@@ -66,6 +66,11 @@ export default {
       this.$store.dispatch('device/updateIsNativeApp', false);
     }
     this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
+
+    const appVersion = this.$store.app.$env.VERSION_TAG;
+    if (appVersion) {
+      this.$store.dispatch('appVersion/updateWebVersion', appVersion);
+    }
   },
 };
 </script>

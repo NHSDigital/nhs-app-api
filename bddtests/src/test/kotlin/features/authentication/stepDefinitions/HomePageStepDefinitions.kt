@@ -1,5 +1,6 @@
 package features.authentication.stepDefinitions
 
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.HomeSteps
@@ -39,6 +40,16 @@ class HomePageDefinitions : AbstractSteps() {
     @Then("^I see the beta banner$")
     fun iSeeTheBetaBanner() {
         homeSteps.homePage.assertBetaBannerVisible()
+    }
+
+    @Given("^I am at the login page")
+    fun givenIAmAtTheLoginPage() {
+        browser.goToApp()
+    }
+
+    @Then("^I see the current app version")
+    fun iSeeTheCurrentAppVersion() {
+        homeSteps.homePage.assertVersionNumberVisible()
     }
 
     @Then("^I see a collapsible link to a survey, which I can follow$")

@@ -11,6 +11,12 @@
       <input :value="responseType" type="hidden" name="response_type">
       <LoginButton />
     </form>
+    <div :class="$style.appVersion">
+      Version {{ this.$store.state.appVersion.webVersion }}
+      <span v-if="this.$store.state.appVersion.nativeVersion">
+        ({{ this.$store.state.appVersion.nativeVersion }})
+      </span>
+    </div>
   </div>
 </template>
 <script>
@@ -65,5 +71,9 @@ export default {
 </script>
 <style module lang="scss" scoped>
 @import "../style/home";
-
+.appVersion {
+  text-align: center;
+  color: #637683;
+  font-size: small;
+}
 </style>

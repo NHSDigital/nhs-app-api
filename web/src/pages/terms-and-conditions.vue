@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" :class="[$style.webHeader, 'pull-content']">
     <header-slim :show-in-native="true"> {{ $t('termsAndConditions.title') }} </header-slim>
-    <terms-conditions/>
+    <terms-conditions />
   </div>
 </template>
 <script>

@@ -40,6 +40,7 @@ import worker.models.patient.Im1ConnectionResponse
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import java.net.URI
+import java.util.*
 
 const val INVALID_VALUE = "xxx-wrong-format-xxx"
 

@@ -81,5 +81,7 @@ module.exports = {
     CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/',
     // Terms and conditions
     STUB_TERMS_AND_CONDITIONS: true,
+    // App Version
+    VERSION_TAG: 'dev_web_npm',
   },
 };

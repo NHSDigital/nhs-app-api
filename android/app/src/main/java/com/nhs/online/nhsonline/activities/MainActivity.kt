@@ -35,6 +35,7 @@ import kotlinx.android.synthetic.main.header_layout.*
 import android.location.LocationManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
+import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.services.KnownServices
 
 
@@ -98,6 +99,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 loadWelcomePage()
             }
         }
+    }
+
+    private fun setupAppVersion() {
+        var versionName = BuildConfig.VERSION_NAME
+        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updateNativeVersion', 'Android: $versionName')")
     }
 
     private fun onErrorRetryButton() {
@@ -343,6 +349,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     fun hideHeader() {
         header.visibility = GONE
+        setupAppVersion()
     }
 
     fun loggedIn() {
@@ -368,6 +375,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     fun showHeader() {
         header.visibility = VISIBLE
+        setupAppVersion()
     }
 
     fun showBlankScreen() {

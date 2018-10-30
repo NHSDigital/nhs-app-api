@@ -51,6 +51,12 @@
         </floating-button-bottom>
       </form>
     </analytics-tracked-tag>
+    <p>
+      Version {{ this.$store.state.appVersion.webVersion }}
+      <span v-if="this.$store.state.appVersion.nativeVersion">
+        ({{ this.$store.state.appVersion.nativeVersion }})
+      </span>
+    </p>
   </div>
 </template>
 
@@ -82,7 +88,7 @@ export default {
   margin-left: -1em;
   margin-right: -1em;
   padding-bottom : 5em;
-  h2 {
+  p, h2 {
     margin-left: 0.7em;
     margin-top: 0.5em;
   }

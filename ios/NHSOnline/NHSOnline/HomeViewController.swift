@@ -129,6 +129,25 @@ class HomeViewController : UIViewController {
         self.headerBar.helpIcon.addGestureRecognizer(tapGesture)
     }
     
+    func setupAppVersion() {
+        let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+        let appVersion = "iOS: " + versionNumber
+        let javascriptCommand = "window.$nuxt.$store.dispatch('appVersion/updateNativeVersion', '\(appVersion)')"
+        
+        let completionHandler: (Any?, Error?) -> Void = {
+            (data, error) in
+            if(error != nil) {
+                if #available(iOS 10.0, *) {
+                    os_log("An error occured setting the app version number.", log: OSLog.default, type: .error)
+                } else {
+                    NSLog("An error occured setting the app version number.")
+                }
+            }
+        }
+        
+        self.webViewController?.webView.evaluateJavaScript(javascriptCommand, completionHandler: completionHandler)
+    }
+    
     func setVisibilityOfHeaderAndMenuBars(visible:Bool) {
         UIView.animate(withDuration: 0.3, animations: {
             let constraintPriority:UILayoutPriority
@@ -144,6 +163,8 @@ class HomeViewController : UIViewController {
             self.headerBar.isHidden = !visible
             self.tabBar.isHidden = !visible
         })
+        
+        setupAppVersion()
     }
     
     func showWebViewContainer() {

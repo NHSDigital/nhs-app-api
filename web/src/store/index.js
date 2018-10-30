@@ -15,6 +15,7 @@ import myAppointments from './modules/myAppointments';
 import flashMessage from './modules/flashMessage';
 import analytics from './modules/analytics';
 import termsAndConditions from './modules/termsAndConditions';
+import appVersion from './modules/appVersion';
 
 const createStore = () => new Vuex.Store({
   modules: {
@@ -33,6 +34,7 @@ const createStore = () => new Vuex.Store({
     flashMessage,
     analytics,
     termsAndConditions,
+    appVersion,
   },
   actions: {
     async nuxtServerInit({ dispatch }) {

@@ -8,6 +8,7 @@ services:
       - URI_FORMAT_CID_REDIRECT_WEB=http://web.{host}:3000/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://10.0.2.2:3000/auth-return
       - CID_AUTH_ENDPOINT=http://10.0.2.2:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
+      - VERSION_TAG=dev_bdd_docker_appium
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:

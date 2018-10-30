@@ -23,6 +23,7 @@ const final = ({ self, commit }) => {
   self.dispatch('session/setInfo');
   self.dispatch('flashMessage/init');
   self.dispatch('termsAndConditions/init');
+  self.dispatch('appVersion/init');
 
   if (sourceValue === Sources.Web) {
     self.app.context.redirect(LOGIN.path);

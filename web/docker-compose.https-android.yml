@@ -18,6 +18,7 @@ services:
       - URI_FORMAT_API_SERVER=http://api.local.bitraft.io:8082
       - URI_FORMAT_CID_REDIRECT_WEB=https://android.local.bitraft.io/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://android.local.bitraft.io/auth-return
+      - VERSION_TAG=dev_web_docker_https_android
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:

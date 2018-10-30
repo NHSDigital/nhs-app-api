@@ -104,6 +104,15 @@ class {{&className}} {
       headers['Cookie'] = this.cookie;
     }
 
+    if (this.store.state.appVersion && this.store.state.appVersion.webVersion) {
+      var appVersion = this.store.state.appVersion.webVersion;
+
+      if (this.store.state.appVersion.nativeVersion) {
+        appVersion += ' (' + this.store.state.appVersion.nativeVersion + ')';
+      }
+
+      headers['NHSO-Version-Tag'] = appVersion;
+    }
 
     const resolve = ({ store, deferred, result, cancel }) => {
       deferred.resolve(result)

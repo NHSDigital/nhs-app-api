@@ -14,6 +14,10 @@ Feature: View My Account Page
     Given I am on the My Account page
     Then I see my personal details
 
+  Scenario: The app version is on the My Account Page
+    Given I am on the My Account page
+    Then I see the current app version
+
   Scenario: A patient can navigate to the Terms of use page
     Given I am on the My Account page
     When I click the Terms of use link

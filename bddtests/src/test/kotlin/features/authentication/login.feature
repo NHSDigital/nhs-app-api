@@ -34,6 +34,11 @@ Feature: Login
       | EMIS      |
       | TPP       |
 
+  Scenario: Any user sees the current app version on the login page
+    Given I am at the login page
+    And I see the login page
+    Then I see the current app version
+
   Scenario Outline: A <GP System> user can log in, log out, and log in again
     Given I am logged in as a <GP System> user
     Then I see the home page

@@ -115,6 +115,11 @@ export default {
     if (process.browser) {
       this.$store.dispatch('session/updateLastCalledAt');
     }
+
+    const appVersion = this.$store.app.$env.VERSION_TAG;
+    if (appVersion) {
+      this.$store.dispatch('appVersion/updateWebVersion', appVersion);
+    }
   },
   mounted() {
     if (process.client) {

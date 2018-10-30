@@ -126,6 +126,20 @@ open class HomePage : HybridPageObject() {
         betaBanner.assertSingleElementPresent()
     }
 
+    fun assertVersionNumberVisible() {
+
+        var divXpath = "//div[contains(text(),'Version dev_bdd_docker')]"
+        var pXpath = "//p[contains(text(),'Version dev_bdd_docker')]"
+
+        var versionNumberElement = HybridPageElement(
+                browserLocator = "$divXpath | $pXpath",
+                androidLocator = null,
+                page = this,
+                helpfulName = "Version Number"
+        )
+        versionNumberElement.assertSingleElementPresent()
+    }
+
     fun assertSurveyLinkCollapsibleAndExpandable() {
         surveyLinkTab.element.click()
         surveyContent.assertSingleElementPresent().assertIsNotVisible()
