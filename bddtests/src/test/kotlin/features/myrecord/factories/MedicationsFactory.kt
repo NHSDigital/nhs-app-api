@@ -12,9 +12,9 @@ import java.util.*
 
 abstract class MedicationsFactory {
 
-    protected val TWENTY_MONTHS: Long = 20
-    protected val TEN_MONTHS: Long = 10
-    protected val ONE_MONTH: Long = 1
+    protected val twentyMonths: Long = 20
+    protected val tenMonths: Long = 10
+    protected val oneMonth: Long = 1
 
     val mockingClient = MockingClient.instance
 

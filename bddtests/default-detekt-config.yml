@@ -19,7 +19,6 @@ test-pattern: # Configure exclusions for test sources
     - 'MagicNumber'
     - 'WildcardImport'
     - 'ReturnCount'
-    - 'VariableNaming'
 
 build:
   maxIssues: 0

@@ -23,8 +23,8 @@ class MedicationsFactoryTpp: MedicationsFactory() {
     private fun getTppMedicationData(): ViewPatientOverviewReply {
 
         val now = LocalDateTime.now()
-        val tenMonthsAgo = now.minusMonths(TEN_MONTHS).toString()
-        val twentyMonthsAgo = now.minusMonths(TWENTY_MONTHS).toString()
+        val tenMonthsAgo = now.minusMonths(tenMonths).toString()
+        val twentyMonthsAgo = now.minusMonths(twentyMonths).toString()
 
         return ViewPatientOverviewReply(
                 drugs = mutableListOf

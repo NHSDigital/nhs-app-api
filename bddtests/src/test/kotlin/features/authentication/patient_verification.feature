@@ -3,7 +3,6 @@
 Feature: Patient Verification
   The system validates the patient data
 
-  
   Scenario Outline: <GP System> patient has single NHS Number
     Given I have valid credentials for a <GP System> patient with one NHS Number
     When I verify patient data
@@ -35,7 +34,6 @@ Feature: Patient Verification
       | EMIS      |
       | VISION    |
 
-  
   Scenario Outline: Non-existent IM1 Connection Token for the <GP System>
     Given I have an <GP System> IM1 Connection Token that does not exist
     When I verify patient data

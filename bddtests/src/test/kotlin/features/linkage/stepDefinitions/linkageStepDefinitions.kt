@@ -9,14 +9,13 @@ import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
 import org.junit.Assert
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
 
 open class LinkageStepDefinitions {
-
-    val HTTP_EXCEPTION = "HttpException"
 
     val mockingClient = MockingClient.instance
 
@@ -173,7 +172,7 @@ open class LinkageStepDefinitions {
             Serenity.setSessionVariable(LinkageResponse::class).to(linkageResponse)
 
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
@@ -197,7 +196,7 @@ open class LinkageStepDefinitions {
             Serenity.setSessionVariable(LinkageResponse::class).to(linkageResponse)
 
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 

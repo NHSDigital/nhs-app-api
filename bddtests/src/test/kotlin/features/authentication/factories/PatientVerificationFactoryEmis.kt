@@ -1,0 +1,73 @@
+package features.authentication.factories
+
+import mocking.defaults.EmisMockDefaults
+import mocking.emis.demographics.PatientIdentifier
+import mocking.emis.models.AssociationType
+import mocking.emis.models.IdentifierType
+import models.Patient
+import net.serenitybdd.core.Serenity
+
+class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
+
+    override fun validPatientWithNoNhsNumber() {
+        emisValidCredentialsWithNHSNumbers(arrayListOf())
+    }
+
+    override fun validPatientWithMultipleNumbers() {
+        emisValidCredentialsWithNHSNumbers(listOf("NHS_number1", "NHS_number2"))
+    }
+
+    override fun validPatientWithOneNhsNumber() {
+        emisValidCredentialsWithNHSNumbers(listOf("NHS_number"))
+    }
+
+
+    override val odsCode: String = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS
+
+    override fun im1ConnectionTokenDoesNotExist() {
+        val nonExistingConnectionToken = "0d135b66-a8b0-46b2-b437-cfe75edc773d"
+        val patient = Patient(
+                connectionToken = nonExistingConnectionToken,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D"
+        )
+
+        mockingClient.forEmis { authentication.sessionRequest(patient).respondWithUserNotRegistered() }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis {
+            myRecord.demographicsRequest(patient).respondWithSuccess(patient,
+                    patientIdentifiers = arrayOf(
+                            PatientIdentifier(
+                                    identifierType = IdentifierType.NhsNumber,
+                                    identifierValue = EmisMockDefaults.patientEmis.nhsNumbers.first())))
+        }
+        Serenity.setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
+        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+    }
+
+
+    private fun emisValidCredentialsWithNHSNumbers(numbers: List<String>) {
+        val patient = Patient(
+                title = "Miss",
+                firstName = "Alexia",
+                surname = "Scott",
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4",
+                sessionId = "xkWiivK1WBAkxIN9CDrGyy",
+                endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7",
+                userPatientLinkToken = "KxLiDl5nRS60DzIlrKoFSl",
+                nhsNumbers = numbers,
+                dateOfBirth = "1985-05-29T00:00:00.0Z")
+
+        val nhsNumbers = numbers.map { number -> PatientIdentifier(number, identifierType = IdentifierType.NhsNumber) }.toTypedArray()
+
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
+        mockingClient.forEmis { myRecord.demographicsRequest(patient).respondWithSuccess(patient, nhsNumbers) }
+
+        Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
+        Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+        Serenity.setSessionVariable("NhsNumbers").to(nhsNumbers)
+
+    }
+}

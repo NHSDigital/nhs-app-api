@@ -25,6 +25,7 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertTrue
 import pages.prescription.PrescriptionsPage
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
@@ -32,9 +33,6 @@ import java.time.Duration
 import java.util.*
 
 open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
-
-    val HTTP_EXCEPTION = "HttpException"
-    val HTTP_RESPONSE = "HttpResponse"
 
     val mockingClient = MockingClient.instance
 
@@ -55,12 +53,9 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     @Steps
     lateinit var prescriptionSteps: PrescriptionsSteps
 
-    private val EMIS = "EMIS"
-    private val TPP = "TPP"
-
     private var initialHistoricPrescriptionsCount = 0
 
-    val StatusSubmitted = "Submitted"
+    val statusSubmitted = "Submitted"
 
     @Given("^I have an empty repeat prescription request")
     fun iHaveAnEmptyRepeatPrescriptionRequest() {
@@ -129,10 +124,9 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .prescriptions.postPrescriptionsConnection(prescriptionSubmissionRequest)
-
-            Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
+            SerenityHelpers.setHttpResponse(response)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
@@ -245,7 +239,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                 .setupWireMockAndDataSetup(
                         scenarioTitle,
                         currentScenarioState,
-                        StatusSubmitted,
+                        statusSubmitted,
                         initialHistoricPrescriptionsCount,
                         amount)
     }

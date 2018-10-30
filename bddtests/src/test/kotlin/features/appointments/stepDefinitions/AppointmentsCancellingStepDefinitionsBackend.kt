@@ -9,9 +9,9 @@ import mocking.MockingClient
 import mocking.stubs.StubbedEnvironment
 import mocking.vision.appointments.CancelAppointmentBuilderVision
 import net.serenitybdd.core.Serenity
-import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.SC_NO_CONTENT
-import org.junit.Assert.assertTrue
+import org.junit.Assert
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import java.time.Duration
@@ -22,9 +22,6 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     private val commonSteps: CommonSteps = CommonSteps()
     private val cancelAppointmentSteps = CancelAppointmentSteps()
-
-    val HTTP_EXCEPTION = "HttpException"
-    val HTTP_RESPONSE = "HttpResponse"
 
     @Given("^(.*) is available to cancel a previously booked appointment$")
     fun gpSystemIsAvailableToCancelAnAppointment(gpSystem: String) {
@@ -103,9 +100,9 @@ class AppointmentsCancellingStepDefinitionsBackend {
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .appointments.deleteAppointment(body)
 
-            Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
+            SerenityHelpers.setHttpResponse(response)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
@@ -122,9 +119,9 @@ class AppointmentsCancellingStepDefinitionsBackend {
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .appointments.deleteAppointment(body)
 
-            Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
+            SerenityHelpers.setHttpResponse(response)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
@@ -140,17 +137,17 @@ class AppointmentsCancellingStepDefinitionsBackend {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .appointments.deleteAppointment(body)
-
-            Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
+            SerenityHelpers.setHttpResponse(response)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
     @Then("^I will receive a successful response$")
     @Throws(Exception::class)
     fun i_will_receive_a_successful_response() {
-        val response = Serenity.sessionVariableCalled<HttpResponse>(HTTP_RESPONSE)
-        assertTrue(response.statusLine.statusCode == SC_NO_CONTENT)
+        val response = SerenityHelpers.getHttpResponse()
+        Assert.assertNotNull("Expected Response", response)
+        Assert.assertEquals("Expected statusCode", SC_NO_CONTENT, response!!.statusLine.statusCode )
     }
 }

@@ -9,16 +9,12 @@ import mocking.data.myrecord.TppDcrData
 import mocking.defaults.EmisMockDefaults
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert.assertEquals
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinitions() {
-
-    @Steps
-    val HTTP_EXCEPTION = "HttpException"
 
     @Given("the GP Practice has multiple consultations for (.*)")
     fun givenTheGpPracticeHasMultipleConsultationsFor(getService: String) {

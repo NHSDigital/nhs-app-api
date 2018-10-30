@@ -69,7 +69,7 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
-  
+
   Scenario Outline: The <GP System> user has the max number of repeatable prescriptions
     Given a patient from <GP System> is defined
     And I have historic prescriptions

@@ -27,6 +27,7 @@ abstract class AuthenticationFactory(protected val gpSystem: String)  {
     abstract fun patientWithLinkageKeyInWrongFormat(patient: Patient)
     abstract fun patientWithDOBInWrongFormat(patient: Patient)
 
+
     companion object : SupplierSpecificFactory<AuthenticationFactory>() {
 
         override val map: HashMap<String, (()-> AuthenticationFactory)> by lazy {

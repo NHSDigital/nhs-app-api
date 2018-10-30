@@ -31,10 +31,6 @@ class CommonSteps : AbstractSteps() {
         val GP_SYSTEM: String = "GP_SYSTEM"
     }
 
-    private val EMIS = "EMIS"
-    private val TPP = "TPP"
-    private val VISION = "VISION"
-
     @Before
     fun beforeEachScenario() {
         getCurrentSession().clear()
@@ -55,19 +51,19 @@ class CommonSteps : AbstractSteps() {
         setSessionVariable("NationalPracticeCode").to(patient.odsCode)
 
         when (gpSystem) {
-            EMIS -> {
+            "EMIS" -> {
                 mockingClient.forEmis {
                     authentication.endUserSessionRequest()
                             .respondWithServiceUnavailable()
                 }
             }
-            TPP -> {
+            "TPP" -> {
                 mockingClient.forTpp {
                     authentication.authenticateRequest(Authenticate())
                             .respondWithServiceUnavailable()
                 }
             }
-            VISION -> {
+            "VISION" -> {
                 mockingClient.forVision {
                     getConfigurationRequest(
                             VisionMockDefaults.getVisionUserSession(patient))

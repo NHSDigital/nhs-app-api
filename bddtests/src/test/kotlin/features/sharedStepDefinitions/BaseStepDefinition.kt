@@ -13,10 +13,6 @@ open class BaseStepDefinition {
         }
     }
 
-    val EMIS_PATIENT = Patient.getDefault(ProviderTypes.EMIS.toString())
-    val TPP_PATIENT = Patient.getDefault(ProviderTypes.TPP.toString())
-    val VISION_PATIENT = Patient.getDefault(ProviderTypes.VISION.toString())
-
     var currentProvider: ProviderTypes? = null
 
     lateinit var currentPatient: Patient

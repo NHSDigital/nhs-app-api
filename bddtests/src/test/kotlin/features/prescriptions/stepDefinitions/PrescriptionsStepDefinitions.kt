@@ -59,20 +59,17 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     val mockingClient = MockingClient.instance
 
-    val FROM_DATE = "FromDate"
-    val TO_DATE = OffsetDateTime.now()
-    val HTTP_EXCEPTION = "HttpException"
-    val PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY: Long = 6
-    var numberOfPrescriptions: Int = 0
-    var numOfCourses: Int = 0
-    var numOfRepeats: Int = 0
-    var fromDate: String? = null
-
+    private val fromDateKey = "FromDate"
+    private val toDate = OffsetDateTime.now()
+    private val prescriptionsDefaultLastNumberMonthsToDisplay: Long = 6
+    private var numberOfPrescriptions: Int = 0
+    private var numOfCourses: Int = 0
+    private var numOfRepeats: Int = 0
+    private var fromDate: String? = null
 
     lateinit var prescriptionLoader: IPrescriptionLoader<*>
 
-
-    lateinit var PrescriptionsListResponse: PrescriptionsListResponse
+    lateinit var prescriptionsListResponse: PrescriptionsListResponse
 
     lateinit var prescriptionsPage: PrescriptionsPage
     lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
@@ -86,7 +83,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     lateinit var navigation: NavigationSteps
 
     @Then("^I see prescriptions page loaded$")
-    fun iSeePrecriptionsPageLoaded() {
+    fun iSeePrescriptionsPageLoaded() {
         prescriptions.isLoaded()
     }
 
@@ -119,56 +116,56 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @And("^each repeat prescription contains (\\d+) courses of which (\\d+) are repeats$")
     fun givenEachRepeatPrescriptionContainsXCoursesOfWhichXAreRepeats(numOfCourses: Int, numOfRepeats: Int) {
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
         this.numOfCourses = numOfCourses
         this.numOfRepeats = numOfRepeats
 
-        setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE,
+        setupWiremockAndData(expectedDefaultFromDate,
                 numOfCourses * numberOfPrescriptions,
                 numOfRepeats * numberOfPrescriptions)
     }
 
     @And("^each repeat prescription shares the same course")
     fun givenEachRepeatPrescriptionSharesTheSameCourse() {
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
         numOfCourses = 1
         numOfRepeats = 1
 
-        setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE)
+        setupWiremockAndData(expectedDefaultFromDate)
     }
 
     @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
     fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths() {
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
         numberOfPrescriptions = 10
         numOfRepeats = 10
         numOfCourses = 10
 
-        setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE)
+        setupWiremockAndData(expectedDefaultFromDate)
     }
 
     @When("I get the users prescriptions with a valid cookie")
     fun whenIGetTheUsersPrescriptionsWithAValidCookie() {
-        val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(FROM_DATE)
+        val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(fromDateKey)
 
         try {
             val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            PrescriptionsListResponse = sessionVariable.prescriptions.getPrescriptionsConnection(
+            prescriptionsListResponse = sessionVariable.prescriptions.getPrescriptionsConnection(
                     if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
     @Then("I receive a list of (\\d+) prescriptions")
     fun thenIReceiveAListOfTenPrescriptions(count: Int) {
 
-        assertNotNull(PrescriptionsListResponse)
+        assertNotNull(prescriptionsListResponse)
 
         when (currentProvider) {
             ProviderTypes.EMIS -> {
-                assertEquals(count, PrescriptionsListResponse.prescriptions.count())
-                val prescriptions = PrescriptionsListResponse.prescriptions
+                assertEquals(count, prescriptionsListResponse.prescriptions.count())
+                val prescriptions = prescriptionsListResponse.prescriptions
 
                 // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
                 for (int in 0 until prescriptions.count() - 2) {
@@ -176,10 +173,10 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 }
             }
             ProviderTypes.TPP -> {
-                assertEquals(count, PrescriptionsListResponse.courses.count())
+                assertEquals(count, prescriptionsListResponse.courses.count())
             }
             ProviderTypes.VISION -> {
-                assertEquals(count, PrescriptionsListResponse.courses.count())
+                assertEquals(count, prescriptionsListResponse.courses.count())
             }
             else -> {
                 throw NotImplementedError("Invalid GP System")
@@ -221,12 +218,12 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @And("^the patient has no prescriptions in the last 6 months")
     fun thePatientHasNoPrescriptionsInTheLastSixMonths() {
 
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
         numberOfPrescriptions = 0
         numOfRepeats = 0
         numOfCourses = 0
 
-        setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE)
+        setupWiremockAndData(expectedDefaultFromDate)
     }
 
     @But("^I do not request a fromDate$")
@@ -236,31 +233,31 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @But("^the GP System is too slow$")
     fun butTheGPSystemIsTooSlow() {
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
         numberOfPrescriptions = 1
         numOfRepeats = 1
         numOfCourses = 1
 
-        setupWiremockAndDataWithDelay(EXPECTED_DEFAULT_FROM_DATE)
+        setupWiremockAndDataWithDelay(expectedDefaultFromDate)
     }
 
     @When("^I request prescriptions for the last 6 months$")
     fun iRequestPrescriptionsForTheLastSixMonths() {
         try {
-            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+            prescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .prescriptions.getPrescriptionsConnection(fromDate)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
     @When("^I request prescriptions for the last 6 months with an invalid cookie$")
     fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
         try {
-            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+            prescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
@@ -269,18 +266,18 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         Serenity.setSessionVariable(Cookie::class).to(null)
 
         try {
-            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+            prescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
     @Then("^I get a response with a list of prescriptions for the last 6 months$")
     fun iGetAResponseWithAListOfPrescriptionForTheLastSixMonths() {
-        assertNotNull(PrescriptionsListResponse)
-        assertTrue(PrescriptionsListResponse.prescriptions.isNotEmpty())
-        assertTrue(PrescriptionsListResponse.courses.isNotEmpty())
+        assertNotNull(prescriptionsListResponse)
+        assertTrue(prescriptionsListResponse.prescriptions.isNotEmpty())
+        assertTrue(prescriptionsListResponse.courses.isNotEmpty())
     }
 
     @But("^a fromDate in an unexpected format$")
@@ -292,14 +289,14 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @But("^a fromDate in the future$")
     fun aFromDateInTheFuture() {
-        fromDate = TO_DATE.plusMonths(1).toString()
+        fromDate = toDate.plusMonths(1).toString()
 
         givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths()
     }
 
     @But("^a fromDate greater than 6 months ago$")
     fun aFromDateGreaterThanSixMonths() {
-        fromDate = TO_DATE.minusMonths(7).toString()
+        fromDate = toDate.minusMonths(7).toString()
 
         givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths()
     }
@@ -314,7 +311,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     }
 
     fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
-        return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
+        return dateNow.minusMonths(prescriptionsDefaultLastNumberMonthsToDisplay)
     }
 
     @Given("prescriptions is disabled at a GP Practice level")
@@ -541,7 +538,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         val showDosage = contents.toLowerCase().contains("dosage")
         val showQuantity = contents.toLowerCase().contains("quantity")
 
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
         prescriptionLoader.loadData(
                 numberOfPrescriptions,
@@ -554,8 +551,10 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forEmis {
-                            prescriptions.prescriptionsRequest(EmisMockDefaults.patientEmis,
-                                    EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                            prescriptions.prescriptionsRequest(
+                                    EmisMockDefaults.patientEmis,
+                                    expectedDefaultFromDate,
+                                    toDate)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
                         }
             }
@@ -598,7 +597,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.EMIS -> {
                 mockingClient
                         .forEmis {
-                            prescriptions.prescriptionsRequest(currentPatient, fromdate, TO_DATE)
+                            prescriptions.prescriptionsRequest(currentPatient, fromdate, toDate)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
                         }
             }
@@ -656,7 +655,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forEmis {
-                            prescriptions.prescriptionsRequest(currentPatient, fromdate, TO_DATE)
+                            prescriptions.prescriptionsRequest(currentPatient, fromdate, toDate)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse).delayedBy(Duration.ofSeconds(delay))
                         }
             }
@@ -682,7 +681,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @And("^courses have status$")
     fun givenCoursesHaveStatus(statuses: DataTable) {
 
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
 
         var statusIndex = 0
         val data = statuses.raw()
@@ -699,26 +698,25 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         mockingClient
                 .forEmis {
-                    prescriptions.prescriptionsRequest(EmisMockDefaults.patientEmis,
-                            EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                    prescriptions.prescriptionsRequest(
+                            EmisMockDefaults.patientEmis,
+                            expectedDefaultFromDate, toDate)
                             .respondWithSuccess(prgr)
                 }
     }
 
     private fun initialize(gpSystem: String) {
         currentProvider = ProviderTypes.valueOf(gpSystem)
+        currentPatient = Patient.getDefault(gpSystem)
 
         when (currentProvider) {
             ProviderTypes.EMIS -> {
-                currentPatient = EMIS_PATIENT
                 prescriptionLoader = EmisPrescriptionLoader
             }
             ProviderTypes.TPP -> {
-                currentPatient = TPP_PATIENT
                 prescriptionLoader = TppPrescriptionLoader
             }
             ProviderTypes.VISION -> {
-                currentPatient = VISION_PATIENT
                 prescriptionLoader = VisionPrescriptionLoader
             }
         }

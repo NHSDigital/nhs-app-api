@@ -24,14 +24,14 @@ import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CoursesListResponse
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
 
-    val HTTP_EXCEPTION = "HttpException"
-    val IS_VISIBLE = "is"
+    val isVisibleIndicator = "is"
 
     @Steps
     lateinit var login: LoginSteps
@@ -90,7 +90,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
             Serenity.setSessionVariable(CoursesListResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            SerenityHelpers.setHttpException(httpException)
         }
     }
 
@@ -259,7 +259,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     @Then("A validation message (.*) displayed indicating the user has not selected any repeat prescriptions")
     fun aValidationMessageIsDisplayedIndicatingTheUserhasNotSelectedAnyRepeatPrescriptions(visibility: String) {
-        courseSteps.assertNoRepeatPrescriptionsSelectedMessageVisibility(visibility.toLowerCase() == IS_VISIBLE)
+        courseSteps.assertNoRepeatPrescriptionsSelectedMessageVisibility(visibility.toLowerCase() == isVisibleIndicator)
     }
 
     @When("I select (\\d+) additional repeat prescriptions")

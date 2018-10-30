@@ -272,7 +272,7 @@ data class Patient(
                 linkageKey = "kWWG9kHfNMSjm"
         )
 
-        private fun formatNHSNumber(nhsNumber: String): String {
+        public fun formatNHSNumber(nhsNumber: String): String {
             val number = nhsNumber.trim().replace(" ", "")
             return "${number.substring(firstNHSNumberIndex, firstNHSNumberFormattingBreak)} " +
                     "${number.substring(firstNHSNumberFormattingBreak, secondNHSNumberFormattingBreak)} " +

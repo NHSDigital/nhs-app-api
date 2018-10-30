@@ -3,7 +3,9 @@ package utils
 import mocking.MockingClient
 import models.Patient
 import net.serenitybdd.core.Serenity
+import org.apache.http.HttpResponse
 import org.junit.Assert
+import worker.NhsoHttpException
 
 class SerenityHelpers {
 
@@ -38,6 +40,18 @@ class SerenityHelpers {
             val newMockingClient = MockingClient.instance
             Serenity.setSessionVariable(MockingClient::class).to(newMockingClient)
             return newMockingClient
+        }
+
+        fun setHttpException(httpException: NhsoHttpException) {
+            Serenity.setSessionVariable("HttpException").to(httpException)
+        }
+
+        fun setHttpResponse(response: HttpResponse) {
+            Serenity.setSessionVariable("HttpResponse").to(response)
+        }
+
+        fun getHttpResponse(): HttpResponse? {
+            return  getValueOrNull("HttpResponse")
         }
 
         fun <T>getValueOrNull(key: Any): T? {
