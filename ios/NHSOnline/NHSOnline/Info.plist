@@ -46,6 +46,8 @@
 	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>OpenSourceLicensesURL</key>
+	<string>https://$(OPEN_SOURCE_LICENSE_URL)</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
