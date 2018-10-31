@@ -25,12 +25,9 @@ const final = ({ self, commit }) => {
   self.dispatch('termsAndConditions/init');
 
   if (sourceValue === Sources.Web) {
-    self.app.router.push(LOGIN.name);
+    self.app.context.redirect(LOGIN.path);
   } else {
-    self.app.router.push({
-      path: LOGIN.path,
-      query: { source: sourceValue },
-    });
+    self.app.context.redirect(`${LOGIN.path}?source=${sourceValue}`);
   }
 };
 

@@ -24,6 +24,10 @@ namespace NHSOnline.Backend.Worker
         {
             using (_logger.BeginScope(context.HttpContext))
             {
+                if (context.HttpContext.Request.Path.Equals("/v1/session", StringComparison.OrdinalIgnoreCase) &&
+                    context.HttpContext.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                    return;
+                
                 var userSessionOption = await GetUserSession(context);
 
                 if (!userSessionOption.HasValue)

@@ -31,6 +31,9 @@ describe('actions', () => {
           device: { source: Sources.Web },
         },
       },
+      context: {
+        redirect: jest.fn(),
+      },
     };
 
     commit = jest.fn();
