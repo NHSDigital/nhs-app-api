@@ -36,6 +36,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         
         Task<VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
             VisionConnectionToken token, string odsCode, string patientId, AppointmentSlotsDateRange dateRange);
+        
+        Task<VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse>> CancelAppointment(
+            VisionUserSession userSession, CancelAppointmentRequest request);
             
         Task<VisionClient.VisionApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
             VisionUserSession visionUserSession,

@@ -159,6 +159,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return await SendRequestAndParseResponse<AvailableAppointmentsResponse, VisionRequest<AvailableAppointmentsRequest>>(visionRequest);
         }
 
+        public async Task<VisionApiObjectResponse<CancelledAppointmentResponse>> CancelAppointment(
+            VisionUserSession userSession, CancelAppointmentRequest request
+        )
+        {
+            IVisionServiceDefinition visionServiceDefinition = new CancelAppointmentServiceDefinition();
+            
+            var visionRequest = new VisionRequest<CancelAppointmentRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
+                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, request);
+
+            
+            return await SendRequestAndParseResponse<CancelledAppointmentResponse, VisionRequest<CancelAppointmentRequest>>(visionRequest);
+        }
+
         public async Task<VisionApiObjectResponse<ServiceContentRegisterResponse>> PostLinkAccount(string odsCode,
             PatientIm1ConnectionRequest request, string dob)
         {
@@ -321,6 +334,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             
             public bool IsAccessDeniedError =>
                 "-35".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
+                    StringComparison.Ordinal);
+            
+            public bool IsAppointmentSlotNotBookedToCurrentUserError =>
+                "-100".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
+                    StringComparison.Ordinal);
+            
+            public bool IsAppointmentSlotNotFoundError =>
+                "-21".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
                     StringComparison.Ordinal);
 
             private bool StatusCodeIndicatesSuccess => StatusCode == HttpStatusCode.OK;
