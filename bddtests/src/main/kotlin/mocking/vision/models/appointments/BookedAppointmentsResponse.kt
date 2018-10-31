@@ -12,7 +12,9 @@ data class BookedAppointmentsResponse(
         @XmlElement(namespace = "urn:vision", name = "slot")
         var slots: Slots? = null,
         @XmlElement(namespace = "urn:vision")
-        var references: References? = null
+        var references: References? = null,
+        @XmlElement(namespace = "urn:vision", name = "settings")
+        var settings: AppointmentSettings? = null
 ) {
 
     companion object {

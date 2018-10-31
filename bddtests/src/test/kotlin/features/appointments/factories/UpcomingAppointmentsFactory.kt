@@ -3,6 +3,7 @@ package features.appointments.factories
 import constants.DateTimeFormats
 import features.appointments.data.AppointmentsSlotsExample
 import features.sharedSteps.SupplierSpecificFactory
+import mocking.emis.models.AppointmentCancellationReason
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -37,6 +38,9 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
             = AppointmentsSlotsExample.getGenericExample()
     ) {
+        if (cancellationReasonRequired)
+            appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons()
+
         val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
         createUpcomingAppointments {
             respondWithSuccess(myAppointmentsFacade)
@@ -60,8 +64,11 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
 
     fun createTimeoutUpcomingAppointmentsResponse(
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade = AppointmentsSlotsExample
-            .getGenericExample()
+                    .getGenericExample()
     ) {
+        if (cancellationReasonRequired)
+            appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons()
+
         val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
         createUpcomingAppointments {
             respondWithSuccess(myAppointmentsFacade).delayedBy(Duration.ofSeconds(90))
@@ -70,7 +77,6 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
 
     fun createUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         mockUpcomingAppointments(mapping)
-        setCancellationReasons()
     }
 
     private fun convertToMyAppointmentsFacade(facade: AppointmentSlotsResponseFacade): MyAppointmentsFacade {
@@ -109,7 +115,9 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
     abstract fun filterUpcomingAppointmentsWhenAppropriate(facade: ArrayList<AppointmentSessionFacade>):
             List<AppointmentSessionFacade>
 
-    abstract fun setCancellationReasons()
+    abstract fun getDefaultCancellationReasons(): List<AppointmentCancellationReason>
+
+    abstract val cancellationReasonRequired: Boolean
 
     companion object : SupplierSpecificFactory<UpcomingAppointmentsFactory>() {
 

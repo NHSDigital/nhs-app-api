@@ -9,7 +9,6 @@ import features.appointments.steps.CancelAppointmentSteps
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.MockingClient
 import models.Patient
-import models.Slot
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -60,7 +59,9 @@ class AppointmentsCancellingStepDefinitionsBackend {
                 reason
         )
 
-        factory.setupRequestAndResponse(request) { cancelAppointmentRequest(patient, request).respondWithSuccess() }
+        factory.setupRequestAndResponse(request) {
+            cancelAppointmentRequest(patient, request).respondWithSuccess()
+        }
     }
 
     @When("^I send a cancellation request to the API with a valid cancellation reason$")

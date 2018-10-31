@@ -7,6 +7,7 @@ import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
+import mocking.vision.appointments.CancelAppointmentBuilderVision
 import mocking.vision.appointments.MyAppointmentsBuilderVision
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
@@ -27,5 +28,5 @@ open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBu
             IAppointmentSlotsBuilder = AppointmentSlotsBuilderVision(patient, fromDateTime, toDateTime)
 
     override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade):
-            ICancelAppointmentsBuilder = throw NotImplementedError("To be implemented as part of NHSO-798")
+            ICancelAppointmentsBuilder = CancelAppointmentBuilderVision(patient, request)
 }

@@ -11,16 +11,18 @@ import worker.models.appointments.MyAppointmentsResponse
 
 class UpcomingAppointmentsFactoryEmis : UpcomingAppointmentsFactory("EMIS") {
 
+    override val cancellationReasonRequired: Boolean = true
+
     private val emisCancellationReason1 =
             AppointmentCancellationReason("R1_NoLongerRequired", "No longer required")
 
     private val emisCancellationReason2 =
             AppointmentCancellationReason("R2_UnableToAttend", "Unable to attend")
 
-    override fun setCancellationReasons() {
-        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(
-                arrayListOf(emisCancellationReason1, emisCancellationReason2)
-        )
+    override fun getDefaultCancellationReasons(): List<AppointmentCancellationReason> {
+        val reasons = arrayListOf(emisCancellationReason1, emisCancellationReason2)
+        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(reasons)
+        return reasons
     }
 
     override fun filterUpcomingAppointmentsWhenAppropriate(

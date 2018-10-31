@@ -2,24 +2,29 @@ package features.appointments.factories
 
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
-import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.models.appointments.CancelAppointmentRequest
 
-abstract class AppointmentsCancellingFactory(gpSystem: String):AppointmentsFactory(gpSystem) {
+class AppointmentsCancellingFactory(gpSystem: String) : AppointmentsFactory(gpSystem) {
 
-    abstract fun defaultRequest(patient: Patient,
+    fun defaultRequest(patient: Patient,
                                 appointmentId: Int? = null,
-                                cancellationReason: String? = null): CancelAppointmentSlotFacade
+                                cancellationReason: String? = null): CancelAppointmentSlotFacade {
+        return CancelAppointmentSlotFacade(
+                patient.userPatientLinkToken,
+                appointmentId ?: defaultApptCancellingSlotId,
+                cancellationReason ?: defaultApptCancellingReason
+        )
+    }
 
     fun setupRequestAndResponse(request: CancelAppointmentSlotFacade,
                                 response: (IAppointmentMappingBuilder.() -> Mapping)? = null) {
 
         if (response != null) {
-           appointmentMapper.requestMapping { response()}
+            appointmentMapper.requestMapping { response() }
         }
         setAppointmentToBeCancelled(request)
     }
@@ -37,10 +42,12 @@ abstract class AppointmentsCancellingFactory(gpSystem: String):AppointmentsFacto
 
     companion object : SupplierSpecificFactory<AppointmentsCancellingFactory>() {
 
-        override val map: HashMap<String, (()-> AppointmentsCancellingFactory)> by lazy {
-                hashMapOf(
-                        "EMIS" to {AppointmentsCancellingFactoryEmis()},
-                        "TPP" to {AppointmentsCancellingFactoryTpp()})}
+        override val map: HashMap<String, (() -> AppointmentsCancellingFactory)> by lazy {
+            hashMapOf(
+                    "EMIS" to { AppointmentsCancellingFactory("EMIS") },
+                    "TPP" to { AppointmentsCancellingFactory("TPP") },
+                    "VISION" to { AppointmentsCancellingFactory("VISION") })
+        }
 
         val defaultApptCancellingReason = "Cancel an appointment."
         val defaultApptCancellingSlotId = 1

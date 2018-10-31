@@ -5,8 +5,6 @@ import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
 import features.appointments.factories.UpcomingAppointmentsFactory
 import mocking.MockingClient
 import mocking.emis.models.AppointmentCancellationReason
-import mockingFacade.appointments.AppointmentSlotFacade
-import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.pages.WebElementFacade

@@ -10,10 +10,12 @@ import worker.models.appointments.MyAppointmentsResponse
 
 class UpcomingAppointmentsFactoryTpp : UpcomingAppointmentsFactory("TPP") {
 
-    override fun setCancellationReasons() {
-        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(
-                emptyList<AppointmentCancellationReason>()
-        )
+    override val cancellationReasonRequired: Boolean = false
+
+    override fun getDefaultCancellationReasons(): List<AppointmentCancellationReason> {
+        val reasons = emptyList<AppointmentCancellationReason>()
+        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(reasons)
+        return reasons
     }
 
     override fun filterUpcomingAppointmentsWhenAppropriate(

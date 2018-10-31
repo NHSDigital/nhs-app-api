@@ -5,9 +5,12 @@ import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 
-@XmlRootElement(name = "slots")
+
+@XmlRootElement(name = "appointment")
 @XmlAccessorType(XmlAccessType.FIELD)
-data class Slots(
-        @XmlElement(namespace = "urn:vision", name = "slot")
-        var slot: List<Slot>? = null
+data class Appointment(
+        @XmlElement
+        val patient: PatientVision? = null,
+        @XmlElement
+        val slot: Slot? = null
 )

@@ -1,11 +1,13 @@
 package mocking.vision.appointments.helpers
 
 import constants.DateTimeFormats
-import mocking.vision.models.appointments.BookedAppointmentsResponse
+import mocking.vision.models.appointments.SlotType
+import mocking.vision.models.appointments.CancellationReasons
+import mocking.vision.models.appointments.Reason
+import mocking.vision.models.appointments.ReasonDescription
 import mocking.vision.models.appointments.Owner
 import mocking.vision.models.appointments.References
 import mocking.vision.models.appointments.Slot
-import mocking.vision.models.appointments.SlotType
 import mocking.vision.models.appointments.Slots
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import java.time.LocalDateTime
@@ -77,6 +79,17 @@ class GeneralAppointmentsHelper {
                     SlotType(slot.slotTypeId!!, slot.slotTypeName!!)
                 }
             }.distinct()
+        }
+
+        fun extractVPCancelReasonsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade)
+                : CancellationReasons {
+            val facadeReasons = slotsResponseFacade.cancellationReasons
+            val visionReasons = mutableListOf<Reason>()
+            facadeReasons?.forEach { reason ->
+                val visionReason = Reason(reason.id, listOf(ReasonDescription(reason.displayName)))
+                visionReasons.add(visionReason)
+            }
+            return CancellationReasons(visionReasons)
         }
 
         fun convertDateToVisionTime(time: String): String {

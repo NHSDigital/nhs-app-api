@@ -11,10 +11,13 @@ import worker.models.appointments.MyAppointmentsResponse
 
 class UpcomingAppointmentsFactoryVision : UpcomingAppointmentsFactory("VISION") {
 
-    override fun setCancellationReasons() {
-        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(
-                emptyList<AppointmentCancellationReason>()
-        )
+    override val cancellationReasonRequired: Boolean = true
+
+    override fun getDefaultCancellationReasons(): List<AppointmentCancellationReason> {
+        val reasons = arrayListOf(AppointmentCancellationReason("1", "Reason 1"),
+                AppointmentCancellationReason("2", "Reason 2"))
+        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(reasons)
+        return reasons
     }
 
     override fun filterUpcomingAppointmentsWhenAppropriate(

@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElement
 
 @XmlAccessorType(XmlAccessType.FIELD)
 data class Slot(
-        @XmlAttribute(name = "id") private var id: String? = null,
+        @XmlAttribute(name = "id") private var id: String,
         @XmlElement(namespace = "urn:vision")
         var dateTime: String? = null,
         @XmlElement(namespace = "urn:vision")
@@ -19,5 +19,7 @@ data class Slot(
         @XmlElement(namespace = "urn:vision")
         var type: Int? = null,
         @XmlElement(namespace = "urn:vision")
-        var session: Int? = null
+        var session: Int? = null,
+        @XmlElement(namespace = "urn:vision")
+        var reason: String? = null
 )

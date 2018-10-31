@@ -3,7 +3,6 @@ package mocking.vision
 import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionResponse
 import mocking.vision.helpers.VisionConstantsHelper.Companion.setContextOnServiceContent
 import mocking.vision.models.appointments.BookedAppointmentsResponse
-import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.appointments.AvailableAppointmentsResponse
 
 object VisionConstants {
@@ -33,6 +32,9 @@ object VisionConstants {
     const val availableAppointmentsName: String = "VOAPP.GetAvailableAppointment"
     const val availableAppointmentsVersion: String = "2.0.0"
 
+    const val cancelAppointmentsName: String = "VOAPP.CancelAppointment"
+    const val cancelAppointmentsVersion: String = "2.0.0"
+
     const val allergiesView: String  = "VPS_ALLERGIES"
     const val medicationsView: String = "VPS_MEDICATIONS"
     const val immunisationsView: String = "PROCEDURES"
@@ -50,7 +52,7 @@ object VisionConstants {
         val response = setContextOnServiceContent(serviceContent, BookedAppointmentsResponse.name)
 
         return getBaseVisionResponse(response, serviceDefinition)
-   }
+    }
 
     fun getVisionAvailableAppointmentsResponse(serviceContent: String,
                                               serviceDefinition: mocking.vision.models.ServiceDefinition): String {
@@ -62,7 +64,7 @@ object VisionConstants {
 
     // Vision Get Patient Data
     fun getClinicalDataResponse(serviceContent: String,
-                                serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
+                                serviceDefinition: mocking.vision.models.ServiceDefinition): String {
         return getBaseVisionResponse("<vision:record>${serviceContent}</vision:record>", serviceDefinition)
     }
 
