@@ -5,9 +5,9 @@ import mocking.MappingBuilder
 import mocking.models.Mapping
 import mocking.vision.demographics.VisionDemographicsBuilder
 import mocking.vision.helpers.VisionConstantsHelper
-import mocking.vision.models.VisionUserSession
 import mocking.vision.models.OrderNewPrescriptionRequest
 import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
 import models.Patient
 import org.apache.http.HttpStatus
 

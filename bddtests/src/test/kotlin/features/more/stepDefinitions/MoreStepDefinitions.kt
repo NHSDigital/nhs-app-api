@@ -2,9 +2,9 @@ package features.more.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert

@@ -1,8 +1,8 @@
 package features.appointments.factories
 
 import constants.DateTimeFormats
-import mocking.data.appointments.AppointmentsSlotsExample
 import features.sharedSteps.SupplierSpecificFactory
+import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.emis.models.AppointmentCancellationReason
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping

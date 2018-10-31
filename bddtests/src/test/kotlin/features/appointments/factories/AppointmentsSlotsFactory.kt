@@ -1,9 +1,9 @@
 package features.appointments.factories
 
 import constants.DateTimeFormats
+import features.sharedSteps.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
-import features.sharedSteps.SupplierSpecificFactory
 import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping

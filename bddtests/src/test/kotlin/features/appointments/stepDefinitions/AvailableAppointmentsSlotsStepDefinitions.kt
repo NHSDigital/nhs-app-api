@@ -3,17 +3,20 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.data.appointments.AppointmentsBookingData
-import mocking.data.appointments.AppointmentsSlotsExample
-import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentDateKey
 import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentTimeKey
 import features.appointments.factories.AppointmentsSlotsFactory
+import features.appointments.steps.AvailableAppointmentFilterSteps
+import features.appointments.steps.AvailableAppointmentFilterSteps.Companion.ALL_OPTION
+import features.appointments.steps.AvailableAppointmentFilterSteps.Companion.TODAY_OPTION
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
+import mocking.data.appointments.AppointmentsBookingData
+import mocking.data.appointments.AppointmentsSlotsExample
+import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -38,6 +41,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
     lateinit var navigation: NavigationSteps
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
+    @Steps
+    lateinit var availableAppointmentsFilter: AvailableAppointmentFilterSteps
 
     val mockingClient = MockingClient.instance
 
@@ -180,7 +185,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^I have filtered such that there is one time displayed that represents multiple slots$")
     fun iSelectAOptionsFromTheFiltersThatIncludeTimesWhenMultipleSlotsExist() {
-        availableAppointments.selectOptionsToRevealSlots()
+        availableAppointmentsFilter.selectOptionsToRevealSlots()
     }
 
     @Given("^I have selected a time when multiple slots are available$")
@@ -189,7 +194,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
         val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
         availableAppointments.assertTimeSlotPresent(date, time)
         availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
-        availableAppointments.selectSlot(date, time)
+        availableAppointments.availableAppointmentsPage.selectSlot(date, time)
     }
 
     @When("^the available appointment slots are retrieved$")
@@ -214,30 +219,36 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @When("^I expand the appointment slot guidance$")
     fun iExpandTheAppointmentSlotGuidance() {
-        availableAppointments.verifyGuidanceIsDisplayed()
-        availableAppointments.verifyGuidanceContentIsNotDisplayed()
-        availableAppointments.verifyTheLabelIsCorrect()
-        availableAppointments.expandAppointmentSlotGuidance()
+        availableAppointments.availableAppointmentsPage.guidance.appointmentSlotGuidance.assertIsVisible()
+        availableAppointments.availableAppointmentsPage.guidance.content.assertElementNotPresent()
+        assertEquals("Appointment guidance help text is incorrect. ",
+                "Which type of appointment do I need?",
+                availableAppointments.availableAppointmentsPage.guidance.label.element.text)
+        availableAppointments.availableAppointmentsPage.guidance.expand.element.click()
     }
 
     @When("^I select a type and location that have available slots$")
     fun iFilterTypeAndLocation() {
-        availableAppointments.selectFilterOptionsToRevealSlots()
+        availableAppointmentsFilter.selectFilterOptionsToRevealSlots()
     }
 
     @When("^I select time period for '(.*)'$")
     fun iFilterTimePeriod(timePeriod: String) {
-        availableAppointments.selectTimePeriodOption(timePeriod)
+        availableAppointments.availableAppointmentsPage.timePeriodFilter.selectByText(timePeriod)
     }
 
     @When("^I select an option from each of the filters$")
     fun iSelectAnOptionFromEachOfTheFilters() {
-        availableAppointments.selectOptionsToRevealSlots()
+        availableAppointmentsFilter.selectFilterOptionsToRevealSlots()
+        availableAppointments.availableAppointmentsPage.timePeriodFilter.selectByText(
+                ALL_OPTION)
     }
 
     @When("^I select options from the filters that don't yield any results$")
     fun iSelectAnOptionsFromTheFiltersThatDoNotYieldAnyResults() {
-        availableAppointments.selectOptionsToRevealNoResults()
+        availableAppointmentsFilter.selectFilterOptionsToRevealSlots()
+        availableAppointments.availableAppointmentsPage.timePeriodFilter.selectByText(
+                TODAY_OPTION)
     }
 
     @Then("^available slots are returned for the given date-time range$")
@@ -275,36 +286,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         assertEquals(0, result.slots.size)
     }
 
-    @Then("^I see appropriate information message for time-outs$")
-    fun iSeeAppropriateInformationMessageAfterSecondsWhenItTimesOut() {
-        availableAppointments.checkTimeoutErrorMessage()
-    }
-
-    @Then("^there should be a button to try again$")
-    fun there_should_be_a_button_to_try_again() {
-        availableAppointments.checkIfTryAgainButtonDisplayed()
-    }
-
-    @Then("^I see appropriate information message when there is a error retrieving data$")
-    fun i_see_appropriate_information_message_when_there_is_a_error_retrieving_data() {
-        availableAppointments.checkUnavailableErrorMessage()
-    }
-
-    @Then("^I see appropriate information message when appointments are disabled$")
-    fun i_see_appropriate_information_message_when_appointments_are_disabled() {
-        availableAppointments.checkAppointmentsDisabledMessage()
-    }
-
-    @Then("^there should not be an option to try again$")
-    fun there_should_not_be_an_option_to_try_again() {
-        availableAppointments.checkIfTryAgainButtonIsNotDisplayed()
-    }
-
-    @When("^I click try again button on appointment page$")
-    fun i_click_try_again_button_on_appointment_page() {
-        availableAppointments.clickOnTryAgainButton()
-    }
-
     @Then("^I am taken to the available appointment slots screen$")
     fun i_am_taken_to_the_available_appointment_slots_screen() {
         availableAppointments.checkIfPageHeaderIsCorrect()
@@ -312,22 +293,22 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^there is a filter for the appointment types$")
     fun thereIsAFilterForAppointmentTypes() {
-        availableAppointments.verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated()
+        availableAppointmentsFilter.verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated()
     }
 
     @Then("^there is a filter for the appointment locations$")
     fun thereIsAFilterForLocations() {
-        availableAppointments.verifyThatLocationsFilterExistsAndIsCorrectlyPopulated()
+        availableAppointmentsFilter.verifyThatLocationsFilterExistsAndIsCorrectlyPopulated()
     }
 
     @Then("^there is a filter for the appointment doctors/nurses$")
     fun thereIsAFilterForDoctorsNurses() {
-        availableAppointments.verifyThatCliniciansFilterExistsAndIsCorrectlyPopulated()
+        availableAppointmentsFilter.verifyThatCliniciansFilterExistsAndIsCorrectlyPopulated()
     }
 
     @Then("^there is a filter for the appointment time period$")
     fun thereIsAFilterForTimePeriod() {
-        availableAppointments.verifyThatTimePeriodFilterExistsAndIsCorrectlyPopulated()
+        availableAppointmentsFilter.verifyThatTimePeriodFilterExistsAndIsCorrectlyPopulated()
     }
 
     @Then("^no available slots are displayed$")
@@ -346,27 +327,27 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^I don't see filters for available slots$")
     fun iDoNotSeeFiltersForAvailableSlots() {
-        availableAppointments.verifyThatTheFiltersAreNotDisplayed()
+        availableAppointmentsFilter.verifyThatTheFiltersAreNotDisplayed()
     }
 
     @Then("^appointment type is not selected$")
     fun appointmentTypeIsNotSelected() {
-        availableAppointments.verifyThatNoAppointmentTypesIsSelected()
+        availableAppointmentsFilter.verifyThatNoAppointmentTypesIsSelected()
     }
 
     @Then("^the only location is selected$")
     fun theOnlyLocationIsSelected() {
-        availableAppointments.verifyThatLocationIsSelected()
+        availableAppointmentsFilter.verifyThatLocationIsSelected()
     }
 
     @Then("^options for doctors/nurses remains as \"no preference\"$")
     fun optionForClinicianRemainsAsNoPreference() {
-        availableAppointments.verifyThatNoSpecificClinicianIsSelected()
+        availableAppointmentsFilter.verifyThatNoSpecificClinicianIsSelected()
     }
 
     @Then("^time period remains as that for this week$")
     fun timePeriodRemainsAsThatForThisWeek() {
-        availableAppointments.verifyThatTimePeriodIsSetAsTheDefault()
+        availableAppointmentsFilter.verifyThatTimePeriodIsSetAsTheDefault()
     }
 
     @Then("^a message is displayed indicating there are no slots available$")
@@ -377,11 +358,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Then("^a message is displayed indicating there are no slots for selected criteria$")
     fun aMessageIsDisplayedIndicatingThereAreNoSlotsForSelectedCriteria() {
         availableAppointments.verifyThatNoAppointmentsForSelectedCriteriaErrorIsDisplayed()
-    }
-
-    @Then("^a message is displayed indicating that the slot has already been taken$")
-    fun aMessageIsDisplayedInformingTheSlotHasAlreadyBeenTaken() {
-        availableAppointments.verifyThatSlotNoLongerAvailableMessageIsDisplayed()
     }
 
     @Then("^available slots are displayed that meet the new criteria$")
@@ -418,12 +394,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates, AppointmentsSlotsExample.datesForNextWeek)
     }
 
-    @Then("^I see a timeout on the appointment booking page$")
-    fun iSeeATimeOutOnTheAppointmentBookingPage() {
-        availableAppointments.waitForSpinnerToDisappearBecauseOfTimeout()
-        availableAppointments.checkIfTryAgainButtonDisplayed()
-    }
-
     @Then("^the appointment slot guidance content is displayed$")
     fun appointmentSlotGuidanceContentIsDisplayed() {
         availableAppointments.verifyThatAppointmentGuidanceContentIsDisplayed()
@@ -431,12 +401,12 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^the appointment slot guidance is collapsible$")
     fun appointmentSlotGuidanceIsCollapsible() {
-        availableAppointments.collapseAppointmentSlotGuidance()
+        availableAppointments.  availableAppointmentsPage.guidance.collapse.element.click()
         iExpandTheAppointmentSlotGuidance()
     }
 
     @Then("^I cannot see any appointment slot guidance$")
     fun iCannotSeeAnyAppointmentSlotGuidance() {
-        availableAppointments.verifyThatAppointmentGuidanceIsNotDisplayedAtAll()
+        availableAppointments.availableAppointmentsPage.guidance.content.assertElementNotPresent()
     }
 }

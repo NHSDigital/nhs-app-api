@@ -3,13 +3,13 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.factories.AppointmentsSlotsFactory
 import mocking.data.appointments.AppointmentsBookingData.Companion.dateTimeFormat
 import mocking.data.appointments.AppointmentsBookingData.Companion.defaultSessionEndDate
 import mocking.data.appointments.AppointmentsBookingData.Companion.defaultSessionStartDate
 import mocking.data.appointments.AppointmentsBookingData.Companion.pastFromDate
 import mocking.data.appointments.AppointmentsBookingData.Companion.pastToDate
 import mocking.data.appointments.AppointmentsSlotsExample
-import features.appointments.factories.AppointmentsSlotsFactory
 import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity
 import org.junit.Assert

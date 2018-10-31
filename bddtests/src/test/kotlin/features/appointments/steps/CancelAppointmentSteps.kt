@@ -75,7 +75,8 @@ open class CancelAppointmentSteps {
 
     @Step
     fun selectReason(reason: String) {
-        assertTrue("$reason is not available as a Cancellation Reason. ", cancelAppointmentPage.selectReason(reason))
+        assertTrue("$reason is not available as a Cancellation Reason. ",
+                cancelAppointmentPage.selectReason(reason))
     }
 
     @Step

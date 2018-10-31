@@ -5,7 +5,6 @@ import models.prescriptions.HistoricPrescription
 import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import pages.ErrorPage
 import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionsPage
 
@@ -13,7 +12,6 @@ open class PrescriptionsSteps {
 
     lateinit var prescriptions : PrescriptionsPage
     private lateinit var repeatPrescriptions: RepeatPrescriptionsPage
-    private lateinit var errorPage: ErrorPage
 
     @Step
     open fun isLoaded() {

@@ -1,12 +1,9 @@
 package features.myrecord.stepDefinitions
 
-import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.data.myrecord.DemographicsData
-import mocking.tpp.models.Error
-import mocking.vision.VisionMockDefaults
+import features.myrecord.factories.DemographicsFactory
 import mocking.vision.models.VisionUserSession
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -31,27 +28,7 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Given("^the GP Practice has enabled demographics functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithSuccess(DemographicsData.getEmisDemographicData(this@DemographicsStepDefinitions.patient))
-                }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    myRecord.patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(DemographicsData.getTppDemographicsData(this@DemographicsStepDefinitions.patient))
-                }
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    demographicsRequest(visionUserSession = VisionUserSession(
-                            this@DemographicsStepDefinitions.patient.rosuAccountId,
-                            this@DemographicsStepDefinitions.patient.apiKey,
-                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)).respondWithSuccess(VisionMockDefaults.visionDemographicsResponse)
-
-                }
-            }
-        }
+        DemographicsFactory.getForSupplier(getService).enabledFunctionality(this@DemographicsStepDefinitions.patient)
     }
 
     @Given("^there is an error getting demographics for (.*)$")
@@ -73,42 +50,7 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Given("^the GP Practice has disabled demographics functionality for (.*)$")
     fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                try {
-                    mockingClient.forEmis {
-                        myRecord.demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
-                    }
-                } catch (httpException: NhsoHttpException) {
-                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-                }
-            }
-            "TPP" -> {
-                try {
-                    mockingClient.forTpp {
-                        myRecord.patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!)
-                                .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                        "Error Occurred",
-                                        "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                    }
-                } catch (httpException: NhsoHttpException) {
-                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-                }
-            }
-            "VISION" -> {
-                try {
-                    mockingClient.forVision {
-                        demographicsRequest(visionUserSession = VisionUserSession(
-                                this@DemographicsStepDefinitions.patient.rosuAccountId,
-                                this@DemographicsStepDefinitions.patient.apiKey,
-                                Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)
-                        ).respondWithAccessDeniedError()
-                    }
-                } catch (httpException: NhsoHttpException) {
-                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-                }
-            }
-        }
+        DemographicsFactory.getForSupplier(getService).disabledFunctionality(this@DemographicsStepDefinitions.patient)
     }
 
     @Then("^I receive the demographic object$")

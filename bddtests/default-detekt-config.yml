@@ -12,8 +12,6 @@ test-pattern: # Configure exclusions for test sources
   exclude-rules:
     - 'TooManyFunctions'
     - 'LargeClass'
-    - 'ComplexMethod'
-    - 'NestedBlockDepth'
     - 'TooGenericExceptionCaught'
     - 'TooGenericExceptionThrown'
     - 'FunctionNaming'

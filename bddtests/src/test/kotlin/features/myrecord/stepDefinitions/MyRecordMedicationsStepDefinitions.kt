@@ -5,18 +5,11 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import mocking.data.myrecord.MedicationsData
+import features.myrecord.factories.MedicationsFactory
 import mocking.tpp.models.Error
-import mocking.vision.VisionConstants
-import mocking.vision.VisionConstants.medicationsView
-import mocking.vision.VisionConstants.xmlResponseFormat
-import mocking.vision.models.ServiceDefinition
-import mocking.vision.models.VisionUserSession
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import worker.NhsoHttpException
-import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefinitions() {
@@ -30,92 +23,15 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^the GP Practice has enabled medications functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityfor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisMedicationData())
-                }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppMedicationData())
-                }
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = medicationsView,
-                            responseFormat = xmlResponseFormat
-                    ).respondWithSuccess(MedicationsData.getVisionMedicationsData())
-                }
-            }
-        }
+        MedicationsFactory.getForSupplier(getService).enabled(this@MyRecordMedicationsStepDefinitions.patient)
     }
 
     @Given("^the GP Practice has enabled medication functionality and the patient has no medications for (.*)$")
-    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityandpatienthasnomedicationsfor(getService: String) {
+    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityAndPatientHasNoMedicationsFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                try {
-                    mockingClient.forEmis {
-                        myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
-                    }
-
-                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
-
-                    Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-                } catch (httpException: NhsoHttpException) {
-                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-                }
-            }
-            "TPP" -> {
-                try {
-                    mockingClient.forTpp {
-                        myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppDefaultMedicationsModel())
-                    }
-
-                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
-
-                    Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-
-                } catch (httpException: NhsoHttpException) {
-                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-                }
-            }
-            "VISION" -> {
-                try {
-                    mockingClient.forVision {
-                        getPatientDataRequest(
-                                visionUserSession = VisionUserSession(
-                                        patient.rosuAccountId,
-                                        patient.apiKey,
-                                        patient.odsCode,
-                                        patient.patientId),
-                                serviceDefinition = ServiceDefinition(
-                                        name = VisionConstants.patientDataName,
-                                        version = VisionConstants.patientDataVersion),
-                                view = medicationsView,
-                                responseFormat = xmlResponseFormat
-                        ).respondWithSuccess(MedicationsData.getEmptySetOfVisionMedicationData())
-                    }
-                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
-
-                    Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-
-                } catch (httpException: NhsoHttpException) {
-                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-                }
-            }
-        }
+        val factory = MedicationsFactory.getForSupplier(getService);
+        factory.enabledAndNoMedicationsMock(this@MyRecordMedicationsStepDefinitions.patient)
+        factory.getResult()
     }
 
     @But("^the GP Practice has disabled medications functionality for (.*)$")

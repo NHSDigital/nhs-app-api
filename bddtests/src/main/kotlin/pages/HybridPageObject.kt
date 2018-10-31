@@ -153,12 +153,6 @@ open class HybridPageObject : PageObject() {
         return theDriver as T
     }
 
-    private fun switchToDefaultWindow(originalDriver: AppiumDriver<WebElementFacade>) {
-        println("Current window: ${originalDriver.windowHandle}")
-        println("Switching window to default...")
-        originalDriver.switchTo().defaultContent()
-    }
-
     fun findByXpath(parent: WebElementFacade, xpath: String): WebElementFacade {
         switchWebview()
         val element: WebElementFacade

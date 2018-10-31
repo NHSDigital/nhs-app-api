@@ -7,6 +7,7 @@ import features.appointments.factories.AppointmentsBookingFactory.Companion.Symp
 import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentDateKey
 import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentTimeKey
 import features.appointments.steps.AppointmentsConfirmationSteps
+import features.appointments.steps.AvailableAppointmentFilterSteps
 import features.appointments.steps.AvailableAppointmentsSteps
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
@@ -16,16 +17,18 @@ import org.junit.Assert
 class AppointmentsConfirmationStepDefinitions {
 
     @Steps
+    lateinit var availableAppointmentsFilterSteps: AvailableAppointmentFilterSteps
+    @Steps
     lateinit var availableAppointmentsSteps: AvailableAppointmentsSteps
     @Steps
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
     @Given("^I have selected an appointment slot to book$")
     fun i_have_selected_an_appointment_slot_to_book() {
-        availableAppointmentsSteps.selectOptionsToRevealSlots()
+        availableAppointmentsFilterSteps.selectOptionsToRevealSlots()
         val date = sessionVariableCalled<String>(TargetAppointmentDateKey)
         val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
-        availableAppointmentsSteps.selectSlot(date, time)
+        availableAppointmentsSteps.availableAppointmentsPage.selectSlot(date, time)
     }
 
     @When("^I click the 'Confirm and book appointment' button$")

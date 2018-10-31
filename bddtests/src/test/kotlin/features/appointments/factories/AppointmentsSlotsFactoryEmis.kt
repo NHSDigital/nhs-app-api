@@ -2,9 +2,9 @@ package features.appointments.factories
 
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.emis.EmisMappingBuilderAppointments
-import mocking.emis.practices.NecessityOption
 import mocking.emis.models.InputRequirements
 import mocking.emis.models.Messages
+import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
