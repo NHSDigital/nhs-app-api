@@ -5,10 +5,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointment
 {
     public class DateRange
     {
-        [XmlElement(ElementName = "from")]
+        [XmlElement(ElementName = "from", DataType="date")]
         public DateTime From { get; set; }
         
-        [XmlElement(ElementName = "to")]
+        [XmlElement(ElementName = "to", DataType="date")]
         public DateTime To { get; set; }
     }
 }

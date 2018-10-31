@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         {
             if (response.HasErrorResponse)
             {
-                _logger.LogError($"Call to VISION returned an unanticipated error with status code: '{response.StatusCode}'.");
+                _logger.LogError($"Call to VISION (VisionAppointmentsRetrievalService) returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
                 return new AppointmentsResult.SupplierSystemUnavailable();
             }
             

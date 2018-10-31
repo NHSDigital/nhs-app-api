@@ -85,11 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         {
             // Arrange
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
-                    It.Is<VisionConnectionToken>(p => 
-                        p.RosuAccountId.Equals(_userSession.RosuAccountId, StringComparison.Ordinal)
-                        && p.ApiKey.Equals(_userSession.ApiKey, StringComparison.Ordinal)),
-                    _userSession.OdsCode,
-                    _userSession.PatientId,
+                    _userSession,
                     _dateRange
                 ))
                 .Throws<HttpRequestException>()
@@ -107,11 +103,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         {
             // Arrange
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
-                    It.Is<VisionConnectionToken>(p => 
-                        p.RosuAccountId.Equals(_userSession.RosuAccountId, StringComparison.Ordinal)
-                        && p.ApiKey.Equals(_userSession.ApiKey, StringComparison.Ordinal)),
-                    _userSession.OdsCode,
-                    _userSession.PatientId,
+                    _userSession,
                     _dateRange
                 ))
                 .Throws<Exception>();
@@ -127,11 +119,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response)
         {   
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
-                    It.Is<VisionConnectionToken>(p => 
-                        p.RosuAccountId.Equals(_userSession.RosuAccountId, StringComparison.Ordinal)
-                        && p.ApiKey.Equals(_userSession.ApiKey, StringComparison.Ordinal)),
-                    _userSession.OdsCode,
-                    _userSession.PatientId,
+                    _userSession,
                     _dateRange
                 ))
                 .ReturnsAsync(response);

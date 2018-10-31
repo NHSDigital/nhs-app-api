@@ -15,6 +15,9 @@ Feature: View available appointment slots backend
       | GP System |
       | EMIS      |
       | TPP       |
+@bug @NHSO-795
+    Examples:
+      | GP System |
       | VISION    |
 
 

@@ -35,16 +35,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogEnter(nameof(GetSlots));
             
                 var visionUserSession = (VisionUserSession)userSession;
-                var visionConnectionToken = new VisionConnectionToken
-                {
-                    RosuAccountId = visionUserSession.RosuAccountId,
-                    ApiKey = visionUserSession.ApiKey
-                };
 
                 var response = await _visionClient.GetAvailableAppointments(
-                    visionConnectionToken,
-                    visionUserSession.OdsCode,
-                    visionUserSession.PatientId,
+                    visionUserSession,
                     dateRange
                     );
 
@@ -72,7 +65,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         {
             if (response.HasErrorResponse)
             {
-                _logger.LogError($"Call to VISION returned an unanticipated error with status code: '{response.StatusCode}'.");
+                _logger.LogError($"Call to VISION (VisionAppointmentSlotsService) returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
                 return new AppointmentSlotsResult.SupplierSystemUnavailable();
             }
             

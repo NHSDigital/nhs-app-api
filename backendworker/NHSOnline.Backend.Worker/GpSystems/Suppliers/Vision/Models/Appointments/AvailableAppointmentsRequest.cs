@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments
 {
@@ -12,6 +13,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointment
         
         [XmlElement(ElementName = "page", Namespace = "urn:vision")]
         public Page Page { get; set; }
+        
+        [XmlElement(ElementName = "owners", Namespace = "urn:vision")]
+        public List<OwnerFilter> Owners { get; set; } = new List<OwnerFilter>{new OwnerFilter()}; //TODO: NHSO-2816
+        
+        [XmlElement(ElementName = "locations", Namespace = "urn:vision")]
+        public List<LocationFilter> Locations { get; set; } = new List<LocationFilter>{new LocationFilter()}; //TODO: NHSO-2816
         
         [XmlElement(ElementName = "dateRange", Namespace = "urn:vision")]
         public DateRange DateRange { get; set; }

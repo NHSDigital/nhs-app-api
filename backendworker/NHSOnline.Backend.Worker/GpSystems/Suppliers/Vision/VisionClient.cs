@@ -135,13 +135,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         }
         
         public async Task<VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
-            VisionConnectionToken token, string odsCode, string patientId, AppointmentSlotsDateRange dateRange)
+            VisionUserSession visionUserSession, AppointmentSlotsDateRange dateRange)
         {
             IVisionServiceDefinition visionServiceDefinition = new GetAvailableAppointmenServiceDefinition();
 
             var request = new AvailableAppointmentsRequest
             {
-                PatientId = patientId,
+                PatientId = visionUserSession.PatientId,
                 Page = new Page
                 {
                     Number = 1,
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 }
             };
             var visionRequest = new VisionRequest<AvailableAppointmentsRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                token.RosuAccountId, token.ApiKey, odsCode, _providerId, request);
+                visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId, request);
             
             return await SendRequestAndParseResponse<AvailableAppointmentsResponse, VisionRequest<AvailableAppointmentsRequest>>(visionRequest);
         }
