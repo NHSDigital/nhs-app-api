@@ -44,9 +44,12 @@
       </li>
     </ul>
     <analytics-tracked-tag :text="$t('signOutButton.signOut')" data-purpose="button">
-      <floating-button-bottom id="signout-button" :button-classes="['grey']" @click="signout()">
-        {{ $t('signOutButton.signOut') }}
-      </floating-button-bottom>
+      <form action="account/signout" method="post">
+        <floating-button-bottom id="signout-button" :button-classes="['grey']" type="submit"
+                                @click="signout">
+          {{ $t('signOutButton.signOut') }}
+        </floating-button-bottom>
+      </form>
     </analytics-tracked-tag>
   </div>
 </template>
@@ -64,7 +67,8 @@ export default {
     WelcomeSection,
   },
   methods: {
-    signout() {
+    signout(event) {
+      event.preventDefault();
       this.$store.dispatch('auth/logout');
     },
   },
@@ -83,5 +87,4 @@ export default {
     margin-top: 0.5em;
   }
 }
-
 </style>

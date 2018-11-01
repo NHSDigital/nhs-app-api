@@ -3,7 +3,7 @@
     <generic-button :button-classes="buttonStylingClasses" :id="id"
                     :style="{ 'margin-bottom': 0}"
                     :disabled="isButtonDisabled"
-                    @click="$emit('click')">
+                    @click="$emit('click', $event)">
       <slot/>
     </generic-button>
   </div>

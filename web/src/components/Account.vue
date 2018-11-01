@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <generic-button id="signout-button"
-                    :class="[$style.button, $style.grey]" @click="signoutClicked()">
+                    :class="[$style.button, $style.grey]" @click="signoutClicked">
       {{ $t('signOutButton.signOut') }}
     </generic-button>
   </div>
@@ -11,7 +11,8 @@
 
 import GenericButton from '@/components/widgets/GenericButton';
 
-function signoutClicked() {
+function signoutClicked(event) {
+  event.preventDefault();
   this.$store.dispatch('auth/logout');
 }
 

@@ -71,6 +71,9 @@ export default {
     this.dispatch('session/showExpiryMessage');
     this.dispatch('auth/logout', { expired: true });
   },
+  logoutNoJs() {
+    this.app.$cookies.removeAll();
+  },
   logout({ commit }, { expired } = {}) {
     this.dispatch('session/clear');
     this.dispatch('session/endValidationChecking');
