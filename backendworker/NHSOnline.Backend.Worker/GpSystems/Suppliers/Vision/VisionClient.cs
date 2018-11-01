@@ -322,8 +322,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                         $"error: { JsonConvert.SerializeObject(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error) }";
                 }
             }
-
-            public bool HasForbiddenResponse => StatusCode == HttpStatusCode.Forbidden;
             
             // Note
             // We don't know whether Vision always populates certain properties when there is an error.
@@ -332,40 +330,39 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             public bool IsInvalidRequestError =>
                 (RawResponse?.Body?.Fault?.Detail?.VisionFault?.Error?.Category ?? "").Contains("INVALID_REQUEST",
                     StringComparison.Ordinal);
-
-            public bool IsInvalidUserCredentialsError => "-30".Equals(
-                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
-
+            
             public bool IsInvalidSecurityHeaderError => (RawResponse?.Body?.Fault?.FaultCode ?? "").Contains("InvalidSecurity", StringComparison.Ordinal);
 
-            public bool IsAccountLockedError => VisionApiErrorCodes.AccountLocked.Equals(
-                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
+            public bool IsInvalidUserCredentialsError => HasVisionApiErrorCode(VisionApiErrorCodes.InvalidUserCredentials);
 
-            public bool IsAlreadyRegisteredError => VisionApiErrorCodes.AccountAlreadyRegistered.Equals(
-                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
+            public bool IsAccountLockedError => HasVisionApiErrorCode(VisionApiErrorCodes.AccountLocked);
 
-            public bool IsInvalidDetailsError => VisionApiErrorCodes.InvalidDetails.Equals(
-                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
-            
-            public bool IsInvalidParameterError => VisionApiErrorCodes.InvalidParameter.Equals(
-                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
+            public bool IsAlreadyRegisteredError => HasVisionApiErrorCode(VisionApiErrorCodes.AccountAlreadyRegistered);
 
-            public bool IsUnknownError =>
-                "-100".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
-                    StringComparison.Ordinal);
-            
-            public bool IsAccessDeniedError =>
-                "-35".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
-                    StringComparison.Ordinal);
-            
-            public bool IsAppointmentSlotNotBookedToCurrentUserError =>
-                "-100".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
-                    StringComparison.Ordinal);
-            
-            public bool IsAppointmentSlotNotFoundError =>
-                "-21".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
-                    StringComparison.Ordinal);
+            public bool IsInvalidDetailsError => HasVisionApiErrorCode(VisionApiErrorCodes.InvalidDetails);
 
+            public bool IsInvalidParameterError => HasVisionApiErrorCode(VisionApiErrorCodes.InvalidParameter);
+
+            public bool IsUnknownError => HasVisionApiErrorCode(VisionApiErrorCodes.UnknownError);
+            
+            public bool IsAccessDeniedError => HasVisionApiErrorCode(VisionApiErrorCodes.AccessDenied);
+            
+            public bool IsAppointmentSlotNotBookedToCurrentUserError => HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentSlotNotBookedToCurrentUser);
+            
+            public bool IsAppointmentSlotNotFoundError => HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentSlotNotFound);
+
+            public bool IsAppointmentSlotAlreadyBookedError =>
+                HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentSlotAlreadyBooked);
+
+            public bool IsAppointmentBookingLimitReachedError =>
+                HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentBookingLimitReached);
+            
+            private bool HasVisionApiErrorCode(string visionErrorCode)
+            {
+                return visionErrorCode.Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
+                    StringComparison.Ordinal);
+            }
+            
             private bool StatusCodeIndicatesSuccess => StatusCode == HttpStatusCode.OK;
         }
         

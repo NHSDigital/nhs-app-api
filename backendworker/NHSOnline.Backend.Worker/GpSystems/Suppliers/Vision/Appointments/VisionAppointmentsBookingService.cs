@@ -1,4 +1,3 @@
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -52,14 +51,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
         }
         
-        private static AppointmentBookResult InterpretAppointmentsPostResponse(VisionClient.VisionApiObjectResponse<BookAppointmentResponse> response)
+        private AppointmentBookResult InterpretAppointmentsPostResponse(VisionClient.VisionApiObjectResponse<BookAppointmentResponse> response)
         {
-            if (response.HasSuccessResponse)
+            if (!response.HasErrorResponse) return new AppointmentBookResult.SuccessfullyBooked();
+
+            if (response.IsAppointmentSlotAlreadyBookedError || response.IsAppointmentSlotNotFoundError)
             {
-                return new AppointmentBookResult.SuccessfullyBooked();
+                return new AppointmentBookResult.SlotNotAvailable();
+            }
+
+            if (response.IsAppointmentBookingLimitReachedError)
+            {
+                return new AppointmentBookResult.AppointmentLimitReached();
             }
             
-// TODO: Error handling NHSO-801
+            _logger.LogError($"Call to VISION book appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
 
             return new AppointmentBookResult.SupplierSystemUnavailable();
         }

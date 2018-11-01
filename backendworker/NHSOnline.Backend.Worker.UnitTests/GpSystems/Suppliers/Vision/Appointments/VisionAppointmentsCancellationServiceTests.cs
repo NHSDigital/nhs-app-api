@@ -26,9 +26,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         private VisionAppointmentsCancellationService _systemUnderTest;
         private AppointmentCancelRequest _request;
 
-        private const string SlotId = "1";
-        private const string ReasonId = "1";
-
         [TestInitialize]
         public void TestInitialize()
         {
@@ -40,18 +37,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             _systemUnderTest = _fixture.Create<VisionAppointmentsCancellationService>();
 
-            _request = new AppointmentCancelRequest
-            {
-                AppointmentId = SlotId,
-                CancellationReasonId = ReasonId
-            };
+            _request = _fixture.Create<AppointmentCancelRequest>(); 
         }
         
         [TestMethod]
         public async Task Cancel_HappyPath_ReturnsSuccessfullyCancelledResponse()
         {
-            // Arrange
-            
+            // Arrange         
             var response = new VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<CancelledAppointmentResponse>
@@ -63,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 }
             };
 
-            MockVisionClientCancelAppointmentMethod(response, SlotId, ReasonId);
+            MockVisionClientCancelAppointmentMethod(response);
 
             // Act
             var result = await _systemUnderTest.Cancel(_userSession, _request);
@@ -84,8 +76,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     && p.OdsCode.Equals(_userSession.OdsCode, StringComparison.Ordinal)),
                 It.Is<CancelAppointmentRequest>(p => 
                     p.PatientId.Equals(_userSession.PatientId, StringComparison.Ordinal)
-                    && p.ReasonId.Equals(ReasonId, StringComparison.Ordinal)
-                    && p.SlotId.Equals(SlotId, StringComparison.Ordinal))
+                    && p.ReasonId.Equals(_request.CancellationReasonId, StringComparison.Ordinal)
+                    && p.SlotId.Equals(_request.AppointmentId, StringComparison.Ordinal))
             ))
             .Throws<HttpRequestException>()
             .Verifiable();
@@ -106,6 +98,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             // Act            
             var result = await _systemUnderTest.Cancel(_userSession, _request);
+            
+            // Assert
             result.Should().BeAssignableTo<AppointmentCancelResult.InsufficientPermissions>();
         }
 
@@ -113,40 +107,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task Cancel_VisionClientReturnsAppointmentSlotNotBookedToCurrentUserError_ReturnsAppointmentNotCancellable()
         {
             // Arrange
-            _mockVisionClient.Setup(x => x.CancelAppointment(
-                    It.Is<VisionUserSession>(p => 
-                        p.RosuAccountId.Equals(_userSession.RosuAccountId, StringComparison.Ordinal)
-                        && p.ApiKey.Equals(_userSession.ApiKey, StringComparison.Ordinal)
-                        && p.OdsCode.Equals(_userSession.OdsCode, StringComparison.Ordinal)),
-                    It.Is<CancelAppointmentRequest>(p => 
-                        p.PatientId.Equals(_userSession.PatientId, StringComparison.Ordinal)
-                        && p.ReasonId.Equals(ReasonId, StringComparison.Ordinal)
-                        && p.SlotId.Equals(SlotId, StringComparison.Ordinal))
-                ))
-                .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse>(HttpStatusCode.OK)
-                    {
-                        RawResponse = new VisionResponseEnvelope<CancelledAppointmentResponse>
-                        {
-                            Body = new VisionResponseBody<CancelledAppointmentResponse>
-                            {
-                                VisionResponse = new VisionResponse<CancelledAppointmentResponse>
-                                {
-                                    ServiceHeader = new ServiceHeaderResponse
-                                    {
-                                        Outcome = new Outcome
-                                        {
-                                            Successful = bool.FalseString.ToLowerInvariant(),
-                                            Error = new OutcomeError
-                                            {
-                                                Code = "-100",
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    }));
+            var response = VisionApiObjectResponseBuilder
+                .BuildUnsuccessfulResponseWithErrorCode<CancelledAppointmentResponse>("-100");
+            MockVisionClientCancelAppointmentMethod(response);
 
             // Act
             var result = await _systemUnderTest.Cancel(_userSession, _request);
@@ -160,40 +123,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task Cancel_VisionClientReturnsAppointmentSlotNotFoundError_ReturnsAppointmentNotCancellable()
         {
             // Arrange
-            _mockVisionClient.Setup(x => x.CancelAppointment(
-                    It.Is<VisionUserSession>(p => 
-                        p.RosuAccountId.Equals(_userSession.RosuAccountId, StringComparison.Ordinal)
-                        && p.ApiKey.Equals(_userSession.ApiKey, StringComparison.Ordinal)
-                        && p.OdsCode.Equals(_userSession.OdsCode, StringComparison.Ordinal)),
-                    It.Is<CancelAppointmentRequest>(p => 
-                        p.PatientId.Equals(_userSession.PatientId, StringComparison.Ordinal)
-                        && p.ReasonId.Equals(ReasonId, StringComparison.Ordinal)
-                        && p.SlotId.Equals(SlotId, StringComparison.Ordinal))
-                ))
-                .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse>(HttpStatusCode.OK)
-                    {
-                        RawResponse = new VisionResponseEnvelope<CancelledAppointmentResponse>
-                        {
-                            Body = new VisionResponseBody<CancelledAppointmentResponse>
-                            {
-                                VisionResponse = new VisionResponse<CancelledAppointmentResponse>
-                                {
-                                    ServiceHeader = new ServiceHeaderResponse
-                                    {
-                                        Outcome = new Outcome
-                                        {
-                                            Successful = bool.FalseString.ToLowerInvariant(),
-                                            Error = new OutcomeError
-                                            {
-                                                Code = "-21",
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    }));
+            var response = VisionApiObjectResponseBuilder
+                .BuildUnsuccessfulResponseWithErrorCode<CancelledAppointmentResponse>("-21");
+            MockVisionClientCancelAppointmentMethod(response);
 
             // Act
             var result = await _systemUnderTest.Cancel(_userSession, _request);
@@ -203,9 +135,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             result.Should().BeAssignableTo<AppointmentCancelResult.AppointmentNotCancellable>();
         }
         
+        [TestMethod]
+        public async Task Cancel_VisionClientReturnsUnexpectedErrorCode_ReturnsSupplierSystemUnavailable()
+        {
+            // Arrange
+            var unexpectedErrorCode = _fixture.Create<string>();
+            var response = VisionApiObjectResponseBuilder
+                .BuildUnsuccessfulResponseWithErrorCode<CancelledAppointmentResponse>(unexpectedErrorCode);
+            MockVisionClientCancelAppointmentMethod(response);
+            
+            // Act
+            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            
+            // Assert
+            _mockVisionClient.Verify();
+            result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
+        }
+        
         private void MockVisionClientCancelAppointmentMethod(
-            VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse> response,
-            string slotId, string reasonId)
+            VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse> response)
         {
             _mockVisionClient.Setup(x => x.CancelAppointment(
                 It.Is<VisionUserSession>(p => 
@@ -214,10 +162,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     && p.OdsCode.Equals(_userSession.OdsCode, StringComparison.Ordinal)),
                 It.Is<CancelAppointmentRequest>(p => 
                     p.PatientId.Equals(_userSession.PatientId, StringComparison.Ordinal)
-                    && p.ReasonId.Equals(reasonId, StringComparison.Ordinal)
-                    && p.SlotId.Equals(slotId, StringComparison.Ordinal))
+                    && p.ReasonId.Equals(_request.CancellationReasonId, StringComparison.Ordinal)
+                    && p.SlotId.Equals(_request.AppointmentId, StringComparison.Ordinal))
             ))
-            .ReturnsAsync(response);
+            .ReturnsAsync(response)
+            .Verifiable();
         }
     }
 }

@@ -37,7 +37,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                     PatientId = visionUserSession.PatientId,
                     SlotId = request.AppointmentId,
                     ReasonId = request.CancellationReasonId
-                    
                 };
                 
                 var response = await _visionClient.CancelAppointment(
@@ -62,16 +61,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         {
             if (!response.HasErrorResponse) return new AppointmentCancelResult.SuccessfullyCancelled();
 
-            _logger.LogError($"Call to VISION cancel appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'.");
-            
             if (response.IsAppointmentSlotNotBookedToCurrentUserError || response.IsAppointmentSlotNotFoundError)
             {
                 return new AppointmentCancelResult.AppointmentNotCancellable();
             }
             
+            _logger.LogError($"Call to VISION cancel appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
             
             return new AppointmentCancelResult.SupplierSystemUnavailable();
-
         }
     }
 }
