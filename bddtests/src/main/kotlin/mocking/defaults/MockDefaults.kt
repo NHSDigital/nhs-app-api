@@ -15,7 +15,7 @@ import mocking.vision.models.Configuration
 import mocking.vision.models.Account
 import mocking.vision.models.PatientNumber
 import mocking.vision.models.Prescriptions
-import mocking.vision.models.Appointments
+import mocking.vision.models.appointments.Appointments
 import models.Patient
 
 class MockDefaults {

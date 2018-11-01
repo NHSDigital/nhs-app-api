@@ -22,14 +22,15 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
                                                        endDate: ZonedDateTime? = null,
                                                        guidanceMessage: Boolean = true,
                                                        reasonNecessity: NecessityOption = NecessityOption.MANDATORY) {
-        generateExample(generateDefaultUserDataAndRetrieveSlotsExample(), startDate, endDate, guidanceMessage, reasonNecessity)
+        generateExample(retrieveSlotsExample(), startDate, endDate, guidanceMessage, reasonNecessity)
     }
 
     fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage() {
-        val example = generateDefaultUserDataAndRetrieveSlotsExample()
+        val example = retrieveSlotsExample()
         generateAppointmentSlotResponseWithoutGuidance(null, null) {
             respondWithSuccess(example)
         }
+        generateDefaultUserData()
     }
 
     fun generateMultipleAvailableAppointmentSlotsForTheSameTime() {
@@ -51,8 +52,6 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         val startDateToUseForMockResponse = adjustAndFormatDate(startDate)
         val endDateToUseForMockResponse = adjustAndFormatDate(endDate)
 
-        generateDefaultUserData()
-
         generateAppointmentSlotResponse(
                 startDateToUseForMockResponse,
                 endDateToUseForMockResponse,
@@ -61,6 +60,8 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         ) {
             respondWithSuccess(example)
         }
+
+        generateDefaultUserData()
     }
 
     private fun adjustAndFormatDate(date: ZonedDateTime?): String? {
@@ -73,16 +74,15 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     private val supplierAdjustTime = TimeZone.getTimeZone("Europe/London").toZoneId()
 
-    private fun generateDefaultUserDataAndRetrieveSlotsExample(): AppointmentSlotsResponseFacade {
-        generateDefaultUserData()
+    private fun retrieveSlotsExample(): AppointmentSlotsResponseFacade {
         val example = AppointmentsSlotsExample.getGenericExample()
         storeUIDateAndTimeOfSlotToSelect()
         return example
     }
 
     fun generateExample(mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
-        generateDefaultUserData()
         generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, mapping)
+        generateDefaultUserData()
     }
 
     private fun saveToSerenityVariableForRequest(date: ZonedDateTime?, key: String) {

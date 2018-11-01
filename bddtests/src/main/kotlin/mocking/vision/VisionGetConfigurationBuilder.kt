@@ -30,6 +30,7 @@ class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
                 .andBody(userSession.provider, "contains")
                 .andBody(serviceDefinition.name, "contains")
     }
+
     fun respondWithSuccess(configuration: Configuration): Mapping {
         val jaxbContext = JAXBContext.newInstance(Configuration::class.java)
         val marshaller = jaxbContext.createMarshaller()
@@ -40,46 +41,39 @@ class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
             marshaller.marshal(configuration, stringWriter)
         }
 
-        var resp = respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionResponse(stringWriter.toString(), serviceDefinition)).build()
         }
-
-        return resp
     }
 
     fun respondWithInvalidRequest(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getInvalidRequestError(serviceDefinition)).build()
         }
-        return resp
     }
 
     fun respondWithSecurityHeaderError(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_OK) {
             andXmlBody(securityHeaderErrorResponse).build()
         }
-        return resp
     }
 
     fun respondWithUnknownError(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getUnknownError(serviceDefinition)).build()
         }
-        return resp
     }
 
     fun respondWithServiceUnavailable(): Mapping {
-        var resp = respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
             andXmlBody("").build()
         }
-        return resp
     }
 
     fun respondWitInvalidUserCredentials(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getInvalidUserCredentialsError(serviceDefinition)).build()
         }
-        return resp
     }
 }
 

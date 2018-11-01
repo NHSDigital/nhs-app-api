@@ -1,5 +1,7 @@
 package mocking.vision.models
 
+import mocking.vision.models.appointments.Appointments
+import mocking.vision.models.appointments.References
 import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlElement
 
@@ -13,6 +15,9 @@ data class Configuration(
         var prescriptions: Prescriptions = Prescriptions(),
 
         @XmlElement(namespace = "urn:vision", name = "appointments")
-        var appointments: Appointments = Appointments()
+        var appointments: Appointments = Appointments(),
+
+        @XmlElement(namespace = "urn:vision")
+        var references: References = References()
 
 )

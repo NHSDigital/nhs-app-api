@@ -3,6 +3,7 @@ package mocking.vision.appointments.helpers
 import constants.DateTimeFormats
 import mocking.vision.models.appointments.SlotType
 import mocking.vision.models.appointments.CancellationReasons
+import mocking.vision.models.appointments.Location
 import mocking.vision.models.appointments.Reason
 import mocking.vision.models.appointments.ReasonDescription
 import mocking.vision.models.appointments.Owner
@@ -10,6 +11,7 @@ import mocking.vision.models.appointments.References
 import mocking.vision.models.appointments.Slot
 import mocking.vision.models.appointments.Slots
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
+import net.serenitybdd.core.Serenity
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -53,17 +55,21 @@ class GeneralAppointmentsHelper {
 
         private fun extractLocationsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade):
                 List<mocking.vision.models.appointments.Location> {
-            return slotsResponseFacade.sessions.map { session ->
-                mocking.vision.models.appointments.Location(session.locationid, session.location!!)
+            val locations = slotsResponseFacade.sessions.map { session ->
+                Location(session.locationid, session.location!!)
             }.distinct()
+            Serenity.setSessionVariable(VisionMetadata.LOCATIONS).to(locations)
+            return locations
         }
 
         private fun extractOwnersFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade): List<Owner> {
-            return slotsResponseFacade.sessions.flatMap { session ->
+            val owners = slotsResponseFacade.sessions.flatMap { session ->
                 session.staffDetails.map { clinician ->
                     Owner(clinician.staffDetailsid!!, clinician.staffName!!)
                 }
             }.distinct()
+            Serenity.setSessionVariable(VisionMetadata.OWNERS).to(owners)
+            return owners
         }
 
         private fun extractSessionsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade):
@@ -111,6 +117,12 @@ class GeneralAppointmentsHelper {
                             / NUMBER_OF_SECONDS_IN_A_MINUTE
                     )
                     .toInt()
+        }
+
+        // Data related to this is used for passing into the Vision Configuration
+        enum class VisionMetadata {
+            LOCATIONS,
+            OWNERS
         }
     }
 }

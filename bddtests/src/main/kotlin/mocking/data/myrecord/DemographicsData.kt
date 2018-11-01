@@ -33,7 +33,7 @@ object DemographicsData {
                 patientIdentifiers,
                 DateConverter.convertDateToDateTimeFormat(
                         patient.dateOfBirth,
-                        DateTimeFormats.mockDataDobFormat,
+                        DateTimeFormats.dateWithoutTimeFormat,
                         DateTimeFormats.backendDateTimeFormatWithoutTimezone),
                 patient.sex,
                 ContactDetails(patient.contactDetails.telephoneNumber,
@@ -56,7 +56,7 @@ object DemographicsData {
                 Person(patient.patientId,
                         DateConverter.convertDateToDateTimeFormat(
                                 patient.dateOfBirth,
-                                DateTimeFormats.mockDataDobFormat,
+                                DateTimeFormats.dateWithoutTimeFormat,
                                 DateTimeFormats.tppDateTimeFormat),
                         patient.sex.name,
                         NationalId(type = TppConstants.NationalIdTypeNhs, value = patient.nhsNumbers.first()),

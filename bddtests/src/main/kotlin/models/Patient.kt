@@ -47,7 +47,7 @@ data class Patient(
     fun formattedDateOfBirth(): String {
         return DateConverter.convertDateToDateTimeFormat(
                 dateOfBirth,
-                DateTimeFormats.mockDataDobFormat,
+                DateTimeFormats.dateWithoutTimeFormat,
                 DateTimeFormats.frontendBasicDateFormat)
     }
 

@@ -1,5 +1,6 @@
-package mocking.vision.models
+package mocking.vision.models.appointments
 
+import mocking.vision.models.appointments.References
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
 

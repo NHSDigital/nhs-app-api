@@ -8,6 +8,6 @@ class DateTimeFormats {
         const val frontendDateFormat = "EEEE d MMMM yyyy"
         const val frontendBasicDateFormat = "d MMMM yyyy"
         const val frontendTimeFormat = "h:mma"  // Warning: will need to convert resulting String toLowerCase()
-        const val mockDataDobFormat = "yyyy-MM-dd"
+        const val dateWithoutTimeFormat = "yyyy-MM-dd"
     }
 }
