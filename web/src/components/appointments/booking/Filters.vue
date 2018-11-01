@@ -129,8 +129,15 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../../style/forms";
+@import "../../../style/colours";
 
 .line {
   margin-top: 0.5em
+}
+
+.form {
+  :focus {
+    outline-color: $focus_highlight;
+  }
 }
 </style>
