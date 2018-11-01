@@ -19,7 +19,8 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
             {
                 { Supplier.Emis, "GP_PROVIDER_ENABLED_EMIS" },
                 { Supplier.Tpp, "GP_PROVIDER_ENABLED_TPP" },
-                { Supplier.Vision, "GP_PROVIDER_ENABLED_VISION" }
+                { Supplier.Vision, "GP_PROVIDER_ENABLED_VISION" },
+                { Supplier.Microtest, "GP_PROVIDER_ENABLED_MICROTEST" },
             };
 
         public override bool IsEnabled(IConfiguration configuration)
