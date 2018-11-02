@@ -75,27 +75,50 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 
                 var endUserSessionResponse = await SendSessionsEndUserSessionPost();
 
-                var sessionResponse =
-                    await SendSessionsRequest(endUserSessionResponse.EndUserSessionId, connectionToken, odsCode);
-
-                _logger.LogDebug("Emis session successfully created");
-
+                var patientName = string.Empty;
+                
                 var session = new EmisUserSession
                 {
-                    SessionId = sessionResponse.SessionId,
                     EndUserSessionId = endUserSessionResponse.EndUserSessionId,
-                    UserPatientLinkToken = sessionResponse.ExtractUserPatientLinkToken(),
                     NhsNumber = nhsNumber,
                     OdsCode = odsCode,
                     AppointmentBookingReasonNecessity =  Necessity.Mandatory,
                     PrescriptionSpecialRequestNecessity = Necessity.Optional
                 };
 
+                var headerParams = new EmisHeaderParameters(session);
+                    
+                var sessionRequestTask = SendSessionsRequest(endUserSessionResponse.EndUserSessionId, connectionToken, odsCode);
+                var practiceSettingsTask =  _emisClient.PracticeSettingsGet(headerParams, odsCode);
+                await Task.WhenAll(sessionRequestTask, practiceSettingsTask);
+
                 try
                 {
-                    var headerParams = new EmisHeaderParameters(session);
-                    var practiceResponse = await _emisClient.PracticeSettingsGet(headerParams, odsCode);
-
+                    var sessionResponse = new EmisRequestTaskChecker<SessionsPostResponse>(_logger, "SendSessionsRequest").Check(sessionRequestTask);
+                    session.SessionId = sessionResponse.SessionId;
+                    session.UserPatientLinkToken = sessionResponse.ExtractUserPatientLinkToken();  
+                    patientName = FormatName(sessionResponse);
+                }
+                catch (EmisSessionResponseErrorException responseError)
+                {
+                    _logger.LogError(responseError,
+                        "Failed request to create Emis user session,EmisSessionResponseErrorException has been thrown");
+                    return responseError.ErrorResult;
+                }
+                catch (HttpRequestException e)
+                {
+                    _logger.LogError(e, "Failed request to create Emis user session,HttpRequestException has been thrown.");
+                    return new SessionCreateResult.SupplierSystemUnavailable();
+                }
+                finally
+                {
+                    _logger.LogExit(nameof(Create));
+                }
+                
+                try
+                {
+                    var practiceResponse = new EmisRequestTaskChecker<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>>(_logger, "GetPracticeDetails").Check(practiceSettingsTask);
+             
                     session.AppointmentBookingReasonNecessity =
                         _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.AppointmentBookingReason, Necessity.Mandatory);
                     
@@ -107,10 +130,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                     _logger.LogError(e, "Failed request to retrieve practice settings, HttpRequestException has been thrown.");
                 }
                 
-                return new SessionCreateResult.SuccessfullyCreated(
-                    FormatName(sessionResponse),
-                    session
-                );
+                return new SessionCreateResult.SuccessfullyCreated(patientName, session);
             }
             catch (EmisSessionResponseErrorException responseError)
             {
