@@ -315,5 +315,7 @@ Temporary Items
 
 audit.txt
 
+# Coverage Exclusions
+coverage/
 
 # End of https://www.gitignore.io/api/osx,aspnetcore
