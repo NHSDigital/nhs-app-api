@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
@@ -10,9 +11,11 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
@@ -301,6 +304,80 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task GetAvailableAppointments_FormatsRequestCorrectly()
+        {
+            // Arrange
+            var dateRange = _fixture.Create<AppointmentSlotsDateRange>();
+            var bodyResponse = _fixture.Create<VisionResponseEnvelope<AvailableAppointmentsResponse>>();
+            var received = new VisionRequest<AvailableAppointmentsRequest>();
+
+            _visionUserSession.LocationIds = _fixture.CreateMany<string>().ToList();
+            _visionUserSession.OwnerIds = _fixture.CreateMany<string>().ToList();
+
+            var slotsRequest = GetSlotsRequest(dateRange);
+
+            var expectedVisionRequest = GetVisionRequest(slotsRequest);
+
+            _mockEnvelopeService.Reset();
+
+            _mockEnvelopeService.Setup(x => x.BuildEnvelope(
+                It.IsAny<X509Certificate2>(),
+                It.IsAny<VisionRequest<AvailableAppointmentsRequest>>(),
+                It.IsAny<string>()))
+                .Returns("AnyString")
+                .Callback<X509Certificate, VisionRequest<AvailableAppointmentsRequest>, string>((c, r, s) =>
+                    received = r);
+
+            try
+            {
+                var responseContent = new StringContent(bodyResponse.SerializeXml());
+                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                    .Respond(HttpStatusCode.OK, responseContent);
+            }
+            catch (Exception e)
+            {
+                var ex = e;
+            }
+
+            // Act
+            await _sut.GetAvailableAppointments(_visionUserSession, dateRange);
+
+            // Assert
+            received.ServiceContent.Should().BeEquivalentTo(expectedVisionRequest.ServiceContent);
+        }
+
+        private VisionRequest<AvailableAppointmentsRequest> GetVisionRequest(AvailableAppointmentsRequest slotRequest)
+        {
+            return new VisionRequest<AvailableAppointmentsRequest>("VOAPP.GetAvailableAppointments",
+                "2.0.0",
+                _visionUserSession.RosuAccountId,
+                _visionUserSession.ApiKey,
+                _visionUserSession.OdsCode,
+                null,
+                slotRequest);
+        }
+
+        private AvailableAppointmentsRequest GetSlotsRequest(AppointmentSlotsDateRange dateRange)
+        {
+            return new AvailableAppointmentsRequest
+            {
+                PatientId = _visionUserSession.PatientId,
+                Page = new Page
+                {
+                    Number = 1,
+                    SlotsPerPage = 1000
+                },
+                Locations = _visionUserSession.LocationIds,
+                Owners = _visionUserSession.OwnerIds,
+                DateRange = new DateRange
+                {
+                    From = dateRange.FromDate.Date,
+                    To = dateRange.ToDate.Date
+                }
+            };
         }
 
         public void Dispose()

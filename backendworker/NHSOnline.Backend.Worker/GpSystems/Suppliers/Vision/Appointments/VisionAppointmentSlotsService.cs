@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -42,7 +41,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                     );
 
                 return InterpretAppointmentsGetResponse(response);
-
             }
             catch (HttpRequestException e)
             {

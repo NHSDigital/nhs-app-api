@@ -1,7 +1,10 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
@@ -35,10 +38,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                             NhsNumber = nhsNumber,
                             PatientId = response.Body.Configuration.Account.PatientId,
                             IsRepeatPrescriptionsEnabled = response.Body.Configuration.Prescriptions.RepeatEnabled,
-                            IsAppointmentsEnabled = response.Body.Configuration.Appointments.BookingEnabled
+                            IsAppointmentsEnabled = response.Body.Configuration.Appointments.BookingEnabled,
+                            LocationIds = GetLocationIds(response),
+                            OwnerIds = GetOwnerIds(response)
                         }
                     );
                 }
+
 
                 return GetCorrectErrorResult(response);
             }
@@ -47,6 +53,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                 return new SessionCreateResult.SupplierSystemUnavailable();
             }
         }
+
+        private static List<string> GetLocationIds(VisionApiObjectResponse<PatientConfigurationResponse> response) =>
+            response.Body.Configuration.References?.Locations != null
+                ? response.Body.Configuration.References.Locations.Select(l => l.Id).ToList()
+                : new List<string>();
+
+        private static List<string> GetOwnerIds(VisionApiObjectResponse<PatientConfigurationResponse> response) =>
+            response.Body.Configuration.References?.Owners != null
+                ? response.Body.Configuration.References.Owners.Select(o => o.Id).ToList()
+                : new List<string>();
 
         // Vision does not have a logoff endpoint, returning successfully deleted
         public Task<SessionLogoffResult> Logoff(UserSession userSession)

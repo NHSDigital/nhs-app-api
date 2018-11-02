@@ -1,4 +1,7 @@
-﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
+﻿using System.Collections.Generic;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
+
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 {
     public class VisionUserSession : UserSession
     {
@@ -17,5 +20,9 @@
         public bool IsAppointmentsEnabled { get; set; } = true;
 
         public bool AllowFreeTextPrescriptions { get; set; }
+
+        public List<string> OwnerIds { get; set; }
+
+        public List<string> LocationIds { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -9,6 +10,7 @@ using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
@@ -45,6 +47,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             var patientNumber = _fixture.Create<PatientNumber>();
             var patientId = _fixture.Create<string>();
             patientNumber.NumberType = "NHS";
+            var owners = _fixture.CreateMany<Owner>().ToList();
+            var locations = _fixture.CreateMany<Location>().ToList();
 
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
@@ -67,23 +71,28 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                                                 PatientNumbers = new List<PatientNumber> {patientNumber},
                                                 PatientId = patientId 
                                             },
-                                            Prescriptions = new PrescriptionsConfiguration()
+                                            Prescriptions = new PrescriptionsConfiguration
                                             {
                                                 RepeatEnabled = true
                                             },
-                                            Appointments = new AppointmentsConfiguration()
+                                            Appointments = new AppointmentsConfiguration
                                             {
                                                 BookingEnabled = false
+                                            },
+                                            References = new PatientReferences
+                                            {
+                                                Locations = locations,
+                                                Owners = owners
                                             }
                                         }
                                     }
                                 }
-                            },
-                        },
+                            }
+                        }
                     }));
             
             var expectedResult = new SessionCreateResult.SuccessfullyCreated(accountName, 
-                new VisionUserSession()
+                new VisionUserSession
                 {
                     NhsNumber = _nhsNumber, 
                     PatientId = patientId, 
@@ -91,7 +100,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                     ApiKey = DefaultApiKey,
                     RosuAccountId = DefaultRosuAccountId,
                     IsRepeatPrescriptionsEnabled = true,
-                    IsAppointmentsEnabled = false
+                    IsAppointmentsEnabled = false,
+                    LocationIds = locations.Select(l => l.Id).ToList(),
+                    OwnerIds = owners.Select(o => o.Id).ToList()
                 });
             
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);
@@ -170,12 +181,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                                             Error = new OutcomeError
                                             {
                                                 Code = "-30",
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }));
 
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);

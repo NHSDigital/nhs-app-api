@@ -12,5 +12,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
         
         [XmlElement(ElementName = "prescriptions", Namespace = "urn:vision")]
         public PrescriptionsConfiguration Prescriptions { get; set; }
+
+        [XmlElement(ElementName = "references", Namespace = "urn:vision")]
+        public PatientReferences References { get; set; }
     }
 }

@@ -133,6 +133,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         }
         
         public async Task<VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
+
             VisionUserSession visionUserSession, AppointmentSlotsDateRange dateRange)
         {
             IVisionServiceDefinition visionServiceDefinition = new GetAvailableAppointmenServiceDefinition();
@@ -140,21 +141,31 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             var request = new AvailableAppointmentsRequest
             {
                 PatientId = visionUserSession.PatientId,
+
                 Page = new Page
                 {
                     Number = 1,
-                    SlotsPerPage = 1000,
+                    SlotsPerPage = 1000
                 },
+                Locations = visionUserSession.LocationIds,
+                Owners = visionUserSession.OwnerIds,
                 DateRange = new DateRange
                 {
                     From = dateRange.FromDate.Date,
-                    To = dateRange.ToDate.Date,
+                    To = dateRange.ToDate.Date
                 }
             };
-            var visionRequest = new VisionRequest<AvailableAppointmentsRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId, request);
-            
-            return await SendRequestAndParseResponse<AvailableAppointmentsResponse, VisionRequest<AvailableAppointmentsRequest>>(visionRequest);
+            var visionRequest = new VisionRequest<AvailableAppointmentsRequest>(visionServiceDefinition.Name,
+                visionServiceDefinition.Version,
+                visionUserSession.RosuAccountId,
+                visionUserSession.ApiKey,
+                visionUserSession.OdsCode,
+                _providerId,
+                request);
+
+            return await
+                SendRequestAndParseResponse<AvailableAppointmentsResponse, VisionRequest<AvailableAppointmentsRequest>>(
+                    visionRequest);
         }
         
         public async Task<VisionApiObjectResponse<BookAppointmentResponse>> BookAppointment(
