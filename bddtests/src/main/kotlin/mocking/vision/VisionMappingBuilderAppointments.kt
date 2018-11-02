@@ -20,8 +20,8 @@ open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBu
     override fun viewMyAppointmentsRequest(patient: Patient):
             IMyAppointmentsBuilder = MyAppointmentsBuilderVision(patient)
 
-    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder =
-            BookAppointmentsBuilderVision(patient, request)
+    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade):
+            IBookAppointmentsBuilder = BookAppointmentsBuilderVision(patient, request)
 
     override fun appointmentSlotsRequest(patient: Patient,
                                          fromDateTime: String?,

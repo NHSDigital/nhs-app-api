@@ -17,7 +17,11 @@ abstract class MappingBuilder(method: String, url: String) {
         }
     }
 
-    fun respondWith(statusCode: Int, milliSecondDelay: Int = delayMillisecs, resolve: ResponseBuilder.() -> Unit): Mapping {
+    fun respondWith(
+            statusCode: Int,
+            milliSecondDelay: Int = delayMillisecs,
+            resolve: ResponseBuilder.() -> Unit
+    ): Mapping {
         val responseBuilder = ResponseBuilder(statusCode)
         responseBuilder.resolve()
 
