@@ -1,7 +1,7 @@
 <template>
   <header v-if="showHeader" :class="[$style.slim]">
     <h1 :class="[$style.h1]"><slot/></h1>
-    <a @click="performLogout()">
+    <a tabindex="0" @click="performLogout()" @keypress="keyPress($event)">
       <back-icon/>
     </a>
   </header>
@@ -11,6 +11,8 @@
 <script>
 /* eslint-disable import/extensions */
 import BackIcon from '@/components/icons/BackIcon';
+
+const ENTER_KEY_CODE = 13;
 
 export default {
   components: {
@@ -34,6 +36,13 @@ export default {
     performLogout() {
       this.$store.dispatch('auth/logout');
     },
+    keyPress(event) {
+      if (event.keyCode === ENTER_KEY_CODE) {
+        event.preventDefault();
+        this.performLogout();
+      }
+    },
+
   },
 };
 </script>
