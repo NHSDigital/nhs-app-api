@@ -46,7 +46,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private lateinit var urlLoader: UrlLoader
     private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
-
     private var isLoggedIn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -243,6 +242,16 @@ class MainActivity : IInteractor, AppCompatActivity() {
             showExitDialog()
         } else {
             this.finishAndRemoveTask()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val loginUrl = resources.getString(R.string.baseURL) + resources.getString(R.string.loginPath)
+
+        if (webview.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
+            webview.reload()
         }
     }
 
