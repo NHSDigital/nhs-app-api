@@ -164,6 +164,7 @@ Feature: View courses
       | VISION    |
 
   @smoketest
+  @nativebug @NHSO-3051
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -176,6 +177,7 @@ Feature: View courses
     And I see the entered special request text
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     And I select 1 additional repeat prescriptions
+    And I clear the text entered as special request
     And I enter text "Note I'm allergic to paracetamol." for special request
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page

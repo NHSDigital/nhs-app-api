@@ -3,6 +3,7 @@
 .user/
 .gradle/
 .vscode/
+.DS_Store
 audit.txt
 
 # Chromedriver#

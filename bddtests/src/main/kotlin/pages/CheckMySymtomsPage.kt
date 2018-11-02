@@ -1,6 +1,6 @@
 package pages
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException
+import org.openqa.selenium.WebDriverException
 
 open class CheckMySymtomsPage : HybridPageObject() {
 
@@ -19,12 +19,13 @@ open class CheckMySymtomsPage : HybridPageObject() {
     fun isConditionsHeaderVisible(): Boolean {
         switchWebview()
         for(window in driver.windowHandles.toList()) {
+            waitForNativeStepToComplete()
             driver.switchTo().window(window)
             try {
                 if (conditionsHeader.element.isDisplayed)
                     return true
             }
-            catch(e: ElementNotFoundException){
+            catch(e: WebDriverException){
                 println("Did not find element; switching window")
             }
         }

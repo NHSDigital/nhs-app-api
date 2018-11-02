@@ -1,17 +1,16 @@
 package features.more.stepDefinitions
 
-import config.Config
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
-import java.net.URL
 
 class MoreStepDefinitions {
 
@@ -19,10 +18,13 @@ class MoreStepDefinitions {
     lateinit var browser: BrowserSteps
     @Steps
     lateinit var nav: NavigationSteps
+    @Steps
+    lateinit var organDonationSteps: OrganDonationStepDefinitions
 
     lateinit var headerNative: HeaderNative
 
     lateinit var morePage: MorePage
+
     val mockingClient = MockingClient.instance
 
 
@@ -38,6 +40,7 @@ class MoreStepDefinitions {
                     .respondWithNdopMockPage()
         }
         morePage.btnDataSharing.element.click()
+        morePage.waitForNativeStepToComplete()
     }
 
     @Then("^I am on the More Page$")
@@ -60,8 +63,8 @@ class MoreStepDefinitions {
         headerNative.assertIsVisible("More")
     }
 
-    @Then("I see and can follow links within the more page body$")
-    fun iSeeAndCanFollowLinksWithinTheMorePageBody() {
+    @Then("I can see and can follow links within the more page body$")
+    fun iCanSeeAndCanFollowLinksWithinTheMorePageBody() {
         morePage.assertLinksPresent()
         val linksToFollow = arrayListOf(
                 { followDataSharingLink() },
@@ -81,19 +84,15 @@ class MoreStepDefinitions {
 
     private fun followDataSharingLink() {
         morePage.btnDataSharing.element.click()
+        morePage.waitForNativeStepToComplete()
         headerNative.waitForPageHeaderText("Sharing health data preferences")
         nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 
 
-    fun followOrganDonationLink() {
+    private fun followOrganDonationLink() {
         morePage.btnOrganDonation.element.click()
-        if (morePage.onMobile()){
-            URL(Config.instance.organDonation)
-        } else {
-            browser.changeTab(URL(Config.instance.organDonation))
-            browser.shouldHaveUrl(Config.instance.organDonation)
-        }
+        organDonationSteps.iAmOnTheOrganDonationPage()
     }
 
     private fun navigateBackToMorePage() {

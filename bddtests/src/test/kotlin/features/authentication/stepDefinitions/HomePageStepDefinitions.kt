@@ -6,6 +6,7 @@ import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.HomeSteps
 import features.myrecord.stepDefinitions.MyRecordStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
+import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
@@ -36,6 +37,8 @@ class HomePageDefinitions : AbstractSteps() {
     private lateinit var prescriptions: PrescriptionsSteps
     @Steps
     private lateinit var recordSteps: MyRecordStepDefinitions
+    @Steps
+    private lateinit var organDonationSteps: OrganDonationStepDefinitions
 
     @Then("^I see the beta banner$")
     fun iSeeTheBetaBanner() {
@@ -119,14 +122,7 @@ class HomePageDefinitions : AbstractSteps() {
     }
     private fun followOrganDonationLink() {
         homeSteps.homePage.organDonationLink.element.click()
-
-        if(homeSteps.homePage.onMobile()) {
-            URL(organDonationUrl)
-        }
-        else {
-            browser.changeTab(URL(organDonationUrl))
-            browser.shouldHaveUrl(organDonationUrl)
-        }
+        organDonationSteps.iAmOnTheOrganDonationPage()
     }
 }
 

@@ -37,5 +37,7 @@ open class HomeSteps {
     @Step
     fun waitForLoginToComplete() {
         homePage.waitForSpinnerToDisappear()
+        homePage.waitForNativeStepToComplete()
+
     }
 }

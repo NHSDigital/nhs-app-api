@@ -2,7 +2,7 @@ package pages
 
 class NdopPage : HybridPageObject() {
 
-    val pageTitle = HybridPageElement(
+    private val pageTitle = HybridPageElement(
             browserLocator = "//p[contains(text(),'token')]",
             androidLocator = null,
             iOSLocator = "//*[@id=\"ndop-token-form\"]",

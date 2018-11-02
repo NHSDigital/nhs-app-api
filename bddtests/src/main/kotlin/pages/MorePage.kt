@@ -28,6 +28,7 @@ open class MorePage : HybridPageObject() {
         return HybridPageElement(
                 browserLocator = "$sections[h2[contains(text(),'$linkTitle')]]",
                 androidLocator = null,
+                iOSLocator = "//*[contains(text(),'$linkTitle')]",
                 page = this,
                 helpfulName = "$linkTitle Link")
     }

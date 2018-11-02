@@ -1,0 +1,4 @@
+#include "Defaults.xcconfig"
+
+HOME_URL = web.local.bitraft.io:3000/
+BASE_SCHEME = http

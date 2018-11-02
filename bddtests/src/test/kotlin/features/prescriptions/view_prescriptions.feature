@@ -60,6 +60,7 @@ Feature: View prescriptions
       | VISION    |
 
   @smoketest
+  @nativebug @NHSO-3051
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System

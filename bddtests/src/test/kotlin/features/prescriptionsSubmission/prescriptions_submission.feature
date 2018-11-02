@@ -6,6 +6,7 @@ Feature: Prescriptions submission
     Given the scenario is submit prescription
 
   @smoketest
+  @nativebug @NHSO-3051
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
     Given <GP System> is initialised
     And I am using <GP System> GP System to submit my prescription

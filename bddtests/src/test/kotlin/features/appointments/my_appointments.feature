@@ -120,6 +120,8 @@ Feature: My appointments
       | VISION    |
 
   @long-running
+  @NHSO-802
+  @nativepending @NHSO-2966
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have no upcoming appointments for EMIS
     And I am logged in as a EMIS user

@@ -156,5 +156,10 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     fun isSpecialRequestTextAreaVisible() : Boolean {
         return findByXpath(specialRequestTextAreaXpath).isVisible
     }
+
+    fun clearTextInSpecialRequestTextArea() {
+        val requestBox = findByXpath("//*[@id='specialRequest']")
+           return requestBox.clear()
+    }
 }
 

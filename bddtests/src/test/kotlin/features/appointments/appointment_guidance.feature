@@ -3,7 +3,7 @@ Feature: Guidance prior to booking an appointment
   Users are given guidance before booking a new appointment.
 
   @smoketest
-  @nativepending @NHSO-2956
+  @nativebug @NHSO-2956 @NHSO-3053
   Scenario: A user is presented with guidance when booking an appointment and can proceed to check their symptoms
     Given I have upcoming appointments for EMIS
     And I am logged in as a EMIS user

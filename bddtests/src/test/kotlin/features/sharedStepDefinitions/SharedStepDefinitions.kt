@@ -75,6 +75,7 @@ open class SharedStepDefinitions {
         SharedStepDefinitions.patient = SerenityHelpers.getPatientOrNull() ?: SharedStepDefinitions.patient
         browser.goToApp()
         login.using(SharedStepDefinitions.patient)
+        browser.loginPage.waitForNativeStepToComplete()
     }
 
     @Given("^I am logged in and have not accepted the terms and conditions$")

@@ -357,6 +357,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         login.using(this.patient)
         nav.select(NavBarNative.NavBarType.MY_RECORD)
         myRecordWarningPage.clickAgreeAndContinue()
+        myRecordInfoPage.waitForNativeStepToComplete()
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
         myRecordInfoPage.waitForSpinnerToDisappear()

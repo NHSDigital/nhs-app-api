@@ -47,6 +47,7 @@ open class MyAppointmentsSteps {
 
     @Step
     fun clickOnBookAppointmentButton() {
+        myAppointmentsPage.waitForNativeStepToComplete()
         myAppointmentsPage.bookButton.element.click()
     }
 
@@ -91,7 +92,7 @@ open class MyAppointmentsSteps {
     fun checkIfBookAnAppointmentButtonExistAndEnabled() {
         try {
             myAppointmentsPage.bookButton.element.isVisible
-            myAppointmentsPage.bookButton.element.waitUntilVisible<WebElementFacade>()
+            myAppointmentsPage.bookButton.element.waitUntilPresent<WebElementFacade>()
 
             assertTrue("Book an appointment is not displaying",
                     myAppointmentsPage.bookButton.element.isDisplayed)

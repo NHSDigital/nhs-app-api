@@ -11,7 +11,7 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
     @Steps
     lateinit var login: LoginSteps
 
-    private val sessionExpiryInMilliSecs: Long = 70_000
+    private val sessionExpiryInMilliSecs: Long = 80_000
 
 
     @When("^I am idle long enough for the session to expire$")

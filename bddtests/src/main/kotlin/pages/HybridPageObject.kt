@@ -15,7 +15,8 @@ import org.openqa.selenium.support.ui.FluentWait
 import java.time.Duration
 
 const val DEFAULT_SPINNER_WAIT: Long = 30
-const val DEFAULT_MOBILE_WAIT: Long = 4000
+const val DEFAULT_MOBILE_WAIT: Long = 5000
+const val DEFAULT_NATIVE_SPINNER_WAIT: Long = 1000
 const val POOLING_FREQUENCY: Long = 100
 const val WEB_CONTEXT: String = "webview"
 
@@ -45,11 +46,18 @@ open class HybridPageObject : PageObject() {
         return this.element
     }
 
-    private fun HybridPageElement.waitForNativeSpinner(milliseconds: Long = DEFAULT_MOBILE_WAIT): WebElementFacade {
-        //Actually waiting for the native spinner can cause problems because it can vanish and comeback
-        //For now; we will sleep for long enough to make sure it's really gone.
+    private fun HybridPageElement.waitForNativeSpinner(
+            milliseconds: Long = DEFAULT_NATIVE_SPINNER_WAIT): WebElementFacade {
+        //waiting for the native spinner can cause problems
+        //because it can vanish and comeback
         Thread.sleep(milliseconds)
         return this.element
+    }
+
+    fun waitForNativeStepToComplete(milliseconds: Long = DEFAULT_MOBILE_WAIT){
+        //Native execution/redirect is slow on browser stack
+       if(onMobile())
+            Thread.sleep(milliseconds)
     }
 
     private fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {

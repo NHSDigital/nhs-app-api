@@ -90,6 +90,7 @@ class MyAppointmentsStepDefinitions {
 
     @When("^I select \"([^\"]*)\" button$")
     fun i_select_button(buttonText: String) {
+        myAppointmentsSteps.myAppointmentsPage.waitForNativeStepToComplete()
         myAppointmentsSteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
     }
 

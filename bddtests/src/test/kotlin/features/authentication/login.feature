@@ -6,6 +6,7 @@ Feature: Login
 
 
   @smoketest
+  @nativepending @NHSO-2972
   Scenario Outline: A <GP System> user sees the home page after logging in
     Given I have no upcoming appointments for <GP System>
     And I have no repeat prescriptions for <GP System>
