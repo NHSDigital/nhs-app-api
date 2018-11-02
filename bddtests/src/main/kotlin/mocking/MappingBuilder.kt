@@ -7,6 +7,8 @@ private const val SC_FOUND = HttpStatus.SC_MOVED_TEMPORARILY
 const val CONTENT_TYPE_APPLICATION_JSON = "application/json; charset=UTF-8"
 abstract class MappingBuilder(method: String, url: String) {
 
+    var delayMillisecs = 0
+
     internal val requestBuilder = RequestBuilder(method, url)
 
     fun respondWithBody(body: String, statusCode: Int = HttpStatus.SC_OK): Mapping {
@@ -15,7 +17,7 @@ abstract class MappingBuilder(method: String, url: String) {
         }
     }
 
-    fun respondWith(statusCode: Int, milliSecondDelay: Int = 0, resolve: ResponseBuilder.() -> Unit): Mapping {
+    fun respondWith(statusCode: Int, milliSecondDelay: Int = delayMillisecs, resolve: ResponseBuilder.() -> Unit): Mapping {
         val responseBuilder = ResponseBuilder(statusCode)
         responseBuilder.resolve()
 

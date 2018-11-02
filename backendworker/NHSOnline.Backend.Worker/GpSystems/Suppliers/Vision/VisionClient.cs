@@ -121,15 +121,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         }
         
         public async Task<VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
-            VisionConnectionToken token, 
-            string odsCode, 
-            string patientId
+            VisionUserSession userSession
             )
         {
             IVisionServiceDefinition visionServiceDefinition = new GetExistingAppointmentsServiceDefinition();
 
             var visionRequest = new VisionRequest<PatientId>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                token.RosuAccountId, token.ApiKey, odsCode, _providerId, new PatientId { Id = patientId });
+                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, new PatientId { Id = userSession.PatientId });
 
             return await SendRequestAndParseResponse<BookedAppointmentsResponse, VisionRequest<PatientId>>(visionRequest);
         }
@@ -157,6 +155,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId, request);
             
             return await SendRequestAndParseResponse<AvailableAppointmentsResponse, VisionRequest<AvailableAppointmentsRequest>>(visionRequest);
+        }
+        
+        public async Task<VisionApiObjectResponse<BookAppointmentResponse>> BookAppointment(
+            VisionUserSession userSession,
+            BookAppointmentRequest bookAppointmentRequest
+        )
+        {
+            IVisionServiceDefinition visionServiceDefinition = new BookAppointmentServiceDefinition();
+
+            var visionRequest = new VisionRequest<BookAppointmentRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
+                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, bookAppointmentRequest);
+
+            return await SendRequestAndParseResponse<BookAppointmentResponse, VisionRequest<BookAppointmentRequest>>(visionRequest);
         }
 
         public async Task<VisionApiObjectResponse<CancelledAppointmentResponse>> CancelAppointment(
@@ -215,7 +226,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
             if (!response.HasSuccessResponse)
             {
-                _logger.LogError($"Tpp request failed with status code {responseMessage.StatusCode}");
+                _logger.LogError($"VISION request failed with status code {responseMessage.StatusCode}");
                 return response;
             }
 

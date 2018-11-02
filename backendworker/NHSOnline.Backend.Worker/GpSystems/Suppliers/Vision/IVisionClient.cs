@@ -32,11 +32,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             OrderNewPrescriptionRequest newPrescriptionRequest);
 
         Task<VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
-            VisionConnectionToken token, string odsCode, string patientId);
+            VisionUserSession userSession);
         
         Task<VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
             VisionUserSession visionUserSession, AppointmentSlotsDateRange dateRange);
-
+        
+        Task<VisionClient.VisionApiObjectResponse<BookAppointmentResponse>> BookAppointment(
+            VisionUserSession userSession, BookAppointmentRequest bookAppointmentRequest);
+        
         Task<VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse>> CancelAppointment(
             VisionUserSession userSession, CancelAppointmentRequest request);
             

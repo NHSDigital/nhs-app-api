@@ -9,17 +9,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
     public class VisionAppointmentsService : IAppointmentsService
     {
         private readonly VisionAppointmentsRetrievalService _getter;
+        private readonly VisionAppointmentsBookingService _booker;
+        
         private readonly VisionAppointmentsCancellationService _canceller;
 
-        public VisionAppointmentsService(VisionAppointmentsRetrievalService getter, VisionAppointmentsCancellationService canceller)
+        public VisionAppointmentsService(
+            VisionAppointmentsRetrievalService getter,
+            VisionAppointmentsBookingService booker, 
+            VisionAppointmentsCancellationService canceller)
         {
             _getter = getter;
+            _booker = booker;
             _canceller = canceller;
         }
         
-        public Task<AppointmentBookResult> Book(UserSession userSession, AppointmentBookRequest request)
+        public async Task<AppointmentBookResult> Book(UserSession userSession, AppointmentBookRequest request)
         {
-            throw new NotImplementedException();
+            return await _booker.Book((VisionUserSession)userSession, request);
         }
 
         public async Task<AppointmentCancelResult> Cancel(UserSession userSession, AppointmentCancelRequest request)

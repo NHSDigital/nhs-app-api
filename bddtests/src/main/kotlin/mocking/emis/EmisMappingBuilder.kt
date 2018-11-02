@@ -18,8 +18,6 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
                               method: String, relativePath: String = "")
     : MappingBuilder(method, "/emis$relativePath") {
 
-    protected var delayMillisecs = 0
-
     init {
         if (configuration != null) {
             requestBuilder

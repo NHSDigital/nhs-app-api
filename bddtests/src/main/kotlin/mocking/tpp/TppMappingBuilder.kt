@@ -18,8 +18,6 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
         internal const val HEADER_SUID = "suid"
     }
 
-    var delayMillisecs = 0
-
     init {
         requestBuilder.andHeader(HEADER_CONTENT_TYPE, "text/xml; charset=UTF-8")
     }

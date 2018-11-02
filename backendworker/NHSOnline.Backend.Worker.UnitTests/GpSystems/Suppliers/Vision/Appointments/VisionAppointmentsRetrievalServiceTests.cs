@@ -84,11 +84,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         {
             // Arrange
             _mockVisionClient.Setup(x => x.GetExistingAppointments(
-                    It.Is<VisionConnectionToken>(p => 
-                        p.RosuAccountId.Equals(_userSession.RosuAccountId, StringComparison.Ordinal)
-                        && p.ApiKey.Equals(_userSession.ApiKey, StringComparison.Ordinal)),
-                    _userSession.OdsCode,
-                    _userSession.PatientId
+                    _userSession
                 ))
                 .Throws<HttpRequestException>()
                 .Verifiable();
@@ -118,11 +114,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {   
             _mockVisionClient.Setup(x => x.GetExistingAppointments(
-                    It.Is<VisionConnectionToken>(p => 
-                        p.RosuAccountId.Equals(_userSession.RosuAccountId, StringComparison.Ordinal)
-                        && p.ApiKey.Equals(_userSession.ApiKey, StringComparison.Ordinal)),
-                    _userSession.OdsCode,
-                    _userSession.PatientId
+                    _userSession
                     ))
                 .ReturnsAsync(response);
         }

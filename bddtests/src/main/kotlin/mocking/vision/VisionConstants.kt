@@ -2,9 +2,8 @@ package mocking.vision
 
 import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionResponse
 import mocking.vision.helpers.VisionConstantsHelper.Companion.setContextOnServiceContent
-import mocking.vision.models.appointments.BookedAppointmentsResponse
 import mocking.vision.models.appointments.AvailableAppointmentsResponse
-
+import mocking.vision.models.appointments.BookedAppointmentsResponse
 object VisionConstants {
 
     // Service names and versions
@@ -39,6 +38,9 @@ object VisionConstants {
     const val medicationsView: String = "VPS_MEDICATIONS"
     const val immunisationsView: String = "PROCEDURES"
     const val problemsView: String = "PROBLEMS"
+
+    const val bookAppointmentName: String = "VOAPP.BookAppointment"
+    const val bookAppointmentVersion: String = "2.0.0"
 
 
     const val htmlResponseFormat: String = "HTML"

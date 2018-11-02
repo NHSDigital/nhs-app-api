@@ -70,6 +70,7 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
                 else
                     BookedAppointmentsResponse()
 
+
         val jaxbContext = JAXBContext.newInstance(BookedAppointmentsResponse::class.java)
         val marshaller = jaxbContext.createMarshaller()
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)

@@ -11,9 +11,10 @@ Feature: Book appointments
     When an appointment booking is submitted
     Then a successful response for appointment booking is returned
     Examples: 
-    | GP System |
-    | EMIS      |
-    | TPP       |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no slot identifier is provided
     Given I have logged into <GP System> and have a valid session cookie
@@ -43,6 +44,7 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no booking reason is provided
     Given I have logged into <GP System> and have a valid session cookie
@@ -72,6 +74,8 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
+
 
   Scenario Outline: Booking an appointment with <GP System> returns successful response if the booking reason is 150 characters
     Given an appointment booking for <GP System> can be successful with booking reason of 150 characters
@@ -82,6 +86,7 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if the booking reason exceeds 150 characters
     Given an appointment booking for <GP System> can be successful
@@ -101,6 +106,7 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Unauthorized" response if no user session cookie was generated
     Given an appointment booking for <GP System> can be successful
@@ -180,3 +186,4 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |

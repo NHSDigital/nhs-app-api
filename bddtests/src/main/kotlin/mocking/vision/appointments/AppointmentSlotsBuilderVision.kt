@@ -29,8 +29,6 @@ class AppointmentSlotsBuilderVision(patient: Patient, fromDateString: String?, t
             VisionConstants.availableAppointmentsVersion
     )
 
-    private var delayMillisecs = 0
-
     init {
         val contentTypeHeader = "content-type"
         val contentTypeValue = "text/xml; charset=UTF-8"

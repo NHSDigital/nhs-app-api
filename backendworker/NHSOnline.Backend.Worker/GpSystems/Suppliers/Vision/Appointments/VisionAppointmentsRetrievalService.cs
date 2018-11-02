@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -41,16 +40,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                     return new AppointmentsResult.CannotViewAppointments();
                 }
                 
-                var visionConnectionToken = new VisionConnectionToken
-                {
-                    RosuAccountId = visionUserSession.RosuAccountId,
-                    ApiKey = visionUserSession.ApiKey
-                };
-                
                 var response = await _visionClient.GetExistingAppointments(
-                    visionConnectionToken,
-                    visionUserSession.OdsCode,
-                    visionUserSession.PatientId
+                    visionUserSession
                     );
                 return InterpretAppointmentsGetResponse(response);
             }

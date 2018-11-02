@@ -18,6 +18,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
@@ -31,6 +32,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user can book an appointment describing symptoms at least 1 character
     Given there are <GP System> appointments available to book with a reason of 1 character
@@ -45,6 +47,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @smoketest
   Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
@@ -60,6 +63,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @nativepending @NHSO-2956
     #native issue - length mismatch
@@ -77,6 +81,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @nativepending @NHSO-2956
     #native issue - length mismatch
@@ -92,6 +97,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @nativepending @NHSO-2956
     #native issue - length mismatch
@@ -108,6 +114,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user cannot enter dangerous text for booking reason
     Given there are <GP System> appointments available to book and user attempts to enter booking reason <script>
@@ -122,6 +129,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
@@ -198,6 +206,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
 # EMIS Specific Scenarios (For EMIS reason necessity)
 # The following scenarios covered only Optional and Not-Required reason necessity options.

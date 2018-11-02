@@ -53,7 +53,8 @@ abstract class AppointmentsBookingBackendFactory(gpSupplier:String): Appointment
         override val map: HashMap<String, (()-> AppointmentsBookingBackendFactory)>
                by lazy{ hashMapOf(
                         "EMIS" to { AppointmentsBookingBackendFactoryEmis() },
-                        "TPP" to { AppointmentsBookingBackendFactoryTpp() })}
+                        "TPP" to { AppointmentsBookingBackendFactoryTpp() },
+                        "VISION" to { AppointmentsBookingBackendFactoryVision() })}
 
 
         const val appointmentToBookKey = "AppointmentToBook"

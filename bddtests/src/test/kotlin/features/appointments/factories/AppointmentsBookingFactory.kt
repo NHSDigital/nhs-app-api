@@ -47,6 +47,7 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         override val map: HashMap<String, (() -> (AppointmentsBookingFactory))> by lazy {
             hashMapOf(
                     "EMIS" to { AppointmentsBookingFactory("EMIS") },
+                    "VISION" to { AppointmentsBookingFactory("VISION") },
                     "TPP" to { AppointmentsBookingFactory("TPP") })
         }
 
