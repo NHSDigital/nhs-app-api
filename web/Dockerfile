@@ -28,7 +28,7 @@ RUN npm run build
 
 # Tests
 FROM build_dependencies AS test
-COPY . .
+COPY --chown=nodejs:nodejs . .
 
 
 # Final image
