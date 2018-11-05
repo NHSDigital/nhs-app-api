@@ -5,19 +5,11 @@ import WebKit
 class LifecycleHandlers: NSObject {
     var knownServices: KnownServices
     var webViewController: WebViewController?
-    var unsecureWebViewController: UnsecureWebViewController?
     let validateSessionString: String = "window.validateSession()"
     
     init(knownServices: KnownServices, webViewController: WebViewController) {
         self.knownServices = knownServices
         self.webViewController = webViewController
-        super.init()
-        createLifecycleObservers()
-    }
-    
-    init(knownServices: KnownServices, webViewController: UnsecureWebViewController) {
-        self.knownServices = knownServices
-        self.unsecureWebViewController = webViewController
         super.init()
         createLifecycleObservers()
     }
@@ -34,20 +26,11 @@ class LifecycleHandlers: NSObject {
     }
     
     @objc func didBecomeActive() {
-        if(unsecureWebViewController != nil) {
-            if knownServices.shouldValidateSession(host: unsecureWebViewController?.webView.url?.host) {
-                validateSession(knownServices: self.knownServices, webView: (self.unsecureWebViewController?.webView)!)
-            } else {
-                hideWhiteScreen()
-            }
+        if knownServices.shouldValidateSession(host: webViewController?.webView.url?.host) {
+            validateSession(knownServices: self.knownServices, webView: (self.webViewController?.webView)!)
         } else {
-            if knownServices.shouldValidateSession(host: webViewController?.webView.url?.host) {
-                validateSession(knownServices: self.knownServices, webView: (self.webViewController?.webView)!)
-            } else {
-                hideWhiteScreen()
-            }
+            hideWhiteScreen()
         }
-
     }
     
     @objc func didEnterBackground() {

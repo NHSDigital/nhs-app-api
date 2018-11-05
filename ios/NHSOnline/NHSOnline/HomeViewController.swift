@@ -7,17 +7,19 @@ class HomeViewController : UIViewController {
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
     
     @IBOutlet weak var headerBar: HeaderBar!
+    @IBOutlet weak var headerBarSlim: HeaderBarSlim!
+
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var containerView: UIView!
     
     @IBOutlet weak var webviewHeaderTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var webviewNavMenuBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var webviewHeaderSlimTopConstraint: NSLayoutConstraint!
     
     let knownServices = KnownServices(config: config())
     var lifecycleHandlers: LifecycleHandlers?
     var webViewController: WebViewController?
     var nativeViewController: PageUnavailabilityViewController?
-    var unsecureViewController: UnsecureViewController?
     var webViewDelegate: WebViewDelegate?
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().HomeUrl
@@ -29,6 +31,7 @@ class HomeViewController : UIViewController {
         super.viewDidLoad()
         
         setupNhsLogo()
+        setupBackArrow()
         setupMyAccountIcon()
         setupHelpIcon()
         
@@ -95,9 +98,10 @@ class HomeViewController : UIViewController {
     func updateHeaderText(headerText: String?, accessibilityLabel: String? = nil) {
         if (headerText != nil) {
             self.headerBar.headerTitle.text = headerText
+            self.headerBar.headerTitle.accessibilityLabel = accessibilityLabel
+            self.headerBarSlim.headerTitle.text = headerText
+            self.headerBarSlim.headerTitle.accessibilityLabel = accessibilityLabel
         }
-        self.headerBar.headerTitle.accessibilityLabel = accessibilityLabel
-        
         if let a11yLabel = accessibilityLabel {
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, a11yLabel)
         } else {
@@ -105,16 +109,16 @@ class HomeViewController : UIViewController {
         }
     }
     
-    func callCheckSymptoms() {
-        self.webViewController?.webView.stopLoading()
-        let tempVC = self.storyboard?.instantiateViewController(withIdentifier: "UnsecureViewController") as? UnsecureViewController
-        self.navigationController?.pushViewController(tempVC!, animated: false)
-    }
-    
     func setupNhsLogo() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.goHome))
         self.headerBar.NHSHomeLogo.isUserInteractionEnabled = true
         self.headerBar.NHSHomeLogo.addGestureRecognizer(tapGesture)
+    }
+    
+    func setupBackArrow() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.checkSymptomsBack))
+        self.headerBarSlim.backButtonArrow.isUserInteractionEnabled = true
+        self.headerBarSlim.backButtonArrow.addGestureRecognizer(tapGesture)
     }
     
     func setupMyAccountIcon() {
@@ -147,7 +151,7 @@ class HomeViewController : UIViewController {
         self.webViewController?.webView.evaluateJavaScript(javascriptCommand, completionHandler: completionHandler)
     }
     
-    func setVisibilityOfHeaderAndMenuBars(visible:Bool) {
+    func setVisibilityOfHeaderAndMenuBars(visible: Bool, isSlim: Bool) {
         UIView.animate(withDuration: 0.3, animations: {
             let constraintPriority:UILayoutPriority
             
@@ -157,10 +161,15 @@ class HomeViewController : UIViewController {
                 constraintPriority = self.hideConstraintPriority
             }
             
-            self.webviewHeaderTopConstraint.priority = constraintPriority
-            self.webviewNavMenuBottomConstraint.priority = constraintPriority
-            self.headerBar.isHidden = !visible
-            self.tabBar.isHidden = !visible
+            if isSlim {
+                self.webviewHeaderSlimTopConstraint.priority = constraintPriority
+                self.headerBarSlim.isHidden = !visible
+            } else {
+                self.webviewHeaderTopConstraint.priority = constraintPriority
+                self.webviewNavMenuBottomConstraint.priority = constraintPriority
+                self.headerBar.isHidden = !visible
+                self.tabBar.isHidden = !visible
+            }
         })
         
         setupAppVersion()
@@ -217,6 +226,27 @@ class HomeViewController : UIViewController {
         self.pageUrl = config().HomeUrl
         self.webViewController?.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
+    }
+    func showWhiteScreen() {
+        let v = UIView(frame: UIScreen.main.bounds)
+        v.backgroundColor = UIColor.white
+        v.tag = 2
+        self.view.addSubview(v)
+    }
+    @objc func checkSymptomsBack() {
+        let baseUrl = URL(string: config().HomeUrl)
+        if let webview = self.webViewController?.webView {
+            if(webview.url?.host == baseUrl?.host && webview.url?.path == config().CheckSymptomsUrlPath) {
+                self.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
+                self.showWhiteScreen()
+                self.webViewController?.loadPage(url: config().HomeUrl)
+                
+            } else {
+                if(webview.canGoBack) {
+                    webview.goBack()
+                }
+            }
+        }
     }
 }
 

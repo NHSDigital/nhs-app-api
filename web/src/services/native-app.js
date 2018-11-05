@@ -7,6 +7,7 @@ export default {
     }
     return false;
   },
+
   onLogout() {
     const app = window.nativeApp;
     if (app && app.onLogout) {
@@ -33,15 +34,6 @@ export default {
     return false;
   },
 
-  checkSymptoms() {
-    const app = window.nativeApp;
-    if (app && app.checkSymptoms) {
-      app.checkSymptoms();
-      return true;
-    }
-    return false;
-  },
-
   hideHeader() {
     const app = window.nativeApp;
     if (app && app.hideHeader) {
@@ -60,10 +52,39 @@ export default {
     return false;
   },
 
+  showHeaderSlim() {
+    const app = window.nativeApp;
+    if (app && app.showHeaderSlim) {
+      app.showHeaderSlim();
+      return true;
+    }
+    return false;
+  },
+
+  hideHeaderSlim() {
+    const app = window.nativeApp;
+    if (app && app.hideHeaderSlim) {
+      app.hideHeaderSlim();
+      return true;
+    }
+    return false;
+  },
+
+  checkSymptoms() {
+    const app = window.nativeApp;
+    if (app && app.checkSymptoms) {
+      app.checkSymptoms();
+      return true;
+    }
+    return false;
+  },
+
   hideWhiteScreen() {
     const app = window.nativeApp;
     if (app && app.hideWhiteScreen) {
-      app.hideWhiteScreen();
+      setTimeout(() => {
+        app.hideWhiteScreen();
+      }, 20);
       return true;
     }
     return false;

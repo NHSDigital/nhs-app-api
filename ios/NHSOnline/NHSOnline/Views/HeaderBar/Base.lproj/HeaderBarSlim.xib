@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HeaderBarSlim" customModule="NHSOnline" customModuleProvider="target">
+            <connections>
+                <outlet property="backButtonArrow" destination="2ci-pA-TO0" id="hQE-aZ-55v"/>
+                <outlet property="headerBarView" destination="iN0-l3-epB" id="QfN-bN-4Ni"/>
+                <outlet property="headerTitle" destination="2kX-eU-qpv" id="eQ4-AC-RrU"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kX-eU-qpv">
+                    <rect key="frame" x="0.0" y="1" width="359" height="49"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" staticText="YES" header="YES"/>
+                    </accessibility>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="49" id="VZ7-Kj-L6a"/>
+                    </constraints>
+                    <attributedString key="attributedText">
+                        <fragment content="Home">
+                            <attributes>
+                                <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <font key="NSFont" size="20" name=".AppleSystemUIFont"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2ci-pA-TO0">
+                    <rect key="frame" x="0.0" y="0.0" width="43" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="43" id="XDI-dr-PVH"/>
+                    </constraints>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="4" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" image="backArrow"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="2ci-pA-TO0" secondAttribute="bottom" id="1dt-od-J5p"/>
+                <constraint firstItem="2ci-pA-TO0" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="8gM-kx-er6"/>
+                <constraint firstItem="2kX-eU-qpv" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="F1J-Hl-Xg7"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2kX-eU-qpv" secondAttribute="trailing" constant="16" id="Qdc-xx-bEI"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="2kX-eU-qpv" secondAttribute="bottom" id="VXz-kb-2es"/>
+                <constraint firstItem="2ci-pA-TO0" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="zwB-Wp-7dk"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="-62.8125" y="-300"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="backArrow" width="11" height="20"/>
+    </resources>
+</document>

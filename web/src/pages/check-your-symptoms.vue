@@ -10,6 +10,7 @@
 </template>
 <script>
 /* eslint-disable import/extensions */
+import NativeCallbacks from '@/services/native-app';
 import HeaderSlim from '@/components/HeaderSlim';
 import symptomsCheck from '@/components/symptoms/SymptomsCheck';
 
@@ -17,6 +18,12 @@ export default {
   components: {
     HeaderSlim,
     symptomsCheck,
+  },
+  mounted() {
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.showHeaderSlim();
+      NativeCallbacks.hideWhiteScreen();
+    }
   },
   methods: {
     getHeaderState() {

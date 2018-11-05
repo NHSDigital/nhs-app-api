@@ -18,10 +18,17 @@ export default {
   methods: {
     checkSymptomsButtonClicked() {
       this.$store.dispatch('device/goToCheckSymptoms');
+      // this method will be refactored to the following:
+      // const sourceValue = this.$store.state.device.source;
+      // this.$router.push({
+      //   path: '/check-your-symptoms',
+      //   query: { source: sourceValue },
+      // });
     },
   },
 };
 </script>
+
 <style module lang="scss" scoped>
 @import "../style/buttons";
 @import "../style/home";

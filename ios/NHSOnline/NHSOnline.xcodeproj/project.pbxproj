@@ -13,9 +13,8 @@
 		105BB9902179C0A300571671 /* Scratch8.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB98F2179C0A300571671 /* Scratch8.xcconfig */; };
 		105BB9922179C0B100571671 /* Scratch9.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9912179C0B100571671 /* Scratch9.xcconfig */; };
 		105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9932179C0C400571671 /* Scratch10.xcconfig */; };
-		138DF3772111CF6F00D71A64 /* UnsecureWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138DF3762111CF6F00D71A64 /* UnsecureWebViewController.swift */; };
-		13BA17E321232D1500DF724B /* UnsecureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BA17E221232D1500DF724B /* UnsecureViewController.swift */; };
-		13BA17E7212C4ED200DF724B /* UnsecureWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BA17E6212C4ED200DF724B /* UnsecureWebViewDelegate.swift */; };
+		139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139F19262181D73300ED59A1 /* HeaderBarSlim.xib */; };
+		139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */; };
 		4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
 		9200DC9F21428562009EFFEF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200DC9E21428562009EFFEF /* Reachability.swift */; };
@@ -72,11 +71,10 @@
 		105BB9912179C0B100571671 /* Scratch9.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch9.xcconfig; sourceTree = "<group>"; };
 		105BB9932179C0C400571671 /* Scratch10.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch10.xcconfig; sourceTree = "<group>"; };
 		105BB9A42186FA3E00571671 /* Defaults.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Defaults.xcconfig; sourceTree = "<group>"; };
-		138DF3762111CF6F00D71A64 /* UnsecureWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsecureWebViewController.swift; sourceTree = "<group>"; };
-		13BA17E221232D1500DF724B /* UnsecureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsecureViewController.swift; sourceTree = "<group>"; };
-		13BA17E6212C4ED200DF724B /* UnsecureWebViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsecureWebViewDelegate.swift; sourceTree = "<group>"; };
-		4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlers.swift; sourceTree = "<group>"; };
 		5598FF712189C27100767CAC /* BrowserstackLocal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserstackLocal.xcconfig; sourceTree = "<group>"; };
+		139F19272181D73300ED59A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBarSlim.xib; sourceTree = "<group>"; };
+		139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarSlim.swift; sourceTree = "<group>"; };
+		4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlers.swift; sourceTree = "<group>"; };
 		609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime_Extensions.swift; sourceTree = "<group>"; };
 		9200DC9E21428562009EFFEF /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		925C3D5D2110C78600534AC5 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../android/app/src/main/assets; sourceTree = "<group>"; };
@@ -214,7 +212,6 @@
 				C205780E2028B94800CDBDC5 /* Info.plist */,
 				F0B4B8BA204D68DC004E4120 /* Localizable.strings */,
 				F065B3D7205FCFFE004EF388 /* HomeViewController.swift */,
-				13BA17E221232D1500DF724B /* UnsecureViewController.swift */,
 				105BB9752178DC1700571671 /* Configurations */,
 			);
 			path = NHSOnline;
@@ -262,8 +259,10 @@
 		C2D9864220C8000C00F19792 /* HeaderBar */ = {
 			isa = PBXGroup;
 			children = (
+				139F19262181D73300ED59A1 /* HeaderBarSlim.xib */,
 				F057336B20A72F040059032D /* HeaderBar.xib */,
 				C276D563207B638400F3B1E5 /* HeaderBar.swift */,
+				139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */,
 			);
 			path = HeaderBar;
 			sourceTree = "<group>";
@@ -298,7 +297,6 @@
 			children = (
 				F0F2A8B2205138C700394B2F /* PageUnavailabilityViewController.swift */,
 				F026199A2050AFE100EDDFE0 /* WebViewController.swift */,
-				138DF3762111CF6F00D71A64 /* UnsecureWebViewController.swift */,
 			);
 			path = ContainerViewControllers;
 			sourceTree = "<group>";
@@ -320,7 +318,6 @@
 			children = (
 				F0D2E5D520501EAA0067DEC4 /* WebViewDelegate.swift */,
 				F065B3D9205FDFC6004EF388 /* TabBarDelegate.swift */,
-				13BA17E6212C4ED200DF724B /* UnsecureWebViewDelegate.swift */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -426,6 +423,7 @@
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
 				105BB98C2179C08300571671 /* Scratch6.xcconfig in Resources */,
 				105BB9872179B67400571671 /* Scratch5.xcconfig in Resources */,
+				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
 				F07607F320B44C0300069F7F /* WebEvents.js in Resources */,
 				105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */,
 				105BB9902179C0A300571671 /* Scratch8.xcconfig in Resources */,
@@ -449,18 +447,16 @@
 			files = (
 				C21428212164B21300F00948 /* KnownService.swift in Sources */,
 				F0F2A8B3205138C700394B2F /* PageUnavailabilityViewController.swift in Sources */,
+				139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */,
 				C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
-				138DF3772111CF6F00D71A64 /* UnsecureWebViewController.swift in Sources */,
 				4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
 				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
-				13BA17E321232D1500DF724B /* UnsecureViewController.swift in Sources */,
-				13BA17E7212C4ED200DF724B /* UnsecureWebViewDelegate.swift in Sources */,
 				C2142823216512D200F00948 /* KnownServices.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
@@ -496,6 +492,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		139F19262181D73300ED59A1 /* HeaderBarSlim.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				139F19272181D73300ED59A1 /* Base */,
+			);
+			name = HeaderBarSlim.xib;
+			sourceTree = "<group>";
+		};
 		C20578062028B94800CDBDC5 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

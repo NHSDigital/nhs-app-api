@@ -13,6 +13,7 @@
 "MoreTitle" = "More";
 "HomeTitle" = "Home";
 "CheckSymptomsTitle" = "Check my symptoms";
+"BackArrowTitle" = "Back button";
 
 /*Error messages*/
 "ConnectionErrorHeader" = "Connection error";
@@ -22,6 +23,7 @@
 
 /*Accessibility*/
 "MyAccountHint" = "Navigates to my account page";
+"BackArrowHint" = "Navigates back a page";
 "HelpHint" = "Navigates to help page";
 "NHSAppHomeTitle" = "NHS App Home";
 "NHSAppHomeHint" = "Takes you to NHS App home page";

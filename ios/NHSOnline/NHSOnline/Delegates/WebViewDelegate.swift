@@ -170,7 +170,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             
             if (message.name == "hideHeader") {
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: false)
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
             }
             
             if (message.name == "hideWhiteScreen") {
@@ -178,7 +178,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             
             if (message.name == "showHeader") {
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
+            }
+            
+            if (message.name == "showHeaderSlim") {
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: true)
+            }
+            
+            if (message.name == "hideHeaderSlim") {
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
             }
             
             if (message.name == "resetPageFocus") {
@@ -198,9 +206,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             if (message.name == "clearMenuBarItem") {
                 clearMenuBarItem()
             }
-            if (message.name == "checkSymptoms") {
-                checkSymptoms()
-            }
             if (message.name == "completeAppIntro") {
                 
                 let defaults = UserDefaults.standard
@@ -218,10 +223,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func clearMenuBarItem() {
         self.viewController.tabBar.selectedItem = nil
     }
-    
-    func checkSymptoms() {
-        self.viewController.callCheckSymptoms()
-    }
+
     
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {

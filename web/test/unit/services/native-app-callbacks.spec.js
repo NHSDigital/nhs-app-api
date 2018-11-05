@@ -6,9 +6,11 @@ describe('NATIVE CALLBACKS', () => {
     { fn: 'onLogin' },
     { fn: 'onLogout' },
     { fn: 'clearMenuBarItem' },
-    { fn: 'checkSymptoms' },
     { fn: 'hideHeader' },
     { fn: 'showHeader' },
+    { fn: 'checkSymptoms' },
+    { fn: 'hideHeaderSlim' },
+    { fn: 'showHeaderSlim' },
     { fn: 'hideWhiteScreen' },
     { fn: 'completeAppIntro' },
     { fn: 'resetPageFocus' },
@@ -28,6 +30,10 @@ describe('NATIVE CALLBACKS', () => {
     NativeCallbacks[fn](param);
 
     if (param) expect(mockFunction).toHaveBeenCalledWith(param);
-    else expect(mockFunction).toHaveBeenCalled();
+    else {
+      setTimeout(() => {
+        expect(mockFunction).toHaveBeenCalled();
+      }, 20);
+    }
   });
 });

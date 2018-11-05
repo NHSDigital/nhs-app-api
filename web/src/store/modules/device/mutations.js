@@ -11,7 +11,13 @@ export default {
   },
   [GO_TO_CHECK_SYMPTOMS](state) {
     if (window.nativeApp) {
-      NativeCallbacks.checkSymptoms();
+      if (!NativeCallbacks.checkSymptoms()) {
+        const sourceValue = this.app.store.state.device.source;
+        this.$router.push({
+          path: '/check-your-symptoms',
+          query: { source: sourceValue },
+        });
+      }
     } else {
       this.$router.push(CHECKYOURSYMPTOMS.path);
     }

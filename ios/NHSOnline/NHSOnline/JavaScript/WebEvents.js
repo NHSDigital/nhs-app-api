@@ -20,6 +20,14 @@ window.nativeApp.showHeader = function() {
     window.webkit.messageHandlers.showHeader.postMessage(null);
 };
 
+window.nativeApp.showHeaderSlim = function() {
+    window.webkit.messageHandlers.showHeaderSlim.postMessage(null);
+};
+
+window.nativeApp.hideHeaderSlim = function() {
+    window.webkit.messageHandlers.hideHeaderSlim.postMessage(null);
+};
+
 window.nativeApp.resetPageFocus = function() {
     window.webkit.messageHandlers.resetPageFocus.postMessage(null);
 };
@@ -34,10 +42,6 @@ window.nativeApp.postNdopToken = function(token) {
 
 window.nativeApp.clearMenuBarItem = function(header) {
     window.webkit.messageHandlers.clearMenuBarItem.postMessage(null);
-};
-
-window.nativeApp.checkSymptoms = function(header) {
-    window.webkit.messageHandlers.checkSymptoms.postMessage(null);
 };
 
 window.nativeApp.completeAppIntro = function() {

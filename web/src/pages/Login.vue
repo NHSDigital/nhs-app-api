@@ -50,6 +50,8 @@ export default {
   mounted() {
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.hideHeader();
+      NativeCallbacks.hideWhiteScreen();
+      NativeCallbacks.hideHeaderSlim();
     }
 
     const authorisationService = new AuthorisationService(this.$env);
