@@ -118,15 +118,15 @@ open class HybridPageObject : PageObject() {
             return
 
         val driver = getMobileDriver()
-        if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
-            println("Already in ${WEB_CONTEXT} context: ${driver.context}")
-        } else {
-            for (context in driver.contextHandles) {
-                if (context.contains(WEB_CONTEXT, true)) {
-                    println("Switching context to $context... Currently on: ${driver.context}")
-                    driver.context(context)
-                    println("Switched context! Now on: ${driver.context}")
-                    break
+                    if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
+                        println("Already in ${WEB_CONTEXT} context: ${driver.context}")
+                    } else {
+                        for (context in driver.contextHandles) {
+                            if (context.contains(WEB_CONTEXT, true)) {
+                                println("Switching context to $context... Currently on: ${driver.context}")
+                                driver.context(context)
+                                println("Switched context! Now on: ${driver.context}")
+                                break
                 }
             }
         }

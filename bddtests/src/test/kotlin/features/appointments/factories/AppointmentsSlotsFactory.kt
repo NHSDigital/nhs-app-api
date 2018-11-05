@@ -51,6 +51,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
         val startDateToUseForMockResponse = adjustAndFormatDate(startDate)
         val endDateToUseForMockResponse = adjustAndFormatDate(endDate)
+        Serenity.setSessionVariable("BookingReasonNecessity").to(reasonNecessity)
 
         generateAppointmentSlotResponse(
                 startDateToUseForMockResponse,

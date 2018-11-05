@@ -2,7 +2,7 @@ package features.myAccount.stepDefintions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.sharedSteps.SerenityHelpers
+import utils.SerenityHelpers
 import pages.MyAccountPage
 
 

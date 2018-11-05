@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlValue
 
 
 @XmlRootElement(namespace = "urn:vision", name = "settings")
+@XmlAccessorType(XmlAccessType.FIELD)
 data class AppointmentSettings(
         @XmlElement(namespace = "urn:vision", name = "cancellationReasons")
         var cancellationReasons: CancellationReasons? = null,

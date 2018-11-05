@@ -8,11 +8,11 @@ import features.authentication.steps.LoginSteps
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.courses.steps.CourseSteps
 import features.prescriptions.factories.PrescriptionsFactory
+import features.prescriptions.helpers.PrescriptionHelpers
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
-import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
 import mocking.emis.EmisConfiguration
@@ -119,7 +119,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     fun gpProviderHasEnabledSpecialRequestText(gpSystem: String) {
         initalize(gpSystem)
 
-        SerenityHelpers.setPrescriptionCommentsAllowed(true)
+        PrescriptionHelpers.setPrescriptionCommentsAllowed(true)
 
         if (currentProvider == ProviderTypes.EMIS) {
             setupSpecialRequestConfigEmis()
@@ -130,7 +130,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     fun gpProviderHasDisabledSpecialRequestText(gpSystem: String) {
         initalize(gpSystem)
 
-        SerenityHelpers.setPrescriptionCommentsAllowed(false)
+        PrescriptionHelpers.setPrescriptionCommentsAllowed(false)
 
         if (currentProvider == ProviderTypes.EMIS) {
             setupSpecialRequestConfigEmis()
@@ -140,7 +140,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     private fun setupSpecialRequestConfigEmis() {
         val response = SettingsResponseModel()
 
-        if (SerenityHelpers.getPrescriptionCommentsAllowed()) {
+        if (PrescriptionHelpers.getPrescriptionCommentsAllowed()) {
             response.inputRequirements.prescribingComment = NecessityOption.OPTIONAL.text
         } else {
             response.inputRequirements.prescribingComment = NecessityOption.NOT_ALLOWED.text
