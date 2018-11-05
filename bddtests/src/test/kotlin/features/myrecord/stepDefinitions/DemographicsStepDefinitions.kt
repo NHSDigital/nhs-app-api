@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.*
 import mocking.data.myrecord.DemographicsData
 import mocking.tpp.models.Error
@@ -44,8 +45,7 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
                     demographicsRequest(visionUserSession = VisionUserSession(
                             this@DemographicsStepDefinitions.patient.rosuAccountId,
                             this@DemographicsStepDefinitions.patient.apiKey,
-                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)).
-                    respondWithSuccess(VisionMockDefaults.visionDemographicsResponse)
+                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)).respondWithSuccess(VisionMockDefaults.visionDemographicsResponse)
 
                 }
             }
@@ -53,7 +53,7 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Given("^there is an error getting demographics for (.*)$")
-    fun thereIsAnErrorGettingTheDemographicsFor(getService:String) {
+    fun thereIsAnErrorGettingTheDemographicsFor(getService: String) {
         setPatientToDefaultFor(getService)
         when (getService) {
             "VISION" -> {
@@ -85,7 +85,9 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
                 try {
                     mockingClient.forTpp {
                         myRecord.patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!)
-                                .respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                                .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                        "Error Occurred",
+                                        "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                     }
                 } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
@@ -94,11 +96,11 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
             "VISION" -> {
                 try {
                     mockingClient.forVision {
-                            demographicsRequest(visionUserSession = VisionUserSession(
-                                    this@DemographicsStepDefinitions.patient.rosuAccountId,
-                                    this@DemographicsStepDefinitions.patient.apiKey,
-                                    Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)
-                            ).respondWithAccessDeniedError()
+                        demographicsRequest(visionUserSession = VisionUserSession(
+                                this@DemographicsStepDefinitions.patient.rosuAccountId,
+                                this@DemographicsStepDefinitions.patient.apiKey,
+                                Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)
+                        ).respondWithAccessDeniedError()
                     }
                 } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)

@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.And
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
@@ -15,12 +16,12 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.models.myrecord.MyRecordResponse
 
-open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions() {
+open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the GP Practice has enabled allergies functionality and the patient has \"(.*)\" allergies for (.*)$")
     fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergiesForService(count: Int, getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService) {
+        when (getService) {
             "EMIS" ->
 
                 mockingClient.forEmis {
@@ -35,14 +36,14 @@ open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions
             "VISION" -> {
                 mockingClient.forVision {
                     getPatientDataRequest(
-                        visionUserSession = VisionUserSession(
-                            patient.rosuAccountId,
-                            patient.apiKey,
-                            patient.odsCode,
-                            patient.patientId),
-                        serviceDefinition = ServiceDefinition(
-                            name = VisionConstants.patientDataName,
-                            version = VisionConstants.patientDataVersion),
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
                             view = allergiesView,
                             responseFormat = htmlResponseFormat
                     ).respondWithSuccess(AllergiesData.getVisionAllergiesData(count))
@@ -56,18 +57,18 @@ open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions
             "record for (.*)$")
     fun theGPPracticeHasEnabledAllergiesFunctionalityAndThePatientHasADrugAndNonDrugAllergyRecord(service: String) {
         setPatientToDefaultFor(service)
-        when(service) {
+        when (service) {
             "VISION" -> {
                 mockingClient.forVision {
                     getPatientDataRequest(
-                        visionUserSession = VisionUserSession(
-                            patient.rosuAccountId,
-                            patient.apiKey,
-                            patient.odsCode,
-                            patient.patientId),
-                        serviceDefinition = ServiceDefinition(
-                            name = VisionConstants.patientDataName,
-                            version = VisionConstants.patientDataVersion),
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
                             view = allergiesView,
                             responseFormat = htmlResponseFormat
                     ).respondWithSuccess(AllergiesData.getVisionAllergiesDrugAndNonDrugData())
@@ -104,21 +105,23 @@ open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions
             "TPP" -> {
                 mockingClient.forTpp {
                     myRecord.viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!)
-                            .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                    "Requested record access is disabled by the practice",
+                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
 
                 }
             }
             "VISION" -> {
                 mockingClient.forVision {
                     getPatientDataRequest(
-                        visionUserSession = VisionUserSession(
-                            patient.rosuAccountId,
-                            patient.apiKey,
-                            patient.odsCode,
-                            patient.patientId),
-                        serviceDefinition = ServiceDefinition(
-                            name = VisionConstants.patientDataName,
-                            version = VisionConstants.patientDataVersion),
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
                             view = allergiesView,
                             responseFormat = htmlResponseFormat
                     ).respondWithAccessDeniedError()

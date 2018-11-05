@@ -14,6 +14,10 @@ class ErrorPage : HybridPageObject() {
     private val backButtonLocator = "//button[@data-purpose='retry-or-back-button']"
     private lateinit var headerNative: HeaderNative
 
+    val pageTitle = findElementByLocator(
+            locator = "//header/h1",
+            androidLocator = "//*[contains(@resource-id, 'header_text_view')]")
+
     val heading = findElementByLocator(headerLocator)
 
     val subHeading = findElementByLocator(subHeaderLocator)
@@ -24,10 +28,10 @@ class ErrorPage : HybridPageObject() {
 
     val button = findElementByLocator(backButtonLocator)
 
-    private fun findElementByLocator(locator: String): HybridPageElement {
+    private fun findElementByLocator(locator: String, androidLocator: String? = null): HybridPageElement {
         return HybridPageElement(
                 browserLocator = locator,
-                androidLocator = null,
+                androidLocator = androidLocator,
                 page = this
         )
     }
@@ -66,7 +70,7 @@ class ErrorPage : HybridPageObject() {
         return this
     }
 
-    fun assertNoRetryButton(): ErrorPage{
+    fun assertNoRetryButton(): ErrorPage {
         button.assertElementNotPresent()
         return this
     }

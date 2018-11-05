@@ -1,6 +1,6 @@
 package mocking.emis
 
-import constants.EmisResponseCode
+import constants.ErrorResponseCodeEmis
 import mocking.MappingBuilder
 import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ErrorResponse
@@ -43,7 +43,7 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
     }
 
     fun responseErrorForbiddenService(): Mapping {
-        return respondWithStandardError(EmisResponseCode.SERVICE_ACCESS_VIOLATION.toInt(), HttpStatus.SC_FORBIDDEN)
+        return respondWithStandardError(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION.toInt(), HttpStatus.SC_FORBIDDEN)
     }
 
     fun respondWithStandardError(internalResponseCode: Int, httpResponseCode: Int): Mapping {

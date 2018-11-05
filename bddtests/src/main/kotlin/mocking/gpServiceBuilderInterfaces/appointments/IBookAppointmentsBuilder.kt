@@ -10,9 +10,13 @@ interface IBookAppointmentsBuilder {
 
     fun respondWithSuccess(): Mapping
 
+    fun respondWithCorrupted(): Mapping
+
     fun respondWithUnavailableException(): Mapping
 
     fun respondWithConflictException(): Mapping
+
+    fun respondWithBookingLimitException(): Mapping
 
     fun respondWithUnknownException(): Mapping
 

@@ -2,8 +2,9 @@ package mocking.vision
 
 import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionResponse
 import mocking.vision.helpers.VisionConstantsHelper.Companion.setContextOnServiceContent
-import mocking.vision.models.appointments.AvailableAppointmentsResponse
 import mocking.vision.models.appointments.BookedAppointmentsResponse
+import mocking.vision.models.appointments.AvailableAppointmentsResponse
+
 object VisionConstants {
 
     // Service names and versions
@@ -27,7 +28,7 @@ object VisionConstants {
 
     const val existingAppointmentsName: String = "VOAPP.GetExistingAppointments"
     const val existingAppointmentsVersion: String = "2.0.0"
-    
+
     const val availableAppointmentsName: String = "VOAPP.GetAvailableAppointment"
     const val availableAppointmentsVersion: String = "2.0.0"
 
@@ -41,7 +42,6 @@ object VisionConstants {
 
     const val bookAppointmentName: String = "VOAPP.BookAppointment"
     const val bookAppointmentVersion: String = "2.0.0"
-
 
     const val htmlResponseFormat: String = "HTML"
     const val xmlResponseFormat: String = "XML"
@@ -57,7 +57,7 @@ object VisionConstants {
     }
 
     fun getVisionAvailableAppointmentsResponse(serviceContent: String,
-                                              serviceDefinition: mocking.vision.models.ServiceDefinition): String {
+                                               serviceDefinition: mocking.vision.models.ServiceDefinition): String {
 
         val response = setContextOnServiceContent(serviceContent, AvailableAppointmentsResponse.name)
 
@@ -67,7 +67,7 @@ object VisionConstants {
     // Vision Get Patient Data
     fun getClinicalDataResponse(serviceContent: String,
                                 serviceDefinition: mocking.vision.models.ServiceDefinition): String {
-        return getBaseVisionResponse("<vision:record>${serviceContent}</vision:record>", serviceDefinition)
+        return getBaseVisionResponse("<vision:record>$serviceContent</vision:record>", serviceDefinition)
     }
 
     // Vision Demographics

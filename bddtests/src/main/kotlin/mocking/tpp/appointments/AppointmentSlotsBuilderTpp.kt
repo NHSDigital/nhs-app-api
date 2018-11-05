@@ -1,6 +1,7 @@
 package mocking.tpp.appointments
 
 import constants.DateTimeFormats
+import constants.ErrorResponseCodeTpp
 import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
@@ -17,8 +18,6 @@ import org.junit.Assert.fail
 import worker.models.demographics.TppUserSession
 import java.time.Duration
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -72,7 +71,7 @@ class AppointmentSlotsBuilderTpp(
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         val errorMsg = "You don't have access to this online service"
         val disabledTppError = Error(
-                errorCode = "6",
+                errorCode = ErrorResponseCodeTpp.NO_ACCESS,
                 userFriendlyMessage = errorMsg,
                 uuid = UUID.randomUUID().toString())
         return respondWith(disabledTppError)

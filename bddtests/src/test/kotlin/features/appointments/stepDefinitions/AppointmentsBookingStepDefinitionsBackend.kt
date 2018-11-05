@@ -21,8 +21,12 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) can be successful$")
     fun anAppointmentBookingForCanBeSuccessful(gpSystem: String) {
-
         defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithSuccess() }
+    }
+
+    @Given("^(.*) returns corrupted response for booking request")
+    fun corruptedResponseFromMyAppointments(gpSystem: String) {
+        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithCorrupted() }
     }
 
     @Given("^an appointment booking for (.*) can be successful with slot identifier of (\\d+) characters?$")

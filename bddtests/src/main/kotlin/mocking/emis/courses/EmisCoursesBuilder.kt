@@ -1,6 +1,5 @@
 package mocking.emis.courses
 
-import constants.EmisResponseCode
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder

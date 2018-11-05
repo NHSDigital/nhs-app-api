@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.*
 import mocking.data.myrecord.TestResultsData
 import mocking.tpp.models.Error
@@ -13,7 +14,7 @@ import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 import java.time.OffsetDateTime
 
-open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitions() {
+open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
     lateinit var errorPage: ErrorPage
@@ -48,9 +49,9 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     }
 
     @Given("^the GP Practice has six test results for (.*)$")
-    fun givenTheGpPracticeHasSixTestResultsFor(getService:String) {
+    fun givenTheGpPracticeHasSixTestResultsFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService) {
+        when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getTestResultsForEmis(6))
@@ -76,7 +77,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 endDate = today
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate ).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(3))
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(3))
                 }
             }
         }
@@ -85,7 +86,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Given("^the GP Practice has a single test result with multiple child values with no ranges for (.*)$")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRangesFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService) {
+        when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithNoRanges())
@@ -139,7 +140,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Given("^I do not have access to test results for (.*)$")
     fun givenIDoNotHaveAccessToTestResultsFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService) {
+        when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
@@ -153,8 +154,9 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
 
                 mockingClient.forTpp {
                     myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate)
-                            .respondWithError(Error("6", "You don&apos;t have access to this online service. You can request access to " +
-                                    "this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
+                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                    "You don&apos;t have access to this online service. You can request access to " +
+                                            "this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
@@ -164,7 +166,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Given("^I have no test results for (.*)$")
     fun givenIHaveNoTestResultsFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService) {
+        when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
@@ -200,7 +202,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Given("^an error occurred retrieving the test results from (.*)$")
     fun givenAnErrorOccurredRetrievingTestResultsFrom(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService) {
+        when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithNonDataAccessException()
@@ -236,14 +238,16 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
 
                 mockingClient.forTpp {
                     myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate)
-                            .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                    "Requested record access is disabled by the practice",
+                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
         }
     }
+
     @When("^I get the users test results$")
-    fun whenIGetTheUsersMyRecordData()
-    {
+    fun whenIGetTheUsersMyRecordData() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
 
@@ -268,19 +272,19 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Then("^the line item displays text value and range$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectlyIncludingRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Child LineItem Description does not match","Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults.data.first().testResultChildLineItems.first().description)
+        assertEquals("Child LineItem Description does not match", "Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^the line item value is set correctly$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Child LineItem Description does not match","Platelet count: 5.9 x10^9/L", result.response.testResults.data.first().testResultChildLineItems.first().description)
+        assertEquals("Child LineItem Description does not match", "Platelet count: 5.9 x10^9/L", result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^I receive line items for each child value$")
     fun thenIReceiveATestResultWithLineItemsForEachChildValue() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Expected two ChildLineItems in TestResult",2, result.response.testResults.data.first().testResultChildLineItems.count())
+        assertEquals("Expected two ChildLineItems in TestResult", 2, result.response.testResults.data.first().testResultChildLineItems.count())
     }
 
     @Then("^I receive a single test result with the term set correctly to Term TextValue NumericUnits$")

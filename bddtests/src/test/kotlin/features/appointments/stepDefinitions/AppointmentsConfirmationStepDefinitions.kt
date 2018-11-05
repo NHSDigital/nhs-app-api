@@ -102,6 +102,11 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.appointmentsConfirmation.symptomsFormDiv.assertElementNotPresent()
     }
 
+    @Then("^a message is displayed indicating that user has reached maximum appointment limit$")
+    fun aMessageIsDisplayedInformingTheAppointmentLimitReached() {
+        appointmentsConfirmationSteps.verifyThatAppointmentLimitReachedErrorDisplayed()
+    }
+
     private fun getSymptomsOfLength(length: Int): String {
         val symptoms = Serenity.sessionVariableCalled<String>(SymptomsToEnter)
         Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)

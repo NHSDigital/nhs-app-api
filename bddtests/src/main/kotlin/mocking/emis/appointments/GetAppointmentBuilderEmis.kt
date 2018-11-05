@@ -1,6 +1,6 @@
 package mocking.emis.appointments
 
-import constants.EmisResponseCode
+import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -32,7 +32,7 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Unknown Exception")
         return respondWithException(exceptionResponse)
     }

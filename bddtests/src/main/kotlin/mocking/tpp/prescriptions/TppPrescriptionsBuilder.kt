@@ -2,14 +2,11 @@ package mocking.tpp.prescriptions
 
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
-import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
-import mocking.tpp.models.ListRepeatMedication
 import mocking.tpp.models.ListRepeatMedicationReply
 import models.Patient
 import org.apache.http.HttpStatus
 import java.io.StringWriter
-import java.util.*
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 

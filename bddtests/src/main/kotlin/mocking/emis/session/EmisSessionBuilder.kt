@@ -1,11 +1,10 @@
 package mocking.emis.session
 
-import constants.EmisResponseCode
+import constants.ErrorResponseCodeEmis
 import mocking.CONTENT_TYPE_APPLICATION_JSON
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
-import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.models.AssociationType
 import mocking.models.Mapping
 import models.Patient
@@ -40,7 +39,7 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithUserNotRegistered(): Mapping {
-        return respondWithException(EmisResponseCode.SERVICE_ACCESS_VIOLATION.toInt(),
+        return respondWithException(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION.toInt(),
                                     "User Identity '00000000-0000-0000-0000-000000000000' " +
                                     "required account status 'Inactive, Active' from Application " +
                                     "'00000000-0000-0000-0000-000000000000'. Actual account status is " +

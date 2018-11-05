@@ -1,5 +1,6 @@
 package features.prescriptions.stepDefinitions
 
+import constants.ErrorResponseCodeTpp
 import cucumber.api.DataTable
 import cucumber.api.java.en.And
 import cucumber.api.java.en.But
@@ -106,7 +107,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     }
 
     @Given("^I have no repeat prescriptions for (.*)$")
-    fun givenIHaveNoRepeatPrescriptions(gpSystem:String) {
+    fun givenIHaveNoRepeatPrescriptions(gpSystem: String) {
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         initialize(gpSystem)
@@ -333,7 +334,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                         .forTpp {
                             prescriptions.listRepeatMedication(currentPatient)
                                     .respondWithError(
-                                            Error("6",
+                                            Error(ErrorResponseCodeTpp.NO_ACCESS,
                                                     "Error Occurred",
                                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                         }
@@ -403,21 +404,19 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @But("The courses endpoint is timing out")
     fun butTheCoursesEndpointIsTimingOut() {
 
-        if(currentProvider == ProviderTypes.EMIS) {
+        if (currentProvider == ProviderTypes.EMIS) {
             mockingClient.forEmis {
                 prescriptions.coursesRequest(currentPatient)
                         .respondWith(504, resolve = {}, milliSecondDelay = 15000)
             }
-        }
-        else if(currentProvider == ProviderTypes.TPP) {
+        } else if (currentProvider == ProviderTypes.TPP) {
             Thread.sleep(1000)
             mockingClient
                     .forTpp {
                         prescriptions.listRepeatMedication(currentPatient)
                                 .respondWith(504, resolve = {}, milliSecondDelay = 15000)
                     }
-        }
-        else if(currentProvider == ProviderTypes.VISION) {
+        } else if (currentProvider == ProviderTypes.VISION) {
             Thread.sleep(1000)
 
             mockingClient
@@ -431,21 +430,19 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @But("The courses endpoint is throwing a server error")
     fun butTheCoursesEndpointIsThrowingAServerError() {
 
-        if(currentProvider == ProviderTypes.EMIS) {
+        if (currentProvider == ProviderTypes.EMIS) {
             mockingClient.forEmis {
                 prescriptions.coursesRequest(currentPatient)
                         .respondWith(500, resolve = {})
             }
-        }
-        else if(currentProvider == ProviderTypes.TPP) {
+        } else if (currentProvider == ProviderTypes.TPP) {
             Thread.sleep(1000)
             mockingClient
                     .forTpp {
                         prescriptions.listRepeatMedication(currentPatient)
                                 .respondWith(500, resolve = {})
                     }
-        }
-        else if(currentProvider == ProviderTypes.VISION) {
+        } else if (currentProvider == ProviderTypes.VISION) {
             Thread.sleep(1000)
 
             mockingClient
@@ -470,12 +467,20 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @But("The prescription submission endpoint is throwing an already ordered exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnAlreadyOrderedException() {
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null).respondWithError(Error("1", "One of the medications requested is no longer available", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
+        mockingClient.forTpp {
+            prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
+                    .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
+                            "One of the medications requested is no longer available",
+                            "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+        }
     }
 
     @But("The prescription submission endpoint is throwing an invalid guid exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnInvalidGuidException() {
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null).respondWithError(Error("1", "There was an error processing your request", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
+                .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
+                        "There was an error processing your request",
+                        "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
     }
 
     @Then("I see the appropriate error message for a prescription timeout")

@@ -3,6 +3,8 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsBookingFactory.Companion.SymptomsToEnter
+import features.appointments.factories.AppointmentsSlotsFactoryEmis
+import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity
 import java.time.Duration
@@ -72,12 +74,31 @@ class AppointmentsBookingStepDefinitions {
         factory.generateBookingResponse { bookRequest -> bookRequest.respondWithConflictException() }
     }
 
+    @Given("^there are (.*) appointments available to book, but user reached maximum appointment booking limit$")
+    fun thereAreAvailableAppointmentsToBookButUserReachedMaximumBookingLimit(gpSystem: String) {
+
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.generateDefaultAvailableAppointmentSlotExample()
+        factory.generateBookingResponse { bookRequest -> bookRequest.respondWithBookingLimitException() }
+    }
+
     //    EMIS Specific step definition
+    @Given("^there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit$")
+    fun thereAreAvailableAppointmentsToBookInOldEmisSystemButUserReachedMaximumBookingLimit() {
+        val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
+        factory.generateDefaultAvailableAppointmentSlotExample()
+        factory.generateBookingResponse { bookRequest ->
+            (bookRequest as BookAppointmentsBuilderEmis)
+                    .respondWithBookingLimitExceptionForOldEMIS()
+        }
+
+    }
+
     @Given("^there are EMIS appointments available to book where booking reason is set optional$")
     fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetOptional() {
         val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.OPTIONAL)
-        factory.generateSuccessfulBookingResponseEmptyReasong()
+        factory.generateSuccessfulBookingResponseEmptyReason()
     }
 
     @Given("^there are EMIS appointments available to book where booking reason is set optional with 150 reason characters entered$")
@@ -93,6 +114,6 @@ class AppointmentsBookingStepDefinitions {
     fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetRequired() {
         val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.NOT_ALLOWED)
-        factory.generateSuccessfulBookingResponseEmptyReasong()
+        factory.generateSuccessfulBookingResponseEmptyReason()
     }
 }

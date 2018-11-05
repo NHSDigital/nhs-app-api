@@ -1,5 +1,7 @@
 package mocking.vision.helpers
 
+import mocking.vision.models.ServiceDefinition
+
 class VisionConstantsHelper {
 
     companion object {
@@ -12,11 +14,34 @@ class VisionConstantsHelper {
                     .replace("</ns2:$context>", "</$context>")
         }
 
-        fun getBaseVisionResponse(response: String, serviceDefinition: mocking.vision.models.ServiceDefinition):
+        fun getBaseVisionFailedResponse(
+                serviceDefinition: ServiceDefinition,
+                errorCode: String, description: String = "0"): String {
+            return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+                    "    <soap:Body>\n" +
+                    "        <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
+                    "            <vision:serviceDefinition>\n" +
+                    "                <vision:name>${serviceDefinition.name}</vision:name>\n" +
+                    "                <vision:version>${serviceDefinition.version}</vision:version>\n" +
+                    "            </vision:serviceDefinition>\n" +
+                    "            <vision:serviceHeader>\n" +
+                    "                <vision:outcome>\n" +
+                    "                    <vision:successful>false</vision:successful>\n" +
+                    "                    <vision:error>\n"+
+                    "                       <vision:code>$errorCode</vision:code>\n" +
+                    "                       <vision:description>$description</vision:description>\n" +
+                    "                    </vision:error>\n"+
+                    "                </vision:outcome>\n" +
+                    "            </vision:serviceHeader>\n" +
+                    "        </vision:visionResponse>\n" +
+                    "    </soap:Body>\n" +
+                    "</soap:Envelope>"
+        }
+
+        fun getBaseVisionResponse(response: String, serviceDefinition: ServiceDefinition):
                 String {
 
-            return "<soap:Envelope xmlns:urn=\"urn:vision\" " +
-                    "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+            return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                     "    <soap:Body>\n" +
                     "        <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                     "            <vision:serviceDefinition>\n" +

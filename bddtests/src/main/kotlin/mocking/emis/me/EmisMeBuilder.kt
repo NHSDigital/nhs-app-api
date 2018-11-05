@@ -3,7 +3,7 @@ package mocking.emis.me
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import constants.EmisResponseCode
+import constants.ErrorResponseCodeEmis
 import mocking.CONTENT_TYPE_APPLICATION_JSON
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
@@ -59,17 +59,17 @@ class EmisMeBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithNoOnlineUserFound(): Mapping {
-        return respondWithException(EmisResponseCode.INTERNAL_ERROR.toInt(),
+        return respondWithException(ErrorResponseCodeEmis.INTERNAL_ERROR.toInt(),
                                     "No registered online user found for given linkage details")
     }
 
     fun respondWithUserAlreadyLinked(): Mapping {
-        return respondWithException(EmisResponseCode.INTERNAL_ERROR.toInt(),
+        return respondWithException(ErrorResponseCodeEmis.INTERNAL_ERROR.toInt(),
                                     "Registered online user is already linked")
     }
 
     fun respondWithInvalidLinkLevel(): Mapping {
-        return respondWithException(EmisResponseCode.SERVICE_ACCESS_VIOLATION.toInt(),
+        return respondWithException(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION.toInt(),
                                     "User Identity '00000000-0000-0000-0000-000000000000' " +
                                     "requested access level 'Linked' " +
                                     "from Application '00000000-0000-0000-0000-000000000000'. " +

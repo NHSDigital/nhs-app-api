@@ -1,15 +1,10 @@
 package mocking.tpp.session
 
+import constants.ErrorResponseCodeTpp
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
-import mocking.tpp.models.Authenticate
-import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import mocking.tpp.models.LogOffReply
-import org.apache.http.HttpStatus
-import javax.xml.bind.JAXBContext
-import java.io.StringWriter
-import javax.xml.bind.Marshaller
 
 
 class TppLogOffBuilder : TppMappingBuilder("POST", "/tpp/") {
@@ -30,7 +25,7 @@ class TppLogOffBuilder : TppMappingBuilder("POST", "/tpp/") {
     }
 
     fun respondWithError(): Mapping {
-        val error = Error("5", "You must be logged on" , uuid)
+        val error = Error(ErrorResponseCodeTpp.NOT_LOGGED_IN, "You must be logged on" , uuid)
         return respondWith(error)
     }
 }

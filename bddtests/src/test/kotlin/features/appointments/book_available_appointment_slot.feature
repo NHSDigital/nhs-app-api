@@ -145,6 +145,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given there are <GP System> appointments available to book, but the GP system is unavailable
@@ -160,6 +161,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
@@ -174,6 +176,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user can return directly back to their appointments after trying to book one already booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
@@ -189,6 +192,23 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
+
+  @NHSO-2996
+  Scenario Outline: A <GP System> user reached maximum appointment booking limit
+    Given there are <GP System> appointments available to book, but user reached maximum appointment booking limit
+    And I am logged in
+    And I am on the available appointments page
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    And I enter symptoms
+    And  I click the 'Confirm and book appointment' button
+    Then a message is displayed indicating that user has reached maximum appointment limit
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
     Given there are <GP System> appointments available to book
@@ -240,3 +260,14 @@ Feature: Book an available appointment slot
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     And I don't see option to type in booking reason
+
+  @NHSO-2996
+  Scenario: An EMIS user on Old EMIS Systme reached maximum appointment booking limit
+    Given  there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit
+    And I am logged in
+    And I am on the available appointments page
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    And I enter symptoms
+    And  I click the 'Confirm and book appointment' button
+    Then a message is displayed indicating that user has reached maximum appointment limit

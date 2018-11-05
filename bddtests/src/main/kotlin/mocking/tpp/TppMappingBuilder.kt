@@ -1,5 +1,6 @@
 package mocking.tpp
 
+import constants.ErrorResponseCodeTpp
 import mocking.JSonXmlConverter
 import mocking.MappingBuilder
 import mocking.models.Mapping
@@ -32,8 +33,9 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
 
     fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
         val errorMsg = "You don't have access to this online service"
-        val disabledTppError = Error(errorCode = "6", userFriendlyMessage = errorMsg,
-                                     uuid = UUID.randomUUID().toString())
+        val disabledTppError = Error(errorCode = ErrorResponseCodeTpp.NO_ACCESS,
+                userFriendlyMessage = errorMsg,
+                uuid = UUID.randomUUID().toString())
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(JSonXmlConverter.toXML(disabledTppError))
         }

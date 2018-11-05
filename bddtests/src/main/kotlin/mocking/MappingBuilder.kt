@@ -7,7 +7,7 @@ private const val SC_FOUND = HttpStatus.SC_MOVED_TEMPORARILY
 const val CONTENT_TYPE_APPLICATION_JSON = "application/json; charset=UTF-8"
 abstract class MappingBuilder(method: String, url: String) {
 
-    var delayMillisecs = 0
+    open var delayMillisecs = 0
 
     internal val requestBuilder = RequestBuilder(method, url)
 

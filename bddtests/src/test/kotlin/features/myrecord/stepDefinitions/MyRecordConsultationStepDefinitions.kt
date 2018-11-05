@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.*
 import mocking.data.myrecord.ConsultationsData
 import mocking.data.myrecord.TppDcrData
@@ -47,8 +48,10 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
                 setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
                     myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
-                            .respondWithError(Error("6", "You don&apos;t have access to this online service. " +
-                                    "You can request access to this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
+                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                    "You don&apos;t have access to this online service. " +
+                                            "You can request access to this service at Kainos GP Demo Unit by " +
+                                            "clicking Manage Online Services in the Account section.",
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
 

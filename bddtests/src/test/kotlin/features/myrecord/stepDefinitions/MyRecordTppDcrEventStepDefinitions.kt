@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.*
 import mocking.data.myrecord.TppDcrData
 import mocking.tpp.models.Error
@@ -9,7 +10,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitions() {
+open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the GP Practice has multiple dcr events for TPP$")
     fun givenTheGpPracticeHasMultipleDcrEventsForTpp() {
@@ -35,8 +36,10 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
         setPatientToDefaultFor("TPP")
         mockingClient.forTpp {
             myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
-                    .respondWithError(Error("6", "You don&apos;t have access to this online service. " +
-                            "You can request access to this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
+                    .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                            "You don&apos;t have access to this online service. " +
+                                    "You can request access to this service at Kainos GP Demo Unit by " +
+                                    "clicking Manage Online Services in the Account section.",
                             "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
         }
     }
@@ -51,8 +54,7 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
     }
 
     @When("^I get the users dcr event data$")
-    fun whenIGetTheUsersMyRecordData()
-    {
+    fun whenIGetTheUsersMyRecordData() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
 

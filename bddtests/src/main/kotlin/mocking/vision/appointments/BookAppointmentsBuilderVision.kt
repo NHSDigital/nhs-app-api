@@ -3,17 +3,21 @@ package mocking.vision.appointments
 import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
+import constants.ErrorResponseCodeVision
 import mocking.vision.VisionConstants
 import mocking.vision.VisionMappingBuilder
-import mocking.vision.helpers.VisionConstantsHelper
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
+import mocking.vision.models.appointments.Appointment
+import mocking.vision.models.appointments.PatientVision
+import mocking.vision.models.appointments.Slot
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import org.apache.http.HttpStatus
 import java.time.Duration
+import mocking.vision.helpers.VisionConstantsHelper
 
-class BookAppointmentsBuilderVision (patient: Patient, request: BookAppointmentSlotFacade)
+class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSlotFacade)
     : VisionMappingBuilder()
         , IBookAppointmentsBuilder {
 
@@ -29,8 +33,7 @@ class BookAppointmentsBuilderVision (patient: Patient, request: BookAppointmentS
                 patient.rosuAccountId,
                 patient.apiKey,
                 patient.odsCode,
-                patient.patientId
-        )
+                patient.patientId)
         requestBuilder
                 .andHeader(contentTypeHeader, contentTypeValue)
                 .andBody(userSession.rosuAccountId, "contains")
@@ -39,7 +42,7 @@ class BookAppointmentsBuilderVision (patient: Patient, request: BookAppointmentS
                 .andBody(userSession.accountId, "contains")
                 .andBody(userSession.provider, "contains")
                 .andBody(serviceDefinition.name, "contains")
-                .andBody(userSession.patientId, "contains")
+                .andBody(JSonXmlConverter.wrapAroundXmlTag("vision:patientId", userSession.patientId), "contains")
                 .andBody(JSonXmlConverter.wrapAroundXmlTag("vision:slotId", request.slotId.toString()), "contains")
 
         val reason = request.bookingReason
@@ -49,56 +52,85 @@ class BookAppointmentsBuilderVision (patient: Patient, request: BookAppointmentS
 
     }
 
+    private val successBookingResponse = Appointment(patient = PatientVision(id = patient.patientId),
+            slot = Slot(id = request.slotId.toString(), reason = request.bookingReason))
+
     override fun withDelay(delayMilliseconds: Duration): BookAppointmentsBuilderVision {
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this
     }
 
     override fun respondWithSuccess(): Mapping {
+        val response = JSonXmlConverter.toXML(successBookingResponse, true)
         return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(VisionConstantsHelper.getBaseVisionResponse("", serviceDefinition)).build()
+            andXmlBody(VisionConstantsHelper.getBaseVisionResponse(response, serviceDefinition)).build()
+        }
+    }
+
+    override fun respondWithCorrupted(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            val corruptedResponse = VisionConstantsHelper
+                    .getBaseVisionResponse("", serviceDefinition)
+                    .replace(">", "|")
+                    .replace("}", "|")
+
+            andBody(corruptedResponse, contentType = "text/xml")
         }
     }
 
     override fun respondWithUnavailableException(): Mapping {
 
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithUnavailableException() is not yet implemented in " +
-                        "BookAppointmentsBuilderVision")
+        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+            andXmlBody("").build()
+        }
     }
 
     override fun respondWithConflictException(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                    serviceDefinition,
+                    ErrorResponseCodeVision.APPOINTMENT_SLOT_ALREADY_BOOKED)).build()
+        }
+    }
 
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithConflictException() is not yet implemented in " +
-                        "BookAppointmentsBuilderVision")
+    override fun respondWithBookingLimitException(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                    serviceDefinition,
+                    ErrorResponseCodeVision.APPOINTMENT_BOOKING_LIMIT_REACHED)).build()
+        }
     }
 
     override fun respondWithUnknownException(): Mapping {
-
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithUnknownException() is not yet implemented in " +
-                        "BookAppointmentsBuilderVision")
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                    serviceDefinition,
+                    ErrorResponseCodeVision.NON_VISION_ERROR_CODE)).build()
+        }
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
 
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithExceptionWhenNotEnabled() is not yet implemented in " +
-                        "BookAppointmentsBuilderVision")
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                    serviceDefinition,
+                    ErrorResponseCodeVision.ACCESS_DENIED)).build()
+        }
     }
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {
 
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithExceptionWhenNotAvailable() is not yet implemented in " +
-                        "BookAppointmentsBuilderVision")
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                    serviceDefinition,
+                    ErrorResponseCodeVision.APPOINTMENT_SLOT_NOT_FOUND)).build()
+        }
     }
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
-
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithExceptionWhenInThePast() is not yet implemented in " +
-                        "BookAppointmentsBuilderVision")
+        // VISION ALLOWS To book appointments that are in past
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody("").build()
+        }
     }
 }

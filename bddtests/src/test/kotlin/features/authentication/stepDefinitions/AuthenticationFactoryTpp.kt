@@ -1,5 +1,6 @@
 package features.authentication.stepDefinitions
 
+import constants.ErrorResponseCodeTpp
 import mocking.defaults.TppMockDefaults
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
@@ -7,7 +8,7 @@ import mocking.tpp.models.Error
 import models.Patient
 import java.time.Duration
 
-class AuthenticationFactoryTpp  : AuthenticationFactory("TPP"){
+class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
 
     override fun patientDoesNotExist(patient: Patient) {
         createInvalidLinkageTest(patient)
@@ -53,7 +54,9 @@ class AuthenticationFactoryTpp  : AuthenticationFactory("TPP"){
         mockingClient.forTpp {
             authentication.authenticateRequest(Authenticate())
                     // respond with error.  Unconfirmed format.
-                    .respondWithError(Error(errorCode = "9", userFriendlyMessage = "There was a problem logging on"))
+                    .respondWithError(Error(
+                            errorCode = ErrorResponseCodeTpp.LOGIN_PROBLEM,
+                            userFriendlyMessage = "There was a problem logging on"))
 
         }
     }
@@ -62,11 +65,13 @@ class AuthenticationFactoryTpp  : AuthenticationFactory("TPP"){
         mockingClient.forTpp {
             authentication.authenticateRequest(Authenticate())
                     // respond with error.  Unconfirmed format.
-                    .respondWithError(Error(errorCode = "0", userFriendlyMessage = "Service Unavailable"))
+                    .respondWithError(Error(
+                            errorCode = ErrorResponseCodeTpp.SERVICE_UNAVAILABLE,
+                            userFriendlyMessage = "Service Unavailable"))
         }
     }
 
-    private fun createInvalidLinkageTest( patient: Patient) {
+    private fun createInvalidLinkageTest(patient: Patient) {
         mockingClient.forTpp {
             authentication.linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
         }

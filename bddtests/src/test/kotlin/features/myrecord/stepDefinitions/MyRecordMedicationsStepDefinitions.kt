@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.And
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
@@ -18,7 +19,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitions() {
+open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I receive the medications object$")
     fun thenIReceiveAMedicationsObject() {
@@ -29,13 +30,13 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
     @Given("^the GP Practice has enabled medications functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityfor(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService){
-            "EMIS"->{
+        when (getService) {
+            "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisMedicationData())
                 }
             }
-            "TPP"->{
+            "TPP" -> {
                 mockingClient.forTpp {
                     myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppMedicationData())
                 }
@@ -80,14 +81,13 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
                 try {
                     mockingClient.forTpp {
                         myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppDefaultMedicationsModel())
-                }
+                    }
 
-                val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
+                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
 
-                Serenity.setSessionVariable(MyRecordResponse::class).to(result)
+                    Serenity.setSessionVariable(MyRecordResponse::class).to(result)
 
-                }
-                catch(httpException: NhsoHttpException) {
+                } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
                 }
             }
@@ -111,8 +111,7 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
 
                     Serenity.setSessionVariable(MyRecordResponse::class).to(result)
 
-                }
-                catch(httpException: NhsoHttpException) {
+                } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
                 }
             }
@@ -130,7 +129,10 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                    myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!)
+                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                    "Requested record access is disabled by the practice",
+                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
         }

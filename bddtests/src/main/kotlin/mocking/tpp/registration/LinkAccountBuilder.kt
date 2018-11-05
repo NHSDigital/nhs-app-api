@@ -1,4 +1,5 @@
 package mocking.tpp.registration
+import constants.ErrorResponseCodeTpp
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.LinkAccount
@@ -49,7 +50,7 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
 
     fun respondWithInvalidProviderId(): Mapping {
         val invalidProviderIdError = Error(
-                "5",
+                ErrorResponseCodeTpp.INVALID_PROVIDER_ID,
                 "There was an error processing your request"
         )
 
@@ -58,7 +59,7 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
 
     fun respondWithInvalidLinkageCredentials(): Mapping {
         val invalidLinkageCredentialsError = Error(
-                "8",
+                ErrorResponseCodeTpp.INVALID_LINKAGE_CREDENTIALS,
                 "There was a problem linking your account." +
                         " Please contact Kainos GP Demo Unit to complete the online account registration."
         )

@@ -1,7 +1,7 @@
 package mocking.emis.appointments
 
 import constants.DateTimeFormats
-import constants.EmisResponseCode
+import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -61,7 +61,7 @@ class AppointmentSlotsMetaBuilderEmis(
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.SERVICE_ACCESS_VIOLATION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION,
                 "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services " +
                         "'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked " +
                         "patient. Available services are 'AddressChange, RecordViewer, RepeatPrescribing, " +
@@ -70,7 +70,7 @@ class AppointmentSlotsMetaBuilderEmis(
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Unknown Exception")
         return respondWithException(exceptionResponse)
     }

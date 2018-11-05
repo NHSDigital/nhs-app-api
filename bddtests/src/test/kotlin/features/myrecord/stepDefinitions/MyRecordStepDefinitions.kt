@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
+import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -122,8 +123,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
                                     version = VisionConstants.patientDataVersion),
-                                    view = allergiesView,
-                                    responseFormat = htmlResponseFormat
+                            view = allergiesView,
+                            responseFormat = htmlResponseFormat
                     ).respondWithSuccess(AllergiesData.getVisionAllergiesData(0))
 
                 }
@@ -138,8 +139,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
                                     version = VisionConstants.patientDataVersion),
-                                    view = immunisationsView,
-                                    responseFormat = xmlResponseFormat
+                            view = immunisationsView,
+                            responseFormat = xmlResponseFormat
                     ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())
 
                 }
@@ -175,7 +176,9 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
             "TPP" -> {
                 mockingClient.forTpp {
                     myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
-                            .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                    "Requested record access is disabled by the practice",
+                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
             "VISION" -> {
@@ -189,8 +192,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
                                     version = VisionConstants.patientDataVersion),
-                                    view = allergiesView,
-                                    responseFormat = "HTML"
+                            view = allergiesView,
+                            responseFormat = "HTML"
                     ).respondWithAccessDeniedError()
                 }
             }
@@ -578,7 +581,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                 "Leg swelling",
                 "Pollen"
         )
-        assertTrue("Expected records",allergyMessages.size == expectedMessages.size)
+        assertTrue("Expected records", allergyMessages.size == expectedMessages.size)
         allergyMessages.forEachIndexed { i, message -> assertTrue(message == expectedMessages[i]) }
     }
 

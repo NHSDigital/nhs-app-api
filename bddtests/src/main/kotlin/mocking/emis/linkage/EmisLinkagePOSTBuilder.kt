@@ -2,7 +2,7 @@ package mocking.emis.linkage
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import constants.EmisResponseCode
+import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.AddNhsUserRequest
@@ -35,22 +35,22 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     }
 
     fun respondWithNoRegisteredOnlineUserFound(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.NO_REGISTERED_ONLINE_USER_FOUND.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.NO_REGISTERED_ONLINE_USER_FOUND.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     fun respondWithPracticeNotLive(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.PRACTICE_NOT_LIVE.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PRACTICE_NOT_LIVE.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientMarkedAsArchived(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_MARKED_AS_ARCHIVED.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_MARKED_AS_ARCHIVED.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientNonCompetentOrUnder16(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_NON_COMPETENT_OR_UNDER_16.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NON_COMPETENT_OR_UNDER_16.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
@@ -60,7 +60,7 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     }
 
     fun respondWithBadGatewayException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Bad Gateway")
         return respondWithBody(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }

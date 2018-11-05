@@ -57,10 +57,21 @@ open class AppointmentsConfirmationSteps {
         val errorHeading = "There's been a problem sending your request"
         val errorText = "Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
         assertEquals("Expected heading text $errorHeading but found ${errorPage.heading.element.text}",
-                errorHeading, errorPage.heading.element.text )
+                errorHeading, errorPage.heading.element.text)
         errorPage.subHeading.assertElementNotPresent()
         assertEquals("Expected error text $errorText but found ${errorPage.errorText1.element.text}",
-                errorText, errorPage.errorText1.element.text )
+                errorText, errorPage.errorText1.element.text)
+    }
+
+    @Step
+    fun verifyThatAppointmentLimitReachedErrorDisplayed() {
+        val expectedPageHeader = "Appointment limit reached"
+        val expectedHeader = "You can't book any more appointments right now"
+
+        assertEquals("expected Page Header text $expectedPageHeader but found ${errorPage.pageTitle.element.text}",
+                expectedPageHeader, errorPage.pageTitle.element.text)
+        assertEquals("expected error text $expectedHeader but found ${errorPage.heading.element.text}",
+                expectedHeader, errorPage.heading.element.text)
     }
 
     @Step

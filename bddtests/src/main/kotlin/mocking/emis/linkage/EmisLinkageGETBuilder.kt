@@ -2,7 +2,7 @@ package mocking.emis.linkage
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import constants.EmisResponseCode
+import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.ExceptionResponse
@@ -33,19 +33,19 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
     }
 
     fun respondWithForbiddenException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Forbidden Exception")
         return respondWithBody(exceptionResponse, HttpStatus.SC_FORBIDDEN)
     }
 
     fun respondWithNotImplementedException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Not Implemented")
         return respondWithBody(exceptionResponse, HttpStatus.SC_NOT_IMPLEMENTED)
     }
 
     fun respondWithBadGatewayException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Bad Gateway")
         return respondWithBody(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }
@@ -56,32 +56,32 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
     }
 
     fun respondWithPatientNotRegisteredAtPractice(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_NOT_REGISTERED_AT_PRACTICE.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NOT_REGISTERED_AT_PRACTICE.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     fun respondWithNoRegisteredOnlineUserFound(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.NO_REGISTERED_ONLINE_USER_FOUND.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.NO_REGISTERED_ONLINE_USER_FOUND.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     fun respondWithPracticeNotLive(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.PRACTICE_NOT_LIVE.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PRACTICE_NOT_LIVE.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientMarkedAsArchived(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_MARKED_AS_ARCHIVED.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_MARKED_AS_ARCHIVED.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientNonCompetentOrUnder16(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_NON_COMPETENT_OR_UNDER_16.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NON_COMPETENT_OR_UNDER_16.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithAccountStatusInvalid(): Mapping {
-        val errorResponse = ErrorResponse(-EmisResponseCode.ACCOUNT_STATUS_INVALID.toInt())
+        val errorResponse = ErrorResponse(-ErrorResponseCodeEmis.ACCOUNT_STATUS_INVALID.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 

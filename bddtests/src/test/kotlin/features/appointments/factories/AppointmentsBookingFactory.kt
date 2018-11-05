@@ -13,7 +13,7 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
 
     fun generateDefaultAvailableAppointmentSlotExample(guidanceMessage: Boolean = true, reasonNecessityOption: NecessityOption = NecessityOption.MANDATORY) {
         val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
-        factory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage= guidanceMessage, reasonNecessity = reasonNecessityOption)
+        factory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = guidanceMessage, reasonNecessity = reasonNecessityOption)
     }
 
     fun generateMultipleAvailableAppointmentSlots() {
@@ -25,7 +25,7 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         generateBookingResponse(bookingReason = bookingReason) { bookRequest -> bookRequest.respondWithSuccess() }
     }
 
-    fun generateSuccessfulBookingResponseEmptyReasong() {
+    fun generateSuccessfulBookingResponseEmptyReason() {
         generateSuccessfulBookingResponse(bookingReason = "")
     }
 
@@ -42,13 +42,13 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         setSessionVariable(SymptomsToEnter).to(bookingReason)
     }
 
-    companion object: SupplierSpecificFactory<AppointmentsBookingFactory>() {
+    companion object : SupplierSpecificFactory<AppointmentsBookingFactory>() {
 
         override val map: HashMap<String, (() -> (AppointmentsBookingFactory))> by lazy {
             hashMapOf(
                     "EMIS" to { AppointmentsBookingFactory("EMIS") },
-                    "VISION" to { AppointmentsBookingFactory("VISION") },
-                    "TPP" to { AppointmentsBookingFactory("TPP") })
+                    "TPP" to { AppointmentsBookingFactory("TPP") },
+                    "VISION" to { AppointmentsBookingFactory("VISION") })
         }
 
         const val SymptomsToEnter = "SymptomsToEnter"

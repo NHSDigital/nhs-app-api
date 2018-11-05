@@ -3,7 +3,7 @@ package mocking.emis.appointments
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import mocking.GsonFactory
-import constants.EmisResponseCode
+import constants.ErrorResponseCodeEmis
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -32,6 +32,12 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
 
     }
 
+    fun respondWithBookingLimitExceptionForOldEMIS(): Mapping {
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.INTERNAL_ERROR,
+                "Maximum booked appointments is limited to 0 by the practice")
+        return respondWithBody(exceptionResponse, HttpStatus.SC_SERVICE_UNAVAILABLE)
+    }
+
     override fun withDelay(delayMilliseconds: Duration): BookAppointmentsBuilderEmis {
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this
@@ -41,20 +47,32 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
         return respondWithBody(BookAppointmentSlotResponse(true))
     }
 
+    override fun respondWithCorrupted(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andBody("< Non parsable {:< as a XML or JSON", contentType = "application/json")
+        }
+    }
+
     override fun respondWithUnavailableException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Unavailable Exception")
         return respondWithBody(exceptionResponse, HttpStatus.SC_SERVICE_UNAVAILABLE)
     }
 
     override fun respondWithConflictException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Conflict Exception")
         return respondWithBody(exceptionResponse, HttpStatus.SC_CONFLICT)
     }
 
+    override fun respondWithBookingLimitException(): Mapping {
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.ONLINE_USER_MAX_APPOINTMENT_BOOKED_COUNT,
+                "Maximum booked appointments is limited to 0 by the practice")
+        return respondWithBody(exceptionResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+    }
+
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
                 "Unknown Exception")
         return respondWithBody(exceptionResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
     }
@@ -64,12 +82,12 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
     }
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.NOT_AVAILABLE.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.NOT_AVAILABLE.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
-        val errorResponse = ErrorResponse(EmisResponseCode.REQUESTED_APPOINTMENT_SLOT_IN_PAST.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.REQUESTED_APPOINTMENT_SLOT_IN_PAST.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 

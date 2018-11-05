@@ -10,7 +10,7 @@ Feature: Book appointments
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then a successful response for appointment booking is returned
-    Examples: 
+    Examples:
       | GP System |
       | EMIS      |
       | TPP       |
@@ -76,7 +76,6 @@ Feature: Book appointments
       | TPP       |
       | VISION    |
 
-
   Scenario Outline: Booking an appointment with <GP System> returns successful response if the booking reason is 150 characters
     Given an appointment booking for <GP System> can be successful with booking reason of 150 characters
     And I have logged into <GP System> and have a valid session cookie
@@ -126,6 +125,10 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+  @bug @NHSO-3074
+    Examples:
+      | GP System |
+      | VISION    |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot is not available for booking
     Given an appointment booking for <GP System> cannot be successful because the slot is not available
@@ -136,7 +139,9 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
+#  Note: VISION ALLOWS To book appointments that are in past
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot is in the past
     Given an appointment booking for <GP System> cannot be successful because the slot is in the past
     And I have logged into <GP System> and have a valid session cookie
@@ -166,6 +171,7 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Gateway" response if the GP system is currently unavailable
     Given an appointment booking for <GP System> cannot be successful because the GP system is unavailable
@@ -176,7 +182,10 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
+  @backend
+  @NHSO-801
   Scenario Outline: Booking an appointment with <GP System> returns "Gateway Timeout" response if the GP system did not respond in a timely fashion
     Given an appointment booking for <GP System> cannot be successful because the GP system will time out
     And I have logged into <GP System> and have a valid session cookie
@@ -187,3 +196,29 @@ Feature: Book appointments
       | EMIS      |
       | TPP       |
       | VISION    |
+
+  @backend
+  @NHSO-801
+  Scenario Outline: <GP System> returns corrupted data
+    Given <GP System> returns corrupted response for booking request
+    And I have logged into <GP System> and have a valid session cookie
+    When an appointment booking is submitted
+    Then I receive a "Internal Server Error" error
+  @bug @NHSO-3039
+    Examples:
+      | GP System |
+      | EMIS      |
+    Examples:
+      | GP System |
+      | TPP       |
+      | VISION    |
+
+  @manual
+  @NHSO-801
+  Scenario: Booking a VISION appointment when there is no internet connection
+    Given I have no upcoming appointments for VISION
+    And I am logged in
+    And I am on my appointments page
+    And I lose my internet connection
+    When an appointment booking is submitted
+    Then I see a message indicating user may have connectivity problems
