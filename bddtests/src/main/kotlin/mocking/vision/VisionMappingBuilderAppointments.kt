@@ -1,12 +1,12 @@
 package mocking.vision
 
 import mocking.MappingBuilder
-import mocking.vision.appointments.AppointmentSlotsBuilderVision
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
+import mocking.vision.appointments.AppointmentSlotsBuilderVision
 import mocking.vision.appointments.BookAppointmentsBuilderVision
 import mocking.vision.appointments.CancelAppointmentBuilderVision
 import mocking.vision.appointments.MyAppointmentsBuilderVision

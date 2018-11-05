@@ -1,8 +1,6 @@
 package pages
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException
-import io.appium.java_client.ios.IOSDriver
-import net.thucydides.core.webdriver.WebDriverFacade
 
 open class CheckMySymtomsPage : HybridPageObject() {
 

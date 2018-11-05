@@ -1,15 +1,19 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.*
+import cucumber.api.java.en.And
+import cucumber.api.java.en.But
+import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import mocking.data.myrecord.ProblemsData
 import mocking.vision.VisionConstants
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
-import worker.models.myrecord.MyRecordResponse
 import worker.NhsoHttpException
 import worker.WorkerClient
+import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions() {
 

@@ -1,11 +1,11 @@
 package mocking.data.myrecord
 
 import mocking.emis.testResults.EffectiveDate
+import mocking.emis.testResults.TestResultMedicalRecord
+import mocking.emis.testResults.TestResultRange
 import mocking.emis.testResults.TestResultResponse
 import mocking.emis.testResults.TestResultResponseModel
 import mocking.emis.testResults.TestResultValue
-import mocking.emis.testResults.TestResultRange
-import mocking.emis.testResults.TestResultMedicalRecord
 import mocking.tpp.models.TestResultsViewReply
 import mocking.tpp.models.TestResultsViewReplyItem
 

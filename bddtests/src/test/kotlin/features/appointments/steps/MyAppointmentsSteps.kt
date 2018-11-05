@@ -9,8 +9,11 @@ import models.Slot
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.Step
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import pages.ErrorPage
 import pages.appointments.MyAppointmentsPage
 import pages.navigation.HeaderNative

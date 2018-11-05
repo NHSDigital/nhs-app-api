@@ -3,25 +3,19 @@ package mocking.emis.data
 import addDays
 import addMinutes
 import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
-import constants.DateTimeFormats.Companion.frontendDateFormat
-import constants.DateTimeFormats.Companion.frontendTimeFormat
 import mocking.commonData.BaseAppointmentData
 import mocking.emis.appointments.GetAppointmentsResponseModel
+import mocking.emis.models.Appointment
+import mocking.emis.models.AppointmentCancellationReason
 import mocking.emis.models.Location
 import mocking.emis.models.Session
 import mocking.emis.models.SessionHolder
 import mocking.emis.models.SessionType
 import mocking.emis.models.TelephoneAppointmentDetails
-import mocking.emis.models.AppointmentCancellationReason
-import mocking.emis.models.Appointment
-import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotFacade
 import models.Patient
 import models.Slot
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.TimeZone
-import kotlin.collections.ArrayList
+import java.util.*
 
 private const val LOCATION_ID_SURGERY: Int = 1
 private const val LOCATION_ID_HOSPITAL: Int = 2

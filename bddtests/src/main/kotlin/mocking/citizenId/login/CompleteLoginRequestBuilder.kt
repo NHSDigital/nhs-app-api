@@ -2,7 +2,6 @@ package mocking.citizenId.login
 
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.MockDefaults
 import mocking.models.Mapping
 import models.Patient
 

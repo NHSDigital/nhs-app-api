@@ -6,9 +6,9 @@ import mocking.vision.VisionConstants
 import mocking.vision.VisionConstants.getVisionExistingAppointmentsResponse
 import mocking.vision.VisionMappingBuilder
 import mocking.vision.appointments.helpers.MyAppointmentsHelper.Companion.extractResponseFromFacade
-import mocking.vision.models.appointments.BookedAppointmentsResponse
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
+import mocking.vision.models.appointments.BookedAppointmentsResponse
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
 import org.apache.http.HttpStatus

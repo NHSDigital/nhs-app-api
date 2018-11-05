@@ -2,8 +2,6 @@ package mocking.defaults
 
 import config.Config
 import mocking.MockingClient
-import mocking.data.prescriptions.EmisPrescriptionLoader
-import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.dataPopulation.journies.myRecord.MyRecordJournies
 import mocking.dataPopulation.journies.prescriptions.PrescriptionsJournies
 import mocking.defaults.dataPopulation.journies.appointmentSlots.AppointmentSlotsJournies
@@ -14,12 +12,8 @@ import mocking.defaults.dataPopulation.journies.linkage.LinkageJournies
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionJournies
-import mocking.emis.models.CourseRequestsGetResponse
 import mocking.stubs.StubbedEnvironment
-import mockingFacade.appointments.BookAppointmentSlotFacade
-import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
-import models.prescriptions.MedicationCourse
 import worker.models.session.UserSessionRequest
 import java.io.BufferedReader
 import java.io.File

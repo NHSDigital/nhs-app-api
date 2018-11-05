@@ -11,8 +11,6 @@ import worker.models.appointments.AppointmentBookRequest
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.appointments.CancelAppointmentRequest
 import worker.models.appointments.MyAppointmentsResponse
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import javax.servlet.http.Cookie
 
 class WorkerClientAppointments(val config: Config, val sender: WorkerClientSender, val gson: Gson){

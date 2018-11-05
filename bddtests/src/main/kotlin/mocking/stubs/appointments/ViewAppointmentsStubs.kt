@@ -4,11 +4,11 @@ import mocking.JSonXmlConverter
 import mocking.MockingClient
 import mocking.emis.data.EmisAppointmentData
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
+import mocking.stubs.InputResponse
+import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.StubsPatientFactory.Companion.goodPatientEMIS
 import mocking.stubs.StubsPatientFactory.Companion.serviceNotEnabledPatientEMIS
 import mocking.stubs.StubsPatientFactory.Companion.timeoutPatientEMIS
-import mocking.stubs.InputResponse
-import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import models.Patient
 import java.time.Duration
 

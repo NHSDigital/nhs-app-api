@@ -6,10 +6,8 @@ import io.appium.java_client.remote.AndroidMobileCapabilityType
 import io.appium.java_client.remote.MobileCapabilityType
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.DriverSource
-import org.junit.Assert
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
-import webdrivers.browserstack.BrowserstackLocalService
 import java.net.URL
 import java.util.concurrent.TimeUnit
 

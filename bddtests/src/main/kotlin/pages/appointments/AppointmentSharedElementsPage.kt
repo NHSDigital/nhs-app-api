@@ -5,10 +5,10 @@ import constants.DateTimeFormats.Companion.frontendTimeFormat
 import models.Slot
 import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.By
-import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.HybridPageObject
 import java.text.SimpleDateFormat
-import java.util.ArrayList
+import java.util.*
 
 open class AppointmentSharedElementsPage : HybridPageObject() {
     private val xPathRoot = "//*"

@@ -1,11 +1,11 @@
 package mocking.data.myrecord
 
+import mocking.emis.problems.AssociatedText
+import mocking.emis.problems.EffectiveDate
 import mocking.emis.problems.Observation
 import mocking.emis.problems.ProblemMedicalRecord
 import mocking.emis.problems.ProblemResponse
 import mocking.emis.problems.ProblemResponseModel
-import mocking.emis.problems.EffectiveDate
-import mocking.emis.problems.AssociatedText
 
 object ProblemsData {
     private const val PROBLEMS_NUMBER = 3

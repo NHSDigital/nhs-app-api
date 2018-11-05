@@ -2,8 +2,8 @@ package pages.navigation
 
 import org.junit.Assert
 import org.openqa.selenium.TimeoutException
-import pages.NativePageObject
 import pages.NativePageElement
+import pages.NativePageObject
 
 class HeaderNative : NativePageObject() {
 

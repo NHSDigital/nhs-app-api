@@ -2,7 +2,6 @@ package pages.appointments
 
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertTrue
-import org.openqa.selenium.NoSuchElementException
 import pages.HybridPageElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking")

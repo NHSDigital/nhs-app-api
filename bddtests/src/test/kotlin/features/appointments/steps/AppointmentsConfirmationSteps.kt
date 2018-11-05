@@ -3,7 +3,8 @@ package features.appointments.steps
 import mocking.MockingClient
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.appointments.AppointmentsConfirmationPage
 

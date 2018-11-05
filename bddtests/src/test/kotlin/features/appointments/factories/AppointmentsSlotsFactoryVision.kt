@@ -3,7 +3,6 @@ package features.appointments.factories
 import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
-import java.util.*
 
 class AppointmentsSlotsFactoryVision : AppointmentsSlotsFactory("VISION") {
 

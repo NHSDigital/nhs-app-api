@@ -1,6 +1,5 @@
 package features.sharedStepDefinitions.backend
 
-import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import net.serenitybdd.core.Serenity
 import worker.WorkerClient

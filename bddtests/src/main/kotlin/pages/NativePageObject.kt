@@ -1,15 +1,10 @@
 package pages
 
-import config.Config
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileElement
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
-import net.thucydides.core.webdriver.WebDriverFacade
-import org.junit.Assert
 import org.openqa.selenium.NoSuchElementException
-import org.openqa.selenium.TimeoutException
-import pages.HybridPageObject
 
 const val NATIVE_CONTEXT: String = "native"
 

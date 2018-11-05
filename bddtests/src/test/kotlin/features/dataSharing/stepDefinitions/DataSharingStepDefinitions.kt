@@ -1,22 +1,16 @@
 package features.dataSharing.stepDefinitions
 
-import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.dataSharing.steps.NdopSteps
-import features.more.stepDefinitions.MoreStepDefinitions
 import features.myrecord.stepDefinitions.AbstractDemographicsStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import pages.DataSharingPage
-import pages.MorePage
-import pages.NativePageElement
-import pages.NativePageObject
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
-import java.net.URL
 
 class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 

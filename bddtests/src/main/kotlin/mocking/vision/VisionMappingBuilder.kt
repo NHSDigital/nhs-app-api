@@ -2,9 +2,9 @@ package mocking.vision
 
 import mocking.MappingBuilder
 import mocking.vision.demographics.VisionDemographicsBuilder
-import mocking.vision.models.VisionUserSession
 import mocking.vision.models.OrderNewPrescriptionRequest
 import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
 import models.Patient
 
 open class VisionMappingBuilder(method: String = "POST") : MappingBuilder(method, "/vision/") {

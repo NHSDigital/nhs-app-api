@@ -3,11 +3,10 @@ package pages.prescription
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
-import net.thucydides.core.pages.WrongPageError
 import org.junit.Assert
 import org.openqa.selenium.Keys
-import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.HybridPageObject
 import pages.navigation.HeaderNative
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/confirm-prescription-details")

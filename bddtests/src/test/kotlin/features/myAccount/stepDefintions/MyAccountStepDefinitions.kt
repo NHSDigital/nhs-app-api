@@ -4,9 +4,6 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.sharedSteps.SerenityHelpers
 import pages.MyAccountPage
-import java.time.LocalDate
-import java.time.format.TextStyle
-import java.util.*
 
 
 class MyAccountStepDefinitions {

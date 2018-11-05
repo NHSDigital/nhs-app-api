@@ -1,11 +1,10 @@
 package mocking.defaults.dataPopulation.journies.session
 
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
+import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import models.Patient
-import mocking.emis.demographics.PatientIdentifier
 
 class EmisSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
 

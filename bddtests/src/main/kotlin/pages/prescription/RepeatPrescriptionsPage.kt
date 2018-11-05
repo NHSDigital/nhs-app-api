@@ -2,12 +2,11 @@ package pages.prescription
 
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.annotations.findby.By
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
+import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.navigation.HeaderNative
-import pages.HybridPageElement
 
 const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
 

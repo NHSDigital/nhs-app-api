@@ -7,8 +7,8 @@ import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import org.apache.http.HttpStatus
-import javax.xml.bind.JAXBContext
 import java.io.StringWriter
+import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
 

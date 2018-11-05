@@ -3,13 +3,13 @@ package mocking.tpp.requestPatientRecord
 import mocking.GsonFactory
 import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
+import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.Error
 import mocking.tpp.models.RequestPatientRecordReply
-import mocking.tpp.TppMappingBuilder
 import org.apache.http.HttpStatus
 import worker.models.demographics.TppUserSession
-import javax.xml.bind.JAXBContext
 import java.io.StringWriter
+import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
 class TppRequestPatientRecordBuilder(tppUserSession: TppUserSession) : TppMappingBuilder("POST", "/tpp/") {

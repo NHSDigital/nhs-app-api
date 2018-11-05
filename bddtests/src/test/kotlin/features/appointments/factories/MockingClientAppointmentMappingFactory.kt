@@ -4,7 +4,7 @@ import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.models.Mapping
-import java.util.HashMap
+import java.util.*
 
 abstract class MockingClientAppointmentMappingFactory {
 

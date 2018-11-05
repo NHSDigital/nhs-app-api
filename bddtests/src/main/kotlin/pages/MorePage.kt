@@ -1,6 +1,5 @@
 package pages
 
-import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 

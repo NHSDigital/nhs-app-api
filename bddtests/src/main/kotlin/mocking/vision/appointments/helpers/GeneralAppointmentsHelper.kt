@@ -1,14 +1,14 @@
 package mocking.vision.appointments.helpers
 
 import constants.DateTimeFormats
-import mocking.vision.models.appointments.SlotType
 import mocking.vision.models.appointments.CancellationReasons
 import mocking.vision.models.appointments.Location
+import mocking.vision.models.appointments.Owner
 import mocking.vision.models.appointments.Reason
 import mocking.vision.models.appointments.ReasonDescription
-import mocking.vision.models.appointments.Owner
 import mocking.vision.models.appointments.References
 import mocking.vision.models.appointments.Slot
+import mocking.vision.models.appointments.SlotType
 import mocking.vision.models.appointments.Slots
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity

@@ -7,7 +7,9 @@ import models.Slot
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import pages.appointments.CancelAppointmentPage
 import pages.navigation.HeaderNative
 

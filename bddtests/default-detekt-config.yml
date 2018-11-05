@@ -425,7 +425,7 @@ style:
     maxLineLength: 120
     excludePackageStatements: false
     excludeImportStatements: false
-    excludeCommentStatements: falseO
+    excludeCommentStatements: false
   MayBeConst:
     active: false
   ModifierOrder:
@@ -472,7 +472,7 @@ style:
   UntilInsteadOfRangeTo:
     active: false
   UnusedImports:
-    active: false
+    active: true
   UnusedPrivateMember:
     active: false
     allowedNames: "(_|ignored|expected)"

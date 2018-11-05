@@ -5,13 +5,21 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.courses.steps.CourseSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
+import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
+import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
+import mocking.emis.EmisConfiguration
+import mocking.emis.EmisMappingBuilderAppointments
+import mocking.emis.practices.NecessityOption
+import mocking.emis.practices.SettingsResponseModel
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -19,15 +27,6 @@ import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CoursesListResponse
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
-import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
-import mocking.emis.EmisConfiguration
-import mocking.emis.EmisMappingBuilderAppointments
-import mocking.emis.practices.SettingsResponseModel
-
-import features.sharedSteps.SerenityHelpers
-import mocking.emis.practices.NecessityOption
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
 

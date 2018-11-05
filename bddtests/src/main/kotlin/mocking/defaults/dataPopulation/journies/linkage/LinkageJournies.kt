@@ -3,9 +3,8 @@ package mocking.defaults.dataPopulation.journies.linkage
 import mocking.MockingClient
 import mocking.emis.models.AddNhsUserRequest
 import mocking.emis.models.AddNhsUserResponse
-import mocking.emis.models.AddVerificationResponse
 import mocking.emis.models.AddVerificationRequest
-import worker.models.linkage.CreateLinkageRequest
+import mocking.emis.models.AddVerificationResponse
 import java.time.Duration
 
 private const val TIMEOUT_DURATION_SECONDS:Long = 15

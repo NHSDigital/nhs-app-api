@@ -2,7 +2,6 @@ package mocking.gpServiceBuilderInterfaces.appointments
 
 
 import mocking.models.Mapping
-import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import java.time.Duration
 

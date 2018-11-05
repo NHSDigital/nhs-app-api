@@ -1,9 +1,7 @@
 package mocking.data.prescriptions.mappers
 
-import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.models.Repeat
 import mocking.vision.models.RepeatCourse
-import models.prescriptions.HistoricPrescription
 
 object VisionCourseMapper {
 

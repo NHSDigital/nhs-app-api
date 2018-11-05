@@ -5,12 +5,12 @@ import com.google.gson.GsonBuilder
 import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisMappingBuilder
-import mocking.emis.models.ExceptionResponse
+import mocking.emis.models.AddVerificationRequest
 import mocking.emis.models.AddVerificationResponse
+import mocking.emis.models.ErrorResponse
+import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
-import mocking.emis.models.AddVerificationRequest
-import mocking.emis.models.ErrorResponse
 
 class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
     : EmisMappingBuilder(null, method = "POST", relativePath = "/me/verifications") {

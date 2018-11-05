@@ -14,9 +14,7 @@ import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
-import mocking.emis.practices.NecessityOption
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade

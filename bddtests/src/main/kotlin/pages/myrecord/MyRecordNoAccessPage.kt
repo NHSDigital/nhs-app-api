@@ -1,7 +1,7 @@
 package pages.myrecord
 
-import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.HybridPageObject
 
 class MyRecordNoAccessPage : HybridPageObject() {
 

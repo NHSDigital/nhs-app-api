@@ -2,15 +2,14 @@ package mocking.tpp.testResultDetail
 
 import mocking.GsonFactory
 import mocking.emis.models.ExceptionResponse
+import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.TestResultsViewReply
+import org.apache.http.HttpStatus
 import worker.models.demographics.TppUserSession
 import java.io.StringWriter
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
-import mocking.models.Mapping
-import org.apache.http.HttpStatus
-import java.time.OffsetDateTime
 
 class TppTestResultDetailBuilder(tppUserSession: TppUserSession, testResultId: String) :
         TppMappingBuilder("POST", "/tpp/") {

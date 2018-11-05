@@ -7,7 +7,7 @@ import mocking.emis.models.RequestedMedicationCourse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import models.prescriptions.MedicationCourse
 import java.time.OffsetDateTime
-import java.util.Random
+import java.util.*
 
 object PrescriptionsData {
 

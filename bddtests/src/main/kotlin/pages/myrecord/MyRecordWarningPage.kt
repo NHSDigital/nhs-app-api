@@ -1,8 +1,7 @@
 package pages.myrecord
 
-import pages.HybridPageObject
 import pages.HybridPageElement
-import pages.navigation.HeaderNative
+import pages.HybridPageObject
 
 class MyRecordWarningPage : HybridPageObject() {
 

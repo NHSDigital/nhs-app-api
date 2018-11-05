@@ -2,7 +2,6 @@ package features.authentication.steps
 
 import models.Patient
 import net.thucydides.core.annotations.Step
-import org.joda.time.DateTime
 import org.junit.Assert
 import pages.HomePage
 import pages.navigation.HeaderNative

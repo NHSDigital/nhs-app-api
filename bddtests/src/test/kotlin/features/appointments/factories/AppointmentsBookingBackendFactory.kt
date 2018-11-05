@@ -1,10 +1,10 @@
 package features.appointments.factories
 
 import features.sharedSteps.SupplierSpecificFactory
-import mocking.models.Mapping
-import mockingFacade.appointments.BookAppointmentSlotFacade
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
+import mocking.models.Mapping
+import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.models.appointments.AppointmentBookRequest

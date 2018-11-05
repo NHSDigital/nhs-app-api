@@ -2,12 +2,12 @@ package mocking.tpp.registration
 import constants.ErrorResponseCodeTpp
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
+import mocking.tpp.models.Error
 import mocking.tpp.models.LinkAccount
 import mocking.tpp.models.LinkAccountReply
-import mocking.tpp.models.Error
-import javax.xml.bind.JAXBContext
 import org.apache.http.HttpStatus
 import java.io.StringWriter
+import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
 class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "/tpp/") {

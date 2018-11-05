@@ -2,14 +2,12 @@ package mocking.tpp.patientSelected
 
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
-import mocking.tpp.models.Authenticate
-import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import mocking.tpp.models.PatientSelectedReply
 import org.apache.http.HttpStatus
 import worker.models.demographics.TppUserSession
-import javax.xml.bind.JAXBContext
 import java.io.StringWriter
+import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
 

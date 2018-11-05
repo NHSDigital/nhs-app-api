@@ -1,7 +1,6 @@
 package mocking.models
 
 import com.google.gson.Gson
-import mocking.MockingClient
 import java.time.Duration
 
 class Mapping() {

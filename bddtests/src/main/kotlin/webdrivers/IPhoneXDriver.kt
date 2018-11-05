@@ -3,15 +3,11 @@ package webdrivers
 import config.Config
 import io.appium.java_client.MobileElement
 import io.appium.java_client.ios.IOSDriver
-import io.appium.java_client.ios.IOSElement
 import io.appium.java_client.remote.IOSMobileCapabilityType
 import io.appium.java_client.remote.MobileCapabilityType
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.DriverSource
-import org.junit.Assert
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
-import webdrivers.browserstack.BrowserstackLocalService
 import java.net.URL
 import java.util.concurrent.TimeUnit
 

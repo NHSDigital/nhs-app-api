@@ -2,17 +2,15 @@ package features.sharedSteps
 
 import config.Config
 import junit.framework.TestCase.assertNull
-import net.serenitybdd.core.SerenitySystemProperties
 import net.serenitybdd.core.exceptions.SerenityManagedException
-import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.annotations.Step
+import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.LoginPage
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.Duration
 import java.util.*
-import org.openqa.selenium.Cookie
 
 open class BrowserSteps {
 

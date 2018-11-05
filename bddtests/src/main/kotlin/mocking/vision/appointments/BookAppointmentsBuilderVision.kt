@@ -1,11 +1,12 @@
 package mocking.vision.appointments
 
+import constants.ErrorResponseCodeVision
 import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
-import constants.ErrorResponseCodeVision
 import mocking.vision.VisionConstants
 import mocking.vision.VisionMappingBuilder
+import mocking.vision.helpers.VisionConstantsHelper
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import mocking.vision.models.appointments.Appointment
@@ -15,7 +16,6 @@ import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import org.apache.http.HttpStatus
 import java.time.Duration
-import mocking.vision.helpers.VisionConstantsHelper
 
 class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSlotFacade)
     : VisionMappingBuilder()

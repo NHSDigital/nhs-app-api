@@ -1,10 +1,7 @@
 package pages
 
-import mocking.defaults.EmisMockDefaults
-import mocking.defaults.MockDefaults
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 

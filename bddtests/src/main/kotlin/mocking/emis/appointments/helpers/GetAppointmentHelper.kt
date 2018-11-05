@@ -6,8 +6,6 @@ import mocking.emis.models.Location
 import mocking.emis.models.Session
 import mocking.emis.models.SessionHolder
 import mockingFacade.appointments.MyAppointmentsFacade
-import java.text.ParsePosition
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime

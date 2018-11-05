@@ -2,15 +2,15 @@ package mocking.emis.appointments
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import mocking.GsonFactory
 import constants.ErrorResponseCodeEmis
-import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
+import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
 import mocking.emis.models.ErrorResponse
 import mocking.emis.models.ExceptionResponse
+import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import org.apache.http.HttpStatus

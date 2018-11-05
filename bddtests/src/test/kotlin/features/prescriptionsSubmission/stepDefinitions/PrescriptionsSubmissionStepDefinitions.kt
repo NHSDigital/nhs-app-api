@@ -29,7 +29,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.Duration
-import java.util.UUID
+import java.util.*
 
 open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 

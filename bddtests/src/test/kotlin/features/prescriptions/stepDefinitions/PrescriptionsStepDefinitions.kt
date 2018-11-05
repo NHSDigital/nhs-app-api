@@ -25,13 +25,14 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.MockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.tpp.models.Error
 import mocking.tpp.models.ListRepeatMedicationReply
+import mocking.vision.VisionMockDefaults
 import mocking.vision.models.PrescriptionHistory
+import mocking.vision.models.VisionUserSession
 import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
@@ -40,6 +41,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
+import pages.navigation.NavBarNative
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
@@ -49,9 +51,6 @@ import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import javax.servlet.http.Cookie
-import mocking.vision.VisionMockDefaults
-import pages.navigation.NavBarNative
-import mocking.vision.models.VisionUserSession
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 

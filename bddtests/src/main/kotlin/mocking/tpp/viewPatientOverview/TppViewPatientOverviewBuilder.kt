@@ -8,8 +8,8 @@ import mocking.tpp.models.Error
 import mocking.tpp.models.ViewPatientOverviewReply
 import org.apache.http.HttpStatus
 import worker.models.demographics.TppUserSession
-import javax.xml.bind.JAXBContext
 import java.io.StringWriter
+import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
 

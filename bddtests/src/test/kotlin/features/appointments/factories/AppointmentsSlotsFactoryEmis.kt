@@ -1,15 +1,14 @@
 package features.appointments.factories
 
 import features.appointments.steps.AvailableAppointmentsSteps
-import mocking.emis.practices.NecessityOption
 import mocking.emis.models.InputRequirements
 import mocking.emis.models.Messages
+import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertTrue
-import java.util.TimeZone
 
 class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
 

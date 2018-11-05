@@ -5,7 +5,6 @@ import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.remote.AndroidMobileCapabilityType
 import io.appium.java_client.remote.MobileCapabilityType
 import net.serenitybdd.core.pages.WebElementFacade
-import net.serenitybdd.core.webdriver.driverproviders.AppiumDriverCapabilities
 import net.thucydides.core.webdriver.DriverSource
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities

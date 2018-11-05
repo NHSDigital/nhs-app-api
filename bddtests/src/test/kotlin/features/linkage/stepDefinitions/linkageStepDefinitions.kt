@@ -5,7 +5,6 @@ import cucumber.api.java.en.When
 import features.linkage.LinkageResult
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.MockDefaults
 import mocking.defaults.TppMockDefaults
 import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity

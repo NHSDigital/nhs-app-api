@@ -1,9 +1,9 @@
 package features.appointments.stepDefinitions
 
 import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
 import net.thucydides.core.annotations.Steps
-import cucumber.api.java.en.When
 
 
 class AppointmentGuidanceStepDefinitions {

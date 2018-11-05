@@ -11,11 +11,11 @@ import mocking.MockingClient
 import mocking.stubs.StubbedEnvironment
 import models.Patient
 import net.serenitybdd.core.Serenity
-import worker.NhsoHttpException
-import worker.WorkerClient
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.junit.Assert.assertTrue
+import worker.NhsoHttpException
+import worker.WorkerClient
 import worker.models.appointments.GenericResponseObject
 import java.time.Duration
 import java.time.LocalDateTime

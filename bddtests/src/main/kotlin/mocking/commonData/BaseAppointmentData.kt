@@ -3,10 +3,8 @@ package mocking.commonData
 import addDays
 import addHours
 import addMinutes
-import constants.DateTimeFormats
 import mocking.emis.models.AppointmentCancellationReason
 import models.Patient
-import models.Slot
 import java.text.SimpleDateFormat
 import java.util.*
 

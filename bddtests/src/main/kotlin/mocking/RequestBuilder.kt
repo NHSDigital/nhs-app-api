@@ -1,7 +1,6 @@
 package mocking
 
 import com.google.gson.Gson
-import config.Config
 import mocking.models.Request
 
 class RequestBuilder internal constructor(private val method: String, private val path: String) {

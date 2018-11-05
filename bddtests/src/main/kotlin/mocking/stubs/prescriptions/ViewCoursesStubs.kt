@@ -4,11 +4,11 @@ import mocking.MockingClient
 import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.models.CourseRequestsGetResponse
+import mocking.stubs.InputResponse
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.StubsPatientFactory.Companion.goodPatientEMIS
 import mocking.stubs.StubsPatientFactory.Companion.serviceNotEnabledPatientEMIS
 import mocking.stubs.StubsPatientFactory.Companion.timeoutPatientEMIS
-import mocking.stubs.InputResponse
 import models.Patient
 import models.prescriptions.MedicationCourse
 import java.time.Duration

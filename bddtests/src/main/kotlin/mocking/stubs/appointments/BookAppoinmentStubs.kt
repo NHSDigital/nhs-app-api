@@ -2,12 +2,12 @@ package mocking.stubs.appointments
 
 import mocking.MockingClient
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
+import mocking.stubs.InputResponse
+import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.appointments.AppointmentMatchers.Companion.appointmentBookingSlotForMatcher
 import mocking.stubs.appointments.AppointmentMatchers.Companion.appointmentNotFoundMatcher
 import mocking.stubs.appointments.AppointmentMatchers.Companion.successMatcherForAppointments
 import mocking.stubs.appointments.AppointmentMatchers.Companion.timeoutMatcherForAppointments
-import mocking.stubs.InputResponse
-import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import java.time.Duration

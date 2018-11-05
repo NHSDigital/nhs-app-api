@@ -1,11 +1,11 @@
 package features.prescriptions.mappers
 
 import constants.DateTimeFormats
-import models.prescriptions.MedicationCourse
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.PrescriptionType
 import mocking.emis.models.RequestedMedicationCourseStatus
 import models.prescriptions.HistoricPrescription
+import models.prescriptions.MedicationCourse
 import org.joda.time.DateTime
 
 object EmisPrescriptionMapper {

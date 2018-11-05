@@ -12,10 +12,10 @@ import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.LinkAccountReply
-import mocking.tpp.models.User
 import mocking.tpp.models.NationalId
 import mocking.tpp.models.Person
 import mocking.tpp.models.PersonName
+import mocking.tpp.models.User
 import mocking.vision.VisionMockDefaults
 import mocking.vision.models.Account
 import mocking.vision.models.Configuration

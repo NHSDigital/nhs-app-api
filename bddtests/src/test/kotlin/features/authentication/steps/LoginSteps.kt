@@ -1,7 +1,6 @@
 package features.authentication.steps
 
 import config.Config
-import mocking.defaults.EmisMockDefaults
 import models.Patient
 import net.thucydides.core.annotations.Step
 import pages.LoginPage

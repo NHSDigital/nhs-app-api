@@ -1,7 +1,5 @@
 package features.appointments.stepDefinitions
 
-import constants.DateTimeFormats.Companion.backendDateTimeFormatWithTimezone
-import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -18,12 +16,9 @@ import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
-import java.text.ParsePosition
-import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.servlet.http.Cookie
 
 class AvailableAppointmentsSlotsStepDefinitionsBackend  {

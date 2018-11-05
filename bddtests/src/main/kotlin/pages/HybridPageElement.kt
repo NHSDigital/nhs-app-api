@@ -1,11 +1,9 @@
 package pages
 
 import net.serenitybdd.core.pages.WebElementFacade
-import net.thucydides.core.webdriver.UnsupportedDriverException
 import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 const val LOCATOR_STRATEGY_ANDROID = "ANDROID"
 const val LOCATOR_STRATEGY_WEBVIEW = "WEBVIEW"

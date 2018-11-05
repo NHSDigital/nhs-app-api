@@ -1,7 +1,5 @@
 package features.appointments.steps
 
-import constants.DateTimeFormats
-import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
 import features.appointments.data.AppointmentsBookingData
 import features.appointments.data.AppointmentsSlotsExampleBuilderWithExpectations
 import features.appointments.factories.AppointmentsFactory
@@ -22,10 +20,8 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.appointments.SlotResponseObject
-import java.text.ParsePosition
-import java.text.SimpleDateFormat
-import java.util.TimeZone
 import javax.servlet.http.Cookie
+import kotlin.collections.set
 
 open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 

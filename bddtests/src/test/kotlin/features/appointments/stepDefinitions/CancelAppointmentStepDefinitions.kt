@@ -1,9 +1,9 @@
 package features.appointments.stepDefinitions
 
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.appointments.steps.CancelAppointmentSteps
 import net.thucydides.core.annotations.Steps
-import cucumber.api.java.en.Given
 
 class CancelAppointmentStepDefinitions {
 

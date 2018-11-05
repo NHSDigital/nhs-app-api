@@ -3,8 +3,8 @@ package pages.appointments
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.openqa.selenium.StaleElementReferenceException
-import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.HybridPageObject
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject() {

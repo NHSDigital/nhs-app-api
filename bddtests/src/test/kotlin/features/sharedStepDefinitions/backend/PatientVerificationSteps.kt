@@ -10,12 +10,22 @@ import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.demographics.Sex
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
-import mocking.tpp.models.*
+import mocking.tpp.models.Application
+import mocking.tpp.models.Authenticate
+import mocking.tpp.models.AuthenticateReply
+import mocking.tpp.models.Error
+import mocking.tpp.models.NationalId
+import mocking.tpp.models.Person
+import mocking.tpp.models.PersonName
+import mocking.tpp.models.User
 import mocking.vision.VisionMockDefaults
-import mocking.vision.models.*
+import mocking.vision.models.Account
+import mocking.vision.models.Configuration
+import mocking.vision.models.PatientNumber
+import mocking.vision.models.VisionUserSession
 import models.Patient
-import net.serenitybdd.core.Serenity.*
-
+import net.serenitybdd.core.Serenity.sessionVariableCalled
+import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient

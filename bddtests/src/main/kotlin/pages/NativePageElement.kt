@@ -2,7 +2,6 @@ package pages
 
 import io.appium.java_client.MobileElement
 import org.openqa.selenium.JavascriptExecutor
-import org.openqa.selenium.NoSuchElementException
 
 class NativePageElement(
         browserLocator: String,

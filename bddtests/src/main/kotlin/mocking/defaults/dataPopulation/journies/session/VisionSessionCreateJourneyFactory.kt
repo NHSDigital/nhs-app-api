@@ -1,7 +1,6 @@
 package mocking.defaults.dataPopulation.journies.session
 
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mocking.vision.VisionMockDefaults
 import mocking.vision.appointments.helpers.GeneralAppointmentsHelper

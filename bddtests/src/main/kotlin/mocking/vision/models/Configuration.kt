@@ -2,8 +2,8 @@ package mocking.vision.models
 
 import mocking.vision.models.appointments.Appointments
 import mocking.vision.models.appointments.References
-import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "configuration")
 data class Configuration(

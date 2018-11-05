@@ -2,8 +2,8 @@ package mocking.vision
 
 import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionResponse
 import mocking.vision.helpers.VisionConstantsHelper.Companion.setContextOnServiceContent
-import mocking.vision.models.appointments.BookedAppointmentsResponse
 import mocking.vision.models.appointments.AvailableAppointmentsResponse
+import mocking.vision.models.appointments.BookedAppointmentsResponse
 
 object VisionConstants {
 

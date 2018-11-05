@@ -3,7 +3,6 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsBookingFactory.Companion.SymptomsToEnter
-import features.appointments.factories.AppointmentsSlotsFactoryEmis
 import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity

@@ -10,8 +10,6 @@ import org.apache.http.protocol.HttpContext
 import worker.models.courses.CoursesListResponse
 import worker.models.prescriptions.PrescriptionsListResponse
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.net.URLEncoder
 
 class WorkerClientPrescriptions(val config: Config, val sender: WorkerClientSender, val gson: Gson){

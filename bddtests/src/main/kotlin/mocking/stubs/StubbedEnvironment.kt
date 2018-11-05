@@ -8,12 +8,12 @@ import mocking.stubs.appointments.AppointmentSlotsStubs
 import mocking.stubs.appointments.BookAppoinmentStubs
 import mocking.stubs.appointments.CancelAppointmentsStubs
 import mocking.stubs.appointments.ViewAppointmentsStubs
+import mocking.stubs.myMedicalRecord.AllergiesStubs
+import mocking.stubs.myMedicalRecord.ConsultationsStubs
+import mocking.stubs.myMedicalRecord.ImmunisationsStubs
+import mocking.stubs.myMedicalRecord.MedicationsStubs
 import mocking.stubs.myMedicalRecord.ProblemsStubs
 import mocking.stubs.myMedicalRecord.TestResultsStubs
-import mocking.stubs.myMedicalRecord.ImmunisationsStubs
-import mocking.stubs.myMedicalRecord.AllergiesStubs
-import mocking.stubs.myMedicalRecord.MedicationsStubs
-import mocking.stubs.myMedicalRecord.ConsultationsStubs
 import mocking.stubs.prescriptions.OrderRepeatPrescriptionsStubs
 import mocking.stubs.prescriptions.ViewCoursesStubs
 import mocking.stubs.prescriptions.ViewPrescriptionsStubs

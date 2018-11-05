@@ -3,15 +3,11 @@ package features.more.stepDefinitions
 import config.Config
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.dataSharing.stepDefinitions.DataSharingStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import io.appium.java_client.MobileBy
-import io.appium.java_client.MobileElement
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.DataSharingPage
 import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative

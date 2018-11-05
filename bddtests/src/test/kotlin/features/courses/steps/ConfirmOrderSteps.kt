@@ -1,9 +1,9 @@
 package features.courses.steps
 
 import net.thucydides.core.annotations.Step
-import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert
+import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 
 open class ConfirmRepeatPrescriptionOrderSteps {
 

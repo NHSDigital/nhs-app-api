@@ -5,7 +5,6 @@ import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.models.login.token.SucceededResponse
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.MockDefaults
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import java.io.UnsupportedEncodingException

@@ -1,11 +1,15 @@
 package features.myrecord.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
-import cucumber.api.java.en.*
+import cucumber.api.java.en.And
+import cucumber.api.java.en.But
+import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import mocking.data.myrecord.TestResultsData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import pages.ErrorPage
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordTestResultDetailPage

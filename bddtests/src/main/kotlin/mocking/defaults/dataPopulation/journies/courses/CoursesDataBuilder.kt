@@ -1,8 +1,8 @@
 package mocking.defaults.dataPopulation.journies.courses
 
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsData
-import models.prescriptions.MedicationCourse
 import mocking.emis.models.PrescriptionType
+import models.prescriptions.MedicationCourse
 import java.util.*
 
 private const val MAX_PRESCRIPTIONS_NUMBER = 5

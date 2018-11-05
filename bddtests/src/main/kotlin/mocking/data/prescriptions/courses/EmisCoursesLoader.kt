@@ -4,7 +4,7 @@ import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.emis.models.PrescriptionType
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import models.prescriptions.MedicationCourse
-import java.util.UUID
+import java.util.*
 
 object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
     override lateinit var data: MutableList<MedicationCourse>

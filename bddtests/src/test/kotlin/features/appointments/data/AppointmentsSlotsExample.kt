@@ -7,7 +7,7 @@ import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import worker.models.appointments.SlotResponseObject
-import java.time.DayOfWeek.*
+import java.time.DayOfWeek.MONDAY
 import java.time.LocalDateTime
 
 class AppointmentsSlotsExample {

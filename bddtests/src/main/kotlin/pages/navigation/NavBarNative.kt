@@ -1,14 +1,9 @@
 package pages.navigation
 
-import io.appium.java_client.MobileBy
 import io.appium.java_client.MobileElement
-import io.appium.java_client.ios.IOSDriver
 import net.serenitybdd.core.pages.WebElementFacade
-import org.openqa.selenium.By
-import pages.HybridPageElement
 import pages.NativePageElement
 import pages.NativePageObject
-import java.lang.annotation.Native
 
 open class NavBarNative : NativePageObject() {
 

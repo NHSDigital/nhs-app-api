@@ -7,8 +7,8 @@ import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.factories.UpcomingAppointmentsFactory
 import features.appointments.steps.MyAppointmentsSteps
 import net.serenitybdd.core.Serenity
-import org.junit.Assert
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
 import pages.navigation.HeaderNative
 import worker.NhsoHttpException
 import worker.WorkerClient

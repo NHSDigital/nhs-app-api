@@ -15,7 +15,6 @@ import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
-import kotlin.collections.ArrayList
 
 abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
