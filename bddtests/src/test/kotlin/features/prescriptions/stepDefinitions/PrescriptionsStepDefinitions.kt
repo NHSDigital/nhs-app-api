@@ -106,6 +106,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         browser.goToApp()
         login.using(currentPatient)
         navigation.select(NavBarNative.NavBarType.PRESCRIPTIONS)
+        prescriptions.isLoaded()
     }
 
     @Given("^I have no repeat prescriptions for (.*)$")

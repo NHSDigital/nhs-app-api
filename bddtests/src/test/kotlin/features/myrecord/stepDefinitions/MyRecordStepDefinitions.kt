@@ -359,6 +359,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordWarningPage.clickAgreeAndContinue()
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
+        myRecordInfoPage.waitForSpinnerToDisappear()
     }
 
     @Then("^I can see the clinical abbreviations link$")
