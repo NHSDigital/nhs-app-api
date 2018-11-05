@@ -10,7 +10,7 @@
          data-purpose="record-item">
       <span v-if="consultation.effectiveDate.value" :class="$style.fieldName">
         {{ consultation.effectiveDate.value | datePart(consultation.effectiveDate.datePart) }}
-      </span>s
+      </span>
 
       <p> {{ consultation.consultantLocation }} </p>
 
