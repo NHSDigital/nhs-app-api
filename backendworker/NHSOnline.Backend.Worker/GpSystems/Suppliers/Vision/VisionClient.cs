@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 DateRange = new DateRange
                 {
                     From = dateRange.FromDate.Date,
-                    To = dateRange.ToDate.Date
+                    To = dateRange.ToDate.Date.AddDays(-1)
                 }
             };
             var visionRequest = new VisionRequest<AvailableAppointmentsRequest>(visionServiceDefinition.Name,

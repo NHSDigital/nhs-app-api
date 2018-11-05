@@ -375,7 +375,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 DateRange = new DateRange
                 {
                     From = dateRange.FromDate.Date,
-                    To = dateRange.ToDate.Date
+                    To = dateRange.ToDate.Date.AddDays(-1)
                 }
             };
         }

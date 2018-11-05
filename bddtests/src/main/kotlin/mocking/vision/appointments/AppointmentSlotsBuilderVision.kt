@@ -61,12 +61,12 @@ class AppointmentSlotsBuilderVision(
                         wrapAroundXmlTag("vision:dateRange",
                                 wrapAroundXmlTag(
                                         "vision:from",
-                                        convertDateToVisionTime(fromDateString ?: getDefaultFromDate())
+                                        convertFromDateToVisionTime(fromDateString ?: getDefaultFromDate())
                                 ).plus(
 
                                         wrapAroundXmlTag(
                                                 "vision:to",
-                                                convertDateToVisionTime(toDateString ?: getDefaultToDate())
+                                                convertToDateToVisionTime(toDateString ?: getDefaultToDate())
                                         )
                                 )
                         ),
@@ -137,8 +137,14 @@ class AppointmentSlotsBuilderVision(
                         "AppointmentsSlotsVision")
     }
 
-    private fun convertDateToVisionTime(time: String): String {
+    private fun convertFromDateToVisionTime(time: String): String {
         val dateToPass = ZonedDateTime.parse(time)
+        val queryDateFormat = DateTimeFormatter.ofPattern(dateWithoutTimeFormat)
+        return queryDateFormat.format(dateToPass)
+    }
+
+    private fun convertToDateToVisionTime(time: String): String {
+        val dateToPass = ZonedDateTime.parse(time).minusDays(1)
         val queryDateFormat = DateTimeFormatter.ofPattern(dateWithoutTimeFormat)
         return queryDateFormat.format(dateToPass)
     }
