@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task GetSlots_MapperThrows_ReturnsInternalServerError()
         {
             // Arrange
-            _mockAppointmentsMapper.Setup(x => x.Map(It.IsAny<AvailableAppointmentsResponse>()))
+            _mockAppointmentsMapper.Setup(x => x.Map(It.IsAny<AvailableAppointmentsResponse>(), _userSession))
                 .Throws<Exception>();
 
             // Act

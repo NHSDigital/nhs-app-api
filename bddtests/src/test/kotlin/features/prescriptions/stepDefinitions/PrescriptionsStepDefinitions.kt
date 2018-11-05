@@ -18,7 +18,7 @@ import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.backend.CommonSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import features.sharedSteps.SerenityHelpers
+import utils.SerenityHelpers
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader

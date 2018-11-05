@@ -1,12 +1,14 @@
 ﻿using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
-using Slot = NHSOnline.Backend.Worker.Areas.Appointments.Models.Slot;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
 {
     public interface IAvailableAppointmentsResponseMapper
     {
-        AppointmentSlotsResponse Map(AvailableAppointmentsResponse availableAppointmentsResponse);
+        AppointmentSlotsResponse Map(AvailableAppointmentsResponse availableAppointmentsResponse,
+            VisionUserSession userSession);
     }
     
     public class AvailableAppointmentsResponseMapper : IAvailableAppointmentsResponseMapper
@@ -18,11 +20,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             _availableAppointmentMapper = availableAppointmentMapper;
         }
         
-        public AppointmentSlotsResponse Map(AvailableAppointmentsResponse availableAppointmentsResponse)
+        public AppointmentSlotsResponse Map(AvailableAppointmentsResponse availableAppointmentsResponse,
+            VisionUserSession userSession)
         {
             var slots =_availableAppointmentMapper.Map(availableAppointmentsResponse.Appointments);
 
-            return new AppointmentSlotsResponse { Slots = slots};
+
+            return new AppointmentSlotsResponse
+            {
+                Slots = slots,
+                BookingReasonNecessity = userSession.AppointmentBookingReasonNecessity
+            };
         }
     }
 }
