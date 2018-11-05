@@ -79,3 +79,27 @@ Feature: Ability to cancel an appointment
     When I select "Cancel appointment" button
     Then I will be on the My appointments screen
     And a "Cancellation confirmed" message is displayed
+
+  @long-running
+  @NHSO-803
+  Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
+    Given I have upcoming appointments for VISION
+    And I am logged in as a VISION user
+    And I am on my appointments page
+    And I select a "Cancel appointment" link
+    Then I will be on the "Cancellation reason" screen
+    When I am idle long enough for the session to expire
+    Then I see the login page with the session expiry notification
+    And the user login details are cleared from cookies
+
+  @manual
+  @NHSO-803
+  Scenario: Cancelling appointment, when there is no internet connection should result with a message indicating user may have connectivity problems
+    Given I have upcoming appointments for VISION
+    And I am logged in as a VISION user
+    And I am on my appointments page
+    And I select a "Cancel appointment" link
+    Then I will be on the "Cancellation reason" screen
+    And I lose my internet connection
+    When I select "Cancel appointment" button
+    Then I see a message indicating user may have connectivity problems

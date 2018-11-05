@@ -8,6 +8,7 @@ import features.appointments.factories.UpcomingAppointmentsFactory
 import features.appointments.steps.CancelAppointmentSteps
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.MockingClient
+import mocking.stubs.StubbedEnvironment
 import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
@@ -16,6 +17,7 @@ import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.junit.Assert.assertTrue
 import worker.models.appointments.GenericResponseObject
+import java.time.Duration
 import java.time.LocalDateTime
 
 class AppointmentsCancellingStepDefinitionsBackend {
@@ -39,12 +41,23 @@ class AppointmentsCancellingStepDefinitionsBackend {
         mockCancellationRequestStubForReason(reason, gpSystem)
     }
 
+    @Given("^(.*) will time out when trying to cancel a previously booked appointment")
+    fun gpSystemIsAvailableToCancelAnAppointmentButWillTimeout(gpSystem: String) {
+
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
+        var reason = ""
+        if (gpSystem == "EMIS") {
+            reason = "No longer required"
+        }
+        mockCancellationRequestStubForReason(reason, gpSystem, Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
+    }
+
     @Given("^(.*) is available to cancel a previously booked appointment because (.*)$")
     fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
         mockCancellationRequestStubForReason(reason, gpSystem)
     }
 
-    private fun mockCancellationRequestStubForReason(reason: String, gpSystem: String) {
+    private fun mockCancellationRequestStubForReason(reason: String, gpSystem: String, delay: Duration? = null) {
 
         val patient = Patient.getDefault(gpSystem)
 
@@ -60,7 +73,11 @@ class AppointmentsCancellingStepDefinitionsBackend {
         )
 
         factory.setupRequestAndResponse(request) {
-            cancelAppointmentRequest(patient, request).respondWithSuccess()
+            if (delay != null) {
+                cancelAppointmentRequest(patient, request).respondWithSuccess().delayedBy(delay)
+            } else {
+                cancelAppointmentRequest(patient, request).respondWithSuccess()
+            }
         }
     }
 
