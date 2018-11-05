@@ -35,6 +35,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _userSession = _fixture.Create<VisionUserSession>();
+            _userSession.IsAppointmentsEnabled = true;
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<AvailableAppointmentsResponse>>();
             _dateRange = _fixture.Create<AppointmentSlotsDateRange>();
@@ -78,6 +79,35 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             response.Slots.Should().BeEmpty();
             _mockVisionClient.VerifyAll();
+        }
+
+        [TestMethod]
+        public async Task GetSlots_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsCannotBookAppointments()
+        {
+            // Arrange
+            _userSession.IsAppointmentsEnabled = false;
+            
+            // Act
+            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            
+            // Assert
+            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+        }
+        
+        [TestMethod]
+        public async Task GetSlots_VisionClientReturnsAccessDenied_ReturnsCannotBookAppointments()
+        {
+            // Arrange
+            var response = VisionApiObjectResponseBuilder
+                .BuildUnsuccessfulResponseWithErrorCode<AvailableAppointmentsResponse>("-35");
+            MockVisionClientAppointmentSlotsGetMethod(response);
+
+            // Act
+            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+
+            // Assert
+            _mockVisionClient.Verify();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
         }
         
         [TestMethod]

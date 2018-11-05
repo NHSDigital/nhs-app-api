@@ -26,14 +26,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(UserSession userSession, AppointmentSlotsDateRange dateRange)
-        {
-            _logger.LogEnter(nameof(GetSlots));
-            
+        {          
             try
             {
                 _logger.LogEnter(nameof(GetSlots));
             
                 var visionUserSession = (VisionUserSession)userSession;
+                
+                if (!visionUserSession.IsAppointmentsEnabled)
+                {
+                    _logger.LogError("Appointments not enabled");
+                    return new AppointmentSlotsResult.CannotBookAppointments();
+                }
 
                 var response = await _visionClient.GetAvailableAppointments(
                     visionUserSession,
@@ -61,6 +65,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         private AppointmentSlotsResult InterpretAppointmentsGetResponse(
             VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response)
         {
+            if (response.IsAccessDeniedError)
+            {
+                return new AppointmentSlotsResult.CannotBookAppointments();
+            }
+            
             if (response.HasErrorResponse)
             {
                 _logger.LogError($"Call to VISION (VisionAppointmentSlotsService) returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");

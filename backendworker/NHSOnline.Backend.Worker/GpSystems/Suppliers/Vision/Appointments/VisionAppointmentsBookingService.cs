@@ -55,6 +55,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         {
             if (!response.HasErrorResponse) return new AppointmentBookResult.SuccessfullyBooked();
 
+            if (response.IsAccessDeniedError)
+            {
+                return new AppointmentBookResult.InsufficientPermissions();
+            }
+            
             if (response.IsAppointmentSlotAlreadyBookedError || response.IsAppointmentSlotNotFoundError)
             {
                 return new AppointmentBookResult.SlotNotAvailable();

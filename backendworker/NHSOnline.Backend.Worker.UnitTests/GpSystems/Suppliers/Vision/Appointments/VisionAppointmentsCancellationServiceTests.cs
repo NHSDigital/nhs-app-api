@@ -136,6 +136,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         }
         
         [TestMethod]
+        public async Task Cancel_VisionClientReturnsAccessDenied_ReturnsInsufficientPermissions()
+        {
+            // Arrange
+            var response = VisionApiObjectResponseBuilder
+                .BuildUnsuccessfulResponseWithErrorCode<CancelledAppointmentResponse>("-35");
+            MockVisionClientCancelAppointmentMethod(response);
+
+            // Act
+            var result = await _systemUnderTest.Cancel(_userSession, _request);
+
+            // Assert
+            _mockVisionClient.Verify();
+            result.Should().BeAssignableTo<AppointmentCancelResult.InsufficientPermissions>();
+        }
+        
+        [TestMethod]
         public async Task Cancel_VisionClientReturnsUnexpectedErrorCode_ReturnsSupplierSystemUnavailable()
         {
             // Arrange

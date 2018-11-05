@@ -59,6 +59,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         private AppointmentsResult InterpretAppointmentsGetResponse(
             VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {
+            if (response.IsAccessDeniedError)
+            {
+                return new AppointmentsResult.CannotViewAppointments();
+            }
+            
             if (response.HasErrorResponse)
             {
                 _logger.LogError($"Call to VISION (VisionAppointmentsRetrievalService) returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");

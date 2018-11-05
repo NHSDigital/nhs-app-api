@@ -61,6 +61,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         {
             if (!response.HasErrorResponse) return new AppointmentCancelResult.SuccessfullyCancelled();
 
+            if (response.IsAccessDeniedError)
+            {
+                return new AppointmentCancelResult.InsufficientPermissions();
+            }
+
             if (response.IsAppointmentSlotNotBookedToCurrentUserError || response.IsAppointmentSlotNotFoundError)
             {
                 return new AppointmentCancelResult.AppointmentNotCancellable();
