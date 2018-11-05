@@ -48,5 +48,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/_16sdp"
         android:text="@string/retryButtonText"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:focusable="true"
+        android:background="@drawable/icon_drawable_button_focusable"/>
 </LinearLayout>

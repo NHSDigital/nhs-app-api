@@ -69,10 +69,7 @@
             android:paddingTop="@dimen/_8sdp"
             android:src="@drawable/icon_drawable_account"
             android:background="@drawable/icon_drawable_boarder_focusable"
-            android:nextFocusUp="@id/more"
-            android:nextFocusForward="@id/webview"
-            android:nextFocusRight="@id/webview"
-            android:nextFocusDown="@id/webview" />
+            android:nextFocusUp="@id/more"/>
 
 
     </RelativeLayout>
