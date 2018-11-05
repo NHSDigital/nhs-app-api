@@ -34,6 +34,7 @@ services:
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io
+      - VERSION_TAG=backendworker_docker_main
   cid.local.bitraft.io:
     image: nhsonline.backend.worker
     build:

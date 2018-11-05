@@ -108,6 +108,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun setupAppVersion() {
         var versionName = BuildConfig.VERSION_NAME
         evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updateNativeVersion', '$versionName')")
+        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updatePlatform', 'Android')")
     }
 
     private fun onErrorRetryButton() {

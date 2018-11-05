@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace NHSOnline.Backend.Worker.Support.Auditing
 {
@@ -12,12 +13,14 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
         private readonly IAuditSink _auditSink;
         private readonly AsyncLocal<HttpContextAuditorScope> _scopeProvider;
         private readonly ILogger<Auditor> _logger;
+        private readonly IConfiguration _configuration;
 
-        public Auditor(IAuditSink auditSink, AsyncLocal<HttpContextAuditorScope> scopeProvider, ILogger<Auditor> logger)
+        public Auditor(IAuditSink auditSink, AsyncLocal<HttpContextAuditorScope> scopeProvider, ILogger<Auditor> logger, IConfiguration configuration)
         {
             _auditSink = auditSink ?? throw new ArgumentNullException(nameof(auditSink));
             _scopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         private string NhsNumber()
@@ -98,12 +101,12 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             params object[] parameters)
         {
             await _auditSink.WriteAudit(DateTime.UtcNow, nhsNumber, supplier, operation,
-                string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters));
+                string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters), _scopeProvider.Value.VersionTag());
         }
 
         public IDisposable BeginScope(HttpContext httpContext)
         {
-            _scopeProvider.Value = new HttpContextAuditorScope(httpContext);
+            _scopeProvider.Value = new HttpContextAuditorScope(httpContext, _configuration);
             return null;
         }
     }

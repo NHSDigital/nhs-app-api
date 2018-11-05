@@ -12,9 +12,11 @@ using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.UnitTests.Areas;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -102,7 +104,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
 
             public async Task AuditWithScope(string nhsNumber, Supplier supplier)
             {
-                await _auditor.AuditWithExplicitNhsNumber(nhsNumber, supplier, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
+                var dummyContext = new DefaultHttpContext();
+                using (_auditor.BeginScope(dummyContext))
+                {
+                    await _auditor.AuditWithExplicitNhsNumber(nhsNumber, supplier, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");                    
+                }
             }
         }
 
@@ -116,8 +122,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
 
             // Set the stream for audits
             _stream = new MemoryStream();
-            var logger = _fixture.Freeze<Mock<ILogger<Auditor>>>(); 
-            _fixture.Inject(new AuditorFactory(new StreamAuditSink(_stream)).CreateAuditor(logger.Object));
+            var logger = _fixture.Freeze<Mock<ILogger<Auditor>>>();
+
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>(Constants.EnvironmentalVariables.VersionTag, "UNIT TEST") });
+            
+            _fixture.Inject(new AuditorFactory(new StreamAuditSink(_stream), configBuilder.Build()).CreateAuditor(logger.Object));
 
             // Create system under test from IOC injection...
             _systemUnderTest = _fixture.Create<DummyClassThatAudits>();

@@ -7,6 +7,7 @@ export default {
     return {
       webVersion: '',
       nativeVersion: '',
+      platform: 'web',
     };
   },
   actions,

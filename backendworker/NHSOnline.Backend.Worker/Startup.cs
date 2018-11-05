@@ -1,6 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -32,11 +32,16 @@ namespace NHSOnline.Backend.Worker
     public class Startup
     {
         private readonly IHostingEnvironment _env;
+        
         private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger<Startup> _startupLogger;
+        
         private readonly RunMode _runMode;
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
+
+        private readonly string _apiAppVersion;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -50,6 +55,9 @@ namespace NHSOnline.Backend.Worker
                 loggerFactory.AddConsole(LogLevel.Debug);
             }
             
+            _apiAppVersion = configuration[Constants.EnvironmentalVariables.VersionTag];
+            
+            _startupLogger = _loggerFactory.CreateLogger<Startup>();
             _modularStartup = new ModularStartup(configuration, loggerFactory);
         }
 
@@ -159,6 +167,7 @@ namespace NHSOnline.Backend.Worker
             }
 
             UseSecurityHeaders(app);
+            UseVersionLogging(app);
             app.UseResponseHeadersMiddleware();
 
             app.UsePathBase(new PathString("/v1"));
@@ -194,7 +203,33 @@ namespace NHSOnline.Backend.Worker
                 await next();
             });
         }
-        
+
+        private void UseVersionLogging(IApplicationBuilder app)
+        {
+            app.Use(async (context, next) =>
+            {
+                string webAppVersion = context.Request.Headers[Constants.HttpHeaders.WebAppVersion];
+                string nativeAppVersion = context.Request.Headers[Constants.HttpHeaders.NativeAppVersion];
+
+                if (!string.IsNullOrEmpty(webAppVersion))
+                {
+                    var logMessageStringBuilder = new StringBuilder();
+                    
+                    logMessageStringBuilder.Append(
+                        $"Beginning HTTP Request. Backendworker version: {_apiAppVersion}. Web App Version: {webAppVersion}.");
+                    
+                    if (!string.IsNullOrEmpty(nativeAppVersion))
+                    {
+                        logMessageStringBuilder.Append($" Native App Version: {nativeAppVersion}.");
+                    }
+
+                    _startupLogger.LogInformation(logMessageStringBuilder.ToString());
+                }
+                
+                await next();
+            });
+        }
+
         private static RunMode GetRunMode(IConfiguration configuration)
         {
             if (null == configuration["runMode"])

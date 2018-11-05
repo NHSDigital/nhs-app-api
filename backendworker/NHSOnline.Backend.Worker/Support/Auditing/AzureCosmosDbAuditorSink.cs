@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Support.Auditing
@@ -25,7 +26,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
                 UriFactory.CreateDocumentCollectionUri(config.CosmosDbSinkDatabaseId, config.CosmosDbSinkCollectionId);
         }
 
-        public async Task WriteAudit(DateTime timestamp, string nhsNumber, Supplier supplier, string operation, string details)
+        public async Task WriteAudit(DateTime timestamp, string nhsNumber, Supplier supplier, string operation, string details, VersionTag versionTag)
         {
             if (_disposed)
             {
@@ -34,7 +35,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
 
             _logger.LogEnter(nameof(WriteAudit));
 
-            var auditRecord = new AuditRecord(timestamp, nhsNumber, supplier, operation, details);
+            var auditRecord = new AuditRecord(timestamp, nhsNumber, supplier, operation, details, versionTag);
 
             using (_logger.WithTimer("Add audit entry to CosmosDB"))
             {

@@ -135,8 +135,9 @@ class HomeViewController : UIViewController {
     
     func setupAppVersion() {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        let javascriptCommand = "window.$nuxt.$store.dispatch('appVersion/updateNativeVersion', '\(versionNumber)')"
-        
+        let updateNativeVersionJavascriptCommand = "var result = window.$nuxt.$store.dispatch('appVersion/updateNativeVersion', '\(versionNumber)');"
+        let updatePlatformJavascriptCommand = "var result = window.$nuxt.$store.dispatch('appVersion/updatePlatform', 'iOS');"
+
         let completionHandler: (Any?, Error?) -> Void = {
             (data, error) in
             if(error != nil) {
@@ -148,7 +149,8 @@ class HomeViewController : UIViewController {
             }
         }
         
-        self.webViewController?.webView.evaluateJavaScript(javascriptCommand, completionHandler: completionHandler)
+        self.webViewController?.webView.evaluateJavaScript(updateNativeVersionJavascriptCommand, completionHandler: completionHandler)
+        self.webViewController?.webView.evaluateJavaScript(updatePlatformJavascriptCommand, completionHandler: completionHandler)
     }
     
     func setVisibilityOfHeaderAndMenuBars(visible: Bool, isSlim: Bool) {

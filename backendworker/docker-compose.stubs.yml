@@ -5,12 +5,6 @@ services:
     command: --local-response-templating
     ports:
       - "8080:8080"
-  data.stubs.local.bitraft.io:
-    image: nhsonline.stubs.data
-    depends_on:
-      - stubs.local.bitraft.io
-    environment:
-      - wiremockUrl=http://stubs.local.bitraft.io:8080
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:

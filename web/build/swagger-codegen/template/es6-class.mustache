@@ -104,14 +104,24 @@ class {{&className}} {
       headers['Cookie'] = this.cookie;
     }
 
-    if (this.store.state.appVersion && this.store.state.appVersion.webVersion) {
-      var appVersion = this.store.state.appVersion.webVersion;
+    if (this.store.state.appVersion) {
 
-      if (this.store.state.appVersion.nativeVersion) {
-        appVersion += ' (' + this.store.state.appVersion.nativeVersion + ')';
+      if (this.store.state.appVersion.webVersion) {
+        var webVersion = this.store.state.appVersion.webVersion;
+        headers['NHSO-Web-Version-Tag'] = webVersion;
       }
 
-      headers['NHSO-Version-Tag'] = appVersion;
+      if (this.store.state.appVersion.nativeVersion && this.store.state.appVersion.platform) {
+        var platform = this.store.state.appVersion.platform;
+
+        if (platform == 'web') {
+          headers['NHSO-Native-Version-Tag'] = nativeVersion;
+        }
+        else {
+          var nativeVersion = this.store.state.appVersion.nativeVersion;
+          headers['NHSO-Native-Version-Tag'] = platform + ": " + nativeVersion;
+        }
+      }
     }
 
     const resolve = ({ store, deferred, result, cancel }) => {

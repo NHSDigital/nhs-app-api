@@ -1,4 +1,4 @@
-import { INIT_APP_VERSION, UPDATE_WEB_VERSION, UPDATE_NATIVE_VERSION } from './mutation-types';
+import { INIT_APP_VERSION, UPDATE_WEB_VERSION, UPDATE_NATIVE_VERSION, UPDATE_PLATFORM } from './mutation-types';
 
 export default {
   updateWebVersion({ commit }, webVersion) {
@@ -6,6 +6,9 @@ export default {
   },
   updateNativeVersion({ commit }, nativeVersion) {
     commit(UPDATE_NATIVE_VERSION, nativeVersion);
+  },
+  updatePlatform({ commit }, platform) {
+    commit(UPDATE_PLATFORM, platform);
   },
   init({ commit }) {
     commit(INIT_APP_VERSION);

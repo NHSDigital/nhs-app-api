@@ -21,7 +21,12 @@
             public const int Status464OdsCodeNotSupportedOrNoNhsNumber = 464;
             public const int Status465FailedAgeRequirement = 465;
         }
-        
+
+        public static class EnvironmentalVariables
+        {
+            public const string VersionTag = "VERSION_TAG";
+        }
+
         public static class HttpHeaders
         {
             private const string NhsoPrefix = "NHSO-";
@@ -31,6 +36,8 @@
             public const string Surname = NhsoPrefix + "Surname";
             public const string DateOfBirth = NhsoPrefix + "Date-Of-Birth";
             public const string IdentityToken = NhsoPrefix + "Identity-Token";
+            public const string WebAppVersion = NhsoPrefix + "Web-Version-Tag";
+            public const string NativeAppVersion = NhsoPrefix + "Native-Version-Tag";
         }
 
         public static class AuditingTitles
