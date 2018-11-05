@@ -17,7 +17,7 @@ class CancelAppointmentsStubs(private val patient: Patient,
                             -> builder.respondWithSuccess() }
 
         mapCancelAppointmentStubs.listResponse().forEach { scenario ->
-            var facade = CancelAppointmentSlotFacade(patient.userPatientLinkToken,
+            val facade = CancelAppointmentSlotFacade(patient.userPatientLinkToken,
                                                      cancellationSlotMatcher,
                                                      scenario.forMatcher)
             mockingClient.forEmis { scenario.getResponse(appointments.cancelAppointmentRequest(patient, facade)) }

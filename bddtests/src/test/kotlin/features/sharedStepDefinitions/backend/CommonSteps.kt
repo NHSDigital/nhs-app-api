@@ -125,7 +125,7 @@ class CommonSteps : AbstractSteps() {
 
     @And("I allow my session to expire")
     fun andIDelayMyRequestByTheDefaultTime() {
-        var delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
+        val delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
         Thread.sleep(delayTime + 10)
     }
 }

@@ -17,7 +17,7 @@ private const val TIMEOUT: Long = 10
 class Pixel2LocalDriver : DriverSource {
 
     override fun newDriver(): WebDriver {
-        var caps = DesiredCapabilities()
+        val caps = DesiredCapabilities()
 
         caps.setCapability(MobileCapabilityType.APP, Config.instance.appPath)
         caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Google Pixel 2")

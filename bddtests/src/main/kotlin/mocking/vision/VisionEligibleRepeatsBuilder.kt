@@ -38,7 +38,7 @@ class VisionEligibleRepeatsBuilder(var userSession: VisionUserSession,
             marshaller.marshal(EligibleRepeats, stringWriter)
         }
 
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionResponse(stringWriter.toString(), serviceDefinition)).build()
         }
 

@@ -35,7 +35,7 @@ class VisionOrderNewPrescriptionBuilder(
     }
 
     fun respondWithSuccess(orderNewPrescriptionResponseText: String): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionResponse(orderNewPrescriptionResponseText, serviceDefinition)).build()
         }
 

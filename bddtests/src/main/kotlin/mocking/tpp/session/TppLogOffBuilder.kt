@@ -30,7 +30,7 @@ class TppLogOffBuilder : TppMappingBuilder("POST", "/tpp/") {
     }
 
     fun respondWithError(): Mapping {
-        var error = Error("5", "You must be logged on" , uuid)
+        val error = Error("5", "You must be logged on" , uuid)
         return respondWith(error)
     }
 }

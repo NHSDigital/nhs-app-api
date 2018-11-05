@@ -247,7 +247,7 @@ object MedicationsData {
 
     fun getEmptySetOfVisionMedicationData(): String {
 
-        var response = "<![CDATA[<root><patient>"
+        val response = "<![CDATA[<root><patient>"
         val responseStringEnd = "</patient></root>]]>"
 
         return response + responseStringEnd

@@ -20,7 +20,7 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
                           showDosage: Boolean,
                           showQuantity: Boolean) {
 
-        var prescriptions = mutableListOf<Request>()
+        val prescriptions = mutableListOf<Request>()
 
         if (noPrescriptions != 0) {
             // Create courses first as these will be used in the prescriptions
@@ -31,7 +31,7 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
                     includeDosage = showDosage,
                     includeQuantity = showQuantity)
 
-            var repeatCourse = VisionCoursesLoader.data.repeat
+            val repeatCourse = VisionCoursesLoader.data.repeat
 
             var maxNumberOfPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false
@@ -39,17 +39,17 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
             var courseNumber = repeatCourse.count().minus(1)
 
             while (prescriptionNumber <= maxNumberOfPrescriptions) {
-                var repeats = ArrayList<Repeat>()
+                val repeats = ArrayList<Repeat>()
 
-                var time = DateTime.now().minusDays(prescriptionNumber).toLocalDateTime()
+                val time = DateTime.now().minusDays(prescriptionNumber).toLocalDateTime()
 
-                var course = repeatCourse.get(courseNumber)
+                val course = repeatCourse.get(courseNumber)
 
-                var repeat = Repeat(course.drug, course.dosage, course.quantity, null)
+                val repeat = Repeat(course.drug, course.dosage, course.quantity, null)
 
                 if (!isSecondIteration) {
 
-                    var myEnum = VisionPrescriptionLoader.getPrescriptionStatus()
+                    val myEnum = VisionPrescriptionLoader.getPrescriptionStatus()
 
                     repeats.add(repeat)
                     prescriptions.add(

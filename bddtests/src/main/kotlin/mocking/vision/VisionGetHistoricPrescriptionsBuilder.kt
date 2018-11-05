@@ -41,7 +41,7 @@ class VisionGetHistoricPrescriptionsBuilder(var userSession: VisionUserSession,
             marshaller.marshal(prescriptionHistory, stringWriter)
         }
 
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionResponse(stringWriter.toString(), serviceDefinition)).build()
         }
 
@@ -49,35 +49,35 @@ class VisionGetHistoricPrescriptionsBuilder(var userSession: VisionUserSession,
     }
 
     fun respondWithInvalidRequest(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getInvalidRequestError(serviceDefinition)).build()
         }
         return resp
     }
 
     fun respondWithSecurityHeaderError(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(securityHeaderErrorResponse).build()
         }
         return resp
     }
 
     fun respondWithUnknownError(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getUnknownError(serviceDefinition)).build()
         }
         return resp
     }
 
     fun respondWithServiceUnavailable(): Mapping {
-        var resp = respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+        val resp = respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
             andXmlBody("").build()
         }
         return resp
     }
 
     fun respondWitInvalidUserCredentials(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getInvalidUserCredentialsError(serviceDefinition)).build()
         }
         return resp

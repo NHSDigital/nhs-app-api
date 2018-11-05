@@ -27,20 +27,20 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) can be successful with slot identifier of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForSlotId(gpSystem: String, numberOfCharacters: Int) {
-        var factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
-        var patient = factory.patient
-        var slotId = "1".repeat(numberOfCharacters).toInt()
-        var request = factory.defaultAppointmentRequest(patient, slotId = slotId)
+        val factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        val patient = factory.patient
+        val slotId = "1".repeat(numberOfCharacters).toInt()
+        val request = factory.defaultAppointmentRequest(patient, slotId = slotId)
         factory.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
     }
 
 
     @Given("^an appointment booking for (.*) can be successful with booking reason of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForBookingReason(gpSystem: String, numberOfCharacters: Int) {
-        var factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
-        var patient = factory.patient
-        var bookingReason = "a".repeat(numberOfCharacters)
-        var request = factory.defaultAppointmentRequest(patient, bookingReason = bookingReason)
+        val factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        val patient = factory.patient
+        val bookingReason = "a".repeat(numberOfCharacters)
+        val request = factory.defaultAppointmentRequest(patient, bookingReason = bookingReason)
         factory.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
     }
 

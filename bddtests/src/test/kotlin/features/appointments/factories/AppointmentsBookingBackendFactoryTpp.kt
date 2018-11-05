@@ -11,7 +11,7 @@ class AppointmentsBookingBackendFactoryTpp : AppointmentsBookingBackendFactory("
     override fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int?,
                                            bookingReason: String?): BookAppointmentSlotFacade {
-        var dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+        val dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
 
         return BookAppointmentSlotFacade(
                 patient.patientId,

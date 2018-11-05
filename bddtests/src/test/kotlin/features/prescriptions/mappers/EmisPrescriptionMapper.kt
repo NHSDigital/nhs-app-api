@@ -28,11 +28,11 @@ object EmisPrescriptionMapper {
 
         var totalCoursesRunningTotal = 0
 
-        var repeatCourses = data.medicationCourses.filter { it.prescriptionType == PrescriptionType.Repeat }
+        val repeatCourses = data.medicationCourses.filter { it.prescriptionType == PrescriptionType.Repeat }
 
-        var repeatCourseguids = GetGuids(repeatCourses)
+        val repeatCourseguids = GetGuids(repeatCourses)
 
-        var historicPrescriptions = ArrayList<HistoricPrescription>()
+        val historicPrescriptions = ArrayList<HistoricPrescription>()
 
         for (prescription in data.prescriptionRequests.toList().sortedByDescending { it.dateRequested }){
 
@@ -40,18 +40,18 @@ object EmisPrescriptionMapper {
                 break
             }
 
-            var datetime = DateTime.parse(prescription.dateRequested).toString(DateTimeFormats.frontendBasicDateFormat)
+            val datetime = DateTime.parse(prescription.dateRequested).toString(DateTimeFormats.frontendBasicDateFormat)
 
-            var filteredCoursesInPrescription = prescription.requestedMedicationCourses.filter {
+            val filteredCoursesInPrescription = prescription.requestedMedicationCourses.filter {
                 it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid)
                     && it.requestedMedicationCourseStatus in displayedEmisMedicationCourseStatuses
             }
 
             for (courseEntry in filteredCoursesInPrescription) {
 
-                var course = repeatCourses.toList().filter { it.medicationCourseGuid == courseEntry.requestedMedicationCourseGuid }.single()
+                val course = repeatCourses.toList().filter { it.medicationCourseGuid == courseEntry.requestedMedicationCourseGuid }.single()
 
-                var historicPrescription = HistoricPrescription(
+                val historicPrescription = HistoricPrescription(
                         name = course.name,
                         dosage = pages.prescription.resolveDetailsField(course.dosage, course.quantityRepresentation)
                 )
@@ -71,7 +71,7 @@ object EmisPrescriptionMapper {
     }
 
     private fun GetGuids(repeatCourses: List<MedicationCourse>): ArrayList<String> {
-        var courseGuids = ArrayList<String>()
+        val courseGuids = ArrayList<String>()
 
         repeatCourses.forEach { it -> courseGuids.add(it.medicationCourseGuid) }
 

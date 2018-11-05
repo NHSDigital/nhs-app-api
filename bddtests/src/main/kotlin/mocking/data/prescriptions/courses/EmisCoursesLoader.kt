@@ -21,7 +21,7 @@ object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
         var numberOfRepeats = numOfRepeats
         var numberCanBeRequested = numCanBeRequested
 
-        var medicationCourses = mutableListOf<MedicationCourse>()
+        val medicationCourses = mutableListOf<MedicationCourse>()
 
         // Create courses first as these will be used in the prescriptions
         for (course in 1..maxCourses) {

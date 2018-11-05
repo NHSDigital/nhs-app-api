@@ -22,7 +22,7 @@ object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
                           includeDosage: Boolean,
                           includeQuantity: Boolean) {
 
-        var numberOfRepeats = numOfRepeats
+        val numberOfRepeats = numOfRepeats
 
         val higherNumber: Int
 
@@ -32,7 +32,7 @@ object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
             numberOfRepeats
         }
 
-        var repeats = ArrayList<RepeatCourse>()
+        val repeats = ArrayList<RepeatCourse>()
 
         // Create courses first as these will be used in the prescriptions
         for (course in 1..higherNumber) {
@@ -49,7 +49,7 @@ object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
             repeats.add(createdCourse)
         }
 
-        var eligibleRepeats = EligibleRepeats()
+        val eligibleRepeats = EligibleRepeats()
 
         var allowFreeText = true
         if (Serenity.hasASessionVariableCalled(PRESCRIPTION_COMMENTS_ALLOWED)) {

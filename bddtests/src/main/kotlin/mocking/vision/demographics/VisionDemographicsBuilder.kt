@@ -41,7 +41,7 @@ class VisionDemographicsBuilder(var userSession: VisionUserSession,
             marshaller.marshal(demographics, stringWriter)
         }
 
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionDemographicsResponse(stringWriter.toString(), serviceDefinition)).build()
         }
 
@@ -49,14 +49,14 @@ class VisionDemographicsBuilder(var userSession: VisionUserSession,
     }
 
     fun respondWithUnknownError(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getUnknownError(serviceDefinition)).build()
         }
         return resp
     }
 
     fun respondWithAccessDeniedError(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getAccessDeniedError(serviceDefinition)).build()
         }
         return resp

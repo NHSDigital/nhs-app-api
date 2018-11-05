@@ -41,7 +41,7 @@ class TppPatientSelectedBuilder(tppUserSession: TppUserSession) : TppMappingBuil
             marshaller.marshal(patientSelectedReply, stringWriter)
         }
 
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(stringWriter.toString())
                     .andHeader(suidHeader, suidValue)
                     .build()

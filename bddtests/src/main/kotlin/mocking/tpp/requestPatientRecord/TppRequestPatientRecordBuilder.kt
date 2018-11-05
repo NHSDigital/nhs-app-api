@@ -40,7 +40,7 @@ class TppRequestPatientRecordBuilder(tppUserSession: TppUserSession) : TppMappin
             marshaller.marshal(requestPatientRecordReply, stringWriter)
         }
 
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(stringWriter.toString())
                     .andHeader(suidHeader, suidValue)
                     .build()

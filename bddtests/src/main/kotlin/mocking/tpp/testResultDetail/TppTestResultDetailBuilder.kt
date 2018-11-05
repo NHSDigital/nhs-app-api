@@ -42,7 +42,7 @@ class TppTestResultDetailBuilder(tppUserSession: TppUserSession, testResultId: S
             marshaller.marshal(testResultsViewReply, stringWriter)
         }
 
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(stringWriter.toString())
                     .andHeader(suidHeader, suidValue)
                     .build()

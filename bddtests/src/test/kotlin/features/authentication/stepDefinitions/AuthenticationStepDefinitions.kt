@@ -508,13 +508,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^I see a welcome message$")
     fun iSeeAWelcomeMessageFor() {
-        var patient = SerenityHelpers.getPatient()
+        val patient = SerenityHelpers.getPatient()
         home.assertWelcomeMessageShownFor(patient)
     }
 
     @Then("I see the patient details of name, date of birth and NHS number$")
     fun iSeePatientDetails() {
-        var patient = SerenityHelpers.getPatient()
+        val patient = SerenityHelpers.getPatient()
         val regex = """${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
         Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
                 regex.containsMatchIn(patient.nhsNumbers.first()))

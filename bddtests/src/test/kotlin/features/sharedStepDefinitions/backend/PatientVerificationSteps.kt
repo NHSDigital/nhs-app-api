@@ -66,7 +66,7 @@ class PatientVerificationSteps : AbstractSteps() {
             }
             VISION -> {
                 val patient = VisionMockDefaults.patientVision
-                var nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
+                val nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
 
                 mockingClient
                         .forVision {

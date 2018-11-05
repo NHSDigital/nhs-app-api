@@ -9,10 +9,10 @@ object VisionCourseMapper {
 
         fun map(data: List<RepeatCourse>) : ArrayList<Repeat> {
 
-            var repeats = ArrayList<Repeat>()
+            val repeats = ArrayList<Repeat>()
 
             for(repeatCourse in data){
-                var repeat = Repeat(
+                val repeat = Repeat(
                         repeatCourse.drug,
                         repeatCourse.dosage,
                         repeatCourse.quantity,

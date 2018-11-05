@@ -630,7 +630,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         val delay: Long = 31
 
         if (!::prescriptionLoader.isInitialized) {
-            var gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)
+            val gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)
             initialize(gpSystem)
         }
 

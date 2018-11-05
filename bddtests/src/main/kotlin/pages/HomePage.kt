@@ -128,10 +128,10 @@ open class HomePage : HybridPageObject() {
 
     fun assertVersionNumberVisible() {
 
-        var divXpath = "//div[contains(text(),'Version dev_bdd_docker')]"
-        var pXpath = "//p[contains(text(),'Version dev_bdd_docker')]"
+        val divXpath = "//div[contains(text(),'Version dev_bdd_docker')]"
+        val pXpath = "//p[contains(text(),'Version dev_bdd_docker')]"
 
-        var versionNumberElement = HybridPageElement(
+        val versionNumberElement = HybridPageElement(
                 browserLocator = "$divXpath | $pXpath",
                 androidLocator = null,
                 page = this,

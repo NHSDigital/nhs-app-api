@@ -55,7 +55,7 @@ class IdTokenBuilder(issuer: String, audience: String) {
     }
 
     fun getSignedToken(signer: RSASSASigner, patient: Patient): SignedJWT {
-        var signedJWT = SignedJWT(
+        val signedJWT = SignedJWT(
                 getHeader(),
                 getClaims(patient))
 

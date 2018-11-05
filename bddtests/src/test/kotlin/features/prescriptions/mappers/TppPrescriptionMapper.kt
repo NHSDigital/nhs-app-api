@@ -6,10 +6,10 @@ import models.prescriptions.HistoricPrescription
 object TppPrescriptionMapper {
     fun Map(data: ListRepeatMedicationReply) : ArrayList<HistoricPrescription> {
 
-        var historicPrescriptions = ArrayList<HistoricPrescription>()
+        val historicPrescriptions = ArrayList<HistoricPrescription>()
 
         for(repeatCourse in data.Medication){
-            var historicPrescription = HistoricPrescription(
+            val historicPrescription = HistoricPrescription(
                     repeatCourse.drug,
                     repeatCourse.details
             )

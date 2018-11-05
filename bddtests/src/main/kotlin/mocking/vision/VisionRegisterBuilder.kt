@@ -36,7 +36,7 @@ class VisionRegisterBuilder(var userSession: VisionUserSession,
 
         val xmlBody = JSonXmlConverter.toXML(register)
 
-        var resp = respondWith(HttpStatus.SC_OK) {
+        val resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionResponse(xmlBody, serviceDefinition)).build()
         }
         return resp

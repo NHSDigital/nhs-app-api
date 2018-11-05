@@ -18,18 +18,18 @@ object VisionPrescriptionMapper {
 
         var totalCoursesRunningTotal = 0
 
-        var historicPrescriptions = ArrayList<HistoricPrescription>()
+        val historicPrescriptions = ArrayList<HistoricPrescription>()
 
         for (repeatPrescription in data.request) {
             if (totalCoursesRunningTotal >= 100) {
                 break
             }
 
-            var prescriptionOrderDate = DateTime.parse(repeatPrescription.date).toString(
+            val prescriptionOrderDate = DateTime.parse(repeatPrescription.date).toString(
                     DateTimeFormats.frontendBasicDateFormat)
 
             for (course in repeatPrescription.repeat) {
-                var historicPrescription = HistoricPrescription(
+                val historicPrescription = HistoricPrescription(
                         course.drug ?: "",
                         pages.prescription.resolveDetailsField(course.dosage, course.quantity)
                 )

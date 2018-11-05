@@ -200,7 +200,7 @@ object TestResultsData {
     }
 
     fun getTestResultDetail(): TestResultsViewReply {
-        var testResultDetail = TestResultsViewReply(items = mutableListOf())
+        val testResultDetail = TestResultsViewReply(items = mutableListOf())
 
         testResultDetail.items.add(TestResultsViewReplyItem(value = "<p>Test Result Detail</p>"))
 
