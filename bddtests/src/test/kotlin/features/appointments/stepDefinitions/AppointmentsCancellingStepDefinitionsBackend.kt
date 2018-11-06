@@ -52,9 +52,25 @@ class AppointmentsCancellingStepDefinitionsBackend {
         mockCancellationRequestStubForReason(reason, gpSystem, Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
     }
 
+    @Given("^(.*) returns corrupted response when trying to cancel a previously booked appointment")
+    fun gpSystemIsAvailableToCancelAnAppointmentButWillReturnCorruptedResponse(gpSystem: String) {
+
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
+        var reason = ""
+        if (gpSystem == "EMIS") {
+            reason = "No longer required"
+        }
+        mockCancellationRequestCorruptedStubForReason(reason, gpSystem)
+    }
+
     @Given("^(.*) is available to cancel a previously booked appointment because (.*)$")
     fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
         mockCancellationRequestStubForReason(reason, gpSystem)
+    }
+
+    @Given("^(.*) is unavailable to cancel a previously booked appointment because (.*)$")
+    fun gpSystemIsUnavailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
+        mockCancellationRequestUnavailableStubForReason(reason, gpSystem)
     }
 
     private fun mockCancellationRequestStubForReason(reason: String, gpSystem: String, delay: Duration? = null) {
@@ -78,6 +94,46 @@ class AppointmentsCancellingStepDefinitionsBackend {
             } else {
                 cancelAppointmentRequest(patient, request).respondWithSuccess()
             }
+        }
+    }
+
+    private fun mockCancellationRequestCorruptedStubForReason(reason: String, gpSystem: String) {
+
+        val patient = Patient.getDefault(gpSystem)
+
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
+        Serenity.setSessionVariable(Patient::class).to(patient)
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
+
+        val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
+        val request = factory.defaultRequest(
+                patient,
+                retrieveSlotIdOfAppointmentToCancel(),
+                reason
+        )
+
+        factory.setupRequestAndResponse(request) {
+            cancelAppointmentRequest(patient, request).respondWithCorrupted()
+        }
+    }
+
+    private fun mockCancellationRequestUnavailableStubForReason(reason: String, gpSystem: String) {
+
+        val patient = Patient.getDefault(gpSystem)
+
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
+        Serenity.setSessionVariable(Patient::class).to(patient)
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
+
+        val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
+        val request = factory.defaultRequest(
+                patient,
+                retrieveSlotIdOfAppointmentToCancel(),
+                reason
+        )
+
+        factory.setupRequestAndResponse(request) {
+            cancelAppointmentRequest(patient, request).responseWithExceptionWhenServiceUnavailable()
         }
     }
 

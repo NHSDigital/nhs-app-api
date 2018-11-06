@@ -58,6 +58,22 @@ Feature: Ability to cancel an appointment
       | TPP       |
       | VISION    |
 
+  @NHSO-803
+  Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
+    Given <GP System> is unavailable to cancel a previously booked appointment because <Reason>
+    And I am logged in as a <GP System> user
+    And I am on my appointments page
+    When I select a "Cancel appointment" link
+    And I select a cancellation reason of <Reason>
+    When I select "Cancel appointment" button
+    Then I see appropriate information message when there is an error sending data on appointment confirmation page
+    And there should be a button to go back to my appointments
+    Examples:
+      | Reason           | GP System |
+      | Unable to attend | EMIS      |
+      | Reason 1         | VISION    |
+
+
 
 #    TPP Specific scenarios
   Scenario: A TPP user is presented with the cancel appointment screen

@@ -31,4 +31,16 @@ class DeleteAppointmentsBuilderEmis (configuration: EmisConfiguration,
             andJsonBody(body, GsonFactory.asPascal)
         }
     }
+
+    override fun respondWithCorrupted(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andBody("< Non parsable {:< as a XML or JSON", contentType = "application/json")
+        }
+    }
+
+    override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
+        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+            andXmlBody("").build()
+        }
+    }
 }

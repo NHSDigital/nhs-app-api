@@ -6,6 +6,7 @@ import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.CancelAppointmentReply
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
+import org.apache.http.HttpStatus
 
 
 class CancelAppointmentsBuilderTpp  (patient: Patient, request: CancelAppointmentSlotFacade)
@@ -26,5 +27,19 @@ class CancelAppointmentsBuilderTpp  (patient: Patient, request: CancelAppointmen
                 CancelAppointmentReply(tppPatient.patientId,
                         uuid = uuid
                 ))
+    }
+
+    override fun respondWithCorrupted(): Mapping {
+        val mapping = respondWithSuccess()
+
+        return respondWith(HttpStatus.SC_OK) {
+            andBody(mapping.response!!.body!!.replace(">","|").replace("}","|"), contentType = "application/json")
+        }
+    }
+
+    override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
+        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+            andXmlBody("Service unavailable").build()
+        }
     }
 }

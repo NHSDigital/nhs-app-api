@@ -5,4 +5,9 @@ import mocking.models.Mapping
 interface ICancelAppointmentsBuilder {
 
     fun respondWithSuccess(): Mapping
+
+    fun respondWithCorrupted(): Mapping
+
+    fun responseWithExceptionWhenServiceUnavailable(): Mapping
+
 }

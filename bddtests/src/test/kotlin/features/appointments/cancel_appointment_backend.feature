@@ -28,3 +28,17 @@ Feature: Ability to cancel an appointment via api
       | TPP       |
       | VISION    |
 
+  @NHSO-802
+  Scenario Outline: <GP System> returns corrupted data when trying to cancel a previously booked appointment
+    Given <GP System> returns corrupted response when trying to cancel a previously booked appointment
+    And I have logged into <GP System> and have a valid session cookie
+    When I send a cancellation request to the API with a valid cancellation reason
+    Then I receive a "Internal Server Error" error
+  @bug @NHSO-3039
+    Examples:
+      | GP System |
+      | EMIS      |
+    Examples:
+      | GP System |
+      | TPP       |
+      | VISION    |

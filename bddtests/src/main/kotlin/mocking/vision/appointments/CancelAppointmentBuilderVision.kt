@@ -65,6 +65,23 @@ class CancelAppointmentBuilderVision(patient: Patient, request: CancelAppointmen
         }
     }
 
+    override fun respondWithCorrupted(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            val response = JSonXmlConverter.toXML(successCancellationResponse, true)
+            val serviceDefinition = ServiceDefinition(
+                    VisionConstants.cancelAppointmentsName,
+                    VisionConstants.cancelAppointmentsVersion)
+
+            andXmlBody(getBaseVisionResponse(response, serviceDefinition).replace('>','|'))
+        }
+    }
+
+    override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
+        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+            andXmlBody("").build()
+        }
+    }
+
     private fun retrieveMatchingReasonId(cancellationReason: String): String? {
         val reasons: List<AppointmentCancellationReason>? = Serenity
                 .sessionVariableCalled<List<AppointmentCancellationReason>>(AppointmentCancellationReason::class)
