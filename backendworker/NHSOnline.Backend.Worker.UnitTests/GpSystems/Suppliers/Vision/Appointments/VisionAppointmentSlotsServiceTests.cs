@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -16,7 +14,6 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
-using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointments
 {
@@ -29,7 +26,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         private VisionAppointmentSlotsService _systemUnderTest;
         private VisionResponse<AvailableAppointmentsResponse> _visionClientGetResponse;
         private AppointmentSlotsDateRange _dateRange;
-        
+        private Mock<IAvailableAppointmentsResponseMapper> _mockAppointmentsMapper;
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -53,17 +51,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             
             MockVisionClientAppointmentSlotsGetMethod(response);
             
-            IConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
-            
-            var appointmentMapper = new AvailableAppointmentsMapper(dateTimeOffsetProvider);
+            _mockAppointmentsMapper = _fixture.Freeze<Mock<IAvailableAppointmentsResponseMapper>>();
             
             _systemUnderTest = new VisionAppointmentSlotsService(
                 _mockVisionClient.Object,
                 _fixture.Create<ILogger<VisionAppointmentSlotsService>>(),
-                new AvailableAppointmentsResponseMapper(appointmentMapper));
+                _mockAppointmentsMapper.Object);
         }
         
         [TestMethod]
@@ -132,10 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task GetSlots_MapperThrows_ReturnsInternalServerError()
         {
             // Arrange
-            _mockVisionClient.Setup(x => x.GetAvailableAppointments(
-                    _userSession,
-                    _dateRange
-                ))
+            _mockAppointmentsMapper.Setup(x => x.Map(It.IsAny<AvailableAppointmentsResponse>()))
                 .Throws<Exception>();
 
             // Act

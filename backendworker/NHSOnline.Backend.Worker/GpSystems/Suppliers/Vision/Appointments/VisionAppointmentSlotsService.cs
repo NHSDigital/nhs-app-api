@@ -51,11 +51,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogError(e, "Calling GetAvailableAppointments threw HttpRequestException.");
                 return new AppointmentSlotsResult.SupplierSystemUnavailable();
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during retrieving the response.");
-                return new AppointmentSlotsResult.InternalServerError();
-            }
             finally
             {
                 _logger.LogExit(nameof(GetSlots));
