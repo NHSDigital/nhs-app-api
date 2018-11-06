@@ -56,6 +56,14 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         )
     }
 
+    override fun respondWithCorrupted(): Mapping {
+        return respondWithCorruptedContent("appointment slots")
+    }
+
+    override fun respondWithUnavailableException(): Mapping {
+        return respondWithServiceUnavailable()
+    }
+
     private fun extractSessionsFromFacade(facade: AppointmentSlotsResponseFacade): List<AppointmentSession> {
         return facade.sessions.map { session ->
             val slots = session.slots.map { slot ->

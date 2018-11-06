@@ -3,27 +3,24 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.data.AppointmentsBookingData
-import features.appointments.data.AppointmentsSlotsExample
-import features.appointments.data.AppointmentsSlotsExampleBuilderWithExpectations
+import mocking.data.appointments.AppointmentsBookingData
+import mocking.data.appointments.AppointmentsSlotsExample
+import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentDateKey
 import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentTimeKey
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
-import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
+import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
-import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
-import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
-import org.apache.http.HttpStatus.SC_OK
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -125,12 +122,12 @@ class AvailableAppointmentsSlotsStepDefinitions {
         thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem)
     }
 
-    @Given("^EMIS doesn't respond a timely fashion for available appointment slots$")
-    fun emis_doesn_t_respond_a_timely_fashion_for_available_appointment_slots() {
-        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+    @Given("^the (.*) doesn't respond a timely fashion for available appointment slots$")
+    fun theGpSystemDoesntRespondATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
-            respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
-                    .delayedBy(Duration.ofSeconds(90))
+            withDelay(Duration.ofSeconds(90))
+                    .respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
         }
     }
 
@@ -143,61 +140,27 @@ class AvailableAppointmentsSlotsStepDefinitions {
         }
     }
 
-    @When("^EMIS responds a timely fashion for available appointment slots$")
-    fun emis_responds_a_timely_fashion_for_available_appointment_slots() {
-        thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem("EMIS")
+    @When("^(.*) responds a timely fashion for available appointment slots$")
+    fun respondsATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
+        thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem)
     }
 
-    @Given ("^Appointments are disabled for VISION at a GP Practice level")
+    @Given("^Appointments are disabled for VISION at a GP Practice level")
     fun appointmentsAreDisabledForVisionAtAGPLevel() {
-       Serenity.setSessionVariable(gpAppointmentsDisabled).to("true")
+        Serenity.setSessionVariable(gpAppointmentsDisabled).to("true")
     }
 
 
-    @Given("^EMIS is unavailable for available appointment slots$")
-    fun emis_is_unavailable_for_available_appointment_slots() {
-        val gpSystem = "EMIS"
+    @Given("^(.*) is unavailable for available appointment slots$")
+    fun gpSystemIUnavailableForAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateDefaultUserData()
-        val patient = Patient.getDefault(gpSystem)
-        SerenityHelpers.setPatient(patient)
-
-        mockingClient.forEmis {
-            appointments.appointmentSlotsMetaRequest(patient)
-                    .respondWith(SC_INTERNAL_SERVER_ERROR) {
-                        andHtmlBody("Internal server Error")
-                    }
-        }
-
-        mockingClient.forEmis {
-            appointments.appointmentSlotsRequest(patient)
-                    .respondWith(SC_INTERNAL_SERVER_ERROR) {
-                        andHtmlBody("Internal server Error")
-                    }
-        }
+        factory.generateServiceUnavailableSlotResponse()
     }
 
-    @Given("^EMIS returns corrupt data for appointment slots$")
-    fun emis_returns_corrupt_data_for_appointment_slots() {
-        val gpSystem = "EMIS"
+    @Given("^(.*) returns corrupt data for appointment slots$")
+    fun gpSystemReturnsCorruptDataForAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateDefaultUserData()
-        val patient = Patient.getDefault(gpSystem)
-        SerenityHelpers.setPatient(patient)
-
-        mockingClient.forEmis {
-            appointments.appointmentSlotsMetaRequest(patient)
-                    .respondWith(SC_OK, 0) {
-                        andHtmlBody("appointment slots metadata")
-                    }
-        }
-
-        mockingClient.forEmis {
-            appointments.appointmentSlotsRequest(patient)
-                    .respondWith(SC_OK, 0) {
-                        andHtmlBody("appointment slots")
-                    }
-        }
+        factory.generateCorruptedSlotResponse()
     }
 
 
@@ -280,7 +243,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Then("^available slots are returned for the given date-time range$")
     fun availableSlotsLocationsCliniciansAndAppointmentSessionsAreReturned() {
         val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(
-                AvailableAppointmentsSteps.AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY
+                AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY
         )
         val expectedAppointmentSlots = arrayListOf<AppointmentSlotFacade>()
         for (appointmentSession in expectedAppointmentSessions) {

@@ -48,9 +48,7 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
     }
 
     override fun respondWithCorrupted(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andBody("< Non parsable {:< as a XML or JSON", contentType = "application/json")
-        }
+        return respondWithCorruptedContent("< Non parsable {:< as a XML or JSON")
     }
 
     override fun respondWithUnavailableException(): Mapping {

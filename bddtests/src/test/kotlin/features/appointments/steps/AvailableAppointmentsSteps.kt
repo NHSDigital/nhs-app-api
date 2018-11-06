@@ -1,8 +1,9 @@
 package features.appointments.steps
 
-import features.appointments.data.AppointmentsBookingData
-import features.appointments.data.AppointmentsSlotsExampleBuilderWithExpectations
+import mocking.data.appointments.AppointmentsBookingData
+import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import features.appointments.factories.AppointmentsFactory
+import mocking.data.appointments.AppointmentSessionVariableKeys
 import mockingFacade.appointments.AppointmentFilterFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
@@ -436,10 +437,5 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         private const val ALL_OPTION = "All available"
     }
 
-    enum class AppointmentSessionVariableKeys {
-        EXPECTED_SESSIONS_KEY,
-        EXPECTED_APPOINTMENT_SESSIONS_KEY,
-        EXPECTED_APPOINTMENT_SLOTS_KEY,
-        EXPECTED_GUIDANCE_CONTENT_KEY
-    }
+
 }

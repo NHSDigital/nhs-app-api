@@ -40,7 +40,8 @@ class Config private constructor() {
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         val uri = URI(url)
-        wiremockUrl = envOrDefault("wiremockUrl", "http://${uri.host}:8080")
+        val wiremockUrlString = if (uri.port == -1) "${uri.scheme}://${uri.host}" else "http://${uri.host}:8080"
+        wiremockUrl = envOrDefault("wiremockUrl", wiremockUrlString)
         cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
         pfsBackendUrl = envOrDefault("pfsBackendUrl", "http://api.local.bitraft.io:8082")
         nodeEnv = envOrDefault("NODE_ENV", "production")
@@ -50,7 +51,7 @@ class Config private constructor() {
         browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESSKEY", "NOT_PROVIDED")
         browserstackUrl = "http://$browserstackUsername:$browserstackAccessKey@hub-cloud.browserstack.com/wd/hub"
         browserstackLocal = envOrDefault("BROWSERSTACK_LOCAL", "true")
-        showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE","false")
+        showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE", "false")
         appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
 
@@ -94,7 +95,7 @@ class Config private constructor() {
         val keyStore: KeyStore = KeyStore(constants.JwkValues.cidKeys)
         val logger: Logger = LoggerFactory.getLogger(Config::class.simpleName)
 
-        fun createConfig():Config{
+        fun createConfig(): Config {
             return Config()
         }
 

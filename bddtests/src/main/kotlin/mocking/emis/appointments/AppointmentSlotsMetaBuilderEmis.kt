@@ -75,6 +75,14 @@ class AppointmentSlotsMetaBuilderEmis(
         return respondWithException(exceptionResponse)
     }
 
+    override fun respondWithCorrupted(): Mapping {
+        return respondWithCorruptedContent("appointment slots metadata")
+    }
+
+    override fun respondWithUnavailableException(): Mapping {
+        return respondWithServiceUnavailable()
+    }
+
     private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
         return respondWithBody(exceptionResponse, SC_INTERNAL_SERVER_ERROR)
     }

@@ -1,8 +1,8 @@
 package features.appointments.factories
 
 import constants.DateTimeFormats
-import features.appointments.data.AppointmentsSlotsExample
-import features.appointments.data.AppointmentsSlotsExampleBuilderWithExpectations
+import mocking.data.appointments.AppointmentsSlotsExample
+import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
@@ -119,6 +119,23 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     abstract fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
                                                                 endDate: String?,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping))
+
+    open fun generateCorruptedSlotResponse() {
+        generateDefaultUserData()
+
+        appointmentMapper.requestMapping {
+            appointmentSlotsRequest(patient)
+                    .respondWithCorrupted()
+        }
+    }
+
+    open fun generateServiceUnavailableSlotResponse() {
+        generateDefaultUserData()
+        appointmentMapper.requestMapping {
+            appointmentSlotsRequest(patient)
+                    .respondWithUnavailableException()
+        }
+    }
 
 
     companion object : SupplierSpecificFactory<AppointmentsSlotsFactory>() {

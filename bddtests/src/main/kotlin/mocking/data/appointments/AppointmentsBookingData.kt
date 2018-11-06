@@ -1,4 +1,4 @@
-package features.appointments.data
+package mocking.data.appointments
 
 import constants.DateTimeFormats.Companion.backendDateTimeFormatWithTimezone
 import mocking.MockingClient
@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter
 open class AppointmentsBookingData {
 
     companion object {
+        private const val tomorrow = 1
+        private const val threeWeeks = 22
 
         const val pastFromDate = "2017-12-24T14:00:00"
         const val pastToDate = "2017-12-30T14:00:00"
@@ -21,8 +23,8 @@ open class AppointmentsBookingData {
         val defaultSessionStartDate = defaultSessionStartDateRaw.format(dateTimeFormat)!!
         val defaultSessionEndDate = defaultSessionEndDateRaw.format(dateTimeFormat)!!
 
-        private fun tomorrowMidnight() = midnightDayInTheFuture(1)
-        private fun threeWeeksTomorrowMidnight() = midnightDayInTheFuture(22)
+        private fun tomorrowMidnight() = midnightDayInTheFuture(tomorrow)
+        private fun threeWeeksTomorrowMidnight() = midnightDayInTheFuture(threeWeeks)
 
         private fun midnightDayInTheFuture(daysToAdd: Int): ZonedDateTime {
 

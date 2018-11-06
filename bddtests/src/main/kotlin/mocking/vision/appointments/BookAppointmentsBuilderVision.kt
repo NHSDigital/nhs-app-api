@@ -68,21 +68,11 @@ class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSl
     }
 
     override fun respondWithCorrupted(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            val corruptedResponse = VisionConstantsHelper
-                    .getBaseVisionResponse("", serviceDefinition)
-                    .replace(">", "|")
-                    .replace("}", "|")
-
-            andBody(corruptedResponse, contentType = "text/xml")
-        }
+        return responseWithCorruptedContent(serviceDefinition, "")
     }
 
     override fun respondWithUnavailableException(): Mapping {
-
-        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody("").build()
-        }
+        return respondWithServiceUnavailable()
     }
 
     override fun respondWithConflictException(): Mapping {

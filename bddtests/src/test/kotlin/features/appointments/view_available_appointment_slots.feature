@@ -164,6 +164,58 @@ Feature: View available appointment slots
       | TPP       |
       | VISION    |
 
+  Scenario Outline: <GP System> user tries again after a timeout and it times-out again
+    Given the <GP System> doesn't respond a timely fashion for available appointment slots
+    And I am logged in
+    And I try to progress to the available appointments page
+    Then I see appropriate information message for time-outs
+    When I click try again button on appointment page
+    Then I see appropriate information message for time-outs
+    And there should be a button to try again
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario Outline: <GP System> user tries again after a timeout and it is now successful
+    Given the <GP System> doesn't respond a timely fashion for available appointment slots
+    And I am logged in
+    And I try to progress to the available appointments page
+    Then I see a timeout on the appointment booking page
+    When <GP System> responds a timely fashion for available appointment slots
+    And I click try again button on appointment page
+    Then I am able to filter on available slots
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario Outline: <GP System> user sees appropriate information message when returns corrupt data
+    Given <GP System> returns corrupt data for appointment slots
+    And I am logged in
+    When I try to progress to the available appointments page
+    Then I see appropriate information message when there is a error retrieving data
+    And there should not be an option to try again
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario Outline: <GP System>  user sees appropriate information message when GP system is unavailable
+    Given <GP System> is unavailable for available appointment slots
+    And I am logged in
+    When I try to progress to the available appointments page
+    Then I see appropriate information message when there is a error retrieving data
+    And there should not be an option to try again
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots
     Given there are available appointment slots with different criteria for EMIS
@@ -172,48 +224,6 @@ Feature: View available appointment slots
     When I decide I don't want to select an appointment and go back
     Then I will be on the My appointments screen
 
-  Scenario: A user sees appropriate information message when there is a timeout
-    #    GP System agnostic scenario, so only need to test with EMIS
-    Given EMIS doesn't respond a timely fashion for available appointment slots
-    And I am logged in
-    When I try to progress to the available appointments page
-    Then I see appropriate information message for time-outs
-    And there should be a button to try again
-
-  Scenario: A user tries again after a timeout and it times-out again
-    #    GP System agnostic scenario, so only need to test with EMIS
-    Given EMIS doesn't respond a timely fashion for available appointment slots
-    And I am logged in
-    And I try to progress to the available appointments page
-    When I click try again button on appointment page
-    Then I see appropriate information message for time-outs
-    And there should be a button to try again
-
-  Scenario: A user tries again after a timeout and it is now successful
-    #    GP System agnostic scenario, so only need to test with EMIS
-    Given EMIS doesn't respond a timely fashion for available appointment slots
-    And I am logged in
-    And I try to progress to the available appointments page
-    Then I see a timeout on the appointment booking page
-    When EMIS responds a timely fashion for available appointment slots
-    And I click try again button on appointment page
-    Then I am able to filter on available slots
-
-  Scenario: A user sees appropriate information message when GP system is unavailable
-    #    GP System agnostic scenario, so only need to test with EMIS
-    Given EMIS is unavailable for available appointment slots
-    And I am logged in
-    When I try to progress to the available appointments page
-    Then I see appropriate information message when there is a error retrieving data
-    And there should not be an option to try again
-
-  Scenario: A user sees appropriate information message when EMIS returns corrupt data
-    #    GP System agnostic scenario, so only need to test with EMIS
-    Given EMIS returns corrupt data for appointment slots
-    And I am logged in
-    When I try to progress to the available appointments page
-    Then I see appropriate information message when there is a error retrieving data
-    And there should not be an option to try again
 
   @manual
   Scenario: A user sees appropriate information message when internet connection has been lost

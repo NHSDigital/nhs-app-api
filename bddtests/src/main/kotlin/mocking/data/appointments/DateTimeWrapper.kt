@@ -1,11 +1,13 @@
-package features.appointments.data
+package mocking.data.appointments
 
 import constants.DateTimeFormats
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class DateTimeWrapper(private var dateAsLocalDateTime: LocalDateTime, hoursOverride: Int? = null, minutesOverride: Int? = null) {
+class DateTimeWrapper(private var dateAsLocalDateTime: LocalDateTime,
+                      hoursOverride: Int? = null,
+                      minutesOverride: Int? = null) {
 
     init {
         hoursOverride?.let { this.dateAsLocalDateTime = this.dateAsLocalDateTime.withHour(it) }

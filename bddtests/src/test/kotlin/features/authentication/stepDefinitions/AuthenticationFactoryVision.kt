@@ -1,6 +1,6 @@
 package features.authentication.stepDefinitions
 
-import features.appointments.data.AppointmentsBookingData.Companion.mockingClient
+import mocking.data.appointments.AppointmentsBookingData.Companion.mockingClient
 import mocking.vision.VisionMockDefaults
 import models.Patient
 import java.time.Duration

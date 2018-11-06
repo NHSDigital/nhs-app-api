@@ -2,6 +2,7 @@ package mocking.tpp.appointments
 
 
 import constants.ErrorResponseCodeTpp
+import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
@@ -9,7 +10,6 @@ import mocking.tpp.models.BookAppointmentReply
 import mocking.tpp.models.Error
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
-import org.apache.http.HttpStatus
 import java.time.Duration
 
 
@@ -21,6 +21,10 @@ class BookAppointmentsBuilderTpp(patient: Patient, request: BookAppointmentSlotF
     private val errorText = "There was a problem booking the appointment"
     private val appointmentLimitErrorText = "The appointment has not been booked because you " +
             "have reached the limit of pending appointments"
+    private val defaultAppointmentReply = BookAppointmentReply(tppPatient.patientId,
+            onlineUserId = tppPatient.patientId,
+            message = "Remember to bring your medication!",
+            uuid = TppConfig.uuid)
 
     init {
         requestBuilder.andHeader(HEADER_TYPE, "BookAppointment")
@@ -35,26 +39,16 @@ class BookAppointmentsBuilderTpp(patient: Patient, request: BookAppointmentSlotF
     }
 
     override fun respondWithSuccess(): Mapping {
-        return respondWith(
-                BookAppointmentReply(tppPatient.patientId,
-                        onlineUserId = tppPatient.patientId,
-                        message = "Remember to bring your medication!",
-                        uuid = TppConfig.uuid
-                ))
+        return respondWith(defaultAppointmentReply)
     }
 
     override fun respondWithCorrupted(): Mapping {
-        val mapping = respondWithSuccess()
-        return respondWith(HttpStatus.SC_OK) {
-            andBody(mapping.response!!.body!!.replace(">", "|").replace("}", "|"), contentType = "text/xml")
-        }
+        val response = JSonXmlConverter.toXML(defaultAppointmentReply)
+        return respondWithCorruptedContent(response)
     }
 
     override fun respondWithUnavailableException(): Mapping {
-
-        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody("").build()
-        }
+        return respondWithServiceUnavailable()
     }
 
     override fun respondWithConflictException(): Mapping {

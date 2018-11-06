@@ -125,9 +125,6 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
-  @bug @NHSO-3074
-    Examples:
-      | GP System |
       | VISION    |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot is not available for booking

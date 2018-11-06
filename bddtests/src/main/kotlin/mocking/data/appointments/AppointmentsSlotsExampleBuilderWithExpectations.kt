@@ -1,6 +1,5 @@
-package features.appointments.data
+package mocking.data.appointments
 
-import features.appointments.steps.AvailableAppointmentsSteps
 import mocking.stubs.appointments.AppointmentsSlotsExampleBuilder
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
@@ -24,7 +23,7 @@ class AppointmentsSlotsExampleBuilderWithExpectations: AppointmentsSlotsExampleB
     private fun setExpectations(appointmentSessions: ArrayList<AppointmentSessionFacade>) {
         val appointmentSlots = arrayListOf<AppointmentSlotFacade>()
         appointmentSlots.addAll(appointmentSessions.flatMap { session -> session.slots })
-        setSessionVariable(AvailableAppointmentsSteps.AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(appointmentSessions)
+        setSessionVariable(AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(appointmentSessions)
 
         setSessionVariable(AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).to(filter)
         setSessionVariable(AppointmentSlotExpectations.EXPECTED_APPOINTMENT_TYPE_KEY).to(appointmentTypesList)

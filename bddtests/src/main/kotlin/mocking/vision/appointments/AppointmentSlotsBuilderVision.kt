@@ -2,6 +2,7 @@ package mocking.vision.appointments
 
 import constants.DateTimeFormats
 import constants.DateTimeFormats.Companion.dateWithoutTimeFormat
+import mocking.JSonXmlConverter
 import mocking.JSonXmlConverter.wrapAroundXmlTag
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
@@ -19,13 +20,10 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
-import java.io.StringWriter
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.Marshaller
 
 class AppointmentSlotsBuilderVision(
         patient: Patient,
@@ -61,7 +59,7 @@ class AppointmentSlotsBuilderVision(
                         wrapAroundXmlTag("vision:dateRange",
                                 wrapAroundXmlTag(
                                         "vision:from",
-                                        convertFromDateToVisionTime(fromDateString ?: getDefaultFromDate())
+                                        convertDateToVisionTime(fromDateString ?: getDefaultFromDate())
                                 ).plus(
 
                                         wrapAroundXmlTag(
@@ -98,30 +96,18 @@ class AppointmentSlotsBuilderVision(
                             wrapAroundXmlTag("vision:owner", owner.id.toString())
                         }
 
-                ),
-                "contains")
-                .andBody(
-                        wrapAroundXmlTag("vision:locations",
-                                locationsForPatient.joinToString("") { location ->
-                                    wrapAroundXmlTag("vision:location", location.id.toString())
-                                }
+                ), "contains")
+                .andBody(wrapAroundXmlTag("vision:locations",
+                        locationsForPatient.joinToString("") { location ->
+                            wrapAroundXmlTag("vision:location", location.id.toString())
+                        }
 
-                        ),
-                        "contains")
-
-        val jaxbContext = JAXBContext.newInstance(AvailableAppointmentsResponse::class.java)
-        val marshaller = jaxbContext.createMarshaller()
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
-
-        val stringWriter = StringWriter()
-        stringWriter.use {
-            marshaller.marshal(availableAppointmentsResponse, stringWriter)
-        }
+                ), "contains")
+        val responseBody = JSonXmlConverter.toXML(availableAppointmentsResponse)
 
         return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(
-                    VisionConstants.getVisionAvailableAppointmentsResponse(stringWriter.toString(), serviceDefinition)
-            ).andDelay(delayMillisecs).build()
+            andXmlBody(VisionConstants.getVisionAvailableAppointmentsResponse(responseBody, serviceDefinition))
+                    .andDelay(delayMillisecs).build()
         }
     }
 
@@ -137,7 +123,15 @@ class AppointmentSlotsBuilderVision(
                         "AppointmentsSlotsVision")
     }
 
-    private fun convertFromDateToVisionTime(time: String): String {
+    override fun respondWithCorrupted(): Mapping {
+        return responseWithCorruptedContent(serviceDefinition, "")
+    }
+
+    override fun respondWithUnavailableException(): Mapping {
+        return respondWithServiceUnavailable()
+    }
+
+    private fun convertDateToVisionTime(time: String): String {
         val dateToPass = ZonedDateTime.parse(time)
         val queryDateFormat = DateTimeFormatter.ofPattern(dateWithoutTimeFormat)
         return queryDateFormat.format(dateToPass)

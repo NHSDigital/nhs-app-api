@@ -54,6 +54,16 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
         }
     }
 
+    fun respondWithCorruptedContent(content: String): Mapping {
+        return respondWith(HttpStatus.SC_OK) { andHtmlBody(content) }
+    }
+
+    override fun respondWithServiceUnavailable(content: String): Mapping {
+        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+            andJsonBody(content)
+        }
+    }
+
     protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {
 
         val responseBody = ExceptionResponse(internalResponseCode.toLong(), message)

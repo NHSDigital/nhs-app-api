@@ -3,7 +3,7 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.data.AppointmentsSlotsExample
+import mocking.data.appointments.AppointmentsSlotsExample
 import features.appointments.factories.UpcomingAppointmentsFactory
 import features.appointments.steps.MyAppointmentsSteps
 import net.serenitybdd.core.Serenity

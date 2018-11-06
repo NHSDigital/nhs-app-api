@@ -1,9 +1,10 @@
 package features.appointments.factories
 
-import features.appointments.steps.AvailableAppointmentsSteps
+import mocking.data.appointments.AppointmentSessionVariableKeys
+import mocking.emis.EmisMappingBuilderAppointments
+import mocking.emis.practices.NecessityOption
 import mocking.emis.models.InputRequirements
 import mocking.emis.models.Messages
-import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
@@ -12,7 +13,11 @@ import org.junit.Assert.assertTrue
 
 class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
 
-    override fun generateAppointmentSlotResponse(startDate: String?, endDate: String?, guidanceMessage: Boolean, reasonNecessity: NecessityOption, mapping: IAppointmentSlotsBuilder.() -> Mapping) {
+    override fun generateAppointmentSlotResponse(startDate: String?,
+                                                 endDate: String?,
+                                                 guidanceMessage: Boolean,
+                                                 reasonNecessity: NecessityOption,
+                                                 mapping: IAppointmentSlotsBuilder.() -> Mapping) {
         generateAppointmentSlotResponseWithoutGuidance(startDate, endDate, mapping)
 
         val inputRequirements = InputRequirements(appointmentBookingReason = reasonNecessity.text)
@@ -32,7 +37,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
                     .respondWithSuccess(settingsResponse)
         }
 
-        Serenity.setSessionVariable(AvailableAppointmentsSteps.AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
+        Serenity.setSessionVariable(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
                 .to(appointmentsMessage)
     }
 
@@ -43,5 +48,31 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
         mockingClient.forEmis { mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate)) }
+    }
+
+    override fun generateCorruptedSlotResponse() {
+        generateDefaultUserData()
+
+        appointmentMapper.requestMapping {
+            this as EmisMappingBuilderAppointments
+
+            appointmentSlotsRequest(patient)
+                    .respondWithCorrupted()
+            appointmentSlotsMetaRequest(patient)
+                    .respondWithCorrupted()
+        }
+    }
+
+    override fun generateServiceUnavailableSlotResponse() {
+        generateDefaultUserData()
+
+        appointmentMapper.requestMapping {
+            this as EmisMappingBuilderAppointments
+
+            appointmentSlotsRequest(patient)
+                    .respondWithUnavailableException()
+            appointmentSlotsMetaRequest(patient)
+                    .respondWithUnavailableException()
+        }
     }
 }

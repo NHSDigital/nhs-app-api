@@ -3,6 +3,7 @@ package mocking.tpp.appointments
 import constants.DateTimeFormats
 import constants.ErrorResponseCodeTpp
 import mocking.JSonXmlConverter
+import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
@@ -93,6 +94,16 @@ class AppointmentSlotsBuilderTpp(
             andXmlBody(xmlBody).andDelay(delayMillisecs)
                     .build()
         }
+    }
+
+    override fun respondWithCorrupted(): Mapping {
+        val model = AppointmentsSlotsExample.multipleSlotsOneLocation()
+        val response = JSonXmlConverter.toXML(listSlotsReplyConverter(model))
+        return respondWithCorruptedContent(response)
+    }
+
+    override fun respondWithUnavailableException(): Mapping {
+        return respondWithServiceUnavailable()
     }
 
     private fun listSlotsReplyConverter(model: AppointmentSlotsResponseFacade): ListSlotsReply {

@@ -41,6 +41,13 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
         }
     }
 
+    fun respondWithCorruptedContent(content: String): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andBody(content.replace(">", "|")
+                    .replace("}", "|"), contentType = "text/xml")
+        }
+    }
+
     protected inline fun <reified T : Any> respondWith(response: T): Mapping {
 
         val xmlBody = JSonXmlConverter.toXML(response)
