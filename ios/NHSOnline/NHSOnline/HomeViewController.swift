@@ -131,8 +131,7 @@ class HomeViewController : UIViewController {
     
     func setupAppVersion() {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        let appVersion = "iOS: " + versionNumber
-        let javascriptCommand = "window.$nuxt.$store.dispatch('appVersion/updateNativeVersion', '\(appVersion)')"
+        let javascriptCommand = "window.$nuxt.$store.dispatch('appVersion/updateNativeVersion', '\(versionNumber)')"
         
         let completionHandler: (Any?, Error?) -> Void = {
             (data, error) in
