@@ -164,6 +164,7 @@ Feature: View available appointment slots
       | TPP       |
       | VISION    |
 
+  @nativepending @NHSO-2966
   Scenario Outline: <GP System> user tries again after a timeout and it times-out again
     Given the <GP System> doesn't respond a timely fashion for available appointment slots
     And I am logged in
@@ -178,6 +179,7 @@ Feature: View available appointment slots
       | TPP       |
       | VISION    |
 
+  @nativepending @NHSO-2966
   Scenario Outline: <GP System> user tries again after a timeout and it is now successful
     Given the <GP System> doesn't respond a timely fashion for available appointment slots
     And I am logged in
@@ -226,6 +228,7 @@ Feature: View available appointment slots
 
 
   @long-running
+  @nativepending @NHSO-2966
   Scenario: On session expiry (when on appointment booking page), a user on a secure screen is automatically signed out
     #    GP System agnostic scenario, so only need to test with EMIS
     Given there are available appointment slots with different criteria for EMIS

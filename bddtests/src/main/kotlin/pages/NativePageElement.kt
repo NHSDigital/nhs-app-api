@@ -63,7 +63,6 @@ class NativePageElement(
 
     override fun click() {
         if(page.onMobile()) {
-            this.nativeElement.scroll()
             this.nativeElement.click()
         }
         else
@@ -73,7 +72,7 @@ class NativePageElement(
 
     val text : String
         get() {
-        if(page.isIOS())
+        if(page.onMobile())
             return this.nativeElement.text
 
         return this.element.text

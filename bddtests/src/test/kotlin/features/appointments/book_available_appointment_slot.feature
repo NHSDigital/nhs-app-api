@@ -80,7 +80,7 @@ Feature: Book an available appointment slot
       | GP System |
       | VISION    |
 
-  @nativepending @NHSO-2956
+  @nativepending @NHSO-2966
     #native issue - length mismatch - false failures
   Scenario Outline: A <GP System> user cannot enter symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
@@ -103,7 +103,7 @@ Feature: Book an available appointment slot
       | GP System |
       | VISION    |
 
-  @nativepending @NHSO-2956
+  @nativepending @NHSO-2966
     #native issue - length mismatch - false failures
   Scenario Outline: A <GP System> user cannot paste symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
@@ -119,7 +119,7 @@ Feature: Book an available appointment slot
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2956
+  @nativepending @NHSO-2966
     #native issue - length mismatch
   Scenario Outline: A <GP System> user who books successfully, but only the first 150 characters of the symptoms are sent
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
@@ -168,6 +168,7 @@ Feature: Book an available appointment slot
       | TPP       |
       | VISION    |
 
+  @nativepending @NHSO-2966
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
     And I am logged in

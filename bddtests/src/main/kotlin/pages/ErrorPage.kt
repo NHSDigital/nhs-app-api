@@ -12,11 +12,7 @@ class ErrorPage : HybridPageObject() {
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
     private val extraMessageTextLocator = String.format(errorTextFinderFormat, "msg-extratext")
     private val backButtonLocator = "//button[@data-purpose='retry-or-back-button']"
-    private lateinit var headerNative: HeaderNative
-
-    val pageTitle = findElementByLocator(
-            locator = "//header/h1",
-            androidLocator = "//*[contains(@resource-id, 'header_text_view')]")
+    lateinit var headerNative: HeaderNative
 
     val heading = findElementByLocator(headerLocator)
 

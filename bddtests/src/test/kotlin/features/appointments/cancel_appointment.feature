@@ -67,6 +67,7 @@ Feature: Ability to cancel an appointment
     Examples:
       | Reason             | GP System |
       | No longer required | EMIS      |
+
     Examples:
       | Reason           | GP System |
       | Unable to attend | EMIS      |
@@ -123,6 +124,7 @@ Feature: Ability to cancel an appointment
       | Reason 1         | VISION    |
 
   @long-running
+  @nativepending @NHSO-2966
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have upcoming appointments for VISION
     And I am logged in as a VISION user

@@ -50,8 +50,8 @@ Feature: Sign out of mobile web
       | TPP         |
   @pending @NHSO-2522
     Examples:
-      | GP System |
-      | VISION    |
+      | GP Supplier |
+      | VISION      |
 
   Scenario Outline: The nsho cookie should be clear of session and user information if the <GP Supplier> user is not signed in
     Given I am logged in as a <GP Supplier> user
@@ -65,8 +65,8 @@ Feature: Sign out of mobile web
       | TPP         |
   @pending @NHSO-2522
     Examples:
-      | GP System |
-      | VISION    |
+      | GP Supplier |
+      | VISION      |
 
   Scenario Outline: The nsho cookie should be clear of <GP Supplier> session and user information if server side sign out fails
     # Only TPP has a sign out endpoint which can fail. Other suppliers tested manually

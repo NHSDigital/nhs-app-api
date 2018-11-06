@@ -69,11 +69,8 @@ open class AppointmentsConfirmationSteps {
     fun verifyThatAppointmentLimitReachedErrorDisplayed() {
         val expectedPageHeader = "Appointment limit reached"
         val expectedHeader = "You can't book any more appointments right now"
-
-        assertEquals("expected Page Header text $expectedPageHeader but found ${errorPage.pageTitle.element.text}",
-                expectedPageHeader, errorPage.pageTitle.element.text)
-        assertEquals("expected error text $expectedHeader but found ${errorPage.heading.element.text}",
-                expectedHeader, errorPage.heading.element.text)
+        errorPage.assertPageHeader(expectedPageHeader)
+        errorPage.assertHeaderText(expectedHeader)
     }
 
     @Step
