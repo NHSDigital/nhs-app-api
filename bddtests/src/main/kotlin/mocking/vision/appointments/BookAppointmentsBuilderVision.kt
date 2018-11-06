@@ -79,7 +79,7 @@ class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSl
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
                     serviceDefinition,
-                    ErrorResponseCodeVision.APPOINTMENT_SLOT_ALREADY_BOOKED)).build()
+                    ErrorResponseCodeVision.APPOINTMENT_SLOT_NOT_BOOKED_TO_CURRENT_USER)).build()
         }
     }
 

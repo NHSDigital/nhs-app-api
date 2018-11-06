@@ -7,10 +7,10 @@ Feature: Ability to cancel an appointment via api
     When I send a cancellation request to the API with a valid cancellation reason
     Then I will receive a successful response
     Examples:
-    | GP System |
-    | EMIS      |
-    | TPP       |
-    | VISION    |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
   Scenario: EMIS API will not cancel the appointment if reason an invalid reason is provided
     Given EMIS is available to cancel a previously booked appointment
@@ -42,3 +42,15 @@ Feature: Ability to cancel an appointment via api
       | GP System |
       | TPP       |
       | VISION    |
+
+  @NHSO-803
+  Scenario: VISION API will return a Conflict when cancelling an appointment booked by someone else
+    Given as a VISION user I want to cancel an appointment booked by someone else
+    When I send a cancellation request to the API with a valid cancellation reason
+    Then I receive a "Conflict" error
+
+  @NHSO-803
+  Scenario: VISION API will return a Conflict when cancelling an appointment that doesn't exist
+    Given as a VISION user I want to cancel an appointment that doesn't exist
+    When I send a cancellation request to the API with a valid cancellation reason
+    Then I receive a "Conflict" error

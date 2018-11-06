@@ -131,7 +131,7 @@ Feature: Book appointments
     Given an appointment booking for <GP System> cannot be successful because the slot is not available
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
-    Then I receive an "conflict" error
+    Then I receive a "Conflict" error
     Examples:
       | GP System |
       | EMIS      |
@@ -158,6 +158,7 @@ Feature: Book appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Gateway" response if an unknown exception occurs
     Given an appointment booking for <GP System> generates an unknown exception

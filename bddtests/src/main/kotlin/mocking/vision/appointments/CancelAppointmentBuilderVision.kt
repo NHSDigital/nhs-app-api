@@ -1,11 +1,13 @@
 package mocking.vision.appointments
 
+import constants.ErrorResponseCodeVision
 import mocking.JSonXmlConverter
 import mocking.emis.models.AppointmentCancellationReason
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.vision.VisionConstants
 import mocking.vision.VisionMappingBuilder
+import mocking.vision.helpers.VisionConstantsHelper
 import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionResponse
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
@@ -43,11 +45,17 @@ class CancelAppointmentBuilderVision(patient: Patient, request: CancelAppointmen
                 .andBody(userSession.provider, "contains")
                 .andBody(serviceDefinition.name, "contains")
                 .andBody(userSession.patientId, "contains")
-                .andBody(JSonXmlConverter.wrapAroundXmlTag("vision:slotId", request.slotId.toString()), "contains")
+                .andBody(JSonXmlConverter.wrapAroundXmlTag(
+                        "vision:slotId",
+                        request.slotId.toString()
+                ), "contains")
         val reasonId = retrieveMatchingReasonId(request.cancellationReason)
 
         reasonId?.let { rId ->
-            requestBuilder.andBody(JSonXmlConverter.wrapAroundXmlTag("vision:reasonId", rId), "contains")
+            requestBuilder.andBody(JSonXmlConverter.wrapAroundXmlTag(
+                    "vision:reasonId",
+                    rId
+            ), "contains")
         }
     }
 
@@ -72,13 +80,30 @@ class CancelAppointmentBuilderVision(patient: Patient, request: CancelAppointmen
                     VisionConstants.cancelAppointmentsName,
                     VisionConstants.cancelAppointmentsVersion)
 
-            andXmlBody(getBaseVisionResponse(response, serviceDefinition).replace('>','|'))
+            andXmlBody(getBaseVisionResponse(response, serviceDefinition).replace('>', '|'))
         }
     }
 
     override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
         return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
             andXmlBody("").build()
+        }
+    }
+
+    fun respondWithConflictException(): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                    serviceDefinition,
+                    ErrorResponseCodeVision.APPOINTMENT_SLOT_NOT_BOOKED_TO_CURRENT_USER)).build()
+        }
+    }
+
+    fun respondWithExceptionWhenNotAvailable(): Mapping {
+
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                    serviceDefinition,
+                    ErrorResponseCodeVision.APPOINTMENT_SLOT_NOT_FOUND)).build()
         }
     }
 
@@ -95,5 +120,4 @@ class CancelAppointmentBuilderVision(patient: Patient, request: CancelAppointmen
         }
         return null
     }
-
 }

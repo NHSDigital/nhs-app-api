@@ -5,7 +5,6 @@ object ErrorResponseCodeVision {
     const val ACCOUNT_ALREADY_REGISTERED = "-2"
     const val ACCOUNT_LOCKED = "-15"
     const val APPOINTMENT_BOOKING_LIMIT_REACHED = "-25"
-    const val APPOINTMENT_SLOT_ALREADY_BOOKED = "-100"
     const val APPOINTMENT_SLOT_NOT_BOOKED_TO_CURRENT_USER = "-100"
     const val APPOINTMENT_SLOT_NOT_FOUND = "-21"
     const val INVALID_DETAILS = "-33"

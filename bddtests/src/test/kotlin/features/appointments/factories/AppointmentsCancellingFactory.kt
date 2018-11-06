@@ -1,7 +1,7 @@
 package features.appointments.factories
 
 import features.sharedSteps.SupplierSpecificFactory
-import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
@@ -21,10 +21,12 @@ class AppointmentsCancellingFactory(gpSystem: String) : AppointmentsFactory(gpSy
     }
 
     fun setupRequestAndResponse(request: CancelAppointmentSlotFacade,
-                                response: (IAppointmentMappingBuilder.() -> Mapping)? = null) {
+                                response: ((ICancelAppointmentsBuilder) -> Mapping)? = null) {
 
         if (response != null) {
-            appointmentMapper.requestMapping { response() }
+            appointmentMapper.requestMapping {
+                response(cancelAppointmentRequest(patient, request))
+            }
         }
         setAppointmentToBeCancelled(request)
     }

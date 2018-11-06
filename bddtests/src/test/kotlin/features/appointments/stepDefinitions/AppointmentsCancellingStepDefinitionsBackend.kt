@@ -3,22 +3,18 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.factories.AppointmentsCancellingFactory
-import features.appointments.factories.UpcomingAppointmentsFactory
 import features.appointments.steps.CancelAppointmentSteps
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.MockingClient
 import mocking.stubs.StubbedEnvironment
-import models.Patient
+import mocking.vision.appointments.CancelAppointmentBuilderVision
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.junit.Assert.assertTrue
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.appointments.GenericResponseObject
 import java.time.Duration
-import java.time.LocalDateTime
 
 class AppointmentsCancellingStepDefinitionsBackend {
 
@@ -38,7 +34,10 @@ class AppointmentsCancellingStepDefinitionsBackend {
         if (gpSystem == "EMIS") {
             reason = "No longer required"
         }
-        mockCancellationRequestStubForReason(reason, gpSystem)
+
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
+            cancelRequest.respondWithSuccess()
+        }
     }
 
     @Given("^(.*) will time out when trying to cancel a previously booked appointment")
@@ -49,7 +48,27 @@ class AppointmentsCancellingStepDefinitionsBackend {
         if (gpSystem == "EMIS") {
             reason = "No longer required"
         }
-        mockCancellationRequestStubForReason(reason, gpSystem, Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
+            cancelRequest.respondWithSuccess().delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
+        }
+    }
+
+    @Given("^as a VISION user I want to cancel an appointment booked by someone else$")
+    fun appointmentToBeCancelledIsBookedBySomeoneElseForVision() {
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
+        cancelAppointmentSteps.mockCancellationRequestStubForReason("", "VISION") { cancelRequest ->
+            (cancelRequest as CancelAppointmentBuilderVision)
+                    .respondWithConflictException()
+        }
+    }
+
+    @Given("^as a VISION user I want to cancel an appointment that doesn't exist$")
+    fun appointmentToBeCancelledDoesNotExistForVision() {
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("VISION")
+        cancelAppointmentSteps.mockCancellationRequestStubForReason("", "VISION") { cancelRequest ->
+            (cancelRequest as CancelAppointmentBuilderVision)
+                    .respondWithExceptionWhenNotAvailable()
+        }
     }
 
     @Given("^(.*) returns corrupted response when trying to cancel a previously booked appointment")
@@ -60,80 +79,8 @@ class AppointmentsCancellingStepDefinitionsBackend {
         if (gpSystem == "EMIS") {
             reason = "No longer required"
         }
-        mockCancellationRequestCorruptedStubForReason(reason, gpSystem)
-    }
-
-    @Given("^(.*) is available to cancel a previously booked appointment because (.*)$")
-    fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
-        mockCancellationRequestStubForReason(reason, gpSystem)
-    }
-
-    @Given("^(.*) is unavailable to cancel a previously booked appointment because (.*)$")
-    fun gpSystemIsUnavailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
-        mockCancellationRequestUnavailableStubForReason(reason, gpSystem)
-    }
-
-    private fun mockCancellationRequestStubForReason(reason: String, gpSystem: String, delay: Duration? = null) {
-
-        val patient = Patient.getDefault(gpSystem)
-
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
-        Serenity.setSessionVariable(Patient::class).to(patient)
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
-
-        val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
-        val request = factory.defaultRequest(
-                patient,
-                retrieveSlotIdOfAppointmentToCancel(),
-                reason
-        )
-
-        factory.setupRequestAndResponse(request) {
-            if (delay != null) {
-                cancelAppointmentRequest(patient, request).respondWithSuccess().delayedBy(delay)
-            } else {
-                cancelAppointmentRequest(patient, request).respondWithSuccess()
-            }
-        }
-    }
-
-    private fun mockCancellationRequestCorruptedStubForReason(reason: String, gpSystem: String) {
-
-        val patient = Patient.getDefault(gpSystem)
-
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
-        Serenity.setSessionVariable(Patient::class).to(patient)
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
-
-        val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
-        val request = factory.defaultRequest(
-                patient,
-                retrieveSlotIdOfAppointmentToCancel(),
-                reason
-        )
-
-        factory.setupRequestAndResponse(request) {
-            cancelAppointmentRequest(patient, request).respondWithCorrupted()
-        }
-    }
-
-    private fun mockCancellationRequestUnavailableStubForReason(reason: String, gpSystem: String) {
-
-        val patient = Patient.getDefault(gpSystem)
-
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
-        Serenity.setSessionVariable(Patient::class).to(patient)
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
-
-        val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
-        val request = factory.defaultRequest(
-                patient,
-                retrieveSlotIdOfAppointmentToCancel(),
-                reason
-        )
-
-        factory.setupRequestAndResponse(request) {
-            cancelAppointmentRequest(patient, request).responseWithExceptionWhenServiceUnavailable()
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
+            cancelRequest.respondWithCorrupted()
         }
     }
 
@@ -141,13 +88,13 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Throws(Exception::class)
     fun i_send_a_cancellation_request_to_the_API_with_a_valid_cancellation_reason() {
         var id = ""
-        val reasons = retrieveCancellationReasons()
+        val reasons = cancelAppointmentSteps.retrieveCancellationReasons()
         if (reasons.any()) {
             id = reasons.first().id
 
         }
         val body = worker.models.appointments.CancelAppointmentRequest(
-                retrieveSlotIdOfAppointmentToCancel().toString(),
+                cancelAppointmentSteps.retrieveSlotIdOfAppointmentToCancel().toString(),
                 id
         )
 
@@ -166,7 +113,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Throws(Exception::class)
     fun i_send_a_cancellation_request_to_the_API_without_a_cancellation_reason() {
         val body = worker.models.appointments.CancelAppointmentRequest(
-                retrieveSlotIdOfAppointmentToCancel().toString(),
+                cancelAppointmentSteps.retrieveSlotIdOfAppointmentToCancel().toString(),
                 ""
         )
 
@@ -185,7 +132,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Throws(Exception::class)
     fun i_send_a_cancellation_request_to_the_API_with_an_invalid_cancellation_reason() {
         val body = worker.models.appointments.CancelAppointmentRequest(
-                retrieveSlotIdOfAppointmentToCancel().toString(),
+                cancelAppointmentSteps.retrieveSlotIdOfAppointmentToCancel().toString(),
                 "NOT_EXISTING_REASON_ID"
         )
 
@@ -205,16 +152,5 @@ class AppointmentsCancellingStepDefinitionsBackend {
     fun i_will_receive_a_successful_response() {
         val response = Serenity.sessionVariableCalled<HttpResponse>(HTTP_RESPONSE)
         assertTrue(response.statusLine.statusCode == SC_NO_CONTENT)
-    }
-
-    private fun retrieveCancellationReasons(): List<GenericResponseObject> {
-        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .appointments.getMyAppointments(LocalDateTime.now().toString())
-
-        return result.cancellationReasons
-    }
-
-    private fun retrieveSlotIdOfAppointmentToCancel(): Int {
-        return cancelAppointmentSteps.retrieveSlotOfAppointmentToCancel().id!!
     }
 }

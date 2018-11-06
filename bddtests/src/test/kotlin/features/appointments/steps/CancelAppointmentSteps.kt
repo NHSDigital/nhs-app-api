@@ -1,8 +1,12 @@
 package features.appointments.steps
 
+import features.appointments.factories.AppointmentsCancellingFactory
 import features.appointments.factories.UpcomingAppointmentsFactory
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
+import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
+import mocking.models.Mapping
+import models.Patient
 import models.Slot
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
@@ -12,6 +16,9 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.appointments.CancelAppointmentPage
 import pages.navigation.HeaderNative
+import worker.WorkerClient
+import worker.models.appointments.GenericResponseObject
+import java.time.LocalDateTime
 
 open class CancelAppointmentSteps {
 
@@ -72,9 +79,42 @@ open class CancelAppointmentSteps {
     }
 
     @Step
-    fun retrieveSlotOfAppointmentToCancel(): Slot {
+    private fun retrieveSlotOfAppointmentToCancel(): Slot {
         return Serenity.sessionVariableCalled<List<Slot>>(
                 UpcomingAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
         ).first()
+    }
+
+    @Step
+    fun mockCancellationRequestStubForReason(reason: String, gpSystem: String,
+                                                     response: ((ICancelAppointmentsBuilder) -> Mapping)? = null) {
+
+        val patient = Patient.getDefault(gpSystem)
+
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
+        Serenity.setSessionVariable(Patient::class).to(patient)
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
+
+        val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
+        val request = factory.defaultRequest(
+                patient,
+                retrieveSlotIdOfAppointmentToCancel(),
+                reason
+        )
+
+        factory.setupRequestAndResponse(request, response)
+    }
+
+    @Step
+    fun retrieveCancellationReasons(): List<GenericResponseObject> {
+        val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .appointments.getMyAppointments(LocalDateTime.now().toString())
+
+        return result.cancellationReasons
+    }
+
+    @Step
+    fun retrieveSlotIdOfAppointmentToCancel(): Int {
+        return retrieveSlotOfAppointmentToCancel().id!!
     }
 }

@@ -10,9 +10,23 @@ class CancelAppointmentStepDefinitions {
     @Steps
     lateinit var cancelAppointmentSteps: CancelAppointmentSteps
 
+    @Given("^(.*) is available to cancel a previously booked appointment because (.*)$")
+    fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
+            cancelRequest.respondWithSuccess()
+        }
+    }
+
     @Given("^I select a cancellation reason of (.*)$")
     fun iSelectACancellationReason(reason: String) {
         cancelAppointmentSteps.selectReason(reason)
+    }
+
+    @Given("^(.*) is unavailable to cancel a previously booked appointment because (.*)$")
+    fun gpSystemIsUnavailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
+            cancelRequest.responseWithExceptionWhenServiceUnavailable()
+        }
     }
 
     @Then("^I will be on the \"Cancellation reason\" screen$")
