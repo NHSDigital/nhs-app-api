@@ -177,7 +177,6 @@ Feature: View courses
     And I see the entered special request text
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     And I select 1 additional repeat prescriptions
-    And I clear the text entered as special request
     And I enter text "Note I'm allergic to paracetamol." for special request
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page

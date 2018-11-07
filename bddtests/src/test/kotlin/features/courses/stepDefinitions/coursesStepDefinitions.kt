@@ -275,11 +275,6 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         confirmRepeatPrescriptionOrderSteps.assertErrorSendingOrderShown()
     }
 
-    @And("I clear the text entered as special request")
-    fun iClearTextInSpecialRequestTextArea(){
-        courseSteps.repeatPrescriptions.clearTextInSpecialRequestTextArea()
-    }
-
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
         return coursesLoader.getAvailableCoursesFilteredSortedOrdered()
     }
