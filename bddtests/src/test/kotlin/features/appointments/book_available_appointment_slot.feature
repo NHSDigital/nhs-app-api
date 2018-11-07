@@ -194,7 +194,6 @@ Feature: Book an available appointment slot
       | TPP       |
       | VISION    |
 
-  @NHSO-2996
   Scenario Outline: A <GP System> user reached maximum appointment booking limit
     Given there are <GP System> appointments available to book, but user reached maximum appointment booking limit
     And I am logged in
@@ -258,7 +257,6 @@ Feature: Book an available appointment slot
     Then the Appointment Slot page is displayed
     And I don't see option to type in booking reason
 
-  @NHSO-2996
   Scenario: An EMIS user on Old EMIS Systme reached maximum appointment booking limit
     Given  there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit
     And I am logged in

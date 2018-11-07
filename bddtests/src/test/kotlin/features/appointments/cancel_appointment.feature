@@ -58,7 +58,6 @@ Feature: Ability to cancel an appointment
       | TPP       |
       | VISION    |
 
-  @NHSO-803
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given <GP System> is unavailable to cancel a previously booked appointment because <Reason>
     And I am logged in as a <GP System> user
@@ -97,7 +96,6 @@ Feature: Ability to cancel an appointment
     And a "Cancellation confirmed" message is displayed
 
   @long-running
-  @NHSO-803
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have upcoming appointments for VISION
     And I am logged in as a VISION user
@@ -109,7 +107,6 @@ Feature: Ability to cancel an appointment
     And the user login details are cleared from cookies
 
   @manual
-  @NHSO-803
   Scenario: Cancelling appointment, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have upcoming appointments for VISION
     And I am logged in as a VISION user

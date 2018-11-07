@@ -17,7 +17,6 @@ Feature: Ability to cancel an appointment via api
     When I send a cancellation request to the API with an invalid cancellation reason
     Then I receive a "Bad request" error
 
-  @NHSO-802
   Scenario Outline: Cancel a previously booked appointment the <GP System> times out and returns "Gateway Timeout" error
     Given  <GP System> will time out when trying to cancel a previously booked appointment
     When I send a cancellation request to the API with a valid cancellation reason
@@ -28,7 +27,6 @@ Feature: Ability to cancel an appointment via api
       | TPP       |
       | VISION    |
 
-  @NHSO-802
   Scenario Outline: <GP System> returns corrupted data when trying to cancel a previously booked appointment
     Given <GP System> returns corrupted response when trying to cancel a previously booked appointment
     And I have logged into <GP System> and have a valid session cookie

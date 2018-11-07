@@ -226,7 +226,6 @@ Feature: View available appointment slots
 
 
   @long-running
-  @NHSO-800
   Scenario: On session expiry (when on appointment booking page), a user on a secure screen is automatically signed out
     #    GP System agnostic scenario, so only need to test with EMIS
     Given there are available appointment slots with different criteria for EMIS

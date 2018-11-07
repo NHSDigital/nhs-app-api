@@ -44,7 +44,6 @@ Feature: My appointments
       | EMIS      |
       | TPP       |
 
-  @NHSO-799
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
       # VISION Specific test
     Given Appointments are disabled for VISION at a GP Practice level
@@ -120,7 +119,6 @@ Feature: My appointments
       | VISION    |
 
   @long-running
-  @NHSO-802
   @nativepending @NHSO-2966
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have no upcoming appointments for EMIS
