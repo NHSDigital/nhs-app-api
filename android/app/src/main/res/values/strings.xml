@@ -15,6 +15,7 @@
     <string name="conditions_header_description">Health A to Z</string>
     <string name="my_record_header">My medical record</string>
     <string name="symptoms_header">Check my symptoms</string>
+    <string name="biometric_header">Register for Fingerprint ID</string>
     <string name="appointments_header">My appointments</string>
     <string name="prescriptions_header">My repeat prescriptions</string>
     <string name="more_header">More</string>
@@ -32,6 +33,15 @@
         Check your connection and try again.
         \n\nIf the problem continues and you need to book an appointment or get a prescription now,
         contact your GP surgery directly. For urgent medical advice, call one. one. one..
+    </string>
+    <string name="biometric_information_message1">
+        Log in using your fingerprint
+    </string>
+    <string name="biometric_information_message2">
+        Do this instead of using a password and security code.
+    </string>
+    <string name="biometric_warning_message">
+        All fingerprint IDs registered on this device will be able to open your NHS account.
     </string>
     <string name="service_unavailable">Service unavailable</string>
 

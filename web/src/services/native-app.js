@@ -124,4 +124,13 @@ export default {
     }
     return false;
   },
+
+  goToBiometrics() {
+    const app = window.nativeApp;
+    if (app && app.goToBiometrics) {
+      app.goToBiometrics();
+      return true;
+    }
+    return false;
+  },
 };

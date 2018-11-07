@@ -58,6 +58,9 @@
         <activity android:name=".activities.BlankScreenActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".activities.BiometricActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <activity android:name=".activities.SymptomsActivity"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait">

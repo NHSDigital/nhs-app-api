@@ -568,11 +568,15 @@ export default {
 
   },
   myAccount: {
+    detailsHeading: 'Details',
+    accountSettingsHeading: 'Account settings',
+    aboutUsHeading: 'About us',
     termsAndConditions: 'Terms of use',
     privacyPolicy: 'Privacy policy',
     cookiesPolicy: 'Cookies policy',
     openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
+    fingerprintID: 'Fingerprint ID',
   },
   sc04: {
     organDonation: {
@@ -808,4 +812,3 @@ export default {
     },
   },
 };
-

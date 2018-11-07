@@ -72,6 +72,11 @@ class WebAppInterface(private val context: MainActivity) {
     }
 
     @JavascriptInterface
+    fun goToBiometrics() {
+        context.runOnUiThread{context.goToNativeBiometricPage()}
+    }
+
+    @JavascriptInterface
     fun completeAppIntro() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering completeAppIntro")
         context.webview.post {

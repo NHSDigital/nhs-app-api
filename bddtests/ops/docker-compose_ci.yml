@@ -6,6 +6,8 @@ services:
       - vars_ci.env
     ports:
       - "3000:3000"
+    environment:
+      - BIOMETRICS_ENABLED=true
   api.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendworker:${BACKEND_TAG}
     depends_on:

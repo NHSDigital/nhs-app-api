@@ -14,6 +14,7 @@ services:
       - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/createsession
       - COOKIE_DOMAIN=.bitraft.io
       - VERSION_TAG=dev_bdd_docker_main
+      - BIOMETRICS_ENABLED=true
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:

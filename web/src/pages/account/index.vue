@@ -1,11 +1,22 @@
 <template>
   <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
-    <h2>Details</h2>
+    <h2>{{ $t('myAccount.detailsHeading') }}</h2>
     <welcome-section :name="$store.state.session.user"
                      :date-of-birth="$store.state.session.dateOfBirth"
                      :nhs-number="$store.state.session.nhsNumber" />
-
-    <h2>About us</h2>
+    <div v-if="shouldShowBiometrics">
+      <h2>{{ $t('myAccount.accountSettingsHeading') }}</h2>
+      <ul :class="$style['list-menu']">
+        <li @click="goToBiometrics()">
+          <analytics-tracked-tag id="btn_fingerprintId"
+                                 :text="$t('myAccount.fingerprintID')"
+                                 tag="a">
+            {{ $t('myAccount.fingerprintID') }}
+          </analytics-tracked-tag>
+        </li>
+      </ul>
+    </div>
+    <h2>{{ $t('myAccount.aboutUsHeading') }}</h2>
     <ul :class="$style['list-menu']">
       <li>
         <analytics-tracked-tag id="btn_terms" :href="$store.app.$env.TERMS_AND_CONDITIONS_URL"
@@ -65,6 +76,7 @@
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import WelcomeSection from '@/components/WelcomeSection';
+import NativeCallbacks from '@/services/native-app';
 
 export default {
   components: {
@@ -72,10 +84,18 @@ export default {
     FloatingButtonBottom,
     WelcomeSection,
   },
+  computed: {
+    shouldShowBiometrics() {
+      return this.$env.BIOMETRICS_ENABLED && this.$store.state.device.source === 'android';
+    },
+  },
   methods: {
     signout(event) {
       event.preventDefault();
       this.$store.dispatch('auth/logout');
+    },
+    goToBiometrics() {
+      NativeCallbacks.goToBiometrics();
     },
   },
 };

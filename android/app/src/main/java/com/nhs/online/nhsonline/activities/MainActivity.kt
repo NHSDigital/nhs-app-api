@@ -220,6 +220,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         knownService?.header?.let { nativeHeader ->
             setHeaderText(nativeHeader)
         }
+        hideBiometrics()
         urlLoader.loadUrl(path)
     }
 
@@ -360,6 +361,21 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun goToCheckSymptoms() {
         val intent = Intent(this, SymptomsActivity::class.java)
         startActivity(intent)
+    }
+
+    fun goToNativeBiometricPage() {
+        showBiometrics();
+        setHeaderText(resources.getString(R.string.biometric_header))
+    }
+
+    fun showBiometrics(){
+        biometricLayoutContent.visibility = View.VISIBLE
+        webview.visibility = View.GONE
+    }
+
+    fun hideBiometrics(){
+        biometricLayoutContent.visibility = View.GONE
+        webview.visibility = View.VISIBLE;
     }
 
     override fun announcePageTitle(title: String?) {

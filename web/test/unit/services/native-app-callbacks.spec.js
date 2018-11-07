@@ -14,6 +14,7 @@ describe('NATIVE CALLBACKS', () => {
     { fn: 'hideWhiteScreen' },
     { fn: 'completeAppIntro' },
     { fn: 'resetPageFocus' },
+    { fn: 'goToBiometrics' },
     {
       fn: 'updateHeaderText',
       param: 'headerText',
