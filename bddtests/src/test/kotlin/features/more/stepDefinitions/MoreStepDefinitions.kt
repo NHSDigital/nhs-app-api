@@ -63,8 +63,8 @@ class MoreStepDefinitions {
         headerNative.assertIsVisible("More")
     }
 
-    @Then("I can see and can follow links within the more page body$")
-    fun iCanSeeAndCanFollowLinksWithinTheMorePageBody() {
+    @Then("I see and can follow links within the more page body$")
+    fun iSeeAndCanFollowLinksWithinTheMorePageBody() {
         morePage.assertLinksPresent()
         val linksToFollow = arrayListOf(
                 { followDataSharingLink() },
