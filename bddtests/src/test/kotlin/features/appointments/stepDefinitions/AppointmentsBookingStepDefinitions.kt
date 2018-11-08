@@ -3,12 +3,13 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsBookingFactory.Companion.SymptomsToEnter
+import features.appointments.factories.UpcomingAppointmentsFactory
+import features.sharedSteps.SupplierSpecificFactory
 import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity
 import java.time.Duration
 
-private const val TIMES_TO_REPEAT_CHARACTER = 150
 private const val DELAY_IN_SECONDS = 12L
 
 class AppointmentsBookingStepDefinitions {
@@ -18,6 +19,13 @@ class AppointmentsBookingStepDefinitions {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateSuccessfulBookingResponse()
+    }
+
+    @Given("^a booked appointment can be cancelled$")
+    fun aBookedAppointmentCanBeCancelled() {
+        val gpSystem = Serenity.sessionVariableCalled<String>(SupplierSpecificFactory.SerenityKey.GP_SYSTEM)
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponseOnceBooked()
     }
 
     @Given("^there are multiple appointment slots at the same time, provided by (.*)$")
@@ -113,17 +121,15 @@ class AppointmentsBookingStepDefinitions {
     }
 
     @Given("^there are EMIS appointments available to book where booking reason is set optional " +
-            "with 150 reason characters entered$")
-    fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetOptionalWith150ReasonCharactersEntered() {
+            "with a reason entered$")
+    fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetOptionalWithAReasonEntered() {
         val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.OPTIONAL)
-        val symptomsToEnter = "x".repeat(TIMES_TO_REPEAT_CHARACTER)
-        Serenity.setSessionVariable(SymptomsToEnter).to(symptomsToEnter)
-        factory.generateSuccessfulBookingResponse(symptomsToEnter)
+        factory.generateSuccessfulBookingResponse()
     }
 
     @Given("^there are (.*) appointments available to book where booking reason option is set not required$")
-    fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetRequired(gpSystem: String) {
+    fun thereAreAppointmentsAvailableToBookWhereBookingReasonIsSetRequired(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.NOT_ALLOWED)
         factory.generateSuccessfulBookingResponseEmptyReason()

@@ -13,7 +13,6 @@ import mocking.vision.models.appointments.Slots
 import mocking.vision.models.appointments.BookingReason
 import mocking.emis.practices.NecessityOption
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
-import net.serenitybdd.core.Serenity
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -57,21 +56,17 @@ class GeneralAppointmentsHelper {
 
         private fun extractLocationsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade):
                 List<mocking.vision.models.appointments.Location> {
-            val locations = slotsResponseFacade.sessions.map { session ->
+            return slotsResponseFacade.sessions.map { session ->
                 Location(session.locationid, session.location!!)
             }.distinct()
-            Serenity.setSessionVariable(VisionMetadata.LOCATIONS).to(locations)
-            return locations
         }
 
         private fun extractOwnersFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade): List<Owner> {
-            val owners = slotsResponseFacade.sessions.flatMap { session ->
+            return slotsResponseFacade.sessions.flatMap { session ->
                 session.staffDetails.map { clinician ->
                     Owner(clinician.staffDetailsid!!, clinician.staffName!!)
                 }
             }.distinct()
-            Serenity.setSessionVariable(VisionMetadata.OWNERS).to(owners)
-            return owners
         }
 
         private fun extractSessionsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade):
@@ -102,14 +97,14 @@ class GeneralAppointmentsHelper {
 
         fun extractVPBookingReasonsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade)
                 : BookingReason {
-            val addReason = slotsResponseFacade.bookingReasonNecessityOption == NecessityOption.OPTIONAL
+            val addReason = slotsResponseFacade.bookingReasonNecessityOption != NecessityOption.NOT_ALLOWED
 
             return BookingReason(
                     add = addReason
             )
         }
 
-        fun convertDateToVisionTime(time: String): String {
+        private fun convertDateToVisionTime(time: String): String {
             val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
             val dateToPass = ZonedDateTime.of(LocalDateTime.parse(time, currentDateFormat), ZoneId.of
             ("Europe/London"))
@@ -117,7 +112,7 @@ class GeneralAppointmentsHelper {
             return queryDateFormat.format(dateToPass)
         }
 
-        fun calculateDuration(startTime: String, endTime: String?): Int? {
+        private fun calculateDuration(startTime: String, endTime: String?): Int? {
             val format = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
             val startTimeAsLocalDateTime = ZonedDateTime.of(LocalDateTime.parse(startTime, format), ZoneId.of
             ("Europe/London"))

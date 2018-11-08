@@ -31,17 +31,22 @@ open class MyAppointmentsSteps {
 
     lateinit var headerNative: HeaderNative
 
-    val pageHeader = "My appointments"
-    val expectedNoUpcomingText = "You don't currently have any appointments booked\n" +
+    private val pageHeader = "My appointments"
+    private val expectedNoUpcomingText = "You don't currently have any appointments booked\n" +
             "Once you've booked an appointment here, you'll be able to view details and cancel it.\n" +
             "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information."
     private val bookingSuccessMessage = "Your appointment has been booked. You can view details or cancel it here."
     private val cancellationSuccessMessage = "Your appointment has been cancelled."
 
     @Step
-    fun checkBookingSuccessMessage() {
-        val message = myAppointmentsPage.getSuccessMessage()
-        assertEquals(bookingSuccessMessage, message)
+    fun checkBookingSuccessMessage(includesReferenceToCancel: Boolean = true) {
+        val actualMessage = myAppointmentsPage.getSuccessMessage()
+        val expectedMessage =
+                if (includesReferenceToCancel)
+                    bookingSuccessMessage
+                else
+                    bookingSuccessMessage.replace("or cancel it ", "")
+        assertEquals(expectedMessage, actualMessage)
     }
 
     @Step
@@ -189,9 +194,34 @@ open class MyAppointmentsSteps {
 
     @Step
     fun verifyThatThereIsACancelLinkForEachUpcomingAppointment() {
+        val expectedNumberOfSlots = Serenity.sessionVariableCalled<List<Slot>>(
+                UpcomingAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
+        ).size
         assertEquals(
                 "Missing at least one cancel link. ",
-                myAppointmentsPage.getWebAppointmentSlotDivs().size,
+                expectedNumberOfSlots,
+                myAppointmentsPage.getNumberOfCancelLinks()
+        )
+        assertEquals(
+                "Found a reference to not being able to cancel. ",
+                0,
+                myAppointmentsPage.getNumberOfAppointmentsThatCannotBeCancelled()
+        )
+    }
+
+    @Step
+    fun verifyThatThereAreNoCancelLinks() {
+        val expectedNumberOfSlots = Serenity.sessionVariableCalled<List<Slot>>(
+                UpcomingAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
+        ).size
+        assertEquals(
+                "Missing a reference to not being able to cancel. ",
+                expectedNumberOfSlots,
+                myAppointmentsPage.getNumberOfAppointmentsThatCannotBeCancelled()
+        )
+        assertEquals(
+                "Found a cancel link. ",
+                0,
                 myAppointmentsPage.getNumberOfCancelLinks()
         )
     }

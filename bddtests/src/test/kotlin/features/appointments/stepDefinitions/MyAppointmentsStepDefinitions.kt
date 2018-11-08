@@ -27,9 +27,27 @@ class MyAppointmentsStepDefinitions {
         headerNative.waitForPageHeaderText("Confirm appointment")
     }
 
-    @Then("^the Appointment Booking confirmation screen is displayed$")
-    fun appointmentBookingConfirmationScreenIsDisplayed() {
+    @Then("^the Appointment Booking success message is displayed$")
+    fun appointmentBookingSuccessMessage() {
         myAppointmentsSteps.checkBookingSuccessMessage()
+    }
+
+    @Then("^the booked appointment is correctly displayed with ability to cancel$")
+    fun bookedAppointmentIsCorrectlyDisplayedWithCancel() {
+        myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
+        myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
+    }
+
+    @Then("^the Appointment Booking success message is displayed without reference to being able to cancel$")
+    fun appointmentBookingConfirmationScreenIsDisplayedWithoutReferenceToCancel() {
+        myAppointmentsSteps.checkBookingSuccessMessage(false)
+
+    }
+
+    @Then("^the booked appointment is correctly displayed without ability to cancel$")
+    fun bookedAppointmentIsCorrectlyDisplayedWithoutCancel() {
+        myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
+        myAppointmentsSteps.verifyThatThereAreNoCancelLinks()
     }
 
     @Then("^I can book an appointment$")
@@ -71,6 +89,25 @@ class MyAppointmentsStepDefinitions {
         viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
                 AppointmentsSlotsExample.getFacadeWithPastAppointment()
         )
+    }
+
+    @Given("^I have upcoming appointments for VISION, but with only one cancellation reason$")
+    fun iHaveUpcomingAppointmentsWithOneCancellationReason() {
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(numberOfCancellationReasons = 1)
+    }
+
+    @Given("^I have upcoming appointments for VISION, but without cancellation reasons$")
+    fun iHaveUpcomingAppointmentsWithoutCancellationReasons() {
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(numberOfCancellationReasons = 0)
+    }
+
+    @Given("^a booked appointment cannot be cancelled$")
+    fun aBookedAppointmentCannotBeCancelled() {
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulEmptyUpcomingAppointmentResponse(emptyList())
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponseOnceBooked(numberOfCancellationReasons = 0)
     }
 
     @Given("^(.*) does not offer online booking to my patient$")
@@ -115,6 +152,11 @@ class MyAppointmentsStepDefinitions {
     @Then("^each appointment can be cancelled$")
     fun eachAppointmentCanBeCancelled() {
         myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
+    }
+
+    @Then("^no appointment can be cancelled$")
+    fun noAppointmentCanBeCancelled() {
+        myAppointmentsSteps.verifyThatThereAreNoCancelLinks()
     }
 
     @When("^the upcoming appointments are requested$")

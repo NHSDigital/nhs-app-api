@@ -11,8 +11,6 @@ import worker.models.appointments.MyAppointmentsResponse
 
 class UpcomingAppointmentsFactoryEmis : UpcomingAppointmentsFactory("EMIS") {
 
-    override val cancellationReasonRequired: Boolean = true
-
     private val emisCancellationReason1 =
             AppointmentCancellationReason("R1_NoLongerRequired", "No longer required")
 

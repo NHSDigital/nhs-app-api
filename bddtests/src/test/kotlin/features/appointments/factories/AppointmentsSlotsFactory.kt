@@ -102,7 +102,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     private fun storeUIDateAndTimeOfSlotToSelect() {
         val expectedFilteredSlots = sessionVariableCalled<AppointmentFilterFacade>(
                 AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotExpectations
+                        .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
         ).filteredSlots
         val dateToSelect = expectedFilteredSlots.keys.first()
@@ -120,23 +120,6 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     abstract fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
                                                                 endDate: String?,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping))
-
-    open fun generateCorruptedSlotResponse() {
-        generateDefaultUserData()
-
-        appointmentMapper.requestMapping {
-            appointmentSlotsRequest(patient)
-                    .respondWithCorrupted()
-        }
-    }
-
-    open fun generateServiceUnavailableSlotResponse() {
-        generateDefaultUserData()
-        appointmentMapper.requestMapping {
-            appointmentSlotsRequest(patient)
-                    .respondWithGPServiceUnavailableException()
-        }
-    }
 
 
     companion object : SupplierSpecificFactory<AppointmentsSlotsFactory>() {

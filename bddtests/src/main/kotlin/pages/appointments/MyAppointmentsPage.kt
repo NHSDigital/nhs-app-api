@@ -1,7 +1,6 @@
 package pages.appointments
 
 import models.Slot
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 
@@ -33,6 +32,12 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
+    private val cannotCancelAppointmentText = HybridPageElement(
+            browserLocator = "//*[contains(text(),'To cancel this appointment, contact your GP surgery.')]",
+            androidLocator = null,
+            page = this
+    )
+
     private val upcomingAppointmentParentXpath = "//div[@data-purpose='appointments']"
 
     fun getSuccessMessage(): String = successMessage.element.text
@@ -47,15 +52,15 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
         return getAllSlots(upcomingAppointmentParentXpath, areCliniciansExpected)
     }
 
-    fun getWebAppointmentSlotDivs(): List<WebElementFacade> {
-        return findAllByXpath("$upcomingAppointmentParentXpath")
-    }
-
     fun clickFirstCancelAppointmentLink() {
         cancelAppointmentLink.click()
     }
 
     fun getNumberOfCancelLinks(): Int {
         return cancelAppointmentLink.elements.size
+    }
+
+    fun getNumberOfAppointmentsThatCannotBeCancelled(): Int {
+        return cannotCancelAppointmentText.elements.size
     }
 }

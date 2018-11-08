@@ -1,7 +1,6 @@
 package features.appointments.factories
 
 import mocking.data.appointments.AppointmentSessionVariableKeys
-import mocking.emis.EmisMappingBuilderAppointments
 import mocking.emis.models.InputRequirements
 import mocking.emis.models.Messages
 import mocking.emis.practices.NecessityOption
@@ -49,31 +48,5 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
         mockingClient.forEmis { mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate)) }
-    }
-
-    override fun generateCorruptedSlotResponse() {
-        generateDefaultUserData()
-
-        appointmentMapper.requestMapping {
-            this as EmisMappingBuilderAppointments
-
-            appointmentSlotsRequest(patient)
-                    .respondWithCorrupted()
-            appointmentSlotsMetaRequest(patient)
-                    .respondWithCorrupted()
-        }
-    }
-
-    override fun generateServiceUnavailableSlotResponse() {
-        generateDefaultUserData()
-
-        appointmentMapper.requestMapping {
-            this as EmisMappingBuilderAppointments
-
-            appointmentSlotsRequest(patient)
-                    .respondWithGPServiceUnavailableException()
-            appointmentSlotsMetaRequest(patient)
-                    .respondWithGPServiceUnavailableException()
-        }
     }
 }

@@ -5,7 +5,7 @@ import mocking.models.Mapping
 import java.time.Duration
 
 
-interface IBookAppointmentsBuilder:IBuilderCommonResponses {
+interface IBookAppointmentsBuilder : IBuilderCommonResponses {
 
     fun withDelay(delayMilliseconds: Duration): IBookAppointmentsBuilder
 

@@ -3,6 +3,8 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.appointments.steps.CancelAppointmentSteps
+import mockingFacade.appointments.MyAppointmentsFacade
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 
 class CancelAppointmentStepDefinitions {
@@ -17,9 +19,27 @@ class CancelAppointmentStepDefinitions {
         }
     }
 
+    @Given("^VISION is available to cancel a previously booked appointment, with only one available reason$")
+    fun visionIsAvailableToCancelWithOneReason() {
+        cancelAppointmentSteps.mockCancellationRequestStubForReason(gpSystem = "VISION") { cancelRequest ->
+            cancelRequest.respondWithSuccess()
+        }
+    }
+
     @Given("^I select a cancellation reason of (.*)$")
     fun iSelectACancellationReason(reason: String) {
         cancelAppointmentSteps.selectReason(reason)
+    }
+
+    @Given("^I select the cancellation reason$")
+    fun iSelectTheCancellationReason() {
+        iSelectACancellationReason(
+                Serenity.sessionVariableCalled<MyAppointmentsFacade>(MyAppointmentsFacade::class)
+                        .slots!!
+                        .cancellationReasons!!
+                        .first()
+                        .displayName
+        )
     }
 
     @Given("^(.*) is unavailable to cancel a previously booked appointment because (.*)$")

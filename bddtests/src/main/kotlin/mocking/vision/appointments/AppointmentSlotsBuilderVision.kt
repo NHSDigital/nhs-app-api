@@ -19,6 +19,7 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
+import utils.SerenityHelpers
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -82,7 +83,22 @@ class AppointmentSlotsBuilderVision(
                 else
                     AvailableAppointmentsResponse()
 
-        val locationsForPatient = Serenity.sessionVariableCalled<List<Location>>(
+        if (availableAppointmentsResponse.references != null) {
+            val locationsForPatient = availableAppointmentsResponse.references?.location
+            if (locationsForPatient != null)
+                Serenity.setSessionVariable(
+                        GeneralAppointmentsHelper.Companion.VisionMetadata.LOCATIONS
+                ).to(locationsForPatient)
+
+            val ownersForPatient = availableAppointmentsResponse.references?.owner
+            if (ownersForPatient != null)
+                Serenity.setSessionVariable(
+                        GeneralAppointmentsHelper.Companion.VisionMetadata.OWNERS
+                ).to(ownersForPatient)
+        }
+
+        // Get defaults that are stored when generating the configuration, or those stored above
+        val locationsForPatient: List<Location>? = SerenityHelpers.getValueOrNull(
                 GeneralAppointmentsHelper.Companion.VisionMetadata.LOCATIONS
         )
 
@@ -91,7 +107,7 @@ class AppointmentSlotsBuilderVision(
                         wrapAroundXmlTag("vision:owner", defaultOwnerId)
                 ), "contains")
                 .andBody(wrapAroundXmlTag("vision:locations",
-                        locationsForPatient.joinToString("") { location ->
+                        locationsForPatient!!.joinToString("") { location ->
                             wrapAroundXmlTag("vision:location", location.id.toString())
                         }
 

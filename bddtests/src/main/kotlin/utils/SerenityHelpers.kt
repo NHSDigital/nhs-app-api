@@ -7,19 +7,17 @@ import org.apache.http.HttpResponse
 import org.junit.Assert
 import worker.NhsoHttpException
 
+
 class SerenityHelpers {
 
     companion object {
 
         fun setPatient(patientToSet: Patient) {
-            if (Serenity.hasASessionVariableCalled(Patient::class)) {
-                val currentPatient = getPatient()
-                Assert.assertEquals("Test setup incorrect, expected patients to be the same",
-                        currentPatient.firstName,
-                        patientToSet.firstName)
-            } else {
-                Serenity.setSessionVariable(Patient::class).to(patientToSet)
-            }
+            setSerenityVariableIfNotAlreadySet(
+                    Patient::class,
+                    patientToSet,
+                    "Test setup incorrect, expected patients to be the same"
+            )
         }
 
         fun getPatient(): Patient {
@@ -52,6 +50,21 @@ class SerenityHelpers {
 
         fun getHttpResponse(): HttpResponse? {
             return  getValueOrNull("HttpResponse")
+        }
+
+        fun setSerenityVariableIfNotAlreadySet(
+                key: Any,
+                valueToSet: Any,
+                assertionFailureMessage: String = "Test setup incorrect, trying to set a value already set"
+        ) {
+            val currentStoredValue = getValueOrNull<Any>(key)
+            if (currentStoredValue == null) {
+                Serenity.setSessionVariable(key).to(valueToSet)
+            } else {
+                Assert.assertEquals(assertionFailureMessage,
+                        currentStoredValue,
+                        valueToSet)
+            }
         }
 
         fun <T>getValueOrNull(key: Any): T? {

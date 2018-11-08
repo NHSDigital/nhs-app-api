@@ -169,13 +169,17 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^(.*) is unavailable for available appointment slots$")
     fun gpSystemIUnavailableForAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateServiceUnavailableSlotResponse()
+        factory.generateExample {
+            respondWithGPServiceUnavailableException()
+        }
     }
 
     @Given("^(.*) returns corrupt data for appointment slots$")
     fun gpSystemReturnsCorruptDataForAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateCorruptedSlotResponse()
+        factory.generateExample {
+            respondWithCorrupted()
+        }
     }
 
 
@@ -370,9 +374,11 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^available slots are displayed that meet the new criteria$")
     fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
-        val expectedDatesAndTimes =
-                sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots
+        val expectedDatesAndTimes = sessionVariableCalled<AppointmentFilterFacade>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+        ).filteredSlots
         assertTrue("Invalid test as there are no expected slots stored. ", expectedDatesAndTimes.isNotEmpty())
         val expectedNumberOfSlots = expectedDatesAndTimes.flatMap { it.value.toList() }.size
         for (date in expectedDatesAndTimes.keys) {
@@ -386,9 +392,11 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Then("^I only see results for days that have available slots$")
     fun onlyAvailableSlotsAreDisplayed() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
-        val expectedDates =
-                sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
+        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+        ).filteredSlots.keys
         availableAppointments.assertThatOtherDatesAreNotDisplayed(expectedDates)
     }
 
@@ -396,21 +404,29 @@ class AvailableAppointmentsSlotsStepDefinitions {
             "with an appropriate message when there are no slots$")
     fun iSeeResultsForEachOfTheRemainingDaysForThisWeek() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
-        val expectedDates =
-                sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
-        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates,
-                AppointmentsSlotsExample.remainingDatesForThisWeek)
+        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+        ).filteredSlots.keys
+        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(
+                expectedDates,
+                AppointmentsSlotsExample.remainingDatesForThisWeek
+        )
     }
 
     @Then("^I see results for each of the days for next week, with an appropriate message when there are no slots$")
     fun iSeeResultsForEachOfTheRemainingDaysForNextWeek() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
-        val expectedDates =
-                sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
-        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates,
-                AppointmentsSlotsExample.datesForNextWeek)
+        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+        ).filteredSlots.keys
+        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(
+                expectedDates,
+                AppointmentsSlotsExample.datesForNextWeek
+        )
     }
 
     @Then("^the appointment slot guidance content is displayed$")

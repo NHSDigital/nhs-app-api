@@ -1,14 +1,15 @@
 package features.appointments.factories
 
 import features.sharedSteps.SupplierSpecificFactory
+import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
+import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.BookAppointmentSlotFacade
+import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import java.util.*
-
-private const val SLOT_ID_VALUE = 301
 
 class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
@@ -26,7 +27,12 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
     }
 
     fun generateSuccessfulBookingResponse(bookingReason: String = "Reason") {
-        generateBookingResponse(bookingReason = bookingReason) { bookRequest -> bookRequest.respondWithSuccess() }
+        generateBookingResponse(bookingReason = bookingReason) {
+            bookRequest -> bookRequest
+                .respondWithSuccess()
+                .inScenario("Appointments")
+                .willSetStateTo("Appointment Booked")
+        }
     }
 
     fun generateSuccessfulBookingResponseEmptyReason() {
@@ -37,12 +43,17 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         generateBookingResponse(bookingReason = "Reason", booker = booker)
     }
 
-    fun generateBookingResponse(slotId: Int = SLOT_ID_VALUE, bookingReason: String,
-                                booker: (IBookAppointmentsBuilder) -> Mapping) {
-
+    private fun generateBookingResponse(bookingReason: String, booker: (IBookAppointmentsBuilder) ->
+    Mapping) {
+        val slotToSelect = Serenity.sessionVariableCalled<List<AppointmentSessionFacade>>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .APPOINTMENT_SLOTS_EXAMPLE_SESSIONS
+        ).first().slots.first()
         appointmentMapper.requestMapping {
             booker(bookAppointmentSlotRequest(patient,
-                    BookAppointmentSlotFacade(patient.userPatientLinkToken, slotId, bookingReason))
+                    BookAppointmentSlotFacade(patient.userPatientLinkToken, slotToSelect.slotId!!.toInt(),
+                    bookingReason))
             )
         }
         setSessionVariable(SymptomsToEnter).to(bookingReason)

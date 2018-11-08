@@ -26,8 +26,8 @@ class AppointmentsSlotsExample {
         private const val endOfDayTimeMin = 55
         private const val duration = 10
 
-
-        private var currentDateToAdd = LocalDateTime.now()
+        private val currentTime = LocalDateTime.now()
+        private var currentDateToAdd = currentTime
         val remainingDatesForThisWeek = setWeek()
         val datesForNextWeek = setWeek()
 
@@ -41,8 +41,8 @@ class AppointmentsSlotsExample {
         private val staffDrWho = IdValue(101, "Dr. Who")
         private val staffDrScott = IdValue(102, "Dr. Scott")
 
-        private val startDateTimeForPastAppointment = DateTimeWrapper(LocalDateTime.now().minusMinutes(10))
-        private val endDateTimeForPastAppointment = DateTimeWrapper(LocalDateTime.now())
+        private val startDateTimeForPastAppointment = DateTimeWrapper(currentTime.minusMinutes(10))
+        private val endDateTimeForPastAppointment = DateTimeWrapper(currentTime)
 
         private val startDateAppointment1 = DateTimeWrapper(tomorrowDate, 14, 0)
         private val endDateAppointment1 = DateTimeWrapper(tomorrowDate, 14, 10)

@@ -6,6 +6,7 @@ import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
+import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
 import models.Slot
 import net.serenitybdd.core.Serenity
@@ -87,8 +88,11 @@ open class CancelAppointmentSteps {
     }
 
     @Step
-    fun mockCancellationRequestStubForReason(reason: String, gpSystem: String,
-                                                     response: ((ICancelAppointmentsBuilder) -> Mapping)? = null) {
+    fun mockCancellationRequestStubForReason(
+            reason: String? = null,
+            gpSystem: String,
+            response: ((ICancelAppointmentsBuilder) -> Mapping)? = null
+    ) {
 
         val patient = Patient.getDefault(gpSystem)
 
@@ -101,6 +105,11 @@ open class CancelAppointmentSteps {
                 patient,
                 retrieveSlotIdOfAppointmentToCancel(),
                 reason
+                        ?: Serenity.sessionVariableCalled<MyAppointmentsFacade>(MyAppointmentsFacade::class)
+                                .slots!!
+                                .cancellationReasons!!
+                                .first()
+                                .displayName
         )
 
         factory.setupRequestAndResponse(request, response)

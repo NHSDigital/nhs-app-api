@@ -137,9 +137,11 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun getExpectedResponseSlots(): HashMap<String, SlotResponseObject> {
-        val expectedResponseSlots =
-                sessionVariableCalled<ArrayList<SlotResponseObject>>(AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotExpectations.EXPECTED_RESPONSE_SLOTS_KEY)
+        val expectedResponseSlots = sessionVariableCalled<ArrayList<SlotResponseObject>>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .EXPECTED_RESPONSE_SLOTS_KEY
+        )
         val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
         expectedResponseSlots.forEach { slot -> unmatchedExpectedSlots[slot.id] = slot }
         return unmatchedExpectedSlots
@@ -181,6 +183,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals("Try selecting a different date and time, or without a preferred practice member " +
                 "selected. If you can't find the appointment you need, call your GP surgery.\n" +
                 "If it's urgent and you don't know what to do, call 111 to get help near you.",
+
                 availableAppointmentsPage.warningMessage.assertSingleElementPresent().element.text)
     }
 

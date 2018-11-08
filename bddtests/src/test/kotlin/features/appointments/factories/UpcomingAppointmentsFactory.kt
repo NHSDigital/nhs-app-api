@@ -1,9 +1,12 @@
 package features.appointments.factories
 
+import com.github.tomakehurst.wiremock.stubbing.Scenario
 import constants.DateTimeFormats
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentsSlotsExample
+import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.emis.models.AppointmentCancellationReason
+import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -11,6 +14,7 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
+import utils.SerenityHelpers
 import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -25,10 +29,20 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
     private val baseDate = Calendar.getInstance(timeZone)
     private val appointmentsFromDate = gpDateTimeFormat.format(baseDate.time)
 
-    fun createSuccessfulEmptyUpcomingAppointmentResponse() {
-        val facade = MyAppointmentsFacade(appointmentsFromDate)
+    fun createSuccessfulEmptyUpcomingAppointmentResponse(
+            cancellationReasons: List<AppointmentCancellationReason> = getDefaultCancellationReasons()
+    ) {
+        val facade = MyAppointmentsFacade(
+                appointmentsFromDate,
+                AppointmentSlotsResponseFacade(
+                        cancellationReasons = cancellationReasons,
+                        bookingReasonNecessityOption = getBookingReasonNecessity()
+                )
+        )
         mockUpcomingAppointments {
             respondWithSuccess(facade)
+                    .inScenario("Appointments")
+                    .whenScenarioStateIs(Scenario.STARTED)
         }
         Serenity.setSessionVariable(MyAppointmentsFacade::class).to(facade)
         Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
@@ -37,10 +51,13 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
 
     fun createSuccessfulUpcomingAppointmentsResponse(
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
-            = AppointmentsSlotsExample.getGenericExample()
+            = AppointmentsSlotsExample.getGenericExample(),
+            numberOfCancellationReasons: Int = getDefaultCancellationReasons().size
     ) {
-        if (cancellationReasonRequired)
-            appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons()
+        appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons().subList(
+                0,
+                numberOfCancellationReasons
+        )
 
         val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
         createUpcomingAppointments {
@@ -49,6 +66,35 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         Serenity.setSessionVariable(MyAppointmentsFacade::class).to(myAppointmentsFacade)
         Serenity.setSessionVariable(Expectations.EXPECTED_API_RESPONSE_OF_MY_UPCOMING_APPOINTMENTS)
                 .to(getExpectedApiResponse(myAppointmentsFacade.slots!!.sessions))
+        Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
+                .to(getExpectedUiRepresentationOfSlots(myAppointmentsFacade))
+    }
+
+    fun createSuccessfulUpcomingAppointmentsResponseOnceBooked(
+            numberOfCancellationReasons: Int = getDefaultCancellationReasons().size
+    ) {
+        val sessionOfSelectedSlot = Serenity.sessionVariableCalled<List<AppointmentSessionFacade>>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .APPOINTMENT_SLOTS_EXAMPLE_SESSIONS
+        ).first()
+        val sessionWithOnlySelectedSlot = sessionOfSelectedSlot.copy(
+                slots = arrayListOf(sessionOfSelectedSlot.slots.first())
+        )
+        val appointmentSlotsResponseFacade = AppointmentSlotsResponseFacade(arrayListOf(sessionWithOnlySelectedSlot))
+        appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons().subList(
+                0,
+                numberOfCancellationReasons
+        )
+
+        val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
+        createUpcomingAppointments {
+            respondWithSuccess(myAppointmentsFacade)
+                    .inScenario("Appointments")
+                    .whenScenarioStateIs("Appointment Booked")
+        }
+
+        Serenity.setSessionVariable(MyAppointmentsFacade::class).to(myAppointmentsFacade)
         Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
                 .to(getExpectedUiRepresentationOfSlots(myAppointmentsFacade))
     }
@@ -63,8 +109,7 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade = AppointmentsSlotsExample
                     .getGenericExample()
     ) {
-        if (cancellationReasonRequired)
-            appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons()
+        appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons()
 
         val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
         createUpcomingAppointments {
@@ -74,6 +119,11 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
 
     fun createUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         mockUpcomingAppointments(mapping)
+    }
+
+
+    private fun getBookingReasonNecessity(): NecessityOption {
+        return SerenityHelpers.getValueOrNull<NecessityOption>("BookingReasonNecessity") ?: NecessityOption.NOT_ALLOWED
     }
 
     private fun convertToMyAppointmentsFacade(facade: AppointmentSlotsResponseFacade): MyAppointmentsFacade {
@@ -113,8 +163,6 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
             List<AppointmentSessionFacade>
 
     abstract fun getDefaultCancellationReasons(): List<AppointmentCancellationReason>
-
-    abstract val cancellationReasonRequired: Boolean
 
     companion object : SupplierSpecificFactory<UpcomingAppointmentsFactory>() {
 

@@ -52,6 +52,16 @@ Feature: My appointments
     Then I see appropriate information message when appointments are disabled
     And there should not be an option to try again
 
+  Scenario: It is made clear to a Vision user when they cannot cancel appointments they have already booked
+    Given I have upcoming appointments for VISION, but without cancellation reasons
+    And I am logged in as a VISION user
+    When I am on my appointments page
+    Then the page title is "My appointments"
+    And I am given the list of upcoming appointments
+    And appointments are in chronological order
+    And no appointment can be cancelled
+    And I can book an appointment
+
   @long-running
   @nativepending @NHSO-2966
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out

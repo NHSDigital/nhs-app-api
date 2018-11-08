@@ -1,6 +1,5 @@
 package mocking.vision.appointments
 
-import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.vision.VisionConstants
@@ -10,15 +9,12 @@ import mocking.vision.appointments.helpers.MyAppointmentsHelper.Companion.extrac
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import mocking.vision.models.appointments.BookedAppointmentsResponse
-import mocking.vision.models.appointments.AppointmentSettings
-import mocking.vision.models.appointments.BookingReason
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
 import org.apache.http.HttpStatus
 import java.io.StringWriter
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
-import utils.SerenityHelpers.Companion.getValueOrNull
 
 
 class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder(), IMyAppointmentsBuilder {
@@ -56,25 +52,9 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
     override fun respondWithUnknownException(): Mapping {
         return respondWithUnknownVisionError(serviceDefinition)
     }
-    private fun createDefaultResponse() :BookedAppointmentsResponse {
-        return BookedAppointmentsResponse(
-                settings = AppointmentSettings(
-                        bookingReason = BookingReason(
-                                add = bookingReasonNecessity()
-                        )
-                )
-        )
-    }
-    private fun bookingReasonNecessity() : Boolean{
-        return getValueOrNull<NecessityOption>("BookingReasonNecessity")  != NecessityOption.NOT_ALLOWED
-    }
-    override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
-        val bookedAppointmentsResponse =
-                if (facade.slots != null)
-                    extractResponseFromFacade(facade.slots)
-                else
-                    createDefaultResponse()
 
+    override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
+        val bookedAppointmentsResponse = extractResponseFromFacade(facade.slots!!)
 
         val jaxbContext = JAXBContext.newInstance(BookedAppointmentsResponse::class.java)
         val marshaller = jaxbContext.createMarshaller()
