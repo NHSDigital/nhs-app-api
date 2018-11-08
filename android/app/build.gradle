@@ -59,6 +59,11 @@ android {
             applicationIdSuffix ".preview"
             manifestPlaceholders = [appName: "NHS App Debug"]
         }
+        local {
+            initWith debug
+            applicationIdSuffix ".local"
+            manifestPlaceholders = [appName: "NHS App Local"]
+        }
         scratch1 {
             initWith debug
             applicationIdSuffix ".scratch1"
