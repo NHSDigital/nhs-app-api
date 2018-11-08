@@ -68,10 +68,10 @@ class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSl
     }
 
     override fun respondWithCorrupted(): Mapping {
-        return responseWithCorruptedContent(serviceDefinition, "")
+        return respondWithCorruptedContent(serviceDefinition, "")
     }
 
-    override fun respondWithUnavailableException(): Mapping {
+    override fun respondWithGPServiceUnavailableException(): Mapping {
         return respondWithServiceUnavailable()
     }
 
@@ -92,20 +92,11 @@ class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSl
     }
 
     override fun respondWithUnknownException(): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
-                    serviceDefinition,
-                    ErrorResponseCodeVision.NON_VISION_ERROR_CODE)).build()
-        }
+        return respondWithUnknownVisionError(serviceDefinition)
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
-
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
-                    serviceDefinition,
-                    ErrorResponseCodeVision.ACCESS_DENIED)).build()
-        }
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
+        return respondVisionErrorWhenServiceNotEnabled(serviceDefinition)
     }
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {

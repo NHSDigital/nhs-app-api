@@ -108,7 +108,7 @@ open class MyAppointmentsSteps {
     fun generateStubsForMyAppointmentsWhenUnavailableToPatient(provider: String) {
         val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
         currentViewAppointmentFactory.createUpcomingAppointments {
-            respondWithExceptionWhenNotEnabled()
+            respondWithGPErrorWhenNotEnabled()
         }
     }
 

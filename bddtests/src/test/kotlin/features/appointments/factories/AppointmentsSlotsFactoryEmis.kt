@@ -70,9 +70,9 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
             this as EmisMappingBuilderAppointments
 
             appointmentSlotsRequest(patient)
-                    .respondWithUnavailableException()
+                    .respondWithGPServiceUnavailableException()
             appointmentSlotsMetaRequest(patient)
-                    .respondWithUnavailableException()
+                    .respondWithGPServiceUnavailableException()
         }
     }
 }

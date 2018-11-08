@@ -133,7 +133,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         generateDefaultUserData()
         appointmentMapper.requestMapping {
             appointmentSlotsRequest(patient)
-                    .respondWithUnavailableException()
+                    .respondWithGPServiceUnavailableException()
         }
     }
 

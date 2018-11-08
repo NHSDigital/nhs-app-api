@@ -51,9 +51,9 @@ abstract class MappingBuilder(method: String, url: String) {
         return Mapping(requestBuilder.build(), responseBuilder.build())
     }
 
-    open fun respondWithServiceUnavailable(content:String = ""): Mapping {
+    open fun respondWithServiceUnavailable(): Mapping {
         return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody(content)
+            andXmlBody("")
         }
     }
 }

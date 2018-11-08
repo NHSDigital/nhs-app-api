@@ -4,6 +4,7 @@ import constants.ErrorResponseCodeTpp
 import mocking.JSonXmlConverter
 import mocking.MappingBuilder
 import mocking.models.Mapping
+import mocking.tpp.appointments.TppConfig
 import mocking.tpp.models.Error
 import org.apache.http.HttpStatus
 import java.util.*
@@ -46,6 +47,11 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
             andBody(content.replace(">", "|")
                     .replace("}", "|"), contentType = "text/xml")
         }
+    }
+
+    fun respondWithTppUnknownError(errorText:String) :Mapping {
+        val error = Error(ErrorResponseCodeTpp.UNKNOWN_ERROR, errorText, TppConfig.uuid)
+        return respondWith(error)
     }
 
     protected inline fun <reified T : Any> respondWith(response: T): Mapping {

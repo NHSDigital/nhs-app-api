@@ -33,19 +33,19 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
     }
 
     fun respondWithForbiddenException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Forbidden Exception")
         return respondWithBody(exceptionResponse, HttpStatus.SC_FORBIDDEN)
     }
 
     fun respondWithNotImplementedException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Not Implemented")
         return respondWithBody(exceptionResponse, HttpStatus.SC_NOT_IMPLEMENTED)
     }
 
     fun respondWithBadGatewayException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Bad Gateway")
         return respondWithBody(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }

@@ -1,18 +1,13 @@
 package mocking.gpServiceBuilderInterfaces.appointments
 
+import mocking.gpServiceBuilderInterfaces.IBuilderCommonResponses
 import mocking.models.Mapping
 import mockingFacade.appointments.MyAppointmentsFacade
 
-interface IMyAppointmentsBuilder {
+interface IMyAppointmentsBuilder:IBuilderCommonResponses {
+
     fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping
 
     fun respondWithSuccess(body: String): Mapping
 
-    fun respondWithExceptionWhenNotEnabled(): Mapping
-
-    fun respondWithUnknownException() : Mapping
-
-    fun responseWithExceptionWhenServiceUnavailable(): Mapping
-
-    fun respondWithCorrupted(facade: MyAppointmentsFacade) : Mapping
 }

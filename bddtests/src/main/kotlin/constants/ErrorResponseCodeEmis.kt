@@ -1,7 +1,7 @@
 package constants
 
 object ErrorResponseCodeEmis {
-    const val EXCEPTION: Long = -9999
+    const val UNKNOWN_EXCEPTION: Long = -9999
     const val INTERNAL_ERROR: Long = -1002
     const val SERVICE_ACCESS_VIOLATION: Long = -1030
     const val NOT_AVAILABLE: Long = -1151

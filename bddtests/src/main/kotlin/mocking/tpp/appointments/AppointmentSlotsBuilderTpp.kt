@@ -69,7 +69,7 @@ class AppointmentSlotsBuilderTpp(
         return this
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
         val errorMsg = "You don't have access to this online service"
         val disabledTppError = Error(
                 errorCode = ErrorResponseCodeTpp.NO_ACCESS,
@@ -79,12 +79,7 @@ class AppointmentSlotsBuilderTpp(
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val errorMsg = "Unknown exception"
-        val error = Error(
-                errorCode = ErrorResponseCodeTpp.UNKNOWN_ERROR,
-                userFriendlyMessage = errorMsg,
-                uuid = TppConfig.uuid)
-        return respondWith(error)
+        return respondWithTppUnknownError("Unknown exception")
     }
 
     override fun respondWithSuccess(facade: AppointmentSlotsResponseFacade): Mapping {
@@ -107,7 +102,7 @@ class AppointmentSlotsBuilderTpp(
         return respondWithCorruptedContent(response)
     }
 
-    override fun respondWithUnavailableException(): Mapping {
+    override fun respondWithGPServiceUnavailableException(): Mapping {
         return respondWithServiceUnavailable()
     }
 

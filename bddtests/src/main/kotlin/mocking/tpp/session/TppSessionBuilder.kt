@@ -74,14 +74,6 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
         }
     }
 
-    fun respondWithServiceUnavailable(): Mapping {
-        val responseBody = "Service Unavailable"
-        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody(responseBody)
-            build()
-        }
-    }
-
     fun respondWithError(errorBody: Error): Mapping {
         val responseBody = Error(
                 errorBody.errorCode,

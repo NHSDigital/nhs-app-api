@@ -24,7 +24,7 @@ class AppointmentSlotsStubs(private val mockingClient: MockingClient) {
 
                         .addResponse(serviceNotEnabledPatientEMIS) { builder
                             ->
-                            builder.respondWithExceptionWhenNotEnabled()
+                            builder.respondWithGPErrorWhenNotEnabled()
                         }
 
                         .addResponse(timeoutPatientEMIS) { builder

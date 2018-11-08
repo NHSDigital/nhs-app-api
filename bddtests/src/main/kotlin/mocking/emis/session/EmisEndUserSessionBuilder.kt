@@ -24,12 +24,4 @@ class EmisEndUserSessionBuilder(configuration: EmisConfiguration)
     fun respondWithServerError(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) { build() }
     }
-
-    fun respondWithServiceUnavailable(): Mapping {
-        val responseBody = "Service Unavailable"
-        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andJsonBody(responseBody)
-            build()
-        }
-    }
 }

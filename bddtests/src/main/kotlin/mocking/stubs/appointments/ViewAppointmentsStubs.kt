@@ -23,7 +23,7 @@ class ViewAppointmentsStubs(private val mockingClient: MockingClient) {
                             -> builder.respondWithSuccess(appointmentsBody) }
 
                         .addResponse(serviceNotEnabledPatientEMIS) { builder
-                            -> builder.respondWithExceptionWhenNotEnabled() }
+                            -> builder.respondWithGPErrorWhenNotEnabled() }
 
                         .addResponse(timeoutPatientEMIS) { builder
                             -> builder.respondWithSuccess(appointmentsBody)

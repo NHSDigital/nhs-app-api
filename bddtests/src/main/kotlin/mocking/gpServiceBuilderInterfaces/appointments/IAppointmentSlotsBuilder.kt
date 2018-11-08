@@ -12,6 +12,4 @@ interface IAppointmentSlotsBuilder:IBuilderCommonResponses {
     fun withDelay(delayMilliseconds : Duration): IAppointmentSlotsBuilder
 
     fun respondWithSuccess(facade: AppointmentSlotsResponseFacade): Mapping
-
-    fun respondWithExceptionWhenNotEnabled(): Mapping
 }

@@ -62,7 +62,7 @@ class AppointmentsBookingStepDefinitions {
 
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
-        factory.generateBookingResponse { bookRequest -> bookRequest.respondWithUnavailableException() }
+        factory.generateBookingResponse { bookRequest -> bookRequest.respondWithGPServiceUnavailableException() }
     }
 
     @Given("^there are (.*) appointments available to book, but the appointment slot has already been booked by somebody else$")

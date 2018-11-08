@@ -15,8 +15,6 @@ interface IBookAppointmentsBuilder:IBuilderCommonResponses {
 
     fun respondWithBookingLimitException(): Mapping
 
-    fun respondWithExceptionWhenNotEnabled(): Mapping
-
     fun respondWithExceptionWhenNotAvailable(): Mapping
 
     fun respondWithExceptionWhenInThePast(): Mapping

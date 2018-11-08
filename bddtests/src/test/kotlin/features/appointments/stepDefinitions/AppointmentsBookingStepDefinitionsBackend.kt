@@ -63,7 +63,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     @Given("^online appointment booking is not available to the (.*) patient, when wanting to book an appointment$")
     fun appointmentBookingUnavailableToPatientWhenWantingToBookAnAppointment(gpSystem: String) {
 
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithExceptionWhenNotEnabled() }
+        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithGPErrorWhenNotEnabled() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the slot is not available$")
@@ -87,7 +87,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     @Given("^an appointment booking for (.*) cannot be successful because the GP system is unavailable$")
     fun appointmentBookingUnavailable(gpSystem: String) {
 
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithUnavailableException() }
+        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithGPServiceUnavailableException() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system will time out$")

@@ -47,7 +47,7 @@ class BookAppointmentsBuilderTpp(patient: Patient, request: BookAppointmentSlotF
         return respondWithCorruptedContent(response)
     }
 
-    override fun respondWithUnavailableException(): Mapping {
+    override fun respondWithGPServiceUnavailableException(): Mapping {
         return respondWithServiceUnavailable()
     }
 
@@ -60,15 +60,14 @@ class BookAppointmentsBuilderTpp(patient: Patient, request: BookAppointmentSlotF
     override fun respondWithBookingLimitException(): Mapping {
         val error = Error(ErrorResponseCodeTpp.APPOINTMENT_LIMIT_REACHED, appointmentLimitErrorText, TppConfig.uuid)
         return respondWith(error)
+
     }
 
     override fun respondWithUnknownException(): Mapping {
-
-        val error = Error(ErrorResponseCodeTpp.UNKNOWN_ERROR, errorText, TppConfig.uuid)
-        return respondWith(error)
+        return respondWithTppUnknownError(errorText)
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
 
         val error = Error(ErrorResponseCodeTpp.NO_ACCESS, errorText, TppConfig.uuid)
         return respondWith(error)

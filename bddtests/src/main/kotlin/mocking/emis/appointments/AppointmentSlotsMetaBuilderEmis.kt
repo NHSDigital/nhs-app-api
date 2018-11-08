@@ -60,7 +60,7 @@ class AppointmentSlotsMetaBuilderEmis(
         return respondWithBody(model)
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
         val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.SERVICE_ACCESS_VIOLATION,
                 "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services " +
                         "'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked " +
@@ -70,16 +70,14 @@ class AppointmentSlotsMetaBuilderEmis(
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
-                "Unknown Exception")
-        return respondWithException(exceptionResponse)
+        return respondWithEmisUnknownError()
     }
 
     override fun respondWithCorrupted(): Mapping {
         return respondWithCorruptedContent("appointment slots metadata")
     }
 
-    override fun respondWithUnavailableException(): Mapping {
+    override fun respondWithGPServiceUnavailableException(): Mapping {
         return respondWithServiceUnavailable()
     }
 

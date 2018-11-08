@@ -45,22 +45,12 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
                 .andBody(userSession.patientId, "contains")
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithExceptionWhenNotEnabled() is not yet implemented in " +
-                        "MyAppointmentsBuilderVision")
-    }
-
-    override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
-        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody("").build()
-        }
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
+        return respondVisionErrorWhenServiceNotEnabled(serviceDefinition)
     }
 
     override fun respondWithUnknownException(): Mapping {
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithUnknownException() is not yet implemented in " +
-                        "MyAppointmentsBuilderVision")
+        return respondWithUnknownVisionError(serviceDefinition)
     }
 
     override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
@@ -89,12 +79,12 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
         return respondWithBody(body)
     }
 
-    override fun respondWithCorrupted(facade: MyAppointmentsFacade): Mapping {
-        val mapping = respondWithSuccess(facade)
-        return respondWith(HttpStatus.SC_OK) {
-            andBody(mapping.response!!.body!!.replace(">", "|").replace("}", "|"), contentType = "application/xml")
-        }
+    override fun respondWithCorrupted(): Mapping {
+        return respondWithCorruptedContent(serviceDefinition)
+    }
 
+    override fun respondWithGPServiceUnavailableException(): Mapping {
+        return respondWithServiceUnavailable()
     }
 
 }

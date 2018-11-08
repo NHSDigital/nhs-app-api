@@ -69,12 +69,6 @@ class VisionGetHistoricPrescriptionsBuilder(var userSession: VisionUserSession,
         return resp
     }
 
-    fun respondWithServiceUnavailable(): Mapping {
-        val resp = respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody("").build()
-        }
-        return resp
-    }
 
     fun respondWitInvalidUserCredentials(): Mapping {
         val resp = respondWith(HttpStatus.SC_OK) {

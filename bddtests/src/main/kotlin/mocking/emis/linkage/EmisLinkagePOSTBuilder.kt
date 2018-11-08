@@ -60,7 +60,7 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     }
 
     fun respondWithBadGatewayException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Bad Gateway")
         return respondWithBody(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }

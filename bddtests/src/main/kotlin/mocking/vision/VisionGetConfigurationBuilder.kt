@@ -64,12 +64,6 @@ class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
         }
     }
 
-    fun respondWithServiceUnavailable(): Mapping {
-        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody("").build()
-        }
-    }
-
     fun respondWitInvalidUserCredentials(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(getInvalidUserCredentialsError(serviceDefinition)).build()

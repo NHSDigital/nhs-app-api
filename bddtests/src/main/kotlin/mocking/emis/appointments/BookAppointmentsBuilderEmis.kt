@@ -51,14 +51,12 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
         return respondWithCorruptedContent("< Non parsable {:< as a XML or JSON")
     }
 
-    override fun respondWithUnavailableException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
-                "Unavailable Exception")
-        return respondWithBody(exceptionResponse, HttpStatus.SC_SERVICE_UNAVAILABLE)
+    override fun respondWithGPServiceUnavailableException(): Mapping {
+        return respondWithServiceUnavailable()
     }
 
     override fun respondWithConflictException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Conflict Exception")
         return respondWithBody(exceptionResponse, HttpStatus.SC_CONFLICT)
     }
@@ -70,12 +68,10 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
-                "Unknown Exception")
-        return respondWithBody(exceptionResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        return respondWithEmisUnknownError()
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
         return responseErrorForbiddenService()
     }
 

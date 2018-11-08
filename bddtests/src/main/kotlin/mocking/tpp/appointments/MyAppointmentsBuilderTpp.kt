@@ -10,7 +10,6 @@ import mocking.tpp.models.Appointment
 import mocking.tpp.models.ViewAppointmentsReply
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
-import org.apache.http.HttpStatus
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -29,20 +28,12 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
                                 "@onlineUserId='${patient.onlineUserId}']")
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
         return responseErrorWhenGPDisabledAppointmentsService()
     }
 
-    override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
-        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody("Service unavailable").build()
-        }
-    }
-
     override fun respondWithUnknownException(): Mapping {
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithUnknownException() is not yet implemented in " +
-                        "MyAppointmentsBuilderTpp")
+        return respondWithTppUnknownError("Unknown exception")
     }
 
     override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
@@ -86,11 +77,13 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
         return queryDateFormat.format(dateToPass)
     }
 
-    override fun respondWithCorrupted(facade: MyAppointmentsFacade): Mapping {
-        val mapping = respondWithSuccess(facade)
+    override fun respondWithCorrupted(): Mapping {
 
-        return respondWith(HttpStatus.SC_OK) {
-            andBody(mapping.response!!.body!!.replace(">","|").replace("}","|"), contentType = "application/json")
-        }
+        val response = JSonXmlConverter.toXML(viewAppointmentsReplyBase())
+        return respondWithCorruptedContent(response)
+    }
+
+    override fun respondWithGPServiceUnavailableException(): Mapping {
+        return respondWithServiceUnavailable()
     }
 }

@@ -8,18 +8,14 @@ import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
 import mocking.emis.models.AppointmentSession
 import mocking.emis.models.AppointmentSlot
-import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.Patient
-import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-
-private const val UNKNOWN_HTTP_STATUS_CODE: Long = -9999
 
 class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                                   patient: Patient,
@@ -60,7 +56,7 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         return respondWithCorruptedContent("appointment slots")
     }
 
-    override fun respondWithUnavailableException(): Mapping {
+    override fun respondWithGPServiceUnavailableException(): Mapping {
         return respondWithServiceUnavailable()
     }
 
@@ -88,18 +84,12 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         return queryDateFormat.format(dateToPass)
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
         return responseErrorForbiddenService()
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(UNKNOWN_HTTP_STATUS_CODE,
-                "Unknown Exception")
-        return respondWithException(exceptionResponse)
-    }
-
-    private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
-        return respondWithBody(exceptionResponse, SC_INTERNAL_SERVER_ERROR)
+        return respondWithEmisUnknownError()
     }
 
     private fun respondWithBody(body: Any, statusCode: Int = SC_OK): Mapping {

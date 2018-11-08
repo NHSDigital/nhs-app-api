@@ -88,6 +88,14 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.generateTimeoutStubForMyAppointment(provider)
     }
 
+    @Given("^an unknown exception occurs when I want to view my (\\w+) appointments$")
+    fun anUnknownExceptionOccursWhenIWantToViewMyEMISAppointments(gpService: String) {
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createUpcomingAppointments {
+            respondWithUnknownException()
+        }
+    }
+
     @When("^I select \"([^\"]*)\" button$")
     fun i_select_button(buttonText: String) {
         myAppointmentsSteps.myAppointmentsPage.waitForNativeStepToComplete()
@@ -158,7 +166,7 @@ class MyAppointmentsStepDefinitions {
     fun theAppointmentSystemIsUnavailable(gpSystem: String) {
         val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
         currentViewAppointmentFactory.createUpcomingAppointments {
-            responseWithExceptionWhenServiceUnavailable()
+            respondWithGPServiceUnavailableException()
         }
     }
 

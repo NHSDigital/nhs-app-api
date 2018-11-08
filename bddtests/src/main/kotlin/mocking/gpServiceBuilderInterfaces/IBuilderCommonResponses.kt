@@ -6,7 +6,9 @@ interface IBuilderCommonResponses {
 
     fun respondWithCorrupted(): Mapping
 
-    fun respondWithUnavailableException(): Mapping
+    fun respondWithGPServiceUnavailableException(): Mapping
 
     fun respondWithUnknownException(): Mapping
+
+    fun respondWithGPErrorWhenNotEnabled(): Mapping
 }

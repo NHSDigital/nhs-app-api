@@ -1,6 +1,7 @@
 package mocking.emis
 
 import constants.ErrorResponseCodeEmis
+import mocking.JSonXmlConverter
 import mocking.MappingBuilder
 import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ErrorResponse
@@ -58,9 +59,18 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
         return respondWith(HttpStatus.SC_OK) { andHtmlBody(content) }
     }
 
-    override fun respondWithServiceUnavailable(content: String): Mapping {
+    fun respondWithEmisUnknownError(): Mapping {
+        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
+                "Unknown Exception")
+        val responseBody = JSonXmlConverter.toJson(exceptionResponse)
+        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+            andJsonBody(responseBody).build()
+        }
+    }
+
+    override fun respondWithServiceUnavailable(): Mapping {
         return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andJsonBody(content)
+            andJsonBody("")
         }
     }
 

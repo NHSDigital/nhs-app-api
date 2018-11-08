@@ -12,6 +12,9 @@ import java.net.URL
 import java.time.Duration
 import java.util.*
 
+private const val SIGN_OUT_WAIT_TIME = 1000L
+private const val LOAD_URL_WAIT_TIME = 180L
+private const val POLLING_DURATION = 100L
 open class BrowserSteps {
 
     lateinit var loginPage: LoginPage
@@ -30,8 +33,8 @@ open class BrowserSteps {
 
     @Step
     open fun waitUntilSignoutCompletes() {
-        WebDriverWait(loginPage.driver, 1000)
-                .pollingEvery(Duration.ofMillis(100))
+        WebDriverWait(loginPage.driver, SIGN_OUT_WAIT_TIME)
+                .pollingEvery(Duration.ofMillis(POLLING_DURATION))
                 .until {
                     it.currentUrl == loginPage.driver.currentUrl ||
                     fetchCookie("nhso.session") == null
@@ -40,8 +43,8 @@ open class BrowserSteps {
 
     @Step
     open fun shouldHaveUrl(url: String) {
-        WebDriverWait(loginPage.driver, 180)
-                .pollingEvery(Duration.ofMillis(100))
+        WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
+                .pollingEvery(Duration.ofMillis(POLLING_DURATION))
                 .until {
                     it.currentUrl.startsWith(url)
                 }

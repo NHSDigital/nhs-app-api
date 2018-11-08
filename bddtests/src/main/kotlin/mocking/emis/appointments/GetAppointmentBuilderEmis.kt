@@ -1,13 +1,11 @@
 package mocking.emis.appointments
 
-import constants.ErrorResponseCodeEmis
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
 import mocking.emis.appointments.helpers.GetAppointmentHelper
-import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.MyAppointmentsFacade
@@ -27,22 +25,12 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
                 .andQueryParameter("fetchPreviousAppointments", fetchPreviousAppointments.toString())
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+    override fun respondWithGPErrorWhenNotEnabled(): Mapping {
         return responseErrorForbiddenService()
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.EXCEPTION,
-                "Unknown Exception")
-        return respondWithException(exceptionResponse)
-    }
-
-    override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
-        return respondWithBody("Service unavailable", HttpStatus.SC_SERVICE_UNAVAILABLE)
-    }
-
-    private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
-        return respondWithBody(exceptionResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        return respondWithEmisUnknownError()
     }
 
     private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_OK): Mapping {
@@ -71,11 +59,11 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
         }
     }
 
-    override fun respondWithCorrupted(facade: MyAppointmentsFacade): Mapping {
-        val mapping = respondWithSuccess(facade)
-        return respondWith(HttpStatus.SC_OK) {
-            andBody(mapping.response!!.body!!.replace(">", "|").replace("}", "|"), contentType = "application/json")
-        }
+    override fun respondWithCorrupted(): Mapping {
+        return respondWithCorruptedContent("<<randomtag/>>")
+    }
 
+    override fun respondWithGPServiceUnavailableException(): Mapping {
+        return respondWithServiceUnavailable()
     }
 }

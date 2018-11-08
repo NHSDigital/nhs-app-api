@@ -36,7 +36,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots() {
 
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, { respondWithExceptionWhenNotEnabled() })
+        factory.generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, { respondWithGPErrorWhenNotEnabled() })
     }
 
     @Given("^unknown exception will occur when wanting to view appointment slots$")

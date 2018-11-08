@@ -51,13 +51,9 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
                 .to(getExpectedUiRepresentationOfSlots(myAppointmentsFacade))
     }
 
-    fun createCorruptedUpcomingAppointmentsResponse(
-            appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
-            = AppointmentsSlotsExample.getGenericExample()
-    ) {
-        val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
+    fun createCorruptedUpcomingAppointmentsResponse() {
         createUpcomingAppointments {
-            respondWithCorrupted(myAppointmentsFacade)
+            respondWithCorrupted()
         }
     }
 
