@@ -19,6 +19,7 @@ using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Worker.Support.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {

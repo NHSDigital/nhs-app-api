@@ -128,17 +128,13 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<ITokenValidationParameterBuilder, TokenValidationParameterBuilder>();
             services.AddSingleton<IJwtTokenService<UserProfile>,IdTokenService>();
-            services.AddSingleton<ISessionCacheService, SessionCacheService>();
             services.AddSingleton<ICitizenIdSigningKeysService,CitizenIdSigningKeysService>();
             services.AddSingleton<IJsonResponseParser, JsonResponseParser>();
             services.AddSingleton<IXmlResponseParser, XmlResponseParser>();
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
-            services.AddSingleton(x => new NamedConnectionMultiplexer(
-                ConnectionMultiplexerName.Session,
-                ConnectionMultiplexer.Connect(Configuration["REDIS_SESSION_CONFIG"])));
-            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
+            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();           
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

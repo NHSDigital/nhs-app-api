@@ -12,8 +12,9 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Cipher;
 using StackExchange.Redis;
+using NHSOnline.Backend.Worker.Support.Session;
 
-namespace NHSOnline.Backend.Worker.UnitTests
+namespace NHSOnline.Backend.Worker.Support.Session.UnitTests
 {
     [TestClass]
     public class SessionCacheServiceTests
@@ -24,7 +25,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
         private Mock<IDatabase> _database;
         private Mock<IConnectionMultiplexerFactory> _connectionMultiplexerFactory;
         private int _defaultSessionExpiryMinutes;
-        private ILogger<SessionCacheService> _logger;
+        private ILogger<RedisSessionCacheService> _logger;
         
         [TestInitialize]
         public void TestInitializeInitialize()
@@ -49,7 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             _connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.Session))
                 .Returns(connectionMultiplexer.Object);
 
-            _logger = new LoggerFactory().CreateLogger<SessionCacheService>();
+            _logger = new LoggerFactory().CreateLogger<RedisSessionCacheService>();
         }
         
         [TestMethod]
@@ -81,7 +82,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Verifiable();
                 
                 
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
+            var systemUnderTest = new RedisSessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
             
             // Act
             var result = await systemUnderTest.CreateUserSession(userSession);
@@ -108,7 +109,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Returns(Task.FromResult(true))
                 .Verifiable();
             
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
+            var systemUnderTest = new RedisSessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
             
             // Act
             var result = await systemUnderTest.DeleteUserSession(redisSessionKey);
@@ -148,7 +149,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Verifiable();
 
 
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
+            var systemUnderTest = new RedisSessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
 
             // Act
             await systemUnderTest.UpdateUserSession(userSession);

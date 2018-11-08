@@ -35,7 +35,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _userSession.IsAppointmentsEnabled = true;
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<BookedAppointmentsResponse>>();
-
             _userSession.IsAppointmentsEnabled = true;
             
             var response = new VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)

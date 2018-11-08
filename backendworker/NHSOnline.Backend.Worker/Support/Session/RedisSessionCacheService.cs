@@ -4,37 +4,25 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Cipher;
 using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
 
-namespace NHSOnline.Backend.Worker
+namespace NHSOnline.Backend.Worker.Support.Session
 {
-    public interface ISessionCacheService
-    {
-        Task<string> CreateUserSession(UserSession userSession);
-
-        Task<Option<UserSession>> GetUserSession(string sessionId);
-
-        Task<bool> DeleteUserSession(string sessionId);
-
-        Task UpdateUserSession(UserSession userSession);
-    }
-
-    public class SessionCacheService : ISessionCacheService
+    public class RedisSessionCacheService : ISessionCacheService
     {
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
         private readonly ICipherService _cipherService;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly ConfigurationSettings _settings;
-        private readonly ILogger<SessionCacheService> _logger;
+        private readonly ILogger<RedisSessionCacheService> _logger;
 
-        public SessionCacheService(
+        public RedisSessionCacheService(
             IConnectionMultiplexerFactory connectionMultiplexerFactory,
             ICipherService cipherService,
             IOptions<ConfigurationSettings> settings,
-            ILogger<SessionCacheService> logger)
+            ILogger<RedisSessionCacheService> logger)
         {
             _connectionMultiplexerFactory = connectionMultiplexerFactory ??
                                             throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
