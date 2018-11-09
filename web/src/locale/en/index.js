@@ -140,8 +140,10 @@ export default {
   appointments: {
     index: {
       successText: 'Your appointment has been booked. You can view details or cancel it here.',
+      succcessAndCancellationDisabledText: 'Your appointment has been booked. You can view details here.',
       bookButtonText: 'Book new appointment',
       cancelButtonText: 'Cancel appointment',
+      cancellationDisabledText: 'To cancel this appointment, contact your GP surgery.',
       empty: {
         header: 'You don\'t currently have any appointments booked',
         text1: 'Once you\'ve booked an appointment here, you\'ll be able to view details and cancel it.',

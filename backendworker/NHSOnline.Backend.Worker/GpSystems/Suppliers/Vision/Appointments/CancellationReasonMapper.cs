@@ -7,14 +7,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
 {
     public interface ICancellationReasonMapper
     {
-        IEnumerable<CancellationReason> Map(BookedAppointmentsResponse appointmentsResponses);
+        ICollection<CancellationReason> Map(BookedAppointmentsResponse appointmentsResponses);
     }
     
     public class CancellationReasonMapper : ICancellationReasonMapper
     {
         private const string Language = "en_UK";
         
-        public IEnumerable<CancellationReason> Map(BookedAppointmentsResponse appointmentsResponses)
+        public ICollection<CancellationReason> Map(BookedAppointmentsResponse appointmentsResponses)
         {
             var cancellationReasons = new List<CancellationReason>();
             if (appointmentsResponses?.Appointments?.Settings?.CancellationReasons == null)

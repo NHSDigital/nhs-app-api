@@ -196,6 +196,9 @@ definitions:
         description: Array of Cancellation Reasons.
         items:
           $ref: '#/definitions/CancellationReason'
+      disableCancellation:
+        type: boolean
+        description: Indicates whether appointment cancellation is disabled.
   AppointmentSlotsResponse:
     type: object
     properties:

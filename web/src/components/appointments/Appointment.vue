@@ -21,13 +21,20 @@
       </span>
     </p>
 
-    <span v-if="showCancellationLink">
+    <span v-if="showCancellationLink && !cancellationDisabled">
       <hr :class="$style.cancel" aria-hidden="true">
       <p>
         <nuxt-link :class="$style['cancel-link']" :to="appointmentCancellingPath"
                    @click.native="select">
-          Cancel appointment
+          {{ this.$t('appointments.index.cancelButtonText') }}
         </nuxt-link>
+      </p>
+    </span>
+
+    <span v-if="cancellationDisabled">
+      <hr :class="$style.cancel" aria-hidden="true">
+      <p :class="$style['cancel-disabled']">
+        {{ this.$t('appointments.index.cancellationDisabledText') }}
       </p>
     </span>
 
@@ -52,6 +59,10 @@ export default {
     },
     showCancellationLink: {
       default: true,
+      type: Boolean,
+    },
+    cancellationDisabled: {
+      default: false,
       type: Boolean,
     },
   },

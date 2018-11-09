@@ -8,7 +8,9 @@
       </div>
     </div>
 
-    <upcoming-appointments v-if="showUpcomingAppointments" :appointments = "upcomingAppointments" />
+    <upcoming-appointments v-if="showUpcomingAppointments"
+                           :appointments = "upcomingAppointments"
+                           :cancellation-disabled = "cancellationDisabled" />
 
     <form method="get" action="/appointments/booking-guidance">
       <floating-button-bottom v-if="showBookAppointmentButton"
@@ -50,6 +52,9 @@ export default {
     },
     upcomingAppointments() {
       return this.$store.state.myAppointments.appointments;
+    },
+    cancellationDisabled() {
+      return this.$store.state.myAppointments.disableCancellation;
     },
   },
   asyncData({ store }) {

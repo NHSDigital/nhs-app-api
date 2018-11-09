@@ -18,6 +18,9 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+  @pending @NHSO-3145
+    Examples:
+      | GP System |
       | VISION    |
 
     # Not applicable for VISION
@@ -47,6 +50,9 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+  @pending @NHSO-3145
+    Examples:
+      | GP System |
       | VISION    |
 
   @smoketest
@@ -63,6 +69,9 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+  @pending @NHSO-3145
+    Examples:
+      | GP System |
       | VISION    |
 
   @nativepending @NHSO-2956
@@ -81,6 +90,9 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+  @pending @NHSO-3145
+    Examples:
+      | GP System |
       | VISION    |
 
   @nativepending @NHSO-2956
@@ -114,6 +126,9 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+  @pending @NHSO-3145
+    Examples:
+      | GP System |
       | VISION    |
 
   Scenario Outline: A <GP System> user cannot enter dangerous text for booking reason

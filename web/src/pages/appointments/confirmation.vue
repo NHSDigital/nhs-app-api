@@ -93,6 +93,11 @@ export default {
     showError() {
       return this.submissionError && !this.symptoms;
     },
+    confirmationMessage() {
+      return this.$store.state.myAppointments.disableCancellation
+        ? this.$t('appointments.index.succcessAndCancellationDisabledText')
+        : this.$t('appointments.index.successText');
+    },
   },
   watch: {
     symptoms(val, oldValue) {
@@ -140,7 +145,7 @@ export default {
       };
       this.$store.dispatch('availableAppointments/book', bookingData)
         .then(() => {
-          this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.index.successText'));
+          this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
           this.$router.push(APPOINTMENTS.path);
         });
     },

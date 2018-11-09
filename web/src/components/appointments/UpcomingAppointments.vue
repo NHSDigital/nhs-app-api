@@ -6,6 +6,7 @@
                  :class="[$style.upcoming]"
                  :key="appointment.id"
                  :appointment="appointment"
+                 :cancellation-disabled="cancellationDisabled"
                  data-purpose="appointments" />
   </span>
 </template>
@@ -25,6 +26,10 @@ export default {
     appointments: {
       type: Array,
       default: () => [],
+    },
+    cancellationDisabled: {
+      default: false,
+      type: Boolean,
     },
   },
 };

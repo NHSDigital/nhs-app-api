@@ -198,6 +198,9 @@
                       displayName: 
                         type: "string"
                         description: "Cancellation Reason Description."
+                disableCancellation: 
+                  type: "boolean"
+                  description: "Indicates whether appointment cancellation is disabled."
           400: 
             description: "Bad request. A querystring parameter is not in the expected format."
           401: 

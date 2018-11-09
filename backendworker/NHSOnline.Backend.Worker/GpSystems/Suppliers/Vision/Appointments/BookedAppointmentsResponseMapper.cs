@@ -1,4 +1,5 @@
-﻿using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+﻿using System.Linq;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
@@ -29,7 +30,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             var response = new AppointmentsResponse
             {
                 Appointments = appointments, 
-                CancellationReasons = cancellationReasons
+                CancellationReasons = cancellationReasons,
+                DisableCancellation = !cancellationReasons.Any()
             };
 
             return response;
