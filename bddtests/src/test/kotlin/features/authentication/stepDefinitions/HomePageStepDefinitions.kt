@@ -2,8 +2,10 @@ package features.authentication.stepDefinitions
 
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.HomeSteps
+import features.authentication.steps.LoginSteps
 import features.myrecord.stepDefinitions.MyRecordStepDefinitions
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
@@ -38,6 +40,8 @@ class HomePageStepDefinitions : AbstractSteps() {
     private lateinit var recordSteps: MyRecordStepDefinitions
     @Steps
     private lateinit var organDonationSteps: OrganDonationStepDefinitions
+    @Steps
+    private lateinit var loginSteps: LoginSteps
 
     @Then("^I see the beta banner$")
     fun iSeeTheBetaBanner() {
@@ -47,6 +51,17 @@ class HomePageStepDefinitions : AbstractSteps() {
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
         browser.goToApp()
+        loginSteps.loginPage.shouldBeDisplayed()
+    }
+
+    @Given("^I see the help icon on the login page")
+    fun givenISeeTheHelpIconOnTheLoginPage() {
+        loginSteps.loginPage.helpIconIsVisible()
+    }
+
+    @When("^I click the help icon on the login page")
+    fun iClickTheHelpIconOnTheLoginPage() {
+        loginSteps.loginPage.clickHelpIcon()
     }
 
     @Then("^I see the current app version")

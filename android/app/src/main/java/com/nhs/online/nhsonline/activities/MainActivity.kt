@@ -39,6 +39,7 @@ import com.nhs.online.nhsonline.Application
 import android.view.accessibility.AccessibilityManager
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.services.KnownServices
+import java.net.URL
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
@@ -153,7 +154,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun setReloadUrl(url: String?) {
-        urlLoader.reloadUrl = url
+        if(!knownServices.shouldURLOpenExternally(URL(url))) {
+            urlLoader.reloadUrl = url
+        }
     }
 
     fun getReloadUrl(): String? {

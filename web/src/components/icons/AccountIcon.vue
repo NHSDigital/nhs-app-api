@@ -28,9 +28,6 @@ export default {
   margin: 0.8em 1em;
   display: inline-block;
   height: 1.575em;
-  position: fixed;
-  right: 0em;
-  top: 0em;
   cursor: pointer;
   width: auto;
 

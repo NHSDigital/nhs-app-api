@@ -30,7 +30,7 @@ class KnownServices {
         self.buildKnownServices()
     }
     
-    func shouldURLOpenExternally(url: URL) -> Bool {
+    func shouldURLOpenExternally(_ url: URL) -> Bool {
         return externalSites.contains(url)
     }
     

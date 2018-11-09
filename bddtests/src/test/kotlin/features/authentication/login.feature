@@ -79,3 +79,9 @@ Feature: Login
       | EMIS   |
       | TPP    |
       | VISION |
+
+  Scenario: Any user can click the help icon on the login page
+    Given I am at the login page
+    Given I see the help icon on the login page
+    When I click the help icon on the login page
+    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/

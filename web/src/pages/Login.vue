@@ -22,6 +22,7 @@
 <script>
 import AuthorisationService from '@/services/authorisation-service';
 import LoginButton from '@/components/LoginButton';
+
 import { BEGINLOGIN } from '@/lib/routes';
 import NativeCallbacks from '@/services/native-app';
 

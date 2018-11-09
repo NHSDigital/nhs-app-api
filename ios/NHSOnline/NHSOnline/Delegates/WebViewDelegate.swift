@@ -37,7 +37,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 return
             }
             
-            self.failedUrl = url
+            if (!knownServices.shouldURLOpenExternally( url)) {
+                self.failedUrl = url
+            }
             
             if(!Reachability.isConnectedToNetwork()) {
                 decisionHandler(.cancel)
@@ -45,7 +47,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 return
             }
 
-            if knownServices.shouldURLOpenExternally(url: url) {
+            if knownServices.shouldURLOpenExternally( url) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
                 return

@@ -30,9 +30,6 @@ export default {
   display: inline-block;
   height: 1.575em;
   width: auto;
-  position: fixed;
-  right: 2.4em;
-  top: 0em;
   cursor: pointer;
   outline-style:none;
 }
