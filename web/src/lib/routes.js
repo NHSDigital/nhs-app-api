@@ -34,6 +34,16 @@ const routes = {
     path: '/auth-return',
     isAnonymous: true,
   },
+  GP_FINDER: {
+    name: 'gp-finder',
+    path: '/gp-finder',
+    isAnonymous: true,
+  },
+  GP_FINDER_RESULTS: {
+    name: 'gp-finder-results',
+    path: '/gp-finder/results',
+    isAnonymous: true,
+  },
   CHECKYOURSYMPTOMS: {
     name: 'check-your-symptoms',
     path: '/check-your-symptoms',
@@ -120,6 +130,8 @@ export const {
   APPOINTMENT_BOOKING,
   APPOINTMENT_CONFIRMATIONS,
   AUTH_RETURN,
+  GP_FINDER,
+  GP_FINDER_RESULTS,
   CHECKYOURSYMPTOMS,
   DATA_SHARING_PREFERENCES,
   INDEX,

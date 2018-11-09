@@ -35,7 +35,7 @@ const config = {
     './middleware/server/noJsApi.js',
   ],
   router: {
-    middleware: ['auth', 'meta', 'analytics', 'termsAndConditions', 'urlResolution'],
+    middleware: ['throttling', 'auth', 'meta', 'analytics', 'termsAndConditions', 'urlResolution'],
   },
   link: [
     {
@@ -87,6 +87,12 @@ const config = {
     STUB_TERMS_AND_CONDITIONS: true,
     // App Version
     VERSION_TAG: 'dev_web_npm',
+    // Throttling
+    GP_LOOKUP_API_KEY: '',
+    GP_LOOKUP_API_URL: 'https://nhsapiint.azure-api.net/service-search/search?api-version=1',
+    GP_LOOKUP_API_RESULTS_LIMIT: 20,
+    // Feature Toggles
+    THROTTLING_ENABLED: false,
   },
 };
 

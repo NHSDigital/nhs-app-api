@@ -1,0 +1,17 @@
+@import '../colours';
+
+.header-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 10em;
+
+  header {
+    flex: 1;
+    width: 100%;
+    background: $home_gradient;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+  }
+}

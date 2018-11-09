@@ -9,6 +9,7 @@ import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
+import mocking.nhsAzureSearchService.NhsAzureSearchMappingBuilder
 import mocking.tpp.TppMappingBuilder
 import mocking.vision.VisionMappingBuilder
 import net.serenitybdd.rest.SerenityRest
@@ -52,6 +53,13 @@ class MockingClient(private val configuration: MockingConfiguration) {
 
     fun forNdop(method: String = "POST", resolver: NdopMappingBuilder.() -> Mapping) {
         val mappingBuilder = NdopMappingBuilder(method)
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forNhsAzureSearch(method: String = "POST", resolver: NhsAzureSearchMappingBuilder.() -> Mapping) {
+        val mappingBuilder = NhsAzureSearchMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)

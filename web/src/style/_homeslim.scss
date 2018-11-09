@@ -1,0 +1,35 @@
+/** VARS */
+$logged_height: 12em; //16.5em
+
+/** IMPORTS */
+@import './colours';
+@import './textstyles';
+@import './screensizes';
+@import './fonts';
+
+html {
+  font: $apple-system-body;
+}
+
+.homeSlimMain {
+    box-sizing: border-box;
+    padding: 0em;
+
+    h2 {
+        @include h2;
+        margin-bottom: 0.750em;
+        font-size: 1.2em;
+        text-align: center;
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
+
+    a {
+        @include default_text;
+        color: $nhs_blue;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+

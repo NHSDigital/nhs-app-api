@@ -536,6 +536,7 @@ export default {
   },
   pageHeaders: {
     home: 'Home',
+    gpFinder: 'GP Finder',
     prescriptions: 'My repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
@@ -555,6 +556,7 @@ export default {
   },
   pageTitles: {
     home: 'Home',
+    gpFinder: 'GP Finder',
     prescriptions: 'Repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
     confirmPrescription: 'Confirm prescription - Repeat prescriptions',
@@ -664,6 +666,24 @@ export default {
     },
     symptomsIcon: {
       title: 'Symptoms Checker',
+    },
+  },
+  th02: {
+    banner: {
+      labelText: 'NEW',
+      message: 'We\'re still testing this app',
+    },
+    heading1: 'Check what features you can use',
+    heading2: 'Find your GP surgery',
+    hintText: 'Enter postcode, town or GP surgery name',
+    callToAction: 'Continue',
+    hasAnAccountLink: 'I\'m already using the NHS App',
+  },
+  th03: {
+    header: 'Select your GP surgery',
+    errors: {
+      unableToRetrieveResults: 'Unable to retrieve search results.',
+      noGpPracticesFound: 'No GP Practices found',
     },
   },
   sy01: {

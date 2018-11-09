@@ -81,6 +81,11 @@ open class SharedStepDefinitions {
         browser.loginPage.waitForNativeStepToComplete()
     }
 
+    @Given("^I am on the gp finder$")
+    open fun iAmOnTheGpFinder() {
+        browser.goToApp()
+    }
+
     @Given("^I am logged in and have not accepted the terms and conditions$")
     open fun iAmLoggedInAndHaveNotAcceptedTermsAndConditions() {
         SharedStepDefinitions.patient =

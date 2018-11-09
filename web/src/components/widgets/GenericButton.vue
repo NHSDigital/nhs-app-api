@@ -1,6 +1,6 @@
 <template>
   <button v-tabbing="defaultClasses" :id="id"
-          :class="getStyleClasses"
+          :class="getStyleClasses" :type="type"
           @click="clicked($event)">
     <slot/>
   </button>
@@ -22,6 +22,10 @@ export default {
     id: {
       type: String,
       default: '',
+    },
+    type: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {

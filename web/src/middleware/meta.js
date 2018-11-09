@@ -8,6 +8,8 @@ import {
   APPOINTMENT_CANCELLING,
   APPOINTMENT_CONFIRMATIONS,
   CHECKYOURSYMPTOMS,
+  GP_FINDER,
+  GP_FINDER_RESULTS,
   DATA_SHARING_PREFERENCES,
   INDEX,
   LOGIN,
@@ -60,6 +62,12 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaders.account';
       route.meta.pageTitleKey = 'pageTitles.account';
+      break;
+    case GP_FINDER.name:
+    case GP_FINDER_RESULTS.name:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      route.meta.headerKey = 'pageHeaders.gpFinder';
+      route.meta.pageTitleKey = 'pageTitles.gpFinder';
       break;
     case SYMPTOMS.name:
     case CHECKYOURSYMPTOMS.name:
