@@ -78,7 +78,7 @@ class MyRecordInfoPage : HybridPageObject() {
     }
 
     fun clickClinicalAbbreviationsLink() {
-        clinicalAbbreviationsLink.element.click()
+        clinicalAbbreviationsLink.click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 

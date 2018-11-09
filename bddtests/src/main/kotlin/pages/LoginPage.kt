@@ -42,11 +42,11 @@ class LoginPage : HybridPageObject() {
     )
 
     fun signIn() {
-        loginOrCreateAccountButton.element.click()
+        loginOrCreateAccountButton.click()
     }
 
     fun createAccount(patient: Patient) {
-        loginOrCreateAccountButton.element.click()
+        loginOrCreateAccountButton.click()
         accountCreationPage.completeAccountCreation(patient)
     }
 

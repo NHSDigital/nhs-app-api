@@ -23,12 +23,12 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun goBackToMyAppointments() {
-        appointmentsConfirmation.backToMyAppointmentsButton.element.click()
+        appointmentsConfirmation.backToMyAppointmentsButton.click()
     }
 
     @Step
     fun clickErrorPageBackButton() {
-        errorPage.button.element.click()
+        errorPage.button.click()
     }
 
     @Step

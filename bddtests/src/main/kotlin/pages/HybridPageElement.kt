@@ -44,6 +44,12 @@ open class HybridPageElement(
         return this
     }
 
+    open fun click()
+    {
+        this.element.scroll()
+        this.element.click()
+    }
+
     fun WebElementFacade.scroll() {
         scrollTo(this)
     }

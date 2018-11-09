@@ -37,11 +37,11 @@ class MyRecordWarningPage : HybridPageObject() {
     }
 
     fun clickAgreeAndContinue() {
-        btnAgree.element.click()
+        btnAgree.click()
     }
 
     fun clickBacktoHome() {
-        btnBack2Home.element.click()
+        btnBack2Home.click()
     }
 
     fun getSensitiveList(): ArrayList<String> {

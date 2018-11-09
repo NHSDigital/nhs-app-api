@@ -61,11 +61,13 @@ class NativePageElement(
 
     }
 
-    fun click() {
-        if(page.onMobile())
+    override fun click() {
+        if(page.onMobile()) {
+            this.nativeElement.scroll()
             this.nativeElement.click()
+        }
         else
-            this.element.click()
+            super.click()
 
     }
 

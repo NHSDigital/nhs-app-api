@@ -31,7 +31,7 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     )
 
     fun clickOnConfirmAndBookAppointmentButton() {
-        confirmAndBookAppointmentButton.element.click()
+        confirmAndBookAppointmentButton.click()
     }
 
     fun describeSymptoms(symptoms: String) {

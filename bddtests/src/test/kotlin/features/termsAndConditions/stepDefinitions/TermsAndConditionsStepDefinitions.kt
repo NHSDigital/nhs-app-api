@@ -14,27 +14,27 @@ class TermsAndConditionsStepDefinitions {
 
     @When("^I click the continue button")
     fun iClickTheContinueButton() {
-        termsAndConditions.termsAndConditions.continueButton.element.click()
+        termsAndConditions.termsAndConditions.continueButton.click()
     }
 
     @When("^I check the agree to terms and conditions checkbox")
     fun iCheckTheAgreeTermsCheckbox() {
-        termsAndConditions.termsAndConditions.tcCheckBox.element.click()
+        termsAndConditions.termsAndConditions.tcCheckBox.click()
     }
 
     @When("^I click on Privacy policy")
     fun iClickOnPrivacyPolicy() {
-        termsAndConditions.termsAndConditions.privacyPolicyLink.element.click()
+        termsAndConditions.termsAndConditions.privacyPolicyLink.click()
     }
 
     @When("^I click on Cookies policy")
     fun iClickOnCookiesPolicy() {
-        termsAndConditions.termsAndConditions.cookiesPolicyLink.element.click()
+        termsAndConditions.termsAndConditions.cookiesPolicyLink.click()
     }
 
     @When("^I click on Terms of use")
     fun iClickOnTermsOfUsePolicy() {
-        termsAndConditions.termsAndConditions.termsOfUseLink.element.click()
+        termsAndConditions.termsAndConditions.termsOfUseLink.click()
     }
 
     @Then("^I see error messages indicating I have not yet accepted the terms and conditions")

@@ -61,7 +61,7 @@ class HomePageDefinitions : AbstractSteps() {
 
         homeSteps.homePage.assertSurveyLinkContent()
         homeSteps.homePage.assertSurveyLinkCollapsibleAndExpandable()
-        homeSteps.homePage.surveyContentLink.assertSingleElementPresent().element.click()
+        homeSteps.homePage.surveyContentLink.assertSingleElementPresent().click()
         browser.changeTab(URL(surveyUrl))
         browser.shouldHaveUrl(surveyUrl)
     }
@@ -96,32 +96,32 @@ class HomePageDefinitions : AbstractSteps() {
     }
 
     private fun followSymptomLink() {
-        homeSteps.homePage.checkSymptomsLink.element.click()
+        homeSteps.homePage.checkSymptomsLink.click()
         checkMySymptoms.assertConditionsHeaderVisible()
         checkMySymptoms.assertNhs111HeaderVisible()
         navBar.isHighlighted(NavBarNative.NavBarType.SYMPTOMS)
     }
 
     private fun followAppointmentsLink() {
-        homeSteps.homePage.bookAndManageAppointmentsLink.element.click()
+        homeSteps.homePage.bookAndManageAppointmentsLink.click()
         myAppointmentsSteps.checkHeaderTextIsCorrect()
         myAppointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
         navBar.isHighlighted(NavBarNative.NavBarType.APPOINTMENTS)
     }
 
     private fun followPrescriptionLink() {
-        homeSteps.homePage.orderRepeatPrescriptionLink.element.click()
+        homeSteps.homePage.orderRepeatPrescriptionLink.click()
         prescriptions.isLoaded()
         navBar.isHighlighted(NavBarNative.NavBarType.PRESCRIPTIONS)
     }
 
     private fun followMedicalRecordLink() {
-        homeSteps.homePage.viewMedicalRecordLink.element.click()
+        homeSteps.homePage.viewMedicalRecordLink.click()
         recordSteps.i_see_record_warning_page_opened()
         navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
     }
     private fun followOrganDonationLink() {
-        homeSteps.homePage.organDonationLink.element.click()
+        homeSteps.homePage.organDonationLink.click()
         organDonationSteps.iAmOnTheOrganDonationPage()
     }
 }

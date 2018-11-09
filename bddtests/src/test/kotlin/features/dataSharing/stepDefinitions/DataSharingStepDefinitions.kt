@@ -63,19 +63,19 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     fun iClickTheXContentsLink(link: String) {
         when (link) {
             overviewId -> {
-                dataSharing.linkContentsOverview.element.click()
+                dataSharing.linkContentsOverview.click()
             }
             benefitsId -> {
-                dataSharing.linkContentsBenefits.element.click()
+                dataSharing.linkContentsBenefits.click()
             }
             dataUseId -> {
-                dataSharing.linkContentsDataUse.element.click()
+                dataSharing.linkContentsDataUse.click()
             }
             optOutId -> {
-                dataSharing.linkContentsWhereOptOutDoesntApply.element.click()
+                dataSharing.linkContentsWhereOptOutDoesntApply.click()
             }
             manageChoiceId -> {
-                dataSharing.linkContentsManageYourChoice.element.click()
+                dataSharing.linkContentsManageYourChoice.click()
             }
             else -> throw IllegalArgumentException("$link is not a valid link name.")
         }
@@ -83,17 +83,17 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @When("^I click the Manage Your Choice direct link$")
     fun iClickTheManageYourChoiceDirectLink() {
-        dataSharing.linkManageYourChoice.element.click()
+        dataSharing.linkManageYourChoice.click()
     }
 
     @When("^I click the Data Sharing More Info link$")
     fun iClickTheDataSharingMoreInfoLink() {
-        dataSharing.linkDataSharingMoreInfo.element.click()
+        dataSharing.linkDataSharingMoreInfo.click()
     }
 
     @When("^I click the Start Now button$")
     fun iClickTheStartNowButton() {
-        dataSharing.btnStartNow.element.click()
+        dataSharing.btnStartNow.click()
     }
 
     @When("^I click the (.*) button (.*) times$")
@@ -105,8 +105,8 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
         while (clicks > 0) {
             when (_button) {
-                "Next" -> dataSharing.btnNext.element.click()
-                "Previous" -> dataSharing.btnPrevious.element.click()
+                "Next" -> dataSharing.btnNext.click()
+                "Previous" -> dataSharing.btnPrevious.click()
             }
             if (--clicks != 0) {
                 Thread.sleep(500)

@@ -141,9 +141,9 @@ open class HomePage : HybridPageObject() {
     }
 
     fun assertSurveyLinkCollapsibleAndExpandable() {
-        surveyLinkTab.element.click()
+        surveyLinkTab.click()
         surveyContent.assertSingleElementPresent().assertIsNotVisible()
-        surveyLinkTab.element.click()
+        surveyLinkTab.click()
         surveyLinkTab.assertSingleElementPresent().assertIsVisible()
     }
 

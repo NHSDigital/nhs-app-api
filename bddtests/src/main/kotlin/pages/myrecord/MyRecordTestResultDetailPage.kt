@@ -24,7 +24,7 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
     )
 
     fun clickBackToMyRecordButton() {
-        backButton.element.click()
+        backButton.click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 }

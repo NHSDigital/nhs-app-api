@@ -202,7 +202,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     @When("I click Continue on the Order a repeat prescription page")
     fun iClickContinueOnTheOrderARepeatPrescriptionsPage() {
-        courseSteps.repeatPrescriptions.orderRepeatPrescriptionButton.element.click()
+        courseSteps.repeatPrescriptions.orderRepeatPrescriptionButton.click()
     }
 
     @When("I click Back on the Order a repeat prescription page")

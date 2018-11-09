@@ -31,10 +31,10 @@ class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
                     androidLocator = null,
                     page = pageObject)
 
-    val firstElement by lazy { recordItemElements.element }
+    val firstElement by lazy { recordItemElements }
 
     fun toggleShrub() {
-        header.assertSingleElementPresent().element.click()
+        header.assertSingleElementPresent().click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 

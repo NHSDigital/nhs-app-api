@@ -30,7 +30,7 @@ class MoreStepDefinitions {
 
     @When("^I choose to set my organ donation preferences")
     fun setOrganDonationPreferences() {
-        morePage.btnOrganDonation.element.click()
+        morePage.btnOrganDonation.click()
     }
 
     @When("^I choose to set my data sharing preferences")
@@ -39,7 +39,7 @@ class MoreStepDefinitions {
             postTokenToNdop()
                     .respondWithNdopMockPage()
         }
-        morePage.btnDataSharing.element.click()
+        morePage.btnDataSharing.click()
         morePage.waitForNativeStepToComplete()
     }
 
@@ -83,15 +83,14 @@ class MoreStepDefinitions {
     }
 
     private fun followDataSharingLink() {
-        morePage.btnDataSharing.element.click()
+        morePage.btnDataSharing.click()
         morePage.waitForNativeStepToComplete()
         headerNative.waitForPageHeaderText("Sharing health data preferences")
         nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 
-
     private fun followOrganDonationLink() {
-        morePage.btnOrganDonation.element.click()
+        morePage.btnOrganDonation.click()
         organDonationSteps.iAmOnTheOrganDonationPage()
     }
 

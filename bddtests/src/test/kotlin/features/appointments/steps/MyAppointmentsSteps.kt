@@ -48,7 +48,7 @@ open class MyAppointmentsSteps {
     @Step
     fun clickOnBookAppointmentButton() {
         myAppointmentsPage.waitForNativeStepToComplete()
-        myAppointmentsPage.bookButton.element.click()
+        myAppointmentsPage.bookButton.click()
     }
 
     @Step

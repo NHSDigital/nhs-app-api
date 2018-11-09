@@ -97,7 +97,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         Assert.assertNotNull("Didn't find medication course with: \nname: " +
                 "${courseToSelect.name} \ndosage: " +
                 courseToSelect.getInstructionsText(), prescription)
-        prescription.element.click()
+        prescription.click()
         Thread.sleep(DELAY_FOR_ELEMENT_SELECTION) //In order to ensure each prescription is selected
         verifyPrescriptionIsSelected(courseToSelect)
     }
@@ -136,7 +136,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     }
 
     fun clickBackButton() {
-        backButton.element.click()
+        backButton.click()
     }
 
     fun typeTextIntoSpecialRequestTextArea(text: String) : String {

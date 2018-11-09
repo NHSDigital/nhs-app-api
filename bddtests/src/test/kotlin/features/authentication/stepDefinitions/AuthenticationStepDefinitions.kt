@@ -400,13 +400,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         browser.goToApp()
         login.using(EmisMockDefaults.patientEmis)
         navHeader.clickMyAccount()
-        myAccount.signOutButton.element.click()
+        myAccount.signOutButton.click()
     }
 
     @When("I log out")
     fun iLogOut(){
         navHeader.clickMyAccount()
-        myAccount.signOutButton.element.click()
+        myAccount.signOutButton.click()
     }
 
     @Given("^I am logged in as a (.*) user$")
@@ -562,7 +562,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Throws(Exception::class)
     fun iClickTheSignOutButton() {
         navHeader.clickMyAccount()
-        myAccount.signOutButton.element.click()
+        myAccount.signOutButton.click()
         browser.waitUntilSignoutCompletes()
     }
 
@@ -599,7 +599,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @When("^I select to create an account$")
     fun iClickCreateAccountButton() {
-        login.loginPage.loginOrCreateAccountButton.element.click()
+        login.loginPage.loginOrCreateAccountButton.click()
     }
 
     @When("^I have completed (.+) account creation$")

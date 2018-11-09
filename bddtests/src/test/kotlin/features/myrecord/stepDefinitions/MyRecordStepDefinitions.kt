@@ -433,7 +433,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see acute medication information$")
     fun i_see_acute_medication_information() {
-        assertTrue(myRecordInfoPage.acuteMedications.firstElement.isVisible)
+        myRecordInfoPage.acuteMedications.firstElement.assertIsVisible()
     }
 
     @When("^I click the test result section$")
@@ -514,12 +514,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see current repeat medication information$")
     fun i_see_current_repeat_medication_information() {
-        assertTrue(myRecordInfoPage.repeatMedications.firstElement.isVisible)
+        assertTrue(myRecordInfoPage.repeatMedications.firstElement.element.isVisible)
     }
 
     @Then("^I see discontinued repeat medication information$")
     fun i_see_discontinued_repeat_medication_information() {
-        assertTrue(myRecordInfoPage.discontinuedRepeatMedications.firstElement.isVisible)
+        assertTrue(myRecordInfoPage.discontinuedRepeatMedications.firstElement.element.isVisible)
     }
 
     @Then("^I see a message indicating that I have no access to view my summary care record$")

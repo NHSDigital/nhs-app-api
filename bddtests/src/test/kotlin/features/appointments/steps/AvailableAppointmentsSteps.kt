@@ -383,12 +383,12 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun expandAppointmentSlotGuidance() {
-        availableAppointments.guidance.expand.element.click()
+        availableAppointments.guidance.expand.click()
     }
 
     @Step
     fun collapseAppointmentSlotGuidance() {
-        availableAppointments.guidance.collapse.element.click()
+        availableAppointments.guidance.collapse.click()
     }
 
     @Step

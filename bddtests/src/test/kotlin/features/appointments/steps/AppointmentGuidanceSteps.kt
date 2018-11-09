@@ -45,11 +45,11 @@ open class AppointmentGuidanceSteps {
     @Step
     fun clickBookAnAppointmentButton() {
         appointmentGuidancePage.bookButton.element.waitUntilVisible<WebElementFacade>()
-        appointmentGuidancePage.bookButton.element.click()
+        appointmentGuidancePage.bookButton.click()
     }
 
     @Step
     fun clickCheckSymptomsButton() {
-        appointmentGuidancePage.checkSymptomsButton.element.click()
+        appointmentGuidancePage.checkSymptomsButton.click()
     }
 }

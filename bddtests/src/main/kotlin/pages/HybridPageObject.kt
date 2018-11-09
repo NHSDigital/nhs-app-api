@@ -207,7 +207,7 @@ open class HybridPageObject : PageObject() {
                 androidLocator = null,
                 page = this
         )
-                .withText(text, false).element.click()
+                .withText(text, false).click()
     }
 
     fun hideKeyboard() {

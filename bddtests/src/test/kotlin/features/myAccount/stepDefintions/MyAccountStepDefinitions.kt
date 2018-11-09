@@ -12,27 +12,27 @@ class MyAccountStepDefinitions {
 
     @When("^I click the Terms of use link$")
     fun iClickTheTermsAndConditionsLink() {
-        myAccount.termsOfUseLink.element.click()
+        myAccount.termsOfUseLink.click()
     }
 
     @When("^I click the Privacy policy link$")
     fun iClickThePrivacyPolicyLink() {
-        myAccount.privacyPolicyLink.element.click()
+        myAccount.privacyPolicyLink.click()
     }
 
     @When("^I click the Cookies policy link$")
     fun iClickTheCookiesPolicyLink() {
-        myAccount.cookiesPolicyLink.element.click()
+        myAccount.cookiesPolicyLink.click()
     }
 
     @When("^I click the Open source licences link$")
     fun iClickTheOpenSourceLicencesLink() {
-        myAccount.openSourceLicencesLink.element.click()
+        myAccount.openSourceLicencesLink.click()
     }
 
     @When("^I click the Help and support link$")
     fun iClickTheHelpAndSupportLink() {
-        myAccount.helpAndSupportLink.element.click()
+        myAccount.helpAndSupportLink.click()
     }
 
     @Then("^I am on the My Account page$")

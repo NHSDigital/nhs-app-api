@@ -89,7 +89,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
                 .assertSingleElementPresent()
                 .assertIsVisible()
                 .scrollToElement()
-        slot.element.click()
+        slot.click()
     }
 
     fun getAreAnySlotsPresent(): Boolean {

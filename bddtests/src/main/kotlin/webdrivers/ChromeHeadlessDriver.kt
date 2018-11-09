@@ -15,6 +15,7 @@ open class ChromeHeadlessDriver : DriverSource {
             options.addArguments("--headless")
             options.addArguments("--disable-gpu")
             options.addArguments("--no-sandbox")
+            options.addArguments("--window-size=1080,1920")
         return ChromeDriver(options)
     }
 

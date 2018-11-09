@@ -26,7 +26,7 @@ open class CIDAccountCreationPage : HybridPageObject() {
             if (onMobile()) {
                 hideKeyboard()
             }
-            createAccountButton.element.click()
+            createAccountButton.click()
         }
     }
 }
