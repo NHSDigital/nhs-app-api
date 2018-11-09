@@ -6,7 +6,11 @@ import mocking.models.Mapping
 
 class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {
 
-    override fun generateAppointmentSlotResponse(startDate: String?, endDate: String?, guidanceMessage: Boolean, reasonNecessity: NecessityOption, mapping: IAppointmentSlotsBuilder.() -> Mapping) {
+    override fun generateAppointmentSlotResponse(startDate: String?,
+                                                 endDate: String?,
+                                                 guidanceMessage: Boolean,
+                                                 reasonNecessity: NecessityOption,
+                                                 mapping: IAppointmentSlotsBuilder.() -> Mapping) {
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
@@ -15,6 +19,6 @@ class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {
     override fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
                                                                 endDate: String?,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
-        throw Exception("Test Setup Incorrect: Practice Settings are not relevant to TPP anyway. ")
+        throw NotImplementedError("Test Setup Incorrect: Practice Settings are not relevant to TPP anyway. ")
     }
 }

@@ -182,7 +182,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 assertEquals(count, PrescriptionsListResponse.courses.count())
             }
             else -> {
-                throw Exception("Invalid GP System")
+                throw NotImplementedError("Invalid GP System")
             }
         }
     }
@@ -350,7 +350,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                         }
             }
             else -> {
-                throw Exception("Invalid GP System")
+                throw NotImplementedError("Invalid GP System")
             }
         }
     }

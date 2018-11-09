@@ -15,6 +15,6 @@ class AppointmentsSlotsFactoryVision : AppointmentsSlotsFactory("VISION") {
     override fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
                                                                 endDate: String?,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
-        throw Exception("Test Setup Incorrect: Practice Settings are not relevant to Vision anyway. ")
+        throw NotImplementedError("Test Setup Incorrect: Practice Settings are not relevant to Vision anyway. ")
     }
 }

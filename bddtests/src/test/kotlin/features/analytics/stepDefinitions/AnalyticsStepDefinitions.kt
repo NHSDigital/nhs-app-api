@@ -14,6 +14,7 @@ class AnalyticsStepDefinitions {
         Assert.assertTrue("Expected the analytics data object (window.digitalData) to be available.", dataObjectIsAvailable())
     }
 
+    @Suppress("TooGenericExceptionCaught", "Any exception thrown from javascript")
     private fun dataObjectIsAvailable(): Boolean {
         val dataObject = try {
             digitalData()

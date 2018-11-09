@@ -24,9 +24,11 @@ import mockingFacade.appointments.AppointmentSlotFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
+import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
@@ -260,13 +262,9 @@ class AvailableAppointmentsSlotsStepDefinitions {
         for (appointmentSession in expectedAppointmentSessions) {
             expectedAppointmentSlots.addAll(appointmentSession.slots)
         }
-        val httpStatus =
-                try {
-                    sessionVariableCalled<NhsoHttpException>("HttpException").statusCode
-                } catch (e: NullPointerException) {
-                    200
-                }
-        assertEquals("Http Error Status. ", 200, httpStatus)
+        val httpStatus = SerenityHelpers.getValueOrNull<NhsoHttpException>("HttpException")?.statusCode ?: 200
+
+        assertEquals("Http Error Status. ", HttpStatus.SC_OK, httpStatus)
         val actualResult = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         assertNotNull("Expected actualResult not null", actualResult)
         assertNotNull("Expected actualResult.slots not null", actualResult.slots)

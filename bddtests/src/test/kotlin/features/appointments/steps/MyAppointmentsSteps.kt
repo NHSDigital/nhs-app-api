@@ -13,7 +13,6 @@ import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
 import pages.ErrorPage
 import pages.appointments.MyAppointmentsPage
 import pages.navigation.HeaderNative
@@ -90,8 +89,7 @@ open class MyAppointmentsSteps {
 
     @Step
     fun checkIfBookAnAppointmentButtonExistAndEnabled() {
-        try {
-            myAppointmentsPage.bookButton.element.isVisible
+            myAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
             myAppointmentsPage.bookButton.element.waitUntilPresent<WebElementFacade>()
 
             assertTrue("Book an appointment is not displaying",
@@ -99,9 +97,6 @@ open class MyAppointmentsSteps {
 
             assertTrue("Book an appointment is not enabled",
                     myAppointmentsPage.bookButton.element.isCurrentlyEnabled)
-        } catch (e: Exception) {
-            fail("Book an appointment is not found")
-        }
     }
 
     @Step
