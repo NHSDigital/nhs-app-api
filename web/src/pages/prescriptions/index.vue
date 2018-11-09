@@ -1,7 +1,5 @@
 <template>
-
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content']" >
-
     <glossary-header v-if="hasLoaded"/>
 
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
@@ -29,22 +27,27 @@
       </div>
     </div>
 
-    <floating-button-bottom
-      v-if="hasLoaded"
-      id="order-prescription-button"
-      @click="onRepeatPrescriptionButtonClicked">
-      {{ $t('rp01.orderPrescriptionButton') }}
-    </floating-button-bottom>
+    <form method="get" action="/prescriptions/repeat-courses">
+      <floating-button-bottom
+        v-if="hasLoaded"
+        id="order-prescription-button"
+        @click="onRepeatPrescriptionButtonClicked">
+        {{ $t('rp01.orderPrescriptionButton') }}
+      </floating-button-bottom>
+    </form>
   </div>
 </template>
 
 <script>
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
-import MedicationCourseStatus from '@/lib/medication-course-status';
 import GlossaryHeader from '@/components/GlossaryHeader';
 import { PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
-import _ from 'lodash';
+import MedicationCourseStatus from '@/lib/medication-course-status';
+import keys from 'lodash/fp/keys';
+import each from 'lodash/fp/each';
+import sortBy from 'lodash/fp/sortBy';
+import isEmpty from 'lodash/fp/isEmpty';
 
 export default {
   components: {
@@ -52,7 +55,9 @@ export default {
     HistoricPrescription,
     GlossaryHeader,
   },
-  data() {
+  async asyncData({ store }) {
+    await store.dispatch('prescriptions/clear');
+    await store.dispatch('prescriptions/load');
     return {
       statusDisplayPriority: {
         [MedicationCourseStatus.Rejected]: 1,
@@ -67,52 +72,37 @@ export default {
         hasLoaded,
         prescriptionCourses,
       } = this.$store.state.prescriptions;
-
-      return (
-        hasLoaded &&
-        (prescriptionCourses === null ||
-          Object.keys(prescriptionCourses).length === 0)
-      );
+      return hasLoaded && isEmpty(prescriptionCourses);
     },
     showPrescriptions() {
       const {
         hasLoaded,
         prescriptionCourses,
       } = this.$store.state.prescriptions;
-
-      return (
-        hasLoaded &&
-        prescriptionCourses !== null &&
-        Object.keys(prescriptionCourses).length > 0
-      );
+      return hasLoaded && !isEmpty(prescriptionCourses);
     },
     prescriptionCoursesToDisplay() {
-      const context = this;
-      const keys = _.sortBy(
-        _.keys(this.$store.state.prescriptions.prescriptionCourses),
-        item => context.statusDisplayPriority[item],
-      );
+      const prescriptionKeys =
+        sortBy(i =>
+          this.statusDisplayPriority[i])(keys(this.$store.state.prescriptions.prescriptionCourses));
 
       const orderedMap = {};
-
-      _.each(keys, (k) => {
+      each((k) => {
         orderedMap[k] =
-          context.$store.state.prescriptions.prescriptionCourses[k];
-      });
-
+          this.$store.state.prescriptions.prescriptionCourses[k];
+      })(prescriptionKeys);
       return orderedMap;
     },
     hasLoaded() {
       return this.$store.state.prescriptions.hasLoaded;
     },
   },
-  mounted() {
-    this.$store.dispatch('prescriptions/clear');
-    this.$store.dispatch('prescriptions/load', this.$config);
+  created() {
   },
   methods: {
-    onRepeatPrescriptionButtonClicked() {
+    onRepeatPrescriptionButtonClicked(e) {
       this.$router.push(PRESCRIPTION_REPEAT_COURSES.path);
+      e.preventDefault();
     },
   },
 };

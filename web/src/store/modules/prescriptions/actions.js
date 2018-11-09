@@ -12,6 +12,7 @@ function getPrescriptionsParameters() {
     fromDate: getFromDate(),
   };
 }
+
 export default {
   load({ commit }) {
     this.dispatch('repeatPrescriptionCourses/init');

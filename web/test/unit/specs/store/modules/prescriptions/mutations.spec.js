@@ -1,8 +1,6 @@
 import mutations from '@/store/modules/prescriptions/mutations';
 import { PRESCRIPTIONS_LOADED, PRESCRIPTIONS_CLEAR } from '@/store/modules/prescriptions/mutation-types';
-
-// For some reason this import doesn't work with the @ notation
-import MedicationCourseStatus from '../../../../../../src/lib/medication-course-status';
+import MedicationCourseStatus from '@/lib/medication-course-status';
 
 describe('PRESCRIPTIONS_LOADED', () => {
   it('will set the prescription courses on the state to the received data', () => {
@@ -28,16 +26,17 @@ describe('PRESCRIPTIONS_LOADED', () => {
       ],
     };
 
-    const expectedData = [];
-    expectedData[MedicationCourseStatus.Approved] = [
-      {
-        courseId: '1e5483ce-2e5c-4e57-ad2e-235a08b4f7f8',
-        orderDate: '0001-01-01T00:00:00+00:00',
-        name: 'Co-codamol 8mg/500mg capsules',
-        details: '20 capsule - One To Be Taken Four Times A Day',
-        status: MedicationCourseStatus.Approved,
-      },
-    ];
+    const expectedData = {
+      Approved: [
+        {
+          courseId: '1e5483ce-2e5c-4e57-ad2e-235a08b4f7f8',
+          orderDate: '0001-01-01T00:00:00+00:00',
+          name: 'Co-codamol 8mg/500mg capsules',
+          details: '20 capsule - One To Be Taken Four Times A Day',
+          status: MedicationCourseStatus.Approved,
+        },
+      ],
+    };
 
     mutations[PRESCRIPTIONS_LOADED](state, receivedData);
 
@@ -52,7 +51,7 @@ describe('PRESCRIPTIONS_CLEAR', () => {
 
     mutations[PRESCRIPTIONS_CLEAR](state);
 
-    expect(state.prescriptionCourses).toEqual([]);
+    expect(state.prescriptionCourses).toEqual({});
     expect(state.hasLoaded).toEqual(false);
   });
 });
