@@ -5,11 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Support.Certificate
 {
-    public class CertificateService : ICertificateService, IDisposable
+    public class CertificateService : ICertificateService
     {
         private readonly ILogger _logger;
-        private X509Certificate2 _clientCert;
-        private bool _disposed;
 
         public CertificateService(ILogger<CertificateService> logger)
         {
@@ -23,13 +21,9 @@ namespace NHSOnline.Backend.Worker.Support.Certificate
                 return null;
             }
 
+            X509Certificate2 _clientCert;
             try
             {
-                if (_disposed)
-                {
-                    throw new ObjectDisposedException(GetType().FullName);
-                }
-                
                 _clientCert = new X509Certificate2(certificatePath, certificatePassphrase);
             }
             catch (Exception ex)
@@ -60,32 +54,6 @@ namespace NHSOnline.Backend.Worker.Support.Certificate
                 valid= false;
             }
             return valid;
-        }
-        
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        ~CertificateService()
-        {
-            Dispose(false);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                _clientCert.Dispose();
-            }
-
-            _disposed = true;
         }
     }
 }
