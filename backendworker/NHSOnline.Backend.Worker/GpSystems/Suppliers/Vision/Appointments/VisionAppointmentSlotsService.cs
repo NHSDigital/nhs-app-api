@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                     dateRange
                     );
 
-                return InterpretAppointmentsGetResponse(response, visionUserSession);
+                return InterpretAppointmentsGetResponse(response);
             }
             catch (HttpRequestException e)
             {
@@ -58,8 +58,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         }
         
         private AppointmentSlotsResult InterpretAppointmentsGetResponse(
-            VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response,
-            VisionUserSession userSession)
+            VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response)
         {
             if (response.IsAccessDeniedError)
             {
@@ -68,14 +67,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             
             if (response.HasErrorResponse)
             {
-                _logger.LogError("Call to VISION (VisionAppointmentSlotsService) returned an unanticipated " +
-                                 $"error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
+                _logger.LogError($"Call to VISION (VisionAppointmentSlotsService) returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
                 return new AppointmentSlotsResult.SupplierSystemUnavailable();
             }
             
             try
             {
-                return new AppointmentSlotsResult.SuccessfullyRetrieved(_mapper.Map(response.Body, userSession));
+                return new AppointmentSlotsResult.SuccessfullyRetrieved(_mapper.Map(response.Body));
             }
             catch (Exception e)
             {

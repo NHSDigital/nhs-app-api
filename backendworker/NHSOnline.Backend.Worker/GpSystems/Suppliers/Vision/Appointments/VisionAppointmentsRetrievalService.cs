@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
@@ -15,19 +14,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         private readonly IVisionClient _visionClient;
         private readonly IBookedAppointmentsResponseMapper _responseMapper;
         private readonly ILogger<VisionAppointmentsRetrievalService> _logger;
-        private readonly ISessionCacheService _sessionCacheService;
-
+        
         public VisionAppointmentsRetrievalService(
             ILogger<VisionAppointmentsRetrievalService> logger,
             IVisionClient visionClient,
-            IBookedAppointmentsResponseMapper responseMapper,
-            ISessionCacheService sessionCacheService
+            IBookedAppointmentsResponseMapper responseMapper
         )
         {
             _visionClient = visionClient;
             _responseMapper = responseMapper;
             _logger = logger;
-            _sessionCacheService = sessionCacheService;
         }
         
         public async Task<AppointmentsResult> GetAppointments(UserSession userSession)
@@ -47,7 +43,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 var response = await _visionClient.GetExistingAppointments(
                     visionUserSession
                     );
-                return await InterpretAppointmentsGetResponse(response, visionUserSession);
+                return InterpretAppointmentsGetResponse(response);
             }
             catch (HttpRequestException exception)
             {
@@ -60,9 +56,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
         }
 
-        private async Task<AppointmentsResult> InterpretAppointmentsGetResponse(
-            VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response,
-            VisionUserSession userSession)
+        private AppointmentsResult InterpretAppointmentsGetResponse(
+            VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {
             if (response.IsAccessDeniedError)
             {
@@ -71,34 +66,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             
             if (response.HasErrorResponse)
             {
-                _logger.LogError("Call to VISION (VisionAppointmentsRetrievalService) returned an unanticipated error " +
-                                 $"with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
+                _logger.LogError($"Call to VISION (VisionAppointmentsRetrievalService) returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
                 return new AppointmentsResult.SupplierSystemUnavailable();
             }
             
             try
             {
-                var updateUserSessionTask = UpdateUserSessionBookingReasonNecessity(userSession, response);
-
-                var result = new AppointmentsResult.SuccessfullyRetrieved(_responseMapper.Map(response.Body));
-
-                await updateUserSessionTask;
-                return result;
+                return new AppointmentsResult.SuccessfullyRetrieved(_responseMapper.Map(response.Body));
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Something went wrong during building the response.");
                 return new AppointmentsResult.InternalServerError();
             }
-        }
-
-        private async Task UpdateUserSessionBookingReasonNecessity(VisionUserSession userSession,
-            VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
-        {
-            userSession.AppointmentBookingReasonNecessity = response.Body.Appointments.Settings.BookingReason.Add
-                ? Necessity.Optional
-                : Necessity.NotAllowed;
-            await _sessionCacheService.UpdateUserSession(userSession);
         }
     }
 }

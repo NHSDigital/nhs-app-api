@@ -6,7 +6,7 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
-import utils.SerenityHelpers
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory

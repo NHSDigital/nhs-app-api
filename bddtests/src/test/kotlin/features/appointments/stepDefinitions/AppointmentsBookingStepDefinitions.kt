@@ -109,9 +109,9 @@ class AppointmentsBookingStepDefinitions {
         factory.generateSuccessfulBookingResponse(symptomsToEnter)
     }
 
-    @Given("^there are (.*) appointments available to book where booking reason option is set not required$")
-    fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetRequired(gpSystem: String) {
-        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+    @Given("^there are EMIS appointments available to book where booking reason option is set not required$")
+    fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetRequired() {
+        val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.NOT_ALLOWED)
         factory.generateSuccessfulBookingResponseEmptyReason()
     }

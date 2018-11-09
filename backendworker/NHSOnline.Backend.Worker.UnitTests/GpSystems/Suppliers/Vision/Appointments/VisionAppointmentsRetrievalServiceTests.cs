@@ -8,7 +8,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments;
@@ -27,7 +26,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         private VisionUserSession _userSession;
         private VisionAppointmentsRetrievalService _systemUnderTest;
         private VisionResponse<BookedAppointmentsResponse> _visionClientGetResponse;
-        private SessionCacheService _sessionCacheService;
         
         [TestInitialize]
         public void TestInitialize()
@@ -37,11 +35,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _userSession.IsAppointmentsEnabled = true;
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<BookedAppointmentsResponse>>();
-            _sessionCacheService = _fixture.Create<SessionCacheService>();
 
             _userSession.IsAppointmentsEnabled = true;
-
-            var response = GetVisionResponse(_visionClientGetResponse);
+            
+            var response = new VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
+            {
+                RawResponse = new VisionResponseEnvelope<BookedAppointmentsResponse>
+                {
+                    Body = new VisionResponseBody<BookedAppointmentsResponse>
+                    {
+                        VisionResponse = _visionClientGetResponse
+                    }
+                }
+            };
             
             MockVisionClientAppointmentsGetMethod(response);
             
@@ -50,8 +56,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _systemUnderTest = new VisionAppointmentsRetrievalService(
                 _fixture.Create<ILogger<VisionAppointmentsRetrievalService>>(),
                 _mockVisionClient.Object,
-                _mockBookedAppointmentsResponseMapper.Object,
-                _sessionCacheService);
+                _mockBookedAppointmentsResponseMapper.Object);
         }
         
         [TestMethod]
@@ -130,46 +135,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             result.Should().BeAssignableTo<AppointmentsResult.InternalServerError>();
         }
 
-        [DataTestMethod]
-        [DataRow(true, Necessity.Optional)]
-        [DataRow(false, Necessity.NotAllowed)]
-        public async Task GetAppointments_HappyPath_AppointmentBookingReasonNecessitySet(bool allowReason,
-            Necessity expectedNecessity)
-        {
-            // Arrange
-            _visionClientGetResponse.ServiceContent.Appointments.Settings.BookingReason.Add = allowReason;
-            var visionResponse = GetVisionResponse(_visionClientGetResponse);
-
-            MockVisionClientAppointmentsGetMethod(visionResponse);
-
-            // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
-
-            // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>();
-
-            _userSession.AppointmentBookingReasonNecessity.Should().Be(expectedNecessity);
-        }
-
-        private static VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> GetVisionResponse(
-            VisionResponse<BookedAppointmentsResponse> bookedAppointments)
-        {
-            return new VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
-            {
-                RawResponse = new VisionResponseEnvelope<BookedAppointmentsResponse>
-                {
-                    Body = new VisionResponseBody<BookedAppointmentsResponse>
-                    {
-                        VisionResponse = bookedAppointments
-                    }
-                }
-            };
-        }
-
         private void MockVisionClientAppointmentsGetMethod(
             VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {   
-            _mockVisionClient.Reset();
             _mockVisionClient.Setup(x => x.GetExistingAppointments(
                     _userSession
                     ))

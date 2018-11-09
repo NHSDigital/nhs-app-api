@@ -10,8 +10,6 @@ import mocking.vision.models.appointments.References
 import mocking.vision.models.appointments.Slot
 import mocking.vision.models.appointments.SlotType
 import mocking.vision.models.appointments.Slots
-import mocking.vision.models.appointments.BookingReason
-import mocking.emis.practices.NecessityOption
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import java.time.LocalDateTime
@@ -98,15 +96,6 @@ class GeneralAppointmentsHelper {
                 visionReasons.add(visionReason)
             }
             return CancellationReasons(visionReasons)
-        }
-
-        fun extractVPBookingReasonsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade)
-                : BookingReason {
-            val addReason = slotsResponseFacade.bookingReasonNecessityOption == NecessityOption.OPTIONAL
-
-            return BookingReason(
-                    add = addReason
-            )
         }
 
         fun convertDateToVisionTime(time: String): String {

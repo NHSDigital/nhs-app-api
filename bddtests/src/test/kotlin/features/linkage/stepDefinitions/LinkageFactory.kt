@@ -1,7 +1,7 @@
 package features.linkage.stepDefinitions
 
 import features.linkage.LinkageResult
-import utils.SerenityHelpers
+import features.sharedSteps.SerenityHelpers
 import features.sharedSteps.SupplierSpecificFactory
 import mockingFacade.linkage.LinkageInformationFacade
 import org.junit.Assert

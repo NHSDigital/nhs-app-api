@@ -8,7 +8,6 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments;
@@ -38,7 +37,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             _userSession = _fixture.Create<VisionUserSession>();
             _userSession.IsAppointmentsEnabled = true;
-            _userSession.AppointmentBookingReasonNecessity = Necessity.Optional;
 
             _systemUnderTest = _fixture.Create<VisionAppointmentsService>();
 
@@ -182,19 +180,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             // Assert
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
-        }
-
-        [TestMethod]
-        public async Task Book_BookingReasonNotAllowed_ReturnsBadRequest()
-        {
-            // Arrange
-            _userSession.AppointmentBookingReasonNecessity = Necessity.NotAllowed;
-
-            // Act
-            var result = await _systemUnderTest.Book(_userSession, _request);
-
-            // Assert
-            result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
         }
         
         private void MockVisionClientAppointmentPostMethod(VisionClient.VisionApiObjectResponse<BookAppointmentResponse> response)

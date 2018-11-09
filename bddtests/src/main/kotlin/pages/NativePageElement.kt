@@ -38,7 +38,7 @@ class NativePageElement(
         return if (page.isIOS() && iOSAccessID != null) {
             LOCATOR_STRATEGY_IOS_ACCESSIBILITY
         } else {
-            locatorStrategy()
+            locatorStrategy();
         }
     }
 
@@ -73,9 +73,8 @@ class NativePageElement(
         get() {
         if(page.isIOS())
             return this.nativeElement.text
-
-        return this.element.text
-    }
+            return this.element.text
+        }
 
 
     fun isDisplayed(): Boolean {

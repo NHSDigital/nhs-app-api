@@ -20,7 +20,6 @@ Feature: Book an available appointment slot
       | TPP       |
       | VISION    |
 
-    # Not applicable for VISION
   Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in
@@ -33,6 +32,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user can book an appointment describing symptoms at least 1 character
     Given there are <GP System> appointments available to book with a reason of 1 character
@@ -249,19 +249,13 @@ Feature: Book an available appointment slot
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking confirmation screen is displayed
 
-  @NHSO-2760
-  @NHSO-2860
-  Scenario Outline: An <GP System> user sees no booking symptoms text box displayed if practice settings disallow booking reasons
-    Given there are <GP System> appointments available to book where booking reason option is set not required
+  Scenario: An EMIS user sees no booking symptoms text box displayed if practice settings disallow booking reasons
+    Given there are EMIS appointments available to book where booking reason option is set not required
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     And I don't see option to type in booking reason
-  Examples:
-    | GP System |
-    | EMIS      |
-    | VISION    |
 
   Scenario: An EMIS user on Old EMIS Systme reached maximum appointment booking limit
     Given  there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit

@@ -9,7 +9,7 @@ import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import utils.SerenityHelpers
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney

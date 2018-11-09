@@ -5,7 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.appointments.factories.AppointmentsBookingBackendFactory
 import features.sharedStepDefinitions.backend.AbstractSteps
-import utils.SerenityHelpers
+import features.sharedSteps.SerenityHelpers
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient

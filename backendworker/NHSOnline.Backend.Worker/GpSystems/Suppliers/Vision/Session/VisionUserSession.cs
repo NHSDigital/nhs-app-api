@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 {
@@ -20,8 +20,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
         public bool IsAppointmentsEnabled { get; set; } = true;
 
         public bool AllowFreeTextPrescriptions { get; set; }
-
-        public Necessity AppointmentBookingReasonNecessity { get; set; } = Necessity.Optional;
 
         public List<string> OwnerIds { get; set; }
 

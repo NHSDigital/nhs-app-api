@@ -2,7 +2,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
@@ -32,12 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                     _logger.LogError("Appointments not enabled");
                     return new AppointmentBookResult.InsufficientPermissions();
                 }
-
-                if (ReasonWillNotBeAccepted(visionUserSession, request))
-                {
-                    return new AppointmentBookResult.BadRequest();
-                }
-
+                
                 var bookAppointmentRequest = new BookAppointmentRequest(visionUserSession, request);
                 
                 var response = await _visionClient.BookAppointment(
@@ -79,17 +73,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             _logger.LogError($"Call to VISION book appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
 
             return new AppointmentBookResult.SupplierSystemUnavailable();
-        }
-
-        private bool ReasonWillNotBeAccepted(VisionUserSession visionUserSession, AppointmentBookRequest request)
-        {
-            if (!string.IsNullOrEmpty(request.BookingReason) &&
-                visionUserSession.AppointmentBookingReasonNecessity == Necessity.NotAllowed)
-            {
-                _logger.LogError($"Booking reason '{request.BookingReason}' provided but is not allowed");
-                return true;
-            }
-            return false;
         }
     }
 }

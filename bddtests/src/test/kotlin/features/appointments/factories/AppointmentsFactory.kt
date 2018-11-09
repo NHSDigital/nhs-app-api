@@ -1,6 +1,6 @@
 package features.appointments.factories
 
-import utils.SerenityHelpers
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
