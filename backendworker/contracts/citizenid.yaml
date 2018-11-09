@@ -105,6 +105,17 @@ paths:
           description: Patient's NHS Number.
           required: True
         - in: header
+          name: NHSO-Surname
+          type: string
+          description: Patient's surname.
+          required: True
+        - in: header
+          name: NHSO-Date-Of-Birth
+          type: string
+          format: date
+          description: Patient's Date of Birth.
+          required: True
+        - in: header
           name: NHSO-Identity-Token
           type: string
           description: Token to uniquely identify the patient at their current practice within the Citizen ID platform.
@@ -227,6 +238,13 @@ definitions:
       nhsNumber:
         type: string
         description: Patient's NHS Number.
+      surname:
+        type: string
+        description: Patient's Surname.
+      dateOfBirth:
+        type: string
+        format: date
+        description: Patient's Date of Birth.
       IdentityToken:
         type: string
         description: Token to uniquely identify the patient at their current practice within the Citizen ID platform.

@@ -82,5 +82,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             return _serviceProvider.GetService<EmisLinkageService>();
         }
+
+        public ILinkageRequestValidationService GetLinkageRequestValidationService()
+        {
+            return _serviceProvider.GetService<EmisLinkageRequestValidationService>();
+        }
     }
 }

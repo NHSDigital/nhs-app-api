@@ -228,14 +228,7 @@ data class Patient(
                         "49ODQzz4y+Cu2xOxLaehq/SjEIwfls" +
                         "WeSwCvCAxroId1bXejTdNsV17fOAD0" +
                         "M5nAZF6X9TysOfRR/j5tuR+o=",
-                connectionToken = "{\"accountId\":\"52099308" +
-                        "3\",\"passphrase\":\"c2ax" +
-                        "hQ9VWB2/62XFxvKrNKh9JwgLk0" +
-                        "NFY15hIdI6aRytptqiBs6r/k+0O" +
-                        "vGEZfcEdMLJEMp/J4pkOGm2ViaSL" +
-                        "ca49ODQzz4y+Cu2xOxLaehq/SjEI" +
-                        "wflsWeSwCvCAxroId1bXejTdNsV17" +
-                        "fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
+                connectionToken = TppMockDefaults.DEFAULT_TPP_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 tppUserSession = TppUserSession("ZT8wLjK6beFO" +
                         "dXoiNIHbD+TbPrl0Y3Km" +
@@ -244,7 +237,9 @@ data class Patient(
                         "W5IdGtaWtahGkv" +
                         "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD" +
                         "4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
-                        "84df400000000000", "KGPD", "84df400000000000")
+                        "84df400000000000",
+                        TppMockDefaults.DEFAULT_ODS_CODE_TPP,
+                        "84df400000000000")
         )
 
         ////////// VISION PATIENTS /////////////

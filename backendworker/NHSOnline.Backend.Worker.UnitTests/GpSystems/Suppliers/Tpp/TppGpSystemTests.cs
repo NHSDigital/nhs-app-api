@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
@@ -12,6 +13,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
@@ -30,7 +32,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         
         private ILogger<TppCourseService> _tppCourseLogger;
         private ILogger<TppPrescriptionService> _tppPrescriptionLogger;
-        
+        private IRegistrationCacheService _registrationCacheService;
+        private IRegistrationGuidKeyGenerator _registrationGuidGenerator;
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -42,6 +46,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _loggerFactory = new Mock<ILoggerFactory>().Object;
             _tppDemographicsMapper = new Mock<ITppDemographicsMapper>().Object;
             _tppMyRecordMapper = new Mock<ITppMyRecordMapper>().Object;
+            _registrationCacheService = new Mock<IRegistrationCacheService>().Object;
+            _registrationGuidGenerator = new Mock<IRegistrationGuidKeyGenerator>().Object;
             
             _tppCourseLogger = Mock.Of<ILogger<TppCourseService>>();
             _tppPrescriptionLogger = Mock.Of<ILogger<TppPrescriptionService>>();
@@ -122,7 +128,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetIm1ConnectionService_WhenCalled_ReturnsTppIm1ConnectionService()
         {
-            var service = new TppIm1ConnectionService(_tppClient, _loggerFactory.CreateLogger<TppIm1ConnectionService>());
+            var service = new TppIm1ConnectionService(_tppClient, _registrationCacheService, 
+                _registrationGuidGenerator, _loggerFactory.CreateLogger<TppIm1ConnectionService>());
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppIm1ConnectionService)))
                 .Returns(service);
@@ -167,6 +174,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
                 .Returns(service);
 
             _systemUnderTest.GetTokenValidationService().Should().Be(service);
+        }
+        
+        [TestMethod]
+        public void GetLinkageRequestValidationService_WhenCalled_ReturnsTppLinkageRequestValidationService()
+        {
+            var logger = Mock.Of<ILogger<TppLinkageRequestValidationService>>();
+            var service = new TppLinkageRequestValidationService(logger);
+            _mockServiceProvider
+                .Setup(x => x.GetService(typeof(TppLinkageRequestValidationService)))
+                .Returns(service);
+
+            _systemUnderTest.GetLinkageRequestValidationService().Should().Be(service);
         }
     }
 }

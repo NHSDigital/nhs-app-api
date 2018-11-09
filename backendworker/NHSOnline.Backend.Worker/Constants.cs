@@ -28,6 +28,8 @@
             public const string ConnectionToken = NhsoPrefix + "Connection-Token";
             public const string OdsCode = NhsoPrefix + "ODS-Code";
             public const string NhsNumber = NhsoPrefix + "Nhs-Number";
+            public const string Surname = NhsoPrefix + "Surname";
+            public const string DateOfBirth = NhsoPrefix + "Date-Of-Birth";
             public const string IdentityToken = NhsoPrefix + "Identity-Token";
         }
 
@@ -85,6 +87,16 @@
         public static class Regex
         {
             public const string GuidRegex = @"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}";
+        }
+
+        public static class CacheIdentifiers
+        {
+            public const string LinkagePrefix = "AccessToken:";
+        }
+
+        public static class TppConstants
+        {
+            public const string LinkageKey = "ikjkbnKSJDFV872345%/";
         }
     }
 }

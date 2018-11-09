@@ -48,6 +48,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             // Arrange
             var addVerificationResponse = _fixture.Create<AddVerificationResponse>();
             var nhsNumber = _fixture.Create<string>();
+            var surname = _fixture.Create<string>();
+            var dateOfBirth = _fixture.Create<DateTime>();
             var odsCode = _fixture.Create<string>();
             var identityToken = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
@@ -69,8 +71,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
                         Body = addVerificationResponse,
                     }));
 
+            var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode,identityToken);
+
             // Act
-            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode, identityToken);
+            var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
             _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
@@ -90,6 +94,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             // Arrange
             var addVerificationResponse = _fixture.Create<AddVerificationResponse>();
             var nhsNumber = _fixture.Create<string>();
+            var surname = _fixture.Create<string>();
+            var dateOfBirth = _fixture.Create<DateTime>();
             var odsCode = _fixture.Create<string>();
             var identityToken = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
@@ -110,9 +116,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
                     {
                         Body = addVerificationResponse,
                     }));
+            
+            var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode,identityToken);
 
             // Act
-            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode, identityToken);
+            var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
             _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
@@ -140,6 +148,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             // Arrange
             var nhsNumber = _fixture.Create<string>();
             var odsCode = _fixture.Create<string>();
+            var surname = _fixture.Create<string>();
+            var dateOfBirth = _fixture.Create<DateTime>();
             var identityToken = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
 
@@ -169,9 +179,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
                     req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
                     req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
                     .ReturnsAsync(mockResponse);
+            
+            var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode,identityToken);
 
             // Act
-            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode, identityToken);
+            var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
             _emisClient.Verify(x => x.VerificationPost(
@@ -190,6 +202,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
         {
             // Arrange
             var nhsNumber = _fixture.Create<string>();
+            var surname = _fixture.Create<string>();
+            var dateOfBirth = _fixture.Create<DateTime>();
             var odsCode = _fixture.Create<string>();
             var identityToken = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
@@ -207,9 +221,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
                 req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
+            
+            var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode,identityToken);
 
             // Act
-            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode, identityToken);
+            var result = await _systemUnderTest.GetLinkageKey(request);
 
             // Assert
             result.Should().BeAssignableTo<LinkageResult.SupplierSystemUnavailable>();
@@ -260,7 +276,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
                 .Returns(key).Verifiable();
 
             
-            _mockRegistrationCacheService.Setup(x => x.CreateRegistrationGuid(key, addNhsUserResponse.AccessIdentityGuid))
+            _mockRegistrationCacheService.Setup(x => x.CreateRegistrationToken(key, addNhsUserResponse.AccessIdentityGuid))
                 .Returns(Task.FromResult(
                     "Encrypted key"
                 )).Verifiable();
@@ -276,7 +292,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             successResult.Response.Should().NotBeNull();
             successResult.Response.OdsCode.Should().Be(createLinkageRequest.OdsCode);
             _mockRegistrationGuidKeyGenerator.Verify();
-            _mockRegistrationCacheService.Verify(x => x.CreateRegistrationGuid(key, addNhsUserResponse.AccessIdentityGuid));
+            _mockRegistrationCacheService.Verify(x => x.CreateRegistrationToken(key, addNhsUserResponse.AccessIdentityGuid));
         }
 
         [TestMethod]
@@ -389,6 +405,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             // Assert
             result.Should().BeAssignableTo<LinkageResult.SupplierSystemUnavailable>();
             _emisClient.Verify();
+        }
+
+        private GetLinkageRequest CreateGetLinkageRequest(string nhsNumber, string surname, DateTime dateOfBirth,
+            string odsCode, string identityToken)
+        {
+            var getLinkageRequest = new GetLinkageRequest()
+            {
+                NhsNumber = nhsNumber,
+                Surname = surname,
+                DateOfBirth = dateOfBirth,
+                OdsCode = odsCode,
+                IdentityToken = identityToken
+            };
+
+            return getLinkageRequest;
         }
     }
 }

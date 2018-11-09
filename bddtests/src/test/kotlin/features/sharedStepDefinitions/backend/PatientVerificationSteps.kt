@@ -41,7 +41,9 @@ class PatientVerificationSteps : AbstractSteps() {
     fun givenIHaveAnImConnectionTokenThatDoesNotExist(gpSystem: String) {
         when (gpSystem) {
             TPP -> {
-                val nonExistingConnectionToken = "{\"accountid\":\"999999999\",\"passphrase\":\"nonexistingpassword\"}"
+                val nonExistingConnectionToken = "{\"accountid\":\"999999999\"" +
+                        ",\"passphrase\":\"nonexistingpassword\"" +
+                        ",\"providerId\":\"${TppMockDefaults.DEFAULT_ODS_CODE_TPP}\" }"
 
                 val tppNonExistingAccountIdErrorResponse = Error(
                         errorCode = "9",
@@ -193,7 +195,7 @@ class PatientVerificationSteps : AbstractSteps() {
                         title = "Mr",
                         firstName = "Kevin",
                         surname = "Barry",
-                        connectionToken = "{\"accountId\": \"520993083\", \"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
+                        connectionToken = TppMockDefaults.DEFAULT_TPP_CONNECTION_TOKEN,
                         odsCode = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                         endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                         nhsNumbers = listOf("5785445875"),
@@ -209,12 +211,12 @@ class PatientVerificationSteps : AbstractSteps() {
                         apiVersion = "1",
                         accountId = patient.accountId,
                         passphrase = patient.passphrase,
-                        unitId = "KGPD",
+                        unitId = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                         uuid = "af0a8175-e6c2-4c49-883e-020b2b3600f9",
                         application = Application(
                                 name = "NhsApp",
                                 version = "1.0",
-                                providerId = "b891fc3b51d5e7c1",
+                                providerId = TppMockDefaults.DEFAULT_TPP_PROVIDER_ID,
                                 deviceType = "NhsApp"
                         )
                 )
@@ -350,7 +352,8 @@ class PatientVerificationSteps : AbstractSteps() {
         val odsCode = sessionVariableCalled<String>("NationalPracticeCode")
 
         try {
-            val result = sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication.getIm1Connection(connectionToken, odsCode)
+            val result = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .authentication.getIm1Connection(connectionToken, odsCode)
             setSessionVariable(Im1ConnectionResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             setSessionVariable("HttpException").to(httpException)

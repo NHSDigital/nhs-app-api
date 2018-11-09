@@ -3,21 +3,21 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 
-namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
+namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Linkage
 {
     [TestClass]
-    public class EmisRegistrationGuidKeyGeneratorTests
+    public class RegistrationGuidKeyGeneratorTests
     {
-        private EmisRegistrationGuidKeyGenerator _systemUnderTest;
+        private RegistrationGuidKeyGenerator _systemUnderTest;
         private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _systemUnderTest = _fixture.Create<EmisRegistrationGuidKeyGenerator>();
+            _systemUnderTest = _fixture.Create<RegistrationGuidKeyGenerator>();
         }
         
         [TestMethod]

@@ -80,22 +80,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Models
             _validationResults.Single().MemberNames.Should().BeEquivalentTo("OdsCode");
         }
 
-//        TODO: Re-add when we get valid test data in TTP  
-//        [DataTestMethod]
-//        [DataRow("ABCDEFGHJKH")]  // more than 8 characters
-//        public void PatientIm1ConnectionValidation_OdsCode_InvalidFormats(string odsCode)
-//        {
-//            // Arrange
-//            _sut.OdsCode = odsCode;
-//
-//            // Act
-//            var valid = Validator.TryValidateObject(_sut, _context, _validationResults, true);
-//
-//            // Assert
-//            valid.Should().BeFalse();
-//            _validationResults.Count.Should().Be(1);
-//            _validationResults.Single().MemberNames.Should().BeEquivalentTo("OdsCode");
-//        }
+        [DataTestMethod]
+        [DataRow("ABCDEFGHJKH")]  // more than 8 characters
+        public void PatientIm1ConnectionValidation_OdsCode_InvalidFormats(string odsCode)
+        {
+            // Arrange
+            _sut.OdsCode = odsCode;
+            
+            // Act
+            var valid = Validator.TryValidateObject(_sut, _context, _validationResults, true);
+
+            // Assert
+            valid.Should().BeFalse();
+            _validationResults.Count.Should().Be(1);
+            _validationResults.Single().MemberNames.Should().BeEquivalentTo("OdsCode");
+        }
 
         [DataTestMethod]
         [DataRow(null)]

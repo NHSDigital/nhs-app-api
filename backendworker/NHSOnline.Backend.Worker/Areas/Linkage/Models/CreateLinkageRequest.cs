@@ -1,3 +1,5 @@
+using System;
+
 namespace NHSOnline.Backend.Worker.Areas.Linkage.Models
 {
     public class CreateLinkageRequest
@@ -9,5 +11,9 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage.Models
         public string IdentityToken { get; set; }
 
         public string EmailAddress { get; set; }
+        
+        public DateTime? DateOfBirth { get; set; }
+        
+        public string Surname { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
@@ -78,11 +79,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return _serviceProvider.GetService<TppTokenValidationService>();
         }
         
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
         public ILinkageService GetLinkageService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<TppLinkageService>();
+        }
+
+        public ILinkageRequestValidationService GetLinkageRequestValidationService()
+        {
+            return _serviceProvider.GetService<TppLinkageRequestValidationService>();
         }
     }
 }

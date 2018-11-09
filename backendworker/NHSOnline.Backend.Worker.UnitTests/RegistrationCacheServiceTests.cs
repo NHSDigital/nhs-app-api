@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             string redisValue = null;
 
             const string encryptedKey = "encrypted_string";
-            const string prefix = "AccessGuid:";
+            const string prefix = Constants.CacheIdentifiers.LinkagePrefix;
             
             _hashingService.Setup(
                 x => x.Hash(passedKey)).Returns(encryptedKey);
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             var systemUnderTest = new RegistrationCacheService(_connectionMultiplexerFactory.Object, _settings.Object, _logger, _hashingService.Object);
             
             // Act
-            var result = await systemUnderTest.CreateRegistrationGuid(passedKey, passedValue);
+            var result = await systemUnderTest.CreateRegistrationToken(passedKey, passedValue);
             
             // Assert
             _database.Verify();
@@ -96,7 +96,32 @@ namespace NHSOnline.Backend.Worker.UnitTests
             redisValue.Should().NotBeNullOrEmpty();
             redisValue.Should().NotBeSameAs(registrationValueJson);
         }
-        
+
+        // Successful response cannot be tested in unit test because the redis values 
+        // cannot be mocked, or created with values.
+
+        [TestMethod]
+        public async Task GetRegistrationToken_Guid_NotFoundInRedis()
+        {
+
+            var guid = Guid.NewGuid();
+            var key = guid.ToString();
+
+            _hashingService.Setup(x => x.Hash(key)).Returns(key);
+
+            _database.Setup(x => x.StringGetWithExpiryAsync(key, CommandFlags.None))
+                .ReturnsAsync(null);
+            
+            var systemUnderTest = new RegistrationCacheService(
+                _connectionMultiplexerFactory.Object, 
+                _settings.Object,
+                _logger, _hashingService.Object);
+
+            var result = await systemUnderTest.GetRegistrationToken<Guid>(key);
+
+            result.HasValue.Should().Be(false);
+        }
+
         [TestMethod]
         public async Task DeleteRegistrationGuid_SessionIsDeletedFromRedis()
         {
@@ -104,7 +129,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             string redisKey = "test";
             
             const string encryptedKey = "encrypted_string";
-            const string prefix = "AccessGuid:";
+            const string prefix = Constants.CacheIdentifiers.LinkagePrefix;
             
             _hashingService.Setup(
                 x => x.Hash(redisKey)).Returns(encryptedKey);
@@ -120,7 +145,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             var systemUnderTest = new RegistrationCacheService(_connectionMultiplexerFactory.Object, _settings.Object, _logger, _hashingService.Object);
             
             // Act
-            var result = await systemUnderTest.DeleteRegistrationGuid(redisKey);
+            var result = await systemUnderTest.DeleteRegistrationToken(redisKey);
             
             // Assert
             _database.Verify();

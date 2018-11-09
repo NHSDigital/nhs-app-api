@@ -83,6 +83,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         {
             throw new NotImplementedException();
         }
+        
+        [SuppressMessage("Microsoft.Naming", "CA1024", 
+            Justification = "Remove this suppression when method has been implemented.")]
+        public ILinkageRequestValidationService GetLinkageRequestValidationService()
+        {
+            throw new NotImplementedException();
+        }
 
         [SuppressMessage("Microsoft.Naming", "CA1024", 
             Justification = "Remove this suppression when method has been implemented.")]

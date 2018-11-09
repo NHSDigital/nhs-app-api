@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -119,12 +120,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 _logger.LogInformation("Checking Cache for AccessIdentityGuid");
                 var key = _emisRegistrationGuidKeyGenerator.GenerateRegistrationKey(
                     request.AccountId, request.OdsCode, request.LinkageKey);
-                var cachedGuid = await _registrationCacheService.GetRegistrationGuid(key);
-
-                if (cachedGuid.HasValue)
+                var cachedGuidOption = await _registrationCacheService.GetRegistrationToken<Guid>(key);
+            
+                if (cachedGuidOption.HasValue)
                 {
                     _logger.LogInformation("AccessIdentityGuid found in cache.");
-                    accessIdentityGuid = cachedGuid.ValueOrFailure();
+                    accessIdentityGuid = cachedGuidOption.ValueOrFailure().ToString();
                 }
                 else
                 {                    
@@ -183,7 +184,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     }
                     accessIdentityGuid = meApplicationsResponse.Body.AccessIdentityGuid;
                 }
-
                 
                 var sessionPostRequestModel = new SessionsPostRequest
                 {

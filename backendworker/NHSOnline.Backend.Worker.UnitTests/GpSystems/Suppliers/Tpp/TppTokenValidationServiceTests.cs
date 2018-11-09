@@ -43,42 +43,56 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsMissingPassphrase()
         {
-            _invalidConnectionToken = "{\"accountId\":\"account_id\"}";
+            _invalidConnectionToken = "{\"accountId\":\"account_id\",\"providerId\":\"providerId\"}";
             _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
-        
+
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsMissingAccountId()
         {
-            _invalidConnectionToken = "{\"passphrase\":\"passphrase\"}";
+            _invalidConnectionToken = "{\"passphrase\":\"passphrase\",\"providerId\":\"providerId\"}";
             _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
-        
+
+        [TestMethod]
+        public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsMissingProviderId()
+        {
+            _invalidConnectionToken = "{\"passphrase\":\"passphrase\",\"accountId\":\"account_id\"}";
+            _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
+        }
+
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenPassphraseIsEmpty()
         {
-            _invalidConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"\"}";
+            _invalidConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"\",\"providerId\":\"providerId\"}";
             _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
-        
+
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenAccountIdIsEmpty()
         {
-            _invalidConnectionToken = "{\"accountId\":\"\",\"passphrase\":\"\"}";
+            _invalidConnectionToken = "{\"accountId\":\"\",\"passphrase\":\"\",\"providerId\":\"providerId\"}";
+            _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenProviderIdIsEmpty()
+        {
+            _invalidConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"passphrase\",\"providerId\":\"\"}";
             _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsTrue_WhenTokenIsInAJsonStringFormat()
         {
-            _validConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"passphrase\"}";
+            _validConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"passphrase\",\"providerId\":\"provder_id\"}";
             _sut.IsValidConnectionTokenFormat(_validConnectionToken).Should().BeTrue();
         }
         
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsTrue_WhenTokenIsInAJsonCamelCaseStringFormat()
         {
-            _validConnectionToken = "{\"AccountId\":\"account_id\",\"Passphrase\":\"passphrase\"}";
+            _validConnectionToken = "{\"AccountId\":\"account_id\",\"Passphrase\":\"passphrase\",\"ProviderId\":\"provder_id\"}";
             _sut.IsValidConnectionTokenFormat(_validConnectionToken).Should().BeTrue();
         }
     }

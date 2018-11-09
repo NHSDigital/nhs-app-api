@@ -3,14 +3,17 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 {
-    [Serializable]
-    public class LinkAccountReply
+    [XmlType(TypeName = "LinkAccountReply")]
+    public class AddNhsUserResponse
     {
         [XmlAttribute("passphrase")]
         public string Passphrase { get; set; }
 
         [XmlAttribute("uuid")]
         public Guid Uuid { get; set; }
+        
+        [XmlAttribute("accountId")]
+        public string AccountId { get; set; }
         
         public string ProviderId { get; set; }
     }

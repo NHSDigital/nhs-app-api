@@ -33,6 +33,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                 {
                     AccountId = tppToken.AccountId,
                     Passphrase = tppToken.Passphrase,
+                    ProviderId = tppToken.ProviderId,
                     UnitId = odsCode
                 };
 

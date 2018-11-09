@@ -33,5 +33,7 @@ namespace NHSOnline.Backend.Worker.GpSystems
         IPatientRecordService GetPatientRecordService();
 
         ILinkageService GetLinkageService();
+
+        ILinkageRequestValidationService GetLinkageRequestValidationService();
     }
 }

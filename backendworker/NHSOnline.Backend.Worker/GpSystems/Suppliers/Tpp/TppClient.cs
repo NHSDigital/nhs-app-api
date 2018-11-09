@@ -43,6 +43,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {   
             var response = await Post<LinkAccount, LinkAccountReply>(linkAccountModel);
 
+            if (response.Body != null)
+            {
+                response.Body.ProviderId = linkAccountModel.Application.ProviderId;
+            }
+
             return response;
         }
         
@@ -52,7 +57,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
                 Name = _tppConfig.ApplicationName,
                 Version = _tppConfig.ApplicationVersion,
-                ProviderId = _tppConfig.ApplicationProviderId,
+                ProviderId = authenticate.ProviderId,
                 DeviceType = _tppConfig.ApplicationDeviceType
             };
             
@@ -164,7 +169,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             _logger.LogDebug("Exiting: {0}", methodName); 
             return response;
         }
-        
+
+        public async Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest)
+        {
+            var response = await Post<AddNhsUserRequest, AddNhsUserResponse>(addNhsUserRequest);
+
+            if (response.Body != null)
+            {
+                response.Body.ProviderId = addNhsUserRequest.Application.ProviderId;
+            }
+
+            return response;
+        }
+
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
         {
             model.ApplyConfig(_tppConfig);
@@ -342,6 +359,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
             public TBody Body { get; set; }
             public Dictionary<string, string> Headers { get; set; }
+
+            public string ErrorForLogging()
+            {
+                return $"Error Code: '{ErrorResponse?.ErrorCode}'. " +
+                       $"Error User Message:'{ErrorResponse?.UserFriendlyMessage}'. " +
+                       $"Error Technical Response:'{ErrorResponse?.TechnicalMessage}'.";
+            }
         }
     }
 }

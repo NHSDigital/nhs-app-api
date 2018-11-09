@@ -245,11 +245,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
                     It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(key);
 
-            const string registrationGuid = "ACCESS_GUID";
-            _mockRegistrationCacheService.Setup(x => x.GetRegistrationGuid(key))
-                .Returns(Task.FromResult(
-                    Option.Some(registrationGuid)
-                    ));
+            var registrationGuid = Guid.NewGuid();
+            _mockRegistrationCacheService.Setup(x => x.GetRegistrationToken<Guid>(key))
+                .Returns(Task.FromResult(Option.Some(registrationGuid)));
             
             
             var sessionResponse = _fixture.Create<SessionsPostResponse>();

@@ -1,9 +1,9 @@
 ﻿using System;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
+namespace NHSOnline.Backend.Worker.GpSystems.Linkage
 {
-    public class EmisRegistrationGuidKeyGenerator : IRegistrationGuidKeyGenerator
+    public class RegistrationGuidKeyGenerator : IRegistrationGuidKeyGenerator
     {
         public string GenerateRegistrationKey(string accountId, string odsCode, string linkageKey)
         {

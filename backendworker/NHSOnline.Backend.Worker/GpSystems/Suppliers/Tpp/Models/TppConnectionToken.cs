@@ -4,5 +4,6 @@
     {
         public string AccountId { get; set; }
         public string Passphrase { get; set; }
+        public string ProviderId { get; set; }
     }
 }

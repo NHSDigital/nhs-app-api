@@ -48,6 +48,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _configMock.SetupGet(x => x.ApplicationName).Returns(ApplicationName);
             _configMock.SetupGet(x => x.ApplicationVersion).Returns(ApplicationVersion);
             _configMock.SetupGet(x => x.ApplicationProviderId).Returns(ApplicationProviderId);
+            _configMock.SetupGet(x => x.ApplicationProviderId).Returns(ApplicationProviderId);
             _configMock.SetupGet(x => x.ApplicationDeviceType).Returns(ApplicationDeviceType);
             _configMock.SetupGet(x => x.ApiUrl).Returns(ApiUrl);
             _configMock.SetupGet(x => x.ApiVersion).Returns(ApiVersion);
@@ -72,7 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             {
                 Name = _configMock.Object.ApplicationName,
                 Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
+                ProviderId = authenticateRequestModel.ProviderId,
                 DeviceType = _configMock.Object.ApplicationDeviceType
             };
 
@@ -114,7 +115,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             {
                 Name = _configMock.Object.ApplicationName,
                 Version = _configMock.Object.ApplicationVersion,
-                ProviderId = _configMock.Object.ApplicationProviderId,
+                ProviderId = authenticateRequestModel.ProviderId,
                 DeviceType = _configMock.Object.ApplicationDeviceType
             };
 
@@ -220,6 +221,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             linkRequestModel.ApplyConfig(_configMock.Object);
             
             var expectedLinkAccountResponse = _fixture.Create<LinkAccountReply>();
+            expectedLinkAccountResponse.ProviderId = _configMock.Object.ApplicationProviderId;
 
             var requestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -298,6 +300,98 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
                 .Respond(value);
 
             var response = await _sut.LinkAccountPost(linkAccountRequestModel);
+
+            response.StatusCode.Should().Be(value);
+            response.HasSuccessResponse.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public async Task NhsUserPostRequest_ReturnsAddNhsUserReply_WhenValidlyRequested()
+        {
+            var addNhsUserRequestModel = _fixture.Create<AddNhsUserRequest>();
+            addNhsUserRequestModel.OrganisationCode = UnitId;
+            addNhsUserRequestModel.ApplyConfig(_configMock.Object);
+            
+            var expectedLinkAccountResponse = _fixture.Create<AddNhsUserResponse>();
+            expectedLinkAccountResponse.ProviderId = _configMock.Object.ApplicationProviderId;
+
+            var requestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, addNhsUserRequestModel.RequestType)
+            };
+
+            var responseHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.ResponseSuidHeader, Suid)
+            };
+            
+            var responseContent = new StringContent(expectedLinkAccountResponse.SerializeXml());
+            
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(requestHeaders)
+                .WithContent(addNhsUserRequestModel.SerializeXml())
+                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);    
+
+            var response = await _sut.NhsUserPost(addNhsUserRequestModel);
+
+            response.Body.Should().BeEquivalentTo(expectedLinkAccountResponse);
+            response.Headers.Should().BeEquivalentTo(responseHeaders);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().BeNull();
+        }
+        
+        [TestMethod]
+        public async Task NhsUserPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
+        {            
+            var nhsAddUserRequestModel = _fixture.Create<AddNhsUserRequest>();
+            nhsAddUserRequestModel.OrganisationCode = UnitId;
+            nhsAddUserRequestModel.ApplyConfig(_configMock.Object);
+            
+            var expectedErrorResponse = _fixture.Create<Error>();
+
+            var tppRequestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, nhsAddUserRequestModel.RequestType)
+            };
+            
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(tppRequestHeaders)
+                .WithContent(nhsAddUserRequestModel.SerializeXml())
+                .Respond(MediaType, expectedErrorResponse.SerializeXml());
+
+            var response = await _sut.NhsUserPost(nhsAddUserRequestModel);
+
+            response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.Body.Should().BeNull();
+            response.Headers.Should().BeNull();
+        }
+
+        [TestMethod]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.Unauthorized)]
+        [DataRow(HttpStatusCode.NotFound)]
+        public async Task NhsUserPostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
+            HttpStatusCode value)
+        {
+            var addNhsUserRequestModel = _fixture.Create<AddNhsUserRequest>();
+            addNhsUserRequestModel.OrganisationCode = UnitId;
+            addNhsUserRequestModel.ApplyConfig(_configMock.Object);
+
+            var tppRequestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, addNhsUserRequestModel.RequestType)
+            };
+
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(tppRequestHeaders)
+                .Respond(value);
+
+            var response = await _sut.NhsUserPost(addNhsUserRequestModel);
 
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();

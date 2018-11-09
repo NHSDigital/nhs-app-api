@@ -12,9 +12,9 @@ namespace NHSOnline.Backend.Worker
 {
     public interface IRegistrationCacheService
     {
-        Task<string> CreateRegistrationGuid(string key, Guid value);
-        Task<Option<string>> GetRegistrationGuid(string key);
-        Task<bool> DeleteRegistrationGuid(string key);
+        Task<string> CreateRegistrationToken<T>(string key, T value);
+        Task<Option<T>> GetRegistrationToken<T>(string key);
+        Task<bool> DeleteRegistrationToken(string key);
     }
     
     public class RegistrationCacheService : IRegistrationCacheService
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<RegistrationCacheService> _logger;
 
-        private const string Prefix = "AccessGuid:";
+        private const string Prefix = Constants.CacheIdentifiers.LinkagePrefix;
 
         public RegistrationCacheService(
             IConnectionMultiplexerFactory connectionMultiplexerFactory,
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker
             _logger = logger;
         }
         
-        public async Task<string> CreateRegistrationGuid(string key, Guid value)
+        public async Task<string> CreateRegistrationToken<T>(string key, T value)
         {
             var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
             var database = multiplexer.GetDatabase();
@@ -60,27 +60,24 @@ namespace NHSOnline.Backend.Worker
             
         }
 
-        public async Task<Option<string>> GetRegistrationGuid(string key)
+        public async Task<Option<T>> GetRegistrationToken<T>(string key)
         {
             var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
             var database = multiplexer.GetDatabase();
             RedisKey redisKey = Prefix + _hashingService.Hash(key);
             var redisValue = await database.StringGetWithExpiryAsync(redisKey);
-
             if (redisValue.Value.IsNull)
             {
                 _logger.LogDebug("No redis value Found");
-                return Option.None<string>();
+                return Option.None<T>();
             }
 
-            var registrationGuid = JsonConvert
-                .DeserializeObject<string>(redisValue.Value, _serializerSettings);
-           
+            var registrationGuid = JsonConvert.DeserializeObject<T>(redisValue.Value);
+
             return Option.Some(registrationGuid);
-            
         }
 
-        public async Task<bool> DeleteRegistrationGuid(string key)
+        public async Task<bool> DeleteRegistrationToken(string key)
         {
             var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
             var database = multiplexer.GetDatabase();

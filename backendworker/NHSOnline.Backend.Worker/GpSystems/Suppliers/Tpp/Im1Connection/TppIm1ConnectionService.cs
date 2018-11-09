@@ -1,9 +1,9 @@
 ﻿using System.Net.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Extensions;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -13,11 +13,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
     public class TppIm1ConnectionService : IIm1ConnectionService
     {
         private readonly ITppClient _tppClient;
+        private readonly IRegistrationCacheService _registrationCacheService;
+        private readonly IRegistrationGuidKeyGenerator _registrationGuidKeyGenerator;
         private readonly ILogger<TppIm1ConnectionService> _logger;
 
-        public TppIm1ConnectionService(ITppClient tppClient, ILogger<TppIm1ConnectionService> logger)
+        public TppIm1ConnectionService(ITppClient tppClient, IRegistrationCacheService registrationCacheService,
+            IRegistrationGuidKeyGenerator registrationGuidKeyGenerator, ILogger<TppIm1ConnectionService> logger)
         {
             _tppClient = tppClient;
+            _registrationCacheService = registrationCacheService;
+            _registrationGuidKeyGenerator = registrationGuidKeyGenerator;
             _logger = logger;
         }
 
@@ -34,7 +39,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
 
                 if (!authenticateReply.HasSuccessResponse)
                 {
-                    _logger.LogError("Tpp Authentication call failed");
+                    _logger.LogError($"Tpp Authentication call failed - {authenticateReply.ErrorForLogging()}");
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
@@ -76,56 +81,75 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                     Passphrase = request.LinkageKey
                 };
 
-                var linkAccountReply = await _tppClient.LinkAccountPost(linkAccountRequest);
+                _logger.LogInformation("Checking Cache for AccessIdentityGuid");
+                var key = _registrationGuidKeyGenerator.GenerateRegistrationKey(
+                    request.AccountId, request.OdsCode, request.LinkageKey);
+                var connectionTokenOption = await _registrationCacheService.GetRegistrationToken<TppConnectionToken>(key);
 
-                if (linkAccountReply.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidProviderId))
+                TppConnectionToken connectionToken;
+
+                if (connectionTokenOption.HasValue)
                 {
-                    _logger.LogError("Failed LinkAccount request returned with 'InvalidProviderId' error code.");
-                    return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    connectionToken = connectionTokenOption.ValueOrFailure();
+                    _logger.LogInformation("AccessIdentityGuid found in cache.");
                 }
-                
-                if (linkAccountReply.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials))
+                else
                 {
-                    _logger.LogError("Failed LinkAccount request returned with 'InvalidLinkageCredentials' error code.");
-                    return new Im1ConnectionRegisterResult.NotFound();
-                }
-                
-                if (!linkAccountReply.HasSuccessResponse)
-                {
-                    _logger.LogError("Failed LinkAccount request returned without success response.  Unknown Reason.");
-                    return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    var linkAccountReply = await _tppClient.LinkAccountPost(linkAccountRequest);
+
+                    if (linkAccountReply.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidProviderId))
+                    {
+                        _logger.LogError("Failed LinkAccount request returned with 'InvalidProviderId' error code.");
+                        return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    }
+
+                    if (linkAccountReply.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials))
+                    {
+                        _logger.LogError(
+                            "Failed LinkAccount request returned with 'InvalidLinkageCredentials' error code.");
+                        return new Im1ConnectionRegisterResult.NotFound();
+                    }
+
+                    if (!linkAccountReply.HasSuccessResponse)
+                    {
+                        _logger.LogError(
+                            "Failed LinkAccount request returned without success response.  Unknown Reason.");
+                        return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    }
+
+                    connectionToken = new TppConnectionToken()
+                    {
+                        AccountId = linkAccountRequest.AccountId,
+                        Passphrase = linkAccountReply.Body.Passphrase,
+                        ProviderId = linkAccountReply.Body.ProviderId
+                    };
                 }
 
                 var authenticateRequest = new Authenticate
                 {
-                    AccountId = linkAccountRequest.AccountId,
-                    Passphrase = linkAccountReply.Body.Passphrase,
-                    UnitId = linkAccountRequest.OrganisationCode
+                    AccountId = connectionToken.AccountId,
+                    Passphrase = connectionToken.Passphrase,
+                    UnitId = linkAccountRequest.OrganisationCode,
+                    ProviderId = connectionToken.ProviderId
                 };
 
-                var connectionTokenDict = new Dictionary<string, string>
-                {
-                    { "accountId", authenticateRequest.AccountId },
-                    { "passphrase", authenticateRequest.Passphrase }
-                };
-
-                var connectionToken = connectionTokenDict.SerializeJson();                
                 var authenticateReply = await _tppClient.AuthenticatePost(authenticateRequest);
-                
+
                 if (!authenticateReply.HasSuccessResponse)
                 {
-                    _logger.LogError("Failed Authenticate request returned without success response.  Unknown Reason.");
+                    _logger.LogError(
+                        "Failed Authenticate request returned without success response.  Unknown Reason.");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
-                
+
                 var nhsNumbers = authenticateReply.Body.ExtractNhsNumbers();
 
                 var response = new PatientIm1ConnectionResponse
                 {
-                    ConnectionToken = connectionToken,
+                    ConnectionToken = connectionToken.SerializeJson(),
                     NhsNumbers = nhsNumbers
                 };
-                
+
                 _logger.LogDebug("TppIm1ConnectionService Register successfully completed");
                 return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
             }

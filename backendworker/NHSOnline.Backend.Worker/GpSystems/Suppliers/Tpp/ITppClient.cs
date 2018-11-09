@@ -37,5 +37,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         Task<TppApiObjectResponse<RequestMedicationReply>> OrderPrescriptionsPost(TppUserSession tppUserSession, RequestMedication requestMedication);
 
         Task<TppApiObjectResponse<LogoffReply>> LogoffPost(TppUserSession tppUserSession);
+        
+        Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest);
     }
 }

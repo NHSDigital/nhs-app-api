@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
@@ -22,7 +23,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             try
             {
                 var auth = connectionToken.DeserializeJson<Authenticate>();
-                return !string.IsNullOrEmpty(auth?.AccountId) && !string.IsNullOrEmpty(auth.Passphrase);
+
+                var validator = new ValidateAndLog(_logger)
+                    .IsNotNullOrWhitespace(auth?.AccountId, nameof(auth.AccountId))
+                    .IsNotNullOrWhitespace(auth?.Passphrase, nameof(auth.Passphrase))
+                    .IsNotNullOrWhitespace(auth?.ProviderId, nameof(auth.ProviderId));
+
+                return validator.IsValid();
             }
             catch (Exception e)
             {

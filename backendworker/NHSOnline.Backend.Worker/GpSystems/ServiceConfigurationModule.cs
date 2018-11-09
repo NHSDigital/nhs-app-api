@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems
 {
@@ -8,6 +9,8 @@ namespace NHSOnline.Backend.Worker.GpSystems
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IGpSystemFactory, GpSystemFactory>();
+            services.AddSingleton<IRegistrationCacheService, RegistrationCacheService>();
+            services.AddSingleton<IRegistrationGuidKeyGenerator,RegistrationGuidKeyGenerator>();
 
             base.ConfigureServices(services, configuration);
         }

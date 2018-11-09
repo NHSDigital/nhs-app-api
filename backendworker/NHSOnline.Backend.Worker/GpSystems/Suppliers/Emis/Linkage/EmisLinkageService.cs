@@ -37,20 +37,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
             _registrationCacheService = registrationCacheService;
         }
 
-        public async Task<LinkageResult> GetLinkageKey(string nhsNumber, string odsCode, string identityToken)
+        public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
         {
             try
             {
                 var sessionPost = await _emisSessionService.SendSessionsEndUserSessionPost();
 
-                var response = await GetLinkageKeyResponse(nhsNumber, odsCode, identityToken, sessionPost.EndUserSessionId);
+                var response = await GetLinkageKeyResponse(getLinkageRequest.NhsNumber, getLinkageRequest.OdsCode, 
+                    getLinkageRequest.IdentityToken, sessionPost.EndUserSessionId);
 
                 if (response.HasSuccessStatusCode || response.StatusCode == HttpStatusCode.Conflict)
                 {
                     try
                     {
                         var linkage = _emisLinkageMapper.Map(response.Body);
-                        linkage.OdsCode = odsCode;
+                        linkage.OdsCode = getLinkageRequest.OdsCode;
 
                         if (response.StatusCode == HttpStatusCode.Conflict)
                         {
@@ -132,7 +133,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
             var key = _emisRegistrationGuidKeyGenerator.GenerateRegistrationKey(
                     linkage.AccountId, linkage.OdsCode, linkage.LinkageKey);
 
-            await _registrationCacheService.CreateRegistrationGuid(key, addNhsUserResponse.AccessIdentityGuid);
+            await _registrationCacheService.CreateRegistrationToken(key, addNhsUserResponse.AccessIdentityGuid);
         }
 
         private async Task<EmisApiObjectResponse<AddVerificationResponse>> GetLinkageKeyResponse(string nhsNumber, string odsCode, string identityToken, string endUserSessionId)
