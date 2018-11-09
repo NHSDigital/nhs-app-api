@@ -819,13 +819,6 @@
               type: "object"
               properties: 
                 courses: 
-                  specialRequestNecessity: 
-                    type: "string"
-                    enum: 
-                      - "notAllowed"
-                      - "optional"
-                      - "mandatory"
-                    description: "Indicates whether the patient can supply a special request when ordering a prescription."
                   type: "array"
                   description: "An array of prescription courses"
                   items: 
@@ -840,6 +833,13 @@
                       details: 
                         type: "string"
                         description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
+                specialRequestNecessity: 
+                  type: "string"
+                  enum: 
+                    - "notAllowed"
+                    - "optional"
+                    - "mandatory"
+                  description: "Indicates whether the patient can supply a special request when ordering a prescription."
           401: 
             description: "User session missing or expired."
           403: 
