@@ -36,7 +36,6 @@ class WebAppInterfaceTest {
     fun onLogout() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
 
-
         webAppInterface.onLogout()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()

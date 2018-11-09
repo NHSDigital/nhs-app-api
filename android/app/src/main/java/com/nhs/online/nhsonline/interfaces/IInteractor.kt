@@ -23,6 +23,14 @@ interface IInteractor {
 
     fun clearMenuBarItem()
 
+    fun showHeader()
+
+    fun showMenuBar()
+
+    fun hideHeader()
+
+    fun hideMenuBar()
+
     fun setReloadUrl(url: String?)
 
     fun announcePageTitle(title: String?)

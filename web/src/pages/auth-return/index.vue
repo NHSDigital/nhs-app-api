@@ -4,7 +4,6 @@
 
 <script>
 import { isEmpty } from 'lodash/fp';
-import NativeCallbacks from '@/services/native-app';
 import { TERMSANDCONDITIONS } from '@/lib/routes';
 
 export default {
@@ -20,10 +19,6 @@ export default {
     return undefined;
   },
   mounted() {
-    if (this.$store.state.device.isNativeApp) {
-      NativeCallbacks.hideHeader();
-      NativeCallbacks.hideWhiteScreen();
-    }
   },
   created() {
   },

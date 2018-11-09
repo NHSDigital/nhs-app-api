@@ -1,5 +1,8 @@
 package com.nhs.online.nhsonline.webinterfaces
 
+import android.util.Log
+import com.nhs.online.nhsonline.Application
+import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.activities.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -7,6 +10,7 @@ class AppWebInterface(private val context: MainActivity) {
     private val validateSessionString: String = "window.validateSession();"
 
     fun validateSession() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering validateSession")
         context.webview.evaluateJavascript(validateSessionString) {
             context.hideBlankScreen()
         }

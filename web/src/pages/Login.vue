@@ -21,9 +21,9 @@
 </template>
 <script>
 import AuthorisationService from '@/services/authorisation-service';
-import NativeCallbacks from '@/services/native-app';
 import LoginButton from '@/components/LoginButton';
 import { BEGINLOGIN } from '@/lib/routes';
+import NativeCallbacks from '@/services/native-app';
 
 export default {
   head() {
@@ -50,8 +50,9 @@ export default {
   mounted() {
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.hideHeader();
-      NativeCallbacks.hideWhiteScreen();
+      NativeCallbacks.hideMenuBar();
       NativeCallbacks.hideHeaderSlim();
+      NativeCallbacks.hideWhiteScreen();
     }
 
     const authorisationService = new AuthorisationService(this.$env);

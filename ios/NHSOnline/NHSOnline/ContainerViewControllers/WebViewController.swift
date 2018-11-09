@@ -19,6 +19,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
+        config.suppressesIncrementalRendering = true
         
 
         webView = WKWebView(frame: .zero, configuration: config)
@@ -50,6 +51,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "hideHeaderSlim")
         webView.configuration.userContentController.add(delegate, name: "resetPageFocus")
         webView.configuration.userContentController.add(delegate, name: "hideHeader")
+        webView.configuration.userContentController.add(delegate, name: "hideMenuBar")
         webView.configuration.userContentController.add(delegate, name: "hideWhiteScreen")
     }
     

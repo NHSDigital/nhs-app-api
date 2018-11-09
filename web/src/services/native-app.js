@@ -43,6 +43,15 @@ export default {
     return false;
   },
 
+  hideMenuBar() {
+    const app = window.nativeApp;
+    if (app && app.hideMenuBar()) {
+      app.hideMenuBar();
+      return true;
+    }
+    return false;
+  },
+
   showHeader() {
     const app = window.nativeApp;
     if (app && app.showHeader) {
@@ -82,9 +91,7 @@ export default {
   hideWhiteScreen() {
     const app = window.nativeApp;
     if (app && app.hideWhiteScreen) {
-      setTimeout(() => {
-        app.hideWhiteScreen();
-      }, 20);
+      app.hideWhiteScreen();
       return true;
     }
     return false;

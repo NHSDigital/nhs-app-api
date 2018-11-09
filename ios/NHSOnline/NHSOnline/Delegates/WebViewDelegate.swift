@@ -88,10 +88,16 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
-        self.showWebViewContainer()
-        if !knownServices.isSameHostAsHomeUrl(url: webView.url) && !viewController.headerBar.isHidden {
-            viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
-        }
+            if(webView.url?.absoluteString == config().HomeUrl + config().NhsOnlineRequiredQueryString) {
+                self.viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
+            }
+
+            self.showWebViewContainer()
+            UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
+            
+            if !self.knownServices.isSameHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
+                self.viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
+            }
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
@@ -161,7 +167,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             if (message.name == "onLogin") {
-                UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
                 WebViewController.Properties.usingAbsoluteUri = false
             }
             
@@ -187,6 +192,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             if (message.name == "hideHeaderSlim") {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
+            }
+            
+            if (message.name == "hideMenuBar") {
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
             }
             
             if (message.name == "resetPageFocus") {
@@ -269,16 +278,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     private func showWebViewContainer() {
         clearTimer()
-        self.activityIndicator.stopAnimating()
         self.viewController.showWebViewContainer()
+        self.activityIndicator.stopAnimating()
     }
     
     func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
-        UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
         clearTimer()
         self.activityIndicator.stopAnimating()
         self.viewController.showNativeViewContainer(errorMessage: errorMessage)
-        
+        UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
     }
     
     func clearTimer() {

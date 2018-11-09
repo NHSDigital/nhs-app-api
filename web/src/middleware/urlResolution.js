@@ -16,7 +16,6 @@ export const getHost = (req) => {
     return host.split(',')
       .map(x => x.trim())[0];
   }
-
   return undefined;
 };
 
@@ -53,7 +52,6 @@ export const resolveCidNative = ({ req, env }) => {
     resolveBaseHost(req),
     resolveUrlFormat('URI_FORMAT_CID_REDIRECT_NATIVE', env),
   );
-
   return env.NATIVE_CID_REDIRECT_URI;
 };
 

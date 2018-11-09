@@ -5,7 +5,11 @@ import android.os.Handler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.content.Context
+import android.util.Log
+import com.nhs.online.nhsonline.Application
+import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
@@ -34,6 +38,7 @@ class WebClientInterceptor(
 
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering shouldOverrideUrlLoading")
         if (URL(url).host?.equals(URL(context.getString(R.string.dataPreferencesBaseUrl)).host)!!) {
             view.loadUrl(url)
             return false
@@ -48,10 +53,13 @@ class WebClientInterceptor(
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageStarted > url $url")
         uiInteractor.setReloadUrl(url)
         cancelTrackingWebRequestResponse()
 
         if (!isConnectedToInternet()) {
+            Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageStarted > no internet")
+
             stopLoadingWebviewAndShowNoConnectionError(view)
             noConnectionHandled = true
             return
@@ -75,8 +83,11 @@ class WebClientInterceptor(
     }
 
     override fun onLoadResource(view: WebView?, url: String?) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLoadResource > url $url")
         if (!isConnectedToInternet()) {
+            Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLoadResource > isConnectedToInternet")
             if (!noConnectionHandled) {
+                Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLoadResource > isConnectedToInternet > noConnectionHandled false")
                 cancelTrackingWebRequestResponse()
             }
             return
@@ -94,12 +105,15 @@ class WebClientInterceptor(
         failingUrl: String?
     ) {
         if (shouldHandleUnavailability(failingUrl)) {
+            Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onReceivedError > failingUrl $failingUrl")
+
             cancelTrackingWebRequestResponse()
             handleUnavailability(failingUrl, errorCode)
         }
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageFinished")
         if (shouldHandleUnavailability(url)) {
             cancelTrackingWebRequestResponse()
         }
@@ -108,11 +122,19 @@ class WebClientInterceptor(
     }
 
     override fun onPageCommitVisible(view: WebView?, url: String?) {
-        if (shouldHandleUnavailability(url)) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageCommitVisible")
+        if(shouldHandleUnavailability(url)){
             uiInteractor.dismissProgressDialog()
         }
 
         if (!shouldShowErrorPage) {
+            if(url == context.resources.getString(R.string.baseURL) +
+                    context.resources.getString(R.string.nhsOnlineRequiredQueries)) {
+                Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageCommitVisible > is Home page")
+                uiInteractor.showHeader()
+                uiInteractor.showMenuBar()
+            }
+
             uiInteractor.showWebviewScreen()
             if(!knownServices.isUrlHostSameAsHomeUrlHost(url))
                 uiInteractor.announcePageTitle(view?.title)
@@ -122,15 +144,19 @@ class WebClientInterceptor(
 
     private fun shouldHandleUnavailability(urlString: String?): Boolean {
         if (urlString == null) {
+            Log.d(Application.TAG, "${this::class.java.simpleName}: Entering shouldHandleUnavailability > url $urlString > false")
             return false
         }
         val matchingKnownService =
             knownServices.findMatchingKnownService(urlString)
 
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering shouldHandleUnavailability > url $urlString > ${matchingKnownService != null}")
+
         return matchingKnownService != null
     }
 
     fun isConnectedToInternet(): Boolean {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: isConnectedToInternet")
         return Reachability.isConnectedToNetwork(context)
     }
 
@@ -141,6 +167,8 @@ class WebClientInterceptor(
     }
 
     fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering stopLoadingWebviewAndShowNoConnectionError > ${view?.url}")
+
         handleUnavailability(view?.url)
         view?.stopLoading()
         uiInteractor.setHeaderText(context.resources.getString(R.string.connection_error_header))
@@ -175,11 +203,14 @@ class WebClientInterceptor(
     }
 
     private fun trackWebRequestResponse(view: WebView?, url: String?) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering trackWebRequestResponse")
+
         val showDialogFn = { uiInteractor.showProgressDialog() }
 
         val expireRequestFn = {
             view?.stopLoading()
             uiInteractor.dismissProgressDialog()
+            Log.d(Application.TAG, "${this::class.java.simpleName}: Entering trackWebRequestResponse > expireRequestFn")
             handleUnavailability(url)
         }
 
@@ -190,11 +221,14 @@ class WebClientInterceptor(
     }
 
     private fun cancelTrackingWebRequestResponse() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering cancelTrackingWebRequestResponse")
         uiInteractor.dismissProgressDialog()
         handler.removeCallbacksAndMessages(null)
     }
 
     private fun handleUnavailability(failingUrl: String?, errorCode: Int? = null) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering handleUnavailability > failingUrl $failingUrl")
+
         shouldShowErrorPage = true
 
         val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
@@ -205,6 +239,7 @@ class WebClientInterceptor(
     }
 
     private fun getUnavailabilityErrorMessageForService(failingUrl: String?): ErrorMessage {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering getUnavailabilityErrorMessageForService > failingUrl $failingUrl")
         val serviceInfo = knownServices.findMatchingServiceInfo(failingUrl.toString())
         return serviceInfo?.errorMessage ?: knownServices.getServiceUnavailabilityError()
     }

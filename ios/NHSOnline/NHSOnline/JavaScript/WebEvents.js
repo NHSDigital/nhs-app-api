@@ -12,6 +12,10 @@ window.nativeApp.hideHeader = function() {
     window.webkit.messageHandlers.hideHeader.postMessage(null);
 };
 
+window.nativeApp.hideMenuBar = function() {
+    window.webkit.messageHandlers.hideMenuBar.postMessage(null);
+};
+
 window.nativeApp.hideWhiteScreen = function() {
     window.webkit.messageHandlers.hideWhiteScreen.postMessage(null);
 };

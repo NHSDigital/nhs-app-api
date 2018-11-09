@@ -53,4 +53,8 @@ class Application : Application() {
             WebView.setWebContentsDebuggingEnabled(true)
         }
     }
+
+    companion object {
+        val TAG = "NHSApp"
+    }
 }

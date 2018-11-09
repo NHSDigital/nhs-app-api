@@ -34,6 +34,8 @@ import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import android.location.LocationManager
 import android.view.accessibility.AccessibilityEvent
+import android.util.Log
+import com.nhs.online.nhsonline.Application
 import android.view.accessibility.AccessibilityManager
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.services.KnownServices
@@ -49,13 +51,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private var isLoggedIn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnCreate")
+
         super.onCreate(savedInstanceState)
 
         if(resources.getString(R.string.secureFlag)!="disabled") {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE)
         }
-        
+
         CookieManager.getInstance().removeAllCookies(null)
 
         setContentView(R.layout.activity_main)
@@ -106,11 +110,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun onErrorRetryButton() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnRetryButton")
         showProgressDialog()
         urlLoader.reloadRequest()
     }
 
     override fun onStart() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnStart")
         super.onStart()
 
         if (lifeCycleObserver == null) {
@@ -122,6 +128,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun onStop() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnStop")
         super.onStop()
 
         lifeCycleObserver?.onMoveToBackground()
@@ -155,6 +162,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering configureWebView")
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true
         webview.settings.javaScriptCanOpenWindowsAutomatically = true
@@ -174,6 +182,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMenuSelected")
         var path: String
 
         when (menuBarItem.id) {
@@ -232,12 +241,16 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
 
     override fun setHeaderText(text: String, description: String?) {
-        header_text_view.text = text
-        header_text_view.contentDescription = description
-        webview.announceForAccessibility(description ?: text)
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering setHeaderText")
+        runOnUiThread {
+            header_text_view.text = text
+            header_text_view.contentDescription = description
+            webview.announceForAccessibility(description ?: text)
+        }
     }
 
     override fun onBackPressed() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onBackPressed")
         if (isLoggedIn) {
             showExitDialog()
         } else {
@@ -306,9 +319,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun showWebviewScreen() {
-        hideBlankScreen()
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showWebViewScreen")
         errorViewLayout.visibility = View.GONE
         webview.visibility = View.VISIBLE
+        hideBlankScreen()
 
         if (isLoggedIn) {
             urlLoader.usingAbsoluteUri = false
@@ -352,16 +366,23 @@ class MainActivity : IInteractor, AppCompatActivity() {
         title?.let { webview.announceForAccessibility(it) }
     }
 
-    private fun hideMenuBar() {
-        menuBar.visibility = GONE
+    override fun hideMenuBar() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideMenuBar")
+        runOnUiThread {
+            menuBar.visibility = GONE
+        }
     }
 
-    fun hideHeader() {
-        header.visibility = GONE
-        setupAppVersion()
+    override fun hideHeader() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
+        runOnUiThread {
+            header.visibility = GONE
+            setupAppVersion()
+        }
     }
 
     fun loggedIn() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering loggedIn")
         if (isLoggedIn) return
 
         showMenuBar()
@@ -371,25 +392,33 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     fun loggedOut() {
-        hideHeader()
-        hideMenuBar()
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering loggedOut")
         urlLoader.usingAbsoluteUri = true
         isLoggedIn = false
     }
 
 
-    private fun showMenuBar() {
-        menuBar.visibility = VISIBLE
+    override fun showMenuBar() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showMenuBar")
+        runOnUiThread {
+            menuBar.visibility = VISIBLE
+        }
     }
 
-    fun showHeader() {
-        header.visibility = VISIBLE
-        setupAppVersion()
+    override fun showHeader() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
+        runOnUiThread {
+            header.visibility = VISIBLE
+            setupAppVersion()
+        }
     }
 
     fun showBlankScreen() {
-        viewSwitcher.visibility = View.GONE
-        blankScreen.visibility = View.VISIBLE
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showBlankScreen")
+        runOnUiThread {
+            viewSwitcher.visibility = View.GONE
+            blankScreen.visibility = View.VISIBLE
+        }
     }
 
     fun resetFocusToNhsLogoForA11y() {
@@ -400,8 +429,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     fun hideBlankScreen() {
-        viewSwitcher.visibility = View.VISIBLE
-        blankScreen.visibility = View.GONE
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideBlankScreen")
+        runOnUiThread {
+            viewSwitcher.visibility = View.VISIBLE
+            blankScreen.visibility = View.GONE
+        }
     }
 
     fun evaluateWebviewJavascript(javascriptText: String) {
