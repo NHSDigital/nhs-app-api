@@ -42,7 +42,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Development"
+      buildConfiguration = "Preview"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -65,7 +65,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Development"
+      buildConfiguration = "Preview"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = "/Applications/Xcode.app/Contents/Applications/Instruments.app/Contents/Packages/ActivityMonitor.instrdst/Contents/Templates/Activity Monitor.tracetemplate"
       useCustomWorkingDirectory = "NO"
@@ -82,10 +82,10 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Development">
+      buildConfiguration = "Preview">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Development"
+      buildConfiguration = "Preview"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
