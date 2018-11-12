@@ -15,12 +15,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var timer: Timer!
     var startDate: Date!
     var javascript: String!
+    var webAppInterface: WebAppInterface
     
-    init(controller: HomeViewController, knownServices: KnownServices) {
+    init(controller: HomeViewController, knownServices: KnownServices, webAppInterface: WebAppInterface) {
         self.viewController = controller
         self.knownServices = knownServices
         self.activityIndicator.center = viewController.view.center
         self.viewController.view.addSubview(activityIndicator)
+        self.webAppInterface = webAppInterface
     }
     
     func webView(_ webView: WKWebView,
@@ -180,6 +182,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             if (message.name == "onLogout") {
                 WebViewController.Properties.usingAbsoluteUri = true
+                webAppInterface.onLogout()
             }
             
             if (message.name == "hideHeader") {
@@ -230,6 +233,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 defaults.set(true, forKey: config().HaveShownThrottlingCarouselBefore)
                 
                 self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
+            }
+            if (message.name == "onSessionExpiring") {
+                var sessionDuration : Int? = message.body as? Int
+                if sessionDuration == nil {
+                    sessionDuration = 20
+                }
+                
+                viewController.displayExtendSessionDialogue(sessionDuration: sessionDuration!)
             }
         }
     }

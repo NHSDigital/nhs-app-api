@@ -15,6 +15,9 @@
 		105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9932179C0C400571671 /* Scratch10.xcconfig */; };
 		139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139F19262181D73300ED59A1 /* HeaderBarSlim.xib */; };
 		139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */; };
+		3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */; };
+		3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */; };
+		3EF9DDD421ABFDE40052C72A /* UIAlertController_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */; };
 		4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */; };
 		4793CF0D219AF18500C95F51 /* CustomNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4793CF0C219AF18500C95F51 /* CustomNotifications.swift */; };
 		4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4793CF0F219C319A00C95F51 /* ConfigurationService.swift */; };
@@ -76,6 +79,9 @@
 		105BB9A42186FA3E00571671 /* Defaults.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Defaults.xcconfig; sourceTree = "<group>"; };
 		139F19272181D73300ED59A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBarSlim.xib; sourceTree = "<group>"; };
 		139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarSlim.swift; sourceTree = "<group>"; };
+		3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterface.swift; sourceTree = "<group>"; };
+		3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppInterface.swift; sourceTree = "<group>"; };
+		3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController_Extensions.swift; sourceTree = "<group>"; };
 		4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlers.swift; sourceTree = "<group>"; };
 		4703497921945F5C00F72D05 /* Preview.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Preview.xcconfig; sourceTree = "<group>"; };
 		4793CF0C219AF18500C95F51 /* CustomNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNotifications.swift; sourceTree = "<group>"; };
@@ -164,10 +170,18 @@
 			path = Configurations;
 			sourceTree = "<group>";
 		};
+		3E5BD2D3219EE5CC00774F06 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */,
+				3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */,
+			);
+			path = Interfaces;
+			sourceTree = "<group>";
+		};
 		4649682420C7D94B00FDDE87 /* Lifecycle */ = {
 			isa = PBXGroup;
 			children = (
-				4793CF0C219AF18500C95F51 /* CustomNotifications.swift */,
 				4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */,
 			);
 			path = Lifecycle;
@@ -203,6 +217,7 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
+				4793CF0C219AF18500C95F51 /* CustomNotifications.swift */,
 				981E9E31214E5FB300DA80EB /* Config.swift */,
 				9200DC9D2142854C009EFFEF /* Network */,
 				4649682420C7D94B00FDDE87 /* Lifecycle */,
@@ -214,6 +229,7 @@
 				F0D2E5D2205007200067DEC4 /* Delegates */,
 				F0B7D86D204EA0F40078D56E /* Extensions */,
 				F0B7D860204E8B8A0078D56E /* ContainerViewControllers */,
+				3E5BD2D3219EE5CC00774F06 /* Interfaces */,
 				C20578022028B94800CDBDC5 /* AppDelegate.swift */,
 				C20578062028B94800CDBDC5 /* Main.storyboard */,
 				C20578092028B94800CDBDC5 /* Assets.xcassets */,
@@ -320,6 +336,7 @@
 				C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */,
 				C2ED05D521427E950036189C /* TabBar_Extension.swift */,
 				609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */,
+				3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -464,8 +481,10 @@
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
+				3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */,
 				4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
+				3EF9DDD421ABFDE40052C72A /* UIAlertController_Extensions.swift in Sources */,
 				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
 				47D88A4621998CBD004771B5 /* Configuration.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
@@ -476,6 +495,7 @@
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */,
 				9200DC9F21428562009EFFEF /* Reachability.swift in Sources */,
+				3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */,
 				C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */,
 				C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */,
 				4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */,

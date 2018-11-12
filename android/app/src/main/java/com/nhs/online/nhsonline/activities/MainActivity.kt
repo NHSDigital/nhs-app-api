@@ -40,6 +40,8 @@ import com.nhs.online.nhsonline.Application
 import android.view.accessibility.AccessibilityManager
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import android.widget.Button
+import android.widget.TextView
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
@@ -60,9 +62,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private lateinit var upgradeDialog: AlertDialog
     private var lifeCycleObserver: LifeCycleObserver? = null
     private var isLoggedIn = false
+    private var extendSessionDialogue: AlertDialog? = null
 
     var isSuccessfulConfigCheck = true
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnCreate")
@@ -354,9 +356,35 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     fun hideVersionUpgradeDialog() {
-        if(::upgradeDialog.isInitialized && upgradeDialog.isShowing) {
+        if (::upgradeDialog.isInitialized && upgradeDialog.isShowing) {
             upgradeDialog.dismiss()
         }
+    }
+
+    override fun showExtendSessionDialogue(sessionDuration: Int) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
+
+        extendSessionDialogue = extendSessionDialogue ?: initialiseExtendSessionDialogue(sessionDuration)
+        extendSessionDialogue?.show()
+    }
+
+    private fun initialiseExtendSessionDialogue(sessionDuration: Int): AlertDialog {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.session_expiry_warning_dialogue, null)
+        builder.setView(dialogView)
+        builder.setCancelable(false)
+        var textView = dialogView.findViewById(R.id.sessionExpiryWarningDurationInformation) as TextView
+        textView.text =resources.getString(R.string.sessionExpiryWarningDurationInformation).format(sessionDuration)
+        val extendSession = dialogView.findViewById(R.id.extendSession) as Button
+        val logOut = dialogView.findViewById(R.id.logOut) as Button
+        var dialog: AlertDialog = builder.create()
+        extendSession.setOnClickListener { dialog.dismiss(); appWebInterface.extendSession() }
+        logOut.setOnClickListener {  dialog.dismiss(); appWebInterface.logout()}
+        dialog.setCanceledOnTouchOutside(false)
+
+        return dialog
     }
 
     override fun showProgressDialog() {
@@ -493,6 +521,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering loggedOut")
         urlLoader.usingAbsoluteUri = true
         isLoggedIn = false
+
+        if (extendSessionDialogue?.isShowing == true) {
+            extendSessionDialogue?.dismiss()
+        }
     }
 
 

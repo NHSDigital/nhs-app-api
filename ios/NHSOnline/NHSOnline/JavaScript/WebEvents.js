@@ -52,3 +52,6 @@ window.nativeApp.completeAppIntro = function(header) {
     window.webkit.messageHandlers.completeAppIntro.postMessage(null);
 };
 
+window.nativeApp.onSessionExpiring = function(sessionDuration) {
+    window.webkit.messageHandlers.onSessionExpiring.postMessage(sessionDuration);
+};

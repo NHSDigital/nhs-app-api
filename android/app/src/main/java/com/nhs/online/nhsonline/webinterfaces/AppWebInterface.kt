@@ -45,4 +45,13 @@ class AppWebInterface(private val context: MainActivity) {
     fun loadDispatchEvent(event: String) {
         context.evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event')")
     }
+
+    fun logout() {
+        loadDispatchEvent("auth/logout")
+    }
+
+    fun extendSession() {
+        loadDispatchEvent("session/extend")
+    }
+
 }

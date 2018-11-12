@@ -7,6 +7,8 @@ import {
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
+  SHOW_SESSION_EXPIRING,
+  HIDE_SESSION_EXPIRING,
 } from '../../../../../../src/store/modules/session/mutation-types';
 
 describe('mutations', () => {
@@ -49,7 +51,7 @@ describe('mutations', () => {
   });
 
   describe('HIDE_EXPIRY_MESSAGE', () => {
-    it('will set the remove the showExpiryMessage property on the state', () => {
+    it('will remove the showExpiryMessage property from the state', () => {
       const stateToMutate = {
         showExpiryMessage: true,
       };
@@ -77,6 +79,26 @@ describe('mutations', () => {
 
       mutations[END_VALIDATION_CHECKING](stateToMutate);
       expect(stateToMutate.validationInterval).toBeUndefined();
+    });
+  });
+
+  describe('SHOW_SESSION_EXPIRING', () => {
+    it('will set the showSessionExpiring on the state to true', () => {
+      const stateToMutate = {};
+      mutations[SHOW_SESSION_EXPIRING](stateToMutate);
+      expect(stateToMutate.showSessionExpiring).toBe(true);
+    });
+  });
+
+  describe('HIDE_SESSION_EXPIRING', () => {
+    it('will remove the showSessionExpiring property from the state', () => {
+      const stateToMutate = {
+        showSessionExpiring: true,
+      };
+
+      mutations[HIDE_SESSION_EXPIRING](stateToMutate);
+      expect(stateToMutate.showSessionExpiring).toBeUndefined();
+      expect(stateToMutate).not.toHaveProperty('showSessionExpiring');
     });
   });
 });

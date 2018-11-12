@@ -1,4 +1,5 @@
 import actions from '@/store/modules/session/actions';
+import NativeCallbacks from '@/services/native-app';
 
 import {
   CLEAR,
@@ -7,6 +8,9 @@ import {
   SET_INFO,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
+  START_VALIDATION_CHECKING,
+  SHOW_SESSION_EXPIRING,
+  HIDE_SESSION_EXPIRING,
 } from '@/store/modules/session/mutation-types';
 
 describe('actions', () => {
@@ -56,14 +60,24 @@ describe('actions', () => {
   describe('validation checking', () => {
     beforeEach(() => {
       process.client = true;
-      mutation.state = {
-        csrfToken: 'logged in',
+      mutation.state = {};
+      mutation.getters = {
+        isLoggedIn: () => true,
       };
     });
 
     describe('start validation checking', () => {
       it('will have a startValidationChecking function', () =>
         expect(actions.startValidationChecking).toBeInstanceOf(Function));
+
+      it(
+        'will call commit for the START_VALIDATION_CHECKING passing an interval when there is no validationInterval',
+        () => {
+          actions.startValidationChecking(mutation);
+          expect(mutation.commit.mock.calls[0][0]).toEqual(START_VALIDATION_CHECKING);
+          expect(mutation.commit.mock.calls[0][1]).toBeGreaterThan(0);
+        },
+      );
 
       it(
         'will not call commit for the START_VALIDATION_CHECKING there is a validationInterval',
@@ -105,6 +119,11 @@ describe('actions', () => {
         actions.endValidationChecking(mutation);
         expect(mutation.commit.mock.calls[0][0]).toEqual(END_VALIDATION_CHECKING);
       });
+
+      it('will call commit for the HIDE_SESSION_EXPIRING mutation', () => {
+        actions.endValidationChecking(mutation);
+        expect(mutation.commit.mock.calls[1][0]).toEqual(HIDE_SESSION_EXPIRING);
+      });
     });
   });
 
@@ -120,6 +139,14 @@ describe('actions', () => {
         actions.updateLastCalledAt(mutation, now);
         expect(mutation.commit.mock.calls[0][0]).toEqual(SET_LAST_CALLED_AT);
         expect(mutation.commit.mock.calls[0][1] - now).toBeCloseTo(0);
+      },
+    );
+
+    it(
+      'will call commit for the HIDE_SESSION_EXPIRING mutation',
+      () => {
+        actions.updateLastCalledAt(mutation, new Date());
+        expect(mutation.commit.mock.calls[1][0]).toEqual(HIDE_SESSION_EXPIRING);
       },
     );
   });
@@ -143,12 +170,20 @@ describe('actions', () => {
       app = {
         dispatch: jest.fn(),
         validate: actions.validate,
+        app: {
+          $env: {
+            SESSION_EXPIRING_WARNING_SECONDS: 10,
+          },
+        },
       };
       store = {
         getters: {
           isValid: () => true,
         },
         commit: jest.fn(),
+        state: {
+          durationSeconds: 60,
+        },
       };
     });
 
@@ -157,8 +192,19 @@ describe('actions', () => {
     });
 
     describe('is valid', () => {
+      let spy;
+
       beforeEach(() => {
-        store.getters.isValid = () => true;
+        store.getters.isLoggedIn = () => true;
+        store.getters.isExpiring = () => true;
+        window.nativeApp = true;
+
+        spy = jest.spyOn(NativeCallbacks, 'onSessionExpiring').mockImplementation(() => true);
+      });
+
+      afterEach(() => {
+        (spy || {}).mockRestore();
+        window.nativeApp = undefined;
       });
 
       it('will not call global dispatch', () => {
@@ -170,11 +216,57 @@ describe('actions', () => {
         const result = app.validate(store);
         expect(result).toEqual(true);
       });
+
+      it('will not call native onSessionExpiring callback if not native', () => {
+        window.nativeApp = undefined;
+
+        app.validate(store);
+        expect(NativeCallbacks.onSessionExpiring).not.toBeCalled();
+      });
+
+      it('will not call native onSessionExpiring callback if not expiring', () => {
+        store.getters.isExpiring = () => false;
+
+        app.validate(store);
+        expect(NativeCallbacks.onSessionExpiring).not.toBeCalled();
+      });
+
+      it('will call native onSessionExpiring callback if expiring and native', () => {
+        app.validate(store);
+        expect(NativeCallbacks.onSessionExpiring).toHaveBeenCalledTimes(1);
+      });
+
+      it('will call commit for the SHOW_SESSION_EXPIRING mutation if expiring and native', () => {
+        app.validate(store);
+        expect(store.commit.mock.calls[0][0]).toEqual(SHOW_SESSION_EXPIRING);
+      });
     });
 
     describe('is not valid', () => {
       beforeEach(() => {
         store.getters.isValid = () => false;
+        store.getters.isLoggedIn = () => true;
+      });
+
+      it('will call global dispatch with the logout action', () => {
+        app.validate(store);
+        expect(app.dispatch).toHaveBeenCalledWith('auth/logoutWhenExpired');
+      });
+
+      it('will return false', () => {
+        const result = app.validate(store);
+        expect(result).toEqual(false);
+      });
+    });
+
+    describe('is not logged in', () => {
+      beforeEach(() => {
+        store.getters.isLoggedIn = () => false;
+      });
+
+      it('will not call global dispatch with the logout action', () => {
+        app.validate(store);
+        expect(app.dispatch).not.toHaveBeenCalledWith('auth/logoutWhenExpired');
       });
 
       it('will return false', () => {

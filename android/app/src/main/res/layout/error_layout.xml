@@ -5,6 +5,7 @@
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             style="@style/default_error_icon"
             android:layout_width="@dimen/_55ssp"
@@ -50,5 +51,5 @@
         android:text="@string/retryButtonText"
         android:textAllCaps="false"
         android:focusable="true"
-        android:background="@drawable/icon_drawable_button_focusable"/>
+        android:background="@drawable/icon_drawable_blue_button_focusable"/>
 </LinearLayout>

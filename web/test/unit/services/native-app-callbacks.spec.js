@@ -23,6 +23,7 @@ describe('NATIVE CALLBACKS', () => {
       fn: 'postNdopToken',
       param: 'token',
     },
+    { fn: 'onSessionExpiring' },
   ]).it('will trigger native callback via window.nativeApp', ({ fn, param }) => {
     const mockFunction = jest.fn();
     window.nativeApp = {

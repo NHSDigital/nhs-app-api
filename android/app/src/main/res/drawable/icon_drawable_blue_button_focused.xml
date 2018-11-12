@@ -4,5 +4,7 @@
         android:width="2dp"
         android:color="@color/focusHighlight" />
 
-    <solid android:color="@color/nhsBlue" />
+    <solid
+        android:color="@color/nhsBlue"
+        android:shadowColor="@color/darkBlue"/>
 </shape>

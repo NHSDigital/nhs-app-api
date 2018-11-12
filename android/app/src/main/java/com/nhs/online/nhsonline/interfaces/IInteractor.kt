@@ -36,4 +36,6 @@ interface IInteractor {
     fun setReloadUrl(url: String?)
 
     fun announcePageTitle(title: String?)
+
+    fun showExtendSessionDialogue(sessionDuration: Int)
 }

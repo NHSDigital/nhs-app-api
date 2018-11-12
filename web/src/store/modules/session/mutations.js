@@ -6,6 +6,8 @@ import {
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
+  SHOW_SESSION_EXPIRING,
+  HIDE_SESSION_EXPIRING,
 } from './mutation-types';
 
 export default {
@@ -49,5 +51,11 @@ export default {
   },
   [START_VALIDATION_CHECKING](state, validationInterval) {
     state.validationInterval = validationInterval;
+  },
+  [SHOW_SESSION_EXPIRING](state) {
+    state.showSessionExpiring = true;
+  },
+  [HIDE_SESSION_EXPIRING](state) {
+    delete (state.showSessionExpiring);
   },
 };

@@ -1,3 +1,4 @@
+import NativeCallbacks from '@/services/native-app';
 import {
   CLEAR,
   END_VALIDATION_CHECKING,
@@ -5,6 +6,9 @@ import {
   SET_INFO,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
+  START_VALIDATION_CHECKING,
+  SHOW_SESSION_EXPIRING,
+  HIDE_SESSION_EXPIRING,
 } from './mutation-types';
 
 const setCookie = ({ key, value, cookies, isSecure }) => {
@@ -19,8 +23,6 @@ const setCookie = ({ key, value, cookies, isSecure }) => {
   }
 };
 
-let intervalId;
-
 export default {
   clear:
     ({ commit }) => commit(CLEAR),
@@ -30,18 +32,6 @@ export default {
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
   updateLastCalledAt({ commit }, lastCalledAt = new Date()) {
     const session = this.app.$cookies.get('nhso.session');
-
-    if (session && session.durationSeconds) {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-      intervalId = setInterval(() => {
-        if (process.server) return;
-        this.dispatch('session/showExpiryMessage');
-        this.dispatch('auth/logout', { expired: true });
-        clearInterval(intervalId);
-      }, session.durationSeconds * 1000);
-    }
 
     if (session) {
       session.lastCalledAt = lastCalledAt;
@@ -54,6 +44,7 @@ export default {
     }
 
     commit(SET_LAST_CALLED_AT, lastCalledAt);
+    commit(HIDE_SESSION_EXPIRING);
   },
   setInfo({ commit }, info) {
     const value = !info
@@ -78,14 +69,36 @@ export default {
 
     commit(SET_INFO, info);
   },
-  startValidationChecking() {
+  startValidationChecking({ getters, commit, dispatch, state }) {
+    if (process.server || !getters.isLoggedIn() || state.validationInterval) return;
+
+    const interval = setInterval(() => {
+      dispatch('validate');
+    }, 5000);
+
+    commit(START_VALIDATION_CHECKING, interval);
   },
   endValidationChecking: ({ commit, state }) => {
     clearInterval(state.validationInterval);
     commit(END_VALIDATION_CHECKING);
+    commit(HIDE_SESSION_EXPIRING);
   },
-  validate({ getters }) {
-    if (getters.isValid()) return true;
+  validate({ getters, state, commit }) {
+    if (getters.isLoggedIn()) {
+      if (getters.isValid()) {
+        if (process.client && !state.showSessionExpiring && window.nativeApp
+            && getters.isExpiring(this.app.$env.SESSION_EXPIRING_WARNING_SECONDS)) {
+          commit(SHOW_SESSION_EXPIRING);
+          NativeCallbacks.onSessionExpiring(state.durationSeconds / 60);
+        }
+        return true;
+      }
+      this.dispatch('auth/logoutWhenExpired');
+    }
     return false;
+  },
+  extend({ dispatch }) {
+    return this.app.$http.postV1SessionExtend()
+      .catch(() => dispatch('auth/logoutWhenExpired'));
   },
 };

@@ -96,6 +96,8 @@ const config = {
     // Feature Toggles
     THROTTLING_ENABLED: false,
     COMMIT_ID: 'dev',
+    // Session
+    SESSION_EXPIRING_WARNING_SECONDS: 60,
   },
 };
 

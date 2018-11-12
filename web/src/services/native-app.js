@@ -142,4 +142,13 @@ export default {
     }
     return false;
   },
+
+  onSessionExpiring(sessionDuration) {
+    const app = window.nativeApp;
+    if (app && app.onSessionExpiring) {
+      app.onSessionExpiring(sessionDuration);
+      return true;
+    }
+    return false;
+  },
 };

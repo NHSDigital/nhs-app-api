@@ -25,11 +25,30 @@ class HomeViewController : UIViewController {
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().HomeUrl
     var appVersionCheckError: Bool = false
+    var appWebInterface: AppWebInterface?
+    var webAppInterface: WebAppInterface?
+    var extendSessionOverdue: Bool = false
+    var currentSessionDuration: Int?
+    var isPresented: Bool = false
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        isPresented = true
+        
+        if (extendSessionOverdue) {
+            displayExtendSessionDialogue(sessionDuration: currentSessionDuration!)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        isPresented = false
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -38,7 +57,9 @@ class HomeViewController : UIViewController {
         setupMyAccountIcon()
         setupHelpIcon()
         
-        webViewDelegate = WebViewDelegate(controller: self, knownServices: knownServices)
+        webAppInterface = WebAppInterface(controller: self)
+        
+        webViewDelegate = WebViewDelegate(controller: self, knownServices: knownServices, webAppInterface: webAppInterface!)
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
         tabBar.setDefaultTabBarItemsAppearance()
@@ -59,6 +80,7 @@ class HomeViewController : UIViewController {
         configurationService = ConfigurationService(homeViewController: self)
 
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!, configurationService: configurationService!)
+        appWebInterface = AppWebInterface(webView: webViewController?.webView)
     }
     
     func openThrottlingCarousel() {
@@ -256,6 +278,38 @@ class HomeViewController : UIViewController {
                     webview.goBack()
                 }
             }
+        }
+    }
+    
+    func displayExtendSessionDialogue(sessionDuration: Int){
+        if (!isPresented) {
+            currentSessionDuration = sessionDuration
+            extendSessionOverdue = true;
+            return
+        }
+        
+        let alert = UIAlertController(title: NSLocalizedString("sessionExpiryWarningHeader", comment: ""), message: String.localizedStringWithFormat(NSLocalizedString("sessionExpiryWarningDurationInformation", comment: ""),sessionDuration), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("sessionExpiryWarningGetMoreTime", comment: ""), style: .default, handler: { _ in
+            self.appWebInterface?.extendSession()
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("sessionExpiryWarningLogOut", comment: ""), style: .default, handler: { _ in
+            self.appWebInterface?.logout()
+        }))
+        
+        NotificationCenter.default.addObserver(alert, selector: #selector(alert.close), name: CustomNotifications.dismissAllAlerts, object: nil)
+        
+        self.present(alert, animated: true, completion: { self.resetDisplayExtendSessionDialogueFlags() })
+    }
+    
+    func dimissAlert(){
+        NotificationCenter.default.post(name: CustomNotifications.dismissAllAlerts, object: nil)
+        resetDisplayExtendSessionDialogueFlags()
+    }
+    
+    private func resetDisplayExtendSessionDialogueFlags(){
+        if (extendSessionOverdue) {
+            extendSessionOverdue = false
+            currentSessionDuration = nil
         }
     }
 }

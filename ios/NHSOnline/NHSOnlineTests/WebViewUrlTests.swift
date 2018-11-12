@@ -12,7 +12,8 @@ class WebViewUrlTests: XCTestCase {
         
         knownServices = KnownServices(config: config())
         viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
-        webViewDelegate = WebViewDelegate(controller: viewController!, knownServices: knownServices!)
+        let webAppInterface = WebAppInterface(controller: viewController!)
+        webViewDelegate = WebViewDelegate(controller: viewController!, knownServices: knownServices!, webAppInterface: webAppInterface)
     }
     
     override func tearDown() {

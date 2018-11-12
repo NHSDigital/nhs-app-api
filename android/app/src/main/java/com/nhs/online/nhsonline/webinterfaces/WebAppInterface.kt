@@ -104,4 +104,10 @@ class WebAppInterface(private val context: MainActivity) {
             }
         }
     }
+
+    @JavascriptInterface
+    fun onSessionExpiring(sessionDuration: Int) {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
+        context.runOnUiThread{context.showExtendSessionDialogue(sessionDuration)}
+    }
 }

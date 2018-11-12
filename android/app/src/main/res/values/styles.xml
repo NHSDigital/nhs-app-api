@@ -45,6 +45,37 @@
         <item name="android:textSize">@dimen/errorTextSize</item>
     </style>
 
+    <style name="green_button" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:background">@color/darkGreen</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/errorTextSize</item>
+    </style>
+
+    <style name="alert_dialogue_blue_button" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">@dimen/_12sdp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:background">@color/nhsBlue</item>
+        <item name="android:shadowColor">@color/darkBlue</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/errorTextSize</item>
+    </style>
+
+    <style name="alert_dialogue_green_button" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">@dimen/_12sdp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:background">@color/lightGreen</item>
+        <item name="android:shadowColor">@color/darkGreen</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/errorTextSize</item>
+    </style>
+
     <style name="CustomSymptomsToolbar">
         <item name="navigationIcon">@drawable/back_arrow</item>
     </style>

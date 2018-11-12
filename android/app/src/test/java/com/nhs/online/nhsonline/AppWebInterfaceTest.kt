@@ -36,6 +36,18 @@ class AppWebInterfaceTest {
     }
 
     @Test
+    fun logoutTest() {
+        appWebInterface.logout()
+        verify(spyActivity).evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('auth/logout')")
+    }
+
+    @Test
+    fun extendSessionTest() {
+        appWebInterface.extendSession()
+        verify(spyActivity).evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('session/extend')")
+    }
+
+    @Test
     fun onDeviceBackButtonPressedLogoutDialogIsShown() {
         spyActivity.loggedIn()
         spyActivity.onBackPressed()
