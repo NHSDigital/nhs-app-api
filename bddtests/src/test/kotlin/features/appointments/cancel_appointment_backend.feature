@@ -41,13 +41,11 @@ Feature: Ability to cancel an appointment via api
       | TPP       |
       | VISION    |
 
-  @NHSO-803
   Scenario: VISION API will return a Conflict when cancelling an appointment booked by someone else
     Given as a VISION user I want to cancel an appointment booked by someone else
     When I send a cancellation request to the API with a valid cancellation reason
     Then I receive a "Conflict" error
 
-  @NHSO-803
   Scenario: VISION API will return a Conflict when cancelling an appointment that doesn't exist
     Given as a VISION user I want to cancel an appointment that doesn't exist
     When I send a cancellation request to the API with a valid cancellation reason
