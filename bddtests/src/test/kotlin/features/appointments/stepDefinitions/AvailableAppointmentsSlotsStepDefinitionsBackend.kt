@@ -21,6 +21,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.servlet.http.Cookie
 
+private const val TIMEOUT_IN_SECONDS = 90L
+
 class AvailableAppointmentsSlotsStepDefinitionsBackend  {
 
     @Given("^the system will time out when trying to retrieve (.*) appointment slots$")
@@ -28,7 +30,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
             respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
-                    .delayedBy(Duration.ofSeconds(90))
+                    .delayedBy(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
         }
     }
 

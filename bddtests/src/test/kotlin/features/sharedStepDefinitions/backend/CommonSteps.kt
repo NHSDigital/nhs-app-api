@@ -25,6 +25,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import java.util.concurrent.TimeUnit
 
+private const val ADDITIONAL_TIME_TO_DELAY = 10
 
 class CommonSteps : AbstractSteps() {
     companion object {
@@ -123,6 +124,6 @@ class CommonSteps : AbstractSteps() {
     @And("I allow my session to expire")
     fun andIDelayMyRequestByTheDefaultTime() {
         val delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
-        Thread.sleep(delayTime + 10)
+        Thread.sleep(delayTime + ADDITIONAL_TIME_TO_DELAY)
     }
 }

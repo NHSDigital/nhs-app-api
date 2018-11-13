@@ -24,6 +24,9 @@ import pages.navigation.NavBarNative
 import webdrivers.browserstack.BrowserstackLocalService
 import java.net.URL
 
+private const val WAIT_IN_SECONDS_MODIFIER = 1000L
+private const val WAIT_IN_SECONDS = 70L
+
 open class SharedStepDefinitions {
 
     @Steps
@@ -100,7 +103,7 @@ open class SharedStepDefinitions {
 
     @When("^I wait (\\d*) seconds$")
     open fun iWait(waitInSeconds: Int) {
-        Thread.sleep(waitInSeconds * 1000L)
+        Thread.sleep(waitInSeconds * WAIT_IN_SECONDS_MODIFIER)
     }
 
     @Then("^I see the (.*) menu button")
@@ -132,12 +135,12 @@ open class SharedStepDefinitions {
 
     @Then("I wait for (\\d+) seconds")
     fun iWaitForXSeconds(secondsToWaitFor: Long) {
-        Thread.sleep(((secondsToWaitFor) * 1000))
+        Thread.sleep(((secondsToWaitFor) * WAIT_IN_SECONDS_MODIFIER))
     }
 
     @Given("My session has expired")
     fun givenMySessionHasExpired() {
         Serenity.setSessionVariable("SESSION_EXPIRY_MINUTES").to(1)
-        iWaitForXSeconds(70)
+        iWaitForXSeconds(WAIT_IN_SECONDS)
     }
 }

@@ -7,6 +7,8 @@ import org.junit.Assert.assertEquals
 import pages.ErrorPage
 import pages.appointments.AvailableAppointmentsPage
 
+private const val TIME_TO_WAIT_FOR_SPINNER = 70L
+private const val TIMEOUT_PLUS_ONE_SECOND = 11L
 
 class AvailableAppointmentsSlotsErrorStepDefinitions {
 
@@ -17,16 +19,18 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
 
     @When("^I click try again button on appointment page$")
     fun i_click_try_again_button_on_appointment_page() {
-        errorPage.waitForSpinnerToDisappear(11) // 1 second more than timeout
+        errorPage.waitForSpinnerToDisappear(TIMEOUT_PLUS_ONE_SECOND) // 1 second more than timeout
         errorPage.clickOnButtonContainingText("Try again")
     }
 
     @Then("^I see appropriate information message for time-outs$")
     fun iSeeAppropriateInformationMessageAfterSecondsWhenItTimesOut() {
         val expectedHeader = "There's been a problem loading this page"
+
         val expectedMessageText = "Try again now. If the problem continues and you need to book an appointment now, " +
                 "contact your GP surgery directly. For urgent medical advice, call 111."
-        errorPage.waitForSpinnerToDisappear(70)
+        errorPage.waitForSpinnerToDisappear(TIME_TO_WAIT_FOR_SPINNER)
+
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)
         errorPage.subHeading.assertElementNotPresent()
@@ -80,7 +84,7 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
 
     @Then("^I see a timeout on the appointment booking page$")
     fun iSeeATimeOutOnTheAppointmentBookingPage() {
-        availableAppointmentsPage.waitForSpinnerToDisappear(70)
+        availableAppointmentsPage.waitForSpinnerToDisappear(TIME_TO_WAIT_FOR_SPINNER)
         errorPage.assertHasButton("Try again")
     }
 }

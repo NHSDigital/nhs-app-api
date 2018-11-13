@@ -8,11 +8,19 @@ import models.prescriptions.HistoricPrescription
 import models.prescriptions.MedicationCourse
 import org.joda.time.DateTime
 
+private const val REJECTED_PRIORITY = 1
+private const val REQUESTED_PRIORITY = 2
+private const val APPROVED_PRIORITY = 3
+private const val UPPER_LIMIT_FOR_TOTAL_COURSES = 100
+
 object EmisPrescriptionMapper {
 
     fun Map(data: PrescriptionRequestsGetResponse): List<HistoricPrescription> {
 
-        val historicPrescriptionOrderPriority = hashMapOf( "Rejected" to 1, "Requested" to 2, "Approved" to 3)
+        val historicPrescriptionOrderPriority = hashMapOf(
+                "Rejected" to REJECTED_PRIORITY,
+                "Requested" to REQUESTED_PRIORITY,
+                "Approved" to APPROVED_PRIORITY)
 
         val displayedEmisMedicationCourseStatuses = listOf(
                 RequestedMedicationCourseStatus.Rejected,
@@ -36,7 +44,7 @@ object EmisPrescriptionMapper {
 
         for (prescription in data.prescriptionRequests.toList().sortedByDescending { it.dateRequested }){
 
-            if (totalCoursesRunningTotal >= 100) {
+            if (totalCoursesRunningTotal >= UPPER_LIMIT_FOR_TOTAL_COURSES) {
                 break
             }
 

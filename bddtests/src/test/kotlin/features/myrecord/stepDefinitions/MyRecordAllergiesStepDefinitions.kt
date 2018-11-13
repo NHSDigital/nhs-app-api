@@ -16,6 +16,8 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.models.myrecord.MyRecordResponse
 
+private const val NUMBER_OF_ALLERGIES = 5
+
 open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the GP Practice has enabled allergies functionality " +
@@ -95,7 +97,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
             "TPP" -> {
                 mockingClient.forTpp {
                     myRecord.viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!)
-                            .respondWithSuccess(AllergiesData.getTppAllergiesData(5))
+                            .respondWithSuccess(AllergiesData.getTppAllergiesData(NUMBER_OF_ALLERGIES))
                 }
             }
         }

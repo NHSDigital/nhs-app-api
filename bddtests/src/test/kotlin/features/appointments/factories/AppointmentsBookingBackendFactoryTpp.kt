@@ -6,6 +6,8 @@ import models.Patient
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+private const val TIME_TO_ADD_IN_MINUTES = 30L
+
 class AppointmentsBookingBackendFactoryTpp : AppointmentsBookingBackendFactory("TPP") {
 
     override fun defaultAppointmentRequest(patient: Patient,
@@ -18,7 +20,7 @@ class AppointmentsBookingBackendFactoryTpp : AppointmentsBookingBackendFactory("
                 slotId ?: defaultApptBookingSlotId,
                 bookingReason ?: defaultApptBookingReason,
                 startTime = LocalDateTime.now().plusDays(1).format(dateFormatter),
-                endTime = LocalDateTime.now().plusDays(1).plusMinutes(30).format(dateFormatter)
+                endTime = LocalDateTime.now().plusDays(1).plusMinutes(TIME_TO_ADD_IN_MINUTES).format(dateFormatter)
         )
     }
 }

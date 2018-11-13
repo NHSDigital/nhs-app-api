@@ -45,6 +45,10 @@ import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 import java.time.OffsetDateTime
 
+private const val NUMBER_OF_PRESCRIPTIONS = 5
+private const val NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED = 3
+private const val END_DATE = 60L
+
 open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
@@ -110,7 +114,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                 }
 
                 val startDate = OffsetDateTime.now()
-                val endDate = startDate.minusDays(60)
+                val endDate = startDate.minusDays(END_DATE)
 
                 mockingClient.forTpp {
                     myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
@@ -425,7 +429,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see 5 allergies with different date formats$")
     fun i_see_five_allergies_with_different_date_formats() {
 
-        assertEquals(5, myRecordInfoPage.allergies.allRecordItems().count())
+        assertEquals(NUMBER_OF_PRESCRIPTIONS, myRecordInfoPage.allergies.allRecordItems().count())
         val dates = myRecordInfoPage.allergies.allRecordItemLabels()
 
         assertContains(dates, "15 May 2018")
@@ -546,7 +550,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see Problems records displayed$")
     fun i_see_Problems_records_displayed() {
-        assertEquals(3, myRecordInfoPage.problems.allRecordItems().count())
+        assertEquals(NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED, myRecordInfoPage.problems.allRecordItems().count())
     }
 
     @Then("^I see Consultations records displayed$")

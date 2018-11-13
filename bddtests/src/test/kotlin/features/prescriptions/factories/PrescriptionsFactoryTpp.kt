@@ -6,6 +6,7 @@ import mocking.data.prescriptions.courses.TppCoursesLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
+import org.apache.http.HttpStatus.SC_FORBIDDEN
 
 class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
 
@@ -50,7 +51,7 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
         mockingClient
                 .forTpp {
                     prescriptions.listRepeatMedication(patient)
-                            .respondWith(403, 0, resolve = {})
+                            .respondWith(SC_FORBIDDEN, 0, resolve = {})
                 }
     }
 }

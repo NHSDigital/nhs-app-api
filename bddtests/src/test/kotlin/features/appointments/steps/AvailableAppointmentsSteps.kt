@@ -192,6 +192,4 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 expectedGuidanceContent,
                 availableAppointmentsPage.guidance.content.element.text)
     }
-
-
 }

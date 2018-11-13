@@ -37,6 +37,8 @@ import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.apache.http.HttpStatus.SC_GATEWAY_TIMEOUT
+import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -52,6 +54,12 @@ import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import javax.servlet.http.Cookie
 
+private const val PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY = 6L
+private const val DATE_GREATER_THAN_SIX_MONTHS = 7L
+private const val TIME_TO_SLEEP_IN_MILLIS = 1000L
+private const val DELAY_IN_SECONDS = 31L
+private const val NUM_OF_PRESCRIPTIONS = 10
+
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Steps
@@ -61,7 +69,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     private val fromDateKey = "FromDate"
     private val toDate = OffsetDateTime.now()
-    private val prescriptionsDefaultLastNumberMonthsToDisplay: Long = 6
     private var numberOfPrescriptions: Int = 0
     private var numOfCourses: Int = 0
     private var numOfRepeats: Int = 0
@@ -137,9 +144,10 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
     fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths() {
         val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
-        numberOfPrescriptions = 10
-        numOfRepeats = 10
-        numOfCourses = 10
+
+        numberOfPrescriptions = NUM_OF_PRESCRIPTIONS
+        numOfRepeats = NUM_OF_PRESCRIPTIONS
+        numOfCourses = NUM_OF_PRESCRIPTIONS
 
         setupWiremockAndData(expectedDefaultFromDate)
     }
@@ -298,7 +306,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @But("^a fromDate greater than 6 months ago$")
     fun aFromDateGreaterThanSixMonths() {
-        fromDate = toDate.minusMonths(7).toString()
+        fromDate = toDate.minusMonths(DATE_GREATER_THAN_SIX_MONTHS).toString()
 
         givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths()
     }
@@ -313,7 +321,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     }
 
     fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
-        return dateNow.minusMonths(prescriptionsDefaultLastNumberMonthsToDisplay)
+        return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }
 
     @Given("prescriptions is disabled at a GP Practice level")
@@ -367,19 +375,19 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         mockingClient
                 .forEmis {
                     prescriptions.prescriptionsRequest(currentPatient)
-                            .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                            .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
 
         mockingClient
                 .forTpp {
                     prescriptions.listRepeatMedication(currentPatient)
-                            .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                            .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
 
         mockingClient
                 .forVision {
                     getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
-                            .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                            .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
     }
 
@@ -388,19 +396,19 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         mockingClient
                 .forEmis {
                     prescriptions.prescriptionsRequest(currentPatient)
-                            .respondWith(500, resolve = {})
+                            .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
 
         mockingClient
                 .forTpp {
                     prescriptions.listRepeatMedication(currentPatient)
-                            .respondWith(500, resolve = {})
+                            .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
 
         mockingClient
                 .forVision {
                     getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
-                            .respondWith(500, resolve = {})
+                            .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }
 
@@ -410,22 +418,22 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         if (currentProvider == ProviderTypes.EMIS) {
             mockingClient.forEmis {
                 prescriptions.coursesRequest(currentPatient)
-                        .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                        .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
             }
         } else if (currentProvider == ProviderTypes.TPP) {
-            Thread.sleep(1000)
+            Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
             mockingClient
                     .forTpp {
                         prescriptions.listRepeatMedication(currentPatient)
-                                .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                                .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                     }
         } else if (currentProvider == ProviderTypes.VISION) {
-            Thread.sleep(1000)
+            Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
 
             mockingClient
                     .forVision {
                         getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
-                                .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                                .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                     }
         }
     }
@@ -436,22 +444,22 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         if (currentProvider == ProviderTypes.EMIS) {
             mockingClient.forEmis {
                 prescriptions.coursesRequest(currentPatient)
-                        .respondWith(500, resolve = {})
+                        .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
             }
         } else if (currentProvider == ProviderTypes.TPP) {
-            Thread.sleep(1000)
+            Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
             mockingClient
                     .forTpp {
                         prescriptions.listRepeatMedication(currentPatient)
-                                .respondWith(500, resolve = {})
+                                .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
                     }
         } else if (currentProvider == ProviderTypes.VISION) {
-            Thread.sleep(1000)
+            Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
 
             mockingClient
                     .forVision {
                         getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
-                                .respondWith(500, resolve = {})
+                                .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
                     }
         }
     }
@@ -459,16 +467,16 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @But("The prescription submission endpoint is timing out")
     fun butThePrescriptionSubmissionEndpointIsTimingOut() {
         mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
-                .respondWith(504, resolve = {}, milliSecondDelay = 15000) }
+                .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000) }
 
         mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
-                .respondWith(504, resolve = {}, milliSecondDelay = 15000) }
+                .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000) }
     }
 
     @But("The prescription submission endpoint is throwing a server error")
     fun butThePrescriptionSubmissionEndpointIsThrowingAServerError() {
         mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
-                .respondWith(500, resolve = {}) }
+                .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {}) }
     }
 
     @But("The prescription submission endpoint is throwing an already ordered exception")
@@ -626,24 +634,16 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     private fun getResponseToExpectedPrescriptionFormat(): List<HistoricPrescription> {
 
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                return EmisPrescriptionMapper.Map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
-            }
-            ProviderTypes.TPP -> {
-                return TppPrescriptionMapper.Map(prescriptionLoader.data as ListRepeatMedicationReply)
-            }
-            ProviderTypes.VISION -> {
-                return VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory)
-            }
+        return when (currentProvider) {
+            ProviderTypes.EMIS -> EmisPrescriptionMapper.Map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
+            ProviderTypes.TPP -> TppPrescriptionMapper.Map(prescriptionLoader.data as ListRepeatMedicationReply)
+            ProviderTypes.VISION -> VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory)
+            else -> ArrayList()
         }
-        return ArrayList()
     }
 
     private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime) {
         //}, numPrescriptions: Int, numOfCourses: Int, numOfRepeats: Int) {
-
-        val delay: Long = 31
 
         if (!::prescriptionLoader.isInitialized) {
             val gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)
@@ -663,7 +663,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                         .forEmis {
                             prescriptions.prescriptionsRequest(currentPatient, fromdate, toDate)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
-                                    .delayedBy(Duration.ofSeconds(delay))
+                                    .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
                         }
             }
             ProviderTypes.TPP -> {
@@ -672,7 +672,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                         .forTpp {
                             prescriptions.listRepeatMedication(currentPatient)
                                     .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
-                                    .delayedBy(Duration.ofSeconds(delay))
+                                    .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
                         }
             }
             ProviderTypes.VISION -> {
@@ -682,7 +682,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                             getPrescriptionHistoryRequest(VisionMockDefaults
                                     .getVisionUserSession(VisionMockDefaults.patientVision))
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
-                                    .delayedBy(Duration.ofSeconds(delay))
+                                    .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
                         }
             }
         }

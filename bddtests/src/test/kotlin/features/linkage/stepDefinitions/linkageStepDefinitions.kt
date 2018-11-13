@@ -15,6 +15,8 @@ import worker.WorkerClient
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
 
+private const val YEARS_IN_THE_PAST = 16
+
 open class LinkageStepDefinitions {
 
     val mockingClient = MockingClient.instance
@@ -95,7 +97,7 @@ open class LinkageStepDefinitions {
 
     private fun dateOfBirthUnder16():String{
         val now = DateTime.now()
-        val under16 = now.minusYears(16).plusDays(1).withTime(0,0,0,0)
+        val under16 = now.minusYears(YEARS_IN_THE_PAST).plusDays(1).withTime(0,0,0,0)
         return under16.toString(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
     }
 

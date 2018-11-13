@@ -29,6 +29,8 @@ import net.serenitybdd.rest.SerenityRest
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
+import org.apache.http.HttpStatus.SC_CREATED
+import org.apache.http.HttpStatus.SC_OK
 import org.junit.Assert
 import pages.AuthReturnPage
 import pages.MyAccountPage
@@ -348,7 +350,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 .body(Gson().toJson(this.im1ConnectionRequest!!))
                 .post(uri)
 
-        if (arrayOf(200, 201).contains(response.statusCode)) {
+        if (arrayOf(SC_OK, SC_CREATED).contains(response.statusCode)) {
             this.im1ConnectionResponse = Gson().fromJson(response.body.asString(), Im1ConnectionResponse::class.java)
         } else {
             setErrorResponse(NhsoHttpException(uri = uri.toString(),

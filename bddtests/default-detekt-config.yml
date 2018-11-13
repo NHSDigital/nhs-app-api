@@ -15,9 +15,6 @@ test-pattern: # Configure exclusions for test sources
     - 'FunctionNaming'
     - 'MatchingDeclarationName'
     - 'TopLevelPropertyNaming'
-    - 'MagicNumber'
-    - 'WildcardImport'
-    - 'ReturnCount'
 
 build:
   maxIssues: 0

@@ -32,8 +32,10 @@ import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.Duration
 import java.util.*
 
-open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
+private const val WAIT_TIME_GREATER_THAN_THIRTY_SECS = 31L
 
+open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
+    
     val mockingClient = MockingClient.instance
 
     var prescriptionSubmissionRequest: PrescriptionSubmissionRequest? = null
@@ -135,7 +137,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     fun emisTakesTooLongToRespondWhenARepeatPrescriptionIsSubmitted() {
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
-                    .respondWithCreated().delayedBy(Duration.ofSeconds(31))
+                    .respondWithCreated().delayedBy(Duration.ofSeconds(WAIT_TIME_GREATER_THAN_THIRTY_SECS))
         }
     }
 

@@ -8,6 +8,9 @@ import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity
 import java.time.Duration
 
+private const val TIMES_TO_REPEAT_CHARACTER = 150
+private const val DELAY_IN_SECONDS = 12L
+
 class AppointmentsBookingStepDefinitions {
 
     @Given("^there are (.*) appointments available to book$")
@@ -59,7 +62,8 @@ class AppointmentsBookingStepDefinitions {
     fun thereAreAvailableAppointmentsToBookButSystemDoesNotRespond(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
-        factory.generateBookingResponse { bookRequest -> bookRequest.withDelay(Duration.ofSeconds(12))
+
+        factory.generateBookingResponse { bookRequest -> bookRequest.withDelay(Duration.ofSeconds(DELAY_IN_SECONDS))
                 .respondWithSuccess() }
     }
 
@@ -113,7 +117,7 @@ class AppointmentsBookingStepDefinitions {
     fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetOptionalWith150ReasonCharactersEntered() {
         val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.OPTIONAL)
-        val symptomsToEnter = "x".repeat(150)
+        val symptomsToEnter = "x".repeat(TIMES_TO_REPEAT_CHARACTER)
         Serenity.setSessionVariable(SymptomsToEnter).to(symptomsToEnter)
         factory.generateSuccessfulBookingResponse(symptomsToEnter)
     }

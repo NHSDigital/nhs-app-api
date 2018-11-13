@@ -8,6 +8,7 @@ import mockingFacade.appointments.BookAppointmentSlotFacade
 import net.serenitybdd.core.Serenity.setSessionVariable
 import java.util.*
 
+private const val SLOT_ID_VALUE = 301
 
 class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
@@ -36,8 +37,9 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         generateBookingResponse(bookingReason = "Reason", booker = booker)
     }
 
-    fun generateBookingResponse(slotId: Int = 301, bookingReason: String,
+    fun generateBookingResponse(slotId: Int = SLOT_ID_VALUE, bookingReason: String,
                                 booker: (IBookAppointmentsBuilder) -> Mapping) {
+
         appointmentMapper.requestMapping {
             booker(bookAppointmentSlotRequest(patient,
                     BookAppointmentSlotFacade(patient.userPatientLinkToken, slotId, bookingReason))

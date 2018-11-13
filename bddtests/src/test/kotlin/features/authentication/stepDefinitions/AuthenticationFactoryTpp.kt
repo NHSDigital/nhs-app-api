@@ -8,6 +8,8 @@ import mocking.tpp.models.Error
 import models.Patient
 import java.time.Duration
 
+private const val DELAY_BY_SECONDS = 31L
+
 class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
 
     override fun patientDoesNotExist(patient: Patient) {
@@ -46,7 +48,7 @@ class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
         mockingClient.forTpp {
             authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
                     .respondWithSuccess(AuthenticateReply())
-                    .delayedBy(Duration.ofSeconds(31))
+                    .delayedBy(Duration.ofSeconds(DELAY_BY_SECONDS))
         }
     }
 

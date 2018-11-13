@@ -16,6 +16,7 @@ import worker.models.appointments.AppointmentBookRequest
 import java.time.Duration
 import javax.servlet.http.Cookie
 
+private const val TIMEOUT_IN_SECONDS = 31L
 
 open class AppointmentsBookingStepDefinitionsBackend {
 
@@ -98,7 +99,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     fun appointmentBookingTimesOut(gpSystem: String) {
 
         defaultAppointmentBookingSetupWithResult(gpSystem)
-        { builder -> builder.withDelay(Duration.ofSeconds(31))
+        { builder -> builder.withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
                 .respondWithSuccess() }
     }
 

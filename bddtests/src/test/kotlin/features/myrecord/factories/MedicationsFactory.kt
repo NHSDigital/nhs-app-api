@@ -10,11 +10,11 @@ import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 import java.util.*
 
-abstract class MedicationsFactory {
+const val TWENTY_MONTHS: Long = 20
+const val TEN_MONTHS: Long = 10
+const val ONE_MONTH: Long = 1
 
-    protected val twentyMonths: Long = 20
-    protected val tenMonths: Long = 10
-    protected val oneMonth: Long = 1
+abstract class MedicationsFactory {
 
     val mockingClient = MockingClient.instance
 

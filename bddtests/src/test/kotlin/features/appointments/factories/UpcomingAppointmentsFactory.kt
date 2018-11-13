@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
 
+private const val DELAY_IN_SECONDS = 90L
+
 abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
     private val timeZone = TimeZone.getTimeZone("Europe/London")
@@ -66,7 +68,7 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
 
         val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
         createUpcomingAppointments {
-            respondWithSuccess(myAppointmentsFacade).delayedBy(Duration.ofSeconds(90))
+            respondWithSuccess(myAppointmentsFacade).delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
         }
     }
 

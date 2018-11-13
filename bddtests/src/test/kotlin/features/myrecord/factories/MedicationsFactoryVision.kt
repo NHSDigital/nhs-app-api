@@ -36,8 +36,8 @@ class MedicationsFactoryVision: MedicationsFactory() {
     private fun getVisionMedicationsData(): String {
 
         val now = LocalDateTime.now()
-        val tenMonthsAgo = now.minusMonths(tenMonths).toString()
-        val oneMonthAgo = now.minusMonths(oneMonth).toString()
+        val tenMonthsAgo = now.minusMonths(TEN_MONTHS).toString()
+        val oneMonthAgo = now.minusMonths(ONE_MONTH).toString()
 
         val currentRepeatMedication = "<clinical _category=\"Intervention\" _drugsource=\"In practice\" " +
                 "_eventdate=\"1\" _first_prescribed_date=\"1\" _last_issue=\"1\" _last_prescribed_date=\"1\" " +

@@ -9,6 +9,8 @@ import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import java.net.URL
 
+private const val NEW_TAB_WAIT_TIME = 1000L
+
 open class OrganDonationStepDefinitions {
 
     @Steps
@@ -31,7 +33,7 @@ open class OrganDonationStepDefinitions {
     private fun aNewTabOpens(url: String) {
         //This wait has been added because local runs are failing when
         //chrome is not run in headless mode - race condition
-        Thread.sleep(1000)
+        Thread.sleep(NEW_TAB_WAIT_TIME)
         browser.changeTab(URL(url))
         browser.shouldHaveUrl(url)
     }

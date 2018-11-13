@@ -12,6 +12,8 @@ import pages.DataSharingPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 
+private const val NEXT_BUTTON_WAIT_TIME = 500L
+
 class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Steps
@@ -109,7 +111,7 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
                 "Previous" -> dataSharing.btnPrevious.click()
             }
             if (--clicks != 0) {
-                Thread.sleep(500)
+                Thread.sleep(NEXT_BUTTON_WAIT_TIME)
             }
         }
     }

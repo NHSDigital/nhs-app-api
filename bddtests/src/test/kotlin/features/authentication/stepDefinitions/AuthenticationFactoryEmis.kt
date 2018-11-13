@@ -8,6 +8,8 @@ import mocking.models.Mapping
 import models.Patient
 import java.time.Duration
 
+private const val DELAY_BY_SECONDS = 31L
+
 class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
 
     override fun patientDoesNotExist(patient: Patient) {
@@ -47,7 +49,7 @@ class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond() {
         mockingClient.forEmis { authentication.endUserSessionRequest()
-                .respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
+                .respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(DELAY_BY_SECONDS)) }
         mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, associationType) }
     }
 

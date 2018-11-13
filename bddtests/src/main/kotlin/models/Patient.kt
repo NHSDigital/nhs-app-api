@@ -13,6 +13,7 @@ import mocking.vision.VisionMockDefaults
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
 import worker.models.session.UserSessionRequest
+
 data class Patient(
         val title:String = "",
         val firstName:String = "",
@@ -272,13 +273,20 @@ data class Patient(
                 linkageKey = "kWWG9kHfNMSjm"
         )
 
-        public fun formatNHSNumber(nhsNumber: String): String {
+
+        fun formatNHSNumber(nhsNumber: String): String {
             val number = nhsNumber.trim().replace(" ", "")
-            return "${number.substring(firstNHSNumberIndex, firstNHSNumberFormattingBreak)} " +
-                    "${number.substring(firstNHSNumberFormattingBreak, secondNHSNumberFormattingBreak)} " +
-                    number.substring(secondNHSNumberFormattingBreak, finalNHSNumberBreak)
+
+            return when {
+                number.isNullOrEmpty() -> ""
+                number.length != lengthOfNHSNumber -> number
+                else -> "${number.substring(firstNHSNumberIndex, firstNHSNumberFormattingBreak)} " +
+                        "${number.substring(firstNHSNumberFormattingBreak, secondNHSNumberFormattingBreak)} " +
+                        number.substring(secondNHSNumberFormattingBreak, finalNHSNumberBreak)
+            }
         }
 
+        private const val lengthOfNHSNumber = 10
         private const val firstNHSNumberIndex = 0
         private const val firstNHSNumberFormattingBreak = 3
         private const val secondNHSNumberFormattingBreak = 6

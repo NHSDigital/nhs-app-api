@@ -5,6 +5,8 @@ import mocking.vision.VisionMockDefaults
 import models.Patient
 import java.time.Duration
 
+private const val DELAY_BY_SECONDS = 31L
+
 class AuthenticationFactoryVision  : AuthenticationFactory("VISION"){
 
     override fun patientDoesNotExist(patient: Patient) {
@@ -44,7 +46,7 @@ class AuthenticationFactoryVision  : AuthenticationFactory("VISION"){
                 .forVision {
                     getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionMockDefaults.visionConfigurationResponse)
-                            .delayedBy(Duration.ofSeconds(31))
+                            .delayedBy(Duration.ofSeconds(DELAY_BY_SECONDS))
                 }
     }
 

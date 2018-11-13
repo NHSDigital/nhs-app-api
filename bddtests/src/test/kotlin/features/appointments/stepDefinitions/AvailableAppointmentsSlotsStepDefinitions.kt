@@ -24,7 +24,7 @@ import mockingFacade.appointments.AppointmentSlotFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
-import org.apache.http.HttpStatus
+import org.apache.http.HttpStatus.SC_OK
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -34,6 +34,7 @@ import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
 import javax.servlet.http.Cookie
 
+private const val TIMEOUT_IN_SECONDS = 90L
 
 class AvailableAppointmentsSlotsStepDefinitions {
 
@@ -139,7 +140,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun theGpSystemDoesntRespondATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
-            withDelay(Duration.ofSeconds(90))
+            withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
                     .respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
         }
     }
@@ -269,9 +270,10 @@ class AvailableAppointmentsSlotsStepDefinitions {
         for (appointmentSession in expectedAppointmentSessions) {
             expectedAppointmentSlots.addAll(appointmentSession.slots)
         }
-        val httpStatus = SerenityHelpers.getValueOrNull<NhsoHttpException>("HttpException")?.statusCode ?: 200
+        val httpStatus = SerenityHelpers.getValueOrNull<NhsoHttpException>("HttpException")?.statusCode ?: SC_OK
 
-        assertEquals("Http Error Status. ", HttpStatus.SC_OK, httpStatus)
+        assertEquals("Http Error Status. ", SC_OK, httpStatus)
+
         val actualResult = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         assertNotNull("Expected actualResult not null", actualResult)
         assertNotNull("Expected actualResult.slots not null", actualResult.slots)
