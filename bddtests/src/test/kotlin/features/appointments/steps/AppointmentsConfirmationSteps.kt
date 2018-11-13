@@ -56,7 +56,8 @@ open class AppointmentsConfirmationSteps {
     @Step
     fun checkErrorSendingMessage() {
         val errorHeading = "There's been a problem sending your request"
-        val errorText = "Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
+        val errorText = "Go back and try again. If the problem continues and you need to book " +
+                "or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
         assertEquals("Expected heading text $errorHeading but found ${errorPage.heading.element.text}",
                 errorHeading, errorPage.heading.element.text)
         errorPage.subHeading.assertElementNotPresent()

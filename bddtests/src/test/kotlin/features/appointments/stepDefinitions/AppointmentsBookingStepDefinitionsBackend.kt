@@ -30,7 +30,8 @@ open class AppointmentsBookingStepDefinitionsBackend {
     }
 
     @Given("^an appointment booking for (.*) can be successful with slot identifier of (\\d+) characters?$")
-    fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForSlotId(gpSystem: String, numberOfCharacters: Int) {
+    fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForSlotId(gpSystem: String,
+                                                                               numberOfCharacters: Int) {
         val factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
         val patient = factory.patient
         val slotId = "1".repeat(numberOfCharacters).toInt()
@@ -40,7 +41,8 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
 
     @Given("^an appointment booking for (.*) can be successful with booking reason of (\\d+) characters?$")
-    fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForBookingReason(gpSystem: String, numberOfCharacters: Int) {
+    fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForBookingReason(gpSystem: String,
+                                                                                      numberOfCharacters: Int) {
         val factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
         val patient = factory.patient
         val bookingReason = "a".repeat(numberOfCharacters)
@@ -87,24 +89,31 @@ open class AppointmentsBookingStepDefinitionsBackend {
     @Given("^an appointment booking for (.*) cannot be successful because the GP system is unavailable$")
     fun appointmentBookingUnavailable(gpSystem: String) {
 
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithGPServiceUnavailableException() }
+        defaultAppointmentBookingSetupWithResult(gpSystem)
+        { builder -> builder
+                .respondWithGPServiceUnavailableException() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system will time out$")
     fun appointmentBookingTimesOut(gpSystem: String) {
 
-        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.withDelay(Duration.ofSeconds(31)).respondWithSuccess() }
+        defaultAppointmentBookingSetupWithResult(gpSystem)
+        { builder -> builder.withDelay(Duration.ofSeconds(31))
+                .respondWithSuccess() }
     }
 
     private fun defaultAppointmentBookingSetupWithResult(
             gpSystem: String,
             bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-        AppointmentsBookingBackendFactory.getForSupplier(gpSystem).defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)
+        AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+                .defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)
     }
 
     @When("^an appointment booking is submitted$")
     fun anAppointmentBookingIsSubmitted() {
-        val appointmentToBook = Serenity.sessionVariableCalled<AppointmentBookRequest>(AppointmentsBookingBackendFactory.appointmentToBookKey)
+        val appointmentToBook =
+                Serenity.sessionVariableCalled<AppointmentBookRequest>(AppointmentsBookingBackendFactory
+                        .appointmentToBookKey)
         submitAppointmentRequest(appointmentToBook)
     }
 

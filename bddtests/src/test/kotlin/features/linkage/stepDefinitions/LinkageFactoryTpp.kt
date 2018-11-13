@@ -21,7 +21,8 @@ class LinkageFactoryTpp:  LinkageFactory("TPP") {
             surname = "Thompson",
             dateOfBirth = "01-05-2000")
 
-    override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult) {
+    override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
+                                       linkageResult: LinkageResult) {
 
         val linkageToPostRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyRetrieved to successfulPost(linkageInformationFacade),
@@ -43,7 +44,8 @@ class LinkageFactoryTpp:  LinkageFactory("TPP") {
         return { post -> post.respondWithSuccessfullyCreated(linkage) }
     }
 
-    override fun mockLinkageGetResult(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult) {
+    override fun mockLinkageGetResult(linkageInformationFacade: LinkageInformationFacade,
+                                      linkageResult: LinkageResult) {
 
         val linkageToGetRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyRetrieved to successfulGet()

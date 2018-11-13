@@ -25,15 +25,19 @@ class AppointmentsBookingStepDefinitions {
     }
 
     @Given("^there are (.*) appointments available to book with a reason of (\\d+) character$")
-    fun thereAreAvailableAppointmentsToBookWithAReasonOfNumberOfCharactersSpecified(gpSystem: String, numberOfCharacters: Int) {
+    fun thereAreAvailableAppointmentsToBookWithAReasonOfNumberOfCharactersSpecified(gpSystem: String,
+                                                                                    numberOfCharacters: Int) {
         val bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharacters)
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateSuccessfulBookingResponse(bookingReasonOfSpecifiedLength)
     }
 
-    @Given("^there are (.*) appointments available to book with a reason of (\\d+) characters but user attempts to enter (\\d+) characters$")
-    fun thereAreAvailableAppointmentsToBookWithAReasonOfNumberOfCharactersSpecified(gpSystem: String, numberOfCharactersAllowed: Int, numberOfCharactersEntered: Int) {
+    @Given("^there are (.*) appointments available to book with a reason of (\\d+) characters " +
+            "but user attempts to enter (\\d+) characters$")
+    fun thereAreAvailableAppointmentsToBookWithAReasonOfNumberOfCharactersSpecified(gpSystem: String,
+                                                                                    numberOfCharactersAllowed: Int,
+                                                                                    numberOfCharactersEntered: Int) {
         val bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharactersAllowed)
         val symptomsToEnter = "x".repeat(numberOfCharactersEntered)
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
@@ -50,11 +54,13 @@ class AppointmentsBookingStepDefinitions {
         Serenity.setSessionVariable(SymptomsToEnter).to(bookingReason)
     }
 
-    @Given("^there are (.*) appointments available to book, but GP system doesn't respond a timely fashion when booking$")
+    @Given("^there are (.*) appointments available to book, " +
+            "but GP system doesn't respond a timely fashion when booking$")
     fun thereAreAvailableAppointmentsToBookButSystemDoesNotRespond(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
-        factory.generateBookingResponse { bookRequest -> bookRequest.withDelay(Duration.ofSeconds(12)).respondWithSuccess() }
+        factory.generateBookingResponse { bookRequest -> bookRequest.withDelay(Duration.ofSeconds(12))
+                .respondWithSuccess() }
     }
 
     @Given("^there are (.*) appointments available to book, but the GP system is unavailable$")
@@ -65,7 +71,8 @@ class AppointmentsBookingStepDefinitions {
         factory.generateBookingResponse { bookRequest -> bookRequest.respondWithGPServiceUnavailableException() }
     }
 
-    @Given("^there are (.*) appointments available to book, but the appointment slot has already been booked by somebody else$")
+    @Given("^there are (.*) appointments available to book, " +
+            "but the appointment slot has already been booked by somebody else$")
     fun thereAreAvailableAppointmentsToBookButBookingConflict(gpSystem: String) {
 
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
@@ -82,7 +89,8 @@ class AppointmentsBookingStepDefinitions {
     }
 
     //    EMIS Specific step definition
-    @Given("^there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit$")
+    @Given("^there are appointments available to book in old EMIS system, " +
+            "but user reached maximum appointment booking limit$")
     fun thereAreAvailableAppointmentsToBookInOldEmisSystemButUserReachedMaximumBookingLimit() {
         val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         factory.generateDefaultAvailableAppointmentSlotExample()
@@ -100,7 +108,8 @@ class AppointmentsBookingStepDefinitions {
         factory.generateSuccessfulBookingResponseEmptyReason()
     }
 
-    @Given("^there are EMIS appointments available to book where booking reason is set optional with 150 reason characters entered$")
+    @Given("^there are EMIS appointments available to book where booking reason is set optional " +
+            "with 150 reason characters entered$")
     fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetOptionalWith150ReasonCharactersEntered() {
         val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.OPTIONAL)

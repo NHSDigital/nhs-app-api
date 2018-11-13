@@ -18,14 +18,17 @@ import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
 
-    @Given("^the GP Practice has enabled allergies functionality and the patient has \"(.*)\" allergies for (.*)$")
-    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergiesForService(count: Int, getService: String) {
+    @Given("^the GP Practice has enabled allergies functionality " +
+            "and the patient has \"(.*)\" allergies for (.*)$")
+    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergiesForService(count: Int,
+                                                                                               getService: String) {
         setPatientToDefaultFor(getService)
         when (getService) {
             "EMIS" ->
 
                 mockingClient.forEmis {
-                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithSuccess(AllergiesData.getEmisAllergiesData(count))
+                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient)
+                            .respondWithSuccess(AllergiesData.getEmisAllergiesData(count))
                 }
             "TPP" -> {
                 mockingClient.forTpp {
@@ -77,17 +80,22 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         }
     }
 
-    @Given("the GP Practice has enabled allergies functionality and has 5 different allergies with different date formats for (.*)")
-    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndHasFiveDifferentAllergiesWithDifferentDateFormatsForService(getService: String) {
+    @Given("the GP Practice has enabled allergies functionality " +
+            "and has 5 different allergies with different date formats for (.*)")
+    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndHasFiveDifferentAllergiesWithDifferentDateFormats(
+            getService: String) {
+
         setPatientToDefaultFor(getService)
         when (getService) {
             "EMIS" ->
                 mockingClient.forEmis {
-                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
+                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient)
+                            .respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
                 }
             "TPP" -> {
                 mockingClient.forTpp {
-                    myRecord.viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!).respondWithSuccess(AllergiesData.getTppAllergiesData(5))
+                    myRecord.viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!)
+                            .respondWithSuccess(AllergiesData.getTppAllergiesData(5))
                 }
             }
         }
@@ -99,7 +107,8 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient)
+                            .respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {

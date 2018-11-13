@@ -45,7 +45,8 @@ class PatientRegistrationSteps : AbstractSteps() {
         val nhsNumbers = sessionVariableCalled<List<String>>("NHSNumbers")
         val connectionToken = sessionVariableCalled<String>("ConnectionToken")
 
-        Assert.assertNotNull("Exception thrown during IM1 connection post. Exception: ${sessionVariableCalled<NhsoHttpException>("HttpException")}", result)
+        Assert.assertNotNull("Exception thrown during IM1 connection post. " +
+                "Exception: ${sessionVariableCalled<NhsoHttpException>("HttpException")}", result)
         Assert.assertEquals(nhsNumbers[0], result.nhsNumbers!![0].nhsNumber)
         Assert.assertEquals(nhsNumbers[1], result.nhsNumbers!![1].nhsNumber)
         Assert.assertEquals(result.connectionToken, connectionToken)
@@ -56,7 +57,8 @@ class PatientRegistrationSteps : AbstractSteps() {
         val result = sessionVariableCalled<Im1ConnectionResponse>(Im1ConnectionResponse::class)
         val connectionToken = sessionVariableCalled<String>("ConnectionToken")
 
-        Assert.assertNotNull("Exception thrown during IM1 connection post. Exception: ${sessionVariableCalled<NhsoHttpException>("HttpException")}", result)
+        Assert.assertNotNull("Exception thrown during IM1 connection post. " +
+                "Exception: ${sessionVariableCalled<NhsoHttpException>("HttpException")}", result)
         Assert.assertEquals(result.connectionToken, connectionToken)
         Assert.assertArrayEquals(result.nhsNumbers, emptyArray<PatientNhsNumber>())
     }

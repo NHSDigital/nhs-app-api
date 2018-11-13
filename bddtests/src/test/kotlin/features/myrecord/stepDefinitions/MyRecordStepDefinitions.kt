@@ -71,11 +71,13 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.testResultsRequest(patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+                    myRecord.testResultsRequest(patient)
+                            .respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
                 }
 
                 mockingClient.forEmis {
-                    myRecord.immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+                    myRecord.immunisationsRequest(patient)
+                            .respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
                 }
 
                 mockingClient.forEmis {
@@ -83,7 +85,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                 }
 
                 mockingClient.forEmis {
-                    myRecord.medicationsRequest(patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
+                    myRecord.medicationsRequest(patient)
+                            .respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
                 }
 
                 mockingClient.forEmis {
@@ -102,7 +105,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                 }
 
                 mockingClient.forTpp {
-                    myRecord.patientRecordRequest(patient.tppUserSession!!).respondWithSuccess(TppDcrData.getDefaultTppDcrData())
+                    myRecord.patientRecordRequest(patient.tppUserSession!!)
+                            .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
                 }
 
                 val startDate = OffsetDateTime.now()
@@ -342,7 +346,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see the patient information details$")
     fun iSeePatientInformationDetails() {
         val sex = this.patient.sex.name;
-        val address = "${this.patient.address.houseNameFlatNumber}, ${this.patient.address.numberStreet}, ${this.patient.address.village}, ${this.patient.address.town}, ${this.patient.address.county}, ${this.patient.address.postcode}";
+        val address = "${this.patient.address.houseNameFlatNumber}, " +
+                "${this.patient.address.numberStreet}, " +
+                "${this.patient.address.village}, " +
+                "${this.patient.address.town}, " +
+                "${this.patient.address.county}, " +
+                "${this.patient.address.postcode}"
 
         myRecordInfoPage.assertLabelAndValue("Name", patient.formattedFullName())
         myRecordInfoPage.assertLabelAndValue("Date of birth", patient.formattedDateOfBirth())
@@ -396,7 +405,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
     fun i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
-        assertEquals("You do not currently have online access to your medical record\nContact your GP surgery for more information.",
+        assertEquals("You do not currently have online access to your medical record\n" +
+                "Contact your GP surgery for more information.",
                 myRecordInfoPage.getSummaryCareNoAccessMessage())
     }
 
@@ -524,7 +534,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see a message indicating that I have no access to view my summary care record$")
     fun i_see_a_message_indicating_that_I_have_no_access_to_view_my_record() {
-        assertEquals("You do not currently have online access to your medical record\n" + "Contact your GP surgery for more information.",
+        assertEquals("You do not currently have online access to your medical record\n" +
+                "Contact your GP surgery for more information.",
                 myRecordInfoPage.getSummaryCareNoAccessMessage())
     }
 

@@ -6,7 +6,11 @@ import mocking.models.Mapping
 
 class AppointmentsSlotsFactoryVision : AppointmentsSlotsFactory("VISION") {
 
-    override fun generateAppointmentSlotResponse(startDate: String?, endDate: String?, guidanceMessage: Boolean, reasonNecessity: NecessityOption, mapping: IAppointmentSlotsBuilder.() -> Mapping) {
+    override fun generateAppointmentSlotResponse(startDate: String?,
+                                                 endDate: String?,
+                                                 guidanceMessage: Boolean,
+                                                 reasonNecessity: NecessityOption,
+                                                 mapping: IAppointmentSlotsBuilder.() -> Mapping) {
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }

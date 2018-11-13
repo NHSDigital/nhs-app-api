@@ -85,7 +85,8 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.checkTimeoutErrorMessage()
     }
 
-    @Then("^I see appropriate information message when there is an error sending data on appointment confirmation page$")
+    @Then("^I see appropriate information message " +
+            "when there is an error sending data on appointment confirmation page$")
     fun i_see_appropriate_information_message_when_there_is_an_error_sending_data_on_appointment_confirmation_page() {
         appointmentsConfirmationSteps.checkErrorSendingMessage()
     }

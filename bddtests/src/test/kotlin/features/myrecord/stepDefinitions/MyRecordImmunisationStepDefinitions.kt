@@ -18,7 +18,7 @@ import worker.models.myrecord.MyRecordResponse
 open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Given("^the GP Practice has enabled immunisations functionality and multiple immunisation records exist for (.*)$")
-    fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleImmunisationRecordsExistFor(getService: String) {
+    fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleRecordsExistFor(getService: String) {
         setPatientToDefaultFor(getService)
         when (getService) {
             "EMIS" -> {
@@ -55,7 +55,8 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+                    myRecord.immunisationsRequest(patient)
+                            .respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
                 }
             }
             "TPP" -> {

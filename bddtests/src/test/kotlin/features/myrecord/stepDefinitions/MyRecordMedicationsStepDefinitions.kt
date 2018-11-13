@@ -40,7 +40,8 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient)
+                            .respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
@@ -84,4 +85,3 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
         assertEquals(value, result.response.medications.hasErrored)
     }
 }
-

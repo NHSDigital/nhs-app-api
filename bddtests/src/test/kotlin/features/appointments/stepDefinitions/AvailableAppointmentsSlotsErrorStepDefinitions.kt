@@ -24,7 +24,8 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
     @Then("^I see appropriate information message for time-outs$")
     fun iSeeAppropriateInformationMessageAfterSecondsWhenItTimesOut() {
         val expectedHeader = "There's been a problem loading this page"
-        val expectedMessageText = "Try again now. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
+        val expectedMessageText = "Try again now. If the problem continues and you need to book an appointment now, " +
+                "contact your GP surgery directly. For urgent medical advice, call 111."
         errorPage.waitForSpinnerToDisappear(70)
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)
@@ -41,7 +42,8 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
     @Then("^I see appropriate information message when there is a error retrieving data$")
     fun i_see_appropriate_information_message_when_there_is_a_error_retrieving_data() {
         val expectedHeader = "There's been a problem loading this page"
-        val expectedBody = "Try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
+        val expectedBody = "Try again later. If the problem continues and you need to book an appointment now, " +
+                "contact your GP surgery directly. For urgent medical advice, call 111."
         errorPage.waitForSpinnerToDisappear()
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)

@@ -86,8 +86,9 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         prescriptionSubmissionRequest!!.courseIds.addAll(uuids)
     }
 
-    @And("^EMIS responds with an error indicating an included course has already been ordered in the last 30 days when submitting the repeat prescription")
-    fun emisRespondsWithErrorIndicatingAnIncludedCourseHasAlreadyBeenOrderedInTheLastDaysWhenSubmittingRepeatPrescription() {
+    @And("^EMIS responds with an error indicating an included course has already been ordered in the last 30 days " +
+            "when submitting the repeat prescription")
+    fun emisRespondsWithErrorIndicatingAnIncludedCourseHasAlreadyBeenOrderedWhenSubmittingRepeatPrescription() {
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithAlreadyAPendingRequestInTheLast30Days()
@@ -186,7 +187,9 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                             .whenScenarioStateIs(currentScenarioState)
                 }
 
-                val map = Serenity.sessionVariableCalled<MutableMap<String, PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
+                val map =
+                        Serenity.sessionVariableCalled<MutableMap<String,
+                                PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
                 map[Scenario.STARTED] = data
             }
             ProviderTypes.TPP -> {
@@ -206,7 +209,8 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @When("I click Confirm and order repeat prescription")
     fun iClickConfirmAndOrderRepeatPrescription() {
-        confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.clickConfirmAndOrderRepeatPrescriptionButton()
+        confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage
+                .clickConfirmAndOrderRepeatPrescriptionButton()
     }
 
 
@@ -222,13 +226,16 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                         false)
             }
             ProviderTypes.EMIS -> {
-                val map = Serenity.sessionVariableCalled<MutableMap<String, PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
+                val map =
+                        Serenity.sessionVariableCalled<MutableMap<String,
+                                PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
 
                 prescriptionSteps.assertPrescriptionsMatch(EmisPrescriptionMapper.Map(
                         map[currentScenarioState]!!), amount)
             }
             ProviderTypes.VISION -> {
-                prescriptionSteps.assertPrescriptionsMatch(VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory), amount)
+                prescriptionSteps.assertPrescriptionsMatch(VisionPrescriptionMapper
+                        .map(prescriptionLoader.data as PrescriptionHistory), amount)
             }
         }
     }

@@ -27,15 +27,18 @@ class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
     }
 
     override fun patientWithSurnameInWrongFormat(patient: Patient) {
-        createInvalidLinkageTest(patient) { respondWithBadRequest("The request is invalid.", "Surname") }
+        createInvalidLinkageTest(patient) { respondWithBadRequest("The request is invalid.",
+                "Surname") }
     }
 
     override fun patientWithAccountIDInWrongFormat(patient: Patient) {
-        createInvalidLinkageTest(patient) { respondWithBadRequest("The request is invalid.", "LinkageDetails.AccountId") }
+        createInvalidLinkageTest(patient) { respondWithBadRequest("The request is invalid.",
+                "LinkageDetails.AccountId") }
     }
 
     override fun patientWithLinkageKeyInWrongFormat(patient: Patient) {
-        createInvalidLinkageTest(patient) { respondWithBadRequest("The request is invalid.", "LinkageDetails.LinkageKey") }
+        createInvalidLinkageTest(patient) { respondWithBadRequest("The request is invalid.",
+                "LinkageDetails.LinkageKey") }
     }
 
     override fun patientWithDOBInWrongFormat(patient: Patient) {
@@ -43,7 +46,8 @@ class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
     }
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond() {
-        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
+        mockingClient.forEmis { authentication.endUserSessionRequest()
+                .respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
         mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, associationType) }
     }
 
@@ -59,7 +63,8 @@ class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
     }
 
     private fun createInvalidLinkageTest( patient: Patient, emisResponse: (EmisMeApplicationsBuilder.() -> Mapping)) {
-        mockingClient.forEmis { emisResponse(authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))) }
+        mockingClient.forEmis { emisResponse(authentication
+                .meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))) }
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
     }
 

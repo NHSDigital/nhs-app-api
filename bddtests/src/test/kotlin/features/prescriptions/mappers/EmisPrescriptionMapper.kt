@@ -49,14 +49,17 @@ object EmisPrescriptionMapper {
 
             for (courseEntry in filteredCoursesInPrescription) {
 
-                val course = repeatCourses.toList().filter { it.medicationCourseGuid == courseEntry.requestedMedicationCourseGuid }.single()
+                val course =
+                        repeatCourses.toList().filter { it.medicationCourseGuid ==
+                                courseEntry.requestedMedicationCourseGuid }.single()
 
                 val historicPrescription = HistoricPrescription(
                         name = course.name,
                         dosage = pages.prescription.resolveDetailsField(course.dosage, course.quantityRepresentation)
                 )
                 historicPrescription.orderDate = datetime
-                historicPrescription.status = emisMedicationCourseStatusToDisplayedStatus[courseEntry.requestedMedicationCourseStatus]
+                historicPrescription.status =
+                        emisMedicationCourseStatusToDisplayedStatus[courseEntry.requestedMedicationCourseStatus]
 
                 historicPrescriptions.add(historicPrescription)
             }

@@ -11,9 +11,12 @@ import java.util.*
 
 class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
-    fun generateDefaultAvailableAppointmentSlotExample(guidanceMessage: Boolean = true, reasonNecessityOption: NecessityOption = NecessityOption.MANDATORY) {
+    fun generateDefaultAvailableAppointmentSlotExample(guidanceMessage: Boolean = true,
+                                                       reasonNecessityOption: NecessityOption =
+                                                               NecessityOption.MANDATORY) {
         val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
-        factory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = guidanceMessage, reasonNecessity = reasonNecessityOption)
+        factory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = guidanceMessage,
+                reasonNecessity = reasonNecessityOption)
     }
 
     fun generateMultipleAvailableAppointmentSlots() {
@@ -33,7 +36,8 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         generateBookingResponse(bookingReason = "Reason", booker = booker)
     }
 
-    fun generateBookingResponse(slotId: Int = 301, bookingReason: String, booker: (IBookAppointmentsBuilder) -> Mapping) {
+    fun generateBookingResponse(slotId: Int = 301, bookingReason: String,
+                                booker: (IBookAppointmentsBuilder) -> Mapping) {
         appointmentMapper.requestMapping {
             booker(bookAppointmentSlotRequest(patient,
                     BookAppointmentSlotFacade(patient.userPatientLinkToken, slotId, bookingReason))

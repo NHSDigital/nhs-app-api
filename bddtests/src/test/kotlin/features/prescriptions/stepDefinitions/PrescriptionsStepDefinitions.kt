@@ -167,9 +167,11 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 assertEquals(count, prescriptionsListResponse.prescriptions.count())
                 val prescriptions = prescriptionsListResponse.prescriptions
 
-                // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
+                // We had to use a string here and then parse the screen as
+                // kotlin did not like the date time format sent from the worker
                 for (int in 0 until prescriptions.count() - 2) {
-                    assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate)!! >= ZonedDateTime.parse(prescriptions[int + 1].orderDate))
+                    assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate)!! >=
+                            ZonedDateTime.parse(prescriptions[int + 1].orderDate))
                 }
             }
             ProviderTypes.TPP -> {
@@ -343,7 +345,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                         .forVision {
                             getConfigurationRequest(
                                     VisionMockDefaults.visionUserSessionPrescriptionDisabled)
-                                    .respondWithSuccess(VisionMockDefaults.visionConfigurationResponsePrescriptionsDisabled)
+                                    .respondWithSuccess(VisionMockDefaults
+                                            .visionConfigurationResponsePrescriptionsDisabled)
                         }
             }
             else -> {
@@ -355,7 +358,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @Then("I see a message informing me that I don't currently have access to this service")
     fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
         assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.element.text)
-        assertEquals("Contact your GP surgery for more information. For urgent medical help, call 111.", errorPage.errorText1.element.text)
+        assertEquals("Contact your GP surgery for more information. " +
+                "For urgent medical help, call 111.", errorPage.errorText1.element.text)
     }
 
     @But("The prescriptions endpoint is timing out")
@@ -612,7 +616,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.VISION -> {
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(VisionMockDefaults.patientVision))
+                            getPrescriptionHistoryRequest(VisionMockDefaults
+                                    .getVisionUserSession(VisionMockDefaults.patientVision))
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
@@ -635,7 +640,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         return ArrayList()
     }
 
-    private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime) { //}, numPrescriptions: Int, numOfCourses: Int, numOfRepeats: Int) {
+    private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime) {
+        //}, numPrescriptions: Int, numOfCourses: Int, numOfRepeats: Int) {
 
         val delay: Long = 31
 
@@ -656,7 +662,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 mockingClient
                         .forEmis {
                             prescriptions.prescriptionsRequest(currentPatient, fromdate, toDate)
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse).delayedBy(Duration.ofSeconds(delay))
+                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
+                                    .delayedBy(Duration.ofSeconds(delay))
                         }
             }
             ProviderTypes.TPP -> {
@@ -664,15 +671,18 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 mockingClient
                         .forTpp {
                             prescriptions.listRepeatMedication(currentPatient)
-                                    .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply).delayedBy(Duration.ofSeconds(delay))
+                                    .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
+                                    .delayedBy(Duration.ofSeconds(delay))
                         }
             }
             ProviderTypes.VISION -> {
 
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(VisionMockDefaults.patientVision))
-                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory).delayedBy(Duration.ofSeconds(delay))
+                            getPrescriptionHistoryRequest(VisionMockDefaults
+                                    .getVisionUserSession(VisionMockDefaults.patientVision))
+                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
+                                    .delayedBy(Duration.ofSeconds(delay))
                         }
             }
         }

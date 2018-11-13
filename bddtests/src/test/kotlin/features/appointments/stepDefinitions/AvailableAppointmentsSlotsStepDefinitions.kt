@@ -50,7 +50,12 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     private val expiredCookie = Cookie(
             "Set-Cookie",
-            "NHSO-Session-Id=CfDJ8E-ofjSQjqFFrq_TwyjSrr7YjXlzOKAjF2FCuRKQQd8XJLpr5jIZqua3RLYU0ItlMH7Df-uLnLiWc-mUSPveE-ElNNa-tsTVCxD_SomXW3aSvuGh3Dc9Dqe9jFyGLVu5SPrcqg9hafdTKTS7EqEaz2fwsQK8Br_flD7PpImRUjNNFEF0iFNsJTXJm5FZBVBeXvbPe8obyufPFt2Lpti8naW2xlbMb9wGq5g--UjOyDnQbxY1RxCR4tU-rHpdyz0JcbStgePRwhiM14wfoUsUFz4tnNeoYbaPLXaCiXVNm6NzG9SaQMheda0A6zxTv1y0nwu8AAXcUg7EFlSxIKLJV7B7aC0GCiUDAwkxMnzHP6sm; path=/; secure; samesite=lax; httponly"
+            "NHSO-Session-Id=CfDJ8E-ofjSQjqFFrq_TwyjSrr7YjXlzOKAjF2FCuRKQQd8XJLpr5j" +
+                    "IZqua3RLYU0ItlMH7Df-uLnLiWc-mUSPveE-ElNNa-tsTVCxD_SomXW3aSvuGh3Dc9Dqe9" +
+                    "jFyGLVu5SPrcqg9hafdTKTS7EqEaz2fwsQK8Br_flD7PpImRUjNNFEF0iFNsJTXJm5FZBV" +
+                    "BeXvbPe8obyufPFt2Lpti8naW2xlbMb9wGq5g--UjOyDnQbxY1RxCR4tU-rHpdyz0JcbStge" +
+                    "PRwhiM14wfoUsUFz4tnNeoYbaPLXaCiXVNm6NzG9SaQMheda0A6zxTv1y0nwu8AAXcUg7EF" +
+                    "lSxIKLJV7B7aC0GCiUDAwkxMnzHP6sm; path=/; secure; samesite=lax; httponly"
     )
 
     @Given("^there are available (.*) appointment slots for an explicit date-time range$")
@@ -73,7 +78,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample()
     }
 
-    @Given("^there are available appointment slots with different criteria for EMIS when no appointment slot guidance is provided$")
+    @Given("^there are available appointment slots with different criteria for EMIS " +
+            "when no appointment slot guidance is provided$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWithNoGuidance() {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier("EMIS")
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = false)
@@ -138,7 +144,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
         }
     }
 
-    @Given("^there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them$")
+    @Given("^there are available EMIS appointment slots with different criteria " +
+            "but there is a slight delay in retrieving them$")
     fun slightDelayForRetrievingAvailableAppointmentSlots() {
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
         factory.generateExample {
@@ -271,7 +278,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
         assertEquals("Incorrect number of slots. ", expectedAppointmentSlots.size, actualResult.slots.size)
     }
 
-    @Then("^available slots are returned containing id, start date and time, end date and time, location, clinicians, type$")
+    @Then("^available slots are returned containing id, start date and time, " +
+            "end date and time, location, clinicians, type$")
     fun availableSlotsAreReturnedWithAppropriateFields() {
         availableAppointments.verifyThatAvailableSlotsAreReturnedWithAppropriateFields()
     }
@@ -360,7 +368,9 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^available slots are displayed that meet the new criteria$")
     fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
-        val expectedDatesAndTimes = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots
+        val expectedDatesAndTimes =
+                sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots
         assertTrue("Invalid test as there are no expected slots stored. ", expectedDatesAndTimes.isNotEmpty())
         val expectedNumberOfSlots = expectedDatesAndTimes.flatMap { it.value.toList() }.size
         for (date in expectedDatesAndTimes.keys) {
@@ -374,22 +384,31 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Then("^I only see results for days that have available slots$")
     fun onlyAvailableSlotsAreDisplayed() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
-        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
+        val expectedDates =
+                sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
         availableAppointments.assertThatOtherDatesAreNotDisplayed(expectedDates)
     }
 
-    @Then("^I see results for each of the remaining days for this week, with an appropriate message when there are no slots$")
+    @Then("^I see results for each of the remaining days for this week, " +
+            "with an appropriate message when there are no slots$")
     fun iSeeResultsForEachOfTheRemainingDaysForThisWeek() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
-        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
-        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates, AppointmentsSlotsExample.remainingDatesForThisWeek)
+        val expectedDates =
+                sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
+        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates,
+                AppointmentsSlotsExample.remainingDatesForThisWeek)
     }
 
     @Then("^I see results for each of the days for next week, with an appropriate message when there are no slots$")
     fun iSeeResultsForEachOfTheRemainingDaysForNextWeek() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
-        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
-        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates, AppointmentsSlotsExample.datesForNextWeek)
+        val expectedDates =
+                sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
+        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates,
+                AppointmentsSlotsExample.datesForNextWeek)
     }
 
     @Then("^the appointment slot guidance content is displayed$")

@@ -11,7 +11,8 @@ class AnalyticsStepDefinitions {
 
     @Given("^the analytics data object is available$")
     fun analyticsDataObjectIsAvailable() {
-        Assert.assertTrue("Expected the analytics data object (window.digitalData) to be available.", dataObjectIsAvailable())
+        Assert.assertTrue("Expected the analytics data object (window.digitalData) to be available.",
+                dataObjectIsAvailable())
     }
 
     @Suppress("TooGenericExceptionCaught", "Any exception thrown from javascript")

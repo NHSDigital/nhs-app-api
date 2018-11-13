@@ -30,7 +30,8 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
 
         val appointmentsMessage = settingsResponse.messages.appointmentsMessage
 
-        assertTrue("Appointment message incorrectly being stubbed: $appointmentsMessage.", guidanceMessage == appointmentsMessage.isNotEmpty())
+        assertTrue("Appointment message incorrectly being stubbed: $appointmentsMessage.",
+                guidanceMessage == appointmentsMessage.isNotEmpty())
 
         mockingClient.forEmis {
             appointments.practiceSettingsRequest(patient)

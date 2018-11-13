@@ -11,7 +11,8 @@ abstract class AbstractSteps {
     private inline fun <reified T> getFromContext(throwIfNull: Boolean = true): T {
         val type = T::class
         val value = context.get(type.qualifiedName!!)
-        if (value == null && throwIfNull) throw IllegalArgumentException("No value in context for ${type.qualifiedName}")
+        if (value == null && throwIfNull) throw IllegalArgumentException(
+                "No value in context for ${type.qualifiedName}")
         return value as T
     }
 

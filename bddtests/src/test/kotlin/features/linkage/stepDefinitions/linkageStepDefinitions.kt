@@ -215,7 +215,8 @@ open class LinkageStepDefinitions {
         return LinkageFactory.getForSupplier(gpSystem).validLinkageDetails
     }
 
-    private fun setLinkageInformation(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult) {
+    private fun setLinkageInformation(linkageInformationFacade: LinkageInformationFacade,
+                                      linkageResult: LinkageResult) {
         Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkageInformationFacade)
         Serenity.setSessionVariable(LinkageResult::class).to(linkageResult)
     }

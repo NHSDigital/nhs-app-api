@@ -202,7 +202,8 @@ open class MyAppointmentsSteps {
 
     fun checkAppointmentDataErrorMessagesAreCorrect() {
         val expectedHeader = "There's been a problem getting your appointment history"
-        val expectedBody = "Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111."
+        val expectedBody = "Try again later. If the problem continues and you need this information now, " +
+                "contact your GP surgery directly. For urgent medical advice, call 111."
         errorPage.waitForSpinnerToDisappear()
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)

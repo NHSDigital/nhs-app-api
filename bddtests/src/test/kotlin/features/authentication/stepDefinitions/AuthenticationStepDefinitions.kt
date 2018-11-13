@@ -115,13 +115,15 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(EmisMockDefaults.patientEmis)
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithServerError() }
-        mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
+        mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault("EMIS"))
+                .respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
     }
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(EmisMockDefaults.patientEmis)
-        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
+        mockingClient.forEmis { authentication.endUserSessionRequest()
+                .respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
         mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault("EMIS")).respondWithServerError() }
     }
 
@@ -295,7 +297,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis {
-            authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithAlreadyLinked()
+            authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))
+                    .respondWithAlreadyLinked()
         }
 
         setIm1Request()
@@ -313,7 +316,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         setSessionVariable("HttpExceptionExpected").to(true)
     }
 
-    @Given("^I have data for a Vision patient with a locked account as the account is opened in the Vision application$")
+    @Given("^I have data for a Vision patient with a locked account " +
+            "as the account is opened in the Vision application$")
     fun iHaveDataForAVisionPatientThatHasALockedAccount() {
 
         this.patient = Patient.getDefault("VISION")
@@ -327,7 +331,9 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iCreateUserSession() {
         try {
             this.userSessionResponse = WorkerClient().authentication.postSessionConnection(
-                    UserSessionRequest(authCode = this.authCode, codeVerifier = this.codeVerifier!!, redirectUrl = Config.instance.cidRedirectUri))
+                    UserSessionRequest(authCode = this.authCode,
+                            codeVerifier = this.codeVerifier!!,
+                            redirectUrl = Config.instance.cidRedirectUri))
         } catch (httpException: NhsoHttpException) {
             setErrorResponse(httpException)
         }
@@ -345,7 +351,10 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         if (arrayOf(200, 201).contains(response.statusCode)) {
             this.im1ConnectionResponse = Gson().fromJson(response.body.asString(), Im1ConnectionResponse::class.java)
         } else {
-            setErrorResponse(NhsoHttpException(uri = uri.toString(), statusCode = response.statusCode, body = response.body?.toString(), method = "POST"))
+            setErrorResponse(NhsoHttpException(uri = uri.toString(),
+                    statusCode = response.statusCode,
+                    body = response.body?.toString(),
+                    method = "POST"))
         }
     }
 
@@ -358,7 +367,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @And("^the response has a name$")
     fun theResponseHasAName() {
-        Assert.assertEquals(EmisMockDefaults.patientEmis.formattedFullName(), this.userSessionResponse?.userSessionResponseBody?.name)
+        Assert.assertEquals(EmisMockDefaults.patientEmis.formattedFullName(),
+                this.userSessionResponse?.userSessionResponseBody?.name)
     }
 
     @And("^the response has a session timeout$")
@@ -385,7 +395,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iReceiveCookieWithSessionIdHttpOnly() {
         val cookieParams = retrieveCookie(this.userSessionResponse!!)
         Assert.assertFalse("NHSO-Session-Id is empty or null", cookieParams["NHSO-Session-Id"].isNullOrEmpty())
-        Assert.assertTrue(cookieParams.toString(), !cookieParams["httponly"].isNullOrEmpty() && cookieParams["httponly"]!!.toBoolean())
+        Assert.assertTrue(cookieParams.toString(),
+                !cookieParams["httponly"].isNullOrEmpty() && cookieParams["httponly"]!!.toBoolean())
     }
 
     @Then("^I get (?:a|an) \"(.*)\" error")
@@ -448,7 +459,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^I see an error message informing me I cannot log in$")
     fun iSeeAnErrorMessageInformingMeICannotLogIn() {
-        serviceUnavailablePage.assertIsPresent("You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.")
+        serviceUnavailablePage.assertIsPresent("You can still call or visit your GP surgery to access your " +
+                "NHS services. For urgent medical advice, call 111.")
     }
 
     fun setupAndLogIn(patient: Patient, gpSystem: String) {
@@ -543,7 +555,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iSeePatientDetails() {
         val patient = SerenityHelpers.getPatient()
         val regex = """${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
-        Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
+        Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number " +
+                "to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
                 regex.containsMatchIn(patient.nhsNumbers.first()))
         home.assertPatientDetailsShownFor(patient)
     }
@@ -670,7 +683,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     private fun retrieveCookie(result: UserSessionResponse): HashMap<String, String> {
         checkNotNull(result.userSessionResponseCookie.cookie)
-        Assert.assertFalse("Cookie value is empty or null", result.userSessionResponseCookie.cookie.value.isNullOrEmpty())
+        Assert.assertFalse("Cookie value is empty or null",
+                result.userSessionResponseCookie.cookie.value.isNullOrEmpty())
         val cookieContents = StringUtils.split(result.userSessionResponseCookie.cookie.value, "; ")
         val cookieParams = HashMap<String, String>()
         for (c in cookieContents) {

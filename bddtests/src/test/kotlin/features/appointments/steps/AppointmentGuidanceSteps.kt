@@ -13,7 +13,8 @@ open class AppointmentGuidanceSteps {
     private val expectedGuidanceLinesAndIfInBold = arrayListOf(
             Pair("Three things to try before you book an appointment:", false),
             Pair("1. Self care", true),
-            Pair("Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines", false),
+            Pair("Many minor problems can be treated at home, for example through rest " +
+                    "or appropriate over-the-counter medicines", false),
             Pair("2. Check your symptoms", true),
             Pair("Using trusted NHS online information", false),
             Pair("3. Get advice from a pharmacist", true),

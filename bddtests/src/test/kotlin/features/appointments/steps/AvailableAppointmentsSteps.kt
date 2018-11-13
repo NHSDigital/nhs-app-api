@@ -64,7 +64,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates: Set<String>, allDates: ArrayList<String>) {
+    fun assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates: Set<String>,
+                                                                  allDates: ArrayList<String>) {
         for (date in allDates) {
             if (!expectedDates.contains(date)) {
                 assertEquals(
@@ -136,7 +137,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun getExpectedResponseSlots(): HashMap<String, SlotResponseObject> {
-        val expectedResponseSlots = sessionVariableCalled<ArrayList<SlotResponseObject>>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_RESPONSE_SLOTS_KEY)
+        val expectedResponseSlots =
+                sessionVariableCalled<ArrayList<SlotResponseObject>>(AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotExpectations.EXPECTED_RESPONSE_SLOTS_KEY)
         val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
         expectedResponseSlots.forEach { slot -> unmatchedExpectedSlots[slot.id] = slot }
         return unmatchedExpectedSlots
@@ -167,21 +170,24 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun verifyThatNoAppointmentsErrorIsDisplayed() {
         assertEquals("No appointments available\n" +
-                "There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.\n" +
+                "There are currently no appointments available to book online right now. " +
+                "If you need to book one now, call your GP surgery.\n" +
                 "If it's urgent and you don't know what to do, call 111 to get help near you.",
                 availableAppointmentsPage.warningMessage.assertSingleElementPresent().element.text)
     }
 
     @Step
     fun verifyThatNoAppointmentsForSelectedCriteriaErrorIsDisplayed() {
-        assertEquals("Try selecting a different date and time, or without a preferred practice member selected. If you can't find the appointment you need, call your GP surgery.\n" +
+        assertEquals("Try selecting a different date and time, or without a preferred practice member " +
+                "selected. If you can't find the appointment you need, call your GP surgery.\n" +
                 "If it's urgent and you don't know what to do, call 111 to get help near you.",
                 availableAppointmentsPage.warningMessage.assertSingleElementPresent().element.text)
     }
 
     @Step
     fun verifyThatAppointmentGuidanceContentIsDisplayed() {
-        val expectedGuidanceContent = sessionVariableCalled<String>(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
+        val expectedGuidanceContent =
+                sessionVariableCalled<String>(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
         assertEquals("Guidance content not displayed correctly. ",
                 expectedGuidanceContent,
                 availableAppointmentsPage.guidance.content.element.text)

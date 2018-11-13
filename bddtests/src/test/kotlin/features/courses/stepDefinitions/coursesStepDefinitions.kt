@@ -170,7 +170,9 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     }
 
     @Given("I select (\\d+) (.*) repeatable prescriptions out of (\\d+) available")
-    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int, gpSystem: String, numberOfPrescriptionsToCreate: Int) {
+    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int,
+                                        gpSystem: String,
+                                        numberOfPrescriptionsToCreate: Int) {
         iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate, gpSystem)
         xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
         xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
@@ -183,7 +185,9 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     }
 
     @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available which have (.*)")
-    fun iSelectXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToSelect: Int, numberOfPrescriptionsToCreate: Int, content: String) {
+    fun iSelectXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToSelect: Int,
+                                                  numberOfPrescriptionsToCreate: Int,
+                                                  content: String) {
         iHaveXAssignedPrescriptionsWhichHasX(numberOfPrescriptionsToCreate, content)
         xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
         xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
@@ -197,7 +201,8 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     @And("I enter text \"(.*)\" for special request")
     fun iEnterTextForSpecialRequest(text: String) {
-        Serenity.setSessionVariable("specialRequestText").to(courseSteps.repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text))
+        Serenity.setSessionVariable("specialRequestText")
+                .to(courseSteps.repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text))
     }
 
     @When("I click Continue on the Order a repeat prescription page")
@@ -224,7 +229,8 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     @Then("I see the previously selected prescriptions on the Confirm repeat prescription page")
     fun iSeeThePreviouslySelectedPrescriptionsOnTheConfirmRepeatPrescriptionPage() {
         confirmRepeatPrescriptionOrderSteps.isLoaded()
-        confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.verifySelectedRepeatPrescriptions(selectedCourses)
+        confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage
+                .verifySelectedRepeatPrescriptions(selectedCourses)
     }
 
     @Then("I see the entered special request text")

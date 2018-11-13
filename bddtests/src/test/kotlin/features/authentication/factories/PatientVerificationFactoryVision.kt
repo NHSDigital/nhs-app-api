@@ -78,6 +78,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
                 }
         Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
         Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        Serenity.setSessionVariable("NhsNumbers").to(nhsNumbers.map { number -> PatientIdentifier(number, IdentifierType.NhsNumber) }.toTypedArray())
+        Serenity.setSessionVariable("NhsNumbers").to(nhsNumbers.map { number -> PatientIdentifier(number,
+                IdentifierType.NhsNumber) }.toTypedArray())
     }
 }

@@ -113,7 +113,8 @@ class CommonSteps : AbstractSteps() {
         val patient = Patient.getDefault(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-        sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication.postSessionConnection(patient.cidUserSession)
+        sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(patient.cidUserSession)
         Serenity.setSessionVariable(GP_SYSTEM).to(gpSystem)
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
         SerenityHelpers.setPatient(patient)

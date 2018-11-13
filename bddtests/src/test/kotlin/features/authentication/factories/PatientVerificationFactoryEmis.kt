@@ -59,11 +59,15 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
                 nhsNumbers = numbers,
                 dateOfBirth = "1985-05-29T00:00:00.0Z")
 
-        val nhsNumbers = numbers.map { number -> PatientIdentifier(number, identifierType = IdentifierType.NhsNumber) }.toTypedArray()
+        val nhsNumbers = numbers.map { number -> PatientIdentifier(number,
+                identifierType = IdentifierType.NhsNumber) }.toTypedArray()
 
-        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
-        mockingClient.forEmis { myRecord.demographicsRequest(patient).respondWithSuccess(patient, nhsNumbers) }
+        mockingClient.forEmis { authentication.endUserSessionRequest()
+                .respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { authentication.sessionRequest(patient)
+                .respondWithSuccess(patient, AssociationType.Self) }
+        mockingClient.forEmis { myRecord.demographicsRequest(patient)
+                .respondWithSuccess(patient, nhsNumbers) }
 
         Serenity.setSessionVariable("ConnectionToken").to(patient.connectionToken)
         Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)

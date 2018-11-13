@@ -71,7 +71,8 @@ class MoreStepDefinitions {
                 { followOrganDonationLink() }
         )
 
-        Assert.assertEquals("Test Setup Incorrect. Expected Number of links does not match those to follow. This test must be updated if a link is added or removed.",
+        Assert.assertEquals("Test Setup Incorrect. Expected Number of links does not match those to follow. " +
+                "This test must be updated if a link is added or removed.",
                 morePage.expectedLinks.count(),
                 linksToFollow.count())
 

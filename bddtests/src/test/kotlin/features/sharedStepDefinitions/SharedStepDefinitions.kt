@@ -80,7 +80,8 @@ open class SharedStepDefinitions {
 
     @Given("^I am logged in and have not accepted the terms and conditions$")
     open fun iAmLoggedInAndHaveNotAcceptedTermsAndConditions() {
-        SharedStepDefinitions.patient = Serenity.sessionVariableCalled<Patient>(Patient::class) ?: SharedStepDefinitions.patient
+        SharedStepDefinitions.patient =
+                Serenity.sessionVariableCalled<Patient>(Patient::class) ?: SharedStepDefinitions.patient
         browser.goToApp()
         login.using(SharedStepDefinitions.patient)
     }

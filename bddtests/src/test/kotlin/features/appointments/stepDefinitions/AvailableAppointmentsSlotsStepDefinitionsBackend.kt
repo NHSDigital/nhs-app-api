@@ -36,14 +36,24 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots() {
 
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, { respondWithGPErrorWhenNotEnabled() })
+        factory.generateAppointmentSlotResponse(
+                null,
+                null,
+                true,
+                NecessityOption.OPTIONAL,
+                { respondWithGPErrorWhenNotEnabled() })
     }
 
     @Given("^unknown exception will occur when wanting to view appointment slots$")
     fun unknownExceptionWhenWantingToViewAppointmentSlots() {
 
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, { respondWithUnknownException() })
+        factory.generateAppointmentSlotResponse(
+                null,
+                null,
+                true,
+                NecessityOption.OPTIONAL,
+                { respondWithUnknownException() })
     }
 
     @When("^the available appointment slots are retrieved without a cookie$")
@@ -69,11 +79,14 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
 
     @When("^I try to retrieve appointment slots with a malformed from Date$")
     fun tryToRetrieveAppointmentSlotsWithMalformedFromDate() {
-        val fromDate = LocalDateTime.parse(defaultSessionStartDate, dateTimeFormat).format(DateTimeFormatter.BASIC_ISO_DATE)
+        val fromDate = LocalDateTime.parse(defaultSessionStartDate, dateTimeFormat)
+                .format(DateTimeFormatter.BASIC_ISO_DATE)
         retrieveAppointmentSlots(fromDate, defaultSessionEndDate)
     }
 
-    private fun retrieveAppointmentSlots(fromDate: String? = null, toDate: String? = null, includeCookie: Boolean = true) {
+    private fun retrieveAppointmentSlots(fromDate: String? = null,
+                                         toDate: String? = null,
+                                         includeCookie: Boolean = true) {
         var cookie: Cookie? = null
         if (includeCookie) {
             cookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)

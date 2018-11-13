@@ -29,7 +29,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         setPatientToDefaultFor("TPP")
 
         mockingClient.forTpp {
-            myRecord.testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, TestResultsData.mockTestResultId).respondWithServiceNotAvailableException()
+            myRecord.testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                    TestResultsData.mockTestResultId)
+                    .respondWithServiceNotAvailableException()
         }
     }
 
@@ -38,7 +40,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         setPatientToDefaultFor("TPP")
 
         mockingClient.forTpp {
-            myRecord.testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, TestResultsData.mockTestResultId).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(4))
+            myRecord.testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                    TestResultsData.mockTestResultId)
+                    .respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(4))
         }
     }
 
@@ -48,7 +52,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
         mockingClient.forTpp {
             myRecord.testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                    TestResultsData.mockTestResultId).respondWithSuccess(TestResultsData.getTestResultDetail())
+                    TestResultsData.mockTestResultId)
+                    .respondWithSuccess(TestResultsData.getTestResultDetail())
         }
     }
 
@@ -58,7 +63,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getTestResultsForEmis(6))
+                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                            .respondWithSuccess(TestResultsData.getTestResultsForEmis(6))
                 }
             }
             "TPP" -> {
@@ -67,21 +73,27 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
                 var endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(1))
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
+                            .respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(1))
                 }
 
                 startDate = today.minusDays(119)
                 endDate = today.minusDays(60)
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(2))
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
+                            .respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(2))
                 }
 
                 startDate = today.minusDays(59)
                 endDate = today
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(3))
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
+                            .respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(3))
                 }
             }
         }
@@ -93,7 +105,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithNoRanges())
+                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                            .respondWithSuccess(TestResultsData
+                                    .getSingleTestResultWithMultipleChildValuesWithNoRanges())
                 }
             }
             "TPP" -> {
@@ -105,7 +119,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesFor() {
         setPatientToDefaultFor("EMIS")
         mockingClient.forEmis {
-            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
+            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                    .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
         }
     }
 
@@ -113,7 +128,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor() {
         setPatientToDefaultFor("EMIS")
         mockingClient.forEmis {
-            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
+            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                    .respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
         }
     }
 
@@ -121,15 +137,18 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor() {
         setPatientToDefaultFor("EMIS")
         mockingClient.forEmis {
-            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
+            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                    .respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
         }
     }
 
-    @Given("^the GP Practice has test results enabled and a single test result exists with no child values or range for EMIS$")
+    @Given("^the GP Practice has test results enabled " +
+            "and a single test result exists with no child values or range for EMIS$")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor() {
         setPatientToDefaultFor("EMIS")
         mockingClient.forEmis {
-            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
+            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                    .respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
         }
     }
 
@@ -137,7 +156,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor() {
         setPatientToDefaultFor("EMIS")
         mockingClient.forEmis {
-            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
+            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                    .respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
         }
     }
 
@@ -147,7 +167,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                            .respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
@@ -157,10 +178,12 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
                 val endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate)
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                    "You don&apos;t have access to this online service. You can request access to " +
-                                            "this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
+                                    "You don&apos;t have access to this online service. " +
+                                            "You can request access to this service at Kainos GP Demo Unit by " +
+                                            "clicking Manage Online Services in the Account section.",
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
@@ -173,7 +196,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                            .respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
                 }
             }
             "TPP" -> {
@@ -183,21 +207,27 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
                 var endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
+                            .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
 
                 startDate = today.minusDays(119)
                 endDate = today.minusDays(60)
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
+                            .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
 
                 startDate = today.minusDays(59)
                 endDate = today
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
+                            .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
             }
         }
@@ -209,7 +239,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithNonDataAccessException()
+                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                            .respondWithNonDataAccessException()
                 }
             }
             "TPP" -> {
@@ -219,7 +250,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
                 val endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithServiceNotAvailableException()
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
+                            .respondWithServiceNotAvailableException()
                 }
             }
         }
@@ -231,7 +264,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                            .respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
@@ -241,7 +275,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
                 val endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate)
+                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                            startDate, endDate)
                             .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
                                     "Requested record access is disabled by the practice",
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
@@ -276,19 +311,25 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("^the line item displays text value and range$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectlyIncludingRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Child LineItem Description does not match", "Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults.data.first().testResultChildLineItems.first().description)
+        assertEquals("Child LineItem Description does not match",
+                "Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)",
+                result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^the line item value is set correctly$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Child LineItem Description does not match", "Platelet count: 5.9 x10^9/L", result.response.testResults.data.first().testResultChildLineItems.first().description)
+        assertEquals("Child LineItem Description does not match",
+                "Platelet count: 5.9 x10^9/L",
+                result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^I receive line items for each child value$")
     fun thenIReceiveATestResultWithLineItemsForEachChildValue() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Expected two ChildLineItems in TestResult", 2, result.response.testResults.data.first().testResultChildLineItems.count())
+        assertEquals("Expected two ChildLineItems in TestResult",
+                2,
+                result.response.testResults.data.first().testResultChildLineItems.count())
     }
 
     @Then("^I receive a single test result with the term set correctly to Term TextValue NumericUnits$")
@@ -300,7 +341,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("^I receive the term set correctly to Term TextValue NumericUnits Range$")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnitsWithRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)", result.response.testResults.data.first().description)
+        assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)",
+                result.response.testResults.data.first().description)
     }
 
     @And("^the flag informing that the patient has access to the test results data is set to \"(.*)\"$")

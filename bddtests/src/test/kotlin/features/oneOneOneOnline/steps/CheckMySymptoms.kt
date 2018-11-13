@@ -12,12 +12,14 @@ open class CheckMySymptoms {
 
     @Step
     fun assertConditionsHeaderVisible() {
-        Assert.assertTrue("Conditions header not visible, expected to be visible", checkMySymptoms.isConditionsHeaderVisible())
+        Assert.assertTrue("Conditions header not visible, expected to be visible",
+                checkMySymptoms.isConditionsHeaderVisible())
     }
 
     @Step
     fun assertNhs111HeaderVisible() {
-        Assert.assertTrue("Conditions header not visible, expected to be visible", checkMySymptoms.isNhs111HeaderVisible())
+        Assert.assertTrue("Conditions header not visible, expected to be visible",
+                checkMySymptoms.isNhs111HeaderVisible())
     }
 
     @Step
