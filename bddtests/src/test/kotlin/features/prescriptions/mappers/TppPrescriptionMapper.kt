@@ -4,7 +4,7 @@ import mocking.tpp.models.ListRepeatMedicationReply
 import models.prescriptions.HistoricPrescription
 
 object TppPrescriptionMapper {
-    fun Map(data: ListRepeatMedicationReply) : ArrayList<HistoricPrescription> {
+    fun map(data: ListRepeatMedicationReply) : ArrayList<HistoricPrescription> {
 
         val historicPrescriptions = ArrayList<HistoricPrescription>()
 

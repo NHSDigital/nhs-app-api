@@ -233,61 +233,61 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @When("I click a test result$")
-    fun i_click_a_test_result() {
+    fun whenIClickATestResult() {
         myRecordInfoPage.testResults.clickFirst()
     }
 
     @When("^I click my record button on menu bar$")
-    fun i_click_my_record_button_on_menu_bar() {
+    fun whenIClickMyRecordButtonOnMenuBar() {
         nav.select(NavBarNative.NavBarType.MY_RECORD)
     }
 
     @When("^I enter url address for my record directly into the url$")
-    fun i_enter_url_address_for_my_record_directly_into_the_url() {
+    fun whenIEnterUrlAddressForMyRecordDirectlyIntoTheUrl() {
         val fullUrl = Config.instance.url + "/my-record"
         browser.browseTo(fullUrl)
     }
 
     @Then("^I see record warning page opened$")
-    fun i_see_record_warning_page_opened() {
-        i_see_header_text_is_My_medical_record()
-        i_see_agree_and_continue_button()
-        i_see_back_to_home_button()
+    fun thenISeeRecordWarningPageOpened() {
+        thenISeeHeaderTextIsMyMedicalRecord()
+        thenISeeAgreeAndContinueButton()
+        thenISeeBackToHomeButton()
     }
 
     @Then("^I see the my record warning page")
     fun iSeeTheMyRecordWarningPage() {
-        i_see_record_warning_page_opened()
-        i_see_header_text_is_My_medical_record()
-        i_see_your_record_may_contain_sensitive_information_message()
-        i_see_list_of_sensitive_data_information()
-        i_see_agree_and_continue_button()
-        i_see_back_to_home_button()
-        i_see_my_record_button_on_the_nav_bar_is_highlighted()
+        thenISeeRecordWarningPageOpened()
+        thenISeeHeaderTextIsMyMedicalRecord()
+        theISeeYourRecordMayContainSensitiveInformationMessage()
+        thenISeeListOfSensitiveDataInformation()
+        thenISeeAgreeAndContinueButton()
+        thenISeeBackToHomeButton()
+        thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
 
     }
 
     @Then("^I see the my medical record page$")
     fun iSeeTheMyMedicalRecordPage() {
-        i_see_header_text_is_My_medical_record()
+        thenISeeHeaderTextIsMyMedicalRecord()
         iSeeTheHeadingOnMyRecord("My details")
         iSeePatientInformationDetails()
-        i_see_my_record_button_on_the_nav_bar_is_highlighted()
+        thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
     }
 
 
     @Then("^I see header text is My medical record$")
-    fun i_see_header_text_is_My_medical_record() {
+    fun thenISeeHeaderTextIsMyMedicalRecord() {
         headerNative.waitForPageHeaderText("My medical record")
     }
 
     @Then("^I see your record may contain sensitive information message$")
-    fun i_see_your_record_may_contain_sensitive_information_message() {
+    fun theISeeYourRecordMayContainSensitiveInformationMessage() {
         assertEquals("Your record may contain sensitive information", myRecordWarningPage.warningText())
     }
 
     @Then("^I see list of sensitive data information$")
-    fun i_see_list_of_sensitive_data_information() {
+    fun thenISeeListOfSensitiveDataInformation() {
         val expected = ArrayList<String>()
         expected.add("personal data, such as your details, allergies and medications")
         expected.add("clinical terms that you may not be familiar with")
@@ -297,49 +297,49 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see agree and continue button$")
-    fun i_see_agree_and_continue_button() {
+    fun thenISeeAgreeAndContinueButton() {
         Assert.assertTrue("isAgreePresent", myRecordWarningPage.isAgreePresent())
     }
 
     @Then("^I see back to home button$")
-    fun i_see_back_to_home_button() {
+    fun thenISeeBackToHomeButton() {
         Assert.assertTrue("isBackToHomePresent", myRecordWarningPage.isBackToHomePresent())
     }
 
     @Then("^I see my record button on the nav bar is highlighted$")
-    fun i_see_my_record_button_on_the_nav_bar_is_highlighted() {
+    fun thenISeeMyRecordButtonOnTheNavBarIsHighlighted() {
         assertTrue(nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))
     }
 
     @Given("^I am on the record warning page$")
-    fun i_am_on_the_record_warning_page() {
+    fun givenIAmOnTheRecordWarningPage() {
         browser.goToApp()
         login.using(this.patient)
         nav.select(NavBarNative.NavBarType.MY_RECORD)
     }
 
     @When("^I click agree and continue$")
-    fun i_click_agree_and_continue() {
+    fun whenIClickAgreeAndContinue() {
         myRecordWarningPage.clickAgreeAndContinue()
     }
 
     @Then("^the my record information screen is loaded$")
-    fun the_my_record_information_screen_is_loaded() {
+    fun thenTheMyRecordInformationScreenIsLoaded() {
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
     }
 
     @When("^I click the back to home button$")
-    fun i_click_the_back_to_home_button() {
+    fun whenIClickTheBackToHomeButton() {
         myRecordWarningPage.clickBacktoHome()
     }
 
     @Then("^I will return to the home page$")
-    fun i_will_return_to_the_home_page() {
+    fun thenIWillReturnToTheHomePage() {
         navHeader.assertHomePageHeaderVisible()
     }
 
     @Then("^No navigation menu bar item will be selected$")
-    fun no_navigation_menu_bar_item_will_be_selected() {
+    fun thenNoNavigationMenuBarItemWillBeSelected() {
         assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.SYMPTOMS))
         assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.APPOINTMENTS))
         assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
@@ -365,7 +365,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Given("^I am on my record information page$")
-    fun i_am_on_my_record_information_page() {
+    fun givenIAmOnMyRecordInformationPage() {
         browser.goToApp()
         login.using(this.patient)
         nav.select(NavBarNative.NavBarType.MY_RECORD)
@@ -377,22 +377,22 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I can see the clinical abbreviations link$")
-    fun i_can_see_the_clinical_abbreviations_link() {
+    fun thenICanSeeTheClinicalAbbreviationsLink() {
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
     }
 
     @Then("^I click the clinical abbreviations link$")
-    fun i_click_the_clinical_abbreviations_link() {
+    fun thenIClickTheClinicalAbbreviationsLink() {
         myRecordInfoPage.clickClinicalAbbreviationsLink()
     }
 
     @When("^I click My details heading$")
-    fun i_click_My_details_heading() {
+    fun whenIClickMyDetailsHeading() {
         myRecordInfoPage.myDetails.toggleShrub()
     }
 
     @Then("^I do not see patient information details$")
-    fun i_do_not_see_patient_information_details() {
+    fun thenIDoNotSeePatientInformationDetails() {
         assertFalse("Name field was visible.", myRecordInfoPage.isNameVisible())
     }
 
@@ -408,14 +408,14 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
-    fun i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
+    fun thenISeeServiceNotOfferedByGPOrToSpecificUserOrAccessRevokedWarningMessage() {
         assertEquals("You do not currently have online access to your medical record\n" +
                 "Contact your GP surgery for more information.",
                 myRecordInfoPage.getSummaryCareNoAccessMessage())
     }
 
     @Then("^I see one or more drug type allergies record displayed$")
-    fun i_see_one_or_more_drug_type_allergies_record_displayed() {
+    fun thenISeeOneOrMoreDrugTypeAllergiesRecordDisplayed() {
         assertEquals(2, myRecordInfoPage.allergies.allRecordItems().count())
         val expected = ArrayList<String>()
         for (i in 1..2) {
@@ -427,7 +427,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see 5 allergies with different date formats$")
-    fun i_see_five_allergies_with_different_date_formats() {
+    fun thenISeeFiveAllergiesWithDifferentDateFormats() {
 
         assertEquals(NUMBER_OF_PRESCRIPTIONS, myRecordInfoPage.allergies.allRecordItems().count())
         val dates = myRecordInfoPage.allergies.allRecordItemLabels()
@@ -446,29 +446,29 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see acute medication information$")
-    fun i_see_acute_medication_information() {
+    fun thenISeeAcuteMedicationInformation() {
         myRecordInfoPage.acuteMedications.firstElement.assertIsVisible()
     }
 
     @When("^I click the test result section$")
-    fun i_click_the_test_result_section() {
+    fun whenIClickTheTestResultSection() {
         myRecordInfoPage.testResults.toggleShrub()
     }
 
     @Then("^I see one test result with one value$")
-    fun i_see_one_test_result_with_one_value() {
+    fun thenISeeOneTestResultWithOneValue() {
         assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
         assertEquals("Expected child test result", 1, myRecordInfoPage.getTestResultChildCount())
     }
 
     @Then("^I see one test result with one value and a range$")
-    fun i_see_one_test_result_with_one_value_and_a_range() {
+    fun thenISeeOneTestResultWithOneValueAndARange() {
         assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
         assertEquals("Expected child test result", 1, myRecordInfoPage.getTestResultChildCount())
     }
 
     @Then("^I see one test result with multiple child values$")
-    fun i_see_one_test_result_with_multiple_child_values() {
+    fun thenISeeOneTestResultWithMultipleChildValues() {
         assertTrue("Expected test result equal to or less than 1, but was" +
                 "${myRecordInfoPage.testResults.allRecordItems().size}",
                 myRecordInfoPage.testResults.allRecordItems().size >= 1)
@@ -478,7 +478,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see test results with multiple child values some of which have ranges$")
-    fun i_see_test_results_with_multiple_child_values_some_of_which_ave_ranges() {
+    fun thenISeeTestResultsWithMultipleChildValuesSomeOfWhichHaveRanges() {
         assertTrue("Expected test result equal to or greater than 1, but was" +
                 "${myRecordInfoPage.testResults.allRecordItems().size}"
                 , myRecordInfoPage.testResults.allRecordItems().size >= 1)
@@ -504,7 +504,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see the test result heading for (.*)$")
-    fun i_see_the_test_result_heading(getService: String) {
+    fun thenISeeTheTestResultHeading(getService: String) {
         val header = when (getService) {
             "TPP" -> {
                 "Test results (past 6 months)"
@@ -517,44 +517,44 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see the test result section collapsed$")
-    fun i_see_the_test_result_section_collapsed() {
+    fun thenISeeTheTestResultSectionCollapsed() {
         assertFalse(myRecordInfoPage.isTestResultsTextMsgVisible())
     }
 
     @Then("^I see test result information$")
-    fun i_see_test_result_information() {
+    fun thenISeeTestResultInformation() {
         assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
     }
 
     @Then("^I see current repeat medication information$")
-    fun i_see_current_repeat_medication_information() {
+    fun thenISeeCurrentRepeatMedicationInformation() {
         assertTrue(myRecordInfoPage.repeatMedications.firstElement.element.isVisible)
     }
 
     @Then("^I see discontinued repeat medication information$")
-    fun i_see_discontinued_repeat_medication_information() {
+    fun thenISeeDiscontinuedRepeatMedicationInformation() {
         assertTrue(myRecordInfoPage.discontinuedRepeatMedications.firstElement.element.isVisible)
     }
 
     @Then("^I see a message indicating that I have no access to view my summary care record$")
-    fun i_see_a_message_indicating_that_I_have_no_access_to_view_my_record() {
+    fun thenISeeAMessageIndicatingThatIHaveNoAccessToViewMyRecord() {
         assertEquals("You do not currently have online access to your medical record\n" +
                 "Contact your GP surgery for more information.",
                 myRecordInfoPage.getSummaryCareNoAccessMessage())
     }
 
     @Then("^I see immunisation records displayed$")
-    fun i_see_immunisation_records_displayed() {
+    fun thenISeeImmunisationRecordsDisplayed() {
         assertEquals(2, myRecordInfoPage.immunisations.allRecordItems().count())
     }
 
     @Then("^I see Problems records displayed$")
-    fun i_see_Problems_records_displayed() {
+    fun thenISeeProblemsRecordsDisplayed() {
         assertEquals(NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED, myRecordInfoPage.problems.allRecordItems().count())
     }
 
     @Then("^I see Consultations records displayed$")
-    fun i_see_consultations_records_displayed() {
+    fun thenISeeConsultationsRecordsDisplayed() {
         assertEquals(2, myRecordInfoPage.consultations.allRecordItems().count())
     }
 
@@ -564,17 +564,17 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see a message indicating that I have no access to view (.*) on My Record$")
-    fun i_see_a_message_indicating_that_I_have_no_access_to_view_section(heading: String) {
+    fun thenISeeAMessageIndicatingThatIHaveNoAccessToViewSection(heading: String) {
         assertTextInSection(heading, "You do not currently have access to this section")
     }
 
     @Then("^I see an error occurred message with (.*) on My Record$")
-    fun i_see_an_error_occured_message_for_problems(heading: String) {
+    fun thenISeeAnErrorOccuredMessageForProblems(heading: String) {
         assertTextInSection(heading, "An error has occurred trying to retrieve this data.")
     }
 
     @Then("^I see a message indicating that I have no information recorded for (.*) on My Record$")
-    fun i_see_a_message_indicating_that_I_have_No_information_recorded(heading: String) {
+    fun thenISeeAMessageIndicatingThatIHaveNoInformationRecorded(heading: String) {
         assertTextInSection(heading, "No information recorded")
     }
 
@@ -591,7 +591,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     }
 
     @Then("^I see a drug and non drug allergy record from VISION$")
-    fun i_see_a_drug_and_non_drug_allergy_record_from_vision() {
+    fun thenISeeADrugAndNonDrugAllergyRecordFromVision() {
         val allergyMessages = myRecordInfoPage.allergies.allRecordItemBodies()
         val expectedMessages = listOf(
                 "H/O: drug allergy",

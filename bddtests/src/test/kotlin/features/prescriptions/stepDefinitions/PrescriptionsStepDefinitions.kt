@@ -635,8 +635,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     private fun getResponseToExpectedPrescriptionFormat(): List<HistoricPrescription> {
 
         return when (currentProvider) {
-            ProviderTypes.EMIS -> EmisPrescriptionMapper.Map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
-            ProviderTypes.TPP -> TppPrescriptionMapper.Map(prescriptionLoader.data as ListRepeatMedicationReply)
+            ProviderTypes.EMIS -> EmisPrescriptionMapper.map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
+            ProviderTypes.TPP -> TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply)
             ProviderTypes.VISION -> VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory)
             else -> ArrayList()
         }

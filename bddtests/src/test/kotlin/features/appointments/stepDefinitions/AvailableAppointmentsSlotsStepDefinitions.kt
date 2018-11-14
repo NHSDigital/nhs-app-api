@@ -295,7 +295,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     }
 
     @Then("^I am taken to the available appointment slots screen$")
-    fun i_am_taken_to_the_available_appointment_slots_screen() {
+    fun thenIAmTakenToTheAvailableAppointmentSlotsScreen() {
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 

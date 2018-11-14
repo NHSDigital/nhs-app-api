@@ -284,7 +284,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     }
 
     @Given("^I have a (.+) user's IM1 credentials with missing Linkage Key$")
-    fun iHaveAn_EMISUsersIMCredentialsWithMissingLinkageKey(gpSystem: String) {
+    fun iHaveAnEMISUsersIMCredentialsWithMissingLinkageKey(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
         this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
@@ -639,19 +639,19 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^I am redirected to the CID create an account page$")
     @Throws(Exception::class)
-    fun IAmRedirectedToTheCIDCreateAnAccountPage() {
+    fun thenIAmRedirectedToTheCIDCreateAnAccountPage() {
         accountCreation.assertPageIsVisible()
     }
 
     @Then("^I am redirected to the signed in home page$")
     @Throws(Exception::class)
-    fun IAmRedirectedToTheSignedInHomePage() {
+    fun thenIAmRedirectedToTheSignedInHomePage() {
         navHeader.assertHomePageHeaderVisible()
     }
 
     @Then("^I am redirected to the app to the signed in home page$")
     @Throws(Exception::class)
-    fun IAmRedirectedToTheAppToTheSignedInHomePage() {
+    fun thenIAmRedirectedToTheAppToTheSignedInHomePage() {
         navHeader.assertHomePageHeaderVisible()
     }
 

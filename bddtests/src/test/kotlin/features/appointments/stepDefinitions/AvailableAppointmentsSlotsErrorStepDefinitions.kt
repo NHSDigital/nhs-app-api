@@ -18,7 +18,7 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
     val mockingClient = MockingClient.instance
 
     @When("^I click try again button on appointment page$")
-    fun i_click_try_again_button_on_appointment_page() {
+    fun whenIClickTryAgainButtonOnAppointmentPage() {
         errorPage.waitForSpinnerToDisappear(TIMEOUT_PLUS_ONE_SECOND) // 1 second more than timeout
         errorPage.clickOnButtonContainingText("Try again")
     }
@@ -39,12 +39,12 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
     }
 
     @Then("^there should be a button to try again$")
-    fun there_should_be_a_button_to_try_again() {
+    fun thenThereShouldBeAButtonToTryAgain() {
         errorPage.assertHasButton("Try again")
     }
 
     @Then("^I see appropriate information message when there is a error retrieving data$")
-    fun i_see_appropriate_information_message_when_there_is_a_error_retrieving_data() {
+    fun thenISeeAppropriateInformationMessageWhenThereIsAErrorRetrievingData() {
         val expectedHeader = "There's been a problem loading this page"
         val expectedBody = "Try again later. If the problem continues and you need to book an appointment now, " +
                 "contact your GP surgery directly. For urgent medical advice, call 111."
@@ -56,7 +56,7 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
     }
 
     @Then("^I see appropriate information message when appointments are disabled$")
-    fun i_see_appropriate_information_message_when_appointments_are_disabled() {
+    fun thenISeeAppropriateInformationMessageWhenAppointmentsAreDisabled() {
         val expectedHeader = "You are not currently able to book appointments online"
         val expectedBody = "Contact your GP surgery for more information. For urgent medical help, call 111."
         errorPage.waitForSpinnerToDisappear()
@@ -67,7 +67,7 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
     }
 
     @Then("^there should not be an option to try again$")
-    fun there_should_not_be_an_option_to_try_again() {
+    fun thenThereShouldNotBeAnOptionToTryAgain() {
         errorPage.assertNoButton("Try again")
     }
 

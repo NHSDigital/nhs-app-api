@@ -24,7 +24,7 @@ class AppointmentsConfirmationStepDefinitions {
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
     @Given("^I have selected an appointment slot to book$")
-    fun i_have_selected_an_appointment_slot_to_book() {
+    fun givenIHaveSelectedAnAppointmentSlotToBook() {
         availableAppointmentsFilterSteps.selectOptionsToRevealSlots()
         val date = sessionVariableCalled<String>(TargetAppointmentDateKey)
         val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
@@ -42,67 +42,67 @@ class AppointmentsConfirmationStepDefinitions {
     }
 
     @When("^I click the button to go back to my appointments$")
-    fun i_click_the_button_to_go_back_to_my_appointments() {
+    fun whenIClickTheButtonToGoBackToMyAppointments() {
         appointmentsConfirmationSteps.goBackToMyAppointments()
     }
 
     @When("^I click the error page back button$")
-    fun i_click_the_error_page_back_button() {
+    fun whenIClickTheErrorPageBackButton() {
         appointmentsConfirmationSteps.clickErrorPageBackButton()
     }
 
     @When("^I enter symptoms of (\\d+) characters$")
-    fun i_enter_symptoms_of_character(length: Int) {
+    fun whenIEnterSymptomsOfCharacter(length: Int) {
         val symptoms: String = getSymptomsOfLength(length)
         appointmentsConfirmationSteps.describeSymptoms(symptoms)
     }
 
     @When("^I enter symptoms$")
-    fun i_enter_symptoms() {
+    fun whenIEnterSymptoms() {
         val symptoms = Serenity.sessionVariableCalled<String>(SymptomsToEnter)
         Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
         appointmentsConfirmationSteps.describeSymptoms(symptoms)
     }
 
     @When("^I paste symptoms of (\\d+) characters$")
-    fun i_paste_symptoms_of_characters(length: Int) {
+    fun whenIPasteSymptomsOfCharacters(length: Int) {
         val symptoms: String = getSymptomsOfLength(length)
         appointmentsConfirmationSteps.pasteSymptoms(symptoms)
     }
 
     @Then("^only the first (\\d+) characters will be displayed$")
-    fun only_the_first_characters_will_be_displayed(length: Int) {
+    fun thenOnlyTheFirstCharactersWillBeDisplayed(length: Int) {
         appointmentsConfirmationSteps.checkSymptomsLength(length)
     }
 
     @Then("^I see appropriate information message when there is an error on appointment confirmation page$")
-    fun i_see_appropriate_information_message_when_there_is_an_error_on_appointment_confirmation_page() {
+    fun thenISeeAppropriateInformationMessageWhenThereIsAnErrorOnAppointmentConfirmationPage() {
         appointmentsConfirmationSteps.checkTimeoutErrorMessage()
     }
 
     @Then("^I see appropriate information message after 10 seconds when it times-out on appointment confirmation page$")
-    fun i_see_appropriate_information_message_after_seconds_when_it_times_out_on_appointment_confirmation_page() {
+    fun thenISeeAppropriateInformationMessageAfterSecondsWhenItTimesOutOnAppointmentConfirmationPage() {
         appointmentsConfirmationSteps.checkTimeoutErrorMessage()
     }
 
     @Then("^I see appropriate information message " +
             "when there is an error sending data on appointment confirmation page$")
-    fun i_see_appropriate_information_message_when_there_is_an_error_sending_data_on_appointment_confirmation_page() {
+    fun thenISeeAppropriateInformationMessageWhenThereIsAnErrorSendingDataOnAppointmentConfirmationPage() {
         appointmentsConfirmationSteps.checkErrorSendingMessage()
     }
 
     @Then("^there should be a button to go back to my appointments$")
-    fun there_should_be_a_button_to_go_back_to_my_appointments() {
+    fun thenThereShouldBeAButtonToGoBackToMyAppointments() {
         appointmentsConfirmationSteps.checkIfButtonIsVisible("Back to my appointments")
     }
 
     @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")
-    fun an_error_is_displayed_that_is_mandatory() {
+    fun thenAnErrorIsDisplayedThatIsMandatory() {
         appointmentsConfirmationSteps.checkValidationErrorMessage()
     }
 
     @Then("^I don't see option to type in booking reason$")
-    fun i_don_t_see_option_to_type_in_booking_reason() {
+    fun thenIDontSeeOptionToTypeInBookingReason() {
         appointmentsConfirmationSteps.appointmentsConfirmation.symptomsFormDiv.assertElementNotPresent()
     }
 

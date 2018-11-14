@@ -15,7 +15,7 @@ private const val UPPER_LIMIT_FOR_TOTAL_COURSES = 100
 
 object EmisPrescriptionMapper {
 
-    fun Map(data: PrescriptionRequestsGetResponse): List<HistoricPrescription> {
+    fun map(data: PrescriptionRequestsGetResponse): List<HistoricPrescription> {
 
         val historicPrescriptionOrderPriority = hashMapOf(
                 "Rejected" to REJECTED_PRIORITY,
@@ -38,7 +38,7 @@ object EmisPrescriptionMapper {
 
         val repeatCourses = data.medicationCourses.filter { it.prescriptionType == PrescriptionType.Repeat }
 
-        val repeatCourseguids = GetGuids(repeatCourses)
+        val repeatCourseguids = getGuids(repeatCourses)
 
         val historicPrescriptions = ArrayList<HistoricPrescription>()
 
@@ -81,7 +81,7 @@ object EmisPrescriptionMapper {
         return historicPrescriptionsOrderedByStatusOnScreen
     }
 
-    private fun GetGuids(repeatCourses: List<MedicationCourse>): ArrayList<String> {
+    private fun getGuids(repeatCourses: List<MedicationCourse>): ArrayList<String> {
         val courseGuids = ArrayList<String>()
 
         repeatCourses.forEach { it -> courseGuids.add(it.medicationCourseGuid) }

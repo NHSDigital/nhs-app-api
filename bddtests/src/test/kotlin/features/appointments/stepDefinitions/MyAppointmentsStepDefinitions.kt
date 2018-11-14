@@ -49,7 +49,7 @@ class MyAppointmentsStepDefinitions {
     }
 
     @Then("^I am informed I have no booked appointments$")
-    fun i_am_informed_I_have_no_booked_appointments() {
+    fun thenIAmInformedIHaveNoBookedAppointments() {
         myAppointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
     }
 
@@ -97,18 +97,18 @@ class MyAppointmentsStepDefinitions {
     }
 
     @When("^I select \"([^\"]*)\" button$")
-    fun i_select_button(buttonText: String) {
+    fun whenISelectButton(buttonText: String) {
         myAppointmentsSteps.myAppointmentsPage.waitForNativeStepToComplete()
         myAppointmentsSteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
     }
 
     @Then("^I am given the list of upcoming appointments$")
-    fun i_am_given_the_list_of_upcoming_appointments() {
+    fun thenIAmGivenTheListOfUpcomingAppointments() {
         myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
     }
 
     @Then("^appointments are in chronological order$")
-    fun appointments_are_in_chronological_order() {
+    fun thenAppointmentsAreInChronologicalOrder() {
         myAppointmentsSteps.checkIfSlotsAreInCorrectOrder()
     }
 
@@ -118,12 +118,12 @@ class MyAppointmentsStepDefinitions {
     }
 
     @When("^the upcoming appointments are requested$")
-    fun the_API_retrieves_upcoming_appointments() {
+    fun whenTheAPIRetrievesUpcomingAppointments() {
         myAppointmentsSteps.createSerenityMyAppointmentSessionVariable()
     }
 
     @When("^the \"([^\"]*)\" API call fails with csrf token of \"([^\"]*)\"$")
-    fun the_API_call_failes_with_csrf_token_of(provider: String, csrfToken: String) {
+    fun whenTheAPICallFailsWithCsrfTokenOf(provider: String, csrfToken: String) {
         Assert.assertEquals("Test setup incorrect: Step only implemented for EMIS", "EMIS", provider.toUpperCase())
 
         try {
@@ -148,7 +148,7 @@ class MyAppointmentsStepDefinitions {
     }
 
     @Then("^a list of cancellation reasons if the GP Service provides the list$")
-    fun a_list_of_cancellation_reasons() {
+    fun thenAListOfCancellationReasons() {
         myAppointmentsSteps.checkCancellationReasonExistForApplicableGPService()
     }
 

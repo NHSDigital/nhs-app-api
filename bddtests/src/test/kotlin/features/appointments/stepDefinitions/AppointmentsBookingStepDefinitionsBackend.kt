@@ -60,7 +60,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     @Given("^an appointment booking for (.*) can be successful, but session has expired$")
     fun anAppointmentForCanBeSuccessfullyGeneratedButSessionExpired(gpSystem: String) {
         anAppointmentBookingForCanBeSuccessful(gpSystem)
-        AppointmentsSharedStepDefinitions.SetAppointmentsSessionCookieToExpired()
+        AppointmentsSharedStepDefinitions.setAppointmentsSessionCookieToExpired()
     }
 
     @Given("^online appointment booking is not available to the (.*) patient, when wanting to book an appointment$")

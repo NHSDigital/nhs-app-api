@@ -12,7 +12,7 @@ class AppointmentGuidanceStepDefinitions {
 
     @Then("^I am given guidance as to my options before booking an appointment$")
     @Throws(Exception::class)
-    fun i_am_given_guidance_as_to_my_options_before_booking_an_appointment() {
+    fun thenIAmGivenGuidanceAsToMyOptionsBeforeBookingAnAppointment() {
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
         appointmentGuidanceSteps.checkTheContentHeaderIsCorrect()
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
@@ -20,7 +20,7 @@ class AppointmentGuidanceStepDefinitions {
 
     @When("^I select Appointment Guidance Page Check symptoms button$")
     @Throws(Exception::class)
-    fun i_select_Appointment_Guidance_Page_Check_symptoms_button() {
+    fun whenISelectAppointmentGuidancePageCheckSymptomsButton() {
         appointmentGuidanceSteps.clickCheckSymptomsButton()
     }
 }

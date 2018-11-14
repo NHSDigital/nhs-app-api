@@ -16,10 +16,9 @@ import org.junit.Assert
 import pages.navigation.NavBarNative
 import java.net.URL
 
-private const val surveyUrl = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
-private const val organDonationUrl = "https://www.organdonation.nhs.uk/"
+private const val SURVEY_URL = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
 
-class HomePageDefinitions : AbstractSteps() {
+class HomePageStepDefinitions : AbstractSteps() {
 
     @Steps
     private lateinit var browser: BrowserSteps
@@ -62,8 +61,8 @@ class HomePageDefinitions : AbstractSteps() {
         homeSteps.homePage.assertSurveyLinkContent()
         homeSteps.homePage.assertSurveyLinkCollapsibleAndExpandable()
         homeSteps.homePage.surveyContentLink.assertSingleElementPresent().click()
-        browser.changeTab(URL(surveyUrl))
-        browser.shouldHaveUrl(surveyUrl)
+        browser.changeTab(URL(SURVEY_URL))
+        browser.shouldHaveUrl(SURVEY_URL)
     }
 
 
@@ -118,7 +117,7 @@ class HomePageDefinitions : AbstractSteps() {
 
     private fun followMedicalRecordLink() {
         homeSteps.homePage.viewMedicalRecordLink.click()
-        recordSteps.i_see_record_warning_page_opened()
+        recordSteps.thenISeeRecordWarningPageOpened()
         navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
     }
     private fun followOrganDonationLink() {

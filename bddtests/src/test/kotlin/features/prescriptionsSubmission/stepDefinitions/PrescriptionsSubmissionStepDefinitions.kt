@@ -223,7 +223,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         when (currentProvider) {
             ProviderTypes.TPP -> {
                 prescriptionSteps.assertPrescriptionsMatch(
-                        TppPrescriptionMapper.Map(prescriptionLoader.data as ListRepeatMedicationReply),
+                        TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply),
                         amount,
                         false)
             }
@@ -232,7 +232,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                         Serenity.sessionVariableCalled<MutableMap<String,
                                 PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
 
-                prescriptionSteps.assertPrescriptionsMatch(EmisPrescriptionMapper.Map(
+                prescriptionSteps.assertPrescriptionsMatch(EmisPrescriptionMapper.map(
                         map[currentScenarioState]!!), amount)
             }
             ProviderTypes.VISION -> {

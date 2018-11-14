@@ -12,7 +12,7 @@ class AppointmentsSharedStepDefinitions {
     companion object {
 
         @Step
-        fun SetAppointmentsSessionCookieToExpired() {
+        fun setAppointmentsSessionCookieToExpired() {
             Serenity.setSessionVariable(Cookie::class).to(expiredCookie)
         }
 

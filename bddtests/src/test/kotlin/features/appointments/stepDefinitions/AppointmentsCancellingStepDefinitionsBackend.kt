@@ -83,7 +83,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @When("^I send a cancellation request to the API with a valid cancellation reason$")
     @Throws(Exception::class)
-    fun i_send_a_cancellation_request_to_the_API_with_a_valid_cancellation_reason() {
+    fun whenISendACancellationRequestToTheAPIWithAValidCancellationReason() {
         var id = ""
         val reasons = cancelAppointmentSteps.retrieveCancellationReasons()
         if (reasons.any()) {
@@ -108,7 +108,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @When("^I send a cancellation request to the API without a cancellation reason$")
     @Throws(Exception::class)
-    fun i_send_a_cancellation_request_to_the_API_without_a_cancellation_reason() {
+    fun whenISendACancellationRequestToTheAPIWithoutACancellationReason() {
         val body = worker.models.appointments.CancelAppointmentRequest(
                 cancelAppointmentSteps.retrieveSlotIdOfAppointmentToCancel().toString(),
                 ""
@@ -127,7 +127,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @When("^I send a cancellation request to the API with an invalid cancellation reason$")
     @Throws(Exception::class)
-    fun i_send_a_cancellation_request_to_the_API_with_an_invalid_cancellation_reason() {
+    fun whenISendACancellationRequestToTheAPIWithAnInvalidCancellationReason() {
         val body = worker.models.appointments.CancelAppointmentRequest(
                 cancelAppointmentSteps.retrieveSlotIdOfAppointmentToCancel().toString(),
                 "NOT_EXISTING_REASON_ID"
@@ -145,7 +145,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @Then("^I will receive a successful response$")
     @Throws(Exception::class)
-    fun i_will_receive_a_successful_response() {
+    fun thenIWillReceiveASuccessfulResponse() {
         val response = SerenityHelpers.getHttpResponse()
         Assert.assertNotNull("Expected Response", response)
         Assert.assertEquals("Expected statusCode", SC_NO_CONTENT, response!!.statusLine.statusCode )
