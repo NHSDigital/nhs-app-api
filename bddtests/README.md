@@ -23,7 +23,7 @@ docker-compose up
 Run the tests locally
 
 ```
-gradle clean test aggregate \
+gradle clean prepare test aggregate \
 -Dcucumber.options="--tags 'not (@pending or @bug or @native or @manual or @tech-debt)'" \
 -Dwebdriver.base.url="http://web.local.bitraft.io:3000"
 ```

@@ -52,4 +52,4 @@ docker rm $(docker ps -aq)
 
 exit "$test_exit_code"
 
-# cd /repo ; ./gradlew clean test aggregate -Dcucumber.options="--tags 'not @bug and not @pending'" -Dwebdriver.provided.type=chromenongpu -Dwebdriver.base.url=http://nhsonline.web:3000
+# cd /repo ; ./gradlew clean test prepare aggregate -Dcucumber.options="--tags 'not @bug and not @pending'" -Dwebdriver.provided.type=chromenongpu -Dwebdriver.base.url=http://nhsonline.web:3000

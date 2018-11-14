@@ -78,12 +78,12 @@ class Config private constructor() {
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {
-        return System.getenv(key) ?: defaultValue
+        return (System.getenv(key) ?: defaultValue)
                 .also { println("$key set as $it") }
     }
 
     private fun envOrDefault(key: String, defaultValue: Long): Long {
-        val result = System.getenv(key)?.toLong() ?: defaultValue
+        val result = (System.getenv(key)?.toLong() ?: defaultValue)
                 .also { println("$key set as $it") }
 
         return result

@@ -4,8 +4,6 @@ services:
     image: nhsapp.azurecr.io/nhsonline-web:${WEB_TAG}
     env_file:
       - vars_ci.env
-    ports:
-      - "3000:3000"
     environment:
       - BIOMETRICS_ENABLED=true
   api.local.bitraft.io:
@@ -15,8 +13,6 @@ services:
       - nhsonline.redis.session
     env_file:
       - vars_ci.env
-    ports:
-      - "8082:8082"
     environment:
       - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_URLS=http://*:8082
@@ -36,8 +32,6 @@ services:
       - nhsonline.redis.session
     env_file:
       - vars_ci.env
-    ports:
-      - "8084:8084"
     environment:
       - BACKENDWORKER_RUNMODE=cid
       - ASPNETCORE_URLS=http://*:8084
@@ -55,8 +49,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     tty: true
-    ports:
-      - "8080:8080"
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:${REDIS_DATA_TAG}
     environment:

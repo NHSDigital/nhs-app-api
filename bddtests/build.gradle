@@ -1,4 +1,4 @@
-defaultTasks 'clean','test','aggregate'
+defaultTasks 'clean','prepare','test','aggregate'
 repositories {
 //    maven {
 //        url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
@@ -102,11 +102,13 @@ task frameworkUnitTests(type: Test) {
         includeCategories 'pages.PageObjectTests'
     }
 }
-test {
+task prepare {
     dependsOn compileTestKotlin, detektCheck
+}
+test {
     testLogging.showStandardStreams = true
     /* Assign all env variables passed to gradle as system properties.  Serenity only picks up on properties (not env variables) */
     systemProperties System.getProperties()
 }
 gradle.startParameter.continueOnFailure = false
-test.finalizedBy(aggregate)
+

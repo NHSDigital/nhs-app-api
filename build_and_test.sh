@@ -15,17 +15,19 @@ displayUsage () {
                [This option is ignored if -A is specified]
     -L     Force a branch build to run as if it was Develop and execute full BDD suite including long running tests
                 [This option is ignored if -A is specified]
+    -P     Run tests in parallel (WARNING: This can consume a large amount of docker VM memory)
     -h     Display this help message
   "
   exit 1
 }
 
 RUN_SUBSET=1
+PARALLEL=0
 RUN_AS_DEVELOP=0
 ENABLE_LONG_RUNNING=0
 PREFIX="and"
 
-while getopts "ADh" opt; do
+while getopts "ADPh" opt; do
 
   case $opt in
     A)
@@ -38,6 +40,9 @@ while getopts "ADh" opt; do
     L)
       RUN_AS_DEVELOP=1
       ENABLE_LONG_RUNNING=1
+      ;;
+    P)
+      PARALLEL=1
       ;;
     h)
       displayUsage
@@ -90,4 +95,4 @@ docker build . -t $DOCKER_REGISTRY/$BACKEND_NAME:$TAG -f NHSOnline.Backend.Worke
 docker tag $DOCKER_REGISTRY/$BACKEND_NAME:$TAG $DOCKER_REGISTRY/$BACKEND_NAME:latest
 
 cd ../bddtests/ops
-RUN_AS_DEVELOP=$RUN_AS_DEVELOP RUN_SUBSET=$RUN_SUBSET ENABLE_LONG_RUNNING=$ENABLE_LONG_RUNNING SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ./docker_tests.sh
+PARALLEL=$PARALLEL RUN_AS_DEVELOP=$RUN_AS_DEVELOP RUN_SUBSET=$RUN_SUBSET ENABLE_LONG_RUNNING=$ENABLE_LONG_RUNNING SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ./docker_tests.sh
