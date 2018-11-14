@@ -23,8 +23,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 
         public Necessity AppointmentBookingReasonNecessity { get; set; } = Necessity.Optional;
 
-        public List<string> OwnerIds { get; set; }
-
         public List<string> LocationIds { get; set; }
     }
 }

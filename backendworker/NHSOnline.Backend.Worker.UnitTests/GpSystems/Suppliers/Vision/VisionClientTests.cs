@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
-            _configMock = new Mock<IVisionConfig>();
+            _configMock = _fixture.Freeze<Mock<IVisionConfig>>();
             _configMock.SetupGet(x => x.ApiUrl).Returns(ApiUrl);
             _configMock.SetupGet(x => x.RequestUsername).Returns(RequestUserName);
             _configMock.SetupGet(x => x.CertificatePath).Returns(Path);
@@ -76,10 +77,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new VisionHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 
-            _fixture.Inject(_configMock);
             _fixture.Inject(_httpClient);
-            _fixture.Inject(_mockCertificateService);
-            _fixture.Inject(_mockEnvelopeService);
             
             _sut = _fixture.Create<VisionClient>();
         }
@@ -315,7 +313,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             var received = new VisionRequest<AvailableAppointmentsRequest>();
 
             _visionUserSession.LocationIds = _fixture.CreateMany<string>().ToList();
-            _visionUserSession.OwnerIds = _fixture.CreateMany<string>().ToList();
 
             var slotsRequest = GetSlotsRequest(dateRange);
 
@@ -371,7 +368,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                     SlotsPerPage = 1000
                 },
                 Locations = _visionUserSession.LocationIds,
-                Owners = _visionUserSession.OwnerIds,
+                Owners = new List<string> { "ALL" },
                 DateRange = new DateRange
                 {
                     From = dateRange.FromDate.Date,

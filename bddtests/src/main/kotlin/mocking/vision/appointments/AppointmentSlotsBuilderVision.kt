@@ -14,7 +14,7 @@ import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import mocking.vision.models.appointments.AvailableAppointmentsResponse
 import mocking.vision.models.appointments.Location
-import mocking.vision.models.appointments.Owner
+import mocking.vision.VisionConstants.defaultOwnerId
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -85,16 +85,10 @@ class AppointmentSlotsBuilderVision(
         val locationsForPatient = Serenity.sessionVariableCalled<List<Location>>(
                 GeneralAppointmentsHelper.Companion.VisionMetadata.LOCATIONS
         )
-        val ownersForPatient = Serenity.sessionVariableCalled<List<Owner>>(
-                GeneralAppointmentsHelper.Companion.VisionMetadata.OWNERS
-        )
 
         requestBuilder.andBody(
                 wrapAroundXmlTag("vision:owners",
-                        ownersForPatient.joinToString("") { owner ->
-                            wrapAroundXmlTag("vision:owner", owner.id.toString())
-                        }
-
+                        wrapAroundXmlTag("vision:owner", defaultOwnerId)
                 ), "contains")
                 .andBody(wrapAroundXmlTag("vision:locations",
                         locationsForPatient.joinToString("") { location ->

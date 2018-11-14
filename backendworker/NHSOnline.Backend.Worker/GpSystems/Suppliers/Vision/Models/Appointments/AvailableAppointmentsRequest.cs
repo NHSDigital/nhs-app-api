@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointment
 
         [XmlArray(ElementName = "owners", Namespace = "urn:vision")]
         [XmlArrayItem(ElementName = "owner", Namespace = "urn:vision")]
-        public List<string> Owners { get; set; }
+        public List<string> Owners { get; set; } = new List<string> { "ALL" };
 
         [XmlArray(ElementName = "locations", Namespace = "urn:vision")]
         [XmlArrayItem(ElementName = "location", Namespace = "urn:vision")]

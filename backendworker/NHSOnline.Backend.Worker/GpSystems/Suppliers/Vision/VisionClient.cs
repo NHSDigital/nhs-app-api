@@ -148,7 +148,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                     SlotsPerPage = 1000
                 },
                 Locations = visionUserSession.LocationIds,
-                Owners = visionUserSession.OwnerIds,
                 DateRange = new DateRange
                 {
                     From = dateRange.FromDate.Date,

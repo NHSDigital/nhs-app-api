@@ -46,6 +46,8 @@ object VisionConstants {
     const val htmlResponseFormat: String = "HTML"
     const val xmlResponseFormat: String = "XML"
 
+    const val defaultOwnerId: String = "ALL"
+
     var gpAppointmentsDisabled: String = "gpAppointmentsDisabled"
 
     fun getVisionExistingAppointmentsResponse(serviceContent: String,

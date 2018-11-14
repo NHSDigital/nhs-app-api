@@ -47,7 +47,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             var patientNumber = _fixture.Create<PatientNumber>();
             var patientId = _fixture.Create<string>();
             patientNumber.NumberType = "NHS";
-            var owners = _fixture.CreateMany<Owner>().ToList();
             var locations = _fixture.CreateMany<Location>().ToList();
 
             _mockVisionClient.Setup(x =>
@@ -81,8 +80,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                                             },
                                             References = new PatientReferences
                                             {
-                                                Locations = locations,
-                                                Owners = owners
+                                                Locations = locations
                                             }
                                         }
                                     }
@@ -101,8 +99,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                     RosuAccountId = DefaultRosuAccountId,
                     IsRepeatPrescriptionsEnabled = true,
                     IsAppointmentsEnabled = false,
-                    LocationIds = locations.Select(l => l.Id).ToList(),
-                    OwnerIds = owners.Select(o => o.Id).ToList()
+                    LocationIds = locations.Select(l => l.Id).ToList()
                 });
             
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);

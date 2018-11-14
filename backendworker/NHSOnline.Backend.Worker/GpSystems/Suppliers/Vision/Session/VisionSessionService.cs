@@ -39,8 +39,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                             PatientId = response.Body.Configuration.Account.PatientId,
                             IsRepeatPrescriptionsEnabled = response.Body.Configuration.Prescriptions.RepeatEnabled,
                             IsAppointmentsEnabled = response.Body.Configuration.Appointments.BookingEnabled,
-                            LocationIds = GetLocationIds(response),
-                            OwnerIds = GetOwnerIds(response)
+                            LocationIds = GetLocationIds(response)
                         }
                     );
                 }
@@ -57,11 +56,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
         private static List<string> GetLocationIds(VisionApiObjectResponse<PatientConfigurationResponse> response) =>
             response.Body.Configuration.References?.Locations != null
                 ? response.Body.Configuration.References.Locations.Select(l => l.Id).ToList()
-                : new List<string>();
-
-        private static List<string> GetOwnerIds(VisionApiObjectResponse<PatientConfigurationResponse> response) =>
-            response.Body.Configuration.References?.Owners != null
-                ? response.Body.Configuration.References.Owners.Select(o => o.Id).ToList()
                 : new List<string>();
 
         // Vision does not have a logoff endpoint, returning successfully deleted
