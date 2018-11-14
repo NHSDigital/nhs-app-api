@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Settings;
@@ -29,6 +30,23 @@ namespace NHSOnline.Backend.Worker
                 throw new ConfigurationNotFoundException(key);
             }
 
+            return value;
+        }
+        
+        public static string GetOrNull(this IConfiguration configuration, string key)
+        {
+            return configuration[key];
+        }
+        
+        public static int GetIntOrThrow<T>(this IConfiguration configuration, string key, ILogger<T> logger)
+        {
+            var strValue = GetOrThrow(configuration, key, logger);
+            int value;
+            if (!int.TryParse(strValue, out value))
+            {
+                logger.LogError(string.Format(CultureInfo.InvariantCulture, LogMessage, key));
+                throw new ConfigurationNotFoundException(key);
+            }
             return value;
         }
 

@@ -11,13 +11,13 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Cipher;
-using NHSOnline.Backend.Worker.Support.Session;
 using StackExchange.Redis;
+using NHSOnline.Backend.Worker.Support.Session;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Support.Session
 {
     [TestClass]
-    public class SessionCacheServiceTests
+    public class RedisSessionCacheServiceTests
     {
         private IFixture _fixture;
         private Mock<IOptions<ConfigurationSettings>> _settings;
