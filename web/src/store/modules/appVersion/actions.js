@@ -2,7 +2,12 @@ import { INIT_APP_VERSION, UPDATE_WEB_VERSION, UPDATE_NATIVE_VERSION, UPDATE_PLA
 
 export default {
   updateWebVersion({ commit }, webVersion) {
-    commit(UPDATE_WEB_VERSION, webVersion);
+    const versionRegex = new RegExp('[v][0-9]+');
+    let correctWebVersion = webVersion;
+    if (versionRegex.exec(webVersion)) {
+      correctWebVersion = webVersion.substr(1);
+    }
+    commit(UPDATE_WEB_VERSION, correctWebVersion);
   },
   updateNativeVersion({ commit }, nativeVersion) {
     commit(UPDATE_NATIVE_VERSION, nativeVersion);
