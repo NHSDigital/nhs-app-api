@@ -45,7 +45,7 @@ export default {
 
   hideMenuBar() {
     const app = window.nativeApp;
-    if (app && app.hideMenuBar()) {
+    if (app && app.hideMenuBar) {
       app.hideMenuBar();
       return true;
     }

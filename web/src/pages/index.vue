@@ -14,6 +14,7 @@
 
 <script>
 /* eslint-disable import/extensions */
+import NativeCallbacks from '@/services/native-app';
 import BetaBanner from '../components/BetaBanner';
 import WelcomeSection from '../components/WelcomeSection';
 import NavigationListMenu from '../components/NavigationListMenu';
@@ -33,6 +34,15 @@ export default {
   },
   mounted() {
     window.scrollTo(0, 0);
+    this.version050compatibility();
+  },
+  methods: {
+    version050compatibility() {
+      if (this.$store.state.device.isNativeApp && this.$store.getters['appVersion/isPreForceUpdate']) {
+        NativeCallbacks.showHeader();
+        NativeCallbacks.hideWhiteScreen();
+      }
+    },
   },
 };
 </script>

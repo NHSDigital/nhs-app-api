@@ -1,5 +1,4 @@
 import getOr from 'lodash/fp/getOr';
-import { INDEX } from '@/lib/routes';
 import { SET_ACCEPTANCE, INIT_ACCEPTANCE } from '@/store/modules/termsAndConditions/mutation-types';
 
 const extractConsentGiven = getOr(false, 'response.consentGiven');
@@ -15,13 +14,12 @@ export default {
       .postV1PatientTermsAndConditionsConsent(consentTerms)
       .then(() => {
         commit(SET_ACCEPTANCE, consentTerms);
-        const sourceValue = this.app.store.state.device.source;
-        this.app.router.push({
-          path: INDEX.path,
-          query: { source: sourceValue },
-        });
+        return Promise.resolve();
       })
-      .catch(() => commit(SET_ACCEPTANCE, false));
+      .catch(() => {
+        commit(SET_ACCEPTANCE, false);
+        return Promise.resolve();
+      });
   },
   async checkAcceptance({ commit, state }) {
     if (state.areAccepted) return Promise.resolve();

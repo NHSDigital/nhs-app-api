@@ -57,10 +57,6 @@ describe('termsAndConditions/actions', () => {
       it('will commit SET_ACCEPTANCE as true when the post request completes successfully', async () => {
         expect(commit).toBeCalledWith(SET_ACCEPTANCE, true);
       });
-
-      it('will push `/` to the router when the post request completes successfully', async () => {
-        expect(app.router[0].path).toBe('/');
-      });
     });
 
     describe('post fails', () => {
@@ -75,10 +71,6 @@ describe('termsAndConditions/actions', () => {
 
       it('will commit SET_ACCEPTANCE as false when the post request fails', async () => {
         expect(commit).toBeCalledWith(SET_ACCEPTANCE, false);
-      });
-
-      it('will not push `/` to the router when the post request fails', async () => {
-        expect(app.router.length).toEqual(0);
       });
     });
   });

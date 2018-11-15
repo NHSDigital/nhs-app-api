@@ -5,6 +5,7 @@
 <script>
 import { isEmpty } from 'lodash/fp';
 import { TERMSANDCONDITIONS } from '@/lib/routes';
+import NativeCallbacks from '@/services/native-app';
 
 export default {
   name: '',
@@ -25,8 +26,15 @@ export default {
     return undefined;
   },
   mounted() {
+    this.version050compatibility();
   },
-  created() {
+  methods: {
+    version050compatibility() {
+      if (this.$store.state.device.isNativeApp && this.$store.getters['appVersion/isPreForceUpdate']) {
+        NativeCallbacks.hideHeader();
+        NativeCallbacks.hideWhiteScreen();
+      }
+    },
   },
 };
 </script>

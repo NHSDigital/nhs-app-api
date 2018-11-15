@@ -8,6 +8,7 @@
 /* eslint-disable import/extensions */
 import HeaderSlim from '@/components/HeaderSlim';
 import TermsConditions from '@/components/TermsConditions';
+import NativeCallbacks from '@/services/native-app';
 
 export default {
   layout: 'termsAndConditions',
@@ -16,11 +17,18 @@ export default {
     TermsConditions,
   },
   mounted() {
+    this.version050compatibility();
   },
   methods: {
     getHeaderState() {
       return !this.$store.state.device.isNativeApp
         ? this.$style.webHeader : this.$style.nativeHeader;
+    },
+    version050compatibility() {
+      if (this.$store.state.device.isNativeApp && this.$store.getters['appVersion/isPreForceUpdate']) {
+        NativeCallbacks.hideHeader();
+        NativeCallbacks.hideWhiteScreen();
+      }
     },
   },
 };

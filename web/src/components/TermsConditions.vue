@@ -63,6 +63,7 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
+import { INDEX } from '@/lib/routes';
 
 export default {
   components: {
@@ -88,7 +89,7 @@ export default {
     stopProp(event) {
       event.stopPropagation();
     },
-    onConfirmButtonClicked() {
+    async onConfirmButtonClicked() {
       this.hasTriedToContinue = true;
       if (this.areTermsAccepted) {
         const consentRequest = {
@@ -96,7 +97,12 @@ export default {
           DateOfConsent: moment().format(),
         };
 
-        this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
+        await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
+
+        if (this.$store.state.termsAndConditions.areAccepted) {
+          const sourceValue = this.$store.state.device.source;
+          window.location = `${window.location.origin}${INDEX.path}?source=${sourceValue}`;
+        }
       }
     },
     getErrorState() {
