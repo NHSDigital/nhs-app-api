@@ -1,5 +1,5 @@
 <template>
-  <tab-focused-icon id="helpIcon" :icon-classes="[$style.help]" view-box="0 0 112 112" >
+  <tab-focused-icon id="helpIcon" :icon-classes="[$style.help]" view-box="0 0 116 116" >
     <title>{{ $t('icons.helpIcon.title') }}</title>
     <desc>{{ $t('icons.helpIcon.desc') }}</desc>
     <g>
