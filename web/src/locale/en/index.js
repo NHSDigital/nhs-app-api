@@ -581,6 +581,7 @@ export default {
     openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
     fingerprintID: 'Fingerprint ID',
+    accessibilityStatement: 'Accessibility statement',
   },
   sc04: {
     organDonation: {

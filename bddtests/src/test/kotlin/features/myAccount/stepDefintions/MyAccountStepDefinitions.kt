@@ -35,6 +35,11 @@ class MyAccountStepDefinitions {
         myAccount.helpAndSupportLink.click()
     }
 
+    @When("^I click the Accessibility statement link$")
+    fun iClickTheAccessibilityStatementLink() {
+        myAccount.accessibilityStatementLink.element.click()
+    }
+
     @Then("^I am on the My Account page$")
     fun iAmOnTheMyAccountPage() {
         myAccount.signOutButton.assertIsVisible()

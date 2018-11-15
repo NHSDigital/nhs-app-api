@@ -31,6 +31,7 @@
     <string name="cookiesPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/</string>
     <string name="openSourceLicensesURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/</string>
     <string name="medicalRecordAbbreviationsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/</string>
+    <string name="accessibilityStatementURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/</string>
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 
@@ -42,6 +43,7 @@
         <item>@string/cookiesPolicyURL</item>
         <item>@string/openSourceLicensesURL</item>
         <item>@string/medicalRecordAbbreviationsURL</item>
+        <item>@string/accessibilityStatementURL</item>
     </string-array>
 
     <string-array name="serviceUrls">

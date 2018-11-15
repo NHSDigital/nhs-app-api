@@ -53,6 +53,14 @@
           {{ $t('myAccount.helpAndSupport') }}
         </analytics-tracked-tag>
       </li>
+      <li>
+        <analytics-tracked-tag id="btn_accessibility"
+                               :href="$store.app.$env.ACCESSIBILITY_STATEMENT"
+                               :text="$t('myAccount.accessibilityStatement')"
+                               tag="a" target="_blank">
+          {{ $t('myAccount.accessibilityStatement') }}
+        </analytics-tracked-tag>
+      </li>
     </ul>
     <analytics-tracked-tag :text="$t('signOutButton.signOut')" data-purpose="button">
       <form action="account/signout" method="post">

@@ -83,8 +83,8 @@ class KnownServicesTests: XCTestCase {
     func test_ShouldURLOpenExternally_ResolveToTrueWhenOneOfExternalServices_ButFalseWhenOneOfKnownServices() {
         let externalServiceUrl = URL(string: config().TermsAndConditionsURL)!
         let knownServiceUrl = URL(string: config().HomeUrl)!
-        let externalServiceShouldOpenEx = knownServices.shouldURLOpenExternally(url: externalServiceUrl)
-        let knownServiceShouldOpenEx = knownServices.shouldURLOpenExternally(url: knownServiceUrl)
+        let externalServiceShouldOpenEx = knownServices.shouldURLOpenExternally(externalServiceUrl)
+        let knownServiceShouldOpenEx = knownServices.shouldURLOpenExternally(knownServiceUrl)
         XCTAssertTrue(externalServiceShouldOpenEx, "External service should open externally")
         XCTAssertFalse(knownServiceShouldOpenEx, "Known service shouldn't open externally")
     }

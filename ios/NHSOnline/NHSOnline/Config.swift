@@ -7,7 +7,7 @@ struct Config: Decodable {
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
         case IsFirstTimeOpened, CarouselDirectory, CarouselContentType, CarouselFileName
-        case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL
+        case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL
     }
     
     let HomeUrl: String
@@ -43,6 +43,8 @@ struct Config: Decodable {
     let CookiesPolicyURL: String
     let OpenSourceLicencesURL: String
     let MedicalRecordAbbreviationsURL: String
+    let AccessibilityStatementURL: String
+    
 }
 
 func config() -> Config {

@@ -42,3 +42,8 @@ Feature: View My Account Page
     Given I am on the My Account page
     When I click the Help and support link
     Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
+
+  Scenario: A patient can navigate to the Accessibility statement page
+    Given I am on the My Account page
+    When I click the Accessibility statement link
+    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/

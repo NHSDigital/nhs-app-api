@@ -123,6 +123,8 @@
 	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
 	<key>DataPreferencesURL</key>
 	<string>https://$(DATA_PREFERENCES_URL)</string>
+	<key>AccessibilityStatementURL</key>
+	<string>https://$(ACCESSIBILITY_STATEMENT_URL)</string>
 	<key>ResponseWaitingTime</key>
 	<integer>20</integer>
 	<key>SessionTimeout</key>

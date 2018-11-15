@@ -56,6 +56,7 @@ class MyAccountPage : HybridPageObject() {
     val cookiesPolicyLink = getLink("Cookies policy")
     val openSourceLicencesLink = getLink("Open source licences")
     val helpAndSupportLink = getLink("Help and support")
+    val accessibilityStatementLink = getLink("Accessibility statement")
 
     fun assertPersonalDetailsVisible(expectedUsername: String,
                                      expectedDateOfBirth: String,
@@ -83,7 +84,8 @@ class MyAccountPage : HybridPageObject() {
                 privacyPolicyLink,
                 cookiesPolicyLink,
                 openSourceLicencesLink,
-                helpAndSupportLink)
+                helpAndSupportLink,
+                accessibilityStatementLink)
 
         Assert.assertEquals("Expected Number of Links", expectedLinks.count(), getLink().elements.count())
         expectedLinks.forEach { link -> link.assertSingleElementPresent().assertIsVisible() }
