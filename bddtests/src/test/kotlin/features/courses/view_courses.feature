@@ -243,6 +243,7 @@ Feature: View courses
       | EMIS      |
       | VISION    |
 
+  @nativepending @NHSO-2970
   Scenario Outline: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -257,6 +258,7 @@ Feature: View courses
       | EMIS      |
       | VISION    |
 
+  @nativepending @NHSO-2970
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from EMIS is defined
     And I have historic prescriptions

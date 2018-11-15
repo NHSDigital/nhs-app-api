@@ -6,6 +6,7 @@ Feature: Session Expiry
     Given EMIS is initialised
 
   @long-running
+  @nativepending @NHSO-2948
   Scenario: On session expiry, a user on a secure screen is automatically signed out
     Given I am logged in
     And I am on the home page
@@ -21,7 +22,7 @@ Feature: Session Expiry
     And I navigate back to the app
     Then I see the login page with the session expiry notification
     And the user login details are cleared from cookies
-    
+
   @tech-debt @NHSO-1742
   Scenario: On session expiry, a user of the native app, on a non secure screen, is signed out on navigating back to a secure screen and sending a request
     Given I am logged in

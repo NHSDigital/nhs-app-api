@@ -32,7 +32,6 @@ class IPhoneXDriver : DriverSource {
             caps.setCapability(MobileCapabilityType.DEVICE_NAME, "iPhone X")
             caps.setCapability(IOSMobileCapabilityType.ACCEPT_SSL_CERTS, true)
             caps.setCapability("browserstack.local", "true")
-            caps.setCapability("browserstack.localIdentifier","test123")
             caps.setCapability("autoWebview","true")
             caps.setCapability(MobileCapabilityType.APP,Config.instance.appPath)
 

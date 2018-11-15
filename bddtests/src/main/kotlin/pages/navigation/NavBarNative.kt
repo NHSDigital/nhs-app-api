@@ -82,7 +82,7 @@ open class NavBarNative : NativePageObject() {
 
     fun hasSingleSelection(): Boolean {
         var highlightedCount = 0
-        if(isIOS()){
+        if(onMobile()){
             val navBar = arrayListOf(
                     NavBarNative.NavBarType.SYMPTOMS,
                     NavBarNative.NavBarType.APPOINTMENTS,

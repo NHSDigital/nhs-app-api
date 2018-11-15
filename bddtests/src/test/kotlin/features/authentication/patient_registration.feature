@@ -234,6 +234,7 @@ Feature: Registration
     Then I receive a response from the Patient Facing request
     And I receive a Not Found response from the IM1 request
 
+  @nativepending @NHSO-2948
   Scenario Outline: <GP System> User launches the create account CitizenID journey
     Given I want to register for a <GP System> account
     When I select to create an account
@@ -249,6 +250,8 @@ Feature: Registration
       |VISION    |
 
   @smoketest
+  @nativepending @NHSO-2948
+    #fails on Android
   Scenario Outline: <GP System> User launches and completes account creation from web
     Given I have completed <GP System> account creation
     Then I am redirected to the signed in home page

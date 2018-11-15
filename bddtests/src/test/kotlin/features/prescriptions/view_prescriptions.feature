@@ -155,6 +155,7 @@ Feature: View prescriptions
       | TPP       |
       | VISION    |
 
+  @nativebug @NHSO-3051
   Scenario Outline: <GP System> user with historic prescriptions with missing dosage and quantity info
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -263,6 +264,7 @@ Feature: View prescriptions
     Then I receive a "Unauthorized" error
 
   @backend
+  @nativepending @NHSO-2970
   Scenario Outline: <GP System> patient requesting prescriptions with when their session has expired
     Given I have logged into <GP System> and have a valid session cookie
     But I allow my session to expire

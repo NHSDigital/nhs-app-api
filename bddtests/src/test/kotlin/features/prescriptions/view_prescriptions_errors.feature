@@ -29,6 +29,7 @@ Feature: View prescriptions error cases
       | TPP       |
       | VISION    |
 
+  @nativepending @NHSO-2970
   Scenario: A user navigates to the prescriptions page and the session times out
     Given a patient from EMIS is defined
     And I am using EMIS GP System
@@ -71,6 +72,7 @@ Feature: View prescriptions error cases
       | TPP       |
       | VISION    |
 
+  @nativepending @NHSO-2970
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
     Given <GP System> is initialised
     And I am using <GP System> GP System
