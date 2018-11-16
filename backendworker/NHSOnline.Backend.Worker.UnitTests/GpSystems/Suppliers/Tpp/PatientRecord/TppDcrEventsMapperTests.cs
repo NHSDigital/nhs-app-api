@@ -14,11 +14,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
     public class TppDcrEventsMapperTests
     {
         private ITppMyRecordMapper _mapper;
+        private ITppDcrEventItemsMapper _eventItemsMapper;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mapper = new TppMyRecordMapper();
+            _eventItemsMapper = new TppDcrEventItemsMapper();
         }
 
         [TestMethod]
@@ -28,7 +30,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             var item = new RequestPatientRecordReply();
 
             // Act
-            var tppDcrEvents = new TppDcrEventsMapper().Map(item);
+            var tppDcrEvents = new TppDcrEventsMapper(_eventItemsMapper).Map(item);
             var result = _mapper.Map(new Allergies(), new Medications(), tppDcrEvents, new TestResults());
 
             // Assert
@@ -81,6 +83,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                             }
                         },
                         Location = "Kainos GP Demo Unit (General Practice)"
+                    },
+                    new Event
+                    {
+                        Date = null, 
+                        DoneBy = "Mr General NhsApp 2", 
+                        Items = new List<RequestPatientRecordItem>
+                        {
+                            new RequestPatientRecordItem { 
+                                Details = "Alimemazine 20mg tablets - 1 pack of 14 tablet(s)", 
+                                Type = "Medication template"                             
+                            },
+                            new RequestPatientRecordItem { 
+                                Details = "(R) Benzoin tincture - 250 ml - use as directed", 
+                                Type = "Medication"                             
+                            }
+                        },
+                        Location = "Kainos GP Demo Unit (General Practice)"
                     }
                 }
                 
@@ -107,10 +126,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                         $"{requestPatientRecordReply.Events[1].Items[0].Type} - { requestPatientRecordReply.Events[1].Items[0].Details}",
                         $"{requestPatientRecordReply.Events[1].Items[1].Type} - { requestPatientRecordReply.Events[1].Items[1].Details}",    
                     }
-                }                
+                },
+                new TppDcrEvent
+                {
+                    Date = null,
+                    LocationAndDoneBy = $"{requestPatientRecordReply.Events[1].Location} - {requestPatientRecordReply.Events[1].DoneBy}",
+                    EventItems = new List<string> { 
+                        $"{requestPatientRecordReply.Events[1].Items[0].Type} - { requestPatientRecordReply.Events[1].Items[0].Details}",
+                        $"{requestPatientRecordReply.Events[1].Items[1].Type} - { requestPatientRecordReply.Events[1].Items[1].Details}",    
+                    }
+                }  
             };
             // Act
-            var result = new TppDcrEventsMapper().Map(requestPatientRecordReply);
+            var result = new TppDcrEventsMapper(_eventItemsMapper).Map(requestPatientRecordReply);
             
             // Assert
             result.Should().NotBeNull();
@@ -142,7 +170,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                 }              
             };
 
-            var result = new TppDcrEventsMapper().Map(requestPatientRecordReply);
+            var result = new TppDcrEventsMapper(_eventItemsMapper).Map(requestPatientRecordReply);
 
             result.Should().NotBeNull();
             result.Data[0].EventItems[0].Should().Be("Medication template - Benzoin tincture - 500 ml; use as directed");

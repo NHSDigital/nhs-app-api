@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             return new AllergyItem
             {
                 Name = item.Value,
-                Date = new MyRecordDate { Value = DateTimeOffset.Parse(item.Date, CultureInfo.InvariantCulture) }
+                Date = new MyRecordDate { Value = item.Date.SafeParseToNullableDateTimeOffset() }
             };
         }
 
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
         {       
             var result = new MedicationItem
             {
-                Date = DateTimeOffset.Parse(item.Date, CultureInfo.InvariantCulture) 
+                Date = item.Date.SafeParseToNullableDateTimeOffset() 
             };
             
             var medicationLineItems = new List<MedicationLineItem>();

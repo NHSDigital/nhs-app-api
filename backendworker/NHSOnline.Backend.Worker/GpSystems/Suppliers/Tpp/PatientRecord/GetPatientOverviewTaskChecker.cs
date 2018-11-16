@@ -6,11 +6,16 @@ using Allergies = NHSOnline.Backend.Worker.Areas.MyRecord.Models.Allergies;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public class GetPatientOverviewTaskChecker
+    public interface IGetPatientOverviewTaskChecker
     {
-        private readonly ILogger _logger;
+        Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse);
+    }
+    
+    public class GetPatientOverviewTaskChecker : IGetPatientOverviewTaskChecker
+    {
+        private readonly ILogger<GetPatientOverviewTaskChecker> _logger;
         
-        public GetPatientOverviewTaskChecker(ILogger logger)
+        public GetPatientOverviewTaskChecker(ILogger<GetPatientOverviewTaskChecker> logger)
         {
             _logger = logger;
         }

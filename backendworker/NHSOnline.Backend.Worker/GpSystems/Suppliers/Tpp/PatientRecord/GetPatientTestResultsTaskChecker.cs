@@ -4,12 +4,19 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public class GetPatientTestResultsTaskChecker
+    public interface IGetPatientTestResultsTaskChecker
     {
-        private readonly ILogger _logger;
+        TestResults Check(TppClient.TppApiObjectResponse<TestResultsViewReply> taskResponse);
+    }
+    
+    public class GetPatientTestResultsTaskChecker : IGetPatientTestResultsTaskChecker
+    {
+        private readonly ITppTestResultsMapper _testResultsMapper;
+        private readonly ILogger<GetPatientTestResultsTaskChecker> _logger;
         
-        public GetPatientTestResultsTaskChecker(ILogger logger)
+        public GetPatientTestResultsTaskChecker(ITppTestResultsMapper testResultsMapper, ILogger<GetPatientTestResultsTaskChecker> logger)
         {
+            _testResultsMapper = testResultsMapper;
             _logger = logger;
         }
 
@@ -22,7 +29,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             if (taskResponse.HasSuccessResponse)
             {            
                 _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", methodName);
-                return new TppTestResultsMapper().Map(taskResponse.Body);
+                return _testResultsMapper.Map(taskResponse.Body);
             }
             
             if (taskResponse.HasForbiddenResponse)

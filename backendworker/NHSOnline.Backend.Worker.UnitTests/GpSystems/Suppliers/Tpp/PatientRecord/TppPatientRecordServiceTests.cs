@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using Moq;
+using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 
@@ -22,6 +23,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         private Mock<ITppClient> _tppClient;
         private TppUserSession _userSession;
         private IFixture _fixture;
+        private Mock<IGetPatientDcrEventsTaskChecker> _patientDcrEventsChecker;
+        private Mock<IGetPatientOverviewTaskChecker> _patientOverviewTaskChecker;
+        private Mock<IGetPatientTestResultsTaskChecker> _patientTestResultsChecker;
 
         [TestInitialize]
         public void TestInitialize()
@@ -29,6 +33,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
             _userSession = _fixture.Freeze<TppUserSession>();
+            _patientDcrEventsChecker = _fixture.Freeze<Mock<IGetPatientDcrEventsTaskChecker>>();
+            _patientOverviewTaskChecker = _fixture.Freeze<Mock<IGetPatientOverviewTaskChecker>>();
+            _patientTestResultsChecker = _fixture.Freeze<Mock<IGetPatientTestResultsTaskChecker>>();
             _systemUnderTest = _fixture.Create<TppPatientRecordService>();
         }
         
@@ -89,13 +96,31 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                     {
                         Body = testResultsResponse,
                         ErrorResponse = null,
-                    }));   
+                    }));
 
-            // Act
+            _patientDcrEventsChecker.Setup(x =>
+                    x.Check(It.IsAny<TppClient.TppApiObjectResponse<RequestPatientRecordReply>>()))
+                .Returns(Mock.Of<TppDcrEvents>())
+                .Verifiable();
+            
+            _patientOverviewTaskChecker.Setup(x =>
+                    x.Check(It.IsAny<TppClient.TppApiObjectResponse<ViewPatientOverviewReply>>()))
+                .Returns(new Tuple<Allergies, Medications>(Mock.Of<Allergies>(), Mock.Of<Medications>()))
+                .Verifiable();
+            
+            _patientTestResultsChecker.Setup(x =>
+                    x.Check(It.IsAny<TppClient.TppApiObjectResponse<TestResultsViewReply>>()))
+                .Returns(Mock.Of<TestResults>())
+                .Verifiable();
+            
+           // Act
             var result = await _systemUnderTest.GetMyRecord(_userSession);
 
             // Assert
             _tppClient.Verify(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()));
+            _patientDcrEventsChecker.Verify();
+            _patientOverviewTaskChecker.Verify();
+            _patientTestResultsChecker.Verify();
             result.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
             ((GetMyRecordResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
         }

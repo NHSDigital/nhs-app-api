@@ -4,12 +4,19 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public class GetTppDetailedTestResultChecker
+    public interface IGetTppDetailedTestResultChecker
     {
-        private readonly ILogger _logger;
+        TestResultResponse Check(TppClient.TppApiObjectResponse<TestResultsViewReply> taskResponse);
+    }
+    
+    public class GetTppDetailedTestResultChecker : IGetTppDetailedTestResultChecker
+    {
+        private readonly ITppDetailedTestResultMapper _testResultsMapper;
+        private readonly ILogger<GetTppDetailedTestResultChecker> _logger;
         
-        public GetTppDetailedTestResultChecker(ILogger logger)
+        public GetTppDetailedTestResultChecker(ITppDetailedTestResultMapper testResultsMapper, ILogger<GetTppDetailedTestResultChecker> logger)
         {
+            _testResultsMapper = testResultsMapper;
             _logger = logger;
         }
 
@@ -22,7 +29,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             {
                 _logger.LogDebug("Mapping TPP TestResultsViewReply response to instance of standardised TestResultResponse class");
                 _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", methodName);
-                return new TppDetailedTestResultMapper().Map(taskResponse.Body);             
+                return _testResultsMapper.Map(taskResponse.Body);             
             }
             
             _logger.LogError($"Unsuccessful request retrieving test result information for Tpp. Status code: {(int)taskResponse.StatusCode}");

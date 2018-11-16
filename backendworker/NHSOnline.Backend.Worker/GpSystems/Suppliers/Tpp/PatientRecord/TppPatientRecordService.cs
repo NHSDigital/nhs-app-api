@@ -13,15 +13,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
     public class TppPatientRecordService : IPatientRecordService
     {
         private const string TestResultDateFormat = "yyyy-MM-ddTHH:mm:ss.f'Z'";
-        private readonly ILogger _logger;
+        private readonly ILogger<TppPatientRecordService> _logger;
+        private readonly IGetPatientDcrEventsTaskChecker _patientDcrEventsChecker;
+        private readonly IGetPatientOverviewTaskChecker _patientOverviewTaskChecker;
+        private readonly IGetPatientTestResultsTaskChecker _patientTestResultsChecker;
+        private readonly IGetTppDetailedTestResultChecker _patientDetailedTestResultChecker;
         private readonly ITppClient _tppClient;
         private readonly ITppMyRecordMapper _tppMyRecordMapper;
         
-        public TppPatientRecordService(ILoggerFactory loggerFactory, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper)
+        public TppPatientRecordService(IGetPatientDcrEventsTaskChecker patientDcrEventsChecker,
+            IGetPatientOverviewTaskChecker patientOverviewTaskChecker,
+            IGetPatientTestResultsTaskChecker patientTestResultsChecker,
+            IGetTppDetailedTestResultChecker patientDetailedTestResultChecker,
+            ILogger<TppPatientRecordService> logger, ITppClient tppClient, ITppMyRecordMapper tppMyRecordMapper)
         {
+            _patientDcrEventsChecker = patientDcrEventsChecker;
+            _patientOverviewTaskChecker = patientOverviewTaskChecker;
+            _patientTestResultsChecker = patientTestResultsChecker;
+            _patientDetailedTestResultChecker = patientDetailedTestResultChecker;
             _tppClient = tppClient;
             _tppMyRecordMapper = tppMyRecordMapper;
-            _logger = loggerFactory.CreateLogger<TppPatientRecordService>();
+            _logger = logger;
         }
         
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
@@ -38,13 +50,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 var testResults = await GetLast180DaysTestResults(tppUserSession);
 
                 _logger.LogDebug("Mapping TPP Patient Overview responses to lists of Allergies and Medication classes");
-                var patientOverviewItems = new GetPatientOverviewTaskChecker(_logger).Check(patientOverview);  
+                var patientOverviewItems = _patientOverviewTaskChecker.Check(patientOverview);  
                 
                 var allergies = patientOverviewItems.Item1;
                 var medications = patientOverviewItems.Item2;
                 
                 _logger.LogDebug("Mapping TPP DCR responses to instnace of TppDcrEvents class");
-                var dcrEvents = new GetPatientDcrEventsTaskChecker(_logger).Check(patientRecord);
+                var dcrEvents = _patientDcrEventsChecker.Check(patientRecord);
 
                 _logger.LogInformation("Mapping TPP responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, dcrEvents, testResults);
@@ -82,7 +94,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 var detailedTestResult = await _tppClient.TestResultsViewDetailed(tppUserSession, testResultId);
 
                 _logger.LogDebug("Mapping TPP detailed test results to instance of TestResultResponse class");   
-                var tppTestResultResponse = new GetTppDetailedTestResultChecker(_logger).Check(detailedTestResult);
+                var tppTestResultResponse = _patientDetailedTestResultChecker.Check(detailedTestResult);
 
                 if (tppTestResultResponse.HasErrored)
                 {
@@ -123,7 +135,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                     testResultDates.EndDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture));                  
                 
                 _logger.LogDebug("Mapping TPP test results to instance of TestResults class");
-                var testResults = new GetPatientTestResultsTaskChecker(_logger).Check(testResultsView);
+                var testResults = _patientTestResultsChecker.Check(testResultsView);
 
                 if (!testResults.HasAccess || testResults.HasErrored)
                 {

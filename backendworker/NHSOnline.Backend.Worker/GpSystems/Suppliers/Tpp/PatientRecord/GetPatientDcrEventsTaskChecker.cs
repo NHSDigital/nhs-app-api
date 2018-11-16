@@ -4,12 +4,19 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public class GetPatientDcrEventsTaskChecker
+    public interface IGetPatientDcrEventsTaskChecker
     {
-        private readonly ILogger _logger;
+        TppDcrEvents Check(TppClient.TppApiObjectResponse<RequestPatientRecordReply> taskResponse);
+    }
+    
+    public class GetPatientDcrEventsTaskChecker : IGetPatientDcrEventsTaskChecker
+    {
+        private readonly ITppDcrEventsMapper _dcrEventsMapper;
+        private readonly ILogger<IGetPatientDcrEventsTaskChecker> _logger;
         
-        public GetPatientDcrEventsTaskChecker(ILogger logger)
+        public GetPatientDcrEventsTaskChecker(ITppDcrEventsMapper dcrEventsMapper, ILogger<GetPatientDcrEventsTaskChecker> logger)
         {
+            _dcrEventsMapper = dcrEventsMapper;
             _logger = logger;
         }
 
@@ -20,7 +27,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             if (taskResponse.HasSuccessResponse)
             {              
                 _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", nameof(Check));
-                return new TppDcrEventsMapper().Map(taskResponse.Body);
+                return _dcrEventsMapper.Map(taskResponse.Body);
             }
 
             TppDcrEvents tppDcrEvents;

@@ -114,6 +114,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 
             try
             {
+                _logger.LogDebug($"Fetch GP System: '{supplier}'.");
                 return supplier.HasValue 
                     ? Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure())) 
                     : Option.None<IGpSystem>();

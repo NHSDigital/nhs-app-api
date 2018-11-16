@@ -116,7 +116,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetPatientRecordService_WhenCalled_ReturnsTppPatientRecordService()
         {
-            var service = new TppPatientRecordService(_loggerFactory, _tppClient, 
+            var logger = Mock.Of<ILogger<TppPatientRecordService>>();
+            var patientDcrEventsChecker = Mock.Of<IGetPatientDcrEventsTaskChecker>();
+            var patientOverviewTaskChecker = Mock.Of<IGetPatientOverviewTaskChecker>();
+            var patientTestResultsChecker = Mock.Of<IGetPatientTestResultsTaskChecker>();
+            var patientDetailedTestResultChecker = Mock.Of<IGetTppDetailedTestResultChecker>();
+            
+            var service = new TppPatientRecordService(patientDcrEventsChecker,
+                patientOverviewTaskChecker,
+                patientTestResultsChecker,
+                patientDetailedTestResultChecker,
+                logger, _tppClient, 
                 _tppMyRecordMapper);
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppPatientRecordService)))

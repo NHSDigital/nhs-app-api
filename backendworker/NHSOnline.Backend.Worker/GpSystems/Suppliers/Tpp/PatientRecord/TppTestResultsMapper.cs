@@ -7,7 +7,12 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public class TppTestResultsMapper
+    public interface ITppTestResultsMapper
+    {
+        TestResults Map(TestResultsViewReply testResultsViewReply);
+    }
+    
+    public class TppTestResultsMapper : ITppTestResultsMapper
     {
         public TestResults Map(TestResultsViewReply testResultsViewReply)
         {
