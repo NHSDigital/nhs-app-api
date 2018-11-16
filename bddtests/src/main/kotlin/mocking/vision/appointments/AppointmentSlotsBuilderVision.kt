@@ -1,5 +1,5 @@
 package mocking.vision.appointments
-import constants.DateTimeFormats
+
 import constants.DateTimeFormats.Companion.dateWithoutTimeFormat
 import mocking.JSonXmlConverter
 import mocking.JSonXmlConverter.wrapAroundXmlTag
@@ -7,7 +7,6 @@ import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mocking.vision.VisionConstants
 import mocking.vision.VisionMappingBuilder
-import mocking.vision.appointments.AppointmentSlotsBuilderVision.Companion.FOUR_WEEKS_OF_DAYS_PLUS_ONE
 import mocking.vision.appointments.helpers.AppointmentsSlotsHelper
 import mocking.vision.appointments.helpers.GeneralAppointmentsHelper
 import mocking.vision.models.ServiceDefinition
@@ -21,14 +20,14 @@ import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
 import utils.SerenityHelpers
 import java.time.Duration
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class AppointmentSlotsBuilderVision(
         patient: Patient,
-        fromDateString: String?,
-        toDateString: String?
+        fromDate: ZonedDateTime?,
+        toDate: ZonedDateTime?
 ) : VisionMappingBuilder(), IAppointmentSlotsBuilder {
 
     private val serviceDefinition = ServiceDefinition(
@@ -55,20 +54,24 @@ class AppointmentSlotsBuilderVision(
                 .andBody(userSession.provider, "contains")
                 .andBody(serviceDefinition.name, "contains")
                 .andBody(userSession.patientId, "contains")
-                .andBody(
-                        wrapAroundXmlTag("vision:dateRange",
-                                wrapAroundXmlTag(
-                                        "vision:from",
-                                        convertDateToVisionTime(fromDateString ?: getDefaultFromDate())
-                                ).plus(
 
-                                        wrapAroundXmlTag(
-                                                "vision:to",
-                                                convertToDateToVisionTime(toDateString ?: getDefaultToDate())
-                                        )
-                                )
-                        ),
-                        "contains")
+
+        if (fromDate != null && toDate != null) {
+            requestBuilder.andBody(
+                    wrapAroundXmlTag("vision:dateRange",
+                            wrapAroundXmlTag(
+                                    "vision:from",
+                                    convertDateToVisionTime(fromDate)
+                            ).plus(
+
+                                    wrapAroundXmlTag(
+                                            "vision:to",
+                                            convertToDateToVisionTime(toDate)
+                                    )
+                            )
+                    ),
+                    "contains")
+        }
     }
 
     override fun withDelay(delayMilliseconds: Duration): IAppointmentSlotsBuilder {
@@ -136,38 +139,12 @@ class AppointmentSlotsBuilderVision(
         return respondWithServiceUnavailable()
     }
 
-    private fun convertDateToVisionTime(time: String): String {
-        val dateToPass = ZonedDateTime.parse(time)
+    private fun convertDateToVisionTime(time: ZonedDateTime?): String {
         val queryDateFormat = DateTimeFormatter.ofPattern(dateWithoutTimeFormat)
-        return queryDateFormat.format(dateToPass)
+        return queryDateFormat.format(time)
     }
 
-    private fun convertToDateToVisionTime(time: String): String {
-        val dateToPass = ZonedDateTime.parse(time).minusDays(1)
-        val queryDateFormat = DateTimeFormatter.ofPattern(dateWithoutTimeFormat)
-        return queryDateFormat.format(dateToPass)
+    private fun convertToDateToVisionTime(time: ZonedDateTime?): String {
+          return convertDateToVisionTime(time!!.minusDays(1))
     }
-
-    companion object {
-        const val FOUR_WEEKS_OF_DAYS_PLUS_ONE = 29L
-    }
-}
-
-fun getDefaultFromDate(): String {
-    val now = ZonedDateTime.now(ZoneId.of("Europe/London"))
-    return now.format(
-            DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
-    )
-}
-
-fun getDefaultToDate(): String {
-    val fourWeeksTomorrow = ZonedDateTime.now(ZoneId.of("Europe/London")).plusDays(FOUR_WEEKS_OF_DAYS_PLUS_ONE)
-    val fourWeeksTomorrowAtMidnight = setToMidnight(fourWeeksTomorrow)
-    return fourWeeksTomorrowAtMidnight.format(
-            DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
-    )
-}
-
-private fun setToMidnight(date: ZonedDateTime): ZonedDateTime {
-    return date.withHour(0).withMinute(0).withSecond(0)
 }

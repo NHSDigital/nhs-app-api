@@ -19,8 +19,9 @@ import java.time.format.DateTimeFormatter
 
 class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                                   patient: Patient,
-                                  fromDateTime: String?,
-                                  toDateTime: String?)
+                                  fromDateTime: ZonedDateTime? = null,
+                                  toDateTime: ZonedDateTime? = null
+)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointmentslots"), IAppointmentSlotsBuilder {
 
     init {
@@ -31,12 +32,23 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         requestBuilder.andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
         requestBuilder.andHeader(HEADER_API_SESSION_ID, apiSessionId)
 
-        if (!fromDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(
-                name = "fromDateTime", value = convertDateToEmisTime(fromDateTime!!))
-        if (!toDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(
-                name = "toDateTime", value = convertDateToEmisTime(toDateTime!!))
-        if (!linkToken.isEmpty()) requestBuilder.andQueryParameter(
-                name = "userPatientLinkToken", value = linkToken)
+        if (fromDateTime != null) {
+            // We'll only match on the date and time down to the minutes, as it's much harder to match seconds
+            // without creating many stubs. We are creating 1 stub for the current minute and 1 for the next minute.
+            val fromDateParts = convertDateToEmisTimeString(fromDateTime).split(":")
+            requestBuilder.andQueryParameter(
+                    "fromDateTime",
+                    fromDateParts.joinToString(":", limit = 2, truncated = ""),
+                    "contains")
+        }
+
+        if (toDateTime != null) {
+            requestBuilder.andQueryParameter(
+                    "toDateTime",
+                    convertDateToEmisTimeString(toDateTime))
+        }
+
+        if (!linkToken.isEmpty()) requestBuilder.andQueryParameter("userPatientLinkToken", linkToken)
     }
 
     override fun withDelay(delayMilliseconds: Duration): AppointmentSlotsBuilderEmis {
@@ -65,8 +77,8 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
             val slots = session.slots.map { slot ->
                 AppointmentSlot(
                         slot.slotId!!,
-                        convertDateToEmisTime(slot.startTime!!),
-                        convertDateToEmisTime(slot.endTime!!),
+                        convertStringToEmisTimeString(slot.startTime!!),
+                        convertStringToEmisTimeString(slot.endTime!!),
                         slot.slotTypeName
                 )
             }
@@ -78,10 +90,13 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         }
     }
 
-    private fun convertDateToEmisTime(time: String): String {
-        val dateToPass = ZonedDateTime.parse(time)
+    private fun convertStringToEmisTimeString(time: String): String {
+        return convertDateToEmisTimeString(ZonedDateTime.parse(time))
+    }
+
+    private fun convertDateToEmisTimeString(time: ZonedDateTime?): String {
         val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
-        return queryDateFormat.format(dateToPass)
+        return queryDateFormat.format(time)
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {

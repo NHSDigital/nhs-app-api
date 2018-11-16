@@ -11,6 +11,7 @@ import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
+import java.time.ZonedDateTime
 
 class EmisMappingBuilderAppointments(private var configuration: EmisConfiguration?) : IAppointmentMappingBuilder {
 
@@ -20,15 +21,16 @@ class EmisMappingBuilderAppointments(private var configuration: EmisConfiguratio
             IMyAppointmentsBuilder = GetAppointmentBuilderEmis(configuration, patient)
 
     override fun appointmentSlotsRequest(patient: Patient,
-                                         fromDateTime: String?, toDateTime: String?) = AppointmentSlotsBuilderEmis(
+                                         fromDateTime: ZonedDateTime?,
+                                         toDateTime: ZonedDateTime?) = AppointmentSlotsBuilderEmis(
             configuration!!,
             patient,
             fromDateTime,
             toDateTime)
 
     fun appointmentSlotsMetaRequest(patient: Patient,
-                                    sessionStartDate: String? = null,
-                                    sessionEndDate: String? = null) = AppointmentSlotsMetaBuilderEmis(
+                                    sessionStartDate: ZonedDateTime? = null,
+                                    sessionEndDate: ZonedDateTime? = null) = AppointmentSlotsMetaBuilderEmis(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,

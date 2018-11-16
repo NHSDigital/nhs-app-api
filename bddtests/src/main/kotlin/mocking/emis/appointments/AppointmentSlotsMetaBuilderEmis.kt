@@ -22,8 +22,8 @@ class AppointmentSlotsMetaBuilderEmis(
         configuration: EmisConfiguration,
         apiEndUserSessionId: String,
         apiSessionId: String,
-        sessionStartDate: String? = null,
-        sessionEndDate: String? = null,
+        sessionStartDate: ZonedDateTime? = null,
+        sessionEndDate: ZonedDateTime? = null,
         userPatientLinkToken: String? = null)
     : EmisMappingBuilder(configuration, method = "GET",
         relativePath = "/appointmentslots/meta"), IAppointmentSlotsBuilder {
@@ -33,8 +33,20 @@ class AppointmentSlotsMetaBuilderEmis(
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, apiSessionId)
 
-        requestBuilder.andQueryParameterIfNotNull("sessionStartDate", convertDateToEmisTime(sessionStartDate))
-        requestBuilder.andQueryParameterIfNotNull("sessionEndDate", convertDateToEmisTime(sessionEndDate))
+        if (sessionStartDate != null) {
+            // We'll only match on the date and time down to the minutes, as it's much harder to match seconds
+            // without creating many stubs. We are creating 1 stub for the current minute and 1 for the next minute.
+            val fromDateParts = convertDateToEmisTimeString(sessionStartDate).split(":")
+            requestBuilder.andQueryParameter(
+                    "sessionStartDate",
+                    fromDateParts.joinToString(":", limit = 2, truncated = ""),
+                    "contains")
+        }
+
+        if (sessionEndDate != null) {
+            requestBuilder.andQueryParameter("sessionEndDate", convertDateToEmisTimeString(sessionEndDate))
+        }
+
         requestBuilder.andQueryParameterIfNotNull("userPatientLinkToken", userPatientLinkToken)
     }
 
@@ -94,14 +106,8 @@ class AppointmentSlotsMetaBuilderEmis(
         }
     }
 
-    private fun convertDateToEmisTime(time: String?): String? {
-        return if (time.isNullOrEmpty()) {
-            null
-        } else {
-            val dateToPass = ZonedDateTime.parse(time)
-            val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
-            return queryDateFormat.format(dateToPass)
-        }
+    private fun convertDateToEmisTimeString(time: ZonedDateTime?): String {
+        val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+        return queryDateFormat.format(time)
     }
-
 }

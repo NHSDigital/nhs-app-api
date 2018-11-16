@@ -9,11 +9,12 @@ import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertTrue
+import java.time.ZonedDateTime
 
 class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
 
-    override fun generateAppointmentSlotResponse(startDate: String?,
-                                                 endDate: String?,
+    override fun generateAppointmentSlotResponse(startDate: ZonedDateTime,
+                                                 endDate: ZonedDateTime,
                                                  guidanceMessage: Boolean,
                                                  reasonNecessity: NecessityOption,
                                                  mapping: IAppointmentSlotsBuilder.() -> Mapping) {
@@ -41,12 +42,14 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
                 .to(appointmentsMessage)
     }
 
-    override fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
-                                                                endDate: String?,
+    override fun generateAppointmentSlotResponseWithoutGuidance(startDate: ZonedDateTime,
+                                                                endDate: ZonedDateTime,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
-        mockingClient.forEmis { mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate)) }
+        mockingClient.forEmis {
+            mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate))
+        }
     }
 }

@@ -16,7 +16,11 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+private const val DEFAULT_NUMBER_OF_DAYS_IN_RANGE = 29L
+
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
+
+    private val supplierAdjustTime = TimeZone.getTimeZone("Europe/London").toZoneId()
 
     fun generateDefaultAvailableAppointmentSlotExample(startDate: ZonedDateTime? = null,
                                                        endDate: ZonedDateTime? = null,
@@ -27,7 +31,10 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage() {
         val example = retrieveSlotsExample()
-        generateAppointmentSlotResponseWithoutGuidance(null, null) {
+        generateAppointmentSlotResponseWithoutGuidance(defaultStartDate(), defaultEndDate()) {
+            respondWithSuccess(example)
+        }
+        generateAppointmentSlotResponseWithoutGuidance(defaultStartDate().plusMinutes(1), defaultEndDate()) {
             respondWithSuccess(example)
         }
         generateDefaultUserData()
@@ -46,11 +53,10 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
             guidanceMessage: Boolean = true,
             reasonNecessity: NecessityOption = NecessityOption.MANDATORY) {
 
-        saveToSerenityVariableForRequest(startDate, AppointmentStartTimeKey)
-        saveToSerenityVariableForRequest(endDate, AppointmentEndTimeKey)
-
-        val startDateToUseForMockResponse = adjustAndFormatDate(startDate)
-        val endDateToUseForMockResponse = adjustAndFormatDate(endDate)
+        val startDateToUseForMockResponse = startDate ?: defaultStartDate()
+        val endDateToUseForMockResponse = endDate ?: defaultEndDate()
+        saveToSerenityVariableForRequest(startDateToUseForMockResponse, AppointmentStartTimeKey)
+        saveToSerenityVariableForRequest(endDateToUseForMockResponse, AppointmentEndTimeKey)
         Serenity.setSessionVariable("BookingReasonNecessity").to(reasonNecessity)
 
         generateAppointmentSlotResponse(
@@ -62,18 +68,17 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
             respondWithSuccess(example)
         }
 
+        generateAppointmentSlotResponse(
+                startDateToUseForMockResponse.plusMinutes(1),
+                endDateToUseForMockResponse,
+                guidanceMessage,
+                reasonNecessity
+        ) {
+            respondWithSuccess(example)
+        }
+
         generateDefaultUserData()
     }
-
-    private fun adjustAndFormatDate(date: ZonedDateTime?): String? {
-        if (date != null) {
-            val adjustedDate = date.withZoneSameInstant(supplierAdjustTime)
-            return formatDate(adjustedDate)
-        }
-        return null
-    }
-
-    private val supplierAdjustTime = TimeZone.getTimeZone("Europe/London").toZoneId()
 
     private fun retrieveSlotsExample(): AppointmentSlotsResponseFacade {
         val example = AppointmentsSlotsExample.getGenericExample()
@@ -82,21 +87,40 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     }
 
     fun generateExample(mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
-        generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, mapping)
+        generateAppointmentSlotResponse(
+                defaultStartDate(),
+                defaultEndDate(),
+                true,
+                NecessityOption.OPTIONAL,
+                mapping
+        )
+        generateAppointmentSlotResponse(
+                defaultStartDate().plusMinutes(1),
+                defaultEndDate(),
+                true,
+                NecessityOption.OPTIONAL,
+                mapping
+        )
         generateDefaultUserData()
     }
 
-    private fun saveToSerenityVariableForRequest(date: ZonedDateTime?, key: String) {
-        if (date != null) {
-            val value = formatDate(date)
-            Serenity.setSessionVariable(key).to(value)
-        }
+    private fun saveToSerenityVariableForRequest(date: ZonedDateTime, key: String) {
+        val dateAsBackendString = DateTimeFormatter.ofPattern(
+                DateTimeFormats.backendDateTimeFormatWithTimezone
+        ).format(date)
+        Serenity.setSessionVariable(key).to(dateAsBackendString)
     }
 
-    private fun formatDate(date: ZonedDateTime): String {
-        val dateFormatter = DateTimeFormatter.ofPattern(
-                DateTimeFormats.backendDateTimeFormatWithTimezone)
-        return dateFormatter.format(date)
+    private fun defaultStartDate(): ZonedDateTime {
+        return ZonedDateTime.now()
+                .withZoneSameInstant(supplierAdjustTime)
+    }
+
+    private fun defaultEndDate(): ZonedDateTime {
+        return ZonedDateTime.now()
+                .toLocalDate()
+                .atStartOfDay(supplierAdjustTime)
+                .plusDays(DEFAULT_NUMBER_OF_DAYS_IN_RANGE)
     }
 
     private fun storeUIDateAndTimeOfSlotToSelect() {
@@ -111,14 +135,14 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         setSessionVariable(TargetAppointmentTimeKey).to(timeToSelect)
     }
 
-    abstract fun generateAppointmentSlotResponse(startDate: String?,
-                                                 endDate: String?,
+    abstract fun generateAppointmentSlotResponse(startDate: ZonedDateTime,
+                                                 endDate: ZonedDateTime,
                                                  guidanceMessage: Boolean,
                                                  reasonNecessity: NecessityOption,
                                                  mapping: IAppointmentSlotsBuilder.() -> Mapping)
 
-    abstract fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
-                                                                endDate: String?,
+    abstract fun generateAppointmentSlotResponseWithoutGuidance(startDate: ZonedDateTime,
+                                                                endDate: ZonedDateTime,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping))
 
 

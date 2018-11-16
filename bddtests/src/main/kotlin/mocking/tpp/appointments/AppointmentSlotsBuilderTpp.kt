@@ -18,7 +18,6 @@ import org.apache.http.HttpStatus
 import org.junit.Assert.fail
 import worker.models.demographics.TppUserSession
 import java.time.Duration
-import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -26,8 +25,8 @@ import java.util.*
 
 class AppointmentSlotsBuilderTpp(
         val tppUserSession: TppUserSession,
-        startDate: String? = null,
-        endDate: String? = null
+        startDate: ZonedDateTime?,
+        endDate: ZonedDateTime?
 ) : TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
 
     init {
@@ -38,10 +37,19 @@ class AppointmentSlotsBuilderTpp(
         val path = StringBuilder("//ListSlots[")
 
         if (startDate != null) {
-            path.append("@startDate='${convertDateToTppTime(startDate)}' and ")
+            // We'll only match on the date and time down to the minutes, as it's much harder to match seconds
+            // without creating many stubs. We are creating 1 stub for the current minute and 1 for the next minute.
+            val startDateParts = convertDateToTppTimeString(startDate).split(":")
+            path.append("starts-with(@startDate, ")
+            path.append("'${startDateParts.joinToString(":", limit = 2, truncated = "")}') and ")
+            path.append("substring(@startDate, string-length(@startDate)) = 'Z' and ")
+        }
+
+        if (endDate != null) {
             val numberOfDays = getNumberOfDays(startDate, endDate)
             path.append("@numberOfDays='$numberOfDays' and ")
         }
+
 
         path.append("@apiVersion='$apiVersion' and " +
                 "@patientId='${tppUserSession.patientId}' and " +
@@ -52,16 +60,9 @@ class AppointmentSlotsBuilderTpp(
                 .andBodyMatchingXpath(path.toString())
     }
 
-    private fun getNumberOfDays(startDate: String, endDate: String? = null): Long {
-
-        if (endDate != null) {
-            val format = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
-            val firstDate = LocalDate.parse(startDate, format)
-            val secondDate = LocalDate.parse(endDate, format)
-
-            return ChronoUnit.DAYS.between(firstDate, secondDate)
-        }
-        return 1
+    private fun getNumberOfDays(startDate: ZonedDateTime?, endDate: ZonedDateTime?): Long {
+        // "between" excludes the last date
+        return ChronoUnit.DAYS.between(startDate, endDate!!.plusDays(1))
     }
 
     override fun withDelay(delayMilliseconds: Duration): IAppointmentSlotsBuilder {
@@ -129,15 +130,18 @@ class AppointmentSlotsBuilderTpp(
                 staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails.first().staffName, "staffName"),
                 location = getValueOrTestSetupIncorrectly(session.location, "location"),
                 Slot = mutableListOf(Slot(
-                        startDate = convertDateToTppTime(slot.startTime!!),
-                        endDate = convertDateToTppTime(slot.endTime!!),
+                        startDate = convertStringToTppTimeString(slot.startTime!!),
+                        endDate = convertStringToTppTimeString(slot.endTime!!),
                         type = slot.slotTypeName!!)))
     }
 
-    private fun convertDateToTppTime(time: String): String {
-        val dateToPass = ZonedDateTime.parse(time)
+    private fun convertStringToTppTimeString(time: String): String {
+        return convertDateToTppTimeString(ZonedDateTime.parse(time))
+    }
+
+    private fun convertDateToTppTimeString(time: ZonedDateTime?): String {
         val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.tppDateTimeFormat)
-        return queryDateFormat.format(dateToPass)
+        return queryDateFormat.format(time)
     }
 
     private fun getValueOrTestSetupIncorrectly(value: Int?, valueName: String): String {

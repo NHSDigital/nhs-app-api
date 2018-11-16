@@ -7,9 +7,9 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import java.time.Duration
 
 
-interface IAppointmentSlotsBuilder:IBuilderCommonResponses {
+interface IAppointmentSlotsBuilder : IBuilderCommonResponses {
 
-    fun withDelay(delayMilliseconds : Duration): IAppointmentSlotsBuilder
+    fun withDelay(delayMilliseconds: Duration): IAppointmentSlotsBuilder
 
     fun respondWithSuccess(facade: AppointmentSlotsResponseFacade): Mapping
 }

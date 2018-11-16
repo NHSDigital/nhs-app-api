@@ -14,12 +14,8 @@ Feature: View available appointment slots backend
     Examples:
       | GP System |
       | EMIS      |
-      | VISION    |
-    @tech-debt  @NHSO-3056
-    Examples:
-      | GP System |
       | TPP       |
-
+      | VISION    |
 
 
   Scenario Outline: Requesting available <GP System> appointment slots returns an unknown exception, returns a Bad Gateway error

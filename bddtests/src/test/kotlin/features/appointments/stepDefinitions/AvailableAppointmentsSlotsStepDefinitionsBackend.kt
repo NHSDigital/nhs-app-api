@@ -10,7 +10,6 @@ import mocking.data.appointments.AppointmentsBookingData.Companion.defaultSessio
 import mocking.data.appointments.AppointmentsBookingData.Companion.pastFromDate
 import mocking.data.appointments.AppointmentsBookingData.Companion.pastToDate
 import mocking.data.appointments.AppointmentsSlotsExample
-import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.NhsoHttpException
@@ -36,26 +35,14 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
 
     @Given("^online appointment booking is not available to the patient, when wanting to view appointment slots$")
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots() {
-
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(
-                null,
-                null,
-                true,
-                NecessityOption.OPTIONAL,
-                { respondWithGPErrorWhenNotEnabled() })
+        factory.generateExample { respondWithGPErrorWhenNotEnabled() }
     }
 
     @Given("^unknown exception will occur when wanting to view appointment slots$")
     fun unknownExceptionWhenWantingToViewAppointmentSlots() {
-
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(
-                null,
-                null,
-                true,
-                NecessityOption.OPTIONAL,
-                { respondWithUnknownException() })
+        factory.generateExample { respondWithUnknownException() }
     }
 
     @When("^the available appointment slots are retrieved without a cookie$")

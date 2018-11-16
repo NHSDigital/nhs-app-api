@@ -13,6 +13,7 @@ import mocking.vision.appointments.MyAppointmentsBuilderVision
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
+import java.time.ZonedDateTime
 
 open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBuilder(method, "/vision/"),
         IAppointmentMappingBuilder {
@@ -24,8 +25,8 @@ open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBu
             IBookAppointmentsBuilder = BookAppointmentsBuilderVision(patient, request)
 
     override fun appointmentSlotsRequest(patient: Patient,
-                                         fromDateTime: String?,
-                                         toDateTime: String?):
+                                         fromDateTime: ZonedDateTime?,
+                                         toDateTime: ZonedDateTime?):
             IAppointmentSlotsBuilder = AppointmentSlotsBuilderVision(patient, fromDateTime, toDateTime)
 
     override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade):

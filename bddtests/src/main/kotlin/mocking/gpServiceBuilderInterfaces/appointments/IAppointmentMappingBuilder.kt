@@ -3,6 +3,7 @@ package mocking.gpServiceBuilderInterfaces.appointments
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
+import java.time.ZonedDateTime
 
 interface IAppointmentMappingBuilder {
     fun viewMyAppointmentsRequest(patient: Patient): IMyAppointmentsBuilder
@@ -10,8 +11,8 @@ interface IAppointmentMappingBuilder {
     fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder
 
     fun appointmentSlotsRequest(patient: Patient,
-                                fromDateTime: String? = null,
-                                toDateTime: String? = null): IAppointmentSlotsBuilder
+                                fromDateTime: ZonedDateTime? = null,
+                                toDateTime: ZonedDateTime? = null): IAppointmentSlotsBuilder
 
     fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade): ICancelAppointmentsBuilder
 }
