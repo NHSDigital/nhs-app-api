@@ -46,7 +46,7 @@ ENV EMIS_VERSION 2.1.0.0
 ENV WAIT_FOR_TIMEOUT 60
 ENV REDIS_ODSLOOKUP_CONFIG nhsonline.redis.sds:6379
 ENV REDIS_SESSION_CONFIG nhsonline.redis.session:6379
-ENV ConfigurationSettings__DefaultSessionExpiryMinutes 20
+ENV ConfigurationSettings__DefaultSessionExpiryMinutes 10
 ENV TPP_BASE_URL https://systmonline2.tpp-uk.com:60015/Patient/
 ENV TPP_API_VERSION 1
 ENV TPP_APPLICATION_NAME NhsApp
