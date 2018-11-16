@@ -11,10 +11,10 @@ import {
 
 export default {
   [LOADING_COMPLETE](state) {
-    state.isLoading = false;
+    state.loadingCounter -= 1;
   },
   [IS_LOADING](state) {
-    state.isLoading = true;
+    state.loadingCounter += 1;
   },
   [ADD_CANCEL_REQUEST_HANDLER](state, handler) {
     state.cancelRequestHandlers.push(handler);
@@ -26,11 +26,11 @@ export default {
       if (typeof handler === 'function') handler();
     }
     state.cancelRequestHandlers = [];
-    state.isLoading = false;
+    state.loadingCounter = 0;
   },
   [INIT_HTTP](state) {
     state = {
-      isLoading: false,
+      loadingCounter: 0,
     };
   },
 };

@@ -93,19 +93,22 @@ export default {
     };
   },
   mounted() {
-    this.$store.app.$http
+    const demographicsPromise = this.$store.app.$http
       .getV1PatientDemographics({})
       .then((data) => {
         this.patientDetails = data.response;
         this.isPatientDetailsCollapsed = false;
-      }).then(() => {
-        this.$store.app.$http
-          .getV1PatientMyRecord({})
-          .then((data) => {
-            this.myRecord = data.response;
-            this.hasLoaded = true;
-          });
       });
+
+    const myRecordPromise = this.$store.app.$http
+      .getV1PatientMyRecord({})
+      .then((data) => {
+        this.myRecord = data.response;
+      });
+
+    Promise.all([demographicsPromise, myRecordPromise]).then(() => {
+      this.hasLoaded = true;
+    });
   },
   methods: {
     getCollapsedState(collapsed) {

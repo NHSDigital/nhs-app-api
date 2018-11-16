@@ -3,7 +3,8 @@ export const LOADING_COMPLETE = 'LOADING_COMPLETE';
 export const ADD_CANCEL_REQUEST_HANDLER = 'ADD_CANCEL_REQUEST_HANDLER';
 export const CANCEL_REQUESTS = 'CANCEL_REQUESTS';
 export const INIT_HTTP = 'INIT_HTTP';
+
 export const initialState = () => ({
-  isLoading: false,
+  loadingCounter: 0,
   cancelRequestHandlers: [],
 });

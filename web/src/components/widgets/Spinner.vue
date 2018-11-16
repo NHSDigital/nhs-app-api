@@ -8,7 +8,7 @@
 export default {
   computed: {
     isVisible() {
-      return this.$store.state.http.isLoading;
+      return this.$store.state.http.loadingCounter;
     },
   },
 };
