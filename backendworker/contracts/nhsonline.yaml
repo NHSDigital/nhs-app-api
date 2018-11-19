@@ -34,3 +34,5 @@ paths:
     $ref: './nhsonline.configuration.yaml#/paths/~1configuration'  
   /v1/session/extend:
     $ref: './nhsonline.usersession.yaml#/paths/~1session~1extend'
+  /v1/odscodelookup:
+    $ref: './nhsonline.odscode.yaml#/paths/~1odscodelookup'

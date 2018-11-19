@@ -81,7 +81,9 @@ class HomeViewController : UIViewController {
         let path = Bundle.main.url(forResource: fileName, withExtension: type, subdirectory: directory)
         
         if path != nil {
-            self.webViewController?.webView.loadFileURL(path!, allowingReadAccessTo: path!)
+            DispatchQueue.main.async {
+                self.webViewController?.webView.loadFileURL(path!, allowingReadAccessTo: path!)
+            }
         } else {
             if #available(iOS 10.0, *) {
                 os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)

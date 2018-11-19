@@ -1,0 +1,38 @@
+ul {
+  li {
+    list-style-position: inside;
+  }
+}
+
+hr {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+h2 {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+h3 {
+  font-size: 1em;
+  padding-bottom: 0;
+  padding-top: 1em;
+}
+
+.headerPadding {
+  padding-top: 3.125em;
+}
+
+.features {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.continue {
+  margin-top: 1em;
+}
+
+.createAccountMessage {
+  padding-top: 0.5em;
+}

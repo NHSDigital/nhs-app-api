@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <throttling-header v-if="showHeader" :class="getHeaderClasses"
-                       :pages-with-slim-headers="pagesWithSlimHeader"/>
-    <main :class="[this.$style.homeMain, 'throttlingContent']">
+    <main>
       <connection-error />
       <api-error />
       <flash-message />
@@ -13,18 +11,16 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import ThrottlingHeader from '@/components/ThrottlingHeader';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import { GP_FINDER_RESULTS } from '@/lib/routes';
+import Sources from '@/lib/sources';
 
 export default {
   components: {
     ApiError,
     ConnectionError,
     FlashMessage,
-    ThrottlingHeader,
   },
   head() {
     return {
@@ -39,24 +35,14 @@ export default {
       ],
     };
   },
-  data() {
-    return {
-      pagesWithSlimHeader: [
-        GP_FINDER_RESULTS.path,
-      ],
-    };
-  },
-  computed: {
-    showHeader() {
-      return this.showTemplate;
-    },
-    getHeaderClasses() {
-      const classes = ['throttlingHeader'];
-      if (this.pagesWithSlimHeader.indexOf(this.$route.path) === -1) {
-        classes.push('notSlim');
-      }
-      return classes;
-    },
+  created() {
+    const { source } = this.$route.query;
+    if (Sources.isNative(source)) {
+      this.$store.dispatch('device/updateIsNativeApp', true);
+    } else {
+      this.$store.dispatch('device/updateIsNativeApp', false);
+    }
+    this.$store.dispatch('device/setSourceDevice', source);
   },
 };
 </script>
@@ -65,7 +51,6 @@ export default {
 @import '../style/main';
 @import '../style/pulltorefresh';
 @import '../style/elements';
-@import '../style/throttling/throttling';
 </style>
 
 <style module lang='scss' scoped>

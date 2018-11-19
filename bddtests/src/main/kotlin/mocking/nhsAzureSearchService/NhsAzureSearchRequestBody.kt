@@ -1,7 +1,6 @@
 package mocking.nhsAzureSearchService
 
 data class NhsAzureSearchRequestBody(val top: Int = 20,
-                                     val suggesterName: String = "orgname-suggester",
                                      val search: String = "",
                                      val searchFields: String =  "OrganisationName,Postcode,City",
                                      val select: String = "OrganisationID,OrganisationName," +

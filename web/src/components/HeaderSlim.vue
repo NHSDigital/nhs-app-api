@@ -52,7 +52,6 @@ export default {
         this.backClick(event);
       }
     },
-
   },
 };
 </script>

@@ -1,24 +1,12 @@
-#app {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
+.throttlingContent {
+  margin-left: 0.313em;
+  margin-right: 0.313em;
+  box-sizing: border-box;
+  padding-left: 1em;
+  padding-right: 1em;
+}
 
-  .throttlingHeader.notSlim {
-    display: flex;
-    flex: 1;
-
-    &+.throttlingContent {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-  
-  .throttlingContent {
-    margin-left: 0.313em;
-    margin-right: 0.313em;
-  }
+.webHeader {
+  padding-top: 4.625em;
+  padding-bottom: 3.125em;
 }

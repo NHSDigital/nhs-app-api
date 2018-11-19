@@ -71,6 +71,13 @@ class ConfigurationService(private val context: MainActivity) {
 
     private fun parseBoolean(response: String, propertyId: Int) : Boolean {
         val jsonObj = JSONObject(response)
-        return jsonObj.getBoolean(context.resources.getString(propertyId))
+
+        var propertyName = context.resources.getString(propertyId)
+
+        if(jsonObj.has(propertyName)) {
+            return jsonObj.getBoolean(context.resources.getString(propertyId))
+        }
+
+        return false
     }
 }

@@ -118,8 +118,8 @@ main.onboard {
 }
 
 main.onboard .nhso_logo {
-  margin-top: 6em;
-  margin-left: 4em;
+  margin-top: 5em;
+  margin-left: 1.5em;
   box-sizing: border-box;
 }
 
@@ -158,16 +158,26 @@ main.onboard .carousel div.slide .content {
   display: block;
   vertical-align: middle;
   text-align: left;
-  height: 100%;
   margin: auto;
   display: table-cell;
+  font-family: "FrutigerLTW01-45Light",
+    Arial,
+    sans-serif;
+  font-weight: normal;
+  color: #ffffff;
+  padding-left: 1.5em;
+  padding-right: 2em;
 }
 
 main.onboard .carousel div.slide .content h1 {
+  margin-bottom: 1em;
+  line-height: 1.325em;
+}
+
+/*
+main.onboard .carousel div.slide .content h1 {
   font-family: "FrutigerLTW01-45Light", Arial, sans-serif;
   font-weight: normal;
-  font-size: 1.25em;
-  line-height: 1.25em;
   color: #ffffff;
   font-size: 1.625em;
   line-height: 1.325em;
@@ -179,26 +189,23 @@ main.onboard .carousel div.slide .content h1 {
 main.onboard .carousel div.slide .content h2 {
   font-family: "FrutigerLTW01-45Light", Arial, sans-serif;
   font-weight: normal;
-  font-size: 1.25em;
-  line-height: 1.25em;
   color: #ffffff;
   font-size: 1.5em;
   line-height: 1.3em;
-  padding-left: 1.25em;
+  padding-left: 0em;
   padding-right: 1.5em;
 }
 
 main.onboard .carousel div.slide .content p {
   font-family: "FrutigerLTW01-45Light", Arial, sans-serif;
   font-weight: lighter;
-  font-size: 1em;
-  line-height: 1em;
   color: #ffffff;
   font-size: 1.25em;
   line-height: 1em;
   padding-left: 1.5em;
   padding-right: 1.5em;
 }
+*/
 
 @supports (-webkit-overflow-scrolling: touch) {
   main.onboard .carousel div.slide h1 {

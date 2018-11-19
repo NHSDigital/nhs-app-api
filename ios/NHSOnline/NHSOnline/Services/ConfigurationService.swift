@@ -30,7 +30,7 @@ class ConfigurationService {
                     
                     let configurationResponse = ConfigurationResponse()
                     configurationResponse.isValidConfiguration = appConfig.isDeviceSupported
-                    configurationResponse.isThrottlingEnabled = appConfig.isThrottlingEnabled
+                    configurationResponse.isThrottlingEnabled = appConfig.isThrottlingEnabled ?? false
                     
                     if(configurationResponse.isThrottlingEnabled) {
                         self.homeViewController.openThrottlingCarousel()

@@ -709,6 +709,24 @@ export default {
       noGpPracticesFound: 'No GP Practices found',
     },
   },
+  th04: {
+    featuresHeader: 'Features used by this surgery',
+    currentlyAvailableHeader: 'Currently available',
+    comingSoonHeader: 'Coming soon',
+    defaultFeatures: [
+      'Check symptoms',
+    ],
+    conditionalFeatures: [
+      'Book and manage appointments',
+      'Order repeat prescriptions',
+      'View your medical records',
+    ],
+    createAccountMessage: 'To use the NHS App fully, you\'ll need to create an NHS account.',
+    ctaContinue: 'Continue',
+    ctaCreateAccount: 'Create account',
+    ctaNotMySurgery: 'This is not my GP surgery',
+    limitingFeaturesWarning: 'Each GP surgery manages its own online services. They may choose to limit some of these features. Contact your surgery for more information.',
+  },
   sy01: {
     pageHeader: 'Check my symptoms',
     a_z: {

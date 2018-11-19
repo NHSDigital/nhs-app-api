@@ -75,6 +75,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         CookieManager.getInstance().removeAllCookies(null)
 
+        val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        val persistedBetaCookie = prefs.getString("BetaCookie", null)
+        if(!persistedBetaCookie.isNullOrBlank()) {
+            CookieManager.getInstance().setCookie(getString(R.string.cookieDomain), "$persistedBetaCookie; max-age=${60 * 60 * 24 * 365}")
+        }
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.header))
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
@@ -83,7 +89,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
         knownServices = KnownServices(this)
         appWebInterface = AppWebInterface(this)
         configurationService = ConfigurationService(this)
-
 
         dismissProgressDialog()
 

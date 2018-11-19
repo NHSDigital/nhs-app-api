@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker
             _connectionMultiplexerFactory =
                 connectionMultiplexerFactory ?? throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
             _logger = logger;
-        }
+        }    
 
         public async Task<Option<Supplier>> LookupSupplier(string odsCode)
         {

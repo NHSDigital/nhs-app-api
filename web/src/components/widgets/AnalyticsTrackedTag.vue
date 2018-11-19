@@ -1,5 +1,5 @@
 <template>
-  <component :id="id" :is="tag" @click="trackClick($event);">
+  <component :id="id" :is="tag" :href="href" @click="trackClick($event);">
     <slot/>
   </component>
 </template>
@@ -27,6 +27,10 @@ export default {
     clickParam: {
       type: String,
       default: '',
+    },
+    href: {
+      type: String,
+      default: undefined,
     },
   },
   methods: {

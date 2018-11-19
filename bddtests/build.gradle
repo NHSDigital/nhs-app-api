@@ -66,6 +66,7 @@ dependencies {
     compile 'net.serenity-bdd:serenity-rest-assured:2.0.8'
     compile "org.assertj:assertj-core:3.8.0"
     compile 'com.neovisionaries:nv-websocket-client:2.6'
+    compile group: 'redis.clients', name: 'jedis', version: '2.9.0'
 }
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

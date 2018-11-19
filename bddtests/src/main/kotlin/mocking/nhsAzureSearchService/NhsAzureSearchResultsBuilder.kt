@@ -5,10 +5,7 @@ import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-    class NhsAzureSearchResultsBuilder(
-                                    requestBody: NhsAzureSearchRequestBody) :
-        NhsAzureSearchMappingBuilder
-                ("POST") {
+class NhsAzureSearchResultsBuilder(requestBody: NhsAzureSearchRequestBody) : NhsAzureSearchMappingBuilder("POST") {
     init {
         requestBuilder
                 .andJsonBody(requestBody)

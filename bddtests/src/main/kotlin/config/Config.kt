@@ -37,6 +37,7 @@ class Config private constructor() {
     var appiumServer: String
     var sessionExpiryMinutes: Long
     val showPageSourceForXPathQuery: String
+    val gpLookupApiKey: String
 
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
@@ -77,6 +78,8 @@ class Config private constructor() {
         dataPreferencesHost = "http://stubs.local.bitraft.io:8080"
         dataPreferencesPath = "/ndop/createsession"
         dataPreferencesUrl = envOrDefault("DATA_PREFERENCES_URL", dataPreferencesHost + dataPreferencesPath)
+
+        gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {

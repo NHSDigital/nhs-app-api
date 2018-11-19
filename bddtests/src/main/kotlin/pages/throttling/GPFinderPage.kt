@@ -7,6 +7,10 @@ import pages.myrecord.SHRUB_ANIMATION_DURATION_MILLIS
 
 open class GPFinderPage : HybridPageObject() {
 
+    companion object {
+        val validSearch = "Chesterfield"
+    }
+
     val findYourGPSurgeryHeader = HybridPageElement(
             browserLocator = "//h4[contains(text(),'Find your GP surgery')]",
             androidLocator = null,

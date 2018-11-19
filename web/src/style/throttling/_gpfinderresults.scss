@@ -1,7 +1,15 @@
 @import '../colours';
 
-.list-menu {
+ul.list-menu {
   border-top:none !important;
+  
+  li {
+    padding-left: 0;
+
+    &:first-of-type{
+      padding-top: 0;
+    }
+  }
 }
 
 .fieldName {
@@ -9,11 +17,7 @@
    padding-bottom: 0.250rem;
    color: $dark_grey;
    font-weight: 700;
- }
-
- .webHeader {
-   padding: 3.625em 0em 3.125em 0em;
- }
+}
  
  .no-decoration {
    text-decoration: none;

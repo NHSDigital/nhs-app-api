@@ -51,6 +51,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
         webView.configuration.userContentController.add(delegate, name: "hideHeader")
         webView.configuration.userContentController.add(delegate, name: "hideMenuBar")
         webView.configuration.userContentController.add(delegate, name: "hideWhiteScreen")
+        webView.configuration.userContentController.add(delegate, name: "completeAppIntro")
     }
     
     private func loadSpaPage(path: String)  {
