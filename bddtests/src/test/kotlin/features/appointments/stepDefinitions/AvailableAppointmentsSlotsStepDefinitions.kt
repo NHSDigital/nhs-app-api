@@ -1,5 +1,6 @@
 package features.appointments.stepDefinitions
 
+import com.github.tomakehurst.wiremock.stubbing.Scenario
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -12,6 +13,7 @@ import features.appointments.steps.AvailableAppointmentFilterSteps.Companion.TOD
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
+import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsBookingData
@@ -25,6 +27,7 @@ import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.SC_OK
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -136,12 +139,38 @@ class AvailableAppointmentsSlotsStepDefinitions {
         thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem)
     }
 
-    @Given("^the (.*) doesn't respond a timely fashion for available appointment slots$")
-    fun theGpSystemDoesntRespondATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
+    @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots$")
+    fun theGpSystemDoesntRespondInATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
             withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
                     .respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+        }
+    }
+
+    @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots, on the first attempt$")
+    fun theGpSystemDoesntRespondInATimelyFashionForAvailableAppointmentSlotsOnTheFirstAttempt(gpSystem: String) {
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        // stub to generate timeout for 1st attempt
+        factory.generateExample {
+            withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
+                    .respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+                    .inScenario(timeoutScenario)
+                    .whenScenarioStateIs(Scenario.STARTED)
+                    .willSetStateTo(willSucceed)
+        }
+    }
+
+    @Given("^will respond in a timely fashion on the second attempt$")
+    fun theGpSystemWillSucceedForAvailableAppointmentSlotsOnTheSecondAttempt() {
+        val gpSystem: String = SerenityHelpers.getValueOrNull(SupplierSpecificFactory.SerenityKey.GP_SYSTEM) ?: ""
+        Assert.assertNotEquals("Cannot determine GP system being used. ","", gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        // stub to generate success on 2nd attempt
+        factory.generateExample {
+            respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+                    .inScenario(timeoutScenario)
+                    .whenScenarioStateIs(willSucceed)
         }
     }
 
@@ -153,11 +182,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
             respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
                     .delayedBy(Duration.ofSeconds(1))
         }
-    }
-
-    @When("^(.*) responds a timely fashion for available appointment slots$")
-    fun respondsATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
-        thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem)
     }
 
     @Given("^Appointments are disabled for VISION at a GP Practice level")
@@ -436,12 +460,17 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^the appointment slot guidance is collapsible$")
     fun appointmentSlotGuidanceIsCollapsible() {
-        availableAppointments.  availableAppointmentsPage.guidance.collapse.element.click()
+        availableAppointments.availableAppointmentsPage.guidance.collapse.element.click()
         iExpandTheAppointmentSlotGuidance()
     }
 
     @Then("^I cannot see any appointment slot guidance$")
     fun iCannotSeeAnyAppointmentSlotGuidance() {
         availableAppointments.availableAppointmentsPage.guidance.content.assertElementNotPresent()
+    }
+
+    companion object {
+        const val timeoutScenario = "timeout scenario"
+        const val willSucceed = "to succeed"
     }
 }

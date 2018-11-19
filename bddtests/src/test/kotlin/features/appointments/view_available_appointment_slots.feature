@@ -166,7 +166,7 @@ Feature: View available appointment slots
 
   @nativepending @NHSO-2966
   Scenario Outline: <GP System> user tries again after a timeout and it times-out again
-    Given the <GP System> doesn't respond a timely fashion for available appointment slots
+    Given the <GP System> doesn't respond in a timely fashion for available appointment slots
     And I am logged in
     And I try to progress to the available appointments page
     Then I see appropriate information message for time-outs
@@ -181,12 +181,12 @@ Feature: View available appointment slots
 
   @nativepending @NHSO-2966
   Scenario Outline: <GP System> user tries again after a timeout and it is now successful
-    Given the <GP System> doesn't respond a timely fashion for available appointment slots
+    Given the <GP System> doesn't respond in a timely fashion for available appointment slots, on the first attempt
+    But will respond in a timely fashion on the second attempt
     And I am logged in
     And I try to progress to the available appointments page
     Then I see a timeout on the appointment booking page
-    When <GP System> responds a timely fashion for available appointment slots
-    And I click try again button on appointment page
+    When I click try again button on appointment page
     Then I am able to filter on available slots
     Examples:
       | GP System |
