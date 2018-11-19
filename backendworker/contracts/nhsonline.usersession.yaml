@@ -1,7 +1,7 @@
 swagger: "2.0"
 
 info:
-  version: 0.0.5
+  version: 0.0.6
   title: NHS App Sub-API - User Sessions.
   description: NHS App Sub-API - endpoints pertaining to User Sessions.
 
@@ -54,6 +54,23 @@ paths:
           description: An unexpected error occurred during the processing of the request.
         502:
           description: Session storage is unavailable
+  /session/extend:
+    post:
+      tags:
+	   - session
+	  summary: Extends a user session for an authenticated user.
+      description: Extends a user session for an authenticated user, by calling an upstream endpoint. Requires NHSO-Session-Id cookie obtained from post session endpoint.
+      responses:
+        200:
+          description: Successfully extended.   
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred during the processing of the request.
+        502:
+          description: Could not extend service. Can occur if already timed out, or there is a problem with the request.
+        504:
+          description: Timeout when calling upstream system.
 definitions:
   UserSessionRequest:
     type: object

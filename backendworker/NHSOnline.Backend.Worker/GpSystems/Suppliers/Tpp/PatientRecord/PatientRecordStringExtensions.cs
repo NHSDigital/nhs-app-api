@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
@@ -11,7 +12,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 return null;
             }
 
-            if (!DateTimeOffset.TryParse(dateTimeString, out var parsedDateTimeOffset))
+            if (!DateTimeOffset.TryParse(dateTimeString, CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDateTimeOffset))
             {
                 return null;
             }

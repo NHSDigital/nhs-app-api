@@ -73,6 +73,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return _serviceProvider.GetService<TppSessionService>();
         }
 
+        public ISessionExtendService GetSessionExtendService()
+        {
+            return _serviceProvider.GetService<TppSessionExtendService>();
+        }
+
         public ITokenValidationService GetTokenValidationService()
         {
             return _serviceProvider.GetService<TppTokenValidationService>();

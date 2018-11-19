@@ -67,6 +67,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return _serviceProvider.GetService<VisionSessionService>();
         }
 
+        public ISessionExtendService GetSessionExtendService()
+        {
+            return _serviceProvider.GetService<VisionSessionExtendService>();
+        }
+
         public ITokenValidationService GetTokenValidationService()
         {
             return _serviceProvider.GetService<VisionTokenValidationService>();

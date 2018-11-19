@@ -28,6 +28,8 @@ namespace NHSOnline.Backend.Worker.GpSystems
 
         ISessionService GetSessionService();
 
+        ISessionExtendService GetSessionExtendService();
+
         ITokenValidationService GetTokenValidationService();
 
         IPatientRecordService GetPatientRecordService();

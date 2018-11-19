@@ -392,6 +392,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                        + " and error message "
                        + $"{ExceptionErrorResponse?.Exceptions.First().Message}";
             }
+            public string ErrorForLogging()
+            {
+                return $"Error Code: '{StatusCode}'. " +
+                       $"Error Message:'{StandardErrorResponse?.Message}'. ";
+            }
         }
 
         public class EmisApiObjectResponse<TBody> : EmisApiResponse

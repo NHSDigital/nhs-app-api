@@ -73,6 +73,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return _serviceProvider.GetService<EmisSessionService>();
         }
 
+        public ISessionExtendService GetSessionExtendService()
+        {
+            return _serviceProvider.GetService<EmisSessionExtendService>();
+        }
+
         public ITokenValidationService GetTokenValidationService()
         {
             return _serviceProvider.GetService<EmisTokenValidationService>();
