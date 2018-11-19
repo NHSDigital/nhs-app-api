@@ -38,12 +38,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.Conventions
         [DataRow(null, null)]
         [DataRow(null, RunMode.Cid)]
         [DataRow(null, RunMode.Pfs)]
+        [DataRow(null, RunMode.All)]
         [DataRow(RunMode.Cid, null)]
         [DataRow(RunMode.Cid, RunMode.Cid)]
         [DataRow(RunMode.Cid, RunMode.Pfs)]
+        [DataRow(RunMode.Cid, RunMode.All)]
         [DataRow(RunMode.Pfs, null)]
         [DataRow(RunMode.Pfs, RunMode.Cid)]
         [DataRow(RunMode.Pfs, RunMode.Pfs)]
+        [DataRow(RunMode.Pfs, RunMode.All)]
+        [DataRow(RunMode.All, null)]
+        [DataRow(RunMode.All, RunMode.Cid)]
+        [DataRow(RunMode.All, RunMode.Pfs)]
+        [DataRow(RunMode.All, RunMode.All)]
         public void ConventionTest_ControllerSecurityAttribute_NoneRunMode(RunMode? actionRunMode, RunMode? controllerRunMode)
         {
             //Arrange
@@ -71,6 +78,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Conventions
         [DataRow(RunMode.Pfs, null)]
         [DataRow(RunMode.Pfs, RunMode.Cid)]
         [DataRow(RunMode.Pfs, RunMode.Pfs)]
+        [DataRow(RunMode.All, RunMode.Pfs)]
+        [DataRow(RunMode.All, RunMode.Cid)]
+        [DataRow(RunMode.Pfs, RunMode.All)]
+        [DataRow(RunMode.Cid, RunMode.All)]
+        [DataRow(RunMode.All, RunMode.All)]
         public void ConventionTest_ValidSecurityAttribute_DevRunMode(RunMode? actionRunMode, RunMode? controllerRunMode)
         {
             //Arrange
@@ -111,9 +123,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Conventions
         
         [DataTestMethod]
         [DataRow(null, RunMode.Cid)]
+        [DataRow(null, RunMode.All)]
         [DataRow(RunMode.Cid, null)]
+        [DataRow(RunMode.All, null)]
         [DataRow(RunMode.Cid, RunMode.Cid)]
         [DataRow(RunMode.Cid, RunMode.Pfs)]
+        [DataRow(RunMode.Cid, RunMode.All)]
+        [DataRow(RunMode.All, RunMode.Cid)]
+        [DataRow(RunMode.All, RunMode.Pfs)]
+        [DataRow(RunMode.All, RunMode.All)]
         public void ConventionTest_ValidSecurityAttribute_CidRunMode(RunMode? actionRunMode, RunMode? controllerRunMode)
         {
             //Arrange
@@ -138,6 +156,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Conventions
         [DataRow(RunMode.Pfs, null)]
         [DataRow(RunMode.Pfs, RunMode.Cid)]
         [DataRow(RunMode.Pfs, RunMode.Pfs)]
+        [DataRow(RunMode.Pfs, RunMode.All)]
         public void ConventionTest_InvalidSecurityAttribute_CidRunMode(RunMode? actionRunMode, RunMode? controllerRunMode)
         {
             //Arrange
@@ -158,9 +177,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Conventions
         
         [DataTestMethod]
         [DataRow(null, RunMode.Pfs)]
+        [DataRow(null, RunMode.All)]
         [DataRow(RunMode.Pfs, null)]
+        [DataRow(RunMode.All, null)]
         [DataRow(RunMode.Pfs, RunMode.Cid)]
         [DataRow(RunMode.Pfs, RunMode.Pfs)]
+        [DataRow(RunMode.Pfs, RunMode.All)]
+        [DataRow(RunMode.All, RunMode.Cid)]
+        [DataRow(RunMode.All, RunMode.Pfs)]
+        [DataRow(RunMode.All, RunMode.All)]
         public void ConventionTest_ValidSecurityAttribute_PfsRunMode(RunMode? actionRunMode, RunMode? controllerRunMode)
         {
             //Arrange
@@ -185,6 +210,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Conventions
         [DataRow(RunMode.Cid, null)]
         [DataRow(RunMode.Cid, RunMode.Cid)]
         [DataRow(RunMode.Cid, RunMode.Pfs)]
+        [DataRow(RunMode.Cid, RunMode.All)]
         public void ConventionTest_InvalidSecurityAttribute_PfsRunMode(RunMode? actionRunMode, RunMode? controllerRunMode)
         {
             //Arrange
@@ -207,12 +233,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Conventions
         {
             switch (runMode)
             {
-                case null:
-                    return null;
                 case RunMode.Cid:
                     return new CidSecurityModeAttribute();
                 case RunMode.Pfs:
                     return new PfsSecurityModeAttribute();
+                case RunMode.All:
+                    return new AllSecurityModeAttribute();
                 default:
                     return null;
             }

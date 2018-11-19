@@ -6,7 +6,7 @@ using NHSOnline.Backend.Worker.HealthCheck;
 
 namespace NHSOnline.Backend.Worker.Areas.HealthCheck
 {
-    [Route("patient/healthcheck"),PfsSecurityMode]
+    [Route("healthcheck"),AllSecurityMode]
     public class HealthCheckController : Controller
     {
         private readonly IHealthCheckService _healthCheckService;

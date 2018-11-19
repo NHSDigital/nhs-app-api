@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.Conventions
             if (actionSecurityMode == RunMode.None)
                 return false;
 
-            return actionSecurityMode == _runMode || _runMode == RunMode.Dev;
+            return actionSecurityMode == _runMode || _runMode == RunMode.Dev || actionSecurityMode == RunMode.All;
         }
 
         private static RunMode FindSecurityMode(IEnumerable<object> attributeList)

@@ -24,4 +24,13 @@ namespace NHSOnline.Backend.Worker.Conventions
             SecurityMode = RunMode.Pfs;
         }
     }
+    
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+    public sealed class AllSecurityModeAttribute : SecurityModeAttribute
+    {
+        public AllSecurityModeAttribute()
+        {
+            SecurityMode = RunMode.All;
+        }
+    }
 }
