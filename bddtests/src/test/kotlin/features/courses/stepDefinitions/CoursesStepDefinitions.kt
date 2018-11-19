@@ -24,6 +24,7 @@ import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.prescription.RepeatPrescriptionsPage
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -39,6 +40,9 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     lateinit var prescriptionsSteps: PrescriptionsSteps
     @Steps
     lateinit var courseSteps: CourseSteps
+
+    lateinit var repeatPrescriptions : RepeatPrescriptionsPage
+
     @Steps
     lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
 
@@ -169,19 +173,27 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         courseSteps.assertNoMedicationAvailableToOrderMessageShown()
     }
 
-    @Given("I select (\\d+) (.*) repeatable prescriptions out of (\\d+) available")
-    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int,
-                                        gpSystem: String,
-                                        numberOfPrescriptionsToCreate: Int) {
-        iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate, gpSystem)
-        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
-        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
+    @Given("I select (\\d+) repeatable prescriptions out of (\\d+) available$")
+    fun iSelectXRepeatablePrescriptionsOutOf(numberOfPrescriptionsToSelect: Int, numberOfPrescriptions: Int) {
+        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
+
+        repeatPrescriptions.verifyVisiblePrescriptionCount(numberOfPrescriptions)
+    }
+
+    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int) {
         iClickOrderARepeatPrescription()
 
         val courses = getAvailableCoursesFilteredSortedOrdered()
         val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
         courseSteps.selectRepeatPrescriptions(coursesToSelect)
         selectedCourses = coursesToSelect
+    }
+
+    @Given("^there are (\\d*) (.*) repeatable prescriptions available$")
+    fun thereAreXXRepeatablePrescriptionsAvailable(numberOfPrescriptionsToCreate: Int, gpSystem: String) {
+        iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate, gpSystem)
+        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
     }
 
     @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available which have (.*)")
@@ -191,12 +203,8 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         iHaveXAssignedPrescriptionsWhichHasX(numberOfPrescriptionsToCreate, content)
         xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
         xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
-        iClickOrderARepeatPrescription()
 
-        val courses = getAvailableCoursesFilteredSortedOrdered()
-        val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
-        courseSteps.selectRepeatPrescriptions(coursesToSelect)
-        selectedCourses = coursesToSelect
+        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
     }
 
     @And("I enter text \"(.*)\" for special request")

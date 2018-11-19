@@ -243,7 +243,8 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     }
 
     private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String) {
-        coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount, gpSystem, amount)
+        coursesStepDefinitions.thereAreXXRepeatablePrescriptionsAvailable(amount, gpSystem)
+        coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount)
         currentScenarioState = PrescriptionsFactory.getForSupplier(gpSystem)
                 .setupWireMockAndDataSetup(
                         scenarioTitle,

@@ -105,9 +105,10 @@ Feature: View courses
   Scenario Outline: The <GP System> User has selected repeat prescriptions to order
     Given a patient from <GP System> is defined
     And I have historic prescriptions
+    And there are 5 <GP System> repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
-    And I select 5 <GP System> repeatable prescriptions out of 5 available
+    And I select 5 repeatable prescriptions out of 5 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
     Examples:
@@ -119,9 +120,10 @@ Feature: View courses
   Scenario Outline: The <GP System> User has selected one repeat prescription to order
     Given a patient from <GP System> is defined
     And I have historic prescriptions
+    And there are 1 <GP System> repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
-    And I select 1 <GP System> repeatable prescriptions out of 1 available
+    And I select 1 repeatable prescriptions out of 1 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
     Examples:
@@ -133,9 +135,10 @@ Feature: View courses
   Scenario Outline: The <GP System> User has selected no repeat prescriptions to order
     Given a patient from <GP System> is defined
     And I have historic prescriptions
+    And there are 5 <GP System> repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
-    And I select 0 <GP System> repeatable prescriptions out of 5 available
+    And I select 0 repeatable prescriptions out of 5 available
     When I click Continue on the Order a repeat prescription page
     Then A validation message is displayed indicating the user has not selected any repeat prescriptions
     When I navigate to prescriptions
@@ -151,9 +154,10 @@ Feature: View courses
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and views previous selection
     Given a patient from <GP System> is defined
     And I have historic prescriptions
+    And there are 5 <GP System> repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
-    And I select 5 <GP System> repeatable prescriptions out of 5 available
+    And I select 5 repeatable prescriptions out of 5 available
     And I click Continue on the Order a repeat prescription page
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     Then I see my previously selected repeat prescriptions selected
@@ -168,9 +172,10 @@ Feature: View courses
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given a patient from <GP System> is defined
     And I have historic prescriptions
+    And there are 5 <GP System> repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
-    And I select 4 <GP System> repeatable prescriptions out of 5 available
+    And I select 4 repeatable prescriptions out of 5 available
     And I enter text "Please call when prescription received." for special request
     And I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
@@ -187,12 +192,14 @@ Feature: View courses
       | TPP       |
       | VISION    |
 
+
   Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value
     Given a patient from <GP System> is defined
     And I have historic prescriptions
+    And there are 1 <GP System> repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
-    And I select 1 <GP System> repeatable prescriptions out of 1 available
+    And I select 1 repeatable prescriptions out of 1 available
     And I click Continue on the Order a repeat prescription page
     Then I see the default special request text
     Examples:
@@ -204,13 +211,14 @@ Feature: View courses
   Scenario Outline: The user can't see prescription special request when the gp system <GP System> has disabled it
     Given a patient from <GP System> is defined
     And <GP System> has disabled special request text
-    And I am logged in
     And I have historic prescriptions
+    And there are 10 <GP System> repeatable prescriptions available
+    And I am logged in
     And I navigate to prescriptions
     And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    And I select 1 <GP System> repeatable prescriptions out of 10 available
+    And I select 1 repeatable prescriptions out of 10 available
     Then I don't see the special request text area
     When I click Continue on the Order a repeat prescription page
     Then I don't see the special request text on prescription confirmation
@@ -304,6 +312,7 @@ Feature: View courses
   Scenario: The User has selected repeat prescriptions to order with missing dosage info
     Given a patient from EMIS is defined
     And I have historic prescriptions
+    And there are 1 EMIS repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
     And I select 1 repeatable prescriptions out of 1 available which have only quantity info
@@ -313,6 +322,7 @@ Feature: View courses
   Scenario: The User has selected repeat prescriptions to order with missing dosage and quantity info
     Given a patient from EMIS is defined
     And I have historic prescriptions
+    And there are 1 EMIS repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions
     And I select 1 repeatable prescriptions out of 1 available which have no info

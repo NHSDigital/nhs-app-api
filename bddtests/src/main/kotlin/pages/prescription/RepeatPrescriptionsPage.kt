@@ -58,6 +58,12 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         return findByXpath("//h3[contains(., \"$message\")]").isVisible
     }
 
+    fun verifyVisiblePrescriptionCount(count: Int) {
+        val nameXpath = "//span[@data-label=\"prescription-name\"]"
+        val namesListed = findAllByXpath(nameXpath)
+        Assert.assertEquals("Unexpected prescription count", count, namesListed.size)
+    }
+
     fun verifyVisiblePrescriptions(coursesData: List<MedicationCourse>) {
         val nameXpath = "//span[@data-label=\"prescription-name\"]"
         val instructionsXpath = "//p[@data-label=\"prescription-description\"]"
