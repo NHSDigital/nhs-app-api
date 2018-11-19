@@ -2,13 +2,14 @@
   <div v-if="showTemplate">
     <h3>{{ $t('th02.heading1') }}</h3>
     <h4>{{ $t('th02.heading2') }}</h4>
-    <p>{{ $t('th02.hintText') }}</p>
+    <p id="search-label">{{ $t('th02.hintText') }}</p>
     <form :action="gpFinderResultsPath" method="GET">
       <generic-text-input id="searchTextInput"
                           ref="search"
                           :class="$style.searchTextInput"
                           :required="true"
                           :type="'text'"
+                          :a-labelled-by="'search-label'"
                           input-name="searchQuery"
                           maxlength="150"/>
       <generic-button :class="[$style.button, $style.green]" :type="'submit'">
