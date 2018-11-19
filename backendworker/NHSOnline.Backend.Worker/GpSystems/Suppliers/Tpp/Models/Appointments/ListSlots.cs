@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
         public ListSlots(TppUserSession userSession, AppointmentSlotsDateRange dateRange)
         {
             StartDate = dateRange.FromDate.DateTime.ToString(ExpectedDateFormat, CultureInfo.InvariantCulture);
-            NumberOfDays = (dateRange.ToDate - dateRange.FromDate).Days;
+            NumberOfDays = (dateRange.ToDate.AddDays(1) - dateRange.FromDate).Days;
             UnitId = userSession.UnitId;
             PatientId = userSession.PatientId;
             OnlineUserId = userSession.OnlineUserId;

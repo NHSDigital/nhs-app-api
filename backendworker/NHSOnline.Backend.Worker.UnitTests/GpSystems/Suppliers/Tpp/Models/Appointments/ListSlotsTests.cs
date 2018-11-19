@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Models.Appo
         private const string FromDate = "2018/12/25 08:30:00";
         private const string FromDateFormatted = "2018-12-25T08:30:00.0Z";
         private const string ToDate = "2018/12/31 17:30:00";
-        private const string NumberOfDays = "6";
+        private const string NumberOfDays = "7";
 
         protected override ListSlots CreateModel()
         {
