@@ -116,7 +116,8 @@ Feature: View prescriptions
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     Given prescriptions is disabled at a GP Practice level
-    When I am on the prescriptions page
+    And I am logged in
+    When I navigate to prescriptions
     Then I see a message informing me that I don't currently have access to this service
 
     Examples:
