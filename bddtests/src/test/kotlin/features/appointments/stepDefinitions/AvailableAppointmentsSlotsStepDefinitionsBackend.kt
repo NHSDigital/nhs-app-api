@@ -4,11 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsSlotsFactory
-import mocking.data.appointments.AppointmentsBookingData.Companion.dateTimeFormat
-import mocking.data.appointments.AppointmentsBookingData.Companion.defaultSessionEndDate
-import mocking.data.appointments.AppointmentsBookingData.Companion.defaultSessionStartDate
-import mocking.data.appointments.AppointmentsBookingData.Companion.pastFromDate
-import mocking.data.appointments.AppointmentsBookingData.Companion.pastToDate
 import mocking.data.appointments.AppointmentsSlotsExample
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
@@ -16,8 +11,6 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.servlet.http.Cookie
 
 private const val TIMEOUT_IN_SECONDS = 90L
@@ -48,29 +41,6 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
     @When("^the available appointment slots are retrieved without a cookie$")
     fun theAvailableAppointmentSlotsAreRetrievedWithoutACookie() {
         retrieveAppointmentSlots(null, null, includeCookie = false)
-    }
-
-    @When("^I try to retrieve appointment slots with fromDate after the toDate$")
-    fun tryToRetrieveAppointmentSlotsWithFromDateAfterToDate() {
-        retrieveAppointmentSlots(defaultSessionEndDate, defaultSessionStartDate)
-    }
-
-    @When("^I try to retrieve appointment slots only from the past$")
-    fun tryToRetrieveAppointmentSlotsFromThePast() {
-        retrieveAppointmentSlots(pastFromDate, pastToDate)
-    }
-
-    @When("^I try to retrieve appointment slots with a malformed to Date$")
-    fun tryToRetrieveAppointmentSlotsWithMalformedToDate() {
-        val toDate = LocalDateTime.parse(defaultSessionEndDate, dateTimeFormat).format(DateTimeFormatter.BASIC_ISO_DATE)
-        retrieveAppointmentSlots(defaultSessionStartDate, toDate)
-    }
-
-    @When("^I try to retrieve appointment slots with a malformed from Date$")
-    fun tryToRetrieveAppointmentSlotsWithMalformedFromDate() {
-        val fromDate = LocalDateTime.parse(defaultSessionStartDate, dateTimeFormat)
-                .format(DateTimeFormatter.BASIC_ISO_DATE)
-        retrieveAppointmentSlots(fromDate, defaultSessionEndDate)
     }
 
     private fun retrieveAppointmentSlots(fromDate: String? = null,

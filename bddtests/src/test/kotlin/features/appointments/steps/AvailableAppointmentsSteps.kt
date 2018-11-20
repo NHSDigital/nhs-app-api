@@ -1,12 +1,9 @@
 package features.appointments.steps
 
-import features.appointments.factories.AppointmentsFactory
 import mocking.data.appointments.AppointmentSessionVariableKeys
-import mocking.data.appointments.AppointmentsBookingData
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
-import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -21,7 +18,7 @@ import worker.models.appointments.SlotResponseObject
 import javax.servlet.http.Cookie
 import kotlin.collections.set
 
-open class AvailableAppointmentsSteps : AppointmentsBookingData() {
+open class AvailableAppointmentsSteps {
 
     private val pageHeader = "Book new appointment"
     private val backButtonText = "Back to my appointments"
@@ -92,23 +89,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
             Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)
-        }
-    }
-
-    @Step
-    fun theAvailableAppointmentSlotsAreRetrievedForExplicitDateTimeRange() {
-        try {
-            val startDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentStartTimeKey)
-            val endDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentEndTimeKey)
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.getAppointmentSlots(
-                    startDate,
-                    endDate,
-                    Serenity.sessionVariableCalled<Cookie>(Cookie::class)
-            )
-            setSessionVariable(AppointmentSlotsResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            setSessionVariable("HttpException").to(httpException)
         }
     }
 

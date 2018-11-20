@@ -16,7 +16,6 @@ import features.sharedSteps.NavigationSteps
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
-import mocking.data.appointments.AppointmentsBookingData
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
@@ -61,14 +60,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
                     "PRwhiM14wfoUsUFz4tnNeoYbaPLXaCiXVNm6NzG9SaQMheda0A6zxTv1y0nwu8AAXcUg7EF" +
                     "lSxIKLJV7B7aC0GCiUDAwkxMnzHP6sm; path=/; secure; samesite=lax; httponly"
     )
-
-    @Given("^there are available (.*) appointment slots for an explicit date-time range$")
-    fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange(gpSystem: String) {
-        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateDefaultAvailableAppointmentSlotExample(
-                AppointmentsBookingData.defaultSessionStartDateRaw,
-                AppointmentsBookingData.defaultSessionEndDateRaw)
-    }
 
     @Given("^there are available (.*) appointment slots$")
     fun thereAreAvailableAppointmentSlots(gpSystem: String) {
@@ -240,11 +231,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.theAvailableAppointmentSlotsAreRetrieved()
     }
 
-    @When("^the available appointment slots are retrieved for explicit date-time range$")
-    fun theAvailableAppointmentSlotsAreRetrievedForExplicitDateTimeRange() {
-        availableAppointments.theAvailableAppointmentSlotsAreRetrievedForExplicitDateTimeRange()
-    }
-
     @When("^I acknowledge that there are no appointments and go back to my appointments$")
     fun iAcknowledgeThatThereAreNoAppointmentsAndGoBackToMyAppointments() {
         availableAppointments.clickOnBackButton()
@@ -289,8 +275,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
                 TODAY_OPTION)
     }
 
-    @Then("^available slots are returned for the given date-time range$")
-    fun availableSlotsLocationsCliniciansAndAppointmentSessionsAreReturned() {
+    @Then("^available slots are returned for the full date range$")
+    fun availableSlotsAreReturned() {
         val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(
                 AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY
         )

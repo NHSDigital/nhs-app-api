@@ -1,6 +1,5 @@
 package features.appointments.steps
 
-import mocking.data.appointments.AppointmentsBookingData
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mockingFacade.appointments.AppointmentFilterFacade
 import net.serenitybdd.core.Serenity
@@ -12,7 +11,7 @@ import org.junit.Assert.assertTrue
 import pages.appointments.AvailableAppointmentsPage
 import pages.navigation.HeaderNative
 
-open class AvailableAppointmentFilterSteps : AppointmentsBookingData() {
+open class AvailableAppointmentFilterSteps {
 
     private val appointmentTypeDefaultOption = "Select type"
     private val locationDefaultOption = "Select location"

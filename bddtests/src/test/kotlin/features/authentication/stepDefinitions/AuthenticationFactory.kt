@@ -5,9 +5,9 @@ import features.sharedSteps.SupplierSpecificFactory
 import mocking.emis.models.AssociationType
 import models.Patient
 
-abstract class AuthenticationFactory(protected val gpSystem: String)  {
+abstract class AuthenticationFactory(protected val gpSystem: String) {
 
-    protected val patient:Patient = Patient.getDefault(gpSystem)
+    protected val patient: Patient = Patient.getDefault(gpSystem)
     protected val mockingClient = SerenityHelpers.getMockingClient()
     protected val associationType = AssociationType.Self
 
@@ -30,11 +30,12 @@ abstract class AuthenticationFactory(protected val gpSystem: String)  {
 
     companion object : SupplierSpecificFactory<AuthenticationFactory>() {
 
-        override val map: HashMap<String, (()-> AuthenticationFactory)> by lazy {
+        override val map: HashMap<String, (() -> AuthenticationFactory)> by lazy {
             hashMapOf(
                     "EMIS" to { AuthenticationFactoryEmis() },
                     "TPP" to { AuthenticationFactoryTpp() },
-                    "VISION" to { AuthenticationFactoryVision() })}
+                    "VISION" to { AuthenticationFactoryVision() })
+        }
 
     }
 }

@@ -1,13 +1,13 @@
 package features.authentication.stepDefinitions
 
-import mocking.data.appointments.AppointmentsBookingData.Companion.mockingClient
 import mocking.vision.VisionMockDefaults
 import models.Patient
+import utils.SerenityHelpers
 import java.time.Duration
 
 private const val DELAY_BY_SECONDS = 31L
 
-class AuthenticationFactoryVision  : AuthenticationFactory("VISION"){
+class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
 
     override fun patientDoesNotExist(patient: Patient) {
         createInvalidTestForVision(patient, "Invalid Details")
@@ -67,6 +67,7 @@ class AuthenticationFactoryVision  : AuthenticationFactory("VISION"){
     }
 
     companion object {
+        val mockingClient = SerenityHelpers.getMockingClient()
 
         fun patientIsAlreadyRegistered(patient: Patient) {
             createInvalidTestForVision(patient, "Already Registered")
@@ -76,7 +77,7 @@ class AuthenticationFactoryVision  : AuthenticationFactory("VISION"){
             createInvalidTestForVision(patient, "Patient Locked")
         }
 
-        fun createInvalidTestForVision(patient: Patient, typeOfError : String) {
+        fun createInvalidTestForVision(patient: Patient, typeOfError: String) {
             mockingClient.forVision {
                 getRegisterRequest(
                         VisionMockDefaults.getVisionUserSession(patient),
