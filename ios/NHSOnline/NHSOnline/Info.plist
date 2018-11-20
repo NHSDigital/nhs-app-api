@@ -129,5 +129,9 @@
 	<integer>20</integer>
 	<key>SessionTimeout</key>
 	<integer>20</integer>
+	<key>ConfigurationApiPath</key>
+	<string>$(CONFIGURATION_API_PATH)</string>
+	<key>BaseApiUrl</key>
+	<string>https://$(BASE_API_URL)</string>
 </dict>
 </plist>

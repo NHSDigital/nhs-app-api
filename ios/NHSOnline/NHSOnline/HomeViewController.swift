@@ -18,18 +18,21 @@ class HomeViewController : UIViewController {
     
     let knownServices = KnownServices(config: config())
     var lifecycleHandlers: LifecycleHandlers?
+    var configurationService: ConfigurationService?
     var webViewController: WebViewController?
     var nativeViewController: PageUnavailabilityViewController?
     var webViewDelegate: WebViewDelegate?
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().HomeUrl
+    var appVersionCheckError: Bool = false
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupNhsLogo()
         setupBackArrow()
         setupMyAccountIcon()
@@ -76,7 +79,9 @@ class HomeViewController : UIViewController {
             self.webViewController?.loadPage(url: pageUrl)
         }
         
-        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!)
+        configurationService = ConfigurationService(homeViewController: self)
+
+        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!, configurationService: configurationService!)
     }
     
     func addSubview(subView:UIView, toView parentView:UIView) {
@@ -178,7 +183,9 @@ class HomeViewController : UIViewController {
     }
     
     func showWebViewContainer() {
-        self.cycleFromViewController(oldViewController: self.nativeViewController!, toViewController: self.webViewController!)
+        if (!appVersionCheckError) {
+            self.cycleFromViewController(oldViewController: self.nativeViewController!, toViewController: self.webViewController!)
+        }
     }
     
     func showNativeViewContainer(errorMessage: ErrorMessage) {

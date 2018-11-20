@@ -71,7 +71,6 @@
             //Retrieves a patient's Linkage details
             public const string TermsAndConditionsRecordConsentAuditTypeRequest = "TermsAndConditions_RecordConsent_Request";
             public const string TermsAndConditionsRecordConsentAuditTypeResponse = "TermsAndConditions_RecordConsent_Response";
-
         }
 
         public static class HttpContextItems
@@ -104,6 +103,12 @@
         public static class TppConstants
         {
             public const string LinkageKey = "ikjkbnKSJDFV872345%/";
+        }
+
+        public static class SupportedDeviceNames
+        {
+            public const string Android = "Android";
+            public const string iOS = "iOS";
         }
     }
 }

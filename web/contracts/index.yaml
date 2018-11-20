@@ -948,4 +948,10 @@
             description: "An unexpected error occurred during the processing of the request."
           502: 
             description: "Session storage is unavailable"
+    /v1/configuration: 
+      get: 
+        tags: 
+          - "configuration"
+        summary: "Gets a collection of configuration values."
+        description: null
 

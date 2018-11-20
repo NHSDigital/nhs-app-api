@@ -137,9 +137,11 @@ dependencies {
     implementation 'com.intuit.ssp:ssp-android:1.0.5'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.android.support:customtabs:27.1.1'
+    implementation 'com.android.volley:volley:1.1.1'
 
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.8'
     testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
+    testImplementation 'org.robolectric:shadows-httpclient:3.8'
 }

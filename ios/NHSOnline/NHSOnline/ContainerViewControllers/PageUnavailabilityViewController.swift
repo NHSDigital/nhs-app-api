@@ -10,6 +10,7 @@ class PageUnavailabilityViewController: UIViewController {
     @IBAction func reloadPageTrigger(_ sender: Any) {
         let parentVC = self.parent as? HomeViewController
         parentVC?.webViewController?.reloadWebView()
+        NotificationCenter.default.post(name: CustomNotifications.pageUnavailabilityOnReloadWebView, object: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -37,28 +37,37 @@ import android.view.accessibility.AccessibilityEvent
 import android.util.Log
 import com.nhs.online.nhsonline.Application
 import android.view.accessibility.AccessibilityManager
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.Volley
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
+import com.nhs.online.nhsonline.interfaces.IVolleyCallback
+import com.nhs.online.nhsonline.services.ConfigurationService
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
 
+    private lateinit var mRequestQueue: RequestQueue
+    private lateinit var configurationService: ConfigurationService
     private lateinit var chromeClient: ChromeClientLocationHandler
     private lateinit var knownServices: KnownServices
     private lateinit var urlLoader: UrlLoader
     private lateinit var appWebInterface: AppWebInterface
+    private lateinit var upgradeDialog: AlertDialog
     private var lifeCycleObserver: LifeCycleObserver? = null
     private var isLoggedIn = false
+
+     var isSuccessfulConfigCheck = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnCreate")
 
         super.onCreate(savedInstanceState)
 
-        if(resources.getString(R.string.secureFlag)!="disabled") {
+        if (resources.getString(R.string.secureFlag) != "disabled") {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE)
+                    WindowManager.LayoutParams.FLAG_SECURE)
         }
 
         CookieManager.getInstance().removeAllCookies(null)
@@ -66,9 +75,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.header))
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+        mRequestQueue = Volley.newRequestQueue(this)
 
         knownServices = KnownServices(this)
         appWebInterface = AppWebInterface(this)
+        configurationService = ConfigurationService(this)
+
 
         dismissProgressDialog()
 
@@ -76,10 +88,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
         var wvClient = WebClientInterceptor(this, knownServices, createActivities(), this)
         webview.webViewClient = wvClient
         urlLoader = UrlLoader(webview,
-            wvClient,
-            appWebInterface,
-            knownServices,
-            resources.getString(R.string.baseURL))
+                wvClient,
+                appWebInterface,
+                knownServices,
+                resources.getString(R.string.baseURL))
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         retryButton.setOnClickListener { onErrorRetryButton() }
@@ -103,11 +115,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 loadWelcomePage()
             }
         }
+
     }
 
     private fun setupAppVersion() {
-        var versionName = BuildConfig.VERSION_NAME
-        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updateNativeVersion', '$versionName')")
+        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updateNativeVersion', '${BuildConfig.VERSION_NAME}')")
         evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updatePlatform', 'Android')")
     }
 
@@ -115,6 +127,19 @@ class MainActivity : IInteractor, AppCompatActivity() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnRetryButton")
         showProgressDialog()
         urlLoader.reloadRequest()
+        configurationService.isValidConfiguration(object : IVolleyCallback {
+            override fun onSuccess(isValid: Boolean) {
+                isSuccessfulConfigCheck = true
+                if (!isValid) {
+                    showVersionUpgradeDialog()
+                }
+            }
+
+            override fun onError(errorMessage: ErrorMessage) {
+                isSuccessfulConfigCheck = false
+                showUnavailabilityError(errorMessage)
+            }
+        })
     }
 
     override fun onStart() {
@@ -123,7 +148,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
-                appWebInterface, knownServices)
+                    appWebInterface, knownServices, configurationService)
         }
 
         lifeCycleObserver?.onMoveToForeground()
@@ -144,8 +169,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
         if (data != null) {
             if (data.scheme == getString(R.string.appScheme)) {
                 val url = data.buildUpon()
-                    .scheme(getString(R.string.baseScheme))
-                    .toString()
+                        .scheme(getString(R.string.baseScheme))
+                        .toString()
                 showBlankScreen()
                 loadPage(url)
             } else {
@@ -181,7 +206,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     fun createActivities(): List<ActivityInterface> {
         val openBrowserActivity =
-            OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
+                OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
         return listOf(openBrowserActivity)
     }
 
@@ -277,13 +302,36 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
         builder.setMessage(resources.getString(R.string.logoutWarning))
-            .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
-                urlLoader.loadPage(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
-            }
-            .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
+                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
+                    urlLoader.loadPage(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
+                }
+                .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
 
         var dialog: AlertDialog = builder.create()
         dialog.show()
+    }
+
+    public fun showVersionUpgradeDialog() {
+        if((::upgradeDialog.isInitialized && !upgradeDialog.isShowing) || !::upgradeDialog.isInitialized ) {
+
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                    .setTitle(resources.getString(R.string.UpdateRequiredHeader))
+                    .setMessage(resources.getString(R.string.UpdateHeader) + "\n" + resources.getString(R.string.UpdateDesc))
+                    .setNegativeButton(resources.getString(R.string.Close)) { _, _ ->
+                        this.finishAndRemoveTask()
+                    }
+            builder.setCancelable(false)
+            upgradeDialog = builder.create()
+            upgradeDialog.setCanceledOnTouchOutside(false)
+            upgradeDialog.setCancelable(false)
+            upgradeDialog.show()
+        }
+    }
+
+    fun hideVersionUpgradeDialog() {
+        if(::upgradeDialog.isInitialized && upgradeDialog.isShowing) {
+            upgradeDialog.dismiss()
+        }
     }
 
     override fun showProgressDialog() {
@@ -301,10 +349,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
             menuBar.switchActiveMenuItemTo(navigationMenuId)
     }
 
-    override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
+    public override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
+        if(::upgradeDialog.isInitialized) {
+            upgradeDialog.dismiss()
+        }
         showErrorScreen()
         errorTextView.setServiceError(unavailabilityErrorMessage.title,
-            unavailabilityErrorMessage.message)
+                unavailabilityErrorMessage.message)
         errorTextView.contentDescription = unavailabilityErrorMessage.title + ". " +
                 unavailabilityErrorMessage.accessibleMessage
         if (unavailabilityErrorMessage.message != null) {
@@ -325,19 +376,21 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     override fun showWebviewScreen() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showWebViewScreen")
-        errorViewLayout.visibility = View.GONE
-        webview.visibility = View.VISIBLE
-        hideBlankScreen()
+        if(isSuccessfulConfigCheck) {
+            errorViewLayout.visibility = View.GONE
+            webview.visibility = View.VISIBLE
+            hideBlankScreen()
 
-        if (isLoggedIn) {
-            urlLoader.usingAbsoluteUri = false
+            if (isLoggedIn) {
+                urlLoader.usingAbsoluteUri = false
+            }
         }
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         val lm = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -348,7 +401,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
                     chromeClient.onLocationPermissionResponded(true)
                 } else {
                     val gpsOptionsIntent =
-                        Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                            Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     startActivity(gpsOptionsIntent)
                     chromeClient.onLocationPermissionResponded(true)
                 }
@@ -458,5 +511,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     fun evaluateWebviewJavascript(javascriptText: String) {
         webview.evaluateJavascript(javascriptText, null)
+    }
+
+    fun getRequestQueue(): RequestQueue {
+        return mRequestQueue
     }
 }

@@ -30,3 +30,5 @@ paths:
     $ref: './nhsonline.ndop.yaml#/paths/~1ndop'
   /v1/session:
     $ref: './nhsonline.usersession.yaml#/paths/~1session'
+  /v1/configuration:
+    $ref: './nhsonline.configuration.yaml#/paths/~1configuration'

@@ -32,3 +32,8 @@
 
 /*Configuration*/
 "locale" = "en-GB";
+
+/*App update*/
+"AppUpdateRequiredTitle" = "Update required";
+"AppUpdateRequiredMessage" = "You need to update the NHS App.\nYou won't be able to use it until you do.";
+"AppUpdateRequiredCloseButtonText" = "Close";

@@ -18,6 +18,10 @@ namespace NHSOnline.Backend.Worker.Settings
         
         public int MinimumAge { get; set; }
 
+        public string MinimumSupportedAndroidVersion { get; set; }
+
+        public string MinimumSupportediOSVersion { get; set; }
+
         public const string ConfigurationSectionName = "ConfigurationSettings";
 
         public static ConfigurationSettings GetSettings(IConfiguration configuration)
@@ -57,6 +61,16 @@ namespace NHSOnline.Backend.Worker.Settings
             if (MinimumAge == default(int))
             {
                 throw new ConfigurationNotFoundException(nameof(MinimumAge));
+            }
+
+            if (MinimumSupportedAndroidVersion == null)
+            {
+                throw new ConfigurationNotFoundException(nameof(MinimumSupportedAndroidVersion));
+            }
+
+            if (MinimumSupportediOSVersion == null)
+            {
+                throw new ConfigurationNotFoundException(nameof(MinimumSupportediOSVersion));
             }
         }
     }
