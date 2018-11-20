@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments
         }
         
         [TestMethod]
-        public void SetsDefaultRange_WhenFromDateAndToDateAreNull()
+        public void SetsDefaultRange()
         {
             const string todayDateString = "2018-05-12T00:00:00";
 
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments
             mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(expectedFromDate);
             mockDateTimeOffsetProvider.Setup(x => x.TryCreateDateTimeOffset(todayDateString, out todayDate)).Returns(true);
             
-            var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object, null, null);
+            var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object);
 
             dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromDate.DateTime);
             dateRange.FromDate.Should().HaveHour(expectedFromDate.Hour);
@@ -49,60 +49,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments
             dateRange.ToDate.Should().HaveHour(expectedToDate.Hour);
             dateRange.ToDate.Should().HaveMinute(expectedToDate.Minute);
             dateRange.ToDate.Should().HaveSecond(expectedToDate.Second);
-        }
-
-        [TestMethod]
-        public void SetsDefaultToDate_WhenToDateIsNull()
-        {
-            //Arrange
-            var fromDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-12T14:15:31");
-            var mockDateTimeOffsetProvider = new Mock<IDateTimeOffsetProvider>();
-            
-            //Act
-            var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object, fromDate, null);
-
-            //Assert
-            var expectedFromDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-12T14:15:31");
-            var expectedToDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-06-10T00:00:01").SetTimeToMidnight();
-            var expectedFrom = expectedFromDate;
-            var expectedTo = expectedToDate;
-
-            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFrom.Date);
-            dateRange.FromDate.Should().HaveHour(expectedFrom.Hour);
-            dateRange.FromDate.Should().HaveMinute(expectedFrom.Minute);
-            dateRange.FromDate.Should().HaveSecond(expectedFrom.Second);
-            
-            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedTo.Date);
-            dateRange.ToDate.Should().HaveHour(expectedTo.Hour);
-            dateRange.ToDate.Should().HaveMinute(expectedTo.Minute);
-            dateRange.ToDate.Should().HaveSecond(expectedTo.Second);
-        }
-        
-        [TestMethod]
-        public void SetsDefaultFromDate_WhenFromDateIsNull()
-        {
-            var toDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-27T18:45:22");
-            const string toDateAtMidnightString = "2018-05-27T00:00:00";
-            DateTimeOffset? toDateAtMidnight = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(toDateAtMidnightString).SetTimeToMidnight();
-            var expectedFromDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-04-29T00:00:01").SetTimeToMidnight();
-            var expectedFromDateOut = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-04-29T00:00:01").SetTimeToMidnight();
-            var expectedToDateOut = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-27T18:45:22");
-
-            var mockDateTimeOffsetProvider = new Mock<IDateTimeOffsetProvider>();
-            mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(expectedFromDate);
-            mockDateTimeOffsetProvider.Setup(x => x.TryCreateDateTimeOffset(toDateAtMidnightString, out toDateAtMidnight)).Returns(true);
-            
-            var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object, null, toDate);
-
-            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromDateOut.Date);
-            dateRange.FromDate.Should().HaveHour(expectedFromDateOut.Hour);
-            dateRange.FromDate.Should().HaveMinute(expectedFromDateOut.Minute);
-            dateRange.FromDate.Should().HaveSecond(expectedFromDateOut.Second);
-            
-            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedToDateOut.Date);
-            dateRange.ToDate.Should().HaveHour(expectedToDateOut.Hour);
-            dateRange.ToDate.Should().HaveMinute(expectedToDateOut.Minute);
-            dateRange.ToDate.Should().HaveSecond(expectedToDateOut.Second);
         }
     }
 }

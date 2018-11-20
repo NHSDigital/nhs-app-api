@@ -68,19 +68,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
                     HttpContext = httpContextMock.Object
                 }
             };
-
         }
 
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
-            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(28);
+            // Arrange
             var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
             var appointmentSlotsServicesGetResponse = new AppointmentSlotsResponse();
 
-            // Arrange
             _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
                 .Returns(gpSystem.Object);
 
@@ -94,20 +91,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
                 .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
 
             // Act
-            var queryParams = new PatientAppointmentSlotsQueryParameters
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var result = await _systemUnderTest.Get(queryParams);
+            var result = await _systemUnderTest.Get();
 
             // Assert
             _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
             appointmentSlotsService.Verify(x => x.GetSlots(_userSession,
-                It.Is<AppointmentSlotsDateRange>(d =>
-                    d.FromDate.Equals(fromDate) &&
-                    d.ToDate.Equals(toDate))));
+                It.IsAny<AppointmentSlotsDateRange>()));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo(typeof(AppointmentSlotsResponse));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
@@ -115,77 +105,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenQueryParametersAreInvalid()
+        public async Task Get_ReturnsSupplierSystemUnavailable_WhenServiceReturnsSupplierSystemUnavailable()
         {
-            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(-14);
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(-6);
-            // Act
-            var queryParams = new PatientAppointmentSlotsQueryParameters
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var result = await _systemUnderTest.Get(queryParams);
-
-            // Assert
-            result.Should().BeAssignableTo(typeof(BadRequestResult));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Available appointment slots view unsuccessful due to bad request"));
-        }
-
-        [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenServiceReturnsBadRequest()
-        {
-            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(28);
-            var gpSystem = new Mock<IGpSystem>();
-            var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
-
-            var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.BadRequest();
-
             // Arrange
-            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
-                .Returns(gpSystem.Object);
-
-            gpSystem.Setup(x => x.GetAppointmentSlotsService())
-                .Returns(appointmentSlotsService.Object);
-
-            appointmentSlotsService.Setup(x => x.GetSlots(_userSession, It.IsAny<AppointmentSlotsDateRange>()))
-                .Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
-
-            // Act
-            var queryParams = new PatientAppointmentSlotsQueryParameters
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var result = await _systemUnderTest.Get(queryParams);
-
-            // Assert
-            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
-            gpSystem.Verify(x => x.GetAppointmentSlotsService());
-            appointmentSlotsService.Verify(x => x.GetSlots(_userSession,
-                It.Is<AppointmentSlotsDateRange>(d =>
-                    d.FromDate.Equals(fromDate) &&
-                    d.ToDate.Equals(toDate))));
-            result.Should().BeAssignableTo(typeof(BadRequestResult));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Available appointment slots view unsuccessful due to bad request"));
-        }
-
-        [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenServiceReturnsBadRequest()
-        {
-            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(28);
             var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
 
             var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.SupplierSystemUnavailable();
-
-            // Arrange
+ 
             _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
                 .Returns(gpSystem.Object);
 
@@ -196,20 +123,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
                 .Returns(Task.FromResult((AppointmentSlotsResult) getAppointmentSlotsServiceResult));
 
             // Act
-            var queryParams = new PatientAppointmentSlotsQueryParameters
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var result = await _systemUnderTest.Get(queryParams);
+            var result = await _systemUnderTest.Get();
 
             // Assert
             _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
             appointmentSlotsService.Verify(x => x.GetSlots(_userSession,
-                It.Is<AppointmentSlotsDateRange>(d =>
-                    d.FromDate.Equals(fromDate) &&
-                    d.ToDate.Equals(toDate))));
+                It.IsAny<AppointmentSlotsDateRange>()));
             result.Should().BeAssignableTo(typeof(StatusCodeResult));
 
             var statusCodeResult = (StatusCodeResult) result;

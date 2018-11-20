@@ -25,14 +25,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Appointments
             }
         }
         
-        public class BadRequest : AppointmentSlotsResult
-        {
-            public override T Accept<T>(IAppointmentSlotsResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-        
         public class SupplierSystemUnavailable : AppointmentSlotsResult
         {
             public override T Accept<T>(IAppointmentSlotsResultVisitor<T> visitor)

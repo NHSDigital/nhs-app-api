@@ -11,11 +11,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             return new OkObjectResult(result.Response);
         }
 
-        public IActionResult Visit(AppointmentSlotsResult.BadRequest result)
-        {
-            return new BadRequestResult();
-        }
-
         public IActionResult Visit(AppointmentSlotsResult.SupplierSystemUnavailable result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);

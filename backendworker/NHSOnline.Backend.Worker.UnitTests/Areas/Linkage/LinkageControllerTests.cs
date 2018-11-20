@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         [TestMethod]
         public async Task Get_UnknownOdsCode_Returns501NotImplemented()
         {
-            // Arrage
+            // Arrange
             const string nhsNumber = DefaultNhsNumber;
             const string odsCode = DefaultOdsCode;
             DateTime? dateOfBirth = DefaultDateOfBirth;
@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         [TestMethod]
         public async Task Post_UnknownOdsCode_Returns501NotImplemented()
         {
-            // Arrage
+            // Arrange
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
                 .Returns(Task.FromResult(Option.None<Supplier>()));

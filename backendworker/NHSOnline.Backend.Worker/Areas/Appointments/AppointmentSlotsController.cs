@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Conventions;
@@ -33,7 +32,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PatientAppointmentSlotsQueryParameters queryParameters)
+        public async Task<IActionResult> Get()
         {
             try
             {
@@ -41,27 +40,12 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 
                 await _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
-                if (!new DateRangeValidator(_dateTimeOffsetProvider).IsValid(queryParameters.FromDate,
-                    queryParameters.ToDate))
-                {
-                    _logger.LogError(
-                        $"Query parameters are invalid. From date: '{queryParameters.FromDate?.ToString("o", CultureInfo.InvariantCulture)}', To date '{queryParameters.ToDate?.ToString("o", CultureInfo.InvariantCulture)}'");
-                    var badRequestResult = new AppointmentSlotsResult.BadRequest();
-                    badRequestResult.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
-
-                    return badRequestResult.Accept(new AppointmentSlotsResultVisitor());
-                }
-
                 var userSession = HttpContext.GetUserSession();
                 _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{userSession.Supplier}'.");
                 var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.Supplier)
                     .GetAppointmentSlotsService();
 
-                var dateRange = new AppointmentSlotsDateRange(
-                    _dateTimeOffsetProvider,
-                    queryParameters.FromDate,
-                    queryParameters.ToDate
-                );
+                var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider);
             
                 var result = await appointmentService.GetSlots(userSession, dateRange);
 
@@ -72,7 +56,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             {
                 _logger.LogExit(nameof(Get));
             }
-            
         }
     }
 }

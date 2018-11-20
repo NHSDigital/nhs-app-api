@@ -7,24 +7,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Appointments
     {
         private const int DayRange = 29;
 
-        public DateTimeOffset FromDate { get; }
-        public DateTimeOffset ToDate { get; }
+        public DateTimeOffset FromDate { get; set; }
+        public DateTimeOffset ToDate { get; set; }
         
-        public AppointmentSlotsDateRange(IDateTimeOffsetProvider dateTimeOffsetProvider, DateTimeOffset? fromDate, DateTimeOffset? toDate)
+        public AppointmentSlotsDateRange(IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
-            if (fromDate == null && toDate == null)
-            {
-                var nowdateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
-                FromDate = nowdateTimeOffset;
-                ToDate = nowdateTimeOffset.AddDays(DayRange).SetTimeToMidnight();
-            }
-            else
-            {
-                FromDate = fromDate ?? toDate.Value.SubDays(DayRange - 1).SetTimeToMidnight();
-                ToDate = toDate ?? fromDate.Value.AddDays(DayRange).SetTimeToMidnight();
-                FromDate = FromDate;
-                ToDate = ToDate;
-            }    
+            var nowDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
+            FromDate = nowDateTimeOffset;
+            ToDate = nowDateTimeOffset.AddDays(DayRange).SetTimeToMidnight();  
         }
     }
 }

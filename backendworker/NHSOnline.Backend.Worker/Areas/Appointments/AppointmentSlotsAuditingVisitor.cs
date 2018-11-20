@@ -20,13 +20,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             return null;
         }
 
-        public object Visit(AppointmentSlotsResult.BadRequest result)
-        {
-            _auditor.Audit(AuditType, "Available appointment slots view unsuccessful due to bad request");
-
-            return null;
-        }
-
         public object Visit(AppointmentSlotsResult.SupplierSystemUnavailable result)
         {
             _auditor.Audit(AuditType, "Available appointment slots view unsuccessful due to supplier unavailable");

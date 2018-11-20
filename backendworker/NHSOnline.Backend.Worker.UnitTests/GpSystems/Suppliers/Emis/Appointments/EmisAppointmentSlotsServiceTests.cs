@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         private Mock<IEmisClient> _mockEmisClient;
         private EmisUserSession _userSession;
         private AppointmentSlotsDateRange _dateRange;
-        private DateTimeOffset _fromdDteTimeOffset;
+        private DateTimeOffset _fromDateTimeOffset;
         private DateTimeOffset _toDateTimeOffset;
         private SlotsMetadataGetQueryParameters _slotsMetadataGetQueryParameters;
         private SlotsGetQueryParameters _slotsGetQueryParameters;
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _mockResponseMapper = _fixture.Freeze<Mock<IAppointmentSlotsResponseMapper>>();
 
-            _userSession = new EmisUserSession()
+            _userSession = new EmisUserSession
             {
                 UserPatientLinkToken = UserPatientLinkToken,
                 EndUserSessionId = EndUserSessionId,
@@ -58,20 +58,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 OdsCode = "TestOds"
             };
 
-            _fromdDteTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
+            _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
 
-            _dateRange = new AppointmentSlotsDateRange(
-                dateTimeOffsetProvider,
-                _fromdDteTimeOffset,
-                _toDateTimeOffset
-            );
+            _dateRange = new AppointmentSlotsDateRange(dateTimeOffsetProvider)
+            {
+                FromDate = _fromDateTimeOffset,
+                ToDate = _toDateTimeOffset
+            };
 
             _slotsMetadataGetQueryParameters =
-                new SlotsMetadataGetQueryParameters(_fromdDteTimeOffset, _toDateTimeOffset, UserPatientLinkToken);
+                new SlotsMetadataGetQueryParameters(_fromDateTimeOffset, _toDateTimeOffset, UserPatientLinkToken);
             _slotsGetQueryParameters =
-                new SlotsGetQueryParameters(_fromdDteTimeOffset, _toDateTimeOffset, UserPatientLinkToken);
-
+                new SlotsGetQueryParameters(_fromDateTimeOffset, _toDateTimeOffset, UserPatientLinkToken);
 
             _systemUnderTest = new EmisAppointmentSlotsService(
                 _mockEmisClient.Object,
