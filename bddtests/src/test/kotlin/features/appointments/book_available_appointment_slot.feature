@@ -20,9 +20,6 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
-  @pending @NHSO-3145
-    Examples:
-      | GP System |
       | VISION    |
 
   # Not applicable for VISION
@@ -54,9 +51,6 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
-  @pending @NHSO-3145
-    Examples:
-      | GP System |
       | VISION    |
 
   @smoketest
@@ -75,9 +69,6 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
-  @pending @NHSO-3145
-    Examples:
-      | GP System |
       | VISION    |
 
   @nativepending @NHSO-2966
@@ -98,9 +89,6 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
-  @pending @NHSO-3145
-    Examples:
-      | GP System |
       | VISION    |
 
   @nativepending @NHSO-2966
@@ -136,9 +124,6 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
-  @pending @NHSO-3145
-    Examples:
-      | GP System |
       | VISION    |
 
   Scenario: A Vision user gets an alternative success message when booking and there's no ability to cancel
