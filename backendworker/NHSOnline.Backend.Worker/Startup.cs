@@ -34,7 +34,6 @@ namespace NHSOnline.Backend.Worker
         private readonly IHostingEnvironment _env;
         
         private readonly ILoggerFactory _loggerFactory;
-        private readonly ILogger<Startup> _startupLogger;
         
         private readonly RunMode _runMode;
         private IConfiguration Configuration { get; }
@@ -56,8 +55,7 @@ namespace NHSOnline.Backend.Worker
             }
             
             _apiAppVersion = configuration[Constants.EnvironmentalVariables.VersionTag];
-            
-            _startupLogger = _loggerFactory.CreateLogger<Startup>();
+
             _modularStartup = new ModularStartup(configuration, loggerFactory);
         }
 
@@ -166,8 +164,7 @@ namespace NHSOnline.Backend.Worker
                 app.UseDeveloperExceptionPage();
             }
 
-            UseSecurityHeaders(app);
-            UseVersionLogging(app);
+            UseSecurityHeaders(app, _apiAppVersion, loggerFactory.CreateLogger<Startup>());
             app.UseResponseHeadersMiddleware();
 
             app.UsePathBase(new PathString("/v1"));
@@ -189,7 +186,7 @@ namespace NHSOnline.Backend.Worker
             _modularStartup.Configure(app, env);
         }
 
-        private static void UseSecurityHeaders(IApplicationBuilder app)
+        private static void UseSecurityHeaders(IApplicationBuilder app, string apiAppVersion, ILogger<Startup> startupLogger)
         {
             app.Use(async (context, next) =>
             {
@@ -199,35 +196,31 @@ namespace NHSOnline.Backend.Worker
                 context.Response.Headers.Add("Referrer-Policy", "no-referrer");
                 context.Response.Headers.Add("Content-Security-Policy", "default-src https:");
                 context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+
+                LogVersion(context, apiAppVersion, startupLogger);
                 
                 await next();
             });
         }
 
-        private void UseVersionLogging(IApplicationBuilder app)
+        private static void LogVersion(HttpContext context, string apiAppVersion, ILogger<Startup> startupLogger)
         {
-            app.Use(async (context, next) =>
+            string webAppVersion = context.Request.Headers[Constants.HttpHeaders.WebAppVersion];
+            string nativeAppVersion = context.Request.Headers[Constants.HttpHeaders.NativeAppVersion];
+
+            if (string.IsNullOrEmpty(webAppVersion)) return;
+            
+            var logMessageStringBuilder = new StringBuilder();
+                    
+            logMessageStringBuilder.Append(
+                $"Beginning HTTP Request. Backendworker version: {apiAppVersion}. Web App Version: {webAppVersion}.");
+                    
+            if (!string.IsNullOrEmpty(nativeAppVersion))
             {
-                string webAppVersion = context.Request.Headers[Constants.HttpHeaders.WebAppVersion];
-                string nativeAppVersion = context.Request.Headers[Constants.HttpHeaders.NativeAppVersion];
+                logMessageStringBuilder.Append($" Native App Version: {nativeAppVersion}.");
+            }
 
-                if (!string.IsNullOrEmpty(webAppVersion))
-                {
-                    var logMessageStringBuilder = new StringBuilder();
-                    
-                    logMessageStringBuilder.Append(
-                        $"Beginning HTTP Request. Backendworker version: {_apiAppVersion}. Web App Version: {webAppVersion}.");
-                    
-                    if (!string.IsNullOrEmpty(nativeAppVersion))
-                    {
-                        logMessageStringBuilder.Append($" Native App Version: {nativeAppVersion}.");
-                    }
-
-                    _startupLogger.LogInformation(logMessageStringBuilder.ToString());
-                }
-                
-                await next();
-            });
+            startupLogger.LogInformation(logMessageStringBuilder.ToString());
         }
 
         private static RunMode GetRunMode(IConfiguration configuration)

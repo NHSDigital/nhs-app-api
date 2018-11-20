@@ -124,7 +124,10 @@ class {{&className}} {
     const webVersion = getWebVersion(this);
     const nativeVersion = getNativeVersion(this);
     if (webVersion) {
-      headers['NHSO-Version-Tag'] = nativeVersion ? `${webVersion} (${nativeVersion})` : webVersion;
+      headers['NHSO-Web-Version-Tag'] = webVersion;
+    }
+    if (nativeVersion) {
+      headers['NHSO-Native-Version-Tag'] = nativeVersion;
     }
 
     const resolve = ({ store, deferred, result, cancel }) => {
