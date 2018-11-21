@@ -4,6 +4,8 @@ import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
+import webdrivers.isAndroid
+import webdrivers.isIOS
 
 const val LOCATOR_STRATEGY_ANDROID = "ANDROID"
 const val LOCATOR_STRATEGY_WEBVIEW = "WEBVIEW"
@@ -102,9 +104,9 @@ open class HybridPageElement(
     }
 
     fun locatorStrategy(): String {
-        return if (page.isAndroid() && androidLocator != null) {
+        return if (page.driver.isAndroid() && androidLocator != null) {
                 LOCATOR_STRATEGY_ANDROID
-        } else if (page.isIOS() && iOSLocator != null) {
+        } else if (page.driver.isIOS() && iOSLocator != null) {
                 LOCATOR_STRATEGY_IOS
         } else {
             LOCATOR_STRATEGY_BROWSER

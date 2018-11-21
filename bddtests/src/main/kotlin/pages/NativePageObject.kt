@@ -6,6 +6,8 @@ import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.WebDriverException
+import webdrivers.getSpecificDriver
+import webdrivers.isAndroid
 
 
 const val NATIVE_CONTEXT: String = "native"
@@ -18,12 +20,12 @@ abstract class NativePageObject : HybridPageObject() {
     }
 
     private fun getNativeMobileDriver(): AppiumDriver<MobileElement> {
-        return when (isAndroid()) {
+        return when (driver.isAndroid()) {
             true -> {
-                getSpecificDriver<AndroidDriver<MobileElement>>()
+                driver.getSpecificDriver<AndroidDriver<MobileElement>>()
             }
             false -> {
-                getSpecificDriver<IOSDriver<MobileElement>>()
+                driver.getSpecificDriver<IOSDriver<MobileElement>>()
             }
         }
     }

@@ -48,9 +48,7 @@ class GPFinderPage : HybridPageObject() {
 
     fun enterSearchTerm(searchTerm: String) {
         searchTermField.element.type<WebElementFacade>(searchTerm)
-        if (onMobile()) {
-            getMobileDriver().hideKeyboard()
-        }
+        hideKeyboardIfOnMobile()
     }
 
     fun clickContinueButton() {

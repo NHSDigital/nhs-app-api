@@ -36,16 +36,12 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
 
     fun describeSymptoms(symptoms: String) {
         reasonFormField.element.type<WebElementFacade>(symptoms)
-        if (onMobile()) {
-            getMobileDriver().hideKeyboard()
-        }
+        hideKeyboardIfOnMobile()
     }
 
     fun pasteSymptoms(symptoms: String) {
         reasonFormField.element.sendKeys(symptoms)
-        if (onMobile()) {
-            getMobileDriver().hideKeyboard()
-        }
+        hideKeyboardIfOnMobile()
     }
 
     fun getSymptoms(): String {

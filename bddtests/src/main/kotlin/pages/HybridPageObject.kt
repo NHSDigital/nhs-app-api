@@ -1,18 +1,17 @@
 package pages
 
 import config.Config
-import io.appium.java_client.AppiumDriver
-import io.appium.java_client.android.AndroidDriver
-import io.appium.java_client.ios.IOSDriver
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.SerenityWebdriverManager
-import net.thucydides.core.webdriver.WebDriverFacade
 import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.support.ui.FluentWait
+import webdrivers.getMobileDriver
+import webdrivers.isAndroid
+import webdrivers.isIOS
 import java.time.Duration
 
 const val DEFAULT_SPINNER_WAIT: Long = 30
@@ -21,7 +20,6 @@ const val DEFAULT_NATIVE_SPINNER_WAIT: Long = 1000
 const val POOLING_FREQUENCY: Long = 100
 const val WEB_CONTEXT: String = "webview"
 
-@Suppress("TooManyFunctions")
 open class HybridPageObject : PageObject() {
 
     val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
@@ -36,7 +34,7 @@ open class HybridPageObject : PageObject() {
     )
 
     fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
-        if(onMobile())
+        if (onMobile())
             spinner.waitForNativeSpinner()
 
         if (!spinner.elements.isEmpty()) spinner.shouldNotBeVisible(seconds)
@@ -50,9 +48,9 @@ open class HybridPageObject : PageObject() {
         return this.element
     }
 
-    fun waitForNativeStepToComplete(milliseconds: Long = DEFAULT_MOBILE_WAIT){
+    fun waitForNativeStepToComplete(milliseconds: Long = DEFAULT_MOBILE_WAIT) {
         //Native execution/redirect is slow on browser stack
-       if(onMobile())
+        if (onMobile())
             Thread.sleep(milliseconds)
     }
 
@@ -74,7 +72,7 @@ open class HybridPageObject : PageObject() {
 
     fun onMobile(): Boolean {
         return if (SerenityWebdriverManager.inThisTestThread().hasAnInstantiatedDriver()) {
-            isAndroid().xor(isIOS())
+            driver.isAndroid().xor(driver.isIOS())
 
         } else { //no driver yet instantiated so check the environment variables
 
@@ -85,29 +83,11 @@ open class HybridPageObject : PageObject() {
         }
     }
 
-    fun isAndroid(): Boolean {
-        val isAndroid = driver is AndroidDriver<*>
-        val isProxyForAndroid = when (driver is WebDriverFacade) {
-            true -> { (driver as WebDriverFacade).isAProxyFor(AndroidDriver::class.java) }
-            false -> { false }
-        }
-        return isAndroid.xor(isProxyForAndroid)
-    }
-
-    fun isIOS(): Boolean {
-        val isIOS = driver is IOSDriver<*>
-        val isProxyForIOS = when  (driver is WebDriverFacade) {
-            true -> { (driver as WebDriverFacade).isAProxyFor(IOSDriver::class.java) }
-            false -> { false }
-        }
-        return isIOS.xor(isProxyForIOS)
-    }
-
     fun switchWebview() {
         if (!onMobile())
             return
 
-        val driver = getMobileDriver()
+        val driver = driver.getMobileDriver()
         if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
             println("Already in ${WEB_CONTEXT} context: ${driver.context}")
         } else {
@@ -123,24 +103,10 @@ open class HybridPageObject : PageObject() {
         setDriver<HybridPageObject>(driver)
     }
 
-    fun getMobileDriver(): AppiumDriver<WebElementFacade>{
-        return when (isAndroid()) {
-            true -> {  getSpecificDriver<AndroidDriver<WebElementFacade>>() }
-            false -> { getSpecificDriver<IOSDriver<WebElementFacade>>() }
+    fun hideKeyboardIfOnMobile(){
+        if (onMobile()) {
+            driver.getMobileDriver().hideKeyboard()
         }
-    }
-
-    fun <T>getSpecificDriver(): T {
-        val theDriver =
-                if (driver is WebDriverFacade) {
-                    (driver as WebDriverFacade).proxiedDriver
-                } else {
-                    driver
-                }
-        @Suppress("UNCHECKED_CAST",
-                "Cast cannot be checked as a generic type is used, " +
-                        "see https://kotlinlang.org/docs/reference/typecasts.html")
-        return theDriver as T
     }
 
     fun findByXpath(parent: WebElementFacade, xpath: String): WebElementFacade {
@@ -152,8 +118,8 @@ open class HybridPageObject : PageObject() {
         return elements.first()
     }
 
-    fun logSelectorAndSource(selector:String){
-        if(Config.instance.showPageSourceForXPathQuery=="true") {
+    fun logSelectorAndSource(selector: String) {
+        if (Config.instance.showPageSourceForXPathQuery == "true") {
             println("Selector: $selector")
             println("Current source:\n${driver.pageSource}")
         }

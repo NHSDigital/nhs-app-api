@@ -2,6 +2,7 @@ package pages
 
 import io.appium.java_client.MobileElement
 import org.openqa.selenium.JavascriptExecutor
+import webdrivers.isIOS
 
 class NativePageElement(
         browserLocator: String,
@@ -35,7 +36,7 @@ class NativePageElement(
         }
 
     private fun nativeLocatorStrategy(): String {
-        return if (page.isIOS() && iOSAccessID != null) {
+        return if (page.driver.isIOS() && iOSAccessID != null) {
             LOCATOR_STRATEGY_IOS_ACCESSIBILITY
         } else {
             locatorStrategy()

@@ -4,6 +4,7 @@ import io.appium.java_client.MobileElement
 import net.serenitybdd.core.pages.WebElementFacade
 import pages.NativePageElement
 import pages.NativePageObject
+import webdrivers.isAndroid
 
 open class NavBarNative : NativePageObject() {
 
@@ -63,7 +64,7 @@ open class NavBarNative : NativePageObject() {
     fun isHighlighted(type: NavBarType): Boolean {
         return when (onMobile()) {
             true -> {
-                when (isAndroid()) {
+                when (driver.isAndroid()) {
                     true -> {
                         getNativeElement(type).findElementsByXPath("//*[contains(@content-desc,'selected')]").count()==1
                     }
