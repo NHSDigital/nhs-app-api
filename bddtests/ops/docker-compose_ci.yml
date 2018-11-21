@@ -2,8 +2,6 @@ version: "3.2"
 services:
   nhsonline.mongodb.session:
     image: mongo:latest
-    ports:
-      - "27017:27017"
   web.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-web:${WEB_TAG}
     env_file:
