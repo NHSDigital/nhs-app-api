@@ -911,6 +911,12 @@
                 token: 
                   type: "string"
                   description: "User's session CsrfToken"
+                nhsNumber: 
+                  type: "string"
+                  description: "User's NHS number"
+                accessToken: 
+                  type: "string"
+                  description: "User's access token which allows NHS Login to identify them"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
           403: 

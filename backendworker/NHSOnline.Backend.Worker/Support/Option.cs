@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace NHSOnline.Backend.Worker.Support
 {
@@ -41,6 +42,11 @@ namespace NHSOnline.Backend.Worker.Support
         public Option<T> IfNone(Func<Option<T>> next)
         {
             return HasValue ? this : next.Invoke();
+        }
+
+        public Option<T> IfSome(Func<T, Option<T>> next)
+        {
+            return HasValue ? next.Invoke(Value) : this;
         }
     }
 }

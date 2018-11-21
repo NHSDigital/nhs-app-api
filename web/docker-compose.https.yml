@@ -18,6 +18,7 @@ services:
       - API_HOST_SERVER=http://api.local.bitraft.io:8082
       - URI_FORMAT_CID_REDIRECT_WEB=https://local.bitraft.io/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://local.bitraft.io/auth-return
+      - SECURE_COOKIES=true
       - GP_LOOKUP_API_KEY=
       - GP_LOOKUP_API_URL=https://nhsapiint.azure-api.net/service-search/search?api-version=1
       - GP_LOOKUP_API_RESULTS_LIMIT=20

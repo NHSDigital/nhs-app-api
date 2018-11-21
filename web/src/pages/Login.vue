@@ -25,6 +25,7 @@ import LoginButton from '@/components/LoginButton';
 
 import { BEGINLOGIN } from '@/lib/routes';
 import NativeCallbacks from '@/services/native-app';
+import querystring from 'querystring';
 
 export default {
   head() {
@@ -46,7 +47,13 @@ export default {
       state: '',
       responseType: '',
       clientId: '',
+      fidoAuthResponse: '',
     };
+  },
+  computed: {
+    shouldShowBiometrics() {
+      return this.$env.BIOMETRICS_ENABLED && this.$store.state.device.source === 'android';
+    },
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
@@ -60,6 +67,7 @@ export default {
     const loginValues = authorisationService.generateLoginValues(
       this.$route.query.source,
       this.$cookies,
+      this.$route.query.fidoAuthResponse,
     );
 
     this.scope = loginValues.scope;
@@ -70,6 +78,27 @@ export default {
     this.responseType = loginValues.responseType;
     this.clientId = loginValues.clientId;
     this.authoriseUrl = loginValues.authoriseUrl;
+
+    this.fidoAuthResponse = loginValues.fidoAuthResponse;
+
+    if (this.shouldShowBiometrics && this.fidoAuthResponse) {
+      this.$store.app.context.redirect(this.generateFidoUrl());
+    }
+  },
+  methods: {
+    generateFidoUrl() {
+      const originalData = this.$data;
+      const newData = {};
+      Object.keys(originalData).forEach((key) => {
+        if (key !== 'authoriseUrl') {
+          newData[this.camelToUnderscore(key)] = originalData[key];
+        }
+      });
+      return `${this.authoriseUrl}?${querystring.stringify(newData)}`;
+    },
+    camelToUnderscore(key) {
+      return key.replace(/([A-Z])/g, '_$1').toLowerCase();
+    },
   },
 };
 </script>

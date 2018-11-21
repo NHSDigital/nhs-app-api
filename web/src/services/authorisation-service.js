@@ -23,11 +23,13 @@ class AuthorisationService {
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT;
   }
 
-  generateLoginValues(source, cookies) {
+  generateLoginValues(source, cookies, fidoAuthResponse) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
     const redirectUri = this.getRedirectUri(source || Sources.Web);
+    const fidoResponse = fidoAuthResponse;
+
     const request = {
       scope: 'openid profile nhs_app_credentials gp_integration_credentials',
       clientId: this.cidClientId,
@@ -38,6 +40,7 @@ class AuthorisationService {
       codeChallenge: challenge,
       codeChallengeMethod: 'S256',
       authoriseUrl: this.cidAuthEndpoint,
+      fidoAuthResponse: fidoResponse,
     };
 
     cookies.set('nhso.auth', {

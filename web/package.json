@@ -80,6 +80,7 @@
     "node-sass": "4.9.3",
     "nuxt": "1.4.1",
     "qs": "6.5.2",
+    "querystring": "0.2.0",
     "sass-loader": "7.0.1",
     "swagger-js-codegen": "1.12.0",
     "vee-validate": "2.0.9",

@@ -99,7 +99,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _mockSessionService = _fixture.Freeze<Mock<ISessionService>>();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber,
+                    _userProfile.AccessToken))
                 .Returns(Task.FromResult(_sessionCreateResult));
 
             _mockTokenValidationService = _fixture.Freeze<Mock<ITokenValidationService>>();
@@ -254,7 +255,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Arrange
             var sessionCreateResult = new SessionCreateResult.InvalidIm1ConnectionToken();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber,
+                    _userProfile.AccessToken))
                 .ReturnsAsync(sessionCreateResult)
                 .Verifiable();
 
@@ -274,7 +276,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Arrange
             var sessionCreateResult = new SessionCreateResult.SupplierSystemUnavailable();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber,
+                    _userProfile.AccessToken))
                 .ReturnsAsync(sessionCreateResult)
                 .Verifiable();
 
@@ -308,6 +311,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat,
                     CultureInfo.InvariantCulture),
                 NhsNumber = _userProfile.NhsNumber,
+                AccessToken = _userProfile.AccessToken
             };
 
             actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
@@ -316,6 +320,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);
             actualUserSessionResponse.DateOfBirth.Should().Be(expectedUserSessionResponse.DateOfBirth);
             actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
+            actualUserSessionResponse.AccessToken.Should().Be(expectedUserSessionResponse.AccessToken);
         }
 
         [TestMethod]

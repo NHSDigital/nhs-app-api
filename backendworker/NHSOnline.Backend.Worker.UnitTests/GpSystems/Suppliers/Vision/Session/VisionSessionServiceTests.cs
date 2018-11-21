@@ -27,6 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
         private const string DefaultRosuAccountId = "104969";
 
         private string _nhsNumber;
+        private string _accessToken;
         private IFixture _fixture;
         private Mock<IVisionClient> _mockVisionClient;
 
@@ -37,6 +38,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
 
             _nhsNumber = _fixture.Create<string>();
+            _accessToken = _fixture.Create<string>();
         }
 
         [TestMethod]
@@ -105,7 +107,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);
 
             // Act
-            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
+            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber, _accessToken);
 
             // Assert
             _mockVisionClient.VerifyAll();
@@ -149,7 +151,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);
 
             // Act
-            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
+            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber, _accessToken);
 
             // Assert
             result.Should().BeAssignableTo<SessionCreateResult.InvalidRequest>();
@@ -189,7 +191,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);
 
             // Act
-            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
+            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber, _accessToken);
 
             // Assert
             result.Should().BeAssignableTo<SessionCreateResult.InvalidUserCredentials>();
@@ -219,7 +221,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);
 
             // Act
-            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
+            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber, _accessToken);
 
             // Assert
             result.Should().BeAssignableTo<SessionCreateResult.ErrorProcessingSecurityHeader>();
@@ -259,7 +261,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);
 
             // Act
-            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
+            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber, _accessToken);
 
             // Assert
             result.Should().BeAssignableTo<SessionCreateResult.UnknownError>();
@@ -286,7 +288,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);
 
             // Act
-            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
+            var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber, _accessToken);
 
             // Assert
             result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();

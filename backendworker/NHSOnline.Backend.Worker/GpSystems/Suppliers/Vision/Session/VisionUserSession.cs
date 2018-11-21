@@ -9,6 +9,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 
         public string RosuAccountId { get; set; }
 
+        public string AccessToken { get; set; }
+
         public string PatientId { get; set; }
 
         public string ApiKey { get; set; }

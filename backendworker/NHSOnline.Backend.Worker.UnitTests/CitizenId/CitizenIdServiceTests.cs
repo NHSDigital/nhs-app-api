@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
                 .ReturnsAsync(signingKeysResponse);
  
             _idTokenService 
-                .Setup(x => x.ReadToken(token.IdToken,signingKeys)) 
+                .Setup(x => x.ReadToken(token.IdToken, signingKeys))
                 .Returns(tokenServiceReponse); 
  
             // Act 
@@ -280,7 +280,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
                 .ReturnsAsync(signingKeysResponse);
  
             _idTokenService 
-                .Setup(x => x.ReadToken(token.IdToken,signingKeys)) 
+                .Setup(x => x.ReadToken(token.IdToken,signingKeys))
                 .Returns(tokenServiceReponse); 
  
             // Act 

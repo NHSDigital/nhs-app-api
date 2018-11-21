@@ -15,5 +15,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session.Models
         public DateTime DateOfBirth { get; set; }
         
         public string NhsNumber { get; set; }
+
+        public string AccessToken { get; set; }
     }
 }

@@ -51,7 +51,8 @@ export default {
       })
       .then((response) => {
         // eslint-disable-next-line object-curly-newline
-        const { name, odsCode, sessionTimeout, token, nhsNumber, dateOfBirth } = (response || {});
+        const { name, odsCode, sessionTimeout, token, nhsNumber, dateOfBirth, accessToken } =
+          (response || {});
         this.dispatch('session/hideExpiryMessage');
         this.dispatch('session/setInfo', {
           name,
@@ -60,6 +61,7 @@ export default {
           token,
           nhsNumber,
           dateOfBirth,
+          accessToken,
         });
 
         commit(AUTH_RESPONSE, response);

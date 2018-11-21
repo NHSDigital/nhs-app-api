@@ -17,7 +17,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             _visionClient = visionClient;
         }
 
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
+        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber,
+            string accessToken)
         {
             try
             {
@@ -33,6 +34,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                         {
                             RosuAccountId = visionConnectionToken.RosuAccountId,
                             OdsCode = odsCode,
+                            AccessToken = accessToken,
                             ApiKey = visionConnectionToken.ApiKey,
                             NhsNumber = nhsNumber,
                             PatientId = response.Body.Configuration.Account.PatientId,

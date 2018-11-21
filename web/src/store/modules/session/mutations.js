@@ -29,6 +29,7 @@ export default {
     lastCalledAt = new Date(),
     nhsNumber,
     dateOfBirth,
+    accessToken,
   } = {}) {
     state.user = name;
     state.durationSeconds = durationSeconds;
@@ -38,6 +39,7 @@ export default {
     state.lastCalledAt = lastCalledAt;
     state.nhsNumber = nhsNumber;
     state.dateOfBirth = dateOfBirth;
+    state.accessToken = accessToken;
   },
   [SET_LAST_CALLED_AT](state, date) {
     state.lastCalledAt = date;

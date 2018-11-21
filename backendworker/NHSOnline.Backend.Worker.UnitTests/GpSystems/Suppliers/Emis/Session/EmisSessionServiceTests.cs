@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         private string _connectionToken;
         private string _odsCode;
         private string _nhsNumber;
+        private string _accessToken;
         
         [TestInitialize]
         public void TestInitialize()
@@ -39,6 +40,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _connectionToken = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
             _nhsNumber = _fixture.Create<string>();
+            _accessToken = _fixture.Create<string>();
             
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
@@ -94,7 +96,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
 
             // Assert
             _mockEmisClient.Verify();
@@ -112,7 +114,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
 
             // Assert
             _mockEmisClient.Verify();
@@ -135,7 +137,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
 
             // Assert
             _mockEmisClient.Verify();
@@ -162,7 +164,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
 
             // Assert
             _mockEmisClient.Verify();
@@ -189,7 +191,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
 
             // Assert
             _mockEmisClient.Verify();
@@ -215,7 +217,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
 
             // Assert
             _mockEmisClient.Verify();
@@ -242,7 +244,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
             
             // Act
-            var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
 
             // Assert
             _mockEmisClient.VerifyAll();
@@ -257,7 +259,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public async Task Create_HappyPath_ReturnsAUserSessionInTheResult()
         {
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
             
             // Assert
             result
@@ -273,7 +275,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public async Task Create_HappyPath_ReturnsAUserSessionWithTheEmisSupplier()
         {
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
             
             // Assert
             result
@@ -290,7 +292,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public async Task Create_HappyPath_ReturnsAEmisUserSession()
         {
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber, _accessToken);
             
             // Assert
             result

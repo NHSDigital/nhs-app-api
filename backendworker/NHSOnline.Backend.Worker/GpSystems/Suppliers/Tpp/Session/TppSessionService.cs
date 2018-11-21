@@ -21,7 +21,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             _logger = logger;
         }
 
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
+        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber,
+            string accessToken)
         {
             try
             {
@@ -52,6 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                     OnlineUserId = reply.Body.OnlineUserId,
                     PatientId = reply.Body.PatientId,
                     OdsCode = odsCode,
+                    AccessToken = accessToken,
                     NhsNumber = nhsNumber
                 };
 

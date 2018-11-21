@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -88,10 +89,21 @@ namespace NHSOnline.Backend.Worker.CitizenId
                     return result;
                 }
 
-                result.UserProfile = _idTokenService.ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure());
-                result.StatusCode = result.UserProfile.HasValue
-                    ? HttpStatusCode.OK
-                    : HttpStatusCode.BadRequest;
+                result.UserProfile = _idTokenService
+                    .ReadToken(tokenResponse.Body.IdToken,
+                        signingKeys.ValueOrFailure())
+                    .IfSome((userProfile) =>
+                    {
+                        result.StatusCode = HttpStatusCode.OK;
+                        userProfile.AccessToken = tokenResponse.Body.AccessToken;
+                        return Option.Some(userProfile);
+                    })
+                    .IfNone(() =>
+                    {
+                        result.StatusCode = HttpStatusCode.BadRequest;
+                        return Option.None<UserProfile>();
+                    });
+
                 return result;
             }
             finally

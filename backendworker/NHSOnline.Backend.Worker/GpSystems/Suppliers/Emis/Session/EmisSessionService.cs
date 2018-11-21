@@ -66,7 +66,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             return sessionsResponse.Body;
         }
 
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
+        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber,
+            string accessToken)
         {
             try
             {
@@ -81,6 +82,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                     EndUserSessionId = endUserSessionResponse.EndUserSessionId,
                     NhsNumber = nhsNumber,
                     OdsCode = odsCode,
+                    AccessToken = accessToken,
                     AppointmentBookingReasonNecessity =  Necessity.Mandatory,
                     PrescriptionSpecialRequestNecessity = Necessity.Optional
                 };

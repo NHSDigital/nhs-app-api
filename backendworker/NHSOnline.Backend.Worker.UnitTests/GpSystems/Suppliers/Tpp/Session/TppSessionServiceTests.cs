@@ -27,6 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         private Authenticate _actual;
         private TppUserSession _userSession;
         private int _sessionTimeoutMinutes;
+        private string _accessToken;
         private string _nhsNumber;
         private const string ResponseSuidHeader = "suid";
         private TppClient.TppApiObjectResponse<AuthenticateReply> _authenticatePostResult;
@@ -48,6 +49,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                 });
 
             _nhsNumber = _fixture.Create<string>();
+            _accessToken = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
             _userSession = _fixture.Create<TppUserSession>();
 
@@ -74,7 +76,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
-            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "bar", _nhsNumber);
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "bar", _nhsNumber, _accessToken);
 
             // Assert
             _mockTppClient.Verify();
@@ -96,7 +98,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
         
             // Act
-            await _systemUnderTest.Create(tppConnectionToken, "bar", _nhsNumber);
+            await _systemUnderTest.Create(tppConnectionToken, "bar", _nhsNumber, _accessToken);
         
             // Assert
             _actual.AccountId.Should().Be(accountId);
@@ -115,7 +117,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             };
             
             // Act
-            await _systemUnderTest.Create(CreateConnectionTokenJson(), expected, _nhsNumber);
+            await _systemUnderTest.Create(CreateConnectionTokenJson(), expected, _nhsNumber, _accessToken);
 
             //Assert
             _actual.UnitId.Should().Be(expected);
@@ -135,7 +137,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
         
             // Act
-            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber, _accessToken);
         
             // Assert
             var created = (SessionCreateResult.SuccessfullyCreated) result;
@@ -164,7 +166,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
         
             // Act
-            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber, _accessToken);
         
             // Assert
             var createdResult = result.Should().BeAssignableTo<SessionCreateResult.SuccessfullyCreated>().Subject;
@@ -191,7 +193,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act 
-            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber, _accessToken);
             
             // Assert 
             result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();
@@ -211,7 +213,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act 
-            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber, _accessToken);
 
             // Assert 
             result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();

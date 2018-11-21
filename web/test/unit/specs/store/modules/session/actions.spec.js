@@ -19,6 +19,7 @@ describe('actions', () => {
         set: jest.fn(),
         remove: jest.fn(),
       },
+      $env: jest.fn(),
     };
     mutation = {
       commit: jest.fn(),

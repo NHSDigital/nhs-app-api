@@ -117,7 +117,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
                 // Create a session with the GP system, using the IM1 connection token.
                 var sessionCreatedResultVisited = await GetSessionCreateResultVisitorOutput(gpSystem, 
-                    cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode, nhsNumberFormatted);
+                    cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode, nhsNumberFormatted,
+                    cidUserProfile.AccessToken);
                 if (!sessionCreatedResultVisited.SessionWasCreated)
                 {
                     _logger.LogError(
@@ -135,7 +136,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 _logger.LogDebug($"Finished session post with status code {sessionCreatedResultVisited.StatusCode}");
 
                 return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited, cidUserProfile.OdsCode,
-                    dateOfBirthParsed.Value, nhsNumberFormatted));
+                    dateOfBirthParsed.Value, nhsNumberFormatted, cidUserProfile.AccessToken));
             }
             finally
             {
@@ -209,7 +210,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         }
 
         private static CreatedResult CreateCreatedResult(SessionCreateResultVisitorOutput sessionCreatedResultVisited,
-            string odsCode, DateTime dateOfBirth, string nhsNumber)
+            string odsCode, DateTime dateOfBirth, string nhsNumber, string accessToken)
         {
             var responseBody = new UserSessionResponse
             {
@@ -218,7 +219,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 Token = sessionCreatedResultVisited.UserSession.CsrfToken,
                 OdsCode = odsCode,
                 DateOfBirth = dateOfBirth,
-                NhsNumber = nhsNumber
+                NhsNumber = nhsNumber,
+                AccessToken = accessToken
             };
 
             return new CreatedResult(string.Empty, responseBody);
@@ -240,11 +242,11 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         }
 
         private async Task<SessionCreateResultVisitorOutput> GetSessionCreateResultVisitorOutput(IGpSystem gpSystem,
-            string im1ConnectionToken, string odsCode, string nhsNumber)
+            string im1ConnectionToken, string odsCode, string nhsNumber, string accessToken)
         {
             var sessionService = gpSystem.GetSessionService();
             var sessionCreateResult =
-                await sessionService.Create(im1ConnectionToken, odsCode, nhsNumber);
+                await sessionService.Create(im1ConnectionToken, odsCode, nhsNumber, accessToken);
 
             return sessionCreateResult.Accept(new SessionCreateResultVisitor(_settings));
         }

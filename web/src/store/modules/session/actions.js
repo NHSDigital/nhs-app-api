@@ -7,13 +7,13 @@ import {
   SHOW_EXPIRY_MESSAGE,
 } from './mutation-types';
 
-const setCookie = ({ key, value, cookies }) => {
+const setCookie = ({ key, value, cookies, isSecure }) => {
   if (!cookies) return;
 
   const cleaned = value === '' ? undefined : value;
 
   if (cleaned) {
-    cookies.set(key, cleaned);
+    cookies.set(key, cleaned, { secure: isSecure });
   } else {
     cookies.remove(key);
   }
@@ -49,6 +49,7 @@ export default {
         key: 'nhso.session',
         value: session,
         cookies: this.app.$cookies,
+        isSecure: this.app.$env.SECURE_COOKIES,
       });
     }
 
@@ -65,12 +66,14 @@ export default {
         lastCalledAt: info.lastCalledAt || new Date(),
         nhsNumber: info.nhsNumber,
         dateOfBirth: info.dateOfBirth,
+        accessToken: info.accessToken,
       });
 
     setCookie({
       key: 'nhso.session',
       value,
       cookies: this.app.$cookies,
+      isSecure: this.app.$env.SECURE_COOKIES,
     });
 
     commit(SET_INFO, info);
