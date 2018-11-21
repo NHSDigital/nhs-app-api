@@ -35,7 +35,7 @@ const config = {
     './.transpiled/middleware-server/responseHeaders.js',
   ],
   router: {
-    middleware: ['throttling', 'auth', 'meta', 'analytics', 'termsAndConditions', 'urlResolution'],
+    middleware: ['urlResolution', 'throttling', 'auth', 'meta', 'analytics', 'termsAndConditions'],
   },
   link: [
     {

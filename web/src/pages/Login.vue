@@ -62,7 +62,6 @@ export default {
       this.$cookies,
     );
 
-    this.authoriseUrl = loginValues.authoriseUrl;
     this.scope = loginValues.scope;
     this.codeChallenge = loginValues.codeChallenge;
     this.codeChallengeMethod = loginValues.codeChallengeMethod;
@@ -70,6 +69,7 @@ export default {
     this.state = loginValues.state;
     this.responseType = loginValues.responseType;
     this.clientId = loginValues.clientId;
+    this.authoriseUrl = loginValues.authoriseUrl;
   },
 };
 </script>
