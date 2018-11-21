@@ -2,10 +2,10 @@
 <resources>
     <string name="baseScheme">https</string>
     <string name="appScheme">nhsapp</string>
-    <string name="baseHost">www.nhsapp.service.nhs.uk</string>
+    <string name="baseHost">www-preview.dev.nonlive.nhsapp.service.nhs.uk</string>
+    <string name="baseURL">https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
+    <string name="baseApiURL">https://api-preview.dev.nonlive.nhsapp.service.nhs.uk/v1/</string>
     <string name="authRedirectPath">/auth-return</string>
-    <string name="baseURL">https://www.nhsapp.service.nhs.uk/</string>
-    <string name="baseApiURL">https://api.nhsapp.service.nhs.uk/v1/</string>
     <string name="morePath">more</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
     <string name="myRecordPath">my-record-warning</string>
@@ -20,7 +20,8 @@
     <string name="organDonation">https://www.organdonation.nhs.uk/</string>>
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
-    <string name="dataPreferencesBaseUrl">https://app.your-data-matters.service.nhs.uk/</string>
+    <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
+
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
     <string name="logoutPath">logout</string>
     <string name="loginPath">login</string>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NHS App</string>
+    <string name="baseHost">www.nhsapp.service.nhs.uk</string>
+    <string name="baseURL">https://www.nhsapp.service.nhs.uk/</string>
+    <string name="baseApiURL">https://api.nhsapp.service.nhs.uk/v1/</string>
+    <string name="dataPreferencesBaseUrl">https://app.your-data-matters.service.nhs.uk/</string>
+</resources>
