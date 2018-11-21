@@ -5,7 +5,7 @@
   "description": "NHS Online Web",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run swagger && nuxt",
+    "dev": "npm run transpile && npm run swagger && nuxt",
     "transpile-middleware": "npx babel --out-dir src/.transpiled/middleware-server ./src/middleware-server",
     "transpile-services": "npx babel --out-dir src/.transpiled/services ./src/services",
     "transpile": "npx babel --out-dir src/.transpiled ./src",

@@ -13,7 +13,7 @@
       {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}
     </analytics-tracked-tag>
     <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
-                                     :data="myRecord.allergies" />
+                                     :allergies="record.allergies" />
 
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isAcuteMedicationsCollapsed)]"
@@ -27,8 +27,8 @@
       {{ $t('my_record.acuteMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isAcuteMedicationsCollapsed"
-                 :data="myRecord.medications.data.acuteMedications"
-                 :has-error="myRecord.medications.hasErrored"/>
+                 :medications="record.medications.data.acuteMedications"
+                 :has-error="record.medications.hasErrored"/>
 
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isCurrentRepeatMedicationsCollapsed)]"
@@ -42,8 +42,8 @@
       {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
-                 :data="myRecord.medications.data.currentRepeatMedications"
-                 :has-error="myRecord.medications.hasErrored" />
+                 :medications="record.medications.data.currentRepeatMedications"
+                 :has-error="record.medications.hasErrored" />
 
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isDiscontinuedRepeatMedicationsCollapsed)]"
@@ -58,8 +58,8 @@
       {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"
-                 :data="myRecord.medications.data.discontinuedRepeatMedications"
-                 :has-error="myRecord.medications.hasErrored" />
+                 :medications="record.medications.data.discontinuedRepeatMedications"
+                 :has-error="record.medications.hasErrored" />
   </div>
 </template>
 
@@ -80,17 +80,22 @@ export default {
     Medications,
     AnalyticsTrackedTag,
   },
+  props: {
+    record: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       ALLERGIESANDADVERSEREACTIONS,
       ACUTEMEDICATIONS,
       CURRENTREPEATMEDICATIONS,
       DISCONTINUEDREPEATMEDICATIONS,
-      isAllergiesAndAdverseReactionsCollapsed: true,
-      isAcuteMedicationsCollapsed: true,
-      isCurrentRepeatMedicationsCollapsed: true,
-      isDiscontinuedRepeatMedicationsCollapsed: true,
-      myRecord: this.$parent.myRecord,
+      isAllergiesAndAdverseReactionsCollapsed: process.client,
+      isAcuteMedicationsCollapsed: process.client,
+      isCurrentRepeatMedicationsCollapsed: process.client,
+      isDiscontinuedRepeatMedicationsCollapsed: process.client,
     };
   },
   methods: {

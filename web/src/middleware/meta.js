@@ -21,7 +21,6 @@ import {
   MYRECORD,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
-  MYRECORDWARNING,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -121,11 +120,6 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.confirmPrescription';
       route.meta.pageTitleKey = 'pageTitles.confirmPrescription';
       break;
-    case MYRECORDWARNING.name:
-      store.dispatch('navigation/setNewMenuItem', 3);
-      route.meta.headerKey = 'pageHeaders.myRecordWarning';
-      route.meta.pageTitleKey = 'pageTitles.myRecordWarning';
-      break;
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:
     case MYRECORDTESTRESULT.name:
@@ -154,7 +148,7 @@ export default function ({ route, store, app }) {
 
   store.dispatch('http/cancelRequests');
   store.dispatch('flashMessage/validate');
-  store.dispatch('errors/setRoutePath', route.path);
+  store.dispatch('errors/setRoutePath', route);
 
   setPageTitle(route, store, app);
 }

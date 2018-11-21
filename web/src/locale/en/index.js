@@ -461,7 +461,7 @@ export default {
     nhsNumber: 'NHS Number',
     gpPractice: 'GP Practice',
     patient: 'Patient',
-    myRecordWarning: {
+    warning: {
       warningText: 'Your record may contain sensitive information',
       title: 'Your record will display:',
       bulletPoints: {
@@ -570,7 +570,6 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
-    myRecordWarning: 'My medical record',
     symptoms: 'Check my symptoms',
     dataSharing: 'Sharing health data preferences',
     more: 'More',
@@ -589,8 +588,7 @@ export default {
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
-    myRecord: 'My record',
-    myRecordWarning: 'Sensitive information - My record',
+    myRecord: 'Sensitive information - My record',
     symptoms: 'Check my symptoms',
     dataSharing: 'Sharing health data preferences',
     more: 'More',

@@ -1,6 +1,8 @@
 <template>
   <dcr-error-no-access v-if="showError"
-                       :data="data" :class="[$style['record-content'], getCollapseState]"
+                       :has-access="immunisations.hasAccess"
+                       :has-errored="immunisations.hasErrored"
+                       :class="[$style['record-content'], getCollapseState]"
                        :aria-hidden="isCollapsed"/>
   <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
@@ -17,7 +19,7 @@
 
 <script>
 
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 
 export default {
@@ -29,7 +31,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    data: {
+    immunisations: {
       type: Object,
       default: () => {},
     },
@@ -39,12 +41,12 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedImmunisations() {
-      return _.orderBy(this.data.data, [obj => obj.effectiveDate.value], ['desc']);
+      return orderBy([obj => obj.effectiveDate.value], ['desc'])(this.immunisations.data);
     },
     showError() {
-      return this.data.hasErrored ||
-             this.data.data.length === 0 ||
-             !this.data.hasAccess;
+      return this.immunisations.hasErrored ||
+             this.immunisations.data.length === 0 ||
+             !this.immunisations.hasAccess;
     },
   },
 };

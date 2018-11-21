@@ -1,7 +1,10 @@
 <template>
   <dcr-error-no-access v-if="showError"
-                       :data="data" :class="[$style['record-content'], getCollapseState]"
-                       :aria-hidden="isCollapsed"/>
+                       :data="events"
+                       :class="[$style['record-content'], getCollapseState]"
+                       :aria-hidden="isCollapsed"
+                       :has-access="events.hasAccess"
+                       :has-errored="events.hasErrored" />
   <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
     <div v-for="(event, eventIndex) in orderedEvents" :key="`event-${eventIndex}`"
@@ -33,7 +36,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    data: {
+    events: {
       type: Object,
       default: () => {},
     },
@@ -43,12 +46,12 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedEvents() {
-      return _.orderBy(this.data.data, [obj => obj.date], ['desc']);
+      return _.orderBy(this.events.data, [obj => obj.date], ['desc']);
     },
     showError() {
-      return this.data.hasErrored ||
-             this.data.data.length === 0 ||
-             !this.data.hasAccess;
+      return this.events.hasErrored ||
+             this.events.data.length === 0 ||
+             !this.events.hasAccess;
     },
   },
 };

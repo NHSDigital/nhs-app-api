@@ -17,7 +17,6 @@ const final = ({ self, commit }) => {
   self.dispatch('header/init');
   self.dispatch('http/init');
   self.dispatch('navigation/init');
-  self.dispatch('prescriptions/init');
   self.dispatch('repeatPrescriptionCourses/init');
   self.dispatch('errors/clearAllApiErrors');
   self.dispatch('session/setInfo');

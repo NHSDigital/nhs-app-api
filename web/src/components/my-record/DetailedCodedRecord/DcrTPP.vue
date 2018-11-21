@@ -11,7 +11,7 @@
                            tag="a">
       {{ $t('my_record.events.sectionHeader') }}
     </analytics-tracked-tag>
-    <events :is-collapsed="isEventsCollapsed" :data="myRecord.tppDcrEvents" />
+    <events :is-collapsed="isEventsCollapsed" :events="record.tppDcrEvents" />
 
     <analytics-tracked-tag :id="'testResultsHeader'"
                            :class="[$style['record-title'],
@@ -25,8 +25,8 @@
                            tag="a">
       {{ $t('my_record.testResults.sectionHeader.tpp') }}
     </analytics-tracked-tag>
-    <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"
-                  :supplier="myRecord.supplier" />
+    <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
+                  :supplier="record.supplier" />
   </div>
 </template>
 
@@ -46,13 +46,18 @@ export default {
     TestResults,
     VueScrollTo,
   },
+  props: {
+    record: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       TESTRESULTS,
       EVENTS,
-      isTestResultsCollapsed: true,
-      isEventsCollapsed: true,
-      myRecord: this.$parent.myRecord,
+      isTestResultsCollapsed: process.client,
+      isEventsCollapsed: process.client,
     };
   },
   mounted() {

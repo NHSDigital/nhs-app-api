@@ -1,6 +1,8 @@
 <template>
   <dcr-error-no-access v-if="showError"
-                       :data="data" :is-collapsed="isCollapsed"
+                       :has-access="consultations.hasAccess"
+                       :has-errored="consultations.hasErrored"
+                       :is-collapsed="isCollapsed"
                        :class="[$style['record-content'], getCollapsedState]"
                        :aria-hidden="isCollapsed"/>
   <div v-else :class="[$style['record-content'], getCollapsedState]"
@@ -61,7 +63,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    data: {
+    consultations: {
       type: Object,
       default: () => {},
     },
@@ -71,12 +73,12 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedConsultations() {
-      return _.orderBy(this.data.data, [obj => obj.effectiveDate.value], ['desc']);
+      return _.orderBy(this.consultations.data, [obj => obj.effectiveDate.value], ['desc']);
     },
     showError() {
-      return this.data.hasErrored
-             || this.data.data.length === 0
-             || !this.data.hasAccess;
+      return this.consultations.hasErrored
+             || this.consultations.data.length === 0
+             || !this.consultations.hasAccess;
     },
   },
 };

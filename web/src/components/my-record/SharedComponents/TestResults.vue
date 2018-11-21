@@ -1,6 +1,8 @@
 <template>
   <dcr-error-no-access v-if="showError"
-                       :data="data" :class="[$style['record-content'], getCollapseState]"
+                       :has-access="results.hasAccess"
+                       :has-errored="results.hasErrored"
+                       :class="[$style['record-content'], getCollapseState]"
                        :aria-hidden="isCollapsed"/>
   <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
@@ -11,10 +13,11 @@
         {{ testResult.date.value | datePart(testResult.date.datePart) }}
       </span>
       <p v-if="supplier === 'TPP'">
-        <nuxt-link :to="{
-          name: 'my-record-testresultdetail',
-          params: { testResultId: testResult.id }}" :class="$style.viewTestResult">
-          {{ testResult.description }}</nuxt-link>
+        <a
+          :href="getTestResultPath(testResult.id)"
+          :class="$style.viewTestResult"
+          @click="activateTestResult(testResult.id, $event)">{{ testResult.description }}
+        </a>
       </p>
       <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
         {{ testResult.description }}</p>
@@ -43,9 +46,7 @@
 </template>
 
 <script>
-
-
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 
 export default {
@@ -57,7 +58,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    data: {
+    results: {
       type: Object,
       default: () => {},
     },
@@ -71,12 +72,21 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedTestResults() {
-      return _.orderBy(this.data.data, [obj => obj.date.value], ['desc']);
+      return orderBy([obj => obj.date.value], ['desc'])(this.results.data);
     },
     showError() {
-      return this.data.hasErrored ||
-             this.data.data.length === 0 ||
-             !this.data.hasAccess;
+      return this.results.hasErrored ||
+             this.results.data.length === 0 ||
+             !this.results.hasAccess;
+    },
+  },
+  methods: {
+    activateTestResult(testResultId, event) {
+      event.preventDefault();
+      this.$router.push(this.getTestResultPath(testResultId));
+    },
+    getTestResultPath(testResultId) {
+      return `/my-record/testresultdetail/${testResultId}`;
     },
   },
 };

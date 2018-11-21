@@ -11,7 +11,7 @@
                            tag="a">
       {{ $t('my_record.immunisations.sectionHeader') }}
     </analytics-tracked-tag>
-    <immunisations :is-collapsed="isImmunisationsCollapsed" :data="myRecord.immunisations" />
+    <immunisations :is-collapsed="isImmunisationsCollapsed" :immunisations="record.immunisations" />
 
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isProblemsCollapsed)]"
@@ -24,7 +24,7 @@
                            tag="a">
       {{ $t('my_record.problems.sectionHeader') }}
     </analytics-tracked-tag>
-    <problems :is-collapsed="isProblemsCollapsed" :data="myRecord.problems" />
+    <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
 
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isConsultationsCollapsed)]"
@@ -38,7 +38,7 @@
       {{ $t('my_record.consultations.sectionHeader') }}
     </analytics-tracked-tag>
     <consultations :is-collapsed="isConsultationsCollapsed"
-                   :data="myRecord.consultations" />
+                   :consultations="record.consultations" />
     <analytics-tracked-tag id="testResultsHeader"
                            :class="[$style['record-title'],
                                     getCollapsedState(isTestResultsCollapsed)]"
@@ -51,8 +51,8 @@
                            tag="a">
       {{ $t('my_record.testResults.sectionHeader.default') }}
     </analytics-tracked-tag>
-    <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"
-                  :supplier="myRecord.supplier" />
+    <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
+                  :supplier="record.supplier" />
   </div>
 </template>
 
@@ -76,17 +76,22 @@ export default {
     Consultations,
     TestResults,
   },
+  props: {
+    record: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       IMMUNISATIONS,
       TESTRESULTS,
       PROBLEMS,
       CONSULTATIONS,
-      isImmunisationsCollapsed: true,
-      isTestResultsCollapsed: true,
-      isProblemsCollapsed: true,
-      isConsultationsCollapsed: true,
-      myRecord: this.$parent.myRecord,
+      isImmunisationsCollapsed: process.client,
+      isTestResultsCollapsed: process.client,
+      isProblemsCollapsed: process.client,
+      isConsultationsCollapsed: process.client,
     };
   },
   methods: {

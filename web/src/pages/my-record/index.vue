@@ -1,57 +1,64 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <glossary-header />
-    <analytics-tracked-tag :class="[$style['record-title'],
-                                    getCollapsedState(isPatientDetailsCollapsed)]"
-                           :click-func="myRecordSectionClick"
-                           :click-param="PATIENTDETAILS"
-                           :text="$t('my_record.patientInfo.sectionHeader')"
-                           :aria-expanded="!isPatientDetailsCollapsed ? 'true' : 'false'"
-                           data-purpose="accordion"
-                           role="button"
-                           tag="a">
-      {{ $t('my_record.patientInfo.sectionHeader') }}
-    </analytics-tracked-tag>
-    <patient-details :is-collapsed="isPatientDetailsCollapsed"
-                     :patient-details="patientDetails"/>
+  <div v-if="$store.state.myRecord.hasAcceptedTerms">
+    <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
+      <glossary-header />
+      <analytics-tracked-tag :class="[$style['record-title'],
+                                      getCollapsedState(isPatientDetailsCollapsed)]"
+                             :click-func="myRecordSectionClick"
+                             :click-param="PATIENTDETAILS"
+                             :text="$t('my_record.patientInfo.sectionHeader')"
+                             data-purpose="accordion"
+                             role="button"
+                             tag="a">
+        {{ $t('my_record.patientInfo.sectionHeader') }}
+      </analytics-tracked-tag>
+      <patient-details :is-collapsed="isPatientDetailsCollapsed"
+                       :patient-details="$store.state.myRecord.patientDetails"/>
 
-    <div v-if="myRecord.hasSummaryRecordAccess">
-      <scr-emis v-if="myRecord.supplier === 'EMIS'"/>
+      <div v-if="hasSummaryRecordAccess">
+        <scr-emis v-if="supplier === 'EMIS'" :record="$store.state.myRecord.record"/>
 
-      <scr-tpp v-if="myRecord.supplier === 'TPP'"/>
+        <scr-tpp v-if="supplier === 'TPP'" :record="$store.state.myRecord.record"/>
 
-      <scr-vision v-if="myRecord.supplier === 'VISION'"/>
+        <scr-vision v-if="supplier === 'VISION'" :record="$store.state.myRecord.record"/>
 
-      <div v-if="myRecord.hasDetailedRecordAccess">
+        <div v-if="hasDetailedRecordAccess">
 
-        <dcr-emis v-if="myRecord.supplier === 'EMIS'"/>
+          <dcr-emis v-if="supplier === 'EMIS'" :record="$store.state.myRecord.record"/>
 
-        <dcr-tpp v-if="myRecord.supplier === 'TPP'" ref="TPPChild"/>
+          <dcr-tpp v-if="supplier === 'TPP'"
+                   ref="TPPChild"
+                   :record="$store.state.myRecord.record"/>
 
-        <dcr-vision v-if="myRecord.supplier === 'VISION'"/>
+          <dcr-vision v-if="supplier === 'VISION'" :record="$store.state.myRecord.record"/>
 
+        </div>
+
+        <div v-else>
+          <p :class="$style.summaryRecordWarning">
+            {{ $t('my_record.viewRestOfHealthRecordWarning') }}
+          </p>
+        </div>
       </div>
-
-      <div v-else>
-        <p :class="$style.summaryRecordWarning">
-          {{ $t('my_record.viewRestOfHealthRecordWarning') }}
-        </p>
-      </div>
-    </div>
-    <div v-else class="pull-content">
-      <div v-if="hasLoaded">
-        <div id="errorMsg" :class="$style.info">
-          <p><strong style="margin-top: 0.5em;">
-            {{ $t('my_record.noRecordAccess.warningHeader') }}
-          </strong></p>
-          <p>{{ $t('my_record.noRecordAccess.warningBody') }} </p>
+      <div v-else class="pull-content">
+        <div v-if="hasLoaded">
+          <div id="errorMsg" :class="$style.info">
+            <p><strong style="margin-top: 0.5em;">
+              {{ $t('my_record.noRecordAccess.warningHeader') }}
+            </strong></p>
+            <p>{{ $t('my_record.noRecordAccess.warningBody') }} </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <div v-else>
+    <Warning />
+  </div>
 </template>
 
 <script>
+import get from 'lodash/fp/get';
 import PatientDetails from '@/components/my-record/SharedComponents/PatientDetails';
 import DcrEmis from '@/components/my-record/DetailedCodedRecord/DcrEMIS';
 import DcrTpp from '@/components/my-record/DetailedCodedRecord/DcrTPP';
@@ -61,7 +68,7 @@ import ScrTpp from '@/components/my-record/SummaryCareRecord/ScrTPP';
 import ScrVision from '@/components/my-record/SummaryCareRecord/ScrVISION';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GlossaryHeader from '@/components/GlossaryHeader';
-import { MYRECORDWARNING, MYRECORDTESTRESULT } from '@/lib/routes';
+import Warning from '@/components/my-record/Warning';
 
 const PATIENTDETAILS = 'patientdetails';
 
@@ -76,41 +83,44 @@ export default {
     ScrEmis,
     ScrTpp,
     ScrVision,
+    Warning,
   },
-  beforeRouteEnter(to, from, next) {
-    if (from.path === MYRECORDWARNING.path || from.path === MYRECORDTESTRESULT.path.split('/:')[0]) {
-      next();
-    } else {
-      next(MYRECORDWARNING.path);
+  async asyncData({ store }) {
+    if (store.state.myRecord.hasAcceptedTerms) {
+      store.dispatch('myRecord/acceptTerms');
+      await store.dispatch('myRecord/load');
     }
   },
   data() {
     return {
       PATIENTDETAILS,
-      isPatientDetailsCollapsed: true,
-      hasLoaded: false,
-      myRecord: {},
-      patientDetails: {},
       clinicalAbbreviationsUrl: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
-  mounted() {
-    const demographicsPromise = this.$store.app.$http
-      .getV1PatientDemographics({})
-      .then((data) => {
-        this.patientDetails = data.response;
-        this.isPatientDetailsCollapsed = false;
-      });
-
-    const myRecordPromise = this.$store.app.$http
-      .getV1PatientMyRecord({})
-      .then((data) => {
-        this.myRecord = data.response;
-      });
-
-    Promise.all([demographicsPromise, myRecordPromise]).then(() => {
-      this.hasLoaded = true;
-    });
+  computed: {
+    supplier() {
+      return get('$store.state.myRecord.record.supplier')(this);
+    },
+    hasDetailedRecordAccess() {
+      return get('$store.state.myRecord.record.hasDetailedRecordAccess')(this);
+    },
+    hasAcceptedTerms() {
+      return get('$store.state.myRecord.hasAcceptedTerms')(this);
+    },
+    hasLoaded() {
+      return get('$store.state.myRecord.hasLoaded')(this);
+    },
+    hasSummaryRecordAccess() {
+      return get('$store.state.myRecord.record.hasSummaryRecordAccess')(this);
+    },
+    isPatientDetailsCollapsed() {
+      return get('$store.state.myRecord.isPatientDetailsCollapsed')(this);
+    },
+  },
+  updated() {
+    if (this.hasAcceptedTerms && !this.hasLoaded) {
+      this.$store.dispatch('myRecord/load');
+    }
   },
   methods: {
     getCollapsedState(collapsed) {
@@ -119,7 +129,7 @@ export default {
     myRecordSectionClick(section) {
       switch (section) {
         case PATIENTDETAILS:
-          this.isPatientDetailsCollapsed = !this.isPatientDetailsCollapsed;
+          this.$store.dispatch('myRecord/togglePatientDetail');
           break;
         default:
           break;

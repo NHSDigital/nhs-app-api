@@ -19,7 +19,7 @@ const createApiErrorComponent = ($route, apiError) => {
   localVue.use(Vuex);
 
   const store = createStore();
-  store.dispatch('errors/setRoutePath', $route.path);
+  store.dispatch('errors/setRoutePath', $route);
   store.dispatch('errors/addApiError', apiError);
 
   component = mount(ApiError, {

@@ -1,3 +1,6 @@
+import isEmpty from 'lodash/fp/isEmpty';
+import isString from 'lodash/fp/isString';
+import values from 'lodash/fp/values';
 import {
   ADD_API_ERROR,
   SET_ROUTE_PATH,
@@ -6,13 +9,23 @@ import {
   SET_CONNECTION_PROBLEM,
 } from './mutation-types';
 
+const extractPath = (route) => {
+  if (isString(route)) return route;
+
+  const paramValues = values(route.params);
+  if (isEmpty(paramValues)) return route.path;
+  return isEmpty(paramValues)
+    ? route.path
+    : paramValues.reduce((aggregate, next) => aggregate.replace(`/${next}`, ''), route.path);
+};
+
 export default {
   addApiError({ commit }, error) {
     commit(ADD_API_ERROR, error);
   },
   setRoutePath({ commit }, route) {
     commit(CLEAR_ALL_API_ERRORS);
-    commit(SET_ROUTE_PATH, route);
+    commit(SET_ROUTE_PATH, extractPath(route));
   },
   disableApiError({ commit }) {
     commit(DISABLE_API_ERROR);

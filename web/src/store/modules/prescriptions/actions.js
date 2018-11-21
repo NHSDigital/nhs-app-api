@@ -1,5 +1,5 @@
 import moment from 'moment/moment';
-import { PRESCRIPTIONS_CLEAR, PRESCRIPTIONS_LOADED, INIT_PRESCRIPTIONS } from './mutation-types';
+import { PRESCRIPTIONS_CLEAR, PRESCRIPTIONS_LOADED } from './mutation-types';
 
 function getFromDate() {
   return moment()
@@ -21,9 +21,6 @@ export default {
       .then((data) => {
         commit(PRESCRIPTIONS_LOADED, data);
       });
-  },
-  init({ commit }) {
-    commit(INIT_PRESCRIPTIONS);
   },
   clear({ commit }) {
     commit(PRESCRIPTIONS_CLEAR);

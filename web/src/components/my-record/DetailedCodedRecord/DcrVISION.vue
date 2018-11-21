@@ -11,7 +11,8 @@
                            tag="a">
       {{ $t('my_record.immunisations.sectionHeader') }}
     </analytics-tracked-tag>
-    <immunisations :is-collapsed="isImmunisationsCollapsed" :data="myRecord.immunisations" />
+
+    <immunisations :is-collapsed="isImmunisationsCollapsed" :immunisations="record.immunisations" />
 
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isProblemsCollapsed)]"
@@ -24,8 +25,7 @@
                            tag="a">
       {{ $t('my_record.problems.sectionHeader') }}
     </analytics-tracked-tag>
-    <problems :is-collapsed="isProblemsCollapsed" :data="myRecord.problems" />
-
+    <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
   </div>
 </template>
 
@@ -43,13 +43,18 @@ export default {
     Immunisations,
     Problems,
   },
+  props: {
+    record: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       IMMUNISATIONS,
       PROBLEMS,
-      isProblemsCollapsed: true,
-      isImmunisationsCollapsed: true,
-      myRecord: this.$parent.myRecord,
+      isProblemsCollapsed: process.client,
+      isImmunisationsCollapsed: process.client,
     };
   },
   methods: {

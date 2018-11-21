@@ -1,6 +1,6 @@
 <template>
   <div :class="[$style['record-content']]">
-    <p v-if="data.hasErrored">
+    <p v-if="hasErrored">
       {{ $t('my_record.genericErrorMessage') }}
     </p>
     <p v-else>
@@ -14,9 +14,9 @@
 
 export default {
   props: {
-    data: {
-      type: Object,
-      default: () => {},
+    hasErrored: {
+      type: Boolean,
+      default: () => false,
     },
   },
 };

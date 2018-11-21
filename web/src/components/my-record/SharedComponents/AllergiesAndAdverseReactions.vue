@@ -1,7 +1,8 @@
 <template>
   <scr-error-no-access v-if="showError"
-                       :data="data" :class="[$style['record-content'], getCollapseState]"
-                       :aria-hidden="isCollapsed"/>
+                       :class="[$style['record-content'], getCollapseState]"
+                       :aria-hidden="isCollapsed"
+                       :has-errored="allergies.hasErrored" />
   <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
     <div v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`"
@@ -27,7 +28,7 @@ export default {
     ScrErrorNoAccess,
   },
   props: {
-    data: {
+    allergies: {
       type: Object,
       default: () => {},
     },
@@ -41,10 +42,10 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedAllergies() {
-      return _.orderBy(this.data.data, [obj => obj.date.value], ['desc']);
+      return _.orderBy(this.allergies.data, [obj => obj.date.value], ['desc']);
     },
     showError() {
-      return this.data.hasErrored || this.data.data.length === 0;
+      return this.allergies.hasErrored || this.allergies.data.length === 0;
     },
   },
 };

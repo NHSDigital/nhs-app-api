@@ -21,7 +21,6 @@ Feature: Authorisation occurs during each URL visit
       | /logout                                     |
       | /more                                       |
       | /my-record                                  |
-      | /my-record-warning                          |
       | /my-record/noaccess                         |
       | /my-record/testresultdetail                 |
       | /prescriptions                              |
@@ -45,7 +44,6 @@ Feature: Authorisation occurs during each URL visit
       | /logout                                     |
       | /more                                       |
       | /my-record                                  |
-      | /my-record-warning                          |
       | /my-record/noaccess                         |
       | /my-record/testresultdetail                 |
       | /prescriptions                              |
@@ -69,7 +67,6 @@ Feature: Authorisation occurs during each URL visit
       | /logout                                     |
       | /more                                       |
       | /my-record                                  |
-      | /my-record-warning                          |
       | /my-record/noaccess                         |
       | /my-record/testresultdetail                 |
       | /prescriptions                              |
@@ -92,10 +89,8 @@ Feature: Authorisation occurs during each URL visit
       | /data-sharing                               | /data-sharing                  |
       | /                                           | /                              |
       | /more                                       | /more                          |
-      | /my-record                                  | /my-record-warning             |
-      | /my-record-warning                          | /my-record-warning             |
+      | /my-record                                  | /my-record             |
       | /my-record/noaccess                         | /my-record/noaccess            |
-      | /my-record/testresultdetail                 | /my-record-warning             |
       | /prescriptions                              | /prescriptions                 |
       | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
       | /prescriptions/confirm-prescription-details | /prescriptions                 |
@@ -119,10 +114,8 @@ Feature: Authorisation occurs during each URL visit
       | /data-sharing                               | /data-sharing                  |
       | /                                           | /                              |
       | /more                                       | /more                          |
-      | /my-record                                  | /my-record-warning             |
-      | /my-record-warning                          | /my-record-warning             |
+      | /my-record                                  | /my-record             |
       | /my-record/noaccess                         | /my-record/noaccess            |
-      | /my-record/testresultdetail                 | /my-record-warning             |
       | /prescriptions                              | /prescriptions                 |
       | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
       | /prescriptions/confirm-prescription-details | /prescriptions                 |

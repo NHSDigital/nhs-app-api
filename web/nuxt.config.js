@@ -35,7 +35,17 @@ const config = {
     './.transpiled/middleware-server/responseHeaders.js',
   ],
   router: {
-    middleware: ['urlResolution', 'throttling', 'auth', 'meta', 'analytics', 'termsAndConditions', 'brothermailer'],
+    middleware: [
+      'noJsState',
+      'urlResolution',
+      'throttling',
+      'auth',
+      'meta',
+      'analytics',
+      'termsAndConditions',
+      'myRecordAcceptance',
+      'brothermailer',
+    ],
   },
   link: [
     {

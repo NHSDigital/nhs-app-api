@@ -1,6 +1,6 @@
 <template>
   <scr-error-no-access v-if="showError"
-                       :data="data" :class="[$style['record-content'], getCollapseState]"
+                       :data="medications" :class="[$style['record-content'], getCollapseState]"
                        :aria-hidden="isCollapsed"/>
   <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
@@ -25,7 +25,7 @@
 
 <script>
 
-import _ from 'lodash';
+import orderBy from 'lodash/fp/orderBy';
 import ScrErrorNoAccess from '@/components/my-record/SharedComponents/SCRErrorNoAccess';
 
 export default {
@@ -33,7 +33,7 @@ export default {
     ScrErrorNoAccess,
   },
   props: {
-    data: {
+    medications: {
       type: Array,
       default: () => [],
     },
@@ -51,11 +51,11 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedMedications() {
-      return _.orderBy(this.data, [obj => obj.date], ['desc']);
+      return orderBy([obj => obj.date], ['desc'])(this.medications);
     },
     showError() {
-      return this.data.hasErrored
-             || (this.data && this.data.length === 0);
+      return this.medications.hasErrored
+             || (this.medications && this.medications.length === 0);
     },
   },
 };

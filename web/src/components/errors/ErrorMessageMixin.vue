@@ -42,7 +42,6 @@ export default {
     getMessage(type) {
       const hasApiError = this.hasApiError();
       const domain = hasApiError ? 'errors' : 'noConnection';
-
       if (hasApiError && this.hasComponentErrorCodeKey(type)) {
         return this.$t(this.getComponentErrorCodeKey(type));
       } else if (this.hasComponentKey(type, domain)) {

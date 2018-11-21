@@ -71,7 +71,7 @@ import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 import PrescriptionsIcon from '@/components/icons/PrescriptionsIcon';
 import RecordIcon from '@/components/icons/MyRecordIcon';
 import MoreIcon from '@/components/icons/MoreIcon';
-import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORDWARNING, MORE } from '@/lib/routes';
+import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORD, MORE } from '@/lib/routes';
 
 export default {
   components: {
@@ -86,7 +86,7 @@ export default {
       symptomsPath: SYMPTOMS.path,
       appointmentsPath: APPOINTMENTS.path,
       prescriptionsPath: PRESCRIPTIONS.path,
-      recordWarningPath: MYRECORDWARNING.path,
+      recordWarningPath: MYRECORD.path,
       morePath: MORE.path,
     };
   },

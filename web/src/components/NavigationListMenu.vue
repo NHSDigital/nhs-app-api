@@ -30,7 +30,7 @@
     <li :class="$style.listMenuItem">
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.myRecord')"
-                             :href="myRecordWarningPath"
+                             :href="myRecordPath"
                              data-sid="myrecord-menu-item"
                              tag="a">
         {{ $t('navigationMenuList.myRecord') }}
@@ -56,7 +56,7 @@ import {
   SYMPTOMS,
   PRESCRIPTIONS,
   APPOINTMENTS,
-  MYRECORDWARNING,
+  MYRECORD,
 } from '@/lib/routes';
 
 export default {
@@ -79,8 +79,8 @@ export default {
     prescriptionsPath() {
       return PRESCRIPTIONS.path;
     },
-    myRecordWarningPath() {
-      return MYRECORDWARNING.path;
+    myRecordPath() {
+      return MYRECORD.path;
     },
   },
 };

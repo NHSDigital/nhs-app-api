@@ -42,7 +42,6 @@ const testDataSet = [
   '/auth-return',
   '/login',
   '/my-record',
-  '/my-record-warning',
   '/my-record/noaccess',
   '/my-record/testresultdetail/:testResultId',
   '/prescriptions',

@@ -11,3 +11,9 @@
     </g>
   </svg>
 </template>
+
+<script>
+// This is required for JEST tests.  If omitted it results in the error
+//     'No script available to transform'
+export default {};
+</script>

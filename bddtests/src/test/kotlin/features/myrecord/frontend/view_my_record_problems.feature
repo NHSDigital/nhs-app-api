@@ -15,7 +15,6 @@ Feature: View My Medical Record Information - Problems
       |EMIS|
       |VISION|
 
-
   Scenario Outline: A <Service> user has no Problems on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

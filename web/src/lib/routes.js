@@ -103,10 +103,6 @@ const routes = {
     name: 'my-record',
     path: '/my-record',
   },
-  MYRECORDWARNING: {
-    name: 'my-record-warning',
-    path: '/my-record-warning',
-  },
   MYRECORDNOACCESS: {
     name: 'my-record-noaccess',
     path: '/my-record/noaccess',
@@ -169,7 +165,6 @@ export const {
   BEGINLOGIN,
   MORE,
   MYRECORD,
-  MYRECORDWARNING,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
   PRESCRIPTIONS,
