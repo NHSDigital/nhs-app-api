@@ -20,8 +20,11 @@
     <string name="organDonation">https://www.organdonation.nhs.uk/</string>>
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
+    <string name="throttleCarouselPath">file:///android_asset/throttling.html</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
 
+    <string name="isFirstTimeOpened">isFirstTimeOpened</string>
+    <string name="haveShownThrottlingCarouselBefore">haveShownThrottlingCarouselBefore</string>
     <string name="logoutPath">logout</string>
     <string name="loginPath">login</string>
     <string name="secureFlag">enabled</string>
@@ -35,6 +38,7 @@
     <string name="accessibilityStatementURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/</string>
     <string name="configurationApiPath">configuration?nativeAppVersion=%1$s&amp;deviceName=Android</string>
     <string name="isSupportedVersion">isDeviceSupported</string>
+    <string name="isThrottlingEnabled">isThrottlingEnabled</string>
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 

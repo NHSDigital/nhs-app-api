@@ -6,6 +6,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.content.Context
 import android.util.Log
+import android.webkit.CookieManager
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.R
@@ -16,6 +17,7 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
+import java.net.URLDecoder
 import java.util.logging.Logger
 
 private const val DELAY_PROGRESS_SHOW_TIME_MILLISECONDS = 500L
@@ -35,6 +37,7 @@ class WebClientInterceptor(
     private val handler = Handler()
     private var noConnectionHandled = false
     private var shouldShowErrorPage = false
+    private var throttlingCarouselLoaded = false
 
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
@@ -111,6 +114,8 @@ class WebClientInterceptor(
             handleUnavailability(failingUrl, errorCode)
         }
     }
+
+
 
     override fun onPageFinished(view: WebView?, url: String?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageFinished")

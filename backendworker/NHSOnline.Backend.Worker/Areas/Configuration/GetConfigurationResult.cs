@@ -12,11 +12,12 @@ namespace NHSOnline.Backend.Worker.Areas.Configuration
 
         public class SuccessfullyRetrieved : GetConfigurationResult
         {
-            public SuccessfullyRetrieved(bool isDeviceSupported)
+            public SuccessfullyRetrieved(bool isDeviceSupported, bool isThrottlingEnabled)
             {
                 Response = new GetConfigurationResponse
                 {
                     IsDeviceSupported = isDeviceSupported,
+                    IsThrottlingEnabled = isThrottlingEnabled
                 };
             }
 

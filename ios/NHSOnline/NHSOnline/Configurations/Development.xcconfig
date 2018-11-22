@@ -1,4 +1,4 @@
 #include "Defaults.xcconfig"
 
-HOME_URL = local.bitraft.io/
-BASE_API_URL = local.bitraft.io:444/v1/
+HOME_URL = www-preview.dev.nonlive.nhsapp.service.nhs.uk/
+BASE_API_URL = api-preview.dev.nonlive.nhsapp.service.nhs.uk/v1/

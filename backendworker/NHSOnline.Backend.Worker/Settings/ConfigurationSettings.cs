@@ -24,6 +24,8 @@ namespace NHSOnline.Backend.Worker.Settings
         public string MinimumSupportedAndroidVersion { get; set; }
 
         public string MinimumSupportediOSVersion { get; set; }
+        
+        public string ThrottlingEnabled { get; set; }
 
         public const string ConfigurationSectionName = "ConfigurationSettings";
 
@@ -79,6 +81,11 @@ namespace NHSOnline.Backend.Worker.Settings
             if (CurrentTermsConditionsEffectiveDate == null)
             {
                 throw new ConfigurationNotFoundException(nameof(CurrentTermsConditionsEffectiveDate));
+            }
+
+            if (ThrottlingEnabled == null)
+            {
+                throw new ConfigurationNotFoundException(nameof(ThrottlingEnabled));
             }
         }
     }

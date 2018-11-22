@@ -2,7 +2,7 @@ import UIKit
 import WebKit
 import os.log
 
-class WebViewController: UIViewController, WKUIDelegate {
+class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
     var webViewDelegate: WebViewDelegate?
     public var webView: WKWebView!
     
@@ -20,7 +20,6 @@ class WebViewController: UIViewController, WKUIDelegate {
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         config.suppressesIncrementalRendering = true
-        
         
         webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = self

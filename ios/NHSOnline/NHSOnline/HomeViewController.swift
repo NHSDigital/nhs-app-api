@@ -61,6 +61,36 @@ class HomeViewController : UIViewController {
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!, configurationService: configurationService!)
     }
     
+    func openThrottlingCarousel() {
+        let defaults = UserDefaults.standard
+        
+        let haveShownThrottlingCarouselBefore =  defaults.bool(forKey: config().HaveShownThrottlingCarouselBefore)
+        
+        if(haveShownThrottlingCarouselBefore) {
+            return
+        }
+        
+        openCarousel(fileName: config().ThrottlingCarouselFileName)
+    }
+    
+    func openCarousel(fileName: String) {
+        
+        let type = config().CarouselContentType
+        let directory = config().CarouselDirectory
+        
+        let path = Bundle.main.url(forResource: fileName, withExtension: type, subdirectory: directory)
+        
+        if path != nil {
+            self.webViewController?.webView.loadFileURL(path!, allowingReadAccessTo: path!)
+        } else {
+            if #available(iOS 10.0, *) {
+                os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
+            } else {
+                NSLog("Critical - Files for carousel missing")
+            }
+        }
+    }
+    
     func addSubview(subView:UIView, toView parentView:UIView) {
         parentView.addSubview(subView)
         var viewBindingsDict = [String: AnyObject]()

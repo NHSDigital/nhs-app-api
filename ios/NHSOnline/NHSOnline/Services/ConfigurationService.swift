@@ -1,6 +1,11 @@
 import Foundation
 import os.log
 
+class ConfigurationResponse {
+    public var isValidConfiguration = false
+    public var isThrottlingEnabled = false
+}
+
 class ConfigurationService {
     private let homeViewController: HomeViewController
     
@@ -8,7 +13,7 @@ class ConfigurationService {
         self.homeViewController = homeViewController
     }
     
-    func isUserDeviceAllowed(completionHandler: @escaping (Bool) -> Void) {
+    func isUserDeviceAllowed(completionHandler: @escaping (ConfigurationResponse) -> Void) {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         
         let configurationPathWithAppendedVersion = String(format: config().ConfigurationApiPath, versionNumber)
@@ -21,8 +26,17 @@ class ConfigurationService {
                 let decoder = JSONDecoder()
                 do {
                     self.homeViewController.appVersionCheckError = false
-                    let config = try decoder.decode(Configuruation.self, from: usableData)
-                    completionHandler(config.isDeviceSupported)
+                    let appConfig = try decoder.decode(Configuruation.self, from: usableData)
+                    
+                    let configurationResponse = ConfigurationResponse()
+                    configurationResponse.isValidConfiguration = appConfig.isDeviceSupported
+                    configurationResponse.isThrottlingEnabled = appConfig.isThrottlingEnabled
+                    
+                    if(configurationResponse.isThrottlingEnabled) {
+                        self.homeViewController.openThrottlingCarousel()
+                    }
+                    
+                    completionHandler(configurationResponse)
                 }
                 catch {
                     if #available(iOS 10.0, *) {

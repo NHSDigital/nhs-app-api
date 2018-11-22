@@ -23,7 +23,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.viewController.view.addSubview(activityIndicator)
     }
     
-    
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -142,6 +141,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func shouldOpenInSafari(url: URL) -> Bool {
+        if(url.absoluteString.contains(config().IntroCarouselFileName)) {
+            return false
+        }
+        
+        if(url.absoluteString.contains(config().ThrottlingCarouselFileName)) {
+            return false
+        }
         
         if let _ = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
             return false
@@ -161,6 +167,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         let url = self.viewController.webViewController?.webView.url;
         if(url?.absoluteString.contains("appintro"))!{
+            shouldAllowNativeInteraction = true
+        }
+        if(url?.absoluteString.contains("throttling"))!{
             shouldAllowNativeInteraction = true
         }
         
@@ -213,6 +222,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             if (message.name == "clearMenuBarItem") {
                 clearMenuBarItem()
+            }
+            if (message.name == "completeAppIntro") {
+                
+                let defaults = UserDefaults.standard
+                defaults.set(false, forKey: config().IsFirstTimeOpened)
+                defaults.set(true, forKey: config().HaveShownThrottlingCarouselBefore)
+                
+                self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
             }
         }
     }

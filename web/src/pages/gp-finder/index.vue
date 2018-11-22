@@ -24,6 +24,7 @@
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
 import { GP_FINDER_RESULTS } from '@/lib/routes';
+import NativeCallbacks from '@/services/native-app';
 
 export default {
   components: {

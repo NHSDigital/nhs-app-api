@@ -14,7 +14,8 @@ namespace NHSOnline.Backend.Worker.Support.Devices
     {
         private readonly ILogger<SupportedDeviceService> _logger;
         private readonly Dictionary<string, string> SupportedAppVersions;
-
+        private bool _throttlingEnabled;
+        
         public SupportedDeviceService(ILogger<SupportedDeviceService> logger, IOptions<ConfigurationSettings> settings)
         {
             _logger = logger;
@@ -22,10 +23,20 @@ namespace NHSOnline.Backend.Worker.Support.Devices
             SupportedAppVersions = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
             {
                 { SupportedDeviceNames.Android, settings.Value.MinimumSupportedAndroidVersion },
-                { SupportedDeviceNames.iOS, settings.Value.MinimumSupportediOSVersion },
+                { SupportedDeviceNames.iOS, settings.Value.MinimumSupportediOSVersion }
             };
+
+            CheckIfThrottlingEnabled(settings);
         }
-        
+
+        private void CheckIfThrottlingEnabled(IOptions<ConfigurationSettings> settings)
+        {
+            if (!bool.TryParse(settings.Value.ThrottlingEnabled, out _throttlingEnabled))
+            {
+                throw new ConfigurationNotFoundException();
+            }
+        }
+
         [AllowAnonymous]
         public GetConfigurationResult IsDeviceSupported(DeviceDetails device)
         {
@@ -70,10 +81,10 @@ namespace NHSOnline.Backend.Worker.Support.Devices
             if (result < 0)
             {
                 _logger.LogInformation($"App version { device.NativeAppVersion } is less than minimum supported version { minimumSupportedVersionForDevice }");
-                return new SuccessfullyRetrieved(isDeviceSupported: false);
+                return new SuccessfullyRetrieved(isDeviceSupported: false, isThrottlingEnabled: _throttlingEnabled);
             }
 
-            return new SuccessfullyRetrieved(isDeviceSupported: true);
+            return new SuccessfullyRetrieved(isDeviceSupported: true, isThrottlingEnabled: _throttlingEnabled);
         }
     }
 }

@@ -29,7 +29,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Devices
             _options = Options.Create(new ConfigurationSettings
             {
                 MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
-                MinimumSupportediOSVersion = MinimumSupportediOSVersion
+                MinimumSupportediOSVersion = MinimumSupportediOSVersion,
+                ThrottlingEnabled = "true"
             });
 
             TestInitialiseWithOptions(_options);
@@ -145,6 +146,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Devices
             var options = Options.Create(new ConfigurationSettings
             {
                 MinimumSupportedAndroidVersion = "1.blah",
+                ThrottlingEnabled = "true"
             });
 
             // Reinitialise with new options

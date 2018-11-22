@@ -31,7 +31,7 @@ class LifecycleHandlers: NSObject {
     func performAppVersionCheck() {
         if (hasCheckedAppVersionSinceAppOpened == false) {
             configurationService.isUserDeviceAllowed { (result) in
-                if (result == false) {
+                if (result.isValidConfiguration == false) {
                     DispatchQueue.main.async {
                         self.displayAppVersionOutOfDate()
                     }

@@ -14,9 +14,14 @@ import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
 import org.json.JSONObject
 
+class ConfigurationResponse {
+    var isValidConfiguration: Boolean = false
+    var isThrottlingEnabled: Boolean = false
+}
+
 class ConfigurationService(private val context: MainActivity) {
 
-    fun isValidConfiguration(callback: IVolleyCallback) {
+    fun getConfiguration(callback: IVolleyCallback) {
         var configurationUrl = String.format(
                 context.resources.getString(R.string.baseApiURL)
                         + context.resources.getString(R.string.configurationApiPath), BuildConfig.VERSION_NAME)
@@ -26,9 +31,15 @@ class ConfigurationService(private val context: MainActivity) {
                 Response.Listener<String> { response ->
 
                     try {
-                        val isValidConfiguration = parseIsValidConfiguration(response)
+                        val isValidConfiguration = parseBoolean(response, R.string.isSupportedVersion)
+                        var isThrottlingEnabled = parseBoolean(response, R.string.isThrottlingEnabled)
+
+                        var configurationResponse = ConfigurationResponse()
+                        configurationResponse.isThrottlingEnabled = isThrottlingEnabled
+                        configurationResponse.isValidConfiguration = isValidConfiguration
+
                         Log.d(Application.TAG, "${this::class.java.simpleName}: Configuration success: isValidConfiguration $isValidConfiguration")
-                        callback.onSuccess(isValidConfiguration)
+                        callback.onSuccess(configurationResponse)
                     } catch (e: ClassCastException) {
                         Log.d(Application.TAG, "${this::class.java.simpleName}: Configuration success: failed to parse response")
                         callback.onError(serverErrorMessage)
@@ -58,8 +69,8 @@ class ConfigurationService(private val context: MainActivity) {
                     context.resources.getString(
                             R.string.accessible_server_error_message))
 
-    private fun parseIsValidConfiguration(response: String) : Boolean {
+    private fun parseBoolean(response: String, propertyId: Int) : Boolean {
         val jsonObj = JSONObject(response)
-        return jsonObj.getBoolean(context.resources.getString(R.string.isSupportedVersion))
+        return jsonObj.getBoolean(context.resources.getString(propertyId))
     }
 }

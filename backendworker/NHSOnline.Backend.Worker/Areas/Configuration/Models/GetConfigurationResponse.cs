@@ -3,5 +3,6 @@
     public class GetConfigurationResponse
     {
         public bool IsDeviceSupported { get; set; }
+        public bool IsThrottlingEnabled { get; set; }
     }
 }

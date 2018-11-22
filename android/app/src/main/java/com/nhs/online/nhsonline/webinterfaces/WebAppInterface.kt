@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.webinterfaces
 
+import android.preference.PreferenceManager
 import android.util.Log
 import android.webkit.JavascriptInterface
 import com.nhs.online.nhsonline.activities.MainActivity
@@ -79,6 +80,12 @@ class WebAppInterface(private val context: MainActivity) {
     @JavascriptInterface
     fun completeAppIntro() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering completeAppIntro")
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val edit = prefs.edit()
+        edit.putBoolean(context.getString(R.string.haveShownThrottlingCarouselBefore), java.lang.Boolean.TRUE)
+        edit.apply()
+
         context.webview.post {
             context.webview.loadUrl(context.resources.getString(
                 R.string.baseURL))

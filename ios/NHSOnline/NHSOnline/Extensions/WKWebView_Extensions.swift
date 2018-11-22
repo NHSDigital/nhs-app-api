@@ -8,4 +8,3 @@ extension WKWebView {
         self.load(urlRequest)
     }
 }
-

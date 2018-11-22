@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import android.location.LocationManager
+import android.preference.PreferenceManager
 import android.view.accessibility.AccessibilityEvent
 import android.util.Log
 import com.nhs.online.nhsonline.Application
@@ -43,6 +44,7 @@ import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
+import com.nhs.online.nhsonline.services.ConfigurationResponse
 import com.nhs.online.nhsonline.services.ConfigurationService
 
 
@@ -113,6 +115,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
+    override fun loadThrottlingCarousel() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        val haveShownThrottlingCarouselBefore = prefs.getBoolean(getString(R.string.haveShownThrottlingCarouselBefore), false)
+
+        if(!haveShownThrottlingCarouselBefore) {
+            urlLoader.loadUrl(getString(R.string.throttleCarouselPath))
+        }
+    }
+
     private fun setupAppVersion() {
         evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updateNativeVersion', '${BuildConfig.VERSION_NAME}')")
         evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updatePlatform', 'Android')")
@@ -122,11 +133,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnRetryButton")
         showProgressDialog()
         urlLoader.reloadRequest()
-        configurationService.isValidConfiguration(object : IVolleyCallback {
-            override fun onSuccess(isValid: Boolean) {
+        configurationService.getConfiguration(object : IVolleyCallback {
+            override fun onSuccess(configurationResponse: ConfigurationResponse) {
                 isSuccessfulConfigCheck = true
-                if (!isValid) {
+                if (!configurationResponse.isValidConfiguration) {
                     showVersionUpgradeDialog()
+                }
+
+                if(configurationResponse.isThrottlingEnabled) {
+                    loadThrottlingCarousel()
                 }
             }
 

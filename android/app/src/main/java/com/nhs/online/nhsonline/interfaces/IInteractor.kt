@@ -5,6 +5,8 @@ import com.nhs.online.nhsonline.data.ErrorMessage
 
 interface IInteractor {
 
+    fun loadThrottlingCarousel()
+
     fun loadPage(url: String)
 
     fun showProgressDialog()

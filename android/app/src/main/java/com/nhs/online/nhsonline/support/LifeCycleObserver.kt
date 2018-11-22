@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.support
 
+import android.preference.PreferenceManager
 import android.util.Log
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.activities.MainActivity
@@ -8,7 +9,9 @@ import com.nhs.online.nhsonline.services.ConfigurationService
 import kotlinx.android.synthetic.main.activity_main.*
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.Application
+import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.services.ConfigurationResponse
 
 
 class LifeCycleObserver(
@@ -46,13 +49,17 @@ class LifeCycleObserver(
     }
 
     fun checkAndHandleConfiguration () {
-        configurationService.isValidConfiguration(object : IVolleyCallback {
-            override fun onSuccess(isValid: Boolean) {
+        configurationService.getConfiguration(object : IVolleyCallback {
+            override fun onSuccess(configurationResponse: ConfigurationResponse) {
                 context.isSuccessfulConfigCheck = true
-                if (!isValid) {
+                if (!configurationResponse.isValidConfiguration) {
                     context.showVersionUpgradeDialog()
                 } else {
                     context.hideVersionUpgradeDialog()
+                }
+
+                if(configurationResponse.isThrottlingEnabled) {
+                    context.loadThrottlingCarousel()
                 }
             }
 

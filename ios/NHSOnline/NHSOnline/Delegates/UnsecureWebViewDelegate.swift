@@ -75,7 +75,7 @@ class UnsecureWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKS
         var isIntroPage = false
         
         let url = webView.url
-        if(url?.absoluteString.contains(config().CarouselFileName))! {
+        if(url?.absoluteString.contains(config().IntroCarouselFileName))! {
             isIntroPage = true
         }
         
@@ -136,7 +136,10 @@ class UnsecureWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKS
     
     func shouldOpenInSafari(url: URL) -> Bool {
         
-        if(url.absoluteString.contains(config().CarouselFileName)) {
+        if(url.absoluteString.contains(config().IntroCarouselFileName)) {
+            return false
+        }
+        if(url.absoluteString.contains(config().ThrottlingCarouselFileName)) {
             return false
         }
         
