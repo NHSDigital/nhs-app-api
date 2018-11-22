@@ -34,6 +34,8 @@ class IPhoneXDriver : DriverSource {
             caps.setCapability("browserstack.local", "true")
             caps.setCapability("autoWebview","true")
             caps.setCapability(MobileCapabilityType.APP,Config.instance.appPath)
+            if(Config.instance.browserstackLocalIdentifier!="")
+                caps.setCapability("browserstack.localIdentifier",Config.instance.browserstackLocalIdentifier)
 
             return caps
         }

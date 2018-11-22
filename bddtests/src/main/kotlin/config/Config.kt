@@ -31,6 +31,7 @@ class Config private constructor() {
     var browserstackAccessKey: String
     var browserstackUrl: String
     var browserstackLocal: String
+    var browserstackLocalIdentifier: String
     var autoLogin: String
     var appPath: String
     var appiumServer: String
@@ -51,6 +52,7 @@ class Config private constructor() {
         browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESSKEY", "NOT_PROVIDED")
         browserstackUrl = "http://$browserstackUsername:$browserstackAccessKey@hub-cloud.browserstack.com/wd/hub"
         browserstackLocal = envOrDefault("BROWSERSTACK_LOCAL", "true")
+        browserstackLocalIdentifier = envOrDefault("BROWSERSTACK_LOCAL_IDENTIFIER","")
         showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE", "false")
         appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")

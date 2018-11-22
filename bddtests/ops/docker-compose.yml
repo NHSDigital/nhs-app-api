@@ -12,8 +12,9 @@ services:
       - URI_FORMAT_CID_REDIRECT_WEB=http://web{host}:3000/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://10.0.2.2:3000/auth-return
       - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
-      - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/registrations
+      - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
       - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/createsession
+      - COOKIE_DOMAIN=.bitraft.io
       - VERSION_TAG=dev_bdd_docker_ops_main
       - BIOMETRICS_ENABLED=true
   api.local.bitraft.io:

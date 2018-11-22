@@ -36,6 +36,8 @@ class Pixel2Driver : DriverSource {
             caps.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true)
             caps.setCapability("browserstack.local", "true")
             caps.setCapability("browserstack.debug","true")
+            if(Config.instance.browserstackLocalIdentifier!="")
+                caps.setCapability("browserstack.localIdentifier",Config.instance.browserstackLocalIdentifier)
 
             return caps
         }

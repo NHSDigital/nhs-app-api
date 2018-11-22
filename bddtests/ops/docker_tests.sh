@@ -21,6 +21,7 @@ then
 fi
 DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
+DOCKER_IMAGE_BROWSERSTACK=$DOCKER_REGISTRY/browserstack:latest
 
 #### 3. Change browser variable to one webdriver mentioned in ./serenity.properties
 if [ -z $BROWSER ]
@@ -32,9 +33,6 @@ if [ -z $PARALLEL ]
 then
   PARALLEL=1
 fi
-
-#### 4. Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
-DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 
 # List all docker images in the docker compose setup
 DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
@@ -72,6 +70,23 @@ info $BDD_CUCUMBER_OPTIONS_PREFIX
 export WEB_TAG=$APP_DOCKER_TAG
 export BACKEND_TAG=$APP_DOCKER_TAG
 [ -z $REDIS_DATA_DOCKER_TAG ] || export REDIS_DATA_TAG=$REDIS_DATA_DOCKER_TAG
+
+# Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
+if [ "$BROWSER" == "pixel_2" ] || [ "$BROWSER" == "iphoneX" ]
+then
+  DOCKER_IMAGE=$DOCKER_IMAGE_BROWSERSTACK
+  AUTOLOGIN="AUTOLOGIN=true"
+  APPSCHEME="APP_SCHEME=nhsapp"
+  if [ "$BROWSER" == "pixel_2" ]
+  then
+    APPIUM_TYPE="-Dappium.platformName=ANDROID"
+  else
+    APPIUM_TYPE="-Dappium.platformName=IPHONE"
+  fi
+else
+  DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
+fi
+
 
 # Pull images
 docker pull $DOCKER_IMAGE
@@ -154,6 +169,11 @@ info "Running $TAG tests"
 
   info $BDD_CUCUMBER_OPTIONS
 
+  if [ $DOCKER_IMAGE == $DOCKER_IMAGE_BROWSERSTACK ]
+  then
+      BROWSERSTACK_LOCAL_STRING="(BrowserStackLocal --key $BROWSERSTACK_ACCESSKEY --force-local --local-identifier $NETWORK &) ;"
+  fi
+
   docker run \
   --name $TAG \
   --rm \
@@ -162,9 +182,13 @@ info "Running $TAG tests"
   -v $workingDir/../../testRunFolder/$TAG/:/repo \
   $DOCKER_IMAGE bash -c " \
     cd /repo ; \
+    $BROWSERSTACK_LOCAL_STRING \
+    BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
+    APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $APPSCHEME $AUTOLOGIN \
     ./gradlew test --stacktrace \
-      -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS \" \
+      -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
       -Dwebdriver.provided.type=$BROWSER \
+      $APPIUM_TYPE \
       -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=')" &
   
   PID=$!
