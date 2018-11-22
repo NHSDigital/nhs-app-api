@@ -1,6 +1,5 @@
 package features.appointments.factories
 
-import constants.DateTimeFormats
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
@@ -13,7 +12,6 @@ import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 private const val DEFAULT_NUMBER_OF_DAYS_IN_RANGE = 29L
@@ -55,8 +53,6 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
         val startDateToUseForMockResponse = startDate ?: defaultStartDate()
         val endDateToUseForMockResponse = endDate ?: defaultEndDate()
-        saveToSerenityVariableForRequest(startDateToUseForMockResponse, AppointmentStartTimeKey)
-        saveToSerenityVariableForRequest(endDateToUseForMockResponse, AppointmentEndTimeKey)
         Serenity.setSessionVariable("BookingReasonNecessity").to(reasonNecessity)
 
         generateAppointmentSlotResponse(
@@ -102,13 +98,6 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
                 mapping
         )
         generateDefaultUserData()
-    }
-
-    private fun saveToSerenityVariableForRequest(date: ZonedDateTime, key: String) {
-        val dateAsBackendString = DateTimeFormatter.ofPattern(
-                DateTimeFormats.backendDateTimeFormatWithTimezone
-        ).format(date)
-        Serenity.setSessionVariable(key).to(dateAsBackendString)
     }
 
     private fun defaultStartDate(): ZonedDateTime {

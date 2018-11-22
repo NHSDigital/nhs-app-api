@@ -30,9 +30,6 @@ abstract class AppointmentsFactory(gpSupplier: String) {
     }
 
     companion object {
-        const val AppointmentStartTimeKey = "AppointmentStartTimeKey"
-        const val AppointmentEndTimeKey = "AppointmentEndTimeKey"
-
         const val TargetAppointmentDateKey = "TargetAppointmentDateKey"
         const val TargetAppointmentTimeKey = "TargetAppointmentTimeKey"
     }
