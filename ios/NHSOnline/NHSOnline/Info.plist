@@ -132,6 +132,6 @@
 	<key>ConfigurationApiPath</key>
 	<string>$(CONFIGURATION_API_PATH)</string>
 	<key>BaseApiUrl</key>
-	<string>https://$(BASE_API_URL)</string>
+	<string>$(BASE_SCHEME)://$(BASE_API_URL)</string>
 </dict>
 </plist>
