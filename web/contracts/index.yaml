@@ -1,7 +1,7 @@
 ---
   swagger: "2.0"
   info: 
-    version: "0.0.5"
+    version: "0.0.6"
     title: "NHS App API"
     description: "This is the API for the NHS App."
   schemes: 
@@ -937,4 +937,51 @@
           - "configuration"
         summary: "Gets a collection of configuration values."
         description: null
+        produces: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "query"
+            name: "deviceName"
+            type: "string"
+            format: "string"
+            required: true
+            description: "name of the device (android or ios)"
+          - 
+            in: "query"
+            name: "nativeAppVersion"
+            type: "string"
+            format: "string"
+            required: true
+            description: "version number of the NHS App installed on the device"
+        responses: 
+          200: 
+            description: "Returns configuration for the app."
+            schema: 
+              type: "object"
+              properties: 
+                isDeviceSupported: 
+                  type: "boolean"
+                  description: "Returns true if the version of NHS App installed on device is supported, otherwise false."
+          400: 
+            description: "Either the device name was not provided or the device version number was not in the correct format."
+          500: 
+            description: "An unexpected error occurred processing the request."
+    /v1/session/extend: 
+      post: 
+        tags: 
+          - "session"
+        summary: "Extends a user session for an authenticated user."
+        description: "Extends a user session for an authenticated user, by calling an upstream endpoint. Requires NHSO-Session-Id cookie obtained from post session endpoint."
+        responses: 
+          200: 
+            description: "Successfully extended."
+          401: 
+            description: "User session has expired."
+          500: 
+            description: "An unexpected error occurred during the processing of the request."
+          502: 
+            description: "Could not extend service. Can occur if already timed out, or there is a problem with the request."
+          504: 
+            description: "Timeout when calling upstream system."
 

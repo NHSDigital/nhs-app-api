@@ -14,7 +14,7 @@ paths:
       description:
       produces:
         - application/json
-        parameters:
+      parameters:
         - in: query
           name: deviceName
           type: string
@@ -27,7 +27,7 @@ paths:
           format: string
           required: true
           description: version number of the NHS App installed on the device
-        responses:
+      responses:
         200:
           description: Returns configuration for the app.
           schema:

@@ -57,8 +57,8 @@ paths:
   /session/extend:
     post:
       tags:
-	   - session
-	  summary: Extends a user session for an authenticated user.
+        - session
+      summary: Extends a user session for an authenticated user.
       description: Extends a user session for an authenticated user, by calling an upstream endpoint. Requires NHSO-Session-Id cookie obtained from post session endpoint.
       responses:
         200:
