@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
         {
             PatientId = userSession.PatientId;
             OnlineUserId = userSession.OnlineUserId;
-            UnitId = userSession.UnitId;
+            UnitId = userSession.OdsCode;
             
             ApptId = request.AppointmentId;
         }

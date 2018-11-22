@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
                 OnlineUserId = tppUserSession.OnlineUserId,
                 PatientId =  tppUserSession.PatientId,
-                UnitId = tppUserSession.UnitId,                  
+                UnitId = tppUserSession.OdsCode,                  
             };
            
             _logger.LogDebug("Exiting: {0}", methodName);
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
                 PatientId = tppUserSession.PatientId,
                 OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                UnitId = tppUserSession.OdsCode,
             };
             
             _logger.LogDebug("Exiting: {0}", methodName);
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
                 PatientId = tppUserSession.PatientId,
                 OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                UnitId = tppUserSession.OdsCode,
             };  
             
             _logger.LogDebug("Exiting: {0}", methodName);
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
                 PatientId = tppUserSession.PatientId,
                 OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                UnitId = tppUserSession.OdsCode,
                 StartDate = startDate,
                 EndDate = endDate,
             }; 
@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
                 PatientId = tppUserSession.PatientId,
                 OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                UnitId = tppUserSession.OdsCode,
                 TestResultId = testResultId,
             }; 
     
@@ -257,7 +257,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
                 PatientId = tppUserSession.PatientId,
                 OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                UnitId = tppUserSession.OdsCode,
             };
 
             var response =

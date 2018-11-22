@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             var tppUserSession = (TppUserSession) userSession;
 
             try
-            {               
+            {
                 var patientOverview = await _tppClient.PatientOverviewPost(tppUserSession);
                 var patientRecord = await _tppClient.RequestPatientRecordPost(tppUserSession);
                 var testResults = await GetLast180DaysTestResults(tppUserSession);

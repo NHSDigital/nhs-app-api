@@ -7,6 +7,7 @@
            :class="checkboxStylingClasses"
            :value="checkboxId"
            :id="name + '-' + checkboxId"
+           :aria-labelledby="aLabelledBy"
            v-model="selected"
            type="checkbox"
            @click="check">
@@ -41,6 +42,10 @@ export default {
     checkboxClasses: {
       type: Array,
       default: () => [],
+    },
+    aLabelledBy: {
+      type: String,
+      default: undefined,
     },
   },
   data: function data() { return { checkedModel: false }; },

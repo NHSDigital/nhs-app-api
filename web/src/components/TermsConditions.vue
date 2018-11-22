@@ -36,18 +36,37 @@
       </error-message>
       <generic-checkbox :selected="areTermsAccepted"
                         :check-box-classes="[$style.hideDefaultCheckbox]"
+                        :a-labelled-by="acceptTermsCheckboxLabel"
                         v-model="areTermsAccepted"
                         checkbox-id="agree_checkbox"
                         name="termsAndConditions"
-                        @click="check">
-        <label for="hiddenCheckbox" @click="check">
-          {{ $t('termsAndConditions.checkBoxText') }}
+                        @click="checkTerms">
+        <label id="acceptTermsLabel" @click="checkTerms">
+          {{ $t('termsAndConditions.checkBoxText1') }}
+          <a :href="termsAndConditionsURL" style="display: inline-block;"
+             target="_blank" @click="stopProp($event)" >
+          {{ $t('termsAndConditions.link1') }}</a> and
+          <a :href="privacyPolicyURL" style="display: inline-block;"
+             target="_blank" @click="stopProp($event)" >
+          {{ $t('termsAndConditions.link2') }}</a>.
+          {{ $t('termsAndConditions.checkBoxText2') }}
           <a :href="cookiesPolicyURL" style="display: inline-block;"
              target="_blank" @click="stopProp($event)" >
-            {{ $t('termsAndConditions.link3') }}</a>
+          {{ $t('termsAndConditions.link3') }}</a>.
         </label>
       </generic-checkbox>
     </div>
+    <generic-checkbox :selected="isAnalyticsCookieAccepted"
+                      :check-box-classes="[$style.hideDefaultCheckbox]"
+                      :a-labelled-by="'analyticsCookieLabel'"
+                      v-model="isAnalyticsCookieAccepted"
+                      checkbox-id="agree_analyticsCookieCheckbox"
+                      name="analyticsCookie"
+                      @click="checkAnalyticsCookieAccepted">
+      <label id="analyticsCookieLabel" @click="checkAnalyticsCookieAccepted">
+        {{ $t('termsAndConditions.analyticsCookieCheckBoxText') }}
+      </label>
+    </generic-checkbox>
     <generic-button id="btn_accept" :class="[$style.button, $style.green]"
                     @click="onConfirmButtonClicked">
       {{ $t('termsAndConditions.btnAccept') }}
@@ -57,7 +76,6 @@
 
 <script>
 /* eslint-disable import/extensions */
-import moment from 'moment';
 import CheckedIcon from '@/components/icons/CheckedIcon';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -79,12 +97,22 @@ export default {
       privacyPolicyURL: this.$store.app.$env.PRIVACY_POLICY_URL,
       cookiesPolicyURL: this.$store.app.$env.COOKIES_POLICY_URL,
       areTermsAccepted: false,
+      isAnalyticsCookieAccepted: false,
       hasTriedToContinue: false,
     };
   },
+  computed: {
+    acceptTermsCheckboxLabel() {
+      return this.hasTriedToContinue && !this.areTermsAccepted ?
+        'error_msg acceptTermsLabel' : 'acceptTermsLabel';
+    },
+  },
   methods: {
-    check() {
+    checkTerms() {
       this.areTermsAccepted = !this.areTermsAccepted;
+    },
+    checkAnalyticsCookieAccepted() {
+      this.isAnalyticsCookieAccepted = !this.isAnalyticsCookieAccepted;
     },
     stopProp(event) {
       event.stopPropagation();
@@ -94,7 +122,7 @@ export default {
       if (this.areTermsAccepted) {
         const consentRequest = {
           ConsentGiven: true,
-          DateOfConsent: moment().format(),
+          AnalyticsCookieAccepted: this.isAnalyticsCookieAccepted,
         };
 
         await this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });

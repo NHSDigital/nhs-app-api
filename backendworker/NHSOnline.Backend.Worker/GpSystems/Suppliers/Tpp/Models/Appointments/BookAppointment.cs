@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
             StartDate = dateTimeOffsetProvider.ConvertToLocalTime(request.StartTime.Value).ToString(TppClient.TppDateTimeFormat, CultureInfo.InvariantCulture);
             EndDate = dateTimeOffsetProvider.ConvertToLocalTime(request.EndTime.Value).ToString(TppClient.TppDateTimeFormat, CultureInfo.InvariantCulture);
             Notes = request.BookingReason;
-            UnitId = userSession.UnitId;
+            UnitId = userSession.OdsCode;
             OnlineUserId = userSession.OnlineUserId;
         }
 

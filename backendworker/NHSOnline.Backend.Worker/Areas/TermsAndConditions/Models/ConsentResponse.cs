@@ -5,6 +5,8 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models
     public class ConsentResponse
     {
         [Required]
-        public bool ConsentGiven { get; set; }       
+        public bool ConsentGiven { get; set; }
+        [Required]
+        public bool AnalyticsCookieAccepted { get; set; }   
     }
 }

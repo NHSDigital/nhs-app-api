@@ -53,12 +53,11 @@ definitions:
     type: object
     required:
       - consentGiven
-      - dateOfConsent
+      - analyticsCookieAccepted
     properties:
       consentGiven:
         type: boolean
         description: Flag indicating whether the user has consented to the terms and conditions
-      dateOfConsent:
-        type: string
-        format: date-time
-        description: Date consent request was placed
+      analyticsCookieAccepted:
+        type: boolean
+        description: Flag indicating whether the user has consented to the use of analytics

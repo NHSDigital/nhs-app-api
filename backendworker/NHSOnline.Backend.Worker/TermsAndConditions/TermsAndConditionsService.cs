@@ -5,6 +5,7 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.TermsAndConditions
 {
@@ -30,12 +31,12 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
 
         public async Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsNumber)
         {
-            const string methodName = "FetchConsent";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter(nameof(FetchConsent));
+            
             if (_configuration.Stubbed)
             {
                 var response = new ConsentResponse { ConsentGiven = true };
-                _logger.LogDebug("Exiting: {0} - patient consent found", methodName); 
+                _logger.LogExit(nameof(FetchConsent));
                 return new TermsAndConditionsFetchConsentResult.Success(response); 
             } 
             try
@@ -61,37 +62,39 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
                     {
                         var record = records.ElementAt(0);
                         response.ConsentGiven = record.ConsentGiven;
+                        response.AnalyticsCookieAccepted = record.AnalyticsCookieAccepted;
                         matchFound = true;
                     }
                 }
 
                 if (matchFound)
                 {           
-                    _logger.LogDebug("Exiting: {0} - patient consent found", methodName); 
+                    _logger.LogDebug("Exiting: {0} - patient consent found", nameof(FetchConsent)); 
                     return new TermsAndConditionsFetchConsentResult.Success(response);                    
                 }             
-                _logger.LogDebug("Exiting: {0} - no existing patient consent record", methodName); 
+                _logger.LogDebug("Exiting: {0} - no existing patient consent record", nameof(FetchConsent)); 
                 return new TermsAndConditionsFetchConsentResult.NoConsentFound();
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Unsuccessful request to record patient consent");
-                _logger.LogDebug("Exiting: {0}", methodName); 
+                _logger.LogExit(nameof(FetchConsent));
                 return new TermsAndConditionsFetchConsentResult.FailureToFetchConsent();
             }             
         }
         
-        public async Task<TermsAndConditionsRecordConsentResult> RecordConsent(string nhsNumber, ConsentRequest request)
+        public async Task<TermsAndConditionsRecordConsentResult> RecordConsent(string nhsNumber, 
+            ConsentRequest request, DateTimeOffset termsAndConditionsAcceptanceDate)
         {
-            const string  methodName = "RecordConsent";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter(nameof(RecordConsent));
             
             if (_configuration.Stubbed)
             {
-                _logger.LogDebug("Exiting: {0}", methodName);
+                _logger.LogExit(nameof(RecordConsent));
                 return new TermsAndConditionsRecordConsentResult.ConsentRecorded();
             }
-            var auditRecord = new TermsAndConditionsRecord(nhsNumber, request.ConsentGiven, request.DateOfConsent);
+            var auditRecord = new TermsAndConditionsRecord(nhsNumber, request.ConsentGiven, request.AnalyticsCookieAccepted,
+                termsAndConditionsAcceptanceDate, request.AnalyticsCookieAccepted ? termsAndConditionsAcceptanceDate : (DateTimeOffset?)null);
 
             try
             {
@@ -101,13 +104,13 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
                 }
 
                 await _client.CreateDocumentAsync(_collectionUri, auditRecord);
-                _logger.LogDebug("Exiting: {0}", methodName);
+                _logger.LogExit(nameof(RecordConsent));
                 return new TermsAndConditionsRecordConsentResult.ConsentRecorded();
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Unsuccessful request to record patient consent");
-                _logger.LogDebug("Exiting: {0}", methodName);
+                _logger.LogExit(nameof(RecordConsent));
                 return new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
             }
         }      

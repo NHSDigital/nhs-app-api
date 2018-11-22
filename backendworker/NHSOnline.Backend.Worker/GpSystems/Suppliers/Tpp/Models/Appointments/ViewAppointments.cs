@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
 
         public ViewAppointments(TppUserSession tppUserSession)
         {
-            UnitId = tppUserSession.UnitId;
+            UnitId = tppUserSession.OdsCode;
             PatientId = tppUserSession.PatientId;
             OnlineUserId = tppUserSession.OnlineUserId;
             FutureAppointments = "Y";

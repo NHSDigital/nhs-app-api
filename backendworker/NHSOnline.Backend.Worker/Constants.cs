@@ -72,6 +72,8 @@
             //Retrieves a patient's Linkage details
             public const string TermsAndConditionsRecordConsentAuditTypeRequest = "TermsAndConditions_RecordConsent_Request";
             public const string TermsAndConditionsRecordConsentAuditTypeResponse = "TermsAndConditions_RecordConsent_Response";
+            public const string TermsAndConditionsAnalyticsCookieAcceptance= "TermsAndConditions_RecordAnalyticsCookie_Acceptance";
+
         }
 
         public static class HttpContextItems

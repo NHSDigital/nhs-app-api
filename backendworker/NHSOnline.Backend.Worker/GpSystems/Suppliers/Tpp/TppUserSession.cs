@@ -6,7 +6,6 @@
         
         public string Suid { get; set; }
         public string PatientId { get; set; }
-        public string UnitId { get; set; }
         public string OnlineUserId { get; set; }
     }
 }

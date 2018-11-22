@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 PatientId = tppUserSession.PatientId,
                 OnlineUserId = tppUserSession.OnlineUserId,
-                UnitId = tppUserSession.UnitId,
+                UnitId = tppUserSession.OdsCode,
                 Notes = repeatPrescriptionRequest.SpecialRequest,
                 Medications = repeatPrescriptionRequest.CourseIds.Select(x => new MedicationRequest
                 {

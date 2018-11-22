@@ -12,5 +12,7 @@ namespace NHSOnline.Backend.Worker
         public abstract Supplier Supplier { get; }
 
         public string CsrfToken { get; set; }
+        
+        public string OdsCode { get; set; }
     }
 }

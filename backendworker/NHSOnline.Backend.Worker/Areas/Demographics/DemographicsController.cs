@@ -39,26 +39,5 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
             _logger.LogDebug("Exiting: {0}", methodName);
             return myRecordGetResult.Accept(new DemographicsResultVisitor());
         }
-        
-        /// <summary>
-        /// Remove this method after bddtests that use above route are committed.  The build pipeline will fail if
-        /// this is missing because current bddtests refer to this route.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("my-record/demographics")]
-        public async Task<IActionResult> GetOld()
-        {
-            var userSession = HttpContext.GetUserSession();
-
-            var demographicsService = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier)
-                .GetDemographicsService();
-
-            _logger.LogDebug("Fetching Demographics");
-
-            var myRecordGetResult = await demographicsService.GetDemographics(userSession);
-
-            return myRecordGetResult.Accept(new DemographicsResultVisitor());
-        }
     }
 }

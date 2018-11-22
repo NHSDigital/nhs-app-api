@@ -248,7 +248,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<SessionCreateResult.SuccessfullyCreated>().Subject;
 
-            var expectedResult = new SessionCreateResult.SuccessfullyCreated(expected, new EmisUserSession { NhsNumber = _nhsNumber});
+            var expectedResult = new SessionCreateResult.SuccessfullyCreated(expected, new EmisUserSession { NhsNumber = _nhsNumber, OdsCode = _odsCode});
 
             createdResult.Should().BeEquivalentTo(expectedResult);
         }

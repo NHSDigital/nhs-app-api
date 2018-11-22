@@ -134,7 +134,9 @@ export default {
     cookiesText1: 'The NHS App puts small files (known as cookies) on your device. These are used to make the app work and improve your experience. You can ',
     cookiesText2: ' to opt out of using some of them.',
     checkBoxError: 'You cannot use the NHS App without agreeing',
-    checkBoxText: 'I understand and accept the terms of use and privacy policy. I accept use of cookies as detailed in the',
+    checkBoxText1: 'I understand and accept the',
+    checkBoxText2: 'I accept the use of \'strictly necessary\' cookies as detailed in the',
+    analyticsCookieCheckBoxText: 'I accept the use of optional cookies used to improve the performance of the NHS App.',
     btnAccept: 'Continue',
   },
   appointments: {

@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             tppUserSession.Suid.Should().Be(expectedSessionId);
             tppUserSession.OnlineUserId.Should().Be(expectedOnlineUserId);
             tppUserSession.PatientId.Should().Be(expectedPatientId);
-            tppUserSession.UnitId.Should().Be(odsCode);
+            tppUserSession.OdsCode.Should().Be(odsCode);
             tppUserSession.NhsNumber.Should().Be(_nhsNumber);
         }
 

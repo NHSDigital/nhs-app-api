@@ -8,6 +8,6 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models
         [Required]
         public bool ConsentGiven { get; set; }
         [Required]
-        public DateTimeOffset DateOfConsent { get; set; }
+        public bool AnalyticsCookieAccepted { get; set; }        
     }
 }
