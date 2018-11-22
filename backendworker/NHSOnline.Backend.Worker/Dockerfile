@@ -26,6 +26,10 @@ FROM dependencies as built
 WORKDIR /src
 COPY . .
 WORKDIR /src/NHSOnline.Backend.Worker
+
+ARG COMMIT_ID
+RUN sed -i "s/.*\"CommitId\":.*/    \"CommitId\": \"$COMMIT_ID\"/" appsettings.json
+
 RUN dotnet build -c Release -o /app  -r linux-x64
 
 FROM built AS publish

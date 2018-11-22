@@ -21,6 +21,11 @@
             public const int Status464OdsCodeNotSupportedOrNoNhsNumber = 464;
             public const int Status465FailedAgeRequirement = 465;
         }
+        
+        public static class AppConfig
+        {
+            public const string GitCommitId = "Version:CommitId";
+        }
 
         public static class EnvironmentalVariables
         {

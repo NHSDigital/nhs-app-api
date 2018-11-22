@@ -24,6 +24,10 @@ RUN npm install
 # Build
 FROM build_dependencies as build
 COPY --chown=nodejs:nodejs . .
+
+ARG COMMIT_ID
+RUN sed -i "s/.*COMMIT_ID:.*/    COMMIT_ID: '$COMMIT_ID',/" nuxt.config.js
+
 RUN npm run build
 
 # Tests

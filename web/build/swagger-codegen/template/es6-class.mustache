@@ -14,6 +14,7 @@ import { resolveApiClient } from '@/middleware/urlResolution'
 
 const getWebVersion = get('store.state.appVersion.webVersion');
 const getNativeVersion = get('store.state.appVersion.nativeVersion');
+const getPlatform = get('store.state.appVersion.platform');
 
 /**
  * {{&description}}
@@ -123,11 +124,21 @@ class {{&className}} {
 
     const webVersion = getWebVersion(this);
     const nativeVersion = getNativeVersion(this);
+    const platform = getPlatform(this);
+
     if (webVersion) {
-      headers['NHSO-Web-Version-Tag'] = webVersion;
+      headers['NHSO-Web-Version-Tag'] = webVersion + ' (commit:' + this.store.app.$env.COMMIT_ID + ')';
     }
     if (nativeVersion) {
-      headers['NHSO-Native-Version-Tag'] = nativeVersion;
+      if (platform !== 'web') {
+        let fullNativeVersion = platform;
+        fullNativeVersion += ' ';
+        fullNativeVersion += nativeVersion;
+
+        headers['NHSO-Native-Version-Tag'] = fullNativeVersion;
+      } else {
+        headers['NHSO-Native-Version-Tag'] = nativeVersion;
+      }
     }
 
     const resolve = ({ store, deferred, result, cancel }) => {

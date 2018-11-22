@@ -49,9 +49,20 @@ namespace NHSOnline.Backend.Worker
                 loggerFactory.AddConsole(LogLevel.Debug);
             }
             
-            _apiAppVersion = configuration[Constants.EnvironmentalVariables.VersionTag];
+            _apiAppVersion = GetApiAppVersion();
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
+        }
+
+        private string GetApiAppVersion()
+        {
+            var apiVersionStringBuilder = new StringBuilder();
+            apiVersionStringBuilder.Append(Configuration[Constants.EnvironmentalVariables.VersionTag]);
+            apiVersionStringBuilder.Append(" (commit:");
+            apiVersionStringBuilder.Append(Configuration[Constants.AppConfig.GitCommitId]);
+            apiVersionStringBuilder.Append(")");
+
+            return apiVersionStringBuilder.ToString();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

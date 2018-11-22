@@ -93,6 +93,7 @@ const config = {
     GP_LOOKUP_API_RESULTS_LIMIT: 20,
     // Feature Toggles
     THROTTLING_ENABLED: false,
+    COMMIT_ID: 'dev',
   },
 };
 
@@ -104,4 +105,5 @@ if (process.env.NODE_ENV !== 'production') {
   };
 }
 
+config.head.meta.push({ name: 'commit_id', content: config.env.COMMIT_ID });
 module.exports = config;

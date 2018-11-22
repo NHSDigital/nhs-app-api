@@ -44,6 +44,13 @@ export default {
     HotJar,
   },
   head() {
+    let { platform } = this.$store.state.appVersion;
+    const { nativeVerison } = this.$store.state.appVersion;
+
+    if (nativeVerison !== undefined) {
+      platform = `${platform} (${nativeVerison})`;
+    }
+
     const head = {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
@@ -53,6 +60,10 @@ export default {
         {
           src: this.$env.ANALYTICS_SCRIPT_URL,
         },
+      ],
+      meta: [
+        { name: 'web version', content: this.$store.state.appVersion.webVersion },
+        { name: 'platform', content: platform },
       ],
     };
     return head;
