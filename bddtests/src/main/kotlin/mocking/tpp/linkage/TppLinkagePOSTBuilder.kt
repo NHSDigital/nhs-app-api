@@ -43,7 +43,7 @@ class TppLinkagePOSTBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST"
         return respondWithBody("Internal Server Error", HttpStatus.SC_INTERNAL_SERVER_ERROR)
     }
 
-    fun respondWithPatientNonCompetentOrUnder16(): Mapping {
+    fun respondWithPatientNonCompetentOrUnderMinumumAge(): Mapping {
         val disabledTppError = Error(errorCode = "8")
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(JSonXmlConverter.toXML(disabledTppError))

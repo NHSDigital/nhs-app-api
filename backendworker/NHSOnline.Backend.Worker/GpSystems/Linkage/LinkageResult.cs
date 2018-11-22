@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Linkage
             }
         }
 
-        public class PatientNonCompetentOrUnder16 : LinkageResult
+        public class PatientNonCompetentOrUnderMinimumAge : LinkageResult
         {
             public override T Accept<T>(ILinkageResultVisitor<T> visitor)
             {

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
+using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppClient;
@@ -16,18 +17,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
         private readonly IRegistrationGuidKeyGenerator _registrationGuidKeyGenerator;
         private readonly IRegistrationCacheService _registrationCacheService;
         private readonly ILogger<TppLinkageService> _logger;
+        private readonly IMinimumAgeValidator _minimumAgeValidator;
 
         public TppLinkageService(ITppClient client,
             ITppLinkageMapper linkageMapper,
             IRegistrationGuidKeyGenerator registrationGuidKeyGenerator,
             IRegistrationCacheService registrationCacheService,
-            ILogger<TppLinkageService> logger)
+            ILogger<TppLinkageService> logger,
+            IMinimumAgeValidator minimumAgeValidator)
         {
             _tppClient = client;
             _linkageMapper = linkageMapper;
             _registrationGuidKeyGenerator = registrationGuidKeyGenerator;
             _registrationCacheService = registrationCacheService;
             _logger = logger;
+            _minimumAgeValidator = minimumAgeValidator;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
@@ -44,7 +48,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
 
                 if (!createNhsUserResponse.HasSuccessResponse)
                 {
-                    return TppLinkageErrors.GetErrorCreatingNhsUser(_logger, createNhsUserResponse, request);
+                    var errors = new TppLinkageErrors(_minimumAgeValidator, _logger);
+                    return errors.GetErrorCreatingNhsUser(createNhsUserResponse, request);
                 }
 
                 try

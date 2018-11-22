@@ -20,7 +20,7 @@
 
         T Visit(LinkageResult.PatientMarkedAsArchived result);
 
-        T Visit(LinkageResult.PatientNonCompetentOrUnder16 result);
+        T Visit(LinkageResult.PatientNonCompetentOrUnderMinimumAge result);
 
         T Visit(LinkageResult.AccountStatusInvalid result);
 

@@ -72,8 +72,8 @@ Feature: Linkage Post Key
     When I call the EMIS Linkage POST endpoint
     Then I receive a "Bad Request" error
 
-  Scenario Outline: Linkage request POST for <GP System> returns bad request when patient is under 16
-    Given I have valid <GP System> linkage details but I am under 16
+  Scenario Outline: Linkage request POST for <GP System> returns bad request when patient is under 13
+    Given I have valid <GP System> linkage details but I am under 13
     When I call the <GP System> Linkage POST endpoint
     Then I receive a "Bad Request" error
     Examples:

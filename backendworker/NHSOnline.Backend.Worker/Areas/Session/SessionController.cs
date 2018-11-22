@@ -80,16 +80,9 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 var cidUserProfile = cidUserProfileOption.ValueOrFailure();
 
                 // Validate the Date of Birth meets expected format and minimum age requirements
-                if (!DateTime.TryParseExact(cidUserProfile.DateOfBirth, DateFormat, CultureInfo.InvariantCulture,
-                    DateTimeStyles.None, out var dateOfBirthParsed))
+                var dateOfBirthParsed = ValidateAndParseDateOfBirth(cidUserProfile.DateOfBirth);
+                if (!dateOfBirthParsed.HasValue)
                 {
-                    _logger.LogError($"Missing or invalid date of birth");
-                    return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
-                }
-
-                if (!_minimumAgeValidator.IsValid(dateOfBirthParsed))
-                {
-                    _logger.LogWarning("Failed to meet the minimum age requirement.");
                     return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
                 }
                 
@@ -142,7 +135,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 _logger.LogDebug($"Finished session post with status code {sessionCreatedResultVisited.StatusCode}");
 
                 return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited, cidUserProfile.OdsCode,
-                    dateOfBirthParsed, nhsNumberFormatted));
+                    dateOfBirthParsed.Value, nhsNumberFormatted));
             }
             finally
             {
@@ -286,6 +279,22 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity)
             );
+        }
+
+        private DateTime? ValidateAndParseDateOfBirth(string dateOfBirth)
+        {
+            if (!DateTime.TryParseExact(dateOfBirth, DateFormat, CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out var dateOfBirthParsed))
+            {
+                _logger.LogError("Missing or invalid date of birth");
+                return null;
+            }
+            if (!_minimumAgeValidator.IsValid(dateOfBirthParsed))
+            {
+                _logger.LogWarning("Failed to meet the minimum age requirement.");
+                return null;
+            }
+            return dateOfBirthParsed;
         }
     }
 }

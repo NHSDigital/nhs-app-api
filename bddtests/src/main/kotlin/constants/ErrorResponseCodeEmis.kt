@@ -12,6 +12,6 @@ object ErrorResponseCodeEmis {
     const val ALREADY_PENDING_REQUEST: Long = -1455
     const val PATIENT_NOT_REGISTERED_AT_PRACTICE: Long = -1551
     const val PATIENT_MARKED_AS_ARCHIVED: Long = -1552
-    const val PATIENT_NON_COMPETENT_OR_UNDER_16: Long = -1553
+    const val PATIENT_NON_COMPETENT_OR_UNDER_MINIMUM_AGE: Long = -1553
     const val ONLINE_USER_MAX_APPOINTMENT_BOOKED_COUNT: Long = -1156
 }

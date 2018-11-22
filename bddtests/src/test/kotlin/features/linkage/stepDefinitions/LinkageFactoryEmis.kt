@@ -37,8 +37,8 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
                         .respondWithPracticeNotLive() },
                 LinkageResult.PatientMarkedAsArchived to { get -> get
                         .respondWithPatientMarkedAsArchived() },
-                LinkageResult.PatientNonCompetentOrUnder16 to { get -> get
-                        .respondWithPatientNonCompetentOrUnder16() },
+                LinkageResult.PatientNonCompetentOrUnderMinimumAge to { get -> get
+                        .respondWithPatientNonCompetentOrUnderMinumumAge() },
                 LinkageResult.InternalServerError to { get -> get
                         .respondWithInternalServerError() }
         )
@@ -85,8 +85,8 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
                         .respondWithPracticeNotLive() },
                 LinkageResult.PatientMarkedAsArchived to { get -> get
                         .respondWithPatientMarkedAsArchived() },
-                LinkageResult.PatientNonCompetentOrUnder16 to { get -> get
-                        .respondWithPatientNonCompetentOrUnder16() },
+                LinkageResult.PatientNonCompetentOrUnderMinimumAge to { get -> get
+                        .respondWithPatientNonCompetentOrUnderMinimumAge() },
                 LinkageResult.AccountStatusInvalid to { get -> get
                         .respondWithAccountStatusInvalid() },
                 LinkageResult.InternalServerError to { get -> get

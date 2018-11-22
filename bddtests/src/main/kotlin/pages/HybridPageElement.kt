@@ -116,17 +116,17 @@ open class HybridPageElement(
         return when(exact) {
             true -> {
                 HybridPageElement(
-                        browserLocator = this.browserLocator.plus("[text()='$text']"),
-                        androidLocator = this.androidLocator?.plus("[@text='$text']"),
-                        iOSLocator = this.iOSLocator?.plus("[@text='$text']"),
+                        browserLocator = this.browserLocator.plus("[text()=\"$text\"]"),
+                        androidLocator = this.androidLocator?.plus("[@text=\"$text\"]"),
+                        iOSLocator = this.iOSLocator?.plus("[@text=\"$text\"]"),
                         helpfulName = this.helpfulNameToUse,
                         page = this.page)
             }
             false -> {
                 HybridPageElement(
-                        browserLocator = this.browserLocator.plus("[contains(text(),'$text')]"),
-                        androidLocator = this.androidLocator?.plus("[contains(@text,'$text')]"),
-                        iOSLocator = this.iOSLocator?.plus("[contains(@text,'$text')]"),
+                        browserLocator = this.browserLocator.plus("[contains(text(),\"$text\")]"),
+                        androidLocator = this.androidLocator?.plus("[contains(@text,\"$text\")]"),
+                        iOSLocator = this.iOSLocator?.plus("[contains(@text,\"$text\")]"),
                         helpfulName = this.helpfulNameToUse,
                         page = this.page)
             }

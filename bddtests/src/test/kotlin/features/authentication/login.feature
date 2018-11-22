@@ -86,3 +86,11 @@ Feature: Login
     Given I see the help icon on the login page
     When I click the help icon on the login page
     Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
+
+  Scenario Outline: A <GP System> user that is 13 years old can log in
+    Given I attempt to log in as a <GP System> user that is 13
+    Then I see the home page
+    Examples:
+      | GP System   |
+      | EMIS        |
+      | TPP         |

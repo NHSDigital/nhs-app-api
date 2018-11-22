@@ -75,8 +75,8 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
-    fun respondWithPatientNonCompetentOrUnder16(): Mapping {
-        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NON_COMPETENT_OR_UNDER_16.toInt())
+    fun respondWithPatientNonCompetentOrUnderMinimumAge(): Mapping {
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NON_COMPETENT_OR_UNDER_MINIMUM_AGE.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 

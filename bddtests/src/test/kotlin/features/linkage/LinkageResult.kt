@@ -5,7 +5,7 @@ enum class LinkageResult {
     SuccessfullyRetrievedFirstTime,
     SuccessfullyRetrieved,
     AccountStatusInvalid,
-    PatientNonCompetentOrUnder16,
+    PatientNonCompetentOrUnderMinimumAge,
     PatientMarkedAsArchived,
     NoRegisteredOnlineUserFound,
     PatientNotRegisteredAtPractice,

@@ -8,6 +8,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
+using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage;
@@ -25,6 +26,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
         private Mock<IRegistrationCacheService> _mockRegistrationCacheService;
         private Mock<ITppLinkageMapper> _mockLinkageMapper;
         private TppLinkageService _systemUnderTest;
+        private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
+        private DateTime _dateOfBirth;
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,7 +37,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
             _mockRegistrationGuidKeyGenerator = _fixture.Freeze<Mock<IRegistrationGuidKeyGenerator>>();
             _mockRegistrationCacheService = _fixture.Freeze<Mock<IRegistrationCacheService>>();
             _mockLinkageMapper = _fixture.Freeze<Mock<ITppLinkageMapper>>();
-            
+
+
+            _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>())).Returns(true);
+            _dateOfBirth = DateTime.Now.AddYears(-16);  //Doesn't matter what age, as validator is mocked
+
             _systemUnderTest = _fixture.Create<TppLinkageService>();
         }
 
@@ -142,12 +150,39 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
             //Assert
             result.Should().BeAssignableTo<LinkageResult.InternalServerError>();
         }
-        
-        [DataTestMethod]
-        [DataRow(TppApiErrorCodes.NotAuthenticated, typeof(LinkageResult.SupplierSystemUnavailable))]
-        [DataRow(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials, typeof(LinkageResult.NotFoundErrorCreatingNhsUser))]
-        [DataRow(TppApiErrorCodes.LinkAccount.InvalidProviderId, typeof(LinkageResult.InternalServerError))]
-        public async Task CreateLinkageKey_ReturnsError_WhenBadNhsResponse(string errorCode, Type expectedError)
+
+        [TestMethod]
+        public async Task CreateLinkageKey_ReturnsSupplierSystemUnavailable_WhenNotAuthenticated()
+        {
+            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.NotAuthenticated,
+                typeof(LinkageResult.SupplierSystemUnavailable));
+        }
+
+        [TestMethod]
+        public async Task CreateLinkageKey_ReturnsNotFoundErrorCreatingNhsUser_WhenInvalidLinkageCredentials()
+        {
+            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(
+                TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials,
+                typeof(LinkageResult.NotFoundErrorCreatingNhsUser));
+        }
+
+        [TestMethod]
+        public async Task CreateLinkageKey_ReturnsInternalServerError_WhenNotAuthenticated()
+        {
+            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.LinkAccount.InvalidProviderId,
+                typeof(LinkageResult.InternalServerError));
+        }
+
+        [TestMethod]
+        public async Task CreateLinkageKey_ReturnsError_WhenUserUnder16()
+        {
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>())).Returns(false);
+
+            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials,
+                typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge));
+        }
+
+        private async Task CreateLinkageKey_ReturnsError_WhenNotAuthenticated(string errorCode, Type expectedError)
         {
             //Arrange
             var request = ValidCreateLinkageRequest();
@@ -170,45 +205,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
         private CreateLinkageRequest ValidCreateLinkageRequest()
         {
             var request = _fixture.Create<CreateLinkageRequest>();
-            request.DateOfBirth = DateOfBirth16Today();
+            request.DateOfBirth = _dateOfBirth;
             return request;
-        }
-
-
-        [TestMethod]
-        public async Task CreateLinkageKey_ReturnsError_WhenUserUnder16()
-        {
-            //Arrange
-            var request = ValidCreateLinkageRequest();
-            request.DateOfBirth = DateOfBirthUnder16();
-            var userResponse = new TppApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.OK)
-            {
-                ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials }
-            };
-
-            _tppClient
-                .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
-                .ReturnsAsync(userResponse);
-
-            //Act
-            var result = await _systemUnderTest.CreateLinkageKey(request);
-
-            //Assert
-            result.GetType().Should().Be(typeof(LinkageResult.PatientNonCompetentOrUnder16));
-        }
-
-        private DateTime DateOfBirth16Today()
-        {
-            var now = DateTime.Now;
-            var dateOfBirthFor16Today = now.AddYears(-16);
-            return dateOfBirthFor16Today;
-        }
-
-        private DateTime DateOfBirthUnder16()
-        {
-            var dateOfBirthFor16Today = DateOfBirth16Today();
-            var dateOfBirthFor16Tomorrow = dateOfBirthFor16Today.AddDays(1);
-            return dateOfBirthFor16Tomorrow;
         }
     }
 }

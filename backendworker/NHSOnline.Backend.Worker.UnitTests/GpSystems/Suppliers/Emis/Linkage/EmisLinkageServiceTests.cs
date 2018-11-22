@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
         [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFoundErrorRetrievingNhsUser))]
         [DataRow(EmisApiErrorCode.PracticeNotLive, HttpStatusCode.BadRequest, typeof(LinkageResult.PracticeNotLive))]
         [DataRow(EmisApiErrorCode.PatientMarkedAsArchived, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientMarkedAsArchived))]
-        [DataRow(EmisApiErrorCode.PatientNonCompetentOrUnder16, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientNonCompetentOrUnder16))]
+        [DataRow(EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge))]
         [DataRow(EmisApiErrorCode.AccountStatusInvalid, HttpStatusCode.BadRequest, typeof(LinkageResult.AccountStatusInvalid))]
         [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequestErrorRetrievingNhsUser))]
         public async Task GetLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(EmisApiErrorCode? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
@@ -301,7 +301,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
         [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFoundErrorCreatingNhsUser))]
         [DataRow(EmisApiErrorCode.PracticeNotLive, HttpStatusCode.BadRequest, typeof(LinkageResult.PracticeNotLive))]
         [DataRow(EmisApiErrorCode.PatientMarkedAsArchived, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientMarkedAsArchived))]
-        [DataRow(EmisApiErrorCode.PatientNonCompetentOrUnder16, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientNonCompetentOrUnder16))]
+        [DataRow(EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge))]
         [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequestErrorCreatingNhsUser))]
         public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(EmisApiErrorCode? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
         {

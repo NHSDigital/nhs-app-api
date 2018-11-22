@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
 
-        public IActionResult Visit(LinkageResult.PatientNonCompetentOrUnder16 result)
+        public IActionResult Visit(LinkageResult.PatientNonCompetentOrUnderMinimumAge result)
         {
             _auditor.AuditWithExplicitNhsNumber(
                 _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - patient non competent or under 16.");

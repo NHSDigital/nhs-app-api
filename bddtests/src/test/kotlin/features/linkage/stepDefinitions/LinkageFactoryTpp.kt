@@ -27,7 +27,8 @@ class LinkageFactoryTpp:  LinkageFactory("TPP") {
         val linkageToPostRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyRetrieved to successfulPost(linkageInformationFacade),
                 LinkageResult.InternalServerError to { post -> post.respondWithInternalServerError() },
-                LinkageResult.PatientNonCompetentOrUnder16 to {post -> post.respondWithPatientNonCompetentOrUnder16()}
+                LinkageResult.PatientNonCompetentOrUnderMinimumAge to {post -> post
+                        .respondWithPatientNonCompetentOrUnderMinumumAge()}
         )
 
         val response = responseFromMap(linkageToPostRequestResponse, linkageResult)

@@ -49,8 +49,8 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
-    fun respondWithPatientNonCompetentOrUnder16(): Mapping {
-        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NON_COMPETENT_OR_UNDER_16.toInt())
+    fun respondWithPatientNonCompetentOrUnderMinumumAge(): Mapping {
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.PATIENT_NON_COMPETENT_OR_UNDER_MINIMUM_AGE.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 

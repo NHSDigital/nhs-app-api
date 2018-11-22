@@ -2,6 +2,7 @@ package features.authentication.stepDefinitions
 
 import com.google.gson.Gson
 import config.Config
+import constants.DateTimeFormats
 import cucumber.api.DataTable
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
@@ -31,6 +32,7 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_CREATED
 import org.apache.http.HttpStatus.SC_OK
+import org.joda.time.DateTime
 import org.junit.Assert
 import pages.AuthReturnPage
 import pages.MyAccountPage
@@ -448,20 +450,41 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         setupAndLogIn(patient, gpSystem)
     }
 
+    @Given("^I attempt to log in as a (.*) user with an age under (\\d+)$")
+    fun iAmLoggedInToWithAgeUnderMinAge(gpSystem: String, age : Int) {
+        val birthdayToday =DateTime.now().minusYears(age);
+        val birthdayTomorrow = birthdayToday.plusDays(1)
+        val dateOfBirth = birthdayTomorrow.toString(DateTimeFormats.dateWithoutTimeFormat)
+        this.patient = Patient.getDefault(gpSystem).copy(dateOfBirth = dateOfBirth)
+        setupAndLogIn(patient, gpSystem)
+    }
+
+    @Given("^I attempt to log in as a (.*) user that is (\\d+)$")
+    fun iAmLoggedInToWithUserOfAge(gpSystem: String, age : Int) {
+        val dateOfBirth = DateTime.now().minusYears(age)
+                .toString(DateTimeFormats.dateWithoutTimeFormat)
+        this.patient = Patient.getDefault(gpSystem).copy(dateOfBirth = dateOfBirth)
+        setupAndLogIn(patient, gpSystem)
+    }
+
     @Given("I attempt to log in as a (.*) user with invalid ODS Code$")
     fun iAttemptToLogInWithInvalidOdsCode(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem).copy(odsCode = "A33224")
         setupAndLogIn(patient, gpSystem)
     }
 
-    @Then("^I see an error message informing me I cannot log in as I am under 16$")
+    @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")
     fun iSeeAnErrorMessageInformingMeICannotLogInAsIAmUnderSixteen() {
-        serviceUnavailablePage.assertIsPresent("As you’re under 16, you cannot currently access the NHS App.")
+        serviceUnavailablePage.assertIsPresent("You are too young to use the NHS App",
+                "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. " +
+                        "You can still call or visit your GP surgery to access your NHS services. " +
+                        "For urgent medical advice, call 111.")
     }
 
     @Then("^I see an error message informing me I cannot log in$")
     fun iSeeAnErrorMessageInformingMeICannotLogIn() {
-        serviceUnavailablePage.assertIsPresent("You can still call or visit your GP surgery to access your " +
+        serviceUnavailablePage.assertIsPresent("You cannot currently use this service",
+                "You can still call or visit your GP surgery to access your " +
                 "NHS services. For urgent medical advice, call 111.")
     }
 

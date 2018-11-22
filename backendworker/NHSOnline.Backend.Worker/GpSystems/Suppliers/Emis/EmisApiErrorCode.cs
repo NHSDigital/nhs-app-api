@@ -12,7 +12,7 @@
         OnlineUserMaxAppointmentBookCount = -1156,
         PracticeNotLive = -1401,
         PatientMarkedAsArchived = -1552,
-        PatientNonCompetentOrUnder16 = -1553,
+        PatientNonCompetentOrUnderMinimumAge = -1553,
         
     }
 }

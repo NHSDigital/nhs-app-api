@@ -24,11 +24,19 @@ Feature: Login error messages
 
   Scenario Outline: Cannot log in as a <GP System> user with no Date of Birth
     Given I attempt to log in as a <GP System> user without a date of birth
-    Then I see an error message informing me I cannot log in as I am under 16
+    Then I see an error message informing me I cannot log in as I am under the minimum age
   Examples:
   | GP System   |
   | EMIS        |
   | TPP         |
+
+  Scenario Outline: Cannot log in as a <GP System> user with an age under 13
+    Given I attempt to log in as a <GP System> user with an age under 13
+    Then I see an error message informing me I cannot log in as I am under the minimum age
+    Examples:
+      | GP System   |
+      | EMIS        |
+      | TPP         |
 
   Scenario Outline: Cannot log in as a <GP System> user with no NHS Number
     Given I attempt to log in as a <GP System> user without an NHS Number

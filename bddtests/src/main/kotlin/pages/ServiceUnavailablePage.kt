@@ -7,7 +7,7 @@ class ServiceUnavailablePage : HybridPageObject() {
             androidLocator = null,
             page = this,
             helpfulName = "content"
-    ).withText("You cannot currently use this service", false)
+    )
 
     private val content = HybridPageElement(
             browserLocator = "//div/p",
@@ -16,8 +16,8 @@ class ServiceUnavailablePage : HybridPageObject() {
             helpfulName = "error message"
     )
 
-    fun assertIsPresent(message: String) {
-        header.assertSingleElementPresent()
+    fun assertIsPresent(titleText: String, message: String) {
+        header.withText(titleText, true).assertSingleElementPresent()
         content.withText(message, false).assertSingleElementPresent()
     }
 }

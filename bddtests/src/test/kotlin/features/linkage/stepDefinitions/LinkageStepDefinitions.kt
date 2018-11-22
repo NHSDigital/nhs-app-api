@@ -15,8 +15,6 @@ import worker.WorkerClient
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
 
-private const val YEARS_IN_THE_PAST = 16
-
 open class LinkageStepDefinitions {
 
     val mockingClient = MockingClient.instance
@@ -88,17 +86,13 @@ open class LinkageStepDefinitions {
         setLinkageInformation(linkage, LinkageResult.PatientMarkedAsArchived)
     }
 
-    @Given("^I have valid (.*) linkage details but I am under 16$")
-    fun iAmUnder16(gpSystem: String) {
+    @Given("^I have valid (.*) linkage details but I am under (\\d+)$")
+    fun iAmUnderAge(gpSystem: String, age: Int) {
         val linkage = validLinkage(gpSystem)
-        linkage.dateOfBirth = dateOfBirthUnder16()
-        setLinkageInformation(linkage, LinkageResult.PatientNonCompetentOrUnder16)
-    }
-
-    private fun dateOfBirthUnder16():String{
         val now = DateTime.now()
-        val under16 = now.minusYears(YEARS_IN_THE_PAST).plusDays(1).withTime(0,0,0,0)
-        return under16.toString(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+        val dateOfBirth = now.minusYears(age).plusDays(1).withTime(0,0,0,0)
+        linkage.dateOfBirth = dateOfBirth.toString(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+        setLinkageInformation(linkage, LinkageResult.PatientNonCompetentOrUnderMinimumAge)
     }
 
     @Given("^I have valid (.*) linkage details but my account status is invalid$")

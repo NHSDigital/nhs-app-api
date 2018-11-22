@@ -43,8 +43,12 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             try
             {
                 _logger.LogEnter(nameof(Get));
-    
-                if (!ArgumentsAreValid(connectionToken, odsCode))
+
+                var argumentValidator = new ValidateAndLog(_logger)
+                    .IsNotNullOrWhitespace(connectionToken, Constants.HttpHeaders.ConnectionToken)
+                    .IsNotNullOrWhitespace(odsCode, Constants.HttpHeaders.OdsCode);
+
+                if (!argumentValidator.IsValid())
                 {
                     return BadRequest();
                 }
@@ -124,25 +128,6 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 _logger.LogWarning(exception, $"Failed to create GP System for supplier: {supplier.ValueOrFailure()}.");
                 return Option.None<IGpSystem>();
             }
-        }
-        
-        private bool ArgumentsAreValid(string connectionToken, string odsCode)
-        {
-            var argumentsAreValid = true;
-
-            if (string.IsNullOrEmpty(connectionToken))
-            {
-                _logger.LogError($"The header {Constants.HttpHeaders.ConnectionToken}, has not been supplied in the request"); 
-                argumentsAreValid = false;
-            }
-
-            if (string.IsNullOrEmpty(odsCode))
-            {
-                _logger.LogError($"The header {Constants.HttpHeaders.OdsCode}, has not been supplied in the request.");
-                argumentsAreValid = false;
-            }
-
-            return argumentsAreValid;
         }
     }
 }

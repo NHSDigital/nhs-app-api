@@ -175,11 +175,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                     return new LinkageResult.PatientMarkedAsArchived();
                 }
 
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnder16))
+                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge))
                 {
-                    _logger.LogError($"Linkage get request unsuccessful - patient non competent or under 16. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnder16}");
+                    _logger.LogError($"Linkage get request unsuccessful - patient non competent or under minimum age. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge}");
                     _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.PatientNonCompetentOrUnder16();
+                    return new LinkageResult.PatientNonCompetentOrUnderMinimumAge();
                 }
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.AccountStatusInvalid))
@@ -259,11 +259,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                     return new LinkageResult.PatientMarkedAsArchived();
                 }
 
-                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnder16))
+                if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge))
                 {
-                    _logger.LogError($"Linkage create request unsuccessful - patient non competent or under 16. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnder16}");
+                    _logger.LogError($"Linkage create request unsuccessful - patient non competent or under minimum age. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge}");
                     _logger.LogEmisErrorResponse(response);
-                    return new LinkageResult.PatientNonCompetentOrUnder16();
+                    return new LinkageResult.PatientNonCompetentOrUnderMinimumAge();
                 }
                 
                 _logger.LogError($"Linkage create request unsuccessful - Bad Request - Unknown error.");
