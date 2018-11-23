@@ -12,6 +12,9 @@ namespace NHSOnline.Backend.Worker.CitizenId
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
             services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
+            services.AddSingleton<ITokenValidationParameterBuilder, TokenValidationParameterBuilder>();
+            services.AddSingleton<IJwtTokenService<UserProfile>, IdTokenService>();
+            services.AddSingleton<ICitizenIdSigningKeysService, CitizenIdSigningKeysService>();
 
             base.ConfigureServices(services, configuration);
         }

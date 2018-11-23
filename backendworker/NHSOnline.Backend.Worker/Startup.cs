@@ -12,20 +12,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.Worker.Areas.Session;
-using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Conventions;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Certificate;
-using NHSOnline.Backend.Worker.Support.Cipher;
-using NHSOnline.Backend.Worker.Support.Hasher;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using Microsoft.AspNetCore.Mvc;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -63,61 +58,19 @@ namespace NHSOnline.Backend.Worker
         // Note that some service registration has now been moved into Module classes within the namespaces containing the services that they register, to avoid namespace dependency cycles.
         public void ConfigureServices(IServiceCollection services)
         {
-            var configurationSettings = ConfigurationSettings.GetSettings(Configuration);
             services.Configure<ConfigurationSettings>(
                 Configuration.GetSection(ConfigurationSettings.ConfigurationSectionName));
 
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.Cookie.Name = Constants.CookieNames.SessionId;
-                    options.Cookie.HttpOnly = true;
-                    options.EventsType = typeof(CustomCookieAuthenticationEvents);
-                    options.TicketDataFormat = new UnencryptedCookieDataFormat();
-
-                    if (!string.IsNullOrEmpty(configurationSettings.CookieDomain))
-                    {
-                        options.Cookie.Domain = configurationSettings.CookieDomain;
-                    }
-
-                    if (_env.IsDevelopment())
-                    {
-                        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                        options.Cookie.SameSite = SameSiteMode.None;
-                    }
-                    else
-                    {
-                        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                        options.Cookie.SameSite = SameSiteMode.Lax;
-                    }
-                });
+                .AddCookie(ConfigureServiceCookies);
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
-            services.AddTransient<ICertificateService, CertificateService>();
-            services.AddTransient<IMinimumAgeValidator, MinimumAgeValidator>();
-
+        
             services.AddCors();
 
-            services.AddSingleton<CipherConfiguration>();
-            services.AddSingleton<ICipherService, CipherService>();
-            services.AddSingleton<IHashingService, HashingService>();
-
             services
-                .AddMvc(
-                    options =>
-                    {
-                        options.Conventions.Add(new SecurityModeConvention(
-                            _runMode, _loggerFactory.CreateLogger<SecurityModeConvention>()));
-                        options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
-                        options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
-                        options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
-                        options.Filters.Add(new AuthorizeFilter(
-                            new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
-                        );
-                        options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
-                    }
-                )
+                .AddMvc(ConfigureMvcOptions)
                 .AddJsonOptions(
                     options => options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver()
@@ -132,20 +85,55 @@ namespace NHSOnline.Backend.Worker
             
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
-            services.AddSingleton<ITokenValidationParameterBuilder, TokenValidationParameterBuilder>();
-            services.AddSingleton<IJwtTokenService<UserProfile>,IdTokenService>();
-            services.AddSingleton<ICitizenIdSigningKeysService,CitizenIdSigningKeysService>();
-            services.AddSingleton<IJsonResponseParser, JsonResponseParser>();
-            services.AddSingleton<IXmlResponseParser, XmlResponseParser>();
+            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
+
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
-            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();           
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
 
             _modularStartup.ConfigureServices(services);
+        }
+
+        private void ConfigureMvcOptions(MvcOptions options)
+        {
+            options.Conventions.Add(new SecurityModeConvention(
+                            _runMode, _loggerFactory.CreateLogger<SecurityModeConvention>()));
+            options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
+            options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
+            options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
+            options.Filters.Add(new AuthorizeFilter(
+                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
+            );
+            options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
+        }
+
+        private void ConfigureServiceCookies(CookieAuthenticationOptions options)
+        {
+            var configurationSettings = ConfigurationSettings.GetSettings(Configuration);
+
+            options.Cookie.Name = Constants.CookieNames.SessionId;
+            options.Cookie.HttpOnly = true;
+            options.EventsType = typeof(CustomCookieAuthenticationEvents);
+            options.TicketDataFormat = new UnencryptedCookieDataFormat();
+
+            if (!string.IsNullOrEmpty(configurationSettings.CookieDomain))
+            {
+                options.Cookie.Domain = configurationSettings.CookieDomain;
+            }
+
+            if (_env.IsDevelopment())
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.Cookie.SameSite = SameSiteMode.None;
+            }
+            else
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -240,5 +228,4 @@ namespace NHSOnline.Backend.Worker
             return runMode;
         }
     }
-
 }
