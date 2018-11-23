@@ -1,16 +1,16 @@
 <template>
   <div :class="[$style['record-content'], getCollapseState]" :aria-hidden="isCollapsed">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelName') }}</span>
-    <p v-if="patientDetails">{{ patientDetails.patientName }}</p>
+    <p v-if="patientDetails" data-hj-suppress>{{ patientDetails.patientName }}</p>
     <hr aria-hidden="true">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelDOB') }}</span>
     <p v-if="patientDetails">{{ patientDetails.dateOfBirth | longDate }}</p>
     <hr aria-hidden="true">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelSex') }}</span>
-    <p v-if="patientDetails">{{ patientDetails.sex }}</p>
+    <p v-if="patientDetails" data-hj-suppress>{{ patientDetails.sex }}</p>
     <hr aria-hidden="true">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelAddress') }}</span>
-    <p v-if="patientDetails">
+    <p v-if="patientDetails" data-hj-suppress>
       {{ patientDetails.address }}</p>
     <hr aria-hidden="true">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelNHS') }}</span>

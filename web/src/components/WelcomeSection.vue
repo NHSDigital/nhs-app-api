@@ -2,7 +2,7 @@
   <div :class="$style.welcomeInfo" data-sid="welcome-info">
     <p v-if="name">
       <strong>Name:</strong>
-      <span data-sid="user-name">
+      <span data-sid="user-name" data-hj-suppress>
         {{ name }}
       </span>
     </p>

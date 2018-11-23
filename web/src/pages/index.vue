@@ -2,7 +2,7 @@
   <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
     <beta-banner data-sid="beta-flag"/>
     <hr :class="$style.rule" aria-hidden="true">
-    <h2 :class="$style.header" data-purpose="greeting">{{ greetingMessage }}</h2>
+    <h2 :class="$style.header" data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
     <welcome-section :date-of-birth="$store.state.session.dateOfBirth"
                      :nhs-number="$store.state.session.nhsNumber" />
     <navigation-list-menu
