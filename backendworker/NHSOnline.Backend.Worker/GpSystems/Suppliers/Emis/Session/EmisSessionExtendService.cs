@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         {
             try
             {
-                _logger.LogEnter(nameof(Extend));
+                _logger.LogEnter();
 
                 var emisUserSession = (EmisUserSession) userSession;
                 var headerParams = new EmisHeaderParameters(emisUserSession);
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             }
             finally
             {
-                _logger.LogExit(nameof(Extend));
+                _logger.LogExit();
             }
         }
     }

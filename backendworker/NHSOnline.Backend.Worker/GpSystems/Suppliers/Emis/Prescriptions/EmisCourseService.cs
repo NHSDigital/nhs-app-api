@@ -7,13 +7,14 @@ using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 {
     public class EmisCourseService : ICourseService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisCourseService> _logger;
         private readonly ConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
@@ -32,6 +33,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             
             try
             {
+                _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Courses for user");
                 
                 var coursesResponse = await _emisClient.CoursesGet(emisUserSession.UserPatientLinkToken, emisUserSession.SessionId, 
@@ -80,6 +82,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             {
                 _logger.LogError(e, "Unsuccessful request retrieving courses");
                 return new GetCoursesResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 

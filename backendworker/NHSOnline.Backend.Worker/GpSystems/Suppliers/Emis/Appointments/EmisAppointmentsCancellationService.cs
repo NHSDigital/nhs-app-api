@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(Cancel));
+                _logger.LogEnter();
             
                 var deleteRequestOption = GetCancelAppointmentDeleteRequest(emisUserSession, request);
                 if (deleteRequestOption.IsEmpty)
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Cancel));
+                _logger.LogExit();
             }
         }
 

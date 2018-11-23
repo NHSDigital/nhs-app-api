@@ -11,12 +11,13 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 {
     public class EmisPrescriptionService : IPrescriptionService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisPrescriptionService> _logger;
         private readonly ConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
@@ -38,6 +39,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
             try
             {
+                _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
 
                 var prescriptionsResponse = await _emisClient.PrescriptionsGet(emisUserSession.UserPatientLinkToken,
@@ -61,7 +63,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                             mappedPrescriptionList.Prescriptions = mappedPrescriptionList.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
-                        
+
                         return new PrescriptionResult.SuccessfulGet(mappedPrescriptionList);
                     }
                     catch (Exception e)
@@ -78,6 +80,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             {
                 _logger.LogError(e, $"Unsuccessful request retrieving prescriptions");
                 return new PrescriptionResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 
@@ -153,6 +159,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
             try
             {
+                _logger.LogEnter();
                 _logger.LogInformation("Beginning Place Prescription Request");
 
                 var response = await _emisClient.PrescriptionsPost(
@@ -170,6 +177,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             {
                 _logger.LogError($"Repeat prescription order failed with message {e.Message}");
                 return new PrescriptionResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 

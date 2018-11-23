@@ -8,13 +8,14 @@ using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
+using NHSOnline.Backend.Worker.Support.Logging;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.EmisClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
 {
     public class EmisLinkageService : ILinkageService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisLinkageService> _logger;
         private readonly IEmisClient _emisClient;
         private readonly IEmisLinkageMapper _emisLinkageMapper;
         private readonly IEmisSessionService _emisSessionService;
@@ -41,6 +42,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
         {
             try
             {
+                _logger.LogEnter();
+           
                 var sessionPost = await _emisSessionService.SendSessionsEndUserSessionPost();
 
                 var response = await GetLinkageKeyResponse(getLinkageRequest.NhsNumber, getLinkageRequest.OdsCode, 
@@ -75,12 +78,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                 _logger.LogError(e, "Unsuccessful request retrieving linkage key");
                 return new LinkageResult.SupplierSystemUnavailable();
             }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
 
         public async Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
         {
             try
             {
+                _logger.LogEnter();
+
                 var sessionPost = await _emisSessionService.SendSessionsEndUserSessionPost();
 
                 var createLinkageKeyResponse = await CreateLinkageKey(createLinkageRequest, sessionPost.EndUserSessionId);
@@ -125,6 +134,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
             {
                 _logger.LogError(e, "Unsuccessful request creating linkage key");
                 return new LinkageResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 

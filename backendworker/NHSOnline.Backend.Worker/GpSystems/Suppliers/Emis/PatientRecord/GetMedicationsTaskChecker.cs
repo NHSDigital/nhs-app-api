@@ -2,22 +2,22 @@
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class GetMedicationsTaskChecker
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisPatientRecordService> _logger;
         
-        public GetMedicationsTaskChecker(ILogger logger)
+        public GetMedicationsTaskChecker(ILogger<EmisPatientRecordService> logger)
         {
             _logger = logger;
         }
         
         public Medications Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
         {
-            var methodName = "Check";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter();
             
             Medications medications = null;
             
@@ -54,8 +54,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     };
                 }
             }
-            
-            _logger.LogDebug("Exiting: {0}", methodName);
+
+            _logger.LogExit();
             return medications ?? new EmisMedicationMapper().Map(medicationsResponse.Body);
         }
     }

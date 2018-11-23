@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(GetSlots));
+                _logger.LogEnter();
             
                 var emisUserSession = (EmisUserSession) userSession;
                 var patientLinkToken = emisUserSession.UserPatientLinkToken;
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(GetSlots));
+                _logger.LogExit();
             }
         }
     }

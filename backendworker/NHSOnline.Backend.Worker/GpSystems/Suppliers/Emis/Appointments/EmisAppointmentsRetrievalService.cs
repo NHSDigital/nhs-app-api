@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(GetAppointments));
+                _logger.LogEnter();
             
                 var emisUserSession = (EmisUserSession) userSession;
                 var emisHeaders = new EmisHeaderParameters(emisUserSession);
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(GetAppointments));
+                _logger.LogExit();
             }
         }
 

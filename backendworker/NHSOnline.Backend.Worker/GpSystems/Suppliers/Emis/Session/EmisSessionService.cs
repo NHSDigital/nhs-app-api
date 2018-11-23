@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         {
             try
             {
-                _logger.LogEnter(nameof(Create));
+                _logger.LogEnter();
 
                 var endUserSessionResponse = await SendSessionsEndUserSessionPost();
 
@@ -111,10 +111,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                     _logger.LogError(e, "Failed request to create Emis user session,HttpRequestException has been thrown.");
                     return new SessionCreateResult.SupplierSystemUnavailable();
                 }
-                finally
-                {
-                    _logger.LogExit(nameof(Create));
-                }
                 
                 try
                 {
@@ -146,7 +142,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             }
             finally
             {
-                _logger.LogExit(nameof(Create));
+                _logger.LogExit();
             }
         }
 

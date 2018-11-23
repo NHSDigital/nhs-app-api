@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 {
@@ -16,8 +17,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         
         public T Check(Task<T> task)
         {
-            var methodName = "Check";
-            _logger.LogDebug("Entered: {0}", methodName);
+            string methodName = nameof(Check);
+            _logger.LogDebug($"Entered {methodName}");
             
             T result = default(T);
             
@@ -30,8 +31,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 _logger.LogDebug("Emis " + _taskName + " task completed successfully");
                 result = task.Result;
             }
-            
-            _logger.LogDebug("Exiting: {0}", methodName);
+
+            _logger.LogDebug($"Exited {methodName}");
             return result;
         }       
     }

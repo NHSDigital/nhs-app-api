@@ -2,22 +2,22 @@
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class GetAllergiesTaskChecker
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisPatientRecordService> _logger;
         
-        public GetAllergiesTaskChecker(ILogger logger)
+        public GetAllergiesTaskChecker(ILogger<EmisPatientRecordService> logger)
         {
             _logger = logger;
         }
         
         public Allergies Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
         {
-            var methodName = "Check";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter();
             
             Allergies allergies = null;
             
@@ -54,8 +54,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     };
                 }
             }
-            
-            _logger.LogDebug("Exiting: {0}", methodName);
+
+            _logger.LogExit();
             return allergies ?? new EmisAllergyMapper().Map(allergiesResponse.Body);
         }
     }

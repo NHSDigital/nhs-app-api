@@ -17,6 +17,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Temporal;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -295,8 +296,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private async Task<EmisApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
-            var methodName = "SendRequestAndParseResponse";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter();
 
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
@@ -315,7 +315,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             response.ExceptionErrorResponse =
                 _responseParser.ParseError<ExceptionErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
 
-            _logger.LogDebug("Exiting: {0}", methodName);
+            _logger.LogExit();
             return response;
         }
 

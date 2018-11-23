@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(Build));
+                _logger.LogEnter();
 
                 return GetMetaTaskCompletedUnsuccessfulCase()
                     .IfNone(GetMetaResponseNoSuccessStatusCodeCase)
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Build));
+                _logger.LogExit();
             }
         }
 

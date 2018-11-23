@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
-            _logger.LogEnter(nameof(GetMyRecord));
+            _logger.LogEnter();
 
             var emisUserSession = (EmisUserSession)userSession;
 
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             }
             finally
             {
-                _logger.LogExit(nameof(GetMyRecord));
+                _logger.LogExit();
             }
         }
 

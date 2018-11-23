@@ -23,12 +23,12 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             return startOfQueryString > 0 ? uri.Substring(0, startOfQueryString) + "?*****" : uri;
         }
 
-        public static void LogEnter<T>(this ILogger<T> logger, string methodName)
+        public static void LogEnter<T>(this ILogger<T> logger, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
         {
             logger.LogDebug($"Entering {methodName}");
         }
         
-        public static void LogExit<T>(this ILogger<T> logger, string methodName)
+        public static void LogExit<T>(this ILogger<T> logger, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
         {
             logger.LogDebug($"Exiting {methodName}");
         }
