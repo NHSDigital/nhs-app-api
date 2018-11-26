@@ -142,9 +142,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func shouldOpenInSafari(url: URL) -> Bool {
-        if(url.absoluteString.contains(config().CarouselFileName)) {
-            return false
-        }
         
         if let _ = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
             return false
@@ -216,13 +213,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             if (message.name == "clearMenuBarItem") {
                 clearMenuBarItem()
-            }
-            if (message.name == "completeAppIntro") {
-                
-                let defaults = UserDefaults.standard
-                defaults.set(false, forKey: config().IsFirstTimeOpened)
-                
-                self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
             }
         }
     }

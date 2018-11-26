@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
@@ -98,24 +97,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
+        
+        loadAuthReturnOrWelcomePage()
+    }
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
-        val isFirstTimeOpened = prefs.getBoolean(getString(R.string.isFirstTimeOpened), true)
-        if (isFirstTimeOpened) {
-            val edit = prefs.edit()
-            edit.putBoolean(getString(R.string.isFirstTimeOpened), java.lang.Boolean.FALSE)
-            edit.apply()
-            urlLoader.loadUrl(getString(R.string.appIntroPath))
+    private fun loadAuthReturnOrWelcomePage() {
+        val urlPath = intent?.data?.path
+        val authRedirectPath = resources.getString(R.string.authRedirectPath)
+        if (urlPath == authRedirectPath) {
+            loadPage(intent.data.toString())
         } else {
-            val urlPath = intent?.data?.path
-            val authRedirectPath = resources.getString(R.string.authRedirectPath)
-            if (urlPath == authRedirectPath) {
-                loadPage(intent.data.toString())
-            } else {
-                loadWelcomePage()
-            }
+            loadWelcomePage()
         }
-
     }
 
     private fun setupAppVersion() {

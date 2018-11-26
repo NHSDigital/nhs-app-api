@@ -22,7 +22,6 @@
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
 
-    <string name="isFirstTimeOpened">isFirstTimeOpened</string>
     <string name="logoutPath">logout</string>
     <string name="loginPath">login</string>
     <string name="secureFlag">enabled</string>

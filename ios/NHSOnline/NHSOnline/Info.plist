@@ -67,14 +67,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CarouselDirectory</key>
-	<string>$(CAROUSEL_DIRECTORY)</string>
-	<key>CarouselContentType</key>
-	<string>$(CAROUSEL_CONTENT_TYPE)</string>
-	<key>CarouselFileName</key>
-	<string>$(CAROUSEL_FILE_NAME</string>
-	<key>IsFirstTimeOpened</key>
-	<string>$(IS_FIRST_TIME_OPENED)</string>
 	<key>HomeUrl</key>
 	<string>$(BASE_SCHEME)://$(HOME_URL)</string>
 	<key>HotJarLinkUrl</key>

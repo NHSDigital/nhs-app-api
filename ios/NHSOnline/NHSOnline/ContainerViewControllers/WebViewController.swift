@@ -45,7 +45,6 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "clearMenuBarItem")
         webView.configuration.userContentController.add(delegate, name: "onLogin")
         webView.configuration.userContentController.add(delegate, name: "onLogout")
-        webView.configuration.userContentController.add(delegate, name: "completeAppIntro")
         webView.configuration.userContentController.add(delegate, name: "showHeader")
         webView.configuration.userContentController.add(delegate, name: "showHeaderSlim")
         webView.configuration.userContentController.add(delegate, name: "hideHeaderSlim")

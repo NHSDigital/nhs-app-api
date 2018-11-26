@@ -6,7 +6,6 @@ struct Config: Decodable {
         case AppointmentsUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
-        case IsFirstTimeOpened, CarouselDirectory, CarouselContentType, CarouselFileName
         case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL
         case BaseApiUrl, ConfigurationApiPath
     }
@@ -32,11 +31,6 @@ struct Config: Decodable {
     let NhsOnlineRequiredQueryString:String
     let ResponseWaitingTime: Double
     let SessionTimeout: Int
-    
-    let IsFirstTimeOpened: String
-    let CarouselDirectory: String
-    let CarouselContentType: String
-    let CarouselFileName: String
     
     let HelpURL: String
     let TermsAndConditionsURL: String

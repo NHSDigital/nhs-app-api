@@ -48,8 +48,4 @@ window.nativeApp.clearMenuBarItem = function(header) {
     window.webkit.messageHandlers.clearMenuBarItem.postMessage(null);
 };
 
-window.nativeApp.completeAppIntro = function() {
-    window.webkit.messageHandlers.completeAppIntro.postMessage(null);
-};
-
 

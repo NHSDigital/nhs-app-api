@@ -54,30 +54,7 @@ class HomeViewController : UIViewController {
         
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
-        
-        let defaults = UserDefaults.standard
-        let isFirstTimeOpened =  (defaults.object(forKey: config().IsFirstTimeOpened) == nil || defaults.bool(forKey: config().IsFirstTimeOpened))
-        
-        if(isFirstTimeOpened) {
-            
-            let filename = config().CarouselFileName
-            let type = config().CarouselContentType
-            let directory = config().CarouselDirectory
-            
-            let path = Bundle.main.url(forResource: filename, withExtension: type, subdirectory: directory)
-            
-            if path != nil {
-                self.webViewController?.webView.loadFileURL(path!, allowingReadAccessTo: path!)
-            } else {
-                if #available(iOS 10.0, *) {
-                    os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
-                } else {
-                    NSLog("Critical - Files for carousel missing")
-                }
-            }
-        } else {
-            self.webViewController?.loadPage(url: pageUrl)
-        }
+        self.webViewController?.loadPage(url: pageUrl)
         
         configurationService = ConfigurationService(homeViewController: self)
 
