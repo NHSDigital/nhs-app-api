@@ -42,6 +42,19 @@ export default {
       redirectUrl: PRESCRIPTIONS.path,
     },
   ],
+  466: [
+    PATH,
+    {
+      pageTitle: 'Error submitting request',
+      pageHeader: 'Error submitting request',
+      header: 'We cannot complete this order',
+      subheader: 'You previously ordered at least one of these medications in the last 30 days.',
+      message: 'If you need more medication sooner, contact your GP.',
+      hasRetryButton: true,
+      retryButtonText: 'Back to my repeat prescriptions',
+      redirectUrl: PRESCRIPTIONS.path,
+    },
+  ],
   500: [
     PATH,
     {

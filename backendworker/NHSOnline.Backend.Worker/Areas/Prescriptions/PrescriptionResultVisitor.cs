@@ -40,5 +40,10 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         {
             return new StatusCodeResult(StatusCodes.Status409Conflict);
         }
+
+        public IActionResult Visit(PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days result)
+        {
+            return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status466MedicationAlreadyOrderedWithinLast30Days);
+        }
     }
 }

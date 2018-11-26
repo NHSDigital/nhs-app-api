@@ -74,7 +74,7 @@ class CommonSteps : AbstractSteps() {
         }
     }
 
-    @Then("^I receive (?:a|an) \"(.*)\" error")
+    @Then("^I receive (?:a|an) \"(.*)\" error$")
     fun thenIReceiveAMessage(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
         val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
@@ -87,6 +87,12 @@ class CommonSteps : AbstractSteps() {
         val converted = httpStatusCodeTransform(expectedStatusCode)
         val httpResponse = sessionVariableCalled<HttpResponse>("HttpResponse")
         assertEquals(converted, httpResponse.statusLine.statusCode)
+    }
+
+    @Then("^I receive (?:a|an) \"(.*)\" error status code$")
+    fun thenIReceiveAStatusCode(expectedStatusCode: Int) {
+        val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
+        assertEquals(expectedStatusCode, exception.statusCode)
     }
 
     private val _statusCodeMapping: HashMap<String, Int> = hashMapOf(

@@ -50,5 +50,10 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         {
             await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Cannot Reorder Prescription");
         }
+
+        public async Task Visit(PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days result)
+        {
+            await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Medication already ordered within last 30 days");
+        }
     }
 }

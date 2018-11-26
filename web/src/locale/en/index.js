@@ -419,6 +419,13 @@ export default {
         subheader: '',
         message: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
         retryButtonText: 'Back to my repeat prescriptions',
+        466: {
+          pageTitle: 'Error submitting request',
+          pageHeader: 'Error submitting request',
+          header: 'We cannot complete this order',
+          subheader: 'You previously ordered at least one of these medications in the last 30 days.',
+          message: 'If you need more medication sooner, contact your GP.',
+        },
       },
     },
   },

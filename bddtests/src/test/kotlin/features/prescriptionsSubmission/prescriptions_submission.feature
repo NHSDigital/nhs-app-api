@@ -54,3 +54,18 @@ Feature: Prescriptions submission
     Examples:
       | GP System |
       | EMIS      |
+
+  Scenario Outline: The <GP System> user should receive an error when they try to order a drug which they're ordered within the last 30 days
+    Given <GP System> is initialised
+    And I am using <GP System> GP System to submit my prescription
+    And I have 1 historic prescriptions in this scenario
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 <GP System> repeatable prescriptions to order
+    And I click Continue on the Order a repeat prescription page
+    But <GP System> responds with an error indicating an included course has already been ordered in the last 30 days when submitting the repeat prescription
+    When I click Confirm and order repeat prescription
+    Then I see a message indicating I've previously ordered one of the selected medications within the last 30 days
+    Examples:
+      | GP System |
+      | EMIS      |

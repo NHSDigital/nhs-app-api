@@ -24,7 +24,6 @@ class EmisCoursesBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithSuccess(courseRequestsGetResponse: CourseRequestsGetResponse): Mapping {
-
         return respondWithSuccessAny(courseRequestsGetResponse)
     }
 

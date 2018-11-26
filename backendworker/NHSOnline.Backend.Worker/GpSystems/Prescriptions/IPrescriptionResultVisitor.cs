@@ -9,5 +9,6 @@
         T Visit(PrescriptionResult.InternalServerError result);
         T Visit(PrescriptionResult.BadRequest result);
         T Visit(PrescriptionResult.CannotReorderPrescription result);
+        T Visit(PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days result);
     }
 }

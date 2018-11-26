@@ -57,5 +57,11 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             _auditor.Audit(AuditType, "Error creating prescription request: Cannot Reorder Prescription with course ids: {0}", _courseIds);
             return null;
         }
+
+        public object Visit(PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days result)
+        {
+            _auditor.Audit(AuditType, "Error ordering prescription: Medication aleady ordered within last 30 days with course ids: {0}", _courseIds);
+            return null;
+        }
     }
 }

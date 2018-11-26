@@ -20,6 +20,7 @@
             public const int Status463FailedToFetchConsent = 463;
             public const int Status464OdsCodeNotSupportedOrNoNhsNumber = 464;
             public const int Status465FailedAgeRequirement = 465;
+            public const int Status466MedicationAlreadyOrderedWithinLast30Days = 466;
         }
         
         public static class AppConfig

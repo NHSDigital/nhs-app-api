@@ -47,7 +47,7 @@ Feature: View prescriptions
     But EMIS responds with an error indicating an included course has already been ordered in the last 30 days when submitting the repeat prescription
     And I have logged into EMIS and have a valid session cookie
     When I submit the repeat prescription
-    Then I receive a "Conflict" error
+    Then I receive a "466" error status code
 
   @nativepending @NHSO-2970
   Scenario: Session expired (redis)

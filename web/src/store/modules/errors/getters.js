@@ -1,5 +1,5 @@
 const handledErrors = [464, 465];
-const standardErrors = [400, 403, 409, 460, 461];
+const standardErrors = [400, 403, 409, 460, 461, 466];
 
 export default {
   showApiError(state) {

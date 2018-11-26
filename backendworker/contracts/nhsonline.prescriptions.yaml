@@ -55,6 +55,8 @@ paths:
           description: The patient does not have the necessary permissions within the GP system.
         409:
           description: Conflict. A repeat prescription for the given course already exists preventing a new one to be created.
+        466:
+          description: The patient is trying to order medication which has already been ordered within the last 30 days.
         500:
           description: An unexpected error occurred processing the request.
         502:

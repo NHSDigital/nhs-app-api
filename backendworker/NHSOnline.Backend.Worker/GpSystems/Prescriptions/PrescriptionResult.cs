@@ -68,5 +68,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
                 return visitor.Visit(this);
             }
         }
+
+        public class MedicationAlreadyOrderedWithinLast30Days : PrescriptionResult
+        {
+            public override T Accept<T>(IPrescriptionResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

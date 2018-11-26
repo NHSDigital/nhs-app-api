@@ -488,25 +488,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
         }
 
         [TestMethod]
-        public async Task Post_ReturnsConflictException_WhenErrorReceivedFromEmis()
-        {
-            // Arrange
-            var errorResponse = _fixture.Create<StandardErrorResponse>();
-
-            _emisClient.Setup(x => x.PrescriptionsPost(_userSession.SessionId,
-                    _userSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.Conflict)
-                        { StandardErrorResponse = errorResponse }));
-
-            // Act
-            var result = await _systemUnderTest.OrderPrescription(_userSession, _repeatPrescriptionRequest);
-
-            // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.CannotReorderPrescription>();
-        }
-
-        [TestMethod]
         public async Task Post_ReturnsConflict_WhenErrorReceivedFromEmis()
         {
             // Arrange
@@ -524,7 +505,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
             var result = await _systemUnderTest.OrderPrescription(_userSession, _repeatPrescriptionRequest);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.CannotReorderPrescription>();
+            result.Should().BeAssignableTo<PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days>();
         }
 
         [TestMethod]
