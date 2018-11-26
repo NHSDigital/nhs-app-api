@@ -81,7 +81,7 @@ then
   then
     APPIUM_TYPE="-Dappium.platformName=ANDROID"
   else
-    APPIUM_TYPE="-Dappium.platformName=IPHONE"
+    APPIUM_TYPE="-Dappium.platformName=IOS"
   fi
 else
   DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
