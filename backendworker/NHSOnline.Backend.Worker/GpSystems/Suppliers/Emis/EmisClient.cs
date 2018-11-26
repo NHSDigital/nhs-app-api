@@ -17,7 +17,6 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Temporal;
-using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -27,8 +26,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         public const string HeaderEndUserSessionId = "X-API-EndUserSessionId";
         public const string HeaderSessionId = "X-API-SessionId";
-        public const string HeaderNhsNumber = "NhsNumber";
-        public const string HeaderOdsCode = "OdsCode";
 
         private const string MeApplicationsPath = "me/applications";
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
@@ -296,51 +293,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private async Task<EmisApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
-            _logger.LogEnter();
-
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
-
-            var stringResponse = responseMessage.Content != null
-                ? await responseMessage.Content.ReadAsStringAsync()
-                : null;
-
-            if (string.IsNullOrEmpty(stringResponse)) return response;
-
-            response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
-            response.StandardErrorResponse =
-                _responseParser.ParseBadRequest<StandardErrorResponse>(stringResponse, responseMessage);
-            response.ErrorResponseBadRequest =
-                _responseParser.ParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage);
-            response.ExceptionErrorResponse =
-                _responseParser.ParseError<ExceptionErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
-
-            _logger.LogExit();
-            return response;
+            return await response.Parse(responseMessage, _responseParser, _logger);
         }
 
-        public class EmisApiResponse
+        public abstract class EmisApiResponse: ApiResponse
         {
-            public EmisApiResponse(HttpStatusCode statusCode)
-            {
-                StatusCode = statusCode;
-            }
+            protected EmisApiResponse(HttpStatusCode statusCode) :base(statusCode)
+            {}
 
-            public HttpStatusCode StatusCode { get; set; }
             public StandardErrorResponse StandardErrorResponse { get; set; }
             public ExceptionErrorResponse ExceptionErrorResponse { get; set; }
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
-            public bool HasSuccessStatusCode => StatusCode.IsSuccessStatusCode();
-
-            public bool HasErrorWithMessage(string message)
-            {
-                return StandardErrorResponse?.Message?.Equals(message, StringComparison.OrdinalIgnoreCase) ?? false;
-            }
-
-            public bool HasErrorWithMessageContaining(string message)
-            {
-                return StandardErrorResponse?.Message?.Contains(message, StringComparison.OrdinalIgnoreCase) ?? false;
-            }
+            public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
 
             public bool HasInternalErrorCode(EmisApiErrorCode code)
             {
@@ -354,15 +320,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
             public bool HasExceptionWithMessage(string message)
             {
-                return ExceptionErrorResponse?.Exceptions?.Any(x => string.Equals(x.Message, message, StringComparison.Ordinal)) ?? false;
+                return ExceptionErrorResponse?.Exceptions?.Any(x =>
+                           string.Equals(x.Message, message, StringComparison.Ordinal)) ?? false;
             }
 
 
             public bool HasExceptionWithMessageContaining(string message)
             {
-                return ExceptionErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message, StringComparison.Ordinal)) ?? false;
+                return ExceptionErrorResponse?.Exceptions?.Any(x =>
+                           x.Message.Contains(message, StringComparison.Ordinal)) ?? false;
             }
-            
+
             public bool HasExceptionWithAnyMessage(string[] messages)
             {
                 return ExceptionErrorResponse?.Exceptions?.Any(x => messages.Contains(x.Message)) ?? false;
@@ -378,7 +346,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 return HasExceptionWithMessageContaining(
                     EmisApiErrorMessages.EmisService_NotEnabledForUser);
             }
-            
+
             public string GetExceptionLogMessage(string methodCall)
             {
                 var baseMessage = $"Emis {methodCall} returned with status code {StatusCode}";
@@ -392,20 +360,44 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                        + " and error message "
                        + $"{ExceptionErrorResponse?.Exceptions.First().Message}";
             }
-            public string ErrorForLogging()
-            {
-                return $"Error Code: '{StatusCode}'. " +
-                       $"Error Message:'{StandardErrorResponse?.Message}'. ";
-            }
+
+            public override string  ErrorForLogging => $"Error Code: '{StatusCode}'. " +
+                                             $"Error Message:'{StandardErrorResponse?.Message}'. ";
+
         }
 
         public class EmisApiObjectResponse<TBody> : EmisApiResponse
         {
+            public TBody Body { get; set; }
             public EmisApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
+            {}
+
+            public async Task<EmisApiObjectResponse<TBody>> Parse(
+                HttpResponseMessage responseMessage,
+                IJsonResponseParser responseParser,
+                ILogger logger)
             {
+                var stringResponse = await GetStringResponse(responseMessage, logger);
+                return string.IsNullOrEmpty(stringResponse)
+                    ? this : ParseResponse(responseParser, stringResponse, responseMessage);
             }
 
-            public TBody Body { get; set; }
+            private  EmisApiObjectResponse<TBody> ParseResponse(
+                IResponseParser responseParser, 
+                string stringResponse, 
+                HttpResponseMessage responseMessage)
+            {
+                Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
+                StandardErrorResponse =
+                    responseParser.ParseBadRequest<StandardErrorResponse>(stringResponse, responseMessage);
+                ErrorResponseBadRequest =
+                    responseParser.ParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage);
+                ExceptionErrorResponse =
+                    responseParser.ParseError<ExceptionErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
+                return this;
+            }
+
+            protected override bool FormatResponseIfUnsuccessful => true;
         }
 
         private static string EncodeDateTimeOffsetToIso(DateTimeOffset dateTimeOffset)

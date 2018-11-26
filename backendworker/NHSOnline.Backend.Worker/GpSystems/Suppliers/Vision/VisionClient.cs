@@ -1,11 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
@@ -18,6 +16,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionServiceDefinition;
+using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
@@ -25,6 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
     public class VisionClient : IVisionClient
     {
         private readonly VisionHttpClient _httpClient;
+        private readonly IXmlResponseParser _responseParser;
         private readonly Uri _targetUri;
         private readonly string _requestUsername;
         private readonly string _providerId;
@@ -38,7 +38,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             ILoggerFactory loggerFactory,
             ICertificateService certificateService,
             IEnvelopeService envelopeService,
-            VisionHttpClient httpClient)
+            VisionHttpClient httpClient,
+            IXmlResponseParser responseParser)
         {
             _targetUri = visionConfig.ApiUrl;
             _requestUsername = visionConfig.RequestUsername;
@@ -46,94 +47,102 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             _logger = loggerFactory.CreateLogger<VisionClient>();
             _envelopeService = envelopeService;
             _httpClient = httpClient;
+            _responseParser = responseParser;
             _certificate =
                 certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
         }
-            
-        public async Task<VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(VisionUserSession visionUserSession,
+
+        public async Task<VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(
+            VisionUserSession visionUserSession,
             DemographicsRequest requestContent)
         {
-            IVisionServiceDefinition visionServiceDefinition = new DemographicsServiceDefinition();
-              
-            var visionRequest = new VisionRequest<DemographicsRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId, requestContent);
-            
-            return await SendRequestAndParseResponse<VisionDemographicsResponse, DemographicsRequest>(visionRequest);   
+            var visionServiceDefinition = new DemographicsServiceDefinition();
+
+            return await Post<VisionDemographicsResponse, DemographicsRequest>(
+                visionServiceDefinition,
+                visionUserSession,
+                requestContent);
         }
-        
+
         public async Task<VisionApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
             VisionUserSession visionUserSession, PatientDataRequest requestContent)
         {
-            IVisionServiceDefinition visionServiceDefinition = new PatientDataServiceDefinition();
-            var visionRequest = new VisionRequest<PatientDataRequest>(visionServiceDefinition.Name,
-                visionServiceDefinition.Version,
-                visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId,
-                requestContent);
+            var visionServiceDefinition = new PatientDataServiceDefinition();
 
-            return await SendRequestAndParseResponse<VisionPatientDataResponse, PatientDataRequest>(visionRequest);
+            return await Post<VisionPatientDataResponse, PatientDataRequest>(
+                visionServiceDefinition,
+                visionUserSession,
+                requestContent);
         }
-        
+
         public async Task<VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
             VisionConnectionToken token, string odsCode)
         {
-            IVisionServiceDefinition visionServiceDefinition = new ConfigurationServiceDefinition();
+            var visionServiceDefinition = new ConfigurationServiceDefinition();
 
-            var visionRequest = new VisionRequest<Object>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                token.RosuAccountId, token.ApiKey, odsCode, _providerId, null);
+            var visionRequest = new VisionRequest<object>(
+                visionServiceDefinition.Name,
+                visionServiceDefinition.Version,
+                token.RosuAccountId,
+                token.ApiKey,
+                odsCode,
+                _providerId,
+                null);
 
-            return await SendRequestAndParseResponse<PatientConfigurationResponse, Object>(visionRequest);
+            return await Post<PatientConfigurationResponse, object>(visionRequest);
         }
 
         public async Task<VisionApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeats(
             VisionUserSession session)
         {
-            IVisionServiceDefinition visionServiceDefinition = new EligibleRepeatsServiceDefinition();
+            var visionServiceDefinition = new EligibleRepeatsServiceDefinition();
 
-            var visionRequest = new VisionRequest<CoursesRequest>(visionServiceDefinition.Name,
-                visionServiceDefinition.Version,
-                session.RosuAccountId, session.ApiKey, session.OdsCode, _providerId,
-                new CoursesRequest { PatientId = session.PatientId });
+            var requestContent = new CoursesRequest { PatientId = session.PatientId };
 
-            return await SendRequestAndParseResponse<EligibleRepeatsResponse, CoursesRequest>(visionRequest);
+            return await Post<EligibleRepeatsResponse, CoursesRequest>(
+                visionServiceDefinition,
+                session,
+                requestContent);
         }
-        
-        public async Task<VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(VisionUserSession userSession, PrescriptionRequest prescriptionRequest)
+
+        public async Task<VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(
+            VisionUserSession userSession, PrescriptionRequest prescriptionRequest)
         {
-            IVisionServiceDefinition visionServiceDefinition = new PrescriptionHistoryServiceDefinition();
-            
-            var visionRequest = new VisionRequest<PrescriptionRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, prescriptionRequest);
+            var visionServiceDefinition = new PrescriptionHistoryServiceDefinition();
 
-            return await SendRequestAndParseResponse<PrescriptionHistoryResponse, PrescriptionRequest>(visionRequest);
+            return await Post<PrescriptionHistoryResponse, PrescriptionRequest>(
+                visionServiceDefinition,
+                userSession,
+                prescriptionRequest);
         }
 
-        public async Task<VisionApiObjectResponse<OrderNewPrescriptionResponse>> OrderNewPrescription(VisionUserSession userSession, OrderNewPrescriptionRequest newPrescriptionRequest)
+        public async Task<VisionApiObjectResponse<OrderNewPrescriptionResponse>> OrderNewPrescription(
+            VisionUserSession userSession, OrderNewPrescriptionRequest newPrescriptionRequest)
         {
-            IVisionServiceDefinition visionServiceDefinition = new NewPrescriptionServiceDefinition();
+            var visionServiceDefinition = new NewPrescriptionServiceDefinition();
 
-            var visionRequest = new VisionRequest<OrderNewPrescriptionRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, newPrescriptionRequest);
-
-            return await SendRequestAndParseResponse<OrderNewPrescriptionResponse, OrderNewPrescriptionRequest>(visionRequest);
+            return await Post<OrderNewPrescriptionResponse, OrderNewPrescriptionRequest>(
+                visionServiceDefinition,
+                userSession,
+                newPrescriptionRequest);
         }
-        
+
         public async Task<VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
             VisionUserSession userSession
-            )
+        )
         {
-            IVisionServiceDefinition visionServiceDefinition = new GetExistingAppointmentsServiceDefinition();
+            var visionServiceDefinition = new GetExistingAppointmentsServiceDefinition();
 
-            var visionRequest = new VisionRequest<PatientId>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, new PatientId { Id = userSession.PatientId });
-
-            return await SendRequestAndParseResponse<BookedAppointmentsResponse, PatientId>(visionRequest);
+            return await Post<BookedAppointmentsResponse, PatientId>(
+                visionServiceDefinition,
+                userSession,
+                new PatientId { Id = userSession.PatientId });
         }
-        
-        public async Task<VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
 
+        public async Task<VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
             VisionUserSession visionUserSession, AppointmentSlotsDateRange dateRange)
         {
-            IVisionServiceDefinition visionServiceDefinition = new GetAvailableAppointmenServiceDefinition();
+            var visionServiceDefinition = new GetAvailableAppointmenServiceDefinition();
 
             var request = new AvailableAppointmentsRequest
             {
@@ -151,58 +160,69 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                     To = dateRange.ToDate.Date.AddDays(-1)
                 }
             };
-            var visionRequest = new VisionRequest<AvailableAppointmentsRequest>(visionServiceDefinition.Name,
-                visionServiceDefinition.Version,
-                visionUserSession.RosuAccountId,
-                visionUserSession.ApiKey,
-                visionUserSession.OdsCode,
-                _providerId,
-                request);
 
-            return await
-                SendRequestAndParseResponse<AvailableAppointmentsResponse, AvailableAppointmentsRequest>(
-                    visionRequest);
+            return await Post<AvailableAppointmentsResponse, AvailableAppointmentsRequest>(
+                visionServiceDefinition, visionUserSession, request);
         }
-        
+
         public async Task<VisionApiObjectResponse<BookAppointmentResponse>> BookAppointment(
             VisionUserSession userSession,
             BookAppointmentRequest bookAppointmentRequest
         )
         {
-            IVisionServiceDefinition visionServiceDefinition = new BookAppointmentServiceDefinition();
+            var visionServiceDefinition = new BookAppointmentServiceDefinition();
 
-            var visionRequest = new VisionRequest<BookAppointmentRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, bookAppointmentRequest);
-
-            return await SendRequestAndParseResponse<BookAppointmentResponse, BookAppointmentRequest>(visionRequest);
+            return await Post<BookAppointmentResponse, BookAppointmentRequest>(
+                visionServiceDefinition, userSession, bookAppointmentRequest);
         }
 
         public async Task<VisionApiObjectResponse<CancelledAppointmentResponse>> CancelAppointment(
-            VisionUserSession userSession, CancelAppointmentRequest request
+            VisionUserSession userSession,
+            CancelAppointmentRequest request
         )
         {
-            IVisionServiceDefinition visionServiceDefinition = new CancelAppointmentServiceDefinition();
-            
-            var visionRequest = new VisionRequest<CancelAppointmentRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, request);
+            var visionServiceDefinition = new CancelAppointmentServiceDefinition();
 
-            
-            return await SendRequestAndParseResponse<CancelledAppointmentResponse, CancelAppointmentRequest>(visionRequest);
+            return await Post<CancelledAppointmentResponse, CancelAppointmentRequest>(
+                visionServiceDefinition, userSession, request);
         }
 
         public async Task<VisionApiObjectResponse<ServiceContentRegisterResponse>> PostLinkAccount(string odsCode,
             PatientIm1ConnectionRequest request, string dob)
         {
-            IVisionServiceDefinition visionServiceDefinition = new RegisterServiceDefinition();
+            var visionServiceDefinition = new RegisterServiceDefinition();
 
-            var visionRequest = new VisionRequest<Object>(visionServiceDefinition.Name, visionServiceDefinition.Version,
-                odsCode, _providerId, request.AccountId, request.LinkageKey, request.Surname, dob);
+            var visionRequest = new VisionRequest<object>(
+                visionServiceDefinition.Name,
+                visionServiceDefinition.Version,
+                odsCode,
+                _providerId,
+                request.AccountId,
+                request.LinkageKey,
+                request.Surname,
+                dob);
 
-            return await SendRequestAndParseResponse<ServiceContentRegisterResponse, Object>(
-                visionRequest);
+            return await Post<ServiceContentRegisterResponse, object>(visionRequest);
         }
 
-        private async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(VisionRequest<T> request)
+        public async Task<VisionApiObjectResponse<TResponse>> Post<TResponse, TRequest>(
+            IVisionServiceDefinition visionServiceDefinition,
+            VisionUserSession session,
+            TRequest requestContent)
+        {
+            var request = new VisionRequest<TRequest>(
+                visionServiceDefinition.Name,
+                visionServiceDefinition.Version,
+                session.RosuAccountId,
+                session.ApiKey,
+                session.OdsCode,
+                _providerId,
+                requestContent);
+
+            return await Post<TResponse, TRequest>(request);
+        }
+        
+        private async Task<VisionApiObjectResponse<TResponse>> Post<TResponse, TRequest>(VisionRequest<TRequest> request)
         {
             var httpRequest = BuildHttpRequest(request);
             var response = await TransmitAsync<TResponse>(httpRequest);
@@ -218,124 +238,79 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 {
                     Content = new StringContent(envelope, Encoding.UTF8, MediaType)
                 };
-            
-            httpRequest.Headers.Add(Constants.VisionConstants.RequestIdentifierHeader,request?.ServiceDefinition?.Name);
+
+            httpRequest.Headers.Add(Constants.VisionConstants.RequestIdentifierHeader, request?.ServiceDefinition?.Name);
 
             return httpRequest;
         }
 
         private async Task<VisionApiObjectResponse<TResponse>> TransmitAsync<TResponse>(HttpRequestMessage request)
         {
-            var thirdpartyEnvelope = await SendRequestAndParseResponse<TResponse>(request);
-            return thirdpartyEnvelope;
+            var thirdPartyEnvelope = await SendRequestAndParseResponse<TResponse>(request);
+            return thirdPartyEnvelope;
         }
 
         private async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>
             (HttpRequestMessage request)
         {
-            _logger.LogInformation($"{nameof(VisionClient)} sending request");
-
             var responseMessage = await _httpClient.Client.SendAsync(request);
-            
             var response = new VisionApiObjectResponse<TResponse>(responseMessage.StatusCode);
-
-            if (!response.HasSuccessResponse)
-            {
-                _logger.LogError($"VISION request failed with status code {responseMessage.StatusCode}");
-                return response;
-            }
-
-            var stringResponse = responseMessage.Content != null
-                ? await responseMessage.Content.ReadAsStringAsync()
-                : null;
-            
-            if (string.IsNullOrEmpty(stringResponse)) return response;
-
-            try
-            {
-                var responseObject = Deserializer<VisionResponseEnvelope<TResponse>>(stringResponse);
-                response.RawResponse = responseObject;
-            }
-            catch (FormatException e)
-            {
-                _logger.LogError(e, "An error occured while parsing the response");
-                return new VisionApiObjectResponse<TResponse>(HttpStatusCode.InternalServerError);
-            }
-
-            return response;
+            return await response.Parse(responseMessage, _responseParser, _logger);
         }
 
-        private T Deserializer<T>(string request)
-        {
-            T instance;
+        public class VisionApiObjectResponse<TBody> : ApiResponse
+        {            
+            // Note
+            // We don't know whether Vision always populates certain properties when there is an error.
+            // So there are a lot of null checks below using the null conditional operator.
 
-            var xmlSerializer = new XmlSerializer(typeof(T));
-            
-            xmlSerializer.UnknownNode+= serializer_UnknownNode;  
-            xmlSerializer.UnknownAttribute+= serializer_UnknownAttribute;
-            
-            using (var stringReader = new StringReader(request))
-            {
-                instance = (T) xmlSerializer.Deserialize(stringReader);
-            }
-
-            return instance;
-        }
-        public class VisionApiResponse
-        {
-            protected VisionApiResponse(HttpStatusCode status)
-            {
-                StatusCode = status;
-            }
-
-            public HttpStatusCode StatusCode { get; set; }
-        }
-
-        public class VisionApiObjectResponse<TBody> : VisionApiResponse
-        {
             public VisionApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
+            {}
+
+            public async Task<VisionApiObjectResponse<TBody>> Parse(
+                HttpResponseMessage responseMessage, 
+                IXmlResponseParser responseParser, 
+                ILogger logger)
             {
+                var stringResponse = await GetStringResponse(responseMessage, logger);
+                return string.IsNullOrEmpty(stringResponse)
+                    ? this : ParseResponse(responseParser, logger, stringResponse, responseMessage);
             }
 
             public VisionResponseEnvelope<TBody> RawResponse { get; set; }
 
             public TBody Body => RawResponse.Body.VisionResponse.ServiceContent;
 
-            public bool HasErrorResponse
-            {
-                get
-                {
-                    return !StatusCodeIndicatesSuccess
-                           || RawResponse?.Body?.Fault != null
-                           || bool.FalseString.Equals(
-                               RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Successful,
-                               StringComparison.OrdinalIgnoreCase);
-                }
-            }
+            public bool HasErrorResponse => !StatusCode.IsSuccessStatusCode()
+                                            || FaultExists
+                                            || OutcomeUnsuccessful;
 
-            public bool HasSuccessResponse => !HasErrorResponse && StatusCode.IsSuccessStatusCode();
+            private Fault Fault => RawResponse?.Body?.Fault;
+            private Outcome Outcome => RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome;
 
-            public string ErrorContent
-            {
-                get
-                {
-                    return
-                        $"fault: { JsonConvert.SerializeObject(RawResponse?.Body?.Fault) }, " +
-                        $"error: { JsonConvert.SerializeObject(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error) }";
-                }
-            }
-            
-            // Note
-            // We don't know whether Vision always populates certain properties when there is an error.
-            // So there are a lot of null checks below using the null conditional operator.
+            private bool FaultExists => Fault != null;
+
+            private bool OutcomeUnsuccessful => bool.FalseString.Equals(
+                Outcome?.Successful,
+                StringComparison.OrdinalIgnoreCase);
+
+            public override bool HasSuccessResponse => !HasErrorResponse;
+
+
+            public override string ErrorForLogging => $"fault: {JsonConvert.SerializeObject(Fault)}, " +
+                                             $"error: {JsonConvert.SerializeObject(Outcome?.Error)}";
+
+            protected override bool FormatResponseIfUnsuccessful => false;
 
             public bool IsInvalidRequestError =>
-                (RawResponse?.Body?.Fault?.Detail?.VisionFault?.Error?.Category ?? "").Contains("INVALID_REQUEST",
+                (Fault?.Detail?.VisionFault?.Error?.Category ?? "").Contains("INVALID_REQUEST",                     
                     StringComparison.Ordinal);
-            
-            public bool IsInvalidSecurityHeaderError => (RawResponse?.Body?.Fault?.FaultCode ?? "").Contains("InvalidSecurity", StringComparison.Ordinal);
 
-            public bool IsInvalidUserCredentialsError => HasVisionApiErrorCode(VisionApiErrorCodes.InvalidUserCredentials);
+            public bool IsInvalidSecurityHeaderError =>
+                (Fault?.FaultCode ?? "").Contains("InvalidSecurity", StringComparison.Ordinal);
+
+            public bool IsInvalidUserCredentialsError =>
+                HasVisionApiErrorCode(VisionApiErrorCodes.InvalidUserCredentials);
 
             public bool IsAccountLockedError => HasVisionApiErrorCode(VisionApiErrorCodes.AccountLocked);
 
@@ -346,36 +321,45 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             public bool IsInvalidParameterError => HasVisionApiErrorCode(VisionApiErrorCodes.InvalidParameter);
 
             public bool IsUnknownError => HasVisionApiErrorCode(VisionApiErrorCodes.UnknownError);
-            
+
             public bool IsAccessDeniedError => HasVisionApiErrorCode(VisionApiErrorCodes.AccessDenied);
-            
-            public bool IsAppointmentSlotNotBookedToCurrentUserError => HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentSlotNotBookedToCurrentUser);
-            
-            public bool IsAppointmentSlotNotFoundError => HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentSlotNotFound);
+
+            public bool IsAppointmentSlotNotBookedToCurrentUserError =>
+                HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentSlotNotBookedToCurrentUser);
+
+            public bool IsAppointmentSlotNotFoundError =>
+                HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentSlotNotFound);
 
             public bool IsAppointmentSlotAlreadyBookedError =>
                 HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentSlotAlreadyBooked);
 
             public bool IsAppointmentBookingLimitReachedError =>
                 HasVisionApiErrorCode(VisionApiErrorCodes.AppointmentBookingLimitReached);
-            
+
             private bool HasVisionApiErrorCode(string visionErrorCode)
             {
-                return visionErrorCode.Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
-                    StringComparison.Ordinal);
+                return visionErrorCode.Equals(Outcome?.Error?.Code, StringComparison.Ordinal);
             }
-            
-            private bool StatusCodeIndicatesSuccess => StatusCode == HttpStatusCode.OK;
-        }
-        
-        private void serializer_UnknownNode(object sender, XmlNodeEventArgs e)
-        {
-           _logger.LogDebug("Unknown node while deserialising Vision response - Node name: {nodeName}",  e.Name);
-        }
 
-        private void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)  
-        {
-            _logger.LogDebug("Unknown attribute while deserialising Vision response - Attribute name: {attrName}", e.Attr.Name);
+            private VisionApiObjectResponse<TBody> ParseResponse(
+                IResponseParser responseParser,
+                ILogger logger,
+                string stringResponse,
+                HttpResponseMessage responseMessage)
+            {
+                try
+                {
+                    var responseObject = responseParser.ParseBody<VisionResponseEnvelope<TBody>>(stringResponse, responseMessage);
+                    RawResponse = responseObject;
+                }
+                catch (FormatException e)
+                {
+                    logger.LogError(e, "An error occured while parsing the response");
+                    return new VisionApiObjectResponse<TBody>(HttpStatusCode.InternalServerError);
+                }
+
+                return this;
+            }
         }
     }
 }

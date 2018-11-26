@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private AppointmentBookResult InterpretAppointmentsPostResponse(
             EmisClient.EmisApiResponse response)
         {
-            if (response.HasSuccessStatusCode)
+            if (response.HasSuccessResponse)
             {
                 return new AppointmentBookResult.SuccessfullyBooked();
             }

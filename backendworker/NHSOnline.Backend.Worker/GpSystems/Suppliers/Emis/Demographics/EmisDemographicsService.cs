@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
             {
                 var demographicsResponse = await _emisClient.DemographicsGet(emisUserSession.UserPatientLinkToken, emisUserSession.SessionId, emisUserSession.EndUserSessionId);
 
-                if (!demographicsResponse.HasSuccessStatusCode)
+                if (!demographicsResponse.HasSuccessResponse)
                 {
                     // User does not have access
                     if (demographicsResponse.HasForbiddenResponse())

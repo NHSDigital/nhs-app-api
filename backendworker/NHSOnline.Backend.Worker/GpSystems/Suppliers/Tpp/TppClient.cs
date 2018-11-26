@@ -29,8 +29,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         private readonly ITppConfig _tppConfig;
         private readonly IXmlResponseParser _responseParser;
         private readonly ILogger<TppClient> _logger;
-        
-        public TppClient(TppHttpClient httpClient, ITppConfig tppConfig, IXmlResponseParser responseParser, ILoggerFactory loggerFactory)
+
+        public TppClient(TppHttpClient httpClient, ITppConfig tppConfig, IXmlResponseParser responseParser,
+            ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
             _tppConfig = tppConfig;
@@ -38,9 +39,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
             _logger = loggerFactory.CreateLogger<TppClient>();
         }
-        
+
         public async Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel)
-        {   
+        {
             var response = await Post<LinkAccount, LinkAccountReply>(linkAccountModel);
 
             if (response.Body != null)
@@ -50,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
             return response;
         }
-        
+
         public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticate)
         {
             authenticate.Application = new Application
@@ -60,31 +61,32 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 ProviderId = authenticate.ProviderId,
                 DeviceType = _tppConfig.ApplicationDeviceType
             };
-            
+
             var response = await Post<Authenticate, AuthenticateReply>(authenticate);
 
             return response;
         }
-        
+
         public async Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession)
         {
             _logger.LogEnter();
-            
+
             var patientSelected = new PatientSelected
             {
                 OnlineUserId = tppUserSession.OnlineUserId,
-                PatientId =  tppUserSession.PatientId,
-                UnitId = tppUserSession.OdsCode,                  
+                PatientId = tppUserSession.PatientId,
+                UnitId = tppUserSession.OdsCode,
             };
 
             _logger.LogExit();
-            return await Post<PatientSelected, PatientSelectedReply>(patientSelected, tppUserSession.Suid);          
-        }      
-        
-        public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession)
+            return await Post<PatientSelected, PatientSelectedReply>(patientSelected, tppUserSession.Suid);
+        }
+
+        public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(
+            TppUserSession tppUserSession)
         {
             _logger.LogEnter();
-            
+
             var request = new ViewPatientOverview
             {
                 PatientId = tppUserSession.PatientId,
@@ -95,13 +97,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             _logger.LogExit();
             return await Post<ViewPatientOverview, ViewPatientOverviewReply>(request, tppUserSession.Suid);
         }
-        
+
         public async Task<TppApiObjectResponse<RequestPatientRecordReply>> RequestPatientRecordPost(
             TppUserSession tppUserSession)
 
         {
             _logger.LogEnter();
-            
+
             var request = new RequestPatientRecord
             {
                 PatientId = tppUserSession.PatientId,
@@ -113,7 +115,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return await Post<RequestPatientRecord, RequestPatientRecordReply>(request, tppUserSession.Suid);
         }
 
-        public async Task<TppApiObjectResponse<BookAppointmentReply>> BookAppointmentSlotPost(BookAppointment bookAppointment, TppUserSession userSession)
+        public async Task<TppApiObjectResponse<BookAppointmentReply>> BookAppointmentSlotPost(
+            BookAppointment bookAppointment, TppUserSession userSession)
         {
             return await Post<BookAppointment, BookAppointmentReply>(bookAppointment, userSession.Suid);
         }
@@ -122,7 +125,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             string startDate, string endDate)
         {
             _logger.LogDebug("Entered: {0} with startDate:{1} and endDate:{2}", nameof(TestResultsView), startDate, endDate);
-            
+
             var request = new TestResultsView
             {
                 PatientId = tppUserSession.PatientId,
@@ -135,12 +138,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             _logger.LogExit();
             return await Post<TestResultsView, TestResultsViewReply>(request, tppUserSession.Suid);
         }
-        
-        public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession,
+
+        public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(
+            TppUserSession tppUserSession,
             string testResultId)
         {
             _logger.LogEnter();
-            
+
             var request = new TestResultsViewDetailed
             {
                 PatientId = tppUserSession.PatientId,
@@ -176,74 +180,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return response;
         }
 
-        private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
-        {
-            model.ApplyConfig(_tppConfig);
-            var authenticateXml = model.SerializeXml();
-            var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, TppHttpClient.MediaType);
-            var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
-            
-            var response = await SendRequestAndParseResponse<TResponse>(request);
-
-            return response;
-        }
-
-        private async Task<TppApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
-            HttpRequestMessage request)
-        {
-            _logger.LogHttpRequest(request);
-            var responseMessage = await _httpClient.Client.SendAsync(request);
-            _logger.LogHttpResponse(request,responseMessage);
-            var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
-
-            if (!response.HasSuccessResponse)
-            {
-                _logger.LogError($"Tpp request failed with status code {responseMessage.StatusCode}");
-                return response;
-            }
-
-            var stringResponse = responseMessage.Content != null
-                ? await responseMessage.Content.ReadAsStringAsync()
-                : null;
-            
-            if (string.IsNullOrEmpty(stringResponse))
-            {
-                _logger.LogError($"Tpp responded with status code {responseMessage.StatusCode} and no body");
-                return response;
-            }
-
-            try
-            {
-                if (IsErrorResponse(stringResponse))
-                {
-                    response.ErrorResponse = _responseParser.ParseBody<Error>(stringResponse, responseMessage);
-
-                    _logger.LogError(
-                        $"Server returned with error. {response.ErrorResponse?.UserFriendlyMessage}. {response.ErrorResponse?.TechnicalMessage}");
-
-                    return response;
-                }
-
-                response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
-            }
-            catch (FormatException e)
-            {
-                _logger
-                    .LogError(e, "An error occured while parsing the response");
-                return new TppApiObjectResponse<TResponse>(HttpStatusCode.InternalServerError);
-            }
-
-            if (responseMessage.Headers.TryGetValues(ResponseSuidHeader, out var values))
-            {
-                response.Headers = new Dictionary<string, string>
-                {
-                    { ResponseSuidHeader, values.First() }
-                };
-            }
-
-            return response;
-        }
-
         public async Task<TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(
             TppUserSession tppUserSession)
         {
@@ -270,7 +206,39 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return response;
         }
 
-        private static HttpRequestMessage BuildTppRequest(HttpMethod method, string requestType, StringContent stringContent, string suid = null)
+        public async Task<TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots listSlots, string suid)
+        {
+            return await Post<ListSlots, ListSlotsReply>(listSlots, suid);
+        }
+
+        public async Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(
+            ViewAppointments viewAppointments, string suid)
+        {
+            return await Post<ViewAppointments, ViewAppointmentsReply>(viewAppointments, suid);
+        }
+
+        public async Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(
+            CancelAppointment cancelAppointment,
+            string suid)
+        {
+            return await Post<CancelAppointment, CancelAppointmentReply>(cancelAppointment, suid);
+        }
+
+        private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model,
+            string suid = null) where TRequest : ITppRequest
+        {
+            model.ApplyConfig(_tppConfig);
+            var authenticateXml = model.SerializeXml();
+            var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, TppHttpClient.MediaType);
+            var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
+
+            var response = await SendRequestAndParseResponse<TResponse>(request);
+
+            return response;
+        }
+
+        private static HttpRequestMessage BuildTppRequest(HttpMethod method, string requestType,
+            StringContent stringContent, string suid = null)
         {
             if (stringContent == null)
             {
@@ -285,7 +253,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
             requestMessage.Headers.Add(RequestTypeHeader, requestType);
 
-            if (!String.IsNullOrEmpty(suid))
+            if (!string.IsNullOrEmpty(suid))
             {
                 requestMessage.Headers.Add(RequestSuidHeader, suid);
             }
@@ -293,43 +261,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return requestMessage;
         }
 
-        private static bool IsErrorResponse(string responseString)
+        private async Task<TppApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
+            HttpRequestMessage request)
         {
-            return ErrorRegex.IsMatch(responseString);
+            var responseMessage = await _httpClient.Client.SendAsync(request);
+            var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
+            return await response.Parse(responseMessage, _responseParser, _logger);
         }
 
-        public async Task<TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots listSlots, string suid)
+        public abstract class TppApiResponse : ApiResponse
         {
-            return await Post<ListSlots, ListSlotsReply>(listSlots, suid);
-        }
-
-        public async Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments viewAppointments, string suid)
-        {
-            return await Post<ViewAppointments, ViewAppointmentsReply>(viewAppointments, suid);
-        }
-
-        public async Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment cancelAppointment,
-            string suid)
-        {
-            return await Post<CancelAppointment, CancelAppointmentReply>(cancelAppointment, suid);
-        }
-
-        public class TppApiResponse
-        {
-            public TppApiResponse(HttpStatusCode status)
-            {
-                StatusCode = status;
-            }
+            protected TppApiResponse(HttpStatusCode status) :base(status)
+            {}
 
             public Error ErrorResponse { get; set; }
-            public HttpStatusCode StatusCode { get; set; }
-            public bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
+            public override bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
 
             public bool HasErrorWithCode(string errorCode)
             {
                 return string.Equals(ErrorResponse?.ErrorCode, errorCode, StringComparison.Ordinal);
             }
-            
+
             // User does not have access, Sean to confirm with TPP re using error codes
             public bool HasForbiddenResponse => ErrorResponse != null &&
                                                 TppApiErrorCodes.NoAccess.Equals(ErrorResponse.ErrorCode,
@@ -338,7 +290,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             public bool NotAuthenticated => ErrorResponse != null &&
                                             TppApiErrorCodes.NotAuthenticated.Equals(ErrorResponse.ErrorCode,
                                                 StringComparison.Ordinal);
-            
+
             public bool HasErrorMessageContaining(string message)
             {
                 return ErrorResponse?.UserFriendlyMessage.Contains(message, StringComparison.Ordinal) ?? false;
@@ -351,14 +303,63 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
             }
 
+
+            public async Task<TppApiObjectResponse<TBody>> Parse(
+                HttpResponseMessage responseMessage,
+                IXmlResponseParser responseParser,
+                ILogger logger)
+            {
+                var stringResponse = await GetStringResponse(responseMessage, logger);
+                return string.IsNullOrEmpty(stringResponse) 
+                    ? this : ParseResponse(responseParser, logger, stringResponse, responseMessage);
+            }
+
             public TBody Body { get; set; }
             public Dictionary<string, string> Headers { get; set; }
 
-            public string ErrorForLogging()
+            public override string ErrorForLogging => $"Error Code: '{ErrorResponse?.ErrorCode}'. " +
+                                             $"Error User Message:'{ErrorResponse?.UserFriendlyMessage}'. " +
+                                             $"Error Technical Response:'{ErrorResponse?.TechnicalMessage}'.";
+
+            protected override bool FormatResponseIfUnsuccessful => false;
+
+            private TppApiObjectResponse<TBody> ParseResponse(
+                IResponseParser responseParser,
+                ILogger logger,
+                string stringResponse,
+                HttpResponseMessage responseMessage)
             {
-                return $"Error Code: '{ErrorResponse?.ErrorCode}'. " +
-                       $"Error User Message:'{ErrorResponse?.UserFriendlyMessage}'. " +
-                       $"Error Technical Response:'{ErrorResponse?.TechnicalMessage}'.";
+                try
+                {
+                    if (IsErrorResponse(stringResponse))
+                    {
+                        ErrorResponse = responseParser.ParseBody<Error>(stringResponse, responseMessage);
+                        logger.LogError($"Server returned with error. {ErrorForLogging}");
+                        return this;
+                    }
+
+                    Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
+                }
+                catch (FormatException e)
+                {
+                    logger.LogError(e, "An error occured while parsing the response");
+                    return new TppApiObjectResponse<TBody>(HttpStatusCode.InternalServerError);
+                }
+
+                if (responseMessage.Headers.TryGetValues(ResponseSuidHeader, out var values))
+                {
+                    Headers = new Dictionary<string, string>
+                    {
+                        { ResponseSuidHeader, values.First() }
+                    };
+                }
+
+                return this;
+            }
+
+            private static bool IsErrorResponse(string responseString)
+            {
+                return ErrorRegex.IsMatch(responseString);
             }
         }
     }

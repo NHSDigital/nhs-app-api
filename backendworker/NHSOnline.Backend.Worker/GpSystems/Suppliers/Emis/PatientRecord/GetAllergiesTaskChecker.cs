@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             
             var allergiesResponse = task.Result;
             
-            if (!allergiesResponse.HasSuccessStatusCode)
+            if (!allergiesResponse.HasSuccessResponse)
             {
                 // User does not have access
                 if (allergiesResponse.HasForbiddenResponse() ||

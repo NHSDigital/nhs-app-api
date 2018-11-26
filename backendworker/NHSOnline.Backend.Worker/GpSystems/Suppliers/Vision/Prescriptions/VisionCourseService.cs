@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                     }
                 }
                 
-                _logger.LogError($"Vision system encountered an error: { coursesResponse.ErrorContent }");
+                _logger.LogError($"Vision system encountered an error: { coursesResponse.ErrorForLogging }");
                 return new GetCoursesResult.SupplierSystemUnavailable();
             }
             catch (HttpRequestException e)

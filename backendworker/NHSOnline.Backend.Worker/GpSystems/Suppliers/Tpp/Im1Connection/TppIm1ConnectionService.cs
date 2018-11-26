@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
 
                 if (!authenticateReply.HasSuccessResponse)
                 {
-                    _logger.LogError($"Tpp Authentication call failed - {authenticateReply.ErrorForLogging()}");
+                    _logger.LogError($"Tpp Authentication call failed - {authenticateReply.ErrorForLogging}");
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 

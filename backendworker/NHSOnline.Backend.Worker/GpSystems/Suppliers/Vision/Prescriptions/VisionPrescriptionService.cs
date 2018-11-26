@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                     }
                 }
 
-                _logger.LogError($"Vision system encountered an error: { prescriptionsResponse.ErrorContent }");
+                _logger.LogError($"Vision system encountered an error: { prescriptionsResponse.ErrorForLogging }");
                 return new PrescriptionResult.SupplierSystemUnavailable();
             }
             catch (HttpRequestException e)
@@ -138,7 +138,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 
                 if (response.HasErrorResponse)
                 {
-                    _logger.LogError($"Vision response does not indicate a successful order: { response.ErrorContent }");
+                    _logger.LogError($"Vision response does not indicate a successful order: { response.ErrorForLogging }");
                     return new PrescriptionResult.SupplierSystemUnavailable();
                 }
 

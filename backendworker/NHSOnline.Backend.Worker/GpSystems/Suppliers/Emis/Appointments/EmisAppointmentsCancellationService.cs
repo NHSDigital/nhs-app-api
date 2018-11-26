@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private AppointmentCancelResult InterpretAppointmentsDeleteResponse(
             EmisClient.EmisApiResponse response)
         {
-            if (response.HasSuccessStatusCode)
+            if (response.HasSuccessResponse)
             {
                 return new AppointmentCancelResult.SuccessfullyCancelled();
             }

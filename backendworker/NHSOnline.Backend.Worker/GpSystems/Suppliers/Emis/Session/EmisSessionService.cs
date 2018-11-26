@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         public async Task<SessionsEndUserSessionPostResponse> SendSessionsEndUserSessionPost()
         {
             var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
-            if (!endUserSessionResponse.HasSuccessStatusCode)
+            if (!endUserSessionResponse.HasSuccessResponse)
             {
                 _logger.LogEmisResponseIsForbidden();
                 _logger.LogEmisErrorResponse(endUserSessionResponse);
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             };
 
             var sessionsResponse = await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
-            if (!sessionsResponse.HasSuccessStatusCode)
+            if (!sessionsResponse.HasSuccessResponse)
             {
                 if (InvalidTokenStatusCodes.Contains(sessionsResponse.StatusCode))
                 {

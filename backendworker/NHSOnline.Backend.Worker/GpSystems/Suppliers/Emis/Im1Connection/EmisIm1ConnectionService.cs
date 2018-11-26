@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 _logger.LogEnter();
 
                 var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
-                if (!endUserSessionResponse.HasSuccessStatusCode)
+                if (!endUserSessionResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
                     _logger.LogEmisErrorResponse(endUserSessionResponse);
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 };
 
                 var sessionsResponse = await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
-                if (!sessionsResponse.HasSuccessStatusCode)
+                if (!sessionsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
                     _logger.LogEmisErrorResponse(sessionsResponse);
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 var demographicsResponse =
                     await _emisClient.DemographicsGet(userPatientLinkToken, sessionsResponse.Body.SessionId,
                         endUserSessionId);
-                if (!demographicsResponse.HasSuccessStatusCode)
+                if (!demographicsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
                     _logger.LogEmisErrorResponse(demographicsResponse);
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 _logger.LogEnter();
                 
                 var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
-                if (!endUserSessionResponse.HasSuccessStatusCode)
+                if (!endUserSessionResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
                     _logger.LogEmisErrorResponse(endUserSessionResponse);
@@ -178,7 +178,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                         return new Im1ConnectionRegisterResult.BadRequest();
                     }
 
-                    if (!meApplicationsResponse.HasSuccessStatusCode)
+                    if (!meApplicationsResponse.HasSuccessResponse)
                     {
                         _logger.LogError(
                             $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, success");
@@ -196,7 +196,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
 
                 var sessionsResponse =
                     await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
-                if (!sessionsResponse.HasSuccessStatusCode)
+                if (!sessionsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
                     _logger.LogEmisErrorResponse(sessionsResponse);
@@ -215,7 +215,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 var demographicsResponse =
                     await _emisClient.DemographicsGet(userPatientLinkToken, sessionsResponse.Body.SessionId,
                         endUserSessionId);
-                if (!demographicsResponse.HasSuccessStatusCode)
+                if (!demographicsResponse.HasSuccessResponse)
                 {
                     LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
                     _logger.LogEmisErrorResponse(demographicsResponse);

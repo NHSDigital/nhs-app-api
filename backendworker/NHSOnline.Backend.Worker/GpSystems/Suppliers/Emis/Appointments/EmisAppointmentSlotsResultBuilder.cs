@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private Option<AppointmentSlotsResult> GetResponseHasNoSuccessStatusCodeCase<T>(T response)
             where T : EmisClient.EmisApiResponse
         {
-            if (response.HasSuccessStatusCode)
+            if (response.HasSuccessResponse)
             {
                 return Option.None<AppointmentSlotsResult>();
             }

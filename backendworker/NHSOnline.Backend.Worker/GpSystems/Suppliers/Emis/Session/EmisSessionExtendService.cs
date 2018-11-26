@@ -31,11 +31,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 var emisUserSession = (EmisUserSession) userSession;
                 var response = await _emisClient.DemographicsGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId);
-                if (response.HasSuccessStatusCode)
+                if (response.HasSuccessResponse)
                 {
                     return new SessionExtendResult.SuccessfullyExtended();
                 }
-                _logger.LogError($"{StandardErrorMessage} {response.ErrorForLogging()}");
+                _logger.LogError($"{StandardErrorMessage} {response.ErrorForLogging}");
                 return new SessionExtendResult.SupplierSystemUnavailable();
             }
             catch (HttpRequestException e)

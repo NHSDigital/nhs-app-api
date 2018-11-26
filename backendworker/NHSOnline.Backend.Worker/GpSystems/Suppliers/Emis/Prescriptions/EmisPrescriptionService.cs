@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
                 _logger.LogDebug("Fetch Prescriptions For User Complete");
 
-                if (prescriptionsResponse.HasSuccessStatusCode)
+                if (prescriptionsResponse.HasSuccessResponse)
                 {
                     try
                     {
@@ -165,7 +165,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                 var response = await _emisClient.PrescriptionsPost(
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, postRequest);
 
-                if (response.HasSuccessStatusCode)
+                if (response.HasSuccessResponse)
                 {
                     _logger.LogDebug($"Prescription order placed successfully");
                     return new PrescriptionResult.SuccessfulPost();

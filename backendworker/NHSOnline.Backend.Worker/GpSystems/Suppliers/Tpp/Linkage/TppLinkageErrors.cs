@@ -28,13 +28,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
             {
                 if (linkageError.IsInvalid(response, originalRequest))
                 {
-                    _logger.LogError($"Linkage create request unsuccessful - {linkageError.Message} - {response.ErrorForLogging()}");
+                    _logger.LogError($"Linkage create request unsuccessful - {linkageError.Message} - {response.ErrorForLogging}");
                     return linkageError.ResultingError;
                 }
             }
 
             _logger.LogError(
-                $"Linkage create request unsuccessful - Tpp system is currently unavailable - {response.ErrorForLogging()}");
+                $"Linkage create request unsuccessful - Tpp system is currently unavailable - {response.ErrorForLogging}");
             return new LinkageResult.SupplierSystemUnavailable();
         }
 

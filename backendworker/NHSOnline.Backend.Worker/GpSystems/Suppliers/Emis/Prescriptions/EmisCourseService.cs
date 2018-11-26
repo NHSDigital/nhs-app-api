@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                 
                 _logger.LogDebug("Fetch Courses for user complete");
 
-                if (coursesResponse.HasSuccessStatusCode)
+                if (coursesResponse.HasSuccessResponse)
                 {
                     try
                     {

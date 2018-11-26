@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                     return new SessionExtendResult.SuccessfullyExtended();
                 }
 
-                _logger.LogError($"{StandardErrorMessage} {patientSelectedResponse.ErrorForLogging()}");
+                _logger.LogError($"{StandardErrorMessage} {patientSelectedResponse.ErrorForLogging}");
                 return new SessionExtendResult.SupplierSystemUnavailable();
             }
             catch (HttpRequestException e)

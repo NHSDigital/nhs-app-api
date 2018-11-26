@@ -70,10 +70,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 return new AppointmentsResult.CannotViewAppointments();
             }
             
-            if (response.HasErrorResponse)
+            if (!response.HasSuccessResponse)
             {
                 _logger.LogError("Call to VISION (VisionAppointmentsRetrievalService) returned an unanticipated error " +
-                                 $"with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
+                                 $"with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
                 return new AppointmentsResult.SupplierSystemUnavailable();
             }
             

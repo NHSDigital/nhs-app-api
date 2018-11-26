@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
 
         private AppointmentCancelResult InterpretCancelAppointmentResponse(VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse> response)
         {
-            if (!response.HasErrorResponse) return new AppointmentCancelResult.SuccessfullyCancelled();
+            if (response.HasSuccessResponse) return new AppointmentCancelResult.SuccessfullyCancelled();
 
             if (response.IsAccessDeniedError)
             {
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 return new AppointmentCancelResult.AppointmentNotCancellable();
             }
             
-            _logger.LogError($"Call to VISION cancel appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
+            _logger.LogError($"Call to VISION cancel appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
             
             return new AppointmentCancelResult.SupplierSystemUnavailable();
         }

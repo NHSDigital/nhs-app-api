@@ -407,7 +407,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task Get_ReturnsSupplierSystemUnavilable_WhenHttpStatusCodeIndicatesErrorFromVision()
         {
             // Arrange
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, 
+                    It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId,_userSession.PatientId,StringComparison.Ordinal))))
                .Returns(Task.FromResult(
                    new VisionClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.InternalServerError)));
             
@@ -422,7 +423,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingVision()
         {
             // Arrange
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, 
+                    It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 

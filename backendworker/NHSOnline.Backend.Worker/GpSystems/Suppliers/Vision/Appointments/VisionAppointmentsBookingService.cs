@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         
         private AppointmentBookResult InterpretAppointmentsPostResponse(VisionClient.VisionApiObjectResponse<BookAppointmentResponse> response)
         {
-            if (!response.HasErrorResponse) return new AppointmentBookResult.SuccessfullyBooked();
+            if (response.HasSuccessResponse) return new AppointmentBookResult.SuccessfullyBooked();
 
             if (response.IsAccessDeniedError)
             {
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 return new AppointmentBookResult.AppointmentLimitReached();
             }
             
-            _logger.LogError($"Call to VISION book appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorContent}");
+            _logger.LogError($"Call to VISION book appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
 
             return new AppointmentBookResult.SupplierSystemUnavailable();
         }

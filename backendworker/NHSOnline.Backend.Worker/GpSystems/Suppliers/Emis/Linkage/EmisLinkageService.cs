@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                 var response = await GetLinkageKeyResponse(getLinkageRequest.NhsNumber, getLinkageRequest.OdsCode, 
                     getLinkageRequest.IdentityToken, sessionPost.EndUserSessionId);
 
-                if (response.HasSuccessStatusCode || response.StatusCode == HttpStatusCode.Conflict)
+                if (response.HasSuccessResponse || response.StatusCode == HttpStatusCode.Conflict)
                 {
                     try
                     {
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
 
                 var createLinkageKeyResponse = await CreateLinkageKey(createLinkageRequest, sessionPost.EndUserSessionId);
 
-                if (!createLinkageKeyResponse.HasSuccessStatusCode)
+                if (!createLinkageKeyResponse.HasSuccessResponse)
                 {
                     return GetErrorCreatingNhsUser(createLinkageKeyResponse);
                 }
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                 var getLinkageKeyResponse = await GetLinkageKeyResponse(
                     createLinkageRequest.NhsNumber, createLinkageRequest.OdsCode, createLinkageRequest.IdentityToken, sessionPost.EndUserSessionId);
 
-                if (getLinkageKeyResponse.HasSuccessStatusCode)
+                if (getLinkageKeyResponse.HasSuccessResponse)
                 {
                     try
                     {
