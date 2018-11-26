@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using Allergies = NHSOnline.Backend.Worker.Areas.MyRecord.Models.Allergies;
 
@@ -22,8 +23,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         public Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse)
         {
-            var methodName = "Check";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter();
             
             var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
             var hasErrored = false;
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 result = new TppPatientOverviewMapper(_logger).Map(taskResponse.Body);
             }
 
-            _logger.LogDebug("Exiting: {0}", methodName);
+            _logger.LogExit();
             return result;
         }
     }

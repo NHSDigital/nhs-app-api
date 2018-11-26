@@ -6,6 +6,7 @@ using NHSOnline.Backend.Worker.Areas.Linkage.Models;
 using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.Support.Logging;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
@@ -43,6 +44,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
         {
             try
             {
+                _logger.LogEnter();
                 var request = CreateRequest(createLinkageRequest);
                 var createNhsUserResponse = await _tppClient.NhsUserPost(request);
 
@@ -70,6 +72,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
             {
                 _logger.LogError(e, "Unsuccessful request creating linkage key");
                 return new LinkageResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 

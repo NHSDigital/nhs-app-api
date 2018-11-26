@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
@@ -22,7 +23,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         public TppDcrEvents Check(TppClient.TppApiObjectResponse<RequestPatientRecordReply> taskResponse)
         {
-            _logger.LogDebug("Entered: {0}", nameof(Check));
+            _logger.LogEnter();
 
             if (taskResponse.HasSuccessResponse)
             {              
@@ -49,7 +50,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 };
             }
 
-            _logger.LogDebug("Exiting: {0}", nameof(Check));
+            _logger.LogExit();
             return tppDcrEvents;
         }
     }

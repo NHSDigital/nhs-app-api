@@ -5,23 +5,23 @@ using System.Linq;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using Allergies = NHSOnline.Backend.Worker.Areas.MyRecord.Models.Allergies;
+using NHSOnline.Backend.Worker.Support.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public class TppPatientOverviewMapper
     {       
-        private readonly ILogger _logger;
+        private readonly ILogger<GetPatientOverviewTaskChecker> _logger;
         
-        public TppPatientOverviewMapper(ILogger logger)
+        public TppPatientOverviewMapper(ILogger<GetPatientOverviewTaskChecker> logger)
         {
             _logger = logger;
         }
         
         public Tuple<Allergies, Medications> Map(ViewPatientOverviewReply viewPatientOverviewGetResponse)
         {
-            var methodName = "Map";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter();
             
             var allergies = new Allergies();
             var allergiesData = new List<AllergyItem>();
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             medications.Data.CurrentRepeatMedications = currentRepeatMedications;
             medications.Data.DiscontinuedRepeatMedications = pastRepeatMedications;
 
-            _logger.LogDebug("Exiting: {0}", methodName);
+            _logger.LogExit();
             return new Tuple<Allergies, Medications>(allergies, medications);
         }
 

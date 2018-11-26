@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
@@ -23,7 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
         public TestResultResponse Check(TppClient.TppApiObjectResponse<TestResultsViewReply> taskResponse)
         {
             var methodName = "Check";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter();
 
             if (taskResponse.HasSuccessResponse)
             {
@@ -34,7 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             
             _logger.LogError($"Unsuccessful request retrieving test result information for Tpp. Status code: {(int)taskResponse.StatusCode}");
 
-            _logger.LogDebug("Exiting: {0}", methodName);
+            _logger.LogExit();
             return new TestResultResponse { HasErrored = true };
         }
     }

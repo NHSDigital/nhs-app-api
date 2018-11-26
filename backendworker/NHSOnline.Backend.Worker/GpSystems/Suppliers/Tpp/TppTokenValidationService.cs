@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
@@ -14,7 +15,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             _logger = logger;
         }
         public bool IsValidConnectionTokenFormat(string connectionToken)
-        {   
+        {
+            _logger.LogEnter();
             if (string.IsNullOrEmpty(connectionToken))
             {
                 return false;
@@ -35,6 +37,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {
                 _logger.LogError(e, "Failed to deserialize Im1TokenToken");
                 return false;
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
     }

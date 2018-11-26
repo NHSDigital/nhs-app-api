@@ -9,12 +9,13 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 {
     public class TppCourseService : ICourseService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<TppCourseService> _logger;
         private readonly ConfigurationSettings _settings;
         private readonly ITppClient _tppClient;
         private readonly ITppCourseMapper _tppCourseMapper;
@@ -34,6 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
             try
             {
+                _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Courses for user");
                 var response = await _tppClient.ListRepeatMedicationPost(tppUserSession);
                 _logger.LogDebug("Fetch Courses for user complete");
@@ -51,7 +53,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                             $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(CourseListResponse)}");
                         
                         var mapppedPrescriptionList = _tppCourseMapper.Map(medicationListFiltered);
-
                         return new GetCoursesResult.SuccessfullyRetrieved(mapppedPrescriptionList);
                     }
                     catch (Exception e)
@@ -70,6 +71,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 _logger.LogError(e, "Unsuccessful request retrieving repeat prescriptions");
                 return new GetCoursesResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 

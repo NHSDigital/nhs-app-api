@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
 {
@@ -26,7 +27,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
             var tppUserSession = (TppUserSession) userSession;
 
             try
-            {               
+            {
+                _logger.LogEnter();
                 var demographicsResponse = await _tppClient.PatientSelectedPost(tppUserSession);
 
                 if (!demographicsResponse.HasSuccessResponse)
@@ -36,19 +38,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
                         _logger.LogWarning("User does not have access to their patient record for Tpp");
                         return new GetDemographicsResult.UserHasNoAccess();
                     }
-
                     _logger.LogError($"Unsuccessful request retrieving patient selected information for Tpp. Status code: {(int)demographicsResponse.StatusCode}");
                     return new GetDemographicsResult.Unsuccessful();
                 }
                 
                 var result = _tppDemographicsMapper.Map(demographicsResponse.Body);
-
+                
                 return new GetDemographicsResult.SuccessfullyRetrieved(result);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving patient selected information for Tpp");
                 return new GetDemographicsResult.Unsuccessful();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
     }

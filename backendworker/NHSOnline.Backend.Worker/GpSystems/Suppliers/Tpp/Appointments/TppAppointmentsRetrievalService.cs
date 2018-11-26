@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(GetAppointments));
+                _logger.LogEnter();
 
                 var tppUserSession = (TppUserSession)userSession;
                 var request = new ViewAppointments(tppUserSession);
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(GetAppointments));
+                _logger.LogExit();
             }
         }
     }

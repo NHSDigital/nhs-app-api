@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
         {
             try
             {
-                _logger.LogEnter(nameof(Extend));
+                _logger.LogEnter();
 
                 var tppUserSession = (TppUserSession) userSession;
                 var patientSelectedResponse = await _tppClient.PatientSelectedPost(tppUserSession);
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             }
             finally
             {
-                _logger.LogExit(nameof(Extend));
+                _logger.LogExit();
             }
         }
     }

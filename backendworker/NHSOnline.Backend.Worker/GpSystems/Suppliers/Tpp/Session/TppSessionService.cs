@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
         {
             try
             {
-                _logger.LogEnter(nameof(Create));
+                _logger.LogEnter();
                 _logger.LogDebug($"Creating using ODS code: {odsCode}");
 
                 var tppToken = connectionToken.DeserializeJson<TppConnectionToken>();
@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             }
             finally
             {
-                _logger.LogExit(nameof(Create));
+                _logger.LogExit();
             }
         }
 
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
         {
             try
             {
-                _logger.LogEnter(nameof(Logoff));
+                _logger.LogEnter();
             
                 var tppUserSession = (TppUserSession) userSession;
                 var logoffReply = await _client.LogoffPost(tppUserSession);
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             }
             finally
             {
-                _logger.LogExit(nameof(Logoff));
+                _logger.LogExit();
             }
 
         }

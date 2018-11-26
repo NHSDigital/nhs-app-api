@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(Build));
+                _logger.LogEnter();
                 
                 return GetSlotsTaskCompletedUnsuccessfullyCase(slotTask)
                     .IfNone(() => GetSlotsResponseHasNoSuccessStatusCodeCase(slotTask))
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Build));
+                _logger.LogExit();
             }
         }
         

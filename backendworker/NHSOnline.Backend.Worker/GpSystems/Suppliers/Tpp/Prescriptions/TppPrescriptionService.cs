@@ -10,12 +10,13 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 {
     public class TppPrescriptionService : IPrescriptionService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<TppPrescriptionService> _logger;
         private readonly ConfigurationSettings _settings;
         private readonly ITppClient _tppClient;
         private readonly ITppPrescriptionMapper _tppPrescriptionMapper;
@@ -38,12 +39,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
             try
             {
+                _logger.LogEnter();
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
                 var response = await _tppClient.ListRepeatMedicationPost(tppUserSession);
                 _logger.LogDebug("Fetch Prescriptions For User Complete");
 
-                if (!response.HasSuccessResponse) return GetCorrectErrorResult(response);
-                
+                if (!response.HasSuccessResponse)
+                {
+                    return GetCorrectErrorResult(response);
+                }
                 try
                 {
                     var medicationListFiltered = GetMaxPrescriptions(response.Body.Medications.ToList());
@@ -51,14 +55,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                     _logger.LogDebug(
                         $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
                     var mapppedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
-
+                    
                     return new PrescriptionResult.SuccessfulGet(mapppedPrescriptionList);
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(
                         $"Something went wrong during building the response. Exception message: {e.Message}");
-
                     return new PrescriptionResult.InternalServerError();
                 }
             }
@@ -67,10 +70,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                 _logger.LogError(e, "Unsuccessful request retrieving prescriptions");
                 return new PrescriptionResult.SupplierSystemUnavailable();
             }
+            finally
+            {
+                _logger.LogExit();
+            }
+
         }
 
         public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
+            _logger.LogEnter();
+
             var tppUserSession = (TppUserSession)userSession;
 
             var postRequest = new RequestMedication
@@ -101,6 +111,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 _logger.LogError($"Repeat prescription order failed with message {e.Message}");
                 return new PrescriptionResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 

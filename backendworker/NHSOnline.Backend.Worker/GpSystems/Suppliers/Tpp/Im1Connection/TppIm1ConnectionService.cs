@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
         {
             try
             {
-                _logger.LogEnter(nameof(Verify));
+                _logger.LogEnter();
 
                 var authenticateRequest = connectionToken.DeserializeJson<Authenticate>();
                 authenticateRequest.UnitId = odsCode;
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
             }
             finally
             {
-                _logger.LogExit(nameof(Verify));
+                _logger.LogExit();
             }
         }
 
