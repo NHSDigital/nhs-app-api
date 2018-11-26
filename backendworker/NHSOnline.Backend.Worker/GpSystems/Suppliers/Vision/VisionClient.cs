@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             var visionRequest = new VisionRequest<DemographicsRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId, requestContent);
             
-            return await SendRequestAndParseResponse<VisionDemographicsResponse, VisionRequest<DemographicsRequest>>(visionRequest);   
+            return await SendRequestAndParseResponse<VisionDemographicsResponse, DemographicsRequest>(visionRequest);   
         }
         
         public async Task<VisionApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
@@ -70,8 +70,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId,
                 requestContent);
 
-            return await SendRequestAndParseResponse<VisionPatientDataResponse, VisionRequest<PatientDataRequest>>(
-                visionRequest);
+            return await SendRequestAndParseResponse<VisionPatientDataResponse, PatientDataRequest>(visionRequest);
         }
         
         public async Task<VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
@@ -82,8 +81,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             var visionRequest = new VisionRequest<Object>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 token.RosuAccountId, token.ApiKey, odsCode, _providerId, null);
 
-            return await SendRequestAndParseResponse<PatientConfigurationResponse, VisionRequest<Object>>(
-                visionRequest);
+            return await SendRequestAndParseResponse<PatientConfigurationResponse, Object>(visionRequest);
         }
 
         public async Task<VisionApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeats(
@@ -96,8 +94,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 session.RosuAccountId, session.ApiKey, session.OdsCode, _providerId,
                 new CoursesRequest { PatientId = session.PatientId });
 
-            return await SendRequestAndParseResponse<EligibleRepeatsResponse, VisionRequest<CoursesRequest>>(
-                visionRequest);
+            return await SendRequestAndParseResponse<EligibleRepeatsResponse, CoursesRequest>(visionRequest);
         }
         
         public async Task<VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(VisionUserSession userSession, PrescriptionRequest prescriptionRequest)
@@ -107,7 +104,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             var visionRequest = new VisionRequest<PrescriptionRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, prescriptionRequest);
 
-            return await SendRequestAndParseResponse<PrescriptionHistoryResponse, VisionRequest<PrescriptionRequest>>(visionRequest);
+            return await SendRequestAndParseResponse<PrescriptionHistoryResponse, PrescriptionRequest>(visionRequest);
         }
 
         public async Task<VisionApiObjectResponse<OrderNewPrescriptionResponse>> OrderNewPrescription(VisionUserSession userSession, OrderNewPrescriptionRequest newPrescriptionRequest)
@@ -117,7 +114,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             var visionRequest = new VisionRequest<OrderNewPrescriptionRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, newPrescriptionRequest);
 
-            return await SendRequestAndParseResponse<OrderNewPrescriptionResponse, VisionRequest<OrderNewPrescriptionRequest>>(visionRequest);
+            return await SendRequestAndParseResponse<OrderNewPrescriptionResponse, OrderNewPrescriptionRequest>(visionRequest);
         }
         
         public async Task<VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
@@ -129,7 +126,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             var visionRequest = new VisionRequest<PatientId>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, new PatientId { Id = userSession.PatientId });
 
-            return await SendRequestAndParseResponse<BookedAppointmentsResponse, VisionRequest<PatientId>>(visionRequest);
+            return await SendRequestAndParseResponse<BookedAppointmentsResponse, PatientId>(visionRequest);
         }
         
         public async Task<VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
@@ -163,7 +160,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 request);
 
             return await
-                SendRequestAndParseResponse<AvailableAppointmentsResponse, VisionRequest<AvailableAppointmentsRequest>>(
+                SendRequestAndParseResponse<AvailableAppointmentsResponse, AvailableAppointmentsRequest>(
                     visionRequest);
         }
         
@@ -177,7 +174,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             var visionRequest = new VisionRequest<BookAppointmentRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, bookAppointmentRequest);
 
-            return await SendRequestAndParseResponse<BookAppointmentResponse, VisionRequest<BookAppointmentRequest>>(visionRequest);
+            return await SendRequestAndParseResponse<BookAppointmentResponse, BookAppointmentRequest>(visionRequest);
         }
 
         public async Task<VisionApiObjectResponse<CancelledAppointmentResponse>> CancelAppointment(
@@ -190,7 +187,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, request);
 
             
-            return await SendRequestAndParseResponse<CancelledAppointmentResponse, VisionRequest<CancelAppointmentRequest>>(visionRequest);
+            return await SendRequestAndParseResponse<CancelledAppointmentResponse, CancelAppointmentRequest>(visionRequest);
         }
 
         public async Task<VisionApiObjectResponse<ServiceContentRegisterResponse>> PostLinkAccount(string odsCode,
@@ -201,26 +198,34 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             var visionRequest = new VisionRequest<Object>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 odsCode, _providerId, request.AccountId, request.LinkageKey, request.Surname, dob);
 
-            return await SendRequestAndParseResponse<ServiceContentRegisterResponse, VisionRequest<Object>>(
+            return await SendRequestAndParseResponse<ServiceContentRegisterResponse, Object>(
                 visionRequest);
         }
 
-        private async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(T request)
+        private async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(VisionRequest<T> request)
         {
-            var envelope = _envelopeService.BuildEnvelope(_certificate, request, _requestUsername);
-            var response = await TransmitAsync<TResponse>(envelope);
+            var httpRequest = BuildHttpRequest(request);
+            var response = await TransmitAsync<TResponse>(httpRequest);
 
             return response;
         }
 
-        private async Task<VisionApiObjectResponse<TResponse>> TransmitAsync<TResponse>(string envelope)
+        private HttpRequestMessage BuildHttpRequest<T>(VisionRequest<T> request)
         {
-            var request =
+            var envelope = _envelopeService.BuildEnvelope(_certificate, request, _requestUsername);
+            var httpRequest =
                 new HttpRequestMessage(HttpMethod.Post, _targetUri)
                 {
                     Content = new StringContent(envelope, Encoding.UTF8, MediaType)
                 };
+            
+            httpRequest.Headers.Add(Constants.VisionConstants.RequestIdentifierHeader,request?.ServiceDefinition?.Name);
 
+            return httpRequest;
+        }
+
+        private async Task<VisionApiObjectResponse<TResponse>> TransmitAsync<TResponse>(HttpRequestMessage request)
+        {
             var thirdpartyEnvelope = await SendRequestAndParseResponse<TResponse>(request);
             return thirdpartyEnvelope;
         }

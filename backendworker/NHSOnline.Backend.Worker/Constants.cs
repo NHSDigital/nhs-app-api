@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker
+namespace NHSOnline.Backend.Worker
 {
     public static class Constants
     {
@@ -111,6 +111,12 @@
         public static class TppConstants
         {
             public const string LinkageKey = "ikjkbnKSJDFV872345%/";
+            public const string RequestIdentifierHeader = "type";
+        }
+        
+        public static class VisionConstants
+        {
+            public const string RequestIdentifierHeader = "type";
         }
 
         public static class SupportedDeviceNames

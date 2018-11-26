@@ -21,6 +21,7 @@ using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -97,6 +98,8 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
+            
+            services.AddSingleton(typeof(HttpTimeoutHandler<>));
 
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,

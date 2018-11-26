@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
@@ -8,6 +6,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.Worker.Support.Certificate;
+using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
@@ -26,19 +25,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_TPP", _logger), out bool enabled) && enabled)
             {
-                var configValue = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
-                    _logger);
-                var timeout = int.Parse(configValue, CultureInfo.InvariantCulture);
-
                 var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
+                
                 services.AddSingleton<TppHttpClientHandler>();
-
-                services.AddHttpClient<TppHttpClient>(client => { client.Timeout = TimeSpan.FromSeconds(timeout); })
+                services.AddTransient<TppHttpRequestIdentifier>();
+                
+                services.AddHttpClient<TppHttpClient>()
                     .ConfigurePrimaryHttpMessageHandler(
                         () => new TppHttpClientHandler(
                             configuration,
                             _loggerFactory.CreateLogger<TppHttpClientHandler>(),
-                            certificateService));
+                            certificateService))
+                    .AddHttpMessageHandler<HttpTimeoutHandler<TppHttpRequestIdentifier>>();
 
                 services.AddSingleton<IGpSystem, TppGpSystem>();
                 services.AddSingleton<ITppClient, TppClient>();

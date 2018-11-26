@@ -20,9 +20,9 @@ namespace NHSOnline.Backend.Worker.Filters
 
         public override void OnException(ExceptionContext context)
         {
-            if (typeof(OperationCanceledException).IsAssignableFrom(context.Exception.GetType()))
+            if (typeof(TimeoutException).IsAssignableFrom(context.Exception.GetType()))
             {
-                _logger.LogError("Operation timed out, exception: {}", context.Exception);
+                _logger.LogError($"Operation timed out - exception: {context.Exception}");
                 context.Result = new StatusCodeResult(StatusCodes.Status504GatewayTimeout);
             }
         }

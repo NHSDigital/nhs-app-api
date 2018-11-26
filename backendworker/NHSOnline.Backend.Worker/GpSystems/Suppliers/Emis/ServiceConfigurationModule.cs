@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
 using NHSOnline.Backend.Worker.Support.Certificate;
+using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -24,21 +25,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_EMIS", _logger), out bool enabled) &&
                 enabled)
             {
-                var defaultHttpTimeoutSeconds = configuration.ConfigurationSettings().GetOrWarn(
-                    "DefaultHttpTimeoutSeconds",
-                    _logger);
-
                 services.AddSingleton<EmisHttpClientHandler>();
+                services.AddTransient<EmisHttpRequestIdentifier>();
+                
                 var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
 
-                services.AddHttpClient<EmisHttpClient>(client =>
-                {
-                    client.Timeout =
-                        TimeSpan.FromSeconds(int.Parse(defaultHttpTimeoutSeconds, CultureInfo.InvariantCulture));
-                }).ConfigurePrimaryHttpMessageHandler(() =>
+                services.AddHttpClient<EmisHttpClient>().ConfigurePrimaryHttpMessageHandler(() =>
                     new EmisHttpClientHandler(configuration,
                         _loggerFactory.CreateLogger<EmisHttpClientHandler>(),
-                        certificateService));
+                        certificateService))
+                    .AddHttpMessageHandler<HttpTimeoutHandler<EmisHttpRequestIdentifier>>();
 
                 services.AddSingleton<IGpSystem, EmisGpSystem>();
                 services.AddSingleton<IEmisClient, EmisClient>();

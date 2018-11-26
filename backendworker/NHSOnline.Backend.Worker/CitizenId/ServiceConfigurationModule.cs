@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {
@@ -7,7 +8,10 @@ namespace NHSOnline.Backend.Worker.CitizenId
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddHttpClient<CitizenIdHttpClient>();
+            services.AddTransient<CitizenIdHttpRequestIdentifier>();
+            
+            services.AddHttpClient<CitizenIdHttpClient>()
+                .AddHttpMessageHandler<HttpTimeoutHandler<CitizenIdHttpRequestIdentifier>>();
             
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
