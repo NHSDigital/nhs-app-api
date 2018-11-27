@@ -2,6 +2,7 @@ package com.nhs.online.nhsonline.activities
 
 import android.content.Context
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -57,7 +58,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private var lifeCycleObserver: LifeCycleObserver? = null
     private var isLoggedIn = false
 
-     var isSuccessfulConfigCheck = true
+    var isSuccessfulConfigCheck = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnCreate")
@@ -286,7 +288,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         val loginUrl = resources.getString(R.string.baseURL) + resources.getString(R.string.loginPath)
 
-        if (webview.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
+        if (webview.url == null) {
+            webview.loadUrl(loginUrl)
+        }
+        else if (webview.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
             webview.reload()
         }
     }
