@@ -140,7 +140,9 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
                 }
 
                 var termsAndConditions = new TermsAndConditionsRecord(nhsNumber, 
-                    request.ConsentGiven, request.AnalyticsCookieAccepted, termsAndConditionsAcceptanceDate, termsAndConditionsAcceptanceDate);
+                    request.ConsentGiven, request.AnalyticsCookieAccepted, termsAndConditionsAcceptanceDate, 
+                            request.AnalyticsCookieAccepted ? termsAndConditionsAcceptanceDate : (DateTimeOffset?)null);
+                
                 await _client.CreateDocumentAsync(_collectionUri, termsAndConditions);
                 
                 _logger.LogExit(nameof(RecordInitialConsent));
