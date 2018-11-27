@@ -4,6 +4,6 @@ namespace NHSOnline.Backend.Worker.Ndop
 {
     public interface INdopService
     {
-        Task<GetNdopResult> GetJwtToken(string nhsNumber);
+        GetNdopResult GetJwtToken(string nhsNumber);
     }
 }

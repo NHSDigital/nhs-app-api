@@ -23,12 +23,7 @@ namespace NHSOnline.Backend.Worker.Ndop
             _logger = loggerFactory.CreateLogger<NdopService>();
         }
 
-        public async Task<GetNdopResult> GetJwtToken(string nhsNumber)
-        {
-            return await Task.Run(() => GetToken(nhsNumber));
-        }
-
-        public GetNdopResult GetToken(string nhsNumber)
+        public GetNdopResult GetJwtToken(string nhsNumber)
         {           
             try
             {

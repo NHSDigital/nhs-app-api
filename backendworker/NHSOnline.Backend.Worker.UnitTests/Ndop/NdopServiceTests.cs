@@ -34,14 +34,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ndop
         }
         
         [TestMethod]
-        public async Task GetToken_WhenCalledAndErrorCreatingSigningCredentials_ReturnsUnSuccessfulResponse()
+        public void GetToken_WhenCalledAndErrorCreatingSigningCredentials_ReturnsUnSuccessfulResponse()
         {
             // Arrange
             _ndopSigning.Setup(x => x.GetSigningCredentials()).Returns(() => null);
             const string testNhsNumber = "123456789"; 
             // Act
             
-            var ndopResponse = await _ndopService.GetJwtToken(testNhsNumber);
+            var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
             
             // Assert
             _ndopSigning.Verify(x => x.GetSigningCredentials());
@@ -50,14 +50,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ndop
         
          
         [TestMethod]
-        public async Task GetToken_WhenCalledAndExceptionOccursCreatingSigningCredentials_ReturnsUnSuccessfulResponse()
+        public void GetToken_WhenCalledAndExceptionOccursCreatingSigningCredentials_ReturnsUnSuccessfulResponse()
         {
             // Arrange
             _ndopSigning.Setup(x => x.GetSigningCredentials()).Throws<Exception>();
             const string testNhsNumber = "123456789";
             
             // Act
-            var ndopResponse = await _ndopService.GetJwtToken(testNhsNumber);
+            var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
             
             // Assert
             _ndopSigning.Verify(x => x.GetSigningCredentials());
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ndop
         }
         
         [TestMethod]
-        public async Task GetToken_WhenCalledAndValidSigningCredentials_ReturnsSuccessfulResponseWithToken()
+        public void GetToken_WhenCalledAndValidSigningCredentials_ReturnsSuccessfulResponseWithToken()
         {
             // Arrange
             const string key = "401b09eab3c013d4ca54922bb80";
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ndop
             _ndopSigning.Setup(x => x.GetSigningCredentials()).Returns(() => credentials);
 
             // Act
-            var ndopResponse = await _ndopService.GetJwtToken(testNhsNumber);
+            var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
             
             // Assert
             _ndopSigning.Verify(x => x.GetSigningCredentials());

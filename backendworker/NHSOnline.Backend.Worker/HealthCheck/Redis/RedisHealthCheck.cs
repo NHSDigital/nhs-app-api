@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.HealthCheck.Redis
         
         protected override async Task<Result> Check()
         {
-            await Task.Run(() => _connectionMultiplexerFactory.GetMultiplexer(_multiplexerName).GetDatabase().Ping());
+            await _connectionMultiplexerFactory.GetMultiplexer(_multiplexerName).GetDatabase().PingAsync();
             return Result.Healthy(HealthCheckName);       
         }
     }
