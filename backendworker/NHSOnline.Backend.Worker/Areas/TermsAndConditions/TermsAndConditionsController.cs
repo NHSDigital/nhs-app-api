@@ -31,21 +31,21 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            _logger.LogEnter(nameof(Get));
+            _logger.LogEnter();
             
             var userSession = HttpContext.GetUserSession();
           
             _logger.LogDebug("Fetching user consent");
             var fetchConsentResult = await _termsAndConditionsService.FetchConsent(userSession.NhsNumber);
             
-            _logger.LogExit(nameof(Get));
+            _logger.LogExit();
             return fetchConsentResult.Accept(new TermsAndConditionsFetchConsentResultVisitor());
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ConsentRequest model)
         {
-            _logger.LogEnter(nameof(Post));
+            _logger.LogEnter();
             
             var userSession = HttpContext.GetUserSession();
 
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
             recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(_auditor, model.ConsentGiven, termsAndConditionsAcceptanceDate,
                 model.AnalyticsCookieAccepted, model.UpdatingConsent));
             
-            _logger.LogExit(nameof(Post));
+            _logger.LogExit();
             return recordConsentResult.Accept(new TermsAndConditionsRecordConsentResultVisitor());
         }
     }

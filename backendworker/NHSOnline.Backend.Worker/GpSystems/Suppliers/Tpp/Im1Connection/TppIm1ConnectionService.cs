@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
         {
             try
             {
-                _logger.LogEnter(nameof(Register));
+                _logger.LogEnter();
 
                 var linkAccountRequest = new LinkAccount
                 {
@@ -162,7 +162,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
             }
             finally
             {
-                _logger.LogExit(nameof(Register));
+                _logger.LogExit();
             }
         }
     }

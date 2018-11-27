@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(Get));
+                _logger.LogEnter();
                 
                 await _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Get));
+                _logger.LogExit();
             }
         }
     }

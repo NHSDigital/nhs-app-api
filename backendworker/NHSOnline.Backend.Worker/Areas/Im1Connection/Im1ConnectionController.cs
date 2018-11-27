@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         {
             try
             {
-                _logger.LogEnter(nameof(Get));
+                _logger.LogEnter();
 
                 var argumentValidator = new ValidateAndLog(_logger)
                     .IsNotNullOrWhitespace(connectionToken, Constants.HttpHeaders.ConnectionToken)
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             }
             finally
             {
-                _logger.LogExit(nameof(Get));
+                _logger.LogExit();
             }
         }
 
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         {
             try
             {
-                _logger.LogEnter(nameof(Post));
+                _logger.LogEnter();
                 var gpSystemOption = await GetGpSystem(model.OdsCode);
                 if (!gpSystemOption.HasValue)
                 {
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             }
             finally
             {
-                _logger.LogExit(nameof(Post));
+                _logger.LogExit();
             }
         }
 

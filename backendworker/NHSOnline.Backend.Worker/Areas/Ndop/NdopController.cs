@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.Areas.Ndop
         {
             try
             {
-                _logger.LogEnter(nameof(GetToken));
+                _logger.LogEnter();
 
                 var userSession = HttpContext.GetUserSession();
 
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.Areas.Ndop
             }
             finally
             {
-                _logger.LogExit(nameof(GetToken));
+                _logger.LogExit();
             }
         }
     }

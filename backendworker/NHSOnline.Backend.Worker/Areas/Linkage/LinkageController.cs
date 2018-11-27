@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
         {
             try
             {
-                _logger.LogEnter(nameof(Get));
+                _logger.LogEnter();
 
                 if (string.IsNullOrWhiteSpace(odsCode))
                 {
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             }
             finally
             {
-                _logger.LogExit(nameof(Get));
+                _logger.LogExit();
             }
             
         }
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
         {
             try
             {
-                _logger.LogEnter(nameof(Post));
+                _logger.LogEnter();
                 
                 if (string.IsNullOrWhiteSpace(createLinkageRequest.OdsCode))
                 {
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             }
             finally
             {
-                _logger.LogExit(nameof(Post));
+                _logger.LogExit();
             }
         }
 

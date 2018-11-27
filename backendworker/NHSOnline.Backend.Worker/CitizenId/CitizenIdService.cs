@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         {
             try
             {
-                _logger.LogEnter(nameof(GetUserProfile));
+                _logger.LogEnter();
                 var result = new GetUserProfileResult();
 
                 // Sanity-check input parameters - no point invoking CID endpoint if they are clearly invalid
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             }
             finally
             {
-                _logger.LogExit(nameof(GetUserProfile));    
+                _logger.LogExit();    
             }
         }
 

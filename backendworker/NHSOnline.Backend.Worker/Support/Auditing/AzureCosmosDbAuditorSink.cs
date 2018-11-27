@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            _logger.LogEnter(nameof(WriteAudit));
+            _logger.LogEnter();
 
             var auditRecord = new AuditRecord(timestamp, nhsNumber, supplier, operation, details, versionTag);
 
@@ -41,6 +41,8 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             {
                 await _client.CreateDocumentAsync(_auditCollectionUri, auditRecord);
             }
+
+            _logger.LogExit();
         }
 
         public void Dispose()

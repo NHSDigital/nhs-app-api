@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.Worker
         {
             try
             {
-                _logger.LogEnter(nameof(SaveIm1ConnectionToken));
+                _logger.LogEnter();
 
                 var connectionToken = JsonConvert.SerializeObject(value, _serializerSettings);
                 connectionToken = _cipherService.Encrypt(connectionToken);
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.Worker
             }
             finally
             {
-                _logger.LogExit(nameof(SaveIm1ConnectionToken));
+                _logger.LogExit();
             }
         }
 
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.Worker
         {
             try
             {
-                _logger.LogEnter(nameof(GetIm1ConnectionToken));
+                _logger.LogEnter();
 
                 var filter = new BsonDocument(GetId(key));
 
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.Worker
             }
             finally
             {
-                _logger.LogExit(nameof(GetIm1ConnectionToken));
+                _logger.LogExit();
             }
         }
 
@@ -130,7 +130,7 @@ namespace NHSOnline.Backend.Worker
         {
             try
             {
-                _logger.LogEnter(nameof(DeleteIm1ConnectionToken));
+                _logger.LogEnter();
 
                 var filter = new BsonDocument(GetId(key));
 
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.Worker
             }
             finally
             {
-                _logger.LogExit(nameof(DeleteIm1ConnectionToken));
+                _logger.LogExit();
             }
         }
 

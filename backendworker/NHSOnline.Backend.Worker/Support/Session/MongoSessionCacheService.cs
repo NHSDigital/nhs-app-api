@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
         {
             try
             {
-                _logger.LogEnter(nameof(CreateUserSession));
+                _logger.LogEnter();
 
                 var sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
                 sessionObject = _cipherService.Encrypt(sessionObject);
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
             }
             finally
             {
-                _logger.LogExit(nameof(CreateUserSession));
+                _logger.LogExit();
             }
         }
 
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
         {
             try
             {
-                _logger.LogEnter(nameof(GetUserSession));
+                _logger.LogEnter();
 
                 var filter = new BsonDocument(GetId(sessionId));
                 var update = new BsonDocument( "$set", new BsonDocument(GetCurrentTimestamp()) );
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
             }
             finally
             {
-                _logger.LogExit(nameof(GetUserSession));
+                _logger.LogExit();
             }
         }
 
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
         {
             try
             {
-                _logger.LogEnter(nameof(DeleteUserSession));
+                _logger.LogEnter();
 
                 var filter = new BsonDocument(GetId(sessionId));
 
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
             }
             finally
             {
-                _logger.LogExit(nameof(DeleteUserSession));
+                _logger.LogExit();
             }
         }
 
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
         {
             try
             {
-                _logger.LogEnter(nameof(UpdateUserSession));
+                _logger.LogEnter();
 
                 var sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
                 sessionObject = _cipherService.Encrypt(sessionObject);
@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
             }
             finally
             {
-                _logger.LogExit(nameof(UpdateUserSession));
+                _logger.LogExit();
             }
         }
 

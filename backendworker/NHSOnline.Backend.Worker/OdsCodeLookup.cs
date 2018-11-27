@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker
         {
             try
             {
-                _logger.LogEnter(nameof(GetSupplierNameFromRedis));
+                _logger.LogEnter();
                 var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup);
                 var database = multiplexer.GetDatabase();
 
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.Worker
             }
             finally
             {
-                _logger.LogExit(nameof(GetSupplierNameFromRedis));
+                _logger.LogExit();
             }
         }
     }

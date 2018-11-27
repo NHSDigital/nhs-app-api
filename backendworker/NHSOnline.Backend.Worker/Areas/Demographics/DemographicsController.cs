@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.MyRecord;
 using NHSOnline.Backend.Worker.Conventions;
 using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics
 {
@@ -11,21 +12,20 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
     public class DemographicsController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly ILogger _logger;
+        private readonly ILogger<DemographicsController> _logger;
         
         public DemographicsController(
             ILoggerFactory loggerFactory,
             IGpSystemFactory gpSystemFactory)
         {
             _gpSystemFactory = gpSystemFactory;
-            _logger = loggerFactory.CreateLogger<MyRecordController>();
+            _logger = loggerFactory.CreateLogger<DemographicsController>();
         }
 
         [HttpGet("demographics")]
         public async Task<IActionResult> Get()
         {
-            var methodName = "Get";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter();
             var userSession = HttpContext.GetUserSession();
 
             _logger.LogInformation("Fetching DemographicsService for supplier: {0}", userSession.Supplier.ToString());
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
             _logger.LogDebug("Fetching Demographics");
             var myRecordGetResult = await demographicsService.GetDemographics(userSession);
 
-            _logger.LogDebug("Exiting: {0}", methodName);
+            _logger.LogExit();
             return myRecordGetResult.Accept(new DemographicsResultVisitor());
         }
     }

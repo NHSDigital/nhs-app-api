@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             try
             {
-                _logger.LogEnter(nameof(Post));
+                _logger.LogEnter();
 
                 // Call Citizen ID to get the User Profile (IM1 connection token, ODS code, Date of Birth, NHS Number).
                 var userProfileResult = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             }
             finally
             {
-                _logger.LogExit(nameof(Post));
+                _logger.LogExit();
             }
         }
 
@@ -158,7 +158,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             try
             {
-                _logger.LogEnter(nameof(Delete));
+                _logger.LogEnter();
                 await _auditor.Audit(Constants.AuditingTitles.SessionDeleteRequest, "Session delete called.");
 
                 // Delete GP supplier session                
@@ -214,7 +214,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             }
             finally
             {
-                _logger.LogExit(nameof(Delete));
+                _logger.LogExit();
             }
         }
 

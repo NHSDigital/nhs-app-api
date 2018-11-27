@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         {
             try
             {
-                _logger.LogEnter(nameof(GetSigningKeys));
+                _logger.LogEnter();
 
                 var response = await _citizenIdClient.GetSigningKeys();
                 if (response.HasSuccessStatusCode) return Option.Some(response.Body);
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             }
             finally
             {
-                _logger.LogExit(nameof(GetSigningKeys));
+                _logger.LogExit();
             }
         }
     }

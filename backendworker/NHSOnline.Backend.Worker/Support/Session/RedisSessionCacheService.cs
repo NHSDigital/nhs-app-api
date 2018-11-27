@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
         {
             try
             {
-                _logger.LogEnter(nameof(CreateUserSession));
+                _logger.LogEnter();
                 var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
                 var database = multiplexer.GetDatabase();
                 var sessionExpirationTime = TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes);
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
             }
             finally
             {
-                _logger.LogExit(nameof(CreateUserSession));
+                _logger.LogExit();
             }
         }
 
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
         {
             try
             {
-                _logger.LogEnter(nameof(GetUserSession));
+                _logger.LogEnter();
 
                 var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
                 
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
             }
             finally
             {
-                _logger.LogExit(nameof(GetUserSession));
+                _logger.LogExit();
             }
         }
 
@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
         {
             try
             {
-                _logger.LogEnter(nameof(DeleteUserSession));
+                _logger.LogEnter();
 
                 var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
                 var database = multiplexer.GetDatabase();
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
             }
             finally
             {
-                _logger.LogExit(nameof(DeleteUserSession));
+                _logger.LogExit();
             }
         }
 
@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
         {
             try
             {
-                _logger.LogEnter(nameof(UpdateUserSession));
+                _logger.LogEnter();
                 var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
                 var database = multiplexer.GetDatabase();
                 var sessionExpirationTime = TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes);
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
             }
             finally
             {
-                _logger.LogExit(nameof(UpdateUserSession));
+                _logger.LogExit();
             }
         }
 

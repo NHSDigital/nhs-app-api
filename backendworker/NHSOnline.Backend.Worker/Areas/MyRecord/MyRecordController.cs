@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Conventions;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
@@ -11,7 +12,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
     public class MyRecordController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly ILogger _logger;
+        private readonly ILogger<MyRecordController> _logger;
         private readonly IAuditor _auditor;
         
         public MyRecordController(
@@ -27,8 +28,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
         [HttpGet]
         public async Task<IActionResult> GetMyRecord()
         {   
-            var methodName = "GetMyRecord";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter();
             
             var userSession = HttpContext.GetUserSession();
             
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             // Audit result of attempt to view patient record    
             result.Accept(new MyRecordAuditingVisitor(_auditor));
             
-            _logger.LogDebug("Exiting: {0}", methodName);
+            _logger.LogExit();
             return result.Accept(new MyRecordResultVisitor());
         }
     }

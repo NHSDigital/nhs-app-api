@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(Delete));
+                _logger.LogEnter();
                 
                 await _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, "Attempting to cancel appointment with id: {0}",
                     model.AppointmentId);
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Delete));
+                _logger.LogExit();
             }
         }
 
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(Get));
+                _logger.LogEnter();
                 
                 await _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
 
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Get));
+                _logger.LogExit();
             }
         }
         
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(Post));
+                _logger.LogEnter();
                 
                 await _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
                     "Attempting to book appointment with id: {0} and startTime: {1:O}", model.SlotId, model.StartTime);
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Post));
+                _logger.LogExit();
             }
         }
 

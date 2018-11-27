@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         {
             try
             {
-                _logger.LogEnter(nameof(ExchangeAuthToken));
+                _logger.LogEnter();
                 
                 var dict = new Dictionary<string, string>
                 {
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             }
             finally
             {
-                _logger.LogExit(nameof(ExchangeAuthToken));
+                _logger.LogExit();
             }
         }
 

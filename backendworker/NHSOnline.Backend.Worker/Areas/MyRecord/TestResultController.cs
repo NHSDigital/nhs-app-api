@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Conventions;
 using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
@@ -10,7 +11,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
     public class TestResultController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly ILogger _logger;
+        private readonly ILogger<TestResultController> _logger;
         
         public TestResultController(
             ILoggerFactory loggerFactory,
@@ -22,9 +23,8 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
 
         [HttpGet]
         public async Task<IActionResult> GetTestResult([FromQuery] string testResultId)
-        {   
-            var methodName = "GetTestResult";
-            _logger.LogDebug("Entered: {0}", methodName);
+        {
+            _logger.LogEnter();
             
             var userSession = HttpContext.GetUserSession();
             
@@ -35,8 +35,8 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
 
             _logger.LogInformation("Fetching detailed test result");
             var result = await patientRecordService.GetDetailedTestResult(userSession, testResultId);
-            
-            _logger.LogDebug("Exiting: {0}", methodName);
+
+            _logger.LogExit();
             return result.Accept(new TestResultVisitor());
         }
     }

@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             try
             {
-                _logger.LogEnter(nameof(Post));
+                _logger.LogEnter();
 
                 var userSession = HttpContext.GetUserSession();
 
@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             }
             finally
             {
-                _logger.LogExit(nameof(Post));
+                _logger.LogExit();
             }
         }
 
