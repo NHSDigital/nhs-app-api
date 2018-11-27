@@ -39,13 +39,13 @@ export default {
       type: Boolean,
       default: false,
     },
-    checkboxClasses: {
-      type: Array,
-      default: () => [],
-    },
     aLabelledBy: {
       type: String,
       default: undefined,
+    },
+    checkboxClasses: {
+      type: Array,
+      default: () => [],
     },
   },
   data: function data() { return { checkedModel: false }; },

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace NHSOnline.Backend.Worker.Settings
 {
@@ -17,6 +18,8 @@ namespace NHSOnline.Backend.Worker.Settings
         public int DefaultHttpTimeoutSeconds { get; set; }
         
         public int MinimumAge { get; set; }
+        
+        public DateTimeOffset? CurrentTermsConditionsEffectiveDate { get; set; }
 
         public string MinimumSupportedAndroidVersion { get; set; }
 
@@ -71,6 +74,11 @@ namespace NHSOnline.Backend.Worker.Settings
             if (MinimumSupportediOSVersion == null)
             {
                 throw new ConfigurationNotFoundException(nameof(MinimumSupportediOSVersion));
+            }
+            
+            if (CurrentTermsConditionsEffectiveDate == null)
+            {
+                throw new ConfigurationNotFoundException(nameof(CurrentTermsConditionsEffectiveDate));
             }
         }
     }

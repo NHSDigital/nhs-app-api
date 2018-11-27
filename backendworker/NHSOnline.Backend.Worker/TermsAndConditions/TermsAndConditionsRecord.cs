@@ -17,12 +17,12 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
             DateAnalyticsCookieAccepted = dateAnalyticsCookieAccepted;
         }
         
-        [JsonProperty(PropertyName="Id")]
+        [JsonProperty(PropertyName="id")]
         public string Id { get; private set; }
         public string NhsNumber { get; }
-        public bool ConsentGiven { get; }
+        public bool ConsentGiven { get; set; }
         public bool AnalyticsCookieAccepted { get; }
-        public DateTimeOffset DateOfConsent { get; }
-        public DateTimeOffset? DateAnalyticsCookieAccepted { get; }  
+        public DateTimeOffset DateOfConsent { get; set; }
+        public DateTimeOffset? DateAnalyticsCookieAccepted { get; }   
     }
 }

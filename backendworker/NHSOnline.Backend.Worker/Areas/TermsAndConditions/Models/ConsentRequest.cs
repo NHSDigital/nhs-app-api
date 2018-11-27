@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models
 {
@@ -7,7 +6,11 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models
     {
         [Required]
         public bool ConsentGiven { get; set; }
+        
         [Required]
-        public bool AnalyticsCookieAccepted { get; set; }        
+        public bool AnalyticsCookieAccepted { get; set; }
+        
+        [Required]
+        public bool UpdatingConsent { get; set; }
     }
 }

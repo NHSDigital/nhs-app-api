@@ -74,7 +74,6 @@
             public const string CreateLinkageKeyAuditTypeRequest = "Linkage_CreateKey_Request";
             public const string CreateLinkageKeyAuditTypeResponse = "Linkage_CreateKey_Response";
             public const string GetNdopTokenAuditTypeRequest = "Ndop_GetToken_Request";
-            //Retrieves a patient's Linkage details
             public const string TermsAndConditionsRecordConsentAuditTypeRequest = "TermsAndConditions_RecordConsent_Request";
             public const string TermsAndConditionsRecordConsentAuditTypeResponse = "TermsAndConditions_RecordConsent_Response";
             public const string TermsAndConditionsAnalyticsCookieAcceptance= "TermsAndConditions_RecordAnalyticsCookie_Acceptance";

@@ -1,0 +1,106 @@
+@import "./buttons";
+@import "./forms";
+@import "./home";
+
+p {
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
+  display: block;
+  font-weight: normal;
+  line-height: 1.5em;
+  outline-color: $focus_highlight;
+}
+a {
+  color: #005EB8;
+  font-size: 1em;
+  line-height: 1em;
+  font-weight: bold;
+  text-decoration: none;
+  vertical-align: middle;
+    outline-color: $focus_highlight;
+}
+strong {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1em;
+  line-height: 1.5em;
+  color: #425563;
+}
+.hideDefaultCheckbox {
+  display: none;
+}
+
+.info {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+  ul li {
+    margin-left: 2em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
+  p a {
+    display: inline-block;
+    text-decoration: underline;
+  }
+  a {
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
+}
+
+ul {
+  display: block;
+  list-style-type: disc;
+}
+
+label {
+  padding-top: 0.125em;
+  padding-bottom: 0.5em;
+}
+button {
+  -webkit-font-smoothing: antialiased;
+}
+.validationBorderLeft {
+  border-left: 4px #DA291C solid !important;
+  padding-left: 1em !important;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+.customErrorText {
+  padding: 1em;
+  padding-bottom: 0.150em;
+  width: 100%;
+  display: block;
+  font-weight: normal;
+  font-size: 1.125em;
+  line-height: 1.125em;
+  color: #212B32;
+}
+
+.customErrorBox {
+  width: 100%;
+  height: auto;
+  background-color: #ffffff;
+  border-top: 0.25em #005EB8 solid;
+  margin-bottom: 1em;
+  margin-top: 2.125em;
+  padding-bottom: 0.850em;
+  ul li {
+    padding-top: 0.25em;
+    display: block;
+    font-weight: normal;
+    font-size: 1.125em;
+    line-height: 1.125em;
+    color: #DA291C;
+
+  }
+  ul {
+    list-style: none;
+    padding: 0em 1em 0em 1em;
+  }
+}
+.validationText {
+  color: #DA291C !important;
+  font-weight: 700 !important;
+  padding-bottom: 0em !important;
+}

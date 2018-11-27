@@ -33,6 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             
             _userSession = _fixture.Create<UserSession>();
             _userSession.NhsNumber = _fixture.Create<string>();
+            _userSession.OdsCode = _fixture.Create<string>();
             var httpContextItems = new Dictionary<object, object>
             {
                 { Constants.HttpContextItems.UserSession, _userSession }
@@ -49,35 +50,62 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
         }
 
         [TestMethod]
-        public async Task Post_Returns_Success()
+        public async Task PostForInitialConsent_Returns_Success()
         {
             // Arrange
             var request = _fixture.Create<ConsentRequest>();
-            var response = new TermsAndConditionsRecordConsentResult.ConsentRecorded();
-            _termsAndConditionsService.Setup(x => x.RecordConsent(_userSession.NhsNumber, request, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response));
+            var response = new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
+
+            _termsAndConditionsService.Setup(x => x.RecordConsent(
+                _userSession.NhsNumber, _userSession.OdsCode, request,
+                It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
             
             // Act
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, request, It.IsAny<DateTimeOffset>()));
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, _userSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.ConsentRecorded>();
+            okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
         }
+        
+        [TestMethod]
+        public async Task PostForUpdatedConsent_Returns_Success()
+        {
+            // Arrange
+            var request = _fixture.Create<ConsentRequest>();
+            request.UpdatingConsent = true;
+            
+            var response = new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
 
+            _termsAndConditionsService.Setup(x => x.RecordConsent(
+                _userSession.NhsNumber, _userSession.OdsCode, request,
+                It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
+            
+            // Act
+            var result = await _systemUnderTest.Post(request);
+
+            // Assert
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, _userSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
+        }
+        
         [TestMethod]
         public async Task Post_Returns_Failure()
         {
             // Arrange
             var request = _fixture.Create<ConsentRequest>();
             var response = new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
-            _termsAndConditionsService.Setup(x => x.RecordConsent(_userSession.NhsNumber, request, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response));
+            _termsAndConditionsService.Setup(x => x.RecordConsent(
+                _userSession.NhsNumber, _userSession.OdsCode, request, 
+                It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
             
             // Act
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, request, It.IsAny<DateTimeOffset>()));
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, _userSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status462FailedToRecordConsent);
         }
@@ -99,6 +127,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             var value = okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsFetchConsentResult.Success>()
                 .Subject;
             value.Response.ConsentGiven.Should().Be(consentRecord.ConsentGiven);
+            value.Response.UpdatedConsentRequired.Should().Be(consentRecord.UpdatedConsentRequired);
         }
 
         [TestMethod]

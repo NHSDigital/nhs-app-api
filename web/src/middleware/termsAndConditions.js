@@ -5,7 +5,8 @@ export default async ({ redirect, route, store }) => {
     return Promise.resolve();
   }
   await store.dispatch('termsAndConditions/checkAcceptance');
-  if (store.state.termsAndConditions.areAccepted) {
+  if ((store.state.termsAndConditions.areAccepted)
+      && (!store.state.termsAndConditions.updatedConsentRequired)) {
     if (route.name === TERMSANDCONDITIONS.name) {
       return redirect(INDEX.path);
     }

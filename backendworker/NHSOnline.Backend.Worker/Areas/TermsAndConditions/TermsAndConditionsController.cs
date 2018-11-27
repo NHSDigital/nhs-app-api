@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
 using NHSOnline.Backend.Worker.Conventions;
-using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.TermsAndConditions;
@@ -68,15 +67,14 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
                     userSession.OdsCode);
             }
 
-            _logger.LogDebug("Recording user consent");
+            _logger.LogDebug("Recording user consent");         
             
-            
-            var recordConsentResult = await _termsAndConditionsService.RecordConsent(userSession.NhsNumber, 
+            var recordConsentResult = await _termsAndConditionsService.RecordConsent(userSession.NhsNumber, userSession.OdsCode,
                 model, termsAndConditionsAcceptanceDate);
-            
+         
             // Audit result of attempting to record consent
-            recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(_auditor, model.ConsentGiven, termsAndConditionsAcceptanceDate, 
-                model.AnalyticsCookieAccepted));
+            recordConsentResult.Accept(new TermsAndConditionsRecordConsentAuditingVisitor(_auditor, model.ConsentGiven, termsAndConditionsAcceptanceDate,
+                model.AnalyticsCookieAccepted, model.UpdatingConsent));
             
             _logger.LogExit(nameof(Post));
             return recordConsentResult.Accept(new TermsAndConditionsRecordConsentResultVisitor());

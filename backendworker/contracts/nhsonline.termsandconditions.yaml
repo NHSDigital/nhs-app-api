@@ -46,9 +46,15 @@ definitions:
     required:
       - consentGiven
     properties:
+      updatedConsentRequired:
+        type: boolean
+        description: Flag indicating whether the terms and conditions have changed since last consent
       consentGiven:
         type: boolean
         description: Flag indicating whether the user has consented to the terms and conditions
+      analyticsCookieAccepted:
+        type: boolean
+        description: Flag indicating whether the user has consented to the use of analytics
   ConsentRequest:
     type: object
     required:
@@ -61,3 +67,6 @@ definitions:
       analyticsCookieAccepted:
         type: boolean
         description: Flag indicating whether the user has consented to the use of analytics
+      updatingConsent:
+        type: boolean
+        description: Flag indicating whether the user is consenting to updated terms and conditions

@@ -139,6 +139,20 @@ export default {
     analyticsCookieCheckBoxText: 'I accept the use of optional cookies used to improve the performance of the NHS App.',
     btnAccept: 'Continue',
   },
+  updatedTermsAndConditions: {
+    title: 'Updated conditions of use',
+    errorMsgHeader: 'There\'s a problem',
+    errorMsgText: 'You cannot continue without agreeing',
+    body1: 'We\'ve made some important changes to our conditions of use. To continue using the NHS App, you need to agree to our updated',
+    body2: 'If you don\'t agree, you won\'t be able to continue accessing or using the NHS App.',
+    link1: 'terms of use',
+    link2: 'privacy policy',
+    link3: 'cookies policy',
+    checkBoxError: 'You cannot use the NHS App without agreeing',
+    checkBoxText1: 'I understand and agree to the updated',
+    checkBoxText2: 'I agree to the use of \'strictly necessary\' cookies as described in the updated',
+    btnAccept: 'Continue',
+  },
   appointments: {
     index: {
       successText: 'Your appointment has been booked. You can view details or cancel it here.',

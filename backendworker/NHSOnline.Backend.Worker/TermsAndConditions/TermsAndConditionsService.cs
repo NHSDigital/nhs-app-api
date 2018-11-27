@@ -1,101 +1,137 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.TermsAndConditions
 {
-    #pragma warning disable CA1309  
-    [CLSCompliant(false)]  // CA1309  
+    [SuppressMessage("Microsoft.Globalization", "CA1309", Justification = "Method ‘Equals’ is not supported., Linux/9 documentdb-netcore-sdk/1.9.1")]
     public class TermsAndConditionsService : ITermsAndConditionsService, IDisposable
     {
+        private const string DateFormat = "yyyy-MM-ddTHH:mm:ss.f'Z'";
         private readonly ILogger<TermsAndConditionsService> _logger;
         private readonly DocumentClient _client;
         private readonly Uri _collectionUri;
         private bool _disposed;
-        private readonly ITermsAndConditionsConfig _configuration;
-               
-        public TermsAndConditionsService(ITermsAndConditionsConfig configuration, ILogger<TermsAndConditionsService> logger)
+        private readonly ITermsAndConditionsConfig _termsConfig;
+        private readonly DateTimeOffset _latestEffectiveDate;
+        private readonly IAuditor _auditor;
+        
+        public TermsAndConditionsService(ITermsAndConditionsConfig termsConfig, 
+            IConfiguration appConfig, ILogger<TermsAndConditionsService> logger, IAuditor auditor)
         {
             _logger = logger;
-            _configuration = configuration;
+            _termsConfig = termsConfig;
+            _auditor = auditor;
+            
+            var latestEffectiveDateStr = appConfig.ConfigurationSettings().GetOrWarn(
+                "CurrentTermsConditionsEffectiveDate",
+                _logger);
 
-            if (_configuration.Stubbed) return;
-            _client = new DocumentClient(_configuration.EndpointUri, _configuration.AuthKey);
-            _collectionUri = UriFactory.CreateDocumentCollectionUri(_configuration.DatabaseId, _configuration.CollectionName);   
+            _latestEffectiveDate = DateTimeOffset.Parse(latestEffectiveDateStr, CultureInfo.InvariantCulture);
+                    
+            _logger.LogDebug("Effective date {0}", _latestEffectiveDate.ToString(DateFormat, CultureInfo.InvariantCulture));
+
+            if (_termsConfig.Stubbed) return;
+            _client = new DocumentClient(_termsConfig.EndpointUri, _termsConfig.AuthKey);
+            _collectionUri = UriFactory.CreateDocumentCollectionUri(_termsConfig.DatabaseId, _termsConfig.CollectionName);
         }
 
         public async Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsNumber)
         {
             _logger.LogEnter(nameof(FetchConsent));
             
-            if (_configuration.Stubbed)
+            if (_termsConfig.Stubbed)
             {
-                var response = new ConsentResponse { ConsentGiven = true };
-                _logger.LogExit(nameof(FetchConsent));
+                var response = new ConsentResponse
+                {
+                    ConsentGiven = true,
+                    UpdatedConsentRequired = false,
+                };
+                
+                _logger.LogDebug("Exiting: {0} - patient consent found", nameof(FetchConsent)); 
                 return new TermsAndConditionsFetchConsentResult.Success(response); 
-            } 
+            }
+            
             try
             {
                 if (_disposed)
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
-            
-                var docQuery = _client.CreateDocumentQuery<TermsAndConditionsRecord>(_collectionUri, new FeedOptions {MaxItemCount = 1})
-                    .Where(x => x.NhsNumber == nhsNumber)
-                    .OrderByDescending(x => x.DateOfConsent)
-                    .AsDocumentQuery();
-            
-                var response = new ConsentResponse();
-                var matchFound = false;
-            
-                while (!matchFound && docQuery.HasMoreResults)
-                {
-                    var records = await docQuery.ExecuteNextAsync<TermsAndConditionsRecord>();
 
-                    if (records.Count > 0)
+                var termsAndConditions = await GetTermsAndConditionsConsent(nhsNumber);
+
+                if (termsAndConditions != null)
+                {            
+                    _logger.LogDebug("No Patient consent record found");
+                    
+                    //Updated consent required if date of last consent is prior to date of updated terms
+                    var updatedConsentRequired = _latestEffectiveDate <= DateTimeOffset.Now 
+                                                 && _latestEffectiveDate > termsAndConditions.DateOfConsent;
+
+                    var response = new ConsentResponse
                     {
-                        var record = records.ElementAt(0);
-                        response.ConsentGiven = record.ConsentGiven;
-                        response.AnalyticsCookieAccepted = record.AnalyticsCookieAccepted;
-                        matchFound = true;
-                    }
+                        ConsentGiven = termsAndConditions.ConsentGiven,
+                        UpdatedConsentRequired = updatedConsentRequired,
+                        AnalyticsCookieAccepted = termsAndConditions.AnalyticsCookieAccepted,
+                    };
+                    
+                    _logger.LogDebug("Consent Given: true, UpdatedConsentRequired: {0}", updatedConsentRequired);                   
+                    _logger.LogDebug("Exiting: {0} - patient consent found", nameof(FetchConsent));
+                    return new TermsAndConditionsFetchConsentResult.Success(response);  
                 }
-
-                if (matchFound)
-                {           
-                    _logger.LogDebug("Exiting: {0} - patient consent found", nameof(FetchConsent)); 
-                    return new TermsAndConditionsFetchConsentResult.Success(response);                    
-                }             
+                
                 _logger.LogDebug("Exiting: {0} - no existing patient consent record", nameof(FetchConsent)); 
                 return new TermsAndConditionsFetchConsentResult.NoConsentFound();
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Unsuccessful request to record patient consent");
+                _logger.LogError(e, "Unsuccessful request to fetch patient consent");
                 _logger.LogExit(nameof(FetchConsent));
                 return new TermsAndConditionsFetchConsentResult.FailureToFetchConsent();
             }             
         }
-        
-        public async Task<TermsAndConditionsRecordConsentResult> RecordConsent(string nhsNumber, 
-            ConsentRequest request, DateTimeOffset termsAndConditionsAcceptanceDate)
-        {
-            _logger.LogEnter(nameof(RecordConsent));
-            
-            if (_configuration.Stubbed)
-            {
-                _logger.LogExit(nameof(RecordConsent));
-                return new TermsAndConditionsRecordConsentResult.ConsentRecorded();
-            }
-            var auditRecord = new TermsAndConditionsRecord(nhsNumber, request.ConsentGiven, request.AnalyticsCookieAccepted,
-                termsAndConditionsAcceptanceDate, request.AnalyticsCookieAccepted ? termsAndConditionsAcceptanceDate : (DateTimeOffset?)null);
 
+        public async Task<TermsAndConditionsRecordConsentResult> RecordConsent(string nhsNumber, string odsCode, ConsentRequest request, DateTimeOffset termsAndConditionsAcceptanceDate)
+        {
+            return request.UpdatingConsent
+                ? await UpdateConsent(nhsNumber, request, termsAndConditionsAcceptanceDate)
+                : await RecordInitialConsent(nhsNumber, odsCode, request, termsAndConditionsAcceptanceDate);
+        }
+        
+        private async Task<TermsAndConditionsRecordConsentResult> RecordInitialConsent(string nhsNumber, string odsCode, ConsentRequest request,
+            DateTimeOffset termsAndConditionsAcceptanceDate)
+        {
+            _logger.LogEnter(nameof(RecordInitialConsent));
+                    
+            if (_termsConfig.Stubbed)
+            {
+                _logger.LogExit(nameof(RecordInitialConsent));
+                return new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
+            }
+
+            if (!request.AnalyticsCookieAccepted)
+            {
+                _logger.LogInformation("Recording user did not accept optional analytics cookies. OdsCode: {0}",
+                    odsCode);
+            }
+            
+            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsAnalyticsCookieAcceptance,
+                "Attempting to record analytics cookies acceptance - AnalyticsCookieAccepted={0}{1}", request.AnalyticsCookieAccepted, 
+                request.AnalyticsCookieAccepted ? 
+                    string.Format(CultureInfo.InvariantCulture, " at DateAnalyticsCookieAccepted={0:O}", termsAndConditionsAcceptanceDate) 
+                    : string.Empty);
+            
             try
             {
                 if (_disposed)
@@ -103,18 +139,77 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
                     throw new ObjectDisposedException(GetType().FullName);
                 }
 
-                await _client.CreateDocumentAsync(_collectionUri, auditRecord);
-                _logger.LogExit(nameof(RecordConsent));
-                return new TermsAndConditionsRecordConsentResult.ConsentRecorded();
+                var termsAndConditions = new TermsAndConditionsRecord(nhsNumber, 
+                    request.ConsentGiven, request.AnalyticsCookieAccepted, termsAndConditionsAcceptanceDate, termsAndConditionsAcceptanceDate);
+                await _client.CreateDocumentAsync(_collectionUri, termsAndConditions);
+                
+                _logger.LogExit(nameof(RecordInitialConsent));
+
+                return new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Unsuccessful request to record patient consent");
-                _logger.LogExit(nameof(RecordConsent));
+                _logger.LogExit(nameof(RecordInitialConsent));
                 return new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
             }
         }      
+        
+        private async Task<TermsAndConditionsRecordConsentResult> UpdateConsent(string nhsNumber, ConsentRequest request, DateTimeOffset termsAndConditionsConsentDate)
+        {
+            _logger.LogEnter(nameof(UpdateConsent));
+            
+            if (_termsConfig.Stubbed)
+            {
+                _logger.LogExit(nameof(UpdateConsent));
+                return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
+            }
+                       
+            try
+            {
+                if (_disposed)
+                {
+                    throw new ObjectDisposedException(GetType().FullName);
+                }
 
+                var termsAndConditions = await GetTermsAndConditionsConsent(nhsNumber);
+
+                if (termsAndConditions != null)
+                {
+                    termsAndConditions.ConsentGiven = request.ConsentGiven;
+                    termsAndConditions.DateOfConsent = termsAndConditionsConsentDate;
+                    
+                    var docLink = string.Format(CultureInfo.InvariantCulture, "dbs/{0}/colls/{1}/docs/{2}", 
+                        _termsConfig.DatabaseId, _termsConfig.CollectionName, termsAndConditions.Id);
+                    
+                    await _client.ReplaceDocumentAsync(docLink, termsAndConditions);
+                    
+                    return new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
+                }
+                
+                _logger.LogExit(nameof(UpdateConsent));
+                return new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unsuccessful request to update patient consent");
+                _logger.LogExit(nameof(UpdateConsent));
+                return new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
+            }
+        }
+
+        private async Task<TermsAndConditionsRecord> GetTermsAndConditionsConsent(string nhsNumber)
+        {
+            var termsAndConditionsQuery =
+                _client.CreateDocumentQuery<TermsAndConditionsRecord>(_collectionUri,
+                        new FeedOptions { MaxItemCount = 1 })
+                    .Where(x => x.NhsNumber == nhsNumber)
+                    .OrderByDescending(x => x.DateOfConsent).AsDocumentQuery();
+
+            return
+                (await termsAndConditionsQuery.ExecuteNextAsync<TermsAndConditionsRecord>()).FirstOrDefault();
+        }
+        
         public void Dispose()
         {
             Dispose(true);
