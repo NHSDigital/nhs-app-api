@@ -10,6 +10,7 @@ SYMPTOMS_URL_PATH = /symptoms
 PRESCRIPTIONS_URL_PATH = /prescriptions
 MY_ACCOUNT_URL_PATH = /account
 SESSION_URL_PATH = /session
+AUTH_REDIRECT_PATH = /auth-return
 BASE_SCHEME = https
 NHS_ONLINE_REQUIRED_QUERY_STRING = ?source=ios
 CHECK_SYMPTOMS_URL_PATH = /check-your-symptoms

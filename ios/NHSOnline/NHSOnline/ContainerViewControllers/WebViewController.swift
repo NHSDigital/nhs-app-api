@@ -21,12 +21,12 @@ class WebViewController: UIViewController, WKUIDelegate {
         config.userContentController = contentController
         config.suppressesIncrementalRendering = true
         
-
+        
         webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = self
         view = webView
     }
-
+    
     let knownServices = KnownServices(config: config())
     
     struct Properties {
@@ -107,7 +107,7 @@ class WebViewController: UIViewController, WKUIDelegate {
             urlToNavigateTo = homeUrl + urlToNavigateTo
         }
         
-        if(WebViewController.Properties.usingAbsoluteUri) {
+        if(WebViewController.Properties.usingAbsoluteUri || knownServices.isCIDRedirectUrl(urlString: urlToNavigateTo)) {
             webView.loadPage(url: urlToNavigateTo)
         }
         else if(shouldLoadUrlAsSpaPage(urlToNavigateTo: urlToNavigateTo)) {
@@ -132,7 +132,7 @@ class WebViewController: UIViewController, WKUIDelegate {
             webView.load(URLRequest(url: failedUrl))
         } else {
             webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
-          let vc = webViewDelegate?.viewController
+            let vc = webViewDelegate?.viewController
             vc!.tabBar.selectedItem = nil
         }
     }

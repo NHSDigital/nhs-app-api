@@ -90,6 +90,12 @@ class KnownServices {
         }
         return nil
     }
+    func isCIDRedirectUrl(urlString:String) -> Bool {
+        if let url = URL(string: urlString), let nhsUrl = URL(string: config.HomeUrl) {
+            return url.host == nhsUrl.host && url.path == config.AuthRedirectPath
+        }
+        return false
+    }
     
     private func buildExternalSites() {
         let helpURL: URL = URL(string: config.HelpURL)!

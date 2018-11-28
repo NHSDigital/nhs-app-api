@@ -63,6 +63,14 @@ class KnownServices(private val context: Context) {
         return nhsService?.findMatchingServicePathInfoByPath(path)
     }
 
+    fun isCIDRedirectUrl(urlString: String): Boolean = try {
+        val nhsUrl = URL(fetchStringResource(R.string.baseURL))
+        val url = URL(urlString)
+        nhsUrl.host == url.host && url.path == fetchStringResource(R.string.authRedirectPath)
+    } catch (e: MalformedURLException) {
+        false
+    }
+
     private fun buildKnownServices(): ArrayList<KnownService> {
         val services = arrayListOf<KnownService>()
         val nhsAppService = buildNHSInternalAppService()
@@ -137,6 +145,7 @@ class KnownServices(private val context: Context) {
         val url = URL(urlString)
         return homeUrl.host == url.host
     }
+
     private fun fetchStringResource(resourceId: Int): String {
         return context.resources.getString(resourceId)
     }

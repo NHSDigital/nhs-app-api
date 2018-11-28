@@ -93,6 +93,8 @@
 	<string>$(MY_ACCOUNT_URL_PATH)</string>
 	<key>SessionUrlPath</key>
 	<string>$(SESSION_URL_PATH)</string>
+	<key>AuthRedirectPath</key>
+	<string>$(AUTH_REDIRECT_PATH)</string>
 	<key>BaseScheme</key>
 	<string>$(BASE_SCHEME)</string>
 	<key>NhsOnlineRequiredQueryString</key>

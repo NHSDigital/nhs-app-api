@@ -7,12 +7,12 @@ import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 
 
-class UrlLoader (
+class UrlLoader(
     var webView: WebView,
     var wc: WebClientInterceptor,
     var appWebInterface: AppWebInterface,
     var knownServices: KnownServices,
-    val baseURL:String
+    val baseURL: String
 ) {
 
     var reloadUrl: String? = null
@@ -22,7 +22,7 @@ class UrlLoader (
         var uriToUse = url
         var validUri = URLUtil.isValidUrl(uriToUse)
 
-        if(!validUri) {
+        if (!validUri) {
             uriToUse = baseURL + uriToUse
         }
         return uriToUse
@@ -37,19 +37,16 @@ class UrlLoader (
 
         var uriToUse = getValidUrl(pageEndPoint)
 
-        if (usingAbsoluteUri) {
+        if (usingAbsoluteUri || knownServices.isCIDRedirectUrl(uriToUse)) {
             loadPage(uriToUse)
-        }
-        else if (webView.url != null && (webView.url.contains(baseURL))) {
+        } else if (webView.url != null && (webView.url.contains(baseURL))) {
             if (appWebInterface.isRecoveringFromDroppedConnection(pageEndPoint, baseURL)) {
                 loadPage(uriToUse)
-            }
-            else {
+            } else {
                 appWebInterface.loadSpaPage(pageEndPoint, baseURL)
             }
-        }
-        else {
-            if(URLUtil.isValidUrl(uriToUse)) {
+        } else {
+            if (URLUtil.isValidUrl(uriToUse)) {
                 loadExternalPage(uriToUse)
             } else {
                 loadPage(uriToUse)
@@ -59,8 +56,8 @@ class UrlLoader (
 
     fun loadExternalPage(pageUrl: String) {
         val builtUri = Uri.parse(pageUrl)
-                .buildUpon()
-                .build()
+            .buildUpon()
+            .build()
 
         val fullUrl = builtUri.toString()
         loadPage(fullUrl)
@@ -68,7 +65,7 @@ class UrlLoader (
 
     fun loadPage(url: String) {
         val urlWithMissingQueryStrings =
-                knownServices.findKnownServiceAndAddMissingQueryFor(url)
+            knownServices.findKnownServiceAndAddMissingQueryFor(url)
 
         webView.loadUrl(urlWithMissingQueryStrings)
     }
