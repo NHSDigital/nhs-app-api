@@ -512,6 +512,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
+    override fun setMenuBarItem(index: Int) {
+            runOnUiThread {
+                when(index){
+                    0 -> menuBar.switchActiveMenuItemTo(R.id.symptoms)
+                    1 -> menuBar.switchActiveMenuItemTo(R.id.appointments)
+                    2 -> menuBar.switchActiveMenuItemTo(R.id.prescriptions)
+                    3 -> menuBar.switchActiveMenuItemTo(R.id.myRecord)
+                    4 -> menuBar.switchActiveMenuItemTo(R.id.more)
+                }
+            }
+    }
+
     override fun clearMenuBarItem() {
         menuBar.deselectActiveItem()
     }

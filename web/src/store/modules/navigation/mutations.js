@@ -23,6 +23,9 @@ export default {
     }
   },
   [SET_NEWMENUITEM](state, menuItemIndex) {
+    if (process.client && window.nativeApp !== 'undefined') {
+      NativeCallbacks.setMenuBarItem(menuItemIndex);
+    }
     clearPreviousSelectedMenuItem(state);
     state.menuItemStatusAt[menuItemIndex] = true;
   },

@@ -29,6 +29,8 @@ interface IInteractor {
 
     fun showMenuBar()
 
+    fun setMenuBarItem(index: Int)
+
     fun hideHeader()
 
     fun hideMenuBar()

@@ -61,6 +61,12 @@ class WebAppInterface(private val context: MainActivity) {
     }
 
     @JavascriptInterface
+    fun setMenuBarItem(index: Int){
+        Log.d(Application.TAG, "${this::class.java.simpleName} Entering setMenuBarItem")
+        context.runOnUiThread{context.setMenuBarItem(index)}
+    }
+
+    @JavascriptInterface
     fun resetPageFocus() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering resetPageFocus")
         context.runOnUiThread{context.resetFocusToNhsLogoForA11y()}

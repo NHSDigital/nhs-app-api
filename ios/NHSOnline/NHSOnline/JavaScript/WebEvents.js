@@ -16,6 +16,10 @@ window.nativeApp.hideMenuBar = function() {
     window.webkit.messageHandlers.hideMenuBar.postMessage(null);
 };
 
+window.nativeApp.setMenuBarItem = function(index) {
+    window.webkit.messageHandlers.setMenuBarItem.postMessage(index);
+}
+
 window.nativeApp.hideWhiteScreen = function() {
     window.webkit.messageHandlers.hideWhiteScreen.postMessage(null);
 };

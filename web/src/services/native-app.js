@@ -16,10 +16,20 @@ export default {
     }
     return false;
   },
+
   updateHeaderText(header) {
     const app = window.nativeApp;
     if (app && app.updateHeaderText) {
       app.updateHeaderText(header);
+      return true;
+    }
+    return false;
+  },
+
+  setMenuBarItem(index) {
+    const app = window.nativeApp;
+    if (app && app.setMenuBarItem) {
+      app.setMenuBarItem(index);
       return true;
     }
     return false;

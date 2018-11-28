@@ -225,6 +225,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case "clearMenuBarItem":
                 clearMenuBarItem()
                 break
+            case "setMenuBarItem":
+                setMenuBarItem(index: message.body as? Int ?? 0)
+                break
             case "goToBiometrics":
                 goToBiometrics()
                 break
@@ -255,6 +258,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     func callPostNdopToken(token: String?) {
         self.viewController.webViewController?.postNdopToken(token: token!)
+    }
+    
+    func setMenuBarItem(index: Int){
+        let tabBar = self.viewController.tabBar!
+        if(index >= 0 && index < tabBar.items!.count){
+            tabBar.selectedItem = tabBar.items![index]
+        }
     }
     
     func clearMenuBarItem() {
