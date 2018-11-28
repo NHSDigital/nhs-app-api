@@ -65,6 +65,7 @@ dependencies {
     compile 'net.serenity-bdd:serenity-cucumber:1.9.19'
     compile 'net.serenity-bdd:serenity-rest-assured:2.0.8'
     compile "org.assertj:assertj-core:3.8.0"
+    compile 'com.neovisionaries:nv-websocket-client:2.6'
 }
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

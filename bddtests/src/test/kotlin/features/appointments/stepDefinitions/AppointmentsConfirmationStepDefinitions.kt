@@ -30,17 +30,6 @@ class AppointmentsConfirmationStepDefinitions {
         val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
         availableAppointmentsSteps.availableAppointmentsPage.selectSlot(date, time)
     }
-
-    @When("^I click the 'Confirm and book appointment' button$")
-    fun iClickTheConfirmAndBookAppointmentButton() {
-        appointmentsConfirmationSteps.clickOnConfirmAndBookAppointmentButton()
-    }
-
-    @When("^I choose to change the appointment slot$")
-    fun iChooseToChangeTheAppointmentSlot() {
-        appointmentsConfirmationSteps.appointmentsConfirmation.clickOnButtonContainingText("Change this appointment")
-    }
-
     @When("^I click the button to go back to my appointments$")
     fun whenIClickTheButtonToGoBackToMyAppointments() {
         appointmentsConfirmationSteps.goBackToMyAppointments()

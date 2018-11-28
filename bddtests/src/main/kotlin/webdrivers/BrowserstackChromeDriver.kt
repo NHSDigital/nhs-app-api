@@ -5,8 +5,10 @@ import config.Config
 import net.thucydides.core.webdriver.DriverSource
 import org.junit.Assert
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
+import webdrivers.options.WebDriverOption
 import java.net.URL
 
 class BrowserstackChromeDriver : DriverSource {
@@ -38,6 +40,10 @@ class BrowserstackChromeDriver : DriverSource {
             caps.setCapability("os_version", "10")
             caps.setCapability("resolution", "1024x768")
             caps.setCapability("browserstack.local", "true")
+
+            if (WebDriverOption.NO_JS.isEnabled()) {
+                caps.setCapability(SUPPORTS_JAVASCRIPT, "false")
+            }
 
             return caps
         }

@@ -22,6 +22,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.navigation.NavBarNative
 import webdrivers.browserstack.BrowserstackLocalService
+import webdrivers.options.WebDriverOption
 import java.net.URL
 
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
@@ -81,6 +82,11 @@ open class SharedStepDefinitions {
         browser.goToApp()
         login.using(SharedStepDefinitions.patient)
         browser.loginPage.waitForNativeStepToComplete()
+    }
+
+    @Given("^I have (enabled|disabled) javascript$")
+    fun iHaveEnabledDisabledJavascript(status: String) {
+        Serenity.setSessionVariable(WebDriverOption.NO_JS.key).to("disabled" == status)
     }
 
     @Given("^I am on the gp finder$")

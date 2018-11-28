@@ -189,6 +189,6 @@ open class HybridPageObject : PageObject() {
                 androidLocator = null,
                 page = this
         )
-                .withText(text, false).click()
+                .withText(text, false).assertIsVisible().click()
     }
 }

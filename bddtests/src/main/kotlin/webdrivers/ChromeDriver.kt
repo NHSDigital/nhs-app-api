@@ -4,12 +4,25 @@ import io.github.bonigarcia.wdm.WebDriverManager
 import net.thucydides.core.webdriver.DriverSource
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
+import webdrivers.options.ChromeOptionManager.Companion.DEBUG_PORT
 
 open class ChromeDriver : DriverSource {
 
     override fun newDriver(): WebDriver? {
         WebDriverManager.chromedriver().setup()
-        return ChromeDriver()
+
+        /**
+        Configure the web socket debug port for communicating with the
+        chrome instance.
+        */
+        return ChromeDriver(configureOptions()
+                .addArguments("--remote-debugging-port=$DEBUG_PORT")
+        )
+    }
+
+    open fun configureOptions(): ChromeOptions {
+        return ChromeOptions()
     }
 
     override fun takesScreenshots(): Boolean {

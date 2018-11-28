@@ -5,6 +5,7 @@ import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
+import webdrivers.options.WebDriverOption
 
 class InitialLoginRequestBuilder(
         val patient: Patient,
@@ -23,7 +24,7 @@ class InitialLoginRequestBuilder(
     }
 
     fun respondWithLoginPage(): Mapping {
-        if(Config.instance.autoLogin == "true") {
+        if(Config.instance.autoLogin == "true" || WebDriverOption.NO_JS.isEnabled()) {
             return redirectTo(
                     "{{request.query.redirect_uri}}?state={{request.query.state}}&code=" +
                             "${patient.cidUserSession.authCode!!}")

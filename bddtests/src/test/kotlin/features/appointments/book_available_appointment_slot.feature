@@ -238,7 +238,7 @@ Feature: Book an available appointment slot
     And I am on the available appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
-    When I choose to change the appointment slot
+    When I click the 'Change this appointment' button
     Then there is a filter for the appointment types
     And there is a filter for the appointment locations
     And there is a filter for the appointment doctors/nurses
@@ -296,4 +296,23 @@ Feature: Book an available appointment slot
     Examples:
       | GP System |
       | EMIS      |
+      | VISION    |
+
+  @noJs
+  Scenario Outline: A user can find available appointments with javascript disabled
+    Given I have disabled javascript
+    And there are multiple appointment slots at the same time, provided by <GP System>
+    And I am logged in
+    And I am on the available appointments page
+    And I have filtered such that there is one time displayed that represents multiple slots
+    And I click the 'Find available appointments' button
+    And I have selected a time when multiple slots are available
+    Then the Appointment Slot page is displayed
+ #   When I enter symptoms
+ #   And  I click the 'Confirm and book appointment' button
+ #   Then the Appointment Booking success message is displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
       | VISION    |

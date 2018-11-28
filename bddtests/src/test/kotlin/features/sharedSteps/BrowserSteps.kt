@@ -7,6 +7,8 @@ import net.thucydides.core.annotations.Step
 import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.LoginPage
+import webdrivers.options.ChromeOptionManager
+import webdrivers.options.WebDriverOption
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.Duration
@@ -23,6 +25,10 @@ open class BrowserSteps {
     open fun goToApp() {
         if (!loginPage.onMobile()) {
             loginPage.open()
+
+            if (WebDriverOption.NO_JS.isEnabled()) {
+                ChromeOptionManager.instance.configureOption(WebDriverOption.NO_JS)
+            }
         }
     }
 

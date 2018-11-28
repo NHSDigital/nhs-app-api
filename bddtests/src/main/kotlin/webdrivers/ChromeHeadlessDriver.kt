@@ -1,25 +1,15 @@
 package webdrivers
 
-import io.github.bonigarcia.wdm.WebDriverManager
-import net.thucydides.core.webdriver.DriverSource
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 
 
-open class ChromeHeadlessDriver : DriverSource {
+open class ChromeHeadlessDriver : ChromeDriver() {
 
-    override fun newDriver(): WebDriver? {
-        WebDriverManager.chromedriver().setup()
-        val options = ChromeOptions()
-            options.addArguments("--headless")
-            options.addArguments("--disable-gpu")
-            options.addArguments("--no-sandbox")
-            options.addArguments("--window-size=1080,1920")
-        return ChromeDriver(options)
-    }
-
-    override fun takesScreenshots(): Boolean {
-        return true
+    override fun configureOptions(): ChromeOptions {
+        return ChromeOptions()
+                .addArguments("--headless")
+                .addArguments("--disable-gpu")
+                .addArguments("--no-sandbox")
+                .addArguments("--window-size=1080,1920")
     }
 }
