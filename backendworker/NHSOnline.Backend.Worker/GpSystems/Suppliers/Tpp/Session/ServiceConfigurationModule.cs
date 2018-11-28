@@ -8,7 +8,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<TppSessionService>();
-            
+            services.AddTransient<TppSessionExtendService>();
+
             base.ConfigureServices(services, configuration);
         }
     }

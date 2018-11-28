@@ -85,23 +85,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
             _mockEmisClient.Verify();
         }
-
-
-        [TestMethod]
-        public async Task Extend_WhenClientThrowsException_ReturnsSupplierSystemUnavailable()
-        {
-            // Arrange
-            _mockEmisClient.Setup(x => x.PracticeSettingsGet(It.IsAny<EmisHeaderParameters>(), _userSession.OdsCode))
-                .Throws<Exception>()
-                .Verifiable();
-
-            // Act
-            var result = await _systemUnderTest.Extend(_userSession);
-
-            // Assert
-            result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
-            _mockEmisClient.Verify();
-        }
     }
 }
 

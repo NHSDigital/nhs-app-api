@@ -44,11 +44,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 _logger.LogError(e, $"{StandardErrorMessage} HttpRequestException has been thrown.");
                 return new SessionExtendResult.SupplierSystemUnavailable();
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"{StandardErrorMessage} Exception has been thrown.");
-                return new SessionExtendResult.SupplierSystemUnavailable();
-            }
             finally
             {
                 _logger.LogExit();

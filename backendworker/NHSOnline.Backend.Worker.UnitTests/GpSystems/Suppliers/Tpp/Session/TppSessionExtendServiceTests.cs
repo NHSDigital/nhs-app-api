@@ -86,22 +86,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
             _mockTppClient.Verify();
         }
-
-        [TestMethod]
-        public async Task Extend_WhenClientThrowsException_ReturnsSupplierSystemUnavailable()
-        {
-            // Arrange
-            _mockTppClient.Setup(x => x.PatientSelectedPost(_userSession))
-                .Throws<Exception>()
-                .Verifiable();
-
-            // Act
-            var result = await _systemUnderTest.Extend(_userSession);
-
-            // Assert
-            result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
-            _mockTppClient.Verify();
-        }
     }
 }
 

@@ -50,11 +50,6 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
                 return new StatusCodeResult(sessionExtendedResultVisited.StatusCode);
             }
-            catch (Exception e)
-            {
-                _logger.LogError($"Extending the session failed with error: {e.Message}");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
             finally
             {
                 _logger.LogExit(nameof(Post));

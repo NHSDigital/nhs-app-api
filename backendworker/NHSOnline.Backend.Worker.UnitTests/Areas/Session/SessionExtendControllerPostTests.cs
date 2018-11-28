@@ -93,22 +93,5 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockSessionExtendService.Verify();
         }
-
-        [TestMethod]
-        public async Task Post_WhenServiceThrowsException_ReturnsStatus500InternalServerError()
-        {
-            // Arrange
-            _mockSessionExtendService
-                .Setup(x => x.Extend(_userSession))
-                .Throws<Exception>()
-                .Verifiable();
-
-            // Act
-            var result = await _systemUnderTest.Post();
-
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-            _mockSessionExtendService.Verify();
-        }
     }
 }

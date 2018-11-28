@@ -8,7 +8,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<EmisSessionService>();
-            
+            services.AddTransient<EmisSessionExtendService>();
+
             base.ConfigureServices(services, configuration);
         }
     }

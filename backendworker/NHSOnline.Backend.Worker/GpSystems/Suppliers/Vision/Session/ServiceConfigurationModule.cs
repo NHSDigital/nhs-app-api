@@ -8,6 +8,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<VisionSessionService>();
+            services.AddTransient<VisionSessionExtendService>();
+
             base.ConfigureServices(services, configuration);
         }
     }
