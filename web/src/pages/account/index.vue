@@ -62,6 +62,15 @@
         </analytics-tracked-tag>
       </li>
     </ul>
+    <p>
+      Version {{ this.$store.state.appVersion.webVersion }}
+      <span v-if="this.$store.state.appVersion.nativeVersion">
+        ({{ this.$store.state.appVersion.nativeVersion }})
+      </span>
+    </p>
+    <p>
+      <ce-mark-icon/>
+    </p>
     <analytics-tracked-tag :text="$t('signOutButton.signOut')" data-purpose="button">
       <form action="account/signout" method="post">
         <floating-button-bottom id="signout-button" :button-classes="['grey']" type="submit"
@@ -70,12 +79,6 @@
         </floating-button-bottom>
       </form>
     </analytics-tracked-tag>
-    <p>
-      Version {{ this.$store.state.appVersion.webVersion }}
-      <span v-if="this.$store.state.appVersion.nativeVersion">
-        ({{ this.$store.state.appVersion.nativeVersion }})
-      </span>
-    </p>
   </div>
 </template>
 
@@ -85,12 +88,14 @@ import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import WelcomeSection from '@/components/WelcomeSection';
 import NativeCallbacks from '@/services/native-app';
+import CeMarkIcon from '@/components/icons/CeMarkIcon';
 
 export default {
   components: {
     AnalyticsTrackedTag,
     FloatingButtonBottom,
     WelcomeSection,
+    CeMarkIcon,
   },
   computed: {
     shouldShowBiometrics() {
