@@ -162,7 +162,6 @@ export default {
   @import '../../style/buttons';
 
   .information-error {
-      margin-top: -2em;
       p {
         margin-top: 0.5em
       }
