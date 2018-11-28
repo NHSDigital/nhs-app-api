@@ -13,7 +13,8 @@ describe('termsAndConditions/actions', () => {
     cookieValue = {};
     app = {
       $cookies: {
-        get: jest.fn().mockImplementation('nhso.session').mockReturnValue(cookieValue),
+        get: jest.fn()
+          .mockImplementation('nhso.session').mockReturnValue(cookieValue),
         set: jest.fn(),
       },
       $http: {
@@ -98,6 +99,27 @@ describe('termsAndConditions/actions', () => {
       });
     });
 
+    describe('already accepted via cookies', () => {
+      beforeEach(async () => {
+        actions.app.$cookies.get = jest.fn()
+          .mockImplementation('nhso.session')
+          .mockReturnValue(cookieValue)
+
+          .mockImplementation('nhso.terms')
+          .mockReturnValue({ areAccepted: true, updatedConsentRequired: false });
+
+        state = { areAccepted: false, analyticsCookieAccepted: false };
+        await actions.checkAcceptance({ commit, state });
+      });
+
+      it('will not call getV1PatientTermsAndConditionsConsent ', () => {
+        expect(app.$http.getV1PatientTermsAndConditionsConsent).not.toBeCalledWith({});
+        expect(commit.mock.calls[0]).toEqual([
+          SET_ACCEPTANCE, { areAccepted: true, analyticsCookieAccepted: false },
+        ]);
+      });
+    });
+
     describe('not already accepted', () => {
       beforeEach(async () => {
         state = { areAccepted: false, analyticsCookieAccepted: '' };
@@ -117,6 +139,20 @@ describe('termsAndConditions/actions', () => {
           SET_ACCEPTANCE,
           { areAccepted: true, analyticsCookieAccepted: true },
         );
+      });
+    });
+
+    describe('with no data returned', () => {
+      it('will call getV1PatientTermsAndConditionsConsent ', async () => {
+        state = { areAccepted: false, analyticsCookieAccepted: '' };
+        app.$http.getV1PatientTermsAndConditionsConsent = jest.fn(() => Promise.resolve());
+
+        try {
+          await actions.checkAcceptance({ commit, state });
+          fail();
+        } catch (e) {
+          expect(e.message).toEqual('No T&C response');
+        }
       });
     });
   });

@@ -69,6 +69,7 @@
     "cookie": "0.3.1",
     "cookie-universal": "2.0.5",
     "cookie-universal-nuxt": "2.0.3",
+    "deepmerge": "2.1.0",
     "crypto": "1.0.1",
     "express": "4.16.4",
     "js-cookie": "2.2.0",

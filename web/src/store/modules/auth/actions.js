@@ -1,6 +1,7 @@
 import NativeCallbacks from '@/services/native-app';
 import Sources from '@/lib/sources';
 import { LOGIN } from '@/lib/routes';
+import { removeCookies } from '@/lib/cookie-manager';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
 
 const MAX_TRIES = 10;
@@ -65,7 +66,11 @@ export default {
 
         commit(AUTH_RESPONSE, response);
         this.dispatch('session/startValidationChecking');
-        this.app.$cookies.remove('nhso.auth');
+
+        removeCookies({
+          cookies: this.app.$cookies,
+          key: 'nhso.auth',
+        });
       });
   },
 
@@ -82,7 +87,10 @@ export default {
     this.dispatch('errors/disableApiError');
     this.dispatch('navigation/clearPreviousSelectedMenuItem');
 
-    this.app.$cookies.remove('nhso.session');
+    removeCookies({
+      cookies: this.app.$cookies,
+      key: ['nhso.terms', 'nhso.session'],
+    });
 
     return this
       .app

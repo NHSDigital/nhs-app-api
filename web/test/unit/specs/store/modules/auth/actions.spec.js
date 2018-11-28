@@ -107,6 +107,18 @@ describe('actions', () => {
           expect(actions.dispatch).toHaveBeenCalledWith('session/setInfo');
         }),
     );
+
+    it('will remove the nhso.session cookie', () => actions
+      .logout({ commit })
+      .then(() => {
+        expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.session');
+      }));
+
+    it('will remove the nhso.terms cookie', () => actions
+      .logout({ commit })
+      .then(() => {
+        expect(actions.app.$cookies.remove).toHaveBeenCalledWith('nhso.terms');
+      }));
   });
 
   describe('logoutWhenExpired', () => {

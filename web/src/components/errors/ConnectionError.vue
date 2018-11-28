@@ -5,9 +5,11 @@
       <message-text>{{ subheader }}</message-text>
       <message-text>{{ message }}</message-text>
     </message-dialog>
-    <generic-button :class="$style.button" @click="onRetryButtonClicked">
-      {{ retryButtonText }}
-    </generic-button>
+    <form method="get">
+      <generic-button :class="$style.button" @click.prevent="onRetryButtonClicked">
+        {{ retryButtonText }}
+      </generic-button>
+    </form>
   </div>
 </template>
 <script>
@@ -42,7 +44,7 @@ export default {
     },
   },
   updated() {
-    this.$store.dispatch('errors/setConnectionProblem', !navigator.onLine);
+    this.$store.dispatch('errors/setConnectionProblem', process.client && !navigator.onLine);
     this.$store.dispatch('header/updateHeaderText', this.getMessage('header'));
     this.$store.dispatch('pageTitle/updatePageTitle', this.getMessage('header'));
   },

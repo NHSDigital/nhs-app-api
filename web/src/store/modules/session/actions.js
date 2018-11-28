@@ -1,4 +1,5 @@
 import NativeCallbacks from '@/services/native-app';
+import { setCookie } from '@/lib/cookie-manager';
 import {
   CLEAR,
   END_VALIDATION_CHECKING,
@@ -11,17 +12,6 @@ import {
   HIDE_SESSION_EXPIRING,
 } from './mutation-types';
 
-const setCookie = ({ key, value, cookies, isSecure }) => {
-  if (!cookies) return;
-
-  const cleaned = value === '' ? undefined : value;
-
-  if (cleaned) {
-    cookies.set(key, cleaned, { path: '/', secure: isSecure });
-  } else {
-    cookies.remove(key);
-  }
-};
 
 export default {
   clear:

@@ -1,4 +1,8 @@
-import { SET_ACCEPTANCE, INIT_ACCEPTANCE, SET_UPDATED_CONSENT_REQUIRED } from '@/store/modules/termsAndConditions/mutation-types';
+import {
+  SET_ACCEPTANCE,
+  INIT_ACCEPTANCE,
+  SET_UPDATED_CONSENT_REQUIRED,
+} from '@/store/modules/termsAndConditions/mutation-types';
 
 export default {
   init({ commit }) {
@@ -25,20 +29,45 @@ export default {
       });
   },
   async checkAcceptance({ commit, state }) {
-    if (state.areAccepted && !state.updatedConsentRequired) return Promise.resolve();
-    return this
-      .app
-      .$http
-      .getV1PatientTermsAndConditionsConsent({})
-      .then((data) => {
-        const consentGiven = {
-          areAccepted: data.response.consentGiven,
-          analyticsCookieAccepted: data.response.analyticsCookieAccepted,
-        };
-        commit(SET_ACCEPTANCE, consentGiven);
-        commit(SET_UPDATED_CONSENT_REQUIRED, data.response.updatedConsentRequired);
-        return Promise.resolve();
-      })
-      .catch(err => Promise.reject(err));
+    const getTermsAndConditions = (termsAndConditions, property) =>
+      termsAndConditions[property] || (this.app.$cookies.get('nhso.terms') || {})[property];
+
+    const areAccepted = getTermsAndConditions(state, 'areAccepted');
+    const updatedConsentRequired = getTermsAndConditions(state, 'updatedConsentRequired');
+
+    let promise;
+    if (areAccepted && !updatedConsentRequired) {
+      promise = Promise.resolve({
+        consentGiven: {
+          areAccepted,
+          analyticsCookieAccepted: state.analyticsCookieAccepted,
+        },
+        consentRequired: updatedConsentRequired,
+      });
+    } else {
+      promise = this
+        .app
+        .$http
+        .getV1PatientTermsAndConditionsConsent({})
+        .then((data) => {
+          if (data) {
+            const consentGiven = {
+              areAccepted: data.response.consentGiven,
+              analyticsCookieAccepted: data.response.analyticsCookieAccepted,
+            };
+            return Promise.resolve({
+              consentGiven,
+              consentRequired: data.response.updatedConsentRequired,
+            });
+          }
+          throw new Error('No T&C response');
+        })
+        .catch(err => Promise.reject(err));
+    }
+
+    return promise.then(({ consentGiven, consentRequired }) => {
+      commit(SET_ACCEPTANCE, consentGiven);
+      commit(SET_UPDATED_CONSENT_REQUIRED, consentRequired);
+    });
   },
 };
