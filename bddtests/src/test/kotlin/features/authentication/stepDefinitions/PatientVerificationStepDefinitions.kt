@@ -16,7 +16,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.patient.Im1ConnectionResponse
 
-class PatientVerificationSteps : AbstractSteps() {
+class PatientVerificationStepDefinitions : AbstractSteps() {
 
     @Given("I have an (.*) IM1 Connection Token that does not exist")
     fun givenIHaveAnImConnectionTokenThatDoesNotExist(gpSystem: String) {
@@ -150,5 +150,4 @@ class PatientVerificationSteps : AbstractSteps() {
         Assert.assertNotNull("IM1 connection response expected, but was null", result)
         Assert.assertEquals(result.nhsNumbers!!.count(), 0)
     }
-
 }

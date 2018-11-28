@@ -62,6 +62,7 @@ open class SharedStepDefinitions {
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
         SerenityHelpers.setPatient(patient)
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
+        SerenityHelpers.setGpSupplier(gpSystem)
     }
 
     @Given("(TPP|EMIS|VISION) is initialised")
@@ -71,6 +72,7 @@ open class SharedStepDefinitions {
         CitizenIdSessionCreateJourney(mockingClient).createFor(SharedStepDefinitions.patient)
         SessionCreateJourneyFactory.getForSupplier(system, mockingClient).createFor(SharedStepDefinitions.patient)
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(system)
+        SerenityHelpers.setGpSupplier(system)
     }
 
     @Given("^I am logged in$")

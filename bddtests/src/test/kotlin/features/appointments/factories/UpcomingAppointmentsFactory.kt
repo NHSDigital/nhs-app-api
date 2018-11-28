@@ -36,7 +36,9 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
                 appointmentsFromDate,
                 AppointmentSlotsResponseFacade(
                         cancellationReasons = cancellationReasons,
-                        bookingReasonNecessityOption = getBookingReasonNecessity()
+                        bookingReasonNecessityOption =
+                        SerenityHelpers.getValueOrNull<NecessityOption>("BookingReasonNecessity")
+                                ?: NecessityOption.NOT_ALLOWED
                 )
         )
         mockUpcomingAppointments {
@@ -99,12 +101,6 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
                 .to(getExpectedUiRepresentationOfSlots(myAppointmentsFacade))
     }
 
-    fun createCorruptedUpcomingAppointmentsResponse() {
-        createUpcomingAppointments {
-            respondWithCorrupted()
-        }
-    }
-
     fun createTimeoutUpcomingAppointmentsResponse(
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade = AppointmentsSlotsExample
                     .getGenericExample()
@@ -119,11 +115,6 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
 
     fun createUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         mockUpcomingAppointments(mapping)
-    }
-
-
-    private fun getBookingReasonNecessity(): NecessityOption {
-        return SerenityHelpers.getValueOrNull<NecessityOption>("BookingReasonNecessity") ?: NecessityOption.NOT_ALLOWED
     }
 
     private fun convertToMyAppointmentsFacade(facade: AppointmentSlotsResponseFacade): MyAppointmentsFacade {

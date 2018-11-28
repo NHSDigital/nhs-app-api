@@ -43,7 +43,7 @@ Feature: My appointments
       | EMIS      |
       | TPP       |
       | VISION    |
-    
+
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
       # VISION Specific test
     Given Appointments are disabled for VISION at a GP Practice level

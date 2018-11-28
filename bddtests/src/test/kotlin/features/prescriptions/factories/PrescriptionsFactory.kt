@@ -7,6 +7,7 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import models.Patient
 
+const val TIME_TO_SLEEP_IN_MILLIS = 1000L
 abstract class PrescriptionsFactory(gpSupplier:String) {
 
     abstract val getCoursesLoader: ICoursesLoader<*>
@@ -34,6 +35,10 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
                                            amount: Int): String
     abstract fun disableAtGPLevel()
     abstract fun setupWireMockAndCreateDataGpSpecific()
+    abstract fun prescriptionsEndpointTimeout(patient : Patient)
+    abstract fun prescriptionsEndpointThrowServerError(patient : Patient    )
+    abstract fun coursesEndpointTimeout(patient : Patient)
+    abstract fun coursesEndpointThrowingServerError(patient : Patient)
 
     val mockingClient = MockingClient.instance
     val patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)
@@ -47,6 +52,5 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
                             "TPP" to { PrescriptionsFactoryTpp() },
                             "VISION" to { PrescriptionsFactoryVision() })
                 }
-
     }
 }

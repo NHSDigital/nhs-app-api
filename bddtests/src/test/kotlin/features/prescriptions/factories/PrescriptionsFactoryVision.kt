@@ -11,6 +11,8 @@ import mocking.vision.models.OrderNewPrescriptionRequest
 import mocking.vision.models.OrderNewPrescriptionResponse
 import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.VisionUserSession
+import models.Patient
+import org.apache.http.HttpStatus
 
 class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
 
@@ -61,4 +63,38 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     }
 
     override fun disableAtGPLevel() {}
+
+    override fun prescriptionsEndpointTimeout(patient: Patient) {
+        mockingClient
+                .forVision {
+                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                            .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
+                }
+    }
+
+    override fun prescriptionsEndpointThrowServerError(patient: Patient) {
+        mockingClient
+                .forVision {
+                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                            .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
+                }
+    }
+
+    override fun coursesEndpointTimeout(patient: Patient) {
+        Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
+        mockingClient
+                .forVision {
+                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                            .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
+                }
+    }
+
+    override fun coursesEndpointThrowingServerError(patient: Patient) {
+        Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
+        mockingClient
+                .forVision {
+                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                            .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
+                }
+    }
 }

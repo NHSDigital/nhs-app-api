@@ -34,7 +34,6 @@ import org.apache.http.HttpStatus.SC_CREATED
 import org.apache.http.HttpStatus.SC_OK
 import org.joda.time.DateTime
 import org.junit.Assert
-import pages.AuthReturnPage
 import pages.MyAccountPage
 import pages.ServiceUnavailablePage
 import worker.NhsoHttpException
@@ -49,6 +48,8 @@ import java.util.*
 
 const val INVALID_VALUE = "xxx-wrong-format-xxx"
 
+@Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
+        "if possible, break down steps into functional areas")
 class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Steps
@@ -66,7 +67,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     lateinit var myAccount: MyAccountPage
 
-    lateinit var authReturnPage: AuthReturnPage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
 
     private var authCode: String? = EmisMockDefaults.patientEmis.cidUserSession.authCode
@@ -561,16 +561,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         login.loginPage.shouldBeDisplayed()
     }
 
-    @Then("^I see the relevant page$")
-    fun iSeeTheRelevantPage() {
-        browser.shouldHaveUrl(this.currentUrl)
-    }
-
-    @Then("I see the relevant (.*)")
-    fun iSeeTheRelevant(relevantUrl: String){
-        browser.shouldHaveUrl(Config.instance.url + relevantUrl)
-    }
-
     @Then("^I see a welcome message$")
     fun iSeeAWelcomeMessageFor() {
         val patient = SerenityHelpers.getPatient()
@@ -611,11 +601,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         login.loginPage.assertMenuIsNotVisible()
     }
 
-    @Then("^I see the sign out button$")
-    fun iSeeTheSignOutButton() {
-        myAccount.signOutButton.assertSingleElementPresent().assertIsVisible()
-    }
-
     @Then("^the user login details are cleared from cookies$")
     @Throws(Exception::class)
     fun theUserLoginDetailsAreClearedFromCookies() {
@@ -629,11 +614,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
 
         browser.goToApp()
-    }
-
-    @Then("^I see create account button$")
-    fun iSeeCreateAccountButton() {
-        Assert.assertTrue(login.loginPage.loginOrCreateAccountButton.element.isVisible())
     }
 
     @When("^I select to create an account$")
@@ -654,12 +634,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         login.loginPage.createAccount(patient)
     }
 
-    @Then("^the spinner appears$")
-    @Throws(Exception::class)
-    fun theSpinnerAppears() {
-        authReturnPage.assertSpinnerVisible()
-    }
-
     @Then("^I am redirected to the CID create an account page$")
     @Throws(Exception::class)
     fun thenIAmRedirectedToTheCIDCreateAnAccountPage() {
@@ -669,12 +643,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^I am redirected to the signed in home page$")
     @Throws(Exception::class)
     fun thenIAmRedirectedToTheSignedInHomePage() {
-        navHeader.assertHomePageHeaderVisible()
-    }
-
-    @Then("^I am redirected to the app to the signed in home page$")
-    @Throws(Exception::class)
-    fun thenIAmRedirectedToTheAppToTheSignedInHomePage() {
         navHeader.assertHomePageHeaderVisible()
     }
 

@@ -7,12 +7,10 @@ import mocking.MockingClient
 import mocking.emis.models.AppointmentCancellationReason
 import models.Slot
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.appointments.MyAppointmentsPage
 import pages.navigation.HeaderNative
@@ -93,38 +91,6 @@ open class MyAppointmentsSteps {
     }
 
     @Step
-    fun checkIfBookAnAppointmentButtonExistAndEnabled() {
-            myAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
-            myAppointmentsPage.bookButton.element.waitUntilPresent<WebElementFacade>()
-
-            assertTrue("Book an appointment is not displaying",
-                    myAppointmentsPage.bookButton.element.isDisplayed)
-
-            assertTrue("Book an appointment is not enabled",
-                    myAppointmentsPage.bookButton.element.isCurrentlyEnabled)
-    }
-
-    @Step
-    fun generateStubsForMyAppointmentsWhenUnavailableToPatient(provider: String) {
-        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
-        currentViewAppointmentFactory.createUpcomingAppointments {
-            respondWithGPErrorWhenNotEnabled()
-        }
-    }
-
-    @Step
-    fun generateCorruptedStubForMyAppointment(provider: String) {
-        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
-        currentViewAppointmentFactory.createCorruptedUpcomingAppointmentsResponse()
-    }
-
-    @Step
-    fun generateTimeoutStubForMyAppointment(provider: String) {
-        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
-        currentViewAppointmentFactory.createTimeoutUpcomingAppointmentsResponse()
-    }
-
-    @Step
     fun createSerenityMyAppointmentSessionVariable() {
         val timeZone = TimeZone.getTimeZone("Europe/London")
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
@@ -182,11 +148,6 @@ open class MyAppointmentsSteps {
     }
 
     @Step
-    fun clickFirstCancelLink() {
-        myAppointmentsPage.clickFirstCancelAppointmentLink()
-    }
-
-    @Step
     fun verifyCancellationConfirmationMessage() {
         val message = myAppointmentsPage.getSuccessMessage()
         assertEquals(cancellationSuccessMessage, message)
@@ -224,10 +185,6 @@ open class MyAppointmentsSteps {
                 0,
                 myAppointmentsPage.getNumberOfCancelLinks()
         )
-    }
-
-    fun verifyAppointmentDataErrorHeaderIsDisplayed() {
-        headerNative.waitForPageHeaderText("Appointment data error")
     }
 
     fun checkAppointmentDataErrorMessagesAreCorrect() {

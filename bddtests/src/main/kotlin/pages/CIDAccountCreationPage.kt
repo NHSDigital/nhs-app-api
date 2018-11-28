@@ -24,7 +24,7 @@ open class CIDAccountCreationPage : HybridPageObject() {
         if(Config.instance.autoLogin != "true") {
             mockPatientInput.element.sendKeys(patient.hashCode().toString())
             if (onMobile()) {
-                hideKeyboard()
+                getMobileDriver().hideKeyboard()
             }
             createAccountButton.click()
         }

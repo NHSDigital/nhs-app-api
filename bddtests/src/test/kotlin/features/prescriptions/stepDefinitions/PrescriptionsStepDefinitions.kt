@@ -25,42 +25,36 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.EmisMockDefaults
-import mocking.defaults.TppMockDefaults
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.tpp.models.Error
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.vision.VisionMockDefaults
 import mocking.vision.models.PrescriptionHistory
-import mocking.vision.models.VisionUserSession
 import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.apache.http.HttpStatus.SC_GATEWAY_TIMEOUT
-import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
-import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
-import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptions.PrescriptionsListResponse
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
-import javax.servlet.http.Cookie
 
 private const val PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY = 6L
 private const val DATE_GREATER_THAN_SIX_MONTHS = 7L
-private const val TIME_TO_SLEEP_IN_MILLIS = 1000L
 private const val DELAY_IN_SECONDS = 31L
 private const val NUM_OF_PRESCRIPTIONS = 10
 
+@Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
+        "if possible, break down steps into functional areas")
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Steps
@@ -80,9 +74,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     lateinit var prescriptionLoader: IPrescriptionLoader<*>
 
     lateinit var prescriptionsListResponse: PrescriptionsListResponse
-
-    lateinit var prescriptionsPage: PrescriptionsPage
-    lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
     lateinit var errorPage: ErrorPage
 
     @Steps
@@ -207,13 +198,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         numberOfPrescriptions = numPrescriptions
     }
 
-    @Then("^I see expected prescriptions$")
-    fun thenISeeXPrescriptions() {
-        val expectedPrescriptions = getResponseToExpectedPrescriptionFormat()
-
-        prescriptions.assertPrescriptionsMatch(expectedPrescriptions, expectedPrescriptions.size, true)
-    }
-
     @Then("^I see (\\d+) prescriptions$")
     fun thenISeeXPrescriptions(numPrescriptions: Int) {
 
@@ -226,17 +210,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     private fun providerHasAllPrescriptionFields(): Boolean {
         return currentProvider == ProviderTypes.EMIS || currentProvider == ProviderTypes.VISION
-    }
-
-    @And("^the patient has no prescriptions in the last 6 months")
-    fun thePatientHasNoPrescriptionsInTheLastSixMonths() {
-
-        val expectedDefaultFromDate = getDefaultPrescriptionsFromDate(toDate)
-        numberOfPrescriptions = 0
-        numOfRepeats = 0
-        numOfCourses = 0
-
-        setupWiremockAndData(expectedDefaultFromDate)
     }
 
     @But("^I do not request a fromDate$")
@@ -266,18 +239,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @When("^I request prescriptions for the last 6 months with an invalid cookie$")
     fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
-        try {
-            prescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
-    }
-
-    @When("^I request prescriptions for the last 6 months with a missing cookie$")
-    fun iRequestPrescriptionsForTheLastSixMonthsWithAMissingCookie() {
-        Serenity.setSessionVariable(Cookie::class).to(null)
-
         try {
             prescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
@@ -373,174 +334,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.element.text)
         assertEquals("Contact your GP surgery for more information. " +
                 "For urgent medical help, call 111.", errorPage.errorText1.element.text)
-    }
-
-    @But("The prescriptions endpoint is timing out")
-    fun butThePrescriptionsEndpointIsTimingOut() {
-        mockingClient
-                .forEmis {
-                    prescriptions.prescriptionsRequest(currentPatient)
-                            .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
-                }
-
-        mockingClient
-                .forTpp {
-                    prescriptions.listRepeatMedication(currentPatient)
-                            .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
-                }
-
-        mockingClient
-                .forVision {
-                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
-                            .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
-                }
-    }
-
-    @But("The prescriptions endpoint is throwing a server error")
-    fun butThePrescriptionsEndpointIsThrowingAServerError() {
-        mockingClient
-                .forEmis {
-                    prescriptions.prescriptionsRequest(currentPatient)
-                            .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
-                }
-
-        mockingClient
-                .forTpp {
-                    prescriptions.listRepeatMedication(currentPatient)
-                            .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
-                }
-
-        mockingClient
-                .forVision {
-                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
-                            .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
-                }
-    }
-
-    @But("The courses endpoint is timing out")
-    fun butTheCoursesEndpointIsTimingOut() {
-
-        if (currentProvider == ProviderTypes.EMIS) {
-            mockingClient.forEmis {
-                prescriptions.coursesRequest(currentPatient)
-                        .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
-            }
-        } else if (currentProvider == ProviderTypes.TPP) {
-            Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
-            mockingClient
-                    .forTpp {
-                        prescriptions.listRepeatMedication(currentPatient)
-                                .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
-                    }
-        } else if (currentProvider == ProviderTypes.VISION) {
-            Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
-
-            mockingClient
-                    .forVision {
-                        getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
-                                .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
-                    }
-        }
-    }
-
-    @But("The courses endpoint is throwing a server error")
-    fun butTheCoursesEndpointIsThrowingAServerError() {
-
-        if (currentProvider == ProviderTypes.EMIS) {
-            mockingClient.forEmis {
-                prescriptions.coursesRequest(currentPatient)
-                        .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
-            }
-        } else if (currentProvider == ProviderTypes.TPP) {
-            Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
-            mockingClient
-                    .forTpp {
-                        prescriptions.listRepeatMedication(currentPatient)
-                                .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
-                    }
-        } else if (currentProvider == ProviderTypes.VISION) {
-            Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
-
-            mockingClient
-                    .forVision {
-                        getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
-                                .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {})
-                    }
-        }
-    }
-
-    @But("The prescription submission endpoint is timing out")
-    fun butThePrescriptionSubmissionEndpointIsTimingOut() {
-        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
-                .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000) }
-
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
-                .respondWith(SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000) }
-    }
-
-    @But("The prescription submission endpoint is throwing a server error")
-    fun butThePrescriptionSubmissionEndpointIsThrowingAServerError() {
-        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
-                .respondWith(SC_INTERNAL_SERVER_ERROR, resolve = {}) }
-    }
-
-    @But("The prescription submission endpoint is throwing an already ordered exception")
-    fun butThePrescriptionSubmissionEndpointIsThrowingAnAlreadyOrderedException() {
-        mockingClient.forTpp {
-            prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
-                    .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
-                            "One of the medications requested is no longer available",
-                            "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-        }
-    }
-
-    @But("The prescription submission endpoint is throwing an invalid guid exception")
-    fun butThePrescriptionSubmissionEndpointIsThrowingAnInvalidGuidException() {
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
-                .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
-                        "There was an error processing your request",
-                        "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
-    }
-
-    @Then("I see the appropriate error message for a prescription timeout")
-    fun thenISeeTheAppropriateErrorMessageForAPrescriptionTimeout() {
-
-        val pageHeader = prescriptionsPage.timeoutPageHeader
-        val header = prescriptionsPage.timeoutHeader
-        val message = prescriptionsPage.timeoutMessage
-        val retryButtonText = prescriptionsPage.timeoutRetryButtonText
-
-        errorPage.assertHeaderText(header)
-                .assertMessageText(message)
-                .assertRetryButtonText(retryButtonText)
-                .assertPageHeader(pageHeader)
-    }
-
-    @Then("I see the appropriate error message for a prescription server error")
-    fun thenISeeTheAppropriateErrorMessageForAPrescriptionServerError() {
-
-        val pageHeader = prescriptionsPage.serverErrorPageHeader
-        val header = prescriptionsPage.serverErrorHeader
-        val message = prescriptionsPage.serverErrorMessage
-
-        errorPage.assertHeaderText(header)
-                .assertMessageText(message)
-                .assertNoRetryButton()
-                .assertPageHeader(pageHeader)
-    }
-
-    @Then("I see the appropriate error message for a course request error")
-    fun thenISeeTheAppropriateErrorMessageForACourseRequestError() {
-
-        val pageHeader = confirmRepeatPrescriptionsOrderPage.serverErrorPageHeader
-        val header = confirmRepeatPrescriptionsOrderPage.serverErrorHeader
-        val message = confirmRepeatPrescriptionsOrderPage.serverErrorMessage
-        val retryButtonText = confirmRepeatPrescriptionsOrderPage.serverErrorRetryButtonText
-
-        errorPage.assertHeaderText(header)
-                .assertMessageText(message)
-                .assertRetryButtonText(retryButtonText)
-                .assertPageHeader(pageHeader)
     }
 
     @Then("I select (\\d+) prescription to order")

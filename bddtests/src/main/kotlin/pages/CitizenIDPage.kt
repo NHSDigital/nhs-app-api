@@ -6,7 +6,7 @@ class CitizenIDPage : HybridPageObject() {
         findByXpath("//input[@id='username']").sendKeys(username)
         findByXpath("//input[@id='password']").sendKeys(password)
         if (onMobile()) {
-            hideKeyboard()
+            getMobileDriver().hideKeyboard()
         }
         findByXpath("//input[@name='login']").click()
     }

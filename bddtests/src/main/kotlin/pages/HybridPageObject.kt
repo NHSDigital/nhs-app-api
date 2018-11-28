@@ -8,6 +8,7 @@ import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFacade
+import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
@@ -20,7 +21,7 @@ const val DEFAULT_NATIVE_SPINNER_WAIT: Long = 1000
 const val POOLING_FREQUENCY: Long = 100
 const val WEB_CONTEXT: String = "webview"
 
-@Suppress("TooManyFunctions", "To be addressed after browser stack implementation work, NHSO-2949")
+@Suppress("TooManyFunctions")
 open class HybridPageObject : PageObject() {
 
     val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
@@ -39,11 +40,6 @@ open class HybridPageObject : PageObject() {
             spinner.waitForNativeSpinner()
 
         if (!spinner.elements.isEmpty()) spinner.shouldNotBeVisible(seconds)
-    }
-
-    fun HybridPageElement.waitForSpinner(seconds: Long = DEFAULT_SPINNER_WAIT): WebElementFacade {
-        waitForSpinnerToDisappear(seconds)
-        return this.element
     }
 
     private fun HybridPageElement.waitForNativeSpinner(
@@ -74,12 +70,6 @@ open class HybridPageObject : PageObject() {
         } catch (e: StaleElementReferenceException) {
             // continue
         }
-    }
-
-    override fun <T : PageObject?> switchToPage(pageObjectClass: Class<T>?): T {
-        val page = super.switchToPage(pageObjectClass)
-
-        return page
     }
 
     fun onMobile(): Boolean {
@@ -114,26 +104,26 @@ open class HybridPageObject : PageObject() {
     }
 
     fun switchWebview() {
-        if(!onMobile())
+        if (!onMobile())
             return
 
         val driver = getMobileDriver()
-                    if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
-                        println("Already in ${WEB_CONTEXT} context: ${driver.context}")
-                    } else {
-                        for (context in driver.contextHandles) {
-                            if (context.contains(WEB_CONTEXT, true)) {
-                                println("Switching context to $context... Currently on: ${driver.context}")
-                                driver.context(context)
-                                println("Switched context! Now on: ${driver.context}")
-                                break
+        if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
+            println("Already in ${WEB_CONTEXT} context: ${driver.context}")
+        } else {
+            for (context in driver.contextHandles) {
+                if (context.contains(WEB_CONTEXT, true)) {
+                    println("Switching context to $context... Currently on: ${driver.context}")
+                    driver.context(context)
+                    println("Switched context! Now on: ${driver.context}")
+                    break
                 }
             }
         }
         setDriver<HybridPageObject>(driver)
     }
 
-    private fun getMobileDriver(): AppiumDriver<WebElementFacade>{
+    fun getMobileDriver(): AppiumDriver<WebElementFacade>{
         return when (isAndroid()) {
             true -> {  getSpecificDriver<AndroidDriver<WebElementFacade>>() }
             false -> { getSpecificDriver<IOSDriver<WebElementFacade>>() }
@@ -154,14 +144,12 @@ open class HybridPageObject : PageObject() {
     }
 
     fun findByXpath(parent: WebElementFacade, xpath: String): WebElementFacade {
-        switchWebview()
-        val element: WebElementFacade
-        try {
-            element = parent.findBy(By.xpath(xpath))
-        } catch (e: NoSuchElementException) {
-            throw NoSuchElementException("No element found on page:\n${driver.pageSource}", e)
+        val elements = findAllByXpath(parent, xpath)
+
+        if(!elements.any()){
+            Assert.fail("No elements found for '$xpath'")
         }
-        return element
+        return elements.first()
     }
 
     fun logSelectorAndSource(selector:String){
@@ -203,13 +191,4 @@ open class HybridPageObject : PageObject() {
         )
                 .withText(text, false).click()
     }
-
-    fun hideKeyboard() {
-        if (isAndroid()) {
-            getSpecificDriver<AndroidDriver<WebElementFacade>>().hideKeyboard()
-        } else if (isIOS()) {
-            getSpecificDriver<IOSDriver<WebElementFacade>>().hideKeyboard()
-        }
-    }
 }
-

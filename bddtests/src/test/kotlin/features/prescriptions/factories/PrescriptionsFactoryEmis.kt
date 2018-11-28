@@ -7,8 +7,10 @@ import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.emis.models.CourseRequestsGetResponse
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
+import models.Patient
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
+import org.apache.http.HttpStatus
 
 class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
 
@@ -77,5 +79,35 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
                     prescriptions.prescriptionsRequest(patient)
                             .respondWithPrescriptionsNotEnabled()
                 }
+    }
+
+    override fun prescriptionsEndpointTimeout(patient: Patient) {
+        mockingClient
+                .forEmis {
+                    prescriptions.prescriptionsRequest(patient)
+                            .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
+                }
+    }
+
+    override fun prescriptionsEndpointThrowServerError(patient: Patient) {
+        mockingClient
+                .forEmis {
+                    prescriptions.prescriptionsRequest(patient)
+                            .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
+                }
+    }
+
+    override fun coursesEndpointTimeout(patient: Patient) {
+        mockingClient.forEmis {
+            prescriptions.coursesRequest(patient)
+                    .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
+        }
+    }
+
+    override fun coursesEndpointThrowingServerError(patient: Patient) {
+        mockingClient.forEmis {
+            prescriptions.coursesRequest(patient)
+                    .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
+        }
     }
 }

@@ -6,6 +6,8 @@ import mocking.data.prescriptions.courses.TppCoursesLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
+import models.Patient
+import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_FORBIDDEN
 
 class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
@@ -52,6 +54,40 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
                 .forTpp {
                     prescriptions.listRepeatMedication(patient)
                             .respondWith(SC_FORBIDDEN, 0, resolve = {})
+                }
+    }
+
+    override fun prescriptionsEndpointTimeout(patient: Patient) {
+        mockingClient
+                .forTpp {
+                    prescriptions.listRepeatMedication(patient)
+                            .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
+                }
+    }
+
+    override fun prescriptionsEndpointThrowServerError(patient: Patient) {
+        mockingClient
+                .forTpp {
+                    prescriptions.listRepeatMedication(patient)
+                            .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
+                }
+    }
+
+    override fun coursesEndpointTimeout(patient: Patient) {
+        Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
+        mockingClient
+                .forTpp {
+                    prescriptions.listRepeatMedication(patient)
+                            .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
+                }
+    }
+
+    override fun coursesEndpointThrowingServerError(patient: Patient) {
+        Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
+        mockingClient
+                .forTpp {
+                    prescriptions.listRepeatMedication(patient)
+                            .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }
 }

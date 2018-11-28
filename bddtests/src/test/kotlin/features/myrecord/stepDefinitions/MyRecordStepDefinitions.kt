@@ -49,6 +49,8 @@ private const val NUMBER_OF_PRESCRIPTIONS = 5
 private const val NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED = 3
 private const val END_DATE = 60L
 
+@Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
+        "if possible, break down steps into functional areas")
 open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
@@ -237,11 +239,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.testResults.clickFirst()
     }
 
-    @When("^I click my record button on menu bar$")
-    fun whenIClickMyRecordButtonOnMenuBar() {
-        nav.select(NavBarNative.NavBarType.MY_RECORD)
-    }
-
     @When("^I enter url address for my record directly into the url$")
     fun whenIEnterUrlAddressForMyRecordDirectlyIntoTheUrl() {
         val fullUrl = Config.instance.url + "/my-record"
@@ -374,11 +371,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
         myRecordInfoPage.waitForSpinnerToDisappear()
-    }
-
-    @Then("^I can see the clinical abbreviations link$")
-    fun thenICanSeeTheClinicalAbbreviationsLink() {
-        myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
     }
 
     @Then("^I click the clinical abbreviations link$")

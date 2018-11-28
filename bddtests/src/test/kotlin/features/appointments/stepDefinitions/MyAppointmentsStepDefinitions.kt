@@ -7,6 +7,7 @@ import features.appointments.factories.UpcomingAppointmentsFactory
 import features.appointments.steps.MyAppointmentsSteps
 import mocking.data.appointments.AppointmentsSlotsExample
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.navigation.HeaderNative
@@ -52,7 +53,14 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^I can book an appointment$")
     fun iCanBookAnAppointment() {
-        myAppointmentsSteps.checkIfBookAnAppointmentButtonExistAndEnabled()
+        myAppointmentsSteps.myAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
+        myAppointmentsSteps.myAppointmentsPage.bookButton.element.waitUntilPresent<WebElementFacade>()
+
+        Assert.assertTrue("Book an appointment is not displaying",
+                myAppointmentsSteps.myAppointmentsPage.bookButton.element.isDisplayed)
+
+        Assert.assertTrue("Book an appointment is not enabled",
+                myAppointmentsSteps.myAppointmentsPage.bookButton.element.isCurrentlyEnabled)
     }
 
     @Then("^the page title is \"My appointments\"$")
@@ -112,17 +120,24 @@ class MyAppointmentsStepDefinitions {
 
     @Given("^(.*) does not offer online booking to my patient$")
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider: String) {
-        myAppointmentsSteps.generateStubsForMyAppointmentsWhenUnavailableToPatient(provider)
+        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.createUpcomingAppointments {
+            respondWithGPErrorWhenNotEnabled()
+        }
     }
 
     @Given("^(.*) returns corrupted response for my appointments")
     fun corruptedResponseFromMyAppointments(provider: String) {
-        myAppointmentsSteps.generateCorruptedStubForMyAppointment(provider)
+        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.createUpcomingAppointments {
+            respondWithCorrupted()
+        }
     }
 
     @Given("^(.*) will time out when trying to retrieve my appointments")
     fun timeoutResponseFromMyAppointments(provider: String) {
-        myAppointmentsSteps.generateTimeoutStubForMyAppointment(provider)
+        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.createTimeoutUpcomingAppointmentsResponse()
     }
 
     @Given("^an unknown exception occurs when I want to view my (\\w+) appointments$")
@@ -151,7 +166,11 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^each appointment can be cancelled$")
     fun eachAppointmentCanBeCancelled() {
-        myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
+        Assert.assertEquals(
+                "Missing at least one cancel link. ",
+                myAppointmentsSteps.myAppointmentsPage.getWebAppointmentSlotDivs().size,
+                myAppointmentsSteps.myAppointmentsPage.getNumberOfCancelLinks()
+        )
     }
 
     @Then("^no appointment can be cancelled$")
@@ -196,7 +215,7 @@ class MyAppointmentsStepDefinitions {
 
     @When("^I select a \"Cancel appointment\" link$")
     fun iSelectACancelLink() {
-        myAppointmentsSteps.clickFirstCancelLink()
+        myAppointmentsSteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
     @Then("^a \"Cancellation confirmed\" message is displayed$")
@@ -214,7 +233,7 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^I see page header indicating there is an appointment data error$")
     fun iSeePageHeaderIndicatingAppointmentDataError() {
-        myAppointmentsSteps.verifyAppointmentDataErrorHeaderIsDisplayed()
+        myAppointmentsSteps.headerNative.waitForPageHeaderText("Appointment data error")
     }
 
     @Then("^I see the appropriate error messages for the appointment data error$")

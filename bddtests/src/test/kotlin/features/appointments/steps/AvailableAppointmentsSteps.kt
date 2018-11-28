@@ -1,6 +1,5 @@
 package features.appointments.steps
 
-import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
@@ -30,12 +29,6 @@ open class AvailableAppointmentsSteps {
     @Step
     fun checkIfPageHeaderIsCorrect() {
         headerNative.waitForPageHeaderText(pageHeader)
-    }
-
-    @Step
-    fun assertTimeSlotPresent(expectedDateHeading: String, expectedTimeSlot: String) {
-        availableAppointmentsPage.assertDateHeadingPresent(expectedDateHeading)
-        availableAppointmentsPage.timeSlotForDateAndTime(expectedDateHeading, expectedTimeSlot).assertIsVisible()
     }
 
     @Step
@@ -147,32 +140,5 @@ open class AvailableAppointmentsSteps {
     @Step
     fun verifyThatNoSlotsAreDisplayed() {
         assertFalse("Slots are displayed. ", availableAppointmentsPage.getAreAnySlotsPresent())
-    }
-
-    @Step
-    fun verifyThatNoAppointmentsErrorIsDisplayed() {
-        assertEquals("No appointments available\n" +
-                "There are currently no appointments available to book online right now. " +
-                "If you need to book one now, call your GP surgery.\n" +
-                "If it's urgent and you don't know what to do, call 111 to get help near you.",
-                availableAppointmentsPage.warningMessage.assertSingleElementPresent().element.text)
-    }
-
-    @Step
-    fun verifyThatNoAppointmentsForSelectedCriteriaErrorIsDisplayed() {
-        assertEquals("Try selecting a different date and time, or without a preferred practice member " +
-                "selected. If you can't find the appointment you need, call your GP surgery.\n" +
-                "If it's urgent and you don't know what to do, call 111 to get help near you.",
-
-                availableAppointmentsPage.warningMessage.assertSingleElementPresent().element.text)
-    }
-
-    @Step
-    fun verifyThatAppointmentGuidanceContentIsDisplayed() {
-        val expectedGuidanceContent =
-                sessionVariableCalled<String>(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
-        assertEquals("Guidance content not displayed correctly. ",
-                expectedGuidanceContent,
-                availableAppointmentsPage.guidance.content.element.text)
     }
 }

@@ -7,10 +7,11 @@ import org.apache.http.HttpResponse
 import org.junit.Assert
 import worker.NhsoHttpException
 
-
 class SerenityHelpers {
 
     companion object {
+
+        private const val GpSupplier = "GpSupplier"
 
         fun setPatient(patientToSet: Patient) {
             setSerenityVariableIfNotAlreadySet(
@@ -28,6 +29,20 @@ class SerenityHelpers {
 
         fun getPatientOrNull(): Patient? {
             return getValueOrNull<Patient>(Patient::class)
+        }
+
+        fun getGpSupplier():String?{
+            Assert.assertTrue("Test setup incorrect, GpSupplier to be set",
+                    Serenity.hasASessionVariableCalled(GpSupplier))
+            return Serenity.sessionVariableCalled<String>(GpSupplier)
+        }
+
+        fun setGpSupplier(gpSupplier: String){
+            setSerenityVariableIfNotAlreadySet(
+                    GpSupplier,
+                    gpSupplier,
+                    "Test setup incorrect, expected patients to be the same"
+            )
         }
 
         fun getMockingClient(): MockingClient {
