@@ -1,9 +1,9 @@
 /* eslint-disable */
 import Vue from 'vue';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 Vue.filter('longDate',
-  value => (value ? moment(value).format('D MMMM YYYY') : ''));
+  value => (value ? moment.tz(value, 'Europe/London').format('D MMMM YYYY') : ''));
 
 Vue.filter('datePart',
   function(value, datePart) {
