@@ -6,6 +6,10 @@ import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import models.Patient
 import net.serenitybdd.core.Serenity
+import org.apache.http.HttpStatus
+import java.time.Duration
+
+private const val REQUEST_DELAY = 1000_000L
 
 class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
 
@@ -73,5 +77,36 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
         Serenity.setSessionVariable("NationalPracticeCode").to(patient.odsCode)
         Serenity.setSessionVariable("NhsNumbers").to(nhsNumbers)
 
+    }
+
+    override fun setSessionExtendMockResponse(expectedResponse: String) {
+        when (expectedResponse) {
+            "Success" -> {
+                mockingClient.forEmis {
+                    authentication.practiceSettingsRequest(Patient.getDefault(gpSystem)).respondWith(
+                            HttpStatus.SC_OK, resolve = {}, milliSecondDelay = 0)
+                }
+            }
+            "bad gateway" -> {
+                mockingClient.forEmis {
+                    authentication.practiceSettingsRequest(Patient.getDefault(gpSystem)).respondWith(
+                            HttpStatus.SC_BAD_GATEWAY, resolve = {}, milliSecondDelay = 0)
+                }
+            }
+            "gateway timeout" -> {
+                mockingClient.forEmis {
+                    authentication.practiceSettingsRequest(Patient.getDefault(gpSystem)).respondWith(
+                            HttpStatus.SC_OK, resolve = {}, milliSecondDelay = 0)
+                            .delayedBy(seconds = Duration.ofSeconds(REQUEST_DELAY))
+                }
+            }
+            "unauthorized" -> {
+                mockingClient.forEmis {
+                    authentication.practiceSettingsRequest(Patient.getDefault(gpSystem))
+                            .respondWith(HttpStatus.SC_UNAUTHORIZED,
+                                    resolve = {}, milliSecondDelay = 0)
+                }
+            }
+        }
     }
 }

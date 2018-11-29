@@ -12,6 +12,7 @@ abstract class PatientVerificationFactory(protected val gpSystem: String)  {
     abstract fun validPatientWithOneNhsNumber()
     abstract fun validPatientWithMultipleNumbers()
     abstract fun validPatientWithNoNhsNumber()
+    abstract fun setSessionExtendMockResponse(expectedResponse: String)
 
 
     companion object : SupplierSpecificFactory<PatientVerificationFactory>() {

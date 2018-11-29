@@ -31,6 +31,7 @@ class WorkerClient(config:Config = Config.instance) {
     val prescriptions = WorkerClientPrescriptions(config, workerClientSender, gson)
     val myRecord = WorkerClientMyRecord(config, workerClientSender, gson)
     val authentication = WorkerClientAuthentication(config, workerClientSender, gson)
+    val session = WorkerClientSession(config, workerClientSender, gson)
 
     companion object {
 

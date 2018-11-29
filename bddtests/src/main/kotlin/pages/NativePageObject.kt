@@ -102,5 +102,4 @@ abstract class NativePageObject : HybridPageObject() {
         }
         return elementNative
     }
-
 }

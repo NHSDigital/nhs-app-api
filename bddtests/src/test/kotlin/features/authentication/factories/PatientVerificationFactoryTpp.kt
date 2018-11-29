@@ -1,5 +1,7 @@
 package features.authentication.factories
 
+import constants.ErrorResponseCodeTpp
+import mocking.data.myrecord.DemographicsData
 import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.IdentifierType
@@ -14,6 +16,9 @@ import mocking.tpp.models.User
 import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import java.time.Duration
+
+private const val REQUEST_DELAY = 1000_000L
 
 class PatientVerificationFactoryTpp: PatientVerificationFactory("TPP"){
     override fun validPatientWithNoNhsNumber() {
@@ -95,5 +100,40 @@ class PatientVerificationFactoryTpp: PatientVerificationFactory("TPP"){
         return "{\"AccountId\":\"$accountId\"" +
                 ",\"Passphrase\":\"$passphrase\"" +
                 ",\"ProviderId\":\"$providerId\"}"
+    }
+
+    override fun setSessionExtendMockResponse(expectedResponse: String) {
+        when (expectedResponse) {
+            "Success" -> {
+                mockingClient.forTpp {
+                    authentication.patientSelectedPost(Patient.getDefault(gpSystem).tppUserSession!!)
+                            .respondWithSuccess(DemographicsData.getTppDemographicsData(Patient.getDefault(gpSystem)))
+                }
+            }
+            "bad gateway" -> {
+                mockingClient.forTpp {
+                    authentication.patientSelectedPost(Patient.getDefault(gpSystem).tppUserSession!!)
+                            .respondWithError(Error(ErrorResponseCodeTpp.UNKNOWN_ERROR,
+                                    "Error occurred when trying to extend session",
+                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
+            }
+            "gateway timeout" -> {
+                mockingClient.forTpp {
+                    authentication.patientSelectedPost(Patient.getDefault(gpSystem).tppUserSession!!)
+                            .respondWithSuccess(DemographicsData.getTppDemographicsData(Patient.getDefault(gpSystem)))
+                            .delayedBy(Duration.ofSeconds(REQUEST_DELAY))
+
+                }
+            }
+            "unauthorized" -> {
+                mockingClient.forTpp {
+                    authentication.patientSelectedPost(Patient.getDefault(gpSystem).tppUserSession!!)
+                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                                    "Not Authorized to return record",
+                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
+            }
+        }
     }
 }

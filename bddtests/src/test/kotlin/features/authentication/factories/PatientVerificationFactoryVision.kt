@@ -12,6 +12,10 @@ import net.serenitybdd.core.Serenity
 
 class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
 
+    override fun setSessionExtendMockResponse(expectedResponse: String) {
+        // Currently no session mocking required for vision
+    }
+
     override fun validPatientWithNoNhsNumber() {
         val patient =  Patient.getDefault(gpSystem)
 

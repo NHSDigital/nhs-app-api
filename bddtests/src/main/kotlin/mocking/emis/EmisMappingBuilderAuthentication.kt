@@ -7,6 +7,7 @@ import mocking.emis.me.EmisMeBuilder
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.models.AddNhsUserRequest
 import mocking.emis.models.AddVerificationRequest
+import mocking.emis.practices.PracticeSettingsBuilderEmis
 import mocking.emis.session.EmisEndUserSessionBuilder
 import mocking.emis.session.EmisSessionBuilder
 import models.Patient
@@ -25,4 +26,8 @@ class EmisMappingBuilderAuthentication(private var configuration: EmisConfigurat
     fun linkageKeyGetRequest(request: AddVerificationRequest) = EmisLinkageGETBuilder(request)
 
     fun linkageKeyPOSTRequest(request: AddNhsUserRequest) = EmisLinkagePOSTBuilder(request)
+
+    //This is also in my records but for where it is needed it would add confusion if we didn't add
+    //the call in here too.
+    fun practiceSettingsRequest(patient: Patient) = PracticeSettingsBuilderEmis(patient)
 }
