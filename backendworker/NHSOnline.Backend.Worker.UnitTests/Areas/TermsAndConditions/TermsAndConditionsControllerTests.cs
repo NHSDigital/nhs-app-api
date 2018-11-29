@@ -68,20 +68,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
         }
-        
+
         [TestMethod]
         public async Task PostForUpdatedConsent_Returns_Success()
         {
             // Arrange
             var request = _fixture.Create<ConsentRequest>();
             request.UpdatingConsent = true;
-            
+
             var response = new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
 
             _termsAndConditionsService.Setup(x => x.RecordConsent(
                 _userSession.NhsNumber, _userSession.OdsCode, request,
                 It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
-            
+
             // Act
             var result = await _systemUnderTest.Post(request);
 
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
         }
-        
+
         [TestMethod]
         public async Task Post_Returns_Failure()
         {
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             var request = _fixture.Create<ConsentRequest>();
             var response = new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
             _termsAndConditionsService.Setup(x => x.RecordConsent(
-                _userSession.NhsNumber, _userSession.OdsCode, request, 
+                _userSession.NhsNumber, _userSession.OdsCode, request,
                 It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
             
             // Act
@@ -128,13 +128,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
                 .Subject;
             value.Response.ConsentGiven.Should().Be(consentRecord.ConsentGiven);
             value.Response.UpdatedConsentRequired.Should().Be(consentRecord.UpdatedConsentRequired);
+            value.Response.AnalyticsCookieAccepted.Should().Be(consentRecord.AnalyticsCookieAccepted);
         }
 
         [TestMethod]
         public async Task Get_Returns_NotFound()
         {
             // Arrange
-            var response = new TermsAndConditionsFetchConsentResult.NoConsentFound();
+            var response = new TermsAndConditionsFetchConsentResult.NoConsentFound(new ConsentResponse());
             _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
             
             // Act
@@ -143,7 +144,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsFetchConsentResult.NoConsentFound>();
+            var value = okObjectResult.Value.Should()
+                .BeAssignableTo<TermsAndConditionsFetchConsentResult.NoConsentFound>().Subject;
+            value.Response.ConsentGiven.Should().Be(false);
+            value.Response.UpdatedConsentRequired.Should().Be(false);
+            value.Response.AnalyticsCookieAccepted.Should().Be(false);
         }
 
         [TestMethod]

@@ -23,6 +23,14 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
 
         public class NoConsentFound : TermsAndConditionsFetchConsentResult
         {
+            public ConsentResponse Response { get; }
+            
+                        
+            public NoConsentFound(ConsentResponse response)
+            {
+                Response = response;
+            }
+            
             public override T Accept<T>(ITermsAndConditionsFetchConsentResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);

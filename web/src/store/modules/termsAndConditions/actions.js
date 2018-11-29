@@ -1,8 +1,4 @@
-import getOr from 'lodash/fp/getOr';
 import { SET_ACCEPTANCE, INIT_ACCEPTANCE, SET_UPDATED_CONSENT_REQUIRED } from '@/store/modules/termsAndConditions/mutation-types';
-
-const extractConsentGiven = getOr(false, 'response.consentGiven');
-const extractUpdatedConsentRequired = getOr(false, 'response.updatedConsentRequired');
 
 export default {
   init({ commit }) {
@@ -14,11 +10,17 @@ export default {
       .$http
       .postV1PatientTermsAndConditionsConsent(consentTerms)
       .then(() => {
-        commit(SET_ACCEPTANCE, consentTerms);
+        const consentGiven = {
+          areAccepted: consentTerms.consentRequest.ConsentGiven,
+          analyticsCookieAccepted: consentTerms.consentRequest.AnalyticsCookieAccepted,
+        };
+
+        commit(SET_ACCEPTANCE, consentGiven);
+        commit(SET_UPDATED_CONSENT_REQUIRED, false);
         return Promise.resolve();
       })
       .catch(() => {
-        commit(SET_ACCEPTANCE, false);
+        commit(SET_ACCEPTANCE, { areAccepted: false, analyticsCookieAccepted: false });
         return Promise.resolve();
       });
   },
@@ -29,10 +31,12 @@ export default {
       .$http
       .getV1PatientTermsAndConditionsConsent({})
       .then((data) => {
-        const consentGiven = extractConsentGiven(data);
-        const updatedConsentRequired = extractUpdatedConsentRequired(data);
+        const consentGiven = {
+          areAccepted: data.response.consentGiven,
+          analyticsCookieAccepted: data.response.analyticsCookieAccepted,
+        };
         commit(SET_ACCEPTANCE, consentGiven);
-        commit(SET_UPDATED_CONSENT_REQUIRED, updatedConsentRequired);
+        commit(SET_UPDATED_CONSENT_REQUIRED, data.response.updatedConsentRequired);
         return Promise.resolve();
       })
       .catch(err => Promise.reject(err));

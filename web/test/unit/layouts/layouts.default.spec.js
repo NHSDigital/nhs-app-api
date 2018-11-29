@@ -60,6 +60,9 @@ const createStore = isNativeApp => ({
     session: {
       csrfToken: 'someToken',
     },
+    termsAndConditions: {
+      analyticsCookieAccepted: true,
+    },
   },
 });
 

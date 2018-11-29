@@ -11,7 +11,7 @@
     <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                 @onBarStatusChanged="setSurveyBarStatus"/>
     <navigation-menu v-if="showMenu"/>
-    <hot-jar />
+    <hot-jar v-if="isAnalyticsCookieAccepted()"/>
     <a11y-title-announcer v-if="!$store.state.device.isNativeApp" ref="a11yAnnouncer"/>
   </div>
 </template>
@@ -56,16 +56,21 @@ export default {
         lang: `${this.$t('language')}`,
       },
       title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
-      script: [
-        {
-          src: this.$env.ANALYTICS_SCRIPT_URL,
-        },
-      ],
       meta: [
         { name: 'web version', content: this.$store.state.appVersion.webVersion },
         { name: 'platform', content: platform },
       ],
     };
+
+    const analyticsScript = [
+      {
+        src: this.$env.ANALYTICS_SCRIPT_URL,
+      },
+    ];
+
+    if (this.isAnalyticsCookieAccepted()) {
+      head.script = analyticsScript;
+    }
     return head;
   },
   data() {
@@ -162,7 +167,7 @@ export default {
       this.surveyBarOpen = isBarOpen;
     },
     isHotJarSurveyVisible() {
-      return this.$env.HOTJAR_SURVEY_VISIBLE === 'true' || this.$env.HOTJAR_SURVEY_VISIBLE === true;
+      return this.isAnalyticsCookieAccepted() && (this.$env.HOTJAR_SURVEY_VISIBLE === 'true' || this.$env.HOTJAR_SURVEY_VISIBLE === true);
     },
     resetFocus() {
       if (!this.loggedIn) {
@@ -181,6 +186,9 @@ export default {
           }
         }
       }, 2000);
+    },
+    isAnalyticsCookieAccepted() {
+      return this.$store.state.termsAndConditions.analyticsCookieAccepted;
     },
   },
 };

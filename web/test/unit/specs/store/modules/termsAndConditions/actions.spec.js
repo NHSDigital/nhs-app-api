@@ -36,7 +36,12 @@ describe('termsAndConditions/actions', () => {
     let consentTerms;
 
     beforeEach(() => {
-      consentTerms = true;
+      consentTerms = {
+        consentRequest: {
+          ConsentGiven: true,
+          AnalyticsCookieAccepted: true,
+        },
+      };
     });
 
     it('will call postV1PatientTermsAndConditionsConsent with the received consent terms ', () => {
@@ -55,7 +60,10 @@ describe('termsAndConditions/actions', () => {
       });
 
       it('will commit SET_ACCEPTANCE as true when the post request completes successfully', async () => {
-        expect(commit).toBeCalledWith(SET_ACCEPTANCE, true);
+        expect(commit).toBeCalledWith(
+          SET_ACCEPTANCE,
+          { areAccepted: true, analyticsCookieAccepted: true },
+        );
       });
     });
 
@@ -70,7 +78,10 @@ describe('termsAndConditions/actions', () => {
       });
 
       it('will commit SET_ACCEPTANCE as false when the post request fails', async () => {
-        expect(commit).toBeCalledWith(SET_ACCEPTANCE, false);
+        expect(commit).toBeCalledWith(
+          SET_ACCEPTANCE,
+          { areAccepted: false, analyticsCookieAccepted: false },
+        );
       });
     });
   });
@@ -78,7 +89,7 @@ describe('termsAndConditions/actions', () => {
   describe('checkAcceptance', () => {
     describe('already accepted', () => {
       beforeEach(() => {
-        state = { areAccepted: true };
+        state = { areAccepted: true, analyticsCookieAccepted: true };
         actions.checkAcceptance({ commit, state });
       });
 
@@ -89,9 +100,9 @@ describe('termsAndConditions/actions', () => {
 
     describe('not already accepted', () => {
       beforeEach(async () => {
-        state = { areAccepted: false };
+        state = { areAccepted: false, analyticsCookieAccepted: '' };
         app.$http.getV1PatientTermsAndConditionsConsent = jest.fn(() => Promise.resolve({
-          response: { consentGiven: true },
+          response: { consentGiven: true, analyticsCookieAccepted: true },
         }));
 
         await actions.checkAcceptance({ commit, state });
@@ -102,7 +113,10 @@ describe('termsAndConditions/actions', () => {
       });
 
       it('will commit the result from getV1PatientTermsAndConditionsConsent', () => {
-        expect(commit).toBeCalledWith(SET_ACCEPTANCE, true);
+        expect(commit).toBeCalledWith(
+          SET_ACCEPTANCE,
+          { areAccepted: true, analyticsCookieAccepted: true },
+        );
       });
     });
   });

@@ -2,10 +2,8 @@ import { SET_ACCEPTANCE, SET_UPDATED_CONSENT_REQUIRED, INIT_ACCEPTANCE } from '@
 
 export default {
   [SET_ACCEPTANCE](state, result) {
-    state.areAccepted = result;
-    if (result) {
-      state.updatedConsentRequired = false;
-    }
+    state.areAccepted = result.areAccepted;
+    state.analyticsCookieAccepted = result.analyticsCookieAccepted;
   },
   [SET_UPDATED_CONSENT_REQUIRED](state, result) {
     state.updatedConsentRequired = result;
