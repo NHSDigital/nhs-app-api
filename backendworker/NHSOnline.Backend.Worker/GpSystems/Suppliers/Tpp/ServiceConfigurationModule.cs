@@ -10,61 +10,53 @@ using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
-    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : Support.DependencyInjection.SupplierServiceConfigurationModule
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<ServiceConfigurationModule> _logger;
-
-        public ServiceConfigurationModule(ILoggerFactory loggerFactory)
+        
+        public ServiceConfigurationModule(ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             _loggerFactory = loggerFactory;
             _logger = loggerFactory.CreateLogger<ServiceConfigurationModule>();
         }
 
+        protected override Supplier Supplier => Supplier.Tpp;
+        
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_TPP", _logger), out bool enabled) && enabled)
-            {
-                var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
-                
-                services.AddSingleton<TppHttpClientHandler>();
-                services.AddTransient<TppHttpRequestIdentifier>();
-                
-                services.AddHttpClient<TppHttpClient>()
-                    .ConfigurePrimaryHttpMessageHandler(
-                        () => new TppHttpClientHandler(
-                            configuration,
-                            _loggerFactory.CreateLogger<TppHttpClientHandler>(),
-                            certificateService))
-                    .AddHttpMessageHandler<HttpTimeoutHandler<TppHttpRequestIdentifier>>();
+            var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
+            
+            services.AddSingleton<TppHttpClientHandler>();
+            services.AddTransient<TppHttpRequestIdentifier>();
+            
+            services.AddHttpClient<TppHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler(
+                    () => new TppHttpClientHandler(
+                        configuration,
+                        _loggerFactory.CreateLogger<TppHttpClientHandler>(),
+                        certificateService))
+                .AddHttpMessageHandler<HttpTimeoutHandler<TppHttpRequestIdentifier>>();
 
-                services.AddSingleton<IGpSystem, TppGpSystem>();
-                services.AddSingleton<ITppClient, TppClient>();
-                services.AddSingleton<ITppConfig, TppConfig>();
-                services.AddTransient<IListSlotsReplyMapper, ListSlotsReplyMapper>();
-                services.AddTransient<ISessionMapper, SessionMapper>();
-                services.AddSingleton<IAppointmentSlotResultBuilder, TppAppointmentSlotsResultBuilder>();
-                services.AddTransient<IAppointmentsReplyMapper, AppointmentsReplyMapper>();
-                services.AddTransient<IAppointmentMapper, AppointmentMapper>();
-                services.AddSingleton<IAppointmentsResultBuilder, TppAppointmentsResultBuilder>();
+            services.AddSingleton<IGpSystem, TppGpSystem>();
+            services.AddSingleton<ITppClient, TppClient>();
+            services.AddSingleton<ITppConfig, TppConfig>();
+            services.AddTransient<IListSlotsReplyMapper, ListSlotsReplyMapper>();
+            services.AddTransient<ISessionMapper, SessionMapper>();
+            services.AddSingleton<IAppointmentSlotResultBuilder, TppAppointmentSlotsResultBuilder>();
+            services.AddTransient<IAppointmentsReplyMapper, AppointmentsReplyMapper>();
+            services.AddTransient<IAppointmentMapper, AppointmentMapper>();
+            services.AddSingleton<IAppointmentsResultBuilder, TppAppointmentsResultBuilder>();
 
-                services.AddTransient<TppTokenValidationService>();
-                services.AddTransient<TppDemographicsService>();
-                services.AddTransient<TppPatientRecordService>();
-                services.AddTransient<TppPrescriptionService>();
-                services.AddTransient<TppCourseService>();
-                services.AddTransient<TppAppointmentSlotsService>();
-                services.AddTransient<TppAppointmentsService>();
-
-                _logger.LogDebug("Tpp GP Service was successfully configured");
-            }
-            else
-            {
-                _logger.LogDebug("Tpp GP Service was not configured");
-            }
+            services.AddTransient<TppTokenValidationService>();
+            services.AddTransient<TppDemographicsService>();
+            services.AddTransient<TppPatientRecordService>();
+            services.AddTransient<TppPrescriptionService>();
+            services.AddTransient<TppCourseService>();
+            services.AddTransient<TppAppointmentSlotsService>();
+            services.AddTransient<TppAppointmentsService>();
 
             base.ConfigureServices(services, configuration);
-
         }
     }
 }

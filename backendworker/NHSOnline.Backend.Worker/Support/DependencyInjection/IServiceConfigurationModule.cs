@@ -7,6 +7,8 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
 {
     public interface IServiceConfigurationModule
     {
+        bool IsEnabled(IConfiguration configuration);
+        
         void ConfigureServices(
             IServiceCollection services,
             IConfiguration configuration);

@@ -9,51 +9,42 @@ using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
-    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : Support.DependencyInjection.SupplierServiceConfigurationModule
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<ServiceConfigurationModule> _logger;
 
-        public ServiceConfigurationModule(ILoggerFactory loggerFactory)
+        public ServiceConfigurationModule(ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             _loggerFactory = loggerFactory;
             _logger = loggerFactory.CreateLogger<ServiceConfigurationModule>();
         }
-
+        
+        protected override Supplier Supplier => Supplier.Emis;
+        
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_EMIS", _logger), out bool enabled) &&
-                enabled)
-            {
-                services.AddSingleton<EmisHttpClientHandler>();
-                services.AddTransient<EmisHttpRequestIdentifier>();
-                
-                var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
+            services.AddSingleton<EmisHttpClientHandler>();
+            services.AddTransient<EmisHttpRequestIdentifier>();
+            
+            var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
 
-                services.AddHttpClient<EmisHttpClient>().ConfigurePrimaryHttpMessageHandler(() =>
-                    new EmisHttpClientHandler(configuration,
-                        _loggerFactory.CreateLogger<EmisHttpClientHandler>(),
-                        certificateService))
-                    .AddHttpMessageHandler<HttpTimeoutHandler<EmisHttpRequestIdentifier>>();
+            services.AddHttpClient<EmisHttpClient>().ConfigurePrimaryHttpMessageHandler(() =>
+                new EmisHttpClientHandler(configuration,
+                    _loggerFactory.CreateLogger<EmisHttpClientHandler>(),
+                    certificateService))
+                .AddHttpMessageHandler<HttpTimeoutHandler<EmisHttpRequestIdentifier>>();
 
-                services.AddSingleton<IGpSystem, EmisGpSystem>();
-                services.AddSingleton<IEmisClient, EmisClient>();
-                services.AddSingleton<IEmisConfig, EmisConfig>();
-                services.AddSingleton<IEmisSessionService, EmisSessionService>();
-                
-                services.AddTransient<IEmisEnumMapper, EmisEnumMapper>();
+            services.AddSingleton<IGpSystem, EmisGpSystem>();
+            services.AddSingleton<IEmisClient, EmisClient>();
+            services.AddSingleton<IEmisConfig, EmisConfig>();
+            services.AddSingleton<IEmisSessionService, EmisSessionService>();
+            
+            services.AddTransient<IEmisEnumMapper, EmisEnumMapper>();
 
-                services.AddTransient<EmisTokenValidationService>();
-
-                _logger.LogDebug("Emis GP Service was successfully configured");
-            }
-            else
-            {
-                _logger.LogDebug("Emis GP Service was not configured");
-            }
+            services.AddTransient<EmisTokenValidationService>();
 
             base.ConfigureServices(services, configuration);
-
         }
     }
 }

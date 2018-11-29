@@ -7,6 +7,11 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
 {
     public abstract class ServiceConfigurationModule : IServiceConfigurationModule
     {
+        public virtual bool IsEnabled(IConfiguration configuration)
+        {
+            return true;
+        }
+
         public virtual void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
         }

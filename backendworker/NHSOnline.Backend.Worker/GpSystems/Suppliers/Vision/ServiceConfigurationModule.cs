@@ -6,17 +6,19 @@ using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
-    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : Support.DependencyInjection.SupplierServiceConfigurationModule
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<ServiceConfigurationModule> _logger;
 
-        public ServiceConfigurationModule(ILoggerFactory loggerFactory)
+        public ServiceConfigurationModule(ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             _loggerFactory = loggerFactory;
             _logger = _loggerFactory.CreateLogger<ServiceConfigurationModule>();
         }
 
+        protected override Supplier Supplier => Supplier.Vision;
+        
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
 

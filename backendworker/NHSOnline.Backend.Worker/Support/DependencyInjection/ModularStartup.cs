@@ -21,13 +21,13 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
                              throw new ArgumentNullException(nameof(configuration));
             _loggerFactory = loggerFactory;
 
-            _modules = FindAllLoadedModules();
+            _modules = FindAllEnabledModules();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             foreach (var module in _modules)
-            {
+            {  
                 module.ConfigureServices(services, _configuration);
             }
         }
@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
             }
         }
 
-        private IEnumerable<IServiceConfigurationModule> FindAllLoadedModules()
+        private IEnumerable<IServiceConfigurationModule> FindAllEnabledModules()
         {
             return AppDomain.CurrentDomain.GetAssemblies().ToList()
                 .SelectMany(x => x.GetTypes())
@@ -59,6 +59,7 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
                     
                     return (IServiceConfigurationModule) Activator.CreateInstance(t);
                 })
+                .Where(x => x.IsEnabled(_configuration))
                 .ToList();
         }
     }
