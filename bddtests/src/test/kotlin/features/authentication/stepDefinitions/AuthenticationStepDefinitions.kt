@@ -591,8 +591,10 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Throws(Exception::class)
     fun iClickTheSignOutButton() {
         navHeader.clickMyAccount()
+        myAccount.waitForSpinnerToDisappear()
         myAccount.signOutButton.click()
         browser.waitUntilSignoutCompletes()
+        myAccount.waitForSpinnerToDisappear()
     }
 
     @Then("^I do not see the menu bar$")
