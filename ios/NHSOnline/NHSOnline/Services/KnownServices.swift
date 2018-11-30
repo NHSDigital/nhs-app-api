@@ -7,6 +7,7 @@ class KnownServices {
     private let nhsOnlineErrorMessage = NSLocalizedString("ConnectionErrorMessage", comment: "")
     private let accessibleNhsOnlineErrorMessage = NSLocalizedString("AccessibilityConnectionErrorMessage", comment: "")
     private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
+    private let accessibleNhs111Title = NSLocalizedString("AccessibleNHS111Title", comment: "")
     private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
     private let conditionsTitle = NSLocalizedString("ConditionsTitle", comment: "")
     private let accessibleConditionsTitle = NSLocalizedString("AccessibleConditionsTitle", comment: "")
@@ -111,7 +112,7 @@ class KnownServices {
     private func buildKnownServices() {
         let nhsoService = buildNhsoService()
         let conditionService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, serviceError: genericError,  title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: true)
-        let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111, serviceError: genericError, title: nhs111Title, validateSession: false, allowNativeInteraction: false)
+        let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111, serviceError: genericError, title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
         let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111, serviceError: genericError, title: nhs111Title, validateSession: false, allowNativeInteraction: false)
         let organDonationService = KnownService(serviceUrl: config.OrganDonationUrl, service: .ORGAN_DONATION, serviceError: genericError, title: organDonationTitle, validateSession: false, allowNativeInteraction: true)
         let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, serviceError: genericError, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)

@@ -90,11 +90,12 @@ class KnownServices(private val context: Context) {
             false,
             fetchStringResource(R.string.conditions_header))
 
-        val nhs111 = KnownService(fetchStringResource(R.string.nhs111),
-            unavailabilityErrorMessage,
-            fetchStringResource(R.string.nhs_111_header),
-            null,
-            false)
+        val nhs111 = KnownService(fetchStringResource(
+                R.string.nhs111),
+                unavailabilityErrorMessage,
+                fetchStringResource(R.string.nhs_111_header),
+                fetchStringResource(R.string.nhs_111_header_description),
+                false)
         val dataPref = KnownService(fetchStringResource(R.string.dataPreferencesBaseUrl),
             unavailabilityErrorMessage,
             fetchStringResource(R.string.conditions_header),
