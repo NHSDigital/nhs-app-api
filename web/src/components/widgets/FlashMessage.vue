@@ -31,6 +31,9 @@ export default {
     },
     message() {
       if (this.showMessage()) {
+        if (this.$store.state.flashMessage.key) {
+          return this.$t(this.$store.state.flashMessage.key);
+        }
         return this.$store.state.flashMessage.message;
       }
 

@@ -228,7 +228,7 @@ export default {
         message: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
       },
     },
-    cancel: {
+    cancelling: {
       info: 'Check your appointment details before cancelling',
       form_label: 'Reason for cancelling',
       backButtonText: 'Back',

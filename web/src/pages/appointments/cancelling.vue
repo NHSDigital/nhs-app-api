@@ -2,48 +2,52 @@
   <div v-if="showTemplate" class="pull-content">
     <message-dialog v-if="showError" message-type="error">
       <message-text data-purpose="error-heading">
-        {{ $t('appointments.cancel.noReasonDialogError') }}
+        {{ $t('appointments.cancelling.noReasonDialogError') }}
       </message-text>
       <message-list data-purpose="error">
-        <li>{{ $t('appointments.cancel.noReasonError') }}</li>
+        <li>{{ $t('appointments.cancelling.noReasonError') }}</li>
       </message-list>
     </message-dialog>
     <div :class="$style.info" data-purpose="info">
-      <p>{{ $t('appointments.cancel.info') }}</p>
+      <p>{{ $t('appointments.cancelling.info') }}</p>
     </div>
 
     <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false" />
+    <form-post :action="appointmentCancelPath">
+      <input :value="appointment.id" type="hidden" name="id">
+      <div v-if="isReasonRequired" :class="$style.form">
+        <label for="txt_reason">
+          {{ $t('appointments.cancelling.form_label') }}
+        </label>
 
-    <div v-if="isReasonRequired" :class="$style.form">
-      <label for="txt_reason">
-        {{ $t('appointments.cancel.form_label') }}
-      </label>
+        <error-message v-if="showError" id="error-label" :class="$style.form">
+          {{ $t('appointments.cancelling.noReasonError') }}
+        </error-message>
 
-      <error-message v-if="showError" id="error-label" :class="$style.form">
-        {{ $t('appointments.cancel.noReasonError') }}
-      </error-message>
+        <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
+                         select-id = "txt_reason" select-name="reason">
+          <option disabled="" selected="" value="">
+            {{ $t('appointments.cancelling.dropdownDefaultOption') }}
+          </option>
+          <option v-for="reason in cancellationReasons" :key="reason.id" :value="reason.id">
+            {{ reason.displayName }}
+          </option>
+        </select-dropdown>
+      </div>
 
-      <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
-                       select-id = "txt_reason" select-name="reason">
-        <option disabled="" selected="" value="">
-          {{ $t('appointments.cancel.dropdownDefaultOption') }}
-        </option>
-        <option v-for="reason in cancellationReasons" :key="reason.id" :value="reason.id">
-          {{ reason.displayName }}
-        </option>
-      </select-dropdown>
-    </div>
-
-    <generic-button id="btn_cancel_appointment"
-                    :class="[$style.button, $style.green]"
-                    @click="onCancelButtonClicked">
-      {{ $t('appointments.cancel.cancelButtonText') }}
-    </generic-button>
-    <generic-button id="btn_back_appointment"
-                    :class="[$style.button, $style.grey]"
-                    @click="onBackButtonClicked">
-      {{ $t('appointments.cancel.backButtonText') }}
-    </generic-button>
+      <generic-button id="btn_cancel_appointment"
+                      :class="[$style.button, $style.green]"
+                      @click.stop.prevent="onCancelButtonClicked($event)">
+        {{ $t('appointments.cancelling.cancelButtonText') }}
+      </generic-button>
+    </form-post>
+    <form :action="appointmentPath">
+      <generic-button id="btn_back_appointment"
+                      :class="[$style.button, $style.grey]"
+                      @click.stop.prevent="onBackButtonClicked($event)">
+        {{ $t('appointments.cancelling.backButtonText') }}
+      </generic-button>
+    </form>
   </div>
 </template>
 
@@ -55,7 +59,8 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import GenericButton from '@/components/widgets/GenericButton';
-import { APPOINTMENTS } from '@/lib/routes';
+import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS } from '@/lib/routes';
+import FormPost from '@/components/FormPost';
 
 export default {
   components: {
@@ -66,6 +71,7 @@ export default {
     MessageList,
     ErrorMessage,
     SelectDropdown,
+    FormPost,
   },
   data() {
     return {
@@ -81,14 +87,20 @@ export default {
     showError() {
       return this.submissionError && !this.selectedReason;
     },
+    appointmentPath() {
+      return APPOINTMENTS.path;
+    },
+    appointmentCancelPath() {
+      return APPOINTMENT_CANCEL_NOJS.path;
+    },
   },
-  mounted() {
+  created() {
     this.appointment = this.$store.state.myAppointments.selectedAppointment;
     this.cancellationReasons = this.$store.state.myAppointments.cancellationReasons;
     this.isReasonRequired = this.cancellationReasons.length > 0;
 
     if (!this.appointment) {
-      this.$router.push(APPOINTMENTS.path);
+      this.$router.push(this.appointmentPath);
     }
   },
   beforeDestroy() {
@@ -107,7 +119,7 @@ export default {
 
         this.$store.dispatch('myAppointments/cancel', data)
           .then(() => {
-            this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancel.successText'));
+            this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancelling.successText'));
             this.$router.push(APPOINTMENTS.path);
           });
       } else {
@@ -118,7 +130,7 @@ export default {
       }
     },
     onBackButtonClicked() {
-      this.$router.push(APPOINTMENTS.path);
+      this.$router.push(this.appointmentPath);
     },
   },
 };

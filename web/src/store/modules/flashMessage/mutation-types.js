@@ -8,4 +8,5 @@ export const initialState = () => ({
   hasBeenShown: false,
   show: false,
   type: 'success',
+  key: '',
 });

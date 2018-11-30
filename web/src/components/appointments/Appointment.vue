@@ -24,10 +24,10 @@
     <span v-if="showCancellationLink && !cancellationDisabled">
       <hr :class="$style.cancel" aria-hidden="true">
       <p>
-        <nuxt-link :class="$style['cancel-link']" :to="appointmentCancellingPath"
-                   @click.native="select">
+        <a :class="$style['cancel-link']" :href="appointmentCancellingPath"
+           @click.stop.prevent="onCancel">
           {{ this.$t('appointments.index.cancelButtonText') }}
-        </nuxt-link>
+        </a>
       </p>
     </span>
 
@@ -46,6 +46,7 @@ import moment from 'moment-timezone';
 import LocationIcon from '@/components/icons/LocationIcon';
 import ClinicianIcon from '@/components/icons/ClinicianIcon';
 import { APPOINTMENT_CANCELLING } from '@/lib/routes';
+import { createUri } from '@/lib/noJs';
 
 export default {
   components: {
@@ -68,16 +69,23 @@ export default {
   },
   computed: {
     appointmentCancellingPath() {
-      return APPOINTMENT_CANCELLING.path;
+      const noJsData = {
+        myAppointments: {
+          selectedAppointment: this.appointment,
+          cancellationReasons: this.$store.state.myAppointments.cancellationReasons,
+        },
+      };
+      return createUri({ path: APPOINTMENT_CANCELLING.path, noJs: noJsData });
     },
   },
   methods: {
     formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mma'),
     formatDate: dateTime => moment.tz(dateTime, 'Europe/London').format('dddd D MMMM YYYY'),
-    select() {
+    onCancel() {
       if (this.showCancellationLink) {
         this.$store.dispatch('myAppointments/select', this.appointment);
       }
+      this.$router.push(APPOINTMENT_CANCELLING.path);
     },
   },
 };

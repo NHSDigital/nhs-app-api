@@ -38,7 +38,7 @@ const testDataSet = [
   '/appointments/booking-guidance',
   '/appointments/booking',
   '/appointments/confirmation',
-  '/appointments/cancel',
+  '/appointments/cancelling',
   '/auth-return',
   '/login',
   '/my-record',

@@ -13,7 +13,7 @@ Feature: Authorisation occurs during each URL visit
       | /account                                    |
       | /appointments                               |
       | /appointments/booking-guidance              |
-      | /appointments/cancel                        |
+      | /appointments/cancelling                    |
       | /appointments/booking                       |
       | /appointments/confirmation                  |
       | /data-sharing                               |
@@ -36,7 +36,7 @@ Feature: Authorisation occurs during each URL visit
       | /account                                    |
       | /appointments                               |
       | /appointments/booking-guidance              |
-      | /appointments/cancel                        |
+      | /appointments/cancelling                    |
       | /appointments/booking                       |
       | /appointments/confirmation                  |
       | /data-sharing                               |
@@ -59,7 +59,7 @@ Feature: Authorisation occurs during each URL visit
       | /account                                    |
       | /appointments                               |
       | /appointments/booking-guidance              |
-      | /appointments/cancel                        |
+      | /appointments/cancelling                    |
       | /appointments/booking                       |
       | /appointments/confirmation                  |
       | /data-sharing                               |
@@ -83,7 +83,7 @@ Feature: Authorisation occurs during each URL visit
       | /account                                    | /account                       |
       | /appointments                               | /appointments                  |
       | /appointments/booking-guidance              | /appointments/booking-guidance |
-      | /appointments/cancel                        | /appointments                  |
+      | /appointments/cancelling                    | /appointments                  |
       | /appointments/booking                       | /appointments/booking          |
       | /appointments/confirmation                  | /appointments/booking          |
       | /data-sharing                               | /data-sharing                  |
@@ -108,7 +108,7 @@ Feature: Authorisation occurs during each URL visit
       | /account                                    | /account                       |
       | /appointments                               | /appointments                  |
       | /appointments/booking-guidance              | /appointments/booking-guidance |
-      | /appointments/cancel                        | /appointments                  |
+      | /appointments/cancelling                    | /appointments                  |
       | /appointments/booking                       | /appointments/booking          |
       | /appointments/confirmation                  | /appointments/booking          |
       | /data-sharing                               | /data-sharing                  |

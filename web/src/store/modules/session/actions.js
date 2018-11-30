@@ -17,7 +17,7 @@ const setCookie = ({ key, value, cookies, isSecure }) => {
   const cleaned = value === '' ? undefined : value;
 
   if (cleaned) {
-    cookies.set(key, cleaned, { secure: isSecure });
+    cookies.set(key, cleaned, { path: '/', secure: isSecure });
   } else {
     cookies.remove(key);
   }

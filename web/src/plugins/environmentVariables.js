@@ -14,6 +14,8 @@ export default (context, inject) => {
     context.beforeNuxtRender(({ nuxtState }) => {
       nuxtState.env = context.env;
     });
+
+    process.env = { ...process.env, ...context.env };
   } else {
     context.env = context.nuxtState.env;
     inject('env', context.env);

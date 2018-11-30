@@ -5,7 +5,7 @@ import FlashMessage from '@/components/widgets/FlashMessage';
 
 const $t = key => `translate_${key}`;
 
-const createFlashMessage = ($store) => {
+const createFlashMessage = ($store, $translate) => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
 
@@ -18,7 +18,7 @@ const createFlashMessage = ($store) => {
     localVue,
     mocks: {
       $store,
-      $t,
+      $t: $translate || $t,
       $style,
       showTemplate: () => true,
     },
@@ -59,6 +59,30 @@ describe('FlashMessage.vue', () => {
     expect(component.find('.warning p').text()).toEqual('Warning!');
   });
 
+  it('will show warning message using key', () => {
+    const key = 'message.key';
+    const message = 'Warning!';
+    const $translate = (messageKey) => {
+      if (messageKey === key) return message;
+      return $t(key);
+    };
+    const $store = {
+      dispatch: jest.fn(),
+      state: {
+        flashMessage: {
+          show: true,
+          key,
+          type: 'warning',
+        },
+      },
+    };
+
+    const component = createFlashMessage($store, $translate);
+
+    expect(component.find('.warning').exists()).toBeTruthy();
+    expect(component.find('.warning p').text()).toEqual('Warning!');
+  });
+
   it('will show success message', () => {
     const $store = {
       dispatch: jest.fn(),
@@ -76,5 +100,30 @@ describe('FlashMessage.vue', () => {
     expect(component.find('.warning').exists()).toBeFalsy();
     expect(component.find('#success-dialog').exists()).toBeTruthy();
     expect(component.find('#success-dialog p').text()).toEqual('Success!');
+  });
+
+  it('will show success message using key', () => {
+    const key = 'message.key';
+    const message = 'Success!';
+    const $translate = (messageKey) => {
+      if (messageKey === key) return message;
+      return $t(key);
+    };
+    const $store = {
+      dispatch: jest.fn(),
+      state: {
+        flashMessage: {
+          show: true,
+          key,
+          type: 'success',
+        },
+      },
+    };
+
+    const component = createFlashMessage($store, $translate);
+
+    expect(component.find('.warning').exists()).toBeFalsy();
+    expect(component.find('#success-dialog').exists()).toBeTruthy();
+    expect(component.find('#success-dialog p').text()).toEqual(message);
   });
 });

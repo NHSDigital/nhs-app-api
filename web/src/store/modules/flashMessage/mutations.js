@@ -14,6 +14,7 @@ const clear = (state) => {
   state.hasBeenShown = false;
   state.show = false;
   state.type = 'success';
+  state.key = '';
 };
 export default {
   [ADD](state, flashMessage) {

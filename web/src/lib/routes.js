@@ -18,8 +18,12 @@ const routes = {
     path: '/appointments/booking-guidance',
   },
   APPOINTMENT_CANCELLING: {
-    name: 'appointments-cancel',
-    path: '/appointments/cancel',
+    name: 'appointments-cancelling',
+    path: '/appointments/cancelling',
+  },
+  APPOINTMENT_CANCEL_NOJS: {
+    name: 'appointments-cancel-noJs',
+    path: '/nojs/appointments/cancel',
   },
   APPOINTMENT_BOOKING: {
     name: 'appointments-booking',
@@ -148,6 +152,7 @@ export const {
   APPOINTMENT_BOOK_NOJS,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,
+  APPOINTMENT_CANCEL_NOJS,
   APPOINTMENT_BOOKING,
   APPOINTMENT_CONFIRMATIONS,
   AUTH_RETURN,
