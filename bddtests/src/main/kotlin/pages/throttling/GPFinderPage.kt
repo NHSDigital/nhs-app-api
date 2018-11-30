@@ -5,14 +5,22 @@ import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.myrecord.SHRUB_ANIMATION_DURATION_MILLIS
 
-open class GPFinderPage : HybridPageObject() {
+class GPFinderPage : HybridPageObject() {
 
     companion object {
-        val validSearch = "Chesterfield"
+        const val validSearch = "Chesterfield"
+        const val emptyInvalidSearch = ""
+        const val blankInvalidSearch = "    "
     }
 
-    val findYourGPSurgeryHeader = HybridPageElement(
+    private val findYourGPSurgeryHeader = HybridPageElement(
             browserLocator = "//h4[contains(text(),'Find your GP surgery')]",
+            androidLocator = null,
+            page = this
+    )
+
+    private val alreadyUsingAppLink = HybridPageElement(
+            browserLocator = "//a[contains(text(), \"I'm already using the NHS App\")]",
             androidLocator = null,
             page = this
     )
@@ -23,14 +31,20 @@ open class GPFinderPage : HybridPageObject() {
             page = this
     )
 
-    val continueButton = HybridPageElement(
+    private val continueButton = HybridPageElement(
             browserLocator = "//button[contains(text(), 'Continue')]",
             androidLocator = null,
             page = this
     )
 
+    private val criteriaErrorMessage = HybridPageElement(
+            browserLocator = "//span[contains(text(), 'Enter postcode, town or GP surgery name')]",
+            androidLocator = null,
+            page = this
+    )
+
     fun isFindYourGPSurgeryHeaderVisible(): Boolean {
-        return findYourGPSurgeryHeader.element.isDisplayed
+        return findYourGPSurgeryHeader.element.isVisible
     }
 
     fun enterSearchTerm(searchTerm: String) {
@@ -43,5 +57,14 @@ open class GPFinderPage : HybridPageObject() {
     fun clickContinueButton() {
         continueButton.element.click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
+    }
+
+    fun clickSkipThrottlingLink() {
+        alreadyUsingAppLink.click()
+        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
+    }
+
+    fun isSearchCriteriaErrorMessageShown(): Boolean {
+        return criteriaErrorMessage.element.isVisible
     }
 }

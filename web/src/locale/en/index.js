@@ -701,12 +701,43 @@ export default {
     hintText: 'Enter postcode, town or GP surgery name',
     callToAction: 'Continue',
     hasAnAccountLink: 'I\'m already using the NHS App',
+    emptySearchError: 'Enter postcode, town or GP surgery name',
   },
   th03: {
     header: 'Select your GP surgery',
+    title: 'Select your GP surgery',
     errors: {
-      unableToRetrieveResults: 'Unable to retrieve search results.',
-      noGpPracticesFound: 'No GP Practices found',
+      backButton: 'Back',
+      serviceUnavailable: {
+        header: 'Technical problems',
+        title: 'Technical problems',
+        errorDialogHeader: 'We are experiencing technical problems',
+        errorDialogText: 'Something has gone wrong with this service. It wasn\'t your fault.',
+        mainContent: 'Come back later. If it still isn\'t working then, contact us about the problem.',
+      },
+      tooManyResults: {
+        header: 'Too many results found',
+        title: 'Too many results found',
+        tooManyResultsHeader: 'Can\'t find your GP surgery?',
+        foundTooManyResults: 'We can only show 20 results for what you search. The more specific your search, the better the results.',
+        suggestionHeader: 'Please try searching:',
+        suggestions: [
+          'Your GP surgery postcode',
+          'The name of your GP surgery',
+          'A combination of these',
+        ],
+      },
+      noResultsFound: {
+        header: 'No results found',
+        title: 'No results found',
+        noResultsFoundHeader: 'No results found',
+        foundNoResults: 'We found no GP surgeries near "{searchQuery}".',
+        suggestionHeader: 'Please try:',
+        suggestions: [
+          'Checking you spelt the GP surgery name or town correctly',
+          'Searching with a postcode',
+        ],
+      },
     },
   },
   th04: {

@@ -1,6 +1,6 @@
 ul {
   li {
-    list-style-position: inside;
+    margin-left: 1em;
   }
 }
 
@@ -28,6 +28,7 @@ h3 {
 .availableFeatures {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
+  padding-left: 1em;
   left: -0.5rem;
   list-style: url('~/assets/icon_checked_tick.svg'); 
 }
@@ -35,6 +36,9 @@ h3 {
 .unavailableFeatures {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
+  li {
+    margin-left: 1.5em;
+  }
 }
 
 .continue {

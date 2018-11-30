@@ -12,7 +12,7 @@
     </header>
     <div v-if="showTemplate" :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
 
-      <h2>{{ $t('th04.featuresHeader') }}  {{ practiceName }}</h2>
+      <h2>{{ `${$t('th04.featuresHeader')} ${practiceName}` }}</h2>
       <form :action="backLink" method="get">
         <input :value="true" type="hidden" name="reset">
         <input :value="this.$store.state.device.source" type="hidden" name="source">
@@ -45,16 +45,18 @@
         <input :value="redirectUri" type="hidden" name="redirect_uri">
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
-        <button :class="[$style.button, $style.green, $style.continue]" type="submit">
-          {{ this.$t('th04.ctaContinue') }}
-        </button>
+        <generic-button :class="[$style.button, $style.green, $style.continue]" type="submit">
+          {{ this.$t('th04.ctaCreateAccount') }}
+        </generic-button>
       </form>
       <a v-else :class="[$style.button, $style.green, $style.continue]">
         {{ this.$t('th04.ctaContinue') }}
       </a>
+
       <p v-if="participating" id="limitingFeaturesWarning">
         {{ $t('th04.limitingFeaturesWarning') }}
       </p>
+
     </div>
   </div>
 </template>
@@ -63,6 +65,7 @@
 import AuthorisationService from '@/services/authorisation-service';
 import { INDEX, GP_FINDER, BEGINLOGIN } from '@/lib/routes';
 import BackIcon from '@/components/icons/BackIcon';
+import GenericButton from '@/components/widgets/GenericButton';
 import moment from 'moment';
 import NativeCallbacks from '@/services/native-app';
 
@@ -70,6 +73,7 @@ export default {
   layout: 'throttling',
   components: {
     BackIcon,
+    GenericButton,
   },
   beforeRouteEnter(to, from, next) {
     if (to.query.odsCode) {

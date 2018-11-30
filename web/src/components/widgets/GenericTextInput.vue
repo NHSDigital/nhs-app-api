@@ -4,7 +4,6 @@
            ref="textInput"
            :class="getStyleClasses"
            :id="id"
-           :required="required"
            :aria-labelledby="aLabelledBy"
            :maxlength="maxlength"
            :name="inputName"
@@ -54,10 +53,6 @@ export default {
     initialContents: {
       type: String,
       default: undefined,
-    },
-    required: {
-      type: Boolean,
-      default: false,
     },
   },
   data: function data() { return { model: undefined }; },

@@ -1,5 +1,6 @@
 package pages.throttling
 
+import mocking.data.nhsAzureSearchData.NhsAzureSearchData.ORGANISATION_NAME
 import org.junit.Assert.assertTrue
 import pages.HybridPageObject
 import pages.HybridPageElement
@@ -9,23 +10,23 @@ private const val NUM_PARTICIPATING_UNAVAILABLE_FEATURES = 0
 private const val NUM_NOT_PARTICIPATING_AVAILABLE_FEATURES = 1
 private const val NUM_NOT_PARTICIPATING_UNAVAILABLE_FEATURES = 3
 
-open class GPParticipationPage : HybridPageObject() {
+class GPParticipationPage : HybridPageObject() {
 
-    val featuresUsedHeader = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'Features used by this surgery')]",
+
+    var featuresUsedHeader = HybridPageElement(
+        browserLocator = "//h2[contains(text(), 'Features used by ')]",
         androidLocator = null,
         page = this
     )
 
-    val practiceNameHeader = HybridPageElement(
-        browserLocator = "//h3[@id='practiceName' and contains(text(), 'Clay Cross Medical Centre')]",
+    val featuresUsedHeaderParticipatingPractice = HybridPageElement(
+        browserLocator = "//h2[contains(text(), 'Features used by $ORGANISATION_NAME 1')]",
         androidLocator = null,
         page = this
     )
 
-    val practiceAddressParagraph = HybridPageElement(
-        browserLocator = "//p[@id='practiceAddress' and contains(text(), 'Bridge Street, Clay Cross, Chesterfield, " +
-                "County, S45 9NG')]",
+    val featuresUsedHeaderNotParticipatingPractice = HybridPageElement(
+        browserLocator = "//h2[contains(text(), 'Features used by $ORGANISATION_NAME 2')]",
         androidLocator = null,
         page = this
     )
@@ -67,7 +68,7 @@ open class GPParticipationPage : HybridPageObject() {
     )
 
     val ctaNotMySurgeryButton = HybridPageElement(
-            browserLocator = "//button[contains(text(), 'This is not my GP surgery')]",
+            browserLocator = "//a[contains(text(), 'This is not my GP surgery')]",
             androidLocator = null,
             page = this
     )
@@ -91,5 +92,17 @@ open class GPParticipationPage : HybridPageObject() {
     fun assertParticipatingFeaturesVisible() {
         assertTrue(unavailableFeatures.elements.count() == NUM_PARTICIPATING_UNAVAILABLE_FEATURES)
         assertTrue(availableFeatures.elements.count() == NUM_PARTICIPATING_AVAILABLE_FEATURES)
+    }
+
+    fun clickNotMySurgeryButton() {
+        ctaNotMySurgeryButton.click()
+    }
+
+    fun setHeaderToLookFor(participating: Boolean) {
+        featuresUsedHeader = if (participating) {
+            featuresUsedHeaderParticipatingPractice
+        } else {
+            featuresUsedHeaderNotParticipatingPractice
+        }
     }
 }

@@ -1,14 +1,27 @@
 @import '../colours';
 
+h2 {
+  padding-top: 0;
+}
+
 ul.list-menu {
   border-top:none !important;
   
   li {
     padding-left: 0;
 
-    &:first-of-type{
+    &:first-of-type {
       padding-top: 0;
     }
+  }
+}
+
+ul.suggestions {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+
+  li {
+    margin-left: 1em;
   }
 }
 
@@ -19,6 +32,33 @@ ul.list-menu {
    font-weight: 700;
 }
  
- .no-decoration {
-   text-decoration: none;
- }
+.no-decoration {
+  text-decoration: none;
+}
+
+#errorContent {
+  padding: 0.5em 0;
+  word-wrap: break-word;
+}
+
+.back {
+  margin-top: 1em;
+}
+
+.technicalError {
+
+  h3, p {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+}
+
+.tooManyResultsError {
+  padding-bottom: 1em;
+
+  hr {
+    margin-top: 1em;
+  }
+}
+
+

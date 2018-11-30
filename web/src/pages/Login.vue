@@ -61,6 +61,10 @@ export default {
       NativeCallbacks.hideMenuBar();
       NativeCallbacks.hideHeaderSlim();
       NativeCallbacks.hideWhiteScreen();
+      const betaCookie = this.$cookies.get('BetaCookie');
+      if (this.$env.THROTTLING_ENABLED && betaCookie && betaCookie.Skipped) {
+        NativeCallbacks.storeBetaCookie();
+      }
     }
 
     const authorisationService = new AuthorisationService(this.$env);

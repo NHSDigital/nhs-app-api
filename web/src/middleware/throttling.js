@@ -3,6 +3,7 @@ import {
   GP_FINDER,
   INDEX,
 } from '@/lib/routes';
+import moment from 'moment';
 
 function hasCompletedThrottling(betaCookie) {
   if (betaCookie) {
@@ -19,13 +20,18 @@ export default function ({ redirect, store, route, env, app }) {
   if (isLoggedIn && route.path.startsWith(GP_FINDER.path)) return redirect(INDEX.path);
 
   let betaCookie = app.$cookies.get('BetaCookie');
-  if (route.name === GP_FINDER.name && route.query.reset) {
-    betaCookie = {};
-    app.$cookies.set('BetaCookie', betaCookie, { path: '/', maxAge: -1 });
+  if (route.name === GP_FINDER.name) {
+    if (route.query.reset) {
+      betaCookie = {};
+      app.$cookies.set('BetaCookie', betaCookie, { path: '/', maxAge: -1 });
+    } else if (route.query.skip) {
+      betaCookie = { Skipped: true };
+      app.$cookies.set('BetaCookie', betaCookie, { path: '/', maxAge: moment.duration(1, 'y').asSeconds() });
+    }
   }
 
   if (!env.THROTTLING_ENABLED || hasCompletedThrottling(betaCookie)) {
-    return route.path.startsWith(GP_FINDER.path) ? redirect(INDEX.path) : undefined;
+    return route.path.startsWith(GP_FINDER.path) ? redirect(LOGIN.path) : undefined;
   }
 
   if (route.name === LOGIN.name) {

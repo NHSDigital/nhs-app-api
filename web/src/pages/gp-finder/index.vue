@@ -18,10 +18,11 @@
       <p id="search-label">{{ $t('th02.hintText') }}</p>
       <form :action="gpFinderResultsPath" method="GET">
         <input :value="this.$store.state.device.source" type="hidden" name="source">
+        <error-message v-if="showError" :id="$style['error-label']" role="alert">
+          {{ $t('th02.emptySearchError') }}
+        </error-message>
         <generic-text-input id="searchTextInput"
                             ref="search"
-                            :class="$style.searchTextInput"
-                            :required="true"
                             :type="'text'"
                             :a-labelled-by="'search-label'"
                             input-name="searchQuery"
@@ -30,7 +31,7 @@
           {{ $t('th02.callToAction') }}
         </generic-button>
       </form>
-      <a>{{ $t('th02.hasAnAccountLink') }}</a>
+      <a :href="skipThrottlingLink">{{ $t('th02.hasAnAccountLink') }}</a>
     </div>
   </div>
 </template>
@@ -39,6 +40,7 @@
 import NhsLogo from '@/components/icons/NhsLogo';
 import HelpIcon from '@/components/icons/HelpIcon';
 import ThrottlingBanner from '@/components/ThrottlingBanner';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
 import { GP_FINDER_RESULTS } from '@/lib/routes';
@@ -49,17 +51,22 @@ export default {
     NhsLogo,
     HelpIcon,
     ThrottlingBanner,
+    ErrorMessage,
     GenericTextInput,
     GenericButton,
   },
   data() {
     return {
       helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
+      showError: this.$route.query.error,
     };
   },
   computed: {
     gpFinderResultsPath() {
       return GP_FINDER_RESULTS.path;
+    },
+    skipThrottlingLink() {
+      return `${GP_FINDER.path}?skip=true`;
     },
   },
 };

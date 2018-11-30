@@ -1,7 +1,11 @@
 package mocking.nhsAzureSearchService
 
-data class NHSAzureSearchReply
-    (var value: MutableList<NhsAzureSearchItem> = arrayListOf())
+import com.google.gson.annotations.SerializedName
+
+data class NHSAzureSearchReply(
+        var value: MutableList<NhsAzureSearchItem> = arrayListOf(),
+        @SerializedName("@odata.count") var count: Int
+)
 
 data class NhsAzureSearchItem(
         var OrganisationID: String,

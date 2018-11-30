@@ -1,39 +1,94 @@
 package pages.throttling
 
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import pages.HybridPageObject
 import pages.HybridPageElement
 
-open class GPSearchResultsPage : HybridPageObject() {
+class GPSearchResultsPage : HybridPageObject() {
 
     companion object {
-        val myGpOdsCode = "C81056"
+        const val TECHNICAL_PROBLEMS_ERROR_HEADER = "We are experiencing technical problems"
+        const val TOO_MANY_RESULTS_TEXT = "Can't find your GP surgery?"
+        const val NO_RESULTS_FOUND_TEXT = "No results found"
     }
 
-    val gpSearchResultsHeader = HybridPageElement(
-            browserLocator = "//h1[contains(text(),'Select your GP surgery')]",
+    private var gpPracticeToSelect: HybridPageElement = HybridPageElement(
+            browserLocator = "",
             androidLocator = null,
             page = this
     )
 
-    val searchResults =
-            HybridPageElement(
-                    browserLocator = "//ul[@id='searchResults']/li",
-                    androidLocator = null,
-                    page = this)
+    private val technicalProblemsErrorHeader = HybridPageElement(
+            browserLocator = "//h3[contains(text(), \"${TECHNICAL_PROBLEMS_ERROR_HEADER}\")]",
+            androidLocator = null,
+            page = this
+    )
 
-    val gpPractice =
-            HybridPageElement(
-                    browserLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-$myGpOdsCode']",
-                    androidLocator = null,
-                    page = this)
+    private val noResultsFoundErrorHeader = HybridPageElement(
+            browserLocator = "//h2[contains(text(), \"${NO_RESULTS_FOUND_TEXT}\")]",
+            androidLocator = null,
+            page = this
+    )
 
-    fun isGPResultsHeaderVisible(): Boolean {
-        return gpSearchResultsHeader.element.isDisplayed
+    private val tooManyResultsErrorHeader = HybridPageElement(
+            browserLocator = "//h2[contains(text(), \"${TOO_MANY_RESULTS_TEXT}\")]",
+            androidLocator = null,
+            page = this
+    )
+
+    private val searchResults = HybridPageElement(
+            browserLocator = "//ul[@id='searchResults']/li",
+            androidLocator = null,
+            page = this
+    )
+
+    private val participatingGPPractice = HybridPageElement(
+            browserLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81090']",
+            androidLocator = null,
+            page = this
+    )
+
+    private val notParticipatingGPPractice = HybridPageElement(
+            browserLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81091']",
+            androidLocator = null,
+            page = this
+    )
+
+    fun technicalProblemsErrorHeaderIsVisible(isVisible: Boolean) {
+        if (isVisible) {
+            assertTrue(technicalProblemsErrorHeader.element.isVisible)
+        } else {
+            assertFalse(findByXpath(technicalProblemsErrorHeader.browserLocator).isVisible)
+        }
+    }
+
+    fun noResultsFoundErrorHeaderIsVisible(isVisible: Boolean) {
+        if (isVisible) {
+            assertTrue(noResultsFoundErrorHeader.element.isVisible)
+        } else {
+            assertFalse(findByXpath(noResultsFoundErrorHeader.browserLocator).isVisible)
+        }
+    }
+
+    fun tooManyResultsErrorHeaderIsVisible(isVisible: Boolean) {
+        if (isVisible) {
+            assertTrue(tooManyResultsErrorHeader.element.isVisible)
+        } else {
+            assertFalse(findByXpath(tooManyResultsErrorHeader.browserLocator).isVisible)
+        }
+    }
+
+    fun selectMyGpPractice() {
+        gpPracticeToSelect.click()
     }
 
     fun testResultsExistForSearch(count: Int): Boolean {
-        return searchResults.elements.count() == count
+        return searchResults.elements.size == count
     }
 
+    fun setPracticeToSelect(participating: Boolean) {
+        gpPracticeToSelect = if (participating) participatingGPPractice else notParticipatingGPPractice
+    }
 
 }
