@@ -13,7 +13,7 @@ class LinkageFactoryTpp:  LinkageFactory("TPP") {
 
     override val validLinkageDetails = LinkageInformationFacade(
             odsCode =  TppMockDefaults.DEFAULT_ODS_CODE_TPP,
-            linkageKey = "ikjkbnKSJDFV872345%/",
+            linkageKey = "passphraseToLink",
             accountId = "123456",
             nhsNumber = "3434234345",
             identityToken = "abc",

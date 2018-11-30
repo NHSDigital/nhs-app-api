@@ -31,7 +31,8 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
     fun respondWithSuccess(linkAccountReply: LinkAccountReply): Mapping {
         val responseBody = LinkAccountReply(
                 linkAccountReply.passphrase,
-                linkAccountReply.uuid)
+                linkAccountReply.uuid,
+                passphraseToLink = "passphraseToLink")
 
         val jaxbContext = JAXBContext.newInstance(LinkAccountReply::class.java)
         val marshaller = jaxbContext.createMarshaller()

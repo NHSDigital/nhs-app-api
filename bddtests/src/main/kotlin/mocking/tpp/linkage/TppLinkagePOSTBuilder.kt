@@ -30,7 +30,8 @@ class TppLinkagePOSTBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST"
         val reply = LinkAccountReply(
                 passphrase = "",
                 uuid = TppMockDefaults.DEFAULT_TPP_UUID,
-                accountId = linkage.accountId
+                accountId = linkage.accountId,
+                passphraseToLink = "passphraseToLink"
         )
         val body = JSonXmlConverter.toXML(reply)
 

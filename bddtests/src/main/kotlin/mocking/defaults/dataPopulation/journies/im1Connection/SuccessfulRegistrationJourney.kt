@@ -78,7 +78,8 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                 authentication.linkAccountRequest(patient).respondWithSuccess(
                                 LinkAccountReply(
                                         passphrase = patient.passphrase,
-                                        uuid = TppMockDefaults.DEFAULT_TPP_UUID
+                                        uuid = TppMockDefaults.DEFAULT_TPP_UUID,
+                                        passphraseToLink = "passphraseToLink"
                                 )
                         )
         }

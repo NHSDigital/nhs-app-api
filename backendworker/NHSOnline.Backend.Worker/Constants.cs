@@ -110,7 +110,6 @@ namespace NHSOnline.Backend.Worker
 
         public static class TppConstants
         {
-            public const string LinkageKey = "ikjkbnKSJDFV872345%/";
             public const string RequestIdentifierHeader = "type";
         }
         

@@ -16,5 +16,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
         public string AccountId { get; set; }
         
         public string ProviderId { get; set; }
+
+        [XmlAttribute("passphraseToLink")]
+        public string PassphraseToLink { get; set; }
     }
 }
