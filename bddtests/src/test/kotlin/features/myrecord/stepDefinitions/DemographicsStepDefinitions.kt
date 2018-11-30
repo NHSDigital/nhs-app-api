@@ -4,8 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.DemographicsFactory
-import mocking.vision.models.VisionUserSession
-import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.NhsoHttpException
@@ -28,29 +26,13 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Given("^the GP Practice has enabled demographics functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
-        DemographicsFactory.getForSupplier(getService).enabledFunctionality(this@DemographicsStepDefinitions.patient)
-    }
-
-    @Given("^there is an error getting demographics for (.*)$")
-    fun thereIsAnErrorGettingTheDemographicsFor(getService: String) {
-        setPatientToDefaultFor(getService)
-        when (getService) {
-            "VISION" -> {
-                mockingClient.forVision {
-                    demographicsRequest(visionUserSession = VisionUserSession(
-                            this@DemographicsStepDefinitions.patient.rosuAccountId,
-                            this@DemographicsStepDefinitions.patient.apiKey,
-                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)
-                    ).respondWithUnknownError()
-                }
-            }
-        }
+        DemographicsFactory.getForSupplier(getService).enabled(this@DemographicsStepDefinitions.patient)
     }
 
     @Given("^the GP Practice has disabled demographics functionality for (.*)$")
     fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
-        DemographicsFactory.getForSupplier(getService).disabledFunctionality(this@DemographicsStepDefinitions.patient)
+        DemographicsFactory.getForSupplier(getService).disabled(this@DemographicsStepDefinitions.patient)
     }
 
     @Then("^I receive the demographic object$")

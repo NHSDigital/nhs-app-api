@@ -33,7 +33,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
                 "")
 
         mockingClient.forVision {
-            orderNewPrescriptionRequest(VisionMockDefaults.visionUserSession, request)
+            prescriptions.orderNewPrescriptionRequest(VisionMockDefaults.visionUserSession, request)
                     .respondWithSuccess(OrderNewPrescriptionResponse.Ok)
                     .inScenario(scenarioTitle)
                     .whenScenarioStateIs(initialScenarioState)
@@ -45,7 +45,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
                 numberOfPrescriptionsAfterSubmit)
         val newPrescriptions = getPrescriptionsLoader.data as PrescriptionHistory
         mockingClient.forVision {
-            getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+            prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
                     .respondWithSuccess(newPrescriptions)
                     .inScenario(scenarioTitle)
                     .whenScenarioStateIs(statusSubmitted)
@@ -57,7 +57,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
         val userSession = VisionUserSession.fromPatient(patient)
 
         mockingClient.forVision {
-            getEligibleRepeatsRequest(userSession)
+            prescriptions.getEligibleRepeatsRequest(userSession)
                     .respondWithSuccess(getCoursesLoader.data as EligibleRepeats)
         }
     }
@@ -67,7 +67,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     override fun prescriptionsEndpointTimeout(patient: Patient) {
         mockingClient
                 .forVision {
-                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                    prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
     }
@@ -75,7 +75,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     override fun prescriptionsEndpointThrowServerError(patient: Patient) {
         mockingClient
                 .forVision {
-                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                    prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }
@@ -84,7 +84,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
         Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
         mockingClient
                 .forVision {
-                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                    prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
     }
@@ -93,7 +93,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
         Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
         mockingClient
                 .forVision {
-                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                    prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }

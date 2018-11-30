@@ -8,10 +8,10 @@ import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
 
 class DemographicsFactoryVision: DemographicsFactory() {
-    override fun disabledFunctionality(patient: Patient) {
+    override fun disabled(patient: Patient) {
         try {
             mockingClient.forVision {
-                demographicsRequest(visionUserSession = VisionUserSession.fromPatient(patient)
+                myRecord.demographicsRequest(visionUserSession = VisionUserSession.fromPatient(patient)
                 ).respondWithAccessDeniedError()
             }
         } catch (httpException: NhsoHttpException) {
@@ -19,9 +19,9 @@ class DemographicsFactoryVision: DemographicsFactory() {
         }
     }
 
-    override fun enabledFunctionality(patient: Patient) {
+    override fun enabled(patient: Patient) {
         mockingClient.forVision {
-            demographicsRequest(visionUserSession =
+            myRecord.demographicsRequest(visionUserSession =
             VisionUserSession.fromPatient(patient)).
                     respondWithSuccess(VisionMockDefaults.visionDemographicsResponse)
 

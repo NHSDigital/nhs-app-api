@@ -3,10 +3,10 @@
 Feature: Get Allergies data
   A user can get their patient allergy information
 
-  Scenario Outline: GP practice has enabled allergies functionality
+  Scenario Outline: GP practice for <Service> has enabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
-    And I have logged into <Service> and have a valid session cookie
     And the GP Practice has enabled allergies functionality and the patient has "3" allergies for <Service>
+    And I have logged into <Service> and have a valid session cookie
     When I get the users my record data
     Then I receive "3" allergies as part of the my record object
     And the flag informing that the patient has access to the allergy data is set to "True"
@@ -19,10 +19,10 @@ Feature: Get Allergies data
       |TPP|
       |VISION|
 
-  Scenario Outline: GP practice has disabled allergies functionality
+  Scenario Outline: GP practice for <Service> has disabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
-    And I have logged into <Service> and have a valid session cookie
     And the GP Practice has disabled allergies functionality for <Service>
+    And I have logged into <Service> and have a valid session cookie
     When I get the users my record data
     Then I receive "0" allergies as part of the my record object
     And the flag informing that the patient has access to the allergy data is set to "False"

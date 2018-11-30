@@ -9,7 +9,7 @@ import worker.NhsoHttpException
 
 class DemographicsFactoryTpp: DemographicsFactory() {
 
-    override fun disabledFunctionality(patient: Patient) {
+    override fun disabled(patient: Patient) {
         try {
             mockingClient.forTpp {
                 myRecord.patientSelectedPost(patient.tppUserSession!!)
@@ -20,7 +20,7 @@ class DemographicsFactoryTpp: DemographicsFactory() {
         }
     }
 
-    override fun enabledFunctionality(patient: Patient) {
+    override fun enabled(patient: Patient) {
         mockingClient.forTpp {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWithSuccess(DemographicsData.getTppDemographicsData(patient))

@@ -66,7 +66,7 @@ class CommonSteps : AbstractSteps() {
             }
             "VISION" -> {
                 mockingClient.forVision {
-                    getConfigurationRequest(
+                    authentication.getConfigurationRequest(
                             VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithServiceUnavailable()
                 }

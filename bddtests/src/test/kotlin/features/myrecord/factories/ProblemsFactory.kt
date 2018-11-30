@@ -1,0 +1,27 @@
+package features.myrecord.factories
+
+import features.sharedSteps.SupplierSpecificFactory
+import mocking.MockingClient
+import models.Patient
+
+abstract class ProblemsFactory {
+
+    abstract fun disabled(patient: Patient)
+    abstract fun enabledWithBlankRecord(patient: Patient)
+    abstract fun enabledWithRecords(patient: Patient)
+    abstract fun errorRetrieving(patient: Patient)
+    abstract fun noAccess(patient: Patient)
+
+    val mockingClient = MockingClient.instance
+
+    companion object : SupplierSpecificFactory<ProblemsFactory>() {
+
+        override val map: HashMap<String, (() -> ProblemsFactory)>
+                by lazy {
+                    hashMapOf(
+                            "EMIS" to { ProblemsFactoryEmis() },
+                            "VISION" to { ProblemsFactoryVision() })
+                }
+
+    }
+}

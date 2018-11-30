@@ -21,7 +21,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
 
         mockingClient
                 .forVision {
-                    getConfigurationRequest(
+                    authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession.fromPatient(patient))
                             .respondWithSuccess(configuration = Configuration(account = Account(patient.patientId,
                                     patientNumber = null, name = patient.formattedFullName())
@@ -51,7 +51,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
 
         mockingClient
                 .forVision {
-                    getConfigurationRequest(
+                    authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession(
                                     "999999999",
                                     "nonexistingapikey",
@@ -68,7 +68,7 @@ class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
         val patient = VisionMockDefaults.patientVision
         mockingClient
                 .forVision {
-                    getConfigurationRequest(
+                    authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession(
                                     Patient.aderynCanon.rosuAccountId,
                                     Patient.aderynCanon.apiKey,

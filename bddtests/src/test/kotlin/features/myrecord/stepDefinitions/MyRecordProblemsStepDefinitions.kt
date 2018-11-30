@@ -5,55 +5,24 @@ import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.myrecord.factories.ProblemsFactory
 import mocking.data.myrecord.ProblemsData
-import mocking.vision.VisionConstants
-import mocking.vision.models.ServiceDefinition
-import mocking.vision.models.VisionUserSession
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
+import pages.myrecord.MyRecordInfoPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
+private const val NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED = 3
 open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
-    @Given("^the GP Practice has enabled problems functionality and the patient has 3 problems$")
-    fun givenTheGPPracticeHasEnabledProblemsFunctionalityAndPatientHasSomeProblems() {
-        mockingClient.forEmis {
-            myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient)
-                    .respondWithSuccess(ProblemsData.getProblemsData())
-        }
-    }
+    lateinit var myRecordInfoPage: MyRecordInfoPage
 
     @Given("^the GP Practice has enabled problems functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService){
-            "EMIS"->{
-                mockingClient.forEmis {
-                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient)
-                            .respondWithSuccess(ProblemsData.getProblemsData())
-                }
-            }
-            "TPP"->{
-            }
-            "VISION"->{
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = VisionConstants.problemsView,
-                            responseFormat = VisionConstants.xmlResponseFormat
-                    ).respondWithSuccess(ProblemsData.getVisionProblemsData())
-                }
-            }
-        }
+        ProblemsFactory.getForSupplier(getService).enabledWithRecords(patient)
     }
 
     @Given("^the GP Practice has enabled problems functionality " +
@@ -68,124 +37,24 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     @But("^the GP Practice has disabled problems functionality for (.*)$")
     fun butTheGPPracticeHasDisabledProblemsFunctionality(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService){
-            "EMIS"->{
-                mockingClient.forEmis {
-                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient)
-                            .respondWithExceptionWhenNotEnabled()
-                }
-            }
-            "TPP"->{
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = VisionConstants.problemsView,
-                            responseFormat = VisionConstants.xmlResponseFormat
-                    ).respondWithAccessDeniedError()
-                }
-            }
-        }
+        ProblemsFactory.getForSupplier(getService).disabled(patient)
     }
     @Given("^no Problems records exist for the patient for (.*)$")
     fun givenNoProblemsRecordsExistForThePatient(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService){
-            "EMIS"->{
-                mockingClient.forEmis {
-                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient)
-                            .respondWithSuccess(ProblemsData.getDefaultProblemModel())
-                }
-            }
-            "TPP"->{
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = VisionConstants.problemsView,
-                            responseFormat = VisionConstants.xmlResponseFormat
-                    ).respondWithSuccess(ProblemsData.getVisionProblemsDataWithNoProblems())
-                }
-            }
-        }
+        ProblemsFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
     }
 
     @Given("^the user does not have access to view Problems for (.*)$")
     fun givenUserDoesNotHaveAccessToViewProblems(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService){
-            "EMIS"->{
-                mockingClient.forEmis {
-                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient)
-                            .respondWithExceptionWhenNotEnabled()
-                }
-            }
-            "TPP"->{
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = VisionConstants.problemsView,
-                            responseFormat = VisionConstants.xmlResponseFormat
-                    ).respondWithAccessDeniedError()
-                }
-            }
-        }
+        ProblemsFactory.getForSupplier(getService).noAccess(patient)
     }
 
     @Given("^there is an error retrieving Problems data for (.*)$")
     fun givenThereIsAnErrorRetrievingProblemsData(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService){
-            "EMIS"->{
-                mockingClient.forEmis {
-                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient)
-                            .respondWithNonDataAccessException()
-                }
-            }
-            "TPP"->{
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = VisionConstants.problemsView,
-                            responseFormat = VisionConstants.xmlResponseFormat
-                    ).respondWithUnknownError()
-                }
-            }
-        }
+        ProblemsFactory.getForSupplier(getService).errorRetrieving(patient)
     }
 
     @When("^I get the users Problems$")
@@ -216,5 +85,10 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     fun andHasErrorsWhenRetrievingProblemsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(value, result.response.problems.hasErrored)
+    }
+
+    @Then("^I see Problems records displayed$")
+    fun thenISeeProblemsRecordsDisplayed() {
+        assertEquals(NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED, myRecordInfoPage.problems.allRecordItems().count())
     }
 }

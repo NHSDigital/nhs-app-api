@@ -8,9 +8,8 @@ abstract class DemographicsFactory {
 
     val mockingClient = MockingClient.instance
 
-    abstract fun enabledFunctionality(patient: Patient)
-
-    abstract fun disabledFunctionality(patient: Patient)
+    abstract fun disabled(patient: Patient)
+    abstract fun enabled(patient: Patient)
 
     companion object : SupplierSpecificFactory<DemographicsFactory>() {
 

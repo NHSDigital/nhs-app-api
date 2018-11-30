@@ -315,7 +315,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.VISION -> {
                 mockingClient
                         .forVision {
-                            getConfigurationRequest(
+                            authentication.getConfigurationRequest(
                                     VisionMockDefaults.visionUserSessionPrescriptionDisabled)
                                     .respondWithSuccess(VisionMockDefaults
                                             .visionConfigurationResponsePrescriptionsDisabled)
@@ -380,7 +380,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
+                            prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
@@ -422,7 +422,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.VISION -> {
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(VisionMockDefaults
+                            prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults
                                     .getVisionUserSession(VisionMockDefaults.patientVision))
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
@@ -477,7 +477,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(VisionMockDefaults
+                            prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults
                                     .getVisionUserSession(VisionMockDefaults.patientVision))
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                                     .delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))

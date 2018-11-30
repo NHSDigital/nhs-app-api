@@ -8,11 +8,15 @@ import cucumber.api.java.en.Then
 import features.myrecord.factories.MedicationsFactory
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import pages.myrecord.MyRecordInfoPage
 import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefinitions() {
+
+    lateinit var myRecordInfoPage: MyRecordInfoPage
 
     @Then("^I receive the medications object$")
     fun thenIReceiveAMedicationsObject() {
@@ -23,14 +27,14 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^the GP Practice has enabled medications functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityfor(getService: String) {
         setPatientToDefaultFor(getService)
-        MedicationsFactory.getForSupplier(getService).enabled(this@MyRecordMedicationsStepDefinitions.patient)
+        MedicationsFactory.getForSupplier(getService).enabledWithRecords(patient)
     }
 
     @Given("^the GP Practice has enabled medication functionality and the patient has no medications for (.*)$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityAndPatientHasNoMedicationsFor(getService: String) {
         setPatientToDefaultFor(getService)
         val factory = MedicationsFactory.getForSupplier(getService);
-        factory.enabledAndNoMedicationsMock(this@MyRecordMedicationsStepDefinitions.patient)
+        factory.enabledWithBlankRecord(patient)
         factory.getResult()
     }
 
@@ -83,5 +87,20 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
     fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(value, result.response.medications.hasErrored)
+    }
+
+    @Then("^I see current repeat medication information$")
+    fun thenISeeCurrentRepeatMedicationInformation() {
+        Assert.assertTrue(myRecordInfoPage.repeatMedications.firstElement.element.isVisible)
+    }
+
+    @Then("^I see discontinued repeat medication information$")
+    fun thenISeeDiscontinuedRepeatMedicationInformation() {
+        Assert.assertTrue(myRecordInfoPage.discontinuedRepeatMedications.firstElement.element.isVisible)
+    }
+
+    @Then("^I see acute medication information$")
+    fun thenISeeAcuteMedicationInformation() {
+        myRecordInfoPage.acuteMedications.firstElement.assertIsVisible()
     }
 }

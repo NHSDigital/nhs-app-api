@@ -32,7 +32,7 @@ class PrescriptionsHistoryJourney(private val client: MockingClient) {
         VisionPrescriptionLoader.loadData(1,1,1)
         client
                 .forVision {
-                    getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(patient))
+                    prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionPrescriptionLoader.data)
                 }
     }

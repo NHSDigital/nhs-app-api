@@ -1,14 +1,14 @@
 package features.myrecord.stepDefinitions
 
-import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.And
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.myrecord.factories.TestResultsFactory
 import mocking.data.myrecord.TestResultsData
-import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
 import pages.myrecord.MyRecordInfoPage
@@ -16,19 +16,8 @@ import pages.myrecord.MyRecordTestResultDetailPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
-import java.time.OffsetDateTime
 
-private const val NUMBER_OF_TEST_RESULTS_EQUALS_ONE = 1
-private const val NUMBER_OF_TEST_RESULTS_EQUALS_TWO = 2
-private const val NUMBER_OF_TEST_RESULTS_EQUALS_THREE = 3
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
-private const val NUMBER_OF_TEST_RESULTS_EQUALS_SIX = 6
-private const val START_DATE_FOR_RANGE_ONE = 179L
-private const val END_DATE_FOR_RANGE_ONE = 120L
-private const val START_DATE_FOR_RANGE_TWO = 119L
-private const val END_DATE_FOR_RANGE_TWO = 60L
-private const val START_DATE_FOR_RANGE_THREE = 59L
-
 open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
@@ -72,62 +61,16 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^the GP Practice has six test results for (.*)$")
     fun givenTheGpPracticeHasSixTestResultsFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
-                            .respondWithSuccess(TestResultsData
-                                    .getTestResultsForEmis(NUMBER_OF_TEST_RESULTS_EQUALS_SIX))
-                }
-            }
-            "TPP" -> {
-                val today = OffsetDateTime.now()
-                var startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
-                var endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithSuccess(TestResultsData
-                                    .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_ONE))
-                }
-
-                startDate = today.minusDays(START_DATE_FOR_RANGE_TWO)
-                endDate = today.minusDays(END_DATE_FOR_RANGE_TWO)
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithSuccess(TestResultsData
-                                    .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_TWO))
-                }
-
-                startDate = today.minusDays(START_DATE_FOR_RANGE_THREE)
-                endDate = today
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithSuccess(TestResultsData
-                                    .getMultipleTestResultsForTpp(NUMBER_OF_TEST_RESULTS_EQUALS_THREE))
-                }
-            }
-        }
+        TestResultsFactory.getForSupplier(getService).enabledWithRecords(patient)
     }
 
-    @Given("^the GP Practice has a single test result with multiple child values with no ranges for (.*)$")
-    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRangesFor(getService: String) {
-        setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
-                            .respondWithSuccess(TestResultsData
-                                    .getSingleTestResultWithMultipleChildValuesWithNoRanges())
-                }
-            }
-            "TPP" -> {
-            }
+    @Given("^the GP Practice has a single test result with multiple child values with no ranges for EMIS$")
+    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRangesFor() {
+        setPatientToDefaultFor("EMIS")
+        mockingClient.forEmis {
+            myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
+                    .respondWithSuccess(TestResultsData
+                            .getSingleTestResultWithMultipleChildValuesWithNoRanges())
         }
     }
 
@@ -180,125 +123,25 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Given("^I do not have access to test results for (.*)$")
     fun givenIDoNotHaveAccessToTestResultsFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
-                            .respondWithExceptionWhenNotEnabled()
-                }
-            }
-            "TPP" -> {
-                val today = OffsetDateTime.now()
-
-                val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
-                val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                    "You don&apos;t have access to this online service. " +
-                                            "You can request access to this service at Kainos GP Demo Unit by " +
-                                            "clicking Manage Online Services in the Account section.",
-                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                }
-            }
-        }
+        TestResultsFactory.getForSupplier(getService).noAccess(patient)
     }
 
     @Given("^I have no test results for (.*)$")
     fun givenIHaveNoTestResultsFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
-                            .respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
-                }
-            }
-            "TPP" -> {
-                val today = OffsetDateTime.now()
-
-                var startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
-                var endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
-                }
-
-                startDate = today.minusDays(START_DATE_FOR_RANGE_TWO)
-                endDate = today.minusDays(END_DATE_FOR_RANGE_TWO)
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
-                }
-
-                startDate = today.minusDays(START_DATE_FOR_RANGE_THREE)
-                endDate = today
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
-                }
-            }
-        }
+        TestResultsFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
     }
 
     @Given("^an error occurred retrieving the test results from (.*)$")
     fun givenAnErrorOccurredRetrievingTestResultsFrom(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
-                            .respondWithNonDataAccessException()
-                }
-            }
-            "TPP" -> {
-                val today = OffsetDateTime.now()
-
-                val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
-                val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithServiceNotAvailableException()
-                }
-            }
-        }
+        TestResultsFactory.getForSupplier(getService).errorRetrieving(patient)
     }
 
     @But("^the GP Practice has disabled test results functionality for (.*)$")
     fun butTheGPPracticeHasDisabledTestResultsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient)
-                            .respondWithExceptionWhenNotEnabled()
-                }
-            }
-            "TPP" -> {
-                val today = OffsetDateTime.now()
-
-                val startDate = today.minusDays(START_DATE_FOR_RANGE_ONE)
-                val endDate = today.minusDays(END_DATE_FOR_RANGE_ONE)
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
-                            startDate, endDate)
-                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                    "Requested record access is disabled by the practice",
-                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                }
-            }
-        }
+        TestResultsFactory.getForSupplier(getService).disabled(patient)
     }
 
     @When("^I get the users test results$")
@@ -310,6 +153,11 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
+    }
+
+    @When("I click a test result$")
+    fun whenIClickATestResult() {
+        myRecordInfoPage.testResults.clickFirst()
     }
 
     @Then("^I receive (.*) test results as part of the my record object$")
@@ -401,6 +249,76 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("I click the test result detail back button")
     fun thenIClickTheTestResultDetailBackButton() {
         myRecordDetailedTestResultPage.clickBackToMyRecordButton()
+    }
+
+    @When("^I click the test result section$")
+    fun whenIClickTheTestResultSection() {
+        myRecordInfoPage.testResults.toggleShrub()
+    }
+
+    @Then("^I see one test result with one value$")
+    fun thenISeeOneTestResultWithOneValue() {
+        assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
+        assertEquals("Expected child test result", 1, myRecordInfoPage.getTestResultChildCount())
+    }
+
+    @Then("^I see one test result with one value and a range$")
+    fun thenISeeOneTestResultWithOneValueAndARange() {
+        assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
+        assertEquals("Expected child test result", 1, myRecordInfoPage.getTestResultChildCount())
+    }
+
+    @Then("^I see one test result with multiple child values$")
+    fun thenISeeOneTestResultWithMultipleChildValues() {
+        Assert.assertTrue("Expected test result equal to or less than 1, but was" +
+                "${myRecordInfoPage.testResults.allRecordItems().size}",
+                myRecordInfoPage.testResults.allRecordItems().size >= 1)
+        Assert.assertTrue("Expected child test result equal to or less than 1, but was " +
+                "${myRecordInfoPage.getTestResultChildCount()}",
+                myRecordInfoPage.getTestResultChildCount() > 1)
+    }
+
+    @Then("^I see test results with multiple child values some of which have ranges$")
+    fun thenISeeTestResultsWithMultipleChildValuesSomeOfWhichHaveRanges() {
+        Assert.assertTrue("Expected test result equal to or greater than 1, but was" +
+                "${myRecordInfoPage.testResults.allRecordItems().size}"
+                , myRecordInfoPage.testResults.allRecordItems().size >= 1)
+        Assert.assertTrue("Expected child test result equal to or greater than 1, but was " +
+                "${myRecordInfoPage.getTestResultChildCount()}",
+                myRecordInfoPage.getTestResultChildCount() > 1)
+    }
+
+    @Then("^I see the test result heading for (.*)$")
+    fun thenISeeTheTestResultHeading(getService: String) {
+        val header = when (getService) {
+            "TPP" -> {
+                "Test results (past 6 months)"
+            }
+            else -> {
+                "Test results"
+            }
+        }
+        myRecordInfoPage.assertSectionHeaderIsVisible(header)
+    }
+
+    @Then("^I see the test result section collapsed$")
+    fun thenISeeTheTestResultSectionCollapsed() {
+        Assert.assertFalse(myRecordInfoPage.isTestResultsTextMsgVisible())
+    }
+
+    @Then("^I see test result information$")
+    fun thenISeeTestResultInformation() {
+        Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
+    }
+
+    @Then("^I see (.*) test results$")
+    fun thenISeeMultipleTestResults(count: Int) {
+        assertEquals("Expected test results", count, myRecordInfoPage.testResults.allRecordItems().count())
+    }
+
+    @Then("I see the my record page scrolled to the test result section")
+    fun thenISeeMyRecordPageScrolledToTestResultSection() {
+        Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
     }
 }
 

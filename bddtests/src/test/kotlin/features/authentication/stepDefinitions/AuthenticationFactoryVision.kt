@@ -49,7 +49,7 @@ class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
     override fun validOAuthDetailsAndGpSystemSlowToRespond() {
         mockingClient
                 .forVision {
-                    getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
+                    authentication.getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionMockDefaults.visionConfigurationResponse)
                             .delayedBy(Duration.ofSeconds(DELAY_BY_SECONDS))
                 }
@@ -58,14 +58,14 @@ class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
         mockingClient
                 .forVision {
-                    getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
+                    authentication.getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWitInvalidUserCredentials()
                 }
     }
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
         mockingClient.forVision {
-            getConfigurationRequest(
+            authentication.getConfigurationRequest(
                     VisionMockDefaults.getVisionUserSession(patient))
                     .respondWithServiceUnavailable()
         }
@@ -84,14 +84,14 @@ class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
 
         fun createInvalidTestForVision(patient: Patient, typeOfError: String) {
             mockingClient.forVision {
-                getRegisterRequest(
+                authentication.getRegisterRequest(
                         VisionMockDefaults.getVisionUserSession(patient),
                         patient)
                         .respondWithError(typeOfError)
             }
 
             mockingClient.forVision {
-                getConfigurationRequest(
+                authentication.getConfigurationRequest(
                         VisionMockDefaults.getVisionUserSession(patient))
                         .respondWithSuccess(
                                 VisionMockDefaults.visionConfigurationResponse)

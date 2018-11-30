@@ -1,36 +1,21 @@
 package features.myrecord.factories
 
-import mocking.models.Mapping
 import mocking.vision.VisionConstants
-import mocking.vision.VisionGetPatientDataBuilder
-import mocking.vision.models.ServiceDefinition
-import mocking.vision.models.VisionUserSession
 import models.Patient
 import java.time.LocalDateTime
 
 class MedicationsFactoryVision: MedicationsFactory() {
 
-    override fun enabled(patient: Patient) {
-        mockPatientDateRequest(patient){
-            request->request.respondWithSuccess(getVisionMedicationsData())}
+    private var mocker: MyRecordVisionMocker = MyRecordVisionMocker(mockingClient)
+
+    override fun enabledWithBlankRecord(patient: Patient) {
+        mocker.generatePatientDataResponse(patient, VisionConstants.medicationsView)
+        { request -> request.respondWithSuccess(getEmptySetOfVisionMedicationData()) }
     }
 
-    override fun enabledAndNoMedicationsMock(patient: Patient) {
-        mockPatientDateRequest(patient){
-            request->request.respondWithSuccess(getEmptySetOfVisionMedicationData())}
-    }
-
-    private fun mockPatientDateRequest(patient:Patient, resolver: (VisionGetPatientDataBuilder) -> Mapping){
-         mockingClient.forVision {
-            resolver(getPatientDataRequest(
-                    visionUserSession = VisionUserSession.fromPatient(patient),
-                    serviceDefinition = ServiceDefinition(
-                            name = VisionConstants.patientDataName,
-                            version = VisionConstants.patientDataVersion),
-                    view = VisionConstants.medicationsView,
-                    responseFormat = VisionConstants.xmlResponseFormat
-            ))
-        }
+    override fun enabledWithRecords(patient: Patient) {
+        mocker.generatePatientDataResponse(patient, VisionConstants.medicationsView)
+        { request -> request.respondWithSuccess(getVisionMedicationsData()) }
     }
 
     private fun getVisionMedicationsData(): String {

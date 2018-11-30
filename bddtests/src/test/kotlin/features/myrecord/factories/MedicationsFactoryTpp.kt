@@ -6,20 +6,20 @@ import models.Patient
 import java.time.LocalDateTime
 
 class MedicationsFactoryTpp: MedicationsFactory() {
-    override fun enabled(patient: Patient) {
+
+    override fun enabledWithBlankRecord(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
+                    .respondWithSuccess(getTppDefaultMedicationsModel())
+        }
+    }
+
+    override fun enabledWithRecords(patient: Patient) {
         mockingClient.forTpp {
             myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                     .respondWithSuccess(getTppMedicationData())
         }
     }
-
-    override fun enabledAndNoMedicationsMock(patient: Patient) {
-            mockingClient.forTpp {
-                myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
-                        .respondWithSuccess(getTppDefaultMedicationsModel())
-            }
-    }
-
     private fun getTppMedicationData(): ViewPatientOverviewReply {
 
         val now = LocalDateTime.now()

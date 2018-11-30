@@ -31,7 +31,7 @@ class VisionSessionCreateJourneyFactory(val client: MockingClient) : SessionCrea
 
         client
                 .forVision {
-                    getConfigurationRequest(
+                    authentication.getConfigurationRequest(
                             VisionMockDefaults.visionUserSession)
                             .respondWithSuccess(configuration)
                 }

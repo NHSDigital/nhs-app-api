@@ -10,11 +10,14 @@ import mocking.defaults.EmisMockDefaults
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
+import pages.myrecord.MyRecordInfoPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinitions() {
+
+    lateinit var myRecordInfoPage: MyRecordInfoPage
 
     @Given("the GP Practice has multiple consultations for (.*)")
     fun givenTheGpPracticeHasMultipleConsultationsFor(getService: String) {
@@ -125,6 +128,11 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
     fun thenIReceiveConsultationsWithErrorFlagSetTo(hasError: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(hasError, result.response.consultations.hasErrored)
+    }
+
+    @Then("^I see Consultations records displayed$")
+    fun thenISeeConsultationsRecordsDisplayed() {
+        assertEquals(2, myRecordInfoPage.consultations.allRecordItems().count())
     }
 }
 

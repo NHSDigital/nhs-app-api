@@ -7,7 +7,7 @@ import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
 
 class DemographicsFactoryEmis: DemographicsFactory() {
-    override fun disabledFunctionality(patient: Patient) {
+    override fun disabled(patient: Patient) {
         try {
             mockingClient.forEmis {
                 myRecord.demographicsRequest(patient).respondWithExceptionWhenNotEnabled()
@@ -17,7 +17,7 @@ class DemographicsFactoryEmis: DemographicsFactory() {
         }
     }
 
-    override fun enabledFunctionality(patient: Patient) {
+    override fun enabled(patient: Patient) {
         mockingClient.forEmis {
             myRecord.demographicsRequest(patient)
                     .respondWithSuccess(DemographicsData.getEmisDemographicData(patient))

@@ -202,7 +202,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
             }
             ProviderTypes.VISION -> {
                 mockingClient.forVision {
-                    getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
+                    prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
                             .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                 }
             }

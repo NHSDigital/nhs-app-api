@@ -1,34 +1,16 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
-import constants.ErrorResponseCodeTpp
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
+import features.myrecord.factories.MyRecordFactory
 import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.data.myrecord.AllergiesData
-import mocking.data.myrecord.ConsultationsData
-import mocking.data.myrecord.ImmunisationsData
-import mocking.data.myrecord.MedicationsData
-import mocking.data.myrecord.ProblemsData
-import mocking.data.myrecord.TestResultsData
-import mocking.data.myrecord.TppDcrData
-import mocking.data.myrecord.ViewPatientOverviewData
-import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.tpp.models.Error
-import mocking.vision.VisionConstants
-import mocking.vision.VisionConstants.allergiesView
-import mocking.vision.VisionConstants.htmlResponseFormat
-import mocking.vision.VisionConstants.immunisationsView
-import mocking.vision.VisionConstants.medicationsView
-import mocking.vision.VisionConstants.xmlResponseFormat
-import mocking.vision.models.ServiceDefinition
-import mocking.vision.models.VisionUserSession
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -43,14 +25,7 @@ import pages.navigation.NavBarNative
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
-import java.time.OffsetDateTime
 
-private const val NUMBER_OF_PRESCRIPTIONS = 5
-private const val NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED = 3
-private const val END_DATE = 60L
-
-@Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
-        "if possible, break down steps into functional areas")
 open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
@@ -73,170 +48,13 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         setPatientToDefaultFor(getService)
         CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
         SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(this.patient)
-
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.testResultsRequest(patient)
-                            .respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
-                }
-
-                mockingClient.forEmis {
-                    myRecord.immunisationsRequest(patient)
-                            .respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
-                }
-
-                mockingClient.forEmis {
-                    myRecord.allergiesRequest(patient).respondWithSuccess(AllergiesData.getEmisDefaultAllergyModel())
-                }
-
-                mockingClient.forEmis {
-                    myRecord.medicationsRequest(patient)
-                            .respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
-                }
-
-                mockingClient.forEmis {
-                    myRecord.problemsRequest(patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
-                }
-
-                mockingClient.forEmis {
-                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
-                            .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
-                }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
-                            .respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
-                }
-
-                mockingClient.forTpp {
-                    myRecord.patientRecordRequest(patient.tppUserSession!!)
-                            .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
-                }
-
-                val startDate = OffsetDateTime.now()
-                val endDate = startDate.minusDays(END_DATE)
-
-                mockingClient.forTpp {
-                    myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
-                            .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
-                }
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = allergiesView,
-                            responseFormat = htmlResponseFormat
-                    ).respondWithSuccess(AllergiesData.getVisionAllergiesData(0))
-
-                }
-
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = immunisationsView,
-                            responseFormat = xmlResponseFormat
-                    ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())
-
-                }
-
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = medicationsView,
-                            responseFormat = xmlResponseFormat
-                    ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())
-
-                }
-            }
-        }
+        MyRecordFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
     }
 
     @Given("the GP Practice has disabled summary care record functionality for (.*)")
-    fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionalityfor(getService: String) {
+    fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
-        when (getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    myRecord.allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
-                }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
-                            .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
-                                    "Requested record access is disabled by the practice",
-                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                }
-            }
-            "VISION" -> {
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = allergiesView,
-                            responseFormat = "HTML"
-                    ).respondWithAccessDeniedError()
-                }
-            }
-        }
-    }
-
-    @Given("^there is an unknown error getting allergies for (.*)$")
-    fun thereIsAnUnknownErrorGettingAllergiesFor(service: String) {
-        setPatientToDefaultFor(service)
-        when (service) {
-            "VISION" -> {
-                mockingClient.forVision {
-                    getPatientDataRequest(
-                            visionUserSession = VisionUserSession(
-                                    patient.rosuAccountId,
-                                    patient.apiKey,
-                                    patient.odsCode,
-                                    patient.patientId),
-                            serviceDefinition = ServiceDefinition(
-                                    name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion),
-                            view = allergiesView,
-                            responseFormat = htmlResponseFormat
-                    ).respondWithUnknownError()
-                }
-            }
-        }
-    }
-
-    @When("I click a test result$")
-    fun whenIClickATestResult() {
-        myRecordInfoPage.testResults.clickFirst()
+        MyRecordFactory.getForSupplier(getService).disabled(patient)
     }
 
     @When("^I enter url address for my record directly into the url$")
@@ -406,79 +224,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                 myRecordInfoPage.getSummaryCareNoAccessMessage())
     }
 
-    @Then("^I see one or more drug type allergies record displayed$")
-    fun thenISeeOneOrMoreDrugTypeAllergiesRecordDisplayed() {
-        assertEquals(2, myRecordInfoPage.allergies.allRecordItems().count())
-        val expected = ArrayList<String>()
-        for (i in 1..2) {
-            expected.add(AllergiesData.TERM)
-        }
-
-        assertArrayEquals(expected.toArray(), myRecordInfoPage.allergies.allRecordItemBodies()
-                .toTypedArray())
-    }
-
-    @Then("^I see 5 allergies with different date formats$")
-    fun thenISeeFiveAllergiesWithDifferentDateFormats() {
-
-        assertEquals(NUMBER_OF_PRESCRIPTIONS, myRecordInfoPage.allergies.allRecordItems().count())
-        val dates = myRecordInfoPage.allergies.allRecordItemLabels()
-
-        assertContains(dates, "15 May 2018")
-        assertContains(dates, "15 May 2018")
-        assertContains(dates, "May 2018")
-        assertContains(dates, "2018")
-        assertContains(dates, "15 May 2018 09:52")
-    }
-
-    private fun assertContains(actualDates: List<String>, expected: String) {
-
-        assertTrue("Expected to contain $expected, but was ${actualDates.joinToString()}",
-                actualDates.contains(expected))
-    }
-
-    @Then("^I see acute medication information$")
-    fun thenISeeAcuteMedicationInformation() {
-        myRecordInfoPage.acuteMedications.firstElement.assertIsVisible()
-    }
-
-    @When("^I click the test result section$")
-    fun whenIClickTheTestResultSection() {
-        myRecordInfoPage.testResults.toggleShrub()
-    }
-
-    @Then("^I see one test result with one value$")
-    fun thenISeeOneTestResultWithOneValue() {
-        assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
-        assertEquals("Expected child test result", 1, myRecordInfoPage.getTestResultChildCount())
-    }
-
-    @Then("^I see one test result with one value and a range$")
-    fun thenISeeOneTestResultWithOneValueAndARange() {
-        assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
-        assertEquals("Expected child test result", 1, myRecordInfoPage.getTestResultChildCount())
-    }
-
-    @Then("^I see one test result with multiple child values$")
-    fun thenISeeOneTestResultWithMultipleChildValues() {
-        assertTrue("Expected test result equal to or less than 1, but was" +
-                "${myRecordInfoPage.testResults.allRecordItems().size}",
-                myRecordInfoPage.testResults.allRecordItems().size >= 1)
-        assertTrue("Expected child test result equal to or less than 1, but was " +
-                "${myRecordInfoPage.getTestResultChildCount()}",
-                myRecordInfoPage.getTestResultChildCount() > 1)
-    }
-
-    @Then("^I see test results with multiple child values some of which have ranges$")
-    fun thenISeeTestResultsWithMultipleChildValuesSomeOfWhichHaveRanges() {
-        assertTrue("Expected test result equal to or greater than 1, but was" +
-                "${myRecordInfoPage.testResults.allRecordItems().size}"
-                , myRecordInfoPage.testResults.allRecordItems().size >= 1)
-        assertTrue("Expected child test result equal to or greater than 1, but was " +
-                "${myRecordInfoPage.getTestResultChildCount()}",
-                myRecordInfoPage.getTestResultChildCount() > 1)
-    }
-
     @Then("^I see the (.*) heading on My Record$")
     fun iSeeTheHeadingOnMyRecord(heading: String) {
         myRecordInfoPage.assertSectionHeaderIsVisible(heading)
@@ -495,64 +240,11 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         assertFalse("Expected section paragraph to not be visible", section.firstParagraph.isCurrentlyVisible)
     }
 
-    @Then("^I see the test result heading for (.*)$")
-    fun thenISeeTheTestResultHeading(getService: String) {
-        val header = when (getService) {
-            "TPP" -> {
-                "Test results (past 6 months)"
-            }
-            else -> {
-                "Test results"
-            }
-        }
-        myRecordInfoPage.assertSectionHeaderIsVisible(header)
-    }
-
-    @Then("^I see the test result section collapsed$")
-    fun thenISeeTheTestResultSectionCollapsed() {
-        assertFalse(myRecordInfoPage.isTestResultsTextMsgVisible())
-    }
-
-    @Then("^I see test result information$")
-    fun thenISeeTestResultInformation() {
-        assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
-    }
-
-    @Then("^I see current repeat medication information$")
-    fun thenISeeCurrentRepeatMedicationInformation() {
-        assertTrue(myRecordInfoPage.repeatMedications.firstElement.element.isVisible)
-    }
-
-    @Then("^I see discontinued repeat medication information$")
-    fun thenISeeDiscontinuedRepeatMedicationInformation() {
-        assertTrue(myRecordInfoPage.discontinuedRepeatMedications.firstElement.element.isVisible)
-    }
-
     @Then("^I see a message indicating that I have no access to view my summary care record$")
     fun thenISeeAMessageIndicatingThatIHaveNoAccessToViewMyRecord() {
         assertEquals("You do not currently have online access to your medical record\n" +
                 "Contact your GP surgery for more information.",
                 myRecordInfoPage.getSummaryCareNoAccessMessage())
-    }
-
-    @Then("^I see immunisation records displayed$")
-    fun thenISeeImmunisationRecordsDisplayed() {
-        assertEquals(2, myRecordInfoPage.immunisations.allRecordItems().count())
-    }
-
-    @Then("^I see Problems records displayed$")
-    fun thenISeeProblemsRecordsDisplayed() {
-        assertEquals(NUMBER_OF_PROBLEMS_RECORDS_DISPLAYED, myRecordInfoPage.problems.allRecordItems().count())
-    }
-
-    @Then("^I see Consultations records displayed$")
-    fun thenISeeConsultationsRecordsDisplayed() {
-        assertEquals(2, myRecordInfoPage.consultations.allRecordItems().count())
-    }
-
-    @Then("^I see (.*) test results$")
-    fun thenISeeMultipleTestResults(count: Int) {
-        assertEquals("Expected test results", count, myRecordInfoPage.testResults.allRecordItems().count())
     }
 
     @Then("^I see a message indicating that I have no access to view (.*) on My Record$")
@@ -580,23 +272,5 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun thenTheFlagIndicatingSupplierIsSetTo(supplier: String) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(supplier, result.response.supplier)
-    }
-
-    @Then("^I see a drug and non drug allergy record from VISION$")
-    fun thenISeeADrugAndNonDrugAllergyRecordFromVision() {
-        val allergyMessages = myRecordInfoPage.allergies.allRecordItemBodies()
-        val expectedMessages = listOf(
-                "H/O: drug allergy",
-                "Paracetamol 500mg capsules",
-                "Leg swelling",
-                "Pollen"
-        )
-        assertTrue("Expected records", allergyMessages.size == expectedMessages.size)
-        allergyMessages.forEachIndexed { i, message -> assertTrue(message == expectedMessages[i]) }
-    }
-
-    @Then("I see the my record page scrolled to the test result section")
-    fun thenISeeMyRecordPageScrolledToTestResultSection() {
-        assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
     }
 }

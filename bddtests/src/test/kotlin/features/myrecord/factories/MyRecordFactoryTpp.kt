@@ -1,0 +1,42 @@
+package features.myrecord.factories
+
+import constants.ErrorResponseCodeTpp
+import mocking.data.myrecord.TestResultsData
+import mocking.data.myrecord.TppDcrData
+import mocking.data.myrecord.ViewPatientOverviewData
+import mocking.tpp.models.Error
+import models.Patient
+import java.time.OffsetDateTime
+
+private const val END_DATE = 60L
+class MyRecordFactoryTpp: MyRecordFactory() {
+
+    override fun disabled(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
+                    .respondWithError(Error(ErrorResponseCodeTpp.NO_ACCESS,
+                            "Requested record access is disabled by the practice",
+                            "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+        }
+    }
+
+    override fun enabledWithBlankRecord(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
+                    .respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
+        }
+
+        mockingClient.forTpp {
+            myRecord.patientRecordRequest(patient.tppUserSession!!)
+                    .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
+        }
+
+        val startDate = OffsetDateTime.now()
+        val endDate = startDate.minusDays(END_DATE)
+
+        mockingClient.forTpp {
+            myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
+                    .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+        }
+    }
+}

@@ -35,7 +35,7 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
         setSessionVariable("NationalPracticeCode").to(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
         mockingClient
                 .forVision {
-                    getConfigurationRequest(
+                    authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession.fromPatient(Patient.getDefault("VISION")))
                             .respondWithSecurityHeaderError()
                 }
@@ -48,7 +48,7 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
 
         mockingClient
                 .forVision {
-                    getConfigurationRequest(
+                    authentication.getConfigurationRequest(
                             visionUserSession = VisionUserSession.fromPatient(Patient.getDefault("VISION")))
                             .respondWithInvalidRequest()
                 }
@@ -61,7 +61,7 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
         setSessionVariable("NationalPracticeCode").to(patient.odsCode)
         mockingClient
                 .forVision {
-                    getConfigurationRequest(
+                    authentication.getConfigurationRequest(
                             VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithUnknownError()
                 }

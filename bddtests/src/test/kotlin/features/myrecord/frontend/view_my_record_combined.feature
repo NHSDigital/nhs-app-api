@@ -1,6 +1,7 @@
 @my-record
 @smoketest
 Feature: View My Medical Record Information - Combined
+
   Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

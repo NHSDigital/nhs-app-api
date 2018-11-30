@@ -18,9 +18,8 @@ abstract class MedicationsFactory {
 
     val mockingClient = MockingClient.instance
 
-    abstract fun enabledAndNoMedicationsMock(patient:Patient)
-
-    abstract fun enabled(patient:Patient)
+    abstract fun enabledWithBlankRecord(patient:Patient)
+    abstract fun enabledWithRecords(patient:Patient)
 
     fun getResult() {
 
