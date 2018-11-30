@@ -5,13 +5,14 @@ ul {
 }
 
 hr {
-  margin-top: 1em;
-  margin-bottom: 1em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  visibility: hidden;
 }
 
 h2 {
   padding-bottom: 0;
-  padding-top: 0;
+  padding-top: 0.5em;
 }
 
 h3 {
@@ -24,7 +25,14 @@ h3 {
   padding-top: 3.125em;
 }
 
-.features {
+.availableFeatures {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  left: -0.5rem;
+  list-style: url('~/assets/icon_checked_tick.svg'); 
+}
+
+.unavailableFeatures {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
@@ -36,3 +44,13 @@ h3 {
 .createAccountMessage {
   padding-top: 0.5em;
 }
+
+.linkBack{
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 1em;
+  box-sizing: content-box;
+  color: $nhs_blue;
+  padding-top: 0.5em
+}
+

@@ -1,6 +1,7 @@
 <template>
   <div>
     <header :class="[$style.slim]">
+       <h1 :class="[$style.h1]"> {{ headerText }} </h1>
       <form :action="backLink" method="get">
         <input :value="true" type="hidden" name="reset">
         <input :value="this.$store.state.device.source" type="hidden" name="source">
@@ -11,21 +12,22 @@
     </header>
     <div v-if="showTemplate" :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
 
-      <h2>{{ $t('th04.featuresHeader') }}</h2>
-
-      <h3 id="practiceName">{{ practiceName }}</h3>
-      <p id="practiceAddress">{{ practiceAddress }}</p>
-
+      <h2>{{ $t('th04.featuresHeader') }}  {{ practiceName }}</h2>
+      <form :action="backLink" method="get">
+        <input :value="true" type="hidden" name="reset">
+        <input :value="this.$store.state.device.source" type="hidden" name="source">
+        <a :href="`${backLink}?reset=true`" :class="$style.linkBack"> {{ $t('th04.ctaNotMySurgery') }}</a>
+      </form>
       <hr>
 
       <h2>{{ $t('th04.currentlyAvailableHeader') }}</h2>
-      <ul id="availableFeatures" :class="$style.features">
+      <ul id="availableFeatures" :class="$style.availableFeatures">
         <li v-for="feature in availableFeatures" :key="feature">{{ feature }}</li>
       </ul>
 
       <div v-if="unavailableFeatures">
         <h2>{{ $t('th04.comingSoonHeader') }}</h2>
-        <ul id="unavailableFeatures" :class="$style.features">
+        <ul id="unavailableFeatures" :class="$style.unavailableFeatures">
           <li v-for="feature in unavailableFeatures" :key="feature">{{ feature }}</li>
         </ul>
       </div>
@@ -43,20 +45,12 @@
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
         <button :class="[$style.button, $style.green, $style.continue]" type="submit">
-          {{ this.$t('th04.ctaCreateAccount') }}
+          {{ this.$t('th04.ctaContinue') }}
         </button>
       </form>
       <a v-else :class="[$style.button, $style.green, $style.continue]">
         {{ this.$t('th04.ctaContinue') }}
       </a>
-
-      <form :action="backLink" method="get">
-        <input :value="true" type="hidden" name="reset">
-        <input :value="this.$store.state.device.source" type="hidden" name="source">
-        <button :class="[$style.button, $style.blue]" type="submit">
-          {{ $t('th04.ctaNotMySurgery') }}
-        </button>
-      </form>
       <p v-if="participating" id="limitingFeaturesWarning">
         {{ $t('th04.limitingFeaturesWarning') }}
       </p>
@@ -98,6 +92,7 @@ export default {
       state: '',
       responseType: '',
       clientId: '',
+      headerText: this.$t('th04.header'),
       backLink: GP_FINDER.path,
     };
   },
@@ -172,4 +167,5 @@ export default {
 @import "../../style/headerslim";
 @import '../../style/throttling/throttling';
 @import '../../style/throttling/gpfinderparticipation';
+
 </style>

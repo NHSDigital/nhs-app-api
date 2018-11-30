@@ -710,7 +710,8 @@ export default {
     },
   },
   th04: {
-    featuresHeader: 'Features used by this surgery',
+    header: 'GP surgery features',
+    featuresHeader: 'Features used by',
     currentlyAvailableHeader: 'Currently available',
     comingSoonHeader: 'Coming soon',
     defaultFeatures: [
