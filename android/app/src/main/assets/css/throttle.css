@@ -118,13 +118,13 @@ main.onboard {
 }
 
 main.onboard .nhso_logo {
-  margin-top: 5em;
-  margin-left: 1.5em;
+  margin-top: 6em;
+  margin-bottom: 4em;
   box-sizing: border-box;
 }
 
 main.onboard .nhso_logo svg {
-  height: 4em;
+  width: 120px;
 }
 
 main.onboard .carousel {
@@ -134,15 +134,18 @@ main.onboard .carousel {
 }
 
 main.onboard .carousel .board-slide-one {
-  background: url(../img/throttling_bg_plus_1.svg) no-repeat center;
+  background: url(../img/throttling_bg_plus_1.svg);
+  background-size: 100vw 100vh !important;
 }
 
 main.onboard .carousel .board-slide-two {
-  background: url(../img/throttling_bg_plus_2.svg) no-repeat center;
+  background: url(../img/throttling_bg_plus_2.svg);
+  background-size: 100vw 100vh !important;
 }
 
 main.onboard .carousel .board-slide-three {
-  background: url(../img/throttling_bg_plus_3.svg) no-repeat center;
+  background: url(../img/throttling_bg_plus_3.svg);
+  background-size: 100vw 100vh !important;
 }
 
 main.onboard .carousel div.slide {
@@ -166,46 +169,18 @@ main.onboard .carousel div.slide .content {
   font-weight: normal;
   color: #ffffff;
   padding-left: 1.5em;
-  padding-right: 2em;
+  padding-right: 5em;
 }
 
 main.onboard .carousel div.slide .content h1 {
-  margin-bottom: 1em;
+  margin-bottom: 0.75em;
   line-height: 1.325em;
-}
-
-/*
-main.onboard .carousel div.slide .content h1 {
-  font-family: "FrutigerLTW01-45Light", Arial, sans-serif;
-  font-weight: normal;
-  color: #ffffff;
-  font-size: 1.625em;
-  line-height: 1.325em;
-  padding-left: 1.5em;
-  padding-right: 1.5em;
-  padding-bottom: 2em;
-}
-
-main.onboard .carousel div.slide .content h2 {
-  font-family: "FrutigerLTW01-45Light", Arial, sans-serif;
-  font-weight: normal;
-  color: #ffffff;
-  font-size: 1.5em;
-  line-height: 1.3em;
-  padding-left: 0em;
-  padding-right: 1.5em;
+  font-size: 1.875em;
 }
 
 main.onboard .carousel div.slide .content p {
-  font-family: "FrutigerLTW01-45Light", Arial, sans-serif;
-  font-weight: lighter;
-  color: #ffffff;
-  font-size: 1.25em;
-  line-height: 1em;
-  padding-left: 1.5em;
-  padding-right: 1.5em;
+  font-size: 1.125em;
 }
-*/
 
 @supports (-webkit-overflow-scrolling: touch) {
   main.onboard .carousel div.slide h1 {

@@ -38,7 +38,7 @@ class ConfigurationService(private val context: MainActivity) {
                         configurationResponse.isThrottlingEnabled = isThrottlingEnabled
                         configurationResponse.isValidConfiguration = isValidConfiguration
 
-                        Log.d(Application.TAG, "${this::class.java.simpleName}: Configuration success: isValidConfiguration $isValidConfiguration")
+                        Log.d(Application.TAG, "${this::class.java.simpleName}: Configuration success: isValidConfiguration $isValidConfiguration. Throttling enabled: $isThrottlingEnabled.")
                         callback.onSuccess(configurationResponse)
                     } catch (e: ClassCastException) {
                         Log.d(Application.TAG, "${this::class.java.simpleName}: Configuration success: failed to parse response")

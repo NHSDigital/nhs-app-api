@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Conventions;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.OdsCode
@@ -24,8 +25,8 @@ namespace NHSOnline.Backend.Worker.Areas.OdsCode
         [AllowAnonymous]
         public async Task<IActionResult> Get([FromQuery] string odsCode)
         {
-            _logger.LogEnter(nameof(Get));
-            
+            _logger.LogEnter();
+
             if (string.IsNullOrEmpty(odsCode))
             {
                 return BadRequest();
@@ -46,7 +47,7 @@ namespace NHSOnline.Backend.Worker.Areas.OdsCode
             }
             finally
             {
-                _logger.LogExit(nameof(Get));
+                _logger.LogExit();
             }
         }
     }

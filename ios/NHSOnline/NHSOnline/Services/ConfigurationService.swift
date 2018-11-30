@@ -1,9 +1,15 @@
 import Foundation
 import os.log
 
-class ConfigurationResponse {
-    public var isValidConfiguration = false
-    public var isThrottlingEnabled = false
+struct ConfigurationResponse {
+
+    init(isValidConfiguration: Bool = false, isThrottlingEnabled: Bool = false) {
+        self.isValidConfiguration = isValidConfiguration
+        self.isThrottlingEnabled = isThrottlingEnabled
+    }
+
+    public var isValidConfiguration: Bool
+    public var isThrottlingEnabled: Bool
 }
 
 class ConfigurationService {
@@ -28,10 +34,10 @@ class ConfigurationService {
                     self.homeViewController.appVersionCheckError = false
                     let appConfig = try decoder.decode(Configuruation.self, from: usableData)
                     
-                    let configurationResponse = ConfigurationResponse()
-                    configurationResponse.isValidConfiguration = appConfig.isDeviceSupported
-                    configurationResponse.isThrottlingEnabled = appConfig.isThrottlingEnabled ?? false
-                    
+                    let configurationResponse = ConfigurationResponse(
+                        isValidConfiguration: appConfig.isDeviceSupported,
+                        isThrottlingEnabled: (appConfig.isThrottlingEnabled ?? false))
+ 
                     if(configurationResponse.isThrottlingEnabled) {
                         self.homeViewController.openThrottlingCarousel()
                     }

@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker
             public const int Status465FailedAgeRequirement = 465;
             public const int Status466MedicationAlreadyOrderedWithinLast30Days = 466;
         }
-        
+
         public static class AppConfig
         {
             public const string GitCommitId = "Version:CommitId";
@@ -78,8 +78,7 @@ namespace NHSOnline.Backend.Worker
             public const string GetNdopTokenAuditTypeRequest = "Ndop_GetToken_Request";
             public const string TermsAndConditionsRecordConsentAuditTypeRequest = "TermsAndConditions_RecordConsent_Request";
             public const string TermsAndConditionsRecordConsentAuditTypeResponse = "TermsAndConditions_RecordConsent_Response";
-            public const string TermsAndConditionsAnalyticsCookieAcceptance= "TermsAndConditions_RecordAnalyticsCookie_Acceptance";
-
+            public const string TermsAndConditionsAnalyticsCookieAcceptance = "TermsAndConditions_RecordAnalyticsCookie_Acceptance";
         }
 
         public static class HttpContextItems

@@ -62,15 +62,9 @@ class HomeViewController : UIViewController {
     }
     
     func openThrottlingCarousel() {
-        let defaults = UserDefaults.standard
-        
-        let haveShownThrottlingCarouselBefore =  defaults.bool(forKey: config().HaveShownThrottlingCarouselBefore)
-        
-        if(haveShownThrottlingCarouselBefore) {
-            return
+        if(!UserDefaults.standard.bool(forKey: config().HaveShownThrottlingCarouselBefore)) {
+            openCarousel(fileName: config().ThrottlingCarouselFileName)
         }
-        
-        openCarousel(fileName: config().ThrottlingCarouselFileName)
     }
     
     func openCarousel(fileName: String) {
@@ -78,11 +72,9 @@ class HomeViewController : UIViewController {
         let type = config().CarouselContentType
         let directory = config().CarouselDirectory
         
-        let path = Bundle.main.url(forResource: fileName, withExtension: type, subdirectory: directory)
-        
-        if path != nil {
+        if let path = Bundle.main.url(forResource: fileName, withExtension: type, subdirectory: directory) {
             DispatchQueue.main.async {
-                self.webViewController?.webView.loadFileURL(path!, allowingReadAccessTo: path!)
+                self.webViewController?.webView.loadFileURL(path, allowingReadAccessTo: path)
             }
         } else {
             if #available(iOS 10.0, *) {

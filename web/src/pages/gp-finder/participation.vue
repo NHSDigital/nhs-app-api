@@ -1,7 +1,7 @@
 <template>
   <div>
     <header :class="[$style.slim]">
-       <h1 :class="[$style.h1]"> {{ headerText }} </h1>
+      <h1 :class="[$style.h1]"> {{ headerText }} </h1>
       <form :action="backLink" method="get">
         <input :value="true" type="hidden" name="reset">
         <input :value="this.$store.state.device.source" type="hidden" name="source">
@@ -16,7 +16,8 @@
       <form :action="backLink" method="get">
         <input :value="true" type="hidden" name="reset">
         <input :value="this.$store.state.device.source" type="hidden" name="source">
-        <a :href="`${backLink}?reset=true`" :class="$style.linkBack"> {{ $t('th04.ctaNotMySurgery') }}</a>
+        <a :href="`${backLink}?reset=true`" :class="$style.linkBack">
+          {{ $t('th04.ctaNotMySurgery') }}</a>
       </form>
       <hr>
 
@@ -100,7 +101,7 @@ export default {
     return context.store.app.$http
       .getV1Odscodelookup({ odsCode: context.route.query.odsCode })
       .then((response) => {
-        const participating = response.isGpSystemSupported;
+        const participating = response && response.isGpSystemSupported;
         let data = { participating };
 
         if (participating) {

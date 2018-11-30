@@ -46,6 +46,7 @@ import java.net.URL
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
 import com.nhs.online.nhsonline.services.ConfigurationResponse
 import com.nhs.online.nhsonline.services.ConfigurationService
+import java.util.*
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
@@ -125,7 +126,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val haveShownThrottlingCarouselBefore = prefs.getBoolean(getString(R.string.haveShownThrottlingCarouselBefore), false)
 
         if(!haveShownThrottlingCarouselBefore) {
-            urlLoader.loadUrl(getString(R.string.throttleCarouselPath))
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+                        webview.loadUrl(getString(R.string.throttleCarouselPath))
+                    }
+                }
+            }, 1000)
         }
     }
 

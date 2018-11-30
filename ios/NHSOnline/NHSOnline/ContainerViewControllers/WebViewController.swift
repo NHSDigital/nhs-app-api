@@ -2,7 +2,7 @@ import UIKit
 import WebKit
 import os.log
 
-class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
+class WebViewController: UIViewController, WKUIDelegate {
     var webViewDelegate: WebViewDelegate?
     public var webView: WKWebView!
     
