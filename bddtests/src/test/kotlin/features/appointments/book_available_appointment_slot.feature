@@ -8,7 +8,7 @@ Feature: Book an available appointment slot
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have filtered such that there is one time displayed that represents multiple slots
     And I have selected a time when multiple slots are available
     Then the Appointment Slot page is displayed
@@ -26,7 +26,7 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
@@ -40,7 +40,7 @@ Feature: Book an available appointment slot
     Given there are <GP System> appointments available to book with a reason of 1 character
     And a booked appointment can be cancelled
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms of 1 characters
@@ -58,7 +58,7 @@ Feature: Book an available appointment slot
     Given there are <GP System> appointments available to book with a reason of 150 character
     And a booked appointment can be cancelled
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms of 150 characters
@@ -77,7 +77,7 @@ Feature: Book an available appointment slot
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And a booked appointment can be cancelled
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms of 151 characters
@@ -96,7 +96,7 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user cannot paste symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I paste symptoms of 151 characters
@@ -113,7 +113,7 @@ Feature: Book an available appointment slot
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And a booked appointment can be cancelled
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms of 151 characters
@@ -130,7 +130,7 @@ Feature: Book an available appointment slot
     Given there are VISION appointments available to book
     But a booked appointment cannot be cancelled
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms
@@ -141,7 +141,7 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user cannot enter dangerous text for booking reason
     Given there are <GP System> appointments available to book and user attempts to enter booking reason <script>
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms
@@ -157,7 +157,7 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms
@@ -173,7 +173,7 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given there are <GP System> appointments available to book, but the GP system is unavailable
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms
@@ -189,7 +189,7 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms
@@ -204,13 +204,13 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user can return directly back to their appointments after trying to book one already booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     And I enter symptoms
     And  I click the 'Confirm and book appointment' button
     When I click the error page back button
-    Then I am taken to the available appointment slots screen
+    Then the Available Appointments page is displayed
     Examples:
       | GP System |
       | EMIS      |
@@ -220,7 +220,7 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user reached maximum appointment booking limit
     Given there are <GP System> appointments available to book, but user reached maximum appointment booking limit
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     And I enter symptoms
@@ -235,7 +235,7 @@ Feature: Book an available appointment slot
   Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
     Given there are <GP System> appointments available to book
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I click the 'Change this appointment' button
@@ -257,7 +257,7 @@ Feature: Book an available appointment slot
     Given there are EMIS appointments available to book where booking reason is set optional
     And a booked appointment can be cancelled
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
@@ -268,7 +268,7 @@ Feature: Book an available appointment slot
     Given there are EMIS appointments available to book where booking reason is set optional with a reason entered
     And a booked appointment can be cancelled
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     When I enter symptoms
@@ -279,7 +279,7 @@ Feature: Book an available appointment slot
   Scenario: An EMIS user on Old EMIS System reached maximum appointment booking limit
     Given  there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     And I enter symptoms
@@ -289,7 +289,7 @@ Feature: Book an available appointment slot
   Scenario Outline: An <GP System> user sees no booking symptoms text box displayed if practice settings disallow booking reasons
     Given there are <GP System> appointments available to book where booking reason option is set not required
     And I am logged in
-    And I am on the available appointments page
+    And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     And I don't see option to type in booking reason

@@ -68,7 +68,7 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.checkHeaderTextIsCorrect()
     }
 
-    @Then("^I will be on the My appointments screen$")
+    @Then("^the My Appointments page is displayed$")
     fun iWillBeOnTheMyAppointmentsScreen() {
         iCanBookAnAppointment()
         thePageTitleIsMyAppointments()

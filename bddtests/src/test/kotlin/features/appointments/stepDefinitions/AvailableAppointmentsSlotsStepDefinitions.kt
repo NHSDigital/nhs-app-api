@@ -289,8 +289,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.verifyThatAvailableSlotsAreReturnedWithAppropriateFields()
     }
 
-    @Then("^I am taken to the available appointment slots screen$")
-    fun thenIAmTakenToTheAvailableAppointmentSlotsScreen() {
+    @Then("^the Available Appointments page is displayed$")
+    fun theAvailableAppointmentsPageIsDisplayed() {
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 

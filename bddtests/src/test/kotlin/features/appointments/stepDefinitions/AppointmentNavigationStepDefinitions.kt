@@ -21,27 +21,28 @@ class AppointmentNavigationStepDefinitions {
     lateinit var availableAppointments: AvailableAppointmentsSteps
 
 
-    @Given("^I am on my appointments page$")
+    @Given("^I am on the My Appointments page$")
     fun iAmOnMyAppointmentsPage() {
         navigation.waitForSpinnerToDisappear()
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
         myAppointments.waitForSpinnerToDisappear()
     }
 
-    @Given("^I am on the guidance page$")
+    @Given("^I am on the Appointment Guidance page$")
     fun iAmOnTheGuidancePage() {
         iAmOnMyAppointmentsPage()
         myAppointments.clickOnBookAppointmentButton()
         myAppointments.waitForSpinnerToDisappear()
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
+        appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
 
-    @Given("^I am on the available appointments page$")
+    @Given("^I am on the Available Appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
         myAppointments.waitForSpinnerToDisappear()
-       availableAppointments.checkIfPageHeaderIsCorrect()
+        availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
     @When("^I try to progress to the available appointments page$")

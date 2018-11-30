@@ -29,13 +29,13 @@ open class OneOneOneStepDefinitions {
         Assert.assertFalse(navBar.hasSelectedTab(NavBarNative.NavBarType.SYMPTOMS))
     }
 
-    @And("^Check My symptoms page is displayed")
+    @And("^the Check My Symptoms page is displayed")
     fun checkMySymptomsPageIsDisplayed() {
         checkMySymptoms.assertConditionsHeaderVisible()
         checkMySymptoms.assertNhs111HeaderVisible()
     }
 
-    @Then("^Check My symptoms page header and navigation menu are correct$")
+    @Then("^the Check My Symptoms page header and navigation menu are correct$")
     fun checkMySymptomsPageHeaderAndNavigationMenuAreCorrect() {
         navBar.headerNative.assertIsVisible("Check my symptoms")
         navBar.assertSelectedTab(NavBarNative.NavBarType.SYMPTOMS)

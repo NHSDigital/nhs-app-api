@@ -4,7 +4,7 @@ Feature: Ability to cancel an appointment
   Scenario Outline: <GP System> user is presented with the cancel appointment screen
     Given I have upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
-    And I am on my appointments page
+    And I am on the My Appointments page
     When I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
@@ -18,7 +18,7 @@ Feature: Ability to cancel an appointment
   one
     Given I have upcoming appointments for VISION, but with only one cancellation reason
     And I am logged in as a VISION user
-    And I am on my appointments page
+    And I am on the My Appointments page
     When I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
@@ -27,7 +27,7 @@ Feature: Ability to cancel an appointment
   Scenario: A TPP user is presented with the cancel appointment screen
     Given I have upcoming appointments for TPP
     And I am logged in as a TPP user
-    And I am on my appointments page
+    And I am on the My Appointments page
     When I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
@@ -36,7 +36,7 @@ Feature: Ability to cancel an appointment
   Scenario Outline: A validation message will be displayed if no reason is selected
     Given I have upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
-    And I am on my appointments page
+    And I am on the My Appointments page
     When I select a "Cancel appointment" link
     And I select "Cancel appointment" button
     Then I will receive a cancellation validation error
@@ -48,7 +48,7 @@ Feature: Ability to cancel an appointment
   Scenario:  A validation message will be displayed if no reason is selected, even when there is just one
     Given I have upcoming appointments for VISION, but with only one cancellation reason
     And I am logged in as a VISION user
-    And I am on my appointments page
+    And I am on the My Appointments page
     When I select a "Cancel appointment" link
     And I select "Cancel appointment" button
     Then I will receive a cancellation validation error
@@ -57,11 +57,11 @@ Feature: Ability to cancel an appointment
   Scenario Outline: <GP System> user can cancel an appointment with selected reason of <Reason>
     Given <GP System> is available to cancel a previously booked appointment because <Reason>
     And I am logged in as a <GP System> user
-    And I am on my appointments page
+    And I am on the My Appointments page
     And I select a "Cancel appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
-    Then I will be on the My appointments screen
+    Then the My Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
   @smoketest
     Examples:
@@ -77,32 +77,32 @@ Feature: Ability to cancel an appointment
   Scenario:  Vision user can cancel appointment when there is just one reason
     Given VISION is available to cancel a previously booked appointment, with only one available reason
     And I am logged in as a VISION user
-    And I am on my appointments page
+    And I am on the My Appointments page
     And I select a "Cancel appointment" link
     And I select the cancellation reason
     When I select "Cancel appointment" button
-    Then I will be on the My appointments screen
+    Then the My Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
 
   @smoketest
   Scenario: A TPP user can cancel an appointment
     Given TPP is available to cancel a previously booked appointment
     And I am logged in as a TPP user
-    And I am on my appointments page
+    And I am on the My Appointments page
     And I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
     When I select "Cancel appointment" button
-    Then I will be on the My appointments screen
+    Then the My Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
 
 
   Scenario Outline: <GP System> user navigates back to the "My appointments" screen
     Given I have upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
-    And I am on my appointments page
+    And I am on the My Appointments page
     And I select a "Cancel appointment" link
     When I select "Back" button
-    Then I will be on the My appointments screen
+    Then the My Appointments page is displayed
     Examples:
       | GP System |
       | EMIS      |
@@ -112,7 +112,7 @@ Feature: Ability to cancel an appointment
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given <GP System> is unavailable to cancel a previously booked appointment because <Reason>
     And I am logged in as a <GP System> user
-    And I am on my appointments page
+    And I am on the My Appointments page
     When I select a "Cancel appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
@@ -128,7 +128,7 @@ Feature: Ability to cancel an appointment
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have upcoming appointments for VISION
     And I am logged in as a VISION user
-    And I am on my appointments page
+    And I am on the My Appointments page
     And I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
     When I am idle long enough for the session to expire
@@ -139,7 +139,7 @@ Feature: Ability to cancel an appointment
   Scenario: Cancelling appointment, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have upcoming appointments for VISION
     And I am logged in as a VISION user
-    And I am on my appointments page
+    And I am on the My Appointments page
     And I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
     And I lose my internet connection
