@@ -21,6 +21,8 @@ class LinkageFactoryVision : LinkageFactory("VISION") {
                 surname = "Smyth",
                 dateOfBirth = "1997-05-01")
 
+    override val validOtherLinkageDetails = validLinkageDetails
+
     override val linkageDateOfBirthFormat = DateTimeFormats.dateWithoutTimeFormat
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,

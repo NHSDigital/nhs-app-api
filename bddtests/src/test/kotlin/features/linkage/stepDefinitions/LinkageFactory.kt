@@ -21,6 +21,8 @@ abstract class LinkageFactory(protected val gpSystem: String) {
 
     abstract val validLinkageDetails: LinkageInformationFacade
 
+    abstract val validOtherLinkageDetails: LinkageInformationFacade
+
     protected fun <TMapping>responseFromMap(linkageToGetRequestResponse: HashMap<LinkageResult, TMapping?>,
                                           linkageResult: LinkageResult): TMapping?{
 

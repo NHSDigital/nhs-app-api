@@ -696,8 +696,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         )
     }
 
-    @When("^I have posted the IM1 Connection Token$")
-    fun iHavePostedTheIm1ConnectionToken() {
+    @When("^I POST to IM1 Connection to register the user$")
+    fun iPostToIm1Connection() {
         val linkingInformationExample =
                 Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
         this.im1ConnectionRequest = Im1ConnectionRequest(

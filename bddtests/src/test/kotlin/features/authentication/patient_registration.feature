@@ -5,10 +5,12 @@ Feature: Registration
   @backend
   Scenario Outline: Patient registers for a <GP System> account with NHS Numbers of <NHS Numbers>
     Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
+    And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
     Then I receive a response
     And the response has the expected connection token
     And the response has the expected NHS numbers
+    And the IM1 Connection Token is in the cache
 
     Examples:
       | GP System | NHS Numbers |
@@ -16,11 +18,19 @@ Feature: Registration
       | EMIS      | "one"       |
       | EMIS      | "one","two" |
       | TPP       | "one"       |
-      | VISION    | "one"       |
+
+  @backend
+  Scenario: Patient registers for a Vision account with NHS Number of "one"
+    Given I have a new VISION patient with Nhs Numbers of "one"
+    When I register the user's IM1 credentials
+    Then I receive a response
+    And the response has the expected connection token
+    And the response has the expected NHS numbers
 
   @backend
   Scenario Outline: <GP System> Account ID doesn't match a user
     Given I have data for a <GP System> patient that does not exist
+    And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
     Then I get a "Not found" error
 
@@ -45,6 +55,7 @@ Feature: Registration
   @backend
   Scenario Outline: <GP System> - Incorrect Surname
     Given I have data for a <GP System> patient with incorrect surname
+    And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
     Then I get a "Not found" error
 
@@ -57,6 +68,7 @@ Feature: Registration
   @backend
   Scenario Outline: <GP System> - Incorrect Date of Birth
     Given I have data for a <GP System> patient with incorrect date of birth
+    And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
     Then I get a "Not found" error
 
@@ -94,6 +106,7 @@ Feature: Registration
   @backend
   Scenario Outline: <GP System> - Surname not in the expected format
     Given I have a <GP System> user's IM1 credentials with a Surname not in the expected format
+    And no IM1 Connection Token is currently cached
     When I register the user's IM1 credentials
     Then I get a "<Response>" error
 

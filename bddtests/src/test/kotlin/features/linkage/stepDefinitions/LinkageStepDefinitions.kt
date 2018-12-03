@@ -31,6 +31,12 @@ open class LinkageStepDefinitions {
         setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
     }
 
+    @Given("^[Aa]nother user has valid (.*) linkage details$")
+    fun anotherUserHasValidLinkageDetailsFor(gpSystem: String) {
+        val linkage = validOtherLinkage(gpSystem)
+        setLinkageInformation(linkage, LinkageResult.SuccessfullyRetrieved)
+    }
+
     @Given("I have valid (.*) linkage details apart from an empty OdsCode$")
     fun iHaveValidLinkageDetailsExceptEmptyOds(gpSystem: String) {
         val linkage = validLinkage(gpSystem)
@@ -175,6 +181,12 @@ open class LinkageStepDefinitions {
         setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
     }
 
+    @Given("^[Aa]nother (.*) user has a new linkage key created for them$")
+    fun anotherUserHasValidLinkageDetails(gpSystem: String) {
+        val linkage = validOtherLinkage(gpSystem)
+        setLinkageInformation(linkage, LinkageResult.SuccessfullyCreated)
+    }
+
     @Given("I have valid (.*) linkage details but I already have an online account")
     fun iAlreadyHaveAnOnlineAccount(gpSystem: String) {
         val linkage = validLinkage(gpSystem)
@@ -228,7 +240,7 @@ open class LinkageStepDefinitions {
         }
     }
 
-    @When("I call the (.*) Linkage POST endpoint")
+    @When("^(?:I|(?:[Tt]hey)) call the (.*) Linkage POST endpoint$")
     fun iCallTheLinkagePOSTEndpoint(gpSystem: String) {
 
         val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
@@ -270,6 +282,10 @@ open class LinkageStepDefinitions {
 
     private fun validLinkage(gpSystem: String): LinkageInformationFacade {
         return LinkageFactory.getForSupplier(gpSystem).validLinkageDetails
+    }
+
+    private fun validOtherLinkage(gpSystem: String) : LinkageInformationFacade {
+        return LinkageFactory.getForSupplier(gpSystem).validOtherLinkageDetails
     }
 
     private fun setLinkageInformation(linkageInformationFacade: LinkageInformationFacade,

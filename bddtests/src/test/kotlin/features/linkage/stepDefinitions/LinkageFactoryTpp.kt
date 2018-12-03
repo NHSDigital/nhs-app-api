@@ -2,6 +2,7 @@ package features.linkage.stepDefinitions
 
 import constants.DateTimeFormats
 import features.linkage.LinkageResult
+import mocking.defaults.TppMockDefaults
 import mocking.models.Mapping
 import mocking.tpp.linkage.TppLinkageGETBuilder
 import mocking.tpp.linkage.TppLinkagePOSTBuilder
@@ -10,6 +11,15 @@ import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
 
 class LinkageFactoryTpp:  LinkageFactory("TPP") {
+    override val validOtherLinkageDetails = LinkageInformationFacade(
+            odsCode =  TppMockDefaults.DEFAULT_ODS_CODE_TPP,
+            linkageKey = "anotherPassphraseToLink",
+            accountId = "123456789",
+            nhsNumber = "1234567890",
+            identityToken = "abc",
+            emailAddress = "ab@cd.com",
+            surname = "Thompson",
+            dateOfBirth = "2000-01-01")
 
     override val validLinkageDetails = LinkageInformationFacade(
             odsCode =  patient.odsCode,
@@ -28,6 +38,7 @@ class LinkageFactoryTpp:  LinkageFactory("TPP") {
 
         val linkageToPostRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyCreated to successfulPost(linkageInformationFacade),
+                LinkageResult.SuccessfullyRetrieved to successfulPost(linkageInformationFacade),
                 LinkageResult.InternalServerError to { post -> post.respondWithInternalServerError() },
                 LinkageResult.PatientNonCompetentOrUnderMinimumAge to {post -> post
                         .respondWithPatientNonCompetentOrUnderMinumumAge()}

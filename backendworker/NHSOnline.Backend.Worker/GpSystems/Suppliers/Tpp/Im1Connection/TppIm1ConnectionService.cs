@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                     Passphrase = request.LinkageKey
                 };
 
-                _logger.LogInformation("Checking Cache for AccessIdentityGuid");
+                _logger.LogDebug("Checking cache for IM1 connection token");
                 var key = _im1CacheKeyGenerator.GenerateCacheKey(
                     request.AccountId, request.OdsCode, request.LinkageKey);
                 var connectionTokenOption = await _im1CacheService.GetIm1ConnectionToken<TppConnectionToken>(key);
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                 if (connectionTokenOption.HasValue)
                 {
                     connectionToken = connectionTokenOption.ValueOrFailure();
-                    _logger.LogInformation("AccessIdentityGuid found in cache.");
+                    _logger.LogDebug("IM1 connection token found in cache.");
                 }
                 else
                 {
@@ -124,6 +124,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                         ProviderId = linkAccountReply.Body.ProviderId,
                         Im1CacheKey = key
                     };
+
+                    await CacheConnectionToken(connectionToken);
                 }
 
                 var authenticateRequest = new Authenticate
@@ -165,5 +167,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                 _logger.LogExit();
             }
         }
+
+        private async Task CacheConnectionToken(TppConnectionToken im1ConnectionToken) =>
+            await _im1CacheService.SaveIm1ConnectionToken(im1ConnectionToken.Im1CacheKey,
+                im1ConnectionToken);
     }
 }

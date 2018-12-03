@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
         }
 
         [TestMethod]
-        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenTppClientReturnsBadgateway()
+        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenTppClientReturnsBadGateway()
         {
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         Body = authenticateReply,
                     }));
             
-            string key = "Key";
+            const string key = "Key";
             _mockIm1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
                     It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(key);
@@ -190,6 +190,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                     {
                         Body = authenticateReply,
                     }));
+
+            const string key = "Key";
+            _mockIm1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
+                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(key);
+
+            _mockIm1CacheService.Setup(x => x.GetIm1ConnectionToken<TppConnectionToken>(key))
+                .Returns(Task.FromResult(
+                    Option.None<TppConnectionToken>()
+                )).Verifiable();
+
+            _mockIm1CacheService.Setup(x => x.SaveIm1ConnectionToken(key,
+                    It.IsAny<TppConnectionToken>()))
+                .Returns(Task.FromResult(true))
+                .Verifiable();
+
             var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
                 , _mockIm1CacheKeyGenerator.Object,_logger);         
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
@@ -197,6 +213,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
             var result = await systemUnderTest.Register(request);
 
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+
+            _mockIm1CacheService.Verify();
         }
         
         [TestMethod]

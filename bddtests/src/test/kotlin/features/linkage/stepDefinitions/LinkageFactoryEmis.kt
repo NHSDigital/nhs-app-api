@@ -14,6 +14,15 @@ import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade
 
 class LinkageFactoryEmis : LinkageFactory("EMIS") {
+    override val validOtherLinkageDetails = LinkageInformationFacade(
+            odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+            linkageKey = "anotherPassphraseToLink",
+            accountId = "123456789",
+            nhsNumber = "1234567890",
+            identityToken = "abc",
+            emailAddress = "ab@cd.com",
+            surname = "Elgar",
+            dateOfBirth = "2000-01-01")
 
     override val validLinkageDetails = LinkageInformationFacade(
             odsCode = patient.odsCode,

@@ -117,18 +117,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 }
 
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
-                string accessIdentityGuid;
-                
-                _logger.LogInformation("Checking Cache for connection token");
+
+                _logger.LogDebug("Checking cache for IM1 connection token");
                 var key = _im1CacheKeyGenerator.GenerateCacheKey(
                     request.AccountId, request.OdsCode, request.LinkageKey);
                 var cachedConnectionToken =
                     await _im1CacheService.GetIm1ConnectionToken<EmisConnectionToken>(key);
+
+                EmisConnectionToken connectionToken;
             
                 if (cachedConnectionToken.HasValue)
                 {
-                    _logger.LogInformation("Connection token found in cache.");
-                    accessIdentityGuid = cachedConnectionToken.ValueOrFailure().AccessIdentityGuid;
+                    connectionToken = cachedConnectionToken.ValueOrFailure();
+                    _logger.LogDebug("IM1 connection token found in cache.");
                 }
                 else
                 {                    
@@ -185,12 +186,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                         _logger.LogEmisErrorResponse(meApplicationsResponse);
                         return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                     }
-                    accessIdentityGuid = meApplicationsResponse.Body.AccessIdentityGuid;
+
+                    connectionToken = new EmisConnectionToken
+                    {
+                        AccessIdentityGuid = meApplicationsResponse.Body.AccessIdentityGuid,
+                        Im1CacheKey = key
+                    };
+
+                    await CacheConnectionToken(connectionToken);
                 }
                 
                 var sessionPostRequestModel = new SessionsPostRequest
                 {
-                    AccessIdentityGuid = accessIdentityGuid,
+                    AccessIdentityGuid = connectionToken.AccessIdentityGuid,
                     NationalPracticeCode = request.OdsCode
                 };
 
@@ -224,15 +232,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
 
                 var nhsNumbers = demographicsResponse.Body.ExtractNhsNumbers();
 
-                var emisConnectionToken = new EmisConnectionToken
-                {
-                    Im1CacheKey = key,
-                    AccessIdentityGuid = accessIdentityGuid
-                };
-
                 var response = new PatientIm1ConnectionResponse
                 {
-                    ConnectionToken = emisConnectionToken.SerializeJson(),
+                    ConnectionToken = connectionToken.SerializeJson(),
                     NhsNumbers = nhsNumbers
                 };
 
@@ -250,10 +252,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
             }
         }
 
-        private void LogExceptionError<T>(string methodCall, EmisClient.EmisApiObjectResponse<T> response)
-        {
+        private void LogExceptionError<T>(string methodCall,
+            EmisClient.EmisApiObjectResponse<T> response) =>
             _logger.LogError(response.GetExceptionLogMessage(methodCall));
-        }
 
+        private async Task CacheConnectionToken(EmisConnectionToken connectionToken) =>
+            await _im1CacheService.SaveIm1ConnectionToken(connectionToken.Im1CacheKey,
+                connectionToken);
     }
 }

@@ -228,7 +228,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
         }
 
         [TestMethod]
-        public async Task Register_SuccessfullyRegistered_WhenAccessGuidIsCached()
+        public async Task Register_SuccessfullyRegistered_WhenConnectionTokenIsCached()
         {
             // Arrange
             // emis client returns expected responses
@@ -315,7 +315,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
                     {
                         Body = demographicsResponse
                     }));
-            
+
+            const string key = "Key";
+            _mockIm1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
+                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(key);
+
+            _mockIm1CacheService.Setup(x => x.GetIm1ConnectionToken<EmisConnectionToken>(key))
+                .Returns(Task.FromResult(Option.None<EmisConnectionToken>())).Verifiable();
+
+            _mockIm1CacheService.Setup(x => x.SaveIm1ConnectionToken(key, It.IsAny<EmisConnectionToken>()))
+                .Returns(Task.FromResult(true)).Verifiable();
+
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
             
             // Act
@@ -323,6 +334,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+            _mockIm1CacheService.Verify();
         }
         
         [TestMethod]
