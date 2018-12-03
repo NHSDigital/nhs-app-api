@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 Method = request.Method.ToString()
             };
             
-            var stringResponse = $"Provider:Emis - RequestMethod:{request.Method} - RequestUrl:{request.RequestUri} - RequestIdentifier: ";
+            var stringResponse = $"Provider=Emis UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier= ";
 
             var result = _systemUnderTest.Identify(request);
             
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 Method = null
             };
             
-            var stringResponse = $"Provider:Emis - RequestMethod: - RequestUrl: - RequestIdentifier: ";
+            var stringResponse = "Provider=Emis UpStreamMethod= UpStreamUrl= UpStreamIdentifier= ";
 
             var result = _systemUnderTest.Identify(request);
             

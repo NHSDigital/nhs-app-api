@@ -11,7 +11,8 @@ namespace NHSOnline.Backend.Worker.CitizenId
             services.AddTransient<CitizenIdHttpRequestIdentifier>();
             
             services.AddHttpClient<CitizenIdHttpClient>()
-                .AddHttpMessageHandler<HttpTimeoutHandler<CitizenIdHttpRequestIdentifier>>();
+                .AddHttpMessageHandler<HttpTimeoutHandler<CitizenIdHttpRequestIdentifier>>()
+                .AddHttpMessageHandler<HttpRequestIdentificationHandler<CitizenIdHttpRequestIdentifier>>();
             
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();

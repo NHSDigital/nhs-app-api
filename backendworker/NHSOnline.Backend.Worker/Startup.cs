@@ -100,6 +100,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
+            services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
 
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,

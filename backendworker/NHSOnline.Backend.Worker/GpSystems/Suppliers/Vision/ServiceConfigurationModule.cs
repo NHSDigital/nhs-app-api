@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Support.Certificate;
 using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
@@ -29,18 +28,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 services.AddSingleton<IVisionClient, VisionClient>();
 
                 services.AddTransient<VisionTokenValidationService>();
-
-                var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
                 
                 services.AddTransient<VisionHttpRequestIdentifier>();
+                services.AddSingleton<VisionHttpClientHandler>();
 
                 services.AddHttpClient<VisionHttpClient>()
-                    .ConfigurePrimaryHttpMessageHandler(() =>
-                            new VisionHttpClientHandler(configuration,
-                                _loggerFactory.CreateLogger<VisionHttpClientHandler>(),
-                                certificateService)
-                        )
-                    .AddHttpMessageHandler<HttpTimeoutHandler<VisionHttpRequestIdentifier>>();
+                    .ConfigurePrimaryHttpMessageHandler<VisionHttpClientHandler>()
+                    .AddHttpMessageHandler<HttpTimeoutHandler<VisionHttpRequestIdentifier>>()
+                    .AddHttpMessageHandler<HttpRequestIdentificationHandler<VisionHttpRequestIdentifier>>();
 
                 _logger.LogDebug("Vision GP Service was successfully configured");
             }

@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
                 Method = request.Method.ToString()
             };
             
-            var stringResponse = $"Provider:CitizenId - RequestMethod:{request.Method} - RequestUrl:{request.RequestUri} - RequestIdentifier: ";
+            var stringResponse = $"Provider=CitizenId UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier= ";
 
             var result = _systemUnderTest.Identify(request);
             
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
                 Method = null
             };
             
-            var stringResponse = $"Provider:CitizenId - RequestMethod: - RequestUrl: - RequestIdentifier: ";
+            var stringResponse = "Provider=CitizenId UpStreamMethod= UpStreamUrl= UpStreamIdentifier= ";
 
             var result = _systemUnderTest.Identify(request);
             

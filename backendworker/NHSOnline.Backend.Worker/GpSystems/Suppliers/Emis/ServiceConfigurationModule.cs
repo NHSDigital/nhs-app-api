@@ -1,10 +1,7 @@
-﻿using System;
-using System.Globalization;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
-using NHSOnline.Backend.Worker.Support.Certificate;
 using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
@@ -26,20 +23,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             services.AddSingleton<EmisHttpClientHandler>();
             services.AddTransient<EmisHttpRequestIdentifier>();
-            
-            var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
-
-            services.AddHttpClient<EmisHttpClient>().ConfigurePrimaryHttpMessageHandler(() =>
-                new EmisHttpClientHandler(configuration,
-                    _loggerFactory.CreateLogger<EmisHttpClientHandler>(),
-                    certificateService))
-                .AddHttpMessageHandler<HttpTimeoutHandler<EmisHttpRequestIdentifier>>();
 
             services.AddSingleton<IGpSystem, EmisGpSystem>();
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddSingleton<IEmisSessionService, EmisSessionService>();
-            
+
+            services.AddHttpClient<EmisHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler<EmisHttpClientHandler>()
+                .AddHttpMessageHandler<HttpTimeoutHandler<EmisHttpRequestIdentifier>>()
+                .AddHttpMessageHandler<HttpRequestIdentificationHandler<EmisHttpRequestIdentifier>>();
+
             services.AddTransient<IEmisEnumMapper, EmisEnumMapper>();
 
             services.AddTransient<EmisTokenValidationService>();

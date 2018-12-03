@@ -5,7 +5,6 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
-using NHSOnline.Backend.Worker.Support.Certificate;
 using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
@@ -25,18 +24,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
-            
             services.AddSingleton<TppHttpClientHandler>();
             services.AddTransient<TppHttpRequestIdentifier>();
-            
-            services.AddHttpClient<TppHttpClient>()
-                .ConfigurePrimaryHttpMessageHandler(
-                    () => new TppHttpClientHandler(
-                        configuration,
-                        _loggerFactory.CreateLogger<TppHttpClientHandler>(),
-                        certificateService))
-                .AddHttpMessageHandler<HttpTimeoutHandler<TppHttpRequestIdentifier>>();
 
             services.AddSingleton<IGpSystem, TppGpSystem>();
             services.AddSingleton<ITppClient, TppClient>();
@@ -47,6 +36,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             services.AddTransient<IAppointmentsReplyMapper, AppointmentsReplyMapper>();
             services.AddTransient<IAppointmentMapper, AppointmentMapper>();
             services.AddSingleton<IAppointmentsResultBuilder, TppAppointmentsResultBuilder>();
+
+            services.AddHttpClient<TppHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler<TppHttpClientHandler>()
+                .AddHttpMessageHandler<HttpTimeoutHandler<TppHttpRequestIdentifier>>()
+                .AddHttpMessageHandler<HttpRequestIdentificationHandler<TppHttpRequestIdentifier>>();
 
             services.AddTransient<TppTokenValidationService>();
             services.AddTransient<TppDemographicsService>();

@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.Support.Http
                 Identifier = null;
 
             return
-                $"Provider:{Provider} - RequestMethod:{Method} - RequestUrl:{RequestUrl} - RequestIdentifier:{Identifier} ";
+                $"Provider={Provider} UpStreamMethod={Method} UpStreamUrl={RequestUrl} UpStreamIdentifier={Identifier} ";
         }
     }
 }

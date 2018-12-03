@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 Method = request.Method.ToString()
             };
             
-            var stringResponse = $"Provider:Vision - RequestMethod:{request.Method} - RequestUrl:{request.RequestUri} - RequestIdentifier:{headerString} ";
+            var stringResponse = $"Provider=Vision UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier={headerString} ";
 
             var result = _systemUnderTest.Identify(request);
             
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 Method = request.Method.ToString()
             };
             
-            var stringResponse = $"Provider:Vision - RequestMethod:{request.Method} - RequestUrl:{request.RequestUri} - RequestIdentifier: ";
+            var stringResponse = $"Provider=Vision UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier= ";
 
             var result = _systemUnderTest.Identify(request);
             
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 Method = null
             };
             
-            var stringResponse = $"Provider:Vision - RequestMethod: - RequestUrl: - RequestIdentifier: ";
+            var stringResponse = $"Provider=Vision UpStreamMethod= UpStreamUrl= UpStreamIdentifier= ";
 
             var result = _systemUnderTest.Identify(request);
             
