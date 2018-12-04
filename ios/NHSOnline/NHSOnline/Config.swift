@@ -2,7 +2,7 @@ import Foundation
 
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
-        case HomeUrl, Nhs111Url, Nhs111LocationUrl, OrganDonationUrl, ConditionsUrlPath, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL
+        case HomeUrl, Nhs111Url, Nhs111LocationUrl, OrganDonationUrl, OrganDonationUrlNative, ConditionsUrlPath, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, NativeDonationPath
         case AppointmentsUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
@@ -15,12 +15,14 @@ struct Config: Decodable {
     let Nhs111Url: String
     let Nhs111LocationUrl: String
     let OrganDonationUrl: String
+    let OrganDonationUrlNative: String
     let CheckSymptomsUrlPath: String
     let AppScheme: String
     let BaseScheme: String
     let HotJarLinkUrl: String
     let DataPreferencesURL: String
-    
+    let NativeDonationPath: String
+
     let MyRecordUrlPath: String
     let MoreUrlPath: String
     let ConditionsUrlPath: String
@@ -33,14 +35,14 @@ struct Config: Decodable {
     let NhsOnlineRequiredQueryString:String
     let ResponseWaitingTime: Double
     let SessionTimeout: Int
-    
+
     let IsFirstTimeOpened: String
     let HaveShownThrottlingCarouselBefore: String
     let CarouselDirectory: String
     let CarouselContentType: String
     let IntroCarouselFileName: String
     let ThrottlingCarouselFileName: String
-    
+
     let HelpURL: String
     let TermsAndConditionsURL: String
     let PrivacyPolicyURL: String

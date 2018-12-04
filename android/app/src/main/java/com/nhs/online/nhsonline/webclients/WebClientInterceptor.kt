@@ -46,6 +46,12 @@ class WebClientInterceptor(
             view.loadUrl(url)
             return false
         }
+
+        if(url == context.getString(R.string.organDonation)) {
+            view.loadUrl(context.getString(R.string.organDonationNative))
+            return false
+        }
+
         activities.forEach { activity ->
             if (activity.canStart(view.context, url)) {
                 activity.start(view.context, url)

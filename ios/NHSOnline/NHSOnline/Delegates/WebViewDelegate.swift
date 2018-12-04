@@ -53,15 +53,22 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 openInSafari(url: url)
                 return
             }
-            if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host),
-                matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
-                let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
-                decisionHandler(.cancel)
-                webView.loadPage(url: urlString)
-                
-                return
-                
+            
+            let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host)
+            
+            if(matchingKnownService != nil) {
+                if(matchingKnownService!.hasMissingQueryString(urlString: url.absoluteString)) {
+                    let urlString = matchingKnownService!.addingMissingQueryParameters(urlString: url.absoluteString)
+                    decisionHandler(.cancel)
+                    webView.loadPage(url: urlString)
+                    return
+                } else if (url.absoluteString == config().OrganDonationUrl) {
+                    decisionHandler(.cancel)
+                    webView.loadPage(url: config().OrganDonationUrlNative)
+                    return
+                }
             }
+                
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)

@@ -1,11 +1,3 @@
-//
-//  Reachability.swift
-//  NHSOnline
-//
-//  Created by John McKay on 07/09/2018.
-//  Copyright © 2018 NHS Digital. All rights reserved.
-//
-
 import SystemConfiguration
 
 public class Reachability {

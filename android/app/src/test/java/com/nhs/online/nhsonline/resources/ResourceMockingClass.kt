@@ -15,6 +15,7 @@ open class ResourceMockingClass {
             on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
             on { getString(R.string.nhs111Location) } doReturn "https://111.service.nhs.uk/"
             on { getString(R.string.organDonation) } doReturn "https://www.organdonation.nhs.uk/"
+            on { getString(R.string.organDonationNative) } doReturn "https://www.organdonation.nhs.uk/app/"
             on { getString(R.string.dataSharing) } doReturn "https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing"
             on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
             on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again." +
@@ -37,6 +38,8 @@ open class ResourceMockingClass {
                 "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/",
                 "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/"
             )
+            on { getString(R.string.nhs_111_header_description) } doReturn  "one one one Online"
+
             on { getString(R.string.symptomsPath) } doReturn "/symptoms"
             on { getString(R.string.appointmentsPath) } doReturn "/appointments"
             on { getString(R.string.prescriptionsPath) } doReturn "/prescriptions"
@@ -49,7 +52,7 @@ open class ResourceMockingClass {
             on { getString(R.string.organ_donation_register_header) } doReturn "Organ donation register"
             on { getString(R.string.data_sharing_header) } doReturn "Sharing health data preferences"
             on { getString(R.string.data_preferences_header) } doReturn "Sharing health data preferences"
-            on { getString(R.string.nhs_111_header) } doReturn "11 Online"
+            on { getString(R.string.nhs_111_header) } doReturn "111 Online"
             on { getString(R.string.conditions_header) } doReturn "Health A-Z"
             on { getString(R.string.conditions_header_description) } doReturn "Health A to Z"
             on { getString(R.string.my_record_header) } doReturn "My medical record"

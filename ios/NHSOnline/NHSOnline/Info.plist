@@ -139,5 +139,9 @@
 	<string>$(CONFIGURATION_API_PATH)</string>
 	<key>BaseApiUrl</key>
 	<string>$(BASE_SCHEME)://$(BASE_API_URL)</string>
+	<key>OrganDonationUrlNative</key>
+	<string>https://$(ORGAN_DONATION_URL_NATIVE)</string>
+	<key>NativeDonationPath</key>
+	<string>$(NATIVE_DONATION_PATH)</string>
 </dict>
 </plist>

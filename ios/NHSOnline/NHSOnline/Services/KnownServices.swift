@@ -114,7 +114,7 @@ class KnownServices {
         let conditionService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, serviceError: genericError,  title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: true)
         let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111, serviceError: genericError, title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
         let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111, serviceError: genericError, title: nhs111Title, validateSession: false, allowNativeInteraction: false)
-        let organDonationService = KnownService(serviceUrl: config.OrganDonationUrl, service: .ORGAN_DONATION, serviceError: genericError, title: organDonationTitle, validateSession: false, allowNativeInteraction: true)
+        let organDonationService = buildDonationService()
         let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, serviceError: genericError, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
         
         self.serviceList.append(nhsoService)
@@ -123,6 +123,12 @@ class KnownServices {
         self.serviceList.append(nhs111LocationService)
         self.serviceList.append(organDonationService)
         self.serviceList.append(dataPrefService)
+    }
+    
+    private func buildDonationService()-> KnownService {
+        let organDonationService = KnownService(serviceUrl: config.OrganDonationUrl, service: .ORGAN_DONATION, serviceError: genericError, title: organDonationTitle, validateSession: false, allowNativeInteraction: true)
+        organDonationService.addPathInfo(path: config.NativeDonationPath, service: .ORGAN_DONATION, validateSession: false, allowNativeInteraction: true, title: organDonationTitle)
+        return organDonationService
     }
     
     private func buildNhsoService()-> KnownService {

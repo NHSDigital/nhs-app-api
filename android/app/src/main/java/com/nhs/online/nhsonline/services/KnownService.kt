@@ -21,10 +21,11 @@ class KnownService(
     init {
         val uri = URI(serviceUrl)
         url = URI(uri.scheme, uri.authority, null, null, null).toURL()
-        generatePathInfoFrom(uri.path)
 
         default = Info("", errorMessage, url.toString(),
             shouldValidateSession, header, nativeHeaderDescription)
+
+        generatePathInfoFrom(uri.path)
     }
 
     fun addPathInfo(

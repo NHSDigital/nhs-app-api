@@ -79,6 +79,9 @@ class KnownServices(private val context: Context) {
             fetchStringResource(R.string.organ_donation_register_header),
             null,
             false)
+        organDonation.addPathInfo(URL(fetchStringResource(R.string.organDonationNative)).path,
+                false,
+                fetchStringResource(R.string.organ_donation_register_header))
 
         val nhsUK = KnownService(fetchStringResource(R.string.nhsUK),
             unavailabilityErrorMessage)
