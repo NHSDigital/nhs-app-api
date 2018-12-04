@@ -37,7 +37,7 @@ Feature: Session Extend Backend
   Scenario Outline: When the session extend endpoint is called but the session has become invalid, the user receives a
   401 response.
     Given I am logged in as a <GP System> user expecting a "unauthorized" response when extending their session
-    When I am idle long enough for the session to expire
+    When I am idle long enough for the backend session to expire
     When I try to extend my session
     Then I receive a "unauthorized" error
     Examples:

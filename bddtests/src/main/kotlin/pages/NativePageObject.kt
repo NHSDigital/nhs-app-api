@@ -1,5 +1,6 @@
 package pages
 
+import com.google.common.collect.ImmutableMap
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileElement
 import io.appium.java_client.android.AndroidDriver
@@ -8,7 +9,7 @@ import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.WebDriverException
 import webdrivers.getSpecificDriver
 import webdrivers.isAndroid
-
+import java.time.Duration
 
 const val NATIVE_CONTEXT: String = "native"
 
@@ -104,4 +105,31 @@ abstract class NativePageObject : HybridPageObject() {
         }
         return elementNative
     }
+
+    fun lockAndroidDevice() {
+        val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
+        driver.lockDevice()
+    }
+
+    fun unlockAndroidDevice() {
+        val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
+        driver.unlockDevice()
+    }
+
+    fun backgroundAndroidAppforDurationBeforeReturning(seconds:Long){
+        val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
+        driver.runAppInBackground(Duration.ofSeconds(seconds))
+        scrollAndroidNativePage()
+    }
+
+    @Suppress("TooGenericExceptionCaught", "Any exception thrown from javascript")
+    fun scrollAndroidNativePage(){
+        val driver = driver.getSpecificDriver<AndroidDriver<MobileElement>>()
+        try {
+        driver.executeScript("mobile: scroll", ImmutableMap.of("direction", "down"))
+        } catch (e: Exception) {
+            println("The current page is not scrollable")
+        }
+    }
+
 }

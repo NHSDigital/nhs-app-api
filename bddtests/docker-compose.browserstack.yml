@@ -20,4 +20,4 @@ services:
       - NHS_WEB_APP_BASE_URL=http://web.local.bitraft.io:3000
       - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io
-      - ConfigurationSettings__DefaultSessionExpiryMinutes=5
+      - ConfigurationSettings__DefaultSessionExpiryMinutes=2

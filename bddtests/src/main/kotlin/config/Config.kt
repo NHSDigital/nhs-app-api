@@ -4,7 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
 
-private const val SESSION_EXPIRY_MINUTES: Long = 3
+private const val SESSION_EXPIRY_MINUTES: Long = 2
 private const val MONGODB_DEFAULT_PORT: Long = 27017L
 
 class Config private constructor() {
