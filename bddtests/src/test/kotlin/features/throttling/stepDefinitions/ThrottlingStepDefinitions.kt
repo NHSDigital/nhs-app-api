@@ -28,11 +28,14 @@ private const val MAX_RESULTS_COUNT = NhsAzureSearchData.LIMIT
 private const val SOME_RESULTS_COUNT = 2
 private const val NO = "no"
 private const val BLANK = "blank"
+private const val MULTIPLE = "multiple"
+private const val MAXIMUM_LIMIT = "the maximum limit"
+private const val MORE_THAN_MAXIMUM = "more than the maximum"
 
-@Suppress("IMPLICIT_CAST_TO_ANY")
 open class ThrottlingStepDefinitions {
 
-    val mockingClient = MockingClient.instance
+    private val mockingClient = MockingClient.instance
+    private var searchText = ""
 
     @Steps
     private lateinit var browser: BrowserSteps
@@ -64,71 +67,68 @@ open class ThrottlingStepDefinitions {
         }
     }
 
-    @Given("^I search for a GP Practice that has some results$")
-    fun iSearchForAGPPracticeThatHasSomeResults() {
-        mockingClient.forNhsAzureSearch {
-            nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
-                search = "${GPFinderPage.validSearch}*"))
-                .respondWithSuccess(NhsAzureSearchData.getLessThanMaxNumberOfSearchData())
+    @Given("^There are ($MULTIPLE|$NO|$MAXIMUM_LIMIT|$MORE_THAN_MAXIMUM) GP Practices for my search criteria$")
+    fun thereAreXGPPracticesForMySearchCriteria(howManyPractices: String) {
+        when(howManyPractices) {
+            MULTIPLE -> {
+                mockingClient.forNhsAzureSearch {
+                    nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
+                            search = "${GPFinderPage.validSearch}*"))
+                            .respondWithSuccess(NhsAzureSearchData.getLessThanMaxNumberOfSearchData())
+                }
+            }
+            NO -> {
+                mockingClient.forNhsAzureSearch {
+                    nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
+                            search = "${GPFinderPage.validSearch}*"))
+                            .respondWithSuccess(NhsAzureSearchData.getZeroSearchData())
+                }
+            }
+            MAXIMUM_LIMIT -> {
+                mockingClient.forNhsAzureSearch {
+                    nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
+                            search = "${GPFinderPage.validSearch}*"))
+                            .respondWithSuccess(NhsAzureSearchData.getMaxNumberOfSearchData())
+                }
+            }
+            MORE_THAN_MAXIMUM -> {
+                mockingClient.forNhsAzureSearch {
+                    nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
+                            search = "${GPFinderPage.validSearch}*"))
+                            .respondWithSuccess(NhsAzureSearchData.getMoreThanMaxNumberOfSearchData())
+                }
+            }
         }
-        submitSearchCriteria()
+        searchText = GPFinderPage.validSearch
     }
 
-    @Given("^I search for a GP Practice that has the max number of results$")
-    fun iSearchForAGPPracticeThatHasTheMaxNumberOfResults() {
-        mockingClient.forNhsAzureSearch {
-            nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
-                search = "${GPFinderPage.validSearch}*"))
-                .respondWithSuccess(NhsAzureSearchData.getMaxNumberOfSearchData())
-        }
-        submitSearchCriteria()
-    }
-
-    @Given("^I search for a GP Practice when the NHS Service Search is unavailable$")
+    @Given("^The NHS Service Search is unavailable$")
     fun iSearchForAGPPracticeWhenTheNHSServiceSearchIsUnavailable() {
         mockingClient.forNhsAzureSearch {
             nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
-                search = "${GPFinderPage.validSearch}*"))
-                .respondWithServiceUnavailable()
-        }
-        submitSearchCriteria()
-    }
-
-    @Given("^I search for a GP Practice that is not found in the NHS Service Search$")
-    fun iSearchForAGPPracticeThatIsNotFoundInTheNHSServiceSearch() {
-        mockingClient.forNhsAzureSearch {
-            nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
-                search = "${GPFinderPage.validSearch}*"))
-                    .respondWithSuccess(NhsAzureSearchData.getZeroSearchData())
-        }
-        submitSearchCriteria(GPFinderPage.validSearch)
-    }
-
-    @Given("^I search for a GP Practice that has more than the max number of results$")
-    fun iSearchForAGPPracticeThatHasMoreThanTheMaxNumberOfResults() {
-        mockingClient.forNhsAzureSearch {
-            nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
                     search = "${GPFinderPage.validSearch}*"))
-                    .respondWithSuccess(NhsAzureSearchData.getMoreThanMaxNumberOfSearchData())
+                    .respondWithServiceUnavailable()
         }
-        submitSearchCriteria()
+        searchText = GPFinderPage.validSearch
     }
 
-    fun submitSearchCriteria(criteria: String = GPFinderPage.validSearch) {
-        gpFinderPage.enterSearchTerm(criteria)
+    @Given("^I submit my search")
+    fun iSubmitMySearch() {
+        gpFinderPage.enterSearchTerm(searchText)
         gpFinderPage.clickContinueButton()
     }
 
-    @Given("^I have submitted ($NO|$BLANK) search criteria$")
-    fun iHaveSubmittedInvalidSearchCriteria(noOrBlank: String) {
+    @Given("^I submit ($NO|$BLANK) search criteria$")
+    fun iSubmitInvalidSearchCriteria(noOrBlank: String) {
         when(noOrBlank) {
             NO -> {
-                submitSearchCriteria(GPFinderPage.emptyInvalidSearch)
+                searchText = GPFinderPage.emptyInvalidSearch
             }
             BLANK -> {
-                submitSearchCriteria(GPFinderPage.blankInvalidSearch)
+                searchText = GPFinderPage.blankInvalidSearch
             }
         }
+        iSubmitMySearch()
     }
 
     @Given("I am not logged in and I have not completed the beta throttling flow$")
@@ -141,7 +141,7 @@ open class ThrottlingStepDefinitions {
     @Given("^I have searched for my GP Practice$")
     fun iHaveSearchedForMyGPPractice() {
         assertGPFinderPageVisible()
-        iSearchForAGPPracticeThatHasSomeResults()
+        thereAreXGPPracticesForMySearchCriteria(MULTIPLE)
         iSeeTheGPSearchResultsPage("$SOME_RESULTS_COUNT")
     }
 

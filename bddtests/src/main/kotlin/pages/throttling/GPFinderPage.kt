@@ -3,7 +3,6 @@ package pages.throttling
 import net.serenitybdd.core.pages.WebElementFacade
 import pages.HybridPageObject
 import pages.HybridPageElement
-import pages.myrecord.SHRUB_ANIMATION_DURATION_MILLIS
 
 class GPFinderPage : HybridPageObject() {
 
@@ -56,12 +55,10 @@ class GPFinderPage : HybridPageObject() {
 
     fun clickContinueButton() {
         continueButton.element.click()
-        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 
     fun clickSkipThrottlingLink() {
         alreadyUsingAppLink.click()
-        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 
     fun isSearchCriteriaErrorMessageShown(): Boolean {

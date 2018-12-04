@@ -640,6 +640,9 @@ export default {
   },
   login: {
     desc: 'To access your GP services',
+    moreFeaturesComingSoon: 'More features will be coming soon to this GP surgery',
+    notMyGpSurgery: 'This isn\'t my GP surgery',
+    checkWhatFeaturesYouCanUse: 'Check what features you can use',
   },
   surveyBar: {
     barText: 'Help us make this service better.',
@@ -755,7 +758,6 @@ export default {
     ],
     createAccountMessage: 'To use the NHS App fully, you\'ll need to create an NHS account.',
     ctaContinue: 'Continue',
-    ctaCreateAccount: 'Create account',
     ctaNotMySurgery: 'This is not my GP surgery',
     limitingFeaturesWarning: 'Each GP surgery manages its own online services. They may choose to limit some of these features. Contact your surgery for more information.',
   },

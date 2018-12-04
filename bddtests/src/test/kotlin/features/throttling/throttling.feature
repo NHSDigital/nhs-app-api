@@ -7,16 +7,17 @@ Feature: Throttling
 
   @pending
   Scenario: A user searches for their practice to find out it is not participating in beta
-    When I search for a GP Practice that has some results
+    Given There are multiple GP Practices for my search criteria
+    When I submit my search
     Then I see the GP Search Results Page with 2 search results
     When My GP Practice is not participating in beta
     And I select my GP Practice
     Then I see the Practice Not Participating page
-    #todo: extend this happy path as part of brothermailer integration
 
   @pending
   Scenario: A user searches for their practice to find out it is participating in beta and logs in
-    And I search for a GP Practice that has some results
+    Given There are multiple GP Practices for my search criteria
+    When I submit my search
     Then I see the GP Search Results Page with 2 search results
     When My GP Practice is participating in beta
     And I select my GP Practice
@@ -26,13 +27,15 @@ Feature: Throttling
 
   @pending
   Scenario: A user does not see the Too many results warning if the max results are returned
-    And I search for a GP Practice that has the max number of results
+    Given There are the maximum limit GP Practices for my search criteria
+    When I submit my search
     Then I see the GP Search Results Page with 20 search results
     And The Too many results error message is not visible
 
   @pending
   Scenario: A user selects the wrong GP practice and returns to the GP finder page
-    When I search for a GP Practice that has some results
+    Given There are multiple GP Practices for my search criteria
+    When I submit my search
     Then I see the GP Search Results Page with 2 search results
     When My GP Practice is participating in beta
     And I select my GP Practice
@@ -41,27 +44,30 @@ Feature: Throttling
 
   @pending
   Scenario: A user sees an error message if the NHS Service Search is unavailable
-    When I search for a GP Practice when the NHS Service Search is unavailable
+    Given The NHS Service Search is unavailable
+    When I submit my search
     Then I see the GP Search Results Page with 0 search results
     And The Technical problems error message is visible
 
   @pending
   Scenario: A user sees an error message if no results are found
-    When I search for a GP Practice that is not found in the NHS Service Search
+    Given There are no GP Practices for my search criteria
+    When I submit my search
     Then I see the GP Search Results Page with 0 search results
     And The No results found error message is visible
 
    @pending
    Scenario: A user sees a message if too many results are found
-     When I search for a GP Practice that has more than the max number of results
+     Given There are more than the maximum GP Practices for my search criteria
+     When I submit my search
      Then I see the GP Search Results Page with 20 search results
      And The Too many results error message is visible
 
    @pending
    Scenario: A user is given an error message if they search with invalid criteria
-     When I have submitted no search criteria
+     When I submit no search criteria
      Then I see the GP Finder page with a search criteria error message
-     When I have submitted blank search criteria
+     When I submit blank search criteria
      Then I see the GP Finder page with a search criteria error message
 
    @pending
@@ -70,4 +76,3 @@ Feature: Throttling
      Then I see the login page
      When I browse to the page at /gp-finder
      Then I see the login page
-     #todo: add here, the test for 3167 This is not my GP surgery link

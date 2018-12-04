@@ -92,13 +92,23 @@ header.logged {
 
 .loginMain {
     margin-bottom: 3em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+
     h2 {
         @include h2;
         margin-bottom: 0.750em;
         font-size: 1.2em;
         text-align: center;
-        padding-left: 0.3em;
-        padding-right: 0.3em;
+    }
+
+    h5 {
+        @include h5;
+        color: $dark_grey;
+    }
+
+    .moreFeaturesComingSoon {
+        text-align: left;
     }
 
     a {
@@ -106,6 +116,18 @@ header.logged {
         color: $nhs_blue;
         width: 100%;
         text-align: center;
+    }
+
+    .notMySurgeryLink {
+        margin-top: 1em;
+        text-align: left;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .checkFeaturesLink {
+        cursor: pointer;
+        text-decoration: underline;
     }
 }
 

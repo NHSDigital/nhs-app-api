@@ -43,7 +43,7 @@ import ThrottlingBanner from '@/components/ThrottlingBanner';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
-import { GP_FINDER_RESULTS } from '@/lib/routes';
+import { GP_FINDER, GP_FINDER_RESULTS } from '@/lib/routes';
 
 export default {
   layout: 'throttling',

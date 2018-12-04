@@ -46,7 +46,7 @@
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
         <generic-button :class="[$style.button, $style.green, $style.continue]" type="submit">
-          {{ this.$t('th04.ctaCreateAccount') }}
+          {{ this.$t('th04.ctaContinue') }}
         </generic-button>
       </form>
       <a v-else :class="[$style.button, $style.green, $style.continue]">
