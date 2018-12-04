@@ -22,6 +22,7 @@ class ConfigurationResponse {
 class ConfigurationService(private val context: MainActivity) {
 
     fun getConfiguration(callback: IVolleyCallback) {
+
         var configurationUrl = String.format(
                 context.resources.getString(R.string.baseApiURL)
                         + context.resources.getString(R.string.configurationApiPath), BuildConfig.VERSION_NAME)
@@ -46,7 +47,6 @@ class ConfigurationService(private val context: MainActivity) {
                     }
                 },
                 Response.ErrorListener { error ->
-
                     Log.d(Application.TAG, "${this::class.java.simpleName}: Configuration error: $error")
                     if (error is TimeoutError || error is NoConnectionError) {
                         callback.onError(connectionErrorMessage)

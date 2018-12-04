@@ -4,6 +4,7 @@ import android.content.Context
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -64,7 +65,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private var isLoggedIn = false
     private var extendSessionDialogue: AlertDialog? = null
 
-    var isSuccessfulConfigCheck = true
+    var isSuccessfulConfigCheck = false
+    var originalWebviewZoom = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnCreate")
@@ -109,11 +111,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
-        
-        loadAuthReturnOrWelcomePage()
+
+        if(isSuccessfulConfigCheck) {
+            loadAuthReturnOrWelcomePage()
+        }
     }
 
-    private fun loadAuthReturnOrWelcomePage() {
+    fun loadAuthReturnOrWelcomePage() {
         val urlPath = intent?.data?.path
         val authRedirectPath = resources.getString(R.string.authRedirectPath)
         if (urlPath == authRedirectPath) {
@@ -128,13 +132,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val haveShownThrottlingCarouselBefore = prefs.getBoolean(getString(R.string.haveShownThrottlingCarouselBefore), false)
 
         if(!haveShownThrottlingCarouselBefore) {
-            Timer().schedule(object : TimerTask() {
-                override fun run() {
-                    runOnUiThread {
-                        webview.loadUrl(getString(R.string.throttleCarouselPath))
-                    }
-                }
-            }, 1000)
+            runOnUiThread {
+                originalWebviewZoom = webview.settings.textZoom
+                webview.settings.textZoom = 100
+                webview.loadUrl(getString(R.string.throttleCarouselPath))
+            }
+        } else {
+            loadAuthReturnOrWelcomePage()
         }
     }
 
@@ -315,13 +319,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        val loginUrl = resources.getString(R.string.baseURL) + resources.getString(R.string.loginPath)
-
-        if (webview.url == null) {
-            webview.loadUrl(loginUrl)
-        }
-        else if (webview.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
-            webview.reload()
+        if(isSuccessfulConfigCheck) {
+            val loginUrl = resources.getString(R.string.baseURL) + resources.getString(R.string.loginPath)
+            if (webview.url == null) {
+                webview.loadUrl(loginUrl)
+            }
+            else if (webview.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
+                webview.reload()
+            }
         }
     }
 

@@ -51,19 +51,26 @@ class LifeCycleObserver(
     fun checkAndHandleConfiguration () {
         configurationService.getConfiguration(object : IVolleyCallback {
             override fun onSuccess(configurationResponse: ConfigurationResponse) {
-                context.isSuccessfulConfigCheck = true
+
+                if(!context.isSuccessfulConfigCheck) {
+                    context.isSuccessfulConfigCheck = true
+
+                    if(configurationResponse.isThrottlingEnabled) {
+                        context.loadThrottlingCarousel()
+                    } else {
+                        context.loadAuthReturnOrWelcomePage()
+                    }
+                }
+
                 if (!configurationResponse.isValidConfiguration) {
                     context.showVersionUpgradeDialog()
                 } else {
                     context.hideVersionUpgradeDialog()
                 }
-
-                if(configurationResponse.isThrottlingEnabled) {
-                    context.loadThrottlingCarousel()
-                }
             }
 
             override fun onError(errorMessage: ErrorMessage) {
+                context.loadAuthReturnOrWelcomePage()
                 context.isSuccessfulConfigCheck = false
                 context.showUnavailabilityError(errorMessage)
             }

@@ -86,6 +86,10 @@ class WebAppInterface(private val context: MainActivity) {
         edit.putBoolean(context.getString(R.string.haveShownThrottlingCarouselBefore), java.lang.Boolean.TRUE)
         edit.apply()
 
+        context.runOnUiThread {
+            context.webview.settings.textZoom = context.originalWebviewZoom
+        }
+
         context.webview.post {
             context.webview.loadUrl(context.resources.getString(
                 R.string.baseURL))

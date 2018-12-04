@@ -23,6 +23,7 @@ class MainActivityTest {
     @Test
     fun onResume_nullWebViewUrl_noException_resetUrlToLogin() {
         mainActivity.webview.loadUrl(null)
+        mainActivity.isSuccessfulConfigCheck = true
 
         try {
             mainActivity.onResume()
