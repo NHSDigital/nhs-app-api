@@ -1,6 +1,6 @@
 <template>
   <div :class="$style['info-message-icon']" data-purpose="icon">
-    {{ iconPlus?'+':'&minus;' }}
+    {{ iconPlus ? '+' : '&minus;' }}
   </div>
 </template>
 

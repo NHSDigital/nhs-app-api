@@ -5,8 +5,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="EVENTS"
                            :text="$t('my_record.events.sectionHeader')"
+                           :aria-expanded="!isEventsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.events.sectionHeader') }}
     </analytics-tracked-tag>
     <events :is-collapsed="isEventsCollapsed" :data="myRecord.tppDcrEvents" />
@@ -17,8 +19,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="TESTRESULTS"
                            :text="$t('my_record.testResults.sectionHeader.tpp')"
+                           :aria-expanded="!isTestResultsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.testResults.sectionHeader.tpp') }}
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"

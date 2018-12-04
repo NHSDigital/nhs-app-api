@@ -6,8 +6,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="PATIENTDETAILS"
                            :text="$t('my_record.patientInfo.sectionHeader')"
+                           :aria-expanded="!isPatientDetailsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.patientInfo.sectionHeader') }}
     </analytics-tracked-tag>
     <patient-details :is-collapsed="isPatientDetailsCollapsed"

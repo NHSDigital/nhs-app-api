@@ -3,7 +3,7 @@
 
 
 /** MEDICAL RECORD */
-h2.record-title {
+a.record-title {
 	@include h3;
 	color: $nhs_blue;
 	padding: 1em;

@@ -5,8 +5,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="IMMUNISATIONS"
                            :text="$t('my_record.immunisations.sectionHeader')"
+                           :aria-expanded="!isImmunisationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.immunisations.sectionHeader') }}
     </analytics-tracked-tag>
     <immunisations :is-collapsed="isImmunisationsCollapsed" :data="myRecord.immunisations" />
@@ -16,8 +18,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="PROBLEMS"
                            :text="$t('my_record.problems.sectionHeader')"
+                           :aria-expanded="!isProblemsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.problems.sectionHeader') }}
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :data="myRecord.problems" />
@@ -27,8 +31,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="CONSULTATIONS"
                            :text="$t('my_record.consultations.sectionHeader')"
+                           :aria-expanded="!isConsultationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.consultations.sectionHeader') }}
     </analytics-tracked-tag>
     <consultations :is-collapsed="isConsultationsCollapsed"
@@ -39,8 +45,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="TESTRESULTS"
                            :text="$t('my_record.testResults.sectionHeader.default')"
+                           :aria-expanded="!isTestResultsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.testResults.sectionHeader.default') }}
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"

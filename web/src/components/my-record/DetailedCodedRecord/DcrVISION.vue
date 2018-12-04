@@ -5,8 +5,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="IMMUNISATIONS"
                            :text="$t('my_record.immunisations.sectionHeader')"
+                           :aria-expanded="!isImmunisationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.immunisations.sectionHeader') }}
     </analytics-tracked-tag>
     <immunisations :is-collapsed="isImmunisationsCollapsed" :data="myRecord.immunisations" />
@@ -16,8 +18,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="PROBLEMS"
                            :text="$t('my_record.problems.sectionHeader')"
+                           :aria-expanded="!isProblemsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.problems.sectionHeader') }}
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :data="myRecord.problems" />

@@ -7,7 +7,7 @@ import pages.HybridPageObject
 
 class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
 
-    private val headerPath = "//h2[contains(text(),'$header')]"
+    private val headerPath = "//a[contains(text(),'$header')]"
     private val bodyPath = "$headerPath/following-sibling::div[1]"
 
     val header =

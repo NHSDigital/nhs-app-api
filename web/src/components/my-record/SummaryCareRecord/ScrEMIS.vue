@@ -5,8 +5,11 @@
                            :click-func="myRecordSectionClick"
                            :click-param="ALLERGIESANDADVERSEREACTIONS"
                            :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
+                           :aria-expanded="!isAllergiesAndAdverseReactionsCollapsed ?
+                           'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}
     </analytics-tracked-tag>
     <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
@@ -17,8 +20,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="ACUTEMEDICATIONS"
                            :text="$t('my_record.acuteMedications.sectionHeader')"
+                           :aria-expanded="!isAcuteMedicationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.acuteMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isAcuteMedicationsCollapsed"
@@ -30,8 +35,10 @@
                            :click-func="myRecordSectionClick"
                            :click-param="CURRENTREPEATMEDICATIONS"
                            :text="$t('my_record.currentRepeatMedications.sectionHeader')"
+                           :aria-expanded="!isCurrentRepeatMedicationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
@@ -43,8 +50,11 @@
                            :click-func="myRecordSectionClick"
                            :click-param="DISCONTINUEDREPEATMEDICATIONS"
                            :text="$t('my_record.discontinuedRepeatMedications.sectionHeader')"
+                           :aria-expanded="!isDiscontinuedRepeatMedicationsCollapsed ?
+                           'true' : 'false'"
                            data-purpose="accordion"
-                           tag="h2">
+                           role="button"
+                           tag="a">
       {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
     </analytics-tracked-tag>
     <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"

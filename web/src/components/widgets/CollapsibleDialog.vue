@@ -1,6 +1,11 @@
 <template>
   <div :class="$style['info-message']" data-purpose="info-msg">
-    <div :class="$style['info-header']" tabindex="0" @click="toggle" @keypress="keyPress($event)">
+    <div :class="$style['info-header']"
+         :aria-expanded="showContent ? 'true' : 'false'"
+         role="button"
+         tabindex="0"
+         @click="toggle"
+         @keypress="keyPress($event)">
       <plus-minus-icon :icon-plus="!showContent" />
       <h2 :class="$style['info-message-title']">
         <slot name="header" />
