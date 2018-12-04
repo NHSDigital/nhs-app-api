@@ -56,20 +56,20 @@ Feature: Linkage Get Key
     When I call the EMIS Linkage GET endpoint
     Then I receive a "Bad Request" error
 
-  Scenario: Linkage request GET for EMIS returns 400 Bad Request, marked as archived
+  Scenario: Linkage request GET for EMIS returns 403 Forbidden, marked as archived
     Given I have valid EMIS linkage details but the GP system has marked me as archived
     When I call the EMIS Linkage GET endpoint
-    Then I receive a "Bad Request" error
+    Then I receive a "Forbidden" error
 
-  Scenario: Linkage request GET for EMIS returns 400 Bad Request, under 16
+  Scenario: Linkage request GET for EMIS returns 403 Forbidden, under 16
     Given I have valid EMIS linkage details but I am under 16
     When I call the EMIS Linkage GET endpoint
-    Then I receive a "Bad Request" error
+    Then I receive a "Forbidden" error
 
-  Scenario: Linkage request GET for EMIS returns 400 Bad Request, account status invalid
+  Scenario: Linkage request GET for EMIS returns 403 Forbidden, account status invalid
     Given I have valid EMIS linkage details but my account status is invalid
     When I call the EMIS Linkage GET endpoint
-    Then I receive a "Bad Request" error
+    Then I receive a "Forbidden" error
 
   Scenario: Linkage request GET for EMIS returns 404 Not Found, patient not registered at practice
     Given I have valid EMIS linkage details but I'm not registered at the practice

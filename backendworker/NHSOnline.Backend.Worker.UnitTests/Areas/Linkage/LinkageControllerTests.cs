@@ -250,6 +250,63 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), PostResponseAuditType, It.IsAny<string>()));
         }
 
+        [DataTestMethod]
+        [DataRow(typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge))]
+        [DataRow(typeof(LinkageResult.AccountStatusInvalid))]
+        [DataRow(typeof(LinkageResult.PatientMarkedAsArchived))]
+        public async Task Post_Returns403Forbidden_ForVariousResults(Type resultType)
+        {
+            var linkageResult = (LinkageResult)Activator.CreateInstance(resultType);
+            
+            var linkageController = CreateLinkageController(linkageResult);
+        
+            var request = CreateLinkageRequest();
+        
+            // Act
+            var actionResult = await linkageController.Post(request);
+        
+            // Assert                 
+            var resultAsStatusCodeResult = actionResult.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+        }
+        
+        private static CreateLinkageRequest CreateLinkageRequest()
+        {
+            var request = new CreateLinkageRequest
+            {
+                NhsNumber = DefaultNhsNumber,
+                OdsCode = DefaultOdsCode,
+                Surname = DefaultSurname,
+                DateOfBirth = DefaultDateOfBirth,
+                IdentityToken = DefaultEmailAddress,
+                EmailAddress = DefaultEmailAddress,
+            };
+            return request;
+        }
+        
+        
+        private LinkageController CreateLinkageController(LinkageResult mockResult)
+        {
+            var mockLinkageService = MockLinkageService(mockResult);
+        
+            mockLinkageService.Setup(x => x.CreateLinkageKey(
+                It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(DefaultNhsNumber, StringComparison.Ordinal) &&
+                                                   req.Surname.Equals(DefaultSurname, StringComparison.Ordinal) &&
+                                                   req.DateOfBirth.Equals(DefaultDateOfBirth) &&
+                                                   req.OdsCode.Equals(DefaultOdsCode, StringComparison.Ordinal) &&
+                                                   req.IdentityToken.Equals(DefaultEmailAddress, StringComparison.Ordinal) &&
+                                                   req.EmailAddress.Equals(DefaultEmailAddress, StringComparison.Ordinal)))
+            ).ReturnsAsync(mockResult);
+        
+            var mockLinkageValidationService = MockLinkageValidationService(true);
+        
+            var gpSystemMock = MockGpSystem(mockLinkageService, mockLinkageValidationService);
+            var gpSystemFactoryMock = MockGpSystemFactory(gpSystemMock);
+        
+            var linkageController = CreateLinkageController(gpSystemFactoryMock: gpSystemFactoryMock);
+            return linkageController;
+        }
+
         private LinkageController CreateLinkageController(
             Mock<IOdsCodeLookup> odsCodeLookupMock = null,
             Mock<IGpSystemFactory> gpSystemFactoryMock = null)

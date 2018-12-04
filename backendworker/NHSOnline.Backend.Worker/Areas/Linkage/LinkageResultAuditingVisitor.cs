@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             _auditor.AuditWithExplicitNhsNumber(
                 _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - patient marked as archived.");
 
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
         public IActionResult Visit(LinkageResult.PatientNonCompetentOrUnderMinimumAge result)
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             _auditor.AuditWithExplicitNhsNumber(
                 _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - patient non competent or under 16.");
 
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
         public IActionResult Visit(LinkageResult.AccountStatusInvalid result)
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             _auditor.AuditWithExplicitNhsNumber(
                 _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - invalid account status.");
 
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
         public IActionResult Visit(LinkageResult.PatientNotRegisteredAtPractice result)

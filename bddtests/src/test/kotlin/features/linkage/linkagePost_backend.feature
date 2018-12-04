@@ -67,15 +67,15 @@ Feature: Linkage Post Key
     When I call the EMIS Linkage POST endpoint
     Then I receive a "Bad Request" error
 
-  Scenario: Linkage request POST for EMIS returns bad request when patient marked as archived
+  Scenario: Linkage request POST for EMIS returns 403 Forbidden when patient marked as archived
     Given I have valid EMIS linkage details but the GP system has marked me as archived
     When I call the EMIS Linkage POST endpoint
-    Then I receive a "Bad Request" error
+    Then I receive a "Forbidden" error
 
-  Scenario Outline: Linkage request POST for <GP System> returns bad request when patient is under 13
+  Scenario Outline: Linkage request POST for <GP System> returns 403 Forbidden when patient is under 13
     Given I have valid <GP System> linkage details but I am under 13
     When I call the <GP System> Linkage POST endpoint
-    Then I receive a "Bad Request" error
+    Then I receive a "Forbidden" error
     Examples:
       | GP System |
       | EMIS      |

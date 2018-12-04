@@ -81,7 +81,7 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
     }
 
     fun respondWithAccountStatusInvalid(): Mapping {
-        val errorResponse = ErrorResponse(-ErrorResponseCodeEmis.ACCOUNT_STATUS_INVALID.toInt())
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.ACCOUNT_STATUS_INVALID.toInt())
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
