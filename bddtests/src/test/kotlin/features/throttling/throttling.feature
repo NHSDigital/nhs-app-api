@@ -22,7 +22,7 @@ Feature: Throttling
     When My GP Practice is participating in beta
     And I select my GP Practice
     Then I see the Practice Participating page
-    When I click the Create Account button on the Practice Participating page
+    When I click the Continue button on the Practice Participating page
     Then I see the CID login page
 
   @pending
@@ -76,3 +76,79 @@ Feature: Throttling
      Then I see the login page
      When I browse to the page at /gp-finder
      Then I see the login page
+
+  @pending
+  Scenario: A user registers their email with brothermailer
+    Given The brothermailer service will return a successful response
+    And There are multiple GP Practices for my search criteria
+    When I submit my search
+    Then I see the GP Search Results Page with 2 search results
+
+    When My GP Practice is not participating in beta
+    And I select my GP Practice
+    Then I see the Practice Not Participating page
+
+    When I click the Practice Not Participating continue button
+    Then I see the Sending Email Page
+
+    And I enter a valid email and submit
+    Then I see the Sending Email Results Page
+
+    When I click the back button on the Sending Email Results Page
+    Then I can see the login page
+
+
+  @pending
+  Scenario: A user cant registers an invalid email with brothermailer
+    Given There are multiple GP Practices for my search criteria
+    When I submit my search
+    Then I see the GP Search Results Page with 2 search results
+
+    When My GP Practice is not participating in beta
+    And I select my GP Practice
+    Then I see the Practice Not Participating page
+
+    When I click the Practice Not Participating continue button
+    Then I see the Sending Email Page
+
+    When I enter a invalid email and submit
+    Then I see the invalid email error
+
+
+  @pending
+  Scenario: A user can get back to Participating page from Sending Email page
+    Given The brothermailer service will return a successful response
+    And There are multiple GP Practices for my search criteria
+    When I submit my search
+    Then I see the GP Search Results Page with 2 search results
+
+    When My GP Practice is not participating in beta
+    And I select my GP Practice
+    Then I see the Practice Not Participating page
+
+    When I click the Practice Not Participating continue button
+    Then I see the Sending Email Page
+
+    When I click the back button on Sending Email page
+    Then I see the Practice Not Participating page
+
+    When I click the Practice Not Participating continue button
+    Then I see the Sending Email Page
+
+
+  @pending
+  Scenario: Brothermailer email registration service is down
+    Given The brothermailer service is down
+    And There are multiple GP Practices for my search criteria
+    When I submit my search
+    Then I see the GP Search Results Page with 2 search results
+
+    When My GP Practice is not participating in beta
+    And I select my GP Practice
+    Then I see the Practice Not Participating page
+
+    When I click the Practice Not Participating continue button
+    Then I see the Sending Email Page
+
+    And I enter a valid email and submit
+    Then I see the brothermailer service is down error

@@ -11,6 +11,8 @@ import {
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
+  GP_FINDER_SENDING_EMAIL,
+  GP_FINDER_SENDING_EMAIL_RESULT,
   DATA_SHARING_PREFERENCES,
   INDEX,
   LOGIN,
@@ -67,6 +69,8 @@ export default function ({ route, store, app }) {
     case GP_FINDER.name:
     case GP_FINDER_RESULTS.name:
     case GP_FINDER_PARTICIPATION.name:
+    case GP_FINDER_SENDING_EMAIL.name:
+    case GP_FINDER_SENDING_EMAIL_RESULT.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaders.gpFinder';
       route.meta.pageTitleKey = 'pageTitles.gpFinder';

@@ -32,6 +32,12 @@ class LoginPage : HybridPageObject() {
             page = this
     )
 
+    val throttlingNotParticipatingHeader = HybridPageElement(
+            browserLocator = "//h2[contains(text(), 'More features will be coming soon to this GP surgery')]",
+            androidLocator = null,
+            page = this
+    )
+
     val helpIcon = HybridPageElement(
             browserLocator = "//a[@id='help_icon']/*[name()='svg']",
             androidLocator = null,

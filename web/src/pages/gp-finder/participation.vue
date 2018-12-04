@@ -49,7 +49,7 @@
           {{ this.$t('th04.ctaContinue') }}
         </generic-button>
       </form>
-      <a v-else :class="[$style.button, $style.green, $style.continue]">
+      <a v-else :href="sendingEmail" :class="[$style.button, $style.green, $style.continue]">
         {{ this.$t('th04.ctaContinue') }}
       </a>
 
@@ -63,7 +63,7 @@
 
 <script>
 import AuthorisationService from '@/services/authorisation-service';
-import { INDEX, GP_FINDER, BEGINLOGIN } from '@/lib/routes';
+import { INDEX, GP_FINDER, BEGINLOGIN, GP_FINDER_SENDING_EMAIL } from '@/lib/routes';
 import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import moment from 'moment';
@@ -99,6 +99,7 @@ export default {
       clientId: '',
       headerText: this.$t('th04.header'),
       backLink: GP_FINDER.path,
+      sendingEmail: GP_FINDER_SENDING_EMAIL.path,
     };
   },
   asyncData(context) {
@@ -150,8 +151,7 @@ export default {
           PracticeName: practiceName,
           PracticeAddress: practiceAddress,
           PracticeParticipating: this.participating,
-          // to be updated to true (if not participating) when brothermailer is complete
-          Complete: this.participating,
+          Complete: true,
         },
       );
 

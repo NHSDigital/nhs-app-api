@@ -10,6 +10,8 @@ import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
 import mocking.nhsAzureSearchService.NhsAzureSearchMappingBuilder
+import mocking.throttling.BrotherMailerMappingBuilder
+import mocking.throttling.BrotherMailerRedirectMappingBuilder
 import mocking.tpp.TppMappingBuilder
 import mocking.vision.VisionMappingBuilder
 import net.serenitybdd.rest.SerenityRest
@@ -57,6 +59,21 @@ class MockingClient(private val configuration: MockingConfiguration) {
 
         this.postMapping(mapping)
     }
+
+    fun forBrotherMailer(method: String = "POST", resolver: BrotherMailerMappingBuilder.() -> Mapping) {
+        val mappingBuilder = BrotherMailerMappingBuilder(method)
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forBrotherMailerRedirect(method: String = "POST", resolver: BrotherMailerRedirectMappingBuilder.() -> Mapping) {
+        val mappingBuilder = BrotherMailerRedirectMappingBuilder(method)
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
 
     fun forNhsAzureSearch(method: String = "POST", resolver: NhsAzureSearchMappingBuilder.() -> Mapping) {
         val mappingBuilder = NhsAzureSearchMappingBuilder(method)

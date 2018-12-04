@@ -38,6 +38,11 @@ const routes = {
     path: '/auth-return',
     isAnonymous: true,
   },
+  BROTHERMAILER: {
+    name: 'brothermailer',
+    path: '/brothermailer',
+    isAnonymous: true,
+  },
   GP_FINDER: {
     name: 'gp-finder',
     path: '/gp-finder',
@@ -46,6 +51,16 @@ const routes = {
   GP_FINDER_RESULTS: {
     name: 'gp-finder-results',
     path: '/gp-finder/results',
+    isAnonymous: true,
+  },
+  GP_FINDER_SENDING_EMAIL: {
+    name: 'gp-finder-sending-email',
+    path: '/gp-finder/sending-email',
+    isAnonymous: true,
+  },
+  GP_FINDER_SENDING_EMAIL_RESULT: {
+    name: 'gp-finder-sending-email-result',
+    path: '/gp-finder/sending-email-result',
     isAnonymous: true,
   },
   GP_FINDER_PARTICIPATION: {
@@ -140,9 +155,12 @@ export const {
   APPOINTMENT_BOOKING,
   APPOINTMENT_CONFIRMATIONS,
   AUTH_RETURN,
+  BROTHERMAILER,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
+  GP_FINDER_SENDING_EMAIL,
+  GP_FINDER_SENDING_EMAIL_RESULT,
   CHECKYOURSYMPTOMS,
   DATA_SHARING_PREFERENCES,
   INDEX,

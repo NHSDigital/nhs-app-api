@@ -12,7 +12,6 @@ private const val NUM_NOT_PARTICIPATING_UNAVAILABLE_FEATURES = 3
 
 class GPParticipationPage : HybridPageObject() {
 
-
     var featuresUsedHeader = HybridPageElement(
         browserLocator = "//h2[contains(text(), 'Features used by ')]",
         androidLocator = null,
@@ -55,14 +54,14 @@ class GPParticipationPage : HybridPageObject() {
         page = this
     )
 
-    val ctaContinueButton = HybridPageElement(
-        browserLocator = "//a[contains(text(), 'Continue')]",
-        androidLocator = null,
-        page = this
+    val ctaParticipatingContinueButton = HybridPageElement(
+            browserLocator = "//button[contains(text(), 'Continue')]",
+            androidLocator = null,
+            page = this
     )
 
-    val ctaCreateAccountButton = HybridPageElement(
-            browserLocator = "//button[contains(text(), 'Create account')]",
+    val ctaNotParticipatingContinueButton = HybridPageElement(
+            browserLocator = "//a[contains(text(), 'Continue')]",
             androidLocator = null,
             page = this
     )

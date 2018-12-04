@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.loginMain">
-    <div v-if="surgeryParticipating">
+    <div v-if="isPracticeParticipating">
       <h2>{{ $t('login.desc') }}</h2>
       <form :action="authoriseUrl" method="get">
         <input :value="scope" type="hidden" name="scope">
@@ -12,8 +12,10 @@
         <input :value="responseType" type="hidden" name="response_type">
         <LoginButton />
       </form>
-      <a v-if="betaCookiePresent" :class="$style.checkFeaturesLink"
-         @click="wrongGpSurgery()">{{ $t('login.checkWhatFeaturesYouCanUse') }}</a>
+      <a v-if="showCheckFeaturesLink" :class="$style.checkFeaturesLink"
+         :href="gpFinderResetLink">
+        {{ $t('login.checkWhatFeaturesYouCanUse') }}
+      </a>
       <div :class="$style.appVersion">
         Version {{ this.$store.state.appVersion.webVersion }}
         <span v-if="this.$store.state.appVersion.nativeVersion">
@@ -22,11 +24,11 @@
       </div>
     </div>
     <div>
-      <div v-if="!surgeryParticipating">
+      <div v-if="!isPracticeParticipating">
         <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
         <h5>{{ notParticipatingSurgeryName }}</h5>
         <p>{{ notParticipatingSurgeryAddress }}</p>
-        <a :class="$style.notMySurgeryLink" @click="wrongGpSurgery()">
+        <a :class="$style.notMySurgeryLink" :href="gpFinderResetLink">
           {{ $t('login.notMyGpSurgery') }}
         </a>
       </div>
@@ -37,7 +39,7 @@
 import AuthorisationService from '@/services/authorisation-service';
 import LoginButton from '@/components/LoginButton';
 
-import { BEGINLOGIN, LOGIN, GP_FINDER_PARTICIPATION } from '@/lib/routes';
+import { BEGINLOGIN, GP_FINDER } from '@/lib/routes';
 import NativeCallbacks from '@/services/native-app';
 import querystring from 'querystring';
 import moment from 'moment';
@@ -63,41 +65,50 @@ export default {
       responseType: '',
       clientId: '',
       fidoAuthResponse: '',
+      isPracticeParticipating: true,
+      practiceName: undefined,
+      practiceAddress: undefined,
     };
+  },
+  asyncData(context) {
+    const { store, app } = context;
+    const betaCookie = store.$cookies.get('BetaCookie');
+    if (betaCookie && !betaCookie.PracticeParticipating && betaCookie.ODSCode) {
+      return app.$http.getV1Odscodelookup({
+        odsCode: betaCookie.ODSCode,
+      }).then((response) => {
+        const isPracticeParticipating = response && response.isGpSystemSupported;
+        betaCookie.PracticeParticipating = isPracticeParticipating;
+
+        store.$cookies.set('BetaCookie', betaCookie, {
+          path: '/',
+          maxAge: moment.duration(1, 'y').asSeconds(),
+        });
+
+        return {
+          isPracticeParticipating,
+          practiceName: betaCookie.PracticeName,
+          practiceAddress: betaCookie.PracticeAddress,
+        };
+      }).catch(() => Promise.resolve());
+    }
+    return {};
   },
   computed: {
     shouldShowBiometrics() {
       return this.$env.BIOMETRICS_ENABLED && this.$store.state.device.source === 'android';
     },
-    surgeryParticipating() {
-      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
-
-      if (betaCookie !== undefined) {
-        const practiceParticipating = betaCookie.PracticeParticipating;
-        if (practiceParticipating !== undefined && practiceParticipating === false) {
-          return false;
-        }
-      }
-
-      return true;
-    },
     notParticipatingSurgeryName() {
-      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
-      if (betaCookie !== undefined) {
-        return betaCookie.PracticeName;
-      }
-      return null;
+      return this.practiceName;
     },
     notParticipatingSurgeryAddress() {
-      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
-      if (betaCookie !== undefined) {
-        return betaCookie.PracticeAddress;
-      }
-      return null;
+      return this.practiceAddress;
     },
-    betaCookiePresent() {
-      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
-      return betaCookie !== undefined;
+    showCheckFeaturesLink() {
+      return this.$store.app.$cookies.get('BetaCookie') !== undefined && this.$store.app.$env.THROTTLING_ENABLED;
+    },
+    gpFinderResetLink() {
+      return `${GP_FINDER.path}?reset=true`;
     },
   },
   mounted() {
@@ -135,16 +146,6 @@ export default {
     }
   },
   methods: {
-    wrongGpSurgery() {
-      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
-      delete betaCookie.ODSCode;
-      delete betaCookie.PracticeParticipating;
-      this.$store.app.$cookies.set('BetaCookie', betaCookie, {
-        path: '/',
-        maxAge: moment.duration(1, 'y').asSeconds(),
-      });
-      this.$router.go(LOGIN.path);
-    },
     generateFidoUrl() {
       const originalData = this.$data;
       const newData = {};
@@ -157,12 +158,6 @@ export default {
     },
     camelToUnderscore(key) {
       return key.replace(/([A-Z])/g, '_$1').toLowerCase();
-    },
-    getHrefForGpPractice(odsCode, name, address) {
-      return `${GP_FINDER_PARTICIPATION.path}?odsCode=${odsCode}` +
-        `&practiceName=${encodeURIComponent(name)}` +
-        `&practiceAddress=${encodeURIComponent(address)}` +
-        `&source=${this.$store.state.device.source}`;
     },
   },
 };

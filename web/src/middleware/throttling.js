@@ -1,7 +1,9 @@
 import {
   LOGIN,
   GP_FINDER,
+  GP_FINDER_PARTICIPATION,
   INDEX,
+  GP_FINDER_SENDING_EMAIL,
 } from '@/lib/routes';
 
 import moment from 'moment';
@@ -49,26 +51,14 @@ export default function ({
   }
 
   if (!env.THROTTLING_ENABLED || hasCompletedThrottling(betaCookie)) {
-    return route.path.startsWith(GP_FINDER.path) ? redirect(LOGIN.path) : undefined;
-  }
-
-  if (betaCookie && betaCookie.PracticeParticipating !== undefined && !isLoggedIn) {
-    if (betaCookie.PracticeParticipating === true) {
-      return redirect(LOGIN.path);
+    if (hasCompletedThrottling(betaCookie) && route.name === GP_FINDER_PARTICIPATION.name) {
+      return undefined;
     }
 
-    return store.app.$http.getV1Odscodelookup({
-      odsCode: betaCookie.ODSCode,
-    }).then((response) => {
-      betaCookie.PracticeParticipating = response && response.isGpSystemSupported;
-
-      app.$cookies.set('BetaCookie', betaCookie, {
-        path: '/',
-        maxAge: moment.duration(1, 'y').asSeconds(),
-      });
-
-      return redirect(LOGIN.path);
-    });
+    return route.path.startsWith(GP_FINDER.path) &&
+           !route.path.startsWith(GP_FINDER_SENDING_EMAIL.path) ?
+      redirect(LOGIN.path) :
+      undefined;
   }
 
   if (route.name === LOGIN.name) {

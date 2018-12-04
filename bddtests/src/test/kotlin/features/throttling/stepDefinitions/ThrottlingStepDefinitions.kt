@@ -1,5 +1,6 @@
 package features.throttling.stepDefinitions
 
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -17,6 +18,9 @@ import pages.CIDAccountCreationPage
 import pages.throttling.GPFinderPage
 import pages.throttling.GPParticipationPage
 import pages.throttling.GPSearchResultsPage
+import pages.LoginPage
+import pages.throttling.SendingEmailPage
+import pages.throttling.SendingEmailResultsPage
 
 private const val IS = "is"
 private const val IS_NOT = "is not"
@@ -38,11 +42,15 @@ open class ThrottlingStepDefinitions {
     private var searchText = ""
 
     @Steps
-    private lateinit var browser: BrowserSteps
-    private lateinit var gpFinderPage: GPFinderPage
-    private lateinit var gpSearchResultsPage: GPSearchResultsPage
-    private lateinit var gpParticipationPage: GPParticipationPage
-    private lateinit var cidAccountCreationPage: CIDAccountCreationPage
+    lateinit var browser: BrowserSteps
+
+    lateinit var cidAccountCreationPage: CIDAccountCreationPage
+    lateinit var login: LoginPage
+    lateinit var gpFinderPage: GPFinderPage
+    lateinit var gpSearchResultsPage: GPSearchResultsPage
+    lateinit var gpParticipationPage: GPParticipationPage
+    lateinit var sendingEmailPage: SendingEmailPage
+    lateinit var sendingEmailResultPage: SendingEmailResultsPage
 
     @Given("^I see the GP Finder Page$")
     fun assertGPFinderPageVisible() {
@@ -161,19 +169,18 @@ open class ThrottlingStepDefinitions {
     fun iSeeThePracticeParticipatingOrNotParticipatingPage(participating: String) {
         gpParticipationPage.featuresUsedHeader.assertIsVisible()
         gpParticipationPage.currentlyAvailableHeader.assertIsVisible()
-        gpParticipationPage
 
         when(participating) {
             "Participating" -> {
+                gpParticipationPage.ctaParticipatingContinueButton.assertIsVisible()
                 gpParticipationPage.assertParticipatingFeaturesVisible()
                 gpParticipationPage.createAccountMessage.assertIsVisible()
-                gpParticipationPage.ctaCreateAccountButton.assertIsVisible()
                 gpParticipationPage.limitingFeaturesWarning.assertIsVisible()
             }
             "Not Participating" -> {
+                gpParticipationPage.ctaNotParticipatingContinueButton.assertIsVisible()
                 gpParticipationPage.assertNotParticipatingFeaturesVisible()
                 gpParticipationPage.comingSoonHeader.assertIsVisible()
-                gpParticipationPage.ctaContinueButton.assertIsVisible()
             }
         }
     }
@@ -188,10 +195,10 @@ open class ThrottlingStepDefinitions {
         gpFinderPage.clickSkipThrottlingLink()
     }
 
-    @When("^I click the Create Account button on the Practice Participating page$")
-    fun whenIClickTheCreateAccountButtonOnThePracticeParticipatingPage() {
+    @When("^I click the Continue button on the Practice Participating page$")
+    fun whenIClickTheContinueButtonOnThePracticeParticipatingPage() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.jackJackson)
-        gpParticipationPage.ctaCreateAccountButton.click()
+        gpParticipationPage.ctaParticipatingContinueButton.click()
     }
 
     @Then("^The ($TOO_MANY_RESULTS|$TECHNICAL_PROBLEMS|$NO_RESULTS_FOUND) error message ($IS|$IS_NOT) visible$")
@@ -217,6 +224,85 @@ open class ThrottlingStepDefinitions {
     @Then("^I see the CID login page$")
     fun iSeeTheCIDLoginPage() {
         assertTrue(cidAccountCreationPage.isVisible())
+    }
+
+    @When("^I click the Practice Not Participating continue button$")
+    fun iClickThePracticeNotParticipatingContinueButton(){
+        gpParticipationPage.ctaNotParticipatingContinueButton.click()
+    }
+
+    @Then("^I see the Sending Email Page$")
+    fun iSeeTheSendingEmailPage() {
+        sendingEmailPage.waitingListResultsHeader.assertIsVisible()
+        sendingEmailPage.emailFeatureText.assertIsVisible()
+        sendingEmailPage.contactYouText.assertIsVisible()
+        sendingEmailPage.emailText.assertIsVisible()
+        sendingEmailPage.continueButton.assertIsVisible()
+        sendingEmailPage.homeButton.assertIsVisible()
+    }
+
+    @Then("^I click the back button on Sending Email page$")
+    fun iClickTheBackButtonOSendingEmailPage() {
+        sendingEmailPage.backLink.click()
+    }
+
+    @And("^The brothermailer service will return a successful response")
+    fun theBrotherMailerServiceReturnsASuccessfulResponse()
+    {
+        mockingClient.forBrotherMailerRedirect {
+            redirectBrotherMailer().respondWithSuccess()
+        }
+        mockingClient.forBrotherMailer {
+            postToBrotherMailer().respondWithOkResponse()
+        }
+    }
+
+    @When("^I enter a valid email and submit$")
+    fun iEnterAValidEmailAndSubmit(){
+        sendingEmailPage.enterEmail(SendingEmailPage.validEmail)
+        sendingEmailPage.continueButton.click()
+    }
+
+    @When("^I enter a invalid email and submit$")
+    fun iEnterAInvalidEmailAndSubmit(){
+        sendingEmailPage.enterEmail(SendingEmailPage.invalidEmail)
+        sendingEmailPage.continueButton.click()
+    }
+
+    @When("^I click the back button on the Sending Email Results Page$")
+    fun iClickTheBackButtonOnTheSendingEmailResultsPage(){
+        sendingEmailResultPage.homeButton.click()
+    }
+
+    @Then("^I see the invalid email error$")
+    fun iSeeTheInvalidEmailError() {
+        sendingEmailPage.isInvalidEmailVisible()
+    }
+
+    @Then("^I can see the login page$")
+    fun iCanSeeTheLoginPage() {
+        login.throttlingNotParticipatingHeader.assertIsVisible()
+    }
+
+    @Then("^I see the Sending Email Results Page$")
+    fun iSeeTheSendingEmailResultsPage() {
+        sendingEmailResultPage.waitingListResultsHeader.assertIsVisible()
+        sendingEmailResultPage.letYouKnowText.assertIsVisible()
+        sendingEmailResultPage.gpSurgeryFeatureText.assertIsVisible()
+        sendingEmailResultPage.homeButton.assertIsVisible()
+    }
+
+    @And("^The brothermailer service is down$")
+    fun theBrotherMailerServiceIsDown() {
+        mockingClient.forBrotherMailer {
+            postToBrotherMailer().respondWithNotFoundError()
+        }
+    }
+
+    @Then("^I see the brothermailer service is down error$")
+    fun iSeeTheBrotherMailerServiceIsDown() {
+        val message = sendingEmailPage.inLineError.element.text
+        Assert.assertEquals("There was a problem adding you. Please try again", message)
     }
 
 }

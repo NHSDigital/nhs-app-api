@@ -761,6 +761,23 @@ export default {
     ctaNotMySurgery: 'This is not my GP surgery',
     limitingFeaturesWarning: 'Each GP surgery manages its own online services. They may choose to limit some of these features. Contact your surgery for more information.',
   },
+  th05: {
+    header: 'Waiting list',
+    invalidEmailError: 'Enter a valid email address',
+    submissionError: 'There was a problem adding you. Please try again',
+    connectionError: 'There was a problem adding you. Please try again',
+    emailFeatureText: 'Get an email when all features are available at your GP surgery',
+    contactYouText: 'We will only contact you about this',
+    emailText: 'Email',
+    continueButton: 'Continue',
+    homeButton: 'Go to home screen',
+  },
+  th06: {
+    header: 'Waiting list',
+    letYouKnowText: 'We will let you know',
+    gpSurgeryFeatureText: 'When your GP surgery can use all features of the app, we’ll send you an email.',
+    homeButton: 'Go to home screen',
+  },
   sy01: {
     pageHeader: 'Check my symptoms',
     a_z: {

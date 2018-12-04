@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <main>
-      <connection-error />
-      <api-error />
-      <flash-message />
+      <div v-if="showErrorMessageContainer" :class="$style.errorMessageContainer">
+        <connection-error />
+        <api-error />
+        <flash-message />
+      </div>
       <nuxt />
     </main>
   </div>
@@ -14,6 +16,7 @@
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
+import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 import Sources from '@/lib/sources';
 
 export default {
@@ -22,6 +25,7 @@ export default {
     ConnectionError,
     FlashMessage,
   },
+  mixins: [ErrorMessageMixin],
   head() {
     return {
       htmlAttrs: {
@@ -34,6 +38,11 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    showErrorMessageContainer() {
+      return this.hasConnectionError() || this.hasApiError();
+    },
   },
   created() {
     const { source } = this.$route.query;
@@ -55,4 +64,5 @@ export default {
 
 <style module lang='scss' scoped>
 @import '../style/home';
+@import '../style/throttling/throttling';
 </style>

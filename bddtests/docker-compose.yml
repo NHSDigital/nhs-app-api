@@ -15,6 +15,7 @@ services:
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://10.0.2.2:3000/auth-return
       - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
       - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
+      - GP_LOOKUP_BROTHER_MAILER_URL=http://stubs.local.bitraft.io:8080/brothermailer/signup
       - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/createsession
       - GP_LOOKUP_API_URL=http://stubs.local.bitraft.io:8080/indexes/organisationlookup/docs/search
       - GP_LOOKUP_API_KEY=testnhssearchservicekey
