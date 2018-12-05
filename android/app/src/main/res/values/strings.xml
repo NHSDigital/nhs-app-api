@@ -86,4 +86,28 @@
     <string name="sessionExpiryWarningDurationInformation">Every %d minutes, we log you out for security purposes.</string>
     <string name="sessionExpiryWarningGetMoreTime">Get more time</string>
     <string name="sessionExpiryWarningLogOut">Log out</string>
+
+    <!-- Local fonts -->
+    <string name="frutiger45Light">FrutigerLTW01\-45Light.woff2</string>
+    <string name="frutiger46LightItalic">FrutigerLTW01\-46LightItalic.woff2</string>
+    <string name="frutiger55Roman">FrutigerLTW01\-55Roman.woff2</string>
+    <string name="frutiger56Italic">FrutigerLTW01\-56Italic.woff2</string>
+    <string name="frutiger65Bold">FrutigerLTW01\-65Bold.woff2</string>
+    <string name="frutiger66BoldItalic">FrutigerLTW01\-66BoldItalic.woff2</string>
+    <string name="frutiger75Black">FrutigerLTW01\-75Black.woff2</string>
+    <string name="frutiger76BlackItalic">FrutigerLTW01\-76BlackItalic.woff2</string>
+    <string name="frutiger95UltraBlack">FrutigerLTW01\-95UltraBlack.woff2</string>
+
+
+    <string-array name="fonts">
+        <item>@string/frutiger45Light</item>
+        <item>@string/frutiger46LightItalic</item>
+        <item>@string/frutiger55Roman</item>
+        <item>@string/frutiger56Italic</item>
+        <item>@string/frutiger65Bold</item>
+        <item>@string/frutiger66BoldItalic</item>
+        <item>@string/frutiger75Black</item>
+        <item>@string/frutiger76BlackItalic</item>
+        <item>@string/frutiger95UltraBlack</item>
+    </string-array>
 </resources>

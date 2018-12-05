@@ -2,11 +2,9 @@ package com.nhs.online.nhsonline.webclients
 
 import android.graphics.Bitmap
 import android.os.Handler
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.content.Context
 import android.util.Log
-import android.webkit.CookieManager
+import android.webkit.*
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.R
@@ -16,18 +14,20 @@ import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.services.KnownServices
+import java.io.InputStream
 import java.net.URL
 import java.net.URLDecoder
 import java.util.logging.Logger
 
 private const val DELAY_PROGRESS_SHOW_TIME_MILLISECONDS = 500L
 private const val REQUEST_TIMEOUT_MILLISECONDS = 20 * 1000L
+private const val WOFF2 = "woff2"
 
 class WebClientInterceptor(
-    private val uiInteractor: IInteractor,
-    private val knownServices: KnownServices,
-    private val activities: List<ActivityInterface>,
-    private val context: Context
+        private val uiInteractor: IInteractor,
+        private val knownServices: KnownServices,
+        private val activities: List<ActivityInterface>,
+        private val context: Context
 ) : WebViewClient() {
 
     companion object {
@@ -47,7 +47,7 @@ class WebClientInterceptor(
             return false
         }
 
-        if(url == context.getString(R.string.organDonation)) {
+        if (url == context.getString(R.string.organDonation)) {
             view.loadUrl(context.getString(R.string.organDonationNative))
             return false
         }
@@ -108,10 +108,10 @@ class WebClientInterceptor(
 
     @Suppress("OverridingDeprecatedMember")
     override fun onReceivedError(
-        view: WebView?,
-        errorCode: Int,
-        description: String?,
-        failingUrl: String?
+            view: WebView?,
+            errorCode: Int,
+            description: String?,
+            failingUrl: String?
     ) {
         if (shouldHandleUnavailability(failingUrl)) {
             Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onReceivedError > failingUrl $failingUrl")
@@ -121,6 +121,35 @@ class WebClientInterceptor(
         }
     }
 
+    override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+        if (request == null) {
+            return null
+        }
+
+        val requestUrl = request.url.toString()
+
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Request to Load $requestUrl")
+
+        if (requestUrl.endsWith(WOFF2, ignoreCase = true)) {
+            val fonts = context.resources.getStringArray(R.array.fonts)
+
+            var fontInRequest = fonts.find { requestUrl.contains(it, ignoreCase = true) }
+
+            fontInRequest?.let {
+                Log.d(Application.TAG, "${this::class.java.simpleName}: Loading local font for: $fontInRequest")
+                return loadBundledFont(fontInRequest)
+            }
+        }
+
+        return super.shouldInterceptRequest(view, request)
+    }
+
+    private fun loadBundledFont(font: String): WebResourceResponse {
+        val woff2MimeType = "application/font-woff2"
+
+        val inputStream: InputStream = context.assets.open("fonts/$font")
+        return WebResourceResponse(woff2MimeType, WOFF2, inputStream)
+    }
 
 
     override fun onPageFinished(view: WebView?, url: String?) {
@@ -134,12 +163,12 @@ class WebClientInterceptor(
 
     override fun onPageCommitVisible(view: WebView?, url: String?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageCommitVisible")
-        if(shouldHandleUnavailability(url)){
+        if (shouldHandleUnavailability(url)) {
             uiInteractor.dismissProgressDialog()
         }
 
         if (!shouldShowErrorPage) {
-            if(url == context.resources.getString(R.string.baseURL) +
+            if (url == context.resources.getString(R.string.baseURL) +
                     context.resources.getString(R.string.nhsOnlineRequiredQueries)) {
                 Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageCommitVisible > is Home page")
                 uiInteractor.showHeader()
@@ -147,7 +176,7 @@ class WebClientInterceptor(
             }
 
             uiInteractor.showWebviewScreen()
-            if(!knownServices.isUrlHostSameAsHomeUrlHost(url))
+            if (!knownServices.isUrlHostSameAsHomeUrlHost(url))
                 uiInteractor.announcePageTitle(view?.title)
         }
         super.onPageCommitVisible(view, url)
@@ -159,7 +188,7 @@ class WebClientInterceptor(
             return false
         }
         val matchingKnownService =
-            knownServices.findMatchingKnownService(urlString)
+                knownServices.findMatchingKnownService(urlString)
 
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering shouldHandleUnavailability > url $urlString > ${matchingKnownService != null}")
 
@@ -197,15 +226,15 @@ class WebClientInterceptor(
                     context.resources.getString(R.string.nhs_111_header),
                     context.resources.getString(R.string.conditions_header),
                     context.resources.getString(R.string.symptoms_header) -> uiInteractor.selectNavigationMenuActive(
-                        R.id.symptoms)
+                            R.id.symptoms)
                     context.resources.getString(R.string.appointments_header) -> uiInteractor.selectNavigationMenuActive(
-                        R.id.appointments)
+                            R.id.appointments)
                     context.resources.getString(R.string.prescriptions_header) -> uiInteractor.selectNavigationMenuActive(
-                        R.id.prescriptions)
+                            R.id.prescriptions)
                     context.resources.getString(R.string.my_record_header) -> uiInteractor.selectNavigationMenuActive(
-                        R.id.myRecord)
+                            R.id.myRecord)
                     context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectNavigationMenuActive(
-                        R.id.more)
+                            R.id.more)
                 }
 
                 uiInteractor.setHeaderText(header, headerDescription)
@@ -226,7 +255,7 @@ class WebClientInterceptor(
         }
 
         handler.postDelayed(showDialogFn,
-            DELAY_PROGRESS_SHOW_TIME_MILLISECONDS)
+                DELAY_PROGRESS_SHOW_TIME_MILLISECONDS)
         handler.postDelayed(expireRequestFn, REQUEST_TIMEOUT_MILLISECONDS)
 
     }

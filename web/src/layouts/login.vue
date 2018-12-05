@@ -51,8 +51,10 @@ export default {
       script: [
         {
           src: this.$env.ANALYTICS_SCRIPT_URL,
+          async: true,
         },
       ],
+
     };
   },
   mounted() {
