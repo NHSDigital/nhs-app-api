@@ -12,7 +12,7 @@ import net.serenitybdd.core.Serenity
 
 class PatientVerificationFactoryVision: PatientVerificationFactory("VISION"){
 
-    override fun setSessionExtendMockResponse(expectedResponse: String) {
+    override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
         // Currently no session mocking required for vision
     }
 

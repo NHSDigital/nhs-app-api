@@ -1,6 +1,7 @@
 package features.authentication.factories
 
 import features.sharedSteps.SupplierSpecificFactory
+import models.Patient
 import utils.SerenityHelpers
 
 abstract class PatientVerificationFactory(protected val gpSystem: String)  {
@@ -12,7 +13,7 @@ abstract class PatientVerificationFactory(protected val gpSystem: String)  {
     abstract fun validPatientWithOneNhsNumber()
     abstract fun validPatientWithMultipleNumbers()
     abstract fun validPatientWithNoNhsNumber()
-    abstract fun setSessionExtendMockResponse(expectedResponse: String)
+    abstract fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String)
 
 
     companion object : SupplierSpecificFactory<PatientVerificationFactory>() {

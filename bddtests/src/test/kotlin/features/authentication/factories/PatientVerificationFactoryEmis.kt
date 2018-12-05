@@ -79,30 +79,43 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
 
     }
 
-    override fun setSessionExtendMockResponse(expectedResponse: String) {
+    override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
+
+        mockingClient.forEmis {
+            appointments.practiceSettingsRequest(patient).respondWith(
+                    HttpStatus.SC_OK, resolve = {}, milliSecondDelay = 0)
+        }
+
         when (expectedResponse) {
             "Success" -> {
                 mockingClient.forEmis {
-                    authentication.practiceSettingsRequest(Patient.getDefault(gpSystem)).respondWith(
-                            HttpStatus.SC_OK, resolve = {}, milliSecondDelay = 0)
+                    authentication.demographicsRequest(patient).respondWithSuccess(patient,
+                            patientIdentifiers = arrayOf(
+                                    PatientIdentifier(
+                                            identifierType = IdentifierType.NhsNumber,
+                                            identifierValue = patient.nhsNumbers[0]
+                                    )
+                            )
+                    )
                 }
             }
             "bad gateway" -> {
                 mockingClient.forEmis {
-                    authentication.practiceSettingsRequest(Patient.getDefault(gpSystem)).respondWith(
-                            HttpStatus.SC_BAD_GATEWAY, resolve = {}, milliSecondDelay = 0)
+                    authentication.demographicsRequest(patient)
+                            .respondWithExceptionWhenNotEnabled()
+                            .whenScenarioStateIs("sessionStarted")
                 }
             }
             "gateway timeout" -> {
                 mockingClient.forEmis {
-                    authentication.practiceSettingsRequest(Patient.getDefault(gpSystem)).respondWith(
+                    authentication.demographicsRequest(patient).respondWith(
                             HttpStatus.SC_OK, resolve = {}, milliSecondDelay = 0)
                             .delayedBy(seconds = Duration.ofSeconds(REQUEST_DELAY))
                 }
             }
             "unauthorized" -> {
                 mockingClient.forEmis {
-                    authentication.practiceSettingsRequest(Patient.getDefault(gpSystem))
+                    authentication.demographicsRequest(patient)
                             .respondWith(HttpStatus.SC_UNAUTHORIZED,
                                     resolve = {}, milliSecondDelay = 0)
                 }

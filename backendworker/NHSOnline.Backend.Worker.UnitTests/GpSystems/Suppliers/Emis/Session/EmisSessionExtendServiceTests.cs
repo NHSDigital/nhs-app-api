@@ -38,9 +38,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccessfullyExtended()
         {    
             // Arrange
-            var response = new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK);
+            var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK);
 
-            _mockEmisClient.Setup(x => x.PracticeSettingsGet(It.IsAny<EmisHeaderParameters>(), _userSession.OdsCode))
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -56,9 +56,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public async Task Extend_WhenClientReturnsError_ReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            var response = new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.BadRequest);
+            var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.BadRequest);
 
-            _mockEmisClient.Setup(x => x.PracticeSettingsGet(It.IsAny<EmisHeaderParameters>(), _userSession.OdsCode))
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.PracticeSettingsGet(It.IsAny<EmisHeaderParameters>(), _userSession.OdsCode))
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 

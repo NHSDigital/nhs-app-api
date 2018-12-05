@@ -1,5 +1,6 @@
 package mocking.emis
 
+import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
 import mocking.emis.me.EmisMeApplicationsBuilder
@@ -7,7 +8,6 @@ import mocking.emis.me.EmisMeBuilder
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.models.AddNhsUserRequest
 import mocking.emis.models.AddVerificationRequest
-import mocking.emis.practices.PracticeSettingsBuilderEmis
 import mocking.emis.session.EmisEndUserSessionBuilder
 import mocking.emis.session.EmisSessionBuilder
 import models.Patient
@@ -29,5 +29,7 @@ class EmisMappingBuilderAuthentication(private var configuration: EmisConfigurat
 
     //This is also in my records but for where it is needed it would add confusion if we didn't add
     //the call in here too.
-    fun practiceSettingsRequest(patient: Patient) = PracticeSettingsBuilderEmis(patient)
+    fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration!!,
+            patient.userPatientLinkToken,
+            patient.endUserSessionId, patient.sessionId)
 }

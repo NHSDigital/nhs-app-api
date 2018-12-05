@@ -29,9 +29,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 _logger.LogEnter();
 
                 var emisUserSession = (EmisUserSession) userSession;
-                var headerParams = new EmisHeaderParameters(emisUserSession);
-                var response = await _emisClient.PracticeSettingsGet(headerParams, emisUserSession.OdsCode);
-
+                var response = await _emisClient.DemographicsGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId);
                 if (response.HasSuccessStatusCode)
                 {
                     return new SessionExtendResult.SuccessfullyExtended();
