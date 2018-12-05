@@ -26,16 +26,16 @@ class TppLinkagePOSTBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST"
     }
 
 
-    fun respondWithSuccessfullyCreated(linkage:LinkageInformationFacade): Mapping {
+    fun respondWithSuccessfullyCreated(linkage: LinkageInformationFacade): Mapping {
         val reply = LinkAccountReply(
-                passphrase = "",
+                passphrase = TppMockDefaults.DEFAULT_TPP_PASSPHRASE,
                 uuid = TppMockDefaults.DEFAULT_TPP_UUID,
                 accountId = linkage.accountId,
                 passphraseToLink = "passphraseToLink"
         )
         val body = JSonXmlConverter.toXML(reply)
 
-        return respondWith(HttpStatus.SC_OK){
+        return respondWith(HttpStatus.SC_OK) {
             andXmlBody(body).build()
         }
     }

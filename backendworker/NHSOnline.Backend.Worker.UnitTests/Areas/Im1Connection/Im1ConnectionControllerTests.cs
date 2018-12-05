@@ -13,7 +13,6 @@ using NHSOnline.Backend.Worker.Areas.Im1Connection;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
 
@@ -27,11 +26,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         private const string DefaultPatientIdentifier = "XX00000A";
         private const string DefaultConnectionToken = "b2ed6831-cdd4-4ef7-a9b4-0880c2a35d78";
 
-        private readonly ITokenValidationService _defaultTokenValidationService = new EmisTokenValidationService();
         private Im1ConnectionController _im1ConnectionController;
-        Mock<ILogger<Im1ConnectionController>> _logger;
-        Mock<IAuditor> _auditor;
-
+        private Mock<ILogger<Im1ConnectionController>> _logger;
+        private Mock<IAuditor> _auditor;
+        private Mock<ITokenValidationService> _tokenValidationService;
         private IFixture _fixture;
 
         [TestInitialize]
@@ -41,6 +39,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             _logger = new Mock<ILogger<Im1ConnectionController>>();
             _auditor = new Mock<IAuditor>();
+
+            _tokenValidationService = new Mock<ITokenValidationService>();
+            _tokenValidationService.Setup(x => x.IsValidConnectionTokenFormat(It.IsAny<string>())).Returns(true);
 
             _im1ConnectionController = CreateIm1ConnectionController();
         }
@@ -267,7 +268,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         )
         {
             nhsNumberProvider = nhsNumberProvider ?? MockIm1ConnectionService();
-            tokenValidationService = tokenValidationService ?? _defaultTokenValidationService;
+            tokenValidationService = tokenValidationService ?? _tokenValidationService.Object;
 
             var mockGpSystem = new Mock<IGpSystem>();
             mockGpSystem.Setup(x => x.GetIm1ConnectionService()).Returns(nhsNumberProvider.Object);

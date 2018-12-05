@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "applicationUrl": "http://api.local.bitraft.io:8082/"
+      "applicationUrl": "http://api.local.bitraft.io:8082/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "AUDIT_SINK_TYPE": "FILE",
@@ -37,11 +37,11 @@
         "TPP_APPLICATION_DEVICE_TYPE": "NhsApp",
         "TPP_APPLICATION_LINKACCOUNT_PROVIDER_ID": "4d0c70f301ecc768",
         "TPP_APPLICATION_NAME": "NhsApp",
-        "TPP_APPLICATION_PROVIDER_ID": "b891fc3b51d5e7c1"
+        "TPP_APPLICATION_PROVIDER_ID": "b891fc3b51d5e7c1",
         "TPP_APPLICATION_VERSION": "1.0",
         "TPP_BASE_URL": "https://systmonline2.tpp-uk.com:60015/Patient/",
         "TPP_CERTIFICATE_PASSWORD": "",
-        "TPP_CERTIFICATE_PATH": "./certs/TppNhsTest.pfx",
+        "TPP_CERTIFICATE_PATH": "./certs/TppNhsTest.pfx"
       }
     },
     "NHSOnline.Backend.Worker": {
@@ -64,6 +64,7 @@
         "GP_PROVIDER_ENABLED_MICROTEST": "true",
         "GP_PROVIDER_ENABLED_TPP": "true",
         "GP_PROVIDER_ENABLED_VISION": "true",
+        "IM1CACHE_MONGO_DATABASE_COLLECTION": "im1Cache",
         "NDOP_CERTIFICATE_PASSWORD": "",
         "NDOP_CERTIFICATE_PATH": "",
         "REDIS_ODSLOOKUP_CONFIG": "api.local.bitraft.io:6379",
@@ -73,7 +74,7 @@
         "TPP_API_VERSION": "1",
         "TPP_APPLICATION_DEVICE_TYPE": "NhsApp",
         "TPP_APPLICATION_NAME": "NhsApp",
-        "TPP_APPLICATION_PROVIDER_ID": "b891fc3b51d5e7c1"
+        "TPP_APPLICATION_PROVIDER_ID": "b891fc3b51d5e7c1",
         "TPP_APPLICATION_VERSION": "1.0",
         "TPP_BASE_URL": "https://systmonline2.tpp-uk.com:60015/Patient/",
         "TPP_CERTIFICATE_PASSWORD": "",
@@ -81,8 +82,8 @@
         "VISION_SENDER_USERFULLNAME": "Name",
         "VISION_SENDER_USERIDENTITY": "65489761321654",
         "VISION_SENDER_USERNAME": "Username123123asdas",
-        "VISION_SENDER_USERROLE": "ROSU",
-      },
+        "VISION_SENDER_USERROLE": "ROSU"
+      }
     }
   }
 }

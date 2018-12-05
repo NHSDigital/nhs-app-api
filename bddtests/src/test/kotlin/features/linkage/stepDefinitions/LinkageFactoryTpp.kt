@@ -1,7 +1,6 @@
 package features.linkage.stepDefinitions
 
 import features.linkage.LinkageResult
-import mocking.defaults.TppMockDefaults
 import mocking.models.Mapping
 import mocking.tpp.linkage.TppLinkageGETBuilder
 import mocking.tpp.linkage.TppLinkagePOSTBuilder
@@ -12,14 +11,14 @@ import models.Patient
 class LinkageFactoryTpp:  LinkageFactory("TPP") {
 
     override val validLinkageDetails = LinkageInformationFacade(
-            odsCode =  TppMockDefaults.DEFAULT_ODS_CODE_TPP,
-            linkageKey = "passphraseToLink",
-            accountId = "123456",
+            odsCode =  patient.odsCode,
+            linkageKey = patient.linkageKey,
+            accountId = patient.accountId,
             nhsNumber = "3434234345",
             identityToken = "abc",
             emailAddress = "ab@cd.com",
             surname = "Thompson",
-            dateOfBirth = "01-05-2000")
+            dateOfBirth = "2000-01-01")
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
                                        linkageResult: LinkageResult) {

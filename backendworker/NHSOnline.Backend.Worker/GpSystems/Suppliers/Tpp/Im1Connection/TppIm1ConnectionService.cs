@@ -13,16 +13,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
     public class TppIm1ConnectionService : IIm1ConnectionService
     {
         private readonly ITppClient _tppClient;
-        private readonly IRegistrationCacheService _registrationCacheService;
-        private readonly IRegistrationGuidKeyGenerator _registrationGuidKeyGenerator;
+        private readonly IIm1CacheService _im1CacheService;
+        private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
         private readonly ILogger<TppIm1ConnectionService> _logger;
 
-        public TppIm1ConnectionService(ITppClient tppClient, IRegistrationCacheService registrationCacheService,
-            IRegistrationGuidKeyGenerator registrationGuidKeyGenerator, ILogger<TppIm1ConnectionService> logger)
+        public TppIm1ConnectionService(ITppClient tppClient, IIm1CacheService im1CacheService,
+            IIm1CacheKeyGenerator im1CacheKeyGenerator, ILogger<TppIm1ConnectionService> logger)
         {
             _tppClient = tppClient;
-            _registrationCacheService = registrationCacheService;
-            _registrationGuidKeyGenerator = registrationGuidKeyGenerator;
+            _im1CacheService = im1CacheService;
+            _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _logger = logger;
         }
 
@@ -82,9 +82,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                 };
 
                 _logger.LogInformation("Checking Cache for AccessIdentityGuid");
-                var key = _registrationGuidKeyGenerator.GenerateRegistrationKey(
+                var key = _im1CacheKeyGenerator.GenerateCacheKey(
                     request.AccountId, request.OdsCode, request.LinkageKey);
-                var connectionTokenOption = await _registrationCacheService.GetRegistrationToken<TppConnectionToken>(key);
+                var connectionTokenOption = await _im1CacheService.GetIm1ConnectionToken<TppConnectionToken>(key);
 
                 TppConnectionToken connectionToken;
 
@@ -117,11 +117,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                         return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                     }
 
-                    connectionToken = new TppConnectionToken()
+                    connectionToken = new TppConnectionToken
                     {
                         AccountId = linkAccountRequest.AccountId,
                         Passphrase = linkAccountReply.Body.Passphrase,
-                        ProviderId = linkAccountReply.Body.ProviderId
+                        ProviderId = linkAccountReply.Body.ProviderId,
+                        Im1CacheKey = key
                     };
                 }
 

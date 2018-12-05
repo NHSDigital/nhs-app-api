@@ -1,6 +1,6 @@
 using System;
-using System.Security.Authentication;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -10,11 +10,29 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Support.Session
 {
+    public interface IMongoSessionCacheServiceConfig
+    {
+        string MongoDatabaseName { get; }
+        string MongoDatabaseIm1CollectionName { get; }
+    }
+
+    public class MongoSessionCacheServiceConfig : IMongoSessionCacheServiceConfig
+    {
+        public string MongoDatabaseName { get; }
+        public string MongoDatabaseIm1CollectionName { get; }
+
+        public MongoSessionCacheServiceConfig(IConfiguration configuration, ILogger<MongoSessionCacheServiceConfig> logger)
+        {
+            MongoDatabaseName = configuration.GetOrThrow("SESSION_MONGO_DATABASE_NAME", logger);
+            MongoDatabaseIm1CollectionName = configuration.GetOrThrow("SESSION_MONGO_DATABASE_COLLECTION", logger);
+        }
+    }
+
     public class MongoSessionCacheService : ISessionCacheService
     {
         private static IMongoClient _mongoClient;
-        private static string _sessionDbName;
-        private static string _sessionDbCollection;
+        private static string _databaseName;
+        private static string _collectionName;
         
         private readonly ICipherService _cipherService;
         private readonly JsonSerializerSettings _serializerSettings;
@@ -23,12 +41,11 @@ namespace NHSOnline.Backend.Worker.Support.Session
         public MongoSessionCacheService(
             ICipherService cipherService,
             ILogger<MongoSessionCacheService> logger,
-            IMongoSessionCacheServiceConfig configuration
+            IMongoClient mongoClient,
+            IMongoSessionCacheServiceConfig config
             )
         {
-            _sessionDbName = configuration.SessionMongoDatabaseName;
-            _sessionDbCollection = configuration.SessionMongoDatabaseCollection;
-            _mongoClient = BuildMongoClient(configuration);
+            _mongoClient = mongoClient;
             
             _cipherService = cipherService;
             _serializerSettings = new JsonSerializerSettings
@@ -37,6 +54,9 @@ namespace NHSOnline.Backend.Worker.Support.Session
             };
 
             _logger = logger;
+
+            _databaseName = config.MongoDatabaseName;
+            _collectionName = config.MongoDatabaseIm1CollectionName;
         }
 
         public async Task<string> CreateUserSession(UserSession userSession)
@@ -44,7 +64,6 @@ namespace NHSOnline.Backend.Worker.Support.Session
             try
             {
                 _logger.LogEnter(nameof(CreateUserSession));
-                var collection = GetMongoCollection();
 
                 var sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
                 sessionObject = _cipherService.Encrypt(sessionObject);
@@ -54,7 +73,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
 
                 using (_logger.WithTimer("Add session to Mongo"))
                 {
-                    await collection.InsertOneAsync(update);
+                    await GetCollection().InsertOneAsync(update);
                 }
 
                 userSession.Key = sessionKey;
@@ -72,14 +91,13 @@ namespace NHSOnline.Backend.Worker.Support.Session
             {
                 _logger.LogEnter(nameof(GetUserSession));
 
-                var collection = GetMongoCollection();
                 var filter = new BsonDocument(GetId(sessionId));
                 var update = new BsonDocument( "$set", new BsonDocument(GetCurrentTimestamp()) );
 
                 BsonDocument sessionValue;
                 using (_logger.WithTimer("Get session from Mongo"))
                 {
-                    sessionValue = await collection.FindOneAndUpdateAsync(filter,update);
+                    sessionValue = await GetCollection().FindOneAndUpdateAsync(filter,update);
                 }
                 if (sessionValue == null)
                 {
@@ -106,13 +124,11 @@ namespace NHSOnline.Backend.Worker.Support.Session
             {
                 _logger.LogEnter(nameof(DeleteUserSession));
 
-                var collection = GetMongoCollection();
                 var filter = new BsonDocument(GetId(sessionId));
-
 
                 using (_logger.WithTimer("Delete session in Mongo"))
                 {
-                    var result = await collection.DeleteOneAsync(filter);
+                    var result = await GetCollection().DeleteOneAsync(filter);
                     return result.IsAcknowledged;
                 }
             }
@@ -127,7 +143,6 @@ namespace NHSOnline.Backend.Worker.Support.Session
             try
             {
                 _logger.LogEnter(nameof(UpdateUserSession));
-                var collection = GetMongoCollection();
 
                 var sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
                 sessionObject = _cipherService.Encrypt(sessionObject);
@@ -136,7 +151,7 @@ namespace NHSOnline.Backend.Worker.Support.Session
 
                 using (_logger.WithTimer("Update Mongo session"))
                 {
-                    await collection.UpdateOneAsync(filter, update);
+                    await GetCollection().UpdateOneAsync(filter, update);
                 }
             }
             finally
@@ -144,31 +159,10 @@ namespace NHSOnline.Backend.Worker.Support.Session
                 _logger.LogExit(nameof(UpdateUserSession));
             }
         }
-        
-        protected MongoClient BuildMongoClient(IMongoSessionCacheServiceConfig configuration)
+
+        private static IMongoCollection<BsonDocument> GetCollection()
         {
-            var settings = new MongoClientSettings
-            {
-                Server = new MongoServerAddress(configuration.SessionMongoDatabaseHost,
-                    configuration.SessionMongoDatabasePort)
-            };
-
-            if (!string.IsNullOrEmpty(configuration.SessionMongoDatabaseUsername))
-            {
-                settings.UseSsl = true;
-                settings.SslSettings = new SslSettings { EnabledSslProtocols = SslProtocols.Tls12 };
-
-                MongoIdentity identity = new MongoInternalIdentity(_sessionDbName, configuration.SessionMongoDatabaseUsername);
-                MongoIdentityEvidence evidence = new PasswordEvidence(configuration.SessionMongoDatabasePassword);
-                settings.Credential = new MongoCredential("SCRAM-SHA-1", identity, evidence);
-            }
-
-            return new MongoClient(settings);
-        }
-
-        private static IMongoCollection<BsonDocument> GetMongoCollection()
-        {
-            return _mongoClient.GetDatabase(_sessionDbName).GetCollection<BsonDocument>(_sessionDbCollection);
+            return _mongoClient.GetDatabase(_databaseName).GetCollection<BsonDocument>(_collectionName);
         }
 
         private static BsonElement GetId(string id)

@@ -2,7 +2,7 @@ package mocking.defaults.dataPopulation.journies.session
 
 import config.Config
 import mocking.MockingClient
-import mocking.citizenId.models.signingKeys.SuceededResponse
+import mocking.citizenId.models.signingKeys.SucceededResponse
 import models.Patient
 
 class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
@@ -27,7 +27,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
         mockingClient.forCitizenId {
             signingKeyRequest()
-                    .respondWithSuccess(SuceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
+                    .respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
 
         mockingClient.forCitizenId {
@@ -56,7 +56,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
         mockingClient.forCitizenId {
             signingKeyRequest()
-                    .respondWithSuccess(SuceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
+                    .respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
 
         mockingClient.forCitizenId {

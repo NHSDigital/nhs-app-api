@@ -22,8 +22,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
     {
         private IFixture _fixture;
         private Mock<ITppClient> _tppClient;
-        private Mock<IRegistrationGuidKeyGenerator> _mockRegistrationGuidKeyGenerator;
-        private Mock<IRegistrationCacheService> _mockRegistrationCacheService;
+        private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
+        private Mock<IIm1CacheService> _mockIm1CacheService;
         private Mock<ITppLinkageMapper> _mockLinkageMapper;
         private TppLinkageService _systemUnderTest;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
@@ -34,8 +34,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
-            _mockRegistrationGuidKeyGenerator = _fixture.Freeze<Mock<IRegistrationGuidKeyGenerator>>();
-            _mockRegistrationCacheService = _fixture.Freeze<Mock<IRegistrationCacheService>>();
+            _mockIm1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
+            _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockLinkageMapper = _fixture.Freeze<Mock<ITppLinkageMapper>>();
 
 
@@ -86,14 +86,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
                 .ReturnsAsync(userResponse);
 
             string key = "CACHEKEY";
-            _mockRegistrationGuidKeyGenerator
-                .Setup(x => x.GenerateRegistrationKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _mockIm1CacheKeyGenerator
+                .Setup(x => x.GenerateCacheKey(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(key)
                 .Verifiable();
 
-            _mockRegistrationCacheService
-                .Setup(x => x.CreateRegistrationToken(key, It.IsAny<TppConnectionToken>()))
-                .ReturnsAsync("ENCRYPTED KEY")
+            _mockIm1CacheService
+                .Setup(x => x.SaveIm1ConnectionToken(key, It.IsAny<TppConnectionToken>()))
+                .Returns(Task.CompletedTask)
                 .Verifiable();
 
             _mockLinkageMapper
@@ -111,8 +111,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
             successResult.Response.OdsCode.Should().Be(request.OdsCode);
             successResult.Response.AccountId.Should().Be(nhsUserResponse.AccountId);
             successResult.Response.LinkageKey.Should().Be(linkageResponse.LinkageKey);
-            _mockRegistrationGuidKeyGenerator.Verify();
-            _mockRegistrationCacheService.Verify();
+            _mockIm1CacheKeyGenerator.Verify();
+            _mockIm1CacheService.Verify();
             _mockLinkageMapper.Verify();
         }
 

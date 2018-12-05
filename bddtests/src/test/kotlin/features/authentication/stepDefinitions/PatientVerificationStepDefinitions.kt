@@ -116,6 +116,7 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
     @When("I verify patient data")
     fun whenIVerifyPatientData() {
         val connectionToken = sessionVariableCalled<String>("ConnectionToken")
+
         val odsCode = sessionVariableCalled<String>("NationalPracticeCode")
 
         try {
@@ -139,15 +140,15 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
         val expectedNhsNumbers = nhsNumbers.map {
             number -> Patient.formatNHSNumber(number.identifierValue!!) }
                 .toTypedArray()
-        Assert.assertEquals(resultNhsNumbers.count(), nhsNumbers.count())
+        Assert.assertEquals(nhsNumbers.count(), resultNhsNumbers.count())
         Assert.assertArrayEquals("Expected NHS Numbers", expectedNhsNumbers, resultNhsNumbers)
-        Assert.assertEquals(result.connectionToken, connectionToken)
+        Assert.assertEquals(connectionToken, result.connectionToken)
     }
 
     @Then("I receive no NHS Number")
     fun thenIReceiveNoNhsNumber() {
         val result = sessionVariableCalled<Im1ConnectionResponse>(Im1ConnectionResponse::class)
         Assert.assertNotNull("IM1 connection response expected, but was null", result)
-        Assert.assertEquals(result.nhsNumbers!!.count(), 0)
+        Assert.assertEquals(0, result.nhsNumbers!!.count()) 
     }
 }

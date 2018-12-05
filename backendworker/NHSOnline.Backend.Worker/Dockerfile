@@ -94,6 +94,7 @@ ENV NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
 ENV NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
 ENV STUB_TERMS_AND_CONDITIONS false
 ENV BACKENDWORKER_RUNMODE none
+ENV IM1CACHE_MONGO_DATABASE_COLLECTION im1cache
 
 WORKDIR /app
 EXPOSE $PORT

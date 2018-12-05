@@ -3,7 +3,7 @@ package mocking.stubs
 import config.Config
 import mocking.MockingClient
 import mocking.citizenId.models.TokenRequest
-import mocking.citizenId.models.signingKeys.SuceededResponse
+import mocking.citizenId.models.signingKeys.SucceededResponse
 import models.Patient
 
 class CitizenIdStubs(private val mockingClient: MockingClient) {
@@ -29,7 +29,7 @@ class CitizenIdStubs(private val mockingClient: MockingClient) {
 
         mockingClient.forCitizenId {
             signingKeyRequest()
-                    .respondWithSuccess(SuceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
+                    .respondWithSuccess(SucceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
 
         mockingClient.forCitizenId {

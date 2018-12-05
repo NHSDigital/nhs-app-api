@@ -4,15 +4,19 @@ Feature: Linkage Post Key
   As CID I want to be able to check if a linkage key exists for a user
   or request a linkage key is created for a user
 
-  Scenario: Linkage request POST for EMIS returns success with LinkageResponse
+  Scenario: Linkage request POST for EMIS returns success with LinkageResponse and an Im1 Connection Token is cached
     Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
+    And no IM1 Connection Token is currently cached
     When I call the EMIS Linkage POST endpoint
     Then I receive a valid linkage response
+    And the IM1 Connection Token is in the cache
 
-  Scenario: Linkage request POST for TPP returns success with LinkageResponse
+  Scenario: Linkage request POST for TPP returns success with LinkageResponse and an Im1 Connection Token is cached
     Given I have valid TPP linkage details
+    And no IM1 Connection Token is currently cached
     When I call the TPP Linkage POST endpoint
     Then I receive a valid linkage response
+    And the IM1 Connection Token is in the cache
 
   Scenario Outline: Linkage request POST for <GP System> returns 400 Bad Request, invalid OdsCode
     Given I have valid <GP System> linkage details apart from a not found OdsCode

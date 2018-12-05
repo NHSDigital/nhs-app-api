@@ -104,7 +104,7 @@ open class LinkageStepDefinitions {
     @Given("^I have valid (.*) linkage details but I'm not registered at the practice$")
     fun imNotRegisteredAtThePractice(gpSystem: String) {
         val linkage = validLinkage(gpSystem)
-        setLinkageInformation(linkage,LinkageResult.PatientNotRegisteredAtPractice)
+        setLinkageInformation(linkage, LinkageResult.PatientNotRegisteredAtPractice)
     }
 
     @Given("^I have valid (.*) linkage details but I am not found on the GP system$")
@@ -182,10 +182,10 @@ open class LinkageStepDefinitions {
         try {
             val linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .authentication.postLinkageKey(CreateLinkageRequest(
-                            linkage.odsCode,
-                            linkage.nhsNumber,
-                            linkage.identityToken,
-                            linkage.emailAddress,
+                    linkage.odsCode,
+                    linkage.nhsNumber,
+                    linkage.identityToken,
+                    linkage.emailAddress,
                     linkage.dateOfBirth,
                     linkage.surname))
 

@@ -19,23 +19,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
         private readonly IEmisClient _emisClient;
         private readonly IEmisLinkageMapper _emisLinkageMapper;
         private readonly IEmisSessionService _emisSessionService;
-        private readonly IRegistrationGuidKeyGenerator _emisRegistrationGuidKeyGenerator;
-        private readonly IRegistrationCacheService _registrationCacheService;
+        private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
+        private readonly IIm1CacheService _im1CacheService;
 
         public EmisLinkageService(
             ILoggerFactory loggerFactory,
             IEmisClient emisClient,
             IEmisLinkageMapper emisLinkageMapper,
             IEmisSessionService emisSessionService,
-            IRegistrationGuidKeyGenerator registrationGuidKeyGenerator,
-            IRegistrationCacheService registrationCacheService)
+            IIm1CacheKeyGenerator im1CacheKeyGenerator,
+            IIm1CacheService im1CacheService)
         {
             _emisClient = emisClient;
             _emisLinkageMapper = emisLinkageMapper;
             _logger = loggerFactory.CreateLogger<EmisLinkageService>();
             _emisSessionService = emisSessionService;
-            _emisRegistrationGuidKeyGenerator = registrationGuidKeyGenerator;
-            _registrationCacheService = registrationCacheService;
+            _im1CacheKeyGenerator = im1CacheKeyGenerator;
+            _im1CacheService = im1CacheService;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
@@ -143,10 +143,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
 
         private async Task StoreAccessGuidInCache(LinkageResponse linkage, AddNhsUserResponse addNhsUserResponse)
         {
-            var key = _emisRegistrationGuidKeyGenerator.GenerateRegistrationKey(
+            var key = _im1CacheKeyGenerator.GenerateCacheKey(
                     linkage.AccountId, linkage.OdsCode, linkage.LinkageKey);
 
-            await _registrationCacheService.CreateRegistrationToken(key, addNhsUserResponse.AccessIdentityGuid);
+            var connectionToken = new EmisConnectionToken
+            {
+                AccessIdentityGuid = addNhsUserResponse.AccessIdentityGuid.ToString(),
+                Im1CacheKey = key
+            };
+
+            await _im1CacheService.SaveIm1ConnectionToken(key, connectionToken);
         }
 
         private async Task<EmisApiObjectResponse<AddVerificationResponse>> GetLinkageKeyResponse(string nhsNumber, string odsCode, string identityToken, string endUserSessionId)

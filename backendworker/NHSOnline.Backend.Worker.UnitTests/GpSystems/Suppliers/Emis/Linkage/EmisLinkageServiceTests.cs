@@ -25,8 +25,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
         private Mock<IEmisLinkageMapper> _emisLinkageMapper;
         private Mock<IEmisSessionService> _emisSessionService;
         private IFixture _fixture;
-        private Mock<IRegistrationGuidKeyGenerator> _mockRegistrationGuidKeyGenerator;
-        private Mock<IRegistrationCacheService> _mockRegistrationCacheService;
+        private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
+        private Mock<IIm1CacheService> _mockIm1CacheService;
         
         [TestInitialize]
         public void TestInitialize()
@@ -36,8 +36,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisLinkageMapper = _fixture.Freeze<Mock<IEmisLinkageMapper>>();
             _emisSessionService = _fixture.Freeze<Mock<IEmisSessionService>>();
-            _mockRegistrationGuidKeyGenerator = _fixture.Freeze<Mock<IRegistrationGuidKeyGenerator>>();
-            _mockRegistrationCacheService = _fixture.Freeze<Mock<IRegistrationCacheService>>();
+            _mockIm1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
+            _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _systemUnderTest = _fixture.Create<EmisLinkageService>();
         }
 
@@ -271,15 +271,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
                     .Verifiable();
             
             const string key = "Key";
-            _mockRegistrationGuidKeyGenerator.Setup(x => x.GenerateRegistrationKey(
+            _mockIm1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
                     It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(key).Verifiable();
 
-            
-            _mockRegistrationCacheService.Setup(x => x.CreateRegistrationToken(key, addNhsUserResponse.AccessIdentityGuid))
-                .Returns(Task.FromResult(
-                    "Encrypted key"
-                )).Verifiable();
+            _mockIm1CacheService
+                .Setup(x => x.SaveIm1ConnectionToken(key,
+                    It.Is<EmisConnectionToken>(ct => ct.Im1CacheKey.Equals(key,
+                                                         StringComparison.Ordinal) &&
+                                                     ct.AccessIdentityGuid.Equals(
+                                                         addNhsUserResponse.AccessIdentityGuid.ToString(),
+                                                         StringComparison.Ordinal))))
+                .Returns(Task.FromResult("Encrypted key"))
+                .Verifiable();
 
             // Act
             var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
@@ -291,8 +295,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             var successResult = (LinkageResult.SuccessfullyCreated)result;
             successResult.Response.Should().NotBeNull();
             successResult.Response.OdsCode.Should().Be(createLinkageRequest.OdsCode);
-            _mockRegistrationGuidKeyGenerator.Verify();
-            _mockRegistrationCacheService.Verify(x => x.CreateRegistrationToken(key, addNhsUserResponse.AccessIdentityGuid));
+            _mockIm1CacheKeyGenerator.Verify();
+            _mockIm1CacheService.Verify();
         }
 
         [TestMethod]

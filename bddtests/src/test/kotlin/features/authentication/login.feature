@@ -21,9 +21,18 @@ Feature: Login
       | GP System |
       | EMIS      |
       | TPP       |
-  @pending @NHSO-2522
+  @tech-debt  @NHSO-3046
     Examples:
       | GP System |
+      | VISION    |
+
+  Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key
+    Given I am logged in as a <GP System> user created before Im1 Cache Keys existed
+    Then I see a welcome message
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
       | VISION    |
 
 
@@ -91,6 +100,43 @@ Feature: Login
     Given I attempt to log in as a <GP System> user that is 13
     Then I see the home page
     Examples:
-      | GP System   |
-      | EMIS        |
-      | TPP         |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  @backend
+  Scenario: Logging in with a cached Im1 Connection Token for an EMIS user will remove that token from the cache
+    Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
+    And no IM1 Connection Token is currently cached
+    And I call the EMIS Linkage POST endpoint
+    And I have posted the IM1 Connection Token
+    When I have logged in with the user associated with the IM1 Connection Token
+    Then the IM1 Connection Token is no longer in the cache
+
+  @backend
+  Scenario: Logging in with a cached Im1 Connection Token for a TPP user will remove that token from the cache
+    Given I have valid TPP linkage details
+    And no IM1 Connection Token is currently cached
+    And I call the TPP Linkage POST endpoint
+    And I have posted the IM1 Connection Token
+    When I have logged in with the user associated with the IM1 Connection Token
+    Then the IM1 Connection Token is no longer in the cache
+
+  @backend
+  @pending  @NHSO-2857
+  Scenario: Logging in as a different EMIS user after an Im1 Connection Token is cached won't remove that token
+    Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
+    And no IM1 Connection Token is currently cached
+    And I call the EMIS Linkage POST endpoint
+    When I have logged into EMIS and have a valid session cookie
+    Then the IM1 Connection Token is in the cache
+
+  @backend
+  @pending  @NHSO-2857
+  Scenario: Logging in as a different TPP user after an Im1 Connection Token is cached won't remove that token
+    Given I have valid TPP linkage details
+    And no IM1 Connection Token is currently cached
+    And I call the TPP Linkage POST endpoint
+    When I have logged into TPP and have a valid session cookie
+    Then the IM1 Connection Token is in the cache
+

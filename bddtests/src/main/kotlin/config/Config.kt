@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import java.net.URI
 
 private const val SESSION_EXPIRY_MINUTES: Long = 3
+private const val MONGODB_DEFAULT_PORT: Long = 27017L
 
 class Config private constructor() {
 
@@ -38,6 +39,9 @@ class Config private constructor() {
     var sessionExpiryMinutes: Long
     val showPageSourceForXPathQuery: String
     val gpLookupApiKey: String
+
+    val mongoDbHost: String
+    val mongoDbPort: Long
 
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
@@ -79,6 +83,9 @@ class Config private constructor() {
         dataPreferencesPath = "/ndop/createsession"
         dataPreferencesUrl = envOrDefault("DATA_PREFERENCES_URL", dataPreferencesHost + dataPreferencesPath)
 
+        mongoDbHost = envOrDefault("SESSION_MONGO_DATABASE_HOST", "127.0.0.1")
+        mongoDbPort = envOrDefault("SESSION_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
+
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
     }
 
@@ -88,10 +95,9 @@ class Config private constructor() {
     }
 
     private fun envOrDefault(key: String, defaultValue: Long): Long {
-        val result = (System.getenv(key)?.toLong() ?: defaultValue)
-                .also { println("$key set as $it") }
 
-        return result
+        return (System.getenv(key)?.toLong() ?: defaultValue)
+                .also { println("$key set as $it") }
     }
 
     companion object {

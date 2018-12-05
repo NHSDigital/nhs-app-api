@@ -18,19 +18,19 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String)
                             redirectUri: String,
                             clientId: String,
                             customMatcher: String? = null) = InitialLoginRequestBuilder(
-            patient, redirectUri, clientId,customMatcher)
+            patient, redirectUri, clientId, customMatcher)
 
     fun createAccountRequest(redirectUri: String = Config.instance.cidRedirectUri,
                              clientId: String = Config.instance.cidClientId) =
             AccountRegistrationRequestBuilder(redirectUri, clientId)
 
     fun completeLoginRequest(patient: Patient = EmisMockDefaults.patientEmis,
-                             customIdForPatient: String?= null) = CompleteLoginRequestBuilder(
+                             customIdForPatient: String? = null) = CompleteLoginRequestBuilder(
             patient, customIdForPatient)
 
     fun tokenRequest(codeVerifier: String, authCode: String? = null,
-                     customTokenRequest:TokenRequest?=null) = TokenRequestBuilder(
-            codeVerifier, authCode,customTokenRequest)
+                     customTokenRequest: TokenRequest? = null) = TokenRequestBuilder(
+            codeVerifier, authCode, customTokenRequest)
 
     fun signingKeyRequest() = SigningKeysRequestBuilder()
 }

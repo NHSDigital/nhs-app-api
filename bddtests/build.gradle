@@ -14,6 +14,7 @@ buildscript {
     ext.kotlin_version = '1.2.71'
     ext.serenity_version = '2.0.8'
     ext.detekt_version = '1.0.0.RC8'
+    ext.mongodb_version = '3.9.0'
     repositories {
 //        maven {
 //            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
@@ -67,6 +68,7 @@ dependencies {
     compile "org.assertj:assertj-core:3.8.0"
     compile 'com.neovisionaries:nv-websocket-client:2.6'
     compile group: 'redis.clients', name: 'jedis', version: '2.9.0'
+    compile "org.mongodb:mongo-java-driver:$mongodb_version"
 }
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

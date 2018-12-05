@@ -12,39 +12,41 @@ import mocking.emis.demographics.Sex
 import mocking.vision.VisionMockDefaults
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
+import worker.models.patient.Im1ConnectionToken
 import worker.models.session.UserSessionRequest
 
 data class Patient(
-        val title:String = "",
-        val firstName:String = "",
-        val surname:String = "",
+        val title: String = "",
+        val firstName: String = "",
+        val surname: String = "",
         val callingName: String = "",
-        val dateOfBirth:String = "",
+        val dateOfBirth: String = "",
         val sex: Sex = Sex.NotSpecified,
         val contactDetails: ContactDetails = ContactDetails(),
         val address: Address = Address(),
-        val accountId:String = "",
-        val odsCode:String = "",
-        val connectionToken:String = "",
-        val sessionId:String = "",
-        val endUserSessionId:String = "",
-        val linkageKey:String = "",
-        val userPatientLinkToken:String = "",
+        val accountId: String = "",
+        val odsCode: String = "",
+        val connectionToken: String = "",
+        val sessionId: String = "",
+        val endUserSessionId: String = "",
+        val linkageKey: String = "",
+        val userPatientLinkToken: String = "",
         val nhsNumbers: List<String> = emptyList(),
         val patientId: String = "",
         val passphrase: String = "",
         val onlineUserId: String = "",
         val rosuAccountId: String = "",
         val apiKey: String = "",
-        val cidUserSession: UserSessionRequest= UserSessionRequest(
+        val cidUserSession: UserSessionRequest = UserSessionRequest(
                 authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPS" +
-                           "ETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-76" +
-                           "57b5e9e403.8d4c0a21-6483-4a52-9d47" +
-                           "-6bcd737c634e",
+                        "ETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-76" +
+                        "57b5e9e403.8d4c0a21-6483-4a52-9d47" +
+                        "-6bcd737c634e",
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
                 redirectUrl = Config.instance.cidRedirectUri),
-        val accessToken: String ="access_token",
-        val tppUserSession: TppUserSession? = null
+        val accessToken: String = "access_token",
+        val tppUserSession: TppUserSession? = null,
+        val im1ConnectionTokenAsJson: Im1ConnectionToken? = null
 ) {
 
     fun formattedDateOfBirth(): String {
@@ -55,7 +57,7 @@ data class Patient(
     }
 
     fun formattedFullName(): String {
-        val fullName = "$title $firstName $surname";
+        val fullName = "$title $firstName $surname"
         return fullName.trim()
     }
 
@@ -151,6 +153,12 @@ data class Patient(
                 userPatientLinkToken = "DbLYlUrwyGpgZ65Mlk6601"
         )
 
+        val montelFryeIm1ConnectionToken = Im1ConnectionToken(
+                "zL7i405lQKsEjB8201inpU0A17qCNETe30VPzP3anHXWd2Da9LQ/lfo6XHxq" +
+                        "/redv0kOktvHpl5+fFsxBNHAog==",
+                accessIdentityGuid = "7a3a3cf8-a797-4fcc-a4b9-629cdbe104fc"
+        )
+
         val montelFrye = Patient(
                 title = "Mr",
                 firstName = "Montel",
@@ -160,12 +168,13 @@ data class Patient(
                 contactDetails = defaultContactDetails,
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "2jM47sZ0ic4FIAcVogI4WI",
-                connectionToken = "7a3a3cf8-a797-4fcc-a4b9-629cdbe104fc",
+                connectionToken = montelFryeIm1ConnectionToken.accessIdentityGuid!!,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 nhsNumbers = listOf("0968764215"),
                 accountId = "4140044939",
                 linkageKey = "vVGO8bgV6fvPb",
-                userPatientLinkToken = "gpSWtREiH9499bPzix8v5b"
+                userPatientLinkToken = "gpSWtREiH9499bPzix8v5b",
+                im1ConnectionTokenAsJson = montelFryeIm1ConnectionToken
         )
 
         val picaJones = Patient(
@@ -202,6 +211,18 @@ data class Patient(
 
         ////////// TPP PATIENTS /////////////
 
+        val kevinBarryIm1ConnectionToken = Im1ConnectionToken(
+                "6pqW/zJEGD5kZ7Zo9J8z1qeIi8LgU7kibAU40CtvjIjWcmQlELqVGhrDZBiAmogsR6LAy9CM4rKVn9nxWrCYmw==",
+                accountId = "520993083",
+                passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgL" +
+                        "k0NFY15hIdI6aRytptqiBs6r/k+0Ov" +
+                        "GEZfcEdMLJEMp/J4pkOGm2ViaSLca" +
+                        "49ODQzz4y+Cu2xOxLaehq/SjEIwfls" +
+                        "WeSwCvCAxroId1bXejTdNsV17fOAD0" +
+                        "M5nAZF6X9TysOfRR/j5tuR+o=",
+                providerId = TppMockDefaults.DEFAULT_TPP_PROVIDER_ID
+        )
+
         val kevinBarry = Patient(
                 title = "Mr",
                 firstName = "Kevin",
@@ -219,16 +240,11 @@ data class Patient(
                 contactDetails = defaultContactDetails,
                 odsCode = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                 nhsNumbers = listOf("5785445875"),
-                linkageKey = "?2sY3qyZp5gRB8*b",
-                accountId = "520993083",
+                linkageKey = "passphraseToLink",
+                accountId = kevinBarryIm1ConnectionToken.accountId!!,
                 patientId = "84df400000000000",
                 onlineUserId = "84df400000000000",
-                passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgL" +
-                        "k0NFY15hIdI6aRytptqiBs6r/k+0Ov" +
-                        "GEZfcEdMLJEMp/J4pkOGm2ViaSLca" +
-                        "49ODQzz4y+Cu2xOxLaehq/SjEIwfls" +
-                        "WeSwCvCAxroId1bXejTdNsV17fOAD0" +
-                        "M5nAZF6X9TysOfRR/j5tuR+o=",
+                passphrase = kevinBarryIm1ConnectionToken.passphrase!!,
                 connectionToken = TppMockDefaults.DEFAULT_TPP_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 tppUserSession = TppUserSession("ZT8wLjK6beFO" +
@@ -240,10 +256,17 @@ data class Patient(
                         "4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
                         "84df400000000000",
                         TppMockDefaults.DEFAULT_ODS_CODE_TPP,
-                        "84df400000000000")
+                        "84df400000000000"),
+                im1ConnectionTokenAsJson = kevinBarryIm1ConnectionToken
         )
 
         ////////// VISION PATIENTS /////////////
+        val adreynCanonIm1ConnectionToken = Im1ConnectionToken(
+                rosuAccountId = "104969",
+                apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnh" +
+                        "vfph76g2h6p9gywjq484c9ghan8tt"
+        )
+
         val aderynCanon = Patient(
                 title = "Mr",
                 firstName = "Aderyn",
@@ -265,12 +288,12 @@ data class Patient(
                         "ApiKey\":\"h4h9869kj3ytz6427y7" +
                         "rctkdy3zkpxcncnhvfph76g2h6p9" +
                         "gywjq484c9ghan8tt\"}",
-                rosuAccountId = "104969",
-                apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnh" +
-                        "vfph76g2h6p9gywjq484c9ghan8tt",
+                rosuAccountId = adreynCanonIm1ConnectionToken.rosuAccountId!!,
+                apiKey = adreynCanonIm1ConnectionToken.apiKey!!,
                 patientId = "1017",
                 accountId = "104969",
-                linkageKey = "kWWG9kHfNMSjm"
+                linkageKey = "kWWG9kHfNMSjm",
+                im1ConnectionTokenAsJson = adreynCanonIm1ConnectionToken
         )
 
 
@@ -278,7 +301,7 @@ data class Patient(
             val number = nhsNumber.trim().replace(" ", "")
 
             return when {
-                number.isNullOrEmpty() -> ""
+                number.isEmpty() -> ""
                 number.length != lengthOfNHSNumber -> number
                 else -> "${number.substring(firstNHSNumberIndex, firstNHSNumberFormattingBreak)} " +
                         "${number.substring(firstNHSNumberFormattingBreak, secondNHSNumberFormattingBreak)} " +

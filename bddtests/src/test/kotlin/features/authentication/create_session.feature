@@ -63,9 +63,6 @@ Feature: Session Registration
       | GP System |
       | EMIS      |
       | TPP       |
-  @pending @NHSO-2522
-    Examples:
-      | GP System |
       | VISION    |
 
   @backend
@@ -77,9 +74,6 @@ Feature: Session Registration
     Examples:
       | GP System |
       | EMIS      |
-  @pending @NHSO-2522
-    Examples:
-      | GP System |
       | VISION    |
 
   @backend
@@ -98,9 +92,6 @@ Feature: Session Registration
       | GP System |
       | EMIS      |
       | TPP       |
-  @pending @NHSO-2522
-    Examples:
-      | GP System |
       | VISION    |
 
   @manual

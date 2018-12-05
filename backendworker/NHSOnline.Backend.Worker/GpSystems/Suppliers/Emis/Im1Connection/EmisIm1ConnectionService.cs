@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,18 +15,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
     {
         private readonly IEmisClient _emisClient;
         private readonly ILogger<EmisIm1ConnectionService> _logger;
-        private readonly IRegistrationGuidKeyGenerator _emisRegistrationGuidKeyGenerator;
-        private readonly IRegistrationCacheService _registrationCacheService;
+        private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
+        private readonly IIm1CacheService _im1CacheService;
 
         public EmisIm1ConnectionService(IEmisClient emisClient, 
             ILogger<EmisIm1ConnectionService> logger,
-            IRegistrationGuidKeyGenerator registrationGuidKeyGenerator,
-            IRegistrationCacheService registrationCacheService)
+            IIm1CacheKeyGenerator im1CacheKeyGenerator,
+            IIm1CacheService im1CacheService)
         {
             _emisClient = emisClient;
             _logger = logger;
-            _emisRegistrationGuidKeyGenerator = registrationGuidKeyGenerator;
-            _registrationCacheService = registrationCacheService;
+            _im1CacheKeyGenerator = im1CacheKeyGenerator;
+            _im1CacheService = im1CacheService;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
@@ -45,9 +44,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 }
 
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
+
+                var either = EmisConnectionTokenParser.Parse(connectionToken);
+
                 var sessionPostRequestModel = new SessionsPostRequest
                 {
-                    AccessIdentityGuid = connectionToken,
+                    AccessIdentityGuid = either.Match(guid => guid, ct => ct.AccessIdentityGuid),
                     NationalPracticeCode = odsCode
                 };
 
@@ -117,15 +119,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
                 string accessIdentityGuid;
                 
-                _logger.LogInformation("Checking Cache for AccessIdentityGuid");
-                var key = _emisRegistrationGuidKeyGenerator.GenerateRegistrationKey(
+                _logger.LogInformation("Checking Cache for connection token");
+                var key = _im1CacheKeyGenerator.GenerateCacheKey(
                     request.AccountId, request.OdsCode, request.LinkageKey);
-                var cachedGuidOption = await _registrationCacheService.GetRegistrationToken<Guid>(key);
+                var cachedConnectionToken =
+                    await _im1CacheService.GetIm1ConnectionToken<EmisConnectionToken>(key);
             
-                if (cachedGuidOption.HasValue)
+                if (cachedConnectionToken.HasValue)
                 {
-                    _logger.LogInformation("AccessIdentityGuid found in cache.");
-                    accessIdentityGuid = cachedGuidOption.ValueOrFailure().ToString();
+                    _logger.LogInformation("Connection token found in cache.");
+                    accessIdentityGuid = cachedConnectionToken.ValueOrFailure().AccessIdentityGuid;
                 }
                 else
                 {                    
@@ -221,9 +224,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
 
                 var nhsNumbers = demographicsResponse.Body.ExtractNhsNumbers();
 
+                var emisConnectionToken = new EmisConnectionToken
+                {
+                    Im1CacheKey = key,
+                    AccessIdentityGuid = accessIdentityGuid
+                };
+
                 var response = new PatientIm1ConnectionResponse
                 {
-                    ConnectionToken = accessIdentityGuid,
+                    ConnectionToken = emisConnectionToken.SerializeJson(),
                     NhsNumbers = nhsNumbers
                 };
 

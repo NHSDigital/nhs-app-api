@@ -1,9 +1,7 @@
 package mocking.defaults.dataPopulation.journies.session
 
 import mocking.MockingClient
-import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.AssociationType
-import mocking.emis.models.IdentifierType
 import models.Patient
 
 class EmisSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
@@ -19,18 +17,6 @@ class EmisSessionCreateJourneyFactory(val client: MockingClient) : SessionCreate
                 .forEmis {
                     authentication.sessionRequest(patient)
                             .respondWithSuccess(patient, AssociationType.Self)
-                }
-        client
-                .forEmis {
-                    myRecord.demographicsRequest(patient)
-                            .respondWithSuccess(patient,
-                                    patientIdentifiers = arrayOf(
-                                            PatientIdentifier(
-                                                    identifierType = IdentifierType.NhsNumber,
-                                                    identifierValue = patient.nhsNumbers.firstOrNull()
-                                            )
-                                    )
-                            )
                 }
     }
 }

@@ -15,6 +15,8 @@ import features.navigation.steps.NavHeaderSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import features.sharedSteps.SupplierSpecificFactory
+import mocking.GsonFactory
 import utils.SerenityHelpers
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
@@ -24,7 +26,10 @@ import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyF
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
+import mockingFacade.linkage.LinkageInformationFacade
 import models.Patient
+import mongodb.MongoDBConnection
+import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.serenitybdd.rest.SerenityRest
 import net.thucydides.core.annotations.Steps
@@ -41,6 +46,7 @@ import worker.WorkerClient
 import worker.WorkerPaths
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
+import worker.models.patient.Im1ConnectionToken
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import java.net.URI
@@ -344,7 +350,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     }
 
     @When("^I register the user's IM1 credentials$")
-    fun iRegisterAnEMISUsersIMCredentials() {
+    fun iRegisterAUsersIMCredentials() {
         val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1Connection)
         val response = SerenityRest
                 .given()
@@ -384,7 +390,14 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun theResponseHasTheExpectedConnectionToken() {
         val result = this.im1ConnectionResponse
 
-        Assert.assertEquals(this.patient.connectionToken, result!!.connectionToken)
+        val expectedIm1ConnectionToken = this.patient.im1ConnectionTokenAsJson
+
+        val actualIm1ConnectionToken = GsonFactory.asPascal.fromJson<Im1ConnectionToken>(
+                result?.connectionToken,
+                Im1ConnectionToken::class.java
+        )
+
+        Assert.assertEquals(expectedIm1ConnectionToken, actualIm1ConnectionToken)
     }
 
     @Then("^the response has the expected NHS numbers$")
@@ -427,7 +440,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I am logged in as a (.*) user$")
     fun iAmLoggedInTo(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
-        SerenityHelpers.setPatient(this.patient)
+        setupAndLogIn(patient, gpSystem)
+    }
+
+    @Given("^I am logged in as a (.*) user created before Im1 Cache Keys existed$")
+    fun iAmLoggedInWithoutIm1CacheKey(gpSystem: String) {
+        this.patient = Patient.getDefault(gpSystem).copy(im1ConnectionTokenAsJson = null)
         setupAndLogIn(patient, gpSystem)
     }
 
@@ -488,8 +506,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 "NHS services. For urgent medical advice, call 111.")
     }
 
-    fun setupAndLogIn(patient: Patient, gpSystem: String) {
-        this.patient = patient
+    private fun setupAndLogIn(patient: Patient, gpSystem: String) {
         SerenityHelpers.setPatient(patient)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
@@ -646,6 +663,62 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Throws(Exception::class)
     fun thenIAmRedirectedToTheSignedInHomePage() {
         navHeader.assertHomePageHeaderVisible()
+    }
+
+    @Given("^no IM1 Connection Token is currently cached$")
+    fun im1ConnectionTokensClearedFromTheCache() {
+        MongoDBConnection.clearIm1Cache()
+    }
+
+    @Then("^the IM1 Connection Token is in the cache$")
+    fun theIm1ConnectionTokenIsInTheCache() {
+        Assert.assertEquals(
+                "Incorrect number of IM1 tokens cached. ${MongoDBConnection.getContentsFromDatabase()}",
+                1,
+                MongoDBConnection.getNumberOfDocumentsFromIm1Cache()
+        )
+    }
+
+    @Then("^the IM1 Connection Token is no longer in the cache$")
+    fun theIm1ConnectionTokenIsNoLongerInTheCache() {
+        Assert.assertEquals(
+                "Incorrect number of IM1 tokens cached. ${MongoDBConnection.getContentsFromDatabase()}",
+                0,
+                MongoDBConnection.getNumberOfDocumentsFromIm1Cache()
+        )
+    }
+
+    @When("^I have posted the IM1 Connection Token$")
+    fun iHavePostedTheIm1ConnectionToken() {
+        val linkingInformationExample =
+                Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                linkingInformationExample.accountId!!,
+                linkingInformationExample.linkageKey,
+                linkingInformationExample.odsCode,
+                linkingInformationExample.surname,
+                linkingInformationExample.dateOfBirth
+        )
+        val gpSystem = Serenity.sessionVariableCalled<String>(SupplierSpecificFactory.SerenityKey.GP_SYSTEM)
+        this.patient = Patient.getDefault(gpSystem).copy(
+                accountId = linkingInformationExample.accountId!!,
+                linkageKey = linkingInformationExample.linkageKey,
+                odsCode = linkingInformationExample.odsCode,
+                surname = linkingInformationExample.surname,
+                dateOfBirth = linkingInformationExample.dateOfBirth,
+                nhsNumbers = arrayListOf(linkingInformationExample.nhsNumber)
+        )
+        CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(this.patient)
+        SuccessfulRegistrationJourney(mockingClient).create(this.patient, gpSystem)
+        iRegisterAUsersIMCredentials()
+        Assert.assertNotNull("IM1 Connection Token post failed: $errorResponse", this.im1ConnectionResponse)
+    }
+
+    @When("^I have logged in with the user associated with the IM1 Connection Token$")
+    fun loggedInWithTheUserAssociatedWithTheIm1ConnectionToken() {
+        Assert.assertNotNull(Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
+                .postSessionConnection(patient.cidUserSession))
     }
 
     private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {

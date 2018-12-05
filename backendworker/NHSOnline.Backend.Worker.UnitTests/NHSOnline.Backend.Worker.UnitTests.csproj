@@ -48,14 +48,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Bridges\**" />
-    <Compile Remove="GpSystems\Suppliers\Vision\PatientRecord\VisionPatientRecordServiceTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Remove="Bridges\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Bridges\**" />
     <None Update="GpSystems\Suppliers\Emis\Resources\EMISTestCert.cer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

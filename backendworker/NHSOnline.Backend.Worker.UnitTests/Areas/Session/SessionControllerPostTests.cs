@@ -21,6 +21,7 @@ using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
@@ -45,10 +46,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IAntiforgery> _mockAntiforgery;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
+        private Mock<IIm1CacheService> _mockIm1CacheService;
         private const string DateFormat = "yyyy-MM-dd";
 
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
+        private EmisConnectionToken _connectionToken;
         private string _apiSessionId;
         private string _name;
         private int _sessionTimeoutMinutes;
@@ -66,6 +69,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
             _userProfile = _fixture.Freeze<UserProfile>();
             _userProfile.DateOfBirth = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture);
+            _connectionToken = _fixture.Create<EmisConnectionToken>();
+            _userProfile.Im1ConnectionToken = _connectionToken.SerializeJson();
             _name = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
             _sessionTimeoutSeconds = _sessionTimeoutMinutes * 60;
@@ -144,6 +149,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockMinimumAgeValidator
                 .Setup(x => x.IsValid(It.IsAny<DateTime>()))
                 .Returns(true);
+
+            _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
+            _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
+                .Returns(Task.FromResult(true)).Verifiable();
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IAuthenticationService)))
@@ -391,6 +400,33 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
             _mockAuditor.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        public async Task Post_Im1ConnectionTokenHasCacheKey_AttemptsToDeleteFromCache()
+        {
+            // Act
+            await _systemUnderTest.Post(_userSessionRequest);
+
+            // Assert
+            _mockIm1CacheService.Verify();
+        }
+
+        [TestMethod]
+        public async Task Post_Im1ConnectionTokenIsAGuid_DoesNotAttemptToDeleteFromCache()
+        {
+            // Arrange
+            _userProfile.Im1ConnectionToken = _fixture.Create<Guid>().ToString();
+
+            _mockIm1CacheService.Reset();
+            _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()))
+                .Returns(Task.FromResult(true));
+
+            // Act
+            await _systemUnderTest.Post(_userSessionRequest);
+
+            // Assert
+            _mockIm1CacheService.Verify(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()), Times.Never);
         }
     }
 }

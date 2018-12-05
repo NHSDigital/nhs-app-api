@@ -26,17 +26,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
 
         private IFixture _fixture;
         private Mock<ITppClient> _mockTppClient;
-        private Mock<IRegistrationCacheService> _mockRegistrationCacheService;
+        private Mock<IIm1CacheService> _mockIm1CacheService;
         private ILogger<TppIm1ConnectionService> _logger;
-        private Mock<IRegistrationGuidKeyGenerator> _mockRegistrationGuidGenerator;
+        private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
-            _mockRegistrationCacheService = _fixture.Freeze<Mock<IRegistrationCacheService>>();
-            _mockRegistrationGuidGenerator = _fixture.Freeze<Mock<IRegistrationGuidKeyGenerator>>();
+            _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
+            _mockIm1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _logger = Mock.Of<ILogger<TppIm1ConnectionService>>();
         }
 
@@ -60,8 +60,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         Body = authenticateReply,
                     }));
 
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object, _logger);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -82,8 +82,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         Body = null
                     }));
 
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object, _logger);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -104,8 +104,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         ErrorResponse = _fixture.Create<Error>()
                     }));
 
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -122,8 +122,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         ErrorResponse = null
                     }));
 
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -150,25 +150,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                     }));
             
             string key = "Key";
-            _mockRegistrationGuidGenerator.Setup(x => x.GenerateRegistrationKey(
+            _mockIm1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(
                     It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(key);
 
             var im1Token = _fixture.Create<TppConnectionToken>();
             
-            _mockRegistrationCacheService.Setup(x => x.GetRegistrationToken<TppConnectionToken>(key))
+            _mockIm1CacheService.Setup(x => x.GetIm1ConnectionToken<TppConnectionToken>(key))
                 .Returns(Task.FromResult(
                     Option.Some(im1Token)
                 ));
             
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);         
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);         
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
 
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
-            _mockRegistrationCacheService.Verify(x => x.GetRegistrationToken<TppConnectionToken>(key), Times.Once);
+            _mockIm1CacheService.Verify(x => x.GetIm1ConnectionToken<TppConnectionToken>(key), Times.Once);
             _mockTppClient.Verify(x => x.LinkAccountPost(It.IsAny<LinkAccount>()), Times.Never);
         }
         
@@ -190,8 +190,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                     {
                         Body = authenticateReply,
                     }));
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);         
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);         
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
@@ -212,8 +212,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                     {
                         ErrorResponse = invalidProviderErrorResponse
                     }));
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);         
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);         
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
@@ -234,8 +234,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                     {
                         ErrorResponse = invalidLinkageCredentialsErrorResponse
                     }));
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);         
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);         
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
@@ -253,8 +253,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                     {
                         ErrorResponse = errorResponse
                     }));
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);         
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);         
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
@@ -280,8 +280,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                     {
                         ErrorResponse = errorResponse
                     }));
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);         
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);         
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
@@ -295,8 +295,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
             _mockTppClient
                 .Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>()))
                 .Throws<HttpRequestException>();
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);
@@ -318,8 +318,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
             _mockTppClient
                 .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
                 .Throws<HttpRequestException>();
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockRegistrationCacheService.Object
-                , _mockRegistrationGuidGenerator.Object,_logger);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object,  _mockIm1CacheService.Object
+                , _mockIm1CacheKeyGenerator.Object,_logger);
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var result = await systemUnderTest.Register(request);

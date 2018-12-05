@@ -15,32 +15,45 @@ import mockingFacade.linkage.LinkageInformationFacade
 class LinkageFactoryEmis : LinkageFactory("EMIS") {
 
     override val validLinkageDetails = LinkageInformationFacade(
-                odsCode =  EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
-                linkageKey = "tTALtBP3rLR16",
-                accountId = "542343",
-                nhsNumber = "3434234345",
-                identityToken = "abc",
-                emailAddress = "ab@cd.com",
-                surname = "Edgar")
+            odsCode = patient.odsCode,
+            linkageKey = patient.linkageKey,
+            accountId = patient.accountId,
+            nhsNumber = "3434234345",
+            identityToken = "abc",
+            emailAddress = "ab@cd.com",
+            surname = "Edgar",
+            dateOfBirth = "2000-01-01")
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
                                        linkageResult: LinkageResult) {
         val linkageToPostRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyRetrieved to successfulPost(linkageInformationFacade),
                 LinkageResult.SuccessfullyCreated to successfulPost(linkageInformationFacade),
-                LinkageResult.PatientAlreadyHasAnOnlineAccount to { get -> get
-                        .respondWithPatientAlreadyHasAnOnlineAccount() },
-                LinkageResult.NoRegisteredOnlineUserFound to { get -> get
-                        .respondWithNoRegisteredOnlineUserFound() },
+                LinkageResult.PatientAlreadyHasAnOnlineAccount to { get ->
+                    get
+                            .respondWithPatientAlreadyHasAnOnlineAccount()
+                },
+                LinkageResult.NoRegisteredOnlineUserFound to { get ->
+                    get
+                            .respondWithNoRegisteredOnlineUserFound()
+                },
                 LinkageResult.PatientNotRegisteredAtPractice to null,
-                LinkageResult.PracticeNotLive to { get -> get
-                        .respondWithPracticeNotLive() },
-                LinkageResult.PatientMarkedAsArchived to { get -> get
-                        .respondWithPatientMarkedAsArchived() },
-                LinkageResult.PatientNonCompetentOrUnderMinimumAge to { get -> get
-                        .respondWithPatientNonCompetentOrUnderMinumumAge() },
-                LinkageResult.InternalServerError to { get -> get
-                        .respondWithInternalServerError() }
+                LinkageResult.PracticeNotLive to { get ->
+                    get
+                            .respondWithPracticeNotLive()
+                },
+                LinkageResult.PatientMarkedAsArchived to { get ->
+                    get
+                            .respondWithPatientMarkedAsArchived()
+                },
+                LinkageResult.PatientNonCompetentOrUnderMinimumAge to { get ->
+                    get
+                            .respondWithPatientNonCompetentOrUnderMinumumAge()
+                },
+                LinkageResult.InternalServerError to { get ->
+                    get
+                            .respondWithInternalServerError()
+                }
         )
 
         // end user session setup always required
@@ -67,8 +80,10 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
             authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
                     .respondWithSuccessfullyRetrievedFirstTime(verificationResponse(linkageInformationFacade))
         }
-        return { post -> post
-                .respondWithSuccessfullyCreated(AddNhsUserResponse(EmisMockDefaults.patientEmis.connectionToken)) }
+        return { post ->
+            post
+                    .respondWithSuccessfullyCreated(AddNhsUserResponse(EmisMockDefaults.patientEmis.connectionToken))
+        }
     }
 
 
@@ -77,20 +92,34 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
         val linkageToGetRequestResponse = hashMapOf<LinkageResult, ((EmisLinkageGETBuilder) -> Mapping)?>(
                 LinkageResult.SuccessfullyRetrievedFirstTime to successfulGet(linkageInformationFacade),
                 LinkageResult.SuccessfullyRetrieved to successfulGet(linkageInformationFacade),
-                LinkageResult.PatientNotRegisteredAtPractice to { get -> get
-                        .respondWithPatientNotRegisteredAtPractice() },
-                LinkageResult.NoRegisteredOnlineUserFound to { get -> get
-                        .respondWithNoRegisteredOnlineUserFound() },
-                LinkageResult.PracticeNotLive to { get -> get
-                        .respondWithPracticeNotLive() },
-                LinkageResult.PatientMarkedAsArchived to { get -> get
-                        .respondWithPatientMarkedAsArchived() },
-                LinkageResult.PatientNonCompetentOrUnderMinimumAge to { get -> get
-                        .respondWithPatientNonCompetentOrUnderMinimumAge() },
-                LinkageResult.AccountStatusInvalid to { get -> get
-                        .respondWithAccountStatusInvalid() },
-                LinkageResult.InternalServerError to { get -> get
-                        .respondWithInternalServerError() }
+                LinkageResult.PatientNotRegisteredAtPractice to { get ->
+                    get
+                            .respondWithPatientNotRegisteredAtPractice()
+                },
+                LinkageResult.NoRegisteredOnlineUserFound to { get ->
+                    get
+                            .respondWithNoRegisteredOnlineUserFound()
+                },
+                LinkageResult.PracticeNotLive to { get ->
+                    get
+                            .respondWithPracticeNotLive()
+                },
+                LinkageResult.PatientMarkedAsArchived to { get ->
+                    get
+                            .respondWithPatientMarkedAsArchived()
+                },
+                LinkageResult.PatientNonCompetentOrUnderMinimumAge to { get ->
+                    get
+                            .respondWithPatientNonCompetentOrUnderMinimumAge()
+                },
+                LinkageResult.AccountStatusInvalid to { get ->
+                    get
+                            .respondWithAccountStatusInvalid()
+                },
+                LinkageResult.InternalServerError to { get ->
+                    get
+                            .respondWithInternalServerError()
+                }
         )
 
         // end user session setup always required
@@ -101,7 +130,7 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
         }
     }
 
-    private fun endUserSessionSetup(){
+    private fun endUserSessionSetup() {
         mockingClient.forEmis {
             authentication.endUserSessionRequest().respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
         }

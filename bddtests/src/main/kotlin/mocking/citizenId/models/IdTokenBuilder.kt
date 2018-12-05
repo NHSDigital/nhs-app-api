@@ -6,7 +6,9 @@ import com.nimbusds.jose.JWSHeader
 import com.nimbusds.jose.crypto.RSASSASigner
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
+import mocking.GsonFactory
 import models.Patient
+import worker.models.patient.Im1ConnectionToken
 import java.util.*
 
 private const val DELAY_IN_SECONDS: Int = 1008000
@@ -34,6 +36,10 @@ class IdTokenBuilder(issuer: String, audience: String) {
     }
 
     private fun getClaims(patient: Patient): JWTClaimsSet {
+        var im1ConnectionToken = patient.im1ConnectionTokenAsJson ?: patient.connectionToken
+        if (im1ConnectionToken.javaClass == Im1ConnectionToken::class.java) {
+            im1ConnectionToken = GsonFactory.asPascal.toJson(im1ConnectionToken)
+        }
 
         return JWTClaimsSet.Builder()
                 .subject("3ad631b4-7a7a-434d-8a7b-1c8ac3c56132")
@@ -47,7 +53,7 @@ class IdTokenBuilder(issuer: String, audience: String) {
                 .claim("email_verified",true)
                 .claim("birthdate", patient.dateOfBirth)
                 .claim("nhs_number", patient.nhsNumbers.firstOrNull())
-                .claim("im1_token", patient.connectionToken)
+                .claim("im1_token", im1ConnectionToken)
                 .claim("id_status","verified")
                 .claim("token_use","id")
                 .claim("surname", patient.surname)

@@ -112,9 +112,9 @@ class EndpointStepDefinitions : AbstractSteps() {
 
     }
 
-    private fun <T> submitRequest(responseKey:String,
-                                     exceptionKey:String,
-                                     request: (WorkerClient) -> T) {
+    private fun <T> submitRequest(responseKey: String,
+                                  exceptionKey: String,
+                                  request: (WorkerClient) -> T) {
         try {
             val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
             val result = request.invoke(workerClient)

@@ -4,12 +4,15 @@ import features.linkage.LinkageResult
 import utils.SerenityHelpers
 import features.sharedSteps.SupplierSpecificFactory
 import mockingFacade.linkage.LinkageInformationFacade
+import models.Patient
 import org.junit.Assert
 import java.util.*
 
 abstract class LinkageFactory(protected val gpSystem: String) {
 
     protected val mockingClient = SerenityHelpers.getMockingClient()
+
+    protected val patient = Patient.getDefault(gpSystem)
 
     abstract fun mockLinkageGetResult(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult)
 

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Conventions;
@@ -35,6 +36,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         private readonly IAuditor _auditor;
         private readonly IAntiforgery _antiforgery;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
+        private readonly IIm1CacheService _im1CacheService;
         private const string DateFormat = "yyyy-MM-dd";
 
         public SessionController(
@@ -46,7 +48,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             ILogger<SessionController> logger,
             IAuditor auditor,
             IAntiforgery antiforgery,
-            IMinimumAgeValidator minimumAgeValidator
+            IMinimumAgeValidator minimumAgeValidator,
+            IIm1CacheService im1CacheService
         )
         {
             _citizenIdService = citizenIdService;
@@ -58,6 +61,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             _auditor = auditor;
             _antiforgery = antiforgery;
             _minimumAgeValidator = minimumAgeValidator;
+            _im1CacheService = im1CacheService;
         }
 
         [HttpPost, AllowAnonymous]
@@ -127,7 +131,12 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 }
 
                 // Build and save session token in our redis session cache
-                await FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
+                var sessionFetchTask = FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
+
+                // Delete connection token from cache
+                var tokenDeletionTask = DeleteConnectionTokenFromCache(cidUserProfile.Im1ConnectionToken);
+
+                await Task.WhenAll(sessionFetchTask, tokenDeletionTask);
 
                 // Audit that the user is logged on.
                 HttpContext.SetUserSession(sessionCreatedResultVisited.UserSession);
@@ -291,12 +300,34 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 _logger.LogError("Missing or invalid date of birth");
                 return null;
             }
+
             if (!_minimumAgeValidator.IsValid(dateOfBirthParsed))
             {
                 _logger.LogWarning("Failed to meet the minimum age requirement.");
                 return null;
             }
+
             return dateOfBirthParsed;
+        }
+
+        private async Task DeleteConnectionTokenFromCache(string im1ConnectionToken)
+        {
+            if (Guid.TryParse(im1ConnectionToken, out _))
+            {
+                return;
+            }
+
+            var tokenObject = JObject.Parse(im1ConnectionToken);
+
+            if (tokenObject.TryGetValue(Im1CacheService.Im1ConnectionTokenCacheKeyPropertyName,
+                StringComparison.Ordinal,
+                out var cacheKey))
+            {
+                if (!string.IsNullOrEmpty(cacheKey?.ToString()))
+                {
+                    await _im1CacheService.DeleteIm1ConnectionToken(cacheKey.ToString());
+                }
+            }
         }
     }
 }

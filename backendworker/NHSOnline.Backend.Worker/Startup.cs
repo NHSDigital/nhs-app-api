@@ -94,11 +94,12 @@ namespace NHSOnline.Backend.Worker
             });
 
             services.AddSingleton(Configuration);
-            
+
+            services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
+            services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
-            
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
 

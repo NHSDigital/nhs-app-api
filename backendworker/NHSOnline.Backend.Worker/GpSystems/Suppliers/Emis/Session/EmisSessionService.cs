@@ -40,11 +40,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             return endUserSessionResponse.Body;
         }
 
-        public async Task<SessionsPostResponse> SendSessionsRequest(string endUserSessionId, string connectionToken, string odsCode)
+        public async Task<SessionsPostResponse> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)
         {
             var sessionPostRequestModel = new SessionsPostRequest
             {
-                AccessIdentityGuid = connectionToken,
+                AccessIdentityGuid = accessIdentityGuid,
                 NationalPracticeCode = odsCode
             };
 
@@ -88,8 +88,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 };
 
                 var headerParams = new EmisHeaderParameters(session);
-                    
-                var sessionRequestTask = SendSessionsRequest(endUserSessionResponse.EndUserSessionId, connectionToken, odsCode);
+
+                var either = EmisConnectionTokenParser.Parse(connectionToken);
+                var accessIdentityGuid = either.Match(guid => guid, ct => ct.AccessIdentityGuid);
+
+                var sessionRequestTask = SendSessionsRequest(endUserSessionResponse.EndUserSessionId, accessIdentityGuid, odsCode);
                 var practiceSettingsTask =  _emisClient.PracticeSettingsGet(headerParams, odsCode);
                 await Task.WhenAll(sessionRequestTask, practiceSettingsTask);
 

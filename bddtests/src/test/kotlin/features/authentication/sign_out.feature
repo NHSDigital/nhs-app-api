@@ -15,9 +15,6 @@ Feature: Sign out of mobile web
       | GP Supplier |
       | EMIS        |
       | TPP         |
-  @pending @NHSO-2522
-    Examples:
-      | GP Supplier |
       | VISION      |
 
   @manual
@@ -48,9 +45,6 @@ Feature: Sign out of mobile web
       | GP Supplier |
       | EMIS        |
       | TPP         |
-  @pending @NHSO-2522
-    Examples:
-      | GP Supplier |
       | VISION      |
 
   Scenario Outline: The nsho cookie should be clear of session and user information if the <GP Supplier> user is not signed in
@@ -63,9 +57,6 @@ Feature: Sign out of mobile web
       | GP Supplier |
       | EMIS        |
       | TPP         |
-  @pending @NHSO-2522
-    Examples:
-      | GP Supplier |
       | VISION      |
 
   Scenario Outline: The nsho cookie should be clear of <GP Supplier> session and user information if server side sign out fails

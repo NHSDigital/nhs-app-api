@@ -32,8 +32,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         
         private ILogger<TppCourseService> _tppCourseLogger;
         private ILogger<TppPrescriptionService> _tppPrescriptionLogger;
-        private IRegistrationCacheService _registrationCacheService;
-        private IRegistrationGuidKeyGenerator _registrationGuidGenerator;
+        private IIm1CacheService _im1CacheService;
+        private IIm1CacheKeyGenerator _im1CacheKeyGenerator;
 
         [TestInitialize]
         public void TestInitialize()
@@ -46,8 +46,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _loggerFactory = new Mock<ILoggerFactory>().Object;
             _tppDemographicsMapper = new Mock<ITppDemographicsMapper>().Object;
             _tppMyRecordMapper = new Mock<ITppMyRecordMapper>().Object;
-            _registrationCacheService = new Mock<IRegistrationCacheService>().Object;
-            _registrationGuidGenerator = new Mock<IRegistrationGuidKeyGenerator>().Object;
+            _im1CacheService = new Mock<IIm1CacheService>().Object;
+            _im1CacheKeyGenerator = new Mock<IIm1CacheKeyGenerator>().Object;
             
             _tppCourseLogger = Mock.Of<ILogger<TppCourseService>>();
             _tppPrescriptionLogger = Mock.Of<ILogger<TppPrescriptionService>>();
@@ -138,8 +138,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetIm1ConnectionService_WhenCalled_ReturnsTppIm1ConnectionService()
         {
-            var service = new TppIm1ConnectionService(_tppClient, _registrationCacheService, 
-                _registrationGuidGenerator, _loggerFactory.CreateLogger<TppIm1ConnectionService>());
+            var service = new TppIm1ConnectionService(_tppClient, _im1CacheService, 
+                _im1CacheKeyGenerator, _loggerFactory.CreateLogger<TppIm1ConnectionService>());
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppIm1ConnectionService)))
                 .Returns(service);

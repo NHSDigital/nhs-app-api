@@ -98,7 +98,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                     providerId = TppMockDefaults.DEFAULT_TPP_PROVIDER_ID,
                                     deviceType = "NhsApp"
                             ))
-                    )
+            )
                     .respondWithSuccess(
                             AuthenticateReply(
                                     patientId = patient.patientId,
@@ -116,7 +116,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                                     personName = PersonName(
                                                             name =
                                                             "${patient.title} " +
-                                                            "${patient.firstName} ${patient.surname}"
+                                                                    "${patient.firstName} ${patient.surname}"
                                                     )
                                             )
                                     )

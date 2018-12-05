@@ -60,9 +60,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.ndopConnection)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
-        val json = gson.fromJson<NdopResponse>(result, NdopResponse::class.java)
-
-        return json
+        return gson.fromJson<NdopResponse>(result, NdopResponse::class.java)
     }
 
     fun getLinkageKey(linkage: LinkageInformationFacade): LinkageResponse {
@@ -75,9 +73,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         httpGet.releaseConnection()
         println(result)
 
-        val json = gson.fromJson<LinkageResponse>(result, LinkageResponse::class.java)
-
-        return json
+        return gson.fromJson(result, LinkageResponse::class.java)
     }
 
     fun postLinkageKey(requestBody: CreateLinkageRequest): LinkageResponse {

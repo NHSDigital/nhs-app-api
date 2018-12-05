@@ -14,22 +14,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
     {
         private readonly ITppClient _tppClient;
         private readonly ITppLinkageMapper _linkageMapper;
-        private readonly IRegistrationGuidKeyGenerator _registrationGuidKeyGenerator;
-        private readonly IRegistrationCacheService _registrationCacheService;
+        private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
+        private readonly IIm1CacheService _im1CacheService;
         private readonly ILogger<TppLinkageService> _logger;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
 
         public TppLinkageService(ITppClient client,
             ITppLinkageMapper linkageMapper,
-            IRegistrationGuidKeyGenerator registrationGuidKeyGenerator,
-            IRegistrationCacheService registrationCacheService,
+            IIm1CacheKeyGenerator im1CacheKeyGenerator,
+            IIm1CacheService im1CacheService,
             ILogger<TppLinkageService> logger,
             IMinimumAgeValidator minimumAgeValidator)
         {
             _tppClient = client;
             _linkageMapper = linkageMapper;
-            _registrationGuidKeyGenerator = registrationGuidKeyGenerator;
-            _registrationCacheService = registrationCacheService;
+            _im1CacheKeyGenerator = im1CacheKeyGenerator;
+            _im1CacheService = im1CacheService;
             _logger = logger;
             _minimumAgeValidator = minimumAgeValidator;
         }
@@ -97,11 +97,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
 
         private async Task StoreAccessGuidInCache(LinkageResponse linkage, TppConnectionToken im1ConnectionToken)
         {
-            var key = _registrationGuidKeyGenerator.GenerateRegistrationKey(
+            var key = _im1CacheKeyGenerator.GenerateCacheKey(
                 linkage.AccountId,
                 linkage.OdsCode,
                 linkage.LinkageKey);
-            await _registrationCacheService.CreateRegistrationToken(key, im1ConnectionToken);
+
+            im1ConnectionToken.Im1CacheKey = key;
+
+            await _im1CacheService.SaveIm1ConnectionToken(key, im1ConnectionToken);
         }
     }
 }

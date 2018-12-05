@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             return _serviceProvider.GetService<TppDemographicsService>();
         }
-        
+
         public IPatientRecordService GetPatientRecordService()
         {
             return _serviceProvider.GetService<TppPatientRecordService>();
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             return _serviceProvider.GetService<TppTokenValidationService>();
         }
-        
+
         public ILinkageService GetLinkageService()
         {
             return _serviceProvider.GetService<TppLinkageService>();
