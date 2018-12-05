@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
     <h2>{{ $t('myAccount.detailsHeading') }}</h2>
     <welcome-section :name="$store.state.session.user"
@@ -68,7 +68,7 @@
         ({{ this.$store.state.appVersion.nativeVersion }})
       </span>
     </p>
-    <p>
+    <p v-if="this.$store.app.$env.CE_MARK_ENABLED">
       <ce-mark-icon/>
     </p>
     <analytics-tracked-tag :text="$t('signOutButton.signOut')" data-purpose="button">
