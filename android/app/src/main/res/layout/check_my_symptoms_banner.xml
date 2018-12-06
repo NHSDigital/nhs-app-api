@@ -30,26 +30,30 @@
             android:background="@color/background"
             android:padding="@dimen/_12sdp"
             android:visibility="gone">
+
             <include layout="@layout/error_layout" />
         </ScrollView>
     </FrameLayout>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/CustomSymptomsToolbar"
-            android:layout_width="match_parent"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/CustomSymptomsToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/header_text_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary">
-            <TextView
-                android:id="@+id/header_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_6sdp"
-                android:layout_gravity="center"
-                android:text="@string/symptoms_header"
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/_18sdp" />
-        </android.support.v7.widget.Toolbar>
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:text="@string/symptoms_header"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/_18sdp" />
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:id="@+id/progressBarLayoutU"
         android:layout_width="match_parent"

@@ -1,55 +1,67 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    android:background="@color/background"
+    android:padding="@dimen/_12sdp">
 
-        <TextView
-            style="@style/default_error_icon"
-            android:layout_width="@dimen/_55ssp"
-            android:layout_height="@dimen/_35sdp"
-            android:paddingTop="@dimen/_6sdp"
-            android:text="@string/errorIconText"/>
-        <LinearLayout
-            android:id="@+id/default_warning_title_bar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:background="@drawable/error_border"
-            android:orientation="horizontal" />
-    </LinearLayout>
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/errorTextView"
-            style="@style/default_warning_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/_40sdp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tryAgainTextView"
+            <TextView
+                style="@style/default_error_icon"
+                android:layout_width="@dimen/_55ssp"
+                android:layout_height="@dimen/_35sdp"
+                android:paddingTop="@dimen/_6sdp"
+                android:text="@string/errorIconText" />
+
+            <LinearLayout
+                android:id="@+id/default_warning_title_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@drawable/error_border"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/errorTextView"
+                style="@style/default_warning_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_40sdp" />
+
+            <TextView
+                android:id="@+id/tryAgainTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:text="@string/tryLaterText"
+                android:textSize="@dimen/errorTextSize" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/retryButton"
+            style="@style/blue_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/_16sdp"
-            android:text="@string/tryLaterText"
-            android:textSize="@dimen/errorTextSize" />
+            android:background="@drawable/icon_drawable_blue_button_focusable"
+            android:focusable="true"
+            android:text="@string/retryButtonText"
+            android:textAllCaps="false" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/retryButton"
-        style="@style/blue_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:text="@string/retryButtonText"
-        android:textAllCaps="false"
-        android:focusable="true"
-        android:background="@drawable/icon_drawable_blue_button_focusable"/>
-</LinearLayout>
+</ScrollView>

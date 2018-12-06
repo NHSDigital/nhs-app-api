@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:keep="@layout/biometric_authentication_layout">
 
     <FrameLayout
         android:id="@+id/viewSwitcher"
@@ -16,7 +18,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="1.0">
 
-        <include layout="@layout/biometric_layout_content"></include>
+        <include layout="@layout/biometric_layout_content" />
 
         <ScrollView
             android:id="@+id/errorViewLayoutN"
@@ -25,6 +27,7 @@
             android:background="@color/background"
             android:padding="@dimen/_12sdp"
             android:visibility="gone">
+
             <include layout="@layout/error_layout" />
         </ScrollView>
     </FrameLayout>
@@ -34,14 +37,15 @@
         style="@style/CustomSymptomsToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/header_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_6sdp"
             android:text="@string/biometric_header"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/_18sdp" />

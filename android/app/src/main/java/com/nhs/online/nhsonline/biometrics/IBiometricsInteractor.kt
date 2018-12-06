@@ -1,0 +1,21 @@
+package com.nhs.online.nhsonline.biometrics
+
+import android.support.v4.app.FragmentActivity
+
+interface IBiometricsInteractor {
+    fun showProgressDialog()
+
+    fun dismissProgressDialog()
+
+    fun toggleBiometricSwitch(isChecked: Boolean)
+
+    fun showBiometricsOnRegistrationSuccessMessage()
+
+    fun showBiometricsOnDeRegistrationSuccessMessage()
+
+    fun showBiometricRegistrationError()
+
+    fun getActivity(): FragmentActivity
+
+    fun loadBiometricLoginPage(url: String)
+}

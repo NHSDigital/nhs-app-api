@@ -21,6 +21,8 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
+        config {
+        }
         release {
             storeFile file(release_store_location)
             storePassword release_store_password
@@ -121,11 +123,27 @@ android {
             applicationIdSuffix ".scratch10"
             manifestPlaceholders = [appName: "NHS App Scratch 10"]
         }
+        scratch11 {
+            initWith debug
+            applicationIdSuffix ".scratch11"
+            manifestPlaceholders = [appName: "NHS App Scratch 11"]
+        }
+        scratch12 {
+            initWith debug
+            applicationIdSuffix ".scratch12"
+            manifestPlaceholders = [appName: "NHS App Scratch 12"]
+        }
     }
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+    lintOptions {
+        lintConfig file("lint.xml")
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -142,12 +160,16 @@ dependencies {
     implementation 'com.android.support:support-vector-drawable:27.1.1'
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
     implementation 'com.intuit.ssp:ssp-android:1.0.5'
+    implementation 'commons-codec:commons-codec:1.11'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.android.support:customtabs:27.1.1'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.scottyab:rootbeer-lib:0.0.7'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'org.mindrot:jbcrypt:0.4'
 
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:3.8'
     testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
@@ -172,7 +194,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
         html.enabled = true
     }
 
-    def fileFilter = [ '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*' ]
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
     def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/kotlin"
 

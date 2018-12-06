@@ -26,3 +26,6 @@
       public static int d(...);
       public static int e(...);
 }
+
+# For Fido data classes that are used during GSon reflection
+-keepclassmembers class com.nhs.online.nhsonline.fido.uaf.msg.* {<fields>;}

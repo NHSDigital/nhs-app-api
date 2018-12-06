@@ -8,10 +8,10 @@ import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 
 
 class UrlLoader(
-    var webView: WebView,
-    var wc: WebClientInterceptor,
-    var appWebInterface: AppWebInterface,
-    var knownServices: KnownServices,
+    private val webView: WebView,
+    private val wc: WebClientInterceptor,
+    private val appWebInterface: AppWebInterface,
+    private val knownServices: KnownServices,
     val baseURL: String
 ) {
 
@@ -19,13 +19,11 @@ class UrlLoader(
     var usingAbsoluteUri: Boolean = true
 
     private fun getValidUrl(url: String): String {
-        var uriToUse = url
-        var validUri = URLUtil.isValidUrl(uriToUse)
+        val validUri = URLUtil.isValidUrl(url)
 
-        if (!validUri) {
-            uriToUse = baseURL + uriToUse
+        return if (!validUri) baseURL + url else {
+            url
         }
-        return uriToUse
     }
 
     fun loadUrl(pageEndPoint: String) {
@@ -35,7 +33,7 @@ class UrlLoader(
             return
         }
 
-        var uriToUse = getValidUrl(pageEndPoint)
+        val uriToUse = getValidUrl(pageEndPoint)
 
         if (usingAbsoluteUri || knownServices.isCIDRedirectUrl(uriToUse)) {
             loadPage(uriToUse)
@@ -54,7 +52,7 @@ class UrlLoader(
         }
     }
 
-    fun loadExternalPage(pageUrl: String) {
+    private fun loadExternalPage(pageUrl: String) {
         val builtUri = Uri.parse(pageUrl)
             .buildUpon()
             .build()

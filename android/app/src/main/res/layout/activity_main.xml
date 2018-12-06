@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -9,26 +8,24 @@
     android:filterTouchesWhenObscured="true"
     tools:context="com.nhs.online.nhsonline.activities.MainActivity">
 
-  <android.support.v7.widget.Toolbar
-      xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#005EB8"
         android:elevation="4dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent">
 
         <include layout="@layout/header_layout" />
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/blankScreen"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone">
-
-        <include layout="@layout/activity_blank_screen" />
-    </FrameLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone" />
 
     <FrameLayout
         android:id="@+id/viewSwitcher"
@@ -47,32 +44,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0dp"
-            android:visibility="visible"
             android:nextFocusUp="@id/nhsOnlineLogoIcon"
-            android:nextFocusDown="@id/symptoms"/>
+            android:nextFocusDown="@id/symptoms"
+            android:visibility="visible" />
 
-        <ScrollView
+
+        <include
             android:id="@+id/errorViewLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background"
-            android:padding="@dimen/_12sdp"
-            android:visibility="gone">
+            layout="@layout/error_layout"
+            android:visibility="gone" />
 
-            <include layout="@layout/error_layout" />
-        </ScrollView>
+        <include
+            android:id="@+id/successViewLayout"
+            layout="@layout/success_layout"
+            android:visibility="gone" />
 
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/biometricLayoutContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background"
-            android:fillViewport="true"
-            android:layout_margin="0dp"
-            android:visibility="gone">
+        <include
+            android:id="@+id/biometricContent"
+            layout="@layout/biometric_layout_content"
+            android:visibility="gone" />
 
-            <include layout="@layout/biometric_layout_content" />
-        </android.support.v4.widget.NestedScrollView>
     </FrameLayout>
 
     <LinearLayout

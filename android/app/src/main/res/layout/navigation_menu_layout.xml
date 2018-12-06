@@ -1,4 +1,4 @@
-<merge
+<merge xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -15,7 +15,8 @@
         android:nextFocusForward="@id/appointments"
         android:nextFocusDown="@id/nhsOnlineLogoIcon"
         android:focusedByDefault="true"
-        android:background="@drawable/icon_drawable_boarder_focusable" />
+        android:background="@drawable/icon_drawable_boarder_focusable"
+        tools:ignore="UnusedAttribute" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/appointments"

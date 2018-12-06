@@ -1,63 +1,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/_10sdp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/sessionExpiryWarningHeader"
+        style="@style/default_warning_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/_10sdp">
+        android:background="@drawable/icon_drawable_boarder_focusable"
+        android:contentDescription="@string/sessionExpiryWarningHeader"
+        android:focusable="true"
+        android:text="@string/sessionExpiryWarningHeader"
+        android:textSize="@dimen/errorTextSize"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/sessionExpiryWarningHeader"
-            style="@style/default_warning_text"
-            android:contentDescription="@string/sessionExpiryWarningHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/sessionExpiryWarningHeader"
-            android:textSize="@dimen/errorTextSize"
-            android:textStyle="bold"
-            android:focusable="true"
-            android:background="@drawable/icon_drawable_boarder_focusable"/>
+    <TextView
+        android:id="@+id/sessionExpiryWarningDurationInformation"
+        style="@style/default_warning_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/icon_drawable_boarder_focusable"
+        android:contentDescription="@string/sessionExpiryWarningDurationInformation"
+        android:focusable="true"
+        android:textSize="@dimen/errorTextSize" />
 
-        <TextView
-            android:id="@+id/sessionExpiryWarningDurationInformation"
-            style="@style/default_warning_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/errorTextSize"
-            android:focusable="true"
-            android:background="@drawable/icon_drawable_boarder_focusable"/>
+    <Button
+        android:id="@+id/extendSession"
+        style="@style/alert_dialogue_green_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:background="@drawable/icon_drawable_green_button_focusable"
+        android:contentDescription="@string/sessionExpiryWarningGetMoreTime"
+        android:focusable="true"
+        android:text="@string/sessionExpiryWarningGetMoreTime"
+        android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/extendSession"
-            style="@style/alert_dialogue_green_button"
-            android:contentDescription="@string/sessionExpiryWarningGetMoreTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:text="@string/sessionExpiryWarningGetMoreTime"
-            android:textAllCaps="false"
-            android:focusable="true"
-            android:background="@drawable/icon_drawable_green_button_focusable" />
-
-        <Button
-            android:id="@+id/logOut"
-            style="@style/alert_dialogue_blue_button"
-            android:contentDescription="@string/sessionExpiryWarningLogOut"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:text="@string/sessionExpiryWarningLogOut"
-            android:textAllCaps="false"
-            android:focusable="true"
-            android:background="@drawable/icon_drawable_blue_button_focusable"/>
-    </LinearLayout>
+    <Button
+        android:id="@+id/logOut"
+        style="@style/alert_dialogue_blue_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:background="@drawable/icon_drawable_blue_button_focusable"
+        android:contentDescription="@string/sessionExpiryWarningLogOut"
+        android:focusable="true"
+        android:text="@string/sessionExpiryWarningLogOut"
+        android:textAllCaps="false" />
 </LinearLayout>

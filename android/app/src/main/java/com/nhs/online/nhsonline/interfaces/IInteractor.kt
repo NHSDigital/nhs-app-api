@@ -40,4 +40,6 @@ interface IInteractor {
     fun announcePageTitle(title: String?)
 
     fun showExtendSessionDialogue(sessionDuration: Int)
+
+    fun showBiometricLoginIfEnabled(): Boolean
 }

@@ -11,9 +11,7 @@ import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.utils.Html
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
-import junit.framework.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Before
 import org.mockito.internal.util.reflection.FieldSetter
@@ -24,8 +22,8 @@ import org.robolectric.shadows.ShadowDialog
 @RunWith(RobolectricTestRunner::class)
 class MainActivityTest {
 
-    lateinit var mainActivity: MainActivity
-    lateinit var spyActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
+    private lateinit var spyActivity: MainActivity
 
     @Before
     fun setUp() {
@@ -43,13 +41,15 @@ class MainActivityTest {
         } catch (e: Exception) {
             assert(false)
         }
-        val loginUrl = mainActivity.resources.getString(R.string.baseURL) + mainActivity.resources.getString(R.string.loginPath)
-        assertEquals(mainActivity.webview.url, loginUrl)
+        val loginUrl =
+            getStringById(R.string.baseURL) + getStringById(R.string.loginPath) + getStringById(R.string.nhsOnlineRequiredQueries)
+        Assert.assertEquals(mainActivity.webview.url, loginUrl)
     }
 
     @Test
     fun onBackButtonPressed_OnLoginScreen_ClosesApp() {
-        spyActivity.webview.loadUrl(mainActivity.resources.getString(R.string.baseURL) + mainActivity.resources.getString(R.string.loginPath))
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) + getStringById(
+            R.string.loginPath))
         spyActivity.isSuccessfulConfigCheck = true
 
         try {
@@ -63,8 +63,8 @@ class MainActivityTest {
 
     @Test
     fun onBackButtonPressed_OnGpFinderScreen_ClosesApp() {
-        spyActivity.webview.loadUrl(mainActivity.resources.getString(R.string.baseURL) +
-                mainActivity.resources.getString(R.string.gpFinderPath))
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
+                getStringById(R.string.gpFinderPath))
         spyActivity.isSuccessfulConfigCheck = true
 
         try {
@@ -78,14 +78,16 @@ class MainActivityTest {
 
     @Test
     fun onBackButtonPressed_OnGpFinderOtherScreen_ResetGpFlow() {
-        spyActivity.webview.loadUrl(mainActivity.resources.getString(R.string.baseURL) +
-                mainActivity.resources.getString(R.string.gpFinderPath) + "/otherPath")
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
+                getStringById(R.string.gpFinderPath) + "/otherPath")
         spyActivity.isSuccessfulConfigCheck = true
 
         val appWebInterface = AppWebInterface(spyActivity)
         val spyAppWebInterface = spy(appWebInterface)
 
-        FieldSetter.setField(spyActivity, spyActivity::class.java.getDeclaredField("appWebInterface"), spyAppWebInterface)
+        FieldSetter.setField(spyActivity,
+            spyActivity::class.java.getDeclaredField("appWebInterface"),
+            spyAppWebInterface)
 
         try {
             spyActivity.onBackPressed()
@@ -99,11 +101,13 @@ class MainActivityTest {
 
     @Test
     fun onBackButtonPressed_IsLoggedIn_ShowAlertDialog() {
-        spyActivity.webview.loadUrl(mainActivity.resources.getString(R.string.baseURL) +
-                mainActivity.resources.getString(R.string.gpFinderPath) + "/otherPath")
+        spyActivity.webview.loadUrl(getStringById(R.string.baseURL) +
+                getStringById(R.string.gpFinderPath) + "/otherPath")
         spyActivity.isSuccessfulConfigCheck = true
 
-        FieldSetter.setField(spyActivity, spyActivity::class.java.getDeclaredField("isLoggedIn"), true)
+        FieldSetter.setField(spyActivity,
+            spyActivity::class.java.getDeclaredField("isLoggedIn"),
+            true)
 
         try {
             spyActivity.onBackPressed()
@@ -137,9 +141,12 @@ class MainActivityTest {
         messageTextView?.apply { Assert.assertTrue(text.contains("Click here to update")) }
 
         var dialogUrls = messageTextView?.urls
-        val updateUrl = dialogUrls!![0].getURL()
+        val updateUrl = dialogUrls!![0].url
 
-        messageTextView?.apply { Assert.assertEquals("market://details?id=com.nhs.online.nhsonline", updateUrl) }
+        messageTextView?.apply {
+            Assert.assertEquals("market://details?id=com.nhs.online.nhsonline",
+                updateUrl)
+        }
     }
 
     @Test
@@ -147,14 +154,16 @@ class MainActivityTest {
         lateinit var upgradeDialog: AlertDialog
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(spyActivity)
-                .setTitle("Test Header")
+            .setTitle("Test Header")
 
         builder.setCancelable(false)
         upgradeDialog = builder.create()
         upgradeDialog.setCanceledOnTouchOutside(false)
         upgradeDialog.setCancelable(false)
 
-        FieldSetter.setField(spyActivity, spyActivity::class.java.getDeclaredField("upgradeDialog"), upgradeDialog)
+        FieldSetter.setField(spyActivity,
+            spyActivity::class.java.getDeclaredField("upgradeDialog"),
+            upgradeDialog)
 
         try {
             spyActivity.showVersionUpgradeDialog()
@@ -177,7 +186,7 @@ class MainActivityTest {
         lateinit var upgradeDialog: AlertDialog
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(spyActivity)
-                .setMessage("Test Message")
+            .setMessage("Test Message")
 
         builder.setCancelable(false)
         upgradeDialog = builder.create()
@@ -185,7 +194,9 @@ class MainActivityTest {
         upgradeDialog.setCancelable(false)
         upgradeDialog.show()
 
-        FieldSetter.setField(spyActivity, spyActivity::class.java.getDeclaredField("upgradeDialog"), upgradeDialog)
+        FieldSetter.setField(spyActivity,
+            spyActivity::class.java.getDeclaredField("upgradeDialog"),
+            upgradeDialog)
         try {
             spyActivity.showVersionUpgradeDialog()
         } catch (e: Exception) {
@@ -199,4 +210,6 @@ class MainActivityTest {
         Assert.assertNotNull(messageTextView)
         messageTextView?.apply { Assert.assertTrue(text.contains("Test Message")) }
     }
+
+    private fun getStringById(resId: Int): String = mainActivity.resources.getString(resId)
 }

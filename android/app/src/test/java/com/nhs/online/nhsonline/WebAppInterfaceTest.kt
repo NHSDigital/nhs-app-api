@@ -18,7 +18,7 @@ class WebAppInterfaceTest {
     private lateinit var webAppInterface: WebAppInterface
 
     @Before
-    fun SetUp() {
+    fun setUp() {
         contextMock = mock()
         webAppInterface = WebAppInterface(contextMock)
     }
@@ -118,7 +118,7 @@ class WebAppInterfaceTest {
     @Test
     fun biometrics(){
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterface.goToBiometrics()
+        webAppInterface.goToLoginOptions()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).goToNativeBiometricPage()

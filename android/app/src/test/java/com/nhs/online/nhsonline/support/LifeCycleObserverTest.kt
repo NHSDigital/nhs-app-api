@@ -1,9 +1,7 @@
 package com.nhs.online.nhsonline.support
 
 import android.content.res.Resources
-import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
-import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
@@ -26,7 +24,8 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class LifeCycleObserverTest {
 
-    private val mainActivity: MainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()
+    private val mainActivity: MainActivity =
+        Robolectric.buildActivity(MainActivity::class.java).create().get()
 
     private lateinit var lifeCycleObserver: LifeCycleObserver
     private lateinit var contextSpy: MainActivity
@@ -39,8 +38,8 @@ class LifeCycleObserverTest {
     fun setUp() {
         contextSpy = spy(mainActivity)
 
-        var r  = mock(Resources::class.java)
-        whenever(r.getString(any<Int>())).thenReturn("true")
+        val r = mock(Resources::class.java)
+        whenever(r.getString(any())).thenReturn("true")
         whenever(contextSpy.resources).thenReturn(r)
 
         appWebInterfaceMock = mock(AppWebInterface::class.java)
@@ -50,11 +49,11 @@ class LifeCycleObserverTest {
         rootBeerServiceMock.setLogging(true)
 
         lifeCycleObserver = LifeCycleObserver(
-                contextSpy,
-                appWebInterfaceMock,
-                knownServicesMock,
-                configurationServiceMock,
-                rootBeerServiceMock)
+            contextSpy,
+            appWebInterfaceMock,
+            knownServicesMock,
+            configurationServiceMock,
+            rootBeerServiceMock)
     }
 
     @Test
@@ -271,6 +270,7 @@ class LifeCycleObserverTest {
         whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
 
         val url = "Bazz"
+        val fidoServerUrl = "https://test@test.com"
         contextSpy.webview.loadUrl(url)
         val ksi = KnownService.Info(url, ErrorMessage("Danger Will Robinson"), url, false)
         whenever(knownServicesMock.findMatchingServiceInfo(url)).thenReturn(ksi)
@@ -279,6 +279,7 @@ class LifeCycleObserverTest {
         val cr = ConfigurationResponse()
         cr.isValidConfiguration = true
         cr.isThrottlingEnabled = true
+        cr.fidoServerUrl = fidoServerUrl
         doAnswer {
             val callback = it.arguments[0] as IVolleyCallback
             callback.onSuccess(cr)
@@ -291,6 +292,7 @@ class LifeCycleObserverTest {
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(contextSpy, times(1)).hideBlankScreen()
         verify(contextSpy, times(1)).loadThrottlingCarousel()
+        verify(contextSpy, times(1)).configBiometricSetup(fidoServerUrl)
         verify(contextSpy, times(1)).hideVersionUpgradeDialog()
         assertEquals(true, contextSpy.isSuccessfulConfigCheck)
     }

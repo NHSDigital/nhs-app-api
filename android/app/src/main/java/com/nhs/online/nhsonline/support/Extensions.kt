@@ -4,6 +4,8 @@ import android.graphics.Typeface.BOLD
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.widget.TextView
+import org.json.JSONException
+import org.json.JSONObject
 
 
 fun TextView.setServiceError(header: String, message: String? = null) {
@@ -37,3 +39,16 @@ fun Int.toStringNewLines(): String {
     return lines
 }
 
+fun ByteArray.toBase64(): String {
+    return android.util.Base64.encodeToString(this,
+        android.util.Base64.NO_WRAP)
+}
+
+fun String.extractJSONString(key: String): String {
+    return try {
+        JSONObject(this).getString(key)
+            .replace("\\\"", "\"")
+    } catch (e: JSONException) {
+        this
+    }
+}

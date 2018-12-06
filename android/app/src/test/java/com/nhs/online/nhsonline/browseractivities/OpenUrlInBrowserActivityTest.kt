@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class OpenUrlInBrowserActivityTest: ResourceMockingClass() {
+class OpenUrlInBrowserActivityTest : ResourceMockingClass() {
 
     @Test
     fun canStart_returnsFalse_forSupportedHosts() {
@@ -17,7 +17,7 @@ class OpenUrlInBrowserActivityTest: ResourceMockingClass() {
 
         val urls = listOf("https://111.nhs.uk/", "https://111.nhs.uk/Help/Terms")
 
-        urls.forEach{url ->
+        urls.forEach { url ->
             val result = openUrlInBrowserActivity.canStart(context, url)
             Assert.assertFalse(result)
         }
@@ -30,8 +30,8 @@ class OpenUrlInBrowserActivityTest: ResourceMockingClass() {
 
         val urls = listOf("https://www.google.co.uk/", "https://www.nhs.uk")
 
-        urls.forEach{url ->
-             val result = openUrlInBrowserActivity.canStart(context, url)
+        urls.forEach { url ->
+            val result = openUrlInBrowserActivity.canStart(context, url)
             Assert.assertTrue(result)
         }
     }
@@ -43,16 +43,15 @@ class OpenUrlInBrowserActivityTest: ResourceMockingClass() {
 
         val urls = listOf("https://111.nhs.uk/", "https://111.nhs.uk/Help/Terms")
 
-
         var runtimeException: java.lang.RuntimeException?
         runtimeException = null
 
-        urls.forEach{url ->
+        urls.forEach { url ->
             try {
                 runtimeException = null
                 openUrlInBrowserActivity.start(context, url)
                 Assert.fail("Expected `start()` to throw an exception for the given url: $url")
-            }catch (exception: RuntimeException){
+            } catch (exception: RuntimeException) {
                 runtimeException = exception
             } finally {
                 Assert.assertNotNull(runtimeException)

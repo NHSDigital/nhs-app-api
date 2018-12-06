@@ -114,8 +114,8 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
         return true
     }
 
-    fun isCheckSymptomsUnsecureURL(failedURL: String): Boolean {
-        var unsecuredKnownServiceInfo = knownServices.findMatchingServiceInfo(failedURL)
+    private fun isCheckSymptomsUnsecureURL(failedURL: String): Boolean {
+        val unsecuredKnownServiceInfo = knownServices.findMatchingServiceInfo(failedURL)
         unsecuredKnownServiceInfo?.header?.let { nativeHeader ->
             return when (nativeHeader) {
                 resources.getString(R.string.nhs_111_header),

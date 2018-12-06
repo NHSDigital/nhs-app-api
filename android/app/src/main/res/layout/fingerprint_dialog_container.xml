@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2017 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  ~ Modified heavily (including conversion to Kotlin) by NHS App
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fingerprintContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/default_padding_large"
+        android:paddingTop="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding_large"
+        android:paddingBottom="@dimen/default_padding_small">
+
+        <TextView
+            android:id="@+id/fingerprintDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/fingerprint_description_login"
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <ImageView
+            android:id="@+id/fingerprintIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fingerprintDescription"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/fingerprint_margin_horizontal"
+            android:contentDescription="@string/description_fingerprint_icon"
+            android:src="@drawable/ic_fp_40px" />
+
+        <TextView
+            android:id="@+id/fingerprintStatus"
+            style="@android:style/TextAppearance.Material.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/fingerprintIcon"
+            android:layout_alignBottom="@+id/fingerprintIcon"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_toEndOf="@+id/fingerprintIcon"
+            android:gravity="center_vertical"
+            android:text="@string/fingerprint_hint"
+            android:textColor="@color/hint_color" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonPanel"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/fingerprint_padding_horizontal"
+        android:paddingTop="@dimen/fingerprint_padding_vertical"
+        android:paddingEnd="@dimen/fingerprint_padding_horizontal"
+        android:paddingBottom="@dimen/fingerprint_padding_vertical">
+
+        <Space
+            android:id="@+id/spacer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            style="?android:attr/buttonBarNegativeButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

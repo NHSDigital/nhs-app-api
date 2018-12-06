@@ -16,43 +16,46 @@ class WebAppInterface(private val context: MainActivity) {
     @JavascriptInterface
     fun onLogin() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLogin")
-        context.runOnUiThread{context.loggedIn()}
+        context.runOnUiThread { context.loggedIn() }
     }
 
     @JavascriptInterface
     fun onLogout() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLogout")
-        context.runOnUiThread{context.loggedOut()}
+        context.runOnUiThread {
+            context.showWebviewScreen()
+            context.loggedOut()
+        }
     }
 
     @JavascriptInterface
     fun updateHeaderText(text: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateHeaderText")
-        context.runOnUiThread{context.setHeaderText(text)}
+        context.runOnUiThread { context.setHeaderText(text) }
     }
 
     @JavascriptInterface
     fun clearMenuBarItem() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering clearMenuBarItem")
-        context.runOnUiThread{context.clearMenuBarItem()}
+        context.runOnUiThread { context.clearMenuBarItem() }
     }
 
     @JavascriptInterface
     fun checkSymptoms() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering checkSymptoms")
-        context.runOnUiThread{context.goToCheckSymptoms()}
+        context.runOnUiThread { context.goToCheckSymptoms() }
     }
 
     @JavascriptInterface
     fun hideHeader() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
-        context.runOnUiThread{context.hideHeader()}
+        context.runOnUiThread { context.hideHeader() }
     }
 
     @JavascriptInterface
     fun showHeader() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
-        context.runOnUiThread{context.showHeader()}
+        context.runOnUiThread { context.showHeader() }
     }
 
     @JavascriptInterface
@@ -70,18 +73,18 @@ class WebAppInterface(private val context: MainActivity) {
     @JavascriptInterface
     fun resetPageFocus() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering resetPageFocus")
-        context.runOnUiThread{context.resetFocusToNhsLogoForA11y()}
+        context.runOnUiThread { context.resetFocusToNhsLogoForA11y() }
     }
 
     @JavascriptInterface
     fun hideWhiteScreen() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideWhiteScreen")
-        context.runOnUiThread{context.hideBlankScreen()}
+        context.runOnUiThread { context.hideBlankScreen() }
     }
 
     @JavascriptInterface
-    fun goToBiometrics() {
-        context.runOnUiThread{context.goToNativeBiometricPage()}
+    fun goToLoginOptions() {
+        context.runOnUiThread { context.goToNativeBiometricPage() }
     }
 
     @JavascriptInterface
@@ -90,7 +93,8 @@ class WebAppInterface(private val context: MainActivity) {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val edit = prefs.edit()
-        edit.putBoolean(context.getString(R.string.haveShownThrottlingCarouselBefore), java.lang.Boolean.TRUE)
+        edit.putBoolean(context.getString(R.string.haveShownThrottlingCarouselBefore),
+            java.lang.Boolean.TRUE)
         edit.apply()
 
         context.runOnUiThread {
@@ -107,7 +111,9 @@ class WebAppInterface(private val context: MainActivity) {
     fun storeBetaCookie() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering storeBetaCookie")
         context.runOnUiThread {
-            val cookies = CookieManager.getInstance().getCookie(context.resources.getString(R.string.cookieDomain))
+            val cookies: String? = CookieManager.getInstance()
+                .getCookie(context.resources.getString(R.string.cookieDomain))
+                ?.takeIf { it.contains("BetaCookie=") }
             if (cookies != null) {
                 val betaCookie = cookies.split("; ").first { it.startsWith("BetaCookie=") }
                 val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -119,7 +125,7 @@ class WebAppInterface(private val context: MainActivity) {
     @JavascriptInterface
     fun onSessionExpiring(sessionDuration: Int) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
-        context.runOnUiThread{context.showExtendSessionDialogue(sessionDuration)}
+        context.runOnUiThread { context.showExtendSessionDialogue(sessionDuration) }
     }
 
     @JavascriptInterface

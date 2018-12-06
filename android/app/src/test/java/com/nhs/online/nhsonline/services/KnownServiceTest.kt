@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class KnownServiceServiceTest {
+class KnownServiceTest {
     private val emptyErrorMessage = ErrorMessage("")
 
     @Test
@@ -70,6 +70,37 @@ class KnownServiceServiceTest {
         val result = testService.hasMissingQueryString("")
 
         Assert.assertFalse(result)
+    }
+
+    @Test
+    fun hasOnlyRequiredQueries_returnsFalseWhenUrlHasAnExtraQuery() {
+        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+            queryStrings = "?source=android")
+        val url = "http://10.0.2.2:3000??source=android&param=1"
+        val result = testService.hasOnlyRequiredQueries(url)
+        Assert.assertFalse("An extra query is present in the url,expected only source=android",
+            result)
+
+    }
+
+    @Test
+    fun hasOnlyRequiredQueries_returnsTrueWhenServiceAndUrlHaveSameQuery() {
+        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+            queryStrings = "?source=android")
+        val url = "http://10.0.2.2:3000?source=android"
+        val result = testService.hasOnlyRequiredQueries(url)
+        Assert.assertTrue("Url query and service query are not matching",
+            result)
+    }
+
+    @Test
+    fun hasOnlyRequiredQueries_returnsFalseWhenServiceHasQueryButUrlHasNot() {
+        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+            queryStrings = "?source=android")
+        val url = "http://10.0.2.2:3000"
+        val result = testService.hasOnlyRequiredQueries(url)
+        Assert.assertFalse("Url has an unexpected query",
+            result)
     }
 
     @Test
@@ -231,7 +262,7 @@ class KnownServiceServiceTest {
         val path = "appointments"
         val randomUrl = "https://www.google.co.uk/$path"
         val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
-        testService.addPathInfo(path, true,"")
+        testService.addPathInfo(path, true, "")
         val pathInfo =
             testService.findMatchingServicePathInfo(randomUrl)
         Assert.assertNull(pathInfo)

@@ -152,6 +152,27 @@ class KnownServicesTest : ResourceMockingClass() {
     }
 
     @Test
+    fun isLoginUrlWithSourceQuery_ReturnsFalseWhenLoginUrlHasAdditionalAQuery() {
+        val loginUrlWithExtraQuery = "http://10.0.2.2:3000/login?source=android&responseCode=102"
+        val result = testKnownServices.isLoginUrlWithSourceQuery(loginUrlWithExtraQuery)
+        Assert.assertFalse("Additional query responseCode=102 shouldn't in known Service", result)
+    }
+
+    @Test
+    fun isLoginUrlWithSourceQuery_ReturnsFalseWhenLoginUrlHasNoQuery() {
+        val loginUrl = "http://10.0.2.2:3000/login"
+        val result = testKnownServices.isLoginUrlWithSourceQuery(loginUrl)
+        Assert.assertFalse(result)
+    }
+
+    @Test
+    fun isLoginUrlWithSourceQuery_ReturnsTrueWhenLoginUrlHasOnlySourceQuery() {
+        val loginUrlWithSourceQuery = "http://10.0.2.2:3000/login?source=android"
+        val result = testKnownServices.isLoginUrlWithSourceQuery(loginUrlWithSourceQuery)
+        Assert.assertTrue(result)
+    }
+
+    @Test
     fun findMatchingServiceInfo_resolvesToMatchingInternalPathOrClosestInternalThePath() {
         val nhsAppServices =
             arrayListOf(getResourceString(R.string.baseURL) + getResourceString(R.string.symptomsPath),

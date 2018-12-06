@@ -63,6 +63,17 @@ class KnownServices(private val context: Context) {
         return nhsService?.findMatchingServicePathInfoByPath(path)
     }
 
+    fun isLoginUrlWithSourceQuery(urlString: String?): Boolean {
+        val nonNullUrlString = urlString ?: ""
+        val knownService = findMatchingKnownService(nonNullUrlString) ?: return false
+        val url = URL(urlString)
+        val nhsUrl = URL(fetchStringResource(R.string.baseURL))
+
+        return nhsUrl.host == url.host &&
+                knownService.hasOnlyRequiredQueries(nonNullUrlString) &&
+                url.path.startsWith("/${fetchStringResource(R.string.loginPath)}")
+    }
+
     fun isCIDRedirectUrl(urlString: String): Boolean = try {
         val nhsUrl = URL(fetchStringResource(R.string.baseURL))
         val url = URL(urlString)
@@ -80,8 +91,8 @@ class KnownServices(private val context: Context) {
             null,
             false)
         organDonation.addPathInfo(URL(fetchStringResource(R.string.organDonationNative)).path,
-                false,
-                fetchStringResource(R.string.organ_donation_register_header))
+            false,
+            fetchStringResource(R.string.organ_donation_register_header))
 
         val nhsUK = KnownService(fetchStringResource(R.string.nhsUK),
             unavailabilityErrorMessage)
@@ -94,11 +105,11 @@ class KnownServices(private val context: Context) {
             fetchStringResource(R.string.conditions_header))
 
         val nhs111 = KnownService(fetchStringResource(
-                R.string.nhs111),
-                unavailabilityErrorMessage,
-                fetchStringResource(R.string.nhs_111_header),
-                fetchStringResource(R.string.nhs_111_header_description),
-                false)
+            R.string.nhs111),
+            unavailabilityErrorMessage,
+            fetchStringResource(R.string.nhs_111_header),
+            fetchStringResource(R.string.nhs_111_header_description),
+            false)
         val dataPref = KnownService(fetchStringResource(R.string.dataPreferencesBaseUrl),
             unavailabilityErrorMessage,
             fetchStringResource(R.string.conditions_header),

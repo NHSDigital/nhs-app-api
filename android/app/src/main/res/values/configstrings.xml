@@ -8,6 +8,11 @@
     <string name="cookieDomain">@string/baseURL</string>
     <string name="authRedirectPath">/auth-return</string>
     <string name="gpFinderPath">gp-finder</string>
+    <string name="fidoGetAuthRequestPath">/authRequest</string>
+    <string name="fidoPostAuthResponsePath">/authResponse</string>
+    <string name="fidoPostDeregResponsePath">/deregRequest</string>
+    <string name="fidoGetRegRequestPath">/regRequest</string>
+    <string name="fidoPostRegResponsePath">/regResponse</string>
     <string name="morePath">more</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
     <string name="myRecordPath">my-record-warning</string>
@@ -15,6 +20,8 @@
     <string name="appointmentsPath">appointments</string>
     <string name="prescriptionsPath">prescriptions</string>
     <string name="myAccountPath">account</string>
+    <string name="fidoAuthQueryKey">fidoAuthResponse</string>
+    <string name="fidoLoginPathWithAuthQueryKey">login?fidoAuthResponse</string>
     <string name="nhs111">https://111.nhs.uk/</string>
     <string name="nhsUK">https://www.nhs.uk</string>
     <string name="conditions">https://www.nhs.uk/conditions/</string>
@@ -26,6 +33,8 @@
     <string name="throttleCarouselPath">file:///android_asset/throttling.html</string>
     <string name="dataPreferencesBaseUrl">https://ndopapp-int1.thunderbird.service.nhs.uk/</string>
 
+    <string name="accessToken">accessToken</string>
+    <string name="fidoUsername">fidoUsername</string>
     <string name="logoutPath">logout</string>
     <string name="loginPath">login</string>
     <string name="secureFlag">enabled</string>
@@ -36,11 +45,14 @@
     <string name="cookiesPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/</string>
     <string name="openSourceLicensesURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/</string>
     <string name="medicalRecordAbbreviationsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/</string>
+    <string name="sessionDetailsCookieName">nhso.session</string>
     <string name="accessibilityStatementURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/</string>
     <string name="configurationApiPath">configuration?nativeAppVersion=%1$s&amp;deviceName=Android</string>
     <string name="isSupportedVersion">isDeviceSupported</string>
     <string name="isThrottlingEnabled">isThrottlingEnabled</string>
+    <string name="fidoServerUrlConfigurationKey">fidoServerUrl</string>
     <string name="isRootCheckEnabled">false</string>
+
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 
@@ -55,13 +67,6 @@
         <item>@string/accessibilityStatementURL</item>
     </string-array>
 
-    <string-array name="serviceUrls">
-        <item>@string/nhs111</item>
-        <item>@string/organDonation</item>
-        <item>@string/dataSharing</item>
-        <item>@string/conditions</item>
-    </string-array>
-
     <string-array name="nativeAppHosts">
         <item>@string/nhs111</item>
         <item>@string/nhs111Location</item>
@@ -71,7 +76,4 @@
         <item>@string/baseURL</item>
     </string-array>
 
-    <string-array name="queryStrings">
-
-    </string-array>
 </resources>

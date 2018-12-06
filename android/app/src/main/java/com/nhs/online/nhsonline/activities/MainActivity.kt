@@ -1,69 +1,82 @@
 package com.nhs.online.nhsonline.activities
 
-import android.content.Context
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
+import android.text.method.LinkMovementMethod
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityManager
 import android.webkit.CookieManager
 import android.webkit.WebSettings
+import android.widget.Button
+import android.widget.TextView
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.Volley
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.biometrics.FingerprintService
+import com.nhs.online.nhsonline.biometrics.IBiometricsInteractor
+import com.nhs.online.nhsonline.biometrics.utils.FingerprintSystemChecker
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
+import com.nhs.online.nhsonline.interfaces.IVolleyCallback
 import com.nhs.online.nhsonline.navigation.MenuBarItem
+import com.nhs.online.nhsonline.network.Reachability
+import com.nhs.online.nhsonline.services.ConfigurationResponse
+import com.nhs.online.nhsonline.services.ConfigurationService
+import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
+import com.nhs.online.nhsonline.support.ActivityView
 import com.nhs.online.nhsonline.support.LifeCycleObserver
+import com.nhs.online.nhsonline.support.MainActivityViewSwitcher
 import com.nhs.online.nhsonline.support.setServiceError
+import com.nhs.online.nhsonline.utils.Html
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
+import com.scottyab.rootbeer.RootBeer
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.biometric_layout_content.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
-import android.location.LocationManager
-import android.preference.PreferenceManager
-import android.text.method.LinkMovementMethod
-import android.view.accessibility.AccessibilityEvent
-import android.util.Log
-import com.nhs.online.nhsonline.Application
-import android.view.accessibility.AccessibilityManager
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
-import android.widget.Button
-import android.widget.TextView
-import com.nhs.online.nhsonline.BuildConfig
-import com.nhs.online.nhsonline.services.KnownServices
+import kotlinx.android.synthetic.main.success_layout.*
 import java.net.URL
-import com.nhs.online.nhsonline.interfaces.IVolleyCallback
-import com.nhs.online.nhsonline.network.Reachability
-import com.nhs.online.nhsonline.services.ConfigurationResponse
-import com.nhs.online.nhsonline.services.ConfigurationService
-import com.nhs.online.nhsonline.utils.Html
-import com.scottyab.rootbeer.RootBeer
+import java.util.logging.Logger
 
+private val TAG = MainActivity::class.java.simpleName
 
-class MainActivity : IInteractor, AppCompatActivity() {
+class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     private lateinit var mRequestQueue: RequestQueue
     private lateinit var configurationService: ConfigurationService
     private lateinit var chromeClient: ChromeClientLocationHandler
     private lateinit var knownServices: KnownServices
+    private val logger = Logger.getLogger(TAG)
+
+    private var fingerprintService: FingerprintService? = null
     private lateinit var urlLoader: UrlLoader
     private lateinit var appWebInterface: AppWebInterface
     private lateinit var upgradeDialog: AlertDialog
     private lateinit var rootedDeviceDialog: AlertDialog
     private var lifeCycleObserver: LifeCycleObserver? = null
+    private lateinit var activityViewSwitcher: MainActivityViewSwitcher
     private var isLoggedIn = false
     private var extendSessionDialogue: AlertDialog? = null
 
@@ -71,22 +84,22 @@ class MainActivity : IInteractor, AppCompatActivity() {
     var originalWebviewZoom = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnCreate")
-
         super.onCreate(savedInstanceState)
 
         if (resources.getString(R.string.secureFlag) != "disabled") {
             window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                    WindowManager.LayoutParams.FLAG_SECURE)
+                WindowManager.LayoutParams.FLAG_SECURE)
         }
 
         CookieManager.getInstance().removeAllCookies(null)
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val persistedBetaCookie = prefs.getString("BetaCookie", null)
         if (!persistedBetaCookie.isNullOrBlank()) {
-            CookieManager.getInstance().setCookie(getString(R.string.cookieDomain), "$persistedBetaCookie; max-age=${60 * 60 * 24 * 365}")
+            CookieManager.getInstance().setCookie(getString(R.string.cookieDomain),
+                "$persistedBetaCookie; max-age=${60 * 60 * 24 * 365}")
         }
+
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.header))
@@ -100,15 +113,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
         dismissProgressDialog()
 
         configureWebView()
-        var wvClient = WebClientInterceptor(this, knownServices, createActivities(), this)
+        val wvClient = WebClientInterceptor(this, knownServices, createActivities(), this)
         webview.webViewClient = wvClient
         urlLoader = UrlLoader(webview,
-                wvClient,
-                appWebInterface,
-                knownServices,
-                resources.getString(R.string.baseURL))
+            wvClient,
+            appWebInterface,
+            knownServices,
+            resources.getString(R.string.baseURL))
+
+        activityViewSwitcher = MainActivityViewSwitcher(this)
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
+        backToAccountButton.setOnClickListener { onSuccessButton() }
         retryButton.setOnClickListener { onErrorRetryButton() }
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
@@ -123,6 +139,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val urlPath = intent?.data?.path
         val authRedirectPath = resources.getString(R.string.authRedirectPath)
         if (urlPath == authRedirectPath) {
+            toggleBiometricSwitch(false)
             loadPage(intent.data.toString())
         } else {
             loadWelcomePage()
@@ -131,7 +148,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     override fun loadThrottlingCarousel() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
-        val haveShownThrottlingCarouselBefore = prefs.getBoolean(getString(R.string.haveShownThrottlingCarouselBefore), false)
+        val haveShownThrottlingCarouselBefore =
+            prefs.getBoolean(getString(R.string.haveShownThrottlingCarouselBefore), false)
 
         if (!haveShownThrottlingCarouselBefore) {
             runOnUiThread {
@@ -145,10 +163,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun onErrorRetryButton() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnErrorRetryButton")
+        logger.info("${this::class.java.simpleName}: Entering OnErrorRetryButton")
 
         if (!Reachability.isConnectedToNetwork(this)) {
-            Log.d(Application.TAG, "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
+            logger.info(
+                "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
             return
         }
 
@@ -161,8 +180,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
                     showVersionUpgradeDialog()
                 }
 
-                if(!isLoggedIn && configurationResponse.isThrottlingEnabled) {
+                if (!isLoggedIn && configurationResponse.isThrottlingEnabled) {
                     loadThrottlingCarousel()
+                }
+
+                if (fingerprintService == null) {
+                    configBiometricSetup(configurationResponse.fidoServerUrl)
                 }
             }
 
@@ -174,39 +197,56 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun onStart() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnStart")
+        logger.info("Entering OnStart")
         super.onStart()
 
+        // reloadIfAppWasInBackground()
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
-                    appWebInterface, knownServices, configurationService, RootBeer(this))
+                appWebInterface, knownServices, configurationService, RootBeer(this))
         }
 
         lifeCycleObserver?.onMoveToForeground()
     }
 
     override fun onStop() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnStop")
+        logger.info(" Entering OnStop")
         super.onStop()
 
         lifeCycleObserver?.onMoveToBackground()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        fingerprintService?.cancelAllProgressingTasks()
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        handleNewIntent(intent)
+    }
 
-        val data = intent?.data
-
-        if (data != null) {
-            if (data.scheme == getString(R.string.appScheme)) {
-                val url = data.buildUpon()
-                        .scheme(getString(R.string.baseScheme))
-                        .toString()
-                showBlankScreen()
-                loadPage(url)
-            } else {
-                loadPage(data.toString())
+    private fun handleNewIntent(intent: Intent?) {
+        intent?.data?.let { uri ->
+            val hasFidoLoginError = uri.path.contains(getString(R.string.authRedirectPath)) &&
+                    fingerprintService?.biometricState?.registered ?: false &&
+                    uri.queryParameterNames.contains(getString(R.string.redirectErrorQueryParam))
+            if (hasFidoLoginError) {
+                Log.d(TAG, "Fido login error response url: $uri")
+                fingerprintService?.notifyLoginErrorOccurrence()
+                loadWelcomePage()
+                return
             }
+
+            val hasAppScheme = uri.scheme == getString(R.string.appScheme)
+            val url = if (hasAppScheme) uri.buildUpon()
+                .scheme(getString(R.string.baseScheme)).toString()
+            else uri.toString()
+
+            if (hasAppScheme)
+                showBlankScreen()
+
+            loadPage(url)
         }
     }
 
@@ -220,9 +260,47 @@ class MainActivity : IInteractor, AppCompatActivity() {
         return urlLoader.reloadUrl
     }
 
+    fun configBiometricSetup(fidoServerUrl: String) {
+        if (fingerprintService != null) return
+
+        fingerprintService = FingerprintService.createIfDeviceSupported(this, fidoServerUrl)
+        biometricToggleSwitch.setOnTouchListener { _, event ->
+            onBiometricSwitchTouch(event)
+        }
+    }
+
+    private fun onBiometricSwitchTouch(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_UP) {
+            if (fingerprintService == null) {
+                if (FingerprintSystemChecker.checkIfAndroidMOrAbove()) {
+                    showBiometricRegistrationError()
+                } else {
+                    FingerprintSystemChecker.showCurrentOSNotSupportDialog(this)
+                }
+
+                return false
+            }
+
+            fingerprintService?.let {
+                if (it.biometricState.registrationStateChangeInProgress) {
+                    biometricToggleSwitch.isChecked = it.biometricState.registered
+                    return false
+                }
+
+                if (it.biometricState.registered) {
+                    it.deRegisterBiometrics()
+                } else {
+                    it.startFidoRegistration()
+                }
+            }
+        }
+
+        return true
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering configureWebView")
+        logger.info("Entering configureWebView")
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true
         webview.settings.javaScriptCanOpenWindowsAutomatically = true
@@ -234,15 +312,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
     }
 
-    fun createActivities(): List<ActivityInterface> {
+    private fun createActivities(): List<ActivityInterface> {
         val openBrowserActivity =
-                OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
+            OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
         return listOf(openBrowserActivity)
     }
 
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMenuSelected")
-        var path: String
+        logger.info("Entering onMenuSelected")
+        val path: String
 
         when (menuBarItem.id) {
             R.id.symptoms -> {
@@ -267,6 +345,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
         loadUrl(path)
     }
 
+    override fun loadBiometricLoginPage(url: String) {
+        urlLoader.usingAbsoluteUri = true
+        loadUrl(url)
+    }
+
     override fun loadPage(url: String) {
         loadUrl(url)
     }
@@ -279,7 +362,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         knownService?.header?.let { nativeHeader ->
             setHeaderText(nativeHeader)
         }
-        hideBiometrics()
+        activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
         urlLoader.loadUrl(path)
     }
 
@@ -301,7 +384,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
 
     override fun setHeaderText(text: String, description: String?) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering setHeaderText")
+        logger.info("Entering setHeaderText")
         runOnUiThread {
             header_text_view.text = text
             header_text_view.contentDescription = description
@@ -310,21 +393,16 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onBackPressed")
+        logger.info("${this::class.java.simpleName}: Entering onBackPressed")
 
-        val  path = URL(webview.url).path
+        val path = URL(webview.url).path
 
-        if (isLoggedIn) {
-            showExitDialog()
-
-        } else if (path.equals("/" + resources.getString(R.string.gpFinderPath))) {
-            this.finishAndRemoveTask()
-
-        } else if (path.contains(resources.getString(R.string.gpFinderPath), ignoreCase = true)) {
-            appWebInterface.resetGPFinderFlow()
-
-        } else {
-            this.finishAndRemoveTask()
+        when {
+            isLoggedIn -> showExitDialog()
+            path == "/" + resources.getString(R.string.gpFinderPath) -> this.finishAndRemoveTask()
+            path.contains(resources.getString(R.string.gpFinderPath),
+                ignoreCase = true) -> appWebInterface.resetGPFinderFlow()
+            else -> this.finishAndRemoveTask()
         }
     }
 
@@ -332,9 +410,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
         super.onResume()
 
         if (isSuccessfulConfigCheck) {
-            val loginUrl = resources.getString(R.string.baseURL) + resources.getString(R.string.loginPath)
-            if (webview.url == null) {
-                webview.loadUrl(loginUrl)
+            val loginUrl =
+                resources.getString(R.string.baseURL) + resources.getString(R.string.loginPath)
+            val currentUrl = webview.url ?: ""
+
+            val isFidoLoginUrl = currentUrl.contains(loginUrl) &&
+                    currentUrl.contains(getString(R.string.fidoAuthQueryKey))
+
+            if (currentUrl.isEmpty() || isFidoLoginUrl) {
+                loadPage(loginUrl)
             } else if (webview.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
                 webview.reload()
             }
@@ -345,30 +429,30 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
         builder.setMessage(resources.getString(R.string.logoutWarning))
-                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
-                    urlLoader.loadPage(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
-                }
-                .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
+            .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
+                urlLoader.loadPage(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
+            }
+            .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
 
-        var dialog: AlertDialog = builder.create()
+        val dialog: AlertDialog = builder.create()
         dialog.show()
     }
 
     fun showVersionUpgradeDialog() {
         if ((::upgradeDialog.isInitialized && !upgradeDialog.isShowing) || !::upgradeDialog.isInitialized) {
 
-            val content = "${resources.getString(R.string.UpdateHeader)}" +
+            val content = resources.getString(R.string.UpdateHeader) +
                     "<br/><br/>" +
-                    "${resources.getString(R.string.UpdateNativeLink)}" +
+                    resources.getString(R.string.UpdateNativeLink) +
                     "<br/><br/>" +
-                    "${resources.getString(R.string.UpdateDesc)}"
+                    resources.getString(R.string.UpdateDesc)
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-                    .setTitle(resources.getString(R.string.UpdateRequiredHeader))
-                    .setMessage( Html.fromHtml(content ))
-                    .setNegativeButton(resources.getString(R.string.Close)) { _, _ ->
-                        this.finishAndRemoveTask()
-                    }
+                .setTitle(resources.getString(R.string.UpdateRequiredHeader))
+                .setMessage(Html.fromHtml(content))
+                .setNegativeButton(resources.getString(R.string.Close)) { _, _ ->
+                    this.finishAndRemoveTask()
+                }
 
             builder.setCancelable(false)
             upgradeDialog = builder.create()
@@ -376,7 +460,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
             upgradeDialog.setCancelable(false)
             upgradeDialog.show()
 
-            (upgradeDialog.findViewById<TextView>(android.R.id.message) as TextView).movementMethod = LinkMovementMethod.getInstance()
+            (upgradeDialog.findViewById<TextView>(android.R.id.message) as TextView).movementMethod =
+                    LinkMovementMethod.getInstance()
         }
     }
 
@@ -387,37 +472,39 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
 
-
     fun showRootedDeviceDialog() {
-        if((::rootedDeviceDialog.isInitialized && !rootedDeviceDialog.isShowing) || !::rootedDeviceDialog.isInitialized ) {
+        if ((::rootedDeviceDialog.isInitialized && !rootedDeviceDialog.isShowing) || !::rootedDeviceDialog.isInitialized) {
 
             val tc1 = resources.getString(R.string.rootedDeviceDialogDescriptionLine1)
             val tc2 = resources.getString(R.string.rootedDeviceDialogDescriptionLine2)
             val content = "$tc1 <br/><br/> $tc2"
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-                    .setTitle(resources.getString(R.string.rootedDeviceDialogHeader))
-                    .setMessage( Html.fromHtml(content ))
-                    .setNegativeButton(resources.getString(R.string.rootedDeviceDialogClose)) { _, _ ->
-                        this.finishAndRemoveTask()
-                    }
+                .setTitle(resources.getString(R.string.rootedDeviceDialogHeader))
+                .setMessage(Html.fromHtml(content))
+                .setNegativeButton(resources.getString(R.string.rootedDeviceDialogClose)) { _, _ ->
+                    this.finishAndRemoveTask()
+                }
             builder.setCancelable(false)
             rootedDeviceDialog = builder.create()
             rootedDeviceDialog.setCanceledOnTouchOutside(false)
             rootedDeviceDialog.setCancelable(false)
             rootedDeviceDialog.show()
 
-            (rootedDeviceDialog.findViewById<TextView>(android.R.id.message) as TextView).movementMethod = LinkMovementMethod.getInstance()
+            (rootedDeviceDialog.findViewById<TextView>(android.R.id.message) as TextView).movementMethod =
+                    LinkMovementMethod.getInstance()
         }
     }
 
     override fun showExtendSessionDialogue(sessionDuration: Int) {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
+        logger.info("Entering showExtendSessionDialogue")
 
-        extendSessionDialogue = extendSessionDialogue ?: initialiseExtendSessionDialogue(sessionDuration)
+        extendSessionDialogue = extendSessionDialogue ?:
+                initialiseExtendSessionDialogue(sessionDuration)
         extendSessionDialogue?.show()
     }
 
+    @SuppressLint("InflateParams")
     private fun initialiseExtendSessionDialogue(sessionDuration: Int): AlertDialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
@@ -425,13 +512,16 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val dialogView = inflater.inflate(R.layout.session_expiry_warning_dialogue, null)
         builder.setView(dialogView)
         builder.setCancelable(false)
-        var textView = dialogView.findViewById(R.id.sessionExpiryWarningDurationInformation) as TextView
-        val sessionExpiryMessage = resources.getString(R.string.sessionExpiryWarningDurationInformation).format(sessionDuration)
+        var textView =
+            dialogView.findViewById(R.id.sessionExpiryWarningDurationInformation) as TextView
+        val sessionExpiryMessage =
+            resources.getString(R.string.sessionExpiryWarningDurationInformation)
+                .format(sessionDuration)
         textView.text = sessionExpiryMessage
         textView.contentDescription = sessionExpiryMessage
         val extendSession = dialogView.findViewById(R.id.extendSession) as Button
         val logOut = dialogView.findViewById(R.id.logOut) as Button
-        var dialog: AlertDialog = builder.create()
+        val dialog: AlertDialog = builder.create()
         extendSession.setOnClickListener { dialog.dismiss(); appWebInterface.extendSession() }
         logOut.setOnClickListener { dialog.dismiss(); appWebInterface.logout() }
         dialog.setCanceledOnTouchOutside(false)
@@ -454,13 +544,37 @@ class MainActivity : IInteractor, AppCompatActivity() {
             menuBar.switchActiveMenuItemTo(navigationMenuId)
     }
 
+    override fun getActivity(): FragmentActivity = this
+
+    override fun toggleBiometricSwitch(isChecked: Boolean) {
+        biometricToggleSwitch.isChecked = isChecked
+    }
+
+    override fun showBiometricsOnRegistrationSuccessMessage() {
+        successTextView.text =
+                resources.getString(R.string.fingerprint_registration_success_dialog_message)
+        activityViewSwitcher.switchTo(ActivityView.FINGERPRINT_SUCCESS)
+    }
+
+    override fun showBiometricsOnDeRegistrationSuccessMessage() {
+        successTextView.text =
+                resources.getString(R.string.fingerprint_de_registration_success_dialog_message)
+        activityViewSwitcher.switchTo(ActivityView.FINGERPRINT_SUCCESS)
+    }
+
+    override fun showBiometricRegistrationError() {
+        errorTextView.setServiceError(getString(R.string.errorIconText),
+            getString(R.string.biometric_registration_failure_message))
+        activityViewSwitcher.switchTo(ActivityView.ERROR)
+    }
+
     override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
         if (::upgradeDialog.isInitialized) {
             upgradeDialog.dismiss()
         }
         showErrorScreen()
         errorTextView.setServiceError(unavailabilityErrorMessage.title,
-                unavailabilityErrorMessage.message)
+            unavailabilityErrorMessage.message)
         errorTextView.contentDescription = unavailabilityErrorMessage.title + ". " +
                 unavailabilityErrorMessage.accessibleMessage
         if (unavailabilityErrorMessage.message != null) {
@@ -473,17 +587,16 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun showErrorScreen() {
         hideBlankScreen()
-        errorViewLayout.visibility = View.VISIBLE
-        webview.visibility = View.GONE
+        activityViewSwitcher.switchTo(ActivityView.ERROR)
 
         urlLoader.usingAbsoluteUri = true
     }
 
     override fun showWebviewScreen() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showWebViewScreen")
+        logger.info("Entering showWebViewScreen")
+
         if (isSuccessfulConfigCheck) {
-            errorViewLayout.visibility = View.GONE
-            webview.visibility = View.VISIBLE
+            activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
             hideBlankScreen()
 
             if (isLoggedIn) {
@@ -493,12 +606,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         val lm = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        var gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -506,7 +619,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
                     chromeClient.onLocationPermissionResponded(true)
                 } else {
                     val gpsOptionsIntent =
-                            Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                        Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     startActivity(gpsOptionsIntent)
                     chromeClient.onLocationPermissionResponded(true)
                 }
@@ -517,15 +630,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun setMenuBarItem(index: Int) {
-            runOnUiThread {
-                when(index){
-                    0 -> menuBar.switchActiveMenuItemTo(R.id.symptoms)
-                    1 -> menuBar.switchActiveMenuItemTo(R.id.appointments)
-                    2 -> menuBar.switchActiveMenuItemTo(R.id.prescriptions)
-                    3 -> menuBar.switchActiveMenuItemTo(R.id.myRecord)
-                    4 -> menuBar.switchActiveMenuItemTo(R.id.more)
-                }
+        runOnUiThread {
+            when (index) {
+                0 -> menuBar.switchActiveMenuItemTo(R.id.symptoms)
+                1 -> menuBar.switchActiveMenuItemTo(R.id.appointments)
+                2 -> menuBar.switchActiveMenuItemTo(R.id.prescriptions)
+                3 -> menuBar.switchActiveMenuItemTo(R.id.myRecord)
+                4 -> menuBar.switchActiveMenuItemTo(R.id.more)
             }
+        }
     }
 
     override fun clearMenuBarItem() {
@@ -538,18 +651,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     fun goToNativeBiometricPage() {
-        showBiometrics();
+        activityViewSwitcher.switchTo(ActivityView.FINGERPRINT)
         setHeaderText(resources.getString(R.string.biometric_header))
-    }
-
-    fun showBiometrics() {
-        biometricLayoutContent.visibility = View.VISIBLE
-        webview.visibility = View.GONE
-    }
-
-    fun hideBiometrics() {
-        biometricLayoutContent.visibility = View.GONE
-        webview.visibility = View.VISIBLE;
     }
 
     override fun announcePageTitle(title: String?) {
@@ -557,21 +660,21 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun hideMenuBar() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideMenuBar")
+        logger.info("Entering hideMenuBar")
         runOnUiThread {
             menuBar.visibility = GONE
         }
     }
 
     override fun hideHeader() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
+        logger.info("Entering hideHeader")
         runOnUiThread {
             header.visibility = GONE
         }
     }
 
     fun loggedIn() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering loggedIn")
+        logger.info("Entering loggedIn")
         if (isLoggedIn) return
 
         showMenuBar()
@@ -581,32 +684,34 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     fun loggedOut() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering loggedOut")
+        logger.info("Entering loggedOut")
         urlLoader.usingAbsoluteUri = true
         isLoggedIn = false
 
         if (extendSessionDialogue?.isShowing == true) {
             extendSessionDialogue?.dismiss()
         }
+        showBiometricLoginIfEnabled()
     }
 
 
     override fun showMenuBar() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showMenuBar")
+        logger.info("Entering showMenuBar")
         runOnUiThread {
             menuBar.visibility = VISIBLE
         }
     }
 
+
     override fun showHeader() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
+        logger.info("Entering showHeader")
         runOnUiThread {
             header.visibility = VISIBLE
         }
     }
 
     fun showBlankScreen() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showBlankScreen")
+        logger.info("Entering showBlankScreen")
         runOnUiThread {
             viewSwitcher.visibility = View.GONE
             blankScreen.visibility = View.VISIBLE
@@ -621,7 +726,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     fun hideBlankScreen() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideBlankScreen")
+        logger.info("Entering hideBlankScreen")
+        dismissProgressDialog()
         runOnUiThread {
             viewSwitcher.visibility = View.VISIBLE
             blankScreen.visibility = View.GONE
@@ -634,5 +740,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     fun getRequestQueue(): RequestQueue {
         return mRequestQueue
+    }
+
+    override fun showBiometricLoginIfEnabled(): Boolean =
+        fingerprintService?.showBiometricLoginIfEnabled() ?: false
+
+    private fun onSuccessButton() {
+        activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
+        urlLoader.reloadRequest()
     }
 }

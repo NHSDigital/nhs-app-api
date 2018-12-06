@@ -21,6 +21,14 @@
         <item name="android:textAlignment">center</item>
     </style>
 
+    <style name="default_success_icon" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:background">@color/nhsBlue</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/errorTextSize</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
     <style name="default_warning_icon" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:background">@color/warning_title</item>

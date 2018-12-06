@@ -16,12 +16,15 @@
     <string name="conditions_header_description">Health A to Z</string>
     <string name="my_record_header">My medical record</string>
     <string name="symptoms_header">Check my symptoms</string>
-    <string name="biometric_header">Register for Fingerprint ID</string>
+    <string name="biometric_header">Login &amp; password options</string>
     <string name="appointments_header">My appointments</string>
     <string name="prescriptions_header">My repeat prescriptions</string>
     <string name="more_header">More</string>
     <string name="home_header">Home</string>
 
+    <string name="nhs111_connection_error">NHS 111 unavailable</string>
+    <string name="organ_donation_connection_error">Organ donation unavailable</string>
+    <string name="data_sharing_connection_error">Sharing health data unavailable</string>
     <string name="connection_error_header">Internet connection error</string>
     <string name="connection_error_title">There\'s an issue with your internet connection</string>
     <string name="connection_error_message">
@@ -48,21 +51,77 @@
         \n\nIf the problem continues and you need to book an appointment or get a prescription now,
         contact your GP surgery directly. For urgent medical advice, call one. one. one..
     </string>
+
+    <!--Start Content texts for the biometric authentication-->
     <string name="biometric_information_message1">
         Log in using your fingerprint
     </string>
     <string name="biometric_information_message2">
         Do this instead of using a password and security code.
     </string>
+    <string name="biometric_toggle_text">Fingerprint ID</string>
+    <string name="biometric_warning_header">Important</string>
     <string name="biometric_warning_message">
-        All fingerprint IDs registered on this device will be able to open your NHS account.
+        All Fingerprint IDs registered on this device will be able to open your NHS account.
+    </string>
+    <string name="biometric_registration_failure_message">
+        Something went wrong when registering for Fingerprint ID.
     </string>
     <string name="service_unavailable">Service unavailable</string>
 
     <string name="retryButtonText">Try again</string>
     <string name="errorIconText">Error</string>
+    <string name="successIconText">Success</string>
     <string name="tryLaterText">Please try again later.</string>
     <string name="nhsAppHome">NHS App Home</string>
+
+
+    <string name="log_in">Log in to NHS App</string>
+    <string name="enable_fingerprint">Turn on Fingerprint ID</string>
+    <string name="ok">OK</string>
+    <string name="fingerprint_description_login">Touch the fingerprint sensor on your device</string>
+    <string name="fingerprint_description_register">Touch the fingerprint sensor on your device</string>
+    <string name="fingerprint_hint">Touch Sensor</string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognised. Try again</string>
+    <string name="fingerprint_success">Fingerprint recognised</string>
+    <string name="new_fingerprint_enrolled_description">
+        A new fingerprint was added to this device, so your password is required.
+    </string>
+    <string name="invalid_fingerprint_dialog_header">You need to turn on Fingerprint ID again</string>
+    <string name="invalid_fingerprint_dialog_message">
+        We have turned it off as something has changed.\nYou can log in using your password and security code, then turn Fingerprint ID on in the NHS App.
+    </string>
+    <string name="fingerprint_registration_success_heading">Success</string>
+    <string name="fingerprint_registration_success_dialog_message">
+        You have turned on Fingerprint ID
+    </string>
+
+    <string name="fingerprint_de_registration_success_dialog_message">
+        Fingerprint ID is now turned off.
+    </string>
+
+    <string name="fingerprint_success_dialog_message">
+        You have turned on Fingerprint ID
+    </string>
+
+    <string name="fingerprint_success_dialog_button">Return to account settings</string>
+    <string name="description_fingerprint_icon">Fingerprint icon</string>
+
+    <string name="hardware_not_supported_header">You can\'t use Fingerprint ID on this device</string>
+    <string name="hardware_not_supported_message">Fingerprint ID is not supported on this device.</string>
+    <string name="version_not_supported_header">You can\'t use Fingerprint ID on this device</string>
+    <string name="version_not_supported_message">You may be able to use it if you can update your operating system. Check with your operating system developer.</string>
+    <string name="fingerprints_not_enabled_header">We can\'t find your fingerprint</string>
+
+    <string name="fingerprints_not_enabled_message">
+        You can &lt;a href=\"https://www.nhs.uk/\">get help with missing fingerprints on Android devices. &lt;/a>.
+    </string>
+
+    <!--Fingerprint Login generic error contents-->
+    <string name="fingerprint_login_error_title">Something went wrong</string>
+    <string name="fingerprint_login_error_description">It wasn\'t your fault. Try logging in again.</string>
+    <string name="redirectErrorQueryParam">error</string>
+    <!--End Content texts for the biometric authentication-->
 
     <string name="logoutWarning">Are you sure you want to log out?</string>
     <string name="logout">Log out</string>
@@ -81,6 +140,8 @@
 
     <string name="locale_language">en</string>
     <string name="locale_region">GB</string>
+
+    <!-- Icon Content description texts-->
 
     <string name="header_icon_account">My account icon</string>
     <string name="header_icon_help">Help icon</string>

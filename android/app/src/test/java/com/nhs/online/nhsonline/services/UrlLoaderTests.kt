@@ -17,38 +17,42 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class UrlLoaderTests {
 
-    var baseUrl = "https://unit-tests.com"
-    var appPageUrl = "$baseUrl/page-one"
+    private val baseUrl = "https://unit-tests.com"
+    private val appPageUrl = "$baseUrl/page-one"
 
-    lateinit var urlLoader: UrlLoader
-    lateinit var appWebInterfaceMock: AppWebInterface
-    lateinit var webviewMock: WebView
+    private lateinit var urlLoader: UrlLoader
+    private lateinit var appWebInterfaceMock: AppWebInterface
+    private lateinit var webviewMock: WebView
 
     @Before
-    fun SetUp() {
+    fun setUp() {
         webviewMock = mock {
             on { url } doReturn baseUrl
         }
 
         appWebInterfaceMock = mock(AppWebInterface::class.java)
 
-        var webClientMock: WebClientInterceptor = mock {
+        val webClientMock: WebClientInterceptor = mock {
             on { isConnectedToInternet() } doReturn true
         }
 
-        var knownServicesMock : KnownServices = mock {
+        val knownServicesMock: KnownServices = mock {
             on { findKnownServiceAndAddMissingQueryFor(appPageUrl) } doReturn appPageUrl
         }
 
-        this.urlLoader = UrlLoader(webviewMock, webClientMock, appWebInterfaceMock, knownServicesMock, baseUrl)
+        this.urlLoader = UrlLoader(webviewMock,
+            webClientMock,
+            appWebInterfaceMock,
+            knownServicesMock,
+            baseUrl)
     }
 
     @Test
-    fun TestInternalLinkLoadsInSpaWhenLoggedIn() {
+    fun testInternalLinkLoadsInSpaWhenLoggedIn() {
 
         login()
 
-        var spaPagePath = "/page-one"
+        val spaPagePath = "/page-one"
 
         urlLoader.loadUrl(spaPagePath)
 
@@ -56,7 +60,7 @@ class UrlLoaderTests {
     }
 
     @Test
-    fun TestInternalLinkLoadsInBrowserWhenNotLoggedIn() {
+    fun testInternalLinkLoadsInBrowserWhenNotLoggedIn() {
 
         logout()
 

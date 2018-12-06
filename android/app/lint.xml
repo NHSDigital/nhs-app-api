@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="InvalidPackage">
+        <!--Required ignore for the prov library-->
+        <ignore path="**/prov*.jar"/>
+        <!--Ignore invalid java.lang.management from junit-->
+        <ignore path="**/junit*.jar"/>
+    </issue>
+</lint>
+

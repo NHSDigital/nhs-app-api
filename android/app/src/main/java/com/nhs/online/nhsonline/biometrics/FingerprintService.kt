@@ -1,0 +1,126 @@
+package com.nhs.online.nhsonline.biometrics
+
+import android.annotation.TargetApi
+import android.os.Build
+import android.support.v4.app.FragmentActivity
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
+import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.biometrics.utils.*
+import com.nhs.online.nhsonline.fido.uaf.client.operation.Authentication
+import com.nhs.online.nhsonline.fido.uaf.crypto.FidoKeystoreAndroidM
+import com.nhs.online.nhsonline.fido.uaf.util.FidoEndpointConfig
+
+@TargetApi(Build.VERSION_CODES.M)
+class FingerprintService(
+        biometricsInteractor: IBiometricsInteractor,
+        fidoKeystore: FidoKeystoreAndroidM,
+        fingerprintSystemChecker: FingerprintSystemChecker,
+        preferencesService: FingerprintSharedPreferences,
+        fidoEndpointConfig: FidoEndpointConfig,
+        uafAuthenticator: Authentication
+) {
+
+    private val authenticationService: AuthenticationService
+    private val deRegistrationService: DeRegistrationService
+    private val registrationService: RegistrationService
+    val biometricState: BiometricState = BiometricState(preferencesService,
+            fidoKeystore,
+            fingerprintSystemChecker)
+    private val biometricAsyncHandler : BiometricAsyncHandler
+
+    init {
+
+        val fidoDataHelper = BiometricCleanupHelper(biometricsInteractor,
+                biometricState,
+                fidoKeystore,
+                preferencesService)
+
+        biometricAsyncHandler = BiometricAsyncHandler(fidoEndpointConfig)
+
+        val signingHelper = SigningHelper(fidoKeystore,
+                preferencesService)
+
+        val activity: FragmentActivity = biometricsInteractor.getActivity()
+
+        val fingerprintDialog = FingerprintDialog(activity,
+                biometricState,
+                signingHelper)
+
+        deRegistrationService = DeRegistrationService(biometricsInteractor,
+                fidoDataHelper,
+                preferencesService,
+                biometricState,
+                biometricAsyncHandler
+        )
+
+        registrationService = RegistrationService(activity,
+                biometricAsyncHandler,
+                biometricsInteractor,
+                FingerprintCookieService(activity),
+                fidoDataHelper,
+                fidoEndpointConfig,
+                fidoKeystore,
+                fingerprintDialog,
+                fingerprintSystemChecker,
+                preferencesService,
+                biometricState)
+
+        authenticationService = AuthenticationService(activity,
+                biometricAsyncHandler,
+                biometricsInteractor,
+                biometricState,
+                fidoDataHelper,
+                fingerprintDialog,
+                fingerprintSystemChecker,
+                preferencesService,
+                uafAuthenticator)
+
+    }
+
+    fun cancelAllProgressingTasks() = biometricAsyncHandler.cancelAllTasks()
+
+    fun deRegisterBiometrics() = deRegistrationService.deRegisterBiometrics()
+
+    fun startFidoRegistration() = registrationService.startFidoRegistration()
+
+    fun showBiometricLoginIfEnabled() = authenticationService.showBiometricLoginIfEnabled()
+
+    fun notifyLoginErrorOccurrence() {
+        biometricState.hasLoginError = true
+    }
+
+    companion object {
+
+        fun createIfDeviceSupported(
+            biometricsInteractor: IBiometricsInteractor,
+            fidoServerUrl: String
+        ): FingerprintService? {
+            if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M) || fidoServerUrl.isEmpty())
+                return null
+
+            val activity: FragmentActivity = biometricsInteractor.getActivity()
+
+            val fidoEndpointConfig = FidoEndpointConfig(
+                fidoServerUrl,
+                activity.resources.getString(R.string.fidoGetAuthRequestPath),
+                activity.resources.getString(R.string.fidoPostDeregResponsePath),
+                activity.resources.getString(R.string.fidoGetRegRequestPath),
+                activity.resources.getString(R.string.fidoPostRegResponsePath)
+            )
+
+            val fingerprintManager = FingerprintManagerCompat.from(activity)
+            val fingerprintSystemChecker = FingerprintSystemChecker(fingerprintManager, activity)
+            val fidoKeystore = FidoKeystoreAndroidM()
+            val preferencesService = FingerprintSharedPreferences(activity)
+            val uafAuthenticator = Authentication(fidoEndpointConfig)
+
+
+            return FingerprintService(biometricsInteractor,
+                    fidoKeystore,
+                    fingerprintSystemChecker,
+                    preferencesService,
+                    fidoEndpointConfig,
+                    uafAuthenticator)
+        }
+    }
+}

@@ -42,13 +42,12 @@ class LifeCycleObserver(
         context.showBlankScreen()
     }
 
-    private fun checkForRooting() : Boolean {
+    private fun checkForRooting(): Boolean {
         rootBeerService.setLogging(true)
 
         if (!isRootCheckEnabled) {
             Log.d(Application.TAG, "${this::class.java.simpleName}: Root check is disabled")
-        }
-        else if (rootBeerService.isRootedWithoutBusyBoxCheck) {
+        } else if (rootBeerService.isRootedWithoutBusyBoxCheck) {
             Log.e(Application.TAG, "${this::class.java.simpleName}: Detected that device is rooted")
             return true
         }
@@ -59,12 +58,14 @@ class LifeCycleObserver(
     private fun updateUI() {
         val currentUrl: String? = context.webview.url
         currentUrl?.let {
-            if (currentUrl.contains("auth-return")) return
+            if (currentUrl.contains(context.getString(R.string.authRedirectPath)) || currentUrl.contains(
+                    context.getString(R.string.fidoAuthQueryKey))) return
 
             val knownServiceInfo = knownServices.findMatchingServiceInfo(it)
 
             if (knownServiceInfo != null && knownServiceInfo.shouldValidateSession) {
-                Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMoveToForeground > isKnownService > ${knownServiceInfo.baseUrl} and shouldValidateSession")
+                Log.d(Application.TAG,
+                    "${this::class.java.simpleName}: Entering onMoveToForeground > isKnownService > ${knownServiceInfo.baseUrl} and shouldValidateSession")
                 appWebInterface.validateSession()
             } else {
                 context.hideBlankScreen()
@@ -72,14 +73,16 @@ class LifeCycleObserver(
         }
     }
 
-    private fun checkAndHandleConfiguration () {
+    private fun checkAndHandleConfiguration() {
         configurationService.getConfiguration(object : IVolleyCallback {
             override fun onSuccess(configurationResponse: ConfigurationResponse) {
 
-                if(!context.isSuccessfulConfigCheck) {
+                if (!context.isSuccessfulConfigCheck) {
                     context.isSuccessfulConfigCheck = true
 
-                    if(configurationResponse.isThrottlingEnabled) {
+                    context.configBiometricSetup(configurationResponse.fidoServerUrl)
+
+                    if (configurationResponse.isThrottlingEnabled) {
                         context.loadThrottlingCarousel()
                     } else {
                         context.loadAuthReturnOrWelcomePage()

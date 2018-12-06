@@ -49,24 +49,22 @@ class AndroidManifestContentTests {
 
         val manifestFiles = searchManifestFiles(sourceDir)
         Assert.assertTrue("There are AndroidManifest.xml files",
-                manifestFiles.isNotEmpty())
+            manifestFiles.isNotEmpty())
 
         manifestFiles.forEach { manifest ->
             val allowBackupValues = findXmlTagAttributeInXmlFile(allowBackupAttribute, manifest)
             Assert.assertFalse("More than 1 allowBackup attribute in ${manifest.path} tags: $allowBackupValues",
-                    allowBackupValues.size > 1)
+                allowBackupValues.size > 1)
 
             if (allowBackupValues.isNotEmpty()) {
                 val (tag, allowBackup) = allowBackupValues[0]
                 Assert.assertEquals("Expected attribute is not defined in manifest tag",
-                        "application", tag)
+                    "application", tag)
                 Assert.assertEquals("Expected allowBackup value " +
                         "$expectedAllowBackupValue not found but found $allowBackup in ${manifest.path}",
-                        expectedAllowBackupValue, allowBackup)
-            }
-            else {
-                Assert.fail("Expected to find an allowBackup attribute with the value " +
-                        "$expectedAllowBackupValue")
+                    expectedAllowBackupValue, allowBackup)
+            } else {
+                Assert.fail("Expected to find an allowBackup attribute with the value $expectedAllowBackupValue")
             }
         }
     }

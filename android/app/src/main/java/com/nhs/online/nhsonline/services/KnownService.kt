@@ -85,6 +85,15 @@ class KnownService(
         return false
     }
 
+    fun hasOnlyRequiredQueries(urlString: String): Boolean {
+        val uri = Uri.parse(urlString.toLowerCase())
+        val queryParams = uri.queryParameterNames
+        if (serviceQueryMap?.size != queryParams.size)
+            return false
+
+        return !hasMissingQueryString(urlString)
+    }
+
     fun findMatchingServicePathInfo(urlString: String, exactPathMatch: Boolean = false): Info? {
         val theUrl = URL(urlString)
         if (!theUrl.host.equals(url.host, true))

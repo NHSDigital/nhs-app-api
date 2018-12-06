@@ -11,8 +11,9 @@ import android.support.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTIO
 import android.content.pm.ResolveInfo
 import com.nhs.online.nhsonline.services.KnownServices
 
+private const val CHROME_PACKAGE_NAME = "com.android.chrome"
+
 class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInterface {
-    private val CHROME_PACKAGE_NAME = "com.android.chrome"
 
     override fun canStart(context: Context, url: String): Boolean {
         val knownServices = KnownServices(context)
@@ -34,7 +35,7 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
             throw RuntimeException("Cannot open url in browser")
         }
 
-        var supportedCustomTabsPackages = getCustomTabsPackages(context, url)
+        val supportedCustomTabsPackages = getCustomTabsPackages(context, url)
 
         val knownServices = KnownServices(context)
 

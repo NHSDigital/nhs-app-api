@@ -2,7 +2,6 @@ package com.nhs.online.nhsonline.webinterfaces
 
 import android.util.Log
 import com.nhs.online.nhsonline.Application
-import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.activities.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,14 +16,14 @@ class AppWebInterface(private val context: MainActivity) {
         }
     }
 
-    fun isRecoveringFromDroppedConnection(path: String, baseUrl: String) : Boolean {
-        var reloadUrl = createReloadUrl(path, baseUrl)
+    fun isRecoveringFromDroppedConnection(path: String, baseUrl: String): Boolean {
+        val reloadUrl = createReloadUrl(path, baseUrl)
         return (context.getReloadUrl() == reloadUrl)
     }
 
-    private fun createReloadUrl(path: String, baseUrl: String) : String {
+    private fun createReloadUrl(path: String, baseUrl: String): String {
         var reloadUrl = baseUrl + path
-        if (path.indexOf(baseUrl) > -1){
+        if (path.indexOf(baseUrl) > -1) {
             reloadUrl = path
         }
         return reloadUrl
@@ -36,7 +35,8 @@ class AppWebInterface(private val context: MainActivity) {
     }
 
     fun resetGPFinderFlow() {
-        var spaPath = generateSpaPathAndReloadUrl(context.resources.getString(R.string.gpFinderPath),
+        var spaPath =
+            generateSpaPathAndReloadUrl(context.resources.getString(R.string.gpFinderPath),
                 context.resources.getString(R.string.baseURL))
         context.evaluateWebviewJavascript("window.\$nuxt.\$router.push({path:'$spaPath', query: { reset: true } })")
     }
@@ -53,18 +53,18 @@ class AppWebInterface(private val context: MainActivity) {
         loadDispatchEvent("session/extend")
     }
 
-    private fun generateSpaPathAndReloadUrl(path: String, baseUrl: String) : String {
+    private fun generateSpaPathAndReloadUrl(path: String, baseUrl: String): String {
         var spaPath = path.replace(baseUrl, "/")
 
-        if(!spaPath.startsWith("/")) {
+        if (!spaPath.startsWith("/")) {
             spaPath = "/$spaPath"
         }
 
-        var reloadUrl = createReloadUrl(path, baseUrl)
+        val reloadUrl = createReloadUrl(path, baseUrl)
 
         context.setReloadUrl(reloadUrl)
 
-        return spaPath;
+        return spaPath
     }
 
 }
