@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private ILoggerFactory _loggerFactory;
         private ITppDemographicsMapper _tppDemographicsMapper;
         private ITppMyRecordMapper _tppMyRecordMapper;
+        private ITppSessionMapper _tppSessionMapper;
         
         private ILogger<TppCourseService> _tppCourseLogger;
         private ILogger<TppPrescriptionService> _tppPrescriptionLogger;
@@ -48,6 +49,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _tppMyRecordMapper = new Mock<ITppMyRecordMapper>().Object;
             _im1CacheService = new Mock<IIm1CacheService>().Object;
             _im1CacheKeyGenerator = new Mock<IIm1CacheKeyGenerator>().Object;
+            _tppSessionMapper = new Mock<ITppSessionMapper>().Object;
             
             _tppCourseLogger = Mock.Of<ILogger<TppCourseService>>();
             _tppPrescriptionLogger = Mock.Of<ILogger<TppPrescriptionService>>();
@@ -166,7 +168,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         public void GetSessionService_WhenCalled_ReturnsTppSessionService()
         {
             var logger = Mock.Of<ILogger<TppSessionService>>();
-            var service = new TppSessionService(_tppClient,logger);
+            var service = new TppSessionService(_tppClient, logger, _tppSessionMapper);
+           
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppSessionService)))
                 .Returns(service);

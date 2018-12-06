@@ -6,11 +6,16 @@ import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.models.Mapping
 import models.Patient
+import org.junit.Assert
 import java.time.Duration
 
 private const val DELAY_BY_SECONDS = 31L
 
 class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
+
+    override fun patientWithIncompleteResponse(patient: Patient) {
+        Assert.fail("NHSO-3484")
+    }
 
     override fun patientDoesNotExist(patient: Patient) {
      createInvalidLinkageTest(patient) { respondWithNoOnlineUserFound() }

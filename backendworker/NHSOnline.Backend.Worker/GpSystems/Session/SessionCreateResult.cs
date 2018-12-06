@@ -42,6 +42,14 @@
                 return visitor.Visit(this);
             }
         }
+        
+        public class SupplierSystemBadResponse : SessionCreateResult
+        {
+            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
 
         public class InvalidRequest : SessionCreateResult
         {

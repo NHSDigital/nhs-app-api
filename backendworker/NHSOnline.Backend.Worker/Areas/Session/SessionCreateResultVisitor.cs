@@ -69,6 +69,15 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 StatusCode = StatusCodes.Status400BadRequest
             };
         }
+        
+        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SupplierSystemBadResponse supplierSystemBadResponse)
+        {
+            return new SessionCreateResultVisitorOutput
+            {
+                SessionWasCreated = false,
+                StatusCode = StatusCodes.Status502BadGateway
+            };
+        }
 
         public SessionCreateResultVisitorOutput Visit(SessionCreateResult.UnknownError unknownError)
         {

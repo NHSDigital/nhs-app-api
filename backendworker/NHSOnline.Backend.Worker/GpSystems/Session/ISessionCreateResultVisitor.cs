@@ -8,6 +8,8 @@
 
         T Visit(SessionCreateResult.SupplierSystemUnavailable supplierSystemUnavailable);
 
+        T Visit(SessionCreateResult.SupplierSystemBadResponse supplierSystemBadResponse);
+
         T Visit(SessionCreateResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader);
 
         T Visit(SessionCreateResult.InvalidUserCredentials invalidUserCredentials);

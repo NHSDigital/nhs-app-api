@@ -12,6 +12,17 @@ private const val DELAY_BY_SECONDS = 31L
 
 class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
 
+    override fun patientWithIncompleteResponse(patient: Patient) {
+        val response = AuthenticateReply()
+        response.onlineUserId = ""
+        response.patientId = ""
+
+        mockingClient.forTpp {
+            authentication.authenticateRequest(Authenticate())
+                    .respondWithSuccess(response)
+        }
+    }
+
     override fun patientDoesNotExist(patient: Patient) {
         createInvalidLinkageTest(patient)
     }

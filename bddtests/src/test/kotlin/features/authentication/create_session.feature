@@ -66,6 +66,16 @@ Feature: Session Registration
       | VISION    |
 
   @backend
+  Scenario Outline: When creating a session with <GP System> an incomplete response returns a Bad Gateway
+    Given I have valid OAuth details and <GP System> returns with an incomplete response
+    When I create a user session
+    Then I get a "Bad Gateway" error
+
+    Examples:
+      | GP System |
+      | TPP       |
+
+  @backend
   Scenario Outline: CID connection token fails to authenticate with <GP System>
     Given I have invalid OAuth details and CID connection token fails to authenticate with <GP System>
     When I create a user session

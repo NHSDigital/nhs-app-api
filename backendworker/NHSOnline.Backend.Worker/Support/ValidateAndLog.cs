@@ -35,6 +35,17 @@ namespace NHSOnline.Backend.Worker.Support
             return this;
         }
 
+        public ValidateAndLog IsNotNull<T>(T value, string name)
+        {
+            if (value == null)
+            {
+                _logger.LogError(string.Format(CultureInfo.InvariantCulture, _errorMessage, name));
+                _argumentsAreValid = false;
+            }
+
+            return this;
+        }
+
         public bool IsValid()
         {
             return _argumentsAreValid;

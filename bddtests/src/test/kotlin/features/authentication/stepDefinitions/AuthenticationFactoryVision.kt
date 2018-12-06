@@ -2,12 +2,17 @@ package features.authentication.stepDefinitions
 
 import mocking.vision.VisionMockDefaults
 import models.Patient
+import org.junit.Assert
 import utils.SerenityHelpers
 import java.time.Duration
 
 private const val DELAY_BY_SECONDS = 31L
 
 class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
+
+    override fun patientWithIncompleteResponse(patient: Patient) {
+        Assert.fail("NHSO-3484")
+    }
 
     override fun patientDoesNotExist(patient: Patient) {
         createInvalidTestForVision(patient, "Invalid Details")

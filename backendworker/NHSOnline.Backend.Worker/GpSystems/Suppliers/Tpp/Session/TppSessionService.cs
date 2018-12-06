@@ -13,12 +13,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
     {
         private readonly ITppClient _client;
         private readonly ILogger<TppSessionService> _logger;
+        private readonly ITppSessionMapper _sessionMapper;
 
         public TppSessionService(ITppClient client,
-            ILogger<TppSessionService> logger)
+            ILogger<TppSessionService> logger,
+            ITppSessionMapper sessionMapper)
         {
             _client = client;
             _logger = logger;
+            _sessionMapper = sessionMapper;
         }
 
         public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber,
@@ -45,22 +48,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                     _logger.LogError("Failed to authenticate user for TPP");
                     return new SessionCreateResult.SupplierSystemUnavailable();
                 }
-
-                var suidHeader = reply.Headers?.FirstOrDefault(h => "suid".Equals(h.Key, StringComparison.Ordinal));
-                var userSession = new TppUserSession
+                
+                var userSession = _sessionMapper.Map(reply, odsCode, accessToken, nhsNumber);
+                if (!userSession.HasValue)
                 {
-                    Suid = suidHeader?.Value,
-                    OnlineUserId = reply.Body.OnlineUserId,
-                    PatientId = reply.Body.PatientId,
-                    OdsCode = odsCode,
-                    AccessToken = accessToken,
-                    NhsNumber = nhsNumber
-                };
+                    _logger.LogError("Cannot create a valid session from Tpp response");
+                    return new SessionCreateResult.SupplierSystemBadResponse();
+                }
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
                 return new SessionCreateResult.SuccessfullyCreated(
                     reply.Body.User?.Person?.PersonName?.Name,
-                    userSession);
+                    userSession.ValueOrFailure());
             }
             catch (HttpRequestException e)
             {

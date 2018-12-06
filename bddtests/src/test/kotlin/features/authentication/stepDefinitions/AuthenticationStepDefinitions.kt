@@ -144,6 +144,14 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         AuthenticationFactory.getForSupplier(gpSystem).validOAuthDetailsAndGpSystemUnavailable()
     }
 
+    @Given("^I have valid OAuth details and (.*) returns with an incomplete response$")
+    fun iHaveValidOAuthDetailsAndGpSystemReturnsAnIncompleteResponse(gpSystem: String)
+    {
+        mockingClient = SerenityHelpers.getMockingClient()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
+        AuthenticationFactory.getForSupplier(gpSystem).patientWithIncompleteResponse(Patient.getDefault(gpSystem))
+    }
+
     @Given("^I have invalid OAuth details and CID connection token fails to authenticate with (.*)$")
     fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithGpSystem(gpSystem: String) {
         mockingClient = SerenityHelpers.getMockingClient()
