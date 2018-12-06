@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate" :class="$style.flexContainer">
+  <div v-if="versionCheckComplete" :class="$style.flexContainer">
     <a id="help_icon" :class="$style['help-icon']"
        :href="helpAndSupportURL" target="_blank" tabindex="-1">
       <help-icon/>
@@ -44,6 +44,9 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
 import { GP_FINDER, GP_FINDER_RESULTS } from '@/lib/routes';
+import moment from 'moment';
+
+import NativeCallbacks from '@/services/native-app';
 
 export default {
   layout: 'throttling',
@@ -59,6 +62,7 @@ export default {
     return {
       helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
       showError: this.$route.query.error,
+      versionCheckComplete: false,
     };
   },
   computed: {
@@ -68,6 +72,41 @@ export default {
     skipThrottlingLink() {
       return `${GP_FINDER.path}?skip=true`;
     },
+  },
+  beforeCreate() {
+    if (process.client) {
+      NativeCallbacks.hideHeader();
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      if (process.client) {
+        const self = this;
+
+        setTimeout(() => {
+          if (self.$store.state.device.isNativeApp) {
+            const nativeAppVersion = this.$store.state.appVersion.nativeVersion;
+
+            if (!nativeAppVersion || (nativeAppVersion && nativeAppVersion.toString().startsWith('0'))) {
+              const betaCookie = {
+                Skipped: true,
+              };
+
+              self.$store.app.$cookies.set('BetaCookie', betaCookie, {
+                path: '/',
+                maxAge: moment.duration(1, 'y').asSeconds(),
+              });
+
+              window.location.reload(true);
+            } else {
+              self.versionCheckComplete = true;
+            }
+          } else {
+            self.versionCheckComplete = true;
+          }
+        }, 100);
+      }
+    });
   },
 };
 </script>
