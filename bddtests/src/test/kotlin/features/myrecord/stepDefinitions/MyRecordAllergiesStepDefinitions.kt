@@ -58,7 +58,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         }
     }
 
-    @Given("^the GP Practice has enabled allergies functionality and the patient has a drug and non drug allergy " +
+    @Given("^the GP Practice has enabled allergies functionality and has a drug and non drug allergy " +
             "record for (.*)$")
     fun theGPPracticeHasEnabledAllergiesFunctionalityAndThePatientHasADrugAndNonDrugAllergyRecord(service: String) {
         setPatientToDefaultFor(service)

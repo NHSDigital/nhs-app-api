@@ -70,7 +70,7 @@ Feature: View My Medical Record Information - Allergies
   Scenario: A VISION user has a drug and non drug allergy record
     Given the my record wiremocks are initialised for VISION
     And the GP Practice has enabled demographics functionality for VISION
-    And the GP Practice has enabled allergies functionality and the patient has a drug and non drug allergy record for VISION
+    And the GP Practice has enabled allergies functionality and has a drug and non drug allergy record for VISION
     And I am on my record information page
     When I click the Allergies and adverse reactions section on My Record
     Then I see a drug and non drug allergy record from VISION
