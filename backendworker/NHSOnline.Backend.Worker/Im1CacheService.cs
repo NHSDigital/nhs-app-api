@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Worker
                 var update = 
                     new BsonDocument{GetId(key), GetConnectionToken(connectionToken), GetDocumentType()};
 
-                using (_logger.WithTimer("Add registration token to cache"))
+                using (_logger.WithTimer("Add IM1 connection token to cache"))
                 {
                     await GetCollection().InsertOneAsync(update);
                 }
@@ -103,13 +103,13 @@ namespace NHSOnline.Backend.Worker
                 var filter = new BsonDocument(GetId(key));
 
                 BsonDocument sessionValue;
-                using (_logger.WithTimer("Get connection token from cache"))
+                using (_logger.WithTimer("Get IM1 connection token from cache"))
                 {
                     sessionValue = await GetCollection().Find(filter).FirstOrDefaultAsync().ConfigureAwait(false);
                 }
                 if (sessionValue == null)
                 {
-                    _logger.LogDebug("No connection token value found");
+                    _logger.LogDebug("No IM1 connection token value found in cache");
                     return Option.None<T>();
                 }
                 
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.Worker
 
                 var filter = new BsonDocument(GetId(key));
 
-                using (_logger.WithTimer("Delete connection token from cache"))
+                using (_logger.WithTimer("Delete IM1 connection token from cache"))
                 {
                     var result = await GetCollection().DeleteOneAsync(filter);
                     return result.IsAcknowledged;
