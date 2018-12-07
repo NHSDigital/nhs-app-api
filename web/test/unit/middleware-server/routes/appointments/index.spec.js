@@ -67,6 +67,8 @@ describe('middleware-server/routes/appointments', () => {
       req.body = {
         slotId: 21,
         bookingReason: 'woo!',
+        startTime: 'start time',
+        endTime: 'end time',
       };
 
       await postHandler(req, res);
@@ -74,23 +76,9 @@ describe('middleware-server/routes/appointments', () => {
       const requestArgument = api.postV1PatientAppointments.mock.calls[0][0];
       expect(requestArgument.appointmentBookRequest.SlotId).toEqual(req.body.slotId);
       expect(requestArgument.appointmentBookRequest.BookingReason).toEqual(req.body.bookingReason);
+      expect(requestArgument.appointmentBookRequest.StartTime).toEqual(req.body.startTime);
+      expect(requestArgument.appointmentBookRequest.EndTime).toEqual(req.body.endTime);
     });
-
-    it('will parse the start time and end time as dates', async () => {
-      const startTime = new Date(2018, 11, 3, 11, 0);
-      const endTime = new Date(2018, 11, 3, 11, 15);
-      req.body = {
-        startTime: startTime.getTime(),
-        endTime: endTime.getTime(),
-      };
-
-      await postHandler(req, res);
-
-      const requestArgument = api.postV1PatientAppointments.mock.calls[0][0];
-      expect(requestArgument.appointmentBookRequest.StartTime).toEqual(startTime);
-      expect(requestArgument.appointmentBookRequest.EndTime).toEqual(endTime);
-    });
-
 
     it('will pass the cookies from the API request through to NHSOnlineApi', async () => {
       req.headers = {
@@ -113,8 +101,19 @@ describe('middleware-server/routes/appointments', () => {
     });
 
     it('will redirect back to appointments on successful response from API', async () => {
+      req.body = {
+        successMessageKey: 'key',
+      };
+
+      const successMessage = {
+        flashMessage: {
+          show: true,
+          key: req.body.successMessageKey,
+        },
+      };
+      const uri = createUri({ path: APPOINTMENTS.path, noJs: successMessage });
       await postHandler(req, res);
-      expect(res.redirect).toBeCalledWith(APPOINTMENTS.path);
+      expect(res.redirect).toBeCalledWith(uri);
     });
   });
 

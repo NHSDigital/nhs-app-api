@@ -51,6 +51,9 @@ describe('booking.vue', () => {
           filteredSlots: [],
           hasLoaded: true,
         },
+        myAppointments: {
+          disableCancellation: false,
+        },
       },
       app,
     };
@@ -73,6 +76,9 @@ describe('booking.vue', () => {
             type: 'appointment',
             location: 'my surgery',
           },
+        },
+        myAppointments: {
+          disableCancellation: false,
         },
       },
       app,

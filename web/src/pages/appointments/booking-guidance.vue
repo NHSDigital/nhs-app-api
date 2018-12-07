@@ -18,12 +18,12 @@
     <generic-button id="btn_check_symptoms" :class="$style.button" @click="onCheckSymptomClicked">
       {{ $t('appointments.guidance.symptomButttonText') }}
     </generic-button>
-    <form action="/appointments/booking" method="get">
+    <no-js-form :action="appointmentBookingPath" :value="formData">
       <generic-button id="btn_appointment" :class="[$style.button, $style.green]"
-                      @click="onBookButtonClicked">
+                      @click.stop.prevent="onBookButtonClicked">
         {{ $t('appointments.guidance.bookButtonText') }}
       </generic-button>
-    </form>
+    </no-js-form>
   </div>
 
 </template>
@@ -32,18 +32,31 @@
 /* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, SYMPTOMS } from '@/lib/routes';
 import GenericButton from '@/components/widgets/GenericButton';
+import NoJsForm from '@/components/no-js/NoJsForm';
 
 export default {
   components: {
     GenericButton,
+    NoJsForm,
+  },
+  computed: {
+    appointmentBookingPath() {
+      return APPOINTMENT_BOOKING.path;
+    },
+    formData() {
+      return {
+        myAppointments: {
+          disableCancellation: this.$store.state.myAppointments.disableCancellation,
+        },
+      };
+    },
   },
   methods: {
     onCheckSymptomClicked() {
       this.$router.push(SYMPTOMS.path);
     },
-    onBookButtonClicked(e) {
+    onBookButtonClicked() {
       this.$router.push(APPOINTMENT_BOOKING.path);
-      e.preventDefault();
     },
   },
 };

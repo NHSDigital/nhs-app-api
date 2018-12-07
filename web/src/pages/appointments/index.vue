@@ -12,25 +12,27 @@
                            :appointments = "upcomingAppointments"
                            :cancellation-disabled = "cancellationDisabled" />
 
-    <form method="get" action="/appointments/booking-guidance">
+    <no-js-form :action="guidancePath" :value="formData">
       <floating-button-bottom v-if="showBookAppointmentButton"
                               id="book-appointments-button"
-                              @click="onBookButtonClicked">
+                              @click.stop.prevent="onBookButtonClicked">
         {{ $t('appointments.index.bookButtonText') }}
       </floating-button-bottom>
-    </form>
+    </no-js-form>
   </div>
 </template>
 
 <script>
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import NoJsForm from '@/components/no-js/NoJsForm';
 import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
 
 export default {
   components: {
     FloatingButtonBottom,
     UpcomingAppointments,
+    NoJsForm,
   },
   computed: {
     showNoUpcomingAppointments() {
@@ -56,6 +58,16 @@ export default {
     cancellationDisabled() {
       return this.$store.state.myAppointments.disableCancellation;
     },
+    formData() {
+      return {
+        myAppointments: {
+          disableCancellation: this.$store.state.myAppointments.disableCancellation,
+        },
+      };
+    },
+    guidancePath() {
+      return APPOINTMENT_BOOKING_GUIDANCE.path;
+    },
   },
   asyncData({ store }) {
     store.dispatch('myAppointments/clear');
@@ -65,10 +77,9 @@ export default {
     this.$store.dispatch('myAppointments/clearAppointments');
   },
   methods: {
-    onBookButtonClicked(e) {
-      this.$store.app.$analytics.trackButtonClick(APPOINTMENT_BOOKING_GUIDANCE.path, true);
-      this.$router.push(APPOINTMENT_BOOKING_GUIDANCE.path);
-      e.preventDefault();
+    onBookButtonClicked() {
+      this.$store.app.$analytics.trackButtonClick(this.guidancePath, true);
+      this.$router.push(this.guidancePath);
     },
   },
 };

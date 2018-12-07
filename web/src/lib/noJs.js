@@ -1,5 +1,6 @@
-/* eslint-disable import/prefer-default-export */
+export const noJsParameterName = 'nojs';
+
 export const createUri = ({ path, noJs }) => {
   const noJsJson = JSON.stringify(noJs);
-  return `${path}?nojs=${encodeURIComponent(noJsJson)}`;
+  return `${path}?${noJsParameterName}=${encodeURIComponent(noJsJson)}`;
 };

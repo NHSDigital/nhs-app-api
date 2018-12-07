@@ -1,8 +1,8 @@
 <template>
   <div v-if="showTemplate" class="pull-content">
     <div>
-      <form :action="confirmBookingPath" method="post">
-        <input :value="$store.state.session.csrfToken" type="hidden" name="csrfToken">
+      <form-post :action="confirmBookingPath">
+        <input :value="confirmationMessageKey" type="hidden" name="successMessageKey">
         <input :value="slotEndTime" type="hidden" name="endTime">
         <input :value="slotId" type="hidden" name="slotId">
         <input :value="slotStartTime" type="hidden" name="startTime">
@@ -52,24 +52,23 @@
         </div>
 
         <generic-button id="btn_book_appointment" :class="[$style.button, $style.green]"
-                        @click="onConfirmButtonClicked">
+                        @click.stop.prevent="onConfirmButtonClicked">
           {{ $t('appointments.confirmation.confirmButtonText') }}
         </generic-button>
-      </form>
+      </form-post>
 
-      <form :action="cancelBookingPath" method="get">
+      <no-js-form :action="cancelBookingPath" :value="formData">
         <generic-button id="btn_cancel_appointment" :class="[$style.button,$style.grey]"
-                        @click="onCancelButtonClicked">
+                        @click.stop.prevent="onCancelButtonClicked">
           {{ $t('appointments.confirmation.changeButtonText') }}
         </generic-button>
-      </form>
+      </no-js-form>
     </div>
   </div>
 </template>
 
 
 <script>
-import qs from 'qs';
 import AppointmentSlot from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -79,6 +78,8 @@ import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericButton from '@/components/widgets/GenericButton';
 import { APPOINTMENTS, APPOINTMENT_BOOKING, APPOINTMENT_BOOK_NOJS } from '@/lib/routes';
 import Necessity from '@/lib/necessity';
+import FormPost from '@/components/FormPost';
+import NoJsForm from '@/components/no-js/NoJsForm';
 
 export default {
   components: {
@@ -89,25 +90,15 @@ export default {
     ErrorMessage,
     GenericTextArea,
     GenericButton,
+    FormPost,
+    NoJsForm,
   },
-  asyncData({ req, store }) {
-    const data = {
-      slot: null,
+  data() {
+    return {
       symptoms: '',
       submissionError: false,
+      slot: this.$store.state.availableAppointments.selectedSlot,
     };
-
-    const query = req ? qs.parse(req.url.substr(req.url.indexOf('?') + 1)) : {};
-    const { slot, bookingReasonNecessity } = query;
-    if (slot) {
-      data.slot = JSON.parse(slot);
-    }
-
-    if (bookingReasonNecessity) {
-      store.dispatch('availableAppointments/setBookingReasonNecessity', bookingReasonNecessity);
-    }
-
-    return data;
   },
   computed: {
     cancelBookingPath() {
@@ -125,10 +116,13 @@ export default {
     showError() {
       return this.submissionError && !this.symptoms;
     },
-    confirmationMessage() {
+    confirmationMessageKey() {
       return this.$store.state.myAppointments.disableCancellation
-        ? this.$t('appointments.index.succcessAndCancellationDisabledText')
-        : this.$t('appointments.index.successText');
+        ? 'appointments.index.succcessAndCancellationDisabledText'
+        : 'appointments.index.successText';
+    },
+    confirmationMessage() {
+      return this.$t(this.confirmationMessageKey);
     },
     slotEndTime() {
       if (!this.slot) return undefined;
@@ -142,6 +136,13 @@ export default {
       if (!this.slot) return undefined;
       return this.slot.startTime;
     },
+    formData() {
+      return {
+        myAppointments: {
+          disableCancellation: this.$store.state.myAppointments.disableCancellation,
+        },
+      };
+    },
   },
   watch: {
     symptoms(val, oldValue) {
@@ -151,7 +152,6 @@ export default {
     },
   },
   mounted() {
-    this.slot = this.$store.state.availableAppointments.selectedSlot;
     if (!this.slot) {
       this.$router.push(APPOINTMENT_BOOKING.path);
     }
@@ -168,8 +168,7 @@ export default {
       return this.$store.state.availableAppointments
         .bookingReasonNecessity === Necessity.Optional;
     },
-    onConfirmButtonClicked(e) {
-      e.preventDefault();
+    onConfirmButtonClicked() {
       const isMandatory = this.$store.state.availableAppointments
         .bookingReasonNecessity === Necessity.Mandatory;
       this.symptoms = this.symptoms.trim();
@@ -196,9 +195,8 @@ export default {
           this.$router.push(APPOINTMENTS.path);
         });
     },
-    onCancelButtonClicked(e) {
-      this.$router.push(APPOINTMENT_BOOKING.path);
-      e.preventDefault();
+    onCancelButtonClicked() {
+      this.$router.push(this.cancelBookingPath);
     },
   },
 };

@@ -42,6 +42,9 @@ describe('booking.vue - noAvailableAppointments', () => {
           filteredSlots: [],
           hasLoaded: true,
         },
+        myAppointments: {
+          disableCancellation: false,
+        },
       },
     };
 
@@ -59,6 +62,9 @@ describe('booking.vue - noAvailableAppointments', () => {
           filteredSlots: [],
           hasLoaded: true,
         },
+        myAppointments: {
+          disableCancellation: false,
+        },
       },
     };
 
@@ -75,6 +81,9 @@ describe('booking.vue - noAvailableAppointments', () => {
           slots: new Map(),
           filteredSlots: [],
           hasLoaded: false,
+        },
+        myAppointments: {
+          disableCancellation: false,
         },
       },
     };
@@ -95,6 +104,9 @@ describe('booking.vue - showNoMatchingWarning', () => {
           filteredSlots: [],
           hasLoaded: true,
         },
+        myAppointments: {
+          disableCancellation: false,
+        },
       },
     };
 
@@ -112,6 +124,9 @@ describe('booking.vue - showNoMatchingWarning', () => {
           filteredSlots: [],
           hasLoaded: true,
         },
+        myAppointments: {
+          disableCancellation: false,
+        },
       },
     };
 
@@ -128,6 +143,9 @@ describe('booking.vue - showNoMatchingWarning', () => {
           slots: [],
           filteredSlots: [],
           hasLoaded: false,
+        },
+        myAppointments: {
+          disableCancellation: false,
         },
       },
     };
@@ -147,6 +165,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
           slots: [{}],
           filteredSlots: [[['2018-04-12'], [{}]]],
         },
+        myAppointments: {
+          disableCancellation: false,
+        },
       },
     };
 
@@ -162,6 +183,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
         availableAppointments: {
           slots: [],
           filteredSlots: [],
+        },
+        myAppointments: {
+          disableCancellation: false,
         },
       },
     };
@@ -179,6 +203,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
           slots: [],
           filteredSlots: [],
         },
+        myAppointments: {
+          disableCancellation: false,
+        },
       },
     };
 
@@ -194,6 +221,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
         availableAppointments: {
           slots: [],
           filteredSlots: [],
+        },
+        myAppointments: {
+          disableCancellation: false,
         },
       },
     };
@@ -214,6 +244,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
             type: 'type',
             location: 'location',
           },
+        },
+        myAppointments: {
+          disableCancellation: false,
         },
       },
       app: {

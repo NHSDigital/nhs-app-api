@@ -24,13 +24,15 @@ export default (apiFn) => {
 
   router.post('/appointments/book', async (req, res) => {
     const api = initialiseApi({ apiFn, req, res });
-    const { bookingReason, csrfToken, endTime, slotId, startTime } = get('body')(req) || {};
+
+    const { successMessageKey, bookingReason, csrfToken, endTime, slotId, startTime }
+      = get('body')(req) || {};
 
     const appointmentBookRequest = {
       BookingReason: bookingReason,
-      EndTime: new Date(endTime),
+      EndTime: endTime,
       SlotId: slotId,
-      StartTime: new Date(startTime),
+      StartTime: startTime,
     };
 
     await api.postV1PatientAppointments({
@@ -39,7 +41,17 @@ export default (apiFn) => {
       csrfToken,
     });
 
-    res.redirect(APPOINTMENTS.path);
+    const uri = createUri({
+      path: APPOINTMENTS.path,
+      noJs: {
+        flashMessage: {
+          show: true,
+          key: successMessageKey,
+        },
+      },
+    });
+
+    res.redirect(uri);
   });
 
   router.post('/appointments/cancel', async (req, res) => {

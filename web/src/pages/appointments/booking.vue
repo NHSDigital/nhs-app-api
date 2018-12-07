@@ -1,6 +1,7 @@
 <template>
   <div v-if="showTemplate" class="pull-content">
-    <form action="/appointments/booking" method="get">
+    <form :action="bookingPath">
+      <input :name="noJsInputName" :value="JSON.stringify(noJsData)" type="hidden">
       <ul :class="$style['sr-only']" role="presentation"
           aria-live="polite" aria-relevant="additions" aria-atomic="false">
         <li v-for="(text, index) in availableAppointmentsScreenReaderMessage" :key="index">
@@ -56,7 +57,7 @@
       <generic-button v-if="loadComplete"
                       id="back-to-appointments"
                       :class="[$style.button, $style.grey]"
-                      @click="goBack($event)">
+                      @click.stop.prevent="goBack()">
         {{ $t('appointments.booking.backButtonText') }}
       </generic-button>
     </form>
@@ -76,7 +77,8 @@ import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
 import VueScrollTo from 'vue-scrollto';
-import { APPOINTMENTS } from '@/lib/routes';
+import { APPOINTMENTS, APPOINTMENT_BOOKING } from '@/lib/routes';
+import { noJsParameterName } from '@/lib/noJs';
 
 const FILTER_PARAMETERS = [
   'clinician',
@@ -160,6 +162,19 @@ export default {
       });
       return count;
     },
+    bookingPath() {
+      return APPOINTMENT_BOOKING.path;
+    },
+    noJsData() {
+      return {
+        myAppointments: {
+          disableCancellation: this.$store.state.myAppointments.disableCancellation,
+        },
+      };
+    },
+    noJsInputName() {
+      return noJsParameterName;
+    },
   },
   asyncData({ store, req }) {
     const query = req ? qs.parse(req.url.substr(req.url.indexOf('?') + 1)) : undefined;
@@ -204,9 +219,8 @@ export default {
 
       this.availableAppointmentsScreenReaderMessage.push(screenReaderMessage);
     },
-    goBack(e) {
+    goBack() {
       this.$router.push(APPOINTMENTS.path);
-      e.preventDefault();
     },
   },
 };
