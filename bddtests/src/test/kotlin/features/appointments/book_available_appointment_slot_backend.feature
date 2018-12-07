@@ -182,7 +182,6 @@ Feature: Book appointments
       | TPP       |
       | VISION    |
 
-  @backend
   Scenario Outline: Booking an appointment with <GP System> returns "Gateway Timeout" response if the GP system did not respond in a timely fashion
     Given an appointment booking for <GP System> cannot be successful because the GP system will time out
     And I have logged into <GP System> and have a valid session cookie
@@ -194,7 +193,6 @@ Feature: Book appointments
       | TPP       |
       | VISION    |
 
-  @backend
   Scenario Outline: <GP System> returns corrupted data
     Given <GP System> returns corrupted response for booking request
     And I have logged into <GP System> and have a valid session cookie
@@ -209,11 +207,3 @@ Feature: Book appointments
       | TPP       |
       | VISION    |
 
-  @manual
-  Scenario: Booking a VISION appointment when there is no internet connection
-    Given I have no upcoming appointments for VISION
-    And I am logged in
-    And I am on my appointments page
-    And I lose my internet connection
-    When an appointment booking is submitted
-    Then I see a message indicating user may have connectivity problems

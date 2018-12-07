@@ -256,3 +256,19 @@ Feature: View available appointment slots
     When I navigate to Prescriptions
     And I wait 5 seconds
     Then I don't see filters for available slots
+
+  @noJs
+  Scenario Outline: A user can find available appointments with javascript disabled
+    Given I have disabled javascript
+    And there are multiple appointment slots at the same time, provided by <GP System>
+    And I am logged in
+    And I am on the available appointments page
+    And I have filtered such that there is one time displayed that represents multiple slots
+    And I click the 'Find available appointments' button
+    And I have selected a time when multiple slots are available
+    Then the Appointment Slot page is displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |

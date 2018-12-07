@@ -298,21 +298,10 @@ Feature: Book an available appointment slot
       | EMIS      |
       | VISION    |
 
-  @noJs
-  Scenario Outline: A user can find available appointments with javascript disabled
-    Given I have disabled javascript
-    And there are multiple appointment slots at the same time, provided by <GP System>
-    And I am logged in
-    And I am on the available appointments page
-    And I have filtered such that there is one time displayed that represents multiple slots
-    And I click the 'Find available appointments' button
-    And I have selected a time when multiple slots are available
-    Then the Appointment Slot page is displayed
- #   When I enter symptoms
- #   And  I click the 'Confirm and book appointment' button
- #   Then the Appointment Booking success message is displayed
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
+  @manual
+  Scenario: Booking a appointment when there is no internet connection
+    Given I am logged in
+    And I am on my appointments page
+    And I lose my internet connection
+    When an appointment booking is submitted
+    Then I see a message indicating user may have connectivity problems

@@ -52,7 +52,7 @@ Feature: Authorisation occurs during each URL visit
       | /symptoms                                   |
       | /terms-and-conditions                       |
 
-  @manual
+  @tech-debt  @NHSO-3580
   Scenario: User session has expired and attempts to navigate to a restricted url
     Given my session has expired
     When I browse to the pages at the following urls I see the login page
@@ -89,32 +89,7 @@ Feature: Authorisation occurs during each URL visit
       | /data-sharing                               | /data-sharing                  |
       | /                                           | /                              |
       | /more                                       | /more                          |
-      | /my-record                                  | /my-record             |
-      | /my-record/noaccess                         | /my-record/noaccess            |
-      | /prescriptions                              | /prescriptions                 |
-      | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
-      | /prescriptions/confirm-prescription-details | /prescriptions                 |
-      | /symptoms                                   | /symptoms                      |
-      | /terms-and-conditions                       | /                              |
-      | /logout                                     | /login                         |
-
-  @nativepending @NHSO-2956
-  @manual
-  Scenario: Mobile Web User switches app then browses to a url
-    Given I am logged in
-    And I switch apps
-    When I switch to the NHS App
-    When I browse to the pages at the following urls I see the relevant page
-      | /account                                    | /account                       |
-      | /appointments                               | /appointments                  |
-      | /appointments/booking-guidance              | /appointments/booking-guidance |
-      | /appointments/cancelling                    | /appointments                  |
-      | /appointments/booking                       | /appointments/booking          |
-      | /appointments/confirmation                  | /appointments/booking          |
-      | /data-sharing                               | /data-sharing                  |
-      | /                                           | /                              |
-      | /more                                       | /more                          |
-      | /my-record                                  | /my-record             |
+      | /my-record                                  | /my-record                     |
       | /my-record/noaccess                         | /my-record/noaccess            |
       | /prescriptions                              | /prescriptions                 |
       | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
