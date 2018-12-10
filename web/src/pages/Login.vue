@@ -106,7 +106,7 @@ export default {
     },
     showCheckFeaturesLink() {
       const betaCookie = this.$store.app.$cookies.get('BetaCookie');
-      return betaCookie !== undefined && !betaCookie.Skipped &&
+      return betaCookie !== undefined && !betaCookie.NeverShowCheckFeatureLink &&
         this.$store.app.$env.THROTTLING_ENABLED;
     },
     gpFinderResetLink() {
