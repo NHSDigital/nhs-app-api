@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(Cancel));
+                _logger.LogEnter();
 
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Cancel));
+                _logger.LogExit();
             }
         }
 

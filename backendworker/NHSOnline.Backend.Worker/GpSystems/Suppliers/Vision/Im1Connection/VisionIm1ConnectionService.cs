@@ -23,6 +23,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
         {
+            _logger.LogEnter();
+
             try
             {
                 var visionConnectionToken = connectionToken.DeserializeJson<VisionConnectionToken>();
@@ -50,13 +52,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                 _logger.LogCritical(ex.ToString());
                 return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
             }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
 
         public async Task<Im1ConnectionRegisterResult> Register(PatientIm1ConnectionRequest request)
         {
+            _logger.LogEnter();
+
             try
             {
-                _logger.LogEnter(nameof(Register));
                 var dob = request.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 var linkAccountRes = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
                 if (linkAccountRes.HasErrorResponse)
@@ -95,7 +102,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
             }
             finally
             {
-                _logger.LogExit(nameof(Register));
+                _logger.LogExit();
             }
         }
 

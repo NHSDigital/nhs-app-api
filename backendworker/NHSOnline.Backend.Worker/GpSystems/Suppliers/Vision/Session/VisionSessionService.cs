@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.Support.Logging;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
@@ -11,15 +13,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
     public class VisionSessionService : ISessionService
     {
         private readonly IVisionClient _visionClient;
+        private readonly ILogger<VisionSessionService> _logger;
 
-        public VisionSessionService(IVisionClient visionClient)
+        public VisionSessionService(IVisionClient visionClient, ILogger<VisionSessionService> logger)
         {
             _visionClient = visionClient;
+            _logger = logger;
         }
 
         public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber,
             string accessToken)
         {
+            _logger.LogEnter();
             try
             {
                 var visionConnectionToken = connectionToken.DeserializeJson<VisionConnectionToken>();
@@ -51,6 +56,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             catch (HttpRequestException)
             {
                 return new SessionCreateResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 

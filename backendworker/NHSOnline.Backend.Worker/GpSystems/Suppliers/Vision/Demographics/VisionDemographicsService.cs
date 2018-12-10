@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Demographics
 {
@@ -26,6 +27,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Demographics
 
         public async Task<GetDemographicsResult> GetDemographics(UserSession userSession)
         {
+            _logger.LogEnter();
             var visionUserSession = (VisionUserSession) userSession;
 
             try
@@ -64,6 +66,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Demographics
             {
                 _logger.LogError(e, "Unsuccessful request retrieving patient selected information for Vision");
                 return new GetDemographicsResult.Unsuccessful();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
     }

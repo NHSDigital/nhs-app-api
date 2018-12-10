@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
-            _logger.LogEnter(nameof(GetMyRecord));
+            _logger.LogEnter();
             var visionUserSession = (VisionUserSession)userSession;
 
             try
@@ -53,7 +53,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                     var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems);
                     response.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     
-                    _logger.LogExit(nameof(GetMyRecord));
                     return new GetMyRecordResult.SuccessfullyRetrieved(response);
                 }
                 catch (Exception e)
@@ -67,6 +66,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             {
                 _logger.LogError(e, "Unsuccessful request retrieving patient selected information for Vision");
                 return new GetMyRecordResult.Unsuccessful();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 

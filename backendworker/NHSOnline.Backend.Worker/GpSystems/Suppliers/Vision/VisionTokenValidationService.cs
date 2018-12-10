@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
@@ -15,6 +16,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             
         public bool IsValidConnectionTokenFormat(string connectionToken)
         {
+            _logger.LogEnter();
             if (string.IsNullOrEmpty(connectionToken))
             {
                 return false;
@@ -29,6 +31,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             {
                 _logger.LogWarning(ex, "Unable to deserialize connection token '{0}'.", connectionToken);
                 return false;
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
     }

@@ -9,13 +9,14 @@ using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Support.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 {
     public class VisionCourseService : ICourseService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<VisionCourseService> _logger;
         private readonly ConfigurationSettings _settings;
         private readonly IVisionClient _visionClient;
         private readonly IVisionPrescriptionMapper _visionPrescriptionMapper;
@@ -37,6 +38,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 
         public async Task<GetCoursesResult> GetCourses(UserSession userSession)
         {
+            _logger.LogEnter();
             var visionUserSession = (VisionUserSession) userSession;
             
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
@@ -84,19 +86,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Something went wrong while building the response");
-
                         return new GetCoursesResult.InternalServerError();
                     }
                 }
                 
                 _logger.LogError($"Vision system encountered an error: { coursesResponse.ErrorContent }");
-                
                 return new GetCoursesResult.SupplierSystemUnavailable();
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving courses");
                 return new GetCoursesResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
     }

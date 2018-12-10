@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         {
             try
             {
-                _logger.LogEnter(nameof(GetAppointments));
+                _logger.LogEnter();
             
                 var visionUserSession = (VisionUserSession) userSession;
 
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(GetAppointments));
+                _logger.LogExit();
             }
         }
 

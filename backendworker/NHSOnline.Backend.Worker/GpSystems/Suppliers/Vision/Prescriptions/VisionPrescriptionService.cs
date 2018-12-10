@@ -9,13 +9,14 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 {
     public class VisionPrescriptionService : IPrescriptionService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<VisionPrescriptionService> _logger;
         private readonly ConfigurationSettings _settings;
         private readonly IVisionClient _visionClient;
         private readonly IVisionPrescriptionMapper _visionPrescriptionMapper;
@@ -35,6 +36,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
+            _logger.LogEnter();
+
             var visionUserSession = (VisionUserSession)userSession;
 
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
@@ -96,6 +99,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             {
                 _logger.LogError(e, $"Unsuccessful request retrieving prescriptions");
                 return new PrescriptionResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit();
             }
         }
 
