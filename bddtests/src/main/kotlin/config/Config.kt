@@ -81,7 +81,7 @@ class Config private constructor() {
         symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
         sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", SESSION_EXPIRY_MINUTES)
 
-        dataPreferencesHost = "http://stubs.local.bitraft.io:8080"
+        dataPreferencesHost = wiremockUrl
         dataPreferencesPath = "/ndop/createsession"
         dataPreferencesUrl = envOrDefault("DATA_PREFERENCES_URL", dataPreferencesHost + dataPreferencesPath)
 
