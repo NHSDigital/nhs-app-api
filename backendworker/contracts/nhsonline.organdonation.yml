@@ -1,0 +1,106 @@
+swagger: "2.0"
+
+info:
+  version: 0.0.7
+  title: NHS App Sub-API - Organ Donation
+  description: NHS App Sub-API - endpoints pertaining to Organ Donation -  All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+paths:
+  /organDonation:
+    get:
+        tags:
+          - organDonation
+        summary: Get the existing organ donation and user demographic information.
+        description: Returns the users organ donation record.
+        consumes:
+          - application/json
+        responses:
+          200:
+            description: Successfully retrieved the users organ donation record.
+            schema:
+              $ref: '#/definitions/organDonationRegistration'
+          401:
+            description: User session missing or expired.
+          409:
+            description: Conflicts on organ donation record.
+          500:
+            description: An unexpected error occurred processing the request.
+          502:
+            description: Bad response received from upstream system.
+          504:
+            description: Timeout when calling upstream system.
+definitions:
+  organDonationRegistration:
+    type: object
+    properties:
+      identifier:
+        type: string
+        description: Users organ donation identifier.
+      nhsNumber:
+        type: string
+        description: Users nhs number from the gp system.
+      name:
+        $ref: '#/definitions/usersName'
+      gender:
+        type: string
+        description: Users gender from the gp system.
+      dateOfBirth:
+        type: string
+        format: date
+        description: Users date of birth from the gp system.
+      address:
+        $ref: '#/definitions/usersAddress'
+      emailAddress:
+        type: string
+        description: Users email address from nhs login.
+      decision:
+        type: string
+        description: Users organ donation decision, Opt-in, Opt-out, not found.
+      decisionDetails:
+        $ref: '#/definitions/decisionDetails'
+      faithDeclaration:
+        type: string
+        description: Users faith decision yes, no, not-stated.
+  usersName:
+    type: object
+    description: Users name object.
+    properties:
+      title:
+        type: string
+        description: Users title from the gp system.
+      givenName:
+        type: string
+        description: Users given name from the gp system.
+      surname:
+        type: string
+        description: Users surname from the gp system.
+  usersAddress:
+    type: object
+    description: Users address from the gp system.
+    properties:
+      text:
+        type: string
+        description: Users address from the gp system.
+      postcode:
+        type: string
+        description: Users postcode from the gp system.
+  decisionDetails:
+    type: object
+    description: Users organ donation decision.
+    properties:
+      all:
+        type: boolean
+        description: Users agreed to donate all organs.
+      choices:
+        type: array
+        items:
+          $ref: '#/definitions/decisionChoice'
+  decisionChoice:
+    type: object
+    description: Users individual organ donation choices.
+    properties:
+      name:
+        type: string
+        description: Name of the choice.
+      value:
+        type: string
+        description: Value of the choice yes, no, not-stated.
