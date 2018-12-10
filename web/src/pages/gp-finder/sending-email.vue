@@ -63,7 +63,6 @@ export default {
     return {
       returnPath: undefined,
       hostPath: undefined,
-      gpLookUpBrotherMailerURL: this.$store.app.$env.GP_LOOKUP_BROTHER_MAILER_URL,
       odsCode: undefined,
       practiceName: undefined,
       practiceAddress: undefined,
