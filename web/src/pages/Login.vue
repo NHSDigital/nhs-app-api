@@ -105,7 +105,9 @@ export default {
       return this.practiceAddress;
     },
     showCheckFeaturesLink() {
-      return this.$store.app.$cookies.get('BetaCookie') !== undefined && this.$store.app.$env.THROTTLING_ENABLED;
+      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
+      return betaCookie !== undefined && !betaCookie.Skipped &&
+        this.$store.app.$env.THROTTLING_ENABLED;
     },
     gpFinderResetLink() {
       return `${GP_FINDER.path}?reset=true`;

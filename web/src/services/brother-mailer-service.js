@@ -1,5 +1,5 @@
 /* eslint-disable prefer-destructuring */
-
+/* eslint-disable dot-notation */
 import axios from 'axios';
 
 export default {
@@ -20,7 +20,7 @@ export default {
       `cd_ODSCODE=${query.odscode}`;
 
     const method = 'POST';
-    const url = store.app.$env.GP_LOOKUP_BROTHER_MAILER_URL;
+    const url = process.env['GP_LOOKUP_BROTHER_MAILER_URL'];
     const headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
     };

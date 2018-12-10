@@ -99,11 +99,6 @@ const config = {
     STUB_TERMS_AND_CONDITIONS: true,
     // App Version
     VERSION_TAG: 'dev_web_npm',
-    // Throttling
-    GP_LOOKUP_API_KEY: '',
-    GP_LOOKUP_API_URL: 'https://nhsapiint.azure-api.net/service-search/search?api-version=1',
-    GP_LOOKUP_API_RESULTS_LIMIT: 20,
-    GP_LOOKUP_BROTHER_MAILER_URL: 'https://r1.brothermailer1.com/signup.ashx',
     // Feature Toggles
     THROTTLING_ENABLED: false,
     COMMIT_ID: 'dev',

@@ -93,6 +93,8 @@
 </template>
 
 <script>
+/* eslint-disable global-require */
+/* eslint-disable dot-notation */
 import BackIcon from '@/components/icons/BackIcon';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import NHSSearchService from '@/services/nhs-search-service';
@@ -156,20 +158,26 @@ export default {
       return this.$t('th03.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
     },
   },
-  asyncData({ route, store, redirect }) {
+  asyncData({ route, redirect }) {
     const { searchQuery } = route.query;
     if (!searchQuery || typeof searchQuery !== 'string' || !searchQuery.trim()) {
       return redirect(`${GP_FINDER.path}?error=true`);
     }
 
-    return NHSSearchService.searchGPPractices(store.app.$env, searchQuery)
+    return NHSSearchService.searchGPPractices(searchQuery)
       .then(response => ({
-        tooManyResults: response.data['@odata.count'] > store.app.$env.GP_LOOKUP_API_RESULTS_LIMIT,
+        tooManyResults: response.data['@odata.count'] > process.env['GP_LOOKUP_API_RESULTS_LIMIT'],
         noResultsFound: !response.data['@odata.count'],
         searchResults: response.data.value,
         searchQuery,
       }))
-      .catch(() => ({ technicalError: true }));
+      .catch((error) => {
+        if (process.server) {
+          const consola = require('consola');
+          consola.error(new Error(`Error searching for GP practice: response: ${error}`));
+        }
+        return { technicalError: true };
+      });
   },
   methods: {
     formatAddress(gpPractice) {

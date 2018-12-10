@@ -16,7 +16,7 @@
                                                    $style.throttlingContent, 'pull-content']">
       <h3>{{ this.$t('th05.emailFeatureText') }}</h3>
       <p :class="$style.contactYouText">{{ this.$t('th05.contactYouText') }}</p>
-      <h4>{{ this.$t('th05.emailText') }}</h4>
+      <h4 id="email-label">{{ this.$t('th05.emailText') }}</h4>
       <form id="signup" :action="callBrotherMailer"
             name="signup" autocomplete="off">
         <error-message v-if="showError" id="error-label">
@@ -24,12 +24,11 @@
         </error-message>
         <generic-text-input id="emailInput"
                             ref="email"
-                            :class="$style.searchTextInput"
                             :type="'text'"
-                            :a-labelled-by="'search-label'"
+                            :a-labelled-by="emailInputLabelledBy"
                             name="email"
                             input-name="email"
-                            maxlength="256"
+                            maxlength="255"
         />
         <input id="odsCode" :value="odsCode" type="hidden" name="odsCode" >
         <generic-button :class="[$style.button, $style.green]" :type="'submit'">
@@ -102,6 +101,9 @@ export default {
   computed: {
     showError() {
       return this.submissionError || this.connectionError || this.invalidEmailError;
+    },
+    emailInputLabelledBy() {
+      return this.showError ? 'email-label error-label' : 'email-label';
     },
     callBrotherMailer() {
       return BROTHERMAILER.path;
