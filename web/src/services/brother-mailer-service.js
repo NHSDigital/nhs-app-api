@@ -1,14 +1,12 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable dot-notation */
 import axios from 'axios';
+import { GP_FINDER_SENDING_EMAIL_RESULT } from '@/lib/routes';
 
 export default {
-  postEmailToBrotherMailer: (store, query) => {
-    const appUrl = store.state.device.isNativeApp ?
-      store.app.$env.NATIVE_CID_REDIRECT_URI : store.app.$env.CID_REDIRECT_URI;
-
-    const urlParts = appUrl.split('/');
-    const returnUrl = `${urlParts[0]}//${urlParts[2]}/gp-finder/sending-email-result`;
+  postEmailToBrotherMailer: (appUrl, email, odscode) => {
+    const returnUrl = appUrl;
+    returnUrl.pathname = GP_FINDER_SENDING_EMAIL_RESULT.path;
 
     const formContent =
       `userid=${process.env['GP_LOOKUP_BROTHER_MAILER_USER_ID']}&` +
@@ -16,8 +14,8 @@ export default {
       `addressbookid=${process.env['GP_LOOKUP_BROTHER_MAILER_ADDRESSBOOK_ID']}&` +
       `ReturnURL=${returnUrl}&` +
       'ci_consenturl=&' +
-      `email=${encodeURI(`${query.email}`)}&` +
-      `cd_ODSCODE=${query.odscode}`;
+      `email=${encodeURI(`${email}`)}&` +
+      `cd_ODSCODE=${odscode}`;
 
     const method = 'POST';
     const url = process.env['GP_LOOKUP_BROTHER_MAILER_URL'];

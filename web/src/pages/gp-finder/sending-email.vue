@@ -17,8 +17,8 @@
       <h3>{{ this.$t('th05.emailFeatureText') }}</h3>
       <p :class="$style.contactYouText">{{ this.$t('th05.contactYouText') }}</p>
       <h4 id="email-label">{{ this.$t('th05.emailText') }}</h4>
-      <form id="signup" :action="callBrotherMailer"
-            name="signup" autocomplete="off">
+      <form id="signup" :action="`${callBrotherMailer}?source=${this.$store.state.device.source}`"
+            method="post" name="signup" autocomplete="off">
         <error-message v-if="showError" id="error-label">
           {{ errorText }}
         </error-message>
@@ -30,7 +30,8 @@
                             input-name="email"
                             maxlength="255"
         />
-        <input id="odsCode" :value="odsCode" type="hidden" name="odsCode" >
+        <input id="odsCode" :value="odsCode" type="hidden" name="odsCode">
+        <input id="appUrl" :value="brotherMailerRedirectUrl" type="hidden" name="appUrl">
         <generic-button :class="[$style.button, $style.green]" :type="'submit'">
           {{ this.$t('th05.continueButton') }}
         </generic-button>
@@ -48,7 +49,7 @@ import HeaderSlim from '@/components/HeaderSlim';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-import { BROTHERMAILER, LOGIN, GP_FINDER, GP_FINDER_PARTICIPATION } from '@/lib/routes';
+import { BROTHERMAILER_SIGNUP_NOJS, LOGIN, GP_FINDER, GP_FINDER_PARTICIPATION } from '@/lib/routes';
 
 export default {
   layout: 'throttling',
@@ -79,23 +80,30 @@ export default {
       context.redirect(`${GP_FINDER.path}?reset=true`);
     }
 
-    if (context.query.error === 'connectionError') {
-      return { connectionError: true };
-    }
-
-    if (context.query.error === 'invalidEmailError') {
-      return { invalidEmailError: true };
-    }
-
-    if (context.query.error === 'submissionError') {
-      return { submissionError: true };
-    }
-
-    return {
+    const data = {
       odsCode: cookie.ODSCode,
       practiceName: cookie.PracticeName,
       practiceAddress: cookie.PracticeAddress,
+      connectionError: false,
+      invalidEmailError: false,
+      submissionError: false,
     };
+
+    switch (context.query.error) {
+      case 'connectionError':
+        data.connectionError = true;
+        break;
+      case 'invalidEmailError':
+        data.invalidEmailError = true;
+        break;
+      case 'submissionError':
+        data.submissionError = true;
+        break;
+      default:
+        break;
+    }
+
+    return data;
   },
   computed: {
     showError() {
@@ -105,7 +113,7 @@ export default {
       return this.showError ? 'email-label error-label' : 'email-label';
     },
     callBrotherMailer() {
-      return BROTHERMAILER.path;
+      return BROTHERMAILER_SIGNUP_NOJS.path;
     },
     errorText() {
       if (this.invalidEmailError) {
@@ -121,6 +129,9 @@ export default {
       }
 
       return undefined;
+    },
+    brotherMailerRedirectUrl() {
+      return this.$store.app.$env.CID_REDIRECT_URI;
     },
   },
   methods: {
