@@ -559,7 +559,7 @@ export default {
   },
   pageHeaders: {
     home: 'Home',
-    gpFinder: 'GP Finder',
+    gpFinder: 'Check what features you can use',
     prescriptions: 'My repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
@@ -743,6 +743,7 @@ export default {
   },
   th04: {
     header: 'GP surgery features',
+    title: 'Features used by your GP surgery',
     featuresHeader: 'Features used by',
     currentlyAvailableHeader: 'Currently available',
     comingSoonHeader: 'Coming soon',

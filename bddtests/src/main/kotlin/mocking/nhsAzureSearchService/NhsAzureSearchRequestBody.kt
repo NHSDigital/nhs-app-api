@@ -2,7 +2,7 @@ package mocking.nhsAzureSearchService
 
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 
-data class NhsAzureSearchRequestBody(val top: Int = NhsAzureSearchData.LIMIT,
+data class NhsAzureSearchRequestBody(val top: String = NhsAzureSearchData.LIMIT.toString(),
                                      val search: String = "",
                                      val searchFields: String =  "OrganisationName,Address2,Address3,Postcode,City",
                                      val select: String = "OrganisationID,OrganisationName," +

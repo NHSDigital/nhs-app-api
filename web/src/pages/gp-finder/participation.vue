@@ -81,6 +81,11 @@ export default {
     }
     return next(INDEX.path);
   },
+  head() {
+    return {
+      title: `${this.$t('th04.title')} - ${this.$t('appTitle')}`,
+    };
+  },
   data() {
     return {
       practiceName: undefined,
