@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             {
                 CsrfToken = _antiforgery.GetTokens(context).RequestToken,
                 GpUserSession = gpUserSession,
-                CitizenIdUserSession = citizenIdUserSession
+                CitizenIdUserSession = citizenIdUserSession,
+                OrganDonationSessionId = Guid.NewGuid()
             };
         }
     }

@@ -14,5 +14,7 @@ namespace NHSOnline.Backend.Worker
         public GpUserSession GpUserSession { get; set; }
 
         public CitizenIdUserSession CitizenIdUserSession { get; set; }
+
+        public Guid OrganDonationSessionId { get; set; }
     }
 }

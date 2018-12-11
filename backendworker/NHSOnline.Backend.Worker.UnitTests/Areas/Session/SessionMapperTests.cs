@@ -1,3 +1,4 @@
+using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -44,7 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         {
             var citizenIdUserSession = _fixture.Create<CitizenIdUserSession>();
             var gpUserSession = _fixture.Create<GpUserSession>();
-            
+
             var expectedResult = new UserSession
             {
                 CsrfToken = _csrfToken,
@@ -52,9 +53,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 CitizenIdUserSession = citizenIdUserSession
             };
 
-            var result = _systemUnderTest.Map(_mockHttpContext.Object, gpUserSession, citizenIdUserSession);
-            
-            result.Should().BeEquivalentTo(expectedResult);
+            var result = _systemUnderTest.Map(_mockHttpContext.Object,
+                gpUserSession,
+                citizenIdUserSession);
+
+            result.Should().BeEquivalentTo(
+                expectedResult,
+                options => options.Excluding(x => x.OrganDonationSessionId));
+            result.OrganDonationSessionId.Should().NotBeEmpty();
             _mockAntiForgery.Verify();
         }
     }

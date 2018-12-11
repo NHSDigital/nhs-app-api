@@ -97,6 +97,9 @@ ENV NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
 ENV STUB_TERMS_AND_CONDITIONS false
 ENV BACKENDWORKER_RUNMODE none
 ENV IM1CACHE_MONGO_DATABASE_COLLECTION im1cache
+ENV ORGAN_DONATION_BASE_URL https://mocksvc-proxy.anypoint.mulesoft.com/exchange/127af7bb-99cb-4a70-8590-28234d029279/odr-fhir-experience-api/1.0.5/xapi/odr/v1/
+ENV ORGAN_DONATION_CLIENT_ID ODR-26-NHSAP
+ENV ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY 781859de3cce4bc48a715dfc8f36dc6f
 
 WORKDIR /app
 EXPOSE $PORT
