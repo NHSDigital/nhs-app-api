@@ -47,6 +47,7 @@ import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
+import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.services.ConfigurationResponse
 import com.nhs.online.nhsonline.services.ConfigurationService
 import java.util.*
@@ -148,7 +149,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun onErrorRetryButton() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnRetryButton")
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnErrorRetryButton")
+
+        if (!Reachability.isConnectedToNetwork(this)) {
+            Log.d(Application.TAG, "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
+            return
+        }
+
         showProgressDialog()
         urlLoader.reloadRequest()
         configurationService.getConfiguration(object : IVolleyCallback {
@@ -158,7 +165,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
                     showVersionUpgradeDialog()
                 }
 
-                if(configurationResponse.isThrottlingEnabled) {
+                if(!isLoggedIn && configurationResponse.isThrottlingEnabled) {
                     loadThrottlingCarousel()
                 }
             }
