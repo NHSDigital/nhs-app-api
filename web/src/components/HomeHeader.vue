@@ -39,7 +39,7 @@ export default {
     right: 0em;
   }
   a.fixed-right {
-     position: fixed;
+     position: absolute;
      top: 0em;
      right: 0em;
   }
