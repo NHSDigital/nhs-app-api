@@ -701,10 +701,10 @@ export default {
     },
     heading1: 'Check what features you can use',
     heading2: 'Find your GP surgery',
-    hintText: 'Enter postcode, town or GP surgery name',
+    hintText: 'Enter the name of your GP surgery, its postcode or town',
     callToAction: 'Continue',
     hasAnAccountLink: 'I\'m already using the NHS App',
-    emptySearchError: 'Enter postcode, town or GP surgery name',
+    emptySearchError: 'Enter the name of your GP surgery, its postcode or town',
   },
   th03: {
     header: 'Select your GP surgery',

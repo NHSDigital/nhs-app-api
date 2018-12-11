@@ -14,7 +14,7 @@ export default {
     const data = {
       top: process.env['GP_LOOKUP_API_RESULTS_LIMIT'],
       search: formatSearch(sanitiseSearch(searchQuery)),
-      searchFields: 'OrganisationName,Postcode,City',
+      searchFields: 'OrganisationName,Address2,Address3,Postcode,City',
       select: 'OrganisationID,OrganisationName,Address1,Address2,Address3,City,County,Postcode,NACSCode',
       filter: 'OrganisationTypeID eq \'GPB\'',
       orderby: 'OrganisationName',
