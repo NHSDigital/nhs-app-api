@@ -2,14 +2,18 @@ package com.nhs.online.nhsonline.resources
 
 import android.content.Context
 import android.content.res.Resources
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhs.online.nhsonline.R
-
+import org.mockito.Mockito
 
 open class ResourceMockingClass {
+
+
     fun mockContext(): Context {
-        var mockresource: Resources = mock {
+        val mockresource: Resources = mock {
             on { getString(R.string.baseURL) } doReturn "http://10.0.2.2:3000"
             on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
             on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
@@ -31,12 +35,12 @@ open class ResourceMockingClass {
             on { getString(R.string.hotjarLink) } doReturn "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"
             on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
             on { getStringArray(R.array.externalSiteUrls) } doReturn arrayOf(
-                "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/",
-                "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/",
-                "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/",
-                "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/",
-                "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/",
-                "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/"
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/"
             )
             on { getString(R.string.nhs_111_header_description) } doReturn  "one one one Online"
 
@@ -61,9 +65,65 @@ open class ResourceMockingClass {
             on { getString(R.string.prescriptions_header) } doReturn "My repeat prescriptions"
             on { getString(R.string.more_header) } doReturn "More"
             on { getString(R.string.home_header) } doReturn "Home"
-
+            on { getStringArray(R.array.nativeAppHosts) } doReturn arrayOf(
+                    "https://111.nhs.uk/",
+                    "https://111.service.nhs.uk/",
+                    "https://www.organdonation.nhs.uk/app/",
+                    "https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/",
+                    "https://www.nhs.uk/conditions/",
+                    "https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/"
+            )
         }
 
-        return mock { on { resources } doReturn mockresource }
+        return mock {
+            on { resources } doReturn mockresource
+            on { getString(R.string.dataPreferencesBaseUrl) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/"
+        }
+    }
+
+    // Returns a context which appears to not have a internet connection
+    fun mockDisconnectedContext() : Context {
+        val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
+        val networkInfo = Mockito.mock( NetworkInfo::class.java )
+
+        Mockito.`when`( connectivityManager.activeNetworkInfo ).thenReturn(networkInfo)
+        Mockito.`when`( networkInfo.isConnected).thenReturn( false)
+        Mockito.`when`(networkInfo.isAvailable).thenReturn(false)
+        Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(false)
+
+        val mockResource: Resources = mock {
+            on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
+            on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
+            on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
+            on { getString(R.string.connection_error_title) } doReturn "There\\'s an issue with your internet connection"
+        }
+
+        return mock {
+            on {getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
+            on { resources } doReturn mockResource
+        }
+    }
+
+    // Returns a context which appears as if it does have internet connection
+    fun mockConnectedContext() : Context {
+        val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
+        val networkInfo = Mockito.mock( NetworkInfo::class.java )
+
+        Mockito.`when`( connectivityManager.activeNetworkInfo ).thenReturn(networkInfo)
+        Mockito.`when`( networkInfo.isConnected).thenReturn( true )
+        Mockito.`when`(networkInfo.isAvailable).thenReturn(true)
+        Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(true)
+
+        val mockresource: Resources = mock {
+            on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
+            on { getString(R.string.connection_error_title) } doReturn "\"There's an issue with your internet connection\""
+            on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
+            on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
+        }
+
+        return mock {
+            on {getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
+            on { resources } doReturn mockresource
+        }
     }
 }

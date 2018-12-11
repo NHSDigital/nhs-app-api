@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.webclients
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.AssetManager
 import android.content.res.Resources
@@ -9,15 +10,19 @@ import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
+import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
+import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.KnownServices
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.Assert.assertEquals
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import java.io.InputStream
 
+@Suppress("DEPRECATION")
 @RunWith(RobolectricTestRunner::class)
 class WebClientInterceptorTest {
 
@@ -28,6 +33,9 @@ class WebClientInterceptorTest {
     private lateinit var contextMock: Context
     private lateinit var webViewMock: WebView
     private lateinit var requestMock: WebResourceRequest
+
+    private val resourceMock = ResourceMockingClass()
+
 
     @Before
     fun setUp() {
@@ -43,6 +51,7 @@ class WebClientInterceptorTest {
         )
 
         webViewMock = mock()
+
     }
 
     @Test
@@ -165,4 +174,251 @@ class WebClientInterceptorTest {
         verify(resourceMock).getStringArray(R.array.fonts)
         verify(assetManagerMock).open("fonts/bazz.woff2")
     }
+
+    @Test
+    fun isConnectedForConnectedContext(){
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                knownServicesMock,
+                activitiesMock,
+                resourceMock.mockConnectedContext()
+        )
+
+        assert(webInterceptor.isConnectedToInternet()) {
+            "WebClientInterceptor: Returns disconnected for a connected context"
+        }
+    }
+
+    @Test
+    fun isConnectedForDisconnectedContext(){
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                knownServicesMock,
+                activitiesMock,
+                resourceMock.mockDisconnectedContext()
+        )
+
+        assert(!webInterceptor.isConnectedToInternet()) {
+            "WebClientInterceptor: Returns connected for disconnected context"
+        }
+    }
+
+    @Test
+    fun overrideUrlLoad(){
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                KnownServices(resourceMock.mockContext()),
+                createActivities(),
+                resourceMock.mockContext()
+        )
+
+        val tmpWebView = createWebView()
+
+        assert(!webInterceptor.shouldOverrideUrlLoading(tmpWebView,
+                "https://ndopapp-int1.thunderbird.service.nhs.uk/")) {
+            "WebClientInterceptor: Failed to override data preferences URL"
+        }
+
+        assert(webInterceptor.shouldOverrideUrlLoading(tmpWebView, "http://www.google.com")){
+            "WebClientInterceptor: Failed to override non-known URL"
+        }
+    }
+
+
+    @Test
+    fun onPageStartedNoConnection(){
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                knownServicesMock,
+                activitiesMock,
+                resourceMock.mockDisconnectedContext()
+        )
+
+        webInterceptor.onPageStarted(webViewMock, "https://111.nhs.uk/", null)
+
+
+
+        val errorHeader = resourceMock.mockDisconnectedContext().resources.getString(
+                R.string.connection_error_header
+        )
+
+        verify(webViewMock).stopLoading()
+        verify(uiInteractorMock).setHeaderText(errorHeader)
+
+    }
+
+    @Test
+    fun onPageStartedConnectedKnownURL() {
+        val tmpContext = resourceMock.mockContext()
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                KnownServices(tmpContext),
+                activitiesMock,
+                resourceMock.mockConnectedContext()
+        )
+
+        webInterceptor.onPageStarted(
+                webViewMock,
+                tmpContext.resources.getString(R.string.conditions),
+                null
+        )
+
+        val serviceInfo = KnownServices(tmpContext).findMatchingServiceInfo(
+                                tmpContext.resources.getString(R.string.conditions)
+        )
+
+        val header = serviceInfo?.header
+        if (header != null) {
+            verify(uiInteractorMock).setHeaderText(header, null)
+        }
+    }
+
+    @Test
+    fun stopLoadingWebViewTest(){
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                KnownServices(resourceMock.mockContext()),
+                activitiesMock,
+                resourceMock.mockDisconnectedContext())
+
+        webInterceptor.stopLoadingWebviewAndShowNoConnectionError(webViewMock)
+
+
+        val header = resourceMock.mockDisconnectedContext().resources.getString(R.string.connection_error_header)
+
+        verify(webViewMock).stopLoading()
+        verify(uiInteractorMock).setHeaderText(header)
+    }
+
+    @Test
+    fun pageFinishUnknownURL(){
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                KnownServices(resourceMock.mockContext()),
+                activitiesMock,
+                resourceMock.mockDisconnectedContext()
+        )
+
+
+        webInterceptor.onPageFinished(webViewMock, "https://google.com")
+        verify(uiInteractorMock, never()).dismissProgressDialog()
+
+        webInterceptor.onPageFinished(webViewMock, "https://www.nhs.uk")
+
+        verify(uiInteractorMock).dismissProgressDialog()
+    }
+
+    @Test
+    fun pageFinishKnownURL(){
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                KnownServices(resourceMock.mockContext()),
+                activitiesMock,
+                resourceMock.mockDisconnectedContext()
+        )
+
+        webInterceptor.onPageFinished(webViewMock, "https://www.nhs.uk")
+
+        verify(uiInteractorMock, times(1)).dismissProgressDialog()
+    }
+
+    @Test
+    fun receivedErrorNonKnownURL(){
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                KnownServices(resourceMock.mockContext()),
+                activitiesMock,
+                resourceMock.mockDisconnectedContext()
+        )
+
+        webInterceptor.onReceivedError(webViewMock, 404,
+                "Error", "https://google.com")
+
+        val knownUrlErrMsg = KnownServices(resourceMock.mockContext()).getServiceUnavailabilityError()
+
+        verify(uiInteractorMock, never()).dismissProgressDialog()
+        verify(uiInteractorMock, never()).showUnavailabilityError(knownUrlErrMsg)
+    }
+
+    @Test
+    fun receivedErrorKnownURL(){
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                KnownServices(resourceMock.mockContext()),
+                activitiesMock,
+                resourceMock.mockDisconnectedContext()
+        )
+
+        webInterceptor.onReceivedError(webViewMock, 404,
+                "Error", "https://www.nhs.uk")
+
+        val knownUrlErrMsg = KnownServices(resourceMock.mockContext()).getServiceUnavailabilityError()
+
+        verify(uiInteractorMock).dismissProgressDialog()
+        verify(uiInteractorMock).showUnavailabilityError(knownUrlErrMsg)
+
+    }
+
+    @Test
+    fun loadResourceConnected() {
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                knownServicesMock,
+                activitiesMock,
+                resourceMock.mockConnectedContext()
+        )
+
+        webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
+
+        verify(uiInteractorMock, never()).dismissProgressDialog()
+        verify(webViewMock, never()).stopLoading()
+    }
+
+    @Test
+    fun loadResourceNotConnected() {
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                knownServicesMock,
+                activitiesMock,
+                resourceMock.mockDisconnectedContext()
+        )
+
+        webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
+        verify(uiInteractorMock).dismissProgressDialog()
+    }
+
+    @Test
+    fun loadResourceNotConnectedPreviouslyHandled() {
+
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                knownServicesMock,
+                activitiesMock,
+                resourceMock.mockDisconnectedContext()
+        )
+
+        webInterceptor.onPageStarted(webViewMock, "https://www.111.nhs.uk", null)
+        webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
+        verify(uiInteractorMock, times(1)).dismissProgressDialog()
+    }
+
+    private fun createWebView(): WebView {
+        val activity = Robolectric.buildActivity(Activity::class.java).create().get()
+        return WebView(activity)
+    }
+
+    private fun createActivities(): List<ActivityInterface> {
+        val openBrowserActivity =
+                OpenUrlInBrowserActivity(resourceMock.mockContext()
+                        .resources.getStringArray(R.array.nativeAppHosts))
+        return listOf(openBrowserActivity)
+    }
+
 }
