@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task Cancel_HappyPath_ReturnsSuccessfullyCancelledResponse()
         {
             // Arrange         
-            var response = new VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse>(HttpStatusCode.OK)
+            var response = new VisionPFSClient.VisionApiObjectResponse<CancelledAppointmentResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<CancelledAppointmentResponse>
                 {
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         }
         
         private void MockVisionClientCancelAppointmentMethod(
-            VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse> response)
+            VisionPFSClient.VisionApiObjectResponse<CancelledAppointmentResponse> response)
         {
             _mockVisionClient.Setup(x => x.CancelAppointment(
                 It.Is<VisionUserSession>(p => 

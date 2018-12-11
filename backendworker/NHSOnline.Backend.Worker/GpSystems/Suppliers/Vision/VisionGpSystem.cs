@@ -14,6 +14,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
@@ -81,23 +82,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         {
             return _serviceProvider.GetService<VisionPatientRecordService>();
         }
-
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
+        
         public ILinkageService GetLinkageService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<VisionLinkageService>();
         }
         
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
         public ILinkageRequestValidationService GetLinkageRequestValidationService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<VisionLinkageRequestValidationService>();
         }
-
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
+        
         public IPrescriptionRequestValidationService GetPrescriptionRequestValidationService()
         {
             return _serviceProvider.GetService<VisionPrescriptionRequestValidationService>();

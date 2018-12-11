@@ -28,16 +28,16 @@ using RichardSzalay.MockHttp;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
 {
     [TestClass]
-    public sealed class VisionClientTests : IDisposable
+    public sealed class VisionPFSClientTests : IDisposable
     {
-        private IVisionClient _sut;
+        private IVisionPFSClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
-        private Mock<IVisionConfig> _configMock;
+        private Mock<IVisionPFSConfig> _configMock;
         private IFixture _fixture;
         private VisionConnectionToken _connectionToken;
         private string _odsCode;
         private VisionUserSession _visionUserSession;
-        private VisionHttpClient _httpClient;
+        private VisionPFSHttpClient _httpClient;
         private const string RequestUserName = "username";
         
         private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
-            _configMock = _fixture.Freeze<Mock<IVisionConfig>>();
+            _configMock = _fixture.Freeze<Mock<IVisionPFSConfig>>();
             _configMock.SetupGet(x => x.ApiUrl).Returns(ApiUrl);
             _configMock.SetupGet(x => x.RequestUsername).Returns(RequestUserName);
             _configMock.SetupGet(x => x.CertificatePath).Returns(Path);
@@ -80,11 +80,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 new X509Certificate2(Path, Passphrase));
             
             _mockHttpHandler = new MockHttpMessageHandler();
-            _httpClient = new VisionHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
+            _httpClient = new VisionPFSHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 
             _fixture.Inject(_httpClient);
             
-            _sut = _fixture.Create<VisionClient>();
+            _sut = _fixture.Create<VisionPFSClient>();
         }
 
         [TestMethod]

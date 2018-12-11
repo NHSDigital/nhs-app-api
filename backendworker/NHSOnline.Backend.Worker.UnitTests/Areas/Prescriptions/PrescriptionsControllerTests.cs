@@ -208,13 +208,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         public async Task Post_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             var courseId = Guid.NewGuid().ToString();
-            
-            var requestModel = new RepeatPrescriptionRequest();
-            requestModel.CourseIds = new List<string>()
+
+            var requestModel = new RepeatPrescriptionRequest
             {
-                courseId
+                CourseIds = new List<string>()
+                {
+                    courseId
+                }
             };
-            
+
             var mockGpSystem = new Mock<IGpSystem>();
             var prescriptionService = new Mock<IPrescriptionService>();
 

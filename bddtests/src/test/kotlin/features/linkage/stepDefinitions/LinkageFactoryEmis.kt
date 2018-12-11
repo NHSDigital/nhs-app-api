@@ -1,5 +1,6 @@
 package features.linkage.stepDefinitions
 
+import constants.DateTimeFormats
 import features.linkage.LinkageResult
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
@@ -23,6 +24,8 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
             emailAddress = "ab@cd.com",
             surname = "Edgar",
             dateOfBirth = "2000-01-01")
+
+    override val linkageDateOfBirthFormat = DateTimeFormats.backendDateTimeFormatWithoutTimezone
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
                                        linkageResult: LinkageResult) {
@@ -153,6 +156,6 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
         return AddVerificationResponse(
                 linkageInformationFacade.odsCode,
                 linkageInformationFacade.linkageKey,
-                linkageInformationFacade.accountId!!)
+                linkageInformationFacade.accountId)
     }
 }

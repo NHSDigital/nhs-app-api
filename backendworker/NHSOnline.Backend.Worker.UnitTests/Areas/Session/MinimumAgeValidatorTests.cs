@@ -12,18 +12,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
     public class MinimumAgeValidatorTests
     {
         private IMinimumAgeValidator _minimumAgeValidator;
-        private IOptions<ConfigurationSettings> _options;
-
+        private const int MinimumLinkageAge = 16;
+        
         [TestInitialize]
         public void TestInitialize()
         {
-            _options = new Mock<IOptions<ConfigurationSettings>>().Object;
-            _options = Options.Create(new ConfigurationSettings
-            {
-                MinimumAge = 16
-            });
-            
-            _minimumAgeValidator = new MinimumAgeValidator(_options);
+            _minimumAgeValidator = new MinimumAgeValidator();
         }
         
         [TestMethod]
@@ -31,7 +25,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         {
             var todaysDateMinusOneDay = DateTime.Now.AddYears(-16).AddDays(1);
             
-            _minimumAgeValidator.IsValid(todaysDateMinusOneDay).Should().BeFalse();
+            _minimumAgeValidator.IsValid(todaysDateMinusOneDay, MinimumLinkageAge).Should().BeFalse();
         }
         
         [TestMethod]
@@ -39,7 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         {
             var todaysDateMinus16Years = DateTime.Now.AddYears(-16);
             
-            _minimumAgeValidator.IsValid(todaysDateMinus16Years).Should().BeTrue();
+            _minimumAgeValidator.IsValid(todaysDateMinus16Years, MinimumLinkageAge).Should().BeTrue();
         }
         
         [TestMethod]
@@ -47,7 +41,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         {
             var todaysDateMinus17Years = DateTime.Now.AddYears(-16).AddDays(-1);
             
-            _minimumAgeValidator.IsValid(todaysDateMinus17Years).Should().BeTrue();
+            _minimumAgeValidator.IsValid(todaysDateMinus17Years, MinimumLinkageAge).Should().BeTrue();
         }
     }
 }

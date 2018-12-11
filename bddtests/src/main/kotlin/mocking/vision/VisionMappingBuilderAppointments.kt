@@ -15,7 +15,7 @@ import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import java.time.ZonedDateTime
 
-open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBuilder(method, "/vision/"),
+open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBuilder(method, "/vision/pfs/"),
         IAppointmentMappingBuilder {
 
     override fun viewMyAppointmentsRequest(patient: Patient):

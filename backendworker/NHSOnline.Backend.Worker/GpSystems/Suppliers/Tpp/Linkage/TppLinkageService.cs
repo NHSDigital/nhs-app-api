@@ -2,11 +2,13 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
 using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Worker.Settings;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
@@ -19,13 +21,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
         private readonly IIm1CacheService _im1CacheService;
         private readonly ILogger<TppLinkageService> _logger;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
+        private readonly IOptions<ConfigurationSettings> _settings;
 
         public TppLinkageService(ITppClient client,
             ITppLinkageMapper linkageMapper,
             IIm1CacheKeyGenerator im1CacheKeyGenerator,
             IIm1CacheService im1CacheService,
             ILogger<TppLinkageService> logger,
-            IMinimumAgeValidator minimumAgeValidator)
+            IMinimumAgeValidator minimumAgeValidator,
+            IOptions<ConfigurationSettings> settings)
         {
             _tppClient = client;
             _linkageMapper = linkageMapper;
@@ -33,6 +37,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
             _im1CacheService = im1CacheService;
             _logger = logger;
             _minimumAgeValidator = minimumAgeValidator;
+            _settings = settings;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
@@ -50,7 +55,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
 
                 if (!createNhsUserResponse.HasSuccessResponse)
                 {
-                    var errors = new TppLinkageErrors(_minimumAgeValidator, _logger);
+                    var errors = new TppLinkageErrors(_minimumAgeValidator, _logger, _settings);
                     return errors.GetErrorCreatingNhsUser(createNhsUserResponse, request);
                 }
 

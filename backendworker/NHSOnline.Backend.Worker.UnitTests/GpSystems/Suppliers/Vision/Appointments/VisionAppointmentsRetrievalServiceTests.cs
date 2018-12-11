@@ -151,10 +151,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _userSession.AppointmentBookingReasonNecessity.Should().Be(expectedNecessity);
         }
 
-        private static VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> GetVisionResponse(
+        private static VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> GetVisionResponse(
             VisionResponse<BookedAppointmentsResponse> bookedAppointments)
         {
-            return new VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
+            return new VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<BookedAppointmentsResponse>
                 {
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         }
 
         private void MockVisionClientAppointmentsGetMethod(
-            VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
+            VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {   
             _mockVisionClient.Reset();
             _mockVisionClient.Setup(x => x.GetExistingAppointments(

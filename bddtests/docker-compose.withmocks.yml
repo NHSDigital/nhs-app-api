@@ -28,7 +28,9 @@ services:
       - ConfigurationSettings__DefaultSessionExpiryMinutes=1
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
-      - VISION_URI=http://stubs.local.bitraft.io:8080/vision
+      - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/
+      - VISION_PFS_PATH=pfs/
+      - VISION_LINKAGE_PATH=linkage/
       - VISION_CERT_PASSPHRASE
       - VISION_SENDER_USERNAME=Username123123asdas
       - VISION_SENDER_USERFULLNAME=Name
@@ -60,7 +62,9 @@ services:
       - ConfigurationSettings__DefaultSessionExpiryMinutes=1
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
-      - VISION_URI=http://stubs.local.bitraft.io:8080/vision
+      - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/
+      - VISION_PFS_PATH=pfs/
+      - VISION_LINKAGE_PATH=linkage/
       - VISION_CERT_PASSPHRASE
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true

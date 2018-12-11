@@ -145,5 +145,21 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
 
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
+
+        public IActionResult Visit(LinkageResult.ForbiddenErrorRetrievingNhsUser result)
+        {
+            _auditor.AuditWithExplicitNhsNumber(
+                _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - forbidden retrieving nhs user - unknown reason.");
+
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+        }
+
+        public IActionResult Visit(LinkageResult.LinkageKeyRevoked result)
+        {
+            _auditor.AuditWithExplicitNhsNumber(
+                _nhsNumber, _supplier, _auditType, "Linkage details request unsuccessful - linkage key revoked.");
+
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+        }
     }
 }

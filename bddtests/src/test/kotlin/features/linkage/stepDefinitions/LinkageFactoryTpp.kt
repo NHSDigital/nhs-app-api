@@ -1,5 +1,6 @@
 package features.linkage.stepDefinitions
 
+import constants.DateTimeFormats
 import features.linkage.LinkageResult
 import mocking.models.Mapping
 import mocking.tpp.linkage.TppLinkageGETBuilder
@@ -20,11 +21,13 @@ class LinkageFactoryTpp:  LinkageFactory("TPP") {
             surname = "Thompson",
             dateOfBirth = "2000-01-01")
 
+    override val linkageDateOfBirthFormat = DateTimeFormats.backendDateTimeFormatWithoutTimezone
+
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
                                        linkageResult: LinkageResult) {
 
         val linkageToPostRequestResponse = hashMapOf(
-                LinkageResult.SuccessfullyRetrieved to successfulPost(linkageInformationFacade),
+                LinkageResult.SuccessfullyCreated to successfulPost(linkageInformationFacade),
                 LinkageResult.InternalServerError to { post -> post.respondWithInternalServerError() },
                 LinkageResult.PatientNonCompetentOrUnderMinimumAge to {post -> post
                         .respondWithPatientNonCompetentOrUnderMinumumAge()}

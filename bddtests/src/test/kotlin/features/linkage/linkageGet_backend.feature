@@ -19,6 +19,11 @@ Feature: Linkage Get Key
     When I call the TPP Linkage GET endpoint
     Then I receive a "Not Found" error
 
+  Scenario: Linkage request GET with correct values for Vision
+    Given I have valid VISION linkage details
+    When I call the VISION Linkage GET endpoint
+    Then I receive a valid linkage response
+
   Scenario Outline: Linkage request GET for <GP System> returns 400 Bad Request, empty OdsCode
     Given I have valid <GP System> linkage details apart from an empty OdsCode
     When I call the <GP System> Linkage GET endpoint
@@ -27,6 +32,7 @@ Feature: Linkage Get Key
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: Linkage request GET for <GP System> returns 400 Bad Request, empty NhsNumber
     Given I have valid <GP System> linkage details apart from an empty NhsNumber
@@ -36,6 +42,7 @@ Feature: Linkage Get Key
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: Linkage request GET for <GP System> returns 501 Not Implemented, not found ods code
     Given I have valid <GP System> linkage details apart from a not found OdsCode
@@ -45,6 +52,7 @@ Feature: Linkage Get Key
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario: Linkage request GET for EMIS returns 400 Bad Request, empty identity token
     Given I have valid EMIS linkage details apart from an empty identity token
@@ -62,7 +70,7 @@ Feature: Linkage Get Key
     Then I receive a "Forbidden" error
 
   Scenario: Linkage request GET for EMIS returns 403 Forbidden, under 16
-    Given I have valid EMIS linkage details but I am under 16
+    Given I have valid EMIS linkage details for GET but I am under 16
     When I call the EMIS Linkage GET endpoint
     Then I receive a "Forbidden" error
 
@@ -81,7 +89,26 @@ Feature: Linkage Get Key
     When I call the EMIS Linkage GET endpoint
     Then I receive a "Not Found" error
 
-  Scenario: Linkage request GET for EMIS returns 502, when GP system responds with 500
-    Given I have valid EMIS linkage details but the GP system responds with an internal server error retrieving the linkage key
-    When I call the EMIS Linkage GET endpoint
+  Scenario Outline: Linkage request GET returns 502, when GP system responds with 500
+    Given I have valid <GP System> linkage details but the GP system responds with an internal server error retrieving the linkage key
+    When I call the <GP System> Linkage GET endpoint
     Then I receive a "Bad Gateway" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | VISION    |
+
+  Scenario: Linkage request GET for Vision returns 404 Not Found, invalid nhs number
+    Given I have valid VISION linkage details but my nhs number is invalid
+    When I call the VISION Linkage GET endpoint
+    Then I receive a "Bad Request" error
+
+  Scenario: Linkage request GET for Vision returns 404 Not Found, patient record not found
+    Given I have valid VISION linkage details but my patient record was not found
+    When I call the VISION Linkage GET endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request GET for Vision returns 403 Forbidden, linkage key revoked
+    Given I have valid VISION linkage details but my linkage key has been revoked
+    When I call the VISION Linkage GET endpoint
+    Then I receive a "Forbidden" error

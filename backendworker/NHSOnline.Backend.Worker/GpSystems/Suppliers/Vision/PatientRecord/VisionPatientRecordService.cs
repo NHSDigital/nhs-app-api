@@ -17,10 +17,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
     {
         private readonly ILogger<VisionPatientRecordService> _logger;
         private readonly IVisionClient _visionClient;
-        private readonly IVisionConfig _config;
+        private readonly IVisionPFSConfig _config;
         private readonly IVisionMyRecordMapper _visionMyRecordMapper;
 
-        public VisionPatientRecordService(ILogger<VisionPatientRecordService> logger, IVisionClient visionClient, IVisionConfig visionConfig, IVisionMyRecordMapper visionMyRecordMapper)
+        public VisionPatientRecordService(ILogger<VisionPatientRecordService> logger, IVisionClient visionClient, IVisionPFSConfig visionConfig, IVisionMyRecordMapper visionMyRecordMapper)
         {
             _logger = logger;
             _visionClient = visionClient;
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             public const string VPS_EVENT_HISTORY = "VPS_EVENT_HISTORY";
         }
 
-        private static GetMyRecordResult GetCorrectErrorResult<T>(VisionClient.VisionApiObjectResponse<T> response)
+        private static GetMyRecordResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {

@@ -115,7 +115,7 @@ Feature: Login
 
   @backend
   Scenario: Logging in with a cached Im1 Connection Token for a TPP user will remove that token from the cache
-    Given I have valid TPP linkage details
+    Given I have valid TPP linkage details for posting
     And no IM1 Connection Token is currently cached
     And I call the TPP Linkage POST endpoint
     And I have posted the IM1 Connection Token

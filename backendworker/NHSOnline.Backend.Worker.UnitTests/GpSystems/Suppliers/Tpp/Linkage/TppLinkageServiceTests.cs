@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
@@ -13,6 +14,7 @@ using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.Settings;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppClient;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
@@ -24,10 +26,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
         private Mock<ITppClient> _tppClient;
         private Mock<IIm1CacheKeyGenerator> _mockIm1CacheKeyGenerator;
         private Mock<IIm1CacheService> _mockIm1CacheService;
+        private Mock<IOptions<ConfigurationSettings>> _settings;
         private Mock<ITppLinkageMapper> _mockLinkageMapper;
         private TppLinkageService _systemUnderTest;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
         private DateTime _dateOfBirth;
+        private const int MinimumLinkageAge = 16;
 
         [TestInitialize]
         public void TestInitialize()
@@ -38,9 +42,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockLinkageMapper = _fixture.Freeze<Mock<ITppLinkageMapper>>();
 
-
+            _settings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
+            _settings
+                .Setup(x => x.Value)
+                .Returns(new ConfigurationSettings()
+                {
+                    MinimumLinkageAge = MinimumLinkageAge,
+                });
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
-            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>())).Returns(true);
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(true);
             _dateOfBirth = DateTime.Now.AddYears(-16);  //Doesn't matter what age, as validator is mocked
 
             _systemUnderTest = _fixture.Create<TppLinkageService>();
@@ -176,10 +186,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsError_WhenUserUnder16()
         {
-            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>())).Returns(false);
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(false);
 
-            await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials,
+           await CreateLinkageKey_ReturnsError_WhenNotAuthenticated(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials,
                 typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge));
+            
+            _mockMinimumAgeValidator.Verify( x => x.IsValid(It.IsAny<DateTime>(), MinimumLinkageAge));
         }
 
         private async Task CreateLinkageKey_ReturnsError_WhenNotAuthenticated(string errorCode, Type expectedError)

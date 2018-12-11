@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
         {
             _logger = logger;
         }
+
         public bool Validate(GetLinkageRequest request)
         {
             var validator = new ValidateAndLog(_logger)

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.Support.Logging;
-using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 {
@@ -63,7 +62,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             }
         }
 
-        private static List<string> GetLocationIds(VisionApiObjectResponse<PatientConfigurationResponse> response) =>
+        private static List<string> GetLocationIds(VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> response) =>
             response.Body.Configuration.References?.Locations != null
                 ? response.Body.Configuration.References.Locations.Select(l => l.Id).ToList()
                 : new List<string>();
@@ -74,7 +73,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
         }
 
-        private static SessionCreateResult GetCorrectErrorResult<T>(VisionApiObjectResponse<T> response)
+        private static SessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {

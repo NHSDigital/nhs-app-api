@@ -12,11 +12,20 @@ Feature: Linkage Post Key
     And the IM1 Connection Token is in the cache
 
   Scenario: Linkage request POST for TPP returns success with LinkageResponse and an Im1 Connection Token is cached
-    Given I have valid TPP linkage details
+    Given I have valid TPP linkage details for posting
     And no IM1 Connection Token is currently cached
     When I call the TPP Linkage POST endpoint
     Then I receive a valid linkage response
     And the IM1 Connection Token is in the cache
+
+  Scenario Outline: Linkage request POST for <GP System> returns success with LinkageResponse test
+    Given I have valid <GP System> linkage details for posting
+    When I call the <GP System> Linkage POST endpoint
+    Then I receive a valid linkage response
+    Examples:
+      | GP System |
+      | TPP       |
+      | VISION    |
 
   Scenario Outline: Linkage request POST for <GP System> returns 400 Bad Request, invalid OdsCode
     Given I have valid <GP System> linkage details apart from a not found OdsCode
@@ -26,6 +35,7 @@ Feature: Linkage Post Key
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: Linkage request POST for <GP System> returns 400 Bad Request, empty NhsNumber
     Given I have valid <GP System> linkage details apart from an empty NhsNumber
@@ -35,6 +45,7 @@ Feature: Linkage Post Key
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario: Linkage request POST for EMIS returns 400 Bad Request, empty identity token
     Given I have valid EMIS linkage details apart from an empty identity token
@@ -76,14 +87,41 @@ Feature: Linkage Post Key
     When I call the EMIS Linkage POST endpoint
     Then I receive a "Forbidden" error
 
-  Scenario Outline: Linkage request POST for <GP System> returns 403 Forbidden when patient is under 13
-    Given I have valid <GP System> linkage details but I am under 13
+  Scenario Outline: Linkage request POST for <GP System> returns 403 Forbidden when patient is under 16
+    Given I have valid <GP System> linkage details for POST but I am under 16
     When I call the <GP System> Linkage POST endpoint
     Then I receive a "Forbidden" error
     Examples:
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
+
+  Scenario Outline: Linkage request POST for <GP System> returns 200 OK when patient is at least 16
+    Given I have valid <GP System> linkage details and try to create a linkage key as 16 years old
+    When I call the <GP System> Linkage POST endpoint
+    Then I receive a valid linkage response
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario: Linkage request POST for Vision returns 400 Bad Request, invalid nhs number
+    Given I have valid VISION linkage details but my nhs number is invalid
+    When I call the VISION Linkage POST endpoint
+    Then I receive a "Bad Request" error
+
+  Scenario: Linkage request POST for Vision returns 404 Not Found, patient record not found
+    Given I have valid VISION linkage details but my patient record was not found
+    When I call the VISION Linkage POST endpoint
+    Then I receive a "Not Found" error
+
+  Scenario: Linkage request POST for Vision returns 409 Conflict, linkage key already exists
+    Given I have valid VISION linkage details but a linkage key already exists
+    When I call the VISION Linkage POST endpoint
+    Then I receive a "Conflict" error
+
 
   Scenario Outline: Linkage request POST for <GP System> returns 502, when GP system responds with 500
     Given I have valid <GP System> linkage details but the GP system responds with an internal server error creating the linkage key
@@ -93,3 +131,4 @@ Feature: Linkage Post Key
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |

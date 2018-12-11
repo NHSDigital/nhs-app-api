@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Extensions
 {
     public static class GetConfigurationExtensions
     {
-        public static IEnumerable<PatientNhsNumber> ExtractNhsNumbers(this VisionClient.VisionApiObjectResponse<PatientConfigurationResponse> response)
+        public static IEnumerable<PatientNhsNumber> ExtractNhsNumbers(this VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> response)
         {
             var nhsNumbers = response.Body.Configuration.Account.PatientNumbers
                 .Select(x => new PatientNhsNumber

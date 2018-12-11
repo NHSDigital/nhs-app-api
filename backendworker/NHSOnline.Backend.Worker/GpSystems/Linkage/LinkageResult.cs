@@ -140,6 +140,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Linkage
             }
         }
 
+        public class LinkageKeyRevoked : LinkageResult
+        {
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class ForbiddenErrorRetrievingNhsUser : LinkageResult
+        {
+            public override T Accept<T>(ILinkageResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
         public class SuccessfullyRetrievedAlreadyExists : LinkageResult
         {
             public LinkageResponse Response { get; }

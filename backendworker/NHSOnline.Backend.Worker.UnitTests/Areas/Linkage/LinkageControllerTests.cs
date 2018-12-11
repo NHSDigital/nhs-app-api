@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Linkage;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
+using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
 
@@ -28,6 +32,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         private const string DefaultEmailAddress = "john@email.com";
         private Mock<IAuditor> _mockAuditor;
         private IFixture _fixture;
+        private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
+        private Mock<IOptions<ConfigurationSettings>> _settings;
+        private const int MinimumLinkageAge = 16;
         
         private const string GetRequestAuditType = "Linkage_GetDetails_Request";
         private const string GetResponseAuditType = "Linkage_GetDetails_Response";
@@ -38,7 +45,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         public void TestInitialize()
         {
             _fixture = new Fixture();
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+
+            _settings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
+            _settings
+                .Setup(x => x.Value)
+                .Returns(new ConfigurationSettings()
+                {
+                    MinimumLinkageAge = MinimumLinkageAge,
+                });
+            _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(true);
         }
         
         [TestMethod]
@@ -249,6 +267,58 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), PostRequestAuditType, It.IsAny<string>()));
             _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), PostResponseAuditType, It.IsAny<string>()));
         }
+        
+        [TestMethod]
+        public async Task Post_Returns403FailedAgeCheck_WhenDateOfBirthIsUnderTheMinimumLinkageAge()
+        {
+            const string nhsNumber = DefaultNhsNumber;
+            const string odsCode = DefaultOdsCode;
+            DateTime? dateOfBirth = DefaultDateOfBirth;
+            const string surname = DefaultSurname;
+            const string identityToken = DefaultIdentityToken;
+            const string emailAddress = DefaultEmailAddress;
+
+            var expectedResponse = _fixture.Create<LinkageResponse>();
+
+            var mockResult = new LinkageResult.SuccessfullyRetrieved(expectedResponse);
+
+            var mockLinkageService = new Mock<ILinkageService>();
+            
+            mockLinkageService.Setup(x => x.CreateLinkageKey(
+                It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal) &&
+                                                   req.Surname.Equals(surname, StringComparison.Ordinal) &&
+                                                   req.DateOfBirth.Equals(dateOfBirth) &&
+                                                   req.OdsCode.Equals(odsCode, StringComparison.Ordinal) &&
+                                                   req.IdentityToken.Equals(identityToken, StringComparison.Ordinal) &&
+                                                   req.EmailAddress.Equals(emailAddress, StringComparison.Ordinal)))
+            ).ReturnsAsync(mockResult);
+
+            var mockLinkageValidationService = MockLinkageValidationService(true);
+
+            var gpSystemMock = MockGpSystem(mockLinkageService, mockLinkageValidationService);
+            var gpSystemFactoryMock = MockGpSystemFactory(gpSystemMock);
+
+            var request = new CreateLinkageRequest
+            {
+                NhsNumber = nhsNumber,
+                OdsCode = odsCode,
+                Surname = surname,
+                DateOfBirth = dateOfBirth,
+                IdentityToken = identityToken,
+                EmailAddress = emailAddress,
+            };
+            
+            _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), MinimumLinkageAge)).Returns(false);
+            
+            LinkageController linkageController = CreateLinkageController(gpSystemFactoryMock: gpSystemFactoryMock);
+
+            // Act
+            var result = await linkageController.Post(request);
+
+            // Assert
+            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+        }
 
         [DataTestMethod]
         [DataRow(typeof(LinkageResult.PatientNonCompetentOrUnderMinimumAge))]
@@ -316,7 +386,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
                                   MockGpSystemFactory();
             var logger = new LoggerFactory();
 
-            return new LinkageController(logger, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object);
+            return new LinkageController(logger, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object, _mockMinimumAgeValidator.Object, _settings.Object);
         }
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
 {
@@ -11,12 +13,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
     {
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly ILogger _logger;
+        private readonly ConfigurationSettings _settings;
 
         public TppLinkageErrors(IMinimumAgeValidator minimumAgeValidator,
-            ILogger logger)
+            ILogger logger, IOptions<ConfigurationSettings> settings)
         {
             _minimumAgeValidator = minimumAgeValidator;
             _logger = logger;
+            _settings = settings.Value;
         }
 
 
@@ -51,14 +55,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
                 new LinkageError
                 {
                     IsInvalid =(resp, req) => resp.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials)
-                                              && !_minimumAgeValidator.IsValid(req.DateofBirth),
+                                              && !_minimumAgeValidator.IsValid(req.DateofBirth, _settings.MinimumLinkageAge),
                     ResultingError = new LinkageResult.PatientNonCompetentOrUnderMinimumAge(),
                     Message = "User is under minimum age"
                 },
                 new LinkageError
                 {
                     IsInvalid = (resp, req) => resp.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials)
-                                               && _minimumAgeValidator.IsValid(req.DateofBirth),
+                                               && _minimumAgeValidator.IsValid(req.DateofBirth, _settings.MinimumLinkageAge),
                     ResultingError = new LinkageResult.NotFoundErrorCreatingNhsUser(),
                     Message = "Invalid Linkage Credentials."
                 },

@@ -13,4 +13,8 @@ enum class LinkageResult {
     PatientAlreadyHasAnOnlineAccount,
     SuccessfullyCreated,
     InternalServerError,
+    InvalidNhsNumber,
+    PatientRecordNotFound,
+    LinkageKeyRevoked,
+    LinkageKeyAlreadyExists,
 }

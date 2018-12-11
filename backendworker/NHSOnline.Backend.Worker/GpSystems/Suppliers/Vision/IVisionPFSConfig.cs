@@ -3,7 +3,7 @@ using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
-    public interface IVisionConfig : ICertificateConfig
+    public interface IVisionPFSConfig : ICertificateConfig
     {
         string ApplicationProviderId { get; }
         Uri ApiUrl { get; }

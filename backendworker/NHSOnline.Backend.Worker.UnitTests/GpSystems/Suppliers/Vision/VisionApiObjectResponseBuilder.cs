@@ -6,9 +6,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
 {
     public static class VisionApiObjectResponseBuilder
     {
-        public static VisionClient.VisionApiObjectResponse<T> BuildUnsuccessfulResponseWithErrorCode<T>(string errorCode)
+        public static VisionPFSClient.VisionApiObjectResponse<T> BuildUnsuccessfulResponseWithErrorCode<T>(string errorCode)
         {
-            return new VisionClient.VisionApiObjectResponse<T>(HttpStatusCode.OK)
+            return new VisionPFSClient.VisionApiObjectResponse<T>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<T>
                 {

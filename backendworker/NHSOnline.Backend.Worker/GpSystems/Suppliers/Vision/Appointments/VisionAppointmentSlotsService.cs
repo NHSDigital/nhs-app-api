@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         }
         
         private AppointmentSlotsResult InterpretAppointmentsGetResponse(
-            VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response,
+            VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response,
             VisionUserSession userSession)
         {
             if (response.IsAccessDeniedError)

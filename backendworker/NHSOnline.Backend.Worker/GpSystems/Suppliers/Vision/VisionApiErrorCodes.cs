@@ -13,5 +13,11 @@
         public const string InvalidDetails = "-33";
         public const string InvalidParameter = "-31";
         public const string UnknownError = "-100";
+
+        // Linkage
+        public const string InvalidNhsNumber = "V4205";
+        public const string LinkageKeyRevoked = "TO_BE_CONFIRMED"; // to be confirmed - Vision question tracker #28
+        public const string PatientRecordNotFound = "VY806";
+        public const string LinkageKeyAlreadyExists = "V2214";
     }
 }

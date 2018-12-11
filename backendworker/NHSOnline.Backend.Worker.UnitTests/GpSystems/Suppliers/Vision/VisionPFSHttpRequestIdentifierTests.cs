@@ -9,16 +9,16 @@ using NHSOnline.Backend.Worker.Support.Http;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
 {
     [TestClass]
-    public class VisionHttpRequestIdentifierTests
+    public class VisionPFSHttpRequestIdentifierTests
     {
         private IFixture _fixture;
-        private VisionHttpRequestIdentifier _systemUnderTest;
+        private VisionPFSHttpRequestIdentifier _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _systemUnderTest = _fixture.Create<VisionHttpRequestIdentifier>();
+            _systemUnderTest = _fixture.Create<VisionPFSHttpRequestIdentifier>();
         }
 
         [TestMethod]

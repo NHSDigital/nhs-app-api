@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
         }
 
-        private AppointmentCancelResult InterpretCancelAppointmentResponse(VisionClient.VisionApiObjectResponse<CancelledAppointmentResponse> response)
+        private AppointmentCancelResult InterpretCancelAppointmentResponse(VisionPFSClient.VisionApiObjectResponse<CancelledAppointmentResponse> response)
         {
             if (response.HasSuccessResponse) return new AppointmentCancelResult.SuccessfullyCancelled();
 

@@ -133,14 +133,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
         
         [DataTestMethod]
         [DataRow(null)]
-        public void ValidateCreateLinkageRequest_ForNoDateOfBirth_ReturnsTrue(DateTime? dateOfBirth)
+        public void ValidateCreateLinkageRequest_ForNoDateOfBirth_ReturnsFalse(DateTime? dateOfBirth)
         {
             var request = _fixture.Create<CreateLinkageRequest>();
             request.DateOfBirth = dateOfBirth;
 
             var result = _systemUnderTest.Validate(request);
 
-            result.Should().BeTrue();
+            result.Should().BeFalse();
         }
         
         [DataTestMethod]

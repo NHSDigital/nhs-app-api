@@ -701,7 +701,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         val linkingInformationExample =
                 Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
         this.im1ConnectionRequest = Im1ConnectionRequest(
-                linkingInformationExample.accountId!!,
+                linkingInformationExample.accountId,
                 linkingInformationExample.linkageKey,
                 linkingInformationExample.odsCode,
                 linkingInformationExample.surname,
@@ -709,7 +709,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         )
         val gpSystem = Serenity.sessionVariableCalled<String>(SupplierSpecificFactory.SerenityKey.GP_SYSTEM)
         this.patient = Patient.getDefault(gpSystem).copy(
-                accountId = linkingInformationExample.accountId!!,
+                accountId = linkingInformationExample.accountId,
                 linkageKey = linkingInformationExample.linkageKey,
                 odsCode = linkingInformationExample.odsCode,
                 surname = linkingInformationExample.surname,

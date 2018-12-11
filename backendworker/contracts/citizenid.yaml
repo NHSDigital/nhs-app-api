@@ -1,7 +1,7 @@
 swagger: '2.0'
 
 info:
-  version: 0.0.3
+  version: 0.0.4
   title: NHS Online API - Citizen ID.
   description: This is the API for NHS Online endpoints that are intended for consumption by Citizen ID.
 
@@ -160,6 +160,8 @@ paths:
             $ref: "#/definitions/LinkageResponse"
         400:
           description: ODS Code or NHS Number was invalid.
+        403:
+          description: The linkage key creation not allowed.
         404:
           description: NHS Number not found, the patient has changed surgery, or the surgery has changed supplier.
         409:

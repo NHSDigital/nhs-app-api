@@ -30,7 +30,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                 .IsNotNullOrWhitespace(request.NhsNumber,nameof(request.NhsNumber))
                 .IsNotNullOrWhitespace(request.OdsCode,nameof(request.OdsCode))
                 .IsNotNullOrWhitespace(request.IdentityToken,nameof(request.IdentityToken))
-                .IsNotNullOrWhitespace(request.EmailAddress,nameof(request.EmailAddress));
+                .IsNotNullOrWhitespace(request.EmailAddress,nameof(request.EmailAddress))
+                .IsNotNull(request.DateOfBirth, nameof(request.DateOfBirth));
 
             return validator.IsValid();
         }

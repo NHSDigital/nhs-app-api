@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
             }
         }
 
-        private Im1ConnectionVerifyResult GetCorrectVerifyErrorResult<T>(VisionClient.VisionApiObjectResponse<T> response)
+        private Im1ConnectionVerifyResult GetCorrectVerifyErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {
@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
             return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
         }
         
-        private Im1ConnectionRegisterResult GetCorrectRegisterErrorResult<T>(VisionClient.VisionApiObjectResponse<T> response)
+        private Im1ConnectionRegisterResult GetCorrectRegisterErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
         {
             if (response.IsAccountLockedError)
             {

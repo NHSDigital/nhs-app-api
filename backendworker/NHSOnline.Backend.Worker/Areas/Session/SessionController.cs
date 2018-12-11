@@ -301,7 +301,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 return null;
             }
 
-            if (!_minimumAgeValidator.IsValid(dateOfBirthParsed))
+            if (!_minimumAgeValidator.IsValid(dateOfBirthParsed, _settings.Value.MinimumAppAge))
             {
                 _logger.LogWarning("Failed to meet the minimum age requirement.");
                 return null;

@@ -3,11 +3,11 @@ using System.Net.Http.Headers;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
-    public class VisionHttpClient
+    public class VisionLinkageHttpClient
     {
-        private const string MediaType = "text/xml";
+        private const string MediaType = "application/json";
 
-        public VisionHttpClient(HttpClient client, IVisionConfig config)
+        public VisionLinkageHttpClient(HttpClient client, IVisionLinkageConfig config)
         {
             client.BaseAddress = config.ApiUrl;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));

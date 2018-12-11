@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _visionClientGetResponse = _fixture.Create<VisionResponse<AvailableAppointmentsResponse>>();
             _dateRange = _fixture.Create<AppointmentSlotsDateRange>();
             
-            var response = new VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
+            var response = new VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<AvailableAppointmentsResponse>
                 {
@@ -136,7 +136,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         }
         
         private void MockVisionClientAppointmentSlotsGetMethod(
-            VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response)
+            VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response)
         {   
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
                     _userSession,

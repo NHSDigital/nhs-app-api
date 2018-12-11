@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -58,6 +59,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private int _sessionTimeoutSeconds;
         private SessionCreateResult _sessionCreateResult;
         private const string CsrfRequestToken = "dskhfakserhhvjcgbfdsh";
+        private const int MinimumAppAge = 13;
 
         [TestInitialize]
         public void TestInitialize()
@@ -81,6 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Returns(new ConfigurationSettings()
                 {
                     DefaultSessionExpiryMinutes = _sessionTimeoutMinutes,
+                    MinimumAppAge = MinimumAppAge,
                 });
 
             _apiSessionId = _fixture.Create<string>();
@@ -147,7 +150,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
             _mockMinimumAgeValidator
-                .Setup(x => x.IsValid(It.IsAny<DateTime>()))
+                .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
                 .Returns(true);
 
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
@@ -358,14 +361,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         {
             // Arrange
             _mockMinimumAgeValidator
-                .Setup(x => x.IsValid(It.IsAny<DateTime>())).Returns(false)
+                .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(false)
                 .Verifiable();
 
             // Act
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
             // Assert
-            _mockMinimumAgeValidator.Verify();
+            _mockMinimumAgeValidator.Verify( x => x.IsValid(It.IsAny<DateTime>(), MinimumAppAge));
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
             _mockAuditor.VerifyNoOtherCalls();

@@ -17,7 +17,9 @@ namespace NHSOnline.Backend.Worker.Settings
 
         public int DefaultHttpTimeoutSeconds { get; set; }
         
-        public int MinimumAge { get; set; }
+        public int MinimumAppAge { get; set; }
+        
+        public int MinimumLinkageAge { get; set; }
         
         public DateTimeOffset? CurrentTermsConditionsEffectiveDate { get; set; }
 
@@ -63,9 +65,14 @@ namespace NHSOnline.Backend.Worker.Settings
                 throw new ConfigurationNotFoundException(nameof(DefaultHttpTimeoutSeconds));
             }
             
-            if (MinimumAge == default(int))
+            if (MinimumAppAge == default(int))
             {
-                throw new ConfigurationNotFoundException(nameof(MinimumAge));
+                throw new ConfigurationNotFoundException(nameof(MinimumAppAge));
+            }
+            
+            if (MinimumLinkageAge == default(int))
+            {
+                throw new ConfigurationNotFoundException(nameof(MinimumLinkageAge));
             }
 
             if (MinimumSupportedAndroidVersion == null)

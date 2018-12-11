@@ -33,5 +33,9 @@
         T Visit(LinkageResult.BadRequestErrorRetrievingNhsUser result);
 
         T Visit(LinkageResult.BadRequestErrorCreatingNhsUser result);
+
+        T Visit(LinkageResult.ForbiddenErrorRetrievingNhsUser result);
+
+        T Visit(LinkageResult.LinkageKeyRevoked result);
     }
 }

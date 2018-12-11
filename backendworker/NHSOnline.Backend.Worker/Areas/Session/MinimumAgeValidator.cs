@@ -6,16 +6,9 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 {
     public class MinimumAgeValidator : IMinimumAgeValidator
     {
-        private readonly ConfigurationSettings _settings;
-
-        public MinimumAgeValidator(IOptions<ConfigurationSettings> settings)
+        public bool IsValid(DateTime dateOfBirth, int minimumAge)
         {
-            _settings = settings.Value;
-        }
-
-        public bool IsValid(DateTime dateOfBirth)
-        {
-            return dateOfBirth.AddYears(_settings.MinimumAge) < DateTime.Now;
+            return dateOfBirth.AddYears(minimumAge).Date <= DateTime.Today;
         }
     }
 }

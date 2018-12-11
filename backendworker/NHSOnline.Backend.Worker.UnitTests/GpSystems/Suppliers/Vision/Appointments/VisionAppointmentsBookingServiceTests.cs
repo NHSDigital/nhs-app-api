@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task Book_HappyPath_ReturnsSuccessfullyBookedResponse()
         {
             // Arrange
-            var response = new VisionClient.VisionApiObjectResponse<BookAppointmentResponse>(HttpStatusCode.OK)
+            var response = new VisionPFSClient.VisionApiObjectResponse<BookAppointmentResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<BookAppointmentResponse>
                 {
@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
         }
         
-        private void MockVisionClientAppointmentPostMethod(VisionClient.VisionApiObjectResponse<BookAppointmentResponse> response)
+        private void MockVisionClientAppointmentPostMethod(VisionPFSClient.VisionApiObjectResponse<BookAppointmentResponse> response)
         {
             _mockVisionClient.Setup(x => x.BookAppointment(
                     It.IsAny<VisionUserSession>(),

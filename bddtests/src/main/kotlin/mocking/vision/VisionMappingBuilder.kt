@@ -7,7 +7,8 @@ import mocking.vision.helpers.VisionConstantsHelper
 import mocking.vision.models.ServiceDefinition
 import org.apache.http.HttpStatus
 
-open class VisionMappingBuilder(method: String = "POST") : MappingBuilder(method, "/vision/") {
+open class VisionMappingBuilder(
+        method: String = "POST") : MappingBuilder(method, "/vision/pfs/") {
 
     var appointments = VisionMappingBuilderAppointments()
     var prescriptions = VisionMappingBuilderPrescriptions()

@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             
             _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
+                    new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = prescriptionsHistoryResponse,
                     }));
@@ -136,7 +136,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
             _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
+                    new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = prescriptionsHistoryResponse,
                     }));
@@ -212,7 +212,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
             _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
+                    new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = prescriptionsHistoryResponse,
                     }));
@@ -304,7 +304,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
             _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
+                    new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = prescriptionsHistoryResponse,
                     }));
@@ -374,7 +374,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
             _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
+                    new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = prescriptionsHistoryResponse,
                     }));
@@ -410,7 +410,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, 
                     It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId,_userSession.PatientId,StringComparison.Ordinal))))
                .Returns(Task.FromResult(
-                   new VisionClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.InternalServerError)));
+                   new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.InternalServerError)));
             
             // Act
             var result = await _systemUnderTest.GetPrescriptions(_userSession, null, null);
@@ -466,7 +466,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 _userSession,
                 It.IsAny<OrderNewPrescriptionRequest>()))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
+                    new VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = orderPrescriptionResponse,
                     }))
@@ -562,7 +562,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 _userSession,
                 It.IsAny<OrderNewPrescriptionRequest>()))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
+                    new VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
                     {
                         RawResponse = orderPrescriptionResponse,
                     }))
@@ -591,7 +591,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             // Arrange
             _visionClient.Setup(x => x.OrderNewPrescription(_userSession, It.IsAny<OrderNewPrescriptionRequest>()))
                .Returns(Task.FromResult(
-                   new VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.InternalServerError)));
+                   new VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.InternalServerError)));
 
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
@@ -622,7 +622,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
             _visionClient.Setup(x => x.OrderNewPrescription(_userSession, It.IsAny<OrderNewPrescriptionRequest>()))
                .Returns(Task.FromResult(
-                   new VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
+                   new VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
                    {
                        RawResponse = orderPrescriptionResponse,
                    }));

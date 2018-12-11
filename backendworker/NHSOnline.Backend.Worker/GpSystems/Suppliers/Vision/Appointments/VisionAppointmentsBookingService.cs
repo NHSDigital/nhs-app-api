@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
         }
         
-        private AppointmentBookResult InterpretAppointmentsPostResponse(VisionClient.VisionApiObjectResponse<BookAppointmentResponse> response)
+        private AppointmentBookResult InterpretAppointmentsPostResponse(VisionPFSClient.VisionApiObjectResponse<BookAppointmentResponse> response)
         {
             if (response.HasSuccessResponse) return new AppointmentBookResult.SuccessfullyBooked();
 

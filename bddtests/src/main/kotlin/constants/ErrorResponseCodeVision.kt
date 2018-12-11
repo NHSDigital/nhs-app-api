@@ -11,6 +11,12 @@ object ErrorResponseCodeVision {
     const val INVALID_PARAMETERS = "-31"
     const val UNKNOWN_ERROR = "-100"
 
-
     const val NON_VISION_ERROR_CODE = "9999"
+
+    // rest api error codes
+    const val INVALID_NHS_NUMBER = "V4205"
+    const val LINKAGE_KEY_REVOKED = "TO_BE_CONFIRMED" // to be confirmed - Vision question tracker #28
+    const val PATIENT_RECORD_NOT_FOUND = "VY806"
+    const val LINKAGE_KEY_ALREADY_EXISTS = "V2214"
+
 }

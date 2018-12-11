@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         }
 
         private async Task<AppointmentsResult> InterpretAppointmentsGetResponse(
-            VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response,
+            VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> response,
             VisionUserSession userSession)
         {
             if (response.IsAccessDeniedError)
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         }
 
         private async Task UpdateUserSessionBookingReasonNecessity(VisionUserSession userSession,
-            VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
+            VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {
             userSession.AppointmentBookingReasonNecessity = response.Body.Appointments.Settings.BookingReason.Add
                 ? Necessity.Optional
