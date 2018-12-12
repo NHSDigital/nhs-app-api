@@ -37,14 +37,11 @@
       </analytics-tracked-tag>
     </li>
     <li :class="$style.listMenuItem">
-      <analytics-tracked-tag :class="$style.listMenuAnchor"
-                             :href="organDonationUrl"
-                             :text="$t('navigationMenuList.organDonation')"
-                             data-sid="organ-donation-menu-item"
-                             tag="a"
-                             target="_blank">
+      <organ-donation-link :class-name="$style.listMenuAnchor"
+                           data-sid="organ-donation-menu-item"
+                           tag="a">
         {{ $t('navigationMenuList.organDonation') }}
-      </analytics-tracked-tag>
+      </organ-donation-link>
     </li>
   </ul>
 </template>
@@ -52,16 +49,13 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import {
-  SYMPTOMS,
-  PRESCRIPTIONS,
-  APPOINTMENTS,
-  MYRECORD,
-} from '@/lib/routes';
+import OrganDonationLink from '@/components/OrganDonationLink';
+import { SYMPTOMS, PRESCRIPTIONS, APPOINTMENTS, MYRECORD } from '@/lib/routes';
 
 export default {
   name: 'NavigationListMenu',
   components: {
+    OrganDonationLink,
     AnalyticsTrackedTag,
   },
   data() {

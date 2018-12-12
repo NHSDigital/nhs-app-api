@@ -18,17 +18,18 @@ export const mockCookies = () => ({
   remove: jest.fn(),
 });
 
-export const createEvent = () => ({ preventDefault: jest.fn() });
+export const createEvent = event => ({ preventDefault: jest.fn(), ...event });
 
-export const createStore = ({ $http = {}, state = {} } = {}) => ({
+export const createStore = ({ $env = {}, $http = {}, state = {} } = {}) => ({
   dispatch: jest.fn(),
   state,
   app: {
-    $env: {},
+    $env,
     $http,
   },
 });
 export const mount = (component, {
+  $env = {},
   $router = [],
   $store,
   $style = {},
@@ -37,7 +38,7 @@ export const mount = (component, {
   propsData = {},
   shallow = false,
 } = {}) => {
-  const store = $store || createStore({ state });
+  const store = $store || createStore({ $env, state });
   const localVue = createLocalVue();
   localVue.use(Vuex);
 

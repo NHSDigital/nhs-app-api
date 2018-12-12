@@ -42,11 +42,25 @@ const routes = {
     path: '/auth-return',
     isAnonymous: true,
   },
+  BEGINLOGIN: {
+    name: 'begin-login',
+    path: '/begin-login',
+    isAnonymous: true,
+  },
   BROTHERMAILER_SIGNUP_NOJS: {
     name: 'brothermailer-signup-noJs',
     path: '/nojs/brothermailer/signup',
     noJsApiPath: '/brothermailer/signup',
     isAnonymous: true,
+  },
+  CHECKYOURSYMPTOMS: {
+    name: 'check-your-symptoms',
+    path: '/check-your-symptoms',
+    isAnonymous: true,
+  },
+  DATA_SHARING_PREFERENCES: {
+    name: 'data-sharing',
+    path: '/data-sharing',
   },
   GP_FINDER: {
     name: 'gp-finder',
@@ -73,23 +87,9 @@ const routes = {
     path: '/gp-finder/participation',
     isAnonymous: true,
   },
-  CHECKYOURSYMPTOMS: {
-    name: 'check-your-symptoms',
-    path: '/check-your-symptoms',
-    isAnonymous: true,
-  },
-  DATA_SHARING_PREFERENCES: {
-    name: 'data-sharing',
-    path: '/data-sharing',
-  },
   INDEX: {
     name: 'index',
     path: '/',
-  },
-  BEGINLOGIN: {
-    name: 'begin-login',
-    path: '/begin-login',
-    isAnonymous: true,
   },
   LOGIN: {
     name: 'Login',
@@ -115,6 +115,10 @@ const routes = {
   MYRECORDTESTRESULT: {
     name: 'my-record-testresultdetail',
     path: '/my-record/testresultdetail/:testResultId',
+  },
+  ORGAN_DONATION: {
+    name: 'organ-donation',
+    path: '/organ-donation',
   },
   PRESCRIPTIONS: {
     name: 'prescriptions',
@@ -164,22 +168,23 @@ export const {
   APPOINTMENT_CONFIRMATIONS,
   AUTH_RETURN,
   BROTHERMAILER_SIGNUP_NOJS,
+  BEGINLOGIN,
+  CHECKYOURSYMPTOMS,
+  DATA_SHARING_PREFERENCES,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
   GP_FINDER_SENDING_EMAIL,
   GP_FINDER_SENDING_EMAIL_RESULT,
-  CHECKYOURSYMPTOMS,
-  DATA_SHARING_PREFERENCES,
   INDEX,
   LEGACY_MYRECORDWARNING,
   LOGIN,
   LOGOUT,
-  BEGINLOGIN,
   MORE,
   MYRECORD,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
+  ORGAN_DONATION,
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,

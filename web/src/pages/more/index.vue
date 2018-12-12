@@ -1,15 +1,11 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-
     <ul :class="$style['list-menu']">
       <li>
-        <analytics-tracked-tag id="btn_organ_donation" :href="$store.app.$env.ORGAN_DONATION_URL"
-                               :class="$style['no-decoration']"
-                               :text="$t('sc04.organDonation.subheader')"
-                               tag="a" target="_blank">
+        <organ-donation-link id="btn_organ_donation" class-name="$style['no-decoration']">
           <h2>{{ $t('sc04.organDonation.subheader') }}</h2>
           <p>{{ $t('sc04.organDonation.body') }}</p>
-        </analytics-tracked-tag>
+        </organ-donation-link>
       </li>
       <li>
         <analytics-tracked-tag :text="$t('sc04.dataSharing.subheader')" data-purpose="text_link">
@@ -29,11 +25,13 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import OrganDonationLink from '@/components/OrganDonationLink';
 import { DATA_SHARING_PREFERENCES } from '@/lib/routes';
 
 export default {
   components: {
     AnalyticsTrackedTag,
+    OrganDonationLink,
   },
   computed: {
     dataSharingPath() {

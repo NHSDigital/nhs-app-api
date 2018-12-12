@@ -102,6 +102,7 @@ const config = {
     THROTTLING_ENABLED: false,
     COMMIT_ID: 'dev',
     CE_MARK_ENABLED: false,
+    ORGAN_DONATION_INTEGRATION_ENABLED: false,
     // Session
     SESSION_EXPIRING_WARNING_SECONDS: 60,
   },
