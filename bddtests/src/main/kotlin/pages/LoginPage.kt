@@ -21,7 +21,7 @@ class LoginPage : HybridPageObject() {
     )
 
     val loginOrCreateAccountButtonHeading = HybridPageElement(
-            browserLocator = "//h2[contains(text(), 'To access your GP services')]",
+            browserLocator = "//h2[contains(text(), 'To access your NHS services')]",
             androidLocator = null,
             page = this
     )

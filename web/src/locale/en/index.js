@@ -639,7 +639,7 @@ export default {
     checker: 'Check symptoms',
   },
   login: {
-    desc: 'To access your GP services',
+    desc: 'To access your NHS services',
     moreFeaturesComingSoon: 'More features will be coming soon to this GP surgery',
     notMyGpSurgery: 'This isn\'t my GP surgery',
     checkWhatFeaturesYouCanUse: 'Check what features you can use',
