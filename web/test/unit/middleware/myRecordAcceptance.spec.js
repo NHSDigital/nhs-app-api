@@ -1,11 +1,14 @@
+import each from 'jest-each';
 import myRecordAcceptance from '@/middleware/myRecordAcceptance';
 import { initialState } from '@/store/modules/myRecord/mutation-types';
+import { MYRECORD } from '@/lib/routes';
 import { createStore } from '../helpers';
 
 const createState = () => ({
   myRecord: initialState(),
 });
-const createApp = ({ route, store = createStore({ state: createState() }) }) => ({
+const createApp = ({ redirect, route, store = createStore({ state: createState() }) }) => ({
+  redirect,
   route,
   store,
 });
@@ -79,5 +82,22 @@ describe('my-record acceptance middleware', () => {
       myRecordAcceptance(app);
       expect(app.store.dispatch).not.toHaveBeenCalledWith('myRecord/resetTerms');
     });
+  });
+
+  describe('my-record-warning page', () => {
+    each(['/my-record-warning', '/my-record-warning/'])
+      .it('will redirect to /myrecord', (path) => {
+        const redirect = jest.fn();
+        app = createApp({
+          redirect,
+          route: {
+            name: 'my-record-warning',
+            path,
+          },
+        });
+
+        myRecordAcceptance(app);
+        expect(redirect).toHaveBeenCalledWith(MYRECORD.path);
+      });
   });
 });

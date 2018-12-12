@@ -135,6 +135,12 @@ const routes = {
     name: 'terms-and-conditions',
     path: '/terms-and-conditions',
   },
+
+  // Legacy
+  LEGACY_MYRECORDWARNING: {
+    name: 'my-record-warning',
+    path: '/my-record-warning',
+  },
 };
 
 const findByName = name => find(({ name: routeName }) => routeName === name)(routes);
@@ -165,6 +171,7 @@ export const {
   CHECKYOURSYMPTOMS,
   DATA_SHARING_PREFERENCES,
   INDEX,
+  LEGACY_MYRECORDWARNING,
   LOGIN,
   LOGOUT,
   BEGINLOGIN,
