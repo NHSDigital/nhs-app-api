@@ -25,7 +25,6 @@ const clearAppointments = (state) => {
 };
 const clearSelectedAppointment = (state) => {
   state.selectedAppointment = null;
-  state.cancellationReasons = [];
 };
 export default {
   /* eslint-disable no-shadow */
