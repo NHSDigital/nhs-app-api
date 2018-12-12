@@ -9,6 +9,16 @@ function info () {
     echo >&2 "===]> Info: $@ ";
 }
 
+info "Output currently executing docker containers to aid debug"
+docker ps
+
+info "Cleaning up hanging containers"
+RUNNING=$(docker ps | wc -l | awk {'print $1'})
+if [ $RUNNING != "1" ]
+then
+  docker kill $(docker ps -q)
+fi
+
 # Check if DOCKER_TAG exists in envvar
 [ -z $APP_DOCKER_TAG ] && die "APP_DOCKER_TAG is not specified, it should be so we can pin builds to a specific version rather than latest"
 
@@ -47,7 +57,6 @@ else
     CURRENT_TAG=$(git name-rev --tags --name-only $CURRENT_BRANCH)
     if [ "$RUN_AS_DEVELOP" == 1 ] || [ $CURRENT_BRANCH == "develop" ] || [ $CURRENT_TAG != "undefined" ]
     then
-        TAGS=(appointment prescription authentication other)
         if [ "$ENABLE_LONG_RUNNING" == 1 ]
         then
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
@@ -55,6 +64,13 @@ else
         else
           info "Main Tranche - Full BDD Test Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and not @long-running $SPECIFIC_TEST_TAGS"
+        fi
+        if [ "$PARALLEL" == 1 ]
+        then
+          TAGS=(appointment prescription authentication other)
+        else
+          TAGS=specific
+          BDD_CUCUMBER_OPTIONS_PREFIX=$BDD_CUCUMBER_OPTIONS_PREFIX"'"
         fi
     else
         info "MR Tranche - BDD Smoketest Run Configured"
