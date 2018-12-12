@@ -26,6 +26,21 @@
       {{ $t('my_record.problems.sectionHeader') }}
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
+
+    <analytics-tracked-tag id="testResultsHeader"
+                           :class="[$style['record-title'],
+                                    getCollapsedState(isTestResultsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="TESTRESULTS"
+                           :text="$t('my_record.testResults.sectionHeader.default')"
+                           :aria-expanded="!isTestResultsCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.testResults.sectionHeader.default') }}
+    </analytics-tracked-tag>
+    <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
+                  :supplier="record.supplier" />
   </div>
 </template>
 
@@ -33,15 +48,18 @@
 import Immunisations from '@/components/my-record/SharedComponents/Immunisations';
 import Problems from '@/components/my-record/SharedComponents/Problems';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import TestResults from '@/components/my-record/SharedComponents/TestResults';
 
 const IMMUNISATIONS = 'immunisations';
 const PROBLEMS = 'problems';
+const TESTRESULTS = 'testresults';
 
 export default {
   components: {
     AnalyticsTrackedTag,
     Immunisations,
     Problems,
+    TestResults,
   },
   props: {
     record: {
@@ -53,8 +71,10 @@ export default {
     return {
       IMMUNISATIONS,
       PROBLEMS,
+      TESTRESULTS,
       isProblemsCollapsed: process.client,
       isImmunisationsCollapsed: process.client,
+      isTestResultsCollapsed: process.client,
     };
   },
   methods: {
@@ -70,6 +90,10 @@ export default {
         case PROBLEMS:
           this.isProblemsCollapsed =
             !this.isProblemsCollapsed;
+          break;
+        case TESTRESULTS:
+          this.isTestResultsCollapsed =
+            !this.isTestResultsCollapsed;
           break;
         default:
           break;

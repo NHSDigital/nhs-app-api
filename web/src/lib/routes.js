@@ -116,6 +116,10 @@ const routes = {
     name: 'my-record-testresultdetail',
     path: '/my-record/testresultdetail/:testResultId',
   },
+  MY_RECORD_VISION_TEST_RESULTS_DETAIL: {
+    name: 'my-record-test-results-detail',
+    path: '/my-record/test-results-detail',
+  },
   ORGAN_DONATION: {
     name: 'organ-donation',
     path: '/organ-donation',

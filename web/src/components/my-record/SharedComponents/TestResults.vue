@@ -6,41 +6,48 @@
                        :aria-hidden="isCollapsed"/>
   <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
-    <div v-for="(testResult, testIndex) in orderedTestResults"
-         :key="`testResult-${testIndex}`" :class="$style['record-item']"
-         data-purpose="record-item">
-      <span v-if="testResult.date.value" :class="$style.fieldName">
-        {{ testResult.date.value | datePart(testResult.date.datePart) }}
-      </span>
-      <p v-if="supplier === 'TPP'">
-        <a
-          :href="getTestResultPath(testResult.id)"
-          :class="$style.viewTestResult"
-          @click="activateTestResult(testResult.id, $event)">{{ testResult.description }}
-        </a>
+    <div v-if="supplier === 'TPP' || supplier === 'EMIS'">
+      <div v-for="(testResult, testIndex) in orderedTestResults"
+           :key="`testResult-${testIndex}`" :class="$style['record-item']"
+           data-purpose="record-item">
+        <span v-if="testResult.date.value" :class="$style.fieldName">
+          {{ testResult.date.value | datePart(testResult.date.datePart) }}
+        </span>
+        <p v-if="supplier === 'TPP'">
+          <a
+            :href="getTestResultPath(testResult.id)"
+            :class="$style.viewTestResult"
+            @click="activateTestResult(testResult.id, $event)">{{ testResult.description }}
+          </a>
+        </p>
+        <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
+          {{ testResult.description }}</p>
+        <ul :class="$style.testResultNoChild">
+          <li v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
+              :key="`associatedText-${associatedTextItemIndex}`">
+            {{ associatedText }}
+          </li>
+        </ul>
+        <ul :class="$style.testResultLine">
+          <li v-for="(lineItem, lineItemIndex) in testResult.testResultChildLineItems"
+              :key="`line-${lineItemIndex}`">
+            {{ lineItem.description }}
+            <ul :class="$style.testResultChildAssociatedText">
+              <li v-for="(lineItemAssociatedText, lineItemAssociatedTextIndex)
+                  in lineItem.associatedTexts"
+                  :key="`lineAssociatedText-${lineItemAssociatedTextIndex}`">
+                {{ lineItemAssociatedText }}
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <hr aria-hidden="true">
+      </div>
+    </div>
+    <div v-else-if="supplier === 'VISION'">
+      <p>
+        <span v-html="resultsData.rawHtml"/>
       </p>
-      <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
-        {{ testResult.description }}</p>
-      <ul :class="$style.testResultNoChild">
-        <li v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
-            :key="`associatedText-${associatedTextItemIndex}`">
-          {{ associatedText }}
-        </li>
-      </ul>
-      <ul :class="$style.testResultLine">
-        <li v-for="(lineItem, lineItemIndex) in testResult.testResultChildLineItems"
-            :key="`line-${lineItemIndex}`">
-          {{ lineItem.description }}
-          <ul :class="$style.testResultChildAssociatedText">
-            <li v-for="(lineItemAssociatedText, lineItemAssociatedTextIndex)
-                in lineItem.associatedTexts"
-                :key="`lineAssociatedText-${lineItemAssociatedTextIndex}`">
-              {{ lineItemAssociatedText }}
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <hr aria-hidden="true">
     </div>
   </div>
 </template>
@@ -71,13 +78,19 @@ export default {
     getCollapseState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
+    resultsData() {
+      return this.results;
+    },
     orderedTestResults() {
       return orderBy([obj => obj.date.value], ['desc'])(this.results.data);
     },
     showError() {
+      if (this.supplier === 'VISION') {
+        return (this.results.rawHtml === null);
+      }
       return this.results.hasErrored ||
-             this.results.data.length === 0 ||
-             !this.results.hasAccess;
+              this.results.data.length === 0 ||
+              !this.results.hasAccess;
     },
   },
   methods: {

@@ -60,6 +60,15 @@
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidImmunisationResponseContent.xml" />
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoImmunisationResponseContent.xml" />
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidImmunisationsResponseContent.xml" />
+    <None Update="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\CleanedTestResults.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Remove="GpSystems\Suppliers\Vision\Resources\mycert.pfx" />

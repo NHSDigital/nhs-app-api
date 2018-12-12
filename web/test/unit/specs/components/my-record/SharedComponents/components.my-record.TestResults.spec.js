@@ -12,12 +12,18 @@ const createData = () => ([{
   date: { value: new Date(2018, 4, 3) },
 }]);
 
-const createPropData = ({ hasErrored = false, hasAccess = true, data = createData() } = {}) => ({
+const createPropData = ({
+  hasErrored = false,
+  hasAccess = true,
+  supplier = 'EMIS',
+  data = createData(),
+} = {}) => ({
   results: {
     data,
     hasAccess,
     hasErrored,
   },
+  supplier,
 });
 
 describe('TestResults', () => {

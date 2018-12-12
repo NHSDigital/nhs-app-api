@@ -39,8 +39,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                 var medicationsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.VPS_MEDICATIONS));
                 var immunisationsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML ,Views.PROCEDURES));
                 var problemsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML ,Views.PROBLEMS));
+                var testResultsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.TEST_RESULTS));
                 
-                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, problemsTask);
+                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, problemsTask, testResultsTask);
                 _logger.LogInformation("Patient record tasks completed");
 
                 try
@@ -49,9 +50,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                     var checkedMedications = new VisionTaskChecker<Medications>(_logger, new VisionMedicationMapper(_logger), VisionMapperType.Medications).Check(medicationsTask);
                     var checkedImmunisations = new VisionTaskChecker<Immunisations>(_logger, new VisionImmunisationsMapper(_logger), VisionMapperType.Immunisations).Check(immunisationsTask);
                     var checkedProblems = new VisionTaskChecker<Problems>(_logger, new VisionProblemsMapper(_logger), VisionMapperType.Problems).Check(problemsTask);
+                    var checkedTestResults = new VisionTaskChecker<TestResults>(_logger, new VisionTestResultsMapper(_logger), VisionMapperType.TestResults).Check(testResultsTask);
                     
-                    var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems);
-                    response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                    var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems, checkedTestResults);
+                    response.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     
                     return new GetMyRecordResult.SuccessfullyRetrieved(response);
                 }
@@ -60,7 +62,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                     _logger.LogError(e, "Something went wrong building the Vision My Record response");
                     return new GetMyRecordResult.InternalServerError();
                 }
-
             }
             catch (HttpRequestException e)
             {

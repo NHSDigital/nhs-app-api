@@ -2,7 +2,7 @@
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
 {
-    public class TestResults
+    public class TestResults : IPatientDataModel
     {
         public TestResults()
         {
@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
         
         public bool HasAccess { get; set; }
         public bool HasErrored { get; set; }
-        public IEnumerable<TestResultItem> Data { get; set; }   
+        public IEnumerable<TestResultItem> Data { get; set; }
+        public string RawHtml { get; set; }
     }
 }

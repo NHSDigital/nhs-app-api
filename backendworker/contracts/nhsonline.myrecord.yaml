@@ -232,6 +232,9 @@ definitions:
       hasErrored:
         type: boolean
         description: Some error occurred when attempting to retrieve this error.
+      rawHtml:
+        type: string
+        description: When working with Vision, raw HTML is returned instead of XML data
       data:
         type: object
         properties: 
