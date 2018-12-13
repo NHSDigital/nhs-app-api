@@ -25,7 +25,7 @@ describe('services/nhsonlineapi', () => {
       describe('cookie exists', () => {
         it('will set the cookie in the headers if it is set on the NHSOnlineApi instance', () => {
           const api = new NHSOnlineApi({ store });
-          api.cookie = 'chocolate chip';
+          api.cookie = 'double chocolate fudge';
           api.request({ headers });
           expect(headers.Cookie).toEqual(api.cookie);
         });
@@ -119,6 +119,51 @@ describe('services/nhsonlineapi', () => {
     it('will dispatch "http/isLoading"', () => {
       new NHSOnlineApi({ store }).request({});
       expect(store.dispatch).toHaveBeenCalledWith('http/isLoading');
+    });
+  });
+
+  describe('query parameters', () => {
+    it('merges parameters of same length successfully', () => {
+      const queryParameters = ['1a', '2a', '3a'];
+      const parameters = {
+        $queryParameters: [
+          '1b',
+          '2b',
+          '3b',
+        ],
+      };
+
+      const resultParams = new NHSOnlineApi({}).mergeQueryParams(parameters, queryParameters);
+      expect(resultParams).toEqual(parameters.$queryParameters);
+    });
+
+    it('merges parameters of differing sizes successfully', () => {
+      const queryParameters = ['1a', '2a', '3a', '4a'];
+      const parameters = {
+        $queryParameters: [
+          '1b',
+          '2b',
+          '3b',
+        ],
+      };
+
+      const resultParams = new NHSOnlineApi({}).mergeQueryParams(parameters, queryParameters);
+      expect(resultParams).toEqual(['1b', '2b', '3b', '4a']);
+    });
+
+    it('merges parameters of differing sizes successfully', () => {
+      const queryParameters = ['1a', '2a', '3a'];
+      const parameters = {
+        $queryParameters: [
+          '1b',
+          '2b',
+          '3b',
+          '4b',
+        ],
+      };
+
+      const resultParams = new NHSOnlineApi({}).mergeQueryParams(parameters, queryParameters);
+      expect(resultParams).toEqual(['1b', '2b', '3b', '4b']);
     });
   });
 });
