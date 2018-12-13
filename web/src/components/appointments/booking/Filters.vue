@@ -15,6 +15,8 @@
               :selected="option.value===''">
         {{ displayName(option) }}
       </option>
+      <!-- empty optgroup tag forces ios to not cut off text in options -->
+      <optgroup label=""/>
     </select-dropdown>
 
     <label for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
