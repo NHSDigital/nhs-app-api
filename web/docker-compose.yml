@@ -20,6 +20,9 @@ services:
       - GP_LOOKUP_API_URL=https://nhsapiint.azure-api.net/service-search/search?api-version=1
       - GP_LOOKUP_API_RESULTS_LIMIT=20
       - GP_LOOKUP_BROTHER_MAILER_URL=https://r1.brothermailer1.com/signup.ashx
+      - GP_LOOKUP_BROTHER_MAILER_ADDRESSBOOK_ID=6113
+      - GP_LOOKUP_BROTHER_MAILER_USER_ID=233847
+      - GP_LOOKUP_BROTHER_MAILER_SIG=SIG340c7799670a244e283c2d568d8b9031f7cdee374315bb20c1e8c109c535c4c7
       - THROTTLING_ENABLED
       - VERSION_TAG=dev_web_docker_main
   api.local.bitraft.io:

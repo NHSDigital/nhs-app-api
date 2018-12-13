@@ -80,12 +80,14 @@ namespace NHSOnline.Backend.Worker
                 var connectionToken = JsonConvert.SerializeObject(value, _serializerSettings);
                 connectionToken = _cipherService.Encrypt(connectionToken);
 
-                var update = 
-                    new BsonDocument{GetId(key), GetConnectionToken(connectionToken), GetDocumentType()};
+                var id = GetId(key);
+                var filter = new BsonDocument(id);
+                var document = 
+                    new BsonDocument{id, GetConnectionToken(connectionToken), GetDocumentType()};
 
                 using (_logger.WithTimer("Add IM1 connection token to cache"))
                 {
-                    await GetCollection().InsertOneAsync(update);
+                    await GetCollection().ReplaceOneAsync(filter, document, new UpdateOptions { IsUpsert = true });
                 }
             }
             finally

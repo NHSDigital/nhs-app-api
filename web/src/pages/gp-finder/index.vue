@@ -90,6 +90,7 @@ export default {
             if (!nativeAppVersion || (nativeAppVersion && nativeAppVersion.toString().startsWith('0'))) {
               const betaCookie = {
                 Skipped: true,
+                NeverShowCheckFeatureLink: true,
               };
 
               self.$store.app.$cookies.set('BetaCookie', betaCookie, {

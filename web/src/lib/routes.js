@@ -42,9 +42,10 @@ const routes = {
     path: '/auth-return',
     isAnonymous: true,
   },
-  BROTHERMAILER: {
-    name: 'brothermailer',
-    path: '/brothermailer',
+  BROTHERMAILER_SIGNUP_NOJS: {
+    name: 'brothermailer-signup-noJs',
+    path: '/nojs/brothermailer/signup',
+    noJsApiPath: '/brothermailer/signup',
     isAnonymous: true,
   },
   GP_FINDER: {
@@ -162,7 +163,7 @@ export const {
   APPOINTMENT_BOOKING,
   APPOINTMENT_CONFIRMATIONS,
   AUTH_RETURN,
-  BROTHERMAILER,
+  BROTHERMAILER_SIGNUP_NOJS,
   GP_FINDER,
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
