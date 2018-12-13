@@ -44,7 +44,6 @@ const config = {
       'analytics',
       'termsAndConditions',
       'myRecordAcceptance',
-      'brothermailer',
     ],
   },
   link: [
