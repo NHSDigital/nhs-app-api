@@ -50,7 +50,7 @@ export default function ({
     }
   }
 
-  if (!env.THROTTLING_ENABLED || hasCompletedThrottling(betaCookie)) {
+  if ((env.THROTTLING_ENABLED !== true && env.THROTTLING_ENABLED !== 'true') || hasCompletedThrottling(betaCookie)) {
     if (hasCompletedThrottling(betaCookie) && route.name === GP_FINDER_PARTICIPATION.name) {
       return undefined;
     }

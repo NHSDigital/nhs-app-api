@@ -107,7 +107,8 @@ export default {
     showCheckFeaturesLink() {
       const betaCookie = this.$store.app.$cookies.get('BetaCookie');
       return betaCookie !== undefined && !betaCookie.NeverShowCheckFeatureLink &&
-        this.$store.app.$env.THROTTLING_ENABLED;
+        (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
+        this.$store.app.$env.THROTTLING_ENABLED === true);
     },
     gpFinderResetLink() {
       return `${GP_FINDER.path}?reset=true`;
@@ -120,7 +121,8 @@ export default {
       NativeCallbacks.hideHeaderSlim();
       NativeCallbacks.hideWhiteScreen();
       const betaCookie = this.$cookies.get('BetaCookie');
-      if (this.$env.THROTTLING_ENABLED && betaCookie && betaCookie.Skipped) {
+      if ((this.$env.THROTTLING_ENABLED === true || this.$env.THROTTLING_ENABLED === 'true') &&
+          betaCookie && betaCookie.Skipped) {
         NativeCallbacks.storeBetaCookie();
       }
     }
