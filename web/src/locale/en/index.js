@@ -632,6 +632,9 @@ export default {
     myRecord: 'View my medical record',
     organDonation: 'Set organ donation preferences',
   },
+  od1_1: {
+    subheader: 'Register your organ donation decision',
+  },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',
     checker: 'Check symptoms',
