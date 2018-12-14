@@ -3,6 +3,7 @@ Feature: Guidance prior to booking an appointment
   Users are given guidance before booking a new appointment.
 
   @smoketest
+  @nativebug @NHSO-2689
   Scenario: A user is presented with guidance when booking an appointment and can proceed to check their symptoms
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in

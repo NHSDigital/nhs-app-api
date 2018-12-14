@@ -1,7 +1,6 @@
 @my-record
 Feature: My Record - Clinical Abbreviations
 
-  @nativepending @NHSO-2972
   Scenario Outline: A patient can navigate to the clinical abbreviations page
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

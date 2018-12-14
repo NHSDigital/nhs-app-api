@@ -11,8 +11,12 @@ Feature: Ability to cancel an appointment
     And there is a cancellation reasons drop-down
     Examples:
       | GP System |
-      | EMIS      |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario: A Vision user is presented with the cancel appointment screen without reason selected, when there is just one (appointments before cutoff time)
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
@@ -63,6 +67,7 @@ Feature: Ability to cancel an appointment
     Then the My Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
   @smoketest
+  @native-smoketest
     Examples:
       | Reason             | GP System |
       | No longer required | EMIS      |
@@ -104,9 +109,13 @@ Feature: Ability to cancel an appointment
     Then the My Appointments page is displayed
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given <GP System> is unavailable to cancel a previously booked appointment because <Reason>
@@ -123,7 +132,7 @@ Feature: Ability to cancel an appointment
       | Reason 1         | VISION    |
 
   @long-running
-  @nativepending @NHSO-2966
+  @nativepending @NHSO-2974
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have upcoming appointments before cutoff time for VISION
     And I am logged in

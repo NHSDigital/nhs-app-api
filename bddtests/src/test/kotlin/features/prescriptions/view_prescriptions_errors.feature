@@ -12,9 +12,13 @@ Feature: View prescriptions error cases
     Then I see the appropriate error message for a prescription timeout
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error
     Given I am a <GP System> patient
@@ -25,11 +29,15 @@ Feature: View prescriptions error cases
     Then I see the appropriate error message for a prescription server error
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2970
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
+
+  @nativepending @NHSO-2974
   Scenario: A user navigates to the prescriptions page and the session times out
     Given I am a EMIS patient
     And I am using EMIS GP System
@@ -52,9 +60,13 @@ Feature: View prescriptions error cases
     Then I see the appropriate error message for a prescription timeout
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
     Given I am a <GP System> patient
@@ -68,11 +80,15 @@ Feature: View prescriptions error cases
     Then I see the appropriate error message for a prescription server error
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2970
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
+
+  @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
     Given I am a <GP System> patient
     And I am using <GP System> GP System
@@ -110,10 +126,15 @@ Feature: View prescriptions error cases
     Then I see the appropriate error message for a course request error
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
 
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
+
+  @native-smoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an already ordered response
     Given I am a <GP System> patient
     And I am using <GP System> GP System
@@ -132,6 +153,7 @@ Feature: View prescriptions error cases
       | GP System |
       | TPP       |
 
+  @native-smoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an invalid guid error
     Given I am a <GP System> patient
     And I am using <GP System> GP System

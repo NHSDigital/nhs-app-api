@@ -54,6 +54,7 @@ Feature: Book an available appointment slot
       | VISION    |
 
   @smoketest
+  @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 character
     And a booked appointment can be cancelled
@@ -67,12 +68,15 @@ Feature: Book an available appointment slot
     And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2966
-    #native issue - length mismatch - false failures
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
+
+  @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user cannot enter symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And a booked appointment can be cancelled
@@ -91,8 +95,7 @@ Feature: Book an available appointment slot
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2966
-    #native issue - length mismatch - false failures
+  @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user cannot paste symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
@@ -107,8 +110,7 @@ Feature: Book an available appointment slot
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2966
-    #native issue - length mismatch
+  @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user who books successfully, but only the first 150 characters of the symptoms are sent
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And a booked appointment can be cancelled
@@ -153,7 +155,7 @@ Feature: Book an available appointment slot
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2966
+  @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
     And I am logged in
@@ -182,9 +184,13 @@ Feature: Book an available appointment slot
     And there should be a button to go back to my appointments
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
@@ -197,9 +203,13 @@ Feature: Book an available appointment slot
     Then a message is displayed indicating that the slot has already been taken
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user can return directly back to their appointments after trying to book one already booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
@@ -213,9 +223,13 @@ Feature: Book an available appointment slot
     Then the Available Appointments page is displayed
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user reached maximum appointment booking limit
     Given there are <GP System> appointments available to book, but user reached maximum appointment booking limit
@@ -228,9 +242,13 @@ Feature: Book an available appointment slot
     Then a message is displayed indicating that user has reached maximum appointment limit
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
     Given there are <GP System> appointments available to book
@@ -246,9 +264,13 @@ Feature: Book an available appointment slot
     And no available slots are displayed
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
 # EMIS Specific Scenarios (For EMIS reason necessity)
 # The following scenarios covered only Optional and Not-Required reason necessity options.
@@ -423,8 +445,12 @@ Feature: Book an available appointment slot
     And I don't see option to type in booking reason
     Examples:
       | GP System |
-      | EMIS      |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   @manual
   Scenario: Booking a appointment when there is no internet connection

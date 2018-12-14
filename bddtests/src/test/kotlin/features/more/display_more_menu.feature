@@ -1,10 +1,11 @@
 @more
+@native-smoketest
 Feature: Display More Menu
   In order to access functionality that is not available on the standard app menu bar
   including Organ Donation and Data Sharing preferences
 
   @smoketest
-  @nativepending @NHSO-2972
+  @android
   Scenario: A logged in user can navigate to the more screen
     Given I am a EMIS patient
     And I am logged in

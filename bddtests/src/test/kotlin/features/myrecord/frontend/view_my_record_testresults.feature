@@ -157,7 +157,9 @@ Feature: View My Medical Record Information - Test Results
     Examples:
       | Service |
       | TPP     |
-    
+
+  @android
+  @native-smoketest
   Scenario Outline: A <Service> user has multiple test results navigation
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

@@ -1,11 +1,11 @@
 @courses
 @prescription
+@backend
 Feature: View courses
   In order to view courses associated with a user
   As a logged in user
   I want to see a list of repeat courses that I can order
 
-  @backend
   Scenario Outline: Requesting courses with correct data returns a list of repeat courses that can be requested
     Given I am a <GP System> patient
     And I have historic prescriptions

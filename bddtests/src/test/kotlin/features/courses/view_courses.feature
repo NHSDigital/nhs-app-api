@@ -168,7 +168,6 @@ Feature: View courses
       | VISION    |
 
   @smoketest
-  @nativebug @NHSO-3051
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given I am a <GP System> patient
     And I have historic prescriptions
@@ -243,7 +242,6 @@ Feature: View courses
       | EMIS      |
       | VISION    |
 
-  @nativepending @NHSO-2970
   Scenario Outline: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
     Given I am a <GP System> patient
     And I am using <GP System> GP System
@@ -258,7 +256,6 @@ Feature: View courses
       | EMIS      |
       | VISION    |
 
-  @nativepending @NHSO-2970
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
     Given I am a EMIS patient
     And I have historic prescriptions

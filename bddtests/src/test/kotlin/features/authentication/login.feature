@@ -6,8 +6,6 @@ Feature: Login
 
 
   @smoketest
-  @nativepending @NHSO-2948
-    #fails on IOS only
   Scenario Outline: A <GP System> user sees the home page after logging in
     Given I have no upcoming appointments for <GP System>
     And I have no repeat prescriptions for <GP System>
@@ -19,9 +17,15 @@ Feature: Login
     And I see and can follow links within the home page body
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+  @android
+    Examples:
+      | GP System |
+      | EMIS      |
+
 
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key
     Given I am logged in as a <GP System> user created before Im1 Cache Keys existed
@@ -39,9 +43,15 @@ Feature: Login
     And I see the beta banner
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
 
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
+
+
+  @native-smoketest
   Scenario: Any user sees the current app version on the login page
     Given I am at the login page
     And I see the login page
@@ -60,15 +70,20 @@ Feature: Login
     Then I see the home page
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
+
 
   Scenario: A user can log in, and when they receive a 401 are redirected to the login page
     Given I am logged in as a EMIS user
     When I am idle long enough for the backend session to expire
     And I navigate to prescriptions
     Then I see the login page
-    
+
   @manual
   # to enable survey link change HOTJAR_SURVEY_VISIBLE env variable value
   Scenario Outline: A <GP System> user sees a survey link on the home page if enabled

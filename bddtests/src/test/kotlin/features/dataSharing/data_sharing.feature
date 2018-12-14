@@ -1,5 +1,6 @@
 @data-sharing
 @more
+@native-smoketest
 Feature: Data Sharing
   A user can access Data Sharing
 
@@ -30,6 +31,7 @@ Feature: Data Sharing
   |Overview    |Where confidential patient information is used |Where confidential patient information is used |
   |Overview    |Where your choice does not apply               |Where your choice does not apply               |
 
+  @android
   Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
     Given I am on the Data Sharing Overview page
     When I click the Data Sharing More Info link

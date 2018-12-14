@@ -3,6 +3,7 @@ Feature: View available appointment slots
   Users can view available appointments from the available appointments Page.
 
     #    GP System agnostic scenario, so only need to test with EMIS
+  @native-smoketest
   Scenario: A user who is signed in sees the appointments navigation button highlighted
     Given there are available appointment slots with different criteria for EMIS
     And I am logged in
@@ -20,9 +21,13 @@ Feature: View available appointment slots
     And no available slots are displayed
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario: A user does not see any guidance provided by TPP
     Given there are available appointment slots with different criteria for TPP
@@ -96,9 +101,13 @@ Feature: View available appointment slots
     Then a message is displayed indicating there are no slots available
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user goes back when no slots are available at all
     Given there are no available appointment slots for <GP System>
@@ -108,9 +117,13 @@ Feature: View available appointment slots
     Then the My Appointments page is displayed
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by today but no appointments are available
     Given there are available appointment slots with different criteria for <GP System>
@@ -176,7 +189,7 @@ Feature: View available appointment slots
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2966
+  @nativepending @NHSO-2974
   Scenario Outline: <GP System> user tries again after a timeout and it times-out again
     Given the <GP System> doesn't respond in a timely fashion for available appointment slots
     And I am logged in
@@ -191,7 +204,7 @@ Feature: View available appointment slots
       | TPP       |
       | VISION    |
 
-  @nativepending @NHSO-2966
+  @nativepending @NHSO-2974
   Scenario Outline: <GP System> user tries again after a timeout and it is now successful
     Given the <GP System> doesn't respond in a timely fashion for available appointment slots, on the first attempt
     But will respond in a timely fashion on the second attempt
@@ -214,9 +227,13 @@ Feature: View available appointment slots
     And there should not be an option to try again
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: <GP System>  user sees appropriate information message when GP system is unavailable
     Given <GP System> is unavailable for available appointment slots
@@ -226,9 +243,13 @@ Feature: View available appointment slots
     And there should not be an option to try again
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots
@@ -240,7 +261,7 @@ Feature: View available appointment slots
 
 
   @long-running
-  @nativepending @NHSO-2966
+  @nativepending @NHSO-2974
   Scenario: On session expiry (when on appointment booking page), a user on a secure screen is automatically signed out
     #    GP System agnostic scenario, so only need to test with EMIS
     Given there are available appointment slots with different criteria for EMIS
@@ -260,6 +281,7 @@ Feature: View available appointment slots
     Then I see appropriate information message when there is no internet connection
     And there should be a button to try again
 
+  @native-smoketest
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
     #    GP System agnostic scenario, so only need to test with EMIS
     Given there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them

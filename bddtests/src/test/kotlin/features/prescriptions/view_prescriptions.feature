@@ -10,10 +10,13 @@ Feature: View prescriptions
 
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
 
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: <GP System> patient selects the prescriptions menu button
     Given I am a <GP System> patient
@@ -26,9 +29,13 @@ Feature: View prescriptions
 
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: <GP System> patient with no past repeat prescriptions
     Given I am a <GP System> patient
@@ -41,9 +48,14 @@ Feature: View prescriptions
 
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
+
 
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
     Given I am a <GP System> patient
@@ -60,7 +72,6 @@ Feature: View prescriptions
       | VISION    |
 
   @smoketest
-  @nativebug @NHSO-3051
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
     Given I am a <GP System> patient
     And I am using <GP System> GP System
@@ -122,9 +133,13 @@ Feature: View prescriptions
 
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
     Given I am a <GP System> patient
@@ -156,7 +171,6 @@ Feature: View prescriptions
       | TPP       |
       | VISION    |
 
-  @nativebug @NHSO-3051
   Scenario Outline: <GP System> user with historic prescriptions with missing dosage and quantity info
     Given I am a <GP System> patient
     And I am using <GP System> GP System
@@ -265,7 +279,6 @@ Feature: View prescriptions
     Then I receive a "Unauthorized" error
 
   @backend
-  @nativepending @NHSO-2970
   Scenario Outline: <GP System> patient requesting prescriptions with when their session has expired
     Given I have logged into <GP System> and have a valid session cookie
     But I allow my session to expire

@@ -29,7 +29,6 @@ Feature: View My Medical Record Information - Warning
       |Service|
       |EMIS|
 
-  @nativepending @NHSO-2972
    Scenario Outline: A user tries to navigate directly to my record through url
      Given the my record wiremocks are initialised for <Service>
      And the GP Practice has enabled demographics functionality for <Service>

@@ -10,9 +10,13 @@ Feature: My appointments
     And I see the appropriate error messages for the appointment data error
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
   Scenario Outline: A user has never booked an appointment
     Given I have no upcoming appointments for <GP System>
@@ -40,9 +44,13 @@ Feature: My appointments
 
     Examples:
       | GP System |
-      | EMIS      |
       | TPP       |
       | VISION    |
+
+  @native-smoketest
+    Examples:
+      | GP System |
+      | EMIS      |
 
 
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
@@ -94,7 +102,7 @@ Feature: My appointments
     And I can book an appointment
 
   @long-running
-  @nativepending @NHSO-2966
+  @nativepending @NHSO-2974
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have no upcoming appointments for EMIS
     And I am logged in
