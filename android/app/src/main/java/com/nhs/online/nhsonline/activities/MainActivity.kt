@@ -83,7 +83,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
         val persistedBetaCookie = prefs.getString("BetaCookie", null)
-        if(!persistedBetaCookie.isNullOrBlank()) {
+        if (!persistedBetaCookie.isNullOrBlank()) {
             CookieManager.getInstance().setCookie(getString(R.string.cookieDomain), "$persistedBetaCookie; max-age=${60 * 60 * 24 * 365}")
         }
 
@@ -113,7 +113,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
 
-        if(isSuccessfulConfigCheck) {
+        if (isSuccessfulConfigCheck) {
             loadAuthReturnOrWelcomePage()
         }
     }
@@ -132,7 +132,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
         val haveShownThrottlingCarouselBefore = prefs.getBoolean(getString(R.string.haveShownThrottlingCarouselBefore), false)
 
-        if(!haveShownThrottlingCarouselBefore) {
+        if (!haveShownThrottlingCarouselBefore) {
             runOnUiThread {
                 originalWebviewZoom = webview.settings.textZoom
                 webview.settings.textZoom = 100
@@ -215,7 +215,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun setReloadUrl(url: String?) {
-        if(!knownServices.shouldURLOpenExternally(URL(url))) {
+        if (!knownServices.shouldURLOpenExternally(URL(url))) {
             urlLoader.reloadUrl = url
         }
     }
@@ -316,8 +316,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     override fun onBackPressed() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onBackPressed")
+
+        val  path = URL(webview.url).path
+
         if (isLoggedIn) {
             showExitDialog()
+
+        } else if (path.equals("/" + resources.getString(R.string.gpFinderPath))) {
+            this.finishAndRemoveTask()
+
+        } else if (path.contains(resources.getString(R.string.gpFinderPath), ignoreCase = true)) {
+            appWebInterface.resetGPFinderFlow()
+
         } else {
             this.finishAndRemoveTask()
         }
@@ -326,12 +336,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if(isSuccessfulConfigCheck) {
+        if (isSuccessfulConfigCheck) {
             val loginUrl = resources.getString(R.string.baseURL) + resources.getString(R.string.loginPath)
             if (webview.url == null) {
                 webview.loadUrl(loginUrl)
-            }
-            else if (webview.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
+            } else if (webview.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
                 webview.reload()
             }
         }
@@ -350,8 +359,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
         dialog.show()
     }
 
-    public fun showVersionUpgradeDialog() {
-        if((::upgradeDialog.isInitialized && !upgradeDialog.isShowing) || !::upgradeDialog.isInitialized ) {
+    fun showVersionUpgradeDialog() {
+        if ((::upgradeDialog.isInitialized && !upgradeDialog.isShowing) || !::upgradeDialog.isInitialized) {
 
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
                     .setTitle(resources.getString(R.string.UpdateRequiredHeader))
@@ -388,12 +397,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
         builder.setView(dialogView)
         builder.setCancelable(false)
         var textView = dialogView.findViewById(R.id.sessionExpiryWarningDurationInformation) as TextView
-        textView.text =resources.getString(R.string.sessionExpiryWarningDurationInformation).format(sessionDuration)
+        textView.text = resources.getString(R.string.sessionExpiryWarningDurationInformation).format(sessionDuration)
         val extendSession = dialogView.findViewById(R.id.extendSession) as Button
         val logOut = dialogView.findViewById(R.id.logOut) as Button
         var dialog: AlertDialog = builder.create()
         extendSession.setOnClickListener { dialog.dismiss(); appWebInterface.extendSession() }
-        logOut.setOnClickListener {  dialog.dismiss(); appWebInterface.logout()}
+        logOut.setOnClickListener { dialog.dismiss(); appWebInterface.logout() }
         dialog.setCanceledOnTouchOutside(false)
 
         return dialog
@@ -415,7 +424,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     public override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
-        if(::upgradeDialog.isInitialized) {
+        if (::upgradeDialog.isInitialized) {
             upgradeDialog.dismiss()
         }
         showErrorScreen()
@@ -441,7 +450,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     override fun showWebviewScreen() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showWebViewScreen")
-        if(isSuccessfulConfigCheck) {
+        if (isSuccessfulConfigCheck) {
             errorViewLayout.visibility = View.GONE
             webview.visibility = View.VISIBLE
             hideBlankScreen()
@@ -490,12 +499,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
         setHeaderText(resources.getString(R.string.biometric_header))
     }
 
-    fun showBiometrics(){
+    fun showBiometrics() {
         biometricLayoutContent.visibility = View.VISIBLE
         webview.visibility = View.GONE
     }
 
-    fun hideBiometrics(){
+    fun hideBiometrics() {
         biometricLayoutContent.visibility = View.GONE
         webview.visibility = View.VISIBLE;
     }

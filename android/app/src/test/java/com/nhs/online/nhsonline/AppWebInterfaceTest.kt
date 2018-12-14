@@ -46,17 +46,4 @@ class AppWebInterfaceTest {
         appWebInterface.extendSession()
         verify(spyActivity).evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('session/extend')")
     }
-
-    @Test
-    fun onDeviceBackButtonPressedLogoutDialogIsShown() {
-        spyActivity.loggedIn()
-        spyActivity.onBackPressed()
-        val logoutAlertDialog = ShadowDialog.getLatestDialog() as AlertDialog
-        Assert.assertNotNull(logoutAlertDialog)
-        Assert.assertTrue(logoutAlertDialog.isShowing)
-
-        val messageTextView = logoutAlertDialog.findViewById<TextView>(android.R.id.message)
-        Assert.assertNotNull(messageTextView)
-        messageTextView?.apply { Assert.assertEquals("Are you sure you want to log out?", text) }
-    }
 }

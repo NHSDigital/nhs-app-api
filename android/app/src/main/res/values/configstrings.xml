@@ -7,6 +7,7 @@
     <string name="baseApiURL">https://api-preview.dev.nonlive.nhsapp.service.nhs.uk/v1/</string>
     <string name="cookieDomain">@string/baseHost</string>
     <string name="authRedirectPath">/auth-return</string>
+    <string name="gpFinderPath">gp-finder</string>
     <string name="morePath">more</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
     <string name="myRecordPath">my-record-warning</string>
