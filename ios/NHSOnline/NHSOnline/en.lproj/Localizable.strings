@@ -21,6 +21,13 @@
 "ConnectionErrorTitle" = "There's an issue with your internet connection";
 "ConnectionErrorMessage" = "\nCheck your connection and try again. \n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.";
 
+/*Biometrics*/
+"BiometricHeader" = "Register for Biometric ID";
+"BiometricWarningHeader" = "Important";
+"BiometricWarningContent" = "All biometric IDs registered on this device will be able to open your NHS account.";
+"BiometricInfoMessage1" = "Log in using your biometric ID";
+"BiometricInfoMessage2" = "Do this instead of using a password and security code.";
+
 /*Accessibility*/
 "MyAccountHint" = "Navigates to my account page";
 "BackArrowHint" = "Navigates back a page";

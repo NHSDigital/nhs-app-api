@@ -183,73 +183,74 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
-            if (message.name == "onLogin") {
+            switch message.name {
+            case "onLogin":
                 WebViewController.Properties.usingAbsoluteUri = false
-            }
-            
-            if (message.name == "onLogout") {
+                break
+            case "onLogout":
                 WebViewController.Properties.usingAbsoluteUri = true
                 webAppInterface.onLogout()
-            }
-            
-            if (message.name == "hideHeader") {
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
-            }
-            
-            if (message.name == "hideWhiteScreen") {
+                break
+            case "hideHeader":
+                 viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
+                break
+            case "hideWhiteScreen":
                 UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
-            }
-            
-            if (message.name == "showHeader") {
+                break
+            case "showHeader":
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
-            }
-            
-            if (message.name == "showHeaderSlim") {
+                break
+            case "showHeaderSlim":
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: true)
-            }
-            
-            if (message.name == "hideHeaderSlim") {
+                break
+            case "hideHeaderSlim":
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
-            }
-            
-            if (message.name == "hideMenuBar") {
+                break
+            case "hideMenuBar":
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: false)
-            }
-            
-            if (message.name == "resetPageFocus") {
+                break
+            case "resetPageFocus":
                 viewController.headerBar.setFocusToNhsLogoForA11y()
-            }
-            
-            if (message.name == "updateHeaderText") {
+                break
+            case "updateHeaderText":
                 if(!Reachability.isConnectedToNetwork()) {
                     self.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
                     return
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
-            }
-            if (message.name == "postNdopToken") {
+                break
+            case "postNdopToken":
                 callPostNdopToken(token: String(describing: message.body))
-            }
-            if (message.name == "clearMenuBarItem") {
+                break
+            case "clearMenuBarItem":
                 clearMenuBarItem()
-            }
-            if (message.name == "completeAppIntro") {
-                
+                break
+            case "goToBiometrics":
+                goToBiometrics()
+                break
+            case "completeAppIntro":
                 let defaults = UserDefaults.standard
                 defaults.set(false, forKey: config().IsFirstTimeOpened)
                 defaults.set(true, forKey: config().HaveShownThrottlingCarouselBefore)
                 
                 self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
-            }
-            if (message.name == "onSessionExpiring") {
+                break
+            case "onSessionExpiring":
                 var sessionDuration : Int? = message.body as? Int
                 if sessionDuration == nil {
                     sessionDuration = 20
                 }
                 
                 viewController.displayExtendSessionDialogue(sessionDuration: sessionDuration!)
+                break
+            default:
+                break
             }
         }
+    }
+    
+    func goToBiometrics() {
+        viewController.showBiometricViewContainer()
     }
     
     func callPostNdopToken(token: String?) {
@@ -259,7 +260,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func clearMenuBarItem() {
         self.viewController.tabBar.selectedItem = nil
     }
-
     
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {

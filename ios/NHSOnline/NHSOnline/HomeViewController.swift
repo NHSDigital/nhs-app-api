@@ -20,7 +20,9 @@ class HomeViewController : UIViewController {
     var lifecycleHandlers: LifecycleHandlers?
     var configurationService: ConfigurationService?
     var webViewController: WebViewController?
-    var nativeViewController: PageUnavailabilityViewController?
+    var errorViewController: PageUnavailabilityViewController?
+    var biometricViewController: BiometricsViewController?
+    var currentNativeViewController: UIViewController?
     var webViewDelegate: WebViewDelegate?
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().HomeUrl
@@ -69,9 +71,15 @@ class HomeViewController : UIViewController {
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         webViewController?.view.translatesAutoresizingMaskIntoConstraints = false
         
-        nativeViewController = self.storyboard?.instantiateViewController(withIdentifier: "PageUnavailabilityViewController") as? PageUnavailabilityViewController
-        nativeViewController?.view.translatesAutoresizingMaskIntoConstraints = false
-        nativeViewController?.loadViewIfNeeded()
+        errorViewController = self.storyboard?.instantiateViewController(withIdentifier: "PageUnavailabilityViewController") as? PageUnavailabilityViewController
+        errorViewController?.view.translatesAutoresizingMaskIntoConstraints = false
+        errorViewController?.loadViewIfNeeded()
+        
+        biometricViewController = self.storyboard?.instantiateViewController(withIdentifier: "BiometricsViewController") as? BiometricsViewController
+        biometricViewController?.view.translatesAutoresizingMaskIntoConstraints = false
+        biometricViewController?.loadViewIfNeeded()
+        
+        currentNativeViewController = errorViewController
         
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
@@ -207,15 +215,23 @@ class HomeViewController : UIViewController {
     
     func showWebViewContainer() {
         if (!appVersionCheckError) {
-            self.cycleFromViewController(oldViewController: self.nativeViewController!, toViewController: self.webViewController!)
+            self.cycleFromViewController(oldViewController: self.currentNativeViewController!, toViewController: self.webViewController!)
         }
     }
     
     func showNativeViewContainer(errorMessage: ErrorMessage) {
-        self.nativeViewController?.setUnavailabilityError(errorMessage: errorMessage)
+        self.errorViewController?.setUnavailabilityError(errorMessage: errorMessage)
         self.updateHeaderText(headerText: NSLocalizedString("ConnectionErrorHeader", comment: ""))
-        self.cycleFromViewController(oldViewController: self.webViewController!, toViewController: self.nativeViewController!)
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.nativeViewController?.errorTextView)
+        self.cycleFromViewController(oldViewController: self.webViewController!, toViewController: self.errorViewController!)
+        self.currentNativeViewController = self.errorViewController
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.errorViewController?.errorTextView)
+    }
+    
+    func showBiometricViewContainer() {
+        self.updateHeaderText(headerText: NSLocalizedString("BiometricHeader", comment: ""))
+        self.cycleFromViewController(oldViewController: self.webViewController!, toViewController: self.biometricViewController!)
+        self.currentNativeViewController = self.biometricViewController
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.errorViewController?.errorTextView)
     }
     
     func resetFocusAndAnnouncePageTitle(pageTitle: String?) {

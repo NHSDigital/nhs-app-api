@@ -65,6 +65,6 @@ npm test
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 ## Biometrics
-To enable biometrics on android, the BIOMETRICS_ENABLED environment variable should be set to true.
+To enable biometrics on android or iOS, the BIOMETRICS_ENABLED environment variable should be set to true.
 To do this you can run
 `docker-compose -f docker-compose.yml -f docker-compose.biometrics.yml up`

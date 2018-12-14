@@ -16,8 +16,6 @@ class PageUnavailabilityViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         errorTextView.layer.addTopBorder(color: UIColor(red:0.85, green:0.16, blue:0.11, alpha:1.0), thickness: 3)
         errorTextView.resizeErrorTextView()
-        self.configureNavBar()
-
     }
     
     func setUnavailabilityError(errorMessage:ErrorMessage) {
@@ -33,8 +31,5 @@ class PageUnavailabilityViewController: UIViewController {
         }
         errorTextView.accessibilityValue = accessibilityText
     }
-    
-    func configureNavBar() {
-        self.navigationItem.backBarButtonItem?.title = ""
-    }
+
 }
