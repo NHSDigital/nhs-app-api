@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Conventions;
@@ -17,18 +18,21 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentSlotsController> _logger;
         private readonly IAuditor _auditor;
+        private readonly IAppointmentSlotTypeScraper _appointmentSlotTypeScraper;
 
         public AppointmentSlotsController(
             IGpSystemFactory gpSystemFactory,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
             ILogger<AppointmentSlotsController> logger,
-            IAuditor auditor
+            IAuditor auditor,
+            IAppointmentSlotTypeScraper appointmentSlotTypeScraper
         )
         {
             _gpSystemFactory = gpSystemFactory;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _logger = logger;
             _auditor = auditor;
+            _appointmentSlotTypeScraper = appointmentSlotTypeScraper;
         }
 
         [HttpGet]
@@ -48,6 +52,17 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider);
             
                 var result = await appointmentService.GetSlots(userSession, dateRange);
+
+                try
+                {
+                    _appointmentSlotTypeScraper.CaptureAppointmentSlotTypes(userSession, result);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Unable to log appointment slot type details. " +
+                                        "Catching exception to prevent inability to create appointment");
+
+                }
 
                 result.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
                 return result.Accept(new AppointmentSlotsResultVisitor());
