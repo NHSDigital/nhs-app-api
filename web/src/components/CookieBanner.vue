@@ -46,9 +46,7 @@ export default {
     },
   },
   created() {
-    if (process.server) {
-      this.$store.dispatch('cookieBanner/sync');
-    }
+    this.$store.dispatch('cookieBanner/sync');
   },
   methods: {
     onCookieBannerClicked() {

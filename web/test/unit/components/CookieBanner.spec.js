@@ -44,26 +44,14 @@ const createStore = () => ({
 
 describe('components/CookieBanner.vue -', () => {
   describe('created ', () => {
-    it('will issue cookie/store synchronisation when in no-js mode', async () => {
+    it('will issue cookie/store synchronisation', async () => {
       const $store = createStore();
 
       jest.spyOn($store, 'dispatch');
-      process.server = true;
 
       createCookieBanner($store);
 
       expect($store.dispatch).toHaveBeenCalledWith('cookieBanner/sync');
-    });
-
-    it('will not issue cookie/store synchronisation when in js mode', async () => {
-      const $store = createStore();
-
-      jest.spyOn($store, 'dispatch');
-      process.server = false;
-
-      createCookieBanner($store);
-
-      expect($store.dispatch).not.toHaveBeenCalledWith('cookieBanner/sync');
     });
   });
 
