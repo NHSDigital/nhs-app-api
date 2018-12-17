@@ -155,7 +155,7 @@ export default {
         },
       );
 
-      cookies.set('BetaCookie', betaCookie, { path: '/', maxAge: moment.duration(1, 'y').asSeconds(), secure: this.$env.SECURE_COOKIES });
+      cookies.set('BetaCookie', betaCookie, { path: '/', maxAge: moment.duration(1, 'y').asSeconds() });
 
       if (process.client) {
         NativeCallbacks.storeBetaCookie();

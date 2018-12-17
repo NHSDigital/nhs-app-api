@@ -51,7 +51,6 @@ export default {
       this.$store.app.$cookies.set('BetaCookie', betaCookie, {
         path: '/',
         maxAge: moment.duration(1, 'y').asSeconds(),
-        secure: this.$env.SECURE_COOKIES,
       });
       this.$router.push(LOGIN.path);
     },
