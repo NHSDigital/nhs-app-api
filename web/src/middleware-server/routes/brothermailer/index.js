@@ -1,9 +1,14 @@
 /* eslint-disable prefer-destructuring */
 import get from 'lodash/fp/get';
-import { Router } from 'express';
-import { GP_FINDER_SENDING_EMAIL, GP_FINDER_SENDING_EMAIL_RESULT, BROTHERMAILER_SIGNUP_NOJS } from '@/lib/routes';
+import {
+  Router,
+} from 'express';
+import {
+  GP_FINDER_SENDING_EMAIL,
+  GP_FINDER_SENDING_EMAIL_RESULT,
+  BROTHERMAILER_SIGNUP_NOJS,
+} from '@/lib/routes';
 import BrotherMailerService from '@/services/brother-mailer-service';
-import { URL } from 'url';
 
 export default () => {
   const router = Router();
@@ -13,43 +18,30 @@ export default () => {
   const connectionError = `${GP_FINDER_SENDING_EMAIL.path}?error=connectionError`;
 
   router.post(BROTHERMAILER_SIGNUP_NOJS.noJsApiPath, async (req, res) => {
-    const { odsCode, email, appUrl } = get('body')(req) || {};
-    let parsedAppUrl;
-
+    const {
+      odsCode,
+      email,
+    } = get('body')(req) || {};
     if (!email || email.indexOf('@') === -1) {
       return res.redirect(invalidEmailError);
     }
 
-    try {
-      parsedAppUrl = new URL(appUrl);
-    } catch (error) {
-      return res.redirect(submissionError);
-    }
-    if (!odsCode || !parsedAppUrl) {
+    if (!odsCode) {
       return res.redirect(submissionError);
     }
 
-    return BrotherMailerService.postEmailToBrotherMailer(parsedAppUrl, email, odsCode)
-      .then((resp) => {
-        const queryString = resp.request.path.split('?')[1];
-        const query = { reason: undefined, result: undefined };
-
-        if (queryString) {
-          const queryParams = queryString.split('&');
-          queryParams.forEach((item) => {
-            const param = item.split('=');
-            query[param[0]] = param[1];
-          });
-        }
-
-        if (query.result === 'success') {
+    return BrotherMailerService.postEmailToBrotherMailer(email, odsCode)
+      .then((response) => {
+        if (response.data.includes('?result=success')) {
           return res.redirect(GP_FINDER_SENDING_EMAIL_RESULT.path);
-        } else if (query.reason === 'invalidemail') {
+        } else if (response.data.includes('?result=invalidemail')) {
           return res.redirect(invalidEmailError);
         }
         return res.redirect(submissionError);
       })
-      .catch(() => res.redirect(connectionError));
+      .catch(() => {
+        res.redirect(connectionError);
+      });
   });
 
   return router;

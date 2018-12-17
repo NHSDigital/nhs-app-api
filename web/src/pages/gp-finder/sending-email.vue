@@ -31,7 +31,6 @@
                             maxlength="255"
         />
         <input id="odsCode" :value="odsCode" type="hidden" name="odsCode">
-        <input id="appUrl" :value="brotherMailerRedirectUrl" type="hidden" name="appUrl">
         <generic-button :class="[$style.button, $style.green]" :type="'submit'">
           {{ this.$t('th05.continueButton') }}
         </generic-button>
@@ -129,9 +128,6 @@ export default {
       }
 
       return undefined;
-    },
-    brotherMailerRedirectUrl() {
-      return this.$store.app.$env.CID_REDIRECT_URI;
     },
   },
   methods: {
