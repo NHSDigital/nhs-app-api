@@ -38,6 +38,7 @@ export default function ({
       app.$cookies.set('BetaCookie', betaCookie, {
         path: '/',
         maxAge: -1,
+        secure: app.$env.SECURE_COOKIES,
       });
     } else if (route.query.skip) {
       betaCookie = {
@@ -46,6 +47,7 @@ export default function ({
       app.$cookies.set('BetaCookie', betaCookie, {
         path: '/',
         maxAge: moment.duration(1, 'y').asSeconds(),
+        secure: app.$env.SECURE_COOKIES,
       });
     }
   }
