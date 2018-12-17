@@ -111,4 +111,4 @@ RUN update-ca-certificates
 
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && dotnet NHSOnline.Backend.Worker.dll --runMode=$BACKENDWORKER_RUNMODE
+CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && exec dotnet NHSOnline.Backend.Worker.dll --runMode=$BACKENDWORKER_RUNMODE
