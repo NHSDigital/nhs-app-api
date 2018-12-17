@@ -1,6 +1,6 @@
 <template>
   <div>
-    <cookie-banner/>
+    <cookie-banner v-if="!loggedIn"/>
     <header>
       <span :class="$style['header-content']">
         <div :class="$style.nhsLogo">
@@ -103,6 +103,9 @@ export default {
       return (
         this.$store.state.myAppointments.hasLoaded && !this.$store.getters['errors/showApiError']
       );
+    },
+    loggedIn() {
+      return !!this.$store.state.session.csrfToken;
     },
   },
   mounted() {

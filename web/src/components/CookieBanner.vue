@@ -1,8 +1,9 @@
 <template>
   <div v-if="showCookieBanner" :class="$style['cookie-banner']">
-    <div :class="$style['cookie-banner-panel']">
+    <div :class="$style['cookie-banner-panel']" data-purpose="cookie-banner">
       <div :class="$style['cookie-caption']">
-        <p>{{ $t('cookieBanner.caption.line1') }}
+        <p><span>{{ $t('cookieBanner.caption.line1') }}</span>
+          &nbsp;
           <a :href="cookieBannerUrl" tabindex="-2" target="_blank">
             {{ $t('cookieBanner.caption.linkText') }}
           </a>
