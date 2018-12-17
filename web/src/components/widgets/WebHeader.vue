@@ -1,5 +1,6 @@
 <template>
   <div>
+    <cookie-banner/>
     <header>
       <span :class="$style['header-content']">
         <div :class="$style.nhsLogo">
@@ -32,6 +33,7 @@ import HeaderMenu from '@/components/widgets/HeaderMenu';
 import HomeLink from './HomeLink';
 import PageTitle from './PageTitle';
 import BookAppointment from './BookAppointment';
+import CookieBanner from '../CookieBanner';
 
 export default {
   components: {
@@ -40,6 +42,7 @@ export default {
     HeaderLinks,
     HeaderMenu,
     PageTitle,
+    CookieBanner,
   },
   head() {
     return {

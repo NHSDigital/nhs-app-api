@@ -1,5 +1,6 @@
 import Vuex from 'vuex';
 
+import cookieBanner from './modules/cookieBanner';
 import header from './modules/header';
 import pageTitle from './modules/pageTitle';
 import availableAppointments from './modules/availableAppointments';
@@ -22,6 +23,7 @@ import throttling from './modules/throttling';
 
 const createStore = () => new Vuex.Store({
   modules: {
+    cookieBanner,
     header,
     pageTitle,
     availableAppointments,

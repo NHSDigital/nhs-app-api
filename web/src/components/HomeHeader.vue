@@ -1,7 +1,7 @@
 <template>
   <div :class="$style['home-header']">
     <header>
-      <a id="help_icon" :class="$style['anchor-icon','fixed-right']"
+      <a id="help_icon" :class="[$style['anchor-icon'],$style['fixed-right']]"
          :href="helpAndSupportURL" target="_blank" tabindex="-1">
         <help-icon/>
       </a>

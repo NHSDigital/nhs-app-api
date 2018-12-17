@@ -1,11 +1,15 @@
 <template>
-  <div :class="[getHeaderState(), 'pull-content']">
-    <header-slim> {{ $t('sy01.pageHeader') }}</header-slim>
-    <body>
-      <div>
-        <symptoms-check/>
-      </div>
-    </body>
+  <div>
+    <div :class="[getHeaderState(), 'pull-content']">
+      <header-slim v-if="this.$store.state.device.isNativeApp">
+        {{ $t('sy01.pageHeader') }}
+      </header-slim>
+      <body>
+        <div>
+          <symptoms-check/>
+        </div>
+      </body>
+    </div>
   </div>
 </template>
 <script>
@@ -36,7 +40,7 @@ export default {
 
 <style module lang="scss" scoped>
   .webHeader {
-    margin-top: -3.625em;
+   // margin-top: -3.625em;
   }
 
   .nativeHeader {

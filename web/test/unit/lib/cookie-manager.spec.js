@@ -1,5 +1,5 @@
 import { setCookie, mergeCookie, removeCookies } from '@/lib/cookie-manager';
-import { mockCookies } from '../../helpers';
+import { mockCookies } from '../helpers';
 
 
 describe('cookie-manager', () => {

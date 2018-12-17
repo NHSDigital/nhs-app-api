@@ -64,9 +64,11 @@ import WebFooter from '@/components/widgets/WebFooter';
 import SymptomBanner from '@/components/SymptonBanner';
 import BetaBanner from '@/components/BetaBanner';
 import NativeVersionSetup from '../services/nativeVersionSetup';
+import CookieBanner from '../components/CookieBanner';
 
 export default {
   components: {
+    CookieBanner,
     BetaBanner,
     SymptomBanner,
     WebHeader,

@@ -60,10 +60,10 @@ export default {
   },
   head() {
     let { platform } = this.$store.state.device.source;
-    const { nativeVerison } = this.$store.state.appVersion;
+    const { nativeVersion } = this.$store.state.appVersion;
 
-    if (nativeVerison !== undefined) {
-      platform = `${platform} (${nativeVerison})`;
+    if (nativeVersion !== undefined) {
+      platform = `${platform} (${nativeVersion})`;
     }
 
     const head = {

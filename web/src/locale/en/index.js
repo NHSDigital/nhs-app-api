@@ -118,6 +118,12 @@ export default {
     retryButtonText: 'Try again',
     message: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
   },
+  cookieBanner: {
+    caption: {
+      line1: 'The NHS website uses cookies to improve your on-site experience.',
+      linkText: 'Find out more about cookies',
+    },
+  },
   termsAndConditions: {
     title: 'Accept conditions of use',
     errorMsgHeader: 'There\'s a problem',

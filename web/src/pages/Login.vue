@@ -52,11 +52,6 @@ import querystring from 'querystring';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 
 export default {
-  // head() {
-  //   return {
-  //     title: 'Login Screen',
-  //   };
-  // },
   layout: 'login',
   components: {
     AnalyticsTrackedTag,

@@ -91,6 +91,9 @@ const config = {
     TERMS_AND_CONDITIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/',
     PRIVACY_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/',
     COOKIES_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/',
+    COOKIES_BANNER_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy#manage',
+    COOKIES_BANNER_EXPIRY_DAYS: 365,
+
     OPEN_SOURCE_LICENCES_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/',
     HELP_AND_SUPPORT_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/',
     ACCESSIBILITY_STATEMENT: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/',
