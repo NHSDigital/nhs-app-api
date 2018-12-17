@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
@@ -8,9 +10,38 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
     {
         void CaptureAppointmentSlotTypes(UserSession userSession, AppointmentSlotsResult result);
     }
-    
+
     public class AppointmentSlotTypeScraper : IAppointmentSlotTypeScraper
     {
+        private static readonly ConcurrentDictionary<string, AppointmentSlotsValue> CapturedAppointmentTypes = 
+            new ConcurrentDictionary<string, AppointmentSlotsValue>();
+        
+        private class AppointmentSlotsInformation
+        {
+            public string[] SlotTypes {get;}
+            public string Supplier {get;}
+            public string OdsCode {get;}
+
+            public AppointmentSlotsInformation(string[] slotTypes, string supplier, string odsCode)
+            {
+                SlotTypes = slotTypes;
+                Supplier = supplier;
+                OdsCode = odsCode;
+            }
+        }
+        
+        private class AppointmentSlotsValue
+        {
+            public DateTime CurrentDate {get;}
+            public int SlotCount {get;}
+
+            public AppointmentSlotsValue(DateTime currentDate, int slotCount)
+            {
+                CurrentDate = currentDate;
+                SlotCount = slotCount;
+            }
+        }
+        
         private readonly ILogger<AppointmentSlotTypeScraper> _logger;
 
         public AppointmentSlotTypeScraper(
@@ -22,25 +53,42 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
         public void CaptureAppointmentSlotTypes(UserSession userSession, AppointmentSlotsResult result)
         {
-            if (!(result is AppointmentSlotsResult.SuccessfullyRetrieved successfulResult))
+            if (!(result is AppointmentSlotsResult.SuccessfullyRetrieved successfulResult) 
+                || successfulResult.Response.Slots?.Any() != true)
             {
                 return;
             }
+            
             var slotTypes = successfulResult.Response.Slots.Select(x => x.Type).Distinct().ToArray();
-            var appointmentSlotsInformation = new AppointmentSlotTypesDetails
+            var appointmentSlotsInformation = new AppointmentSlotsInformation(slotTypes,
+                userSession.GpUserSession.Supplier.ToString(), userSession.GpUserSession.OdsCode);
+            
+            if (!ShouldBeLogged(appointmentSlotsInformation))
             {
-                OdsCode = userSession.GpUserSession.OdsCode,
-                Supplier = userSession.GpUserSession.Supplier.ToString(),
-                SlotTypes = slotTypes
-            };
+                return;
+            }
             _logger.LogInformation("slot_type_data=" + appointmentSlotsInformation.SerializeJson());
         }
-        
-        private class AppointmentSlotTypesDetails
+
+        private static bool ShouldBeLogged(AppointmentSlotsInformation appointmentSlotsInformation)
         {
-            public string[] SlotTypes { get; set; }
-            public string Supplier { get; set; }
-            public string OdsCode { get;set; }
+            var appointmentSlotsValue =
+                new AppointmentSlotsValue(DateTime.Today, appointmentSlotsInformation.SlotTypes.Length);
+            
+            CapturedAppointmentTypes.TryGetValue(appointmentSlotsInformation.OdsCode, out var existingValue);
+            
+            if (existingValue == null || 
+                existingValue.CurrentDate.Date != DateTime.Today.Date ||
+                existingValue.SlotCount < appointmentSlotsInformation.SlotTypes.Length)
+
+            {
+                CapturedAppointmentTypes.AddOrUpdate(appointmentSlotsInformation.OdsCode, appointmentSlotsValue,
+                    (key, oldValue) => appointmentSlotsValue);
+                return true;
+            }
+            
+            return false;
         }
     }
 }
+
