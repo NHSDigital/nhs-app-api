@@ -56,10 +56,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                     return new SessionCreateResult.SupplierSystemBadResponse();
                 }
 
+                var tppUserSession = userSession.ValueOrFailure();
+                await _client.PatientSelectedPost(tppUserSession);
+                
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
                 return new SessionCreateResult.SuccessfullyCreated(
                     reply.Body.User?.Person?.PersonName?.Name,
-                    userSession.ValueOrFailure());
+                    tppUserSession);
             }
             catch (HttpRequestException e)
             {
