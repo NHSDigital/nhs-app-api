@@ -31,14 +31,14 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             var userSession = HttpContext.GetUserSession();
 
             await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
-            _logger.LogInformation($"Fetching courses interface for supplier {userSession.Supplier}");
+            _logger.LogInformation($"Fetching courses interface for supplier {userSession.GpUserSession.Supplier}");
             
             var courseService = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier)
+                .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetCourseService();
 
             var result = await courseService.GetCourses(userSession);
-
+            
             result.Accept(new CourseResultAuditingVisitor(_auditor));
             return result.Accept(new CourseResultVisitor());
         }

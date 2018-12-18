@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
         public async Task<GetCoursesResult> GetCourses(UserSession userSession)
         {
-            var tppUserSession = (TppUserSession) userSession;
+            var tppUserSession = (TppUserSession) userSession.GpUserSession;
 
             try
             {

@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAppointmentsService> _mockAppointmentsService;
-        private EmisUserSession _userSession;
+        private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
 
         private const string RequestAuditType = "Appointments_ViewBooked_Request";
@@ -39,7 +39,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _userSession = _fixture.Create<EmisUserSession>();
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+
+            _userSession = _fixture.Create<UserSession>();
 
             _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
 

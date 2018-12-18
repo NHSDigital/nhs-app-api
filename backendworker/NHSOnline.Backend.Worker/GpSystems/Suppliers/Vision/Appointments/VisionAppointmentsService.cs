@@ -25,19 +25,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         
         public async Task<AppointmentBookResult> Book(UserSession userSession, AppointmentBookRequest request)
         {
-            return await _booker.Book((VisionUserSession)userSession, request);
+            return await _booker.Book((VisionUserSession) userSession.GpUserSession, request);
         }
 
         public async Task<AppointmentCancelResult> Cancel(UserSession userSession, AppointmentCancelRequest request)
         {
-            return await _canceller.Cancel((VisionUserSession) userSession, request);
+            return await _canceller.Cancel((VisionUserSession) userSession.GpUserSession, request);
         }
 
         public async Task<AppointmentsResult> GetAppointments(UserSession userSession, 
             bool includePastAppointments,
             DateTimeOffset? pastAppointmentsFromDate)
         {
-            return await _getter.GetAppointments((VisionUserSession) userSession);
+            return await _getter.GetAppointments(userSession);
         }
     }
 }

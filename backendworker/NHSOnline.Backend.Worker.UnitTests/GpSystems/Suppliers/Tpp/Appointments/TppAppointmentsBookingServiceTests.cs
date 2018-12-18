@@ -29,15 +29,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         private Mock<ITppClient> _mockTppClient;
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
-        private TppUserSession _userSession;
+        private UserSession _userSession;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<TppUserSession>()));
+            
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
 
-            _userSession = _fixture.Create<TppUserSession>();
+            _userSession = _fixture.Create<UserSession>();
 
             _systemUnderTest = _fixture.Create<TppAppointmentsService>();
 

@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             {
                 _logger.LogEnter();
             
-                var tppUserSession = (TppUserSession)userSession;
+                var tppUserSession = (TppUserSession) userSession.GpUserSession;
                 var request = new ListSlots(tppUserSession, dateRange);
                 var listSlotsTask = _tppClient.ListSlotsPost(request, tppUserSession.Suid);
                 await Task.WhenAll(listSlotsTask);

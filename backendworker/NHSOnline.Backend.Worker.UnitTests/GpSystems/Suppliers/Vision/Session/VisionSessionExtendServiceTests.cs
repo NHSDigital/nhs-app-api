@@ -12,15 +12,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
     public class VisionSessionExtendServiceTests
     {
         private IFixture _fixture;
-        private VisionUserSession _userSession;
+        private UserSession _userSession;
+        
         private VisionSessionExtendService _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
-            _userSession = _fixture.Create<VisionUserSession>();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<VisionUserSession>()));
+            
+            _userSession = _fixture.Create<UserSession>();
 
             _systemUnderTest = _fixture.Create<VisionSessionExtendService>();
         }

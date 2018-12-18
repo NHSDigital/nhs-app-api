@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
                 var awaiter = Task.Run(_nestedClass.TaskAsyncMethod);
 
                 var dummyContext = new DefaultHttpContext();
-                dummyContext.Items.Add("UserSession", new EmisUserSession() { NhsNumber = RubbishScope });
+                dummyContext.Items.Add("UserSession", CreateUserSession(RubbishScope) );
                 using (_auditor.BeginScope(dummyContext))
                 {
 
@@ -134,9 +134,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
 
             // set up http contexts for both controller and calling attribute overloads..
             var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.Items.Add("UserSession", new EmisUserSession() { NhsNumber = NhsNumber });
+            actionContext.HttpContext.Items.Add("UserSession", CreateUserSession(NhsNumber));
             _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<String, object>(), _systemUnderTest);
             _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
+        }
+
+        private static UserSession CreateUserSession(string nhsNumber)
+        {
+            return new UserSession
+            {
+                GpUserSession = new EmisUserSession
+                {
+                    NhsNumber = nhsNumber
+                }
+            };
         }
 
         private void RunControllerMethod(Func<Task> controllerMethod)

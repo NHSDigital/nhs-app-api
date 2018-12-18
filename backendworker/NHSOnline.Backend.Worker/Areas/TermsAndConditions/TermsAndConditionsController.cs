@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
             var userSession = HttpContext.GetUserSession();
           
             _logger.LogDebug("Fetching user consent");
-            var fetchConsentResult = await _termsAndConditionsService.FetchConsent(userSession.NhsNumber);
+            var fetchConsentResult = await _termsAndConditionsService.FetchConsent(userSession.GpUserSession.NhsNumber);
             
             _logger.LogExit();
             return fetchConsentResult.Accept(new TermsAndConditionsFetchConsentResultVisitor());
@@ -64,12 +64,12 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
             if (!model.AnalyticsCookieAccepted)
             {
                 _logger.LogInformation("Recording user did not accept optional analytics cookies. OdsCode: {0}",
-                    userSession.OdsCode);
+                    userSession.GpUserSession.OdsCode);
             }
 
             _logger.LogDebug("Recording user consent");         
             
-            var recordConsentResult = await _termsAndConditionsService.RecordConsent(userSession.NhsNumber, userSession.OdsCode,
+            var recordConsentResult = await _termsAndConditionsService.RecordConsent(userSession.GpUserSession.NhsNumber, userSession.GpUserSession.OdsCode,
                 model, termsAndConditionsAcceptanceDate);
          
             // Audit result of attempting to record consent

@@ -59,8 +59,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         private async Task<SessionExtendResultVisitorOutput> GetSessionExtendResultVisitorOutput(
             UserSession userSession)
         {
-            _logger.LogDebug($"Fetch session extend Service for GP System: '{userSession.Supplier}'.");
-            var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.Supplier);
+            _logger.LogDebug($"Fetch session extend Service for GP System: '{userSession.GpUserSession.Supplier}'.");
+            var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
             var sessionService = gpSystem.GetSessionExtendService();
             var extendResult = await sessionService.Extend(userSession);
             return extendResult.Accept(new SessionExtendResultVisitor());

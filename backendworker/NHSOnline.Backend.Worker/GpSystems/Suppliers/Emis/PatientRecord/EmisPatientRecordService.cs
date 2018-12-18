@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession)userSession;
+            var emisUserSession = (EmisUserSession)userSession.GpUserSession;
 
             try
             {
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 _logger.LogInformation("Mapping EMIS responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations);
 
-                myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                myRecordResponse.Supplier = emisUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 

@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
     public class EmisSessionExtendServiceTests
     {
         private IFixture _fixture;
-        private EmisUserSession _userSession;
+        private UserSession _userSession;
         private EmisSessionExtendService _systemUnderTest;
         private Mock<IEmisClient> _mockEmisClient;
 
@@ -26,8 +26,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
 
-            _userSession = _fixture.Create<EmisUserSession>();
+            _userSession = _fixture.Create<UserSession>();
 
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 

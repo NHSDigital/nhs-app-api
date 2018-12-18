@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogEnter();
             
-                var emisUserSession = (EmisUserSession) userSession;
+                var emisUserSession = (EmisUserSession) userSession.GpUserSession;
                 var patientLinkToken = emisUserSession.UserPatientLinkToken;
                 var metaParams = new SlotsMetadataGetQueryParameters(dateRange.FromDate, dateRange.ToDate,
                     patientLinkToken);

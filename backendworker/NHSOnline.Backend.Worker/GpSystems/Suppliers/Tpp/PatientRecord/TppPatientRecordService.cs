@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
         {
             _logger.LogEnter();
             
-            var tppUserSession = (TppUserSession) userSession;
+            var tppUserSession = (TppUserSession) userSession.GpUserSession;
 
             try
             {
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
                 _logger.LogInformation("Mapping TPP responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, dcrEvents, testResults);
-                myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                myRecordResponse.Supplier = tppUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
                 
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             var methodName = "GetDetailedTestResult";
             _logger.LogEnter();
             
-            var tppUserSession = (TppUserSession) userSession;
+            var tppUserSession = (TppUserSession) userSession.GpUserSession;
 
             try
             {           

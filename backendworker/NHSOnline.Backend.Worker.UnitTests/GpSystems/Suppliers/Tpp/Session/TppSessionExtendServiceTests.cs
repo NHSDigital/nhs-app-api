@@ -19,7 +19,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
     {
 
         private IFixture _fixture;
-        private TppUserSession _userSession;
+        private TppUserSession _tppUserSession;
+        private UserSession _userSession;
+        
         private TppSessionExtendService _systemUnderTest;
         private Mock<ITppClient> _mockTppClient;
 
@@ -28,7 +30,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
-            _userSession = _fixture.Create<TppUserSession>();
+            _tppUserSession = _fixture.Create<TppUserSession>();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _tppUserSession));
+
+            _userSession = _fixture.Create<UserSession>();
 
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
 
@@ -41,7 +48,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             // Arrange
             var response = new TppClient.TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.OK);
 
-            _mockTppClient.Setup(x => x.PatientSelectedPost(_userSession))
+            _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -59,7 +66,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             // Arrange
             var response = new TppClient.TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.BadRequest);
 
-            _mockTppClient.Setup(x => x.PatientSelectedPost(_userSession))
+            _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
                 .ReturnsAsync(response)
                 .Verifiable();
 
@@ -75,7 +82,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            _mockTppClient.Setup(x => x.PatientSelectedPost(_userSession))
+            _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 

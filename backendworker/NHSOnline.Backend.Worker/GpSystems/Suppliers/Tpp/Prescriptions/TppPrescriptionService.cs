@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
         public async Task<PrescriptionResult> GetPrescriptions(UserSession userSession, DateTimeOffset? fromDate = null,
             DateTimeOffset? toDate = null)
         {
-            var tppUserSession = (TppUserSession) userSession;
+            var tppUserSession = (TppUserSession) userSession.GpUserSession;
 
             try
             {
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
         {
             _logger.LogEnter();
 
-            var tppUserSession = (TppUserSession)userSession;
+            var tppUserSession = (TppUserSession) userSession.GpUserSession;
 
             var postRequest = new RequestMedication
             {

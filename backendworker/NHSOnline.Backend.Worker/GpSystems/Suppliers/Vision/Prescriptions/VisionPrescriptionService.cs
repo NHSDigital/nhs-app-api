@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
         {
             _logger.LogEnter();
 
-            var visionUserSession = (VisionUserSession)userSession;
+            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
 
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 
         public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            var visionUserSession = (VisionUserSession)userSession;
+            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
 
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {

@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             {
                 _logger.LogEmisResponseIsForbidden();
                 _logger.LogEmisErrorResponse(endUserSessionResponse);
-                throw new EmisSessionResponseErrorException(new SessionCreateResult.SupplierSystemUnavailable());
+                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.SupplierSystemUnavailable());
             }
 
             return endUserSessionResponse.Body;
@@ -55,19 +55,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 {
                     _logger.LogEmisResponseIsForbidden();
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    throw new EmisSessionResponseErrorException(new SessionCreateResult.InvalidIm1ConnectionToken());
+                    throw new EmisSessionResponseErrorException(new GpSessionCreateResult.InvalidIm1ConnectionToken());
                 }
 
                 _logger.LogEmisUnknownError(sessionsResponse);
                 _logger.LogEmisErrorResponse(sessionsResponse);
-                throw new EmisSessionResponseErrorException(new SessionCreateResult.SupplierSystemUnavailable());
+                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.SupplierSystemUnavailable());
             }
 
             return sessionsResponse.Body;
         }
 
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber,
-            string accessToken)
+        public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
             try
             {
@@ -82,7 +81,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                     EndUserSessionId = endUserSessionResponse.EndUserSessionId,
                     NhsNumber = nhsNumber,
                     OdsCode = odsCode,
-                    AccessToken = accessToken,
                     AppointmentBookingReasonNecessity =  Necessity.Mandatory,
                     PrescriptionSpecialRequestNecessity = Necessity.Optional
                 };
@@ -112,7 +110,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 catch (HttpRequestException e)
                 {
                     _logger.LogError(e, "Failed request to create Emis user session,HttpRequestException has been thrown.");
-                    return new SessionCreateResult.SupplierSystemUnavailable();
+                    return new GpSessionCreateResult.SupplierSystemUnavailable();
                 }
                 
                 try
@@ -130,7 +128,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                     _logger.LogError(e, "Failed request to retrieve practice settings, HttpRequestException has been thrown.");
                 }
                 
-                return new SessionCreateResult.SuccessfullyCreated(patientName, session);
+                return new GpSessionCreateResult.SuccessfullyCreated(patientName, session);
             }
             catch (EmisSessionResponseErrorException responseError)
             {
@@ -141,7 +139,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Failed request to create Emis user session,HttpRequestException has been thrown.");
-                return new SessionCreateResult.SupplierSystemUnavailable();
+                return new GpSessionCreateResult.SupplierSystemUnavailable();
             }
             finally
             {

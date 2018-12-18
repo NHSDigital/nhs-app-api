@@ -28,9 +28,9 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
             _logger.LogEnter();
             var userSession = HttpContext.GetUserSession();
 
-            _logger.LogInformation("Fetching DemographicsService for supplier: {0}", userSession.Supplier.ToString());
+            _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier}");
             var demographicsService = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier)
+                .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetDemographicsService();
 
             _logger.LogDebug("Fetching Demographics");

@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
     {
         private TppPatientRecordService _systemUnderTest;
         private Mock<ITppClient> _tppClient;
-        private TppUserSession _userSession;
+        private UserSession _userSession;
         private IFixture _fixture;
         private Mock<IGetPatientDcrEventsTaskChecker> _patientDcrEventsChecker;
         private Mock<IGetPatientOverviewTaskChecker> _patientOverviewTaskChecker;
@@ -31,8 +31,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<TppUserSession>()));
+            
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
-            _userSession = _fixture.Freeze<TppUserSession>();
+            _userSession = _fixture.Create<UserSession>();
+            
             _patientDcrEventsChecker = _fixture.Freeze<Mock<IGetPatientDcrEventsTaskChecker>>();
             _patientOverviewTaskChecker = _fixture.Freeze<Mock<IGetPatientOverviewTaskChecker>>();
             _patientTestResultsChecker = _fixture.Freeze<Mock<IGetPatientTestResultsTaskChecker>>();

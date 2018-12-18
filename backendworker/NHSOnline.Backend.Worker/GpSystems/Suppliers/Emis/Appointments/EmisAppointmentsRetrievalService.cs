@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         }
 
         public async Task<AppointmentsResult> GetAppointments(
-            UserSession userSession, 
+            GpUserSession userSession, 
             bool includePastAppointments,
             DateTimeOffset? pastAppointmentsFromDate)
         {

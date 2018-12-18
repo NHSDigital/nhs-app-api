@@ -27,41 +27,37 @@ namespace NHSOnline.Backend.Worker.Areas.Session
     [Route("session"), PfsSecurityMode]
     public class SessionController : Controller
     {
-        private readonly ICitizenIdService _citizenIdService;
+        private readonly ICitizenIdSessionService _citizenIdSessionService;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly IOptions<ConfigurationSettings> _settings;
         private readonly ILogger<SessionController> _logger;
         private readonly IAuditor _auditor;
-        private readonly IAntiforgery _antiforgery;
-        private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly IIm1CacheService _im1CacheService;
-        private const string DateFormat = "yyyy-MM-dd";
+        private readonly ISessionMapper _sessionMapper;
 
         public SessionController(
-            ICitizenIdService citizenIdService,
+            ICitizenIdSessionService citizenIdSessionService,
             IGpSystemFactory gpSystemFactory,
             ISessionCacheService sessionCacheService,
             IOdsCodeLookup odsCodeLookup,
             IOptions<ConfigurationSettings> settings,
             ILogger<SessionController> logger,
             IAuditor auditor,
-            IAntiforgery antiforgery,
-            IMinimumAgeValidator minimumAgeValidator,
-            IIm1CacheService im1CacheService
+            IIm1CacheService im1CacheService,
+            ISessionMapper sessionMapper
         )
         {
-            _citizenIdService = citizenIdService;
+            _citizenIdSessionService = citizenIdSessionService;
             _gpSystemFactory = gpSystemFactory;
             _sessionCacheService = sessionCacheService;
             _odsCodeLookup = odsCodeLookup;
             _settings = settings;
             _logger = logger;
             _auditor = auditor;
-            _antiforgery = antiforgery;
-            _minimumAgeValidator = minimumAgeValidator;
             _im1CacheService = im1CacheService;
+            _sessionMapper = sessionMapper;
         }
 
         [HttpPost, AllowAnonymous]
@@ -72,38 +68,18 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 _logger.LogEnter();
 
                 // Call Citizen ID to get the User Profile (IM1 connection token, ODS code, Date of Birth, NHS Number).
-                var userProfileResult = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
-                var cidUserProfileOption = userProfileResult.UserProfile;
+                var citizenIdSessionResult = await _citizenIdSessionService.Create(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
 
-                if (!cidUserProfileOption.HasValue)
+                if (!citizenIdSessionResult.StatusCode.IsSuccessStatusCode())
                 {
-                    _logger.LogError("No CID profile was found for received authcode and code verifier");
-                    return new StatusCodeResult((int) userProfileResult.StatusCode);
-                }
-
-                var cidUserProfile = cidUserProfileOption.ValueOrFailure();
-
-                // Validate the Date of Birth meets expected format and minimum age requirements
-                var dateOfBirthParsed = ValidateAndParseDateOfBirth(cidUserProfile.DateOfBirth);
-                if (!dateOfBirthParsed.HasValue)
-                {
-                    return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
-                }
-                
-                // Validate the NHS number has been returned from CID.
-                var nhsNumberFormatted = cidUserProfile.NhsNumber.FormatToNhsNumber();
-                if (string.IsNullOrEmpty(nhsNumberFormatted))
-                {
-                    _logger.LogError($"No NHS number was found");
-                    return new StatusCodeResult(Constants.CustomHttpStatusCodes
-                        .Status464OdsCodeNotSupportedOrNoNhsNumber);
+                    return new StatusCodeResult(citizenIdSessionResult.StatusCode);
                 }
 
                 // Get a suitable GP system, based on the ODS code.
-                var gpSystemOption = await GetGpSystem(cidUserProfile.OdsCode);
+                var gpSystemOption = await GetGpSystem(citizenIdSessionResult.OdsCode);
                 if (!gpSystemOption.HasValue)
                 {
-                    _logger.LogError($"Failed to determine the GP system based on ODS code '{cidUserProfile.OdsCode}'");
+                    _logger.LogError($"Failed to determine the GP system based on ODS code '{citizenIdSessionResult.OdsCode}'");
                     return new StatusCodeResult(Constants.CustomHttpStatusCodes
                         .Status464OdsCodeNotSupportedOrNoNhsNumber);
                 }
@@ -113,39 +89,40 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
                 // Validate the format of the IM1 connection token for this GP system.
                 var tokenValidationService = gpSystem.GetTokenValidationService();
-                if (!tokenValidationService.IsValidConnectionTokenFormat(cidUserProfile.Im1ConnectionToken))
+                if (!tokenValidationService.IsValidConnectionTokenFormat(citizenIdSessionResult.Im1ConnectionToken))
                 {
                     _logger.LogError("Failed to validate Im1 connection");
                     return new StatusCodeResult(StatusCodes.Status403Forbidden);
                 }
 
                 // Create a session with the GP system, using the IM1 connection token.
-                var sessionCreatedResultVisited = await GetSessionCreateResultVisitorOutput(gpSystem, 
-                    cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode, nhsNumberFormatted,
-                    cidUserProfile.AccessToken);
-                if (!sessionCreatedResultVisited.SessionWasCreated)
+                var gpSessionCreatedResultVisited = await GetGpSessionCreateResultVisitorOutput(gpSystem, 
+                    citizenIdSessionResult.Im1ConnectionToken, citizenIdSessionResult.OdsCode, citizenIdSessionResult.NhsNumber);
+                if (!gpSessionCreatedResultVisited.SessionWasCreated)
                 {
                     _logger.LogError(
-                        $"Creating the session failed with status code: '{sessionCreatedResultVisited.StatusCode}'");
-                    return new StatusCodeResult(sessionCreatedResultVisited.StatusCode);
+                        $"Creating the session failed with status code: '{gpSessionCreatedResultVisited.StatusCode}'");
+                    return new StatusCodeResult(gpSessionCreatedResultVisited.StatusCode);
                 }
+                
+                var userSession = _sessionMapper.Map(HttpContext, gpSessionCreatedResultVisited.UserSession, citizenIdSessionResult.Session);
 
                 // Build and save session token in our redis session cache
-                var sessionFetchTask = FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
+                var sessionFetchTask = FetchSessionIdAndSaveInCookie(userSession);
 
                 // Delete connection token from cache
-                var tokenDeletionTask = DeleteConnectionTokenFromCache(cidUserProfile.Im1ConnectionToken);
+                var tokenDeletionTask = DeleteConnectionTokenFromCache(citizenIdSessionResult.Im1ConnectionToken);
 
                 await Task.WhenAll(sessionFetchTask, tokenDeletionTask);
 
                 // Audit that the user is logged on.
-                HttpContext.SetUserSession(sessionCreatedResultVisited.UserSession);
+                HttpContext.SetUserSession(userSession);
                 await _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, "Session successfully created.");
 
-                _logger.LogDebug($"Finished session post with status code {sessionCreatedResultVisited.StatusCode}");
+                _logger.LogDebug($"Finished session post with status code {gpSessionCreatedResultVisited.StatusCode}");
 
-                return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited, cidUserProfile.OdsCode,
-                    dateOfBirthParsed.Value, nhsNumberFormatted, cidUserProfile.AccessToken));
+                return await Task.FromResult(CreateCreatedResult(gpSessionCreatedResultVisited, userSession,
+                    citizenIdSessionResult.DateOfBirth));
             }
             finally
             {
@@ -163,6 +140,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
                 // Delete GP supplier session                
                 var userSession = HttpContext.GetUserSession();
+                var gpUserSession = userSession.GpUserSession;
 
                 try
                 {
@@ -176,7 +154,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 catch (Exception e)
                 {
                     _logger.LogError($"Deleting the GP supplier failed with error: {e.Message}");
-                    await _auditor.AuditWithExplicitNhsNumber(userSession.NhsNumber, userSession.Supplier,
+                    await _auditor.AuditWithExplicitNhsNumber(gpUserSession.NhsNumber, gpUserSession.Supplier,
                         Constants.AuditingTitles.SessionDeleteResponse, "Delete session failed");
 
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -191,7 +169,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Delete session failed with error: {e.Message}");
-                    await _auditor.AuditWithExplicitNhsNumber(userSession.NhsNumber, userSession.Supplier,
+                    await _auditor.AuditWithExplicitNhsNumber(gpUserSession.NhsNumber, gpUserSession.Supplier,
                         Constants.AuditingTitles.SessionDeleteResponse, "Delete session failed");
 
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -207,7 +185,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 _logger.LogDebug(
                     $"Session successfully deleted. Finished with status code: {StatusCodes.Status204NoContent}");
 
-                await _auditor.AuditWithExplicitNhsNumber(userSession.NhsNumber, userSession.Supplier,
+                await _auditor.AuditWithExplicitNhsNumber(gpUserSession.NhsNumber, gpUserSession.Supplier,
                     Constants.AuditingTitles.SessionDeleteResponse, "Session successfully deleted");
 
                 return new StatusCodeResult(StatusCodes.Status204NoContent);
@@ -218,31 +196,27 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             }
         }
 
-        private static CreatedResult CreateCreatedResult(SessionCreateResultVisitorOutput sessionCreatedResultVisited,
-            string odsCode, DateTime dateOfBirth, string nhsNumber, string accessToken)
+        private CreatedResult CreateCreatedResult(GpSessionCreateResultVisitorOutput sessionCreatedResultVisited,
+            UserSession userSession, DateTime dateOfBirth)
         {
             var responseBody = new UserSessionResponse
             {
                 Name = sessionCreatedResultVisited.Name,
-                SessionTimeout = sessionCreatedResultVisited.SessionTimeout,
-                Token = sessionCreatedResultVisited.UserSession.CsrfToken,
-                OdsCode = odsCode,
+                SessionTimeout = _settings.Value.DefaultSessionExpiryMinutes * 60,
+                Token = userSession.CsrfToken,
+                OdsCode = userSession.GpUserSession.OdsCode,
                 DateOfBirth = dateOfBirth,
-                NhsNumber = nhsNumber,
-                AccessToken = accessToken
+                NhsNumber = userSession.GpUserSession.NhsNumber,
+                AccessToken = userSession.CitizenIdUserSession.AccessToken
             };
 
             return new CreatedResult(string.Empty, responseBody);
         }
 
-        private async Task FetchSessionIdAndSaveInCookie(SessionCreateResultVisitorOutput sessionCreatedResultVisited)
+        private async Task FetchSessionIdAndSaveInCookie(UserSession userSession)
         {
-            // Generate CSRF token, to put into cache and return to browser
-            sessionCreatedResultVisited.UserSession.CsrfToken =
-                _antiforgery.GetTokens(HttpContext).RequestToken;
-
             // Build and save session token in our redis session cache
-            var sessionId = await _sessionCacheService.CreateUserSession(sessionCreatedResultVisited.UserSession);
+            var sessionId = await _sessionCacheService.CreateUserSession(userSession);
 
             _logger.LogDebug($"Fetched Session Id: '{sessionId}'");
 
@@ -250,20 +224,20 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             await AppendCookieToResponse(sessionId);
         }
 
-        private async Task<SessionCreateResultVisitorOutput> GetSessionCreateResultVisitorOutput(IGpSystem gpSystem,
-            string im1ConnectionToken, string odsCode, string nhsNumber, string accessToken)
+        private static async Task<GpSessionCreateResultVisitorOutput> GetGpSessionCreateResultVisitorOutput(IGpSystem gpSystem,
+            string im1ConnectionToken, string odsCode, string nhsNumber)
         {
             var sessionService = gpSystem.GetSessionService();
             var sessionCreateResult =
-                await sessionService.Create(im1ConnectionToken, odsCode, nhsNumber, accessToken);
+                await sessionService.Create(im1ConnectionToken, odsCode, nhsNumber);
 
-            return sessionCreateResult.Accept(new SessionCreateResultVisitor(_settings));
+            return sessionCreateResult.Accept(new GpSessionCreateResultVisitor());
         }
 
         private async Task<SessionLogoffResultVisitorOutput> GetSessionLogoffResultVisitorOutput(
             UserSession userSession)
         {
-            var sessionService = _gpSystemFactory.CreateGpSystem(userSession.Supplier).GetSessionService();
+            var sessionService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier).GetSessionService();
             var sessionLogoffResult = await sessionService.Logoff(userSession);
 
             return sessionLogoffResult.Accept(new SessionLogoffResultVisitor());
@@ -290,24 +264,6 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity)
             );
-        }
-
-        private DateTime? ValidateAndParseDateOfBirth(string dateOfBirth)
-        {
-            if (!DateTime.TryParseExact(dateOfBirth, DateFormat, CultureInfo.InvariantCulture,
-                DateTimeStyles.None, out var dateOfBirthParsed))
-            {
-                _logger.LogError("Missing or invalid date of birth");
-                return null;
-            }
-
-            if (!_minimumAgeValidator.IsValid(dateOfBirthParsed, _settings.Value.MinimumAppAge))
-            {
-                _logger.LogWarning("Failed to meet the minimum age requirement.");
-                return null;
-            }
-
-            return dateOfBirthParsed;
         }
 
         private async Task DeleteConnectionTokenFromCache(string im1ConnectionToken)

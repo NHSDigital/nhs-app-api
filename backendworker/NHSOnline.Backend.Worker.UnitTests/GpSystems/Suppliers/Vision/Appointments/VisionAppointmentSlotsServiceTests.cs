@@ -22,7 +22,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
     {
         private IFixture _fixture;
         private Mock<IVisionClient> _mockVisionClient;
-        private VisionUserSession _userSession;
+        private VisionUserSession _visionUserSession;
+        private UserSession _userSession;
         private VisionAppointmentSlotsService _systemUnderTest;
         private VisionResponse<AvailableAppointmentsResponse> _visionClientGetResponse;
         private AppointmentSlotsDateRange _dateRange;
@@ -32,8 +33,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _userSession = _fixture.Create<VisionUserSession>();
-            _userSession.IsAppointmentsEnabled = true;
+            
+            _visionUserSession = _fixture.Create<VisionUserSession>();
+            _visionUserSession.IsAppointmentsEnabled = true;
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _visionUserSession));
+            
+            _userSession = _fixture.Create<UserSession>();
+            
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<AvailableAppointmentsResponse>>();
             _dateRange = _fixture.Create<AppointmentSlotsDateRange>();
@@ -78,7 +86,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task GetSlots_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsCannotBookAppointments()
         {
             // Arrange
-            _userSession.IsAppointmentsEnabled = false;
+            _visionUserSession.IsAppointmentsEnabled = false;
             
             // Act
             var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
@@ -108,7 +116,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         {
             // Arrange
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
-                    _userSession,
+                    _visionUserSession,
                     _dateRange
                 ))
                 .Throws<HttpRequestException>()
@@ -125,7 +133,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task GetSlots_MapperThrows_ReturnsInternalServerError()
         {
             // Arrange
-            _mockAppointmentsMapper.Setup(x => x.Map(It.IsAny<AvailableAppointmentsResponse>(), _userSession))
+            _mockAppointmentsMapper.Setup(x => x.Map(It.IsAny<AvailableAppointmentsResponse>(), _visionUserSession))
                 .Throws<Exception>();
 
             // Act
@@ -139,7 +147,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response)
         {   
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
-                    _userSession,
+                    _visionUserSession,
                     _dateRange
                 ))
                 .ReturnsAsync(response);

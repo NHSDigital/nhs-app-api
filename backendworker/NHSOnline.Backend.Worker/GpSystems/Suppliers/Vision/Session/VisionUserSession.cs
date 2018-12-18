@@ -3,13 +3,11 @@ using NHSOnline.Backend.Worker.Areas.SharedModels;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 {
-    public class VisionUserSession : UserSession
+    public class VisionUserSession : GpUserSession
     {
         public override Supplier Supplier => Supplier.Vision;
 
         public string RosuAccountId { get; set; }
-
-        public string AccessToken { get; set; }
 
         public string PatientId { get; set; }
 

@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             {
                 _logger.LogEnter();
             
-                var visionUserSession = (VisionUserSession) userSession;
+                var visionUserSession = (VisionUserSession) userSession.GpUserSession;
 
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 var response = await _visionClient.GetExistingAppointments(
                     visionUserSession
                     );
-                return await InterpretAppointmentsGetResponse(response, visionUserSession);
+                return await InterpretAppointmentsGetResponse(response, userSession);
             }
             catch (HttpRequestException exception)
             {
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
 
         private async Task<AppointmentsResult> InterpretAppointmentsGetResponse(
             VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> response,
-            VisionUserSession userSession)
+            UserSession userSession)
         {
             if (response.IsAccessDeniedError)
             {
@@ -93,12 +93,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
         }
 
-        private async Task UpdateUserSessionBookingReasonNecessity(VisionUserSession userSession,
+        private async Task UpdateUserSessionBookingReasonNecessity(UserSession userSession,
             VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {
-            userSession.AppointmentBookingReasonNecessity = response.Body.Appointments.Settings.BookingReason.Add
+            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
+            visionUserSession.AppointmentBookingReasonNecessity = response.Body.Appointments.Settings.BookingReason.Add
                 ? Necessity.Optional
                 : Necessity.NotAllowed;
+
+            userSession.GpUserSession = visionUserSession;
             await _sessionCacheService.UpdateUserSession(userSession);
         }
     }

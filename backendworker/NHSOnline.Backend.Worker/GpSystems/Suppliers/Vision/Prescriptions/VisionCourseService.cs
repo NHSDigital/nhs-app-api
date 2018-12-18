@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
         public async Task<GetCoursesResult> GetCourses(UserSession userSession)
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession) userSession;
+            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
             
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {
@@ -79,7 +79,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                         var courseListResponse = _visionPrescriptionMapper.Map(coursesResponse.Body.EligibleRepeats);
 
                         visionUserSession.AllowFreeTextPrescriptions = coursesResponse.Body.EligibleRepeats.Settings.AllowFreeText;
-                        await _sessionCacheService.UpdateUserSession(visionUserSession);
+                        userSession.GpUserSession = visionUserSession;
+                        await _sessionCacheService.UpdateUserSession(userSession);
 
                         return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse);
                     }

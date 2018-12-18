@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var getPrescriptionsResult = new PrescriptionResult.SuccessfulGet(prescriptionRequestsGetResponse);
 
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetPrescriptionRequestValidationService())
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var result = await _systemUnderTest.Get(date);
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.GetPrescriptions(_userSession, date, It.IsAny<DateTimeOffset>()));
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var getPrescriptionsResult = new PrescriptionResult.SuccessfulGet(prescriptionRequestsGetResponse);
 
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetPrescriptionRequestValidationService())
@@ -189,7 +189,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var result = await _systemUnderTest.Get(null);
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.GetPrescriptions(_userSession, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()));
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
@@ -223,7 +223,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var postPrescriptionResult = new PrescriptionResult.SuccessfulPost();
 
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetPrescriptionRequestValidationService())
@@ -243,7 +243,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var result = await _systemUnderTest.Post(requestModel);
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.OrderPrescription(_userSession, It.IsAny<RepeatPrescriptionRequest>()));
             result.Should().BeAssignableTo<CreatedResult>();
@@ -273,7 +273,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var postPrescriptionResult = new PrescriptionResult.SuccessfulPost();
 
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetPrescriptionRequestValidationService())

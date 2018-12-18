@@ -43,9 +43,9 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             UserSession userSession = HttpContext.GetUserSession();
 
             var gpSystem = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier);
+                .CreateGpSystem(userSession.GpUserSession.Supplier);
 
-            _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
+            _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.GpUserSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
 
             if (!prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate))
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
                 fromDate = defaultFromDate;
             }
             
-            _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.Supplier}");
+            _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.GpUserSession.Supplier}");
             var prescriptionService = gpSystem.GetPrescriptionService();
 
             await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
@@ -73,13 +73,13 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             UserSession userSession = HttpContext.GetUserSession();
 
             var gpSystem = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier);
+                .CreateGpSystem(userSession.GpUserSession.Supplier);
 
             var courseIds = FormatCourseIds(repeatPrescriptionRequest.CourseIds);
             
             await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
             
-            _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
+            _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.GpUserSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
 
             if (!prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(repeatPrescriptionRequest))
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             }
             else
             {
-                _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.Supplier}");
+                _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.GpUserSession.Supplier}");
                 var prescriptionService = gpSystem.GetPrescriptionService();
 
                 _logger.LogInformation($"Calling prescription service to order prescriptions");

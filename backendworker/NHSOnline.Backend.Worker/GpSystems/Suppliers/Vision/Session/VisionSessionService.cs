@@ -20,8 +20,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             _logger = logger;
         }
 
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber,
-            string accessToken)
+        public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
             _logger.LogEnter();
             try
@@ -32,13 +31,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 
                 if (!response.HasErrorResponse)
                 {
-                    return new SessionCreateResult.SuccessfullyCreated(
+                    return new GpSessionCreateResult.SuccessfullyCreated(
                         response.Body.Configuration.Account.Name,
                         new VisionUserSession
                         {
                             RosuAccountId = visionConnectionToken.RosuAccountId,
                             OdsCode = odsCode,
-                            AccessToken = accessToken,
                             ApiKey = visionConnectionToken.ApiKey,
                             NhsNumber = nhsNumber,
                             PatientId = response.Body.Configuration.Account.PatientId,
@@ -54,7 +52,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             }
             catch (HttpRequestException)
             {
-                return new SessionCreateResult.SupplierSystemUnavailable();
+                return new GpSessionCreateResult.SupplierSystemUnavailable();
             }
             finally
             {
@@ -73,29 +71,29 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
         }
 
-        private static SessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
+        private static GpSessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {
-                return new SessionCreateResult.InvalidRequest();
+                return new GpSessionCreateResult.InvalidRequest();
             }
 
             if (response.IsInvalidUserCredentialsError)
             {
-                return new SessionCreateResult.InvalidUserCredentials();
+                return new GpSessionCreateResult.InvalidUserCredentials();
             }
 
             if (response.IsInvalidSecurityHeaderError)
             {
-                return new SessionCreateResult.ErrorProcessingSecurityHeader();
+                return new GpSessionCreateResult.ErrorProcessingSecurityHeader();
             }
 
             if (response.IsUnknownError)
             {
-                return new SessionCreateResult.UnknownError();
+                return new GpSessionCreateResult.UnknownError();
             }
 
-            return new SessionCreateResult.SupplierSystemUnavailable();
+            return new GpSessionCreateResult.SupplierSystemUnavailable();
         }
     }
 }

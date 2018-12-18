@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
 
         public async Task<GetDemographicsResult> GetDemographics(UserSession userSession)
         {
-            var tppUserSession = (TppUserSession) userSession;
+            var tppUserSession = (TppUserSession) userSession.GpUserSession;
 
             try
             {

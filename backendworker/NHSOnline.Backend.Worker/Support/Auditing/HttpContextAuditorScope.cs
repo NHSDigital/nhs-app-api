@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
 
             var userSession = _httpContext.GetUserSession();
 
-            var auditUserContext = new AuditUserContext(userSession.NhsNumber, userSession.Supplier);
+            var auditUserContext = new AuditUserContext(userSession.GpUserSession.NhsNumber, userSession.GpUserSession.Supplier);
 
             return auditUserContext;
         }

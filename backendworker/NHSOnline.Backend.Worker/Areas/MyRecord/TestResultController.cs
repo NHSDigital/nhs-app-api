@@ -28,9 +28,9 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             
             var userSession = HttpContext.GetUserSession();
             
-            _logger.LogInformation("Fetching PatientRecordService for supplier: {0}", userSession.Supplier.ToString());  
+            _logger.LogInformation($"Fetching PatientRecordService for supplier: {userSession.GpUserSession}");  
             var patientRecordService = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier)
+                .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetPatientRecordService();
 
             _logger.LogInformation("Fetching detailed test result");

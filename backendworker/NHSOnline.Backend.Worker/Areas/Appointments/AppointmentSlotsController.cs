@@ -45,8 +45,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 await _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
                 var userSession = HttpContext.GetUserSession();
-                _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{userSession.Supplier}'.");
-                var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.Supplier)
+                _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{userSession.GpUserSession.Supplier}'.");
+                var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier)
                     .GetAppointmentSlotsService();
 
                 var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider);

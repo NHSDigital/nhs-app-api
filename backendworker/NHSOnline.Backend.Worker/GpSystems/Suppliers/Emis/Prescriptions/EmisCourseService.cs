@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
         public async Task<GetCoursesResult> GetCourses(UserSession userSession)
         {
-            var emisUserSession = (EmisUserSession) userSession;
+            var emisUserSession = (EmisUserSession) userSession.GpUserSession;
             
             try
             {

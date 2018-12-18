@@ -24,8 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             _sessionMapper = sessionMapper;
         }
 
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber,
-            string accessToken)
+        public async Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
             try
             {
@@ -46,25 +45,25 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                 if (!reply.HasSuccessResponse)
                 {
                     _logger.LogError("Failed to authenticate user for TPP");
-                    return new SessionCreateResult.SupplierSystemUnavailable();
+                    return new GpSessionCreateResult.SupplierSystemUnavailable();
                 }
                 
-                var userSession = _sessionMapper.Map(reply, odsCode, accessToken, nhsNumber);
+                var userSession = _sessionMapper.Map(reply, odsCode, nhsNumber);
                 if (!userSession.HasValue)
                 {
                     _logger.LogError("Cannot create a valid session from Tpp response");
-                    return new SessionCreateResult.SupplierSystemBadResponse();
+                    return new GpSessionCreateResult.SupplierSystemBadResponse();
                 }
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
-                return new SessionCreateResult.SuccessfullyCreated(
+                return new GpSessionCreateResult.SuccessfullyCreated(
                     reply.Body.User?.Person?.PersonName?.Name,
                     userSession.ValueOrFailure());
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Failed request to create TPP user session, HttpRequestException has been thrown.");
-                return new SessionCreateResult.SupplierSystemUnavailable();
+                return new GpSessionCreateResult.SupplierSystemUnavailable();
             }
             finally
             {
@@ -78,7 +77,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogEnter();
             
-                var tppUserSession = (TppUserSession) userSession;
+                var tppUserSession = (TppUserSession) userSession.GpUserSession;
                 var logoffReply = await _client.LogoffPost(tppUserSession);
 
                 if (logoffReply.NotAuthenticated)

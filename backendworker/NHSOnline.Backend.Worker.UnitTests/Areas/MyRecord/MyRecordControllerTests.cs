@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             var getAllergiesResponse = new GetMyRecordResult.SuccessfullyRetrieved(allergyRequestResponse);
             
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetPatientRecordService())
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             var result = await _systemUnderTest.GetMyRecord();
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             var getMedicationsResponse = new GetMyRecordResult.SuccessfullyRetrieved(medicationRequestResponse);
             
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetPatientRecordService())
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             var result = await _systemUnderTest.GetMyRecord();
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             var getProblemsRequestResponse = new GetMyRecordResult.SuccessfullyRetrieved(problemRequestResponse);
             
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetPatientRecordService())
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             var result = await _systemUnderTest.GetMyRecord();
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;

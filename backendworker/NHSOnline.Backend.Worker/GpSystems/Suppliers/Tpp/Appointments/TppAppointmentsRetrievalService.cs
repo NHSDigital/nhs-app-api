@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _appointmentResultBuilder = appointmentResultBuilder;
         }
 
-        public async Task<AppointmentsResult> GetAppointments(UserSession userSession)
+        public async Task<AppointmentsResult> GetAppointments(GpUserSession userSession)
         {
             try
             {

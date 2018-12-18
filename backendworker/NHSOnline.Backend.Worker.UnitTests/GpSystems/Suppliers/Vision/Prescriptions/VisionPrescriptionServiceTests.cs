@@ -28,7 +28,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         private Mock<IVisionClient> _visionClient;
         private Mock<IVisionPrescriptionMapper> _visionPrescriptionMapper;
         private IOptions<ConfigurationSettings> _options;
-        private VisionUserSession _userSession;
+        private VisionUserSession _visionUserSession;
+        private UserSession _userSession;
         private IFixture _fixture;
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
 
@@ -36,12 +37,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _visionUserSession = _fixture.Create<VisionUserSession>();
+            _visionUserSession.IsRepeatPrescriptionsEnabled = true;
+            _visionUserSession.AllowFreeTextPrescriptions = true;
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _visionUserSession));
+            
+            _userSession = _fixture.Create<UserSession>();
 
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionPrescriptionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
-            _userSession = _fixture.Freeze<VisionUserSession>();
-            _userSession.IsRepeatPrescriptionsEnabled = true;
-            _userSession.AllowFreeTextPrescriptions = true;
+            
             _options = Options.Create(new ConfigurationSettings
             {
                 PrescriptionsMaxCoursesSoftLimit = PrescriptionsMaxCoursesSoftLimit
@@ -54,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task Get_ReturnsSupplierNotEnabled_WhenRepeatPrescriptionsIsDisabledInUserSession()
         {
             // Arrange
-            _userSession.IsRepeatPrescriptionsEnabled = false;
+            _visionUserSession.IsRepeatPrescriptionsEnabled = false;
 
             // Act
             var result = await _systemUnderTest.GetPrescriptions(_userSession, null, null);
@@ -78,18 +86,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                         {
                             PrescriptionHistory = new PrescriptionHistory
                             {
-                                Requests = new List<Request>
-                                {
-                                    _fixture.Create<Request>(),
-                                    _fixture.Create<Request>(),
-                                }
+                                Requests = new List<Request>(_fixture.CreateMany<Request>())
                             }
                         }
                     }
                 }
             };
             
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
@@ -108,7 +112,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             var result = await _systemUnderTest.GetPrescriptions(_userSession, null, null);
 
             // Assert
-            _visionClient.Verify(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))));
+            _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
             ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
         }
@@ -134,7 +138,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 }
             };
 
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
@@ -159,7 +163,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             var result = await _systemUnderTest.GetPrescriptions(_userSession, null, null);
 
             // Assert
-            _visionClient.Verify(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))));
+            _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
             var successfulGet = (PrescriptionResult.SuccessfulGet)result;
             successfulGet.Response.Should().NotBeNull();
@@ -210,7 +214,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 },
             };
 
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
@@ -231,7 +235,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             var result = await _systemUnderTest.GetPrescriptions(_userSession, null, null);
 
             // Assert
-            _visionClient.Verify(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))));
+            _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
             ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
 
@@ -302,7 +306,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 }
             };
 
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
@@ -323,7 +327,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             var result = await _systemUnderTest.GetPrescriptions(_userSession, fromDateOneWeekAgo, toDateToday);
 
             // Assert
-            _visionClient.Verify(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))));
+            _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
             ((PrescriptionResult.SuccessfulGet)result).Response.Should().NotBeNull();
 
@@ -372,7 +376,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 },
             };
 
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.OK)
                     {
@@ -393,7 +397,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             var result = await _systemUnderTest.GetPrescriptions(_userSession, null, null);
 
             // Assert
-            _visionClient.Verify(x => x.GetHistoricPrescriptions(_userSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))));
+            _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
             result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
             ((PrescriptionResult.SuccessfulGet)result).Response.Should().NotBeNull();
 
@@ -407,8 +411,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task Get_ReturnsSupplierSystemUnavilable_WhenHttpStatusCodeIndicatesErrorFromVision()
         {
             // Arrange
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, 
-                    It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId,_userSession.PatientId,StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_visionUserSession, 
+                    It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId,_visionUserSession.PatientId,StringComparison.Ordinal))))
                .Returns(Task.FromResult(
                    new VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>(HttpStatusCode.InternalServerError)));
             
@@ -423,8 +427,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingVision()
         {
             // Arrange
-            _visionClient.Setup(x => x.GetHistoricPrescriptions(_userSession, 
-                    It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _userSession.PatientId, StringComparison.Ordinal))))
+            _visionClient.Setup(x => x.GetHistoricPrescriptions(_visionUserSession, 
+                    It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -463,7 +467,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             OrderNewPrescriptionRequest capturedRequest = null;
 
             _visionClient.Setup(x => x.OrderNewPrescription(
-                _userSession,
+                _visionUserSession,
                 It.IsAny<OrderNewPrescriptionRequest>()))
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
@@ -480,11 +484,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             {
                 Repeats = request.CourseIds.Select(x => new NewPrescriptionRepeat { Id = x }).ToList(),
                 Message = request.SpecialRequest,
-                PatientId = _userSession.PatientId,
+                PatientId = _visionUserSession.PatientId,
             };
 
             capturedRequest.Should().BeEquivalentTo(expectedRequest);
-            _visionClient.Verify(x => x.OrderNewPrescription(_userSession, capturedRequest));
+            _visionClient.Verify(x => x.OrderNewPrescription(_visionUserSession, capturedRequest));
             result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
             ((PrescriptionResult.SuccessfulPost)result).Should().NotBeNull();
         }
@@ -493,7 +497,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task OrderPrescription_ReturnsSupplierNotEnabled_WhenRepeatPrescriptionsIsDisabledInUserSession()
         {
             // Arrange
-            _userSession.IsRepeatPrescriptionsEnabled = false;
+            _visionUserSession.IsRepeatPrescriptionsEnabled = false;
 
             var request = new RepeatPrescriptionRequest
             {
@@ -513,7 +517,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task OrderPrescription_ReturnsBadRequest_WhenRepeatPrescriptionsIsDisabledInUserSession()
         {
             // Arrange
-            _userSession.AllowFreeTextPrescriptions = false;
+            _visionUserSession.AllowFreeTextPrescriptions = false;
 
             var request = new RepeatPrescriptionRequest
             {
@@ -533,7 +537,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task OrderPrescription_AllowsPrescriptionToBeSubmittedWithNullSpecialRequestText_WhenSpecialRequestTextIsDisabledInUserSession()
         {
             // Arrange
-            _userSession.AllowFreeTextPrescriptions = false;
+            _visionUserSession.AllowFreeTextPrescriptions = false;
 
             var orderPrescriptionResponse = new VisionResponseEnvelope<OrderNewPrescriptionResponse>
             {
@@ -559,7 +563,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             OrderNewPrescriptionRequest capturedRequest = null;
 
             _visionClient.Setup(x => x.OrderNewPrescription(
-                _userSession,
+                _visionUserSession,
                 It.IsAny<OrderNewPrescriptionRequest>()))
                 .Returns(Task.FromResult(
                     new VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
@@ -576,11 +580,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             {
                 Repeats = request.CourseIds.Select(x => new NewPrescriptionRepeat { Id = x }).ToList(),
                 Message = request.SpecialRequest,
-                PatientId = _userSession.PatientId,
+                PatientId = _visionUserSession.PatientId,
             };
 
             capturedRequest.Should().BeEquivalentTo(expectedRequest);
-            _visionClient.Verify(x => x.OrderNewPrescription(_userSession, capturedRequest));
+            _visionClient.Verify(x => x.OrderNewPrescription(_visionUserSession, capturedRequest));
             result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
             ((PrescriptionResult.SuccessfulPost)result).Should().NotBeNull();
         }
@@ -589,7 +593,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task OrderPrescription_ReturnsSupplierSystemUnavilable_WhenHttpStatusCodeIndicatesErrorFromVision()
         {
             // Arrange
-            _visionClient.Setup(x => x.OrderNewPrescription(_userSession, It.IsAny<OrderNewPrescriptionRequest>()))
+            _visionClient.Setup(x => x.OrderNewPrescription(_visionUserSession, It.IsAny<OrderNewPrescriptionRequest>()))
                .Returns(Task.FromResult(
                    new VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.InternalServerError)));
 
@@ -620,7 +624,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 },
             };
 
-            _visionClient.Setup(x => x.OrderNewPrescription(_userSession, It.IsAny<OrderNewPrescriptionRequest>()))
+            _visionClient.Setup(x => x.OrderNewPrescription(_visionUserSession, It.IsAny<OrderNewPrescriptionRequest>()))
                .Returns(Task.FromResult(
                    new VisionPFSClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
                    {
@@ -640,7 +644,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public async Task OrderPrescription_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingVision()
         {
             // Arrange
-            _visionClient.Setup(x => x.OrderNewPrescription(_userSession, It.IsAny<OrderNewPrescriptionRequest>())).Throws<HttpRequestException>()
+            _visionClient.Setup(x => x.OrderNewPrescription(_visionUserSession, It.IsAny<OrderNewPrescriptionRequest>())).Throws<HttpRequestException>()
                 .Verifiable();
 
             var request = _fixture.Create<RepeatPrescriptionRequest>();

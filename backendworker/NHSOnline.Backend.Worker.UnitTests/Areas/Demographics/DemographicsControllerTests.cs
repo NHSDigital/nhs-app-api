@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             var getDemographicsResult = new GetDemographicsResult.SuccessfullyRetrieved(demographicsResponse);
 
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetDemographicsService())
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetDemographicsService());
             demographicsService.Verify(x => x.GetDemographics(_userSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             var response = new GetDemographicsResult.UserHasNoAccess();
 
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
             mockGpSystem.Setup(x => x.GetDemographicsService())

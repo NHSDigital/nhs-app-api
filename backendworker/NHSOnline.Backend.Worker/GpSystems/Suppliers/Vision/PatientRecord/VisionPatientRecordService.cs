@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession)userSession;
+            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
 
             try
             {
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                     var checkedProblems = new VisionTaskChecker<Problems>(_logger, new VisionProblemsMapper(_logger), VisionMapperType.Problems).Check(problemsTask);
                     
                     var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems);
-                    response.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                    response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     
                     return new GetMyRecordResult.SuccessfullyRetrieved(response);
                 }
@@ -73,26 +73,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             }
         }
 
-        private PatientDataRequest CreatePatientDataRequest(VisionUserSession visionUserSession, string responseFormat, string visionView)
-       {
-           return new PatientDataRequest
-           {
-               PracticeIdentifier = visionUserSession.OdsCode,
-               PatientIdentifier = visionUserSession.PatientId,
-               Sender = new Sender
-               {
-                   Name = new SenderName
-                   {
-                       UserName = _config.VisionSenderUserName,
-                       UserFullName = _config.VisionSenderUserFullName,
-                       UserIdentity = _config.VisionSenderUserIdentity,
-                       UserRole = _config.VisionSenderUserRole
-                   }
-               },
-               ResponseFormat = responseFormat,
-               View = visionView,
-           };
-       }
+        private PatientDataRequest CreatePatientDataRequest(VisionUserSession visionUserSession, string responseFormat,
+            string visionView)
+        {
+            return new PatientDataRequest
+            {
+                PracticeIdentifier = visionUserSession.OdsCode,
+                PatientIdentifier = visionUserSession.PatientId,
+                Sender = new Sender
+                {
+                    Name = new SenderName
+                    {
+                        UserName = _config.VisionSenderUserName,
+                        UserFullName = _config.VisionSenderUserFullName,
+                        UserIdentity = _config.VisionSenderUserIdentity,
+                        UserRole = _config.VisionSenderUserRole
+                    }
+                },
+                ResponseFormat = responseFormat,
+                View = visionView,
+            };
+        }
 
         public Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
         {

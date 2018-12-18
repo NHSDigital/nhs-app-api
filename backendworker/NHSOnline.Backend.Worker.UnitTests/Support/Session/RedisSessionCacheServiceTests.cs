@@ -26,12 +26,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Session
         private Mock<IConnectionMultiplexerFactory> _connectionMultiplexerFactory;
         private int _defaultSessionExpiryMinutes;
         private ILogger<RedisSessionCacheService> _logger;
+        private UserSession _userSession;
         
         [TestInitialize]
         public void TestInitializeInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+
+            _userSession = _fixture.Create<UserSession>();
 
             _defaultSessionExpiryMinutes = _fixture.Create<int>();
             _settings = new Mock<IOptions<ConfigurationSettings>>();
@@ -57,8 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Session
         public async Task CreateUserSession_UserSessionIsStoredInRedis()
         {
             // Arrange
-            var userSession = _fixture.Create<EmisUserSession>();
-            RedisValue userSessionJson = JsonConvert.SerializeObject(userSession);
+            RedisValue userSessionJson = JsonConvert.SerializeObject(_userSession);
             
             string redisSessionKey = null;
             string redisValue = null;
@@ -85,7 +90,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Session
             var systemUnderTest = new RedisSessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
             
             // Act
-            var result = await systemUnderTest.CreateUserSession(userSession);
+            var result = await systemUnderTest.CreateUserSession(_userSession);
             
             // Assert
             _database.Verify();
@@ -123,8 +128,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Session
         public async Task UpdateUserSession_UserSessionIsStoredInRedis()
         {
             // Arrange
-            var userSession = _fixture.Create<EmisUserSession>();
-            RedisValue userSessionJson = JsonConvert.SerializeObject(userSession);
+            RedisValue userSessionJson = JsonConvert.SerializeObject(_userSession);
             const string encryptedOutput = "encrypted_string";
 
             string redisSessionKey = null;
@@ -135,7 +139,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Session
             _database
                 .Setup(x =>
                     x.StringSetAsync(
-                        userSession.Key,
+                        _userSession.Key,
                         "encrypted_string",
                         TimeSpan.FromMinutes(_defaultSessionExpiryMinutes),
                         When.Always,
@@ -151,7 +155,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Session
             var systemUnderTest = new RedisSessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
 
             // Act
-            await systemUnderTest.UpdateUserSession(userSession);
+            await systemUnderTest.UpdateUserSession(_userSession);
 
             // Assert
             _database.Verify();

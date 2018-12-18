@@ -111,10 +111,10 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
         private IAppointmentsService GetAppointmentsService(UserSession userSession)
         {
-            _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.Supplier}'.");
+            _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.GpUserSession.Supplier}'.");
 
             return _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier)
+                .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetAppointmentsService();
         }
     }

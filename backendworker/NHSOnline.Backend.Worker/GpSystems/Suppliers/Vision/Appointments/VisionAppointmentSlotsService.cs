@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             {
                 _logger.LogEnter();
             
-                var visionUserSession = (VisionUserSession)userSession;
+                var visionUserSession = (VisionUserSession) userSession.GpUserSession;
                 
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {

@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
         public async Task<PrescriptionResult> GetPrescriptions(UserSession userSession, DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
-            var emisUserSession = (EmisUserSession)userSession;
+            var emisUserSession = (EmisUserSession) userSession.GpUserSession;
 
             try
             {
@@ -148,7 +148,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
         public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            var emisUserSession = (EmisUserSession)userSession;
+            var emisUserSession = (EmisUserSession) userSession.GpUserSession;
 
             var postRequest = new PrescriptionRequestsPost
             {

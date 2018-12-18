@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession) userSession;
+            var emisUserSession = (EmisUserSession) userSession.GpUserSession;
 
             try
             {

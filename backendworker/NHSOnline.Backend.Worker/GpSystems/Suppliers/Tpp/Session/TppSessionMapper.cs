@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
     public interface ITppSessionMapper
     {
         Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse,
-            string odsCode, string accessToken, string nhsNumber);
+            string odsCode, string nhsNumber);
     }
     
     public class TppSessionMapper : ITppSessionMapper
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             _logger = logger;
         }
         
-        public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string accessToken, string nhsNumber)
+        public Option<TppUserSession> Map(TppApiObjectResponse<AuthenticateReply> authenticateResponse, string odsCode, string nhsNumber)
         {
             if (!IsResponseValid(authenticateResponse))
             {
@@ -38,7 +38,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                 OnlineUserId = authenticateResponse.Body.OnlineUserId,
                 PatientId = authenticateResponse.Body.PatientId,
                 OdsCode = odsCode,
-                AccessToken = accessToken,
                 NhsNumber = nhsNumber
             });
         }

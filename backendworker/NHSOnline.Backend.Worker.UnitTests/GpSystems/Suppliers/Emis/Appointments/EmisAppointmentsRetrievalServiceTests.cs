@@ -21,7 +21,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
     {
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
-        private EmisUserSession _userSession;
+        private UserSession _userSession;
+        private EmisUserSession _emisUserSession;
         private EmisAppointmentsService _systemUnderTest;
         private AppointmentsGetResponse _emisClientGetResponse;
         private Mock<IAppointmentsResponseMapper> _mockResponseMapper;
@@ -31,7 +32,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _userSession = _fixture.Create<EmisUserSession>();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+            
+            _userSession = _fixture.Create<UserSession>();
+            _emisUserSession = (EmisUserSession) _userSession.GpUserSession;
 
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisClientGetResponse = _fixture.Create<AppointmentsGetResponse>();
@@ -72,9 +78,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             // Arrange
             _mockEmisClient.Setup(x => x.AppointmentsGet(
                     It.Is<EmisHeaderParameters>(p =>
-                        p.EndUserSessionId.Equals(_userSession.EndUserSessionId, StringComparison.Ordinal)
-                        && p.SessionId.Equals(_userSession.SessionId, StringComparison.Ordinal)),
-                    _userSession.UserPatientLinkToken,
+                        p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
+                        && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
+                    _emisUserSession.UserPatientLinkToken,
                     It.IsAny<bool>(),
                     It.IsAny<DateTimeOffset?>()))
                 .Throws<HttpRequestException>()
@@ -182,9 +188,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             _mockEmisClient.Setup(x => x.AppointmentsGet(
                     It.Is<EmisHeaderParameters>(p =>
-                        p.EndUserSessionId.Equals(_userSession.EndUserSessionId, StringComparison.Ordinal)
-                        && p.SessionId.Equals(_userSession.SessionId, StringComparison.Ordinal)),
-                    _userSession.UserPatientLinkToken,
+                        p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
+                        && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
+                    _emisUserSession.UserPatientLinkToken,
                     It.IsAny<bool>(),
                     It.IsAny<DateTimeOffset?>()))
                 .ReturnsAsync(response);

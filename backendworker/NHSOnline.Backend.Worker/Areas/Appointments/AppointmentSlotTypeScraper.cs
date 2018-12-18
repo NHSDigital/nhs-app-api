@@ -29,8 +29,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             var slotTypes = successfulResult.Response.Slots.Select(x => x.Type).Distinct().ToArray();
             var appointmentSlotsInformation = new AppointmentSlotTypesDetails
             {
-                OdsCode = userSession.OdsCode,
-                Supplier = userSession.Supplier.ToString(),
+                OdsCode = userSession.GpUserSession.OdsCode,
+                Supplier = userSession.GpUserSession.Supplier.ToString(),
                 SlotTypes = slotTypes
             };
             _logger.LogInformation("slot_type_data=" + appointmentSlotsInformation.SerializeJson());

@@ -32,8 +32,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             _termsAndConditionsService = _fixture.Freeze<Mock<ITermsAndConditionsService>>();
             
             _userSession = _fixture.Create<UserSession>();
-            _userSession.NhsNumber = _fixture.Create<string>();
-            _userSession.OdsCode = _fixture.Create<string>();
+            _userSession.GpUserSession.NhsNumber = _fixture.Create<string>();
+            _userSession.GpUserSession.OdsCode = _fixture.Create<string>();
             var httpContextItems = new Dictionary<object, object>
             {
                 { Constants.HttpContextItems.UserSession, _userSession }
@@ -57,14 +57,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             var response = new TermsAndConditionsRecordConsentResult.InitialConsentRecorded();
 
             _termsAndConditionsService.Setup(x => x.RecordConsent(
-                _userSession.NhsNumber, _userSession.OdsCode, request,
+                _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
                 It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
             
             // Act
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, _userSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.InitialConsentRecorded>();
         }
@@ -79,14 +79,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             var response = new TermsAndConditionsRecordConsentResult.UpdateConsentRecorded();
 
             _termsAndConditionsService.Setup(x => x.RecordConsent(
-                _userSession.NhsNumber, _userSession.OdsCode, request,
+                _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
                 It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
 
             // Act
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, _userSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.UpdateConsentRecorded>();
         }
@@ -98,14 +98,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             var request = _fixture.Create<ConsentRequest>();
             var response = new TermsAndConditionsRecordConsentResult.FailureToRecordConsent();
             _termsAndConditionsService.Setup(x => x.RecordConsent(
-                _userSession.NhsNumber, _userSession.OdsCode, request,
+                _userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request,
                 It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((TermsAndConditionsRecordConsentResult)response)).Verifiable();
             
             // Act
             var result = await _systemUnderTest.Post(request);
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, _userSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
+            _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.GpUserSession.NhsNumber, _userSession.GpUserSession.OdsCode, request, It.IsAny<DateTimeOffset>()));
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status462FailedToRecordConsent);
         }
@@ -116,13 +116,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             // Arrange
             var consentRecord = _fixture.Create<ConsentResponse>();
             var response = new TermsAndConditionsFetchConsentResult.Success(consentRecord);
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
             
             // Act
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
+            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             var value = okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsFetchConsentResult.Success>()
                 .Subject;
@@ -136,13 +136,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var response = new TermsAndConditionsFetchConsentResult.NoConsentFound(new ConsentResponse());
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
             
             // Act
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
+            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             var value = okObjectResult.Value.Should()
                 .BeAssignableTo<TermsAndConditionsFetchConsentResult.NoConsentFound>().Subject;
@@ -156,13 +156,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
         {
             // Arrange
             var response = new TermsAndConditionsFetchConsentResult.FailureToFetchConsent();
-            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
             
             // Act
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
+            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.GpUserSession.NhsNumber));
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status463FailedToFetchConsent);
         }

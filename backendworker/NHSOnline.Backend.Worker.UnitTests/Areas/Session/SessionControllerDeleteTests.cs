@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private SessionController _systemUnderTest;
-        private UserSession _tppUserSession;
+        private UserSession _userSession;
         private Mock<HttpContext> _httpContextMock;
 
         private const string DeleteRequestAuditType = "Session_Delete_Request";
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _tppUserSession = _fixture.Create<TppUserSession>();
+            _userSession = _fixture.Create<UserSession>();
             _mockSessionService = _fixture.Freeze<Mock<ISessionService>>();
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
@@ -65,11 +65,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Returns(authenticationServiceMock.Object);
 
             _httpContextMock = new Mock<HttpContext>();
-            _httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_tppUserSession);
+            _httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
             _httpContextMock.SetupGet(h => h.RequestServices).Returns(serviceProviderMock.Object);
 
             _mockGpSystemFactory
-                .Setup(x => x.CreateGpSystem(_tppUserSession.Supplier))
+                .Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(_mockGpSystem.Object);
 
             _mockGpSystem
@@ -113,10 +113,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         public async Task Delete_DeletingSessionSucceeds_Returns204NoContent()
         {
             // Arrange            
-            var sessionLogoffResult = new SessionLogoffResult.SuccessfullyDeleted(_tppUserSession);
+            var sessionLogoffResult = new SessionLogoffResult.SuccessfullyDeleted(_userSession);
 
             _mockSessionService
-                .Setup(x => x.Logoff(_tppUserSession))
+                .Setup(x => x.Logoff(_userSession))
                 .ReturnsAsync(sessionLogoffResult)
                 .Verifiable();
 
@@ -127,8 +127,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockSessionService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
-            _mockSessionService.Verify(x => x.Logoff(_tppUserSession));
-            _mockSessionCacheService.Verify(x => x.DeleteUserSession(_tppUserSession.Key));
+            _mockSessionService.Verify(x => x.Logoff(_userSession));
+            _mockSessionCacheService.Verify(x => x.DeleteUserSession(_userSession.Key));
             _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), DeleteResponseAuditType, It.IsAny<string>()));
         }
@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var sessionLogoffResult = new SessionLogoffResult.SupplierSystemUnavailable();
 
             _mockSessionService
-                .Setup(x => x.Logoff(_tppUserSession))
+                .Setup(x => x.Logoff(_userSession))
                 .ReturnsAsync(sessionLogoffResult)
                 .Verifiable();
 
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockSessionService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
-            _mockSessionService.Verify(x => x.Logoff(_tppUserSession));
+            _mockSessionService.Verify(x => x.Logoff(_userSession));
             _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), DeleteResponseAuditType, It.IsAny<string>()));
         }

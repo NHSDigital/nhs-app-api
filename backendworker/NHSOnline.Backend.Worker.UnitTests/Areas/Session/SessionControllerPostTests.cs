@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
     {
         private SessionController _systemUnderTest;
         private IFixture _fixture;
-        private Mock<ICitizenIdService> _mockCitizenIdService;
+        private Mock<ICitizenIdSessionService> _mockCitizenIdSessionService;
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IOdsCodeLookup> _mockOdsCodeLookup;
         private Mock<ISessionCacheService> _mockSessionCacheService;
@@ -44,20 +44,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAuthenticationService> _authenticationServiceMock;
         private Mock<IOptions<ConfigurationSettings>> _configurationSettings;
-        private Mock<IAntiforgery> _mockAntiforgery;
         private Mock<IAuditor> _mockAuditor;
-        private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
         private Mock<IIm1CacheService> _mockIm1CacheService;
+        private Mock<ISessionMapper> _mockSessionMapper;
+        
         private const string DateFormat = "yyyy-MM-dd";
 
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
+        private EmisUserSession _emisUserSession;
+        private CitizenIdUserSession _citizenIdUserSession;
+        private UserSession _userSession;
         private EmisConnectionToken _connectionToken;
         private string _apiSessionId;
         private string _name;
         private int _sessionTimeoutMinutes;
         private int _sessionTimeoutSeconds;
-        private SessionCreateResult _sessionCreateResult;
+        private GpSessionCreateResult _sessionCreateResult;
         private const string CsrfRequestToken = "dskhfakserhhvjcgbfdsh";
         private const int MinimumAppAge = 13;
 
@@ -88,17 +91,34 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _apiSessionId = _fixture.Create<string>();
 
-            _sessionCreateResult =
-                new SessionCreateResult.SuccessfullyCreated(_name, new EmisUserSession());
+            _emisUserSession = _fixture.Create<EmisUserSession>();
+            _emisUserSession.OdsCode = _userProfile.OdsCode;
+            _emisUserSession.NhsNumber = _userProfile.NhsNumber;
 
-            _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
-            _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
-                .Returns(Task.FromResult(new GetUserProfileResult
+            _sessionCreateResult =
+                new GpSessionCreateResult.SuccessfullyCreated(_name, _emisUserSession);
+
+            _citizenIdUserSession = new CitizenIdUserSession { AccessToken = _userProfile.AccessToken };
+
+            _mockCitizenIdSessionService = _fixture.Freeze<Mock<ICitizenIdSessionService>>();
+            _mockCitizenIdSessionService
+                .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
+                .Returns(Task.FromResult(new CitizenIdSessionResult
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    UserProfile = Option.Some(_userProfile)
+                    StatusCode = (int)HttpStatusCode.OK,
+                    DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat, CultureInfo.InvariantCulture),
+                    Im1ConnectionToken = _userProfile.Im1ConnectionToken,
+                    NhsNumber = _userProfile.NhsNumber,
+                    OdsCode = _userProfile.OdsCode,
+                    Session = _citizenIdUserSession
                 }));
+
+            _userSession = new UserSession
+            {
+                CsrfToken = CsrfRequestToken,
+                GpUserSession = _emisUserSession,
+                CitizenIdUserSession = _citizenIdUserSession
+            };
 
             _mockOdsCodeLookup = _fixture.Freeze<Mock<IOdsCodeLookup>>();
             _mockOdsCodeLookup
@@ -107,8 +127,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _mockSessionService = _fixture.Freeze<Mock<ISessionService>>();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber,
-                    _userProfile.AccessToken))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
                 .Returns(Task.FromResult(_sessionCreateResult));
 
             _mockTokenValidationService = _fixture.Freeze<Mock<ITokenValidationService>>();
@@ -144,18 +163,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var httpContextMock = new Mock<HttpContext>();
             var responseMock = new Mock<HttpResponse>();
 
-
-            _mockAntiforgery = _fixture.Freeze<Mock<IAntiforgery>>();
-            _mockAntiforgery.Setup(x => x.GetTokens(httpContextMock.Object)).Returns(new AntiforgeryTokenSet(CsrfRequestToken, "", "", ""));
-
-            _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
-            _mockMinimumAgeValidator
-                .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>()))
-                .Returns(true);
-
             _mockIm1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(_connectionToken.Im1CacheKey))
                 .Returns(Task.FromResult(true)).Verifiable();
+
+            _mockSessionMapper = _fixture.Freeze<Mock<ISessionMapper>>();
+            _mockSessionMapper.Setup(x => x.Map(It.IsAny<HttpContext>(),
+                    _emisUserSession, _citizenIdUserSession))
+                .Returns(_userSession);
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IAuthenticationService)))
@@ -179,13 +194,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         public async Task Post_CIDUserProfileCallFails_ReturnsBadRequest()
         {
             // Arrange
-            _mockCitizenIdService
+            _mockCitizenIdSessionService
                 .Setup(x =>
-                    x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
-                .Returns(Task.FromResult(new GetUserProfileResult
+                    x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
+                .Returns(Task.FromResult(new CitizenIdSessionResult()
                 {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    UserProfile = Option.None<UserProfile>()
+                    StatusCode = (int) HttpStatusCode.BadRequest
                 }))
                 .Verifiable();
 
@@ -193,7 +207,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
             // Assert
-            _mockCitizenIdService.Verify();
+            _mockCitizenIdSessionService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             _mockAuditor.VerifyNoOtherCalls();
@@ -203,13 +217,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         public async Task Post_CIDUserProfileCallFails_WithBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            _mockCitizenIdService
+            _mockCitizenIdSessionService
                 .Setup(x =>
-                    x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
-                .Returns(Task.FromResult(new GetUserProfileResult
+                    x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
+                .Returns(Task.FromResult(new CitizenIdSessionResult()
                 {
-                    StatusCode = HttpStatusCode.BadGateway,
-                    UserProfile = Option.None<UserProfile>()
+                    StatusCode = (int) HttpStatusCode.BadGateway,
                 }))
                 .Verifiable();
 
@@ -217,7 +230,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var result = await _systemUnderTest.Post(_userSessionRequest);
 
             // Assert
-            _mockCitizenIdService.Verify();
+            _mockCitizenIdSessionService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAuditor.VerifyNoOtherCalls();
@@ -265,10 +278,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         public async Task Post_Im1ConnectionTokenFailsAuthenticationWithGpSupplier_ReturnsForbidden()
         {
             // Arrange
-            var sessionCreateResult = new SessionCreateResult.InvalidIm1ConnectionToken();
+            var sessionCreateResult = new GpSessionCreateResult.InvalidIm1ConnectionToken();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber,
-                    _userProfile.AccessToken))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
                 .ReturnsAsync(sessionCreateResult)
                 .Verifiable();
 
@@ -286,10 +298,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         public async Task Post_GpSupplierSessionCreateFails_Returns502BadGateway()
         {
             // Arrange
-            var sessionCreateResult = new SessionCreateResult.SupplierSystemUnavailable();
+            var sessionCreateResult = new GpSessionCreateResult.SupplierSystemUnavailable();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber,
-                    _userProfile.AccessToken))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
                 .ReturnsAsync(sessionCreateResult)
                 .Verifiable();
 
@@ -346,65 +357,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             await _systemUnderTest.Post(_userSessionRequest);
 
             // Assert
-            _mockCitizenIdService.VerifyAll();
+            _mockCitizenIdSessionService.VerifyAll();
             _mockGpSystem.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
             _mockSessionCacheService.VerifyAll();
             _mockOdsCodeLookup.VerifyAll();
             _mockSessionService.VerifyAll();
             _authenticationServiceMock.VerifyAll();
-            _mockAntiforgery.VerifyAll();
+            _mockSessionMapper.VerifyAll();
         }
-
-        [TestMethod]
-        public async Task Post_Im1ConnectionTokenFailsMinimumAgeValidation_Returned465FailedAgeRequirement()
-        {
-            // Arrange
-            _mockMinimumAgeValidator
-                .Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(false)
-                .Verifiable();
-
-            // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            _mockMinimumAgeValidator.Verify( x => x.IsValid(It.IsAny<DateTime>(), MinimumAppAge));
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
-            _mockAuditor.VerifyNoOtherCalls();
-        }
-
-        [TestMethod]
-        public async Task Post_Im1ConnectionTokenFailsMinimumAgeValidation_NullDateOfBirth_Returned465FailedAgeRequirement()
-        {
-            // Arrange
-            _fixture.Freeze<UserProfile>().DateOfBirth = null;
-
-            // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            _mockMinimumAgeValidator.Verify();
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
-            _mockAuditor.VerifyNoOtherCalls();
-        }
-
-        [TestMethod]
-        public async Task Post_Im1ConnectionTokenNoNhsNumber_Returned464NoNhsNumber()
-        {
-            // Arrange
-            _fixture.Freeze<UserProfile>().NhsNumber = null;
-
-            // Act
-            var result = await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
-            _mockAuditor.VerifyNoOtherCalls();
-        }
-
+        
         [TestMethod]
         public async Task Post_Im1ConnectionTokenHasCacheKey_AttemptsToDeleteFromCache()
         {
@@ -420,6 +382,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         {
             // Arrange
             _userProfile.Im1ConnectionToken = _fixture.Create<Guid>().ToString();
+            
+            _mockCitizenIdSessionService
+                .Setup(x => x.Create(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
+                .Returns(Task.FromResult(new CitizenIdSessionResult
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat, CultureInfo.InvariantCulture),
+                    Im1ConnectionToken = _userProfile.Im1ConnectionToken,
+                    NhsNumber = _userProfile.NhsNumber,
+                    OdsCode = _userProfile.OdsCode,
+                    Session = _citizenIdUserSession
+                }));
 
             _mockIm1CacheService.Reset();
             _mockIm1CacheService.Setup(x => x.DeleteIm1ConnectionToken(It.IsAny<string>()))

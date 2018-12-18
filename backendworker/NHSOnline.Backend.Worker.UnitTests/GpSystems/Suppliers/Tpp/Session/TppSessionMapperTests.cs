@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         private IFixture _fixture;
         private TppSessionMapper _systemUnderTest;
         private string _odsCode;
-        private string _accessToken;
         private string _nhsNumber;
         private string _suid;
 
@@ -28,7 +27,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionMapper>();
 
             _odsCode = _fixture.Create<string>();
-            _accessToken = _fixture.Create<string>();
             _nhsNumber = _fixture.Create<string>();
             _suid = _fixture.Create<string>();
         }
@@ -46,11 +44,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                     OnlineUserId = response.Body.OnlineUserId,
                     PatientId = response.Body.PatientId,
                     OdsCode = _odsCode,
-                    AccessToken = _accessToken,
                     NhsNumber = _nhsNumber
                 };
 
-            var result = _systemUnderTest.Map(response, _odsCode, _accessToken, _nhsNumber);
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             
             result.ValueOrFailure().Should().BeEquivalentTo(expectedResponse);
             result.HasValue.Should().BeTrue();
@@ -61,7 +58,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         {
             TppApiObjectResponse<AuthenticateReply> response = null;
 
-            var result = _systemUnderTest.Map(response, _odsCode, _accessToken, _nhsNumber);
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
@@ -73,7 +70,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         {
             var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
 
-            var result = _systemUnderTest.Map(response, _odsCode, _accessToken, _nhsNumber);
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
@@ -87,7 +84,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             response.Headers.Add("suid", _suid);
             response.Body = null;
 
-            var result = _systemUnderTest.Map(response, _odsCode, _accessToken, _nhsNumber);
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
@@ -103,7 +100,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             response.Headers.Add("suid", _suid);
             response.Body.PatientId = patientId;
 
-            var result = _systemUnderTest.Map(response, _odsCode, _accessToken, _nhsNumber);
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();
@@ -119,7 +116,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             response.Headers.Add("suid", _suid);
             response.Body.OnlineUserId = onlineUserId;
 
-            var result = _systemUnderTest.Map(response, _odsCode, _accessToken, _nhsNumber);
+            var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             Action act = () => result.ValueOrFailure();
             
             act.Should().Throw<OptionalValueMissingException>();

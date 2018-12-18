@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogEnter();
 
-                var tppUserSession = (TppUserSession) userSession;
+                var tppUserSession = (TppUserSession) userSession.GpUserSession;
                 var patientSelectedResponse = await _tppClient.PatientSelectedPost(tppUserSession);
 
                 if (patientSelectedResponse.HasSuccessResponse)

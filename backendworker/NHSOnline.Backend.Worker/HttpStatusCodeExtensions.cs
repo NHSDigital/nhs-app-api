@@ -6,7 +6,12 @@ namespace NHSOnline.Backend.Worker
     {
         public static bool IsSuccessStatusCode(this HttpStatusCode statusCode)
         {
-            return (int) statusCode >= 200 && (int) statusCode <= 299;
+            return IsSuccessStatusCode((int) statusCode);
+        }
+        
+        public static bool IsSuccessStatusCode(this int statusCode)
+        {
+            return statusCode >= 200 && statusCode <= 299;
         }
     }
 }

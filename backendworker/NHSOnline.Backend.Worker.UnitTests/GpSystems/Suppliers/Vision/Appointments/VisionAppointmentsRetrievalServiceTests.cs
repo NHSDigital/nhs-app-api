@@ -25,7 +25,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         private IFixture _fixture;
         private Mock<IBookedAppointmentsResponseMapper> _mockBookedAppointmentsResponseMapper;
         private Mock<IVisionClient> _mockVisionClient;
-        private VisionUserSession _userSession;
+        private VisionUserSession _visionUserSession;
+        private UserSession _userSession;
         private VisionAppointmentsRetrievalService _systemUnderTest;
         private VisionResponse<BookedAppointmentsResponse> _visionClientGetResponse;
         private ISessionCacheService _sessionCacheService;
@@ -34,12 +35,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _userSession = _fixture.Create<VisionUserSession>();
-            _userSession.IsAppointmentsEnabled = true;
+            
+            _visionUserSession = _fixture.Create<VisionUserSession>();
+            _visionUserSession.IsAppointmentsEnabled = true;
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _visionUserSession));
+            
+            _userSession = _fixture.Create<UserSession>();
+            
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<BookedAppointmentsResponse>>();
             _sessionCacheService = _fixture.Create<ISessionCacheService>();
-            _userSession.IsAppointmentsEnabled = true;
+            _visionUserSession.IsAppointmentsEnabled = true;
 
             var response = GetVisionResponse(_visionClientGetResponse);
             
@@ -74,7 +82,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task GetAppointments_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsCannotBookAppointments()
         {
             // Arrange
-            _userSession.IsAppointmentsEnabled = false;
+            _visionUserSession.IsAppointmentsEnabled = false;
             
             // Act
             var result = await _systemUnderTest.GetAppointments(_userSession);
@@ -104,7 +112,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         {
             // Arrange
             _mockVisionClient.Setup(x => x.GetExistingAppointments(
-                    _userSession
+                    _visionUserSession
                 ))
                 .Throws<HttpRequestException>()
                 .Verifiable();
@@ -148,7 +156,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>();
 
-            _userSession.AppointmentBookingReasonNecessity.Should().Be(expectedNecessity);
+            _visionUserSession.AppointmentBookingReasonNecessity.Should().Be(expectedNecessity);
         }
 
         private static VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> GetVisionResponse(
@@ -171,7 +179,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         {   
             _mockVisionClient.Reset();
             _mockVisionClient.Setup(x => x.GetExistingAppointments(
-                    _userSession
+                    _visionUserSession
                     ))
                 .ReturnsAsync(response);
         }

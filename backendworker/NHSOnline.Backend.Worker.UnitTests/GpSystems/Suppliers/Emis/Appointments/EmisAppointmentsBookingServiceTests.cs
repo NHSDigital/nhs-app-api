@@ -23,30 +23,28 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
     {
         private const string BookingReason = "I caught a cold!";
         private const string SlotId = "2862517";
-        private const string UserPatientLinkToken = "USER_PATIENT_LINK_TOKEN";
-        private const string EndUserSessionId = "END_USER_SESSION_ID";
-        private const string SessionId = "SESSION_ID";
 
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
-        private EmisUserSession _userSession;
+        private EmisUserSession _emisUserSession;
+        private UserSession _userSession;
         
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
+            
+            _emisUserSession = _fixture.Create<EmisUserSession>();
+            _emisUserSession.AppointmentBookingReasonNecessity = Necessity.Optional;
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _emisUserSession));
 
-            _userSession = new EmisUserSession()
-            {
-                UserPatientLinkToken = UserPatientLinkToken,
-                EndUserSessionId = EndUserSessionId,
-                SessionId = SessionId,
-                OdsCode = "TestOds",
-                AppointmentBookingReasonNecessity = Necessity.Optional
-            };
+            _userSession = _fixture.Create<UserSession>();
+            
+            _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
             
@@ -322,7 +320,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         public async Task Book_BookingReasonMandatoryButNotProvided_ReturnsBadRequestResponse(string bookingReason)
         {
             // Arrange
-            _userSession.AppointmentBookingReasonNecessity = Necessity.Mandatory;
+            _emisUserSession.AppointmentBookingReasonNecessity = Necessity.Mandatory;
             _request.BookingReason = bookingReason;
 
             // Act
@@ -337,7 +335,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         public async Task Book_BookingReasonNotAllowedButProvided_ReturnsBadRequestResponse()
         {
             // Arrange
-            _userSession.AppointmentBookingReasonNecessity = Necessity.NotAllowed;
+            _emisUserSession.AppointmentBookingReasonNecessity = Necessity.NotAllowed;
 
             // Act
             var result = await _systemUnderTest.Book(_userSession, _request);
@@ -351,12 +349,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             _mockEmisClient.Setup(x => x.AppointmentsPost(
                     It.Is<EmisHeaderParameters>(p =>
-                        p.EndUserSessionId.Equals(_userSession.EndUserSessionId, StringComparison.Ordinal)
-                        && p.SessionId.Equals(_userSession.SessionId, StringComparison.Ordinal)),
+                        p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
+                        && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
                     It.Is<BookAppointmentSlotPostRequest>(p =>
                         p.BookingReason.Equals(BookingReason, StringComparison.Ordinal)
                         && p.SlotId == Convert.ToInt64(SlotId, CultureInfo.InvariantCulture)
-                        && p.UserPatientLinkToken.Equals(_userSession.UserPatientLinkToken, StringComparison.Ordinal)
+                        && p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)
                     )
                 )
             ).Returns(

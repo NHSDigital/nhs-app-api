@@ -26,19 +26,26 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         private Mock<IVisionClient> _mockVisionClient;
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
-        private VisionUserSession _userSession;
+        private VisionUserSession _visionUserSession;
+        private UserSession _userSession;
         private VisionResponse<BookAppointmentResponse> _visionClientGetResponse;
         
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _visionUserSession = _fixture.Create<VisionUserSession>();
+            _visionUserSession.IsAppointmentsEnabled = true;
+            _visionUserSession.AppointmentBookingReasonNecessity = Necessity.Optional;
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _visionUserSession));
+            
+            _userSession = _fixture.Create<UserSession>();
+            
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<BookAppointmentResponse>>();
-
-            _userSession = _fixture.Create<VisionUserSession>();
-            _userSession.IsAppointmentsEnabled = true;
-            _userSession.AppointmentBookingReasonNecessity = Necessity.Optional;
 
             _systemUnderTest = _fixture.Create<VisionAppointmentsService>();
 
@@ -74,7 +81,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsInsufficientPermissions()
         {
             // Arrange
-            _userSession.IsAppointmentsEnabled = false;
+            _visionUserSession.IsAppointmentsEnabled = false;
             
             // Act            
             var result = await _systemUnderTest.Book(_userSession, _request);
@@ -188,7 +195,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task Book_BookingReasonNotAllowed_ReturnsBadRequest()
         {
             // Arrange
-            _userSession.AppointmentBookingReasonNecessity = Necessity.NotAllowed;
+            _visionUserSession.AppointmentBookingReasonNecessity = Necessity.NotAllowed;
 
             // Act
             var result = await _systemUnderTest.Book(_userSession, _request);

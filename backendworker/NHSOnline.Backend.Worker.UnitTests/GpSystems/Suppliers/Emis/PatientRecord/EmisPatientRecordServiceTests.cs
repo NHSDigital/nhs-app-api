@@ -17,15 +17,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
     {
         private EmisPatientRecordService _systemUnderTest;
         private Mock<IEmisClient> _emisClient;
-        private EmisUserSession _userSession;
+        private UserSession _userSession;
+        private EmisUserSession _emisUserSession;
         private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            _emisUserSession = _fixture.Create<EmisUserSession>();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _emisUserSession));
+            
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
-            _userSession = _fixture.Freeze<EmisUserSession>();
+            _userSession = _fixture.Freeze<UserSession>();
+            
             _systemUnderTest = _fixture.Create<EmisPatientRecordService>();
         }
         
@@ -39,7 +47,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             var problemsResponse = _fixture.Create<MedicationRootObject>();
             var consultationsResponse = _fixture.Create<MedicationRootObject>();
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Medication))
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Medication))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -48,7 +56,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Allergies))
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Allergies))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -57,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Immunisations))
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Immunisations))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -66,7 +74,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.TestResults))
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.TestResults))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -75,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Problems))
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Problems))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -84,7 +92,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                         ErrorResponseBadRequest = null
                     }));
             
-            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Consultations))
+            _emisClient.Setup(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Consultations))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
@@ -97,7 +105,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             var result = await _systemUnderTest.GetMyRecord(_userSession);
 
             // Assert
-            _emisClient.Verify(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Allergies));
+            _emisClient.Verify(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Allergies));
             result.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
             ((GetMyRecordResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
         }

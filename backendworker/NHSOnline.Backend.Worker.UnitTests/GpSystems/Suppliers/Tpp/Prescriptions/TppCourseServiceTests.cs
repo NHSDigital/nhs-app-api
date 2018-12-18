@@ -27,7 +27,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
         private Mock<ITppClient> _tppClient;
         private Mock<ITppCourseMapper> _tppCourseMapper;
         private IOptions<ConfigurationSettings> _options;
-        private TppUserSession _userSession;
+        private TppUserSession _tppUserSession;
+        private UserSession _userSession;
         private IFixture _fixture;
 
         private const int CoursesMaxCoursesLimit = 100;
@@ -37,8 +38,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
+            _tppUserSession = _fixture.Create<TppUserSession>();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _tppUserSession));
+
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
-            _userSession = _fixture.Freeze<TppUserSession>();
+            
+            _userSession = _fixture.Create<UserSession>();
+            
             _tppCourseMapper = _fixture.Freeze<Mock<ITppCourseMapper>>();
             _options = Options.Create(new ConfigurationSettings
             {
@@ -57,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
 
             var listRepeatMedicationReply = _fixture.Create<ListRepeatMedicationReply>();
 
-            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(Task.FromResult(
                     new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -68,7 +76,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
-            _tppClient.Verify(x => x.ListRepeatMedicationPost(_userSession));
+            _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
             ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
         }
@@ -81,7 +89,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
 
             var listRepeatMedicationReply = _fixture.Create<ListRepeatMedicationReply>();
 
-            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(Task.FromResult(
                     new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -92,7 +100,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
-            _tppClient.Verify(x => x.ListRepeatMedicationPost(_userSession));
+            _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
             ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
         }
@@ -105,7 +113,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
 
             var listRepeatMedicationReply = _fixture.Create<ListRepeatMedicationReply>();
 
-            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(Task.FromResult(
                     new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -116,7 +124,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
-            _tppClient.Verify(x => x.ListRepeatMedicationPost(_userSession));
+            _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
             ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
         }
@@ -148,7 +156,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                 Medications = medications
             };
 
-            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession)).Returns(
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession)).Returns(
                 Task.FromResult(
                     new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -164,7 +172,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
-            _tppClient.Verify(x => x.ListRepeatMedicationPost(_userSession));
+            _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
             ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
 
@@ -178,7 +186,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
         public async Task Get_ReturnsSupplierSystemUnavilable_WhenErrorReceivedFromEmis()
         {
             // Arrange
-            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(
                     Task.FromResult(
                         new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>
@@ -197,7 +205,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
         public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
         {
             // Arrange
-            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -241,7 +249,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                 Uuid = new Guid()
             };
 
-            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(Task.FromResult(
                     new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>(HttpStatusCode.OK)
                     {
@@ -258,7 +266,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
-            _tppClient.Verify(x => x.ListRepeatMedicationPost(_userSession));
+            _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
             ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
             Assert.AreEqual(expectedNumberOfPrescriptions, capturedItemToMap.Count);
@@ -273,7 +281,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             expectedError.ErrorCode = TppApiErrorCodes.NoAccess;
             
             // Arrange
-            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
                 .Returns(
                     Task.FromResult(
                         new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>

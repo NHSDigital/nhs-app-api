@@ -1,83 +1,83 @@
 ﻿namespace NHSOnline.Backend.Worker.GpSystems.Session
 {
-    public abstract class SessionCreateResult
+    public abstract class GpSessionCreateResult
     {
-        private SessionCreateResult()
+        private GpSessionCreateResult()
         {
         }
 
-        public abstract T Accept<T>(ISessionCreateResultVisitor<T> visitor);
+        public abstract T Accept<T>(IGpSessionCreateResultVisitor<T> visitor);
 
-        public class SuccessfullyCreated : SessionCreateResult
+        public class SuccessfullyCreated : GpSessionCreateResult
         {
-            public UserSession UserSession { get; }
+            public GpUserSession UserSession { get; }
             public string Name { get; }
 
             public SuccessfullyCreated(
                 string name, 
-                UserSession userSession)
+                GpUserSession userSession)
             {
                 Name = name;
                 UserSession = userSession;
             }
 
-            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
 
-        public class InvalidIm1ConnectionToken : SessionCreateResult
+        public class InvalidIm1ConnectionToken : GpSessionCreateResult
         {
-            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
 
-        public class SupplierSystemUnavailable : SessionCreateResult
+        public class SupplierSystemUnavailable : GpSessionCreateResult
         {
-            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
         
-        public class SupplierSystemBadResponse : SessionCreateResult
+        public class SupplierSystemBadResponse : GpSessionCreateResult
         {
-            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
 
-        public class InvalidRequest : SessionCreateResult
+        public class InvalidRequest : GpSessionCreateResult
         {
-            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
 
-        public class ErrorProcessingSecurityHeader : SessionCreateResult
+        public class ErrorProcessingSecurityHeader : GpSessionCreateResult
         {
-            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
 
-        public class InvalidUserCredentials : SessionCreateResult
+        public class InvalidUserCredentials : GpSessionCreateResult
         {
-            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }
         }
 
-        public class UnknownError : SessionCreateResult
+        public class UnknownError : GpSessionCreateResult
         {
-            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            public override T Accept<T>(IGpSessionCreateResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }

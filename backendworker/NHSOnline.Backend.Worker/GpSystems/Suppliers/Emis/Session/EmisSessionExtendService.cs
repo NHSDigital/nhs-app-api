@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             {
                 _logger.LogEnter();
 
-                var emisUserSession = (EmisUserSession) userSession;
+                var emisUserSession = (EmisUserSession) userSession.GpUserSession;
                 var response = await _emisClient.DemographicsGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId);
                 if (response.HasSuccessResponse)

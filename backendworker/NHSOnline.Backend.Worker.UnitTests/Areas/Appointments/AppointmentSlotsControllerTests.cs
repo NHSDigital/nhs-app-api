@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
             var appointmentSlotsServicesGetResponse = new AppointmentSlotsResponse();
 
-            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(gpSystem.Object);
 
             gpSystem.Setup(x => x.GetAppointmentSlotsService())
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
             appointmentSlotsService.Verify(x => x.GetSlots(_userSession,
                 It.IsAny<AppointmentSlotsDateRange>()));
@@ -110,7 +110,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.SupplierSystemUnavailable();
  
-            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(gpSystem.Object);
 
             gpSystem.Setup(x => x.GetAppointmentSlotsService())
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
             appointmentSlotsService.Verify(x => x.GetSlots(_userSession,
                 It.IsAny<AppointmentSlotsDateRange>()));

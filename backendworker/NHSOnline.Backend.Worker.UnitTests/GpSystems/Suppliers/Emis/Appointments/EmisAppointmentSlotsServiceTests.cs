@@ -29,7 +29,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
-        private EmisUserSession _userSession;
+        private UserSession _userSession;
+        private EmisUserSession _emisUserSession;
         private AppointmentSlotsDateRange _dateRange;
         private DateTimeOffset _fromDateTimeOffset;
         private DateTimeOffset _toDateTimeOffset;
@@ -50,13 +51,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _mockResponseMapper = _fixture.Freeze<Mock<IAppointmentSlotsResponseMapper>>();
 
-            _userSession = new EmisUserSession
+            _emisUserSession = new EmisUserSession
             {
                 UserPatientLinkToken = UserPatientLinkToken,
                 EndUserSessionId = EndUserSessionId,
                 SessionId = SessionId,
                 OdsCode = "TestOds"
             };
+
+            _userSession = _fixture.Create<UserSession>();
+            _userSession.GpUserSession = _emisUserSession;
+                
 
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
@@ -367,7 +372,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             MockEmisClientAppointmentSlotGetMethod(slotResponse);
 
-            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body, metadataResponse.Body, It.IsAny<PracticeSettingsGetResponse>(), _userSession))
+            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body, metadataResponse.Body, It.IsAny<PracticeSettingsGetResponse>(), _emisUserSession))
                 .Throws<Exception>();
 
             // Act
@@ -404,7 +409,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             var expectedResponse = _fixture.Create<AppointmentSlotsResponse>();
 
-            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body, metadataResponse.Body, It.IsAny<PracticeSettingsGetResponse>(), _userSession))
+            _mockResponseMapper.Setup(x => x.Map(slotResponse.Body, metadataResponse.Body, It.IsAny<PracticeSettingsGetResponse>(), _emisUserSession))
                 .Returns(expectedResponse);
 
             // Act

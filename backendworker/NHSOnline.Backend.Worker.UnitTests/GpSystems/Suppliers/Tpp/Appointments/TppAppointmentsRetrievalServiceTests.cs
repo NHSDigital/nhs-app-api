@@ -26,7 +26,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
     {
         private IFixture _fixture;
         private TppAppointmentsService _systemUnderTest;
-        private TppUserSession _userSession;
+        private TppUserSession _tppUserSession;
+        private UserSession _userSession;
         private Mock<ITppClient> _mockTppClient;
         private Mock<IAppointmentsReplyMapper> _mockResponseMapper;
         private AppointmentsResponse _mappedResponse;
@@ -36,13 +37,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _userSession = _fixture.Create<TppUserSession>();
 
+            _tppUserSession = _fixture.Create<TppUserSession>();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _tppUserSession));
+            
+            _userSession = _fixture.Create<UserSession>();
+            
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
             _tppViewAppointmentsReply = new ViewAppointmentsReply()
             {
-                OnlineUserId = _userSession.OnlineUserId,
-                PatientId = _userSession.PatientId,
+                OnlineUserId = _tppUserSession.OnlineUserId,
+                PatientId = _tppUserSession.PatientId,
                 UuId = "uuid",
                 Appointments = new List<Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Appointment>()
                  {
@@ -124,8 +131,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             // Arrange
             _mockTppClient.Setup(x => x.ViewAppointmentsPost(
                     It.Is<ViewAppointments>(p =>
-                        string.Equals(p.PatientId, _userSession.PatientId, StringComparison.Ordinal)
-                        && string.Equals(p.OnlineUserId, _userSession.OnlineUserId, StringComparison.Ordinal)),
+                        string.Equals(p.PatientId, _tppUserSession.PatientId, StringComparison.Ordinal)
+                        && string.Equals(p.OnlineUserId, _tppUserSession.OnlineUserId, StringComparison.Ordinal)),
                     It.IsAny<string>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
@@ -213,8 +220,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             _mockTppClient.Setup(x => x.ViewAppointmentsPost(
                      It.Is<ViewAppointments>(p =>
-                         string.Equals(p.PatientId, _userSession.PatientId, StringComparison.Ordinal)
-                         && string.Equals(p.OnlineUserId, _userSession.OnlineUserId, StringComparison.Ordinal)),
+                         string.Equals(p.PatientId, _tppUserSession.PatientId, StringComparison.Ordinal)
+                         && string.Equals(p.OnlineUserId, _tppUserSession.OnlineUserId, StringComparison.Ordinal)),
                     It.IsAny<string>()))
                 .ReturnsAsync(response);
         }

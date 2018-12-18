@@ -7,13 +7,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
     [Serializable]
     public class EmisSessionResponseErrorException : Exception
     {
-        public SessionCreateResult ErrorResult{ get; }
+        public GpSessionCreateResult ErrorResult{ get; }
         
         public EmisSessionResponseErrorException()
         {
         }
 
-        public EmisSessionResponseErrorException(SessionCreateResult errorResult)
+        public EmisSessionResponseErrorException(GpSessionCreateResult errorResult)
         {
             ErrorResult = errorResult;
         }

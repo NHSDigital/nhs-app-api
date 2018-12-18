@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Demographics
         public async Task<GetDemographicsResult> GetDemographics(UserSession userSession)
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession) userSession;
+            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
 
             try
             {

@@ -20,7 +20,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
     public class TppAppointmentsCancellationServiceTests
     {
         private IFixture _fixture;
-        private TppUserSession _userSession;
+        private TppUserSession _tppUserSession;
+        private UserSession _userSession;
         private Mock<ITppClient> _mockTppClient;
         private TppAppointmentsService _systemUnderTest;
         private AppointmentCancelRequest _request;
@@ -29,7 +30,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _userSession = _fixture.Create<TppUserSession>();
+            _tppUserSession = _fixture.Create<TppUserSession>();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _tppUserSession));
+            
+            _userSession = _fixture.Create<UserSession>();
 
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
 
@@ -67,7 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             // Arrange
             _mockTppClient.Setup(x => x.CancelAppointmentPost(It.IsAny<CancelAppointment>(),
-                    _userSession.Suid)).
+                    _tppUserSession.Suid)).
                 Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -171,7 +177,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 .Setup(
                     x => x.CancelAppointmentPost(
                         It.Is<CancelAppointment>(p => p.ApptId.Equals(_request.AppointmentId, StringComparison.Ordinal)),
-                        _userSession.Suid))
+                        _tppUserSession.Suid))
                 .Returns(Task.FromResult(response))
                 .Verifiable();
         }

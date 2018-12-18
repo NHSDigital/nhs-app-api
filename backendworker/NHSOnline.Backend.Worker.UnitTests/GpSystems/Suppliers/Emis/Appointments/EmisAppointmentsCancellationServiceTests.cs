@@ -21,7 +21,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
     public class EmisAppointmentsCancellationServiceTests
     {
         private IFixture _fixture;
-        private EmisUserSession _userSession;
+        private UserSession _userSession;
+        private EmisUserSession _emisUserSession;
         private Mock<IEmisClient> _mockEmisClient;
         private EmisAppointmentsService _systemUnderTest;
         private AppointmentCancelRequest _request;
@@ -31,7 +32,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _userSession = _fixture.Create<EmisUserSession>();
+            
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+            
+            _userSession = _fixture.Create<UserSession>();
+            _emisUserSession = (EmisUserSession) _userSession.GpUserSession;
 
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 
@@ -275,12 +281,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             _mockEmisClient.Setup(x => x.AppointmentsDelete(
                 It.Is<EmisHeaderParameters>(p =>
-                    p.EndUserSessionId.Equals(_userSession.EndUserSessionId, StringComparison.Ordinal)
-                    && p.SessionId.Equals(_userSession.SessionId, StringComparison.Ordinal)),
+                    p.EndUserSessionId.Equals(_emisUserSession.EndUserSessionId, StringComparison.Ordinal)
+                    && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
                 It.Is<CancelAppointmentDeleteRequest>(p =>
                     p.CancellationReason.Equals(_cancellationReasonText, StringComparison.Ordinal)
                     && p.SlotId == long.Parse(_request.AppointmentId, CultureInfo.InvariantCulture)
-                    && p.UserPatientLinkToken.Equals(_userSession.UserPatientLinkToken, StringComparison.Ordinal))
+                    && p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal))
                 )
             ).Returns(Task.FromResult(response)).Verifiable();
         }
