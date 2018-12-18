@@ -1,6 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Allergies
-
+  
   Scenario Outline: A <Service> user can view allergies and adverse reactions section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

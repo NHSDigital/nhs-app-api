@@ -60,22 +60,24 @@ else
         if [ "$ENABLE_LONG_RUNNING" == 1 ]
         then
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
-          BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt"
+          BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
+          @tech-debt and not @throttling"
         else
           info "Main Tranche - Full BDD Test Run Configured"
-          BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and not @long-running $SPECIFIC_TEST_TAGS"
+          BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
+          @tech-debt and not @long-running and not @throttling $SPECIFIC_TEST_TAGS"
         fi
         if [ "$PARALLEL" == 1 ]
         then
-          TAGS=(appointment prescription authentication other)
+          TAGS=(appointment prescription throttling other)
         else
-          TAGS=specific
+          TAGS=(throttling specific)
           BDD_CUCUMBER_OPTIONS_PREFIX=$BDD_CUCUMBER_OPTIONS_PREFIX"'"
         fi
     else
         info "MR Tranche - BDD Smoketest Run Configured"
         BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and
-        not @long-running $SPECIFIC_TEST_TAGS"
+        not @long-running and not @throttling $SPECIFIC_TEST_TAGS"
         TAGS=smoketest
     fi
 fi
@@ -147,7 +149,9 @@ rm -r $workingDir/../../testRunFolder/*
 
 for TAG in ${TAGS[*]}; do
   info "Creating test folder for $TAG"
+
   cp -r $workingDir/../ $workingDir/../../testRunFolder/$TAG
+
 done
 
 PIDS=()
@@ -155,6 +159,13 @@ PIDS=()
 for TAG in ${TAGS[*]}; do
 
 info "Running $TAG tests"
+  
+  if [ $TAG == "throttling" ]
+  then
+    sed -i '' -e 's/THROTTLING\_ENABLED\=false/THROTTLING\_ENABLED\=true/g' vars_ci.env
+  else
+    sed -i '' -e 's/THROTTLING\_ENABLED\=true/THROTTLING\_ENABLED\=false/g' vars_ci.env
+  fi
 
   # Run docker tests per tag
   docker-compose -p $TAG -f docker-compose_ci.yml up -d --build || die "Docker compose failure"
@@ -179,7 +190,12 @@ info "Running $TAG tests"
         done
         BDD_CUCUMBER_OPTIONS+="'"
     else 
-      BDD_CUCUMBER_OPTIONS="--strict $BDD_CUCUMBER_OPTIONS_PREFIX and @$TAG'"
+      if [ $TAG == "throttling" ]
+      then
+        BDD_CUCUMBER_OPTIONS="--strict --tags @$TAG"
+      else
+        BDD_CUCUMBER_OPTIONS="--strict $BDD_CUCUMBER_OPTIONS_PREFIX and @$TAG'"
+      fi
     fi
   fi
 
@@ -215,7 +231,10 @@ info "Running $TAG tests"
   fi
 
   PIDS+=($PID)
-done 
+
+  sed -i '' -e 's/THROTTLING\_ENABLED\=true/THROTTLING\_ENABLED\=false/g' vars_ci.env
+
+done
 
 # Wait for all test runners
 for PID in ${PIDS[*]}; do

@@ -22,6 +22,8 @@ services:
       - COOKIE_DOMAIN=.bitraft.io
       - VERSION_TAG=dev_bdd_docker_main
       - BIOMETRICS_ENABLED=true
+      - GP_LOOKUP_API_RESULTS_LIMIT=20
+      - THROTTLING_ENABLED=false
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:

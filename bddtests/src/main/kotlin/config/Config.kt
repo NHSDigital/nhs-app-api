@@ -41,7 +41,6 @@ class Config private constructor() {
     var sessionExpiryMinutes: Long
     val showPageSourceForXPathQuery: String
     val gpLookupApiKey: String
-    val brotherMailerRedirectPath: String
 
     val mongoDbHost: String
     val mongoDbPort: Long
@@ -90,7 +89,6 @@ class Config private constructor() {
         mongoDbHost = envOrDefault("SESSION_MONGO_DATABASE_HOST", "127.0.0.1")
         mongoDbPort = envOrDefault("SESSION_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
         brotherMailerPath = "/brothermailer/signup"
-        brotherMailerRedirectPath = "/brothermailer/redirect"
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
     }

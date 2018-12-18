@@ -1,6 +1,5 @@
 package mocking.throttling
 
-import config.Config
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
@@ -8,8 +7,9 @@ class BrotherMailerResultBuilder
     : BrotherMailerMappingBuilder("POST") {
 
     fun respondWithOkResponse(): Mapping {
-        return redirectTo(
-                "${Config.instance.brotherMailerRedirectPath}?result=success")
+        return respondWith(HttpStatus.SC_MOVED_TEMPORARILY) {
+            andJsonBody("?result=success").build()
+        }
     }
 
     fun respondWithNotFoundError(): Mapping {

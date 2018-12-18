@@ -249,9 +249,6 @@ open class ThrottlingStepDefinitions {
     @And("^The brothermailer service will return a successful response")
     fun theBrotherMailerServiceReturnsASuccessfulResponse()
     {
-        mockingClient.forBrotherMailerRedirect {
-            redirectBrotherMailer().respondWithSuccess()
-        }
         mockingClient.forBrotherMailer {
             postToBrotherMailer().respondWithOkResponse()
         }
