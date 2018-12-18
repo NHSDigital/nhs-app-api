@@ -21,7 +21,8 @@ abstract class TestResultsFactory {
                 by lazy {
                     hashMapOf(
                             "EMIS" to { TestResultsFactoryEmis() },
-                            "TPP" to { TestResultsFactoryTpp() })
+                            "TPP" to { TestResultsFactoryTpp() },
+                            "VISION" to { TestResultsFactoryVision() })
                 }
 
     }

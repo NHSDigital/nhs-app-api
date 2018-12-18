@@ -206,4 +206,19 @@ object TestResultsData {
 
         return testResultDetail
     }
+
+    fun getVisionTestResultsDataWithNoTestResults(): String {
+        val response = "<![CDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        return response + responseStringEnd
+    }
+
+    fun getVisionTestResultsDataWithMultipleResults(): String {
+        val response = "<![CDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        return response + responseStringEnd
+
+    }
 }

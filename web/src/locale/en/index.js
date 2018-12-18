@@ -510,6 +510,7 @@ export default {
         tpp: 'Test results (past 6 months)',
         default: 'Test results',
       },
+      visionDetailsLink: 'View your Test Results',
     },
     problems: {
       sectionHeader: 'Problems',
@@ -534,6 +535,11 @@ export default {
           retryButtonText: '',
         },
       },
+    },
+    testresultdetails: {
+      backButton: 'Back',
+      testResultTitle: 'Test results',
+      noTestResultData: 'There is no detail to display here.',
     },
     clinicalTerms: {
       text: 'You may see medical abbreviations that you aren’t familiar with.',

@@ -37,6 +37,7 @@ object VisionConstants {
 
     const val allergiesView: String  = "VPS_ALLERGIES"
     const val medicationsView: String = "VPS_MEDICATIONS"
+    const val testResultsView: String = "TEST RESULTS"
     const val immunisationsView: String = "PROCEDURES"
     const val problemsView: String = "PROBLEMS"
 

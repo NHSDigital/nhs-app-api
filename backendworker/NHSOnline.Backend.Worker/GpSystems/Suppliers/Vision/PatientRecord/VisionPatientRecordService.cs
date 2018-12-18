@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                     var checkedTestResults = new VisionTaskChecker<TestResults>(_logger, new VisionTestResultsMapper(_logger), VisionMapperType.TestResults).Check(testResultsTask);
                     
                     var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems, checkedTestResults);
-                    response.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
+                    response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     
                     return new GetMyRecordResult.SuccessfullyRetrieved(response);
                 }

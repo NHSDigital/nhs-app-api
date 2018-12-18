@@ -21,6 +21,7 @@ import {
   MYRECORD,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
+  MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -122,6 +123,7 @@ export default function ({ route, store, app }) {
       break;
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:
+    case MY_RECORD_VISION_TEST_RESULTS_DETAIL.name:
     case MYRECORDTESTRESULT.name:
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.myRecord';

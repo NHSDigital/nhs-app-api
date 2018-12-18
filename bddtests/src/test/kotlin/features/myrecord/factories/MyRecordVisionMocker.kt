@@ -20,7 +20,7 @@ class MyRecordVisionMocker(val mockingClient: MockingClient){
     fun generatePatientDataResponse(
             patient: Patient,
             view: String,
-            responseFormat :String,
+            responseFormat: String,
             result: (VisionGetPatientDataBuilder) -> Mapping) {
         mockingClient.forVision {
             result(myRecord.getPatientDataRequest(

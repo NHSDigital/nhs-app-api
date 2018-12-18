@@ -49,6 +49,7 @@ import Immunisations from '@/components/my-record/SharedComponents/Immunisations
 import Problems from '@/components/my-record/SharedComponents/Problems';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import TestResults from '@/components/my-record/SharedComponents/TestResults';
+import VueScrollTo from 'vue-scrollto';
 
 const IMMUNISATIONS = 'immunisations';
 const PROBLEMS = 'problems';
@@ -60,6 +61,7 @@ export default {
     Immunisations,
     Problems,
     TestResults,
+    VueScrollTo,
   },
   props: {
     record: {
@@ -76,6 +78,14 @@ export default {
       isImmunisationsCollapsed: process.client,
       isTestResultsCollapsed: process.client,
     };
+  },
+  mounted() {
+    if (this.$route.hash) {
+      setTimeout((route) => {
+        VueScrollTo.scrollTo(route.hash, 500, { easing: VueScrollTo['ease-in'] });
+      }, 500, this.$route);
+      this.isTestResultsCollapsed = false;
+    }
   },
   methods: {
     getCollapsedState(collapsed) {

@@ -12,6 +12,7 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   Scenario Outline: A <Service> user can view test result information
     Given the my record wiremocks are initialised for <Service>
@@ -25,6 +26,7 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   Scenario Outline: A <Service> user has no access to test result section
     Given the my record wiremocks are initialised for <Service>
@@ -38,6 +40,7 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   Scenario Outline: A <Service> user has no test results
     Given the my record wiremocks are initialised for <Service>
@@ -51,6 +54,7 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   Scenario Outline: An error occurs when trying to retrieve test result data from <Service>
     Given the my record wiremocks are initialised for <Service>
@@ -64,6 +68,7 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   Scenario Outline: A <Service> user has one test result with one value
     Given the my record wiremocks are initialised for <Service>

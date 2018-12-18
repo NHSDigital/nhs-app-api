@@ -45,9 +45,9 @@
       </div>
     </div>
     <div v-else-if="supplier === 'VISION'">
-      <p>
-        <span v-html="resultsData.rawHtml"/>
-      </p>
+      <a :class="$style.viewTestResult" @click="viewVisionTestResults($event)">
+        {{ $t('my_record.testResults.visionDetailsLink') }}
+      </a>
     </div>
   </div>
 </template>
@@ -55,6 +55,7 @@
 <script>
 import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
+import { MY_RECORD_VISION_TEST_RESULTS_DETAIL } from '@/lib/routes';
 
 export default {
   components: {
@@ -98,6 +99,10 @@ export default {
       event.preventDefault();
       this.$router.push(this.getTestResultPath(testResultId));
     },
+    viewVisionTestResults(event) {
+      event.preventDefault();
+      this.$router.push(MY_RECORD_VISION_TEST_RESULTS_DETAIL.path);
+    },
     getTestResultPath(testResultId) {
       return `/my-record/testresultdetail/${testResultId}`;
     },
@@ -109,6 +114,11 @@ export default {
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
   @import '../../../style/medrecordtitle';
+
+  .viewTestResult {
+    padding: 1em;
+    font-size: 0.875em;
+  }
 
   .fieldName {
     padding-left: 1.3em;
