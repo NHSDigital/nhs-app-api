@@ -59,4 +59,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="OrganDonation\" />
+  </ItemGroup>
 </Project>

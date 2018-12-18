@@ -5,6 +5,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Demographics.Models;
+using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 
@@ -88,6 +89,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Demographi
                 NhsNumber = "123 456 7890",
                 Address = $"{item.Address.HouseNameFlatNumber}, {item.Address.NumberStreet}, {item.Address.Village}, " +
                           $"{item.Address.Town}, {item.Address.County}, {item.Address.Postcode}",
+                AddressParts = new DemographicsAddress
+                {
+                    Text = $"{item.Address.HouseNameFlatNumber}, {item.Address.NumberStreet}, {item.Address.Village}, " +
+                           $"{item.Address.Town}, {item.Address.County}",
+                    Postcode = item.Address.Postcode
+                },
+                NameParts = new DemographicsName
+                {
+                    Title = item.Title,
+                    Given = item.FirstName,
+                    Surname = item.Surname
+                },
             };
 
             result.Should().BeEquivalentTo(expectedResult);
@@ -139,6 +152,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Demographi
                 NhsNumber = "123 456 7890",
                 Address = $"{item.Address.HouseNameFlatNumber}, {item.Address.NumberStreet}, {item.Address.Village}, " +
                           $"{item.Address.Town}, {item.Address.County}, {item.Address.Postcode}",
+                AddressParts = new DemographicsAddress
+                {
+                    Text = $"{item.Address.HouseNameFlatNumber}, {item.Address.NumberStreet}, {item.Address.Village}, " +
+                           $"{item.Address.Town}, {item.Address.County}",
+                    Postcode = item.Address.Postcode
+                },
+                NameParts = new DemographicsName
+                {
+                    Title = title,
+                    Given = firstname,
+                    Surname = surname
+                }
             };
 
             result.Should().BeEquivalentTo(expectedResult);

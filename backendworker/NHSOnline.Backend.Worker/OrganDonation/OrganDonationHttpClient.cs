@@ -4,7 +4,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 {
     public class OrganDonationHttpClient
     {
-        private const string ClientIdHeaderKey = "X-Client_ID";
+        private const string ClientIdHeaderKey = "X-Client-ID";
         private const string SubscriptionHeaderKey = "Ocp-Apim-Subscription-Key";
 
         public OrganDonationHttpClient(HttpClient client, IOrganDonationConfig config)

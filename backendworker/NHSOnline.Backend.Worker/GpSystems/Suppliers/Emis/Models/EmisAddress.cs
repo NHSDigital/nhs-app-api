@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHSOnline.Backend.Worker.GpSystems.Demographics;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
 {
@@ -14,15 +15,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
 
         public override string ToString()
         {
+            return ToString(AddressExclusion.None);
+        }
+        
+        public string ToString(AddressExclusion exclusion)
+        {
             var addressParts = new List<string>
             {
                 HouseNameFlatNumber,
                 NumberStreet,
                 Village,
                 Town,
-                County,
-                Postcode
+                County
             };
+            
+            if (exclusion != AddressExclusion.Postcode)
+                addressParts.Add(Postcode);
             
             return string.Join(", ", addressParts.Where(part => !string.IsNullOrEmpty(part)));
         }

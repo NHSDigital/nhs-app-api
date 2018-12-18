@@ -79,6 +79,8 @@ namespace NHSOnline.Backend.Worker
             public const string TermsAndConditionsRecordConsentAuditTypeRequest = "TermsAndConditions_RecordConsent_Request";
             public const string TermsAndConditionsRecordConsentAuditTypeResponse = "TermsAndConditions_RecordConsent_Response";
             public const string TermsAndConditionsAnalyticsCookieAcceptance = "TermsAndConditions_RecordAnalyticsCookie_Acceptance";
+            public const string GetOrganDonationAuditTypeResponse = "OrganDonation_Get_Response";
+            public const string GetOrganDonationAuditTypeRequest = "OrganDonation_Get_Request";
         }
 
         public static class HttpContextItems

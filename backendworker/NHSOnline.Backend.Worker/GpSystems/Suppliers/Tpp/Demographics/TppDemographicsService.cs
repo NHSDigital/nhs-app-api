@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
             _tppDemographicsMapper = tppDemographicsMapper;
         }
 
-        public async Task<GetDemographicsResult> GetDemographics(UserSession userSession)
+        public async Task<DemographicsResult> GetDemographics(UserSession userSession)
         {
             var tppUserSession = (TppUserSession) userSession.GpUserSession;
 
@@ -36,20 +36,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
                     if (demographicsResponse.HasForbiddenResponse)
                     {
                         _logger.LogWarning("User does not have access to their patient record for Tpp");
-                        return new GetDemographicsResult.UserHasNoAccess();
+                        return new DemographicsResult.UserHasNoAccess();
                     }
                     _logger.LogError($"Unsuccessful request retrieving patient selected information for Tpp. Status code: {(int)demographicsResponse.StatusCode}");
-                    return new GetDemographicsResult.Unsuccessful();
+                    return new DemographicsResult.Unsuccessful();
                 }
                 
                 var result = _tppDemographicsMapper.Map(demographicsResponse.Body);
                 
-                return new GetDemographicsResult.SuccessfullyRetrieved(result);
+                return new DemographicsResult.SuccessfullyRetrieved(result);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving patient selected information for Tpp");
-                return new GetDemographicsResult.Unsuccessful();
+                return new DemographicsResult.Unsuccessful();
             }
             finally
             {

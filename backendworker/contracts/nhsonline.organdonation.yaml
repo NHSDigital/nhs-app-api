@@ -5,7 +5,7 @@ info:
   title: NHS App Sub-API - Organ Donation
   description: NHS App Sub-API - endpoints pertaining to Organ Donation -  All require an NHSO-Session-Id cookie (obtained from Session endpoint).
 paths:
-  /organDonation:
+  /organdonation:
     get:
         tags:
           - organDonation
@@ -38,6 +38,9 @@ definitions:
       nhsNumber:
         type: string
         description: Users nhs number from the gp system.
+      nameFull:
+        type: string
+        description: Users full name.
       name:
         $ref: '#/definitions/usersName'
       gender:
@@ -47,6 +50,9 @@ definitions:
         type: string
         format: date
         description: Users date of birth from the gp system.
+      addressFull:
+        type: string
+        description: Users full address.
       address:
         $ref: '#/definitions/usersAddress'
       emailAddress:

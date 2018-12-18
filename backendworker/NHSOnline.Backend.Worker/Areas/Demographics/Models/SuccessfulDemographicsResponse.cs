@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics.Models
 {
-    public class DemographicsResponse
+    public class SuccessfulDemographicsResponse
     {
         public string PatientName { get; set; }
         public DateTime? DateOfBirth { get; set; }

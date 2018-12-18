@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.Demographics.Models;
+using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 
@@ -21,7 +23,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
                 DateOfBirth = demographicsGetResponse.DateOfBirth,
                 Sex = demographicsGetResponse.Sex,
                 NhsNumber = demographicsGetResponse.ExtractNhsNumbers().Any() ? demographicsGetResponse.ExtractNhsNumbers().First().NhsNumber : null,
-                Address = demographicsGetResponse.Address?.ToString()
+                Address = demographicsGetResponse.Address?.ToString(),
+                AddressParts = new DemographicsAddress
+                {
+                    Text = demographicsGetResponse.Address?.ToString(AddressExclusion.Postcode),
+                    Postcode = demographicsGetResponse.Address?.Postcode
+                },
+                NameParts = new DemographicsName
+                {
+                    Title = demographicsGetResponse.Title,
+                    Given = demographicsGetResponse.FirstName,
+                    Surname = demographicsGetResponse.Surname
+                }
             };
         }
 

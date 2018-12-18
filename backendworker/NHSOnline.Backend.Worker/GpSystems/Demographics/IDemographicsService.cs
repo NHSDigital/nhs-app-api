@@ -4,6 +4,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Demographics
 {
     public interface IDemographicsService
     {
-        Task<GetDemographicsResult> GetDemographics(UserSession userSession);
+        Task<DemographicsResult> GetDemographics(UserSession userSession);
     }
 }

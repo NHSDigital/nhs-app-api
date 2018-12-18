@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Demographics
             _visionDemographicsMapper = visionDemographicsMapper;
         }
 
-        public async Task<GetDemographicsResult> GetDemographics(UserSession userSession)
+        public async Task<DemographicsResult> GetDemographics(UserSession userSession)
         {
             _logger.LogEnter();
             var visionUserSession = (VisionUserSession) userSession.GpUserSession;
@@ -44,28 +44,28 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Demographics
                         if (demographicsResponse.IsAccessDeniedError)
                         {
                             _logger.LogWarning("User does not have access to their patient record");
-                            return new GetDemographicsResult.UserHasNoAccess();
+                            return new DemographicsResult.UserHasNoAccess();
                         }
 
                         _logger.LogError(
                             $"Unsuccessful request retrieving demographics information for Vision. Status code: {(int) demographicsResponse.StatusCode}");
-                        return new GetDemographicsResult.Unsuccessful();  
+                        return new DemographicsResult.Unsuccessful();  
                     }
 
                     var result = _visionDemographicsMapper.Map(demographicsResponse.Body.Demographics, visionUserSession.NhsNumber);
                     
-                    return new GetDemographicsResult.SuccessfullyRetrieved(result);
+                    return new DemographicsResult.SuccessfullyRetrieved(result);
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"Something went wrong building the Vision Demographics response");
-                    return new GetDemographicsResult.InternalServerError();
+                    return new DemographicsResult.InternalServerError();
                 }  
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving patient selected information for Vision");
-                return new GetDemographicsResult.Unsuccessful();
+                return new DemographicsResult.Unsuccessful();
             }
             finally
             {

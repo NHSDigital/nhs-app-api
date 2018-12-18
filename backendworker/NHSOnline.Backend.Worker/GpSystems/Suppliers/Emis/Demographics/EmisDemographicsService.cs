@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
             _emisDemographicsMapper = emisDemographicsMapper;
         }
 
-        public async Task<GetDemographicsResult> GetDemographics(UserSession userSession)
+        public async Task<DemographicsResult> GetDemographics(UserSession userSession)
         {
             _logger.LogEnter();
 
@@ -39,23 +39,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
                     {
                         _logger.LogWarning("User does not have access to their patient record");
                         _logger.LogEmisErrorResponse(demographicsResponse);
-                        return new GetDemographicsResult.UserHasNoAccess();
+                        return new DemographicsResult.UserHasNoAccess();
                     }
 
                     _logger.LogError($"Unsuccessful request retrieving demographics. Status code: {(int)demographicsResponse.StatusCode}");
                     _logger.LogEmisErrorResponse(demographicsResponse);
-                    return new GetDemographicsResult.Unsuccessful();
+                    return new DemographicsResult.Unsuccessful();
                 }
 
                 _logger.LogInformation("Mapping EMIS responses to universal DemographicsResponse class instance");
                 var result = _emisDemographicsMapper.Map(demographicsResponse.Body);
 
-                return new GetDemographicsResult.SuccessfullyRetrieved(result);
+                return new DemographicsResult.SuccessfullyRetrieved(result);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving courses");
-                return new GetDemographicsResult.Unsuccessful();
+                return new DemographicsResult.Unsuccessful();
             }
             finally
             {

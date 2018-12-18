@@ -1,16 +1,17 @@
-﻿using NHSOnline.Backend.Worker.Areas.Demographics.Models;
+﻿using NHSOnline.Backend.Worker.Areas.Demographics;
+using NHSOnline.Backend.Worker.Areas.Demographics.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Demographics
 {
-    public abstract class GetDemographicsResult
+    public abstract class DemographicsResult
     {
-        private GetDemographicsResult()
+        private DemographicsResult()
         {
         }
         
         public abstract T Accept<T>(IDemographicsResultVisitor<T> visitor);
         
-        public class SuccessfullyRetrieved : GetDemographicsResult
+        public class SuccessfullyRetrieved : DemographicsResult
         {
             public DemographicsResponse Response { get; }
 
@@ -25,7 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Demographics
             }
         }
         
-        public class SupplierSystemUnavailable : GetDemographicsResult
+        public class SupplierSystemUnavailable : DemographicsResult
         {
             public override T Accept<T>(IDemographicsResultVisitor<T> visitor)
             {
@@ -33,7 +34,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Demographics
             }
         }
         
-        public class UserHasNoAccess : GetDemographicsResult
+        public class UserHasNoAccess : DemographicsResult
         {
             public override T Accept<T>(IDemographicsResultVisitor<T> visitor)
             {
@@ -41,7 +42,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Demographics
             }
         }
         
-        public class Unsuccessful : GetDemographicsResult
+        public class Unsuccessful : DemographicsResult
         {
             public override T Accept<T>(IDemographicsResultVisitor<T> visitor)
             {
@@ -49,7 +50,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Demographics
             }
         }
         
-        public class InternalServerError : GetDemographicsResult
+        public class InternalServerError : DemographicsResult
         {
             public override T Accept<T>(IDemographicsResultVisitor<T> visitor)
             {

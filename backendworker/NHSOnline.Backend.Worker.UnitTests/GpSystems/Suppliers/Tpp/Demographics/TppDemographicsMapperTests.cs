@@ -3,7 +3,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.Demographics.Models;
+using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 

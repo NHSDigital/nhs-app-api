@@ -1,7 +1,9 @@
-﻿namespace NHSOnline.Backend.Worker.OrganDonation.Models
+﻿using System.Collections.Generic;
+
+namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
     public class OrganDonationSuccessResponse<TBody>
     {
-        public Entry<TBody> Entry { get; set; }
+        public List<Entry<TBody>> Entry { get; set; }
     }
 }

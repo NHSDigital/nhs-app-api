@@ -1,32 +1,45 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.Worker.Areas.Demographics.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics
 {
-    internal class DemographicsResultVisitor : IDemographicsResultVisitor<IActionResult>
+    public class DemographicsResultVisitor : IDemographicsResultVisitor<IActionResult>
     {
-        public IActionResult Visit(GetDemographicsResult.UserHasNoAccess result)
+
+        private readonly IMapper<DemographicsResult.SuccessfullyRetrieved, SuccessfulDemographicsResult> _resultMapper;
+        
+        public DemographicsResultVisitor(
+            IMapper<DemographicsResult.SuccessfullyRetrieved, SuccessfulDemographicsResult> resultMapper
+        )
+        {
+            _resultMapper = resultMapper;
+        }
+        
+        public IActionResult Visit(DemographicsResult.UserHasNoAccess result)
         {
             return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
-        public IActionResult Visit(GetDemographicsResult.SuccessfullyRetrieved result)
+        public IActionResult Visit(DemographicsResult.SuccessfullyRetrieved result)
         {
-            return new OkObjectResult(result);
+            var mappedResult = _resultMapper.Map(result);
+            return new OkObjectResult(mappedResult);
         }
 
-        public IActionResult Visit(GetDemographicsResult.SupplierSystemUnavailable result)
+        public IActionResult Visit(DemographicsResult.SupplierSystemUnavailable result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
         
-        public IActionResult Visit(GetDemographicsResult.Unsuccessful result)
+        public IActionResult Visit(DemographicsResult.Unsuccessful result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
         
-        public IActionResult Visit(GetDemographicsResult.InternalServerError result)
+        public IActionResult Visit(DemographicsResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
