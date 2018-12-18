@@ -9,6 +9,7 @@ import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
+import mocking.organDonation.models.FaithDeclaration
 import mocking.vision.VisionMockDefaults
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
@@ -46,7 +47,9 @@ data class Patient(
                 redirectUrl = Config.instance.cidRedirectUri),
         val accessToken: String = "access_token",
         val tppUserSession: TppUserSession? = null,
-        val im1ConnectionTokenAsJson: Im1ConnectionToken? = null
+        val im1ConnectionTokenAsJson: Im1ConnectionToken? = null,
+        val organDonationDecision: String = "",
+        val faithDeclaration: FaithDeclaration = FaithDeclaration.NotStated
 ) {
 
     fun formattedDateOfBirth(): String {

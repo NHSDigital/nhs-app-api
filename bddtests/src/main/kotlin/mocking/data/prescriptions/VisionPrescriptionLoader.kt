@@ -1,7 +1,7 @@
 package mocking.data.prescriptions
 
 import mocking.data.prescriptions.courses.VisionCoursesLoader
-import mocking.emis.models.VisionPrescriptionStatus
+import mocking.vision.models.VisionPrescriptionStatus
 import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.Repeat
 import mocking.vision.models.Request

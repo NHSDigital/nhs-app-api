@@ -1,7 +1,7 @@
 package features.prescriptions.mappers
 
 import constants.DateTimeFormats
-import mocking.emis.models.VisionPrescriptionStatus
+import mocking.vision.models.VisionPrescriptionStatus
 import mocking.vision.models.PrescriptionHistory
 import models.prescriptions.HistoricPrescription
 import org.joda.time.DateTime

@@ -1,4 +1,4 @@
-package mocking.emis.models
+package mocking.vision.models
 
 enum class VisionPrescriptionStatus(val value: Int) {
     Processed(1) {

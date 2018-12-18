@@ -24,6 +24,7 @@ class Config private constructor() {
     var emisApplicationId: String
     var emisVersion: String
     var organDonation: String
+    var updatedOrganDonation: String
     var symptomChecker: String
     var dataPreferencesHost: String
     var dataPreferencesPath: String
@@ -78,6 +79,7 @@ class Config private constructor() {
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")
 
         organDonation = envOrDefault("ORGAN_DONATION_URL", "https://www.organdonation.nhs.uk/")
+        updatedOrganDonation = "/organ-donation"
         symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
         sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", SESSION_EXPIRY_MINUTES)
 

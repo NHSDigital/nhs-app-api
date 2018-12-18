@@ -10,6 +10,7 @@ import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
 import mocking.nhsAzureSearchService.NhsAzureSearchMappingBuilder
+import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.throttling.BrotherMailerMappingBuilder
 import mocking.throttling.BrotherMailerRedirectMappingBuilder
 import mocking.tpp.TppMappingBuilder
@@ -77,6 +78,13 @@ class MockingClient(private val configuration: MockingConfiguration) {
 
     fun forNhsAzureSearch(method: String = "POST", resolver: NhsAzureSearchMappingBuilder.() -> Mapping) {
         val mappingBuilder = NhsAzureSearchMappingBuilder(method)
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forOrganDonation(method: String = "POST", resolver: OrganDonationMappingBuilder.() -> Mapping) {
+        val mappingBuilder = OrganDonationMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)
