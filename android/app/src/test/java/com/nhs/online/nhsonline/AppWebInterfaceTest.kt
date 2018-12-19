@@ -19,7 +19,7 @@ import org.robolectric.shadows.ShadowDialog
 @Config(constants = BuildConfig::class)
 class AppWebInterfaceTest {
 
-    private val mainActivity = Robolectric.setupActivity(MainActivity::class.java)
+    private val mainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()
     private val spyActivity = spy(mainActivity)
     private val appWebInterface = AppWebInterface(spyActivity)
 

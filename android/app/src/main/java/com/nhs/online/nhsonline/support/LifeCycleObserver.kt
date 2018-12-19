@@ -1,6 +1,5 @@
 package com.nhs.online.nhsonline.support
 
-import android.preference.PreferenceManager
 import android.util.Log
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.activities.MainActivity
@@ -9,20 +8,28 @@ import com.nhs.online.nhsonline.services.ConfigurationService
 import kotlinx.android.synthetic.main.activity_main.*
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.Application
-import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.services.ConfigurationResponse
+import com.scottyab.rootbeer.RootBeer
 
 
 class LifeCycleObserver(
     private var context: MainActivity,
     private var appWebInterface: AppWebInterface,
     private var knownServices: KnownServices,
-    private var configurationService: ConfigurationService
+    private var configurationService: ConfigurationService,
+    private var rootBeerService: RootBeer
 ) {
 
     fun onMoveToForeground() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMoveToForeground")
+
+        val isDeviceRooted = checkForRooting()
+        if (isDeviceRooted) {
+            context.showRootedDeviceDialog()
+            return
+        }
+
         updateUI()
         checkAndHandleConfiguration()
     }
@@ -32,7 +39,18 @@ class LifeCycleObserver(
         context.showBlankScreen()
     }
 
-    fun updateUI() {
+    private fun checkForRooting() : Boolean {
+        rootBeerService.setLogging(true)
+
+        if (rootBeerService.isRootedWithoutBusyBoxCheck) {
+            Log.e(Application.TAG, "${this::class.java.simpleName}: Detected that device is rooted")
+            return true
+        }
+
+        return false
+    }
+
+    private fun updateUI() {
         val currentUrl: String? = context.webview.url
         currentUrl?.let {
             if (currentUrl.contains("auth-return")) return
@@ -48,7 +66,7 @@ class LifeCycleObserver(
         }
     }
 
-    fun checkAndHandleConfiguration () {
+    private fun checkAndHandleConfiguration () {
         configurationService.getConfiguration(object : IVolleyCallback {
             override fun onSuccess(configurationResponse: ConfigurationResponse) {
 

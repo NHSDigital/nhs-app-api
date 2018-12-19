@@ -28,7 +28,7 @@ class MainActivityTest {
 
     @Before
     fun setUp() {
-        mainActivity = Robolectric.setupActivity(MainActivity::class.java)
+        mainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()
         spyActivity = spy(mainActivity)
     }
 
