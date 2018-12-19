@@ -2,9 +2,7 @@ package com.nhs.online.nhsonline.activities
 
 import android.content.Context
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -35,6 +33,7 @@ import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import android.location.LocationManager
 import android.preference.PreferenceManager
+import android.text.method.LinkMovementMethod
 import android.view.accessibility.AccessibilityEvent
 import android.util.Log
 import com.nhs.online.nhsonline.Application
@@ -50,7 +49,8 @@ import com.nhs.online.nhsonline.interfaces.IVolleyCallback
 import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.services.ConfigurationResponse
 import com.nhs.online.nhsonline.services.ConfigurationService
-import java.util.*
+import com.nhs.online.nhsonline.utils.Html
+import com.scottyab.rootbeer.RootBeer
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
@@ -62,6 +62,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private lateinit var urlLoader: UrlLoader
     private lateinit var appWebInterface: AppWebInterface
     private lateinit var upgradeDialog: AlertDialog
+    private lateinit var rootedDeviceDialog: AlertDialog
     private var lifeCycleObserver: LifeCycleObserver? = null
     private var isLoggedIn = false
     private var extendSessionDialogue: AlertDialog? = null
@@ -183,7 +184,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
-                    appWebInterface, knownServices, configurationService)
+                    appWebInterface, knownServices, configurationService, RootBeer(this))
         }
 
         lifeCycleObserver?.onMoveToForeground()
@@ -368,6 +369,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
                     .setNegativeButton(resources.getString(R.string.Close)) { _, _ ->
                         this.finishAndRemoveTask()
                     }
+
             builder.setCancelable(false)
             upgradeDialog = builder.create()
             upgradeDialog.setCanceledOnTouchOutside(false)
@@ -379,6 +381,31 @@ class MainActivity : IInteractor, AppCompatActivity() {
     fun hideVersionUpgradeDialog() {
         if (::upgradeDialog.isInitialized && upgradeDialog.isShowing) {
             upgradeDialog.dismiss()
+        }
+    }
+
+
+
+    fun showRootedDeviceDialog() {
+        if((::rootedDeviceDialog.isInitialized && !rootedDeviceDialog.isShowing) || !::rootedDeviceDialog.isInitialized ) {
+
+            val tc1 = resources.getString(R.string.rootedDeviceDialogDescriptionLine1)
+            val tc2 = resources.getString(R.string.rootedDeviceDialogDescriptionLine2)
+            val content = "$tc1 <br/><br/> $tc2"
+
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                    .setTitle(resources.getString(R.string.rootedDeviceDialogHeader))
+                    .setMessage( Html.fromHtml(content ))
+                    .setNegativeButton(resources.getString(R.string.rootedDeviceDialogClose)) { _, _ ->
+                        this.finishAndRemoveTask()
+                    }
+            builder.setCancelable(false)
+            rootedDeviceDialog = builder.create()
+            rootedDeviceDialog.setCanceledOnTouchOutside(false)
+            rootedDeviceDialog.setCancelable(false)
+            rootedDeviceDialog.show()
+
+            (rootedDeviceDialog.findViewById<TextView>(android.R.id.message) as TextView).movementMethod = LinkMovementMethod.getInstance()
         }
     }
 
@@ -423,7 +450,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
             menuBar.switchActiveMenuItemTo(navigationMenuId)
     }
 
-    public override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
+    override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
         if (::upgradeDialog.isInitialized) {
             upgradeDialog.dismiss()
         }

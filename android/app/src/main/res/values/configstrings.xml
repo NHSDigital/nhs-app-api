@@ -40,6 +40,7 @@
     <string name="configurationApiPath">configuration?nativeAppVersion=%1$s&amp;deviceName=Android</string>
     <string name="isSupportedVersion">isDeviceSupported</string>
     <string name="isThrottlingEnabled">isThrottlingEnabled</string>
+    <string name="isRootCheckEnabled">false</string>
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 

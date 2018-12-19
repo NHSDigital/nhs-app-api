@@ -73,6 +73,11 @@
     <string name="UpdateDesc">You won\'t be able to use it until you do.</string>
     <string name="Close">Close</string>
 
+    <string name="rootedDeviceDialogHeader">You cannot use the NHS App with a rooted Android device</string>
+    <string name="rootedDeviceDialogDescriptionLine1">This is made clear in our &lt;a href=\"https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/\">terms of use&lt;/a>.</string>
+    <string name="rootedDeviceDialogDescriptionLine2">If you did not realise your phone was rooted, please contact your network provider or the manufacturer of the device.</string>
+    <string name="rootedDeviceDialogClose">Close</string>
+
     <string name="locale_language">en</string>
     <string name="locale_region">GB</string>
 

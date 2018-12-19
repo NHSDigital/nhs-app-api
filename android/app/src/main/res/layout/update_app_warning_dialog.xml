@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/updateAppWarningHeader"
+            style="@style/default_warning_text"
+            android:contentDescription="@string/UpdateRequiredHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/UpdateRequiredHeader"
+            android:textSize="@dimen/errorTextSize"
+            android:textStyle="bold"
+            android:focusable="true"
+            android:background="@drawable/icon_drawable_boarder_focusable"/>
+
+        <TextView
+            android:id="@+id/updateAppSubHeader"
+            style="@style/default_warning_text"
+            android:contentDescription="@string/UpdateHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/UpdateHeader"
+            android:textSize="@dimen/errorTextSize"
+            android:focusable="true"
+            android:background="@drawable/icon_drawable_boarder_focusable"/>
+
+        <TextView
+            android:id="@+id/updateAppInformation"
+            style="@style/default_warning_text"
+            android:contentDescription="@string/UpdateDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/UpdateDesc"
+            android:textSize="@dimen/errorTextSize"
+            android:focusable="true"
+            android:background="@drawable/icon_drawable_boarder_focusable"/>
+
+        <Button
+            android:id="@+id/updateAppCloseButton"
+            style="@style/alert_dialogue_blue_button"
+            android:contentDescription="@string/Close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:text="@string/Close"
+            android:textAllCaps="false"
+            android:focusable="true"
+            android:background="@drawable/icon_drawable_blue_button_focusable" />
+
+    </LinearLayout>
+</LinearLayout>
