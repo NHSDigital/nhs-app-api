@@ -9,7 +9,7 @@ const {
   shallowMount: vueShallowMount,
 } = testUtils;
 
-export const $t = key => `translate_${key}`;
+export const t = key => `translate_${key}`;
 export const $tc = key => `translate_${key}`;
 
 export const mockCookies = () => ({
@@ -33,10 +33,11 @@ export const mount = (component, {
   $router = [],
   $store,
   $style = {},
-  state = {},
+  $t = t,
   data = {},
   propsData = {},
   shallow = false,
+  state = {},
 } = {}) => {
   const store = $store || createStore({ $env, state });
   const localVue = createLocalVue();

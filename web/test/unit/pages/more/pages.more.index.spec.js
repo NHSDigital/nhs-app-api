@@ -1,5 +1,5 @@
 import More from '@/pages/more';
-import OrganDonationLink from '@/components/OrganDonationLink';
+import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { mount } from '../../helpers';
 
 describe('more', () => {

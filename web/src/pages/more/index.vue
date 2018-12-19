@@ -2,7 +2,7 @@
   <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <ul :class="$style['list-menu']">
       <li>
-        <organ-donation-link id="btn_organ_donation" class-name="$style['no-decoration']">
+        <organ-donation-link :id="btn_organ_donation" class-name="$style['no-decoration']">
           <h2>{{ $t('sc04.organDonation.subheader') }}</h2>
           <p>{{ $t('sc04.organDonation.body') }}</p>
         </organ-donation-link>
@@ -25,7 +25,7 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import OrganDonationLink from '@/components/OrganDonationLink';
+import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { DATA_SHARING_PREFERENCES } from '@/lib/routes';
 
 export default {

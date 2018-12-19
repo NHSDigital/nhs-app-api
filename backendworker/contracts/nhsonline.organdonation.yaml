@@ -60,12 +60,12 @@ definitions:
         description: Users email address from nhs login.
       decision:
         type: string
-        description: Users organ donation decision, Opt-in, Opt-out, not found.
+        description: Users organ donation decision - OptIn, OptOut or NotFound.
       decisionDetails:
         $ref: '#/definitions/decisionDetails'
       faithDeclaration:
         type: string
-        description: Users faith decision yes, no, not-stated.
+        description: Users faith decision - Yes, No, NotStated.
   usersName:
     type: object
     description: Users name object.
@@ -109,4 +109,4 @@ definitions:
         description: Name of the choice.
       value:
         type: string
-        description: Value of the choice yes, no, not-stated.
+        description: Value of the choice - Yes, No, NotStated.

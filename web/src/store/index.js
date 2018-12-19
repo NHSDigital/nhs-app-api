@@ -17,6 +17,7 @@ import analytics from './modules/analytics';
 import termsAndConditions from './modules/termsAndConditions';
 import appVersion from './modules/appVersion';
 import myRecord from './modules/myRecord';
+import organDonation from './modules/organDonation';
 
 const createStore = () => new Vuex.Store({
   modules: {
@@ -37,6 +38,7 @@ const createStore = () => new Vuex.Store({
     analytics,
     termsAndConditions,
     appVersion,
+    organDonation,
   },
   actions: {
     async nuxtServerInit({ dispatch }) {

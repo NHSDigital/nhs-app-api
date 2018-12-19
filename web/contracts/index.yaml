@@ -7,74 +7,71 @@
   schemes: 
     - "https"
   paths: 
-    /v1/patient/appointment-slots: 
+    /v1/configuration: 
       get: 
         tags: 
-          - "appointment-slots"
-        summary: "Gets a list of available appointments for the logged on user."
-        description: "Returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+          - "configuration"
+        summary: "Gets a collection of configuration values."
+        description: "Gets a collection of configuration values."
         produces: 
           - "application/json"
+        parameters: 
+          - 
+            in: "query"
+            name: "deviceName"
+            type: "string"
+            format: "string"
+            required: true
+            description: "name of the device (android or ios)"
+          - 
+            in: "query"
+            name: "nativeAppVersion"
+            type: "string"
+            format: "string"
+            required: true
+            description: "version number of the NHS App installed on the device"
         responses: 
           200: 
-            description: "Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots."
+            description: "Returns configuration for the app."
+            schema: 
+              type: "object"
+              properties:
+                isDeviceSupported: 
+                  type: "boolean"
+                  description: "Returns true if the version of NHS App installed on device is supported, otherwise false."
+          400: 
+            description: "Either the device name was not provided or the device version number was not in the correct format."
+          500: 
+            description: "An unexpected error occurred processing the request."
+    /v1/odscodelookup: 
+      get: 
+        tags: 
+          - "odscodelookup"
+        summary: "Gets a boolean value to indicate if gp practice is participating in public beta"
+        description: "Gets a boolean value to indicate if gp practice is participating in public beta"
+        produces: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "query"
+            name: "odsCode"
+            type: "string"
+            format: "string"
+            required: true
+            description: "ods code of gp practice"
+        responses: 
+          200: 
+            description: "Returns ods code lookup result for the practice"
             schema: 
               type: "object"
               properties: 
-                guidanceMessage: 
-                  type: "string"
-                  description: "Guidance message from GP practice explaining which appointment slot to book."
-                bookingReasonNecessity: 
-                  type: "string"
-                  enum: 
-                    - "NotAllowed"
-                    - "Optional"
-                    - "Mandatory"
-                  description: "Indicates whether the patient can supply a booking reason when making an appointment."
-                slots: 
-                  type: "array"
-                  description: "Available Appointment Slots."
-                  items: 
-                    type: "object"
-                    properties: 
-                      id: 
-                        type: "string"
-                        description: "Slot Identifier."
-                      type: 
-                        type: "string"
-                        description: "Type of appointment slot, e.g. \"Baby immunisations\"."
-                      startTime: 
-                        type: "string"
-                        format: "date-time"
-                        description: "Appointment Slot Start Date Time."
-                      endTime: 
-                        type: "string"
-                        format: "date-time"
-                        description: "Appointment Slot End Date Time."
-                      location: 
-                        type: "string"
-                        description: "Location of the appointment slot"
-                      clinicians: 
-                        type: "array"
-                        description: "Array of Clinicians, accounts for joint sessions."
-                        items: 
-                          type: "string"
-                      channel: 
-                        type: "string"
-                        enum: 
-                          - "Unknown"
-                          - "Telephone"
-                        description: "Indicates slot channel type supplied by GP practice"
-          401: 
-            description: "User session has expired."
-          403: 
-            description: "The patient does not have the necessary permissions within the GP system."
-          500: 
+                isGPPracticeSupported: 
+                  type: "boolean"
+                  description: "Returns true if the GP Practice is participating"
+          400: 
+            description: "the ods code was not provided"
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
-            description: "Bad response received from upstream system."
-          504: 
-            description: "Timeout when calling upstream system."
     /v1/patient/appointments: 
       delete: 
         tags: 
@@ -263,6 +260,114 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+    /v1/patient/appointment-slots: 
+      get: 
+        tags: 
+          - "appointment-slots"
+        summary: "Gets a list of available appointments for the logged on user."
+        description: "Returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        produces: 
+          - "application/json"
+        responses: 
+          200: 
+            description: "Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots."
+            schema: 
+              type: "object"
+              properties: 
+                guidanceMessage: 
+                  type: "string"
+                  description: "Guidance message from GP practice explaining which appointment slot to book."
+                bookingReasonNecessity: 
+                  type: "string"
+                  enum: 
+                    - "NotAllowed"
+                    - "Optional"
+                    - "Mandatory"
+                  description: "Indicates whether the patient can supply a booking reason when making an appointment."
+                slots: 
+                  type: "array"
+                  description: "Available Appointment Slots."
+                  items: 
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "Slot Identifier."
+                      type: 
+                        type: "string"
+                        description: "Type of appointment slot, e.g. \"Baby immunisations\"."
+                      startTime: 
+                        type: "string"
+                        format: "date-time"
+                        description: "Appointment Slot Start Date Time."
+                      endTime: 
+                        type: "string"
+                        format: "date-time"
+                        description: "Appointment Slot End Date Time."
+                      location: 
+                        type: "string"
+                        description: "Location of the appointment slot"
+                      clinicians: 
+                        type: "array"
+                        description: "Array of Clinicians, accounts for joint sessions."
+                        items: 
+                          type: "string"
+          401: 
+            description: "User session has expired."
+          403: 
+            description: "The patient does not have the necessary permissions within the GP system."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
+          504: 
+            description: "Timeout when calling upstream system."
+    /v1/patient/courses: 
+      get: 
+        tags: 
+          - "courses"
+        summary: "Gets a list of prescriptions courses for the given patient."
+        description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
+        produces: 
+          - "application/json"
+        responses: 
+          200: 
+            description: "Returns list of courses and associated meta data. Returns empty collection of courses if GP system does not return a list of courses."
+            schema: 
+              type: "object"
+              properties: 
+                courses: 
+                  type: "array"
+                  description: "An array of prescription courses"
+                  items: 
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "Course identifier."
+                      name: 
+                        type: "string"
+                        description: "Course name."
+                      details: 
+                        type: "string"
+                        description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
+                specialRequestNecessity: 
+                  type: "string"
+                  enum: 
+                    - "notAllowed"
+                    - "optional"
+                    - "mandatory"
+                  description: "Indicates whether the patient can supply a special request when ordering a prescription."
+          401: 
+            description: "User session missing or expired."
+          403: 
+            description: "The patient does not have the necessary permissions within the GP system."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
+          504: 
+            description: "Timeout when calling upstream system."
     /v1/patient/demographics: 
       get: 
         tags: 
@@ -444,6 +549,9 @@
                     hasErrored: 
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
+                    rawHtml: 
+                      type: "string"
+                      description: "When working with Vision, raw HTML is returned instead of XML data"
                     data: 
                       type: "object"
                       properties: 
@@ -606,102 +714,119 @@
             description: "The GP system is currently unavailable."
           504: 
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/test-result: 
+    /v1/patient/ndop: 
       get: 
         tags: 
-          - "test result"
-        summary: "Returns a string which contains html from TPP for the selected test result."
-        produces: 
+          - "ndop"
+        summary: "Request Ndop Token"
+        description: "Returns a signed Jwt token to be passed to Ndop Web Page"
+        consumes: 
           - "application/json"
-        parameters: 
-          - 
-            in: "query"
-            name: "testResultId"
-            type: "string"
-            required: true
-            description: "id of selected test result"
         responses: 
           200: 
-            description: "Returns html for selected test result from TPP"
+            description: "Token successfully created."
             schema: 
               type: "object"
               properties: 
-                hasErrored: 
-                  type: "boolean"
-                  description: "Shows if error occurred getting test result from TPP"
-                testResult: 
+                token: 
                   type: "string"
-                  description: "html represenation of test result data"
-          400: 
-            description: "Bad request. A querystring parameter is not in the expected format."
+                  description: "signed Jwt Token"
+          500: 
+            description: "An unexpected error occurred processing the request."
+    /v1/patient/organdonation: 
+      get: 
+        tags: 
+          - "organDonation"
+        summary: "Get the existing organ donation and user demographic information."
+        description: "Returns the users organ donation record."
+        consumes: 
+          - "application/json"
+        responses: 
+          200: 
+            description: "Successfully retrieved the users organ donation record."
+            schema: 
+              type: "object"
+              properties: 
+                identifier: 
+                  type: "string"
+                  description: "Users organ donation identifier."
+                nhsNumber: 
+                  type: "string"
+                  description: "Users nhs number from the gp system."
+                nameFull: 
+                  type: "string"
+                  description: "Users full name."
+                name: 
+                  type: "object"
+                  description: "Users name object."
+                  properties: 
+                    title: 
+                      type: "string"
+                      description: "Users title from the gp system."
+                    givenName: 
+                      type: "string"
+                      description: "Users given name from the gp system."
+                    surname: 
+                      type: "string"
+                      description: "Users surname from the gp system."
+                gender: 
+                  type: "string"
+                  description: "Users gender from the gp system."
+                dateOfBirth: 
+                  type: "string"
+                  format: "date"
+                  description: "Users date of birth from the gp system."
+                addressFull: 
+                  type: "string"
+                  description: "Users full address."
+                address: 
+                  type: "object"
+                  description: "Users address from the gp system."
+                  properties: 
+                    text: 
+                      type: "string"
+                      description: "Users address from the gp system."
+                    postcode: 
+                      type: "string"
+                      description: "Users postcode from the gp system."
+                emailAddress: 
+                  type: "string"
+                  description: "Users email address from nhs login."
+                decision: 
+                  type: "string"
+                  description: "Users organ donation decision - OptIn, OptOut or NotFound."
+                decisionDetails: 
+                  type: "object"
+                  description: "Users organ donation decision."
+                  properties: 
+                    all: 
+                      type: "boolean"
+                      description: "Users agreed to donate all organs."
+                    choices: 
+                      type: "array"
+                      items: 
+                        type: "object"
+                        description: "Users individual organ donation choices."
+                        properties: 
+                          name: 
+                            type: "string"
+                            description: "Name of the choice."
+                          value: 
+                            type: "string"
+                            description: "Value of the choice - Yes, No, NotStated."
+                faithDeclaration: 
+                  type: "string"
+                  description: "Users faith decision - Yes, No, NotStated."
           401: 
-            description: "User session has expired."
+            description: "User session missing or expired."
+          409: 
+            description: "Conflicts on organ donation record."
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
-    /v1/patient/terms-and-conditions/consent: 
-      get: 
-        tags: 
-          - "termsAndConditions"
-        summary: "Gets the patient consent for the logged on user."
-        description: "Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
-          - "application/json"
-        responses: 
-          200: 
-            description: "Returns patient consent data for the logged in user."
-            schema: 
-              type: "object"
-              required: 
-                - "consentGiven"
-              properties: 
-                updatedConsentRequired: 
-                  type: "boolean"
-                  description: "Flag indicating whether the terms and conditions have changed since last consent"
-                consentGiven: 
-                  type: "boolean"
-                  description: "Flag indicating whether the user has consented to the terms and conditions"
-                analyticsCookieAccepted: 
-                  type: "boolean"
-                  description: "Flag indicating whether the user has consented to the use of analytics"
-          463: 
-            description: "Unable to fetch consent at this time."
-      post: 
-        tags: 
-          - "termsAndConditions"
-        summary: "Records patient consent and date of consent"
-        description: "Records whether the logged in user has given their consent to use the app and date and time of consent"
-        consumes: 
-          - "application/json"
-        parameters: 
-          - 
-            in: "body"
-            name: "ConsentRequest"
-            required: true
-            description: "Object indicating whether consent has been granted, and the date the request was made."
-            schema: 
-              type: "object"
-              required: 
-                - "consentGiven"
-                - "analyticsCookieAccepted"
-              properties: 
-                consentGiven: 
-                  type: "boolean"
-                  description: "Flag indicating whether the user has consented to the terms and conditions"
-                analyticsCookieAccepted: 
-                  type: "boolean"
-                  description: "Flag indicating whether the user has consented to the use of analytics"
-                updatingConsent: 
-                  type: "boolean"
-                  description: "Flag indicating whether the user is consenting to updated terms and conditions"
-        responses: 
-          201: 
-            description: "Appointment successfully created."
-          462: 
-            description: "Unable to record consent at this time."
     /v1/patient/prescriptions: 
       post: 
         tags: 
@@ -812,71 +937,102 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
-    /v1/patient/courses: 
+    /v1/patient/terms-and-conditions/consent: 
       get: 
         tags: 
-          - "courses"
-        summary: "Gets a list of prescriptions courses for the given patient."
-        description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
+          - "termsAndConditions"
+        summary: "Gets the patient consent for the logged on user."
+        description: "Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
         produces: 
           - "application/json"
         responses: 
           200: 
-            description: "Returns list of courses and associated meta data. Returns empty collection of courses if GP system does not return a list of courses."
+            description: "Returns patient consent data for the logged in user."
+            schema: 
+              type: "object"
+              required: 
+                - "consentGiven"
+              properties: 
+                updatedConsentRequired: 
+                  type: "boolean"
+                  description: "Flag indicating whether the terms and conditions have changed since last consent"
+                consentGiven: 
+                  type: "boolean"
+                  description: "Flag indicating whether the user has consented to the terms and conditions"
+                analyticsCookieAccepted: 
+                  type: "boolean"
+                  description: "Flag indicating whether the user has consented to the use of analytics"
+          463: 
+            description: "Unable to fetch consent at this time."
+      post: 
+        tags: 
+          - "termsAndConditions"
+        summary: "Records patient consent and date of consent"
+        description: "Records whether the logged in user has given their consent to use the app and date and time of consent"
+        consumes: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "body"
+            name: "ConsentRequest"
+            required: true
+            description: "Object indicating whether consent has been granted, and the date the request was made."
+            schema: 
+              type: "object"
+              required: 
+                - "consentGiven"
+                - "analyticsCookieAccepted"
+              properties: 
+                consentGiven: 
+                  type: "boolean"
+                  description: "Flag indicating whether the user has consented to the terms and conditions"
+                analyticsCookieAccepted: 
+                  type: "boolean"
+                  description: "Flag indicating whether the user has consented to the use of analytics"
+                updatingConsent: 
+                  type: "boolean"
+                  description: "Flag indicating whether the user is consenting to updated terms and conditions"
+        responses: 
+          201: 
+            description: "Appointment successfully created."
+          462: 
+            description: "Unable to record consent at this time."
+    /v1/patient/test-result: 
+      get: 
+        tags: 
+          - "test result"
+        summary: "Returns a string which contains html from TPP for the selected test result."
+        produces: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "query"
+            name: "testResultId"
+            type: "string"
+            required: true
+            description: "id of selected test result"
+        responses: 
+          200: 
+            description: "Returns html for selected test result from TPP"
             schema: 
               type: "object"
               properties: 
-                courses: 
-                  type: "array"
-                  description: "An array of prescription courses"
-                  items: 
-                    type: "object"
-                    properties: 
-                      id: 
-                        type: "string"
-                        description: "Course identifier."
-                      name: 
-                        type: "string"
-                        description: "Course name."
-                      details: 
-                        type: "string"
-                        description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
-                specialRequestNecessity: 
+                hasErrored: 
+                  type: "boolean"
+                  description: "Shows if error occurred getting test result from TPP"
+                testResult: 
                   type: "string"
-                  enum: 
-                    - "notAllowed"
-                    - "optional"
-                    - "mandatory"
-                  description: "Indicates whether the patient can supply a special request when ordering a prescription."
+                  description: "html represenation of test result data"
+          400: 
+            description: "Bad request. A querystring parameter is not in the expected format."
           401: 
-            description: "User session missing or expired."
-          403: 
-            description: "The patient does not have the necessary permissions within the GP system."
+            description: "User session has expired."
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
-    /v1/patient/ndop: 
-      get: 
-        tags: 
-          - "ndop"
-        summary: "Request Ndop Token"
-        description: "Returns a signed Jwt token to be passed to Ndop Web Page"
-        consumes: 
-          - "application/json"
-        responses: 
-          200: 
-            description: "Token successfully created."
-            schema: 
-              type: "object"
-              properties: 
-                token: 
-                  type: "string"
-                  description: "signed Jwt Token"
-          500: 
-            description: "An unexpected error occurred processing the request."
     /v1/session: 
       post: 
         tags: 
@@ -959,42 +1115,6 @@
             description: "An unexpected error occurred during the processing of the request."
           502: 
             description: "Session storage is unavailable"
-    /v1/configuration: 
-      get: 
-        tags: 
-          - "configuration"
-        summary: "Gets a collection of configuration values."
-        description: "Gets a collection of configuration values."
-        produces: 
-          - "application/json"
-        parameters: 
-          - 
-            in: "query"
-            name: "deviceName"
-            type: "string"
-            format: "string"
-            required: true
-            description: "name of the device (android or ios)"
-          - 
-            in: "query"
-            name: "nativeAppVersion"
-            type: "string"
-            format: "string"
-            required: true
-            description: "version number of the NHS App installed on the device"
-        responses: 
-          200: 
-            description: "Returns configuration for the app."
-            schema: 
-              type: "object"
-              properties: 
-                isDeviceSupported: 
-                  type: "boolean"
-                  description: "Returns true if the version of NHS App installed on device is supported, otherwise false."
-          400: 
-            description: "Either the device name was not provided or the device version number was not in the correct format."
-          500: 
-            description: "An unexpected error occurred processing the request."
     /v1/session/extend: 
       post: 
         tags: 
@@ -1012,33 +1132,4 @@
             description: "Could not extend service. Can occur if already timed out, or there is a problem with the request."
           504: 
             description: "Timeout when calling upstream system."
-    /v1/odscodelookup: 
-      get: 
-        tags: 
-          - "odscodelookup"
-        summary: "Gets a boolean value to indicate if gp practice is participating in public beta"
-        description: "Gets a boolean value to indicate if gp practice is participating in public beta"
-        produces: 
-          - "application/json"
-        parameters: 
-          - 
-            in: "query"
-            name: "odsCode"
-            type: "string"
-            format: "string"
-            required: true
-            description: "ods code of gp practice"
-        responses: 
-          200: 
-            description: "Returns ods code lookup result for the practice"
-            schema: 
-              type: "object"
-              properties: 
-                isGPPracticeSupported: 
-                  type: "boolean"
-                  description: "Returns true if the GP Practice is participating"
-          400: 
-            description: "the ods code was not provided"
-          500: 
-            description: "An unexpected error occurred processing the request."
 

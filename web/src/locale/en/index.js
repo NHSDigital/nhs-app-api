@@ -641,8 +641,17 @@ export default {
     myRecord: 'View my medical record',
     organDonation: 'Set organ donation preferences',
   },
-  od1_1: {
-    subheader: 'Register your organ donation decision',
+  organDonation: {
+    additionalDetails: {
+      subheader: 'Additional details',
+    },
+    register: {
+      subheader: 'Register your organ donation decision',
+      noButton: {
+        header: 'NO',
+        subheader: 'I do not want to donate my organs',
+      },
+    },
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',
@@ -690,6 +699,12 @@ export default {
     },
     nhsLogoIcon: {
       title: 'NHS app',
+    },
+    organDonation: {
+      noIcon: {
+        title: 'No',
+        description: 'Indicates not to donate organs',
+      },
     },
     patientDetailsIcon: {
       title: 'Patient Details',
