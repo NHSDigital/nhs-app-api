@@ -5,7 +5,7 @@ import brothermailer from '@/middleware-server/routes/brothermailer';
 
 const app = express();
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(appointments());
 app.use(brothermailer());
 
