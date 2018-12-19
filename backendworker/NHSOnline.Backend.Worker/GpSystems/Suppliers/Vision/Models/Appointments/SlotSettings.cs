@@ -10,5 +10,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointment
 
         [XmlArray(ElementName = "cancellationReasons", Namespace = "urn:vision")]
         public List<Reason> CancellationReasons { get; set; }
+
+        [XmlElement(ElementName = "cancellationCutoffMinutes", Namespace = "urn:vision")]
+        public int CancellationCutOffMinutes { get; set; }
     }
 }

@@ -33,10 +33,17 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.checkBookingSuccessMessage()
     }
 
-    @Then("^the booked appointment is correctly displayed with ability to cancel$")
+    @Then("^the booked appointment before cutoff time is correctly displayed with ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithCancel() {
         myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
         myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
+    }
+
+    @Then("^booked appointments before and one appointment within cutoff time " +
+            "are correctly displayed with relevant ability to cancel$")
+    fun bookedAppointmentIsCorrectlyDisplayedWithCancelExceptOnesWithinCutoffTime() {
+        myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
+        myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment(1)
     }
 
     @Then("^the Appointment Booking success message is displayed without reference to being able to cancel$")
@@ -85,7 +92,7 @@ class MyAppointmentsStepDefinitions {
         viewAppointmentFactory.createSuccessfulEmptyUpcomingAppointmentResponse()
     }
 
-    @Given("^I have upcoming appointments for (\\w+)$")
+    @Given("^I have upcoming appointments before cutoff time for (\\w+)$")
     fun iHaveUpcomingAppointments(gpService: String) {
         val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
@@ -99,16 +106,42 @@ class MyAppointmentsStepDefinitions {
         )
     }
 
-    @Given("^I have upcoming appointments for VISION, but with only one cancellation reason$")
-    fun iHaveUpcomingAppointmentsWithOneCancellationReason() {
+    @Given("^I have upcoming appointments before cutoff time for VISION with only one cancellation reason$")
+    fun iHaveUpcomingAppointmentsBeforeCutoffWithOneCancellationReason() {
         val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
         viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(numberOfCancellationReasons = 1)
     }
 
-    @Given("^I have upcoming appointments for VISION, but without cancellation reasons$")
-    fun iHaveUpcomingAppointmentsWithoutCancellationReasons() {
+    @Given("^I have upcoming appointments before cutoff time for VISION without cancellation reasons$")
+    fun iHaveUpcomingAppointmentsBeforeCutoffWithoutCancellationReasons() {
         val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
         viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(numberOfCancellationReasons = 0)
+    }
+
+    @Given("^I have upcoming appointments within cutoff time for VISION with cancellation reasons$")
+    fun iHaveUpcomingAppointmentsWithinCutoffWithOneCancellationReason() {
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
+                AppointmentsSlotsExample.getGenericExample(
+                        arrayListOf(AppointmentsSlotsExample.appointmentWithinCutoffTime())),
+                2)
+    }
+
+    @Given("^I have upcoming appointments within cutoff time for VISION without cancellation reasons$")
+    fun iHaveUpcomingAppointmentsWithinCutoffWithoutCancellationReasons() {
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
+                AppointmentsSlotsExample.getGenericExample(
+                        arrayListOf(AppointmentsSlotsExample.appointmentWithinCutoffTime())),
+                0)
+    }
+
+    @Given("^I have upcoming appointments before and within cutoff time for VISION with cancellation reasons$")
+    fun iHaveUpcomingAppointmentsBeforeAndWithinCutoffWithOneCancellationReason() {
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
+                AppointmentsSlotsExample.getFacadeWithAppointmentWithinCutoffTime(),
+                2)
     }
 
     @Given("^a booked appointment cannot be cancelled$")

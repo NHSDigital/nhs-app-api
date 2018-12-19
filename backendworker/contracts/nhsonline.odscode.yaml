@@ -11,7 +11,7 @@ paths:
       tags:
         - odscodelookup
       summary: Gets a boolean value to indicate if gp practice is participating in public beta
-      description:
+      description: Gets a boolean value to indicate if gp practice is participating in public beta
       produces:
         - application/json
       parameters:

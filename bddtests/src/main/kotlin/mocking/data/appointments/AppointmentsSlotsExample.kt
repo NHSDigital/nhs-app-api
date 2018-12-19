@@ -26,6 +26,8 @@ class AppointmentsSlotsExample {
         private const val endOfDayTimeMin = 55
         private const val duration = 10
 
+        private const val visionCancellationCutOff: Long = 30
+
         private val currentTime = LocalDateTime.now()
         private var currentDateToAdd = currentTime
         val remainingDatesForThisWeek = setWeek()
@@ -151,13 +153,25 @@ class AppointmentsSlotsExample {
                     .build()
         }
 
-        fun getFacadeWithPastAppointment(): AppointmentSlotsResponseFacade {
+        fun getGenericExample(appointmentSessionFacade: ArrayList<AppointmentSessionFacade>):
+                AppointmentSlotsResponseFacade {
             return getGenericExampleBuilder()
-                    .appointmentSessions(
+                    .appointmentSessions(appointmentSessionFacade)
+                    .build()
+        }
+
+        fun getFacadeWithPastAppointment(): AppointmentSlotsResponseFacade {
+            return getGenericExample(
                             arrayListOf(pastAppointmentSession).plus(appointmentSessions)
                                     as java.util.ArrayList<AppointmentSessionFacade>
                     )
-                    .build()
+        }
+
+        fun getFacadeWithAppointmentWithinCutoffTime(): AppointmentSlotsResponseFacade {
+            return getGenericExample(
+                            arrayListOf(appointmentWithinCutoffTime()).plus(appointmentSessions)
+                                    as java.util.ArrayList<AppointmentSessionFacade>
+                    )
         }
 
         private fun getGenericExampleBuilder(): AppointmentsSlotsExampleBuilder {
@@ -321,6 +335,30 @@ class AppointmentsSlotsExample {
                                     )
                             ))
                     .build()
+        }
+
+
+
+        fun appointmentWithinCutoffTime(): AppointmentSessionFacade {
+                val appointmentSessionFacadeBuilder = AppointmentSessionFacadeBuilder()
+                    .sessionId(slot1ID)
+                    .sessionType(clinicSessionType)
+                    .staffDetails(arrayListOf(staffDrWho))
+                    .location(locationLeeds)
+                    .slots {
+                        addAppointment {
+                            slotId(slot1ID)
+                                    .startDate(DateTimeWrapper(
+                                            LocalDateTime.now() 
+                                                    .plusMinutes(visionCancellationCutOff)).dateTimeAsBackendString) 
+                                    .endDate(DateTimeWrapper( 
+                                            LocalDateTime.now() 
+                                                    .plusMinutes(visionCancellationCutOff + duration)) 
+                                                        .dateTimeAsBackendString) 
+                                    .setSlotInThePast() 
+                        }
+                    }
+            return appointmentSessionFacadeBuilder.build()
         }
 
         fun slotForDayAfterTomorrow(): AppointmentSlotsResponseFacade {

@@ -14,7 +14,9 @@ data class AppointmentSettings(
         @XmlElement(namespace = "urn:vision", name = "cancellationReasons")
         var cancellationReasons: CancellationReasons? = null,
         @XmlElement(namespace = "urn:vision", name = "bookingReason")
-        val bookingReason: BookingReason? = null)
+        val bookingReason: BookingReason? = null,
+        @XmlElement(namespace = "urn:vision", name = "cancellationCutoffMinutes")
+        val cancellationCutoffMinutes: Int = 60)
 
 @XmlAccessorType(XmlAccessType.FIELD)
 data class BookingReason(

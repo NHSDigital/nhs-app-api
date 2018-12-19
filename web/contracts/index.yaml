@@ -169,6 +169,9 @@
                         description: "Array of Clinicians, accounts for joint sessions."
                         items: 
                           type: "string"
+                      disableCancellation: 
+                        type: "boolean"
+                        description: "Indicates the appointment cannot be cancelled."
                 cancellationReasons: 
                   type: "array"
                   description: "Array of Cancellation Reasons."
@@ -952,7 +955,7 @@
         tags: 
           - "configuration"
         summary: "Gets a collection of configuration values."
-        description: null
+        description: "Gets a collection of configuration values."
         produces: 
           - "application/json"
         parameters: 
@@ -1005,7 +1008,7 @@
         tags: 
           - "odscodelookup"
         summary: "Gets a boolean value to indicate if gp practice is participating in public beta"
-        description: null
+        description: "Gets a boolean value to indicate if gp practice is participating in public beta"
         produces: 
           - "application/json"
         parameters: 
@@ -1029,3 +1032,4 @@
             description: "the ods code was not provided"
           500: 
             description: "An unexpected error occurred processing the request."
+

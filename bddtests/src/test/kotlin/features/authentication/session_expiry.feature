@@ -76,7 +76,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
   dialog box, extends their session and stays signed in
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
@@ -90,7 +90,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
   dialog box, opts to logout
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
@@ -103,7 +103,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
   dialog box, does nothing and is signed out
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
@@ -116,7 +116,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
   screen is prompted with the session extension dialog box, extends their session and stays signed in
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     And I navigate to more
     When I choose to set my organ donation preferences
@@ -132,7 +132,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
   screen is prompted with the session extension dialog box, opts to logout
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     And I navigate to more
     When I choose to set my organ donation preferences
@@ -149,7 +149,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
   screen is prompted with the session extension dialog box, does nothing and is signed out
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     And I navigate to more
     When I choose to set my organ donation preferences
@@ -167,7 +167,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: The session expires, a user of the native app, on a non secure screen, when navigating back to a secure
   screen is signed out
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     And I navigate to more
     When I choose to set my organ donation preferences
@@ -179,7 +179,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
   to the foreground and the session extension dialog box is displayed, extends their session and stays signed in
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
@@ -192,7 +192,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
   to the foreground and the session extension dialog box is displayed, opts to logout
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
@@ -204,7 +204,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
   to the foreground and the session extension dialog box is displayed, does nothing and is signed out
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
@@ -216,7 +216,7 @@ Feature: Session Expiry and Extend
   @native
   Scenario: The native app, on a secure screen is in the background. The session expires, the user brings the app
   to the foreground and is signed out
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     Then I background the app long enough for the session expiry and bring it back to foreground
@@ -225,7 +225,7 @@ Feature: Session Expiry and Extend
   @manual
   Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
   unlocks the device and the session extension dialog box is displayed, extends their session and stays signed in
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     Then I lock the device
@@ -241,7 +241,7 @@ Feature: Session Expiry and Extend
   @manual
   Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
   unlocks the device and the session extension dialog box is displayed, opts to logout
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     Then I lock the device
@@ -259,7 +259,7 @@ Feature: Session Expiry and Extend
   @manual
   Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
   unlocks the device and the session extension dialog box is displayed, does nothing and is signed out
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I lock the device
     When I am idle long enough for the session expiry dialog box to appear
@@ -274,7 +274,7 @@ Feature: Session Expiry and Extend
   @manual
   Scenario: The user has locked the device with the native app on a secure screen. The session expires, the user
   unlocks the device and is signed out
-    Given I have upcoming appointments for EMIS
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in as a EMIS user
     Then I navigate to Appointments
     Then I lock the device

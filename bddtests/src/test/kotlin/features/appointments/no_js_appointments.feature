@@ -66,7 +66,7 @@ Feature: Appointment Service with no Javascript
 
   Scenario Outline: A <GP System> user can cancel appointments with javascript disabled
     Given I have disabled javascript
-    And <GP System> is available to cancel a previously booked appointment because <Reason>
+    And <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
     And I am logged in as a <GP System> user
     And I am on the My Appointments page
     And I select a "Cancel appointment" link
@@ -81,7 +81,7 @@ Feature: Appointment Service with no Javascript
 
   Scenario: A TPP user can cancel appointments with javascript disabled
     Given I have disabled javascript
-    And TPP is available to cancel a previously booked appointment
+    And TPP is available to cancel a previously booked appointment before cutoff time
     And I am logged in as a TPP user
     And I am on the My Appointments page
     And I select a "Cancel appointment" link

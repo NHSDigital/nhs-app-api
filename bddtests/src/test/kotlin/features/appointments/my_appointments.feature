@@ -29,7 +29,7 @@ Feature: My appointments
 
   @smoketest
   Scenario Outline: A <GP System> user can see their upcoming appointments
-    Given I have upcoming appointments for <GP System>
+    Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in as a <GP System> user
     When I am on the My Appointments page
     Then the page title is "My appointments"
@@ -44,6 +44,7 @@ Feature: My appointments
       | TPP       |
       | VISION    |
 
+
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
       # VISION Specific test
     Given Appointments are disabled for VISION at a GP Practice level
@@ -52,14 +53,44 @@ Feature: My appointments
     Then I see appropriate information message when appointments are disabled
     And there should not be an option to try again
 
-  Scenario: It is made clear to a Vision user when they cannot cancel appointments they have already booked
-    Given I have upcoming appointments for VISION, but without cancellation reasons
+  Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available
+    Given I have upcoming appointments before cutoff time for VISION without cancellation reasons
     And I am logged in as a VISION user
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
     And appointments are in chronological order
     And no appointment can be cancelled
+    And I can book an appointment
+
+  Scenario: Cancellation link won't be displayed for VISION appointment within cancellation cut off period without cancellation reason(s) available
+    Given I have upcoming appointments within cutoff time for VISION without cancellation reasons
+    And I am logged in as a VISION user
+    When I am on the My Appointments page
+    Then the page title is "My appointments"
+    And I am given the list of upcoming appointments
+    And appointments are in chronological order
+    And no appointment can be cancelled
+    And I can book an appointment
+
+  Scenario: Cancellation link won't be displayed for VISION appointment within cancellation cut off period with cancellation reason(s) available
+    Given I have upcoming appointments within cutoff time for VISION with cancellation reasons
+    And I am logged in as a VISION user
+    When I am on the My Appointments page
+    Then the page title is "My appointments"
+    And I am given the list of upcoming appointments
+    And appointments are in chronological order
+    And no appointment can be cancelled
+    And I can book an appointment
+
+  Scenario: Cancellation link will be displayed for VISION appointment only before cancellation cut off period with cancellation reason(s) available
+    Given I have upcoming appointments before and within cutoff time for VISION with cancellation reasons
+    And I am logged in as a VISION user
+    When I am on the My Appointments page
+    Then the page title is "My appointments"
+    And I am given the list of upcoming appointments
+    And appointments are in chronological order
+    And booked appointments before and one appointment within cutoff time are correctly displayed with relevant ability to cancel
     And I can book an appointment
 
   @long-running

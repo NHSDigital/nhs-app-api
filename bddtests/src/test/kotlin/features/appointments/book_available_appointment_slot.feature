@@ -15,7 +15,7 @@ Feature: Book an available appointment slot
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
-    And the booked appointment is correctly displayed with ability to cancel
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
       | EMIS      |
@@ -46,7 +46,7 @@ Feature: Book an available appointment slot
     When I enter symptoms of 1 characters
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
-    And the booked appointment is correctly displayed with ability to cancel
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
       | EMIS      |
@@ -64,7 +64,7 @@ Feature: Book an available appointment slot
     When I enter symptoms of 150 characters
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
-    And the booked appointment is correctly displayed with ability to cancel
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
       | EMIS      |
@@ -84,7 +84,7 @@ Feature: Book an available appointment slot
     Then only the first 150 characters will be displayed
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
-    And the booked appointment is correctly displayed with ability to cancel
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
       | EMIS      |
@@ -119,7 +119,7 @@ Feature: Book an available appointment slot
     When I enter symptoms of 151 characters
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
-    And the booked appointment is correctly displayed with ability to cancel
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
     Examples:
       | GP System |
       | EMIS      |
@@ -262,7 +262,7 @@ Feature: Book an available appointment slot
     Then the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
-    And the booked appointment is correctly displayed with ability to cancel
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   Scenario: An EMIS user can book an appointment with describing symptoms
     Given there are EMIS appointments available to book where booking reason is set optional with a reason entered
@@ -274,7 +274,7 @@ Feature: Book an available appointment slot
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking success message is displayed
-    And the booked appointment is correctly displayed with ability to cancel
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
 
   Scenario: An EMIS user on Old EMIS System reached maximum appointment booking limit
     Given  there are appointments available to book in old EMIS system, but user reached maximum appointment booking limit

@@ -12,14 +12,15 @@ class CancelAppointmentStepDefinitions {
     @Steps
     lateinit var cancelAppointmentSteps: CancelAppointmentSteps
 
-    @Given("^(.*) is available to cancel a previously booked appointment because (.*)$")
+    @Given("^(.*) is available to cancel a previously booked appointment before cutoff time because (.*)$")
     fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
         cancelAppointmentSteps.mockCancellationRequestStubForReason(reason, gpSystem) { cancelRequest ->
             cancelRequest.respondWithSuccess()
         }
     }
 
-    @Given("^VISION is available to cancel a previously booked appointment, with only one available reason$")
+    @Given("^VISION is available to cancel a previously booked appointment before cutoff time, " +
+            "with only one available reason$")
     fun visionIsAvailableToCancelWithOneReason() {
         cancelAppointmentSteps.mockCancellationRequestStubForReason(gpSystem = "VISION") { cancelRequest ->
             cancelRequest.respondWithSuccess()

@@ -154,18 +154,18 @@ open class MyAppointmentsSteps {
     }
 
     @Step
-    fun verifyThatThereIsACancelLinkForEachUpcomingAppointment() {
+    fun verifyThatThereIsACancelLinkForEachUpcomingAppointment(appointmentsWithoutCancelLink: Int = 0) {
         val expectedNumberOfSlots = Serenity.sessionVariableCalled<List<Slot>>(
                 UpcomingAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
         ).size
         assertEquals(
                 "Missing at least one cancel link. ",
-                expectedNumberOfSlots,
+                (expectedNumberOfSlots-appointmentsWithoutCancelLink),
                 myAppointmentsPage.getNumberOfCancelLinks()
         )
         assertEquals(
                 "Found a reference to not being able to cancel. ",
-                0,
+                appointmentsWithoutCancelLink,
                 myAppointmentsPage.getNumberOfAppointmentsThatCannotBeCancelled()
         )
     }

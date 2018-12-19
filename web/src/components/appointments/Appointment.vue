@@ -21,7 +21,7 @@
       </span>
     </p>
 
-    <span v-if="showCancellationLink && !cancellationDisabled">
+    <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation">
       <hr :class="$style.cancel" aria-hidden="true">
       <p>
         <a :class="$style['cancel-link']" :href="appointmentCancellingPath"
@@ -30,14 +30,12 @@
         </a>
       </p>
     </span>
-
-    <span v-if="cancellationDisabled">
+    <span v-if="showCancellationLink && (cancellationDisabled || appointment.disableCancellation)">
       <hr :class="$style.cancel" aria-hidden="true">
       <p :class="$style['cancel-disabled']">
         {{ this.$t('appointments.index.cancellationDisabledText') }}
       </p>
     </span>
-
   </div>
 </template>
 

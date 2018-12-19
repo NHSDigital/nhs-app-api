@@ -11,5 +11,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         public string Location { get; set; }
         public IEnumerable<string> Clinicians { get; set; }
         public string Type { get; set; }
+
+        public bool DisableCancellation { get; set; }
     }
 }

@@ -23,7 +23,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
     private val commonSteps: CommonSteps = CommonSteps()
     private val cancelAppointmentSteps = CancelAppointmentSteps()
 
-    @Given("^(.*) is available to cancel a previously booked appointment$")
+    @Given("^(.*) is available to cancel a previously booked appointment before cutoff time$")
     fun gpSystemIsAvailableToCancelAnAppointment(gpSystem: String) {
 
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)

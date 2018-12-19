@@ -224,6 +224,9 @@ definitions:
         description: Array of Clinicians, accounts for joint sessions.
         items:
           type: string
+      disableCancellation:
+        type: boolean
+        description: Indicates the appointment cannot be cancelled.
   CancellationReason:
     type: object
     properties:

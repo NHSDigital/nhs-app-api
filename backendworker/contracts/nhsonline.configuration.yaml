@@ -11,7 +11,7 @@ paths:
       tags:
         - configuration
       summary: Gets a collection of configuration values.
-      description:
+      description: Gets a collection of configuration values.
       produces:
         - application/json
       parameters:

@@ -2,7 +2,7 @@
 Feature: Ability to cancel an appointment
 
   Scenario Outline: <GP System> user is presented with the cancel appointment screen
-    Given I have upcoming appointments for <GP System>
+    Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in as a <GP System> user
     And I am on the My Appointments page
     When I select a "Cancel appointment" link
@@ -14,9 +14,8 @@ Feature: Ability to cancel an appointment
       | EMIS      |
       | VISION    |
 
-  Scenario: A Vision user is presented with the cancel appointment screen without reason selected, when there is just
-  one
-    Given I have upcoming appointments for VISION, but with only one cancellation reason
+  Scenario: A Vision user is presented with the cancel appointment screen without reason selected, when there is just one (appointments before cutoff time)
+    Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
     And I am logged in as a VISION user
     And I am on the My Appointments page
     When I select a "Cancel appointment" link
@@ -25,7 +24,7 @@ Feature: Ability to cancel an appointment
     And there is a cancellation reasons drop-down
 
   Scenario: A TPP user is presented with the cancel appointment screen
-    Given I have upcoming appointments for TPP
+    Given I have upcoming appointments before cutoff time for TPP
     And I am logged in as a TPP user
     And I am on the My Appointments page
     When I select a "Cancel appointment" link
@@ -34,7 +33,7 @@ Feature: Ability to cancel an appointment
     And cancellation reasons drop-down is hidden
 
   Scenario Outline: A validation message will be displayed if no reason is selected
-    Given I have upcoming appointments for <GP System>
+    Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in as a <GP System> user
     And I am on the My Appointments page
     When I select a "Cancel appointment" link
@@ -46,7 +45,7 @@ Feature: Ability to cancel an appointment
       | VISION    |
 
   Scenario:  A validation message will be displayed if no reason is selected, even when there is just one
-    Given I have upcoming appointments for VISION, but with only one cancellation reason
+    Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
     And I am logged in as a VISION user
     And I am on the My Appointments page
     When I select a "Cancel appointment" link
@@ -55,7 +54,7 @@ Feature: Ability to cancel an appointment
 
 
   Scenario Outline: <GP System> user can cancel an appointment with selected reason of <Reason>
-    Given <GP System> is available to cancel a previously booked appointment because <Reason>
+    Given <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
     And I am logged in as a <GP System> user
     And I am on the My Appointments page
     And I select a "Cancel appointment" link
@@ -75,7 +74,7 @@ Feature: Ability to cancel an appointment
       | Reason 2         | VISION    |
 
   Scenario:  Vision user can cancel appointment when there is just one reason
-    Given VISION is available to cancel a previously booked appointment, with only one available reason
+    Given VISION is available to cancel a previously booked appointment before cutoff time, with only one available reason
     And I am logged in as a VISION user
     And I am on the My Appointments page
     And I select a "Cancel appointment" link
@@ -86,7 +85,7 @@ Feature: Ability to cancel an appointment
 
   @smoketest
   Scenario: A TPP user can cancel an appointment
-    Given TPP is available to cancel a previously booked appointment
+    Given TPP is available to cancel a previously booked appointment before cutoff time
     And I am logged in as a TPP user
     And I am on the My Appointments page
     And I select a "Cancel appointment" link
@@ -97,7 +96,7 @@ Feature: Ability to cancel an appointment
 
 
   Scenario Outline: <GP System> user navigates back to the "My appointments" screen
-    Given I have upcoming appointments for <GP System>
+    Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in as a <GP System> user
     And I am on the My Appointments page
     And I select a "Cancel appointment" link
@@ -126,7 +125,7 @@ Feature: Ability to cancel an appointment
   @long-running
   @nativepending @NHSO-2966
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
-    Given I have upcoming appointments for VISION
+    Given I have upcoming appointments before cutoff time for VISION
     And I am logged in as a VISION user
     And I am on the My Appointments page
     And I select a "Cancel appointment" link
@@ -137,7 +136,7 @@ Feature: Ability to cancel an appointment
 
   @manual
   Scenario: Cancelling appointment, when there is no internet connection should result with a message indicating user may have connectivity problems
-    Given I have upcoming appointments for VISION
+    Given I have upcoming appointments before cutoff time for VISION
     And I am logged in as a VISION user
     And I am on the My Appointments page
     And I select a "Cancel appointment" link

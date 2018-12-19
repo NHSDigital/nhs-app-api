@@ -32,6 +32,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             var locations = SetUpLocations(bookedAppointments.References?.Locations);
             var slotTypes = SetUpSlotType(bookedAppointments.References?.SlotTypes);
             var sessions = SetUpSessions(bookedAppointments.References?.Sessions);
+            var cancellationCutOffMinutes = bookedAppointments.Settings?.CancellationCutOffMinutes ?? 0;
+            var currentTime = _dateTimeOffsetProvider.CreateDateTimeOffset();
             
             foreach (var slot in bookedAppointments.Slots)
             {
@@ -45,17 +47,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 var slotType = slotTypes.GetValueOrDefault(slot.Type, null);
                 var session = sessions.GetValueOrDefault(slot.Session, null);
 
-                mappedAppointments.Add(
-                    new Appointment
+                mappedAppointments.Add(new Appointment
                 {
                     Id = slot.Id,
                     StartTime = startTime.GetValueOrDefault(),
                     EndTime = GetEndTime(startTime, slot),
                     Location = location,
                     Type = CreateTypeFromAppointmentAndSession(slotType, session),
-                    Clinicians = GetClinician(slot.Owner, bookedAppointments.References?.Owners)
-                }
-                    );
+                    Clinicians = GetClinician(slot.Owner, bookedAppointments.References?.Owners),
+                    DisableCancellation = CutOffBreached(currentTime, startTime, cancellationCutOffMinutes)
+                });
             }
 
             return mappedAppointments;
@@ -103,6 +104,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             return startTime.HasValue && int.TryParse(slot.Duration, out var mins)
                 ? (DateTimeOffset?)startTime.Value.AddMinutes(mins)
                 : null;
+        }
+
+        private static bool CutOffBreached(DateTimeOffset currentTime, DateTimeOffset? startTime,
+            int cancellationCutOffMinutes)
+        {
+            return startTime.HasValue && currentTime >= startTime.Value.AddMinutes(-cancellationCutOffMinutes);
         }
     }
 }

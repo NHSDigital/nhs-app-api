@@ -7,7 +7,7 @@ Feature: My appointments backend
 
   @backend
   Scenario Outline: API call for upcoming appointments will only request upcoming appointments from <GP System>
-    Given I have upcoming appointments for <GP System>
+    Given I have upcoming appointments before cutoff time for <GP System>
     And I have logged into <GP System> and have a valid session cookie
     When the upcoming appointments are requested
     Then I will only receive upcoming appointments
