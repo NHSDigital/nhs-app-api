@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             {
                 Suid = suidHeader?.Value,
                 OnlineUserId = authenticateResponse.Body.OnlineUserId,
-                PatientId = authenticateResponse.Body.PatientId,
+                PatientId = authenticateResponse.Body.User.Person.PatientId,
                 OdsCode = odsCode,
                 NhsNumber = nhsNumber
             });
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                 .IsNotNull(authenticateResponse?.Body, nameof(authenticateResponse.Body))
                 .IsNotNullOrWhitespace(suidHeader?.Value, nameof(suidHeader.Value))
                 .IsNotNullOrWhitespace(authenticateResponse?.Body?.OnlineUserId, nameof(authenticateResponse.Body.OnlineUserId))
-                .IsNotNullOrWhitespace(authenticateResponse?.Body?.PatientId, nameof(authenticateResponse.Body.PatientId))
+                .IsNotNullOrWhitespace(authenticateResponse?.Body?.User?.Person?.PatientId, nameof(authenticateResponse.Body.User.Person.PatientId))
                 .IsValid();
         }
 

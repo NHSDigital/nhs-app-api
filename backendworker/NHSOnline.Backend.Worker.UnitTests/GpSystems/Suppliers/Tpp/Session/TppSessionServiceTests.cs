@@ -52,6 +52,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                 {
                     _actual = x;
                 });
+            
+            _mockTppClient
+                .Setup(x => x.PatientSelectedPost(It.IsAny<TppUserSession>()))
+                .ReturnsAsync(() => null);
 
             _nhsNumber = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
@@ -167,7 +171,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             var reply = CreateReply(
                 suid: expectedSessionId, 
                 onlineUserId: expectedOnlineUserId, 
-                patiendId: expectedPatientId);
+                patientId: expectedPatientId);
 
             var userSession = CreateUserSession(odsCode, expectedSessionId,
                 expectedOnlineUserId, expectedPatientId, _nhsNumber);
@@ -353,18 +357,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
 
         private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie", string suid = "dimsum",
-            string onlineUserId = "123", string patiendId = "123")
+            string onlineUserId = "123", string patientId = "123")
         {
             var response = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
             {
                 Body = new AuthenticateReply
                 {
                     OnlineUserId = onlineUserId,
-                    PatientId = patiendId,
+                    PatientId = patientId,
                     User = new User
                     {
                         Person = new Person
                         {
+                            PatientId = patientId,
                             PersonName = new PersonName { Name = name }
                         }
                     }

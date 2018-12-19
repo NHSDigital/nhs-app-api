@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                 {
                     Suid = _suid,
                     OnlineUserId = response.Body.OnlineUserId,
-                    PatientId = response.Body.PatientId,
+                    PatientId = response.Body.User.Person.PatientId,
                     OdsCode = _odsCode,
                     NhsNumber = _nhsNumber
                 };
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         {
             var response = _fixture.Create<TppApiObjectResponse<AuthenticateReply>>();
             response.Headers.Add("suid", _suid);
-            response.Body.PatientId = patientId;
+            response.Body.User.Person.PatientId = patientId;
 
             var result = _systemUnderTest.Map(response, _odsCode, _nhsNumber);
             Action act = () => result.ValueOrFailure();
