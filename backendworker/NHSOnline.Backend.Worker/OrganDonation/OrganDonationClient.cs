@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
     public class OrganDonationClient : IOrganDonationClient
     {
         private const string LookupPath = "Registration/_search";
+        private const string AllReferencePath = "ReferenceData";
 
         private const string SessionIdHeaderKey = "X-Session-ID";
         private const string SequenceIdHeaderKey = "X-Sequence-ID";
@@ -20,7 +21,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         private readonly OrganDonationHttpClient _httpClient;
         private readonly IJsonResponseParser _responseParser;
         private readonly ILogger<OrganDonationClient> _logger;
-        private JsonSerializerSettings _serializerSettings;
+        private readonly JsonSerializerSettings _serializerSettings;
 
         public OrganDonationClient(OrganDonationHttpClient httpClient,
             IJsonResponseParser responseParser,
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
             _serializerSettings = new JsonSerializerSettings
             {
-                ContractResolver = new DefaultContractResolver() { NamingStrategy = new LowercaseNamingStrategy() }
+                ContractResolver = new DefaultContractResolver { NamingStrategy = new LowercaseNamingStrategy() }
             };
         }
 
@@ -40,6 +41,18 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             LookupRegistrationRequest request, UserSession userSession)
         {
             return await Post<LookupRegistrationRequest, RegistrationLookupResponse>(request, userSession, LookupPath);
+        }
+
+        public async Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData()
+        {
+            return await Get<ReferenceDataResponse>(AllReferencePath);
+        }
+
+        private async Task<OrganDonationResponse<TResponse>> Get<TResponse>(
+            string path)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, path);
+            return await SendRequestAndParseResponse<TResponse>(request);
         }
 
         private async Task<OrganDonationResponse<TResponse>> Post<TRequest, TResponse>(TRequest model,

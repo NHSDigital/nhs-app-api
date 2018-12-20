@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -31,7 +30,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 : ParseResponse(responseParser, logger, stringResponse, responseMessage);
         }
 
-        public override string ErrorForLogging => $"Status Code: '{StatusCode}'. " + 
+        public override string ErrorForLogging => $"Status Code: '{StatusCode}'. " +
                                                   $"Error Code: '{ErrorResponse?.Issue?.Code}'. " +
                                                   $"Details:'{ErrorResponse?.Issue?.Details}'. " +
                                                   $"Diagnostics:'{ErrorResponse?.Issue?.Diagnostics}'.";
@@ -42,25 +41,17 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             string stringResponse,
             HttpResponseMessage responseMessage)
         {
-            try
+            if (!HasSuccessResponse)
             {
-                if (!HasSuccessResponse)
-                {
-                    ErrorResponse = responseParser.ParseBody<OrganDonationErrorResponse>(stringResponse, responseMessage);
-                    logger.LogError($"Server returned with error. {ErrorForLogging}");
-                    return this;
-                }
-
-                Body = responseParser.ParseBody<OrganDonationSuccessResponse<TBody>>(stringResponse, responseMessage);
-            }
-            catch (FormatException e)
-            {
-                logger.LogError(e, "An error occured while parsing the response");
-                return new OrganDonationResponse<TBody>(HttpStatusCode.InternalServerError);
+                ErrorResponse = responseParser.ParseBody<OrganDonationErrorResponse>(stringResponse, responseMessage);
+                logger.LogError($"Server returned with error. {ErrorForLogging}");
+                return this;
             }
 
+            Body = responseParser.ParseBody<OrganDonationSuccessResponse<TBody>>(stringResponse, responseMessage);
             return this;
         }
+
         protected override bool FormatResponseIfUnsuccessful => true;
     }
 }

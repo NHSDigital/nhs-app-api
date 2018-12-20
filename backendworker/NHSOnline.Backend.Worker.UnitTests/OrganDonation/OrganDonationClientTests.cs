@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -21,6 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         public const string DefaultClientIdHeader = "DefaultClientIdHeader";
         public const string DefaultSubscriptionHeader = "DefaultSubscriptionHeader";
         public const string SearchPath = "Registration/_search";
+        public const string ReferenceDataPath = "ReferenceData";
         public static readonly Uri BaseUri = new Uri("http://base_url/");
 
         private IOrganDonationClient _systemUnderTest;
@@ -35,9 +38,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
-            
+
             _mockHttpHandler = new MockHttpMessageHandler();
-            
+
             _configMock = new Mock<IOrganDonationConfig>();
             _configMock.SetupGet(x => x.BaseUrl).Returns(BaseUri);
             _configMock.SetupGet(x => x.ClientIdHeader).Returns(DefaultClientIdHeader);
@@ -68,20 +71,57 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
-        [TestMethod]
-        public async Task PostLookup_ReturnsError()
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.NotFound)]
+        [DataTestMethod]
+        public async Task PostLookup_ReturnsError(HttpStatusCode errorCode)
         {
             var expectedResponse = _fixture.Create<OrganDonationErrorResponse>();
 
             _mockHttpHandler
                 .WhenOrganDonation(HttpMethod.Post, SearchPath)
-                .Respond(HttpStatusCode.InternalServerError, System.Net.Mime.MediaTypeNames.Application.Json,
+                .Respond(errorCode, System.Net.Mime.MediaTypeNames.Application.Json,
                     JsonConvert.SerializeObject(expectedResponse));
 
             var response = await _systemUnderTest.PostLookup(new LookupRegistrationRequest(), _userSession);
 
             response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(errorCode);
+            response.Body.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task GetReferenceData_ReturnsValidResponse()
+        {
+            var expectedResponse = _fixture.Create<OrganDonationSuccessResponse<ReferenceDataResponse>>();
+
+            _mockHttpHandler
+                .WhenOrganDonation(HttpMethod.Get, ReferenceDataPath)
+                .Respond(System.Net.Mime.MediaTypeNames.Application.Json,
+                    JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _systemUnderTest.GetAllReferenceData();
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.NotFound)]
+        [DataTestMethod]
+        public async Task GetReferenceData_ReturnsError(HttpStatusCode errorCode)
+        {
+            var expectedResponse = _fixture.Create<OrganDonationErrorResponse>();
+
+            _mockHttpHandler
+                .WhenOrganDonation(HttpMethod.Get, ReferenceDataPath)
+                .Respond(errorCode, System.Net.Mime.MediaTypeNames.Application.Json,
+                    JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _systemUnderTest.GetAllReferenceData();
+
+            response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(errorCode);
             response.Body.Should().BeNull();
         }
 
@@ -89,6 +129,5 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             _mockHttpHandler.Dispose();
         }
-
     }
 }

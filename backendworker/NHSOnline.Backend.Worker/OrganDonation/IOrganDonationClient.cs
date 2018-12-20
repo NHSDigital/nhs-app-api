@@ -8,5 +8,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
                 LookupRegistrationRequest request,
                 UserSession userSession);
+
+        Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData();
     }
 }
