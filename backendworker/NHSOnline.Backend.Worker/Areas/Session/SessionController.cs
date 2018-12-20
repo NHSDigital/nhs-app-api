@@ -18,7 +18,6 @@ using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
-using NHSOnline.Backend.Worker.Support.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {
@@ -105,7 +104,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 
                 var userSession = _sessionMapper.Map(HttpContext, gpSessionCreatedResultVisited.UserSession, citizenIdSessionResult.Session);
 
-                // Build and save session token in our redis session cache
+                // Build and save session token in our session cache
                 var sessionFetchTask = FetchSessionIdAndSaveInCookie(userSession);
 
                 // Delete connection token from cache
@@ -159,7 +158,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 }
 
-                // Delete redis key and session
+                // Delete key and session
                 bool sessionDeleted;
                 try
                 {
@@ -214,7 +213,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
         private async Task FetchSessionIdAndSaveInCookie(UserSession userSession)
         {
-            // Build and save session token in our redis session cache
+            // Build and save session token in our session cache
             var sessionId = await _sessionCacheService.CreateUserSession(userSession);
 
             _logger.LogDebug($"Fetched Session Id: '{sessionId}'");

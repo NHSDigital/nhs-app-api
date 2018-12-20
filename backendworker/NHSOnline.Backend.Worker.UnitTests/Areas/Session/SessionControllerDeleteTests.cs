@@ -14,7 +14,6 @@ using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Session;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {

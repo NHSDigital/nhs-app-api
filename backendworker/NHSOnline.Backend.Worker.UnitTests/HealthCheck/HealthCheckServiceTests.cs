@@ -28,24 +28,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.HealthCheck
         }
         
         [TestMethod]
-        public async Task RunAllHealthChecks_WhenCalledAndBothRedisChecksAreHealthy_ReturnsTwoHealthChecksWithIsHealthyInHealthCheckResponse()
+        public async Task RunAllHealthChecks_WhenCalledAndOdsRedisChecksIsHealthy_ReturnsSingleHealthCheckWithIsHealthyInHealthCheckResponse()
         {
             // Arrange
             _redisHealthCheckFactory.SetupSequence(r => r
                     .Create(It.IsAny<ConnectionMultiplexerName>()).Execute())
                 .Returns(Task.FromResult(
-                    BaseHealthCheck.Result.Healthy(ConnectionMultiplexerName.OdsCodeLookup.ToString())))
-                .Returns(Task.FromResult(
-                    BaseHealthCheck.Result.Healthy(ConnectionMultiplexerName.Session.ToString())));
+                    BaseHealthCheck.Result.Healthy(ConnectionMultiplexerName.OdsCodeLookup.ToString())));
             
             // Act
             var healthCheckResponse = await _healthCheckService.RunHealthChecks();
             
             // Assert
             _redisHealthCheckFactory.Verify(x => x.Create(ConnectionMultiplexerName.OdsCodeLookup));
-            _redisHealthCheckFactory.Verify(x => x.Create(ConnectionMultiplexerName.Session));
             healthCheckResponse.Should().NotBeNull();
-            healthCheckResponse.HealthChecks.Where(x => x.IsHealthy).Should().HaveCount(2);
+            healthCheckResponse.HealthChecks.Where(x => x.IsHealthy).Should().HaveCount(1);
         }
 
         [TestMethod]
@@ -55,29 +52,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.HealthCheck
             const string healthCheckNameFormat = "Redis {0}";
             var odsHealthCheckName =
                 string.Format(CultureInfo.InvariantCulture, healthCheckNameFormat, ConnectionMultiplexerName.OdsCodeLookup.ToString());
-            var sessionHealthCheckName =
-                string.Format(CultureInfo.InvariantCulture, healthCheckNameFormat, ConnectionMultiplexerName.Session.ToString());
-            
+
             _redisHealthCheckFactory.SetupSequence(r => r
                     .Create(It.IsAny<ConnectionMultiplexerName>()).Execute())
                 .Returns(Task.FromResult(
-                    BaseHealthCheck.Result.UnHealthy(odsHealthCheckName, "Error calling service")))
-                .Returns(Task.FromResult(
-                    BaseHealthCheck.Result.Healthy(sessionHealthCheckName)));
+                    BaseHealthCheck.Result.UnHealthy(odsHealthCheckName, "Error calling service")));
             
             // Act
             var healthCheckResponse = await _healthCheckService.RunHealthChecks();
            
             // Assert
             _redisHealthCheckFactory.Verify(x => x.Create(ConnectionMultiplexerName.OdsCodeLookup));
-            _redisHealthCheckFactory.Verify(x => x.Create(ConnectionMultiplexerName.Session));
             healthCheckResponse.Should().NotBeNull();
             healthCheckResponse.HealthChecks.Where(
                     x => !x.IsHealthy && 
                     odsHealthCheckName.Equals(x.HealthCheckName, StringComparison.Ordinal))
-                .Should().HaveCount(1);
-            healthCheckResponse.HealthChecks.Where(
-                    x => x.IsHealthy && sessionHealthCheckName.Equals(x.HealthCheckName, StringComparison.Ordinal))
                 .Should().HaveCount(1);
         }
     }

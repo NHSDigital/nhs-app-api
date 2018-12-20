@@ -95,6 +95,8 @@ namespace NHSOnline.Backend.Worker
 
             services.AddSingleton(Configuration);
 
+            services.AddSingleton<IMongoSessionCacheServiceConfig, MongoSessionCacheServiceConfig>();
+            services.AddSingleton<ISessionCacheService, MongoSessionCacheService>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();

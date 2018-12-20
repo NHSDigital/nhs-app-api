@@ -5,10 +5,11 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Cipher;
 using NHSOnline.Backend.Worker.Support.Logging;
 
-namespace NHSOnline.Backend.Worker.Support.Session
+namespace NHSOnline.Backend.Worker
 {
     public interface IMongoSessionCacheServiceConfig
     {
@@ -26,6 +27,14 @@ namespace NHSOnline.Backend.Worker.Support.Session
             MongoDatabaseName = configuration.GetOrThrow("SESSION_MONGO_DATABASE_NAME", logger);
             MongoDatabaseIm1CollectionName = configuration.GetOrThrow("SESSION_MONGO_DATABASE_COLLECTION", logger);
         }
+    }
+    
+    public interface ISessionCacheService
+    {
+        Task<string> CreateUserSession(UserSession userSession);
+        Task<Option<UserSession>> GetUserSession(string sessionId);
+        Task<bool> DeleteUserSession(string sessionId);
+        Task UpdateUserSession(UserSession userSession);
     }
 
     public class MongoSessionCacheService : ISessionCacheService

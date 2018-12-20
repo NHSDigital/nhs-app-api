@@ -61,5 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="OrganDonation\" />
+    <Folder Include="Support\Session" />
   </ItemGroup>
 </Project>

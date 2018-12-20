@@ -18,7 +18,6 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support.Session;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescriptions
 {

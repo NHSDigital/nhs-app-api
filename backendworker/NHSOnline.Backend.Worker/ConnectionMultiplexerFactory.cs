@@ -32,8 +32,7 @@ namespace NHSOnline.Backend.Worker
 
     public enum ConnectionMultiplexerName
     {
-        OdsCodeLookup,
-        Session
+        OdsCodeLookup
     }
 
     public class NamedConnectionMultiplexer

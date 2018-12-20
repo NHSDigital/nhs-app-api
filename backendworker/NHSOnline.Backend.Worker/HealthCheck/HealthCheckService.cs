@@ -16,13 +16,11 @@ namespace NHSOnline.Backend.Worker.HealthCheck
 
         public async Task<HealthCheckResponse> RunHealthChecks()
         {
-            var odsCheckTask = _redisHealthCheckFactory.Create(ConnectionMultiplexerName.OdsCodeLookup).Execute();        
-            var sessionCheckTask = _redisHealthCheckFactory.Create(ConnectionMultiplexerName.Session).Execute();
+            var odsCheckTask = _redisHealthCheckFactory.Create(ConnectionMultiplexerName.OdsCodeLookup).Execute();  
 
-            await Task.WhenAll(odsCheckTask, sessionCheckTask);
+            await Task.WhenAll(odsCheckTask);
 
             var odsCheck = await odsCheckTask;
-            var sessionCheck = await sessionCheckTask;
             
             return new HealthCheckResponse
             {
@@ -33,12 +31,6 @@ namespace NHSOnline.Backend.Worker.HealthCheck
                         IsHealthy = odsCheck.IsHealthy,
                         HealthCheckName = odsCheck.HealthCheckName,
                         Message = odsCheck.Message
-                    },
-                    new HealthCheckItem
-                    {
-                        IsHealthy = sessionCheck.IsHealthy,
-                        HealthCheckName = sessionCheck.HealthCheckName,
-                        Message = sessionCheck.Message
                     }
                 }
             };
