@@ -51,20 +51,11 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
 
             var termsAndConditionsAcceptanceDate = DateTimeOffset.Now;
 
-            // Audit attempt to record consent
-            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsRecordConsentAuditTypeRequest,
-                "Attempting to record patient consent - ConsentGiven={0} at DateOfConsent={1:O}", model.ConsentGiven, termsAndConditionsAcceptanceDate);
-
-            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsAnalyticsCookieAcceptance,
-                    "Attempting to record analytics cookies acceptance - AnalyticsCookieAccepted={0}{1}", model.AnalyticsCookieAccepted, 
-                model.AnalyticsCookieAccepted ? 
-                    string.Format(CultureInfo.InvariantCulture, " at DateAnalyticsCookieAccepted={0:O}", termsAndConditionsAcceptanceDate) 
-                    : string.Empty);
+            await AuditAttemptRecordConsent(model, termsAndConditionsAcceptanceDate);
             
             if (!model.AnalyticsCookieAccepted)
             {
-                _logger.LogInformation("Recording user did not accept optional analytics cookies. OdsCode: {0}",
-                    userSession.GpUserSession.OdsCode);
+                _logger.LogInformation($"Recording user did not accept optional analytics cookies. {nameof(userSession.GpUserSession.OdsCode)}: {userSession.GpUserSession.OdsCode}");
             }
 
             _logger.LogDebug("Recording user consent");         
@@ -78,6 +69,21 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
             
             _logger.LogExit();
             return recordConsentResult.Accept(new TermsAndConditionsRecordConsentResultVisitor());
+        }
+
+        private async Task AuditAttemptRecordConsent(ConsentRequest model, DateTimeOffset time)
+        {
+            var formattedDate = time.ToString(CultureInfo.InvariantCulture);
+
+            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsRecordConsentAuditTypeRequest,
+                   $"Attempting to record patient consent - {nameof(model.ConsentGiven)}={model.ConsentGiven} " +
+                   $"at DateOfConsent={formattedDate}");
+
+            string cookieAcceptedLog = model.AnalyticsCookieAccepted ? $" at DateAnalyticsCookieAccepted={formattedDate}" : string.Empty;
+
+            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsAnalyticsCookieAcceptance,
+                    $"Attempting to record analytics cookies acceptance - {nameof(model.AnalyticsCookieAccepted)}={model.AnalyticsCookieAccepted}" +
+                    $"{cookieAcceptedLog}");
         }
     }
 }

@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
                 result.Data = allergies;
             }
             catch(InvalidOperationException e) {
-                _logger.LogWarning("Error deserializing raw Allergies response content string. " + e.Message);
+                _logger.LogWarning($"Error deserializing raw {nameof(Allergies)} response content string. {e.Message}");
                 result.HasErrored = true;
             }
 

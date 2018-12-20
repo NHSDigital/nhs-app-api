@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
                     UpdatedConsentRequired = false,
                 };
 
-                _logger.LogDebug("Exiting: {0} - patient consent found", nameof(FetchConsent));
+                _logger.LogExitWith("patient consent found");
                 return new TermsAndConditionsFetchConsentResult.Success(response);
             }
             
@@ -85,9 +85,9 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
                         AnalyticsCookieAccepted = termsAndConditions.AnalyticsCookieAccepted,
                     };
                     
-                    _logger.LogDebug($"ConsentGiven: {termsAndConditions.ConsentGiven}, " +
-                                     $"UpdatedConsentRequired: {updatedConsentRequired}, " +
-                                     $"AnalyticsCookieAccepted: {termsAndConditions.AnalyticsCookieAccepted}");
+                    _logger.LogDebug($"{nameof(termsAndConditions.ConsentGiven)}: {termsAndConditions.ConsentGiven}, " +
+                                     $"{nameof(response.UpdatedConsentRequired)}: {updatedConsentRequired}, " +
+                                     $"{nameof(termsAndConditions.AnalyticsCookieAccepted)}: {termsAndConditions.AnalyticsCookieAccepted}");
                     
                     return new TermsAndConditionsFetchConsentResult.Success(response);
                 }
@@ -130,11 +130,7 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
                         odsCode);
                 }
 
-                await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsAnalyticsCookieAcceptance,
-                    "Attempting to record analytics cookies acceptance - AnalyticsCookieAccepted={0}{1}", request.AnalyticsCookieAccepted,
-                    request.AnalyticsCookieAccepted ?
-                        string.Format(CultureInfo.InvariantCulture, " at DateAnalyticsCookieAccepted={0:O}", termsAndConditionsAcceptanceDate)
-                        : string.Empty);
+                await AuditCookieAccepted(request, termsAndConditionsAcceptanceDate);
 
                 if (_disposed)
                 {
@@ -158,6 +154,16 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
             {
                 _logger.LogExit();
             }
+        }
+
+
+        private async Task AuditCookieAccepted(ConsentRequest request, DateTimeOffset termsAndConditionsAcceptanceDate)
+        {
+            var formattedAcceptanceString = termsAndConditionsAcceptanceDate.ToString(CultureInfo.InvariantCulture);
+            string cookieAccepted = request.AnalyticsCookieAccepted ? $" at DateAnalyticsCookieAccepted={formattedAcceptanceString}" : string.Empty;
+
+            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsAnalyticsCookieAcceptance,
+                $"Attempting to record analytics cookies acceptance - {nameof(request.AnalyticsCookieAccepted)}={request.AnalyticsCookieAccepted}{cookieAccepted}");
         }
 
         private async Task<TermsAndConditionsRecordConsentResult> UpdateConsent(string nhsNumber, ConsentRequest request, DateTimeOffset termsAndConditionsConsentDate)

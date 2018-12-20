@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 var userPatientLinkToken = sessionsResponse.Body.ExtractUserPatientLinkToken();
                 if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
-                    _logger.LogError("Emis userPatientLinkToken not found");
+                    _logger.LogError($"Emis {nameof(userPatientLinkToken)} not found");
                     _logger.LogEmisErrorResponse(sessionsResponse);
                     return new Im1ConnectionVerifyResult.NotFound();
                 }
@@ -160,7 +160,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                             EmisApiErrorMessages.MeApplicationsPost_AlreadyLinked))
                     {
                         _logger.LogError(
-                            $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, account already exists");
+                            $"Emis {nameof(_emisClient.MeApplicationsPost)} returned with statuscode {meApplicationsResponse.StatusCode}, account already exists");
                         _logger.LogEmisErrorResponse(meApplicationsResponse);
                         return new Im1ConnectionRegisterResult.AccountAlreadyExists();
                     }
@@ -182,7 +182,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     if (!meApplicationsResponse.HasSuccessResponse)
                     {
                         _logger.LogError(
-                            $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, success");
+                            $"Emis {nameof(_emisClient.MeApplicationsPost)} returned with statuscode {meApplicationsResponse.StatusCode}, success");
                         _logger.LogEmisErrorResponse(meApplicationsResponse);
                         return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                     }
@@ -215,7 +215,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
                     _logger.LogError(
-                        $"Emis could not extract UserPatientLinkToken");
+                        $"Emis could not extract {nameof(userPatientLinkToken)}");
                     _logger.LogEmisErrorResponse(sessionsResponse);
                     return new Im1ConnectionRegisterResult.NotFound();
                 }

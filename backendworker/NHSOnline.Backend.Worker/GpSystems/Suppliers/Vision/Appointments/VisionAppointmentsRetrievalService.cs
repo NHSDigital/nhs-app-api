@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
             catch (HttpRequestException exception)
             {
-                _logger.LogError(exception, "Calling GetExistingAppointments threw HttpRequestException.");
+                _logger.LogError(exception, $"Calling {nameof(_visionClient.GetExistingAppointments)} threw HttpRequestException.");
                 return new AppointmentsResult.SupplierSystemUnavailable();
             }
             finally
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             
             if (!response.HasSuccessResponse)
             {
-                _logger.LogError("Call to VISION (VisionAppointmentsRetrievalService) returned an unanticipated error " +
+                _logger.LogError($"Call to VISION ({nameof(VisionAppointmentsRetrievalService)}) returned an unanticipated error " +
                                  $"with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
                 return new AppointmentsResult.SupplierSystemUnavailable();
             }

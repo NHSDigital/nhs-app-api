@@ -124,7 +124,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsView(TppUserSession tppUserSession,
             string startDate, string endDate)
         {
-            _logger.LogDebug("Entered: {0} with startDate:{1} and endDate:{2}", nameof(TestResultsView), startDate, endDate);
+            _logger.LogDebug($"Entered: {nameof(TestResultsView)} with { nameof(startDate)}:{startDate} and {nameof(endDate)}:{endDate}");
+
 
             var request = new TestResultsView
             {

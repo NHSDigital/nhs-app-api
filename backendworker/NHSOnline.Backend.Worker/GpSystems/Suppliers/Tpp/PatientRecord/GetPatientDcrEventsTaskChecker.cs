@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
             if (taskResponse.HasSuccessResponse)
             {              
-                _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", nameof(Check));
+                _logger.LogExitWith($"{nameof(taskResponse.HasSuccessResponse)}= true");
                 return _dcrEventsMapper.Map(taskResponse.Body);
             }
 

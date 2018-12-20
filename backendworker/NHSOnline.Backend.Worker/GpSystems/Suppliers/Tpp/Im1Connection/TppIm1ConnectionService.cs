@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                     NhsNumbers = nhsNumbers
                 };
 
-                _logger.LogDebug("TppIm1ConnectionService Verify successfully completed");
+                _logger.LogDebug($"{nameof(TppIm1ConnectionService)} Verify successfully completed");
                 return new Im1ConnectionVerifyResult.SuccessfullyVerified(response);
             }
             catch (HttpRequestException e)
@@ -97,23 +97,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                 {
                     var linkAccountReply = await _tppClient.LinkAccountPost(linkAccountRequest);
 
+                    var standardErrorMessage = "Failed LinkAccount request returned with";
                     if (linkAccountReply.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidProviderId))
                     {
-                        _logger.LogError("Failed LinkAccount request returned with 'InvalidProviderId' error code.");
+                        _logger.LogError($"{standardErrorMessage} '{nameof(TppApiErrorCodes.LinkAccount.InvalidProviderId)}' error code.");
                         return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                     }
 
                     if (linkAccountReply.HasErrorWithCode(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials))
                     {
                         _logger.LogError(
-                            "Failed LinkAccount request returned with 'InvalidLinkageCredentials' error code.");
+                            $"{standardErrorMessage} '{nameof(TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials)}' error code.");
                         return new Im1ConnectionRegisterResult.NotFound();
                     }
 
                     if (!linkAccountReply.HasSuccessResponse)
                     {
                         _logger.LogError(
-                            "Failed LinkAccount request returned without success response.  Unknown Reason.");
+                            $"{standardErrorMessage}out success response.  Unknown Reason.");
                         return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                     }
 
@@ -153,13 +154,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                     NhsNumbers = nhsNumbers
                 };
 
-                _logger.LogDebug("TppIm1ConnectionService Register successfully completed");
+                _logger.LogDebug($"{nameof(TppIm1ConnectionService)} {nameof(Register)} successfully completed");
                 return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e,
-                    "Failed request to TppIm1ConnectionToken.Register, HttpRequestException has been thrown.");
+                    $"Failed request to TppIm1ConnectionToken.{nameof(Register)}, HttpRequestException has been thrown.");
                 return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
             }
             finally

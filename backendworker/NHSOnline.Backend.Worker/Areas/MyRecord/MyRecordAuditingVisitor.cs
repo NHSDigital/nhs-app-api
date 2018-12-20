@@ -19,8 +19,8 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             var hasDetailedRecordAccess = result.Response.HasDetailedRecordAccess;
             
             _auditor.Audit(AuditType, 
-                "Patient record successfully retrieved. HasSummaryRecordAccess={0}, HasDetailedRecordAccess={1}",
-                hasSummaryRecordAccess, hasDetailedRecordAccess);
+                $"Patient record successfully retrieved. {nameof(hasSummaryRecordAccess)}={hasSummaryRecordAccess}," +
+                $" {nameof(hasDetailedRecordAccess)}={hasDetailedRecordAccess}");
             
             return null;
         }

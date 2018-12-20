@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                     ConnectionToken = visionConnectionToken.SerializeJson(),
                     NhsNumbers = nhsNumbers
                 };
-                 _logger.LogDebug("VisionIm1ConnectionService Register successfully completed");
+                 _logger.LogDebug($"{nameof(VisionIm1ConnectionService)} Register successfully completed");
                 return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
             }
             catch (HttpRequestException e)

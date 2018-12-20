@@ -17,6 +17,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         private readonly ILogger<EmisSessionService> _logger;
         private readonly IEmisEnumMapper _emisEnumMapper;
 
+        private const string StandardErrorMessage = "Failed request to create Emis user session";
+
         private static readonly HttpStatusCode[] InvalidTokenStatusCodes =
             { HttpStatusCode.Forbidden, HttpStatusCode.BadRequest };
 
@@ -104,12 +106,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 catch (EmisSessionResponseErrorException responseError)
                 {
                     _logger.LogError(responseError,
-                        "Failed request to create Emis user session,EmisSessionResponseErrorException has been thrown");
+                        $"{StandardErrorMessage},{nameof(EmisSessionResponseErrorException)} has been thrown");
                     return responseError.ErrorResult;
                 }
                 catch (HttpRequestException e)
                 {
-                    _logger.LogError(e, "Failed request to create Emis user session,HttpRequestException has been thrown.");
+                    _logger.LogError(e, $"{StandardErrorMessage}, HttpRequestException has been thrown.");
                     return new GpSessionCreateResult.SupplierSystemUnavailable();
                 }
                 
@@ -133,12 +135,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             catch (EmisSessionResponseErrorException responseError)
             {
                 _logger.LogError(responseError,
-                    "Failed request to create Emis user session,EmisSessionResponseErrorException has been thrown");
+                    $"{StandardErrorMessage}, {nameof(EmisSessionResponseErrorException)} has been thrown");
                 return responseError.ErrorResult;
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, "Failed request to create Emis user session,HttpRequestException has been thrown.");
+                _logger.LogError(e, $"{StandardErrorMessage}, HttpRequestException has been thrown.");
                 return new GpSessionCreateResult.SupplierSystemUnavailable();
             }
             finally

@@ -23,13 +23,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         public TestResults Check(TppClient.TppApiObjectResponse<TestResultsViewReply> taskResponse)
         {
-            var methodName = "Check";
             _logger.LogEnter();
             
             TestResults testResults;
             if (taskResponse.HasSuccessResponse)
             {            
-                _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", methodName);
+                _logger.LogExitWith($"{nameof(taskResponse.HasSuccessResponse)}=true");
                 return _testResultsMapper.Map(taskResponse.Body);
             }
             

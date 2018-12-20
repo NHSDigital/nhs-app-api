@@ -199,13 +199,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
             var qb = new QueryBuilder
             {
-                { "userPatientLinkToken", userPatientLinkToken },
-                { "fetchPreviousAppointments", fetchPreviousAppointments.ToString(CultureInfo.InvariantCulture).ToLowerInvariant() }
+                { nameof(userPatientLinkToken), userPatientLinkToken },
+                { nameof(fetchPreviousAppointments), fetchPreviousAppointments.ToString(CultureInfo.InvariantCulture).ToLowerInvariant() }
             };
 
             if (fetchPreviousAppointments && previousAppointmentsFromDate.HasValue)
             {
-                qb.Add("previousAppointmentsFromDate", EncodeDateTimeOffsetToIso(previousAppointmentsFromDate.Value));
+                qb.Add(nameof(previousAppointmentsFromDate), EncodeDateTimeOffsetToIso(previousAppointmentsFromDate.Value));
             }
 
             var path = $"{AppointmentsPath}{qb.ToQueryString()}";

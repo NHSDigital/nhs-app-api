@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 var im1ConnectionService = gpSystem.GetIm1ConnectionService();
                 var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
                 
-                _logger.LogDebug("Get Im1Connection completed");
+                _logger.LogDebug($"{nameof(gpSystem.GetIm1ConnectionService)} completed");
 
                 verifyResult.Accept(new Im1ConnectionVerifyAuditingVisitor(_auditor, gpSystem.Supplier));
                 return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());

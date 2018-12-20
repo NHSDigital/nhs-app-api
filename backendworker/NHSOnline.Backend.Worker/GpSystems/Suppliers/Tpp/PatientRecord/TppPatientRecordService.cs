@@ -48,21 +48,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 var patientOverview = await _tppClient.PatientOverviewPost(tppUserSession);
                 var patientRecord = await _tppClient.RequestPatientRecordPost(tppUserSession);
                 var testResults = await GetLast180DaysTestResults(tppUserSession);
-
-                _logger.LogDebug("Mapping TPP Patient Overview responses to lists of Allergies and Medication classes");
+                
+                _logger.LogDebug($"Mapping TPP Patient Overview responses to lists of {nameof(Allergies)} and {nameof(Medications)} classes");
                 var patientOverviewItems = _patientOverviewTaskChecker.Check(patientOverview);  
                 
                 var allergies = patientOverviewItems.Item1;
                 var medications = patientOverviewItems.Item2;
                 
-                _logger.LogDebug("Mapping TPP DCR responses to instnace of TppDcrEvents class");
+                _logger.LogDebug($"Mapping TPP DCR responses to instance of {nameof(TppDcrEvents)} class" );
                 var dcrEvents = _patientDcrEventsChecker.Check(patientRecord);
 
-                _logger.LogInformation("Mapping TPP responses to universal MyRecordResponse class instance");
+                _logger.LogInformation($"Mapping TPP responses to universal {nameof(MyRecordResponse)} class instance");
                 var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, dcrEvents, testResults);
                 myRecordResponse.Supplier = tppUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                 
-                _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
+                _logger.LogInformation($"{nameof(MyRecordResponse)}: {myRecordResponse}");
                 
                 return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);
             }
@@ -84,7 +84,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         public async Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
         {
-            var methodName = "GetDetailedTestResult";
             _logger.LogEnter();
             
             var tppUserSession = (TppUserSession) userSession.GpUserSession;
@@ -94,12 +93,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 _logger.LogDebug("Fetching TPP detailed test results");    
                 var detailedTestResult = await _tppClient.TestResultsViewDetailed(tppUserSession, testResultId);
 
-                _logger.LogDebug("Mapping TPP detailed test results to instance of TestResultResponse class");   
+                _logger.LogDebug($"Mapping TPP detailed test results to instance of {nameof(TestResultResponse)} class");   
                 var tppTestResultResponse = _patientDetailedTestResultChecker.Check(detailedTestResult);
 
                 if (tppTestResultResponse.HasErrored)
                 {
-                    _logger.LogDebug("Exiting: {0}, HasErrored=true", methodName);
+                    _logger.LogExitWith($"{nameof(tppTestResultResponse.HasErrored)}=true");
                     return new GetDetailedTestResult.Unsuccessful();
                 }
                 
@@ -123,7 +122,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
         
         private async Task<TestResults> GetLast180DaysTestResults(TppUserSession tppUserSession)
         {   
-            var methodName = "GetLast180DaysTestResults";
             _logger.LogEnter();
             
             var tppTestResultDates = GetTestResultDateParams();
@@ -136,12 +134,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                     testResultDates.StartDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture), 
                     testResultDates.EndDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture));                  
                 
-                _logger.LogDebug("Mapping TPP test results to instance of TestResults class");
+                _logger.LogDebug($"Mapping TPP test results to instance of {nameof(TestResults)} class");
                 var testResults = _patientTestResultsChecker.Check(testResultsView);
 
                 if (!testResults.HasAccess || testResults.HasErrored)
                 {
-                    _logger.LogDebug("Exiting: {0}, HasAccess={1}, HasErrored={2}", methodName, testResults.HasAccess, testResults.HasErrored);
+                    _logger.LogExitWith($"{nameof(testResults.HasAccess)}={testResults.HasAccess}, {nameof(testResults.HasErrored)}={testResults.HasErrored}");
                     return testResults;                
                 }
                                    

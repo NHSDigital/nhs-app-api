@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 
                     if (!endDateSuccess)
                     {
-                        _logger.LogWarning($"Unable to create DateTimeOffset from slot EndDate '{slot.EndDate}'.");
+                        _logger.LogWarning($"Unable to create {nameof(DateTimeOffset)} from slot {nameof(slot.EndDate)} '{slot.EndDate}'.");
                     }
 
                     yield return new Areas.Appointments.Models.Slot

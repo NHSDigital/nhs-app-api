@@ -33,6 +33,11 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             logger.LogDebug($"Exiting {methodName}");
         }
 
+        public static void LogExitWith<T>(this ILogger<T> logger, string message, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
+        {
+            logger.LogDebug($"Exiting {methodName} with {message}");
+        }
+
         public static void LogFullException<T>(this ILogger<T> logger, Exception exception)
         {
             if (exception == null) return;
