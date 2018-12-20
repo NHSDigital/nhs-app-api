@@ -1,19 +1,29 @@
 import actions from '@/store/modules/organDonation/actions';
-import { LOADED, MAKE_DECISION } from '@/store/modules/organDonation/mutation-types';
+import {
+  LOADED,
+  LOADED_REFERENCE_DATA,
+  MAKE_DECISION,
+} from '@/store/modules/organDonation/mutation-types';
 
-const createHttp = (result = {}) => ({
+const createHttp = ({ result = {}, referenceData = {} } = {}) => ({
   getV1PatientOrgandonation: jest.fn().mockImplementation(() => Promise.resolve(result)),
+  getV1PatientOrgandonationReferencedata:
+    jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(referenceData)),
 });
 
 describe('organ donation actions', () => {
   let $http;
   let commit;
   let result;
+  let referenceData;
 
   beforeEach(() => {
-    result = { mock: result };
+    result = 'result';
+    referenceData = 'reference-data';
     commit = jest.fn();
-    $http = createHttp(result);
+    $http = createHttp({ result, referenceData });
     actions.app = {
       $http,
     };
@@ -35,6 +45,18 @@ describe('organ donation actions', () => {
     it('will commit the result on completion', async () => {
       await actions.getRegistration({ commit });
       expect(commit).toHaveBeenCalledWith(LOADED, result);
+    });
+  });
+
+  describe('getReferenceData', () => {
+    it('will request the organ donation reference data', () => {
+      actions.getReferenceData({ commit });
+      expect($http.getV1PatientOrgandonationReferencedata).toHaveBeenCalled();
+    });
+
+    it('will commit the reference data on completion', async () => {
+      await actions.getReferenceData({ commit });
+      expect(commit).toHaveBeenCalledWith(LOADED_REFERENCE_DATA, referenceData);
     });
   });
 });

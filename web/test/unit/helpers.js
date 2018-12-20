@@ -9,7 +9,7 @@ const {
   shallowMount: vueShallowMount,
 } = testUtils;
 
-export const t = key => `translate_${key}`;
+export const $t = jest.fn().mockImplementation(key => `translate_${key}`);
 export const $tc = key => `translate_${key}`;
 
 export const mockCookies = () => ({
@@ -28,12 +28,12 @@ export const createStore = ({ $env = {}, $http = {}, state = {} } = {}) => ({
     $http,
   },
 });
+
 export const mount = (component, {
   $env = {},
   $router = [],
   $store,
   $style = {},
-  $t = t,
   data = {},
   propsData = {},
   shallow = false,

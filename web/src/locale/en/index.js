@@ -579,6 +579,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
+    organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     dataSharing: 'Sharing health data preferences',
     more: 'More',
@@ -598,6 +599,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'Sensitive information - My record',
+    organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     dataSharing: 'Sharing health data preferences',
     more: 'More',
@@ -643,6 +645,17 @@ export default {
   },
   organDonation: {
     additionalDetails: {
+      backButton: 'Back',
+      continueButton: 'Continue',
+      description: 'This optional information is only used by NHSBT for analysis of the NHS Organ Donor Register and is not stored against your registration.',
+      ethnicity: {
+        placeholder: 'Please select',
+        label: 'Ethnicity (Optional)',
+      },
+      religion: {
+        placeholder: 'Please select',
+        label: 'Religion (Optional)',
+      },
       subheader: 'Additional details',
     },
     register: {

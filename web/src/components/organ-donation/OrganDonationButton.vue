@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { ORGAN_DONATION } from '@/lib/routes';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
 import NoJsForm from '@/components/no-js/NoJsForm';
 
@@ -27,15 +27,16 @@ export default {
   },
   computed: {
     formAction() {
-      return ORGAN_DONATION.path;
+      return ORGAN_DONATION_ADDITIONAL_DETAILS.path;
     },
     noJsValue() {
       return { organDonation: { registration: { decision: this.decision } } };
     },
   },
   methods: {
-    chooseDecision() {
-      this.$store.dispatch('organDonation/makeDecision', this.decision);
+    async chooseDecision() {
+      await this.$store.dispatch('organDonation/makeDecision', this.decision);
+      this.$router.push(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
     },
   },
 };

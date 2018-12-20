@@ -1,29 +1,38 @@
 /* eslint-disable object-curly-newline */
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import { ORGAN_DONATION } from '@/lib/routes';
-import { createStore, mount } from '../../helpers';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
+import { $t, createStore, mount } from '../../helpers';
 
 describe('organ donation button', () => {
+  let $router;
   let $store;
-  let $t;
   let wrapper;
 
   beforeEach(() => {
+    $router = [];
     $store = createStore();
-    $t = jest.fn();
-    $t.mockReturnValue('translated');
     wrapper = mount(OrganDonationButton, {
+      $router,
       $store,
-      $t,
       propsData: { decision: 'boo' },
     });
   });
 
-  it('will dispatch `makeDecision` with the supplied decision when clicked', () => {
-    wrapper.find('button').trigger('click');
-    expect($store.dispatch).toHaveBeenCalledWith('organDonation/makeDecision', 'boo');
+  describe('clicked', () => {
+    beforeEach(() => {
+      wrapper.find('button').trigger('click');
+    });
+
+    it('will dispatch `makeDecision` with the supplied decision', () => {
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/makeDecision', 'boo');
+    });
+
+    it('will push the additional details path to the router', () => {
+      expect($router).toContain(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
+    });
   });
+
 
   describe('text translations', () => {
     it('will display the no button header', () => {
@@ -38,7 +47,7 @@ describe('organ donation button', () => {
   describe('computed properties', () => {
     describe('formAction', () => {
       it('will be the ORGAN_DONATION path', () => {
-        expect(wrapper.vm.formAction).toEqual(ORGAN_DONATION.path);
+        expect(wrapper.vm.formAction).toEqual(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
       });
     });
 

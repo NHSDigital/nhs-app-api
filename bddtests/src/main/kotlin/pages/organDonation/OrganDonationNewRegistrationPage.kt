@@ -8,7 +8,7 @@ import pages.HybridPageObject
 class OrganDonationNewRegistrationPage : HybridPageObject() {
 
     private val organDonationTitle = HybridPageElement(
-            browserLocator = "//p[contains(text(),'Register your organ donation decision')]",
+            browserLocator = "//h2[contains(text(),'Register your organ donation decision')]",
             androidLocator = null,
             page = this
     )

@@ -2,6 +2,7 @@ import mutations from '@/store/modules/organDonation/mutations';
 import {
   initialState,
   LOADED,
+  LOADED_REFERENCE_DATA,
   MAKE_DECISION,
 } from '@/store/modules/organDonation/mutation-types';
 
@@ -17,6 +18,14 @@ describe('organ donation record mutations', () => {
       const data = { registration: 'from service' };
       mutations[LOADED](state, data);
       expect(state.registration).toEqual(data);
+    });
+  });
+
+  describe('LOADED_REFERENCE_DATA', () => {
+    it('will set the organ donation referenceData state to the received value', () => {
+      const data = { ethnicities: [], genders: [] };
+      mutations[LOADED_REFERENCE_DATA](state, data);
+      expect(state.referenceData).toEqual(data);
     });
   });
 

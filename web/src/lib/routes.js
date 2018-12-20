@@ -124,6 +124,10 @@ const routes = {
     name: 'organ-donation',
     path: '/organ-donation',
   },
+  ORGAN_DONATION_ADDITIONAL_DETAILS: {
+    name: 'organ-donation-additional-details',
+    path: '/organ-donation/additional-details',
+  },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
@@ -190,6 +194,7 @@ export const {
   MYRECORDTESTRESULT,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   ORGAN_DONATION,
+  ORGAN_DONATION_ADDITIONAL_DETAILS,
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,

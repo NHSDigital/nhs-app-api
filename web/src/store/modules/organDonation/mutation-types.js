@@ -1,4 +1,5 @@
 export const LOADED = 'LOADED';
+export const LOADED_REFERENCE_DATA = 'LOADED_REFERENCE_DATA';
 export const MAKE_DECISION = 'MAKE_DECISION';
 
 export const DECISION_NOT_FOUND = 'NotFound';
@@ -27,5 +28,13 @@ export const initialState = () => ({
       choices: [],
     },
     faithDeclaration: 'NotStated',
+    selectedEthnicity: undefined,
+    selectedReligion: undefined,
+  },
+  referenceData: {
+    ethnicities: [],
+    genders: [],
+    religions: [],
+    titles: [],
   },
 });

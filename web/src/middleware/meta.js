@@ -22,6 +22,8 @@ import {
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
+  ORGAN_DONATION,
+  ORGAN_DONATION_ADDITIONAL_DETAILS,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -105,6 +107,16 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaders.appointmentConfirmation';
       route.meta.pageTitleKey = 'pageTitles.appointmentConfirmation';
+      break;
+    case ORGAN_DONATION.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.organDonation';
+      route.meta.pageTitleKey = 'pageTitles.organDonation';
+      break;
+    case ORGAN_DONATION_ADDITIONAL_DETAILS.name:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaders.organDonation';
+      route.meta.pageTitleKey = 'pageTitles.organDonation';
       break;
     case PRESCRIPTIONS.name:
       store.dispatch('navigation/setNewMenuItem', 2);
