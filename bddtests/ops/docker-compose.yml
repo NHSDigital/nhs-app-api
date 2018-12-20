@@ -50,6 +50,7 @@ services:
       - ORGAN_DONATION_CLIENT_ID=ODR-26-NHSAP
       - ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY=781859de3cce4bc48a715dfc8f36dc6f
       - ORGAN_DONATION_INTEGRATION_ENABLED=true
+      - ORGAN_DONATION_REFERENCE_DATA_EXPIRY_HOURS=24
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.mongodb.session

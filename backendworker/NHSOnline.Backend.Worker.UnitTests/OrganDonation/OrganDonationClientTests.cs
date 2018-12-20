@@ -2,8 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;

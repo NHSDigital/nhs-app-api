@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using MongoDB.Driver;
 using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation.Models;

@@ -28,7 +28,52 @@ paths:
             description: Bad response received from upstream system.
           504:
             description: Timeout when calling upstream system.
+  /organdonation/referencedata:
+      get:
+          tags:
+            - organDonation
+          summary: Get the reference data required for registering an organ donation decision.
+          description: Returns the reference data for titles, genders, religions, ethnicities and withdrawal reasons.
+          
+          consumes:
+            - application/json
+          responses:
+            200:
+              description: Successfully retrieved the organ donation reference data.
+              schema:
+                $ref: '#/definitions/organDonationReferenceData'
+            401:
+              description: User session missing or expired.
+            500:
+              description: An unexpected error occurred processing the request.
+            502:
+              description: Bad response received from upstream system.
+            504:
+              description: Timeout when calling upstream system.
 definitions:
+  organDonationReferenceData:
+    type: object
+    properties:
+      ethnicities:
+        type: array
+        items:
+          $ref: '#/definitions/selectOption'
+      genders:
+        type: array
+        items:
+          $ref: '#/definitions/selectOption'
+      titles:
+        type: array
+        items:
+          $ref: '#/definitions/selectOption'
+      religions:
+        type: array
+        items:
+          $ref: '#/definitions/selectOption'
+      withdrawReasons:
+        type: array
+        items:
+          $ref: '#/definitions/selectOption'
   organDonationRegistration:
     type: object
     properties:
@@ -66,6 +111,16 @@ definitions:
       faithDeclaration:
         type: string
         description: Users faith decision - Yes, No, NotStated.
+  selectOption:
+    type: object
+    description: Contains data for a select box option
+    properties:
+      id:
+        type: string
+        description: The identifier for the select option.
+      displayName:
+        type: string
+        description: The value to be displayed to the user.      
   usersName:
     type: object
     description: Users name object.

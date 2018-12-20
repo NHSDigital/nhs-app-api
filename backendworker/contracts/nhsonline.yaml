@@ -28,6 +28,8 @@ paths:
     $ref: './nhsonline.ndop.yaml#/paths/~1ndop'
   /v1/patient/organdonation:
     $ref: './nhsonline.organdonation.yaml#/paths/~1organdonation'
+  /v1/patient/organdonation/referencedata:
+    $ref: './nhsonline.organdonation.yaml#/paths/~1organdonation~1referencedata'
   /v1/patient/prescriptions:
     $ref: './nhsonline.prescriptions.yaml#/paths/~1prescriptions'
   /v1/patient/terms-and-conditions/consent:

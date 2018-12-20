@@ -35,6 +35,7 @@ services:
       - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
+      - ORGAN_DONATION_BASE_URL=https://mocksvc-proxy.anypoint.mulesoft.com/exchange/127af7bb-99cb-4a70-8590-28234d029279/odr-fhir-experience-api/1.0.6/v1/odr/
       - ORGAN_DONATION_INTEGRATION_ENABLED=false
       - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io

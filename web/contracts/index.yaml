@@ -33,17 +33,17 @@
         responses: 
           200: 
             description: "Returns configuration for the app."
-            schema: 
+            schema:
               type: "object"
               properties:
-                isDeviceSupported: 
+                isDeviceSupported:
                   type: "boolean"
                   description: "Returns true if the version of NHS App installed on device is supported, otherwise false."
-          400: 
+          400:
             description: "Either the device name was not provided or the device version number was not in the correct format."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-    /v1/odscodelookup: 
+    /v1/odscodelookup:
       get: 
         tags: 
           - "odscodelookup"
@@ -273,8 +273,8 @@
             description: "Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots."
             schema: 
               type: "object"
-              properties: 
-                guidanceMessage: 
+              properties:
+                guidanceMessage:
                   type: "string"
                   description: "Guidance message from GP practice explaining which appointment slot to book."
                 bookingReasonNecessity: 
@@ -822,6 +822,55 @@
           409: 
             description: "Conflicts on organ donation record."
           500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
+          504: 
+            description: "Timeout when calling upstream system."
+    /v1/patient/organdonation/referencedata: 
+      get: 
+        tags: 
+          - "organDonation"
+        summary: "Get the referenced data required for registring an organ donation decision."
+        description: "Returns the reference data for titles, genders, religions, ethnicities and withdrawal reasons."
+        consumes: 
+          - "application/json"
+        responses: 
+          200: 
+            description: "Successfully retrieved the organ donation reference data."
+            schema: 
+              type: "object"
+              properties: 
+                ethnicities: 
+                  type: "array"
+                  items: 
+                    $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/schema/properties/titles/items"
+                genders: 
+                  type: "array"
+                  items: 
+                    $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/schema/properties/titles/items"
+                titles: 
+                  type: "array"
+                  items: 
+                    type: "object"
+                    description: "Contains data for a select box option"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "The identifier for the select option."
+                      displayName: 
+                        description: "The value to be displayed to the user."
+                religions: 
+                  type: "array"
+                  items: 
+                    $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/schema/properties/titles/items"
+                withdrawReasons: 
+                  type: "array"
+                  items: 
+                    $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/schema/properties/titles/items"
+          401: 
+            description: "User session missing or expired."
+          500:
             description: "An unexpected error occurred processing the request."
           502: 
             description: "Bad response received from upstream system."

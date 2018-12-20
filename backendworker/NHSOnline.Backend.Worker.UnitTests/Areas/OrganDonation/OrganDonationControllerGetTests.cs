@@ -10,7 +10,6 @@ using NHSOnline.Backend.Worker.Areas.OrganDonation;
 using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.Support.Auditing;
 
@@ -118,7 +117,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsInternalServerError_WhenServiceReturnSearchErrorResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.SearchError();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
@@ -141,7 +139,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsConflict_WhenServiceReturnDuplicateRecordResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.DuplicateRecord();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
@@ -163,7 +160,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsInternalServerError_WhenServiceReturnBadSearchRequestResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.BadSearchRequest();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
@@ -185,7 +181,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsGatewayTimeout_WhenServiceReturnSearchTimeoutResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.SearchTimeout();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
@@ -204,10 +199,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadGateway_WhenServiceReturnSearchTimeoutResult()
+        public async Task Get_ReturnsBadGateway_WhenServiceReturnSearchSystemUnavailableResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.SearchSystemUnavailable();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
@@ -222,15 +216,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation system unavailable"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation system is unavailable"));
         }
-
 
         [TestMethod]
         public async Task Get_ReturnsInternalServerError_WhenServiceReturnDemographicsRetrievalFailedResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.DemographicsRetrievalFailed();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))

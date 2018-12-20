@@ -28,7 +28,6 @@ Feature: View My Medical Record Information - Combined
       | EMIS    |
       | TPP     |
 
-
   Scenario Outline: A <Service> user can view acute, current and discontinued medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

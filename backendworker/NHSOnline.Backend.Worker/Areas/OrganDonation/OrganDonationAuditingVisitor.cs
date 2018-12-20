@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
 
         public object Visit(OrganDonationResult.SearchSystemUnavailable result)
         {
-            _auditor.Audit(AuditType, "The organ donation system unavailable");
+            _auditor.Audit(AuditType, "The organ donation system is unavailable");
 
             return null;
         }

@@ -81,6 +81,8 @@ namespace NHSOnline.Backend.Worker
         
             services.AddCors();
 
+            services.AddMemoryCache();
+
             services
                 .AddMvc(ConfigureMvcOptions)
                 .AddJsonOptions(
