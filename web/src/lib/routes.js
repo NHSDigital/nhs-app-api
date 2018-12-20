@@ -50,7 +50,7 @@ const routes = {
   BROTHERMAILER_SIGNUP_NOJS: {
     name: 'brothermailer-signup-noJs',
     path: '/nojs/brothermailer/signup',
-    noJsApiPath: '/brothermailer/signup',
+    noJsApiPath: '/nojs/brothermailer/signup',
     isAnonymous: true,
   },
   CHECKYOURSYMPTOMS: {
@@ -132,6 +132,10 @@ const routes = {
     name: 'organ-donation-your-choice',
     path: '/organ-donation/your-choice',
   },
+  ORGAN_DONATION_CONFIRMATION: {
+    name: 'organ-donation-confirmation',
+    path: '/organ-donation/confirmation',
+  },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
@@ -200,6 +204,7 @@ export const {
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_YOUR_CHOICE,
+  ORGAN_DONATION_CONFIRMATION,
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,

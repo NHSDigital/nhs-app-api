@@ -5,6 +5,7 @@ import {
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
   SET_ALL_ORGANS,
+  SET_ADDITIONAL_DETAILS,
 } from '@/store/modules/organDonation/mutation-types';
 
 describe('organ donation record mutations', () => {
@@ -41,6 +42,23 @@ describe('organ donation record mutations', () => {
     it('will set the organ donation registration decision "all" state to the received value', () => {
       mutations[SET_ALL_ORGANS](state, false);
       expect(state.registration.decisionDetails.all).toEqual(false);
+    });
+  });
+
+  describe('SET_ADDITIONAL_DETAILS', () => {
+    beforeEach(() => {
+      mutations[SET_ADDITIONAL_DETAILS](state, {
+        ethnicityId: 'foo',
+        religionId: 'bar',
+      });
+    });
+
+    it('will set the ethnicityId on the state', () => {
+      expect(state.additionalDetails.ethnicityId).toEqual('foo');
+    });
+
+    it('will set the religionId on the state', () => {
+      expect(state.additionalDetails.religionId).toEqual('bar');
     });
   });
 });

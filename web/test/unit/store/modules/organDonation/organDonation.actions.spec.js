@@ -4,6 +4,7 @@ import {
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
   SET_ALL_ORGANS,
+  SET_ADDITIONAL_DETAILS,
 } from '@/store/modules/organDonation/mutation-types';
 
 const createHttp = ({ result = {}, referenceData = {} } = {}) => ({
@@ -65,6 +66,18 @@ describe('organ donation actions', () => {
     it('will commit the SET_ALL_ORGANS mutation', () => {
       actions.setAllOrgans({ commit }, true);
       expect(commit).toHaveBeenCalledWith(SET_ALL_ORGANS, true);
+    });
+  });
+
+  describe('setAdditionalDetails', () => {
+    it('will commit the additional details', () => {
+      const additionalDetails = {
+        selectedEthnicity: { id: 1, displayName: 'one' },
+        selectedReligion: { id: 2, displayName: 'two' },
+      };
+
+      actions.setAdditionalDetails({ commit }, additionalDetails);
+      expect(commit).toHaveBeenCalledWith(SET_ADDITIONAL_DETAILS, additionalDetails);
     });
   });
 });

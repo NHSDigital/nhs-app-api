@@ -2,47 +2,55 @@
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <div :class="$style.info">
       <h2>{{ $t('organDonation.additionalDetails.subheader') }}</h2>
-      <label :class="$style.label" for="ethnicity">
-        {{ $t('organDonation.additionalDetails.ethnicity.label') }}
-      </label>
-      <select-dropdown :class="$style.select"
-                       v-model="selectedEthnicity"
-                       select-id="ethnicity"
-                       select-name="ethnicity">
-        <option v-for="option in ethnicities"
-                :key="option.id"
-                :value="option.id"
-                :disabled="option.value===''"
-                :selected="option.value===''">
-          {{ option.displayName }}
-        </option>
-      </select-dropdown>
+      <form id="continue-form" :action="continueAction" method="post">
+        <label :class="$style.label" for="ethnicity">
+          {{ $t('organDonation.additionalDetails.ethnicity.label') }}
+        </label>
+        <select-dropdown :class="$style.select"
+                         v-model="ethnicityId"
+                         select-id="ethnicity"
+                         select-name="nojs.organDonation.additionalDetails.ethnicityId">
+          <option v-for="option in ethnicities"
+                  :key="option.id"
+                  :value="option.id"
+                  :disabled="option.value===''"
+                  :selected="option.value===''">
+            {{ option.displayName }}
+          </option>
+        </select-dropdown>
 
-      <label :class="$style.label" for="religion">
-        {{ $t('organDonation.additionalDetails.religion.label') }}
-      </label>
-      <select-dropdown :class="$style.select"
-                       v-model="selectedReligion"
-                       select-id="religion"
-                       select-name="religion">
-        <option v-for="option in religions"
-                :key="option.id"
-                :value="option.id"
-                :disabled="option.value===''"
-                :selected="option.value===''">
-          {{ option.displayName }}
-        </option>
-      </select-dropdown>
-      <p>{{ $t('organDonation.additionalDetails.description') }}</p>
+        <label :class="$style.label" for="religion">
+          {{ $t('organDonation.additionalDetails.religion.label') }}
+        </label>
+        <select-dropdown :class="$style.select"
+                         v-model="religionId"
+                         select-id="religion"
+                         select-name="nojs.organDonation.additionalDetails.religionId">
+          <option v-for="option in religions"
+                  :key="option.id"
+                  :value="option.id"
+                  :disabled="option.value===''"
+                  :selected="option.value===''">
+            {{ option.displayName }}
+          </option>
+        </select-dropdown>
+        <p>{{ $t('organDonation.additionalDetails.description') }}</p>
+
+        <generic-button id="continue-button"
+                        :class="[$style.button, $style.green]"
+                        @click.prevent="continueClicked">
+          {{ $t('organDonation.additionalDetails.continueButton') }}
+        </generic-button>
+      </form>
+
+      <form id="back-form" :action="backAction" method="get">
+        <generic-button id="back-button"
+                        :class="[$style.button, $style.grey]"
+                        @click.prevent="backClicked">
+          {{ $t('organDonation.additionalDetails.backButton') }}
+        </generic-button>
+      </form>
     </div>
-
-    <form id="back-form" :action="backAction" method="get">
-      <generic-button id="back-button"
-                      :class="[$style.button, $style.grey]"
-                      @click.prevent="backClicked">
-        {{ $t('organDonation.additionalDetails.backButton') }}
-      </generic-button>
-    </form>
   </div>
 </template>
 
@@ -50,19 +58,27 @@
 import get from 'lodash/fp/get';
 import GenericButton from '@/components/widgets/GenericButton';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import { ORGAN_DONATION } from '@/lib/routes';
+import NoJsForm from '@/components/no-js/NoJsForm';
+import { ORGAN_DONATION, ORGAN_DONATION_CONFIRMATION } from '@/lib/routes';
 import { DECISION_NOT_FOUND } from '@/store/modules/organDonation/mutation-types';
+
+const mapAdditionalDetails = self => ({
+  ethnicityId: self.ethnicityId,
+  religionId: self.religionId,
+});
 
 export default {
   components: {
     GenericButton,
+    NoJsForm,
     SelectDropdown,
   },
   data() {
     return {
       backAction: ORGAN_DONATION.path,
-      selectedReligion: '',
-      selectedEthnicity: '',
+      continueAction: ORGAN_DONATION_CONFIRMATION.path,
+      ethnicityId: undefined,
+      religionId: undefined,
     };
   },
   computed: {
@@ -77,6 +93,13 @@ export default {
         { id: '', displayName: this.$t('organDonation.additionalDetails.religion.placeholder') },
         ...get('$store.state.organDonation.referenceData.religions')(this),
       ];
+    },
+    nojs() {
+      return JSON.stringify({
+        organDonation: {
+          registration: mapAdditionalDetails(this),
+        },
+      });
     },
   },
   asyncData({ redirect, store }) {
@@ -94,6 +117,10 @@ export default {
   methods: {
     backClicked() {
       this.$router.push(ORGAN_DONATION.path);
+    },
+    continueClicked() {
+      this.$store.dispatch('organDonation/setAdditionalDetails', mapAdditionalDetails(this));
+      this.$router.push(ORGAN_DONATION_CONFIRMATION.path);
     },
   },
 };

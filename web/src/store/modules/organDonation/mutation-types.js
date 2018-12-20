@@ -2,12 +2,23 @@ export const LOADED = 'LOADED';
 export const LOADED_REFERENCE_DATA = 'LOADED_REFERENCE_DATA';
 export const MAKE_DECISION = 'MAKE_DECISION';
 export const SET_ALL_ORGANS = 'SET_ALL_ORGANS';
+export const SET_ADDITIONAL_DETAILS = 'SET_ADDITIONAL_DETAILS';
 
 export const DECISION_NOT_FOUND = 'NotFound';
 export const DECISION_OPT_IN = 'OptIn';
 export const DECISION_OPT_OUT = 'OptOut';
 
 export const initialState = () => ({
+  additionalDetails: {
+    ethnicityId: undefined,
+    religionId: undefined,
+  },
+  referenceData: {
+    ethnicities: [],
+    genders: [],
+    religions: [],
+    titles: [],
+  },
   registration: {
     identifier: '',
     nhsNumber: '',
@@ -29,13 +40,5 @@ export const initialState = () => ({
       choices: [],
     },
     faithDeclaration: 'NotStated',
-    selectedEthnicity: undefined,
-    selectedReligion: undefined,
-  },
-  referenceData: {
-    ethnicities: [],
-    genders: [],
-    religions: [],
-    titles: [],
   },
 });

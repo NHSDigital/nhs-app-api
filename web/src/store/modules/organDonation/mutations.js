@@ -1,4 +1,10 @@
-import { LOADED, LOADED_REFERENCE_DATA, MAKE_DECISION, SET_ALL_ORGANS } from './mutation-types';
+import {
+  LOADED,
+  LOADED_REFERENCE_DATA,
+  MAKE_DECISION,
+  SET_ADDITIONAL_DETAILS,
+  SET_ALL_ORGANS,
+} from './mutation-types';
 
 export default {
   [LOADED](state, registration) {
@@ -13,5 +19,9 @@ export default {
   [SET_ALL_ORGANS](state, choice) {
     state.registration.decisionDetails =
       { ...state.registration.decisionDetails, ...{ all: choice } };
+  },
+  [SET_ADDITIONAL_DETAILS](state, { ethnicityId, religionId }) {
+    state.additionalDetails.ethnicityId = ethnicityId;
+    state.additionalDetails.religionId = religionId;
   },
 };

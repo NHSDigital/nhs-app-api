@@ -1,4 +1,10 @@
-import { LOADED, LOADED_REFERENCE_DATA, MAKE_DECISION, SET_ALL_ORGANS } from './mutation-types';
+import {
+  LOADED,
+  LOADED_REFERENCE_DATA,
+  MAKE_DECISION,
+  SET_ADDITIONAL_DETAILS,
+  SET_ALL_ORGANS,
+} from './mutation-types';
 
 export default {
   async getReferenceData({ commit }) {
@@ -12,5 +18,8 @@ export default {
   },
   setAllOrgans({ commit }, choice) {
     commit(SET_ALL_ORGANS, choice);
+  },
+  setAdditionalDetails({ commit }, additionalDetails) {
+    commit(SET_ADDITIONAL_DETAILS, additionalDetails);
   },
 };

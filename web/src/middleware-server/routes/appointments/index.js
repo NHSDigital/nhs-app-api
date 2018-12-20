@@ -22,7 +22,7 @@ const initialiseApi = ({ apiFn, req, res }) => {
 export default (apiFn) => {
   const router = Router();
 
-  router.post('/appointments/book', async (req, res) => {
+  router.post('/nojs/appointments/book', async (req, res) => {
     const api = initialiseApi({ apiFn, req, res });
 
     const { successMessageKey,
@@ -61,7 +61,7 @@ export default (apiFn) => {
     res.redirect(uri);
   });
 
-  router.post('/appointments/cancel', async (req, res) => {
+  router.post('/nojs/appointments/cancel', async (req, res) => {
     const api = initialiseApi({ apiFn, req, res });
     const { reason, id, csrfToken } = get('body')(req) || {};
 

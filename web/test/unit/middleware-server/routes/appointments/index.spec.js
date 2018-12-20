@@ -29,7 +29,7 @@ describe('middleware-server/routes/appointments', () => {
     post = router.post;
   });
 
-  describe('POST /appointments/book', () => {
+  describe('POST /nojs/appointments/book', () => {
     beforeEach(() => {
       // eslint-disable-next-line prefer-destructuring
       postHandler = post.mock.calls[0][1];
@@ -51,7 +51,7 @@ describe('middleware-server/routes/appointments', () => {
 
     it('will be initialized to respond to request', () => {
       expect(post).toBeCalled();
-      expect(post.mock.calls[0][0]).toEqual('/appointments/book');
+      expect(post.mock.calls[0][0]).toEqual('/nojs/appointments/book');
     });
 
     it('will call the "postV1PatientAppointments" endpoint with an AppointmentBookRequest', async () => {
@@ -117,7 +117,7 @@ describe('middleware-server/routes/appointments', () => {
     });
   });
 
-  describe('POST /appointments/cancel', () => {
+  describe('POST /nojs/appointments/cancel', () => {
     beforeEach(() => {
       // eslint-disable-next-line prefer-destructuring
       postHandler = post.mock.calls[1][1];
@@ -139,7 +139,7 @@ describe('middleware-server/routes/appointments', () => {
 
     it('will be initialized to respond to request', () => {
       expect(post).toBeCalled();
-      expect(post.mock.calls[1][0]).toEqual('/appointments/cancel');
+      expect(post.mock.calls[1][0]).toEqual('/nojs/appointments/cancel');
     });
 
     it('will call the "deleteV1PatientAppointments" endpoint with an appointmentCancelRequest', async () => {

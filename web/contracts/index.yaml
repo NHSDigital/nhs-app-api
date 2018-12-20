@@ -78,7 +78,7 @@
             description: "the ods code was not provided"
           500: 
             description: "An unexpected error occurred processing the request."
-    /v1/patient/appointments: 
+    /v1/patient/appointments:
       delete: 
         tags: 
           - "appointments"

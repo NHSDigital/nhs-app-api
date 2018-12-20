@@ -1,20 +1,13 @@
-
 import find from 'lodash/fp/find';
 import AdditionalDetails from '@/pages/organ-donation/additional-details';
-import { ORGAN_DONATION } from '@/lib/routes';
-
-import {
-  DECISION_NOT_FOUND,
-  DECISION_OPT_IN,
-  initialState,
-} from '@/store/modules/organDonation/mutation-types';
+import { ORGAN_DONATION, ORGAN_DONATION_CONFIRMATION } from '@/lib/routes';
+import { DECISION_NOT_FOUND, DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
 describe('additional-details', () => {
   // In this case we want string numbers to be coerced into actual numbers and vice versa.
   // eslint-disable-next-line eqeqeq
   const findOptionById = id => find(x => x.value == id);
-
   let $router;
   let $store;
   let $style;
@@ -163,33 +156,115 @@ describe('additional-details', () => {
           expect(option).not.toBeUndefined();
           expect(option.text).toEqual('translate_organDonation.additionalDetails.religion.placeholder');
         });
-
-        // it('will set the "selectedReligion" on the state when selected', () => {
-        //   options.at(2).trigger('change');
-        //   expect($store.state.organDonation.registration.selectedReligion).not.toBeUndefined();
-        // });
       });
     });
 
-    describe('back button', () => {
-      let backButton;
+    describe('back', () => {
+      describe('button', () => {
+        let backButton;
 
-      beforeEach(() => {
-        backButton = wrapper.find('#back-button');
+        beforeEach(() => {
+          backButton = wrapper.find('#back-button');
+        });
+
+        it('will exist', () => {
+          expect(backButton.exists()).toBe(true);
+        });
+
+        it('will display the back button text for the additional details', () => {
+          const key = 'organDonation.additionalDetails.backButton';
+          expect(backButton.text()).toEqual(`translate_${key}`);
+        });
+
+        it('will be set as a grey button', () => {
+          expect(backButton.classes()).toContain($style.button);
+          expect(backButton.classes()).toContain($style.grey);
+        });
+
+        describe('when clicked', () => {
+          beforeEach(() => {
+            backButton.trigger('click');
+          });
+
+          it('will push the organ donation page on the router', () => {
+            expect($router).toContain(ORGAN_DONATION.path);
+          });
+        });
       });
 
-      it('will exist', () => {
-        expect(backButton.exists()).toBe(true);
+      describe('form', () => {
+        let backForm;
+
+        beforeEach(() => {
+          backForm = wrapper.find('#back-form');
+        });
+
+        it('will exist', () => {
+          expect(backForm.exists()).toBe(true);
+        });
+
+        it('will have a method of "get"', () => {
+          expect(backForm.attributes().method).toEqual('get');
+        });
+
+        it('will have an action of ORGAN_DONATION path', () => {
+          expect(backForm.attributes().action).toEqual(ORGAN_DONATION.path);
+        });
+      });
+    });
+
+    describe('continue', () => {
+      describe('button', () => {
+        let continueButton;
+
+        beforeEach(() => {
+          continueButton = wrapper.find('#continue-form #continue-button');
+        });
+
+        it('will exist', () => {
+          expect(continueButton.exists()).toBe(true);
+        });
+
+        it('will be set as a green button', () => {
+          expect(continueButton.classes()).toContain($style.button);
+          expect(continueButton.classes()).toContain($style.green);
+        });
+
+        describe('when clicked', () => {
+          beforeEach(() => {
+            continueButton.trigger('click');
+          });
+
+          it('will dispatch an organDonation/setAdditionalDetails event', () => {
+            expect($store.dispatch).toHaveBeenCalledWith('organDonation/setAdditionalDetails', {
+              ethnicityId: undefined,
+              religionId: undefined,
+            });
+          });
+
+          it('will push the confirmation page on the router', () => {
+            expect($router).toContain(ORGAN_DONATION_CONFIRMATION.path);
+          });
+        });
       });
 
-      it('will display the back button text for the additional details', () => {
-        const key = 'organDonation.additionalDetails.backButton';
-        expect(backButton.text()).toEqual(`translate_${key}`);
-      });
+      describe('form', () => {
+        let continueForm;
+        beforeEach(() => {
+          continueForm = wrapper.find('#continue-form');
+        });
 
-      it('will be set as a grey button', () => {
-        expect(backButton.classes()).toContain($style.button);
-        expect(backButton.classes()).toContain($style.grey);
+        it('will exist', () => {
+          expect(continueForm.exists()).toBe(true);
+        });
+
+        it('will have a method of "post"', () => {
+          expect(continueForm.attributes().method).toEqual('post');
+        });
+
+        it('will have an action of ORGAN_DONATION_CONFIRMATION route"', () => {
+          expect(continueForm.attributes().action).toEqual(ORGAN_DONATION_CONFIRMATION.path);
+        });
       });
     });
 
