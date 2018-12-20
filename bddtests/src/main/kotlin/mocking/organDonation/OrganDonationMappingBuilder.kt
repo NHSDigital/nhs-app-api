@@ -16,4 +16,6 @@ open class OrganDonationMappingBuilder(method: String, relativePath: String = ""
     fun lookupOrganDonationRegistration(patient: Patient) : OrganDonationLookupRegistrationBuilder {
         return OrganDonationLookupRegistrationBuilder(patient)
     }
+
+    fun referenceData() = OrganDonationReferenceDataBuilder()
 }

@@ -5,6 +5,6 @@ data class CodeableConcept(
 )
 
 data class Coding(
-        var system: String,
-        var code: Int
+        var code: String,
+        var display: String
 )

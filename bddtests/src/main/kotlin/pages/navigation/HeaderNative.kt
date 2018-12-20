@@ -72,6 +72,7 @@ class HeaderNative : NativePageObject() {
                 }
         )
     }
+
     private fun checkPageHeaderText(title: String): Boolean {
             return getPageTitle(title).text == title
     }

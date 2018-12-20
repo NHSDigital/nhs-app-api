@@ -9,7 +9,6 @@ import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
-import mocking.organDonation.models.FaithDeclaration
 import mocking.vision.VisionMockDefaults
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
@@ -49,7 +48,7 @@ data class Patient(
         val tppUserSession: TppUserSession? = null,
         val im1ConnectionTokenAsJson: Im1ConnectionToken? = null,
         val organDonationDecision: String = "",
-        val faithDeclaration: FaithDeclaration = FaithDeclaration.NotStated
+        val organDonationDemographics : OrganDonationDemographics = OrganDonationDemographics()
 ) {
 
     fun formattedDateOfBirth(): String {

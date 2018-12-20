@@ -7,3 +7,13 @@ class Address(
     var town: String? = null,
     var county: String? = null,
     var postcode: String? = null)
+{
+    fun full(): String {
+        return "$houseNameFlatNumber, " +
+                "$numberStreet, " +
+                "$village, " +
+                "$town, " +
+                "$county, " +
+                "$postcode"
+    }
+}

@@ -135,6 +135,7 @@ class HomePageStepDefinitions : AbstractSteps() {
         recordSteps.thenISeeRecordWarningPageOpened()
         navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
     }
+
     private fun followOrganDonationLink() {
         homeSteps.homePage.organDonationLink.click()
         organDonationSteps.iAmOnTheOrganDonationPage()

@@ -161,10 +161,55 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
         [TestMethod]
         public void
-            GetOrganDonation_WhenCalledAndDemographicstRetrievedSuccessfully_ReturnsDemographicsRetrievalFailedResponse()
+            GetRegistration_WhenCalledAndDemographicstRetrievedUnsuccessfully_ReturnsDemographicsBadGateway()
         {
             // Arrange 
             var demographicsResult = new DemographicsResult.Unsuccessful();
+
+            // Act
+            var result = _organDonationService.GetOrganDonation(demographicsResult, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.VerifyNoOtherCalls();
+            result.Result.Should().BeOfType<OrganDonationResult.DemographicsBadGateway>();
+        }
+
+        [TestMethod]
+        public void
+            GetRegistration_WhenCalledAndDemographicsUserHasNoAccess_ReturnsDemographicsForbidden()
+        {
+            // Arrange 
+            var demographicsResult = new DemographicsResult.UserHasNoAccess();
+
+            // Act
+            var result = _organDonationService.GetOrganDonation(demographicsResult, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.VerifyNoOtherCalls();
+            result.Result.Should().BeOfType<OrganDonationResult.DemographicsForbidden>();
+        }
+
+        [TestMethod]
+        public void
+            GetRegistration_WhenCalledAndDemographicsInternalServerError_ReturnsDemographicsInternalServerError()
+        {
+            // Arrange 
+            var demographicsResult = new DemographicsResult.InternalServerError();
+
+            // Act
+            var result = _organDonationService.GetOrganDonation(demographicsResult, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.VerifyNoOtherCalls();
+            result.Result.Should().BeOfType<OrganDonationResult.DemographicsInternalServerError>();
+        }
+
+        [TestMethod]
+        public void
+            GetRegistration_WhenCalledAndDemographicsSupplierSystemUnavailable_ReturnsDemographicsRetrievalFailed()
+        {
+            // Arrange 
+            var demographicsResult = new DemographicsResult.SupplierSystemUnavailable();
 
             // Act
             var result = _organDonationService.GetOrganDonation(demographicsResult, _userSession);

@@ -40,6 +40,18 @@ Feature: Organ Donation Backend
       | TPP       |
       | VISION    |
 
+  Scenario Outline: When looking for an organ donation registration but the call returns internal error, the
+  <GP System> user receives a 502 response
+    Given I am a <GP System> user registered with organ donation, but organ donation call will return an internal error
+    And I have logged in and have a valid session cookie
+    When I request my organ donation details
+    Then I receive a "bad gateway" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
   Scenario Outline: When looking for an organ donation registration but the call times out, the <GP System> user
   receives a 504 response
     Given I am a <GP System> user registered with organ donation, but organ donation call will time out
@@ -52,6 +64,7 @@ Feature: Organ Donation Backend
       | TPP       |
       | VISION    |
 
+
   Scenario Outline: When looking for an organ donation registration with an invalid session, the <GP System> user
   receives a 401 response
     Given I am a <GP System> user registered with organ donation
@@ -59,6 +72,19 @@ Feature: Organ Donation Backend
     And I am idle long enough for the backend session to expire
     When I request my organ donation details
     Then I receive a "unauthorized" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario Outline: When looking for an organ donation registration but <GP System> fails to return demographics,
+  the user receives a 502 response
+      #The OD data needs to be placed after log in, as the demographics timeout will affect creating a session
+    Given I have logged into <GP System> and have a valid session cookie
+    Given I am a <GP System> user registered with organ donation, but demographics will return an internal error
+    When I request my organ donation details
+    Then I receive a "bad gateway" error
     Examples:
       | GP System |
       | EMIS      |

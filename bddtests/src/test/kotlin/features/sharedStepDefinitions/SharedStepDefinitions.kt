@@ -6,6 +6,7 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -36,6 +37,8 @@ open class SharedStepDefinitions {
     lateinit var browser: BrowserSteps
     @Steps
     lateinit var navBar: NavigationSteps
+    @Steps
+    lateinit var home: HomeSteps
 
     val mockingClient = MockingClient.instance
 
@@ -80,8 +83,8 @@ open class SharedStepDefinitions {
     open fun iAmLoggedIn() {
         SharedStepDefinitions.patient = SerenityHelpers.getPatientOrNull() ?: SharedStepDefinitions.patient
         browser.goToApp()
-        login.using(SharedStepDefinitions.patient)
-        browser.loginPage.waitForNativeStepToComplete()
+        login.using(patient)
+        home.waitForLoginToComplete()
     }
 
     @Given("^I have (enabled|disabled) javascript$")
@@ -103,7 +106,7 @@ open class SharedStepDefinitions {
         EmisSessionCreateJourneyFactory(mockingClient).createFor(EmisMockDefaults.patientEmis)
     }
 
-    @When("^I navigate to (.*)$")
+    @When("^I navigate to (\\w+)$")
     open fun iNavigateTo(tab: String) {
         navBar.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
     }

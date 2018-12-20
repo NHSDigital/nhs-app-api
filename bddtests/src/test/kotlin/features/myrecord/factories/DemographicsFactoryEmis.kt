@@ -5,6 +5,7 @@ import mocking.data.myrecord.DemographicsData
 import mocking.stubs.StubbedEnvironment
 import models.Patient
 import net.serenitybdd.core.Serenity
+import org.apache.http.HttpStatus
 import worker.NhsoHttpException
 import java.time.Duration
 
@@ -31,6 +32,14 @@ class DemographicsFactoryEmis: DemographicsFactory() {
             myRecord.demographicsRequest(patient)
                     .respondWithSuccess(DemographicsData.getEmisDemographicData(patient)).delayedBy(Duration.ofSeconds
             (StubbedEnvironment.TIMEOUT_DELAY))
+        }
+    }
+
+    override fun throwInternalError(patient: Patient) {
+        mockingClient.forEmis {
+            myRecord.demographicsRequest(patient)
+                    .respondWithStandardError(HttpStatus.SC_INTERNAL_SERVER_ERROR,
+                            HttpStatus.SC_INTERNAL_SERVER_ERROR)
         }
     }
 }

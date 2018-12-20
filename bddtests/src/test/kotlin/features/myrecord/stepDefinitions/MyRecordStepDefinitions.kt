@@ -166,12 +166,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see the patient information details$")
     fun iSeePatientInformationDetails() {
         val sex = this.patient.sex.name;
-        val address = "${this.patient.address.houseNameFlatNumber}, " +
-                "${this.patient.address.numberStreet}, " +
-                "${this.patient.address.village}, " +
-                "${this.patient.address.town}, " +
-                "${this.patient.address.county}, " +
-                "${this.patient.address.postcode}"
+        val address = patient.address.full()
 
         myRecordInfoPage.assertLabelAndValue("Name", patient.formattedFullName())
         myRecordInfoPage.assertLabelAndValue("Date of birth", patient.formattedDateOfBirth())

@@ -6,6 +6,7 @@ import mocking.stubs.StubbedEnvironment
 import mocking.tpp.models.Error
 import models.Patient
 import net.serenitybdd.core.Serenity
+import org.apache.http.HttpStatus
 import worker.NhsoHttpException
 import java.time.Duration
 
@@ -34,6 +35,13 @@ class DemographicsFactoryTpp: DemographicsFactory() {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWithSuccess(DemographicsData.getTppDemographicsData(patient)).delayedBy(Duration.ofSeconds
                     (StubbedEnvironment.TIMEOUT_DELAY))
+        }
+    }
+
+    override fun throwInternalError(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.patientSelectedPost(patient.tppUserSession!!)
+                    .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR,0){}
         }
     }
 }

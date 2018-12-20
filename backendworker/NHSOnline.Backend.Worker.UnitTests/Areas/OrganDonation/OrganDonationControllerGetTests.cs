@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         }
 
         [TestMethod]
-        public async Task Get_ReturnsInternalServerError_WhenServiceReturnSearchErrorResult()
+        public async Task Get_ReturnsBadGateway_WhenServiceReturnSearchErrorResult()
         {
             // Arrange
             var newResult = new OrganDonationResult.SearchError();
@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
@@ -220,6 +220,30 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         }
 
         [TestMethod]
+        public async Task Get_ReturnsInternalServerError_WhenServiceReturnDemographicsInternalError()
+        {
+            // Arrange
+            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
+            var newResult = new OrganDonationResult.DemographicsInternalServerError();
+
+            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+                .Returns(Task.FromResult((OrganDonationResult)newResult));
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+
+            _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(
+                x => x.Audit(ResponseAuditType, "Error received from demographics"));
+        }
+
+
+        [TestMethod]
         public async Task Get_ReturnsInternalServerError_WhenServiceReturnDemographicsRetrievalFailedResult()
         {
             // Arrange
@@ -234,6 +258,52 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+
+            _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(
+                x => x.Audit(ResponseAuditType, "There was an issue retrieving the demographics record"));
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsForbidden_WhenServiceReturnDemographicsForbiddenResult()
+        {
+            // Arrange
+            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
+            var newResult = new OrganDonationResult.DemographicsForbidden();
+
+            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+                .Returns(Task.FromResult((OrganDonationResult)newResult));
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+
+            _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(
+                x => x.Audit(ResponseAuditType, "Access to demographics was forbidden"));
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsBadGateway_WhenServiceReturnDemographicsBadGatewayResult()
+        {
+            // Arrange
+            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
+            var newResult = new OrganDonationResult.DemographicsBadGateway();
+
+            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+                .Returns(Task.FromResult((OrganDonationResult)newResult));
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));

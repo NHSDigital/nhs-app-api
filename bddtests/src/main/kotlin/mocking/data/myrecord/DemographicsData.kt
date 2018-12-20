@@ -60,13 +60,8 @@ object DemographicsData {
                                 DateTimeFormats.tppDateTimeFormat),
                         patient.sex.name,
                         NationalId(type = TppConstants.NationalIdTypeNhs, value = patient.nhsNumbers.first()),
-                        PersonName(patient.title + " " + patient.firstName + " " + patient.surname),
-                        TppAddress("${patient.address.houseNameFlatNumber}, " +
-                                "${patient.address.numberStreet}, " +
-                                "${patient.address.village}, " +
-                                "${patient.address.town}, " +
-                                "${patient.address.county}, " +
-                                "${patient.address.postcode}"))
-        )
+                        PersonName(patient.formattedFullName()),
+                        TppAddress(patient.address.full())
+        ))
     }
 }

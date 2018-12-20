@@ -1,0 +1,101 @@
+package features.organDonation.stepDefinitions
+
+import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
+import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.sessionVariableCalled
+import net.serenitybdd.core.Serenity.setSessionVariable
+import org.junit.Assert
+import utils.SerenityHelpers
+import worker.NhsoHttpException
+import worker.WorkerClient
+import worker.models.organdonation.OrganDonationSearchResponse
+
+class OrganDonationStepDefinitionsBackend {
+
+    @Given("^I am a (.*) user registered with organ donation$")
+    fun iAmAlreadyRegisteredWithOrganDonation(gpSystem: String) {
+        OrganDonationFactory(gpSystem).registeredUser()
+    }
+
+    @Given("^I am a (.*) user not registered with organ donation$")
+    fun iAmNotRegisteredWithOrganDonation(gpSystem: String) {
+        OrganDonationFactory(gpSystem).unregisteredUser()
+    }
+
+    @Given("^I am a (.*) user registered with organ donation, but organ donation will conflict$")
+    fun iAmRegisteredWithOrganDonationButOrganDonationWillConflict(gpSystem: String) {
+        OrganDonationFactory(gpSystem).conflict()
+    }
+
+    @Given("^I am a (.*) user registered with organ donation, but organ donation call will time out$")
+    fun iAmRegisteredWithOrganDonationButOrganDonationWillThrowTimeout(gpSystem: String) {
+        OrganDonationFactory(gpSystem).organDonationTimeout()
+    }
+
+    @Given("^I am a (.*) user registered with organ donation, but organ donation call will return an internal error$")
+    fun iAmRegisteredWithOrganDonationButOrganDonationWillThrowInternalError(gpSystem: String) {
+        OrganDonationFactory(gpSystem).organDonationInternalError()
+    }
+
+    @Given("^I am a (.*) user registered with organ donation, but demographics will time out$")
+    fun iAmRegisteredWithOrganDonationButDemographicsWillThrowTimeOutError(gpSystem: String) {
+        OrganDonationFactory(gpSystem).demographicsTimeout()
+    }
+
+    @Given("^I am a (.*) user registered with organ donation, but demographics will return an internal error$")
+    fun iAmRegisteredWithOrganDonationButDemographicsWillThrowInternalError(gpSystem: String) {
+        OrganDonationFactory(gpSystem).demographicsInternalError()
+    }
+
+    @When("^I request my organ donation details$")
+    fun iRequestMyOrganDonationDetails() {
+        try {
+            val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .organDonation
+                    .getOrganDonationConnection()
+            setSessionVariable(OrganDonationSearchResponse::class).to(response)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
+    }
+
+    @Then("^I receive organ donation details$")
+    fun iReceiveOrganDonationDetails() {
+        val organDonationResponse = Serenity
+                .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
+
+        Assert.assertNotEquals("Organ donation decision incorrect",
+                "NotFound",
+                organDonationResponse.decision)
+        Assert.assertNotNull("Organ donation identifier was not found", organDonationResponse.identifier)
+    }
+
+    @Then("^I receive no organ donation details$")
+    fun iDoNotReceiveOrganDonationDetail() {
+        val organDonationResponse = Serenity
+                .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
+
+        Assert.assertEquals("Organ donation decision incorrect",
+                "NotFound",
+                organDonationResponse.decision)
+        Assert.assertNull("Organ donation identifier should be null",
+                organDonationResponse.identifier)
+    }
+
+    @Then("^I receive the users demographics details$")
+    fun iReceiveTheGpUsersDemographicsDetails() {
+        val patient = SerenityHelpers.getPatient()
+
+        val organDonationResponse = Serenity
+                .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
+
+        Assert.assertEquals("Nhs number in response does not match the patient",
+                patient.formattedNHSNumber(),
+                organDonationResponse.nhsNumber)
+        Assert.assertEquals("Patient name in the response does not match patient",
+                patient.formattedFullName(),
+                organDonationResponse.nameFull)
+    }
+}

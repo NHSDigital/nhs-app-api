@@ -2,41 +2,55 @@ package features.organDonation.stepDefinitions
 
 import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
+import mocking.data.organDonation.OrganDonationReferenceData
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.stubs.StubbedEnvironment
 import models.Patient
 import utils.SerenityHelpers
 import java.time.Duration
 
-class OrganDonationFactory {
+class OrganDonationFactory(val gpSystem: String) {
 
     val mockingClient = MockingClient.instance
 
-    fun registeredUser(gpSystem: String){
-        val patient = setupPatient(gpSystem)
+    val patient = setupPatient()
+
+    fun setupPatientForAppUse(){
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+
+        mockingClient.forOrganDonation {
+            referenceData().respondWithSuccess(OrganDonationReferenceData.getOrganDonationReferenceData())
+        }
+    }
+
+    fun registeredUser(){
+        val patient = setupPatient()
         mockingClient.forOrganDonation {
             lookupOrganDonationRegistration(patient).respondWithSuccess()
         }
         DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
     }
 
-    fun unregisteredUser(gpSystem: String) {
-        val patient = setupPatient(gpSystem)
+    fun unregisteredUser(patient:Patient? = null) {
+        val patientToUse  = patient ?: setupPatient()
         mockingClient.forOrganDonation {
-            lookupOrganDonationRegistration(patient).respondWithNotFoundError()
+            lookupOrganDonationRegistration(patientToUse).respondWithNotFoundError()
         }
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
+        DemographicsFactory.getForSupplier(gpSystem).enabled(patientToUse)
     }
 
-    fun conflict(gpSystem: String) {
-        val patient = setupPatient(gpSystem)
+    fun conflict() {
+        val patient = setupPatient()
         mockingClient.forOrganDonation {
             lookupOrganDonationRegistration(patient).respondWithConflictError()
         }
         DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
     }
 
-    fun organDonationTimeout(gpSystem: String) {
-        val patient = setupPatient(gpSystem)
+    fun organDonationTimeout() {
+        val patient = setupPatient()
         mockingClient.forOrganDonation {
             lookupOrganDonationRegistration(patient).respondWithTimeoutError()
                     .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
@@ -44,18 +58,34 @@ class OrganDonationFactory {
         DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
     }
 
-    fun demographicsTimeout(gpSystem: String) {
-        val patient = setupPatient(gpSystem)
+    fun organDonationInternalError() {
+        val patient = setupPatient()
+        mockingClient.forOrganDonation {
+            lookupOrganDonationRegistration(patient).respondWithInternalError()
+        }
+        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
+    }
+
+    fun demographicsTimeout() {
+        val patient = setupPatient()
         mockingClient.forOrganDonation {
             lookupOrganDonationRegistration(patient).respondWithSuccess()
         }
         DemographicsFactory.getForSupplier(gpSystem).enabledButTimesOut(patient)
     }
 
-    private fun setupPatient(gpSystem: String) : Patient{
+    private fun setupPatient() : Patient{
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(gpSystem)
         return patient
+    }
+
+    fun demographicsInternalError() {
+        val patient = setupPatient()
+        mockingClient.forOrganDonation {
+            lookupOrganDonationRegistration(patient).respondWithSuccess()
+        }
+        DemographicsFactory.getForSupplier(gpSystem).throwInternalError(patient)
     }
 }

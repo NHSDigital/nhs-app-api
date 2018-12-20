@@ -1,0 +1,52 @@
+package pages.organDonation
+
+import net.serenitybdd.core.pages.WebElementFacade
+import org.junit.Assert
+import org.openqa.selenium.By
+import pages.HybridPageElement
+import pages.HybridPageObject
+
+class DropdownElement(val label:String, val helpfulName:String, pageObject: HybridPageObject) {
+
+    private val byIdXpathFormat = "//label[contains(text(),'%s')]/following-sibling::span/select"
+
+    private val dropDown = HybridPageElement(
+            browserLocator = String.format(byIdXpathFormat, label),
+            androidLocator = null,
+            page = pageObject,
+            helpfulName = helpfulName
+    )
+
+    fun assertIsVisible() {
+        dropDown.assertIsVisible()
+    }
+
+    fun selectByText(text: String) {
+        assertIsVisible()
+        dropDown.element.selectByVisibleText<WebElementFacade>(text)
+        Assert.assertEquals("Expected text to be selected", text, getSelectedValue())
+    }
+
+    fun assertContents(expectedContents: ArrayList<String>) {
+        val actualContents = getContents()
+        val message = "Expected list of $helpfulName. " +
+                "Expected: ${expectedContents.joinToString()}. " +
+                "Actual: ${actualContents.joinToString()}."
+
+        Assert.assertEquals(message, expectedContents.count(), actualContents.count())
+        Assert.assertTrue(message, actualContents.containsAll(expectedContents))
+    }
+
+    private fun getSelectedValue(): String {
+        return dropDown.element.selectedVisibleTextValue.trim()
+    }
+
+    private fun getContents(): ArrayList<String> {
+        val optionElements = dropDown.element.findElements(By.xpath("./option"))
+        val optionsAsStrings = arrayListOf<String>()
+        for (option in optionElements) {
+            optionsAsStrings.add(option.text.trim())
+        }
+        return optionsAsStrings
+    }
+}

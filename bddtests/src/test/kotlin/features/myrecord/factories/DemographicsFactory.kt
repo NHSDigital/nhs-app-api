@@ -11,6 +11,7 @@ abstract class DemographicsFactory {
     abstract fun disabled(patient: Patient)
     abstract fun enabled(patient: Patient)
     abstract fun enabledButTimesOut(patient: Patient)
+    abstract fun throwInternalError(patient: Patient)
 
     companion object : SupplierSpecificFactory<DemographicsFactory>() {
 

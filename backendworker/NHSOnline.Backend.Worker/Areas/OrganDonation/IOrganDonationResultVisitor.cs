@@ -7,6 +7,9 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
         T Visit(OrganDonationResult.NewRegistration result);
         T Visit(OrganDonationResult.ExistingRegistration result);
         T Visit(OrganDonationResult.DemographicsRetrievalFailed result);
+        T Visit(OrganDonationResult.DemographicsForbidden result);
+        T Visit(OrganDonationResult.DemographicsInternalServerError result);
+        T Visit(OrganDonationResult.DemographicsBadGateway result);
         T Visit(OrganDonationResult.DuplicateRecord result);
         T Visit(OrganDonationResult.SearchSystemUnavailable result);
         T Visit(OrganDonationResult.BadSearchRequest result);

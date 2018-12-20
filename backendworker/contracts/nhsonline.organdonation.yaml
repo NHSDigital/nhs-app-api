@@ -20,6 +20,8 @@ paths:
               $ref: '#/definitions/organDonationRegistration'
           401:
             description: User session missing or expired.
+          403:
+            description: User forbidden access to gp system demographics.
           409:
             description: Conflicts on organ donation record.
           500:

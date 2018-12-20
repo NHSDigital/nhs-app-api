@@ -32,11 +32,26 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
+        public class DemographicsBadGateway : OrganDonationResult
+        {
+            public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
         public class DemographicsRetrievalFailed : OrganDonationResult
         {
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
         }
-        
+
+        public class DemographicsForbidden : OrganDonationResult
+        {
+            public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public class DemographicsInternalServerError : OrganDonationResult
+        {
+            public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
         public class DuplicateRecord : OrganDonationResult
         {
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);

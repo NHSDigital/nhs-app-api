@@ -38,4 +38,11 @@ class DemographicsFactoryVision: DemographicsFactory() {
                     .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
         }
     }
+
+    override fun throwInternalError(patient: Patient) {
+        mockingClient.forVision {
+            myRecord.demographicsRequest( VisionUserSession.fromPatient(patient))
+                    .respondWithUnknownError()
+        }
+    }
 }

@@ -34,6 +34,27 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
             return null;
         }
 
+        public object Visit(OrganDonationResult.DemographicsForbidden result)
+        {
+            _auditor.Audit(AuditType, "Access to demographics was forbidden");
+
+            return null;
+        }
+
+        public object Visit(OrganDonationResult.DemographicsInternalServerError result)
+        {
+            _auditor.Audit(AuditType, "Error received from demographics");
+
+            return null;
+        }
+
+        public object Visit(OrganDonationResult.DemographicsBadGateway result)
+        {
+            _auditor.Audit(AuditType, "There was an issue retrieving the demographics record");
+
+            return null;
+        }
+
         public object Visit(OrganDonationResult.DuplicateRecord result)
         {
             _auditor.Audit(AuditType, "Duplicate organ donation record error");
