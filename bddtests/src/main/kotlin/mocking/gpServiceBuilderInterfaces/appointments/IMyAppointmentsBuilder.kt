@@ -4,7 +4,7 @@ import mocking.gpServiceBuilderInterfaces.IBuilderCommonResponses
 import mocking.models.Mapping
 import mockingFacade.appointments.MyAppointmentsFacade
 
-interface IMyAppointmentsBuilder:IBuilderCommonResponses {
+interface IMyAppointmentsBuilder : IBuilderCommonResponses {
 
     fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping
 

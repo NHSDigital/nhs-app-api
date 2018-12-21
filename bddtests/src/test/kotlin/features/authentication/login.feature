@@ -21,9 +21,6 @@ Feature: Login
       | GP System |
       | EMIS      |
       | TPP       |
-  @tech-debt  @NHSO-3046
-    Examples:
-      | GP System |
       | VISION    |
 
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key

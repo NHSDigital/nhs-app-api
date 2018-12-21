@@ -29,6 +29,7 @@ class VisionGetHistoricPrescriptionsBuilder(var userSession: VisionUserSession,
                 .andBody(userSession.accountId, "contains")
                 .andBody(userSession.provider, "contains")
                 .andBody(userSession.patientId, "contains")
+                .andBody(serviceDefinition.name, "contains")
     }
 
     fun respondWithSuccess(prescriptionHistory: PrescriptionHistory): Mapping {
