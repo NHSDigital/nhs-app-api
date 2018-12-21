@@ -13,7 +13,7 @@ Feature: Display More Menu
     Then I see more button on the nav bar is highlighted
     And I see and can follow links within the more page body
 
-  Scenario: A user can navigate to the 'Choose how the NHS uses your data' page
+  Scenario: A user can navigate to the 'Find out why your data matters' page
     Given a patient from EMIS is defined
     And I am logged in
     And I navigate to more

@@ -86,7 +86,7 @@ class MoreStepDefinitions {
     private fun followDataSharingLink() {
         morePage.btnDataSharing.click()
         morePage.waitForNativeStepToComplete()
-        headerNative.waitForPageHeaderText("Sharing health data preferences")
+        headerNative.waitForPageHeaderText("Find out why your data matters")
         nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 

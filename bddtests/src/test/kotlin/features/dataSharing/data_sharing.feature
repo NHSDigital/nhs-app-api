@@ -16,28 +16,19 @@ Feature: Data Sharing
     When I click the Previous button <Clicks> times
     Then I am on the Data Sharing <StartingPage> page
   Examples:
-  |StartingPage|Clicks|TargetPage                 |
-  |Overview    |1     |Benefits                   |
-  |Overview    |2     |Data Use                   |
-  |Overview    |3     |Where Opt Out Doesn't Apply|
-  |Overview    |4     |Manage Your Choice         |
+  |StartingPage|Clicks|TargetPage                                     |
+  |Overview    |1     |Where confidential patient information is used |
+  |Overview    |2     |Where your choice does not apply               |
 
   Scenario Outline: A use navigates through the Data Sharing Preferences pages via the Contents links
     Given I am on the Data Sharing <StartingPage> page
     When I click the <ContentsLink> contents link
     Then I am on the Data Sharing <TargetPage> page
   Examples:
-  |StartingPage|ContentsLink               |TargetPage                 |
-  |Overview    |Overview                   |Overview                   |
-  |Overview    |Benefits                   |Benefits                   |
-  |Overview    |Data Use                   |Data Use                   |
-  |Overview    |Where Opt Out Doesn't Apply|Where Opt Out Doesn't Apply|
-  |Overview    |Manage Your Choice         |Manage Your Choice         |
-
-  Scenario: A user navigates to Data Sharing Manage Your Choice page directly from Overview
-    Given I am on the Data Sharing Overview page
-    When I click the Manage Your Choice direct link
-    Then I am on the Data Sharing Manage Your Choice page
+  |StartingPage|ContentsLink                                   |TargetPage                                     |
+  |Overview    |Overview                                       |Overview                                       |
+  |Overview    |Where confidential patient information is used |Where confidential patient information is used |
+  |Overview    |Where your choice does not apply               |Where your choice does not apply               |
 
   Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
     Given I am on the Data Sharing Overview page
@@ -47,7 +38,7 @@ Feature: Data Sharing
   @smoketest
   Scenario: A user chooses to manage their Data Sharing preferences
     Given I am on the Data Sharing Overview page
-    And I click the Next button 4 times
-    And I am on the Data Sharing Manage Your Choice page
+    And I click the Next button 2 times
+    And I am on the Data Sharing Where your choice does not apply page
     When I click the Start Now button
     Then I am on the Ndop website

@@ -28,14 +28,12 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     lateinit var headerNative: HeaderNative
 
     private val overviewId = "Overview"
-    private val benefitsId = "Benefits"
-    private val dataUseId = "Data Use"
-    private val optOutId = "Where Opt Out Doesn't Apply"
-    private val manageChoiceId = "Manage Your Choice"
+    private val dataUseId = "Where confidential patient information is used"
+    private val manageChoiceId = "Where your choice does not apply"
 
     @Given("^I am on the Data Sharing page$")
     fun iAmOnTheDataSharingPage() {
-        headerNative.waitForPageHeaderText("Sharing health data preferences")
+        headerNative.waitForPageHeaderText("Find out why your data matters")
         navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 
@@ -45,14 +43,8 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
             overviewId -> {
                 dataSharing.onOverviewPage()
             }
-            benefitsId -> {
-                dataSharing.onBenefitsPage()
-            }
             dataUseId -> {
                 dataSharing.onDataUsePage()
-            }
-            optOutId -> {
-                dataSharing.onWhereOptOutDoesntApplyPage()
             }
             manageChoiceId -> {
                 dataSharing.onManageYourChoicePage()
@@ -67,25 +59,14 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
             overviewId -> {
                 dataSharing.linkContentsOverview.click()
             }
-            benefitsId -> {
-                dataSharing.linkContentsBenefits.click()
-            }
             dataUseId -> {
                 dataSharing.linkContentsDataUse.click()
-            }
-            optOutId -> {
-                dataSharing.linkContentsWhereOptOutDoesntApply.click()
             }
             manageChoiceId -> {
                 dataSharing.linkContentsManageYourChoice.click()
             }
             else -> throw IllegalArgumentException("$link is not a valid link name.")
         }
-    }
-
-    @When("^I click the Manage Your Choice direct link$")
-    fun iClickTheManageYourChoiceDirectLink() {
-        dataSharing.linkManageYourChoice.click()
     }
 
     @When("^I click the Data Sharing More Info link$")
@@ -120,5 +101,4 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     fun iAmOnTheNDOPWebsite() {
         assert(ndop.tokenIsDisplayed())
     }
-
 }

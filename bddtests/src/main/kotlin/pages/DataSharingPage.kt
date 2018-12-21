@@ -11,21 +11,14 @@ open class DataSharingPage : HybridPageObject() {
     val btnStartNow = createBrowserElement("//button[contains(text(), 'Start now')]")
 
     private val titleOverview = "Overview"
-    private val titleBenefits = "Benefits of data sharing"
-    private val titleDataUse = "How your data is used"
-    private val titleWhereOptOutDoesntApply = "Where an opt-out doesn't apply"
-    private val titleManageYourChoice = "Manage your choice"
+    private val titleDataUse = "Where confidential patient information is used"
+    private val titleManageYourChoice = "Where your choice does not apply"
 
     val linkContentsOverview = contentsLink(titleOverview)
-    val linkContentsBenefits = contentsLink(titleBenefits)
     val linkContentsDataUse = contentsLink(titleDataUse)
-    val linkContentsWhereOptOutDoesntApply = contentsLink(titleWhereOptOutDoesntApply)
     val linkContentsManageYourChoice = contentsLink(titleManageYourChoice)
-
-    val linkManageYourChoice = createBrowserElement(
-            "//a[@id='manage-choice-link'][contains(text(), 'Manage your choice')]")
     val linkDataSharingMoreInfo = createBrowserElement(
-            "//a[contains(text(), 'NHS website')]")
+            "//a[contains(text(), 'Visit the NHS.UK website')]")
 
     // Asserts
     private fun titleElement(title: String): HybridPageElement {
@@ -36,16 +29,8 @@ open class DataSharingPage : HybridPageObject() {
         titleElement(titleOverview).assertSingleElementPresent()
     }
 
-    fun onBenefitsPage() {
-        titleElement(titleBenefits).assertSingleElementPresent()
-    }
-
     fun onDataUsePage() {
         titleElement(titleDataUse).assertSingleElementPresent()
-    }
-
-    fun onWhereOptOutDoesntApplyPage() {
-        titleElement(titleWhereOptOutDoesntApply).assertSingleElementPresent()
     }
 
     fun onManageYourChoicePage() {

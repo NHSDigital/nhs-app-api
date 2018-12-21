@@ -4,30 +4,48 @@
     <p>{{ $t('ds01.pages.p1.intro.paragraph') }}</p>
 
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.confidential.title') }}</h2>
-    <p v-for="paragraph of $t('ds01.pages.p1.confidential.paragraphs')" :key="paragraph">
-      {{ paragraph }}
+    <p>{{ $t('ds01.pages.p1.confidential.paragraph1') }}</p>
+    <ul>
+      <li v-for="listItem of $t('ds01.pages.p1.confidential.listItems')" :key="listItem">
+        {{ listItem }}
+      </li>
+    </ul>
+    <p>{{ $t('ds01.pages.p1.confidential.paragraph2') }}</p>
+
+    <h2 :class="$style['title']">
+      {{ $t('ds01.pages.p1.patientInformation.title') }}
+    </h2>
+    <h3 :class="$style['title']">
+      {{ $t('ds01.pages.p1.patientInformation.yourIndividualCareSubtitle') }}
+    </h3>
+    <p>
+      {{ $t('ds01.pages.p1.patientInformation.yourIndividualCareParagraph') }}
     </p>
+
+    <h3 :class="$style['title']">
+      {{ $t('ds01.pages.p1.patientInformation.researchAndPlanningSubtitle') }}
+    </h3>
+    <p>{{ $t('ds01.pages.p1.patientInformation.researchAndPlanningParagraph') }}</p>
+    <ul>
+      <li v-for="listItem of $t('ds01.pages.p1.patientInformation.researchAndPlanningListItems')"
+          :key="listItem">
+        {{ listItem }}
+      </li>
+    </ul>
 
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.yourChoice.title') }}</h2>
     <p>{{ $t('ds01.pages.p1.yourChoice.paragraph') }}</p>
 
-    <a id="manage-choice-link" :title="$t('ds01.pages.p1.yourChoice.manageChoiceLink')"
-       role="link" @click="goToManageChoices($event)">
-      {{ $t('ds01.pages.p1.yourChoice.manageChoiceLink') }}
-    </a>
-
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.moreOptions.title') }}</h2>
-    <p :aria-label="$t('ds01.pages.p1.moreOptions.paragraph.part1') +
-      $t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') +
-    $t('ds01.pages.p1.moreOptions.paragraph.part3')">
-      {{ $t('ds01.pages.p1.moreOptions.paragraph.part1') }}
+    <p :aria-label="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') +
+    $t('ds01.pages.p1.moreOptions.paragraph.part2')">
       <analytics-tracked-tag :href="yourDataMattersUrl"
                              :class="$style['paragraph-link']"
                              :text="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink')"
                              tag="a" target="_blank">
         {{ $t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') }}
       </analytics-tracked-tag>
-      {{ $t('ds01.pages.p1.moreOptions.paragraph.part3') }}
+      {{ $t('ds01.pages.p1.moreOptions.paragraph.part2') }}
     </p>
 
   </div>
@@ -36,7 +54,6 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { DATA_SHARING_PREFERENCES } from '@/lib/routes';
 
 export default {
   components: {
@@ -46,13 +63,6 @@ export default {
     return {
       yourDataMattersUrl: this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL,
     };
-  },
-  methods: {
-    goToManageChoices(event) {
-      event.preventDefault();
-      this.$store.app.$analytics.trackButtonClick(`${DATA_SHARING_PREFERENCES.name}-overview:text_link:${DATA_SHARING_PREFERENCES.name}-manage-your-choice`);
-      this.$emit('manage-choices');
-    },
   },
 };
 </script>

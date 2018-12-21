@@ -10,15 +10,13 @@
              @keypress="contentsKeyPressed($event, pageId)">{{ $t('ds01.titles.' + pageId) }}</a>
         </li>
       </ul>
-      <Overview v-if="pageId === 'p1'" @manage-choices="goToPage('p5')"/>
-      <Benefits v-if="pageId === 'p2'"/>
-      <DataUse v-if="pageId === 'p3'"/>
-      <OptOutNotApply v-if="pageId === 'p4'"/>
-      <ManageChoice v-if="pageId === 'p5'"/>
+      <Overview v-if="pageId === 'p1'"/>
+      <WhereConfidentialPatientInformationIsUsed v-if="pageId === 'p2'"/>
+      <WhereYourChoiceDoesNotApply v-if="pageId === 'p3'"/>
     </div>
     <form id="ndop-token-form" :action="dataPreferencesUrl" :target="formTarget" method="POST"
           name="ndopTokenForm">
-      <generic-button v-if="pageId === 'p5'" id="start-now-button"
+      <generic-button v-if="pageId === 'p3'" id="start-now-button"
                       :class="[$style.button, $style.green]"
                       @click="startNowClicked($event)">
         {{ $t('ds01.startNowButton') }}
@@ -35,9 +33,8 @@ import NativeCallbacks from '@/services/native-app';
 import BottomNav from '@/components/data-sharing/BottomNav';
 import Overview from '@/components/data-sharing/Overview';
 import Benefits from '@/components/data-sharing/Benefits';
-import DataUse from '@/components/data-sharing/DataUse';
-import OptOutNotApply from '@/components/data-sharing/OptOutNotApply';
-import ManageChoice from '@/components/data-sharing/ManageChoice';
+import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
+import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoiceDoesNotApply';
 import GenericButton from '@/components/widgets/GenericButton';
 
 import _ from 'lodash';
@@ -48,9 +45,8 @@ export default {
     BottomNav,
     Overview,
     Benefits,
-    DataUse,
-    OptOutNotApply,
-    ManageChoice,
+    WhereConfidentialPatientInformationIsUsed,
+    WhereYourChoiceDoesNotApply,
   },
   data() {
     return {
