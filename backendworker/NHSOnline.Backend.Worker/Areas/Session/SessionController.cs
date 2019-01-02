@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -120,7 +118,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 await _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, "Session successfully created.");
 
                 _logger.LogDebug($"Finished session post with status code {gpSessionCreatedResultVisited.StatusCode}");
-
+                
+                _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
                 return await Task.FromResult(CreateCreatedResult(gpSessionCreatedResultVisited, userSession,
                     citizenIdSessionResult.DateOfBirth));
             }

@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Worker
         {
             if (string.IsNullOrEmpty(sourceNhsNumber)) return "";
             
-            var filteredNhsNumber = string.Concat(sourceNhsNumber.Where(c => !char.IsWhiteSpace(c)));
+            var filteredNhsNumber = sourceNhsNumber.RemoveWhiteSpace();
 
             // Belt and braces here, apparantly the nhsnumber will always be 10 long,
             // if not, jut return whatever it is
@@ -19,6 +19,11 @@ namespace NHSOnline.Backend.Worker
                 filteredNhsNumber.Substring(0, 3),
                 filteredNhsNumber.Substring(3, 3),
                 filteredNhsNumber.Substring(6, 4));
+        }
+
+        public static string RemoveWhiteSpace(this string sourceString)
+        {
+            return string.IsNullOrEmpty(sourceString) ? sourceString : string.Concat(sourceString.Where(c => !char.IsWhiteSpace(c)));
         }
     }
 }

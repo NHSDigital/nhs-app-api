@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.Ndop
 
                 var claims = new[]
                 {
-                    new Claim(ClaimTypeNhsNumber, nhsNumber.Replace(" ", String.Empty, StringComparison.Ordinal))
+                    new Claim(ClaimTypeNhsNumber, nhsNumber.RemoveWhiteSpace())
                 };
 
                 var expiryTime = DateTime.UtcNow.AddSeconds(30);
