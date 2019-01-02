@@ -2,7 +2,10 @@ package mocking.nhsAzureSearchService
 
 class NhsAzureSearchServiceMappingBuilder{
 
-    fun nhsAzureSearchRequest(requestBody: NhsAzureSearchRequestBody) =
-            NhsAzureSearchResultsBuilder(requestBody)
+    fun nhsAzureSearchOrganisationRequest(requestBody: NhsAzureSearchOrganisationRequestBody) =
+            NhsAzureOrganisationResultsBuilder(requestBody)
+
+    fun nhsAzureSearchPostcodesAndPlacesRequest(requestBody: NhsAzureSearchPostcodesAndPlacesRequestBody) =
+            NhsAzurePostcodesAndPlacesResultsBuilder(requestBody)
 
 }

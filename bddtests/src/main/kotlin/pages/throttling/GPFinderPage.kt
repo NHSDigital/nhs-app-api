@@ -37,7 +37,7 @@ class GPFinderPage : HybridPageObject() {
     )
 
     private val criteriaErrorMessage = HybridPageElement(
-            browserLocator = "//span[contains(text(), 'Enter the name of your GP surgery, its postcode or town')]",
+            browserLocator = "//span[contains(text(), 'Enter postcode, town or GP surgery name')]",
             androidLocator = null,
             page = this
     )

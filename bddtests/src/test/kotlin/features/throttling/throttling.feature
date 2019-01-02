@@ -23,6 +23,18 @@ Feature: Throttling
     When I click the Continue button on the Practice Participating page
     Then I see the CID login page
 
+  Scenario Outline: A user searches for their GP practice entering a valid postcode or outward code
+    Given There is a GP Practice with a postcode like <Postcode>
+    When I submit my search
+    Then I see the GP Search Results Page with 1 search results
+    And The GP Practice found matches the searched postcode
+    Examples:
+    | Postcode |
+    | SW9      |
+    | SW91NG   |
+    | SW9 1NG  |
+    | Sw91ng   |
+
   Scenario: A user does not see the Too many results warning if the max results are returned
     Given There are the maximum limit GP Practices for my search criteria
     When I submit my search
@@ -67,7 +79,6 @@ Feature: Throttling
      Then I see the login page
      When I browse to the page at /gp-finder
      Then I see the login page
-
 
   Scenario: A user registers their email with brothermailer
     Given The brothermailer service will return a successful response

@@ -15,14 +15,16 @@ services:
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://10.0.2.2:3000/auth-return
       - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
       - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
-      - GP_LOOKUP_BROTHER_MAILER_URL=http://stubs.local.bitraft.io:8080/brothermailer/signup
       - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/createsession
+      - GP_LOOKUP_BROTHER_MAILER_URL=http://stubs.local.bitraft.io:8080/brothermailer/signup
       - GP_LOOKUP_API_URL=http://stubs.local.bitraft.io:8080/indexes/organisationlookup/docs/search
       - GP_LOOKUP_API_KEY=testnhssearchservicekey
+      - GP_LOOKUP_API_RESULTS_LIMIT=20
+      - POSTCODE_LOOKUP_API_URL=http://stubs.local.bitraft.io:8080/indexes/postcodesandplaces/docs/search
+      - POSTCODE_LOOKUP_SEARCH_RADIUS_KM=10
       - COOKIE_DOMAIN=.bitraft.io
       - VERSION_TAG=dev_bdd_docker_main
       - BIOMETRICS_ENABLED=true
-      - GP_LOOKUP_API_RESULTS_LIMIT=20
       - THROTTLING_ENABLED=false
       - ORGAN_DONATION_INTEGRATION_ENABLED=true
   api.local.bitraft.io:

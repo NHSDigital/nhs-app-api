@@ -9,7 +9,8 @@ import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
-import mocking.nhsAzureSearchService.NhsAzureSearchMappingBuilder
+import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationMappingBuilder
+import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.throttling.BrotherMailerMappingBuilder
 import mocking.tpp.TppMappingBuilder
@@ -67,8 +68,19 @@ class MockingClient(private val configuration: MockingConfiguration) {
         this.postMapping(mapping)
     }
 
-    fun forNhsAzureSearch(method: String = "POST", resolver: NhsAzureSearchMappingBuilder.() -> Mapping) {
-        val mappingBuilder = NhsAzureSearchMappingBuilder(method)
+    fun forNhsAzureSearchOrganisation(method: String = "POST", resolver:
+    NhsAzureSearchOrganisationMappingBuilder.()
+    -> Mapping) {
+        val mappingBuilder = NhsAzureSearchOrganisationMappingBuilder(method)
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forNhsAzureSearchPostcodesAndPlaces(method: String = "POST", resolver:
+    NhsAzureSearchPostcodesAndPlacesMappingBuilder.()
+    -> Mapping) {
+        val mappingBuilder = NhsAzureSearchPostcodesAndPlacesMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)

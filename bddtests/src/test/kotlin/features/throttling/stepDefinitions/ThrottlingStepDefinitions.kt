@@ -7,10 +7,17 @@ import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
 import mocking.MockingClient
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData
+import mocking.data.nhsAzureSearchData.NhsAzureSearchData.DEFAULT_LATITUDE
+import mocking.data.nhsAzureSearchData.NhsAzureSearchData.DEFAULT_LONGITUDE
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.nhsAzureSearchService.NhsAzureSearchRequestBody
+import mocking.nhsAzureSearchService.FILTER_LOCAL_TYPE_POSTCODE
+import mocking.nhsAzureSearchService.FILTER_TYPE_POSTCODE_OUT_CODE
+import mocking.nhsAzureSearchService.NHSAzureSearchOrganisationReply
+import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationRequestBody
+import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesRequestBody
+import mocking.nhsAzureSearchService.getGeoDistanceFilterForLatLon
+import mocking.nhsAzureSearchService.getGeoDistanceOrderbyForLatLon
 import models.Patient
-import net.thucydides.core.annotations.NotImplementedException
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.assertTrue
@@ -28,8 +35,14 @@ private const val TECHNICAL_PROBLEMS = "Technical problems"
 private const val TOO_MANY_RESULTS = "Too many results"
 private const val NO_RESULTS_FOUND = "No results found"
 private const val NO_RESULTS_COUNT = 0
-private const val MAX_RESULTS_COUNT = NhsAzureSearchData.LIMIT
+private const val MAX_ORGANISATION_RESULTS_COUNT = NhsAzureSearchData.ORGANISATION_LIMIT
 private const val SOME_RESULTS_COUNT = 2
+private const val POSTCODE_SEARCH_RESULTS_COUNT = 1
+private const val FULL_POSTCODE_WITH_SPACE = "SW9 1NG"
+private const val FULL_POSTCODE_WITHOUT_SPACE = "SW91NG"
+private const val FULL_POSTCODE_MIXED_CASE_NO_SPACE = "Sw91ng"
+private const val FULL_POSTCODE_MIXED_CASE_WITH_SPACE = "Sw9 1ng"
+private const val OUTWARD_CODE = "SW9"
 private const val NO = "no"
 private const val BLANK = "blank"
 private const val MULTIPLE = "multiple"
@@ -52,68 +65,79 @@ open class ThrottlingStepDefinitions {
     lateinit var sendingEmailPage: SendingEmailPage
     lateinit var sendingEmailResultPage: SendingEmailResultsPage
 
-    @Given("^I see the GP Finder Page$")
-    fun assertGPFinderPageVisible() {
-        Assert.assertTrue(gpFinderPage.isFindYourGPSurgeryHeaderVisible())
+    @Given("^I see the GP Search Results Page with " +
+            "($NO_RESULTS_COUNT|$SOME_RESULTS_COUNT|$MAX_ORGANISATION_RESULTS_COUNT|$POSTCODE_SEARCH_RESULTS_COUNT) " +
+            "search results$")
+    fun iSeeTheGPSearchResultsPage(numResults: String) {
+        assertTrue(gpSearchResultsPage.resultsExistForSearch(numResults.toInt()))
     }
 
-    @Given("^I see the GP Search Results Page with (\\d+) search results$")
-    fun iSeeTheGPSearchResultsPage(numResults: String) {
-        when (numResults) {
-            "$NO_RESULTS_COUNT" -> {
-                assertTrue(gpSearchResultsPage.testResultsExistForSearch(NO_RESULTS_COUNT))
+    @Given("^There is a GP Practice with a postcode like " +
+            "($FULL_POSTCODE_WITHOUT_SPACE|$FULL_POSTCODE_WITH_SPACE|$FULL_POSTCODE_MIXED_CASE_NO_SPACE" +
+            "|$OUTWARD_CODE)$")
+    fun thereIsAtLeastOneGPPracticeWithAPostcodeLike(postcode: String) {
+        var expectedSearch = ""
+        var filterType = FILTER_LOCAL_TYPE_POSTCODE
+        when (postcode) {
+            OUTWARD_CODE -> {
+                expectedSearch = OUTWARD_CODE
+                filterType = FILTER_TYPE_POSTCODE_OUT_CODE
             }
-            "$SOME_RESULTS_COUNT" -> {
-                assertTrue(gpSearchResultsPage.testResultsExistForSearch(SOME_RESULTS_COUNT))
+            FULL_POSTCODE_WITH_SPACE,
+            FULL_POSTCODE_WITHOUT_SPACE -> {
+                expectedSearch = FULL_POSTCODE_WITH_SPACE
             }
-            "$MAX_RESULTS_COUNT" -> {
-                assertTrue(gpSearchResultsPage.testResultsExistForSearch(MAX_RESULTS_COUNT))
+            FULL_POSTCODE_MIXED_CASE_NO_SPACE -> {
+                expectedSearch = FULL_POSTCODE_MIXED_CASE_WITH_SPACE
             }
-            else -> {
-                throw NotImplementedException("Checking for unexpected number of results")
-            }
+        }
+        searchText = postcode
+        mockingClient.forNhsAzureSearchPostcodesAndPlaces {
+            nhsAzureSearch.nhsAzureSearchPostcodesAndPlacesRequest(NhsAzureSearchPostcodesAndPlacesRequestBody(
+                    search = "\"$expectedSearch\"",
+                    filter = filterType
+            )).respondWithSuccess(NhsAzureSearchData.getSuccessfulPostcodeMatch())
+        }
+        mockingClient.forNhsAzureSearchOrganisation {
+            nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
+                    filter = getGeoDistanceFilterForLatLon(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
+                    search = null,
+                    searchFields = null,
+                    queryType = null,
+                    orderby = getGeoDistanceOrderbyForLatLon(DEFAULT_LATITUDE, DEFAULT_LONGITUDE)
+            )).respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange())
         }
     }
 
     @Given("^There are ($MULTIPLE|$NO|$MAXIMUM_LIMIT|$MORE_THAN_MAXIMUM) GP Practices for my search criteria$")
     fun thereAreXGPPracticesForMySearchCriteria(howManyPractices: String) {
+        var data = NHSAzureSearchOrganisationReply()
         when(howManyPractices) {
             MULTIPLE -> {
-                mockingClient.forNhsAzureSearch {
-                    nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
-                            search = "${GPFinderPage.validSearch}*"))
-                            .respondWithSuccess(NhsAzureSearchData.getLessThanMaxNumberOfSearchData())
-                }
+                data = NhsAzureSearchData.getLessThanMaxNumberOfOrganisationData()
             }
             NO -> {
-                mockingClient.forNhsAzureSearch {
-                    nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
-                            search = "${GPFinderPage.validSearch}*"))
-                            .respondWithSuccess(NhsAzureSearchData.getZeroSearchData())
-                }
+                data = NhsAzureSearchData.getZeroOrganisationData()
             }
             MAXIMUM_LIMIT -> {
-                mockingClient.forNhsAzureSearch {
-                    nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
-                            search = "${GPFinderPage.validSearch}*"))
-                            .respondWithSuccess(NhsAzureSearchData.getMaxNumberOfSearchData())
-                }
+                data = NhsAzureSearchData.getMaxNumberOfOrganisationData()
             }
             MORE_THAN_MAXIMUM -> {
-                mockingClient.forNhsAzureSearch {
-                    nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
-                            search = "${GPFinderPage.validSearch}*"))
-                            .respondWithSuccess(NhsAzureSearchData.getMoreThanMaxNumberOfSearchData())
-                }
+                data = NhsAzureSearchData.getMoreThanMaxNumberOfOrganisationData()
             }
+        }
+        mockingClient.forNhsAzureSearchOrganisation {
+            nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
+                    search = "${GPFinderPage.validSearch}*"))
+                    .respondWithSuccess(data)
         }
         searchText = GPFinderPage.validSearch
     }
 
     @Given("^The NHS Service Search is unavailable$")
     fun iSearchForAGPPracticeWhenTheNHSServiceSearchIsUnavailable() {
-        mockingClient.forNhsAzureSearch {
-            nhsAzureSearch.nhsAzureSearchRequest(NhsAzureSearchRequestBody(
+        mockingClient.forNhsAzureSearchOrganisation {
+            nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     search = "${GPFinderPage.validSearch}*"))
                     .respondWithServiceUnavailable()
         }
@@ -302,5 +326,14 @@ open class ThrottlingStepDefinitions {
         Assert.assertEquals("There was a problem adding you. Please try again", message)
     }
 
+    @Then("^I see the GP Finder Page$")
+    fun assertGPFinderPageVisible() {
+        assertTrue(gpFinderPage.isFindYourGPSurgeryHeaderVisible())
+    }
+
+    @Then("^The GP Practice found matches the searched postcode$")
+    fun theGPPracticeFoundMatchesThePostcode() {
+        assertTrue(gpSearchResultsPage.gpPracticeFoundByPostcodeIsVisible())
+    }
 }
 

@@ -41,6 +41,7 @@ class Config private constructor() {
     var sessionExpiryMinutes: Long
     val showPageSourceForXPathQuery: String
     val gpLookupApiKey: String
+    val postcodeLookupSearchRadiusKm: String
 
     val mongoDbHost: String
     val mongoDbPort: Long
@@ -91,6 +92,7 @@ class Config private constructor() {
         brotherMailerPath = "/brothermailer/signup"
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
+        postcodeLookupSearchRadiusKm = envOrDefault("POSTCODE_LOOKUP_SEARCH_RADIUS_KM", "10");
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {

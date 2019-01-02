@@ -164,20 +164,34 @@ export default {
       return redirect(`${GP_FINDER.path}?error=true`);
     }
 
-    return NHSSearchService.searchGPPractices(searchQuery)
-      .then(response => ({
-        tooManyResults: response.data['@odata.count'] > process.env['GP_LOOKUP_API_RESULTS_LIMIT'],
-        noResultsFound: !response.data['@odata.count'],
-        searchResults: response.data.value,
-        searchQuery,
-      }))
-      .catch((error) => {
-        if (process.server) {
-          const consola = require('consola');
-          consola.error(new Error(`Error searching for GP practice: response: ${error}`));
+    const serviceResponse = NHSSearchService.searchGPPractices(searchQuery);
+    if (serviceResponse.then) {
+      return serviceResponse.then((response) => {
+        if (response.postcodeSearchError) {
+          return { technicalError: true };
         }
-        return { technicalError: true };
-      });
+        if (response.noResultsFound) {
+          return { noResultsFound: true, searchQuery };
+        }
+        return {
+          tooManyResults: response.data['@odata.count'] > process.env['GP_LOOKUP_API_RESULTS_LIMIT'],
+          noResultsFound: !response.data['@odata.count'],
+          searchResults: response.data.value,
+          searchQuery,
+        };
+      })
+        .catch((error) => {
+          if (process.server) {
+            const consola = require('consola');
+            consola.error(new Error(`Error searching for GP practice: response: ${error}`));
+          }
+          return { technicalError: true };
+        });
+    }
+    if (serviceResponse.queryError) {
+      return redirect(`${GP_FINDER.path}?error=true`);
+    }
+    return { technicalError: true };
   },
   methods: {
     formatAddress(gpPractice) {

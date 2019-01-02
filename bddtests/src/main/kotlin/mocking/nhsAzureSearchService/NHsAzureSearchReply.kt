@@ -2,12 +2,12 @@ package mocking.nhsAzureSearchService
 
 import com.google.gson.annotations.SerializedName
 
-data class NHSAzureSearchReply(
-        var value: MutableList<NhsAzureSearchItem> = arrayListOf(),
-        @SerializedName("@odata.count") var count: Int
+data class NHSAzureSearchOrganisationReply(
+        var value: MutableList<NhsAzureSearchOrganisationItem> = arrayListOf(),
+        @SerializedName("@odata.count") var count: Int = 0
 )
 
-data class NhsAzureSearchItem(
+data class NhsAzureSearchOrganisationItem(
         var OrganisationID: String,
         var OrganisationName: String,
         var Address1: String,
@@ -17,4 +17,14 @@ data class NhsAzureSearchItem(
         var County: String,
         var Postcode: String,
         var NACSCode: String
+)
+
+data class NHSAzureSearchPostcodesAndPlacesReply(
+        var value: MutableList<NhsAzureSearchPostcodesAndPlacesItem> = arrayListOf(),
+        @SerializedName("@odata.count") var count: Int = 0
+)
+
+data class NhsAzureSearchPostcodesAndPlacesItem(
+        var Latitude: Int,
+        var Longitude: Int
 )
