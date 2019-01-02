@@ -26,4 +26,15 @@ open class CheckMySymptoms {
     fun waitForSpinnerToDisappear() {
         checkMySymptoms.waitForSpinnerToDisappear()
     }
+
+
+    @Step
+    fun clickConditionsHeader() {
+        checkMySymptoms.clickConditionsHeader()
+    }
+
+    @Step
+    fun clickNHS111Header() {
+        checkMySymptoms.clickNHS111Header()
+    }
 }

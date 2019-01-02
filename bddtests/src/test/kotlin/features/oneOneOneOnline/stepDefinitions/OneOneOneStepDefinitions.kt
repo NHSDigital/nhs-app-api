@@ -40,4 +40,15 @@ open class OneOneOneStepDefinitions {
         navBar.headerNative.assertIsVisible("Check my symptoms")
         navBar.assertSelectedTab(NavBarNative.NavBarType.SYMPTOMS)
     }
+
+    @When("I press the A-Z symptoms header")
+    fun iPressTheAtoZHelpHeader() {
+        checkMySymptoms.clickConditionsHeader()
+    }
+
+    @When("I press the urgent help header")
+    fun iPressUrgentHelpHeader() {
+        checkMySymptoms.clickNHS111Header()
+    }
+
 }

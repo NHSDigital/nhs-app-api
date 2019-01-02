@@ -35,4 +35,12 @@ open class CheckMySymtomsPage : HybridPageObject() {
     fun isNhs111HeaderVisible(): Boolean {
         return nhs111Header.element.isDisplayed
     }
+
+    fun clickNHS111Header(){
+        nhs111Header.click()
+    }
+
+    fun clickConditionsHeader() {
+        conditionsHeader.click()
+    }
 }
