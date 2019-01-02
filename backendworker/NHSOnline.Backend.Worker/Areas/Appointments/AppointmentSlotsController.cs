@@ -61,7 +61,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 {
                     _logger.LogError(e, "Unable to log appointment slot type details. " +
                                         "Catching exception to prevent inability to create appointment");
-
                 }
 
                 result.Accept(new AppointmentSlotsAuditingVisitor(_auditor));

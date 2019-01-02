@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, "Unsuccessful request retrieving courses");
+                _logger.LogError(e, "Unsuccessful request retrieving demographics");
                 return new DemographicsResult.Unsuccessful();
             }
             finally

@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.Areas.Demographics;
 using NHSOnline.Backend.Worker.Areas.Demographics.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
 {
@@ -22,7 +23,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private UserSession _userSession;
         private IDemographicsResultVisitor<IActionResult> _visitor;
+        private Mock<IAuditor> _mockAuditor;
+        private Mock<IGpSystem> _mockGpSystem;
+        private Mock<IDemographicsService> _mockDemographicsService;
 
+        private const string RequestAuditType = "Demographics_Get_Request";
+        private const string ResponseAuditType = "Demographics_Get_Response";
+
+        private const string RequestAuditMessage = "Attempting to view Demographics";
+        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -30,8 +39,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+
             _userSession = _fixture.Create<UserSession>();
+            
+            _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
+                
+            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem.Setup(x => x.GetDemographicsService())
+                .Returns(_mockDemographicsService.Object);
+            
+            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
+                .Returns(_mockGpSystem.Object);
+            
             var httpContextItems = new Dictionary<object, object>
             {
                 { Constants.HttpContextItems.UserSession, _userSession }
@@ -54,49 +75,32 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
         [TestMethod]
         public async Task Get_Returns_SuccessfulResult_WhenServiceReturnsSuccessfully()
         {
-            var mockGpSystem = new Mock<IGpSystem>();
-            var demographicsService = new Mock<IDemographicsService>();
-
-            var demographicsResponse = new DemographicsResponse();
-
-            var getDemographicsResult = new DemographicsResult.SuccessfullyRetrieved(demographicsResponse);
-
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
-                .Returns(mockGpSystem.Object);
+            var demographicsResponse = _fixture.Create<DemographicsResponse>();
+            var demographicsResult = new DemographicsResult.SuccessfullyRetrieved(demographicsResponse);
 
-            mockGpSystem.Setup(x => x.GetDemographicsService())
-                .Returns(demographicsService.Object);
-
-            demographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) getDemographicsResult));
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession))
+                .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
-            mockGpSystem.Verify(x => x.GetDemographicsService());
-            demographicsService.Verify(x => x.GetDemographics(_userSession));
+            _mockDemographicsService.Verify();
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo<SuccessfulDemographicsResult>();
+            
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Demographics successfully viewed" ));
         }
         
         [TestMethod]
-        public async Task Get_Returns_Status403Forbidden_When_Patient_Does_Not_Have_Access_To_Data()
+        public async Task Get_ReturnsStatus403Forbidden_WhenPatientDoesNotHaveAccessToData()
         {
-            var mockGpSystem = new Mock<IGpSystem>();
-            var demographicsService = new Mock<IDemographicsService>();
-
-            var response = new DemographicsResult.UserHasNoAccess();
-
             // Arrange
-            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
-                .Returns(mockGpSystem.Object);
+            var demographicsResult = new DemographicsResult.UserHasNoAccess();
 
-            mockGpSystem.Setup(x => x.GetDemographicsService())
-                .Returns(demographicsService.Object);
-
-            demographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) response));
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -104,7 +108,69 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-            demographicsService.Verify();
+            _mockDemographicsService.Verify();
+            
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: patient does not have access to data" ));
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsStatus502BadGateway_WhenServiceReturnsSupplierSystemUnavailable()
+        {
+            // Arrange
+            var demographicsResult = new DemographicsResult.SupplierSystemUnavailable();
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            _mockDemographicsService.Verify();
+            
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: supplier system unavailable" ));
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsStatus500InternalServerError_WhenServiceReturnsInternalServerError()
+        {
+            // Arrange
+            var demographicsResult = new DemographicsResult.InternalServerError();
+
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            _mockDemographicsService.Verify();
+            
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: internal server error" ));
+        }
+        
+        [TestMethod]
+        public async Task Get_ReturnsStatus502BadGateway_WhenServiceReturnsUnsuccessful()
+        {
+            // Arrange
+            var demographicsResult = new DemographicsResult.Unsuccessful();
+
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            _mockDemographicsService.Verify();
+            
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: unsuccessful" ));
         }
     }
 }

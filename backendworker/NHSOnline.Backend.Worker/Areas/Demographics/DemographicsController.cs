@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.MyRecord;
 using NHSOnline.Backend.Worker.Conventions;
 using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics
@@ -15,33 +14,48 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<DemographicsController> _logger;
         private readonly IDemographicsResultVisitor<IActionResult> _demographicsResultVisitor;
-        
+        private readonly IAuditor _auditor;
+
         public DemographicsController(
             ILoggerFactory loggerFactory,
             IGpSystemFactory gpSystemFactory,
-            IDemographicsResultVisitor<IActionResult> demographicsResultVisitor)
+            IDemographicsResultVisitor<IActionResult> demographicsResultVisitor,
+            IAuditor auditor)
         {
             _gpSystemFactory = gpSystemFactory;
             _logger = loggerFactory.CreateLogger<DemographicsController>();
             _demographicsResultVisitor = demographicsResultVisitor;
+            _auditor = auditor;
         }
 
         [HttpGet("demographics")]
         public async Task<IActionResult> Get()
         {
-            _logger.LogEnter();
-            var userSession = HttpContext.GetUserSession();
+            try
+            {
+                _logger.LogEnter();
 
-            _logger.LogInformation($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier}");
-            var demographicsService = _gpSystemFactory
-                .CreateGpSystem(userSession.GpUserSession.Supplier)
-                .GetDemographicsService();
+                await _auditor.Audit(Constants.AuditingTitles.GetDemographicsAuditTypeRequest,
+                    "Attempting to view Demographics");
+                
+                var userSession = HttpContext.GetUserSession();
 
-            _logger.LogDebug("Fetching Demographics");
-            var myRecordGetResult = await demographicsService.GetDemographics(userSession);
+                _logger.LogDebug($"Fetching DemographicsService for supplier: {userSession.GpUserSession.Supplier}");
+                var demographicsService = _gpSystemFactory
+                    .CreateGpSystem(userSession.GpUserSession.Supplier)
+                    .GetDemographicsService();
 
-            _logger.LogExit();
-            return myRecordGetResult.Accept(_demographicsResultVisitor);
+                _logger.LogDebug("Fetching Demographics");
+                var result = await demographicsService.GetDemographics(userSession);
+
+                result.Accept(new DemographicsAuditingVisitor(_auditor));
+                
+                return result.Accept(_demographicsResultVisitor);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
     }
 }
