@@ -465,7 +465,7 @@ export default {
     gpPractice: 'GP Practice',
     patient: 'Patient',
     warning: {
-      warningText: 'Your record may contain sensitive information',
+      warningText: 'Your record may contain sensitive information. If someone is pressuring you for this information, contact your GP surgery immediately.',
       title: 'Your record will display:',
       bulletPoints: {
         bp1: 'personal data, such as your details, allergies and medications',

@@ -98,7 +98,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see your record may contain sensitive information message$")
     fun theISeeYourRecordMayContainSensitiveInformationMessage() {
-        assertEquals("Your record may contain sensitive information", myRecordWarningPage.warningText())
+        assertEquals("Your record may contain sensitive information. If someone is pressuring you for this" +
+                " information, contact your GP surgery immediately.", myRecordWarningPage.warningText())
     }
 
     @Then("^I see list of sensitive data information$")
