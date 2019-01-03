@@ -84,7 +84,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
         Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
         mockingClient
                 .forVision {
-                    prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                    prescriptions.getEligibleRepeatsRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000)
                 }
     }
