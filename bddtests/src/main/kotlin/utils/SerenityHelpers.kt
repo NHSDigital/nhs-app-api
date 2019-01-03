@@ -31,7 +31,7 @@ class SerenityHelpers {
             return getValueOrNull<Patient>(Patient::class)
         }
 
-        fun getGpSupplier():String?{
+        fun getGpSupplier():String{
             Assert.assertTrue("Test setup incorrect, GpSupplier to be set",
                     Serenity.hasASessionVariableCalled(GpSupplier))
             return Serenity.sessionVariableCalled<String>(GpSupplier)

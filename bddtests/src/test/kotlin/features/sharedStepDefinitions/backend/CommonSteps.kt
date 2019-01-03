@@ -118,13 +118,24 @@ class CommonSteps : AbstractSteps() {
     @Given("^I have logged into (.*) and have a valid session cookie$")
     fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
         val patient = Patient.getDefault(gpSystem)
+
+        Serenity.setSessionVariable(GP_SYSTEM).to(gpSystem)
+        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(gpSystem)
+
+        givenIHaveLoggedInAndHaveAValidSessionCookie()
+    }
+
+    @Given("^I have logged in and have a valid session cookie$")
+    fun givenIHaveLoggedInAndHaveAValidSessionCookie() {
+        val patient = SerenityHelpers.getPatient()
+        val gpSystem = SerenityHelpers.getGpSupplier()
+
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
         sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication
                 .postSessionConnection(patient.cidUserSession)
-        Serenity.setSessionVariable(GP_SYSTEM).to(gpSystem)
-        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
-        SerenityHelpers.setPatient(patient)
     }
 
     @And("I allow my session to expire")

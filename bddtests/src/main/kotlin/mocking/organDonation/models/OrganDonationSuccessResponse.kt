@@ -1,5 +1,4 @@
 package mocking.organDonation.models
 
-data class OrganDonationSuccessResponse(
-        var resource: Registration
-)
+data class OrganDonationSuccessResponse<TBody>(
+        var entry: List<TBody>)

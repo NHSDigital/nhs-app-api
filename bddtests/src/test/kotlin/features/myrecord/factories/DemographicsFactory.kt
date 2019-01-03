@@ -10,6 +10,7 @@ abstract class DemographicsFactory {
 
     abstract fun disabled(patient: Patient)
     abstract fun enabled(patient: Patient)
+    abstract fun enabledButTimesOut(patient: Patient)
 
     companion object : SupplierSpecificFactory<DemographicsFactory>() {
 
@@ -20,6 +21,5 @@ abstract class DemographicsFactory {
                             "TPP" to { DemographicsFactoryTpp() },
                             "VISION" to { DemographicsFactoryVision() })
                 }
-
     }
 }

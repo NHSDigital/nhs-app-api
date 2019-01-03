@@ -13,4 +13,5 @@ object WorkerPaths {
     val sessionConnectionExtend = "/v1/session/extend"
     val LinkageKey = "/v1/patient/linkage"
     val ndopConnection = "/v1/patient/ndop"
+    val organDonationConnection = "/v1/patient/organdonation"
 }

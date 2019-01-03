@@ -31,25 +31,25 @@ class PrescriptionsErrorStepDefinitions : BaseStepDefinition() {
 
     @But("The prescriptions endpoint is timing out")
     fun butThePrescriptionsEndpointIsTimingOut() {
-        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier()!!)
+        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factory.prescriptionsEndpointTimeout(SerenityHelpers.getPatient())
     }
 
     @But("The prescriptions endpoint is throwing a server error")
     fun butThePrescriptionsEndpointIsThrowingAServerError() {
-        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier()!!)
+        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factory.prescriptionsEndpointThrowServerError(SerenityHelpers.getPatient())
     }
 
     @But("The courses endpoint is timing out")
     fun butTheCoursesEndpointIsTimingOut() {
-        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier()!!)
+        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factory.coursesEndpointTimeout(SerenityHelpers.getPatient())
     }
 
     @But("The courses endpoint is throwing a server error")
     fun butTheCoursesEndpointIsThrowingAServerError() {
-        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier()!!)
+        val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factory.coursesEndpointThrowingServerError(SerenityHelpers.getPatient())
     }
 

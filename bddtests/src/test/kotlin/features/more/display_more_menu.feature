@@ -13,15 +13,6 @@ Feature: Display More Menu
     Then I see more button on the nav bar is highlighted
     And I see and can follow links within the more page body
 
-  @nativepending @NHSO-2972
-  Scenario: A user can navigate to the 'Set organ donation preferences' page
-    Given a patient from EMIS is defined
-    And I am logged in
-    And I navigate to more
-    Given I am on the More Page
-    When I choose to set my organ donation preferences
-    Then I am on the Organ Donation page
-
   Scenario: A user can navigate to the 'Choose how the NHS uses your data' page
     Given a patient from EMIS is defined
     And I am logged in

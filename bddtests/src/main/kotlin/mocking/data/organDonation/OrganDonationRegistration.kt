@@ -6,13 +6,14 @@ import mocking.organDonation.models.Coding
 import mocking.organDonation.models.Identifier
 import mocking.organDonation.models.Name
 import mocking.organDonation.models.Registration
+import mocking.organDonation.models.Resource
 import models.Patient
 
 object OrganDonationRegistration {
 
-    fun getOrganDonationRegistrationData(patient: Patient): Registration {
+    fun getOrganDonationRegistrationData(patient: Patient): List<Registration> {
 
-        return Registration(
+        val resource = Resource(
                 id = "AD02745157",
                 resourceType = "Registration",
                 identifier = listOf(Identifier(
@@ -29,7 +30,7 @@ object OrganDonationRegistration {
                         listOf(Coding(
                                 system = "White - British",
                                 code = 1))),
-                religiousAffliation = CodeableConcept(
+                religiousAffiliation = CodeableConcept(
                         listOf(Coding(
                                 system = "Adventist",
                                 code = 1001
@@ -46,5 +47,7 @@ object OrganDonationRegistration {
                 organDonationDecision = patient.organDonationDecision,
                 faithDeclaration = patient.faithDeclaration.toString()
         )
+
+        return listOf(Registration(resource))
     }
 }

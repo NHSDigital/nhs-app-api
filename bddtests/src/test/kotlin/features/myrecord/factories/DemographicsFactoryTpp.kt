@@ -2,10 +2,12 @@ package features.myrecord.factories
 
 import features.myrecord.stepDefinitions.HTTP_EXCEPTION
 import mocking.data.myrecord.DemographicsData
+import mocking.stubs.StubbedEnvironment
 import mocking.tpp.models.Error
 import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
+import java.time.Duration
 
 class DemographicsFactoryTpp: DemographicsFactory() {
 
@@ -24,6 +26,14 @@ class DemographicsFactoryTpp: DemographicsFactory() {
         mockingClient.forTpp {
             myRecord.patientSelectedPost(patient.tppUserSession!!)
                     .respondWithSuccess(DemographicsData.getTppDemographicsData(patient))
+        }
+    }
+
+    override fun enabledButTimesOut(patient: Patient) {
+        mockingClient.forTpp {
+            myRecord.patientSelectedPost(patient.tppUserSession!!)
+                    .respondWithSuccess(DemographicsData.getTppDemographicsData(patient)).delayedBy(Duration.ofSeconds
+                    (StubbedEnvironment.TIMEOUT_DELAY))
         }
     }
 }

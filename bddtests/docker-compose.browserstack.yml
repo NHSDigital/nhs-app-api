@@ -10,6 +10,7 @@ services:
       - URI_FORMAT_CID_REDIRECT_WEB=http://web{host}:3000/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://web{host}:3000/auth-return
       - VERSION_TAG=dev_bdd_docker_browserstack
+      - ORGAN_DONATION_INTEGRATION_ENABLED=false
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:

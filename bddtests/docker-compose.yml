@@ -24,6 +24,7 @@ services:
       - BIOMETRICS_ENABLED=true
       - GP_LOOKUP_API_RESULTS_LIMIT=20
       - THROTTLING_ENABLED=false
+      - ORGAN_DONATION_INTEGRATION_ENABLED=true
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
@@ -60,6 +61,10 @@ services:
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
+      - ORGAN_DONATION_BASE_URL=http://stubs.local.bitraft.io:8080/organdonation/
+      - ORGAN_DONATION_CLIENT_ID=ODR-26-NHSAP
+      - ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY=781859de3cce4bc48a715dfc8f36dc6f
+      - ORGAN_DONATION_INTEGRATION_ENABLED=true
     depends_on:
       - nhsonline.redis.sds
     ports:

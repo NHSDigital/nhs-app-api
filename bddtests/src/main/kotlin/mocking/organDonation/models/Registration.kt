@@ -1,6 +1,9 @@
 package mocking.organDonation.models
 
 data class Registration(
+        var resource: Resource)
+
+data class Resource(
         var id: String,
         var resourceType: String,
         var identifier: List<Identifier>,
@@ -8,7 +11,7 @@ data class Registration(
         var gender: String,
         var birthdate: String,
         var ethnicCategory: CodeableConcept,
-        var religiousAffliation: CodeableConcept,
+        var religiousAffiliation: CodeableConcept,
         var address: List<Address>,
         var telecom: List<Identifier>,
         var organDonationDecision: String,

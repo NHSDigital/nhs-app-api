@@ -101,6 +101,16 @@ open class BrowserSteps {
     }
 
     @Step
+    fun appendSourceQueryString(source: String) {
+        val driver = loginPage.driver
+        var url = driver.currentUrl
+
+        url += "?source=$source"
+
+        browseTo(url)
+    }
+
+    @Step
     fun refreshPage() {
         loginPage.driver.navigate().refresh()
     }

@@ -78,7 +78,7 @@ class Config private constructor() {
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")
 
         organDonation = envOrDefault("ORGAN_DONATION_URL", "https://www.organdonation.nhs.uk/")
-        updatedOrganDonation = "/organ-donation"
+        updatedOrganDonation = "/organdonation"
         symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
         sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", SESSION_EXPIRY_MINUTES)
 
