@@ -1,5 +1,5 @@
 <template>
-  <div :class="mType">
+  <div :class="[mType, isDesktopWeb ? $style.desktopWeb : undefined]">
     <div v-if="showIcon" :class="$style.icon">
       {{ iText }}
     </div>
@@ -40,6 +40,8 @@ export default {
         warning: 'Warning',
         error: 'Error',
       },
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {

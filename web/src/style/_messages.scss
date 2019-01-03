@@ -11,12 +11,17 @@
 	margin-bottom: 1em;
 	margin-top: 2.125em;
 	padding-bottom: 0.850em;
-	
+
+  &.desktopWeb{
+    max-width: 540px;
+  }
+
+
 	.msg-content {
 		padding-top: 1.125em;
 	}
 	.icon {
-		@include h4; 
+		@include h4;
 		position: absolute;
 		height: 2.125em;
 		padding: 0.5em 1em 0.5em 1em;

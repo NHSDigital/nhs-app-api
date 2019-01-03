@@ -16,6 +16,9 @@ const createState = () => ({
   noJs: {
     myRecord: {},
   },
+  device: {
+    source: 'web',
+  },
 });
 
 const createHttp = () => ({

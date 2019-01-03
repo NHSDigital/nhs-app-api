@@ -4,6 +4,11 @@
 a.button {
   text-decoration: none;
   text-align: center;
+  :focus {
+    outline-color: $focus_highlight;
+    box-shadow: inset 0 0 0 4px $focus_highlight;
+    outline-offset: -5px;
+  }
 }
 
 a.button:focus {
@@ -14,7 +19,6 @@ a.button:focus {
 @mixin button-core {
 	@include button;
 	box-sizing: border-box;
-	width: 100%;
 	padding: 0.625em;
 	background-color: $nhs_blue;
 	border: none;
@@ -25,6 +29,19 @@ a.button:focus {
 	transition: all ease 0.5s;
 	white-space: normal;
 	cursor: pointer;
+  width: 100%;
+    :focus {
+      outline-color: $focus_highlight;
+      box-shadow: inset 0 0 0 4px $focus_highlight;
+      outline-offset: -5px;
+    }
+    &.desktopWeb {
+      @include webButton;
+    }
+    &.desktopWebConfirmButton{
+      @include webButton;
+      margin-top: 1em;
+    }
 
 	&.tabFocus {
 		outline-color: $focus_highlight !important;
@@ -37,6 +54,11 @@ a.button:focus {
 	&.green {
 		background-color: $light_green;
 		box-shadow: 0 0.125em 0 0 $dark_green;
+      :focus {
+        outline-color: $focus_highlight;
+        box-shadow: inset 0 0 0 4px $focus_highlight;
+        outline-offset: -5px;
+      }
 	}
 	&.grey {
 		background-color: $light_grey;
@@ -62,6 +84,11 @@ a.button:focus {
 button.button,
 a.button {
 	@include button-core;
+  :focus {
+    outline-color: $focus_highlight;
+    box-shadow: inset 0 0 0 4px $focus_highlight;
+    outline-offset: -5px;
+  }
 }
 
 button.button-desktop,

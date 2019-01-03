@@ -82,7 +82,7 @@ export default {
     const { store, app } = context;
     const betaCookie = store.$cookies.get('BetaCookie');
     if (betaCookie && !betaCookie.PracticeParticipating && betaCookie.ODSCode
-      && !betaCookie.Skipped) {
+        && !betaCookie.Skipped) {
       return app.$http.getV1Odscodelookup({
         odsCode: betaCookie.ODSCode,
       }).then((response) => {
@@ -127,8 +127,8 @@ export default {
     showCheckFeaturesLink() {
       const betaCookie = this.$store.app.$cookies.get('BetaCookie');
       return betaCookie !== undefined && !betaCookie.NeverShowCheckFeatureLink &&
-        (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
-        this.$store.app.$env.THROTTLING_ENABLED === true);
+          (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
+            this.$store.app.$env.THROTTLING_ENABLED === true);
     },
   },
   mounted() {
@@ -204,13 +204,13 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-@import "../style/home";
-.appVersion {
+ @import "../style/home";
+ .appVersion {
   text-align: center;
   color: #637683;
   font-size: small;
-}
-.throttlingContent+.appVersion {
+ }
+ .throttlingContent+.appVersion {
   margin-top: 0.5em;
-}
+ }
 </style>

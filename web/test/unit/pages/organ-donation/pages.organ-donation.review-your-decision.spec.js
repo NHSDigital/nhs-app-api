@@ -10,7 +10,12 @@ describe('review your decision', () => {
   let $style;
   let wrapper;
 
-  const createState = (state = { organDonation: initialState() }) => state;
+  const createState = (state = {
+    organDonation: initialState(),
+    device: {
+      source: 'web',
+    },
+  }) => state;
 
   const mountPage = () => mount(ReviewYourDecision, { $store, $style, $t });
 

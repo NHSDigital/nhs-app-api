@@ -1,5 +1,5 @@
 <template>
-  <p :class="$style['validation-text']">
+  <p :class="[$style['validation-text'], isDesktopWeb ? $style.desktopWeb : $style.web]">
     <error-marker-icon/>
     <span data-purpose="error">
       <slot/>
@@ -14,6 +14,12 @@ import ErrorMarkerIcon from '@/components/icons/ErrorMarkerIcon';
 export default {
   components: {
     ErrorMarkerIcon,
+  },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
   },
 };
 </script>

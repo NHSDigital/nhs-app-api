@@ -21,6 +21,10 @@
       margin-bottom: 0em;
       padding-top: 0em;
       padding-bottom: 0em;
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: normal;
+      }
     }
   }
   .info-content {

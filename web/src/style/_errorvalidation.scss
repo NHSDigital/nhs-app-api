@@ -1,4 +1,6 @@
 @import './colours';
+@import './textstyles';
+@import './fonts';
 
 // ERROR AND VALIDATION
 .validation-inline {
@@ -23,7 +25,15 @@
 	padding-left: 0em !important;
 }
 .validation-text {
-	color: $error_dark !important;
-	font-weight: 700 !important;
 	padding-bottom: 0em !important;
+    &.desktopWeb{
+      font-family: $default-web;
+      font-weight: normal;
+      color: red;
+      margin-bottom: 1em;
+    }
+    &.web{
+      font-weight: 700 !important;
+      color: $error_dark !important;
+    }
 }

@@ -264,6 +264,7 @@ export default {
       },
     },
     booking: {
+      desktopBackButtonText: 'Back',
       backButtonText: 'Back to my appointments',
       noSlots: 'No appointments available',
       nojs: {
@@ -340,6 +341,7 @@ export default {
       },
       confirmButtonText: 'Confirm and book appointment',
       changeButtonText: 'Change this appointment',
+      backButtonText: 'Back',
       errorDialog: 'There\'s a problem',
       noReasonError: 'Enter a reason for this appointment',
       noPhoneNumberError: 'Enter a telephone number',

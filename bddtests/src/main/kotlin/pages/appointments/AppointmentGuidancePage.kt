@@ -37,7 +37,7 @@ class AppointmentGuidancePage : HybridPageObject() {
 
     fun isSubHeaderTextEqualTo(text: String, elementWasStale: Boolean = false): Boolean {
         return try {
-            main.element.findBy<WebElementFacade>("//h2[text()='$text']")
+            main.element.findBy<WebElementFacade>("//*[@id='guidance_sub_header' and contains(text(), '$text')]")
             true
         } catch (e: StaleElementReferenceException) {
             if (!elementWasStale) {
@@ -49,6 +49,7 @@ class AppointmentGuidancePage : HybridPageObject() {
             false
         }
     }
+
 
     fun getGuidanceBody(): List<Pair<String, Boolean>> {
         val list = arrayListOf<Pair<String, Boolean>>()

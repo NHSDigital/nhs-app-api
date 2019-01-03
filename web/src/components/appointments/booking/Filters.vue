@@ -1,11 +1,12 @@
 <template>
-  <div :class="$style.form">
-    <label for="type">{{ $t('appointments.booking.filters.type.label') }}</label>
+  <div :class="[$style.form, isDesktopWeb ? $style.desktopWebFilters : undefined]">
+    <label :class="[isDesktopWeb ? $style.desktopWeb : undefined]"
+           for="type">{{ $t('appointments.booking.filters.type.label') }}</label>
     <collapsible-dialog v-if="guidanceMsg">
       <template slot="header">
         {{ $t('appointments.booking.gpMessage.header') }}
       </template>
-      <p>{{ guidanceMsg }}</p>
+      <p :class="[isDesktopWeb ? $style.desktopWeb : undefined]">{{ guidanceMsg }}</p>
     </collapsible-dialog>
     <select-dropdown v-model="type" select-id="type" select-name="type">
       <option v-for="option in options.types"
@@ -19,7 +20,8 @@
       <optgroup label=""/>
     </select-dropdown>
 
-    <label for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
+    <label :class="[isDesktopWeb ? $style.desktopWeb : undefined]"
+           for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
     <select-dropdown v-model="location" select-id="location" select-name="location">
       <option v-for="option in options.locations"
               :key="option.value"
@@ -29,7 +31,8 @@
       </option>
     </select-dropdown>
 
-    <label for="clinician">{{ $t('appointments.booking.filters.clinician.label') }}</label>
+    <label :class="[isDesktopWeb ? $style.desktopWeb : undefined]"
+           for="clinician">{{ $t('appointments.booking.filters.clinician.label') }}</label>
     <select-dropdown
       v-model="clinician"
       :required="false"
@@ -42,7 +45,8 @@
 
     <hr :class="$style.line" aria-hidden="true">
     <h2>{{ $t('appointments.booking.filters.date.header') }}</h2>
-    <label for="time-period">{{ $t('appointments.booking.filters.date.label') }}</label>
+    <label :class="[isDesktopWeb ? $style.desktopWeb : undefined]"
+           for="time-period">{{ $t('appointments.booking.filters.date.label') }}</label>
     <select-dropdown v-model="date" select-id="time-period" select-name="time-period">
       <option v-for="option in options.dates" :key="option.value" :value="option.value">
         {{ displayName(option) }}
@@ -84,6 +88,12 @@ export default {
         date: '',
       }),
     },
+  },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
   },
   computed: {
     type: {
@@ -141,5 +151,12 @@ export default {
   :focus {
     outline-color: $focus_highlight;
   }
+}
+
+label {
+ &.desktopWeb {
+  font-family: $default-web;
+  font-weight: normal;
+ }
 }
 </style>

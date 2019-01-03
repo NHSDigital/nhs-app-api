@@ -3,9 +3,11 @@
                                     isDesktopWeb ? $style.desktopWeb : $style.web]">
     <div v-if="showNoUpcomingAppointments" data-purpose="info">
       <h2>{{ $t('appointments.index.empty.header') }}</h2>
-      <div :class="$style.info">
-        <p>{{ $t('appointments.index.empty.text1') }}</p>
-        <p>{{ $t('appointments.index.empty.text2') }} </p>
+      <div :class="isDesktopWeb && $style.upComingAppointments">
+        <p :class="isDesktopWeb && $style.upComingAppointments">
+          {{ $t('appointments.index.empty.text1') }}</p>
+        <p :class="isDesktopWeb && $style.upComingAppointments">
+          {{ $t('appointments.index.empty.text2') }} </p>
       </div>
     </div>
 

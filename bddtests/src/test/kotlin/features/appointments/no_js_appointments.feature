@@ -36,7 +36,7 @@ Feature: Appointment Service with no Javascript
     And I am on the My Appointments page
     Then I am informed I have no booked appointments
 
-    When I click the 'Book' button
+    When I click the 'Book new appointment' button
     Then I am given guidance as to my options before booking an appointment
 
     When I click the 'Book new appointment' button
@@ -47,7 +47,7 @@ Feature: Appointment Service with no Javascript
     And I have selected a time when multiple slots are available
     Then the Appointment Slot page is displayed
 
-    When I click the 'Change this appointment' button
+    When I click the 'Back' button
     Then the Available Appointments page is displayed
 
     When I have filtered such that there is one time displayed that represents multiple slots

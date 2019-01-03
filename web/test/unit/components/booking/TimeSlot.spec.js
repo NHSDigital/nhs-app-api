@@ -23,6 +23,9 @@ const $store = {
     myAppointments: {
       disableCancellation: '',
     },
+    device: {
+      source: 'web',
+    },
   },
   dispatch: jest.fn(),
   app,

@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.form">
+  <div :class="[$style.form, isDesktopWeb ? $style.desktopWeb : $style.web]">
     <input v-tabbing="textInputClasses"
            ref="textInput"
            :class="getStyleClasses"
@@ -65,7 +65,13 @@ export default {
       default: undefined,
     },
   },
-  data: function data() { return { model: undefined }; },
+  data: function data() {
+    return {
+      model: undefined,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
+  },
   computed: {
     textValue: {
       get() {

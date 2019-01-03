@@ -250,13 +250,13 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | EMIS      |
 
-  Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
+  Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when 'Back' button selected.
     Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
-    When I click the 'Change this appointment' button
+    When I click the 'Back' button
     Then there is a filter for the appointment types
     And there is a filter for the appointment locations
     And there is a filter for the appointment doctors/nurses

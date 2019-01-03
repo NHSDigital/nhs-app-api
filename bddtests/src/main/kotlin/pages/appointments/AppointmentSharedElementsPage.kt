@@ -81,7 +81,7 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
                                     parentToSlotDivRelativePath: String = ""): Slot {
         val slot = Slot()
         val relativePath = if (parentToSlotDivRelativePath.isEmpty()) relativeToParentXPath
-                           else "$parentToSlotDivRelativePath/"
+        else "$parentToSlotDivRelativePath/"
         slot.time = findByXpath(parentContainer, relativePath + appointmentTimeXpath).text
         slot.session = findByXpath(parentContainer, relativePath + appointmentSessionNameXpath).text
         slot.date = findByXpath(parentContainer, relativePath + appointmentDateXpath).text

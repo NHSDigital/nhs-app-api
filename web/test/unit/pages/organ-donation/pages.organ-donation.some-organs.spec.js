@@ -41,6 +41,9 @@ const someNotSetChoices = {
 const createState = (choice = false) => {
   const state = {
     organDonation: initialState(),
+    device: {
+      source: 'web',
+    },
   };
 
   state.organDonation.registration.decisionDetails.all = choice;

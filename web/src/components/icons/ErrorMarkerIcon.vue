@@ -7,7 +7,7 @@
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g id="errors-v4" transform="translate(-16.000000, -666.000000)">
         <g id="error-marker" transform="translate(16.000000, 666.000000)">
-          <circle id="Oval-2" :class="$style['error-circle']" cx="8" cy="8" r="8"/>
+          <circle id="Oval-2" :class="[isDesktopWeb ? $style.desktopErrorIcon: $style['error-circle']]" cx="8" cy="8" r="8"/>
           <path id="!" d="M8.791,10.13 L7.195,10.13 L6.929,3.228 L9.085,3.228 L8.791,
           10.13 Z M8.987,13 L7.027,13 L7.027,11.04 L8.987,11.04 L8.987,13 Z" fill="#FFFFFF"/>
         </g>
@@ -19,7 +19,14 @@
 <script>
 // This is required for JEST tests.  If omitted it results in the error
 //     'No script available to transform'
-export default {};
+export default {
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
+  },
+};
 </script>
 
 <style module lang="scss" scoped>
@@ -27,4 +34,8 @@ export default {};
 .error-circle {
   fill: $error_dark
 }
+
+ .desktopErrorIcon{
+  fill: red
+ }
 </style>

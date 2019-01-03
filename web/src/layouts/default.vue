@@ -112,6 +112,9 @@ export default {
       const clazzes = ['content', 'pull-body'];
       if (this.$store.state.device.isNativeApp) {
         clazzes.push('native');
+        clazzes.push('web');
+      } else {
+        clazzes.push('desktopWeb');
       }
       if (this.isHotJarSurveyVisible() && this.$route.name === INDEX.name) {
         if (this.surveyBarOpen) {

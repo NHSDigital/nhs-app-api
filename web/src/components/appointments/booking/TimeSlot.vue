@@ -2,9 +2,10 @@
   <li
     v-tabbing="defaultClasses"
     :class="getStyleClasses"
-    :aria-label="isSelected?'selected-slot':undefined" tabindex="0"
+    :aria-label="isSelected?'selected-slot':undefined" tabindex="-1"
     @keypress="onKeyDown">
-    <a :href="createLink()" @click.prevent="select">
+    <a :class="[isDesktopWeb ? $style.desktopWeb : undefined]"
+       :href="createLink()" @click.prevent="select">
       {{ formatTime(timeSlot.startTime) }}
     </a>
   </li>
@@ -32,6 +33,8 @@ export default {
   data() {
     return {
       isSelected: false,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {
@@ -84,8 +87,15 @@ export default {
     text-decoration: none;
     font-weight: normal;
     padding: 1em;
-
+    &.desktopWeb {
+     font-family: $default-web;
+     font-weight: lighter;
+    }
   }
+
+ a:focus {
+  outline-color: $focus_highlight;
+ }
 }
 
 

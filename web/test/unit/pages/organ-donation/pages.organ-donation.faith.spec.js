@@ -14,6 +14,9 @@ describe('organ donation faith page', () => {
   const createState = () => {
     state = {
       organDonation: initialState(),
+      device: {
+        source: 'web',
+      },
     };
 
     state.organDonation.registration.faithDeclaration = '';

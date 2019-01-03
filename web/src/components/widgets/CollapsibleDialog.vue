@@ -7,7 +7,7 @@
          @click="toggle"
          @keypress="keyPress($event)">
       <plus-minus-icon :icon-plus="!showContent" />
-      <h2 :class="$style['info-message-title']">
+      <h2 :class="[$style['info-message-title'], ...(isDesktopWeb ? [$style.desktopWeb] : [])]">
         <slot name="header" />
       </h2>
     </div>
@@ -30,8 +30,15 @@ export default {
   },
   data() {
     return {
-      showContent: false,
+      showContent: true,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
+  },
+  mounted() {
+    if (process.client) {
+      this.showContent = !this.showContent;
+    }
   },
   methods: {
     toggle() {

@@ -20,7 +20,7 @@ import kotlin.collections.set
 open class AvailableAppointmentsSteps {
 
     private val pageHeader = "Book new appointment"
-    private val backButtonText = "Back to my appointments"
+    private val backButtonText = "Back"
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
     lateinit var headerNative: HeaderNative

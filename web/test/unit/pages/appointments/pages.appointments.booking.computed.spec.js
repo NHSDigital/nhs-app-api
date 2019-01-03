@@ -45,6 +45,9 @@ describe('booking.vue - noAvailableAppointments', () => {
         myAppointments: {
           disableCancellation: false,
         },
+        device: {
+          source: 'web',
+        },
       },
     };
 
@@ -65,6 +68,9 @@ describe('booking.vue - noAvailableAppointments', () => {
         myAppointments: {
           disableCancellation: false,
         },
+        device: {
+          source: 'web',
+        },
       },
     };
 
@@ -84,6 +90,9 @@ describe('booking.vue - noAvailableAppointments', () => {
         },
         myAppointments: {
           disableCancellation: false,
+        },
+        device: {
+          source: 'web',
         },
       },
     };
@@ -107,6 +116,9 @@ describe('booking.vue - showNoMatchingWarning', () => {
         myAppointments: {
           disableCancellation: false,
         },
+        device: {
+          source: 'web',
+        },
       },
     };
 
@@ -127,6 +139,9 @@ describe('booking.vue - showNoMatchingWarning', () => {
         myAppointments: {
           disableCancellation: false,
         },
+        device: {
+          source: 'web',
+        },
       },
     };
 
@@ -146,6 +161,9 @@ describe('booking.vue - showNoMatchingWarning', () => {
         },
         myAppointments: {
           disableCancellation: false,
+        },
+        device: {
+          source: 'web',
         },
       },
     };
@@ -168,6 +186,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
         myAppointments: {
           disableCancellation: false,
         },
+        device: {
+          source: 'web',
+        },
       },
     };
 
@@ -186,6 +207,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
         },
         myAppointments: {
           disableCancellation: false,
+        },
+        device: {
+          source: 'web',
         },
       },
     };
@@ -206,6 +230,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
         myAppointments: {
           disableCancellation: false,
         },
+        device: {
+          source: 'web',
+        },
       },
     };
 
@@ -224,6 +251,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
         },
         myAppointments: {
           disableCancellation: false,
+        },
+        device: {
+          source: 'web',
         },
       },
     };
@@ -247,6 +277,9 @@ describe('booking.vue - notMatchSearchCriteria', () => {
         },
         myAppointments: {
           disableCancellation: false,
+        },
+        device: {
+          source: 'web',
         },
       },
       app: {

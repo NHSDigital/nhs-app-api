@@ -4,12 +4,12 @@
         data-label="date">{{ formatDate(appointment.startTime) }}</h3>
     <h4 :class="[isDesktopWeb ? $style.desktopWeb : $style.web]"
         data-label="start time">{{ formatTime(appointment.startTime) }}</h4>
-    <hr aria-hidden="true">
+    <hr :class="[isDesktopWeb ? $style.desktopWeb : $style.web]" aria-hidden="true">
     <p :class="[$style.session, isDesktopWeb ? $style.desktopWeb : $style.web]"
        data-label="session name">
       {{ appointment.type }}
     </p>
-    <hr aria-hidden="true">
+    <hr :class="[isDesktopWeb ? $style.desktopWeb : $style.web]" aria-hidden="true">
 
     <p :class="[$style.location, isDesktopWeb ? $style.desktopWeb : $style.web]">
       <location-icon/>&nbsp;
@@ -25,7 +25,8 @@
     </p>
 
     <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation">
-      <hr :class="$style.cancel" aria-hidden="true">
+      <hr :class="[$style.cancel, isDesktopWeb ? $style.desktopWeb : $style.web]"
+          aria-hidden="true">
       <p>
         <a :class="[$style['cancel-link'], isDesktopWeb ? $style.desktopWeb : $style.web]"
            :href="appointmentCancellingPath"
@@ -35,7 +36,8 @@
       </p>
     </span>
     <span v-if="showCancellationLink && (cancellationDisabled || appointment.disableCancellation)">
-      <hr :class="$style.cancel" aria-hidden="true">
+      <hr :class="[$style.cancel, isDesktopWeb ? $style.desktopWeb : $style.web]"
+          aria-hidden="true">
       <p :class="$style['cancel-disabled']">
         {{ this.$t('appointments.index.cancellationDisabledText') }}
       </p>
@@ -105,4 +107,12 @@ export default {
 .cancel {
   margin-top: 0.5em;
 }
+
+ div{
+  hr {
+   &.desktopWeb{
+    opacity: unset;
+   }
+  }
+ }
 </style>

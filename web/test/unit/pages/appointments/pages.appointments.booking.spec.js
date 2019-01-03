@@ -54,6 +54,9 @@ describe('booking.vue', () => {
         myAppointments: {
           disableCancellation: false,
         },
+        device: {
+          source: 'web',
+        },
       },
       app,
     };
@@ -79,6 +82,9 @@ describe('booking.vue', () => {
         },
         myAppointments: {
           disableCancellation: false,
+        },
+        device: {
+          source: 'web',
         },
       },
       app,

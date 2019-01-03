@@ -32,7 +32,7 @@
       />
 
       <noscript inline-template>
-        <button :class="this.$style.button">
+        <button :class="[this.$style.button, this.$style.desktopWeb]">
         {{ $t('appointments.booking.nojs.findButton') }}
         </button>
       </noscript>
@@ -54,12 +54,15 @@
     </form>
 
     <form :action="appointmentsPath" method="get">
-      <generic-button v-if="loadComplete"
-                      id="back-to-appointments"
-                      :class="[$style.button, $style.grey]"
-                      @click.stop.prevent="goBack()">
-        {{ $t('appointments.booking.backButtonText') }}
-      </generic-button>
+      <div :class="[isDesktopWeb ? $style.desktopBackButtonPadding : undefined]">
+        <generic-button v-if="loadComplete"
+                        id="back-to-appointments"
+                        :class="[isDesktopWeb ? $style.desktopBackButton
+                        : [$style.button, $style.grey]]"
+                        @click.stop.prevent="goBack()">
+          {{ $t(getBackButtonText) }}
+        </generic-button>
+      </div>
     </form>
   </div>
 </template>
@@ -115,6 +118,8 @@ export default {
     return {
       availableAppointmentsScreenReaderMessage: [],
       filtered: false,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {
@@ -175,6 +180,11 @@ export default {
     noJsInputName() {
       return noJsParameterName;
     },
+    getBackButtonText() {
+      return (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios') ? 'appointments.booking.desktopBackButtonText'
+        : 'appointments.booking.backButtonText';
+    },
   },
   asyncData({ store, req }) {
     const query = req ? qs.parse(req.url.substr(req.url.indexOf('?') + 1)) : undefined;
@@ -229,9 +239,44 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/buttons";
 @import "../../style/accessibility";
+@import "../../style/textstyles";
+@import "../../style/fonts";
 
 div:focus {
   outline: none !important;
 }
+desktopBackButtonPadding {
+ padding-left: 1em;
+}
+.desktopBackButton {
+ font-family: $default-web;
+ color: $nhs_blue;
+ font-size: 1.125em;
+ line-height: 1.125em;
+ font-weight: normal;
+ vertical-align: middle;
+ cursor: pointer;
+ display: inline-block;
+ border: none;
+ background: none;
+ outline: none;
+ text-decoration: underline;
+ margin-top: 2em;
+ margin-bottom: 2em;
+}
 
+.desktopBackButton:focus{
+ box-sizing: content-box;
+outline-color: $focus_highlight;
+box-shadow: 0 0 0 4px $focus_highlight;
+ outline-width: 2em;
+}
+.desktopBackButton:hover{
+ background: #ffcd60;
+ //box-shadow: 0 0 0 4px #ffcd60;
+ outline: none;
+ box-sizing: border-box;
+ text-decoration: underline;
+ background-clip: content-box;
+}
 </style>

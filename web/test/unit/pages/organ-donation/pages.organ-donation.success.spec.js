@@ -9,7 +9,12 @@ describe('view decision', () => {
   let $style;
   let wrapper;
 
-  const createState = (state = { organDonation: initialState() }) => state;
+  const createState = (state = {
+    organDonation: initialState(),
+    device: {
+      source: 'web',
+    },
+  }) => state;
 
   const mountPage = () => mount(ViewDecision, { $store, $style, $t });
 

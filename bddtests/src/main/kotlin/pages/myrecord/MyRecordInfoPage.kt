@@ -68,7 +68,7 @@ class MyRecordInfoPage : HybridPageObject() {
     val consultations by lazy { getSection("Consultations") }
 
     val diagnosis by lazy { getSection("Diagnosis") }
-    
+
     val procedures by lazy { getSection("Procedures") }
 
     fun assertSectionHeaderIsVisible(header: String) {

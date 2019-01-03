@@ -86,6 +86,7 @@ Feature: Organ Donation
     And I click the 'No I do not want to be a donor' button
     Then the Organ Donation Confirmation page is displayed
     And the decision to opt out of organ donation has been successfully created
+
     @smoketest
     Examples:
       | GP System |
