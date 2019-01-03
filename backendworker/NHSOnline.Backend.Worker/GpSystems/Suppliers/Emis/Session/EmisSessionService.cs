@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session

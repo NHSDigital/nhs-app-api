@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Extensions;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
@@ -37,7 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                     return GetCorrectVerifyErrorResult(getConfigurationReply);
                 }
 
-                var formattedNhsNumbers = getConfigurationReply.ExtractNhsNumbers();
+                var formattedNhsNumbers = getConfigurationReply.Body.Configuration.ExtractNhsNumbers();
                 var response = new PatientIm1ConnectionResponse
                 {
                     ConnectionToken = connectionToken,
@@ -85,7 +84,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
-                var nhsNumbers = configResponse.ExtractNhsNumbers();
+                var nhsNumbers = configResponse.Body.Configuration.ExtractNhsNumbers();
                 var response = new PatientIm1ConnectionResponse
                 {
                     ConnectionToken = visionConnectionToken.SerializeJson(),

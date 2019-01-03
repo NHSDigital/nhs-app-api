@@ -1,11 +1,11 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Extensions;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
-                var nhsNumbers = authenticateReply.Body.ExtractNhsNumbers();
+                var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
                 var response = new PatientIm1ConnectionResponse
                 {
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
-                var nhsNumbers = authenticateReply.Body.ExtractNhsNumbers();
+                var nhsNumbers = authenticateReply.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
                 var response = new PatientIm1ConnectionResponse
                 {

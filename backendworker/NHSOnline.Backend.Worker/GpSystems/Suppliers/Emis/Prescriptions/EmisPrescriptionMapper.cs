@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
@@ -34,7 +33,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             {
                 foreach (var course in prescription.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>())
                 {
-                    var foundPrescriptionGroup = allPrescriptionsGrouped.FirstOrDefault(x => x.OrderDate == prescription.DateRequested && x.Status == course.RequestedMedicationCourseStatus.ToStatus());
+                    var foundPrescriptionGroup = allPrescriptionsGrouped.FirstOrDefault(x => x.OrderDate == prescription.DateRequested && x.Status == MapStatus(course.RequestedMedicationCourseStatus));
 
                     var newCourseEntry = new CourseEntry
                     {
@@ -50,7 +49,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                         allPrescriptionsGrouped.Add(new PrescriptionItem
                         {
                             OrderDate = prescription.DateRequested,
-                            Status = course.RequestedMedicationCourseStatus.ToStatus(),
+                            Status = MapStatus(course.RequestedMedicationCourseStatus),
                             Courses = new List<CourseEntry>
                             {
                                 newCourseEntry,
@@ -111,6 +110,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                 Name = course.Name,
                 Details = details
             };
+        }
+
+        private static Status MapStatus(RequestedMedicationCourseStatus value)
+        {
+            switch (value)
+            {
+                case RequestedMedicationCourseStatus.Issued:
+                    return Status.Approved;
+                case RequestedMedicationCourseStatus.Requested:
+                case RequestedMedicationCourseStatus.ForwardedForSigning:
+                    return Status.Requested;
+                case RequestedMedicationCourseStatus.Rejected:
+                    return Status.Rejected;
+                default:
+                    return Status.Unknown;
+            }
         }
     }
 }

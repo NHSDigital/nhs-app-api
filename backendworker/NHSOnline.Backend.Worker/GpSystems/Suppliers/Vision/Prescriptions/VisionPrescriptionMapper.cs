@@ -4,9 +4,9 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Extensions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
+using Status = NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions.Status;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 {
@@ -34,15 +34,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             {
                 foreach (var prescription in prescriptionGetResponse.Requests)
                 {
-                    var foundPrescriptionGroup = allPrescriptionsGrouped.FirstOrDefault(x => x.OrderDate == prescription.Date.Date && x.Status == prescription.Status.ToStatus());
+                    var foundPrescriptionGroup = allPrescriptionsGrouped.FirstOrDefault(x => x.OrderDate == prescription.Date.Date && x.Status == MapStatus(prescription.Status));
 
                     if (foundPrescriptionGroup == null)
                     {
                         foundPrescriptionGroup = new PrescriptionItem
                         {
                             OrderDate = prescription.Date.Date,
-                            Status = prescription.Status.ToStatus(),
-                            Courses = new List<CourseEntry>(),
+                            Status = MapStatus(prescription.Status),
+                            Courses = new List<CourseEntry>()
                         };
 
                         allPrescriptionsGrouped.Add(foundPrescriptionGroup);
@@ -94,8 +94,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 
             return result;
         }
-
-        
+    
         private static Course MapPrescriptionRepeatToCourse(string id, GetPrescriptionRepeat course)
         {
             var details = GetDetails(course);
@@ -138,6 +137,25 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             }
 
             return details;
+        }
+
+        private static Areas.Prescriptions.Models.Status MapStatus(Status value)
+        {
+            switch (value.Code)
+            {
+                case PrescriptionRepeatStatusCode.Processed:
+                    return Areas.Prescriptions.Models.Status.Approved;
+
+                case PrescriptionRepeatStatusCode.Rejected:
+                    return Areas.Prescriptions.Models.Status.Rejected;
+
+                case PrescriptionRepeatStatusCode.NotProcessed:
+                case PrescriptionRepeatStatusCode.InProgress:
+                    return Areas.Prescriptions.Models.Status.Requested;
+
+                default:
+                    return Areas.Prescriptions.Models.Status.Unknown;
+            }
         }
     }
 }

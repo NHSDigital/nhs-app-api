@@ -1,4 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
+using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
 {
@@ -15,5 +18,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
 
         [XmlElement(ElementName = "references", Namespace = "urn:vision")]
         public PatientReferences References { get; set; }
+
+        public IEnumerable<PatientNhsNumber> ExtractNhsNumbers()
+        {
+            var nhsNumbers = Account.PatientNumbers
+                .Select(x => new PatientNhsNumber
+                {
+                    NhsNumber = x.Number.FormatToNhsNumber()
+                });
+
+            return nhsNumbers;
+        }
     }
 }

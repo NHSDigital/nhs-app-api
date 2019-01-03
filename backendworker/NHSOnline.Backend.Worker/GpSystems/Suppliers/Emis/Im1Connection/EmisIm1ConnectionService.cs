@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -6,7 +7,6 @@ using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
-                var userPatientLinkToken = sessionsResponse.Body.ExtractUserPatientLinkToken();
+                var userPatientLinkToken = sessionsResponse.Body?.ExtractUserPatientLinkToken();
                 if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
                     _logger.LogError($"Emis {nameof(userPatientLinkToken)} not found");
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
-                var nhsNumbers = demographicsResponse.Body.ExtractNhsNumbers();
+                var nhsNumbers = demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
                 var response = new PatientIm1ConnectionResponse
                 {
@@ -211,7 +211,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
-                var userPatientLinkToken = sessionsResponse.Body.ExtractUserPatientLinkToken();
+                var userPatientLinkToken = sessionsResponse.Body?.ExtractUserPatientLinkToken();
                 if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
                     _logger.LogError(
@@ -230,7 +230,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
-                var nhsNumbers = demographicsResponse.Body.ExtractNhsNumbers();
+                var nhsNumbers = demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
 
                 var response = new PatientIm1ConnectionResponse
                 {

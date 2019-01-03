@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using NHSOnline.Backend.Worker.Areas.Demographics.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
 {

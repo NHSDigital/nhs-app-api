@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
 {
@@ -9,5 +10,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
         public string Surname { get; set; }
         public string SessionId { get; set; }
         public IEnumerable<UserPatientLink> UserPatientLinks { get; set; }
+
+        public string ExtractUserPatientLinkToken()
+        {
+            return UserPatientLinks
+                ?.FirstOrDefault(x => x.AssociationType == AssociationType.Self)
+                ?.UserPatientLinkToken;
+        }
     }
 }

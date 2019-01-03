@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
+using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 {
@@ -16,5 +19,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
         
         [XmlAttribute("uuid")]
         public Guid Uuid { get; set; }
+
+        public IEnumerable<PatientNhsNumber> ExtractNhsNumbers()
+        {
+            var nhsNumber = User?.Person?.NationalId?.Value;
+            var nhsNumbers = Enumerable.Empty<PatientNhsNumber>();
+
+            if (nhsNumber != null)
+            {
+                nhsNumbers = new List<PatientNhsNumber>
+                {
+                    new PatientNhsNumber
+                    {
+                        NhsNumber = nhsNumber.FormatToNhsNumber()
+                    }
+                };
+            }
+
+            return nhsNumbers;
+        }
     }
 }
