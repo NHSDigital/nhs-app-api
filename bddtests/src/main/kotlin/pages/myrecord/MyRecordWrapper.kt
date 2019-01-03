@@ -12,27 +12,27 @@ class MyRecordWrapper(header: String, pageObject: HybridPageObject) {
 
     val header =
             HybridPageElement(
-                    browserLocator = headerPath,
+                    webDesktopLocator = headerPath,
                     androidLocator = null,
                     page = pageObject,
                     helpfulName = "Section Header '$header'")
 
     private val paragraphElements =
             HybridPageElement(
-                    browserLocator = "$bodyPath//p",
+                    webDesktopLocator = "$bodyPath//p",
                     androidLocator = null,
                     page = pageObject)
 
     val firstParagraph by lazy { paragraphElements.element }
 
     val visionLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'View your Test Results')]",
+            webDesktopLocator = "//a[contains(text(),'View your Test Results')]",
             androidLocator = null,
             page = pageObject)
 
     private val recordItemElements =
             HybridPageElement(
-                    browserLocator = "$bodyPath//div[@data-purpose='record-item']",
+                    webDesktopLocator = "$bodyPath//div[@data-purpose='record-item']",
                     androidLocator = null,
                     page = pageObject)
 

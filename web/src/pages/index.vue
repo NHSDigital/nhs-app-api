@@ -1,14 +1,20 @@
 <template>
-  <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
-    <beta-banner data-sid="beta-flag"/>
+  <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content',
+                                    isDesktopWeb ? $style.mainContent : undefined]">
+    <div :class="$style['banner-container']">
+      <beta-banner data-sid="beta-flag"/>
+    </div>
+
     <hr :class="$style.rule" aria-hidden="true">
     <h2 :class="$style.header" data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
     <welcome-section :date-of-birth="$store.state.session.dateOfBirth"
                      :nhs-number="$store.state.session.nhsNumber" />
-    <navigation-list-menu
-      nhs-number="nhsNumber"
-      dob="dob"
-    />
+    <div :class="[isDesktopWeb ? $style.navigationList : undefined]">
+      <navigation-list-menu
+        nhs-number="nhsNumber"
+        dob="dob"
+      />
+    </div>
   </div>
 </template>
 
@@ -25,11 +31,19 @@ export default {
     WelcomeSection,
     NavigationListMenu,
   },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios'),
+    };
+  },
   computed: {
     greetingMessage() {
       const message = this.$t('homeLoggedIn.welcome');
       const { user } = this.$store.state.session;
       return `${message}, ${user}`;
+    },
+    shouldShowDesktopVersion() {
+      return (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios');
     },
   },
   mounted() {
@@ -47,22 +61,56 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-.no-padding {
-  width: 102%;
-  height: 100%;
-  margin-left: -16px;
-  margin-right: 0px;
-  margin-top: -8px;
-}
-.header {
-  margin-left: 0.7em;
-  margin-top: 0.5em;
-}
-.rule {
-  height: 0.063em;
-  border: none;
-  background-color: #D8DDE0;
-}
+<style module lang="scss" scoped>
+  @import "../style/fonts";
+  @import "../style/textstyles";
+  @import '../style/screensizes';
+
+  .webStyledSpacing {
+    height: 0.063em;
+    border: none;
+    background-color: grey;
+    border-top: 1px grey solid;
+  }
+
+  .rule {
+    height: 0.063em;
+    border: none;
+    background-color: #D8DDE0;
+    border-top: 1px grey solid;
+  }
+
+  .mainContent {
+    display: block;
+    max-width: 540px;
+    width: auto;
+    position: relative;
+    transition: opacity 0.2s;
+    user-select: none;
+    padding-bottom: 2.5em !important;
+  }
+
+
+  @media (min-width: 48.0625em){
+   .rule {
+     margin-right: 0;
+     padding-left: 1em;
+
+   }
+  }
+
+  @media (min-width: 1024px) {
+    .header {
+      margin: 0 auto;
+    }
+
+    .navigationList {
+      margin: 0 auto;
+    }
+  }
+
+  .banner-container {
+    padding: 1em 1em 0.7em;
+  }
 
 </style>

@@ -26,7 +26,7 @@ class ErrorPage : HybridPageObject() {
 
     private fun findElementByLocator(locator: String, androidLocator: String? = null): HybridPageElement {
         return HybridPageElement(
-                browserLocator = locator,
+                webDesktopLocator = locator,
                 androidLocator = androidLocator,
                 page = this
         )

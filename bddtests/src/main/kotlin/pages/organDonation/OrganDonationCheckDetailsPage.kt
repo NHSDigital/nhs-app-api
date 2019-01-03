@@ -27,7 +27,6 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
     val privacyStatementCheckBox = CheckBoxElement(this,
             "I have read the privacy statement and give consent for the use of my information in " +
                     "accordance with the terms")
-
     val validationBanner by lazy { BannerObject.error(this) }
 
     fun assertPersonalDetailsSection(patient: Patient) {

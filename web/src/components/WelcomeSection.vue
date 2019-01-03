@@ -1,5 +1,6 @@
 <template>
-  <div :class="$style.welcomeInfo" data-sid="welcome-info">
+  <div :class="[$style.welcomeInfo, isDesktopWeb ? $style.desktopWeb : $style.web]"
+       data-sid="welcome-info">
     <p v-if="name">
       <strong>Name:</strong>
       <span data-sid="user-name" data-hj-suppress>
@@ -7,14 +8,14 @@
       </span>
     </p>
     <p v-if="dateOfBirth">
-      <strong>Date of birth:</strong>
-      <span data-sid="user-date-of-birth">
+      <strong :class="[isDesktopWeb ? $style.fieldName : undefined]" >Date of birth:</strong>
+      <span :class="[isDesktopWeb ? $style.fieldValue : undefined]" data-sid="user-date-of-birth">
         {{ dateOfBirth | longDate }}
       </span>
     </p>
     <p v-if="nhsNumber">
-      <strong>NHS number:</strong>
-      <span data-sid="user-nhs-number">
+      <strong :class="[isDesktopWeb ? $style.fieldName : undefined]">NHS number:</strong>
+      <span :class="[isDesktopWeb ? $style.fieldValue : undefined]" data-sid="user-nhs-number">
         {{ nhsNumber }}
       </span>
     </p>
@@ -38,12 +39,30 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
+  },
 };
 </script>
 
 <style module lang="scss">
-  .welcomeInfo {
-    padding-left: 1em;
-    padding-bottom: 1em;
+  @import "../style/fonts";
+  .fieldName{
+    font-family: $default-web;
+    font-weight: 500;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #425563;
+  }
+
+  .fieldValue{
+    font-family: $default-web;
+    font-weight: lighter;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #425563;
   }
 </style>

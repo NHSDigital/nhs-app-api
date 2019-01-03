@@ -5,13 +5,13 @@ import org.openqa.selenium.WebDriverException
 open class CheckMySymtomsPage : HybridPageObject() {
 
     val conditionsHeader = HybridPageElement(
-            browserLocator = "//h2[contains(text(),'A-Z of conditions and treatments')]",
+            webDesktopLocator = "//h2[contains(text(),'A-Z of conditions and treatments')]",
             androidLocator = null,
             page = this
     )
 
     val nhs111Header = HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Check if I need urgent help')]",
+            webDesktopLocator = "//h2[contains(text(),'Check if I need urgent help')]",
             androidLocator = null,
             page = this
     )

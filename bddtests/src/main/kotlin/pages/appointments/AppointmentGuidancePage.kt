@@ -12,25 +12,25 @@ class AppointmentGuidancePage : HybridPageObject() {
     private val mainXPath = "//*[@id='app']/main"
 
     val checkSymptomsButton = HybridPageElement(
-            browserLocator = "//*[@id='btn_check_symptoms']",
+            webDesktopLocator = "//*[@id='btn_check_symptoms']",
             androidLocator = null,
             page = this
     )
 
     val bookButton = HybridPageElement(
-            browserLocator = "//*[@id='btn_appointment']",
+            webDesktopLocator = "//*[@id='btn_appointment']",
             androidLocator = null,
             page = this
     )
 
     private val main = HybridPageElement(
-            browserLocator = mainXPath,
+            webDesktopLocator = mainXPath,
             androidLocator = null,
             page = this
     )
 
     private val content = HybridPageElement(
-            browserLocator = "$mainXPath/div/div[@data-purpose='info']",
+            webDesktopLocator = "$mainXPath/div/div[@data-purpose='info']",
             androidLocator = null,
             page = this
     )

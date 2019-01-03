@@ -8,7 +8,8 @@ import pages.HybridPageObject
 class OrganDonationChoicePage : HybridPageObject() {
 
     val organDonationTitle = HybridPageElement(
-            browserLocator = "//h2",
+            webDesktopLocator = "//h2",
+            webMobileLocator = "//h2",
             androidLocator = null,
             page = this,
             helpfulName = "Title"
@@ -16,11 +17,16 @@ class OrganDonationChoicePage : HybridPageObject() {
 
 
     val noButton = HybridPageElement(
-            browserLocator = "//button[descendant::*[contains(text(),\"NO\")]]",
+            webDesktopLocator = "//button[descendant::*[contains(text(),\"NO\")]]",
+            webMobileLocator = "//button[descendant::*[contains(text(),\"NO\")]]",
+            androidLocator = null,
             page = this
     )
+
     val yesButton = HybridPageElement(
-            browserLocator = "//button[descendant::*[contains(text(),\"YES\")]]",
+            webDesktopLocator = "//button[descendant::*[contains(text(),\"YES\")]]",
+            webMobileLocator = "//button[descendant::*[contains(text(),\"YES\")]]",
+            androidLocator = null,
             page = this
     )
 }

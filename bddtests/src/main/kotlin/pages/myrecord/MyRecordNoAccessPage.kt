@@ -6,13 +6,13 @@ import pages.HybridPageObject
 class MyRecordNoAccessPage : HybridPageObject() {
 
     val txtNoAccess = HybridPageElement(
-            browserLocator = "",
+            webDesktopLocator = "",
             androidLocator = null,
             page = this
     )
 
     val txtGPTxt = HybridPageElement(
-            browserLocator = "",
+            webDesktopLocator = "",
             androidLocator = null,
             page = this
     )

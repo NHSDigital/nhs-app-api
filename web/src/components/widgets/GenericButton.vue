@@ -30,11 +30,8 @@ export default {
   },
   computed: {
     defaultClasses() {
-      const classes = [this.$style.button];
-      this.buttonClasses.forEach((element) => {
-        classes.push(this.$style[element]);
-      });
-      return classes;
+      return [...this.buttonClasses]
+        .map(style => (typeof (style) === 'string' ? this.$style[style] : style));
     },
   },
   methods: {

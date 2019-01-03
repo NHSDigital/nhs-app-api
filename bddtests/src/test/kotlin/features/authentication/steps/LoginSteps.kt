@@ -5,7 +5,8 @@ import models.Patient
 import net.thucydides.core.annotations.Step
 import pages.LoginPage
 import pages.LoginStubPage
-import webdrivers.options.WebDriverOption
+import webdrivers.options.OptionManager
+import webdrivers.options.nojs.NoJsOption
 
 open class LoginSteps {
 
@@ -15,7 +16,7 @@ open class LoginSteps {
     @Step
     fun using(patient: Patient) {
         loginPage.signIn()
-        if(Config.instance.autoLogin != "true" && !WebDriverOption.NO_JS.isEnabled()) {
+        if(Config.instance.autoLogin != "true" && !OptionManager.instance().isEnabled(NoJsOption::class)) {
             loginStubPage.signIn(patient)
         }
     }

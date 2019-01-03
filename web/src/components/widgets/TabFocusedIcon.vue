@@ -5,7 +5,7 @@
        :class="getStyleClasses"
        :viewBox="viewBox"
        xmlns="http://www.w3.org/2000/svg"
-       tabindex="0">
+       tabindex="-1">
     <slot/>
   </svg>
 </template>
@@ -44,10 +44,8 @@ export default {
 @import "../../style/colours";
 svg.tabFocus {
   outline-color: $focus_highlight !important;
-  outline-width: 2px;
   outline-style: solid !important;
-  -webkit-filter: brightness(120%);
-  filter: brightness(120%);
+  outline-width: thick;
 }
 
 svg.defaultStyle {

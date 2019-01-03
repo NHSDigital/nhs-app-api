@@ -8,7 +8,8 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.CapabilityType.SUPPORTS_JAVASCRIPT
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
-import webdrivers.options.WebDriverOption
+import webdrivers.options.OptionManager
+import webdrivers.options.nojs.NoJsOption
 import java.net.URL
 
 class BrowserstackChromeDriver : DriverSource {
@@ -41,7 +42,7 @@ class BrowserstackChromeDriver : DriverSource {
             caps.setCapability("resolution", "1024x768")
             caps.setCapability("browserstack.local", "true")
 
-            if (WebDriverOption.NO_JS.isEnabled()) {
+            if (OptionManager.instance().isEnabled(NoJsOption::class)) {
                 caps.setCapability(SUPPORTS_JAVASCRIPT, "false")
             }
 

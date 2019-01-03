@@ -50,7 +50,7 @@ Feature: Login
       | GP System |
       | EMIS      |
 
-
+  @pending
   @native-smoketest
   Scenario: Any user sees the current app version on the login page
     Given I am at the login page
@@ -107,6 +107,8 @@ Feature: Login
       | TPP    |
       | VISION |
 
+  @native
+  @pending
   Scenario: Any user can click the help icon on the login page
     Given I am at the login page
     Given I see the help icon on the login page

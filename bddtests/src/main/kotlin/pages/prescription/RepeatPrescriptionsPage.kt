@@ -32,13 +32,13 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     private val specialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
 
     val orderRepeatPrescriptionButton = HybridPageElement(
-            browserLocator = "//button[@id='btn_order_prescription']",
+            webDesktopLocator = "//button[@id='btn_order_prescription']",
             androidLocator = null,
             page = this
     )
 
     val backButton = HybridPageElement(
-            browserLocator = "//button[contains(text(),'Back')]",
+            webDesktopLocator = "//button[contains(text(),'Back')]",
             androidLocator = null,
             page = this
     )
@@ -110,7 +110,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
 
     private fun getRepeatPrescription(courseToSelect: MedicationCourse):HybridPageElement {
         return HybridPageElement(
-                browserLocator = "//label[contains(.," +
+                webDesktopLocator = "//label[contains(.," +
                                  "'${courseToSelect.getInstructionsText()}') " +
                                  "and contains(.,'${courseToSelect.name}')]",
                 androidLocator = null,

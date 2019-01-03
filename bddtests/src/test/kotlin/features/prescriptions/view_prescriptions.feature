@@ -2,10 +2,12 @@
 Feature: View prescriptions
   A user can view information about their prescriptions after logging in
 
-  Scenario Outline: A <GP System> user can see the prescriptions menu button
+  Scenario Outline: <GP System> patient selects the prescriptions menu button
     Given I am a <GP System> patient
     And I am using <GP System> GP System
-    And I am logged in
+    And I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And I am on the prescriptions page
     Then I see the prescriptions menu button
 
     Examples:

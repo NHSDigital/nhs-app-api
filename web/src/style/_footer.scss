@@ -1,0 +1,75 @@
+@import './colours';
+@import './textstyles';
+@import './fonts';
+
+/** FOOTER */
+footer {
+    display: block;
+
+    ul li,
+    ol li {
+      margin: 0;
+    }
+
+    .nhsuk-global-footer__logo {
+      padding-bottom: 1em;
+
+      a .nhsuk-logo {
+        border: 0;
+        height: 40px;
+        max-width: 100%;
+        vertical-align: middle;
+        width: 99px;
+      }
+    }
+
+    .nhsuk-global-footer {
+      background-color: #005EB8;
+      color: #FFFFFF;
+      width: 100%;
+
+      ul {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        list-style-type: none;
+        margin: 0;
+        padding: 2em 0;
+
+        li {
+          a {
+            font-family: $default-web;
+            text-decoration: underline;
+            font-weight: normal;
+            color: $white;
+            line-height: 1.5em;
+            padding: 0.5em;
+
+            &:hover {
+              background: #003d78;
+              box-shadow: none;
+              color: #FFFFFF;
+              text-decoration: underline;
+            }
+
+            &:visited {
+              color: $white;
+            }
+
+            &:active {
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+
+    @media (min-width: 40.0625em) {
+      .nhsuk-global-footer ul li {
+        display: inline-block;
+        font-size: 17px;
+        padding-right: 25px;
+      }
+      .nhsuk-global-footer__logo {
+        padding-bottom: 0;
+      }
+    }
+  }

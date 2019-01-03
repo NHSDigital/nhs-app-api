@@ -11,14 +11,15 @@ open class HomePage : HybridPageObject() {
     val headerText: String = "Home"
 
     private val greeting = HybridPageElement(
-            browserLocator = "//h2[@data-purpose='greeting']",
+            webDesktopLocator = "//h2[@data-purpose='greeting']",
             androidLocator = null,
             page = this,
             helpfulName = "Greeting"
     )
 
     private val betaBanner = HybridPageElement(
-            browserLocator = "//div[div[contains(text(),'BETA')]][p[contains(text(),'This is a new service')]]",
+            webDesktopLocator = "//div[span[@data-purpose = 'beta-banner']]//div[contains(text(), " +
+                    "'BETA')]/following-sibling::p[contains(text(),'This is a new service')]",
             androidLocator = null,
             page = this,
             helpfulName = "Beta Banner"
@@ -27,7 +28,7 @@ open class HomePage : HybridPageObject() {
     private val surveyPath = "//div[@data-purpose='survey']"
 
     private val surveyLinkTab = HybridPageElement(
-            browserLocator = "$surveyPath/div[@data-purpose = 'tabForToggle']/div[@data-purpose = 'toggleContent']",
+            webDesktopLocator = "$surveyPath/div[@data-purpose = 'tabForToggle']/div[@data-purpose = 'toggleContent']",
             androidLocator = null,
             page = this,
             helpfulName = "Survey Tab"
@@ -36,14 +37,14 @@ open class HomePage : HybridPageObject() {
     private val surveyContentPath = "$surveyPath/div[@data-purpose = 'content']"
 
     private val surveyContent = HybridPageElement(
-            browserLocator = surveyContentPath,
+            webDesktopLocator = surveyContentPath,
             androidLocator = null,
             page = this,
             helpfulName = "Survey Content"
     )
 
     val surveyContentLink = HybridPageElement(
-            browserLocator = "$surveyContentPath/p[@data-purpose = 'info']/a[@data-purpose = 'link']",
+            webDesktopLocator = "$surveyContentPath/p[@data-purpose = 'info']/a[@data-purpose = 'link']",
             androidLocator = null,
             page = this,
             helpfulName = "Survey Link"
@@ -54,7 +55,7 @@ open class HomePage : HybridPageObject() {
 
     private fun listOfLinks(): HybridPageElement {
         return HybridPageElement(
-                browserLocator = listMenuPath,
+                webDesktopLocator = listMenuPath,
                 androidLocator = null,
                 page = this,
                 helpfulName = "ListOfLinks"
@@ -63,7 +64,7 @@ open class HomePage : HybridPageObject() {
 
     private fun link(linkText: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
+                webDesktopLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
                 androidLocator = null,
                 page = this,
                 helpfulName = "$linkText Link")
@@ -132,7 +133,7 @@ open class HomePage : HybridPageObject() {
         val pXpath = "//p[contains(text(),'Version dev_bdd_docker')]"
 
         val versionNumberElement = HybridPageElement(
-                browserLocator = "$divXpath | $pXpath",
+                webDesktopLocator = "$divXpath | $pXpath",
                 androidLocator = null,
                 page = this,
                 helpfulName = "Version Number"

@@ -12,21 +12,24 @@ open class SessionExpiryNative : NativePageObject() {
     val header = NativePageElement(
             androidLocator = "//*[contains(@resource-id, 'sessionExpiryWarningHeader')]",
             iOSAccessID = "sessionExpiryWarningHeader",
-            browserLocator = "",
+            webDesktopLocator = "",
+            webMobileLocator = "",
             page = this
     )
 
     private val extendSessionButton = NativePageElement(
             androidLocator = "//*[contains(@resource-id, 'extendSession')]",
             iOSAccessID = "sessionExpiryWarningGetMoreTime",
-            browserLocator = "",
+            webDesktopLocator = "",
+            webMobileLocator = "",
             page = this
     )
 
     private val logoutButton = NativePageElement(
             androidLocator = "//*[contains(@resource-id, 'logOut')]",
             iOSAccessID = "sessionExpiryWarningLogOut",
-            browserLocator = "",
+            webDesktopLocator = "",
+            webMobileLocator = "",
             page = this
     )
 

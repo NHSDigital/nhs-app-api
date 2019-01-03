@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <div>
     <h2>{{ $t('appointments.index.upcoming.header') }}</h2>
 
     <appointment v-for="appointment in appointments"
@@ -8,7 +8,7 @@
                  :appointment="appointment"
                  :cancellation-disabled="cancellationDisabled"
                  data-purpose="appointments" />
-  </span>
+  </div>
 </template>
 
 <script>

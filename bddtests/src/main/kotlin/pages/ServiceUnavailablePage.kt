@@ -3,14 +3,14 @@ package pages
 class ServiceUnavailablePage : HybridPageObject() {
 
     private val header = HybridPageElement(
-            browserLocator = "//div/h2",
+            webDesktopLocator = "//div/h2",
             androidLocator = null,
             page = this,
             helpfulName = "content"
     )
 
     private val content = HybridPageElement(
-            browserLocator = "//div/p",
+            webDesktopLocator = "//div/p",
             androidLocator = null,
             page = this,
             helpfulName = "error message"

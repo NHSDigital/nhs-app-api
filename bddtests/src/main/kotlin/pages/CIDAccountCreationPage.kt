@@ -5,13 +5,13 @@ import models.Patient
 
 open class CIDAccountCreationPage : HybridPageObject() {
     val mockPatientInput = HybridPageElement(
-            browserLocator = "//input[@name='mock_patient']",
+            webDesktopLocator = "//input[@name='mock_patient']",
             androidLocator = null,
             page = this
     )
 
     val createAccountButton = HybridPageElement(
-            browserLocator = "//input[@type='submit']",
+            webDesktopLocator = "//input[@type='submit']",
             androidLocator = null,
             page = this
     )

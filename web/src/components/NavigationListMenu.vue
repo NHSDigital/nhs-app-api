@@ -1,7 +1,8 @@
 <template>
   <ul :class="$style.listMenu" data-sid="navigation-list-menu">
-    <li :class="$style.listMenuItem">
-      <analytics-tracked-tag :class="$style.listMenuAnchor"
+    <li :class="[$style.listMenuItem, isDesktopWeb ? $style.desktopWeb : $style.web]">
+      <analytics-tracked-tag :class="[$style.listMenuAnchor,
+                                      isDesktopWeb ? $style.desktopWeb : $style.web]"
                              :text="$t('navigationMenuList.symptoms')"
                              :href="symptomsPath"
                              data-sid="symptoms-list-item"
@@ -9,8 +10,9 @@
         {{ $t('navigationMenuList.symptoms') }}
       </analytics-tracked-tag>
     </li>
-    <li :class="$style.listMenuItem">
-      <analytics-tracked-tag :class="$style.listMenuAnchor"
+    <li :class="[$style.listMenuItem, isDesktopWeb ? $style.desktopWeb : $style.web]">
+      <analytics-tracked-tag :class="[$style.listMenuAnchor,
+                                      isDesktopWeb ? $style.desktopWeb : $style.web]"
                              :text="$t('navigationMenuList.appointments')"
                              :href="appointmentsPath"
                              data-sid="appointments-menu-item"
@@ -18,8 +20,9 @@
         {{ $t('navigationMenuList.appointments') }}
       </analytics-tracked-tag>
     </li>
-    <li :class="$style.listMenuItem">
-      <analytics-tracked-tag :class="$style.listMenuAnchor"
+    <li :class="[$style.listMenuItem, isDesktopWeb ? $style.desktopWeb : $style.web]">
+      <analytics-tracked-tag :class="[$style.listMenuAnchor,
+                                      isDesktopWeb ? $style.desktopWeb : $style.web]"
                              :text="$t('navigationMenuList.prescriptions')"
                              :href="prescriptionsPath"
                              data-sid="prescriptions-menu-item"
@@ -27,8 +30,9 @@
         {{ $t('navigationMenuList.prescriptions') }}
       </analytics-tracked-tag>
     </li>
-    <li :class="$style.listMenuItem">
-      <analytics-tracked-tag :class="$style.listMenuAnchor"
+    <li :class="[$style.listMenuItem, isDesktopWeb ? $style.desktopWeb : $style.web]">
+      <analytics-tracked-tag :class="[$style.listMenuAnchor,
+                                      isDesktopWeb ? $style.desktopWeb : $style.web]"
                              :text="$t('navigationMenuList.myRecord')"
                              :href="myRecordPath"
                              data-sid="myrecord-menu-item"
@@ -36,9 +40,10 @@
         {{ $t('navigationMenuList.myRecord') }}
       </analytics-tracked-tag>
     </li>
-    <li :class="$style.listMenuItem">
+    <li :class="[$style.listMenuItem, isDesktopWeb ? $style.desktopWeb : $style.web]">
       <organ-donation-link id="organ-donation-link"
-                           :class-name="$style.listMenuAnchor"
+                           :class-name="[$style.listMenuAnchor,
+                                         isDesktopWeb ? $style.desktopWeb : $style.web]"
                            data-sid="organ-donation-menu-item"
                            tag="a">
         {{ $t('navigationMenuList.organDonation') }}
@@ -62,6 +67,8 @@ export default {
   data() {
     return {
       organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {
@@ -83,6 +90,7 @@ export default {
 
 <style module lang="scss">
 @import "../style/colours";
+@import "../style/fonts";
   .listMenu {
     border-top: 1px #D8DDE0 solid;
     list-style: none;
@@ -90,18 +98,31 @@ export default {
     margin-bottom: 1em;
   }
   .listMenuItem {
+    &.desktopWeb {
+      font-family: $default-web;
+      font-weight: lighter;
+      margin: 0;
+      padding: 0.25em 0 0.25em 0;
+      :focus {
+        outline-color: $focus_highlight;
+        box-shadow: 0 0 0 4px $focus_highlight;
+      }
+    }
+    &.web {
+      font-weight: normal;
+      padding: 0.5em 0;
+    }
     box-sizing: border-box;
     background-repeat: no-repeat;
     background-position: right 1em center;
     background-image: url('~/assets/icon_arrow_left.svg');
     background-color: #f0f4f5;
     position: relative;
-    margin-bottom: 0em;
-    margin-left: 0em;
-    padding: 0.5em 0em 0.5em 1em;
+    margin-bottom: 0;
+    margin-left: 0;
     border-bottom: 1px #D8DDE0 solid;
     font-size: 1em;
-    font-weight: normal;
+    font-weight: lighter;
     line-height: 1.5em;
     color: #212B32;
     :focus {
@@ -109,20 +130,24 @@ export default {
     }
   }
   .listMenuAnchor {
-    font-size: 1em;
+    &.desktopWeb {
+      font-family: $default-web;
+      font-weight: normal;
+      line-height: 1.5em;
+      &:hover {
+        color: $black;
+      }
+    }
+    &.web {
+      font-weight: bold;
+      line-height: 1em;
+    }
     padding-right: 3em;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
     display: block;
-    font-weight: normal;
-    font-size: 1em;
-    line-height: 1.5em;
-    color: #212B32;
     color: #005EB8;
     font-size: 1em;
-    line-height: 1em;
-    font-weight: bold;
     text-decoration: none;
-    // vertical-align: middle;
   }
 </style>

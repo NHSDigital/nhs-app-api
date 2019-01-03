@@ -6,25 +6,29 @@ import net.thucydides.core.annotations.DefaultUrl
 class UpdatedTermsAndConditionsPage : HybridPageObject() {
 
     val updatedTermsAndConditionsLabel = HybridPageElement(
-            browserLocator = "//label[@id='termsAndConditionsCheckboxLabel']",
+            webDesktopLocator = "//label[@id='termsAndConditionsCheckboxLabel']",
+            webMobileLocator  = "//label[@id='termsAndConditionsCheckboxLabel']",
             androidLocator = null,
             page = this
     )
 
     val continueButton = HybridPageElement(
-            browserLocator = "//*[@id='btn_accept']",
+            webDesktopLocator  = "//*[@id='btn_accept']",
+            webMobileLocator = "//*[@id='btn_accept']",
             androidLocator = null,
             page = this
     )
 
     val mainErrorMessage = HybridPageElement(
-            browserLocator = "//*[@id='error_msg']",
+            webDesktopLocator = "//*[@id='error_msg']",
+            webMobileLocator = "//*[@id='error_msg']",
             androidLocator = null,
             page = this
     )
 
     val secondaryErrorMessage = HybridPageElement(
-            browserLocator = "//*[@id='error_txt']",
+            webDesktopLocator = "//*[@id='error_txt']",
+            webMobileLocator = "//*[@id='error_txt']",
             androidLocator = null,
             page = this
     )

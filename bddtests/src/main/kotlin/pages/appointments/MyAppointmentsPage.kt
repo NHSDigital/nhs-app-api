@@ -9,32 +9,32 @@ import pages.HybridPageElement
 class MyAppointmentsPage : AppointmentSharedElementsPage() {
 
     val bookButton = HybridPageElement(
-            browserLocator = "//*[@id='book-appointments-button']",
+            webDesktopLocator = "//*[@id='book-appointments-header-button']",
             androidLocator = null,
             iOSLocator = "//*[@id='book-appointments-button']",
             page = this
     )
 
     private val successMessage = HybridPageElement(
-            browserLocator = "//*[@data-purpose='success']",
+            webDesktopLocator = "//*[@data-purpose='success']",
             androidLocator = null,
             page = this
     )
 
     private val actualNoUpcomingText = HybridPageElement(
-            browserLocator = "//*[@data-purpose='info']",
+            webDesktopLocator = "//*[@data-purpose='info']",
             androidLocator = null,
             page = this
     )
 
     private val cancelAppointmentLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'Cancel appointment')]",
+            webDesktopLocator = "//a[contains(text(),'Cancel appointment')]",
             androidLocator = null,
             page = this
     )
 
     private val cannotCancelAppointmentText = HybridPageElement(
-            browserLocator = "//*[contains(text(),'To cancel this appointment, contact your GP surgery.')]",
+            webDesktopLocator = "//*[contains(text(),'To cancel this appointment, contact your GP surgery.')]",
             androidLocator = null,
             page = this
     )

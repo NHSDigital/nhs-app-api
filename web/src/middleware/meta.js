@@ -62,13 +62,13 @@ export default function ({ route, store, app }) {
       break;
     case LOGIN.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = '';
-      route.meta.pageTitleKey = '';
+      route.meta.headerKey = 'pageHeaders.login';
+      route.meta.pageTitleKey = 'pageTitles.login';
       break;
     case BEGINLOGIN.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = '';
-      route.meta.pageTitleKey = '';
+      route.meta.headerKey = 'pageHeaders.login';
+      route.meta.pageTitleKey = 'pageTitles.login';
       break;
     case ACCOUNT.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');

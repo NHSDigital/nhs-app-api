@@ -44,41 +44,41 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     val warningMessage = HybridPageElement(
-            browserLocator = "//div[@data-purpose='warning']",
+            webDesktopLocator = "//div[@data-purpose='warning']",
             androidLocator = null,
             page = this
     )
 
     fun timeSlotForDateAndTime(date: String, time: String) = HybridPageElement(
-            browserLocator = String.format(timeSlotByDateAndTimeXpath, date, time),
+            webDesktopLocator = String.format(timeSlotByDateAndTimeXpath, date, time),
             androidLocator = null,
             page = this,
             helpfulName = "Time slot by date and time. "
     )
 
     private val timeSlots = HybridPageElement(
-            browserLocator = timeSlotsXpath,
+            webDesktopLocator = timeSlotsXpath,
             androidLocator = null,
             page = this,
             helpfulName = "Any time slot. "
     )
 
     private val dateHeading = HybridPageElement(
-            browserLocator = dateHeadingXpath,
+            webDesktopLocator = dateHeadingXpath,
             androidLocator = null,
             page = this,
             helpfulName = "Any date heading. "
     )
 
     private fun dateHeadingByText(date: String) = HybridPageElement(
-            browserLocator = String.format(dateHeadingByTextXpathFormat, date),
+            webDesktopLocator = String.format(dateHeadingByTextXpathFormat, date),
             androidLocator = null,
             page = this,
             helpfulName = "Date heading by text. "
     )
 
     private fun noAppointmentsAvailableForDateTextByDate(date: String) = HybridPageElement(
-            browserLocator = String.format(noAppointmentsAvailableForDateTextByDateXpathFormat, date),
+            webDesktopLocator = String.format(noAppointmentsAvailableForDateTextByDateXpathFormat, date),
             androidLocator = null,
             page = this,
             helpfulName = "Text displayed when there are no appointments on a particular date. "

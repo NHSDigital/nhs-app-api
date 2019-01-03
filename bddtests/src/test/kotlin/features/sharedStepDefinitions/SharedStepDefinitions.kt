@@ -10,7 +10,6 @@ import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import utils.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -22,8 +21,14 @@ import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.navigation.NavBarNative
+import utils.SerenityHelpers
 import webdrivers.browserstack.BrowserstackLocalService
-import webdrivers.options.WebDriverOption
+import webdrivers.options.OptionManager
+import webdrivers.options.device.DeviceNativeWebAndroid
+import webdrivers.options.device.DeviceNativeWebIOS
+import webdrivers.options.device.DeviceWebDesktop
+import webdrivers.options.device.DeviceWebMobile
+import webdrivers.options.nojs.NoJsOption
 import java.net.URL
 
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
@@ -81,8 +86,28 @@ open class SharedStepDefinitions {
 
     @Given("^I have (enabled|disabled) javascript$")
     fun iHaveEnabledDisabledJavascript(status: String) {
-        Serenity.setSessionVariable(WebDriverOption.NO_JS.key).to("disabled" == status)
+        when(status) {
+            "disabled" -> OptionManager.instance().registerOption(NoJsOption())
+            "enable" -> {}
+        }
     }
+
+    @Given("^I am on the gp finder$")
+    open fun iAmOnTheGpFinder() {
+        browser.goToApp()
+    }
+
+    @Given("^I am using a (native ios|native android|mobile|desktop) device$")
+    fun iAmUsingAMobileDesktopDevice(device: String) {
+        val optionManager = OptionManager.instance()
+        when(device) {
+            "native ios" -> optionManager.registerOption(DeviceNativeWebIOS())
+            "native android" -> optionManager.registerOption(DeviceNativeWebAndroid())
+            "mobile" -> optionManager.registerOption(DeviceWebMobile())
+            "desktop" -> optionManager.registerOption(DeviceWebDesktop())
+        }
+    }
+
     @Given("^I am logged in and have not accepted the terms and conditions$")
     open fun iAmLoggedInAndHaveNotAcceptedTermsAndConditions() {
         SharedStepDefinitions.patient =
@@ -110,7 +135,9 @@ open class SharedStepDefinitions {
 
     @Then("^I see the (.*) menu button")
     fun iSeeAMenuButton(type: String) {
-        Assert.assertTrue(navBar.hasVisible(type))
+        if(home.headerNative.onMobile()) {
+            Assert.assertTrue(navBar.hasVisible(type))
+        }
     }
 
     @And("^the (.*) menu button is highlighted")
@@ -120,7 +147,11 @@ open class SharedStepDefinitions {
 
     @Then("^none of the menu buttons are highlighted")
     fun iDoNotSeeAHighlightedMenuButton() {
-        Assert.assertFalse("Nav bar has highlighted item, expected none", navBar.hasAnyTabSelected())
+
+        if(home.headerNative.onMobile()) {
+            Assert.assertFalse("Nav bar has highlighted item, expected none", navBar.hasAnyTabSelected())
+        }
+
     }
 
 

@@ -10,8 +10,11 @@ open class OrganDonationAdditionalDetailsPage : HybridPageObject() {
 
     val additionalDetailsTitle = HybridPageElement(
             "//h2",
-            page = this,
-            helpfulName = "header").withText("Additional details")
+            "//h2",
+            null,
+            null,
+            this,
+            "header").withText("Additional details")
 
     private val defaultDropDownValue = "Please select"
 
@@ -43,5 +46,3 @@ open class OrganDonationAdditionalDetailsPage : HybridPageObject() {
                     "This optional information is only used by NHSBT for analysis of the NHS Organ Donor Register " +
                             "and is not stored against your registration.")
 }
-
-

@@ -5,36 +5,46 @@ import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
-import webdrivers.options.WebDriverOption
+import webdrivers.options.OptionManager
+import webdrivers.options.device.DeviceNativeWebAndroid
+import webdrivers.options.device.DeviceNativeWebIOS
+import webdrivers.options.nojs.NoJsOption
 
 class InitialLoginRequestBuilder(
         val patient: Patient,
         redirectUri: String,
         clientId: String,
-        matcherToUse:String? = null)
+        matcherToUse: String? = null)
     : CitizenIdMappingBuilder("GET", "/authorize") {
 
     init {
-            val matcherString = matcherToUse?: "equalTo"
-            requestBuilder
-                    .andQueryParameter("redirect_uri", redirectUri,matcherString)
-                    .andQueryParameter("client_id", clientId)
-                    .andQueryParameter("response_type", "code")
+        val matcherString = matcherToUse ?: "equalTo"
+        val optionManager = OptionManager.instance()
 
+        when {
+            optionManager.isEnabled(DeviceNativeWebAndroid::class) ->
+                requestBuilder.andQueryParameter("source", "android", matcherString)
+            optionManager.isEnabled(DeviceNativeWebIOS::class) ->
+                requestBuilder.andQueryParameter("source", "ios", matcherString)
+            else -> requestBuilder
+        }
+                .andQueryParameter("redirect_uri", redirectUri, matcherString)
+                .andQueryParameter("client_id", clientId)
+                .andQueryParameter("response_type", "code")
     }
 
     fun respondWithLoginPage(): Mapping {
-        if(Config.instance.autoLogin == "true" || WebDriverOption.NO_JS.isEnabled()) {
+        if (Config.instance.autoLogin == "true" || OptionManager.instance().isEnabled(NoJsOption::class)) {
             return redirectTo(
                     "{{request.query.redirect_uri}}?state={{request.query.state}}&code=" +
-                            "${patient.cidUserSession.authCode!!}")
-        }
-        else {
+                            patient.cidUserSession.authCode!!)
+        } else {
             return respondWith(HttpStatus.SC_OK) {
                 andTemplatedHtmlBody("""
                 <html>
                     <body>
                         <form action="complete-login" method="get">
+                            <input value="source" type="hidden" name="{{request.query.source}}" >
                             <input value="clientId" type="hidden" name="client_id" >
                             <input value="3" type="hidden" name="code_challenge">
                             <input value ="codeMethod" type="hidden" name="code_challenge_method" >

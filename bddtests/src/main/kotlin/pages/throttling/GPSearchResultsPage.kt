@@ -15,58 +15,66 @@ class GPSearchResultsPage : HybridPageObject() {
     }
 
     private var gpPracticeToSelect: HybridPageElement = HybridPageElement(
-        browserLocator = "",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "",
+            webMobileLocator = "",
+            androidLocator = null,
+            page = this
     )
 
     private val technicalProblemsErrorHeader = HybridPageElement(
-        browserLocator = "//h3[contains(text(), \"$TECHNICAL_PROBLEMS_ERROR_HEADER\")]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//h3[contains(text(), \"$TECHNICAL_PROBLEMS_ERROR_HEADER\")]",
+            webMobileLocator = "//h3[contains(text(), \"$TECHNICAL_PROBLEMS_ERROR_HEADER\")]",
+            androidLocator = null,
+            page = this
     )
 
     private val noResultsFoundErrorHeader = HybridPageElement(
-        browserLocator = "//h2[contains(text(), \"$NO_RESULTS_FOUND_TEXT\")]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//h2[contains(text(), \"$NO_RESULTS_FOUND_TEXT\")]",
+            webMobileLocator = "//h2[contains(text(), \"$NO_RESULTS_FOUND_TEXT\")]",
+            androidLocator = null,
+            page = this
     )
 
     private val tooManyResultsErrorHeader = HybridPageElement(
-        browserLocator = "//h2[contains(text(), \"$TOO_MANY_RESULTS_TEXT\")]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//h2[contains(text(), \"$TOO_MANY_RESULTS_TEXT\")]",
+            webMobileLocator = "//h2[contains(text(), \"$TOO_MANY_RESULTS_TEXT\")]",
+            androidLocator = null,
+            page = this
     )
 
     private val searchResults = HybridPageElement(
-        browserLocator = "//ul[@id='searchResults']/li",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//ul[@id='searchResults']/li",
+            webMobileLocator = "//ul[@id='searchResults']/li",
+            androidLocator = null,
+            page = this
     )
 
     private val participatingGPPractice = HybridPageElement(
-        browserLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81090']",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81090']",
+            webMobileLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81090']",
+            androidLocator = null,
+            page = this
     )
 
     private val notParticipatingGPPractice = HybridPageElement(
-        browserLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81091']",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81091']",
+            webMobileLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81091']",
+            androidLocator = null,
+            page = this
     )
 
     private val foundGPPracticeByPostcode = HybridPageElement(
-        browserLocator = "//ul[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//ul[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
+            webMobileLocator = "//ul[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
+            androidLocator = null,
+            page = this
     )
 
     fun technicalProblemsErrorHeaderIsVisible(isVisible: Boolean) {
         if (isVisible) {
             assertTrue(technicalProblemsErrorHeader.element.isVisible)
         } else {
-            assertFalse(findByXpath(technicalProblemsErrorHeader.browserLocator).isVisible)
+            assertFalse(findByXpath(technicalProblemsErrorHeader.webDesktopLocator).isVisible)
         }
     }
 
@@ -74,7 +82,7 @@ class GPSearchResultsPage : HybridPageObject() {
         if (isVisible) {
             assertTrue(noResultsFoundErrorHeader.element.isVisible)
         } else {
-            assertFalse(findByXpath(noResultsFoundErrorHeader.browserLocator).isVisible)
+            assertFalse(findByXpath(noResultsFoundErrorHeader.webDesktopLocator).isVisible)
         }
     }
 
@@ -82,7 +90,7 @@ class GPSearchResultsPage : HybridPageObject() {
         if (isVisible) {
             assertTrue(tooManyResultsErrorHeader.element.isVisible)
         } else {
-            assertFalse(findByXpath(tooManyResultsErrorHeader.browserLocator).isVisible)
+            assertFalse(findByXpath(tooManyResultsErrorHeader.webDesktopLocator).isVisible)
         }
     }
 

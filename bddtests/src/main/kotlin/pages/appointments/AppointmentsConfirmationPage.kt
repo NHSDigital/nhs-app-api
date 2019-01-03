@@ -15,27 +15,37 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     private val telephoneNumberRadioButtonByValueXpath = "$inputTypeRadioXpathPrefix and @value='%s']"
     private val alternateNumberRadioButtonXpath = "$inputTypeRadioXpathPrefix and @id='otherPhoneNumberRadioInput']"
 
-    val telephoneNumberDiv = HybridPageElement(
-            browserLocator = "//input[@id='telephoneNumberText']",
+    val confirmAndBookAppointmentButton = HybridPageElement(
+            webDesktopLocator = "//*[@id='btn_book_appointment']",
+            webMobileLocator = "//*[@id='btn_book_appointment']",
             androidLocator = null,
             page = this
     )
 
     val reasonFormField = HybridPageElement(
-            browserLocator = "//textarea[@id='reasonText']",
+            webDesktopLocator = "//textarea[@id='reasonText']",
+            webMobileLocator = "//*[@id='reasonText']",
             androidLocator = null,
             page = this
     )
 
     val radioButtons = HybridPageElement(
-            browserLocator = "$inputTypeRadioXpathPrefix]",
+            webDesktopLocator = "$inputTypeRadioXpathPrefix]",
+            webMobileLocator = "$inputTypeRadioXpathPrefix]",
             androidLocator = null,
             page = this
     )
 
+    val backToMyAppointmentsButton = HybridPageElement(
+            webDesktopLocator = "//button[contains(text(),'Back to my appointments')]",
+            webMobileLocator = "//button[contains(text(),'Back to my appointments')]",
+            androidLocator = null,
+            page = this
+    )
     private fun telephoneNumberRadioButton(telephoneNumber: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = String.format(telephoneNumberRadioButtonByValueXpath, telephoneNumber),
+                webDesktopLocator = String.format(telephoneNumberRadioButtonByValueXpath, telephoneNumber),
+                webMobileLocator = String.format(telephoneNumberRadioButtonByValueXpath, telephoneNumber),
                 androidLocator = null,
                 page = this
         )
@@ -43,20 +53,37 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
 
     private fun telephoneNumberRadioButtonSection(telephoneNumber: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = String.format("$telephoneNumberRadioButtonByValueXpath/..", telephoneNumber),
+                webDesktopLocator = String.format("$telephoneNumberRadioButtonByValueXpath/..", telephoneNumber),
+                webMobileLocator = String.format("$telephoneNumberRadioButtonByValueXpath/..", telephoneNumber),
                 androidLocator = null,
                 page = this
         )
     }
 
     private val alternateTelephoneNumberRadioButton = HybridPageElement(
-            browserLocator = alternateNumberRadioButtonXpath,
+            webDesktopLocator = alternateNumberRadioButtonXpath,
+            webMobileLocator = alternateNumberRadioButtonXpath,
+            androidLocator = null,
+            page = this
+    )
+
+    val symptomsFormDiv = HybridPageElement(
+            webDesktopLocator = "//*[@id='reasonText']",
+            webMobileLocator = "//*[@id='reasonText']",
             androidLocator = null,
             page = this
     )
 
     private val alternateTelephoneNumberRadioButtonSection = HybridPageElement(
-            browserLocator = "$alternateNumberRadioButtonXpath/..",
+            webDesktopLocator = "$alternateNumberRadioButtonXpath/..",
+            webMobileLocator = "$alternateNumberRadioButtonXpath/..",
+            androidLocator = null,
+            page = this
+    )
+
+    val telephoneNumberDiv = HybridPageElement(
+            webDesktopLocator = "//*[@id='telephoneNumberText']",
+            webMobileLocator = "//*[@id='telephoneNumberText']",
             androidLocator = null,
             page = this
     )
@@ -64,7 +91,8 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     private val selectedAppointmentParentXpath = "//div[@aria-label='selected appointment']"
 
     val telephoneError = HybridPageElement(
-            browserLocator = "//*[@data-purpose='telephone-error']",
+            webDesktopLocator = "//*[@data-purpose='telephone-error']",
+            webMobileLocator = "//*[@data-purpose='telephone-error']",
             androidLocator = null,
             page = this,
             helpfulName = "Telephone Error"
@@ -75,7 +103,9 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     }
 
     fun describeSymptoms(symptoms: String) {
-        reasonFormField.element.type<WebElementFacade>(symptoms)
+        symptoms.toCharArray().map { a ->
+            reasonFormField.element.sendKeys("$a")
+        }
         hideKeyboardIfOnMobile()
     }
 

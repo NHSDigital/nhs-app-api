@@ -77,8 +77,8 @@ $kernel: -0.063em;
 }
 @mixin account { //NEW in new textstyles
 	display: block;
-	font-family: $frutiger-light;
-	font-weight: normal;
+	font-family: $default-web;
+	font-weight: lighter;
 	font-size: 0.03em;
 	line-height: 1.250em;
 	color: $white;
@@ -115,6 +115,14 @@ $kernel: -0.063em;
 	font-size: 1em;
 	line-height: 1.5em;
 	color: $black;
+}
+@mixin default_text_web {
+  display: block;
+  font-family: $default-web;
+  font-weight: lighter;
+  font-size: 0.03em;
+  line-height: 1.5em;
+  color: $black;
 }
 @mixin default_text_white {
 	display: block;

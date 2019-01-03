@@ -8,19 +8,19 @@ import pages.HybridPageElement
 class CancelAppointmentPage : AppointmentSharedElementsPage() {
 
     val checkDetailsText = HybridPageElement(
-            browserLocator = "//div[@data-purpose='info']/p",
+            webDesktopLocator = "//div[@data-purpose='info']/p",
             androidLocator = null,
             page = this
     )
 
     val dropDownMenuLabel = HybridPageElement(
-            browserLocator = "//label[@for='txt_reason']",
+            webDesktopLocator = "//label[@for='txt_reason']",
             androidLocator = null,
             page = this
     )
 
     val dropDownMenu = HybridPageElement(
-            browserLocator = "//select[@id='txt_reason']",
+            webDesktopLocator = "//select[@id='txt_reason']",
             androidLocator = null,
             page = this
     )

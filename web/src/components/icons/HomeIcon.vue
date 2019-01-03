@@ -1,7 +1,7 @@
 <template>
   <tab-focused-icon :icon-classes="[$style['nhs_logo']]" view-box="0 0 79 32" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>{{ $t('icons.homeIcon.title') }}</title>
-    <defs/>
+    <defs>NHS Logo</defs>
     <g id="nhs_logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <!--eslint-disable-next-line -->
             <polygon id="Fill-1" fill="#FFFFFF" points="0 31.8736173 78.3641739 31.8736173 78.3641739 0 0 0"></polygon>
@@ -18,10 +18,16 @@
 <script>
 
 import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
+import { INDEX } from '@/lib/routes';
 
 export default {
   components: {
     TabFocusedIcon,
+  },
+  computed: {
+    indexPath() {
+      return INDEX.path;
+    },
   },
 };
 
@@ -32,8 +38,8 @@ export default {
 @import "../../style/colours";
 
 .nhs_logo {
-  margin: 16px;
-  height: 22px;
-  float: left;
+  margin: 0.75em 0;
+  height: 2.5em;
+  cursor: pointer;
 }
 </style>

@@ -27,7 +27,8 @@ open class HybridPageObject : PageObject() {
     val errorBanner by lazy { ErrorBannerPageObject(this) }
 
     val spinner = HybridPageElement(
-            browserLocator = "//*[@id='loading-spinner']",
+            webDesktopLocator = "//*[@id='loading-spinner']",
+            webMobileLocator = "//*[@id='loading-spinner']",
             androidLocator = "//ProgressBar",
             iOSLocator = "//*[@class='nuxt-progress']",
             page = this
@@ -151,7 +152,7 @@ open class HybridPageObject : PageObject() {
 
     fun clickOnButtonContainingText(text: String) {
         HybridPageElement(
-                browserLocator = "//button",
+                webDesktopLocator = "//button",
                 androidLocator = null,
                 page = this
         )

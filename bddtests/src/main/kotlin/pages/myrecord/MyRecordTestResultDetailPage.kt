@@ -13,12 +13,12 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
 
     val testResultDetailsHeader =
             HybridPageElement(
-                    browserLocator = "//h2[contains(text(),'Test result')]",
+                    webDesktopLocator = "//h2[contains(text(),'Test result')]",
                     androidLocator = null,
                     page = this)
 
     val backButton = HybridPageElement(
-            browserLocator = "//button[contains(text(),'Back')]",
+            webDesktopLocator = "//button[contains(text(),'Back')]",
             androidLocator = null,
             page = this
     )

@@ -13,31 +13,36 @@ class GPFinderPage : HybridPageObject() {
     }
 
     private val findYourGPSurgeryHeader = HybridPageElement(
-            browserLocator = "//h4[contains(text(),'Find your GP surgery')]",
+            webDesktopLocator = "//h4[contains(text(),'Find your GP surgery')]",
+            webMobileLocator = "//h4[contains(text(),'Find your GP surgery')]",
             androidLocator = null,
             page = this
     )
 
     private val alreadyUsingAppLink = HybridPageElement(
-            browserLocator = "//a[contains(text(), \"I'm already using the NHS App\")]",
+            webDesktopLocator = "//a[contains(text(), \"I'm already using the NHS App\")]",
+            webMobileLocator = "//a[contains(text(), \"I'm already using the NHS App\")]",
             androidLocator = null,
             page = this
     )
 
     private val searchTermField = HybridPageElement(
-            browserLocator = "//*[@id='searchTextInput']",
+            webDesktopLocator = "//*[@id='searchTextInput']",
+            webMobileLocator = "//*[@id='searchTextInput']",
             androidLocator = null,
             page = this
     )
 
     private val continueButton = HybridPageElement(
-            browserLocator = "//button[contains(text(), 'Continue')]",
+            webDesktopLocator = "//button[contains(text(), 'Continue')]",
+            webMobileLocator = "//button[contains(text(), 'Continue')]",
             androidLocator = null,
             page = this
     )
 
     private val criteriaErrorMessage = HybridPageElement(
-            browserLocator = "//span[contains(text(), 'Enter postcode, town or GP surgery name')]",
+            webDesktopLocator  = "//span[contains(text(), 'Enter postcode, town or GP surgery name')]",
+            webMobileLocator = "//span[contains(text(), 'Enter the name of your GP surgery, its postcode or town')]",
             androidLocator = null,
             page = this
     )

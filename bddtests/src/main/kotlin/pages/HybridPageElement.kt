@@ -6,10 +6,13 @@ import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
 import webdrivers.isAndroid
 import webdrivers.isIOS
+import webdrivers.options.OptionManager
+import webdrivers.options.device.DeviceWebMobile
 
 const val LOCATOR_STRATEGY_ANDROID = "ANDROID"
 const val LOCATOR_STRATEGY_WEBVIEW = "WEBVIEW"
-const val LOCATOR_STRATEGY_BROWSER = "BROWSER"
+const val LOCATOR_STRATEGY_BROWSER_DESKTOP = "BROWSER_DESKTOP"
+const val LOCATOR_STRATEGY_BROWSER_MOBILE = "BROWSER_MOBILE"
 const val LOCATOR_STRATEGY_IOS = "IOS"
 const val LOCATOR_STRATEGY_IOS_ACCESSIBILITY = "IOSACCESS"
 
@@ -18,13 +21,14 @@ const val FLOATING_BUTTON_HEIGHT_PX = 78.5
 const val NAVBAR_HEIGHT_PX = 70
 
 open class HybridPageElement(
-        var browserLocator: String,
+        var webDesktopLocator: String,
+        var webMobileLocator: String = webDesktopLocator,
         var androidLocator: String? = null,
         var iOSLocator: String? = null,
         open val page: HybridPageObject,
         helpfulName: String? = null
 ) {
-    private val helpfulNameToUse = helpfulName ?: browserLocator
+    private val helpfulNameToUse = helpfulName ?: webDesktopLocator
 
     val element: WebElementFacade
         get() {
@@ -32,7 +36,12 @@ open class HybridPageElement(
                 LOCATOR_STRATEGY_IOS -> page.findByXpath(iOSLocator!!)
                 LOCATOR_STRATEGY_ANDROID -> page.findByXpath(androidLocator!!)
                 LOCATOR_STRATEGY_WEBVIEW,
-                LOCATOR_STRATEGY_BROWSER -> page.findByXpath(browserLocator).also {
+                LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findByXpath(webDesktopLocator).also {
+                    if ((!it.isCurrentlyVisible).or(it.isUnderneathFixedElements())) {
+                        it.scroll()
+                    }
+                }
+                LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findByXpath(webMobileLocator).also {
                     if ((!it.isCurrentlyVisible).or(it.isUnderneathFixedElements())) {
                         it.scroll()
                     }
@@ -41,13 +50,12 @@ open class HybridPageElement(
             }
         }
 
-    fun scrollToElement() : HybridPageElement{
+    fun scrollToElement(): HybridPageElement {
         element.scroll()
         return this
     }
 
-    open fun click()
-    {
+    open fun click() {
         this.element.scroll()
         this.element.click()
     }
@@ -56,8 +64,7 @@ open class HybridPageElement(
         scrollTo(this)
     }
 
-    fun scrollTo(elem: Any)
-    {
+    fun scrollTo(elem: Any) {
         val jsExecutor = page.driver as JavascriptExecutor
         try {
             jsExecutor.executeScript("arguments[0].scrollIntoView({block: \"center\"});", elem)
@@ -74,7 +81,8 @@ open class HybridPageElement(
                 LOCATOR_STRATEGY_IOS -> page.findAllByXpath(iOSLocator!!)
                 LOCATOR_STRATEGY_ANDROID -> page.findAllByXpath(androidLocator!!)
                 LOCATOR_STRATEGY_WEBVIEW,
-                LOCATOR_STRATEGY_BROWSER -> page.findAllByXpath(browserLocator)
+                LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findAllByXpath(webDesktopLocator)
+                LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findAllByXpath(webMobileLocator)
                 else -> throw IllegalArgumentException("Unknown element locator strategy.")
             }
         }
@@ -82,7 +90,7 @@ open class HybridPageElement(
     fun assertSingleElementPresent(): HybridPageElement {
 
         Assert.assertEquals(
-                "Expected only one matching element for $helpfulNameToUse, with xpath $browserLocator",
+                "Expected only one matching element for $helpfulNameToUse, with xpath $webDesktopLocator",
                 1,
                 elements.count())
         return this
@@ -110,20 +118,24 @@ open class HybridPageElement(
 
     fun locatorStrategy(): String {
         return if (page.driver.isAndroid() && androidLocator != null) {
-                LOCATOR_STRATEGY_ANDROID
+            LOCATOR_STRATEGY_ANDROID
         } else if (page.driver.isIOS() && iOSLocator != null) {
-                LOCATOR_STRATEGY_IOS
+            LOCATOR_STRATEGY_IOS
         } else {
-            LOCATOR_STRATEGY_BROWSER
+            val optionManager = OptionManager.instance()
+            return when {
+                optionManager.isEnabled(DeviceWebMobile::class) -> LOCATOR_STRATEGY_BROWSER_MOBILE
+                else -> LOCATOR_STRATEGY_BROWSER_DESKTOP
+            }
         }
     }
 
-    fun withText(text:String, exact: Boolean = true): HybridPageElement {
+    fun withText(text: String, exact: Boolean = true): HybridPageElement {
 
-        return when(exact) {
+        return when (exact) {
             true -> {
                 HybridPageElement(
-                        browserLocator = this.browserLocator.plus("[text()=\"$text\"]"),
+                        webDesktopLocator = this.webDesktopLocator.plus("[text()=\"$text\"]"),
                         androidLocator = this.androidLocator?.plus("[@text=\"$text\"]"),
                         iOSLocator = this.iOSLocator?.plus("[@text=\"$text\"]"),
                         helpfulName = this.helpfulNameToUse,
@@ -131,7 +143,7 @@ open class HybridPageElement(
             }
             false -> {
                 HybridPageElement(
-                        browserLocator = this.browserLocator.plus("[contains(text(),\"$text\")]"),
+                        webDesktopLocator = this.webDesktopLocator.plus("[contains(text(),\"$text\")]"),
                         androidLocator = this.androidLocator?.plus("[contains(@text,\"$text\")]"),
                         iOSLocator = this.iOSLocator?.plus("[contains(@text,\"$text\")]"),
                         helpfulName = this.helpfulNameToUse,
@@ -143,7 +155,8 @@ open class HybridPageElement(
     override fun toString(): String {
         return StringBuilder(HybridPageElement::class.simpleName)
                 .append(" { ")
-                .append("browserLocator: $browserLocator, ")
+                .append("webDesktopLocator: $webDesktopLocator, ")
+                .append("webMobileLocator: $webMobileLocator, ")
                 .append("androidLocator: $androidLocator, ")
                 .append("iOSLocator: $iOSLocator ")
                 .append("}")

@@ -69,6 +69,7 @@ dependencies {
     compile 'com.neovisionaries:nv-websocket-client:2.6'
     compile "org.mongodb:mongo-java-driver:$mongodb_version"
     compile "com.microsoft.azure:azure-cosmosdb:2.2.0"
+    compile 'com.neovisionaries:nv-websocket-client:2.6'
 }
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

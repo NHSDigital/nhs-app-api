@@ -1,20 +1,23 @@
 <template>
-  <div :class="$style.panel">
-    <h3 data-label="date">{{ formatDate(appointment.startTime) }}</h3>
-    <h4 data-label="start time">{{ formatTime(appointment.startTime) }}</h4>
+  <div :class="[$style.panel, isDesktopWeb ? $style.desktopWeb : $style.web]">
+    <h3 :class="[isDesktopWeb ? $style.desktopWeb : $style.web]"
+        data-label="date">{{ formatDate(appointment.startTime) }}</h3>
+    <h4 :class="[isDesktopWeb ? $style.desktopWeb : $style.web]"
+        data-label="start time">{{ formatTime(appointment.startTime) }}</h4>
     <hr aria-hidden="true">
-    <p :class="$style.session" data-label="session name">
+    <p :class="[$style.session, isDesktopWeb ? $style.desktopWeb : $style.web]"
+       data-label="session name">
       {{ appointment.type }}
     </p>
     <hr aria-hidden="true">
 
-    <p :class="$style.location">
+    <p :class="[$style.location, isDesktopWeb ? $style.desktopWeb : $style.web]">
       <location-icon/>&nbsp;
       <span data-label="location">{{ appointment.location }}</span>
     </p>
 
     <p v-for="(clinician, index) in appointment.clinicians" :key="clinician"
-       :class="$style.person">
+       :class="[$style.person, isDesktopWeb ? $style.desktopWeb : $style.web]">
       <clinician-icon/>&nbsp;
       <span :data-label="'clinician ' + (index +1)">
         {{ clinician }}
@@ -24,7 +27,8 @@
     <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation">
       <hr :class="$style.cancel" aria-hidden="true">
       <p>
-        <a :class="$style['cancel-link']" :href="appointmentCancellingPath"
+        <a :class="[$style['cancel-link'], isDesktopWeb ? $style.desktopWeb : $style.web]"
+           :href="appointmentCancellingPath"
            @click.stop.prevent="onCancel">
           {{ this.$t('appointments.index.cancelButtonText') }}
         </a>
@@ -64,6 +68,12 @@ export default {
       default: false,
       type: Boolean,
     },
+  },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
   },
   computed: {
     appointmentCancellingPath() {

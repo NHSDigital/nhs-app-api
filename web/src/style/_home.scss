@@ -13,8 +13,8 @@ html {
 
 /** APP */
 body {
-    padding: 0em;
-    margin: 0em;
+    padding: 0;
+    margin: 0;
 	min-height: 31.250em;
     background: $white;
     @include default_text;
@@ -50,10 +50,7 @@ body {
     width: 100%;
     vertical-align: bottom;
     box-sizing: border-box;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding: 1em;
     border-top: 0.063em rgba(255, 255, 255, .4) solid;
 
     h2 {
@@ -69,6 +66,7 @@ body {
 header.logged {
     bottom: $logged_height;
 }
+
 .homeMain {
     box-sizing: border-box;
     padding: 1em;
@@ -90,7 +88,7 @@ header.logged {
     }
 }
 
-.loginMain {
+@mixin loginMain-core {
     margin-bottom: 3em;
     padding-left: 0.3em;
     padding-right: 0.3em;
@@ -98,8 +96,6 @@ header.logged {
     h2 {
         @include h2;
         margin-bottom: 0.750em;
-        font-size: 1.2em;
-        text-align: center;
     }
 
     h5 {
@@ -115,7 +111,6 @@ header.logged {
         @include default_text;
         color: $nhs_blue;
         width: 100%;
-        text-align: center;
     }
 
     .notMySurgeryLink {
@@ -128,6 +123,27 @@ header.logged {
     .checkFeaturesLink {
         cursor: pointer;
         text-decoration: underline;
+    }
+}
+
+.loginMain {
+    @include loginMain-core;
+    h2 {
+        text-align: center;
+        font-size: 1.2em;
+    }
+
+    a {
+        text-align: center;
+    }
+}
+
+.loginMain-desktop {
+    @include loginMain-core;
+    margin-bottom: 1.250em;
+
+    h2 {
+        padding-top: 0.5em;
     }
 }
 

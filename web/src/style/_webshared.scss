@@ -1,0 +1,31 @@
+@import './fonts';
+@import './colours';
+
+.web-page-title {
+  font-family: $frutiger-roman;
+  font-weight: 600;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  text-align: left;
+  font-size: 2.250em;
+  line-height: 1.250em;
+  color: $black;
+}
+
+.web-desktop {
+  max-width: 960px;
+  padding: 0 16px;
+
+  font-family: $default;
+  background-color: #f0f4f5;
+  font-size: 1em;
+  line-height: 2em;
+  margin: 0 auto;
+
+  h2 {
+    @include default_label;
+    font-weight: 700;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
+}

@@ -33,7 +33,7 @@ Vue.mixin({
       }
 
       if (url === LOGIN.path) {
-        const sourceDevice = this.$store.state.device.source; 
+        const sourceDevice = this.$store.state.device.source;
         if (Sources.isNative(sourceDevice)) {
           this.$router.push({
             path: url,

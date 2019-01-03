@@ -1,5 +1,6 @@
 <template>
-  <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+  <div v-if="showTemplate" :class="[$style.content, 'pull-content',
+                                    isDesktopWeb ? $style.desktopWeb : $style.web]">
     <div v-if="showNoUpcomingAppointments" data-purpose="info">
       <h2>{{ $t('appointments.index.empty.header') }}</h2>
       <div :class="$style.info">
@@ -10,9 +11,9 @@
 
     <upcoming-appointments v-if="showUpcomingAppointments"
                            :appointments = "upcomingAppointments"
-                           :cancellation-disabled = "cancellationDisabled" />
-
-    <no-js-form :action="guidancePath" :value="formData">
+                           :cancellation-disabled = "cancellationDisabled"
+                           :class="$style.upcomingAppointmentContainer"/>
+    <no-js-form v-if="!shouldShowDesktopVersion" :action="guidancePath" :value="formData">
       <floating-button-bottom v-if="showBookAppointmentButton"
                               id="book-appointments-button"
                               @click.stop.prevent="onBookButtonClicked">
@@ -33,6 +34,11 @@ export default {
     FloatingButtonBottom,
     UpcomingAppointments,
     NoJsForm,
+  },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios'),
+    };
   },
   computed: {
     showNoUpcomingAppointments() {
@@ -68,6 +74,9 @@ export default {
     guidancePath() {
       return APPOINTMENT_BOOKING_GUIDANCE.path;
     },
+    shouldShowDesktopVersion() {
+      return (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios');
+    },
   },
   asyncData({ store }) {
     store.dispatch('myAppointments/clear');
@@ -91,6 +100,11 @@ export default {
 
 .content {
   padding-bottom : 5em;
+ &.desktopWeb {
+  max-width: 540px;
+  font-family: $default-web;
+ }
 }
+
 
 </style>

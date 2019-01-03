@@ -43,6 +43,7 @@ const config = {
       'analytics',
       'termsAndConditions',
       'myRecordAcceptance',
+      'urlResolution',
     ],
   },
   link: [

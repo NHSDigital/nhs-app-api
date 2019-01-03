@@ -5,14 +5,16 @@ import org.openqa.selenium.JavascriptExecutor
 import webdrivers.isIOS
 
 class NativePageElement(
-        browserLocator: String,
+        webDesktopLocator: String,
+        webMobileLocator: String,
         androidLocator: String? = null,
         iOSLocator: String? = null,
         private var iOSAccessID: String? = null,
         override var page: NativePageObject,
         helpfulName: String? = null
     ) : HybridPageElement(
-        browserLocator,
+        webDesktopLocator,
+        webMobileLocator,
         androidLocator,
         iOSLocator,
         page as HybridPageObject,
@@ -26,7 +28,14 @@ class NativePageElement(
                 LOCATOR_STRATEGY_IOS_ACCESSIBILITY -> page.findByAccessibilityId(iOSAccessID!!)
                 LOCATOR_STRATEGY_ANDROID -> page.findNativeByXpath(androidLocator!!)
                 LOCATOR_STRATEGY_WEBVIEW,
-                LOCATOR_STRATEGY_BROWSER -> page.findNativeByXpath(browserLocator).also {
+                LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findNativeByXpath(webMobileLocator).also {
+                    if ((!it.isDisplayed).or(it.isUnderneathFixedElements())) {
+                        it.scroll()
+                    }
+                    val executor = (page.driver) as JavascriptExecutor
+                    executor.executeScript("// TODO Invoke hidden mobile view navigation buttons when in native.")
+                }
+                LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findNativeByXpath(webDesktopLocator).also {
                     if ((!it.isDisplayed).or(it.isUnderneathFixedElements())) {
                         it.scroll()
                     }

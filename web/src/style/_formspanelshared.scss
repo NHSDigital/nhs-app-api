@@ -1,5 +1,6 @@
 @import './colours';
 @import './textstyles';
+@import './fonts';
 
 /** FORMS AND PANELS */
 
@@ -8,6 +9,10 @@
 	font-size: 1em;
 	margin-bottom: 1em;
 	p {
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
 		padding-bottom: 0.5em;
 		padding-top: 0.250em;
 		b {
@@ -24,6 +29,10 @@
 		font-size: 1.250em;
 		padding-bottom: 0.5em;
 		padding-top: 0em;
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
 	}
 
 	.checkbox {

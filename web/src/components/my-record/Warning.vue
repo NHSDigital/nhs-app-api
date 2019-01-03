@@ -24,12 +24,13 @@
       <input :value="JSON.stringify({ myRecord: { hasAcceptedTerms: true }})"
              type="hidden"
              name="nojs">
-      <generic-button :button-classes="['green']" @click="onContinueButtonClicked">
+
+      <generic-button :class="[$style.button, $style.green]" @click="onContinueButtonClicked">
         {{ $t('my_record.warning.agreeButtonText') }}
       </generic-button>
     </form>
     <form :action="indexPath" method="get">
-      <generic-button :button-classes="['grey']" @click="onBackButtonClicked">
+      <generic-button :class="[$style.button, $style.grey]" @click="onBackButtonClicked">
         {{ $t('my_record.warning.backButtonText') }}
       </generic-button>
     </form>
@@ -71,6 +72,7 @@ export default {
 <style module lang="scss" scoped>
   @import '../../style/info';
   @import '../../style/fonts';
+  @import '../../style/buttons';
   .h2 {
     display: block;
     font-family: $frutiger-bold;

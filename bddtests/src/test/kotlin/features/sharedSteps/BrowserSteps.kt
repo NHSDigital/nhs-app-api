@@ -8,7 +8,10 @@ import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.LoginPage
 import webdrivers.options.ChromeOptionManager
-import webdrivers.options.WebDriverOption
+import webdrivers.options.OptionManager
+import webdrivers.options.device.DeviceNativeWebAndroid
+import webdrivers.options.device.DeviceNativeWebIOS
+import webdrivers.options.device.DeviceWebMobile
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.Duration
@@ -17,6 +20,7 @@ import java.util.*
 private const val SIGN_OUT_WAIT_TIME = 1000L
 private const val LOAD_URL_WAIT_TIME = 180L
 private const val POLLING_DURATION = 100L
+
 open class BrowserSteps {
 
     lateinit var loginPage: LoginPage
@@ -24,10 +28,19 @@ open class BrowserSteps {
     @Step
     open fun goToApp() {
         if (!loginPage.onMobile()) {
-            loginPage.open()
+            val optionManager = OptionManager.instance()
 
-            if (WebDriverOption.NO_JS.isEnabled()) {
-                ChromeOptionManager.instance.configureOption(WebDriverOption.NO_JS)
+            when {
+                optionManager.isEnabled(DeviceNativeWebAndroid::class) -> loginPage.open(arrayOf("android"))
+                optionManager.isEnabled(DeviceNativeWebIOS::class) -> loginPage.open(arrayOf("ios"))
+                else -> loginPage.open()
+            }
+
+            // *FIX*ME: Remove when tested
+            optionManager.registerOption(DeviceWebMobile())
+
+            optionManager.getOptions().forEach {
+                ChromeOptionManager.instance.configureOption(it)
             }
         }
     }
@@ -43,7 +56,7 @@ open class BrowserSteps {
                 .pollingEvery(Duration.ofMillis(POLLING_DURATION))
                 .until {
                     it.currentUrl == loginPage.driver.currentUrl ||
-                    fetchCookie("nhso.session") == null
+                            fetchCookie("nhso.session") == null
                 }
     }
 

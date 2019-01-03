@@ -6,61 +6,61 @@ import net.thucydides.core.annotations.DefaultUrl
 class TermsAndConditionsPage : HybridPageObject() {
 
     val mainErrorMessage = HybridPageElement(
-            browserLocator = "//*[@id='error_msg']",
+            webDesktopLocator = "//*[@id='error_msg']",
             androidLocator = null,
             page = this
     )
 
     val mainBodyText = HybridPageElement(
-            browserLocator = "//*[@id='text_body']",
+            webDesktopLocator = "//*[@id='text_body']",
             androidLocator = null,
             page = this
     )
 
     val secondaryErrorMessage = HybridPageElement(
-            browserLocator = "//*[@id='error_txt']",
+            webDesktopLocator = "//*[@id='error_txt']",
             androidLocator = null,
             page = this
     )
 
     val tcCheckBox = HybridPageElement(
-            browserLocator = "//input[@id='termsAndConditions-agree_checkbox']",
+            webDesktopLocator = "//input[@id='termsAndConditions-agree_checkbox']",
             androidLocator = null,
             page = this
     )
 
     val termsAndConditionsLabel = HybridPageElement(
-            browserLocator = "//label[@id='termsAndConditionsCheckboxLabel']",
+            webDesktopLocator = "//label[@id='termsAndConditionsCheckboxLabel']",
             androidLocator = null,
             page = this
     )
 
     val continueButton = HybridPageElement(
-            browserLocator = "//*[@id='btn_accept']",
+            webDesktopLocator = "//*[@id='btn_accept']",
             androidLocator = null,
             page = this
     )
 
     val termsOfUseLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'terms of use')]",
+            webDesktopLocator = "//a[contains(text(),'terms of use')]",
             androidLocator = null,
             page = this
     )
 
     val privacyPolicyLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'privacy policy')]",
+            webDesktopLocator = "//a[contains(text(),'privacy policy')]",
             androidLocator = null,
             page = this
     )
 
     val cookiesPolicyLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'cookies policy')]",
+            webDesktopLocator = "//a[contains(text(),'cookies policy')]",
             androidLocator = null,
             page = this
     )
 
     val tcBackButton = HybridPageElement(
-            browserLocator = "//*[@id='backIcon']",
+            webDesktopLocator = "//*[@id='backIcon']",
             androidLocator = null,
             page = this
     )

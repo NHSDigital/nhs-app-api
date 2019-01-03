@@ -14,38 +14,38 @@ class MyAccountPage : HybridPageObject() {
     private val nhsNumberPath = "//p//*[@data-sid='user-nhs-number']"
 
     val signOutButton = HybridPageElement(
-            browserLocator = "//button[@id='signout-button']",
+            webDesktopLocator = "//button[@id='signout-button']",
             androidLocator = null,
             page = this
     )
 
     private val aboutUsHeader = HybridPageElement(
-            browserLocator = aboutUsHeaderXpath,
+            webDesktopLocator = aboutUsHeaderXpath,
             androidLocator = null,
             page = this
     )
 
     private val usernameText = HybridPageElement(
-            browserLocator = usernamePath,
+            webDesktopLocator = usernamePath,
             androidLocator = null,
             page = this
     )
 
     private val dateOfBirthText = HybridPageElement(
-            browserLocator = dateOfBirthPath,
+            webDesktopLocator = dateOfBirthPath,
             androidLocator = null,
             page = this
     )
 
     private val nhsNumberText = HybridPageElement(
-            browserLocator = nhsNumberPath,
+            webDesktopLocator = nhsNumberPath,
             androidLocator = null,
             page = this
     )
 
     private fun getLink(text: String = ""): HybridPageElement {
         return HybridPageElement(
-                browserLocator = "$linkPath${String.format(containsTextXpathSubstring, text)}",
+                webDesktopLocator = "$linkPath${String.format(containsTextXpathSubstring, text)}",
                 androidLocator = null,
                 page = this,
                 helpfulName = "$text Link")

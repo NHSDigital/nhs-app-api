@@ -8,7 +8,7 @@ import pages.HybridPageObject
 class CheckBoxElement(page : HybridPageObject, text:String) {
 
     private val checkBoxElement = HybridPageElement(
-            browserLocator = "//div[input[@type='checkbox']][label[contains(normalize-space(),'$text')]]",
+            webDesktopLocator = "//div[input[@type='checkbox']][label[contains(normalize-space(),'$text')]]",
             page = page)
 
     fun assertIsVisible() {

@@ -6,19 +6,19 @@ import pages.HybridPageObject
 class MyRecordWarningPage : HybridPageObject() {
 
     private val txtWarning = HybridPageElement(
-            browserLocator = "//div[@data-purpose='warning']",
+            webDesktopLocator = "//div[@data-purpose='warning']",
             androidLocator = null,
             page = this
     )
 
     private val btnAgree = HybridPageElement(
-            browserLocator = "//button[contains(text(),'Agree and continue')]",
+            webDesktopLocator = "//button[contains(text(),'Agree and continue')]",
             androidLocator = null,
             page = this
     )
 
     private val btnBack2Home = HybridPageElement(
-            browserLocator = "//button[contains(text(),'Back to home')]",
+            webDesktopLocator = "//button[contains(text(),'Back to home')]",
             androidLocator = null,
             page = this
     )

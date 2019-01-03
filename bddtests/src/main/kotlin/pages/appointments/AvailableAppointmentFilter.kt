@@ -10,7 +10,7 @@ class AvailableAppointmentFilter(label:String, helpfulName:String, pageObject: H
     private val byIdXpathFormat = "//*[@id='%s']"
 
     private val filter = HybridPageElement(
-            browserLocator = String.format(byIdXpathFormat, label),
+            webDesktopLocator = String.format(byIdXpathFormat, label),
             androidLocator = null,
             page = pageObject,
             helpfulName = helpfulName

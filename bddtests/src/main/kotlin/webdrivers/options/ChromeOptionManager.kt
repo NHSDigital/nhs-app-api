@@ -23,19 +23,19 @@ class ChromeOptionManager private constructor() {
      * *** CAVEAT *** - When running locally ensure that all chrome instances are
      * closed. This will cause the correct instance to be configured.
      */
-    fun configureOption(webDriverOption: WebDriverOption) {
+    fun configureOption(webDriverOption: IWebDriverOption) {
         val url = URL("http://localhost:$DEBUG_PORT/json")
         val conn = url.openConnection()
         val reader = BufferedReader(InputStreamReader(conn.getInputStream()))
         val jsonArray = JSONArray(IOUtils.toString(reader))
 
-        if (jsonArray.length() > 0) {
+        if (webDriverOption.message.isPresent && jsonArray.length() > 0) {
             var idx = 0
-            while(idx < jsonArray.length()) {
+            while (idx < jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(idx)
                 if (jsonObject.getString("type") == "page") {
                     sendMessage(jsonObject.getString("webSocketDebuggerUrl"),
-                            webDriverOption.message)
+                            webDriverOption.message.get())
                 }
                 idx += 1
             }
@@ -43,9 +43,9 @@ class ChromeOptionManager private constructor() {
     }
 
     private fun sendMessage(webSocketDebuggerUrl: String, message: String) {
-         WebSocketFactory()
-            .createSocket(webSocketDebuggerUrl)
-            .connect()
-            .sendText(message)
+        WebSocketFactory()
+                .createSocket(webSocketDebuggerUrl)
+                .connect()
+                .sendText(message)
     }
 }

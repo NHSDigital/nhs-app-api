@@ -48,6 +48,8 @@ open class NavigationSteps {
 
     @Step
     fun assertVisible() {
+        navBarNative.initailiseMenu()
+
         for (tab in NavBarNative.NavBarType.values()) {
             Assert.assertTrue("$tab not visible", hasVisible(tab))
         }

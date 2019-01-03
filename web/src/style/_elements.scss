@@ -27,13 +27,17 @@ a {
 	font-weight: bold;
 	text-decoration: none;
 	vertical-align: middle;
-		
+
 	h2 {
 		color: $nhs_blue;
 	}
 }
 p {
 	@include default_text;
+  &.desktopWeb {
+    font-family: $default-web;
+    font-weight: lighter;
+  }
 }
 b,
 strong,
@@ -47,4 +51,5 @@ hr {
 	height: 0.063em;
 	border: none;
 	background-color: $border_grey;
+  opacity: 0.25;
 }

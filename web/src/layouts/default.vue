@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <header-menu v-if="showMenu" ref="headerMenu"/>
-    <main :class="mainClass">
+    <web-header v-if="!$store.state.device.isNativeApp" ref="headerMenu"/>
+    <main :class="[mainClass, isDesktopWeb ? $style.desktopWeb : $style.web]">
       <spinner />
       <connection-error />
       <api-error />
@@ -10,9 +10,9 @@
     </main>
     <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                 @onBarStatusChanged="setSurveyBarStatus"/>
-    <navigation-menu v-if="showMenu"/>
     <hot-jar v-if="isAnalyticsCookieAccepted()"/>
     <a11y-title-announcer v-if="!$store.state.device.isNativeApp" ref="a11yAnnouncer"/>
+    <web-footer v-if="!$store.state.device.isNativeApp"/>
   </div>
 </template>
 
@@ -22,6 +22,8 @@ import Sources from '@/lib/sources';
 import A11yTitleAnnouncer from '@/components/widgets/A11yTitleAnnouncer';
 import NativeCallbacks from '@/services/native-app';
 import HeaderMenu from '@/components/HeaderMenu';
+import WebHeader from '@/components/widgets/WebHeader';
+import WebFooter from '@/components/widgets/WebFooter';
 import NavigationMenu from '@/components/NavigationMenu';
 import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
@@ -37,6 +39,8 @@ export default {
     A11yTitleAnnouncer,
     NavigationMenu,
     HeaderMenu,
+    WebHeader,
+    WebFooter,
     Spinner,
     ApiError,
     ConnectionError,
@@ -79,10 +83,19 @@ export default {
       surveyBarOpen: true,
       pathChanged: false,
       resetTimeoutId: undefined,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {
     showMenu() {
+      return (
+        !this.$store.state.device.isNativeApp &&
+        this.loggedIn &&
+        this.$route.name !== 'Login'
+      );
+    },
+    shouldShowDesktopVersion() {
       return (
         !this.$store.state.device.isNativeApp &&
         this.loggedIn &&
@@ -124,8 +137,11 @@ export default {
   created() {
     if (Sources.isNative(this.$route.query.source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
-      this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
+    } else {
+      this.$store.dispatch('device/updateIsNativeApp', false);
     }
+    this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
+
 
     if (process.browser) {
       this.$store.dispatch('session/updateLastCalledAt');
@@ -152,6 +168,7 @@ export default {
         this.resetFocus();
       }
     }
+    this.isWeb = this.$store.state.device.isNativeApp;
   },
   updated() {
     if (this.pathChanged) {
@@ -185,7 +202,7 @@ export default {
             headerMenuCompt.resetFocusToNhsLogo();
           }
         }
-      }, 2000);
+      }, 500);
     },
     isAnalyticsCookieAccepted() {
       return this.$store.state.termsAndConditions.analyticsCookieAccepted;
@@ -195,9 +212,10 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../style/main";
-@import "../style/pulltorefresh";
-@import "../style/elements";
+  @import "../style/main";
+  @import "../style/pulltorefresh";
+  @import "../style/elements";
+  @import "../style/webshared";
 </style>
 
 <style module lang="scss" scoped>

@@ -21,8 +21,11 @@ export default {
         },
       },
     },
-    data: function data() {
-      return { stylingBinding: null, highlight: false, lastKey: KeyCodes.NoKey };
+    data() {
+      return {
+        stylingBinding: null,
+        highlight: false,
+        lastKey: KeyCodes.NoKey };
     },
     computed: {
       getStyleClasses() {

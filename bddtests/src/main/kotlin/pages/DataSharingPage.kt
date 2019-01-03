@@ -39,7 +39,7 @@ open class DataSharingPage : HybridPageObject() {
 
     private fun createBrowserElement(locator: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = locator,
+                webDesktopLocator = locator,
                 androidLocator = null,
                 page = this
         )
@@ -47,7 +47,7 @@ open class DataSharingPage : HybridPageObject() {
 
     private fun contentsLink(linkText: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = "//ul[@id='contents']/li/a[contains(text(), \"$linkText\")]",
+                webDesktopLocator = "//ul[@id='contents']/li/a[contains(text(), \"$linkText\")]",
                 androidLocator = null,
                 page = this,
                 helpfulName = "$'linkText' Link in Contents Element"

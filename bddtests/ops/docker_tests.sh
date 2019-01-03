@@ -70,9 +70,9 @@ else
         fi
         if [ "$PARALLEL" == 1 ]
         then
-          TAGS=(appointment prescription throttling other)
+          TAGS=(appointment authentication throttling other)
         else
-          TAGS=(throttling specific)
+          TAGS=specific
           BDD_CUCUMBER_OPTIONS_PREFIX=$BDD_CUCUMBER_OPTIONS_PREFIX"'"
         fi
     elif [ "$ENABLE_COSMOS_TESTS" == 1 ]

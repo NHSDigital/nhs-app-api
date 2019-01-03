@@ -21,18 +21,35 @@
 		font-weight: 700;
 		padding-bottom: 0.5em;
 		padding-top: 0.5em;
+        &.desktopWeb {
+          font-weight: lighter;
+        }
+        &.web {
+          font-weight: 700;
+        }
 	}
 
 	h3 {
-		@include default_label;
-		padding-bottom: 0.5em;
-		padding-top: 0.5em;
+      @include default_label;
+      padding-bottom: 0.5em;
+      padding-top: 0.5em;
+      &.desktopWeb {
+        font-family: $default-web;
+        display: block;
+        font-weight: lighter;
+        font-size: 1em;
+        line-height: 1.5em;
+      }
 	}
 
 	b,
 	label {
 		padding-bottom: 0.250em;
 		padding-top: 0.5em;
+        &.desktopWeb {
+          font-family: $default-web;
+          font-weight: lighter;
+        }
 	}
 
 	.requested,
@@ -40,6 +57,10 @@
 	.rejected {
 		p {
 			padding-top: 0em;
+          &.desktopWeb {
+            font-family: $default-web;
+            font-weight: lighter;
+          }
 		}
 		svg {
 			vertical-align: middle;
@@ -60,23 +81,48 @@
 			color: $error !important;
 		}
 	}
+  a.cancel-link:hover{
+     background: #ffcd60;
+     box-shadow: 0 0 0 4px #ffcd60;
+     box-sizing: border-box;
+     color: #D40003;
+     text-decoration: none;
+   }
 
-	a.cancel-link:link,
-	a.cancel-link:visited {
-		color: #D40003;
-		display: inline-block;
-		margin-top: 0.5em;
+  a.cancel-link:focus{
     outline-color: $focus_highlight;
+  box-shadow: 0 0 0 4px $focus_highlight;
+  }
+	a.cancel-link{
+      color: #D40003;
+      display: inline-block;
+      margin-top: 0.5em;
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: normal;
+      }
+      :visited {
+        color: #D40003;
+        outline-color: $focus_highlight;
+      }
 	}
 
 	p.session {
 		padding-top: 0.750em;
 		padding-bottom: 0.750em;
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
 	}
 	p.person,
 	p.location,
 	p.cancel-disabled {
 		padding-top: 0.5em;
 		padding-bottom: 0em;
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
 	}
 }

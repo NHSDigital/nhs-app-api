@@ -33,14 +33,14 @@ export default {
 </script>
 
 <style module lang="scss">
-@import "../style/homeheader";
- a.anchor-icon{
+  @import "../style/homeheader";
+  a.anchor-icon{
     color: $white;
-    right: 0em;
+    right: 0;
   }
   a.fixed-right {
-     position: absolute;
-     top: 0em;
-     right: 0em;
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 </style>

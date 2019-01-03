@@ -68,6 +68,7 @@ Feature: Throttling
      Then I see the GP Search Results Page with 20 search results
      And The Too many results error message is visible
 
+  @native @3844
   Scenario: A user is given an error message if they search with invalid criteria
      When I submit no search criteria
      Then I see the GP Finder page with a search criteria error message
@@ -78,6 +79,7 @@ Feature: Throttling
      When I click the link to skip the throttling flow
      Then I see the login page
 
+  @native @3844
   Scenario: A user chooses to register their email with brothermailer and sees the Waiting list joined page
     Given The brothermailer service will return a successful response
     And There are multiple GP Practices for my search criteria

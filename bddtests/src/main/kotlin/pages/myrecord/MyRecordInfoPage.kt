@@ -12,20 +12,20 @@ class MyRecordInfoPage : HybridPageObject() {
 
     val clinicalAbbreviationsLink =
             HybridPageElement(
-                    browserLocator = "//a[contains(text(),'Help with abbreviations')]",
+                    webDesktopLocator = "//a[contains(text(),'Help with abbreviations')]",
                     androidLocator = null,
                     page = this)
 
     private val noSummaryCareAccessMessage =
             HybridPageElement(
-                    browserLocator = "//div[@id='mainDiv']//div[@id='errorMsg']",
+                    webDesktopLocator = "//div[@id='mainDiv']//div[@id='errorMsg']",
                     androidLocator = null,
                     page = this)
 
     fun assertLabelAndValue(expectedLabel: String, expectedValue: String) {
         val labelElement =
                 HybridPageElement(
-                        browserLocator = "//span",
+                        webDesktopLocator = "//span",
                         androidLocator = null,
                         page = this,
                         helpfulName = "Label for '$expectedLabel'")
@@ -41,7 +41,7 @@ class MyRecordInfoPage : HybridPageObject() {
 
     private fun getValueFromField(label: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = "//span${String.format(containsTextXpathSubstring, label)}/following-sibling::p[1]",
+                webDesktopLocator = "//span${String.format(containsTextXpathSubstring, label)}/following-sibling::p[1]",
                 androidLocator = null,
                 page = this,
                 helpfulName = "Label for '$label'")
@@ -108,7 +108,7 @@ class MyRecordInfoPage : HybridPageObject() {
     fun isVisionSectionPageVisible(linkText: String, sectionName: String): Boolean {
         val sectionLink =
                 HybridPageElement(
-                        browserLocator = "//a[contains(text(),'View your $linkText records')]",
+                        webDesktopLocator = "//a[contains(text(),'View your $linkText records')]",
                         androidLocator = null,
                         page = this)
 
@@ -118,7 +118,7 @@ class MyRecordInfoPage : HybridPageObject() {
 
         val sectionPageHeader =
                 HybridPageElement(
-                        browserLocator = "//h2[contains(text(),'$sectionName')]",
+                        webDesktopLocator = "//h2[contains(text(),'$sectionName')]",
                         androidLocator = null,
                         page = this)
 

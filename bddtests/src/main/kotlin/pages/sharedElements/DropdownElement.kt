@@ -11,7 +11,8 @@ class DropdownElement(val label:String, val helpfulName:String, pageObject: Hybr
     private val byIdXpathFormat = "//label[contains(text(),'%s')]/following-sibling::span/select"
 
     private val dropDown = HybridPageElement(
-            browserLocator = String.format(byIdXpathFormat, label),
+            webDesktopLocator = String.format(byIdXpathFormat, label),
+            webMobileLocator = String.format(byIdXpathFormat, label),
             androidLocator = null,
             page = pageObject,
             helpfulName = helpfulName

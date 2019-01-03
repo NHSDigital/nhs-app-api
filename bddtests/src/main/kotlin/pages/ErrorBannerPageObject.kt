@@ -5,13 +5,13 @@ class ErrorBannerPageObject(pageObject: HybridPageObject)  {
     private val errorXPath = "//div[@data-purpose='error']"
 
     private val errorSummarySubHeading = HybridPageElement(
-            browserLocator = "$errorXPath/p",
+            webDesktopLocator = "$errorXPath/p",
             androidLocator = null,
             page = pageObject
     )
 
     private val errorSummaryBody = HybridPageElement(
-            browserLocator = "$errorXPath/ul/li",
+            webDesktopLocator = "$errorXPath/ul/li",
             androidLocator = null,
             page = pageObject
     )

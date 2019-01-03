@@ -30,6 +30,9 @@ describe('FlashMessage.vue', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
+        device: {
+          source: 'web',
+        },
         flashMessage: {
           show: false,
         },
@@ -45,6 +48,9 @@ describe('FlashMessage.vue', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
+        device: {
+          source: 'web',
+        },
         flashMessage: {
           show: true,
           message: 'Warning!',
@@ -69,6 +75,9 @@ describe('FlashMessage.vue', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
+        device: {
+          source: 'web',
+        },
         flashMessage: {
           show: true,
           key,
@@ -87,6 +96,9 @@ describe('FlashMessage.vue', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
+        device: {
+          source: 'web',
+        },
         flashMessage: {
           show: true,
           message: 'Success!',
@@ -112,6 +124,9 @@ describe('FlashMessage.vue', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
+        device: {
+          source: 'web',
+        },
         flashMessage: {
           show: true,
           key,

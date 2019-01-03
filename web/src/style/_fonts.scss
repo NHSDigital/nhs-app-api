@@ -2,7 +2,7 @@
 //@import url('https://beta.nhs.uk/static/beta/css/expo2017/fonts/frutiger-light.css');
 
 @font-face{
-  font-family:"FrutigerLTW01-76BlackItalic";
+  font-family: "FrutigerLTW01-76BlackItalic";
   font-display: optional;
   src: local("FrutigerLTW01-76BlackItalic"),
        url("/fonts/FrutigerLTW01-76BlackItalic.eot"),
@@ -24,7 +24,7 @@
        url("/fonts/FrutigerLTW01-65Bold.svg#eae74276-dd78-47e4-9b27-dac81c3411ca") format("svg");
 }
 @font-face{
-  font-family:"FrutigerLTW01-45Light";
+  font-family: "FrutigerLTW01-45Light";
   font-display: optional;
   src: local("FrutigerLTW01-45Light"),
        url("/fonts/FrutigerLTW01-45Light.eot")
@@ -103,11 +103,11 @@
 
 
 //* FONTS */
-$frutiger-roman: "FrutigerLTW01-55Roman", Arial, sans-serif;
+$frutiger-roman: "FrutigerLTW01-55Roman", sans-serif, Arial;
 $frutiger-light: "FrutigerLTW01-45Light", Arial, sans-serif;
 $frutiger-bold: "FrutigerLTW01-65Bold", Arial, sans-serif;
 $default: 'Roboto', Arial, sans-serif;
-$default-web: Arial, sans-serif;
+$default-web: "FrutigerLTW01-45Light", sans-serif , Arial;
 
 // base font to use if available so text scaling works in webviews in iOS. See:
 // - https://useyourloaf.com/blog/using-dynamic-type-with-web-views/

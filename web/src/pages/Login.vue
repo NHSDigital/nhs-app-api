@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.loginMain">
+  <div :class="dynamicStyle('loginMain')">
     <div v-if="isPracticeParticipating">
       <h2>{{ $t('login.desc') }}</h2>
       <form :action="authoriseUrl" method="get">
@@ -21,7 +21,7 @@
                                :click-func="resetAndGoToGPFinder" tag="a">
           {{ $t('login.checkWhatFeaturesYouCanUse') }}
         </analytics-tracked-tag>
-        <div v-if="!isPracticeParticipating">
+        <div v-if="!isPracticeParticipating && this.$store.state.device.isNativeApp">
           <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
           <h5>{{ notParticipatingSurgeryName }}</h5>
           <p>{{ notParticipatingSurgeryAddress }}</p>
@@ -32,7 +32,7 @@
         </div>
       </div>
     </no-ssr>
-    <div :class="$style.appVersion">
+    <div v-if="this.$store.state.device.isNativeApp" :class="$style.appVersion">
       Version {{ this.$store.state.appVersion.webVersion }}
       <span v-if="this.$store.state.appVersion.nativeVersion">
         ({{ this.$store.state.appVersion.nativeVersion }})
@@ -49,13 +49,14 @@ import AuthorisationService from '@/services/authorisation-service';
 import NativeCallbacks from '@/services/native-app';
 import moment from 'moment';
 import querystring from 'querystring';
+import { getDynamicStyle } from '@/lib/desktop-experience';
 
 export default {
-  head() {
-    return {
-      title: 'Login Screen',
-    };
-  },
+  // head() {
+  //   return {
+  //     title: 'Login Screen',
+  //   };
+  // },
   layout: 'login',
   components: {
     AnalyticsTrackedTag,
@@ -134,7 +135,7 @@ export default {
     const betaCookie = this.$cookies.get('BetaCookie');
     const throttlingEnabled = this.$env.THROTTLING_ENABLED === true || this.$env.THROTTLING_ENABLED === 'true';
 
-    if (throttlingEnabled && !betaCookie) {
+    if (throttlingEnabled && !betaCookie && !this.isDesktopWeb) {
       this.goToUrl(GP_FINDER.path);
       return;
     }
@@ -195,6 +196,9 @@ export default {
         },
       });
       this.goToUrl(GP_FINDER.path);
+    },
+    dynamicStyle(...args) {
+      return getDynamicStyle(this, args);
     },
   },
 };

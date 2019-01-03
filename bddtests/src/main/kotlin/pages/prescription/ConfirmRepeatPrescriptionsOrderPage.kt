@@ -17,13 +17,13 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     val specialRequestTextXPath = "//*[@id='specialRequestText']"
 
     val confirmAndOrderRepeatPrescriptionButton = HybridPageElement(
-            browserLocator = "//*[@id='btn_confirm_and_order_prescription']",
+            webDesktopLocator = "//*[@id='btn_confirm_and_order_prescription']",
             androidLocator = null,
             page = this
     )
 
     val changeThisPrescriptionButton = HybridPageElement(
-            browserLocator = "//button[contains(text(), 'Change this prescription')]",
+            webDesktopLocator = "//button[contains(text(), 'Change this prescription')]",
             androidLocator = null,
             page = this
     )

@@ -5,41 +5,46 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 
-@DefaultUrl("http://web.local.bitraft.io:3000/login")
+@DefaultUrl("http://web.local.bitraft.io:3000/login?source={1}")
 class LoginPage : HybridPageObject() {
 
     val symptomsButtonHeading = HybridPageElement(
-            browserLocator = "//h2[contains(text(), 'How are you feeling today?')]",
+            webDesktopLocator = "//h2[contains(text(), 'How are you feeling today?')]",
+            webMobileLocator = "//h2[contains(text(), 'How are you feeling today?')]",
             androidLocator = null,
             page = this
     )
 
     val symptomsButton = HybridPageElement(
-            browserLocator = "//*[@id='btn_home_symptoms']",
+            webDesktopLocator = "//*[@id='btn_home_symptoms']",
+            webMobileLocator = "//*[@id='btn_home_symptoms']",
             androidLocator = null,
             page = this
     )
 
     val loginOrCreateAccountButtonHeading = HybridPageElement(
-            browserLocator = "//h2[contains(text(), 'To access your NHS services')]",
+            webDesktopLocator = "//h2[contains(text(), 'To access your NHS services')]",
+            webMobileLocator = "//h2[contains(text(), 'To access your NHS services')]",
             androidLocator = null,
             page = this
     )
 
     val loginOrCreateAccountButton = HybridPageElement(
-            browserLocator = "//*[@data-id='login-button']",
+            webDesktopLocator = "//*[@data-id='login-button']",
+            webMobileLocator = "//*[@data-id='login-button']",
             androidLocator = null,
             page = this
     )
 
     val throttlingNotParticipatingHeader = HybridPageElement(
-            browserLocator = "//h2[contains(text(), 'More features will be coming soon to this GP surgery')]",
+            webDesktopLocator = "//h2[contains(text(), 'More features will be coming soon to this GP surgery')]",
+            webMobileLocator = "//h2[contains(text(), 'More features will be coming soon to this GP surgery')]",
             androidLocator = null,
             page = this
     )
 
     val helpIcon = HybridPageElement(
-            browserLocator = "//a[@id='help_icon']/*[name()='svg']",
+            webDesktopLocator = "//a[@id='help_icon']/*[name()='svg']",
             androidLocator = null,
             page = this
     )
@@ -47,7 +52,7 @@ class LoginPage : HybridPageObject() {
     lateinit var accountCreationPage: CIDAccountCreationPage
 
     private val timeoutBanner = HybridPageElement(
-            browserLocator = "//*[@data-purpose='session-timeout'][contains(text(), " +
+            webDesktopLocator = "//*[@data-purpose='session-timeout'][contains(text(), " +
                              "'For your security, you need to log in again')]",
             androidLocator = null,
             page = this

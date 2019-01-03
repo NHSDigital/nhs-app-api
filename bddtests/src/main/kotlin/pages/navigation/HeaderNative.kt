@@ -4,38 +4,44 @@ import org.junit.Assert
 import org.openqa.selenium.StaleElementReferenceException
 import pages.NativePageElement
 import pages.NativePageObject
+import webdrivers.options.OptionManager
+import webdrivers.options.device.DeviceWebDesktop
 
 const val WAIT_FOR_PAGE_MS = 3000L
 
 class HeaderNative : NativePageObject() {
 
     private fun getAndroidIconLocator(id: String): String {
-        return  "//android.widget.ImageView[contains(@resource-id,'${id}')]"
+        return "//android.widget.ImageView[contains(@resource-id,'${id}')]"
     }
 
     val homeIcon = NativePageElement(
             androidLocator = getAndroidIconLocator("nhsOnlineLogoIcon"),
-            browserLocator = "//*[@id='nhs_logo']",
+            webDesktopLocator = "//*[@id='nhs_logo']",
+            webMobileLocator = "//*[@id='nhs_logo']",
             iOSAccessID = "NHS App Home",
             page = this
     )
     val helpIcon = NativePageElement(
             androidLocator = getAndroidIconLocator("helpIcon"),
-            browserLocator = "//a[@id='help_icon']/*[name()='svg']",
+            webDesktopLocator = "//a[@id='help_icon']",
+            webMobileLocator = "//a[@id='help_icon']",
             iOSAccessID = "Help and support",
             page = this
     )
     val accountIcon = NativePageElement(
             androidLocator = getAndroidIconLocator("myAccountIcon"),
-            browserLocator = "//a[@href='/account']/*[name()='svg']",
+            webDesktopLocator = "//a[@href='/account']",
+            webMobileLocator = "//a[@href='/account']",
             iOSAccessID = "My account",
             page = this
     )
 
-    fun getPageTitle(title: String) : NativePageElement {
-        return  NativePageElement(
+    fun getPageTitle(title: String): NativePageElement {
+        return NativePageElement(
                 androidLocator = "//*[contains(@resource-id, 'header_text_view')]",
-                browserLocator = "//header/h1",
+                webDesktopLocator = "//h1",
+                webMobileLocator = "//h1",
                 iOSAccessID = title,
                 page = this
         )
@@ -44,7 +50,13 @@ class HeaderNative : NativePageObject() {
     fun assertIsVisible(title: String) {
         Assert.assertTrue("Expected logo to be visible", homeIcon.isDisplayed())
         Assert.assertTrue("Expected account icon to be visible", accountIcon.isDisplayed())
-        Assert.assertTrue("Expected help icon to be visible", helpIcon.isDisplayed())
+
+        val optionManager = OptionManager.instance()
+        when {
+            optionManager.isEnabled(DeviceWebDesktop::class) ->
+                Assert.assertTrue("Expected help icon to be visible", helpIcon.isDisplayed())
+        }
+
         waitForPageHeaderText(title)
     }
 

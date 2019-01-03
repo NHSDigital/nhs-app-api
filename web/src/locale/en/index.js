@@ -596,6 +596,9 @@ export default {
   loginButton: {
     login: 'Log in or create account',
   },
+  loginLink: {
+    login: 'Login',
+  },
   signOutButton: {
     signOut: 'Log out',
   },
@@ -667,11 +670,14 @@ export default {
       body: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning.',
     },
   },
+  webHeader: {
+    title: '{pageTitle} - NHS App',
+  },
   navigationMenu: {
     appointmentsLabel: 'Appointments',
     moreLabel: 'More',
-    myRecordLabel: 'My record',
-    prescriptionsLabel: 'Prescriptions',
+    myRecordLabel: 'My medical record',
+    prescriptionsLabel: 'Repeat prescriptions',
     symptomsLabel: 'Symptoms',
   },
   navigationMenuList: {
@@ -1105,6 +1111,20 @@ export default {
             text: 'Your choice does not apply to a small number of specific exclusions. In these cases, your confidential patient information may still be used at any time. For example, when information is used to collect official national statistics, like the Population Census.',
           },
         ],
+      },
+    },
+  },
+  web: {
+    home: {
+      title: 'NHS App',
+      bullets: {
+        one: 'Book and manage your appointments at any time',
+        two: 'Order repeat prescriptions from wherever you are',
+        three: 'Check your symptoms and get instant advice on what to do',
+        four: 'Track your medication history, with secure access to your medical record',
+      },
+      checkSymptoms: {
+        title: 'How are you feeling right now?',
       },
     },
   },

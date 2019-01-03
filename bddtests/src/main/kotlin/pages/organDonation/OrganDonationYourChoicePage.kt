@@ -10,6 +10,7 @@ open class OrganDonationYourChoicePage : HybridPageObject() {
 
     val yourChoiceTitle = HybridPageElement(
             "//h2",
+            "//h2",
             null,
             null,
             this,
@@ -17,6 +18,7 @@ open class OrganDonationYourChoicePage : HybridPageObject() {
 
     val radioButtons by lazy {
         RadioButtons(HybridPageElement(
+                "//label[input]",
                 "//label[input]",
                 null,
                 null,

@@ -17,7 +17,7 @@ open class MorePage : HybridPageObject() {
 
     private fun listOfLinks(): HybridPageElement {
         return HybridPageElement(
-                browserLocator = sections,
+                webDesktopLocator = sections,
                 androidLocator = null,
                 page = this,
                 helpfulName = "ListOfLinks"
@@ -26,7 +26,7 @@ open class MorePage : HybridPageObject() {
 
     private fun link(linkTitle: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = "$sections[h2[contains(text(),'$linkTitle')]]",
+                webDesktopLocator = "$sections[h2[contains(text(),'$linkTitle')]]",
                 androidLocator = null,
                 iOSLocator = "//*[contains(text(),'$linkTitle')]",
                 page = this,
@@ -35,7 +35,7 @@ open class MorePage : HybridPageObject() {
 
     private fun linkDescriptionBody(linkTitle: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = "$sections[h2[contains(text(),'$linkTitle')]]//p",
+                webDesktopLocator = "$sections[h2[contains(text(),'$linkTitle')]]//p",
                 androidLocator = null,
                 page = this,
                 helpfulName = "$linkTitle Link")

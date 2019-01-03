@@ -13,76 +13,89 @@ private const val NUM_NOT_PARTICIPATING_UNAVAILABLE_FEATURES = 3
 class GPParticipationPage : HybridPageObject() {
 
     var featuresUsedHeader = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'NHS App features used by ')]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//h2[contains(text(), 'NHS App features used by ')]",
+            webMobileLocator = "//h2[contains(text(), 'NHS App features used by ')]",
+            androidLocator = null,
+            page = this
     )
 
     val featuresUsedHeaderParticipatingPractice = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 1')]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 1')]",
+            webMobileLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 1')]",
+            androidLocator = null,
+            page = this
     )
 
     val featuresUsedHeaderNotParticipatingPractice = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 2')]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 2')]",
+            webMobileLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 2')]",
+            androidLocator = null,
+            page = this
     )
 
     val currentlyAvailableHeader = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'Currently available')]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//h2[contains(text(), 'Currently available')]",
+            webMobileLocator = "//h2[contains(text(), 'Currently available')]",
+            androidLocator = null,
+            page = this
     )
 
     val comingSoonHeader = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'Coming soon')]",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//h2[contains(text(), 'Coming soon')]",
+            webMobileLocator = "//h2[contains(text(), 'Coming soon')]",
+            androidLocator = null,
+            page = this
     )
 
     val availableFeatures = HybridPageElement(
-        browserLocator = "//ul[@id='availableFeatures']/li",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//ul[@id='availableFeatures']/li",
+            webMobileLocator = "//ul[@id='availableFeatures']/li",
+            androidLocator = null,
+            page = this
     )
 
     val unavailableFeatures = HybridPageElement(
-        browserLocator = "//ul[@id='unavailableFeatures']/li",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//ul[@id='unavailableFeatures']/li",
+            webMobileLocator = "//ul[@id='unavailableFeatures']/li",
+            androidLocator = null,
+            page = this
     )
 
     val ctaParticipatingContinueButton = HybridPageElement(
-            browserLocator = "//button[contains(text(), 'Continue')]",
+            webDesktopLocator = "//button[contains(text(), 'Continue')]",
+            webMobileLocator = "//button[contains(text(), 'Continue')]",
             androidLocator = null,
             page = this
     )
 
     val ctaNotParticipatingContinueButton = HybridPageElement(
-            browserLocator = "//button[contains(text(), 'Continue')]",
+            webDesktopLocator = "//[contains(text(), 'Continue')]",
+            webMobileLocator = "//[contains(text(), 'Continue')]",
             androidLocator = null,
             page = this
     )
 
     val ctaNotMySurgeryButton = HybridPageElement(
-            browserLocator = "//a[contains(text(), 'This is not my GP surgery')]",
+            webDesktopLocator = "//a[contains(text(), 'This is not my GP surgery')]",
+            webMobileLocator = "//a[contains(text(), 'This is not my GP surgery')]",
             androidLocator = null,
             page = this
     )
 
     val createAccountMessage = HybridPageElement(
-        browserLocator = "//p[@id='createAccountMessage']",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//p[@id='createAccountMessage']",
+            webMobileLocator = "//p[@id='createAccountMessage']",
+            androidLocator = null,
+            page = this
     )
 
     val limitingFeaturesWarning = HybridPageElement(
-        browserLocator = "//p[@id='limitingFeaturesWarning']",
-        androidLocator = null,
-        page = this
+            webDesktopLocator = "//p[@id='limitingFeaturesWarning']",
+            webMobileLocator = "//p[@id='limitingFeaturesWarning']",
+            androidLocator = null,
+            page = this
     )
+
     fun assertNotParticipatingFeaturesVisible() {
         assertTrue(unavailableFeatures.elements.count() == NUM_NOT_PARTICIPATING_UNAVAILABLE_FEATURES)
         assertTrue(availableFeatures.elements.count() == NUM_NOT_PARTICIPATING_AVAILABLE_FEATURES)

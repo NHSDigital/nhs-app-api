@@ -5,6 +5,7 @@ Feature: Use the navigation header bar
     Given I am a EMIS patient
     And I am logged in
 
+  @pending
   Scenario: A patient can access the help and support page by clicking the help icon
     Given I see the header
     When I click the help icon

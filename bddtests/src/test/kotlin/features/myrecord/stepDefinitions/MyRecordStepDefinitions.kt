@@ -156,11 +156,13 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^No navigation menu bar item will be selected$")
     fun thenNoNavigationMenuBarItemWillBeSelected() {
-        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.SYMPTOMS))
-        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.APPOINTMENTS))
-        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
-        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))
-        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MORE))
+        if(headerNative.onMobile()) {
+            assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.SYMPTOMS))
+            assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.APPOINTMENTS))
+            assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
+            assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))
+            assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MORE))
+        }
     }
 
     @Then("^I see the patient information details$")

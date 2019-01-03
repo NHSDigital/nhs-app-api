@@ -13,8 +13,8 @@ html {
 }
 
 body {
-	padding: 0em;
-	margin: 0em;
+	padding: 0;
+	margin: 0;
 	background: $background;
 	@include default_text;
 	font-family: $default;
@@ -43,11 +43,15 @@ $survey_open: 5.5em;
 $survey_closed: 1.5em;
 
 main.content {
-	padding: 6.750em 1em 4.688em 1em;
-	box-sizing: border-box;
-	width: 100%;
+  max-width: 960px;
+  margin: 0 1em;
+  box-sizing: border-box;
+  width: 100%;
+  &.web {
+    min-height: calc(75vh );
+  }
 
-	&.survey-open {
+  &.survey-open {
 		padding-bottom: 4.688em + $survey_open;
 	}
 
@@ -56,7 +60,7 @@ main.content {
 	}
 
 	&.native {
-		padding: 0em 1em 4.688em 1em;
+		padding: 0 2em 4.688em 0;
 
 		&.survey-open {
 			padding-bottom: 1em + $survey_open;
@@ -71,13 +75,26 @@ main.content {
 		padding: 4.125em 1em 4.688em 1em;
 	}
 	&.nopadding {
-		padding: 6.250em 0em 3.125em 0em;
+		padding: 6.250em 0 3.125em 0;
 	}
 	&.slim.nopadding  {
-		padding: 3.125em 0em 3.125em 0em;
+		padding: 3.125em 0 3.125em 0;
 	}
 }
 
 
+@media (min-width: 48.0625em) {
+	main.content {
+		margin: 0 32px;
+	}
 
+	main.content > div {
+		padding: 0 16px;
+	}
+}
 
+@media (min-width: 1024px) {
+	main.content {
+		margin: 0 auto;
+	}
+}
