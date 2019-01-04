@@ -108,6 +108,10 @@ class BookAppointmentsBuilderVision(patient: Patient, request: BookAppointmentSl
         }
     }
 
+    override fun respondWithExceptionWhenRequiredFieldMissing(): Mapping {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
+
     override fun respondWithExceptionWhenInThePast(): Mapping {
         // VISION ALLOWS To book appointments that are in past
         return respondWith(HttpStatus.SC_OK) {

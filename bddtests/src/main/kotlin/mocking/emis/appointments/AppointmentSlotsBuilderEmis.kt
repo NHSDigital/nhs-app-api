@@ -79,7 +79,8 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                         slot.slotId!!,
                         convertStringToEmisTimeString(slot.startTime!!),
                         convertStringToEmisTimeString(slot.endTime!!),
-                        slot.slotTypeName
+                        slot.slotTypeName,
+                        slot.channel
                 )
             }
             AppointmentSession(

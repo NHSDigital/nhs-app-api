@@ -156,6 +156,9 @@ definitions:
         type: string
         format: date-time
         description: Appointment End Date Time.
+      telephoneNumber:
+        type: string
+        description: Patient's phone number for telephone appointment.
   AppointmentCancelRequest:
     type: object
     required:
@@ -261,3 +264,7 @@ definitions:
         description: Array of Clinicians, accounts for joint sessions.
         items:
           type: string
+      channel:
+        type: string
+        enum: [Unknown, Telephone]
+        description: Indicates slot channel type supplied by GP practice

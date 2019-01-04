@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.Support.Temporal;
@@ -21,6 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         private AppointmentSlotsMapper _systemUnderTest;
+        private Mock<IEmisEnumMapper> _mockEmisEnumMapper;
 
         [TestInitialize]
         public void TestInitialize()
@@ -32,9 +35,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             
-            var logger = _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentSlotsMapper>();
+            _mockEmisEnumMapper = _fixture.Freeze<Mock<IEmisEnumMapper>>();
             
-            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProvider, logger);
+            var logger = _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentSlotsMapper>();            
+
+            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProvider, logger,_mockEmisEnumMapper.Object);            
         }
 
         [TestMethod]
@@ -67,7 +72,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var sessionHolders = new[] { sessionHolder };
 
             var appointmentSlotSession =
-                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency", "Unknown");
 
             var slotSessions = new[] { appointmentSlotSession };
 
@@ -107,7 +112,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointmentSlotSession =
-                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", invalidEndTime, "Emergency");
+                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", invalidEndTime, "Emergency","Unknown");
 
             var slotSessions = new[] { appointmentSlotSession };
             
@@ -144,10 +149,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointmentSlotSessionWithInvalidStartTime =
-                CreateAppointmentsSlotSession(101, 1, invalidStartTime, "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(101, 1, invalidStartTime, "2018-05-09T10:59:19", "Emergency","Unknown");
             
             var appointmentSlotSession=
-                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
             
             var slotSessions = new[]{ appointmentSlotSessionWithInvalidStartTime, appointmentSlotSession};
             
@@ -183,13 +188,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointmentSlotSession1 =
-                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
             
             var appointmentSlotSession2=
-                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
 
             var appointmentSlotSession3 =
-                CreateAppointmentsSlotSession(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null);
+                CreateAppointmentsSlotSession(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null,"Unknown");
 
             var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2, appointmentSlotSession3 };
             
@@ -213,7 +218,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                Channel = Channel.Unknown
             };
             
             var slot2 = new Slot
@@ -223,7 +229,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                Channel = Channel.Unknown
             };
 
             var slot3 = new Slot
@@ -233,7 +240,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = string.Empty
+                Type = string.Empty,
+                Channel = Channel.Unknown
             };
 
             var expectedResponse = new[]{ slot1, slot2, slot3 };
@@ -246,13 +254,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointmentSlotSession1 =
-                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
 
             var appointmentSlotSession2 =
-                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
 
             var appointmentSlotSession3 =
-                CreateAppointmentsSlotSession(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null);
+                CreateAppointmentsSlotSession(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null,"Unknown");
 
             var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2, appointmentSlotSession3 };
 
@@ -303,13 +311,39 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
+        
+        [TestMethod]
+        public void Map_ReturnsChannelObtainedFromEmisEnumMapper()
+        {
+            // Arrange
+            var inputSlotTypeStatus = _fixture.Create<string>();
+            var slotSessions = new[] { CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency",inputSlotTypeStatus) };
+            var location = CreateLocation(23, "Leeds");
+            var sessionHolder = CreateSessionHolder(55, "Dr House");
+            var session = CreateSession(new[] { sessionHolder.ClinicianId }, location.LocationId, 9, "Unknown", "GP Session");
+            var locations = new[] { location };
+            var sessionHolders = new[] { sessionHolder };
+            var sessions = new[] { session };
+
+            var outputChannel = _fixture.Create<Channel>();
+
+            _mockEmisEnumMapper.Setup(x => x.MapSlotTypeStatus(inputSlotTypeStatus, Channel.Unknown))
+                .Returns(outputChannel);
+            
+            // Act
+            var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
+
+            // Assert
+            actualResponse.Single().Channel.Should().Be(outputChannel);
+        }
+      
 
         [TestMethod]
         public void Map_ReturnsNoClinicians_WhenNoneMatched()
         {
             // Arrange
             var appointmentSlotSession1 =
-                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
 
             var slotSessions = new[] { appointmentSlotSession1 };
 
@@ -346,10 +380,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             // Arrange
 
             var appointmentSlotSession1 =
-                CreateAppointmentsSlotSession(900, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(900, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
 
             var appointmentSlotSession2 =
-                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null);
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null,"Unknown");
 
             var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2 };
 
@@ -386,16 +420,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var expectedResponse = new[] { slot1, slot2};
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
-        }
-
-        private static AppointmentSlotSession CreateAppointmentsSlotSession(int slotId, int sessionId, string startTime, string endTime, string slotTypeName)
+        }      
+        
+        private static AppointmentSlotSession CreateAppointmentsSlotSession(int slotId, int sessionId, string startTime, string endTime, string slotTypeName, string slotTypeStatus)
         {
             var appointmentSlot = new AppointmentSlot()
             {
                 SlotId = slotId,
                 EndTime = endTime,
                 StartTime = startTime,
-                SlotTypeName = slotTypeName
+                SlotTypeName = slotTypeName,
+                SlotTypeStatus = slotTypeStatus
             };
             
             var appointmentSlotSession = new AppointmentSlotSession()

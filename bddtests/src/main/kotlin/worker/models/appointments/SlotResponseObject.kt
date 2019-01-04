@@ -7,5 +7,6 @@ data class SlotResponseObject(
         var startTime: String,
         var endTime: String,
         var location: String,
-        var clinicians: Array<String?>
+        var clinicians: Array<String?>,
+        var channel: Int? = 0
 )

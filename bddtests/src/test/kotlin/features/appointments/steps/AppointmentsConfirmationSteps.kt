@@ -33,13 +33,24 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkValidationErrorMessage() {
-        val message = appointmentsConfirmation.inLineError.element.text
+        val message = appointmentsConfirmation.reasonError.element.text
         assertEquals("Enter a reason for this appointment", message)
+    }
+
+    @Step
+    fun checkTelephoneNumberRequiredErrorMessage() {
+        val message = appointmentsConfirmation.telephoneError.element.text
+        assertEquals("Enter a telephone number", message)
     }
 
     @Step
     fun describeSymptoms(symptoms: String) {
         appointmentsConfirmation.describeSymptoms(symptoms)
+    }
+
+    @Step
+    fun describeTelephoneNumber(telephoneNumber: String) {
+        appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
     }
 
     @Step

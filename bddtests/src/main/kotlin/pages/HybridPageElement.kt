@@ -93,6 +93,11 @@ open class HybridPageElement(
         return this
     }
 
+    fun assertDoesElementHaveFocus(): HybridPageElement {
+        Assert.assertTrue("Expected $helpfulNameToUse to be visible", element.hasFocus())
+        return this
+    }
+
     fun assertIsNotVisible(): HybridPageElement {
         Assert.assertFalse("Expected $helpfulNameToUse to not be visible", element.isVisible)
         return this

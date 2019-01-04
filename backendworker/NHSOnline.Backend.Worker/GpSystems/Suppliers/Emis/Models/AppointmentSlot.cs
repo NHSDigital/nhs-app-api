@@ -6,5 +6,6 @@
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public string SlotTypeName { get; set; }
+        public string SlotTypeStatus { get; set; }
     }
 }

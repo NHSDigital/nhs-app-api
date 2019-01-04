@@ -30,7 +30,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         private IAppointmentSlotsResponseMapper _sut;
         private EmisUserSession _userSession;
 
-
         [TestInitialize]
         public void TestInitialize()
         {
@@ -51,8 +50,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 OdsCode = "TestOds",
                 AppointmentBookingReasonNecessity = Necessity.Optional
             };
+            
+            var enumLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
 
-            _sut = new AppointmentSlotsResponseMapper(new AppointmentSlotsMapper(_dateTimeOffsetProvider, slotsMapperLogger));
+            _sut = new AppointmentSlotsResponseMapper(new AppointmentSlotsMapper(_dateTimeOffsetProvider, slotsMapperLogger,_fixture.Create<EmisEnumMapper>()));
         }
         
         [TestMethod]
@@ -142,7 +143,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
 
             var appointmentSlotSession =
-                CreateAppointmentsSlotSession(1, 2, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(1, 2, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
 
             var slotsResponse = new AppointmentSlotsGetResponse
             {
@@ -181,7 +182,7 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
 };
 
             var appointmentSlotSession =
-                CreateAppointmentsSlotSession(1, 2, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(1, 2, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
 
             var slotsResponse = new AppointmentSlotsGetResponse
             {
@@ -222,14 +223,14 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
             };
 
             var appointmentSlotSession =
-                CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
 
             var slotsResponse = new AppointmentSlotsGetResponse
             {
                 Sessions = new[] { appointmentSlotSession }
             };
 
-            var practiceSettigsResponse = new PracticeSettingsGetResponse
+            var practiceSettingsResponse = new PracticeSettingsGetResponse
             {
                 Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not book appointments if you have a sore throat." }
             };
@@ -252,7 +253,7 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _userSession);
+            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettingsResponse, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -278,7 +279,7 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
             };
 
             var appointmentSlotSession =
-                CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
 
             var slotsResponse = new AppointmentSlotsGetResponse
             {
@@ -314,14 +315,15 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
-        private static AppointmentSlotSession CreateAppointmentsSlotSession(int slotId, int sessionId, string startTime, string endTime, string slotTypeName)
+        private static AppointmentSlotSession CreateAppointmentsSlotSession(int slotId, int sessionId, string startTime, string endTime, string slotTypeName, string slotTypeStatus)
         {
             var appointmentSlot = new AppointmentSlot
             {
                 SlotId = slotId,
                 EndTime = endTime,
                 StartTime = startTime,
-                SlotTypeName = slotTypeName
+                SlotTypeName = slotTypeName,
+                SlotTypeStatus = slotTypeStatus
             };
             
             var appointmentSlotSession = new AppointmentSlotSession

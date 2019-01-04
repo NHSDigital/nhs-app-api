@@ -3,6 +3,7 @@ package mocking.stubs.appointments
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.StaffDetailsFacade
+import models.Channel
 import java.util.*
 
 class AppointmentSessionFacadeBuilder {
@@ -80,6 +81,7 @@ class AppointmentSlotFacadeBuilder {
     private var endDate: String = ""
     private var slotTypeName: String = "Slot"
     private var slotInThePast: Boolean = false
+    private var channel: Channel = Channel.Unknown
 
     fun slotId(value: Int): AppointmentSlotFacadeBuilder {
         slotId = value
@@ -106,13 +108,20 @@ class AppointmentSlotFacadeBuilder {
         return this
     }
 
+    fun channel(value: Channel): AppointmentSlotFacadeBuilder {
+        channel = value
+        return this
+    }
+
     fun build(): AppointmentSlotFacade {
         return AppointmentSlotFacade(
                 slotId = slotId,
                 startTime = startDate,
                 endTime = endDate,
                 slotTypeName = slotTypeName,
-                slotInThePast = slotInThePast
+                slotInThePast = slotInThePast,
+                channel = channel
+
         )
     }
 }

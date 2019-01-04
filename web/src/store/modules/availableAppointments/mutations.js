@@ -65,6 +65,7 @@ export default {
     state.slots = result.slots;
     state.filtersOptions = result.filtersOptions;
     state.selectedOptions.location = result.defaultLocationSelectedOption;
+    state.telephoneNumber = data.telephoneNumber;
   },
   [FILTER](state) {
     const mutation = new FilterMutation(DateProvider, new DateFilterMapper(DateProvider));

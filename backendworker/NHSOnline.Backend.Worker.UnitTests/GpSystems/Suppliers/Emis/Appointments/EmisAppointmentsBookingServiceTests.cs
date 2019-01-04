@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using Castle.Core.Internal;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -23,6 +24,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
     {
         private const string BookingReason = "I caught a cold!";
         private const string SlotId = "2862517";
+        private const string TelephoneNumber = "07123456789";
 
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
@@ -52,6 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             {
                 BookingReason = BookingReason,
                 SlotId = SlotId,
+                TelephoneNumber = TelephoneNumber
             };
         }
 
@@ -111,7 +114,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
-        
+                
         [TestMethod]
         public async Task Book_WhenNotFoundAppointmentException_ReturnsSlotNotAvailable()
         {
@@ -344,6 +347,49 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
         }
+        
+        [TestMethod]
+        public async Task Book_WhenTelephoneNumberRequiredButNotProvided_ReturnsBadRequestResponse()
+        {
+            var errorResponse = _fixture.Create<StandardErrorResponse>();
+            errorResponse.InternalResponseCode = (int) EmisApiErrorCode.RequiredFieldValueMissing;
+
+            //Arrange
+            
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                    .BadRequest)
+                { StandardErrorResponse = errorResponse };
+
+            MockEmisClientAppointmentPostMethod(response);
+
+            // Act
+            var result = await _systemUnderTest.Book(_userSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
+        }
+        
+        [TestMethod]
+        public async Task Book_WhenTelephoneNumberRequiredException_ReturnsBadRequestResponse()
+        {
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
+            errorResponse.Exceptions.First().Message = $"{EmisApiErrorMessages.EmisService_TelephoneNumberRequired}";
+
+            //Arrange
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                    .BadRequest)
+                { ExceptionErrorResponse = errorResponse };
+
+            MockEmisClientAppointmentPostMethod(response);
+
+            // Act            
+            var result = await _systemUnderTest.Book(_userSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
+        }        
 
         private void MockEmisClientAppointmentPostMethod(EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse> response)
         {
@@ -353,6 +399,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                         && p.SessionId.Equals(_emisUserSession.SessionId, StringComparison.Ordinal)),
                     It.Is<BookAppointmentSlotPostRequest>(p =>
                         p.BookingReason.Equals(BookingReason, StringComparison.Ordinal)
+                        && p.TelephoneNumber.Equals(TelephoneNumber, StringComparison.Ordinal)
                         && p.SlotId == Convert.ToInt64(SlotId, CultureInfo.InvariantCulture)
                         && p.UserPatientLinkToken.Equals(_emisUserSession.UserPatientLinkToken, StringComparison.Ordinal)
                     )
@@ -362,6 +409,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                     response
                 )
             ).Verifiable();    
-        }
+        }  
+       
     }
 }

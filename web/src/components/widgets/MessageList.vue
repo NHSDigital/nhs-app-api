@@ -28,6 +28,9 @@ export default {
   &.error {
     li {
       color: $error;
+      p {
+        color: $error;
+      }
     }
   }
 }

@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         private AppointmentBookResult InterpretAppointmentsPostResponse(
             EmisClient.EmisApiResponse response)
-        {
+        {   
             if (response.HasSuccessResponse)
             {
                 return new AppointmentBookResult.SuccessfullyBooked();
@@ -68,6 +68,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 return new AppointmentBookResult.AppointmentLimitReached();
             }
+            
+            if (TelephoneNumberIsBlank(response))
+            {
+                return new AppointmentBookResult.BadRequest();
+            }
 
             if (response.HasForbiddenResponse())
             {
@@ -79,6 +84,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
             return new AppointmentBookResult.SupplierSystemUnavailable();
+        }
+
+        private bool TelephoneNumberIsBlank(EmisClient.EmisApiResponse response)
+        {
+            var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
+                            EmisApiErrorCode.RequiredFieldValueMissing)
+                        || response.HasExceptionWithMessage(EmisApiErrorMessages.EmisService_TelephoneNumberRequired);
+            if (check)
+            {
+                _logger.LogError("Telephone number is blank.");
+                _logger.LogEmisErrorResponse(response);
+            }
+            return check;
         }
 
         private bool SlotIsNotAvailableForBooking(EmisClient.EmisApiResponse response)

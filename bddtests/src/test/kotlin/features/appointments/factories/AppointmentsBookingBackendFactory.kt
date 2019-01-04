@@ -18,9 +18,22 @@ abstract class AppointmentsBookingBackendFactory(gpSupplier:String): Appointment
         setAppointmentToBeBooked(request)
     }
 
+    fun telephoneAppointmentBookingSetupWithResult(
+                        bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping, telephoneNumber: String) {
+
+        val request = telephoneAppointmentRequest(patient, telephoneNumber = telephoneNumber)
+        appointmentMapper.requestMapping { bookAppointmentsBuilder(bookAppointmentSlotRequest(patient, request)) }
+    }
+
     abstract fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int? = null,
                                            bookingReason: String? = null): BookAppointmentSlotFacade
+
+    abstract fun telephoneAppointmentRequest(patient: Patient,
+                                           slotId: Int? = null,
+                                           bookingReason: String? = null,
+                                           telephoneNumber: String? = null,
+                                           telephoneContactType: String? = null): BookAppointmentSlotFacade
 
 
 
@@ -35,7 +48,7 @@ abstract class AppointmentsBookingBackendFactory(gpSupplier:String): Appointment
 
 
     private fun setAppointmentToBeBooked(toBeBooked: BookAppointmentSlotFacade) {
-        Serenity.setSessionVariable(appointmentToBookKey).to(getAppointmentBookRequest(toBeBooked))
+            Serenity.setSessionVariable(appointmentToBookKey).to(getAppointmentBookRequest(toBeBooked))
     }
 
     private fun getAppointmentBookRequest(bookApptSlot: BookAppointmentSlotFacade): AppointmentBookRequest {
@@ -60,5 +73,7 @@ abstract class AppointmentsBookingBackendFactory(gpSupplier:String): Appointment
         const val appointmentToBookKey = "AppointmentToBook"
         const val defaultApptBookingReason = "I have a bad back."
         const val defaultApptBookingSlotId = 12345
+        const val defaultTelephoneNumber = "12345678"
+        const val defaultTelephoneContactType = "Other"
     }
 }

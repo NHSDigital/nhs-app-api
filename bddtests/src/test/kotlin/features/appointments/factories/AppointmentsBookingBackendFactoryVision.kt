@@ -15,4 +15,14 @@ class AppointmentsBookingBackendFactoryVision : AppointmentsBookingBackendFactor
                 bookingReason ?: defaultApptBookingReason
         )
     }
+
+    override fun telephoneAppointmentRequest(patient: Patient,
+                                             slotId: Int?,
+                                             bookingReason: String?,
+                                             telephoneNumber: String?,
+                                             telephoneContactType: String?): BookAppointmentSlotFacade {
+
+        throw NotImplementedError("Telephone appointment not available")
+
+    }
 }

@@ -11,5 +11,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         public string Location { get; set; }
         public IEnumerable<string> Clinicians { get; set; }
         public string Type { get; set; }
+        public Channel Channel { get; set; } = Channel.Unknown;
     }
 }

@@ -20,11 +20,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentSlotsMapper> _logger;
         private const string SessionTypeSeparator = " - ";
-
-        public AppointmentSlotsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<AppointmentSlotsMapper> logger)
+        private readonly IEmisEnumMapper _emisEnumMapper;
+        
+        public AppointmentSlotsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<AppointmentSlotsMapper> logger, IEmisEnumMapper emisEnumMapper)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _logger = logger;
+            _emisEnumMapper = emisEnumMapper;
         }
 
         public IEnumerable<Slot> Map(
@@ -57,6 +59,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                     var endTime = ParseSlotTime(sourceSlot.EndTime, "End");
                     
                     var sessionId = sourceSlotSession.SessionId;
+                    
                     var slot = new Slot
                     {
                         Id = sourceSlot.SlotId.ToString(CultureInfo.InvariantCulture),
@@ -64,7 +67,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                         EndTime = endTime,
                         Clinicians = FindCliniciansForSession(sessionId, keyedSessions, sessionHolders),
                         Location = FindLocationForSession(sessionId, keyedSessions, locations),
-                        Type = CreateTypeFromSlotAndSession(sourceSlot, FindSession(sessionId, keyedSessions))
+                        Type = CreateTypeFromSlotAndSession(sourceSlot, FindSession(sessionId, keyedSessions)), 
+                        Channel = _emisEnumMapper.MapSlotTypeStatus(sourceSlot.SlotTypeStatus, Channel.Unknown)             
                     };
 
                     yield return slot;

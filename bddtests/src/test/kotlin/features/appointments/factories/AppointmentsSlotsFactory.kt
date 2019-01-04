@@ -27,6 +27,14 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         generateExample(retrieveSlotsExample(), startDate, endDate, guidanceMessage, reasonNecessity)
     }
 
+    fun generateAvailableSlotExampleIncludingTelephoneAppointment(startDate: ZonedDateTime? = null,
+                                                       endDate: ZonedDateTime? = null,
+                                                       guidanceMessage: Boolean = true,
+                                                       reasonNecessity: NecessityOption = NecessityOption.MANDATORY) {
+        generateExample(retrieveSlotsExampleIncludingTelephoneAppointments(),
+                            startDate, endDate, guidanceMessage, reasonNecessity)
+    }
+
     fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage() {
         val example = retrieveSlotsExample()
         generateAppointmentSlotResponseWithoutGuidance(defaultStartDate(), defaultEndDate()) {
@@ -78,6 +86,12 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     private fun retrieveSlotsExample(): AppointmentSlotsResponseFacade {
         val example = AppointmentsSlotsExample.getGenericExample()
+        storeUIDateAndTimeOfSlotToSelect()
+        return example
+    }
+
+    private fun retrieveSlotsExampleIncludingTelephoneAppointments(): AppointmentSlotsResponseFacade {
+        val example = AppointmentsSlotsExample.slotExampleIncludingTelephoneAppointments()
         storeUIDateAndTimeOfSlotToSelect()
         return example
     }

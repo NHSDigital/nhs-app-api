@@ -4,6 +4,9 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsBookingBackendFactory
+import features.appointments.factories.AppointmentsBookingBackendFactory.Companion.defaultApptBookingReason
+import features.appointments.factories.AppointmentsBookingBackendFactory.Companion.defaultTelephoneContactType
+import features.appointments.factories.AppointmentsBookingBackendFactory.Companion.defaultTelephoneNumber
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import net.serenitybdd.core.Serenity
@@ -110,12 +113,38 @@ open class AppointmentsBookingStepDefinitionsBackend {
                 .defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)
     }
 
+    private fun telephoneAppointmentBookingSetupWithResult(
+            gpSystem: String,
+            telephoneNumber: String,
+            bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
+        AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+                .telephoneAppointmentBookingSetupWithResult(bookAppointmentsBuilder, telephoneNumber)
+    }
+
+    @When("^an appointment booking is submitted with phone number$")
+    fun anAppointmentBookingIsSubmittedWithPhoneNumber() {
+        val appointmentBookRequest = AppointmentBookRequest(
+                slotId = AppointmentsBookingBackendFactory.defaultApptBookingSlotId.toString(),
+                bookingReason = AppointmentsBookingBackendFactory.defaultApptBookingReason,
+                telephoneNumber = AppointmentsBookingBackendFactory.defaultTelephoneNumber,
+                telephoneContactType = AppointmentsBookingBackendFactory.defaultTelephoneContactType)
+        submitAppointmentRequest(appointmentBookRequest)
+    }
+
+    @When("^an appointment booking is submitted without phone number$")
+    fun anAppointmentBookingIsSubmittedWithoutPhoneNumber() {
+        val appointmentBookRequest = AppointmentBookRequest(
+                slotId = AppointmentsBookingBackendFactory.defaultApptBookingSlotId.toString(),
+                bookingReason = AppointmentsBookingBackendFactory.defaultApptBookingReason)
+        submitAppointmentRequest(appointmentBookRequest)
+    }
+
     @When("^an appointment booking is submitted$")
     fun anAppointmentBookingIsSubmitted() {
         val appointmentToBook =
                 Serenity.sessionVariableCalled<AppointmentBookRequest>(AppointmentsBookingBackendFactory
                         .appointmentToBookKey)
-        submitAppointmentRequest(appointmentToBook)
+submitAppointmentRequest(appointmentToBook)
     }
 
     @When("^an appointment booking is submitted with no slot identifier$")
@@ -164,6 +193,18 @@ open class AppointmentsBookingStepDefinitionsBackend {
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)
         }
+    }
+
+    @Given("^a telephone appointment booking for (.*) can be successful$")
+    fun aTelephoneAppointmentBookingForCanBeSuccessful(gpSystem: String) {
+        telephoneAppointmentBookingSetupWithResult(gpSystem, defaultTelephoneNumber) {
+                            builder -> builder.respondWithSuccess() }
+    }
+
+    @Given("^a telephone appointment booking for (.*) cannot be successful without phone number$")
+    fun aTelephoneAppointmentBookingForCannotBeSuccessfulWithoutPhoneNumber(gpSystem: String) {
+        telephoneAppointmentBookingSetupWithResult(gpSystem, "") {
+                            builder -> builder.respondWithExceptionWhenRequiredFieldMissing() }
     }
 
     @Then("^a successful response for appointment booking is returned$")

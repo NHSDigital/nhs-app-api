@@ -25,7 +25,7 @@
                             ref="search"
                             :type="'text'"
                             :a-labelled-by="'search-label'"
-                            input-name="searchQuery"
+                            name="searchQuery"
                             maxlength="150"/>
         <generic-button :class="[$style.button, $style.green]" :type="'submit'">
           {{ $t('th02.callToAction') }}

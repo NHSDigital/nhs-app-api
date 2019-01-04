@@ -27,7 +27,6 @@
                             :type="'text'"
                             :a-labelled-by="emailInputLabelledBy"
                             name="email"
-                            input-name="email"
                             maxlength="255"
         />
         <input id="odsCode" :value="odsCode" type="hidden" name="odsCode">

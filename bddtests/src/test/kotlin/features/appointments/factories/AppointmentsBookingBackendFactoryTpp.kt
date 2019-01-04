@@ -23,4 +23,14 @@ class AppointmentsBookingBackendFactoryTpp : AppointmentsBookingBackendFactory("
                 endTime = LocalDateTime.now().plusDays(1).plusMinutes(TIME_TO_ADD_IN_MINUTES).format(dateFormatter)
         )
     }
+
+    override fun telephoneAppointmentRequest(patient: Patient,
+                                             slotId: Int?,
+                                             bookingReason: String?,
+                                             telephoneNumber: String?,
+                                             telephoneContactType: String?): BookAppointmentSlotFacade {
+
+        throw NotImplementedError("Telephone appointment not available")
+
+    }
 }

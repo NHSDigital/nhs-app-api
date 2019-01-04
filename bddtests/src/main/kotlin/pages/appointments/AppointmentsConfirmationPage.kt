@@ -25,7 +25,13 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     )
 
     val symptomsFormDiv = HybridPageElement(
-            browserLocator = "//div[@role='form']",
+            browserLocator = "//*[@id='reasonText']",
+            androidLocator = null,
+            page = this
+    )
+
+    val telephoneNumberDiv = HybridPageElement(
+            browserLocator = "//*[@id='telephoneNumberText']",
             androidLocator = null,
             page = this
     )
@@ -52,5 +58,10 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
         return findBy<WebElementFacade>(
                 "//button[contains(text()," +
                         "'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
+    }
+
+    fun describeTelephoneNumber(telephoneNumber: String) {
+        telephoneNumberDiv.element.type<WebElementFacade>(telephoneNumber)
+        hideKeyboardIfOnMobile()
     }
 }

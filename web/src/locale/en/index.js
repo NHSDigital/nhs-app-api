@@ -324,6 +324,8 @@ export default {
       },
     },
     confirmation: {
+      telephoneNumberLabel: 'Phone number for appointment',
+      telephoneNumberDescription: 'This number will only be used for this appointment. It will not be saved.',
       headerLabel: 'Reason for this appointment',
       headerLabelSuffix: ' (Optional)',
       reasonDesc: {
@@ -333,8 +335,9 @@ export default {
       },
       confirmButtonText: 'Confirm and book appointment',
       changeButtonText: 'Change this appointment',
-      noReasonDialogError: 'There\'s a problem',
+      errorDialog: 'There\'s a problem',
       noReasonError: 'Enter a reason for this appointment',
+      noPhoneNumberError: 'Enter a telephone number',
       conflictErrorMessage: 'This slot is no longer available. Please select a different time.',
       info: 'Check your appointment details before booking',
       errors: {

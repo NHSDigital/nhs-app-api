@@ -19,11 +19,18 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
     private val appointmentLocationXpath = "[@data-label='location']"
     private val appointmentCliniciansXPath = "[contains(@data-label, 'clinician')]"
 
-    val inLineError = HybridPageElement(
-            browserLocator = "//*[@id='error-label']//*[@data-purpose='error']",
+    val reasonError = HybridPageElement(
+            browserLocator = "//*[@data-purpose='reason-error']",
             androidLocator = null,
             page = this,
-            helpfulName = "Inline Error"
+            helpfulName = "Reason Error"
+    )
+
+    val telephoneError = HybridPageElement(
+            browserLocator = "//*[@data-purpose='telephone-error']",
+            androidLocator = null,
+            page = this,
+            helpfulName = "Telephone Error"
     )
 
     val selectedAppointmentDate = HybridPageElement(

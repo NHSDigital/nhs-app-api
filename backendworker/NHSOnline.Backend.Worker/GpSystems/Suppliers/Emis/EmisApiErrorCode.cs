@@ -3,6 +3,7 @@
     public enum EmisApiErrorCode
     {
         None = 0,
+        RequiredFieldValueMissing = -1014,
         FieldValueOutOfRange = -1017,
         ApiCommandNotPermitted = -1030,
         NoRegisteredOnlineUserFound = -1104,
@@ -12,7 +13,6 @@
         OnlineUserMaxAppointmentBookCount = -1156,
         PracticeNotLive = -1401,
         PatientMarkedAsArchived = -1552,
-        PatientNonCompetentOrUnderMinimumAge = -1553,
-        
+        PatientNonCompetentOrUnderMinimumAge = -1553   
     }
 }

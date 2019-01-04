@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using System;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 {
@@ -89,5 +91,35 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             //Assert
             result.Should().Be(expected);
         }
+        
+        [DataTestMethod]
+        [DataRow("Unknown", Channel.Unknown)]
+        [DataRow("Practice", Channel.Unknown)]
+        [DataRow("Telephone", Channel.Telephone)]
+        [DataRow("Visit", Channel.Unknown)]
+        [DataRow("Video", Channel.Unknown)]
+        public void MapSlotTypeStatus_KeyIsMapped_ReturnsEnum(string key, Channel expected)
+        {
+            //Act
+            var result = _sut.MapSlotTypeStatus(key, null);
+
+            //Assert
+            result.Should().Be(expected);
+        }
+
+        [DataTestMethod]
+        [DataRow("unknown", Channel.Unknown)]
+        [DataRow("practice", Channel.Unknown)]
+        [DataRow("telephone", Channel.Telephone)]
+        [DataRow("visit", Channel.Unknown)]
+        [DataRow("video", Channel.Unknown)]
+        public void MapSlotTypeStatus_KeyIsMappedIgnoringCase_ReturnsEnum(string key, Channel expected)
+        {
+            //Act
+            var result = _sut.MapSlotTypeStatus(key, null);
+
+            //Assert
+            result.Should().Be(expected);
+        }        
     }
 }

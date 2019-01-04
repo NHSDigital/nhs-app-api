@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,9 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Support.Temporal;
+using Slot = NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Slot;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
 {
@@ -86,7 +87,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                Channel = Channel.Unknown
             };
 
             var slot2 = new Worker.Areas.Appointments.Models.Slot
@@ -96,7 +98,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                Channel = Channel.Unknown
             };
 
             var slot3 = new Worker.Areas.Appointments.Models.Slot
@@ -106,7 +109,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = string.Empty
+                Type = string.Empty,
+                Channel = Channel.Unknown
             };
 
             var expectedResponse = new[] { slot1, slot2, slot3 };

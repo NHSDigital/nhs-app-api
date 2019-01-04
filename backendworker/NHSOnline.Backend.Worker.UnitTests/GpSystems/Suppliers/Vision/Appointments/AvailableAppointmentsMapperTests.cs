@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.Support.Temporal;
@@ -122,7 +123,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     Location = "Leeds",
                     StartTime = slotTime1.Start, 
                     EndTime = slotTime1.End,
-                    Clinicians = new []{ "Owner1" }
+                    Clinicians = new []{ "Owner1" },
+                    Channel = Channel.Unknown
                 },
                 new Worker.Areas.Appointments.Models.Slot
                 {
@@ -131,7 +133,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     Location = "London",
                     StartTime = slotTime2.Start,
                     EndTime = slotTime2.End,
-                    Clinicians = new []{ "Owner2" }
+                    Clinicians = new []{ "Owner2" },
+                    Channel = Channel.Unknown
                 }
             };
 

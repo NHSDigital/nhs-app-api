@@ -6,9 +6,11 @@
            :id="id"
            :aria-labelledby="aLabelledBy"
            :maxlength="maxlength"
-           :name="inputName"
+           :required="required"
+           :name="name"
            v-model="textValue"
            :type="type"
+           :pattern="pattern"
            autocomplete="off"
            autocorrect="off"
            autocapitalize="off"
@@ -26,9 +28,9 @@ export default {
   },
   mixins: [TabFocusMixin.tabMixin],
   props: {
-    inputName: {
+    name: {
       type: String,
-      required: true,
+      default: undefined,
     },
     maxlength: {
       type: String,
@@ -50,7 +52,15 @@ export default {
       type: String,
       default: 'text',
     },
+    required: {
+      type: Boolean,
+      default: false,
+    },
     initialContents: {
+      type: String,
+      default: undefined,
+    },
+    pattern: {
       type: String,
       default: undefined,
     },
@@ -67,7 +77,7 @@ export default {
       },
     },
   },
-  mounted() {
+  created() {
     this.model = this.initialContents;
   },
   methods: {

@@ -153,4 +153,7 @@
   <data name="EmisService_BookedAppointmentLimit" xml:space="preserve">
     <value>Maximum booked appointments is limited</value>
   </data>
+  <data name="EmisService_TelephoneNumberRequired" xml:space="preserve">
+    <value>Telephone/mobile number required for telephone appointments</value>
+  </data>  
 </root>

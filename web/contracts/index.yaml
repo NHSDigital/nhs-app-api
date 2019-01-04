@@ -59,6 +59,12 @@
                         description: "Array of Clinicians, accounts for joint sessions."
                         items: 
                           type: "string"
+                      channel: 
+                        type: "string"
+                        enum: 
+                          - "Unknown"
+                          - "Telephone"
+                        description: "Indicates slot channel type supplied by GP practice"
           401: 
             description: "User session has expired."
           403: 
@@ -235,6 +241,9 @@
                   type: "string"
                   format: "date-time"
                   description: "Appointment End Date Time."
+                telephoneNumber: 
+                  type: "string"
+                  description: "Patient's phone number for telephone appointment."
         responses: 
           201: 
             description: "Appointment successfully created."

@@ -85,6 +85,11 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
         return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
+    override fun respondWithExceptionWhenRequiredFieldMissing(): Mapping {
+        val errorResponse = ErrorResponse(ErrorResponseCodeEmis.REQUIRED_FIELD_VALUE_MISSING.toInt())
+        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
+    }
+
     private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_CREATED): Mapping {
         return respondWith(statusCode) {
             andJsonBody(body, GsonBuilder()

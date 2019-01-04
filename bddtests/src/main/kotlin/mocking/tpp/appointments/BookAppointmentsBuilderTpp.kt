@@ -84,4 +84,8 @@ class BookAppointmentsBuilderTpp(patient: Patient, request: BookAppointmentSlotF
         val error = Error(ErrorResponseCodeTpp.START_DATE_IN_PAST, errorText, TppConfig.uuid)
         return respondWith(error)
     }
+
+    override fun respondWithExceptionWhenRequiredFieldMissing(): Mapping {
+        throw NotImplementedError("Not implemented for this GP system")
+    }
 }

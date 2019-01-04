@@ -14,5 +14,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         public string BookingReason { get; set; }
         public DateTimeOffset? StartTime { get; set; }
         public DateTimeOffset? EndTime { get; set; }
+        public string TelephoneNumber { get; set; }
     }
 }

@@ -32,7 +32,7 @@ Feature: Ability to cancel an appointment
     And I am presented with the appointment details
     And cancellation reasons drop-down is hidden
 
-  Scenario Outline: A validation message will be displayed if no reason is selected
+  Scenario Outline: A <GP System> user is presented with a validation message if no reason is selected
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in as a <GP System> user
     And I am on the My Appointments page
@@ -43,8 +43,8 @@ Feature: Ability to cancel an appointment
       | GP System |
       | EMIS      |
       | VISION    |
-
-  Scenario:  A validation message will be displayed if no reason is selected, even when there is just one
+    
+  Scenario:  A VISION user is presented with a validation message if no reason is selected, even when there is just one
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
     And I am logged in as a VISION user
     And I am on the My Appointments page

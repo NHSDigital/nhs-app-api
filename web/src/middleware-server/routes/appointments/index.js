@@ -25,7 +25,13 @@ export default (apiFn) => {
   router.post('/appointments/book', async (req, res) => {
     const api = initialiseApi({ apiFn, req, res });
 
-    const { successMessageKey, bookingReason, csrfToken, endTime, slotId, startTime }
+    const { successMessageKey,
+      bookingReason,
+      csrfToken,
+      endTime,
+      slotId,
+      startTime,
+      telephoneNumberField }
       = get('body')(req) || {};
 
     const appointmentBookRequest = {
@@ -33,6 +39,7 @@ export default (apiFn) => {
       EndTime: endTime,
       SlotId: slotId,
       StartTime: startTime,
+      TelephoneNumber: telephoneNumberField,
     };
 
     await api.postV1PatientAppointments({

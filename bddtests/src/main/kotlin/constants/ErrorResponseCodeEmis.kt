@@ -4,6 +4,7 @@ object ErrorResponseCodeEmis {
     const val UNKNOWN_EXCEPTION: Long = -9999
     const val INTERNAL_ERROR: Long = -1002
     const val SERVICE_ACCESS_VIOLATION: Long = -1030
+    const val REQUIRED_FIELD_VALUE_MISSING = -1014
     const val NOT_AVAILABLE: Long = -1151
     const val NO_REGISTERED_ONLINE_USER_FOUND: Long = -1104
     const val ACCOUNT_STATUS_INVALID: Long = -1107

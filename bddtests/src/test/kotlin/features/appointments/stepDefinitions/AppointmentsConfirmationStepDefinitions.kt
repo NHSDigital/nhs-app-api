@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsBookingFactory.Companion.SymptomsToEnter
+import features.appointments.factories.AppointmentsBookingFactory.Companion.TelephoneNumberToEnter
 import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentDateKey
 import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentTimeKey
 import features.appointments.steps.AppointmentsConfirmationSteps
@@ -98,6 +99,51 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^a message is displayed indicating that user has reached maximum appointment limit$")
     fun aMessageIsDisplayedInformingTheAppointmentLimitReached() {
         appointmentsConfirmationSteps.verifyThatAppointmentLimitReachedErrorDisplayed()
+    }
+
+    @Then("^I do not see a text input to enter phone number$")
+    fun iDoNotSeeTextInputToEnterPhoneNumber() {
+        appointmentsConfirmationSteps.appointmentsConfirmation.telephoneNumberDiv.assertElementNotPresent()
+    }
+
+    @Given("^I have selected a telephone appointment slot to book$")
+    fun givenIHaveSelectedATelephoneAppointmentSlotToBook() {
+
+        availableAppointmentsFilterSteps.selectOptionsToRevealSlots()
+
+        val date = sessionVariableCalled<String>(TargetAppointmentDateKey)
+        val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
+
+        availableAppointmentsSteps.availableAppointmentsPage.selectSlot(date, time)
+    }
+
+    @Then("^I see a text input to enter phone number$")
+    fun iSeeATextInputToEnterPhoneNumber() {
+        appointmentsConfirmationSteps.appointmentsConfirmation.telephoneNumberDiv.assertSingleElementPresent()
+    }
+
+    @Then("^the focus will go back to empty phone number input box$")
+    fun theFocusWillGoBackToEmptyPhoneNumberInputbox() {
+        appointmentsConfirmationSteps.appointmentsConfirmation.telephoneNumberDiv.assertDoesElementHaveFocus()
+    }
+
+    @When("^I enter a phone number for the appointment$")
+    fun whenIEnterAPhoneNumberForTheAppointment() {
+        val telephoneNumber = Serenity.sessionVariableCalled<String>(TelephoneNumberToEnter)
+        Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
+        appointmentsConfirmationSteps.describeTelephoneNumber(telephoneNumber)
+    }
+
+    @When("^I enter whitespace instead of a phone number for the appointment$")
+    fun whenIEnterWhitespaceInsteadOfAPhoneNumberForTheAppointment() {
+        val telephoneNumber = "  "
+        Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
+        appointmentsConfirmationSteps.describeTelephoneNumber(telephoneNumber)
+    }
+
+    @Then("^a message is displayed indicating a phone number is required$")
+    fun thenAMessageIsDisplayedIndicatingAPhoneNumberIsRequired() {
+        appointmentsConfirmationSteps.checkTelephoneNumberRequiredErrorMessage()
     }
 
     private fun getSymptomsOfLength(length: Int): String {

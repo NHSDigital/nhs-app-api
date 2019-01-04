@@ -6,5 +6,6 @@ data class Slot(
         var session: String = "",
         var location: String = "",
         var clinicians: Set<String> = HashSet(),
-        var id: Int? = null
+        var id: Int? = null,
+        var channel: String = ""
 )

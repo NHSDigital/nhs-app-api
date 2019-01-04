@@ -26,6 +26,17 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         factory.generateMultipleAvailableAppointmentSlotsForTheSameTime()
     }
 
+    fun generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage: Boolean = true,
+                                                       reasonNecessityOption: NecessityOption =
+                                                               NecessityOption.MANDATORY,
+                                                         telephoneNumberToEnter: String="") {
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
+        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = guidanceMessage,
+                reasonNecessity = reasonNecessityOption)
+
+        setSessionVariable(TelephoneNumberToEnter).to(telephoneNumberToEnter)
+    }
+
     fun generateSuccessfulBookingResponse(bookingReason: String = "Reason") {
         generateBookingResponse(bookingReason = bookingReason) {
             bookRequest -> bookRequest
@@ -69,5 +80,6 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         }
 
         const val SymptomsToEnter = "SymptomsToEnter"
+        const val TelephoneNumberToEnter = "TelephoneNumberToEnter"
     }
 }

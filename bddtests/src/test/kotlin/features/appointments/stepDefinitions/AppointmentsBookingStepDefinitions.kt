@@ -134,4 +134,29 @@ class AppointmentsBookingStepDefinitions {
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.NOT_ALLOWED)
         factory.generateSuccessfulBookingResponseEmptyReason()
     }
+
+    @Given("^there are (.*) appointments available to book which are of telephone type$")
+    fun thereAreAvailableAppointmentsToBookWhichAreOfTelephoneType(gpSystem: String) {
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        val telephoneNumberToEnter = "7777777777"
+
+        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = true,
+        reasonNecessityOption = NecessityOption.MANDATORY,
+        telephoneNumberToEnter =telephoneNumberToEnter)
+
+        factory.generateSuccessfulBookingResponse()
+    }
+
+    @Given("^there are EMIS appointments available to book which are of telephone type with " +
+            "optional booking reason$")
+    fun thereAreEMISAppointmentsAvailableToBookWhichAreOfTelephoneTypeWithOptionalBookingReason() {
+        val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
+        val telephoneNumberToEnter = "7777777777"
+
+        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = true,
+                reasonNecessityOption = NecessityOption.OPTIONAL,
+                telephoneNumberToEnter =telephoneNumberToEnter
+        )
+        factory.generateSuccessfulBookingResponse()
+    }
 }

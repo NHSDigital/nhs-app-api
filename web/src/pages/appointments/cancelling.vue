@@ -4,7 +4,7 @@
       <message-text data-purpose="error-heading">
         {{ $t('appointments.cancelling.noReasonDialogError') }}
       </message-text>
-      <message-list data-purpose="error">
+      <message-list data-purpose="reason-error">
         <li>{{ $t('appointments.cancelling.noReasonError') }}</li>
       </message-list>
     </message-dialog>
