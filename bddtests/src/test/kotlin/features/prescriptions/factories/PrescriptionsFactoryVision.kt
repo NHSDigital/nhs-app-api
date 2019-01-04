@@ -81,7 +81,6 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     }
 
     override fun coursesEndpointTimeout(patient: Patient) {
-        Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
         mockingClient
                 .forVision {
                     prescriptions.getEligibleRepeatsRequest(VisionUserSession.fromPatient(patient))
@@ -90,10 +89,9 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     }
 
     override fun coursesEndpointThrowingServerError(patient: Patient) {
-        Thread.sleep(TIME_TO_SLEEP_IN_MILLIS)
         mockingClient
                 .forVision {
-                    prescriptions.getPrescriptionHistoryRequest(VisionUserSession.fromPatient(patient))
+                    prescriptions.getEligibleRepeatsRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
     }
