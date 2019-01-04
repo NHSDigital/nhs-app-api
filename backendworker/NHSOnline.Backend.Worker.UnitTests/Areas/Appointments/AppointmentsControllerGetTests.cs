@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -93,7 +94,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             value.Should().BeEquivalentTo(appointmentsResponse);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Booked appointments successfully viewed"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Booked appointments successfully viewed - {appointmentsResponse.Appointments.Count()} appointments"));
         }
 
         [TestMethod]
@@ -167,7 +168,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockGpSystemFactory.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Booked appointments successfully viewed"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Booked appointments successfully viewed - {_appointmentsResponse.Appointments.Count()} appointments"));
         }
     }
 }

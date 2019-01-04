@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                     await appointmentsService.GetAppointments(userSession, includePastAppointments,
                         pastAppointmentsFromDate);
 
-                result.Accept(new AppointmentsAuditingVisitor(_auditor));
+                result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));
 
                 return result.Accept(new AppointmentsResultVisitor());
             }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
 
@@ -43,6 +45,13 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             if (exception == null) return;
             logger.LogError(exception, "Exception thrown");
             logger.LogInnerException(exception);
+        }
+        
+        public static void LogInformationKeyValuePairs(this ILogger logger, string title, IDictionary<string, string> kvp)
+        {
+            var items = kvp.Select(x => $"{x.Key}={x.Value}");
+            var message = $"{title}: {string.Join(" ", items)}";
+            logger.LogInformation(message);
         }
 
         private static void LogInnerException<T>(this ILogger<T> logger, Exception exception, int level = 0)

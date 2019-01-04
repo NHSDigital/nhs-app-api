@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -73,7 +74,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Arrange
             var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
-            var appointmentSlotsServicesGetResponse = new AppointmentSlotsResponse();
+            var appointmentSlotsServicesGetResponse = _fixture.Create<AppointmentSlotsResponse>();
 
             _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(gpSystem.Object);
@@ -98,7 +99,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo(typeof(AppointmentSlotsResponse));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Available appointment slots successfully viewed"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Available appointment slots successfully viewed - {appointmentSlotsServicesGetResponse.Slots.Count()} slots"));
         }
 
         [TestMethod]
