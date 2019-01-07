@@ -13,6 +13,7 @@
 		105BB9902179C0A300571671 /* Scratch8.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB98F2179C0A300571671 /* Scratch8.xcconfig */; };
 		105BB9922179C0B100571671 /* Scratch9.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9912179C0B100571671 /* Scratch9.xcconfig */; };
 		105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9932179C0C400571671 /* Scratch10.xcconfig */; };
+		107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */ = {isa = PBXBuildFile; fileRef = 107EA7B621CCE3CC006C675B /* nativeAppAssets */; };
 		1381D46321BFFAE100B54300 /* Scratch12.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1381D46221BFFAE100B54300 /* Scratch12.xcconfig */; };
 		139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139F19262181D73300ED59A1 /* HeaderBarSlim.xib */; };
 		139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */; };
@@ -26,7 +27,6 @@
 		47D88A4621998CBD004771B5 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D88A4521998CBD004771B5 /* Configuration.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
 		9200DC9F21428562009EFFEF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200DC9E21428562009EFFEF /* Reachability.swift */; };
-		92BD011221AC07A0002B9F55 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 92BD011121AC079F002B9F55 /* assets */; };
 		981E9E32214E5FB300DA80EB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981E9E31214E5FB300DA80EB /* Config.swift */; };
 		C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578022028B94800CDBDC5 /* AppDelegate.swift */; };
 		C20578082028B94800CDBDC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C20578062028B94800CDBDC5 /* Main.storyboard */; };
@@ -79,6 +79,7 @@
 		105BB9912179C0B100571671 /* Scratch9.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch9.xcconfig; sourceTree = "<group>"; };
 		105BB9932179C0C400571671 /* Scratch10.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch10.xcconfig; sourceTree = "<group>"; };
 		105BB9A42186FA3E00571671 /* Defaults.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Defaults.xcconfig; sourceTree = "<group>"; };
+		107EA7B621CCE3CC006C675B /* nativeAppAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = nativeAppAssets; path = ../../nativeAppAssets; sourceTree = "<group>"; };
 		1381D46221BFFAE100B54300 /* Scratch12.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch12.xcconfig; sourceTree = "<group>"; };
 		139F19272181D73300ED59A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBarSlim.xib; sourceTree = "<group>"; };
 		139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarSlim.swift; sourceTree = "<group>"; };
@@ -94,7 +95,6 @@
 		5598FF712189C27100767CAC /* BrowserstackLocal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserstackLocal.xcconfig; sourceTree = "<group>"; };
 		609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime_Extensions.swift; sourceTree = "<group>"; };
 		9200DC9E21428562009EFFEF /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
-		92BD011121AC079F002B9F55 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../android/app/src/main/assets; sourceTree = "<group>"; };
 		981E9E31214E5FB300DA80EB /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		981E9E33214E8EA200DA80EB /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		981E9E34214E8F1000DA80EB /* Demo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Demo.xcconfig; sourceTree = "<group>"; };
@@ -203,10 +203,10 @@
 		C20577F62028B94800CDBDC5 = {
 			isa = PBXGroup;
 			children = (
-				92BD011121AC079F002B9F55 /* assets */,
 				C20578012028B94800CDBDC5 /* NHSOnline */,
 				C20578162028B94800CDBDC5 /* NHSOnlineTests */,
 				C20578002028B94800CDBDC5 /* Products */,
+				107EA7B621CCE3CC006C675B /* nativeAppAssets */,
 			);
 			sourceTree = "<group>";
 		};
@@ -449,6 +449,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				105BB98E2179C09200571671 /* Scratch7.xcconfig in Resources */,
+				107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */,
 				1381D46321BFFAE100B54300 /* Scratch12.xcconfig in Resources */,
 				C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */,
 				F057336920A72F040059032D /* HeaderBar.xib in Resources */,
@@ -458,7 +459,6 @@
 				105BB98C2179C08300571671 /* Scratch6.xcconfig in Resources */,
 				105BB9872179B67400571671 /* Scratch5.xcconfig in Resources */,
 				139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */,
-				92BD011221AC07A0002B9F55 /* assets in Resources */,
 				F07607F320B44C0300069F7F /* WebEvents.js in Resources */,
 				105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */,
 				105BB9902179C0A300571671 /* Scratch8.xcconfig in Resources */,

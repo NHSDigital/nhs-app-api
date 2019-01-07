@@ -5,6 +5,11 @@ apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 27
+    sourceSets {
+        main {
+            assets.srcDirs = ['../../nativeAppAssets']
+        }
+    }
     defaultConfig {
         applicationId "com.nhs.online.nhsonline"
         minSdkVersion 21
