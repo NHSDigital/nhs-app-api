@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
@@ -38,7 +40,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 throw new EmisSessionResponseErrorException(new GpSessionCreateResult.SupplierSystemUnavailable());
             }
 
-            return endUserSessionResponse.Body;
+            var responseBody = endUserSessionResponse.Body;
+
+            if (string.IsNullOrEmpty(responseBody.EndUserSessionId))
+            {
+                _logger.LogError("Gp system did not provide end user session Id");
+                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.SupplierSystemBadResponse());
+            }
+
+            return responseBody;
         }
 
         public async Task<SessionsPostResponse> SendSessionsRequest(string endUserSessionId, string accessIdentityGuid, string odsCode)
@@ -62,6 +72,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 _logger.LogEmisUnknownError(sessionsResponse);
                 _logger.LogEmisErrorResponse(sessionsResponse);
                 throw new EmisSessionResponseErrorException(new GpSessionCreateResult.SupplierSystemUnavailable());
+            }
+
+            var responseBody = sessionsResponse.Body;
+            if (!IsSessionsPostResponseValid(responseBody))
+            {
+                throw new EmisSessionResponseErrorException(new GpSessionCreateResult.SupplierSystemBadResponse());
             }
 
             return sessionsResponse.Body;
@@ -101,6 +117,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                     session.SessionId = sessionResponse.SessionId;
                     session.UserPatientLinkToken = sessionResponse.ExtractUserPatientLinkToken();  
                     patientName = FormatName(sessionResponse);
+
+                    if (string.IsNullOrWhiteSpace(patientName))
+                    {
+                        _logger.LogError("No patient name found");
+                        return new GpSessionCreateResult.SupplierSystemBadResponse();
+                    }
                 }
                 catch (EmisSessionResponseErrorException responseError)
                 {
@@ -158,6 +180,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         public Task<SessionLogoffResult> Logoff(UserSession userSession)
         {
             return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
+        }
+
+        private bool IsSessionsPostResponseValid(SessionsPostResponse sessionsPostResponse)
+        {
+            return new ValidateAndLog(_logger)
+                .IsNotNullOrWhitespace(sessionsPostResponse.SessionId, nameof(sessionsPostResponse.SessionId))
+                .IsNotNull(sessionsPostResponse.UserPatientLinks, nameof(sessionsPostResponse.UserPatientLinks))
+                .IsValid();
         }
     }
 }

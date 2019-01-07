@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
@@ -29,26 +30,32 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 
                 var response = await _visionClient.GetConfiguration(visionConnectionToken, odsCode);
 
-                if (!response.HasErrorResponse)
+                if (response.HasErrorResponse)
                 {
-                    return new GpSessionCreateResult.SuccessfullyCreated(
-                        response.Body.Configuration.Account.Name,
-                        new VisionUserSession
-                        {
-                            RosuAccountId = visionConnectionToken.RosuAccountId,
-                            OdsCode = odsCode,
-                            ApiKey = visionConnectionToken.ApiKey,
-                            NhsNumber = nhsNumber,
-                            PatientId = response.Body.Configuration.Account.PatientId,
-                            IsRepeatPrescriptionsEnabled = response.Body.Configuration.Prescriptions.RepeatEnabled,
-                            IsAppointmentsEnabled = response.Body.Configuration.Appointments.BookingEnabled,
-                            LocationIds = GetLocationIds(response)
-                        }
-                    );
+                    return GetCorrectErrorResult(response);
+                }
+
+                var responseBody = response.Body;
+                if(!IsResponseBodyValid(responseBody))
+                {
+                    return new GpSessionCreateResult.SupplierSystemBadResponse();
                 }
 
 
-                return GetCorrectErrorResult(response);
+                return new GpSessionCreateResult.SuccessfullyCreated(
+                    response.Body.Configuration.Account.Name,
+                    new VisionUserSession
+                    {
+                        RosuAccountId = visionConnectionToken.RosuAccountId,
+                        OdsCode = odsCode,
+                        ApiKey = visionConnectionToken.ApiKey,
+                        NhsNumber = nhsNumber,
+                        PatientId = response.Body.Configuration.Account.PatientId,
+                        IsRepeatPrescriptionsEnabled = response.Body.Configuration.Prescriptions.RepeatEnabled,
+                        IsAppointmentsEnabled = response.Body.Configuration.Appointments.BookingEnabled,
+                        LocationIds = GetLocationIds(response)
+                    }
+                );
             }
             catch (HttpRequestException)
             {
@@ -94,6 +101,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             }
 
             return new GpSessionCreateResult.SupplierSystemUnavailable();
+        }
+
+        private bool IsResponseBodyValid(PatientConfigurationResponse responseBody)
+        {
+            return new ValidateAndLog(_logger)
+                .IsNotNullOrWhitespace(responseBody.Configuration.Account?.Name, nameof(responseBody.Configuration.Account.Name))
+                .IsNotNullOrWhitespace(responseBody.Configuration.Account?.PatientId, nameof(responseBody.Configuration.Account.PatientId))
+                .IsNotNull(responseBody.Configuration.Prescriptions?.RepeatEnabled, nameof(responseBody.Configuration.Prescriptions.RepeatEnabled))
+                .IsNotNull(responseBody.Configuration.Appointments?.BookingEnabled, nameof(responseBody.Configuration.Appointments.BookingEnabled))
+                .IsValid();
         }
     }
 }
