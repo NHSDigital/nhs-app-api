@@ -3,6 +3,7 @@ import OrganDonationButton from '@/components/organ-donation/OrganDonationButton
 import {
   DECISION_NOT_FOUND,
   DECISION_OPT_OUT,
+  DECISION_OPT_IN,
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
@@ -53,19 +54,42 @@ describe('organ donation index page', () => {
   });
 
   describe('organ donation "no" button', () => {
-    let organDonationButton;
-
-    beforeEach(() => {
-      organDonationButton = wrapper.find(OrganDonationButton);
+    it('will translate the register subheader', () => {
+      expect($t).toHaveBeenCalledWith('organDonation.register.subheader');
     });
 
-    it('will exist', () => {
-      expect(organDonationButton.exists()).toBe(true);
+    describe('organ donation "no" button', () => {
+      let organDonationNoButton;
+
+      beforeEach(() => {
+        organDonationNoButton = wrapper.findAll(OrganDonationButton).at(0);
+      });
+
+      it('will exist', () => {
+        expect(organDonationNoButton.exists()).toBe(true);
+      });
+
+      it('will have a value that sets the decision to "OptOut"', () => {
+        const { decision } = organDonationNoButton.props();
+        expect(decision).toEqual(DECISION_OPT_OUT);
+      });
     });
 
-    it('will have a value that sets the decision to "OptOut"', () => {
-      const { decision } = organDonationButton.props();
-      expect(decision).toEqual(DECISION_OPT_OUT);
+    describe('organ donation "yes" button', () => {
+      let organDonationYesButton;
+
+      beforeEach(() => {
+        organDonationYesButton = wrapper.findAll(OrganDonationButton).at(1);
+      });
+
+      it('will exist', () => {
+        expect(organDonationYesButton.exists()).toBe(true);
+      });
+
+      it('will have a value that sets the decision to "OptIn"', () => {
+        const { decision } = organDonationYesButton.props();
+        expect(decision).toEqual(DECISION_OPT_IN);
+      });
     });
   });
 });

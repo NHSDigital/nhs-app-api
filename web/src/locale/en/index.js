@@ -664,6 +664,10 @@ export default {
         header: 'NO',
         subheader: 'I do not want to donate my organs',
       },
+      yesButton: {
+        header: 'YES',
+        subheader: 'I want to donate my organs',
+      },
     },
   },
   symptomBanner: {
@@ -717,6 +721,10 @@ export default {
       noIcon: {
         title: 'No',
         description: 'Indicates not to donate organs',
+      },
+      yesIcon: {
+        title: 'Yes',
+        description: 'Indicates a wish to donate organs',
       },
     },
     patientDetailsIcon: {

@@ -1,5 +1,5 @@
 <template>
-  <analytics-tracked-tag>
+  <analytics-tracked-tag :text="$t('sc04.organDonation.subheader')">
     <a :id="id"
        :class="className"
        :href="organDonationUrl"
