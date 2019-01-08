@@ -140,7 +140,7 @@ class AppointmentsBookingStepDefinitions {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         val telephoneNumberToEnter = "7777777777"
 
-        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = true,
+        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = null,
         reasonNecessityOption = NecessityOption.MANDATORY,
         telephoneNumberToEnter =telephoneNumberToEnter)
 
@@ -153,7 +153,7 @@ class AppointmentsBookingStepDefinitions {
         val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         val telephoneNumberToEnter = "7777777777"
 
-        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = true,
+        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = null,
                 reasonNecessityOption = NecessityOption.OPTIONAL,
                 telephoneNumberToEnter =telephoneNumberToEnter
         )

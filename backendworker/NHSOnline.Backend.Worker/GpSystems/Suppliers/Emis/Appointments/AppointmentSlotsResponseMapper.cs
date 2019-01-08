@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             
             var response = new AppointmentSlotsResponse
             {
-                BookingGuidance = body?.Messages?.AppointmentsMessage ?? string.Empty,
+                BookingGuidance = body?.Messages?.AppointmentsMessage?.Trim() ?? string.Empty,
                 Slots = slots,
                 BookingReasonNecessity = userSession.AppointmentBookingReasonNecessity
             };

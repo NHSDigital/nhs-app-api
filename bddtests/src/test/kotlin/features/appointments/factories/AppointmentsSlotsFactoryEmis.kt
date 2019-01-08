@@ -15,23 +15,20 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
 
     override fun generateAppointmentSlotResponse(startDate: ZonedDateTime,
                                                  endDate: ZonedDateTime,
-                                                 guidanceMessage: Boolean,
+                                                 guidanceMessage: String?,
                                                  reasonNecessity: NecessityOption,
                                                  mapping: IAppointmentSlotsBuilder.() -> Mapping) {
         generateAppointmentSlotResponseWithoutGuidance(startDate, endDate, mapping)
 
+        val guidanceMessageOut = guidanceMessage ?: Messages().appointmentsMessage
         val inputRequirements = InputRequirements(appointmentBookingReason = reasonNecessity.text)
-        val settingsResponse = if (guidanceMessage) {
-            SettingsResponseModel(inputRequirements = inputRequirements)
-        } else {
-            val messages = Messages(appointmentsMessage = "")
-            SettingsResponseModel(messages = messages, inputRequirements = inputRequirements)
-        }
+        val messages = Messages(appointmentsMessage = guidanceMessageOut)
+        val settingsResponse = SettingsResponseModel(messages = messages, inputRequirements = inputRequirements)
 
         val appointmentsMessage = settingsResponse.messages.appointmentsMessage
 
         assertTrue("Appointment message incorrectly being stubbed: $appointmentsMessage.",
-                guidanceMessage == appointmentsMessage.isNotEmpty())
+                guidanceMessageOut!!.isNotEmpty() == appointmentsMessage!!.isNotEmpty())
 
         mockingClient.forEmis {
             appointments.practiceSettingsRequest(patient)

@@ -13,7 +13,7 @@ import java.util.*
 
 class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
-    fun generateDefaultAvailableAppointmentSlotExample(guidanceMessage: Boolean = true,
+    fun generateDefaultAvailableAppointmentSlotExample(guidanceMessage: String? = null,
                                                        reasonNecessityOption: NecessityOption =
                                                                NecessityOption.MANDATORY) {
         val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
@@ -26,7 +26,7 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         factory.generateMultipleAvailableAppointmentSlotsForTheSameTime()
     }
 
-    fun generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage: Boolean = true,
+    fun generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage: String? = null,
                                                        reasonNecessityOption: NecessityOption =
                                                                NecessityOption.MANDATORY,
                                                          telephoneNumberToEnter: String="") {

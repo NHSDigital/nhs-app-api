@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.form">
     <label for="type">{{ $t('appointments.booking.filters.type.label') }}</label>
-    <collapsible-dialog v-if="guidanceMsg !==''">
+    <collapsible-dialog v-if="guidanceMsg">
       <template slot="header">
         {{ $t('appointments.booking.gpMessage.header') }}
       </template>

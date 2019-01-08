@@ -16,6 +16,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             VisionConnectionToken token,
             string odsCode);
 
+        Task<VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
+            VisionUserSession userSession);
+
         Task<VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(
             VisionUserSession userSession,
             PrescriptionRequest prescriptionRequest);

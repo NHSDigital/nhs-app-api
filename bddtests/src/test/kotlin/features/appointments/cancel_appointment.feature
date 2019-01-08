@@ -1,7 +1,7 @@
 @appointment
 Feature: Ability to cancel an appointment
 
-  Scenario Outline: <GP System> user is presented with the cancel appointment screen
+  Scenario Outline: <GP System> user is presented with the cancel appointment screen with a drop-down
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in as a <GP System> user
     And I am on the My Appointments page
@@ -23,7 +23,7 @@ Feature: Ability to cancel an appointment
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
 
-  Scenario: A TPP user is presented with the cancel appointment screen
+  Scenario: A TPP user is presented with the cancel appointment screen without drop-down
     Given I have upcoming appointments before cutoff time for TPP
     And I am logged in as a TPP user
     And I am on the My Appointments page

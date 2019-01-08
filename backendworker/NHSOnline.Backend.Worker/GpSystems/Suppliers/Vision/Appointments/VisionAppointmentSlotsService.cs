@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -30,7 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             try
             {
                 _logger.LogEnter();
-            
+
                 var visionUserSession = (VisionUserSession) userSession.GpUserSession;
                 
                 if (!visionUserSession.IsAppointmentsEnabled)
@@ -39,12 +41,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                     return new AppointmentSlotsResult.CannotBookAppointments();
                 }
 
-                var response = await _visionClient.GetAvailableAppointments(
+                var slotsTask = _visionClient.GetAvailableAppointments(
                     visionUserSession,
                     dateRange
-                    );
+                );
 
-                return InterpretAppointmentsGetResponse(response, visionUserSession);
+                var configTask = _visionClient.GetConfiguration(visionUserSession);
+
+                VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> configResponse = null;
+
+                try
+                {
+                    configResponse = await configTask;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Exception has been thrown retrieving Vision booking guidance.");
+                }
+
+                var slotsResponse = await slotsTask;
+
+                return InterpretAppointmentsGetResponse(slotsResponse, configResponse, visionUserSession);
             }
             catch (HttpRequestException e)
             {
@@ -58,24 +75,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         }
         
         private AppointmentSlotsResult InterpretAppointmentsGetResponse(
-            VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse> response,
+            VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse> slotsResponse,
+            VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> configResponse,
             VisionUserSession userSession)
         {
-            if (response.IsAccessDeniedError)
+            if (slotsResponse.IsAccessDeniedError)
             {
                 return new AppointmentSlotsResult.CannotBookAppointments();
             }
             
-            if (response.HasErrorResponse)
+            if (slotsResponse.HasErrorResponse)
             {
                 _logger.LogError($"Call to VISION ({nameof(VisionAppointmentSlotsService)}) returned an unanticipated " +
-                                 $"error with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
+                                 $"error with status code: '{slotsResponse.StatusCode}'. \n{slotsResponse.ErrorForLogging}");
                 return new AppointmentSlotsResult.SupplierSystemUnavailable();
             }
             
             try
             {
-                return new AppointmentSlotsResult.SuccessfullyRetrieved(_mapper.Map(response.Body, userSession));
+                return new AppointmentSlotsResult.SuccessfullyRetrieved(_mapper.Map(slotsResponse.Body,
+                    configResponse?.Body,
+                    userSession));
             }
             catch (Exception e)
             {

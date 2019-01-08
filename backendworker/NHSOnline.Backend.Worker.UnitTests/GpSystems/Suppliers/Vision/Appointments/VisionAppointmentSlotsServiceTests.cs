@@ -25,7 +25,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         private VisionUserSession _visionUserSession;
         private UserSession _userSession;
         private VisionAppointmentSlotsService _systemUnderTest;
-        private VisionResponse<AvailableAppointmentsResponse> _visionClientGetResponse;
+        private VisionResponse<AvailableAppointmentsResponse> _visionClientSlotsResponse;
+        private VisionResponse<PatientConfigurationResponse> _visionClientConfigResponse;
         private AppointmentSlotsDateRange _dateRange;
         private Mock<IAvailableAppointmentsResponseMapper> _mockAppointmentsMapper;
 
@@ -43,22 +44,37 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _userSession = _fixture.Create<UserSession>();
             
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
-            _visionClientGetResponse = _fixture.Create<VisionResponse<AvailableAppointmentsResponse>>();
+            _visionClientSlotsResponse = _fixture.Create<VisionResponse<AvailableAppointmentsResponse>>();
+            _visionClientConfigResponse = _fixture.Create<VisionResponse<PatientConfigurationResponse>>();
+
             _dateRange = _fixture.Create<AppointmentSlotsDateRange>();
             
-            var response = new VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
+            var slotsResponse = new VisionPFSClient.VisionApiObjectResponse<AvailableAppointmentsResponse>(HttpStatusCode.OK)
             {
                 RawResponse = new VisionResponseEnvelope<AvailableAppointmentsResponse>
                 {
                     Body = new VisionResponseBody<AvailableAppointmentsResponse>
                     {
-                        VisionResponse = _visionClientGetResponse
+                        VisionResponse = _visionClientSlotsResponse
                     }
                 }
             };
             
-            MockVisionClientAppointmentSlotsGetMethod(response);
-            
+            MockVisionClientAppointmentSlotsGetMethod(slotsResponse);
+
+            var configResponse = new VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+            {
+                RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                {
+                    Body = new VisionResponseBody<PatientConfigurationResponse>
+                    {
+                        VisionResponse = _visionClientConfigResponse
+                    }
+                }
+            };
+
+            MockVisionClientConfigurationGetMethod(configResponse);
+
             _mockAppointmentsMapper = _fixture.Freeze<Mock<IAvailableAppointmentsResponseMapper>>();
             
             _systemUnderTest = new VisionAppointmentSlotsService(
@@ -133,7 +149,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task GetSlots_MapperThrows_ReturnsInternalServerError()
         {
             // Arrange
-            _mockAppointmentsMapper.Setup(x => x.Map(It.IsAny<AvailableAppointmentsResponse>(), _visionUserSession))
+            _mockAppointmentsMapper.Setup(x => x.Map(It.IsAny<AvailableAppointmentsResponse>(),
+                    It.IsAny<PatientConfigurationResponse>(),
+                    _visionUserSession))
                 .Throws<Exception>();
 
             // Act
@@ -149,6 +167,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
                     _visionUserSession,
                     _dateRange
+                ))
+                .ReturnsAsync(response);
+        }
+
+        private void MockVisionClientConfigurationGetMethod(
+            VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse> response)
+        {
+            _mockVisionClient.Setup(x => x.GetConfiguration(
+                    _visionUserSession
                 ))
                 .ReturnsAsync(response);
         }

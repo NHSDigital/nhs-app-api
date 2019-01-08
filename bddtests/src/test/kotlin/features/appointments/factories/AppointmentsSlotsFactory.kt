@@ -22,14 +22,14 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     fun generateDefaultAvailableAppointmentSlotExample(startDate: ZonedDateTime? = null,
                                                        endDate: ZonedDateTime? = null,
-                                                       guidanceMessage: Boolean = true,
+                                                       guidanceMessage: String? = null,
                                                        reasonNecessity: NecessityOption = NecessityOption.MANDATORY) {
         generateExample(retrieveSlotsExample(), startDate, endDate, guidanceMessage, reasonNecessity)
     }
 
     fun generateAvailableSlotExampleIncludingTelephoneAppointment(startDate: ZonedDateTime? = null,
                                                        endDate: ZonedDateTime? = null,
-                                                       guidanceMessage: Boolean = true,
+                                                       guidanceMessage: String? = null,
                                                        reasonNecessity: NecessityOption = NecessityOption.MANDATORY) {
         generateExample(retrieveSlotsExampleIncludingTelephoneAppointments(),
                             startDate, endDate, guidanceMessage, reasonNecessity)
@@ -56,7 +56,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
             example: AppointmentSlotsResponseFacade,
             startDate: ZonedDateTime? = null,
             endDate: ZonedDateTime? = null,
-            guidanceMessage: Boolean = true,
+            guidanceMessage: String? = null,
             reasonNecessity: NecessityOption = NecessityOption.MANDATORY) {
 
         val startDateToUseForMockResponse = startDate ?: defaultStartDate()
@@ -100,14 +100,14 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         generateAppointmentSlotResponse(
                 defaultStartDate(),
                 defaultEndDate(),
-                true,
+                null,
                 NecessityOption.OPTIONAL,
                 mapping
         )
         generateAppointmentSlotResponse(
                 defaultStartDate().plusMinutes(1),
                 defaultEndDate(),
-                true,
+                null,
                 NecessityOption.OPTIONAL,
                 mapping
         )
@@ -140,7 +140,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     abstract fun generateAppointmentSlotResponse(startDate: ZonedDateTime,
                                                  endDate: ZonedDateTime,
-                                                 guidanceMessage: Boolean,
+                                                 guidanceMessage: String?,
                                                  reasonNecessity: NecessityOption,
                                                  mapping: IAppointmentSlotsBuilder.() -> Mapping)
 

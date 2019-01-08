@@ -68,16 +68,23 @@ class AvailableAppointmentsSlotsStepDefinitions {
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample()
     }
 
-    @Given("^there are available appointment slots with different criteria for EMIS " +
-            "when no appointment slot guidance is provided$")
-    fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWithNoGuidance() {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = false)
+    @Given("^there are available appointment slots with different criteria for (.*) " +
+            "when (.*) appointment slot guidance is provided$")
+    fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaWithCustomGuidance(
+            gpSystem: String, guidanceMessageDescription: String) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+
+        val guidanceMessage = when (guidanceMessageDescription) {
+            "empty" -> ""
+            "whitespace string" -> "   "
+            else -> guidanceMessageDescription
+        }
+        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = guidanceMessage)
     }
 
-    @Given("^there are available appointment slots with different criteria for EMIS when guidance cannot be retrieved$")
-    fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWhenGuidanceCannotBeRetrieved() {
-        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+    @Given("^there are available appointment slots with different criteria for (.*) when guidance cannot be retrieved$")
+    fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWhenGuidanceCannotBeRetrieved(gpSystem: String) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage()
     }
 
@@ -150,7 +157,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^will respond in a timely fashion on the second attempt$")
     fun theGpSystemWillSucceedForAvailableAppointmentSlotsOnTheSecondAttempt() {
         val gpSystem: String = SerenityHelpers.getValueOrNull(SupplierSpecificFactory.SerenityKey.GP_SYSTEM) ?: ""
-        Assert.assertNotEquals("Cannot determine GP system being used. ","", gpSystem)
+        Assert.assertNotEquals("Cannot determine GP system being used. ", "", gpSystem)
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         // stub to generate success on 2nd attempt
         factory.generateExample {
@@ -456,6 +463,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^I cannot see any appointment slot guidance$")
     fun iCannotSeeAnyAppointmentSlotGuidance() {
+        availableAppointments.availableAppointmentsPage.guidance.label.assertElementNotPresent()
         availableAppointments.availableAppointmentsPage.guidance.content.assertElementNotPresent()
     }
 

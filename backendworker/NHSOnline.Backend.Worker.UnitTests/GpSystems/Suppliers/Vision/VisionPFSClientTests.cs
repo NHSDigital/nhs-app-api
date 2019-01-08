@@ -352,7 +352,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 Page = new Page
                 {
                     Number = 1,
-                    SlotsPerPage = 1000
+                    SlotsPerPage = 50
                 },
                 Locations = _visionUserSession.LocationIds,
                 Owners = new List<string> { "ALL" },

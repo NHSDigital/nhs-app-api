@@ -9,7 +9,7 @@ class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {
 
     override fun generateAppointmentSlotResponse(startDate: ZonedDateTime,
                                                  endDate: ZonedDateTime,
-                                                 guidanceMessage: Boolean,
+                                                 guidanceMessage: String?,
                                                  reasonNecessity: NecessityOption,
                                                  mapping: IAppointmentSlotsBuilder.() -> Mapping) {
         appointmentMapper.requestMapping {

@@ -24,32 +24,44 @@ Feature: View available appointment slots
       | TPP       |
       | VISION    |
 
-  Scenario: A user can expand, view and collapse guidance provided by EMIS
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the Available Appointments page
-    When I expand the appointment slot guidance
-    Then the appointment slot guidance content is displayed
-    And the appointment slot guidance is collapsible
-
-  Scenario: A user does not see guidance if none is provided by EMIS
-    Given there are available appointment slots with different criteria for EMIS when no appointment slot guidance is provided
-    And I am logged in
-    When I am on the Available Appointments page
-    Then I cannot see any appointment slot guidance
-
   Scenario: A user does not see any guidance provided by TPP
     Given there are available appointment slots with different criteria for TPP
     And I am logged in
     When I am on the Available Appointments page
     Then I cannot see any appointment slot guidance
 
-  Scenario: A user does not see any guidance when it cannot be retrieved from EMIS, but can still progress
-    Given there are available appointment slots with different criteria for EMIS when guidance cannot be retrieved
+  Scenario Outline: A user can expand, view and collapse guidance provided by <GP System>
+    Given there are available appointment slots with different criteria for <GP System> when <Content> appointment slot guidance is provided
+    And I am logged in
+    And I am on the Available Appointments page
+    When I expand the appointment slot guidance
+    Then the appointment slot guidance content is displayed
+    And the appointment slot guidance is collapsible
+    Examples:
+      | Content             | GP System |
+      | test Emis Message   | EMIS      |
+      | yet another Message | VISION    |
+
+  Scenario Outline: A user does not see guidance if none is provided by <GP System>
+    Given there are available appointment slots with different criteria for <GP System> when <Content> appointment slot guidance is provided
+    And I am logged in
+    When I am on the Available Appointments page
+    Then I cannot see any appointment slot guidance
+    Examples:
+      | Content           | GP System |
+      | whitespace string | EMIS      |
+      | empty             | VISION    |
+
+  Scenario Outline: A user does not see any guidance when it cannot be retrieved from <GP System>, but can still progress
+    Given there are available appointment slots with different criteria for <GP System> when guidance cannot be retrieved
     And I am logged in
     When I am on the Available Appointments page
     Then I cannot see any appointment slot guidance
     And I am able to filter on available slots
+    Examples:
+      | GP System |
+      | EMIS      |
+      | VISION    |
 
   Scenario Outline: A <GP System> user enters the available appointments page, but only 1 appointment is available
     Given there is 1 available appointment slot for <GP System>

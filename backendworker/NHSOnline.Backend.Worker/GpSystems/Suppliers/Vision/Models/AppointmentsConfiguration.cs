@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
 {
@@ -6,5 +7,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
     {
         [XmlElement(ElementName = "enabled", Namespace = "urn:vision")]
         public bool BookingEnabled { get; set; } = true;
+
+        [XmlArray(ElementName = "welcomeText", Namespace = "urn:vision")]
+        public List<AppointmentsMessage> WelcomeText { get; set; } = new List<AppointmentsMessage>();
     }
 }

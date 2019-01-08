@@ -104,6 +104,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return await Post<PatientConfigurationResponse, object>(visionRequest);
         }
 
+        public async Task<VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(VisionUserSession userSession)
+        {
+            var visionServiceDefinition = new ConfigurationServiceDefinition();
+
+            var visionRequest = new VisionRequest<object>(
+                visionServiceDefinition.Name,
+                visionServiceDefinition.Version,
+                userSession.RosuAccountId,
+                userSession.ApiKey,
+                userSession.OdsCode,
+                _providerId,
+                null);
+
+            return await Post<PatientConfigurationResponse, object>(visionRequest);
+        }
+
         public async Task<VisionApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeats(
             VisionUserSession session)
         {
@@ -163,7 +179,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 Page = new Page
                 {
                     Number = 1,
-                    SlotsPerPage = 1000
+                    SlotsPerPage = 50
                 },
                 Locations = visionUserSession.LocationIds,
                 DateRange = new DateRange

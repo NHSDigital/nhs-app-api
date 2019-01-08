@@ -40,6 +40,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return _visionPFSClient.GetConfiguration(token, odsCode);
         }
 
+        public Task<VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(VisionUserSession userSession)
+        {
+            return _visionPFSClient.GetConfiguration(userSession);
+        }
+
         public Task<VisionPFSClient.VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(VisionUserSession userSession, PrescriptionRequest prescriptionRequest)
         {
             return _visionPFSClient.GetHistoricPrescriptions(userSession, prescriptionRequest);
