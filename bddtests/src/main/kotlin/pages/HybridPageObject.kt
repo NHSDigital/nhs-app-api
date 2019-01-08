@@ -15,9 +15,9 @@ import webdrivers.isIOS
 import java.time.Duration
 import pages.sharedElements.BannerObject
 
-const val DEFAULT_SPINNER_WAIT: Long = 30
-const val DEFAULT_MOBILE_WAIT: Long = 2000
 const val DEFAULT_VISIBILITY_WAIT: Long = 300
+const val DEFAULT_SPINNER_WAIT: Long = 4000
+const val DEFAULT_MOBILE_WAIT: Long = 5000
 const val DEFAULT_NATIVE_SPINNER_WAIT: Long = 1000
 const val POOLING_FREQUENCY: Long = 100
 const val WEB_CONTEXT: String = "webview"
@@ -27,6 +27,8 @@ open class HybridPageObject : PageObject() {
     val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
 
     val validationBanner by lazy { BannerObject.error(this) }
+
+    val locatorMethods by lazy {LocatorMethods(this)}
 
     val spinner = HybridPageElement(
             webDesktopLocator = "//*[@id='loading-spinner']",
@@ -38,18 +40,9 @@ open class HybridPageObject : PageObject() {
 
     fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
         if (onMobile()) {
-            spinner.waitForNativeSpinner()
-        }
-
-        if (!spinner.elements.isEmpty() && !onMobile()) {
+            Thread.sleep(DEFAULT_NATIVE_SPINNER_WAIT)
+        } else if (!spinner.elements.isEmpty()) {
             spinner.shouldNotBeVisible(seconds)
-        }
-    }
-
-    fun waitForNativeStepToComplete(milliseconds: Long = DEFAULT_MOBILE_WAIT) {
-        //Native execution/redirect is slow on browser stack
-        if (onMobile()) {
-            Thread.sleep(milliseconds)
         }
     }
 
@@ -74,7 +67,6 @@ open class HybridPageObject : PageObject() {
         logSelectorAndSource(xpath)
         return findAll(By.xpath(xpath))
     }
-
 
     fun findByXpath(xpath: String): WebElementFacade {
         switchWebview()
@@ -112,25 +104,6 @@ open class HybridPageObject : PageObject() {
         if (Config.instance.showPageSourceForXPathQuery == "true") {
             println("Selector: $selector")
             println("Current source:\n${driver.pageSource}")
-        }
-    }
-
-    fun shouldBeVisibleOnNative(elementToCheckFor:HybridPageElement, seconds: Long = DEFAULT_VISIBILITY_WAIT){
-        try {
-            waitForSpinnerToDisappear()
-            val currentElement = elementToCheckFor.element
-            FluentWait<WebElementFacade>(currentElement)
-                    .withTimeout(Duration.ofSeconds(seconds))
-                    .pollingEvery(Duration.ofMillis(POOLING_FREQUENCY))
-                    .until {
-                        currentElement.isPresent
-                    }
-            if (!currentElement.isVisible) {
-                waitForNativeStepToComplete()
-            }
-        } catch (e: NoSuchElementException) {
-            throw NoSuchElementException("Element $elementToCheckFor does not exist on the page.  " +
-                    "Page source:\n${driver.pageSource}\n")
         }
     }
 
@@ -178,6 +151,11 @@ open class HybridPageObject : PageObject() {
                 page = this
         )
                 .withText(text, false).assertIsVisible().click()
+    }
+
+    fun WebElementFacade.getTextWithoutUnicodeSuffix(): String{
+        val charValToRemove = ("\u200B")
+        return this.text.removeSuffix(charValToRemove)
     }
 
     fun isButtonVisible(button: String): Boolean {

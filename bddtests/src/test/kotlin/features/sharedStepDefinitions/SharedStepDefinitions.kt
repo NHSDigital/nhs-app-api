@@ -79,7 +79,7 @@ open class SharedStepDefinitions {
         SharedStepDefinitions.patient = SerenityHelpers.getPatientOrNull() ?: SharedStepDefinitions.patient
         browser.goToApp()
         login.using(patient)
-        home.waitForLoginToComplete()
+        home.waitForLoginToCompleteSuccessfully()
     }
 
     @Given("^I have (enabled|disabled) javascript$")

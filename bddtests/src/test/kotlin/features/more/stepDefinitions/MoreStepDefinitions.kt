@@ -8,6 +8,7 @@ import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.LocatorMethods
 import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
@@ -25,6 +26,8 @@ class MoreStepDefinitions {
 
     lateinit var morePage: MorePage
 
+    lateinit var locatorMethods: LocatorMethods
+
     val mockingClient = MockingClient.instance
 
 
@@ -40,7 +43,7 @@ class MoreStepDefinitions {
                     .respondWithNdopMockPage()
         }
         morePage.btnDataSharing.click()
-        morePage.waitForNativeStepToComplete()
+        morePage.locatorMethods.waitForNativeStepToComplete()
     }
 
     @Then("^I am on the More Page$")
@@ -85,7 +88,7 @@ class MoreStepDefinitions {
 
     private fun followDataSharingLink() {
         morePage.btnDataSharing.click()
-        morePage.waitForNativeStepToComplete()
+        morePage.locatorMethods.waitForNativeStepToComplete()
         headerNative.waitForPageHeaderText("Find out why your data matters")
         nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }

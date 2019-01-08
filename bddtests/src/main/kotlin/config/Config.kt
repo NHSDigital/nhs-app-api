@@ -35,6 +35,12 @@ class Config private constructor() {
     var browserstackUrl: String
     var browserstackLocal: String
     var browserstackLocalIdentifier: String
+    var browserstackBrowserResolution: String
+    var browserstackTimezone: String
+    var browserstackaAppVersion:String
+    var browserstackNetworkProfile:String
+    var browserstackDeviceName:String
+    var browserstackDeviceOSversion:String
     var autoLogin: String
     var appPath: String
     var appiumServer: String
@@ -68,10 +74,15 @@ class Config private constructor() {
         browserstackUrl = "http://$browserstackUsername:$browserstackAccessKey@hub-cloud.browserstack.com/wd/hub"
         browserstackLocal = envOrDefault("BROWSERSTACK_LOCAL", "true")
         browserstackLocalIdentifier = envOrDefault("BROWSERSTACK_LOCAL_IDENTIFIER","")
+        browserstackBrowserResolution = envOrDefault("BROWSERSTACK_BROWSER_RESOLUTION","")
+        browserstackaAppVersion = envOrDefault("BROWSERSTACK_APP_VERSION","")
+        browserstackNetworkProfile = envOrDefault("BROWSERSTACK_NETWORK_PROFILE","")
+        browserstackTimezone = envOrDefault("BROWSERSTACK_TIMEZONE", "UTC")
         showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE", "false")
         appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
-
+        browserstackDeviceName = envOrDefault("BROWSERSTACK_DEVICE_NAME", "")
+        browserstackDeviceOSversion = envOrDefault("BROWSERSTACK_OS_VERSION", "")
 
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
         cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "https://auth.ext.signin.nhs.uk")

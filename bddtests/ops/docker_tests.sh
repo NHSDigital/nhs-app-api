@@ -58,14 +58,29 @@ else
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
           @tech-debt and not @throttling and not @cosmos"
+        elif [ "$RUN_NATIVE" == 1 ] && [ "$BROWSER" == "browserstack_ios" ]
+        then
+          info "Main Tranche - Full BDD Test including Long Running Run Configured"
+          BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @nativepending and not
+          @nativebug and not @backend and not @bug and not @pending and not @manual and not @tech-debt and not
+          @throttling and not @cosmos and not @noJs and not @android"
+        elif [ "$RUN_NATIVE" == 1 ] && [ "$BROWSER" == "browserstack_android" ]
+        then
+          info "Main Tranche - Full BDD Test including Long Running Run Configured"
+          BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @nativepending and not
+          @nativebug and not @backend and not @bug and not @pending and not @manual and not @tech-debt and not
+          @throttling and not @cosmos and not @noJs and not @ios"
         else
           info "Main Tranche - Full BDD Test Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
           @tech-debt and not @long-running and not @throttling and not @cosmos $SPECIFIC_TEST_TAGS"
         fi
-        if [ "$PARALLEL" == 1 ]
+        if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ]
         then
           TAGS=(appointment authentication throttling other)
+        elif [ "$RUN_NATIVE" == 1 ]
+        then
+          TAGS=(native-smoketest)
         else
           TAGS=specific
           BDD_CUCUMBER_OPTIONS_PREFIX=$BDD_CUCUMBER_OPTIONS_PREFIX"'"
@@ -94,16 +109,32 @@ export BACKEND_TAG=$APP_DOCKER_TAG
 [ -z $REDIS_DATA_DOCKER_TAG ] || export REDIS_DATA_TAG=$REDIS_DATA_DOCKER_TAG
 
 # Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
-if [ "$BROWSER" == "pixel_2" ] || [ "$BROWSER" == "iphoneX" ]
+if [ "$BROWSER" == "browserstack_android" ] || [ "$BROWSER" == "browserstack_ios" ]
 then
   DOCKER_IMAGE=$DOCKER_IMAGE_BROWSERSTACK
   AUTOLOGIN="AUTOLOGIN=true"
   APPSCHEME="APP_SCHEME=nhsapp"
-  if [ "$BROWSER" == "pixel_2" ]
+  if [ "$BROWSER" == "browserstack_android" ]
   then
     APPIUM_TYPE="-Dappium.platformName=ANDROID"
+    if [ -z "$DEVICE" ] && [ -z "$OS" ]
+    then
+        DEVICENAME="BROWSERSTACK_DEVICE_NAME=$DEVICE"
+        OSVERSION="BROWSERSTACK_OS_VERSION=$OS"
+    else
+        DEVICENAME="BROWSERSTACK_DEVICE_NAME=Google\ Pixel\ 2"
+        OSVERSION="BROWSERSTACK_OS_VERSION=8.0"
+    fi
   else
-    APPIUM_TYPE="-Dappium.platformName=IOS"
+    APPIUM_TYPE="-Dappium.platformName=iOS"
+    if [ -z "$DEVICE" ] && [ -z "$OS" ]
+    then
+        DEVICENAME="BROWSERSTACK_DEVICE_NAME=$DEVICE"
+        OSVERSION="BROWSERSTACK_OS_VERSION=$OS"
+    else
+        DEVICENAME="BROWSERSTACK_DEVICE_NAME=iPhone\ 8"
+        OSVERSION="BROWSERSTACK_OS_VERSION=12.1"
+    fi
   fi
 else
   DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
@@ -236,7 +267,7 @@ info "Running $TAG tests"
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
         BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
-        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $APPSCHEME $AUTOLOGIN \
+        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
         ./gradlew test --stacktrace \
           -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
           -Dwebdriver.provided.type=$BROWSER \
@@ -253,7 +284,7 @@ info "Running $TAG tests"
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
         BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
-        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $APPSCHEME $AUTOLOGIN \
+        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
         ./gradlew test --stacktrace \
           -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
           -Dwebdriver.provided.type=$BROWSER \

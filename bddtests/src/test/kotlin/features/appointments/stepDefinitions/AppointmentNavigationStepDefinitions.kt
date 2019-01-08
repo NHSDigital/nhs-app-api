@@ -29,7 +29,8 @@ class AppointmentNavigationStepDefinitions {
         navigation.waitForSpinnerToDisappear()
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
         waitForSpinnerToDisappear()
-        myAppointmentsUI.myAppointmentsPage.assertNativeElementsLoaded()
+        myAppointmentsUI.myAppointmentsPage.
+                locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.myAppointmentsPage.bookButton)
     }
 
     @Given("^I am on the My Appointments error page$")
@@ -37,7 +38,7 @@ class AppointmentNavigationStepDefinitions {
         navigation.waitForSpinnerToDisappear()
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
         waitForSpinnerToDisappear()
-        errorPage.assertNativeElementsLoaded()
+        errorPage.locatorMethods.assertNativeElementsLoaded(errorPage.heading)
     }
 
     @Given("^I am on the Appointment Guidance page$")
@@ -45,7 +46,8 @@ class AppointmentNavigationStepDefinitions {
         iAmOnMyAppointmentsPage()
         myAppointmentsUI.clickOnBookAppointmentButton()
         waitForSpinnerToDisappear()
-        appointmentGuidanceSteps.appointmentGuidancePage.assertNativeElementsLoaded()
+        appointmentGuidanceSteps.appointmentGuidancePage.
+                locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
@@ -55,7 +57,9 @@ class AppointmentNavigationStepDefinitions {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
         waitForSpinnerToDisappear()
-        myAppointmentsUI.myAppointmentsPage.assertNativeElementsLoaded()
+        availableAppointments.availableAppointmentsPage.
+                locatorMethods.assertNativeElementsLoaded(
+                    availableAppointments.availableAppointmentsPage.backToMyAppointmentsButton)
         waitForSpinnerToDisappear()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }

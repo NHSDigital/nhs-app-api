@@ -82,9 +82,9 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
                                     parentToSlotDivRelativePath: String = ""): Slot {
         val slot = Slot()
         val relativePath = if (parentToSlotDivRelativePath.isEmpty()) relativeToParentXPath
-                           else "$parentToSlotDivRelativePath/"
-        slot.time = parentContainer.findByXpath( relativePath + appointmentTimeXpath).text
-        slot.session = parentContainer.findByXpath( relativePath + appointmentSessionNameXpath).text
+        else "$parentToSlotDivRelativePath/"
+        slot.time = parentContainer.findByXpath(relativePath + appointmentTimeXpath).text
+        slot.session = parentContainer.findByXpath(relativePath + appointmentSessionNameXpath).text
         slot.date = parentContainer.findByXpath(relativePath + appointmentDateXpath).text
         slot.location = parentContainer.findByXpath(relativePath + appointmentLocationXpath).text
 
@@ -95,7 +95,7 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
 
     private fun retrieveDateTimeFromSlotElement(slotElement: WebElementFacade): String {
         val time = slotElement.findByXpath(xPathRoot + appointmentTimeXpath).text
-        val date = slotElement.findByXpath( xPathRoot + appointmentDateXpath).text
+        val date = slotElement.findByXpath(xPathRoot + appointmentDateXpath).text
         return "$time $date"
     }
 
@@ -124,3 +124,4 @@ fun WebElementFacade.findByXpath( xpath: String): WebElementFacade {
     }
     return elements.first()
 }
+

@@ -138,7 +138,7 @@ open class OrganDonationStepDefinitions {
     }
 
     private fun pageOpensWithinNativeApp() {
-        header.waitForNativeStepToComplete()
+        header.locatorMethods.waitForNativeStepToComplete()
         header.waitForPageHeaderText("Organ donation register")
         navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }

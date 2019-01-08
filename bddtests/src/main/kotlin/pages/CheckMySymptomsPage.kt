@@ -19,7 +19,7 @@ open class CheckMySymptomsPage : HybridPageObject() {
     fun isConditionsHeaderVisible(): Boolean {
         switchWebview()
         for(window in driver.windowHandles.toList()) {
-            waitForNativeStepToComplete()
+            locatorMethods.waitForNativeStepToComplete()
             driver.switchTo().window(window)
             try {
                 if (conditionsHeader.element.isDisplayed)

@@ -2,8 +2,7 @@ package webdrivers
 
 import config.Config
 import io.appium.java_client.MobileElement
-import io.appium.java_client.ios.IOSDriver
-import io.appium.java_client.remote.IOSMobileCapabilityType
+import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.remote.MobileCapabilityType
 import net.thucydides.core.webdriver.DriverSource
 import org.openqa.selenium.WebDriver
@@ -13,10 +12,10 @@ import java.util.concurrent.TimeUnit
 
 private const val TIMEOUT: Long = 5
 
-class IPhoneXDriver : DriverSource {
+class AppiumAndroidDriver : DriverSource{
 
     override fun newDriver(): WebDriver {
-        val driver: IOSDriver<MobileElement> = IOSDriver(URL(Config.instance.browserstackUrl), caps())
+        val driver: AndroidDriver<MobileElement> = AndroidDriver(URL(Config.instance.appiumServer), caps())
         driver.manage().timeouts().implicitlyWait(TIMEOUT, TimeUnit.SECONDS)
         return driver
     }
@@ -28,15 +27,12 @@ class IPhoneXDriver : DriverSource {
     companion object {
         fun caps(): DesiredCapabilities {
             val caps = DesiredCapabilities()
-            //connect to browser stack on cloud
-            caps.setCapability(MobileCapabilityType.DEVICE_NAME, "iPhone 8")
-            caps.setCapability("os_version", "12.1")
-            caps.setCapability(IOSMobileCapabilityType.ACCEPT_SSL_CERTS, true)
-            caps.setCapability("browserstack.local", "true")
+            caps.setCapability(MobileCapabilityType.PLATFORM_NAME,"ANDROID")
+            caps.setCapability(MobileCapabilityType.AUTOMATION_NAME,"Appium")
             caps.setCapability("autoWebview","true")
             caps.setCapability(MobileCapabilityType.APP,Config.instance.appPath)
-            if(Config.instance.browserstackLocalIdentifier!="")
-                caps.setCapability("browserstack.localIdentifier",Config.instance.browserstackLocalIdentifier)
+            caps.setCapability(MobileCapabilityType.DEVICE_NAME,"Google Pixel 2")
+            caps.setCapability(MobileCapabilityType.PLATFORM_VERSION,"8.0")
 
             return caps
         }

@@ -86,6 +86,12 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             helpfulName = "Text displayed when there are no appointments on a particular date. "
     )
 
+    val backToMyAppointmentsButton = HybridPageElement(
+            webDesktopLocator = "//button[contains(text(),'Back to my appointments')]",
+            androidLocator = null,
+            page = this
+    )
+
     fun selectSlot(date: String, time: String) {
         val slot = timeSlotForDateAndTime(date, time)
                 .assertSingleElementPresent()
@@ -123,4 +129,5 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         )
         return timeSlots.elements.size
     }
+
 }

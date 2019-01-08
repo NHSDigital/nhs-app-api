@@ -55,17 +55,10 @@ class AppointmentGuidancePage : HybridPageObject() {
         val list = arrayListOf<Pair<String, Boolean>>()
         val listElements = content.element.thenFindAll("*")
         listElements.forEach { listElement ->
-            val guidanceLine = listElement.text
+            val guidanceLine = listElement.getTextWithoutUnicodeSuffix()
             val isLineInBold = listElement.tagName == "strong"
             list.add(Pair(guidanceLine, isLineInBold))
         }
         return list
     }
-
-    fun assertNativeElementsLoaded(){
-        if(onMobile()) {
-            shouldBeVisibleOnNative(bookButton)
-        }
-    }
-
 }

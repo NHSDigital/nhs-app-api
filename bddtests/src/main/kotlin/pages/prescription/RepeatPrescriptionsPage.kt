@@ -90,8 +90,8 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
 
     fun selectXPrescriptionsToOrder(numberOfSubscriptionsToSelect: Int) {
         var repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
-        if (repeatPrescriptionContainers.isEmpty() && onMobile()) {
-            waitForNativeStepToComplete()
+        if(repeatPrescriptionContainers.isEmpty() && onMobile()){
+            locatorMethods.waitForNativeStepToComplete()
             repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
         }
         for (i in 0..(numberOfSubscriptionsToSelect - 1)) {

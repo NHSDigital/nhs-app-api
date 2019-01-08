@@ -155,10 +155,4 @@ open class HomePage : HybridPageObject() {
                 "Help us make this service better. Complete our quick survey.",
                 surveyContent.element.text)
     }
-
-    fun assertNativeElementsLoaded(){
-        if(onMobile()) {
-            shouldBeVisibleOnNative(greeting)
-        }
-    }
 }

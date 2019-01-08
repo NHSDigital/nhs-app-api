@@ -489,7 +489,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iLogInAgain(){
         val patient = SerenityHelpers.getPatient()
         login.using(patient)
-        home.waitForLoginToComplete()
+        home.waitForLoginToCompleteSuccessfully()
     }
 
     @Given("^I attempt to log in as a (.*) user without an NHS Number$")
@@ -550,7 +550,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         browser.goToApp()
         login.using(patient)
-        home.waitForLoginToComplete()
+        home.homePage.waitForSpinnerToDisappear()
     }
 
     @Given("^I am logged in as a (.*) user where the session will fail to clear on signout$")

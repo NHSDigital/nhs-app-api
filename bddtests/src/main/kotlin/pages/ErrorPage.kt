@@ -75,10 +75,4 @@ open class ErrorPage : HybridPageObject() {
         assertEquals("Content message incorrect. ", errorDetailText, errorText2.element.text)
         return this
     }
-
-    fun assertNativeElementsLoaded(){
-        if(onMobile()) {
-            shouldBeVisibleOnNative(heading)
-        }
-    }
 }

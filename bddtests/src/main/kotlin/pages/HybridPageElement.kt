@@ -3,6 +3,7 @@ package pages
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.Keys
 import org.openqa.selenium.NoSuchElementException
 import webdrivers.isAndroid
 import webdrivers.isIOS
@@ -153,14 +154,6 @@ open class HybridPageElement(
 
     }
 
-    fun waitForNativeSpinner(
-            milliseconds: Long = DEFAULT_NATIVE_SPINNER_WAIT): WebElementFacade {
-        //waiting for the native spinner can cause problems
-        //because it can vanish and comeback
-        Thread.sleep(milliseconds)
-        return this.element
-    }
-
     fun typeTextIntoTextArea(text: String): String {
         //Each letter sent individually
         //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
@@ -173,4 +166,8 @@ open class HybridPageElement(
 
         return this.element.value
     }
+
+   fun sendEnterKey() {
+       this.element.sendKeys(Keys.ENTER)
+   }
 }

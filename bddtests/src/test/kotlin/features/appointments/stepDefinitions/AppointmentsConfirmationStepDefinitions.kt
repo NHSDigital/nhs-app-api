@@ -148,7 +148,7 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^I see appropriate information message " +
             "when there is an error sending data on appointment confirmation page$")
     fun thenISeeAppropriateInformationMessageWhenThereIsAnErrorSendingDataOnAppointmentConfirmationPage() {
-        appointmentsConfirmationSteps.appointmentsConfirmation.waitForNativeStepToComplete()
+        appointmentsConfirmationSteps.appointmentsConfirmation.locatorMethods.waitForNativeStepToComplete()
         appointmentsConfirmationSteps.checkErrorSendingMessage()
     }
 

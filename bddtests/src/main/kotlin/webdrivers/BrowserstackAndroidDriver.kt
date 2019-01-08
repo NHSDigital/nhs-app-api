@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 private const val TIMEOUT: Long = 5
 
-class Pixel2Driver : DriverSource {
+class BrowserstackAndroidDriver : DriverSource {
 
     override fun newDriver(): WebDriver {
         val driver: AndroidDriver<WebElementFacade> = AndroidDriver(URL(Config.instance.browserstackUrl), caps())
@@ -29,15 +29,30 @@ class Pixel2Driver : DriverSource {
         fun caps(): DesiredCapabilities {
             val caps = DesiredCapabilities()
             caps.setCapability(MobileCapabilityType.APP, Config.instance.appPath)
-            caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Google Pixel 2")
-            caps.setCapability("os_version", "8.0")
             caps.setCapability("autoWebview", true)
             caps.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true)
             caps.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true)
             caps.setCapability("browserstack.local", "true")
             caps.setCapability("browserstack.debug","true")
+
             if(Config.instance.browserstackLocalIdentifier!="")
                 caps.setCapability("browserstack.localIdentifier",Config.instance.browserstackLocalIdentifier)
+
+            if(Config.instance.browserstackDeviceName!="")
+                caps.setCapability(MobileCapabilityType.DEVICE_NAME,Config.instance.browserstackDeviceName)
+            else
+                caps.setCapability(MobileCapabilityType.DEVICE_NAME,"Google Pixel 2")
+
+            if(Config.instance.browserstackDeviceOSversion!="")
+                caps.setCapability("os_version",Config.instance.browserstackDeviceOSversion)
+            else
+                caps.setCapability("os_version","8.0")
+
+            if(Config.instance.browserstackaAppVersion!="")
+               caps.setCapability("browserstack.app_version",Config.instance.browserstackaAppVersion)
+
+            if(Config.instance.browserstackNetworkProfile!="")
+                caps.setCapability("browserstack.networkProfile",Config.instance.browserstackNetworkProfile)
 
             return caps
         }

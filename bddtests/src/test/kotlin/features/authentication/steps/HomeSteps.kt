@@ -35,8 +35,8 @@ open class HomeSteps {
     }
 
     @Step
-    fun waitForLoginToComplete() {
+    fun waitForLoginToCompleteSuccessfully() {
         homePage.waitForSpinnerToDisappear()
-        homePage.assertNativeElementsLoaded()
+        homePage.locatorMethods.assertNativeElementsLoaded(homePage.greeting)
     }
 }
