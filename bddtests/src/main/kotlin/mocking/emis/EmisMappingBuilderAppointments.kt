@@ -5,7 +5,6 @@ import mocking.emis.appointments.AppointmentSlotsMetaBuilderEmis
 import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.appointments.DeleteAppointmentsBuilderEmis
 import mocking.emis.appointments.GetAppointmentBuilderEmis
-import mocking.emis.practices.PracticeSettingsBuilderEmis
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
@@ -14,8 +13,6 @@ import models.Patient
 import java.time.ZonedDateTime
 
 class EmisMappingBuilderAppointments(private var configuration: EmisConfiguration?) : IAppointmentMappingBuilder {
-
-    fun practiceSettingsRequest(patient: Patient) = PracticeSettingsBuilderEmis(patient)
 
     override fun viewMyAppointmentsRequest(patient: Patient):
             IMyAppointmentsBuilder = GetAppointmentBuilderEmis(configuration, patient)

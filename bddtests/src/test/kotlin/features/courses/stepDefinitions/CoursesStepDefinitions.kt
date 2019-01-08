@@ -15,8 +15,6 @@ import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
-import mocking.emis.EmisConfiguration
-import mocking.emis.EmisMappingBuilderAppointments
 import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
@@ -58,7 +56,6 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     var numCanBeRequested: Int = 0
     var showQuantity: Boolean = true
     var showDosage: Boolean = true
-    var prescriptionCommentsAllowed: Boolean = true
 
     @Given("I have (\\d+) (.*) assigned prescriptions")
     fun iHaveXAssignedPrescriptions(numberOfCourses: Int, gpSystem: String) {
@@ -150,8 +147,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
             response.inputRequirements.prescribingComment = NecessityOption.NOT_ALLOWED.text
         }
         mockingClient.forEmis {
-            EmisMappingBuilderAppointments(EmisConfiguration("16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7", "2.1.0.0"))
-                    .practiceSettingsRequest(currentPatient)
+            practiceSettingsRequest(currentPatient)
                     .respondWithSuccess(response)
         }
     }

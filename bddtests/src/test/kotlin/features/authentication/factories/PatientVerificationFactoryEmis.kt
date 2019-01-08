@@ -82,7 +82,7 @@ class PatientVerificationFactoryEmis: PatientVerificationFactory("EMIS"){
     override fun setSessionExtendMockResponse(patient: Patient, expectedResponse: String) {
 
         mockingClient.forEmis {
-            appointments.practiceSettingsRequest(patient).respondWith(
+            practiceSettingsRequest(patient).respondWith(
                     HttpStatus.SC_OK, resolve = {}, milliSecondDelay = 0)
         }
 

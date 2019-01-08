@@ -6,7 +6,9 @@ import mocking.MappingBuilder
 import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ErrorResponse
 import mocking.emis.models.ExceptionResponse
+import mocking.emis.practices.PracticeSettingsBuilderEmis
 import mocking.models.Mapping
+import models.Patient
 import org.apache.http.HttpStatus
 
 const val HEADER_API_APPLICATION_ID = "X-API-ApplicationId"
@@ -83,4 +85,6 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
                     .build()
         }
     }
+
+    fun practiceSettingsRequest(patient: Patient) = PracticeSettingsBuilderEmis(patient)
 }

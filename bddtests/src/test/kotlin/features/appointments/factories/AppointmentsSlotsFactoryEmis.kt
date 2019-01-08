@@ -31,7 +31,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
                 guidanceMessageOut!!.isNotEmpty() == appointmentsMessage!!.isNotEmpty())
 
         mockingClient.forEmis {
-            appointments.practiceSettingsRequest(patient)
+            practiceSettingsRequest(patient)
                     .respondWithSuccess(settingsResponse)
         }
 

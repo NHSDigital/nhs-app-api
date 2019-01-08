@@ -57,7 +57,7 @@ class MockDataPopulateNft(private val mockingClient: MockingClient) {
         val settingsResponse = getFileContents("appointments/GetEmisSettings.json")
 
         mockingClient.forEmis {
-            appointments.practiceSettingsRequest(patient)
+           practiceSettingsRequest(patient)
                     .respondWithSuccessJson(settingsResponse)
         }
 
