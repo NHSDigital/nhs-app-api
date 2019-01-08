@@ -8,7 +8,7 @@ class HomeViewController : UIViewController {
     
     @IBOutlet weak var headerBar: HeaderBar!
     @IBOutlet weak var headerBarSlim: HeaderBarSlim!
-
+    
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var containerView: UIView!
     
@@ -50,10 +50,10 @@ class HomeViewController : UIViewController {
         super.viewWillDisappear(animated)
         isPresented = false
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupNhsLogo()
         setupBackArrow()
         setupMyAccountIcon()
@@ -86,7 +86,7 @@ class HomeViewController : UIViewController {
         self.webViewController?.loadPage(url: pageUrl)
         
         configurationService = ConfigurationService(homeViewController: self)
-
+        
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!, configurationService: configurationService!)
         appWebInterface = AppWebInterface(webView: webViewController?.webView)
     }
@@ -103,9 +103,16 @@ class HomeViewController : UIViewController {
         let directory = config().CarouselDirectory
         
         if let path = Bundle.main.url(forResource: fileName, withExtension: type, subdirectory: directory) {
-            DispatchQueue.main.async {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                 self.webViewController?.webView.loadFileURL(path, allowingReadAccessTo: path)
-            }
+                self.webViewController?.webView.becomeFirstResponder()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    self.executeJavascript(scriptToExecute: "var isIos = true; removeAttrs(); var result = jQuery('#nhso_logo_one').focus();")
+                })
+            })
+
         } else {
             if #available(iOS 10.0, *) {
                 os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
@@ -173,10 +180,18 @@ class HomeViewController : UIViewController {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         let updateNativeVersionJavascriptCommand = "var result = window.$nuxt.$store.dispatch('appVersion/updateNativeVersion', '\(versionNumber)');"
         let updatePlatformJavascriptCommand = "var result = window.$nuxt.$store.dispatch('appVersion/updatePlatform', 'iOS');"
-
+        
+        executeJavascript(scriptToExecute: updateNativeVersionJavascriptCommand)
+        executeJavascript(scriptToExecute: updatePlatformJavascriptCommand)
+    }
+    
+    func executeJavascript(scriptToExecute: String) {
         let completionHandler: (Any?, Error?) -> Void = {
             (data, error) in
             if(error != nil) {
+                let description = error.debugDescription
+                print(description)
+                
                 if #available(iOS 10.0, *) {
                     os_log("An error occured setting the app version number.", log: OSLog.default, type: .error)
                 } else {
@@ -185,8 +200,7 @@ class HomeViewController : UIViewController {
             }
         }
         
-        self.webViewController?.webView.evaluateJavaScript(updateNativeVersionJavascriptCommand, completionHandler: completionHandler)
-        self.webViewController?.webView.evaluateJavaScript(updatePlatformJavascriptCommand, completionHandler: completionHandler)
+        self.webViewController?.webView.evaluateJavaScript(scriptToExecute, completionHandler: completionHandler)
     }
     
     func setVisibilityOfHeaderAndMenuBars(visible: Bool, isSlim: Bool) {

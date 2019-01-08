@@ -238,6 +238,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 
                 self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
                 break
+            case "focusElement":
+                let elementToFocus = message.body;
+                let script = "var result = jQuery('\(elementToFocus)').focus();"
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100), execute: {
+                    self.viewController.executeJavascript(scriptToExecute: script)
+                })
+                break
             case "onSessionExpiring":
                 var sessionDuration : Int? = message.body as? Int
                 if sessionDuration == nil {

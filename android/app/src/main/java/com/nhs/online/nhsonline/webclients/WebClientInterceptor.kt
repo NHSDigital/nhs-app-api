@@ -158,6 +158,9 @@ class WebClientInterceptor(
             cancelTrackingWebRequestResponse()
         }
 
+        view?.isFocusable = true
+        view?.requestFocus()
+
         super.onPageFinished(view, url)
     }
 

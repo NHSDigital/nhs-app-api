@@ -63,3 +63,7 @@ window.nativeApp.goToBiometrics = function(header) {
 window.nativeApp.onSessionExpiring = function(sessionDuration) {
     window.webkit.messageHandlers.onSessionExpiring.postMessage(sessionDuration);
 };
+
+window.nativeApp.focusElement = function(elementToFocus) {
+    window.webkit.messageHandlers.focusElement.postMessage(elementToFocus);
+}

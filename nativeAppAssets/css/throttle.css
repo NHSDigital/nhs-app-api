@@ -204,7 +204,7 @@ main.onboard .carousel .slick-dots li.slick-active button:before {
   font-size: 14px;
 }
 
-nav.onboard-nav {
+div.onboard-nav {
   background: #005EB8;
   position: fixed;
   bottom: 0;
@@ -224,7 +224,7 @@ nav.onboard-nav {
   justify-content: space-between;
 }
 
-nav.onboard-nav button {
+div.onboard-nav button {
   cursor: pointer;
   text-decoration: none;
   color: #ffffff;
@@ -238,15 +238,25 @@ nav.onboard-nav button {
   font-size: 1em;
 }
 
-nav.onboard-nav .left,
-nav.onboard-nav .right {
+div.onboard-nav .left,
+div.onboard-nav .right {
   width: 5em;
 }
 
-nav.onboard-nav .left {
+div.onboard-nav .left {
   text-align: left;
 }
 
-nav.onboard-nav .right {
+div.onboard-nav .right {
   text-align: right;
+}
+
+#slide-one-content {
+  display: none;
+}
+#slide-two-content {
+  display: none;
+}
+#slide-three-content {
+  display: none;
 }
