@@ -54,3 +54,7 @@ Testing the vision system requires SoapUI in order to generate security headers.
 - Load the `vision-supplied-environment.properties` file and set appropriate values in Preferences-->Global Properties from the secrets found in keybase.io
 
 - Set the project certificate keystore and password, by double clicking on the project, then selecting WS-Security Configuration --> Keystores entry. (NOTE soap-ui does not allow this password to be set from an environment variable, so change it before committing into this repository.
+
+## Microtest
+
+Microtest need a cert and key to be used in postman in order to hit their endpoints.  The `.pem` & `.crt` are found in keybase under `gp practice details\microtest_certs`
