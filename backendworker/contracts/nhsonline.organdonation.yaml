@@ -30,14 +30,50 @@ paths:
             description: Bad response received from upstream system.
           504:
             description: Timeout when calling upstream system.
+    post:
+        tags:
+          - organDonation
+        summary: Creates a users organ donation record
+        description: Creates the users organ donation record and returns the record identifier.
+        consumes:
+          - application/json
+        parameters:
+          - in: body
+            required: true
+            description:
+            properties:
+              registration:
+                type: object
+                $ref: '#/definitions/organDonationRegistration'
+              additionalDetails:
+                type: object
+                $ref: '#/definitions/additionalDetails'
+        responses:
+          201:
+            properties:
+              identifier:
+                type: string
+                description: Users organ donation identifier.
+            description: Successfully created the organ donation record and returned the record identifier.
+          400:
+            description: Bad request. Supplied request is incomplete or invalid.
+          401:
+            description: User session missing or expired.
+          409:
+            description: Conflicts on organ donation record.
+          500:
+            description: An unexpected error occurred processing the request.
+          502:
+            description: Bad response received from upstream system.
+          504:
+            description: Timeout when calling upstream system.
   /organdonation/referencedata:
       get:
           tags:
             - organDonation
           summary: Get the reference data required for registering an organ donation decision.
           description: Returns the reference data for titles, genders, religions, ethnicities and withdrawal reasons.
-          
-          consumes:
+          produces:
             - application/json
           responses:
             200:
@@ -76,6 +112,15 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/selectOption'
+  additionalDetails:
+    type: object
+    properties:
+      religionId:
+        type: string
+        description: The identifier for the select religion.
+      ethnicityId:
+        type: string
+        description: The identifier for the select ethnicity.
   organDonationRegistration:
     type: object
     properties:
@@ -122,7 +167,7 @@ definitions:
         description: The identifier for the select option.
       displayName:
         type: string
-        description: The value to be displayed to the user.      
+        description: The value to be displayed to the user.
   usersName:
     type: object
     description: Users name object.
