@@ -5,39 +5,39 @@ import pages.TermsAndConditionsPage
 
 open class TermsAndConditionsSteps {
 
-    lateinit var termsAndConditions: TermsAndConditionsPage
+    lateinit var termsAndConditionsPage: TermsAndConditionsPage
 
     @Step
     fun mainErrorMessageVisible() : Boolean {
-        return termsAndConditions.isMainErrorMessageVisible()
+        return termsAndConditionsPage.isMainErrorMessageVisible()
     }
     @Step
     fun mainBodyTextVisible() : Boolean {
-        return termsAndConditions.isMainBodyTextVisible()
+        return termsAndConditionsPage.isMainBodyTextVisible()
     }
     @Step
     fun termsOfUseLinkVisible() : Boolean {
-        return termsAndConditions.isTermsOfUseLinkVisible()
+        return termsAndConditionsPage.isTermsOfUseLinkVisible()
     }
     @Step
     fun privacyPolicyLinkVisible() : Boolean {
-        return termsAndConditions.isPrivacyPolicyLinkVisible()
+        return termsAndConditionsPage.isPrivacyPolicyLinkVisible()
     }
     @Step
     fun cookiesPolicyLinkVisible() : Boolean {
-        return termsAndConditions.isCookiesPolicyLinkVisible()
+        return termsAndConditionsPage.isCookiesPolicyLinkVisible()
     }
     @Step
     fun secondaryErrorMessageVisible() : Boolean {
-        return termsAndConditions.isSecondaryErrorMessageVisible()
+        return termsAndConditionsPage.isSecondaryErrorMessageVisible()
     }
     @Step
     fun tcCheckBoxVisible() : Boolean {
-        return termsAndConditions.isTcCheckBoxVisible()
+        return termsAndConditionsPage.isTcCheckBoxVisible()
     }
     @Step
     fun continueButtonVisible() : Boolean {
-        return termsAndConditions.isContinueButtonVisible()
+        return termsAndConditionsPage.isContinueButtonVisible()
     }
 
 }

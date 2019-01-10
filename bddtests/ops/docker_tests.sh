@@ -44,8 +44,13 @@ then
   PARALLEL=1
 fi
 
+# create run time version of docker-compose and environment variables so we can amend values for throttling/cosmos tests
+cp docker-compose_ci.yml docker-compose_ci_run.yml
+cp vars_ci.env vars_ci_run.env
+sed -i '' -e 's/vars_ci.env/vars_ci_run.env/g' docker-compose_ci_run.yml
+
 # List all docker images in the docker compose setup
-DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
+DOCKER_SERVICES=`docker-compose -f docker-compose_ci_run.yml config --services`
 
 if [ "$RUN_SUBSET" == 0 ]
 then
@@ -61,11 +66,11 @@ else
         then
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
-          @tech-debt and not @throttling"
+          @tech-debt and not @throttling and not @cosmos"
         else
           info "Main Tranche - Full BDD Test Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
-          @tech-debt and not @long-running and not @throttling $SPECIFIC_TEST_TAGS"
+          @tech-debt and not @long-running and not @throttling and not @cosmos $SPECIFIC_TEST_TAGS"
         fi
         if [ "$PARALLEL" == 1 ]
         then
@@ -74,10 +79,18 @@ else
           TAGS=(throttling specific)
           BDD_CUCUMBER_OPTIONS_PREFIX=$BDD_CUCUMBER_OPTIONS_PREFIX"'"
         fi
+    elif [ "$ENABLE_COSMOS_TESTS" == 1 ]
+    then
+        [ -z "$COSMOS_AUTHKEY" ] && die "COSMOS_AUTHKEY not specified, it is required if cosmos tests are enabled"
+        echo "TERMS_CONDITIONS_COSMOS_AUTH_KEY=$COSMOS_AUTHKEY" >> vars_ci_run.env
+        sed -i '' -e 's/STUB\_TERMS\_AND\_CONDITIONS\=true/STUB\_TERMS\_AND\_CONDITIONS\=false/g' vars_ci_run.env
+        info "Main Tranche - Run Cosmos Tests"
+        BDD_CUCUMBER_OPTIONS_PREFIX="--tags '@cosmos'"
+        TAGS=(specific)
     else
         info "MR Tranche - BDD Smoketest Run Configured"
         BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and
-        not @long-running and not @throttling $SPECIFIC_TEST_TAGS"
+        not @long-running and not @throttling and not @cosmos $SPECIFIC_TEST_TAGS"
         TAGS=smoketest
     fi
 fi
@@ -137,12 +150,12 @@ fi
 
 for s in $DOCKER_SERVICES; do
   if [[ "$s" != "api.local.bitraft.io" && "$s" != "www.local.bitraft.io" ]]; then #Don't pull local images we've built as part of the pipeline
-    docker-compose -f docker-compose_ci.yml pull $s
+    docker-compose -f docker-compose_ci_run.yml pull $s
   fi
 done
 
 # Output list of images contained in config
-docker-compose -f docker-compose_ci.yml config | grep image
+docker-compose -f docker-compose_ci_run.yml config | grep image
 
 #pre-cleanup
 rm -r $workingDir/../../testRunFolder/*
@@ -162,13 +175,13 @@ info "Running $TAG tests"
   
   if [ $TAG == "throttling" ]
   then
-    sed -i '' -e 's/THROTTLING\_ENABLED\=false/THROTTLING\_ENABLED\=true/g' vars_ci.env
+    sed -i '' -e 's/THROTTLING\_ENABLED\=false/THROTTLING\_ENABLED\=true/g' vars_ci_run.env
   else
-    sed -i '' -e 's/THROTTLING\_ENABLED\=true/THROTTLING\_ENABLED\=false/g' vars_ci.env
+    sed -i '' -e 's/THROTTLING\_ENABLED\=true/THROTTLING\_ENABLED\=false/g' vars_ci_run.env
   fi
 
   # Run docker tests per tag
-  docker-compose -p $TAG -f docker-compose_ci.yml up -d --build || die "Docker compose failure"
+  docker-compose -p $TAG -f docker-compose_ci_run.yml up -d --build || die "Docker compose failure"
 
   ##################### Runtime vars
   WEB_ID=$(docker ps -qf name=${TAG}_web.*)
@@ -210,7 +223,7 @@ info "Running $TAG tests"
   --name $TAG \
   --rm \
   --network $NETWORK \
-  --env-file vars_ci.env \
+  --env-file vars_ci_run.env \
   -v $workingDir/../../testRunFolder/$TAG/:/repo \
   $DOCKER_IMAGE bash -c " \
     cd /repo ; \
@@ -221,7 +234,7 @@ info "Running $TAG tests"
       -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
       -Dwebdriver.provided.type=$BROWSER \
       $APPIUM_TYPE \
-      -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=')" &
+      -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')" &
   
   PID=$!
   
@@ -231,8 +244,6 @@ info "Running $TAG tests"
   fi
 
   PIDS+=($PID)
-
-  sed -i '' -e 's/THROTTLING\_ENABLED\=true/THROTTLING\_ENABLED\=false/g' vars_ci.env
 
 done
 
@@ -268,16 +279,18 @@ mkdir -p logs
 
 for TAG in ${TAGS[*]}; do
   
-  for container in $(docker-compose -p ${TAG} -f docker-compose_ci.yml ps | tail -n +3 | awk '{print $1}' ); do
+  for container in $(docker-compose -p ${TAG} -f docker-compose_ci_run.yml ps | tail -n +3 | awk '{print $1}' ); do
     docker logs $container >& ./logs/$container.log
   done
 
-  docker-compose -p $TAG -f docker-compose_ci.yml stop
+  docker-compose -p $TAG -f docker-compose_ci_run.yml stop
 
 done
 
 #cleanup
 rm -r $workingDir/../../testRunFolder/*
+rm -f docker-compose_ci_run.yml
+rm -f vars_ci_run.env
 
 docker rm -f $(docker ps -aq)
 

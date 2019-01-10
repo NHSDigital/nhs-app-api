@@ -24,7 +24,13 @@ class TermsAndConditionsPage : HybridPageObject() {
     )
 
     val tcCheckBox = HybridPageElement(
-            browserLocator = "//*[@id='agree_checkbox']",
+            browserLocator = "//input[@id='termsAndConditions-agree_checkbox']",
+            androidLocator = null,
+            page = this
+    )
+
+    val termsAndConditionsLabel = HybridPageElement(
+            browserLocator = "//label[@id='termsAndConditionsCheckboxLabel']",
             androidLocator = null,
             page = this
     )
@@ -53,6 +59,11 @@ class TermsAndConditionsPage : HybridPageObject() {
             page = this
     )
 
+    val tcBackButton = HybridPageElement(
+            browserLocator = "//*[@id='backIcon']",
+            androidLocator = null,
+            page = this
+    )
 
     fun isMainErrorMessageVisible() : Boolean {
         return mainErrorMessage.element.isVisible
