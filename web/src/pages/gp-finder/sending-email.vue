@@ -132,11 +132,7 @@ export default {
   },
   methods: {
     onReturnHomeClicked() {
-      const sourceValue = this.$store.state.device.source;
-      this.$router.push({
-        path: LOGIN.path,
-        query: { source: sourceValue },
-      });
+      this.$router.push(LOGIN.path);
     },
   },
 };

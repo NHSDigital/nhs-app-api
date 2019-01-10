@@ -46,10 +46,8 @@ export default {
   created() {
     if (Sources.isNative(this.$route.query.source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
-    } else {
-      this.$store.dispatch('device/updateIsNativeApp', false);
+      this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
     }
-    this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
 
     if (process.browser) {
       this.$store.dispatch('session/updateLastCalledAt');

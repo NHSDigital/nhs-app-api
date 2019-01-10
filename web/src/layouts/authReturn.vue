@@ -67,10 +67,8 @@ export default {
 
     if (Sources.isNative(source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
-    } else {
-      this.$store.dispatch('device/updateIsNativeApp', false);
+      this.$store.dispatch('device/setSourceDevice', source);
     }
-    this.$store.dispatch('device/setSourceDevice', source);
   },
   methods: {
     pageTitle() {
