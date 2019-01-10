@@ -45,6 +45,7 @@
 "AppUpdateRequiredTitle" = "Update required";
 "AppUpdateRequiredMessage" = "You need to update the NHS App.\nYou won't be able to use it until you do.";
 "AppUpdateRequiredCloseButtonText" = "Close";
+"AppUpdateRequiredGoToUpdateButtonText" = "Click here to update";
 
 /*Alert strings*/
 "sessionExpiryWarningHeader" = "You'll be logged out shortly";

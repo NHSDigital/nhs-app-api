@@ -28,13 +28,16 @@ class LifecycleHandlers: NSObject {
     }
     
     @objc
-    func performAppVersionCheck() {
+    func performAppVersionCheck(completionHandler: (() -> Void)? = nil) {
         if (hasCheckedAppVersionSinceAppOpened == false) {
             configurationService.isUserDeviceAllowed { (result) in
                 if (result.isValidConfiguration == false) {
                     DispatchQueue.main.async {
                         self.displayAppVersionOutOfDate()
+                        completionHandler?()
                     }
+                } else {
+                    completionHandler?()
                 }
             }
         }
@@ -44,8 +47,25 @@ class LifecycleHandlers: NSObject {
         let appUpdateRequiredTitle = NSLocalizedString("AppUpdateRequiredTitle", comment: "")
         let appUpdateRequiredMessage = NSLocalizedString("AppUpdateRequiredMessage", comment: "")
         let appUpdateRequiredCloseButtonText = NSLocalizedString("AppUpdateRequiredCloseButtonText", comment: "")
+        let appUpdateRequiredGoToUpdateButtonText = NSLocalizedString("AppUpdateRequiredGoToUpdateButtonText", comment: "")
         
         let alert = UIAlertController(title: appUpdateRequiredTitle, message: appUpdateRequiredMessage, preferredStyle: UIAlertControllerStyle.alert)
+        
+        let appStoreUrl = config().AppStoreUrl
+        if (!appStoreUrl.isEmpty) {
+            alert.addAction(UIAlertAction(title: appUpdateRequiredGoToUpdateButtonText, style: .default, handler: { action in
+                self.hasCheckedAppVersionSinceAppOpened = false
+                
+                if let url = URL(string: appStoreUrl), UIApplication.shared.canOpenURL(url) {
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    } else {
+                        UIApplication.shared.openURL(url)
+                    }
+                }
+            }))
+        }
+
         alert.addAction(UIAlertAction(title: appUpdateRequiredCloseButtonText, style: .cancel, handler: { action in
             self.hasCheckedAppVersionSinceAppOpened = false
             UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)

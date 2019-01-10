@@ -11,6 +11,7 @@ import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.utils.Html
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import junit.framework.Assert.assertEquals
 import org.junit.Assert
@@ -117,5 +118,85 @@ class MainActivityTest {
         val messageTextView = logoutAlertDialog.findViewById<TextView>(android.R.id.message)
         Assert.assertNotNull(messageTextView)
         messageTextView?.apply { Assert.assertEquals("Are you sure you want to log out?", text) }
+    }
+
+    @Test
+    fun showVersionUpgradeDialog_CheckUpdateUrl_NotInitialised_ShowAlertDialog() {
+        try {
+            spyActivity.showVersionUpgradeDialog()
+        } catch (e: Exception) {
+            assert(false)
+        }
+
+        val updateAlertDialog = ShadowDialog.getLatestDialog() as AlertDialog
+        Assert.assertNotNull(updateAlertDialog)
+        Assert.assertTrue(updateAlertDialog.isShowing)
+
+        val messageTextView = updateAlertDialog.findViewById<TextView>(android.R.id.message)
+        Assert.assertNotNull(messageTextView)
+        messageTextView?.apply { Assert.assertTrue(text.contains("Click here to update")) }
+
+        var dialogUrls = messageTextView?.urls
+        val updateUrl = dialogUrls!![0].getURL()
+
+        messageTextView?.apply { Assert.assertEquals("market://details?id=com.nhs.online.nhsonline", updateUrl) }
+    }
+
+    @Test
+    fun showVersionUpgradeDialog_IsInitialised_AndNotCurrentlyShowing_ShowAlertDialog() {
+        lateinit var upgradeDialog: AlertDialog
+
+        val builder: AlertDialog.Builder = AlertDialog.Builder(spyActivity)
+                .setTitle("Test Header")
+
+        builder.setCancelable(false)
+        upgradeDialog = builder.create()
+        upgradeDialog.setCanceledOnTouchOutside(false)
+        upgradeDialog.setCancelable(false)
+
+        FieldSetter.setField(spyActivity, spyActivity::class.java.getDeclaredField("upgradeDialog"), upgradeDialog)
+
+        try {
+            spyActivity.showVersionUpgradeDialog()
+        } catch (e: Exception) {
+            assert(false)
+        }
+
+        val updateAlertDialog = ShadowDialog.getLatestDialog() as AlertDialog
+        Assert.assertNotNull(updateAlertDialog)
+        Assert.assertTrue(updateAlertDialog.isShowing)
+
+        val messageTextView = updateAlertDialog.findViewById<TextView>(android.R.id.message)
+        Assert.assertNotNull(messageTextView)
+        messageTextView?.apply { Assert.assertTrue(text.contains("Click here to update")) }
+    }
+
+
+    @Test
+    fun showVersionUpgradeDialog_IsInitialised_CurrentlyShowing_CurrentAlertShouldntBeOverridden() {
+        lateinit var upgradeDialog: AlertDialog
+
+        val builder: AlertDialog.Builder = AlertDialog.Builder(spyActivity)
+                .setMessage("Test Message")
+
+        builder.setCancelable(false)
+        upgradeDialog = builder.create()
+        upgradeDialog.setCanceledOnTouchOutside(false)
+        upgradeDialog.setCancelable(false)
+        upgradeDialog.show()
+
+        FieldSetter.setField(spyActivity, spyActivity::class.java.getDeclaredField("upgradeDialog"), upgradeDialog)
+        try {
+            spyActivity.showVersionUpgradeDialog()
+        } catch (e: Exception) {
+            assert(false)
+        }
+
+        val updateAlertDialog = ShadowDialog.getLatestDialog() as AlertDialog
+        Assert.assertNotNull(updateAlertDialog)
+        Assert.assertTrue(updateAlertDialog.isShowing)
+        val messageTextView = updateAlertDialog.findViewById<TextView>(android.R.id.message)
+        Assert.assertNotNull(messageTextView)
+        messageTextView?.apply { Assert.assertTrue(text.contains("Test Message")) }
     }
 }

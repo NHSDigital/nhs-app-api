@@ -143,5 +143,7 @@
 	<string>https://$(ORGAN_DONATION_URL_NATIVE)</string>
 	<key>NativeDonationPath</key>
 	<string>$(NATIVE_DONATION_PATH)</string>
+	<key>AppStoreUrl</key>
+	<string>$(APP_STORE_SCHEME)://$(APP_STORE_URL)$(APP_STORE_ID)?mt=8</string>
 </dict>
 </plist>

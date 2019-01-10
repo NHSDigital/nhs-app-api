@@ -71,6 +71,7 @@
     <string name="UpdateRequiredHeader">Update required</string>
     <string name="UpdateHeader">You need to update the NHS App</string>
     <string name="UpdateDesc">You won\'t be able to use it until you do.</string>
+    <string name="UpdateNativeLink">&lt;a href=\"market://details?id=com.nhs.online.nhsonline\">Click here to update&lt;/a></string>
     <string name="Close">Close</string>
 
     <string name="rootedDeviceDialogHeader">You cannot use the NHS App with a rooted Android device</string>

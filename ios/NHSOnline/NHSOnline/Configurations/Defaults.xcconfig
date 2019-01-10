@@ -34,3 +34,6 @@ ACCESSIBILITY_STATEMENT_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/
 DATA_PREFERENCES_URL = ndopapp-int1.thunderbird.service.nhs.uk/createsession
 RESPONSE_WAITING_TIME = 20
 CONFIGURATION_API_PATH = configuration?deviceName=iOS&nativeAppVersion=%@
+APP_STORE_SCHEME = itms-apps
+APP_STORE_URL = itunes.apple.com/app/
+APP_STORE_ID = id1388411277

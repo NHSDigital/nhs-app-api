@@ -18,6 +18,7 @@
 		139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139F19262181D73300ED59A1 /* HeaderBarSlim.xib */; };
 		139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */; };
 		13F588AE21BA863D002857EA /* BiometricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F588AD21BA863D002857EA /* BiometricsViewController.swift */; };
+		3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */; };
 		3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */; };
 		3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */; };
 		3EF9DDD421ABFDE40052C72A /* UIAlertController_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */; };
@@ -84,6 +85,7 @@
 		139F19272181D73300ED59A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBarSlim.xib; sourceTree = "<group>"; };
 		139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarSlim.swift; sourceTree = "<group>"; };
 		13F588AD21BA863D002857EA /* BiometricsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsViewController.swift; sourceTree = "<group>"; };
+		3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlersTests.swift; sourceTree = "<group>"; };
 		3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterface.swift; sourceTree = "<group>"; };
 		3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppInterface.swift; sourceTree = "<group>"; };
 		3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController_Extensions.swift; sourceTree = "<group>"; };
@@ -175,6 +177,14 @@
 			path = Configurations;
 			sourceTree = "<group>";
 		};
+		3067F25321E39BF7009734AF /* Lifecycle */ = {
+			isa = PBXGroup;
+			children = (
+				3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */,
+			);
+			path = Lifecycle;
+			sourceTree = "<group>";
+		};
 		3E5BD2D3219EE5CC00774F06 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
@@ -250,6 +260,7 @@
 		C20578162028B94800CDBDC5 /* NHSOnlineTests */ = {
 			isa = PBXGroup;
 			children = (
+				3067F25321E39BF7009734AF /* Lifecycle */,
 				F01745A6207B700700877E4D /* Info.plist */,
 				C20578172028B94800CDBDC5 /* SafariTests.swift */,
 				F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */,
@@ -520,6 +531,7 @@
 				F01745BB207BA39200877E4D /* SafariTests.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
 				C2357EBA216574F20033B98F /* KnownServiceTests.swift in Sources */,
+				3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

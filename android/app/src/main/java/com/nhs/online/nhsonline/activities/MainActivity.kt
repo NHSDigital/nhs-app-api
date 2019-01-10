@@ -363,9 +363,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
     fun showVersionUpgradeDialog() {
         if ((::upgradeDialog.isInitialized && !upgradeDialog.isShowing) || !::upgradeDialog.isInitialized) {
 
+            val content = "${resources.getString(R.string.UpdateHeader)}" +
+                    "<br/><br/>" +
+                    "${resources.getString(R.string.UpdateNativeLink)}" +
+                    "<br/><br/>" +
+                    "${resources.getString(R.string.UpdateDesc)}"
+
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
                     .setTitle(resources.getString(R.string.UpdateRequiredHeader))
-                    .setMessage(resources.getString(R.string.UpdateHeader) + "\n" + resources.getString(R.string.UpdateDesc))
+                    .setMessage( Html.fromHtml(content ))
                     .setNegativeButton(resources.getString(R.string.Close)) { _, _ ->
                         this.finishAndRemoveTask()
                     }
@@ -375,6 +381,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
             upgradeDialog.setCanceledOnTouchOutside(false)
             upgradeDialog.setCancelable(false)
             upgradeDialog.show()
+
+            (upgradeDialog.findViewById<TextView>(android.R.id.message) as TextView).movementMethod = LinkMovementMethod.getInstance()
         }
     }
 

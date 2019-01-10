@@ -8,7 +8,7 @@ struct Config: Decodable {
         case ResponseWaitingTime, SessionTimeout
         case IsFirstTimeOpened, HaveShownThrottlingCarouselBefore, CarouselDirectory, CarouselContentType, IntroCarouselFileName, ThrottlingCarouselFileName
         case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL
-        case BaseApiUrl, ConfigurationApiPath
+        case BaseApiUrl, ConfigurationApiPath, AppStoreUrl
     }
     
     let HomeUrl: String
@@ -52,6 +52,7 @@ struct Config: Decodable {
     let AccessibilityStatementURL: String
     let BaseApiUrl: String
     let ConfigurationApiPath: String
+    let AppStoreUrl: String
 }
 
 func config() -> Config {
