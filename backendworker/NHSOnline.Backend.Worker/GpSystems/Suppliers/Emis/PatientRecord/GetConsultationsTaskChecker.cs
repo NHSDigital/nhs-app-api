@@ -9,18 +9,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
     public class GetConsultationsTaskChecker
     {
         private readonly ILogger<EmisPatientRecordService> _logger;
-        
+
         public GetConsultationsTaskChecker(ILogger<EmisPatientRecordService> logger)
         {
             _logger = logger;
         }
-        
+
         public Consultations Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
         {
             _logger.LogEnter();
-            
+
             Consultations consultations = null;
-            
+
             if (!task.IsCompletedSuccessfully)
             {
                 _logger.LogError("Retrieving consultations task completed unsuccessfully");
@@ -29,14 +29,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     HasErrored = true
                 };
             }
-            
+
             var consultationsResponse = task.Result;
-            
+
             if (!consultationsResponse.HasSuccessResponse)
             {
                 // User does not have access
                 if (consultationsResponse.HasForbiddenResponse() ||
-                    consultationsResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
+                    consultationsResponse.HasExceptionWithMessageContaining(
+                        "Requested record access is disabled by the practice"))
                 {
                     _logger.LogWarning("User does not have access to their patient record");
                     consultations = new Consultations
@@ -56,7 +57,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             }
 
             _logger.LogExit();
-            return consultations ?? new EmisConsulationMapper().Map(consultationsResponse.Body);
+            return consultations ?? new EmisConsultationMapper().Map(consultationsResponse.Body);
         }
     }
 }

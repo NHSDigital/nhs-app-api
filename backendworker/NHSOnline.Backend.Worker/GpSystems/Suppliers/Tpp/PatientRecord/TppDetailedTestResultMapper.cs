@@ -5,7 +5,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public class TppDetailedTestResultMapper: ITppDetailedTestResultMapper
+    public class TppDetailedTestResultMapper : ITppDetailedTestResultMapper
     {
         public TestResultResponse Map(TestResultsViewReply testResultsViewReply)
         {
@@ -15,10 +15,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             }
 
             return new TestResultResponse
-            {    
-                TestResult = testResultsViewReply.Items != null ? (from item in testResultsViewReply.Items
-                             select item.Value).FirstOrDefault() : string.Empty
+            {
+                TestResult = testResultsViewReply.Items
+                             != null
+                    ? testResultsViewReply.Items.Select(item => item.Value).FirstOrDefault()
+                    : string.Empty
             };
-        }     
+        }
     }
 }

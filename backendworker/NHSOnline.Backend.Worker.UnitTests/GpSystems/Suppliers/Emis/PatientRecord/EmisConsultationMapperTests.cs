@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         [TestMethod]
         public void MapConsultationRequestGetResponseToConsultationListResponse_WithNullResponse_ThrowsNullReferenceException()
         {
-            Action act = () => new EmisConsulationMapper().Map(null);
+            Action act = () => new EmisConsultationMapper().Map(null);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("consultationsGetResponse");
         }
@@ -120,7 +120,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             };
                 
             // Act
-            var result = new EmisConsulationMapper().Map(item);
+            var result = new EmisConsultationMapper().Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -279,7 +279,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             };
                 
             // Act
-            var result = new EmisConsulationMapper().Map(item);
+            var result = new EmisConsultationMapper().Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -379,7 +379,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             };
             
             // Act
-            var result = new EmisConsulationMapper().Map(item);
+            var result = new EmisConsultationMapper().Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -453,7 +453,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             };
             
             // Act
-            var result = new EmisConsulationMapper().Map(item);
+            var result = new EmisConsultationMapper().Map(item);
 
             // Assert
             result.Should().NotBeNull();
@@ -493,7 +493,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             };
             
             // Act
-            var result = new EmisConsulationMapper().Map(item);
+            var result = new EmisConsultationMapper().Map(item);
 
             // Assert
             result.Should().NotBeNull();

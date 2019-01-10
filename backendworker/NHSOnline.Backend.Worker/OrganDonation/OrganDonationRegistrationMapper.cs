@@ -16,9 +16,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             OrganDonationRegistration>
     {
         private const string AllChoiceKey = "all";
+        private readonly IMapper<string, ChoiceState> _organDonationChoiceStateMapper;
         private readonly IMapper<string, Decision> _organDonationDecisionMapper;
         private readonly IMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;
-        private readonly IMapper<string, ChoiceState> _organDonationChoiceStateMapper;
         private readonly ILogger<OrganDonationRegistrationMapper> _logger;
 
         public OrganDonationRegistrationMapper(IMapper<string, Decision> organDonationDecisionMapper,
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 NameFull = source.PatientName,
                 Name = MapName(source),
                 NhsNumber = source.NhsNumber,
-                DateOfBirth = source.DateOfBirth,
+                DateOfBirth = source.DateOfBirth
             };
         }
 
@@ -137,16 +137,22 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
         private DecisionDetails MapDecisionDetails(RegistrationLookupResponse existingRegistration)
         {
+            var overallDecision =
+                _organDonationChoiceStateMapper.Map(existingRegistration.DonationWishes[AllChoiceKey]);
+
+            var choiceBreakdown =
+                existingRegistration
+                    .DonationWishes
+                    .Where(choice => !string.Equals(choice.Key, AllChoiceKey, StringComparison.Ordinal));
+
             var decisionDetails = new DecisionDetails
             {
-                All = _organDonationChoiceStateMapper.Map(existingRegistration.DonationWishes[AllChoiceKey]) ==
-                      ChoiceState.Yes,
-                Choices = existingRegistration.DonationWishes.Where(w =>
-                        !string.Equals(w.Key, AllChoiceKey, StringComparison.Ordinal))
-                    .Select(w => new Choice
+                All = overallDecision == ChoiceState.Yes,
+                Choices = choiceBreakdown
+                    .Select(choice => new Choice
                     {
-                        Name = w.Key,
-                        Value = _organDonationChoiceStateMapper.Map(w.Value)
+                        Name = choice.Key,
+                        Value = _organDonationChoiceStateMapper.Map(choice.Value)
                     })
                     .ToList()
             };

@@ -45,12 +45,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
                 medications.Data.AcuteMedications = 
                     acuteMedications.Select(MapMedicationResponse);
 
-                var curentRepeatMedications =
+                var currentRepeatMedications =
                     parsedContent.Patient.Clinicals.Where(
                         x => x.SubGroupCode.Equals(CurrentRepeat, StringComparison.OrdinalIgnoreCase));
 
                 medications.Data.CurrentRepeatMedications =
-                    curentRepeatMedications.Select(MapMedicationResponse);
+                    currentRepeatMedications.Select(MapMedicationResponse);
                 
                 var discontinuedRepeatMedications = parsedContent.Patient.Clinicals
                     .Where(x => x.SubGroupCode.Equals(DiscontinuedRepeat, StringComparison.OrdinalIgnoreCase) &&

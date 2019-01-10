@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
         private static bool IsValidGuidList(IEnumerable<string> courseIds)
         {
-            return courseIds.All(courseId => Guid.TryParse(courseId, out var _));
+            return courseIds.All(courseId => Guid.TryParse(courseId, out _));
         }
     }
 }

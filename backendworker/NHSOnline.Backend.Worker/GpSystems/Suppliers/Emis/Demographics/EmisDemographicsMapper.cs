@@ -13,13 +13,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
             {
                 throw new ArgumentNullException(nameof(demographicsGetResponse));
             }
- 
+
+            var nhsNumber = string.Empty;
+            var allNhsNumbersInResponse = demographicsGetResponse.ExtractNhsNumbers().ToArray();
+
+            if (allNhsNumbersInResponse.Any())
+            {
+                nhsNumber = allNhsNumbersInResponse.First().NhsNumber;
+            }
+
             return new DemographicsResponse
             {
                 PatientName = FormatName(demographicsGetResponse),
                 DateOfBirth = demographicsGetResponse.DateOfBirth,
                 Sex = demographicsGetResponse.Sex,
-                NhsNumber = demographicsGetResponse.ExtractNhsNumbers().Any() ? demographicsGetResponse.ExtractNhsNumbers().First().NhsNumber : null,
+                NhsNumber = nhsNumber,
                 Address = demographicsGetResponse.Address?.ToString(),
                 AddressParts = new DemographicsAddress
                 {
@@ -37,8 +45,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
 
         private static string FormatName(DemographicsGetResponse demographicsGetResponse)
         {
-            return string.Join(" ", new[] { demographicsGetResponse.Title, demographicsGetResponse.FirstName, demographicsGetResponse.Surname }
-                .Where(part => !string.IsNullOrEmpty(part)));
+            return string.Join(" ",
+                new[]
+                    {
+                        demographicsGetResponse.Title, demographicsGetResponse.FirstName,
+                        demographicsGetResponse.Surname
+                    }
+                    .Where(part => !string.IsNullOrEmpty(part)));
         }
     }
 }

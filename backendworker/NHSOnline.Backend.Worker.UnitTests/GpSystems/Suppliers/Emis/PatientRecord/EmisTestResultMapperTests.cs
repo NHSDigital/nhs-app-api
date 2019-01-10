@@ -8,18 +8,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
     [TestClass]
     public class EmisTestResultMapperTests
     {
-        private EmisTestResultMapper _systemUnderTest;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _systemUnderTest = new EmisTestResultMapper();
-        }
-
         [TestMethod]
         public void MapTestResultsRequestsGetResponseToTestResultsListResponse_WithNullResponse_ThrowsNullReferenceException()
         {
-            Action act = () => _systemUnderTest.Map(null);
+            Action act = () => new EmisTestResultMapper().Map(null);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("testResultRequestsGetResponse");
         }

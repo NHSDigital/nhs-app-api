@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
     {
         TestResults Map(TestResultsViewReply testResultsViewReply);
     }
-    
+
     public class TppTestResultsMapper : ITppTestResultsMapper
     {
         public TestResults Map(TestResultsViewReply testResultsViewReply)
@@ -21,18 +21,28 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 throw new ArgumentNullException(nameof(testResultsViewReply));
             }
 
-            return new TestResults
-            {    
-                Data = testResultsViewReply.Items != null ?
-                        (from testResult in testResultsViewReply.Items
-                            select new TestResultItem
-                            {
-                                Id = testResult.Id,
-                                Date = new MyRecordDate { Value = DateTimeOffset.Parse(testResult.Date, CultureInfo.InvariantCulture) },
-                                Description = string.Format(CultureInfo.InvariantCulture,"{0} - {1}", testResult.Description, testResult.Value),
-                            }
-                        ).ToList() : new List<TestResultItem>()
-            };
-        }     
+            var testResultData = new List<TestResultItem>();
+            var testResults = new TestResults();
+
+            if (testResultsViewReply.Items != null && testResultsViewReply.Items.Any())
+            {
+                foreach (var testResult in testResultsViewReply.Items)
+                {
+                    var newTestResultItem = new TestResultItem
+                    {
+                        Id = testResult.Id,
+                        Date = new MyRecordDate
+                            { Value = DateTimeOffset.Parse(testResult.Date, CultureInfo.InvariantCulture) },
+                        Description = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", testResult.Description,
+                            testResult.Value)
+                    };
+
+                    testResultData.Add(newTestResultItem);
+                }
+            }
+
+            testResults.Data = testResultData;
+            return testResults;
+        }
     }
 }
