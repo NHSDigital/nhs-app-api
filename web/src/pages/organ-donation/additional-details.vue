@@ -3,10 +3,14 @@
     <div :class="$style.info">
       <h2>{{ $t('organDonation.additionalDetails.subheader') }}</h2>
       <form id="continue-form" :action="continueAction" method="post">
+        <input :value="JSON.stringify($store.state.organDonation)"
+               type="hidden"
+               name="nojs.organDonation">
         <label :class="$style.label" for="ethnicity">
           {{ $t('organDonation.additionalDetails.ethnicity.label') }}
         </label>
         <select-dropdown :class="$style.select"
+                         :required="false"
                          v-model="ethnicityId"
                          select-id="ethnicity"
                          select-name="nojs.organDonation.additionalDetails.ethnicityId">
@@ -23,6 +27,7 @@
           {{ $t('organDonation.additionalDetails.religion.label') }}
         </label>
         <select-dropdown :class="$style.select"
+                         :required="false"
                          v-model="religionId"
                          select-id="religion"
                          select-name="nojs.organDonation.additionalDetails.religionId">
@@ -56,10 +61,11 @@
 
 <script>
 import get from 'lodash/fp/get';
+import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import GenericButton from '@/components/widgets/GenericButton';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import { ORGAN_DONATION, ORGAN_DONATION_CONFIRMATION } from '@/lib/routes';
+import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 import { DECISION_NOT_FOUND } from '@/store/modules/organDonation/mutation-types';
 
 const mapAdditionalDetails = self => ({
@@ -73,12 +79,13 @@ export default {
     NoJsForm,
     SelectDropdown,
   },
+  mixins: [EnsureDecisionMixin],
   data() {
     return {
       backAction: ORGAN_DONATION.path,
-      continueAction: ORGAN_DONATION_CONFIRMATION.path,
-      ethnicityId: undefined,
-      religionId: undefined,
+      continueAction: ORGAN_DONATION_REVIEW_YOUR_DECISION.path,
+      ethnicityId: get('$store.state.organDonation.additionalDetails.ethnicityId')(this),
+      religionId: get('$store.state.organDonation.additionalDetails.religionId')(this),
     };
   },
   computed: {
@@ -102,11 +109,7 @@ export default {
       });
     },
   },
-  asyncData({ redirect, store }) {
-    if (store.state.organDonation.registration.decision === DECISION_NOT_FOUND) {
-      return redirect(ORGAN_DONATION.path);
-    }
-
+  asyncData({ store }) {
     return store.dispatch('organDonation/getReferenceData');
   },
   mounted() {
@@ -120,7 +123,7 @@ export default {
     },
     continueClicked() {
       this.$store.dispatch('organDonation/setAdditionalDetails', mapAdditionalDetails(this));
-      this.$router.push(ORGAN_DONATION_CONFIRMATION.path);
+      this.$router.push(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
     },
   },
 };

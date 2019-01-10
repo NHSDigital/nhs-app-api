@@ -31,7 +31,7 @@ describe('organ donation actions', () => {
     };
   });
 
-  describe('acceptDonation', () => {
+  describe('makeDecision', () => {
     it('will commit the MAKE_DECISION mutation', () => {
       actions.makeDecision({ commit }, 'foo');
       expect(commit).toHaveBeenCalledWith(MAKE_DECISION, 'foo');

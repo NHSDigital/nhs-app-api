@@ -1,6 +1,6 @@
 import find from 'lodash/fp/find';
 import AdditionalDetails from '@/pages/organ-donation/additional-details';
-import { ORGAN_DONATION, ORGAN_DONATION_CONFIRMATION } from '@/lib/routes';
+import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 import { DECISION_NOT_FOUND, DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
@@ -38,10 +38,10 @@ describe('additional-details', () => {
       wrapper = mountWrapper({ });
     });
 
-    describe('asyncData', () => {
+    describe('fetch (via mixin)', () => {
       it('will redirect back to the organ donation index if the decision is not found', () => {
         const redirect = jest.fn();
-        wrapper.vm.$options.asyncData({ redirect, store: $store });
+        wrapper.vm.$options.fetch({ redirect, store: $store });
         expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
       });
     });
@@ -237,13 +237,13 @@ describe('additional-details', () => {
 
           it('will dispatch an organDonation/setAdditionalDetails event', () => {
             expect($store.dispatch).toHaveBeenCalledWith('organDonation/setAdditionalDetails', {
-              ethnicityId: undefined,
-              religionId: undefined,
+              ethnicityId: '',
+              religionId: '',
             });
           });
 
           it('will push the confirmation page on the router', () => {
-            expect($router).toContain(ORGAN_DONATION_CONFIRMATION.path);
+            expect($router).toContain(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
           });
         });
       });
@@ -262,8 +262,9 @@ describe('additional-details', () => {
           expect(continueForm.attributes().method).toEqual('post');
         });
 
-        it('will have an action of ORGAN_DONATION_CONFIRMATION route"', () => {
-          expect(continueForm.attributes().action).toEqual(ORGAN_DONATION_CONFIRMATION.path);
+        it('will have an action of ORGAN_DONATION_REVIEW_YOUR_DECISION route"', () => {
+          expect(continueForm.attributes().action)
+            .toEqual(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
         });
       });
     });

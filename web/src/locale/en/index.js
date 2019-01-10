@@ -687,6 +687,36 @@ export default {
         },
       },
     },
+    reviewYourDecision: {
+      header: 'Check your details before submitting',
+      backButton: 'Back',
+      aboutYou: {
+        subheader: 'About you',
+        nameheader: 'Name',
+        dateofbirthheader: 'Date of birth',
+        genderheader: 'Gender',
+        nhsnumberheader: 'NHS number',
+        addressheader: 'Address',
+        description: 'The details above are retrieved from your GP services record, please contact your GP to amend them.',
+      },
+      additionalInformation: {
+        subheader: 'Additional information',
+        ethnicityheader: 'Ethnicity',
+        religionheader: 'Religion',
+      },
+      yourDecision: {
+        subheader: 'Your decision',
+        optoutDecisionText: 'No, I do not want to donate my organs',
+        optinDecisionText: 'Yes, I do want to donate my organs',
+      },
+      confirmation: {
+        subheader: 'Confirmation',
+        accuracyText: 'I confirm that the information given in this form is true, complete and accurate',
+        privacyText1: 'I have read the ',
+        privacyText2: ' and give consent for the use of my information in accordance with the terms',
+        privacyLinkText: 'privacy statement',
+      },
+    },
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',

@@ -37,6 +37,9 @@ export default {
       return DECISION_OPT_IN;
     },
   },
+  created() {
+    this.$store.dispatch('organDonation/setAdditionalDetails', { ethnicityId: '', religionId: '' });
+  },
 };
 </script>
 
@@ -53,7 +56,6 @@ export default {
 
 .flexbox-container {
   display: flex;
-  align-items: top;
 }
 
 .divider {

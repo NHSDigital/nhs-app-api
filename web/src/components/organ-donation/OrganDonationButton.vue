@@ -1,5 +1,8 @@
 <template>
-  <no-js-form :action="formAction" :value="noJsValue" :class-name="$style['flex-form']">
+  <no-js-form :action="formAction"
+              :value="noJsValue"
+              :class-name="$style['flex-form']"
+              method="post">
     <button :class="[style, $style['decision-button']]" @click.prevent="chooseDecision()">
       <div>
         <component :class="$style['button-content']" :is="icon"/>
@@ -11,6 +14,7 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/fp/cloneDeep';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
@@ -33,15 +37,25 @@ export default {
   },
   data() {
     const isOptOut = this.decision === DECISION_OPT_OUT;
+
     return {
       formAction: isOptOut ? ORGAN_DONATION_ADDITIONAL_DETAILS.path
         : ORGAN_DONATION_YOUR_CHOICE.path,
       style: isOptOut ? this.$style['no-button'] : this.$style['yes-button'],
       headerKey: isOptOut ? 'organDonation.register.noButton.header' : 'organDonation.register.yesButton.header',
       subHeaderKey: isOptOut ? 'organDonation.register.noButton.subheader' : 'organDonation.register.yesButton.subheader',
-      noJsValue: { organDonation: { registration: { decision: this.decision } } },
       icon: isOptOut ? NoIcon : YesIcon,
     };
+  },
+  computed: {
+    noJsValue() {
+      const noJsValue = {
+        organDonation: cloneDeep(this.$store.state.organDonation),
+      };
+
+      noJsValue.organDonation.registration.decision = this.decision;
+      return noJsValue;
+    },
   },
   methods: {
     chooseDecision() {

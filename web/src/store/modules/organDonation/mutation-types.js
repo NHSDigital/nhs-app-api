@@ -1,3 +1,4 @@
+export const INIT = 'INIT';
 export const LOADED = 'LOADED';
 export const LOADED_REFERENCE_DATA = 'LOADED_REFERENCE_DATA';
 export const MAKE_DECISION = 'MAKE_DECISION';
@@ -10,8 +11,8 @@ export const DECISION_OPT_OUT = 'OptOut';
 
 export const initialState = () => ({
   additionalDetails: {
-    ethnicityId: undefined,
-    religionId: undefined,
+    ethnicityId: '',
+    religionId: '',
   },
   referenceData: {
     ethnicities: [],
@@ -22,6 +23,7 @@ export const initialState = () => ({
   registration: {
     identifier: '',
     nhsNumber: '',
+    nameFull: '',
     name: {
       title: '',
       givenName: '',
@@ -29,12 +31,13 @@ export const initialState = () => ({
     },
     gender: '',
     dateOfBirth: '',
+    addressFull: '',
     address: {
       text: '',
       postcode: '',
     },
     emailAddress: '',
-    decision: 'NotFound',
+    decision: DECISION_NOT_FOUND,
     decisionDetails: {
       all: true,
       choices: [],

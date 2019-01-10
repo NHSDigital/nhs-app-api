@@ -1,4 +1,5 @@
 import {
+  INIT,
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
@@ -7,6 +8,9 @@ import {
 } from './mutation-types';
 
 export default {
+  init({ commit }) {
+    commit(INIT);
+  },
   async getReferenceData({ commit }) {
     commit(LOADED_REFERENCE_DATA, await this.app.$http.getV1PatientOrgandonationReferencedata());
   },

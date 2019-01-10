@@ -1,17 +1,28 @@
 /* eslint-disable object-curly-newline */
+import get from 'lodash/fp/get';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
-import { DECISION_OPT_OUT, DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
+import {
+  DECISION_OPT_OUT,
+  DECISION_OPT_IN,
+  initialState,
+} from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
+
+const getDecision = get('organDonation.registration.decision');
 
 describe('organ donation button', () => {
   let $store;
   let wrapper;
 
   beforeEach(() => {
-    $store = createStore();
+    $store = createStore({
+      state: {
+        organDonation: initialState(),
+      },
+    });
   });
 
   describe('no state', () => {
@@ -47,13 +58,7 @@ describe('organ donation button', () => {
 
       describe('noJsValue', () => {
         it('will include the decision', () => {
-          expect(wrapper.vm.noJsValue).toEqual({
-            organDonation: {
-              registration: {
-                decision: DECISION_OPT_OUT,
-              },
-            },
-          });
+          expect(getDecision(wrapper.vm.noJsValue)).toEqual(DECISION_OPT_OUT);
         });
       });
     });
@@ -61,13 +66,8 @@ describe('organ donation button', () => {
     describe('props', () => {
       it('will set the form value based on the decision', () => {
         const form = wrapper.find(NoJsForm);
-        expect(form.props().value).toEqual({
-          organDonation: {
-            registration: {
-              decision: DECISION_OPT_OUT,
-            },
-          },
-        });
+        const result = getDecision(form.props().value);
+        expect(result).toEqual(DECISION_OPT_OUT);
       });
     });
   });
@@ -105,13 +105,7 @@ describe('organ donation button', () => {
 
       describe('noJsValue', () => {
         it('will include the decision', () => {
-          expect(wrapper.vm.noJsValue).toEqual({
-            organDonation: {
-              registration: {
-                decision: DECISION_OPT_IN,
-              },
-            },
-          });
+          expect(getDecision(wrapper.vm.noJsValue)).toEqual(DECISION_OPT_IN);
         });
       });
     });
@@ -119,13 +113,7 @@ describe('organ donation button', () => {
     describe('props', () => {
       it('will set the form value based on the decision', () => {
         const form = wrapper.find(NoJsForm);
-        expect(form.props().value).toEqual({
-          organDonation: {
-            registration: {
-              decision: DECISION_OPT_IN,
-            },
-          },
-        });
+        expect(getDecision(form.props().value)).toEqual(DECISION_OPT_IN);
       });
     });
 
@@ -136,13 +124,7 @@ describe('organ donation button', () => {
         expect(stateData.style).toEqual(wrapper.vm.$style['yes-button']);
         expect(stateData.headerKey).toEqual('organDonation.register.yesButton.header');
         expect(stateData.subHeaderKey).toEqual('organDonation.register.yesButton.subheader');
-        expect(stateData.noJsValue).toEqual({
-          organDonation: {
-            registration: {
-              decision: DECISION_OPT_IN,
-            },
-          },
-        });
+        expect(getDecision(stateData.noJsValue)).toEqual(DECISION_OPT_IN);
         expect(stateData.icon).toEqual(YesIcon);
       });
     });

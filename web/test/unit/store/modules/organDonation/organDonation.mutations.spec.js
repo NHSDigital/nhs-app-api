@@ -1,6 +1,7 @@
 import mutations from '@/store/modules/organDonation/mutations';
 import {
   initialState,
+  INIT,
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
@@ -13,6 +14,14 @@ describe('organ donation record mutations', () => {
 
   beforeEach(() => {
     state = initialState();
+  });
+
+  describe('INIT', () => {
+    it('will reset the current state to the default state', () => {
+      state.registration.decision = 'foo';
+      mutations[INIT](state);
+      expect(state).toEqual(initialState());
+    });
   });
 
   describe('LOADED', () => {
@@ -35,6 +44,15 @@ describe('organ donation record mutations', () => {
     it('will set the organ donation decision', () => {
       mutations[MAKE_DECISION](state, 'roar');
       expect(state.registration.decision).toEqual('roar');
+    });
+
+    it('will set the additional details to its default', () => {
+      state.additionalDetails.ethnicityId = 1;
+      state.additionalDetails.religionId = 2;
+
+      mutations[MAKE_DECISION](state, 'roar');
+
+      expect(state.additionalDetails).toEqual(initialState().additionalDetails);
     });
   });
 

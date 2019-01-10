@@ -99,6 +99,7 @@ export default {
     box-sizing: border-box;
     width: 100%;
   }
+
   .rule {
     margin: 54px 16px 9px 16px;
     height: 1px;
