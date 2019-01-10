@@ -1,48 +1,48 @@
 import Foundation
 import os.log
-
-struct ConfigurationResponse {
-
-    init(isValidConfiguration: Bool = false, isThrottlingEnabled: Bool = false) {
-        self.isValidConfiguration = isValidConfiguration
-        self.isThrottlingEnabled = isThrottlingEnabled
-    }
-
-    public var isValidConfiguration: Bool
-    public var isThrottlingEnabled: Bool
+protocol ConfigurationServiceProtocol {
+    func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void)
 }
-
-class ConfigurationService {
-    private let homeViewController: HomeViewController
+class   ConfigurationService : ConfigurationServiceProtocol {
     
-    init(homeViewController: HomeViewController) {
-        self.homeViewController = homeViewController
+    private static var sharedConfigurationService = ConfigurationService()
+    private var configurationResponse = ConfigurationResponse()
+    
+    private init() {
+        makeConfigCall()
     }
     
-    func isUserDeviceAllowed(completionHandler: @escaping (ConfigurationResponse) -> Void) {
+    private func makeConfigCall() {
+        if self.configurationResponse.callFailed {
+            let semaphore = DispatchSemaphore(value: 0)
+            getConfigurationResponse() { (configResponse) in
+                if let config = configResponse {
+                    self.configurationResponse = ConfigurationResponse(config.isDeviceSupported,
+                                                                       config.isThrottlingEnabled ?? false,
+                                                                       config.fidoServerUrl,
+                                                                       false)
+                }
+                semaphore.signal()
+            }
+            semaphore.wait()
+        }
+    }
+    
+    private func getConfigurationResponse(completion: @escaping(Configuration?) -> ()) {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         
         let configurationPathWithAppendedVersion = String(format: config().ConfigurationApiPath, versionNumber)
         
         let requestUrl = URL(string: "\(config().BaseApiUrl)\(configurationPathWithAppendedVersion)")!
         let request = URLRequest(url:requestUrl)
+        
         let task = URLSession.shared.dataTask(with: request) {
             (data, response, error) in
             if error == nil, let usableData = data {
                 let decoder = JSONDecoder()
                 do {
-                    self.homeViewController.appVersionCheckError = false
-                    let appConfig = try decoder.decode(Configuruation.self, from: usableData)
-                    
-                    let configurationResponse = ConfigurationResponse(
-                        isValidConfiguration: appConfig.isDeviceSupported,
-                        isThrottlingEnabled: (appConfig.isThrottlingEnabled ?? false))
- 
-                    if(configurationResponse.isThrottlingEnabled) {
-                        self.homeViewController.openThrottlingCarousel()
-                    }
-                    
-                    completionHandler(configurationResponse)
+                    let appConfig = try decoder.decode(Configuration.self, from: usableData)
+                    completion(appConfig)
                 }
                 catch {
                     if #available(iOS 10.0, *) {
@@ -50,20 +50,51 @@ class ConfigurationService {
                     } else {
                         NSLog("Failure doing native app version http check: %@", "\(error)")
                     }
-                    
-                    self.homeViewController.appVersionCheckError = true
-                    DispatchQueue.main.async {
-                        self.homeViewController.showNativeViewContainer(errorMessage: self.getErrorMessage())
-                    }
+                    completion(nil)
                 }
             } else {
-                self.homeViewController.appVersionCheckError = true
-                DispatchQueue.main.async {
-                    self.homeViewController.showNativeViewContainer(errorMessage: self.getErrorMessage())
-                }
+                self.logFailure()
+                completion(nil)
             }
         }
         task.resume()
+    }
+    
+    func logFailure() {
+        if #available(iOS 10.0, *) {
+            os_log("Failure doing native app version http check", log: OSLog.default, type: .error)
+        } else {
+            NSLog("Failure doing native app version http check")
+        }
+    }
+    
+    func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {
+        if isValidConfigResponse() {
+            if(configurationResponse.isThrottlingEnabled) {
+                homeViewController.openThrottlingCarousel()
+            }
+            
+            completionHandler(configurationResponse)
+        } else {
+            retryConfigurationCall()
+            completionHandler(nil)
+        }
+    }
+    
+    func isValidConfigResponse() -> Bool {
+        return !configurationResponse.callFailed
+    }
+    
+    func retryConfigurationCall() {
+        makeConfigCall()
+    }
+    
+    public func FidoServerUrl() -> String {
+        return configurationResponse.FidoServerUrl
+    }
+    
+    class func shared() -> ConfigurationService {
+        return sharedConfigurationService
     }
     
     func getErrorMessage() -> ErrorMessage {
@@ -74,3 +105,4 @@ class ConfigurationService {
         return ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage)
     }
 }
+

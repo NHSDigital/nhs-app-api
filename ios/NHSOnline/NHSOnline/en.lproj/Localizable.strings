@@ -14,19 +14,13 @@
 "HomeTitle" = "Home";
 "CheckSymptomsTitle" = "Check my symptoms";
 "BackArrowTitle" = "Back button";
+"LoginAndPasswordOptions" = "Login & password options";
 
 /*Error messages*/
 "ConnectionErrorHeader" = "Connection error";
 "ServiceUnavailableErrorMessage" = "Service unavailable";
 "ConnectionErrorTitle" = "There's an issue with your internet connection";
 "ConnectionErrorMessage" = "\nCheck your connection and try again. \n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.";
-
-/*Biometrics*/
-"BiometricHeader" = "Register for Biometric ID";
-"BiometricWarningHeader" = "Important";
-"BiometricWarningContent" = "All biometric IDs registered on this device will be able to open your NHS account.";
-"BiometricInfoMessage1" = "Log in using your biometric ID";
-"BiometricInfoMessage2" = "Do this instead of using a password and security code.";
 
 /*Accessibility*/
 "MyAccountHint" = "Navigates to my account page";
@@ -52,3 +46,52 @@
 "sessionExpiryWarningDurationInformation" = "Every %d minutes, we log you out for security purposes.";
 "sessionExpiryWarningGetMoreTime" = "Get more time";
 "sessionExpiryWarningLogOut" = "Log out";
+
+/*Biometrics*/
+"BiometricWarningHeader" = "Important";
+"BiometricInfoMessage2" = "Do this instead of using a password and security code.";
+"BiometricBackButtonText" = "Return to account settings";
+"OSNotSupportedMessage" = "You may be able to use it if you can update your operating system. Check with your operating system developer.";
+"BiometricsDialogHelp" = "Get Help";
+"BiometricRegistrationErrorHeader" = "Something went wrong";
+
+/*BiometricLoginTimeout*/
+"BiometricSessionTimeoutHeader" = "Something went wrong";
+"BiometricSessionTimeoutMessage" = "It was not your fault. Try Logging in again.";
+"BiometricSessionTimeoutButtonText" = "Return to login screen";
+
+/*TouchID String*/
+"TouchId" = "Touch ID";
+"NoTouchIdTitle" = "We can't find your Touch ID";
+"NoTouchIdMessage" = "You can get help with Touch ID on iOS devices";
+"TouchIdNotSupportedTitle" = "You can't use Touch ID on this device";
+"TouchIdNotSupportedMessage" = "Touch ID is not supported on this device";
+"TouchIdOSNotSupportedTitle" = "You can't use Touch ID with this operating system";
+"TouchIdWarningContent" = "All Touch IDs registered on this device will be able to open your NHS account.";
+"TouchIdInfoMessage1" = "Log in using your Touch ID";
+"TouchIdHeader" = "Register for Touch ID";
+"TouchIdTurnedOn" = "You have turned on Touch ID";
+"TouchIdTurnedOff" = "Touch ID is now turned off";
+"TouchIdTurnedOnHeader" = "Turned on Touch ID";
+"TouchIdTurnedOffHeader" = "Turned off Touch ID";
+"TouchIdInvalidatedTitle" = "You need to turn on Touch ID again";
+"TouchIdInvalidatedMessage" = "We have turned it off as something has changed. \nYou can log in using your password and security code, then turn on Touch ID in the NHS App.";
+"TouchIdRegistrationErrorMessage" = "We have been unable to turn on Touch ID.\nIt wasn't your fault.";
+
+/*FaceID String*/
+"FaceId" = "Face ID";
+"NoFaceIdTitle" = "We can't find your Face ID";
+"NoFaceIdMessage" = "You can get help with Face ID on iOS devices";
+"FaceIdOSNotSupportedTitle" = "You can't use Face ID with this operating system";
+"FaceIdNotSupportedTitle" = "You can't use Face ID on this device";
+"FaceIdNotSupportedMessage" = "Face ID is not supported on this device";
+"FaceIdWarningContent" = "All Face IDs registered on this device will be able to open your NHS account.";
+"FaceIdInfoMessage1" = "Log in using your Face ID";
+"FaceIdHeader" = "Register for Face ID";
+"FaceIdTurnedOn" = "You have turned on Face ID";
+"FaceIdTurnedOff" = "Face ID is now turned off";
+"FaceIdTurnedOnHeader" = "Turned on Face ID";
+"FaceIdTurnedOffHeader" = "Turned off Face ID";
+"FaceIdInvalidatedTitle" = "You need to turn on Face ID again";
+"FaceIdInvalidatedMessage" = "We have turned it off as something has changed. \nYou can log in using your password and security code, then turn on Face ID in the NHS App.";
+"FaceIdRegistrationErrorMessage" = "We have been unable to turn on Face ID.\nIt wasn't your fault.";

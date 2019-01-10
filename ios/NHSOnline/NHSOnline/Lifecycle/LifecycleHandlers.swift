@@ -6,12 +6,14 @@ class LifecycleHandlers: NSObject {
     var knownServices: KnownServices
     var webViewController: WebViewController?
     var hasCheckedAppVersionSinceAppOpened = false
-    let configurationService: ConfigurationService
+    var homeViewController: HomeViewController
+    var configurationService: ConfigurationServiceProtocol
     let validateSessionString: String = "window.validateSession()"
     
-    init(knownServices: KnownServices, webViewController: WebViewController, configurationService: ConfigurationService) {
+    init(knownServices: KnownServices, webViewController: WebViewController, homeViewController: HomeViewController, configurationService: ConfigurationServiceProtocol) {
         self.knownServices = knownServices
         self.webViewController = webViewController
+        self.homeViewController = homeViewController
         self.configurationService = configurationService
         super.init()
         createLifecycleObservers()
@@ -19,6 +21,8 @@ class LifecycleHandlers: NSObject {
     
     func createLifecycleObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.didFinishLaunchingNotification), name: Notification.Name.UIApplicationDidFinishLaunching, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appEnteredForeground), name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.didBecomeActive), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
         
@@ -30,14 +34,22 @@ class LifecycleHandlers: NSObject {
     @objc
     func performAppVersionCheck(onQueue queue: DispatchQueue = DispatchQueue.main) {
         if (hasCheckedAppVersionSinceAppOpened == false) {
-            configurationService.isUserDeviceAllowed { (result) in
-                if (result.isValidConfiguration == false) {
-                    queue.async {
-                        self.displayAppVersionOutOfDate()
+            
+            configurationService.isUserDeviceAllowed(homeViewController: homeViewController) { (response) in
+                if let result = response {
+                    if (result.isValidConfiguration == false) {
+                        queue.async {
+                            self.displayAppVersionOutOfDate()
+                        }
                     }
                 }
             }
         }
+    }
+    
+    @objc
+    func appEnteredForeground() {
+        self.homeViewController.delayedBiometricsStart(0.5)
     }
     
     func displayAppVersionOutOfDate() {
@@ -68,12 +80,12 @@ class LifecycleHandlers: NSObject {
             UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
         }))
         let win = UIWindow(frame: UIScreen.main.bounds)
-        let vc = UIViewController()
-        vc.view.backgroundColor = .clear
-        win.rootViewController = vc
+        let viewController = UIViewController()
+        viewController.view.backgroundColor = .clear
+        win.rootViewController = viewController
         win.windowLevel = UIWindowLevelAlert + 1
         win.makeKeyAndVisible()
-        vc.present(alert, animated: true, completion: nil)
+        viewController.present(alert, animated: true, completion: nil)
         self.hasCheckedAppVersionSinceAppOpened = true
     }
     

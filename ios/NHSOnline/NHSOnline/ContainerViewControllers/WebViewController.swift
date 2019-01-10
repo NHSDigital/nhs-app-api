@@ -5,6 +5,7 @@ import os.log
 class WebViewController: UIViewController, WKUIDelegate {
     var webViewDelegate: WebViewDelegate?
     public var webView: WKWebView!
+    var redirect = false
     
     override func loadView() {
         super.loadView()
@@ -54,9 +55,11 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "hideWhiteScreen")
         webView.configuration.userContentController.add(delegate, name: "completeAppIntro")
         webView.configuration.userContentController.add(delegate, name: "onSessionExpiring")
-        webView.configuration.userContentController.add(delegate, name: "goToBiometrics")
+        webView.configuration.userContentController.add(delegate, name: "goToLoginOptions")
         webView.configuration.userContentController.add(delegate, name: "focusElement")
         webView.configuration.userContentController.add(delegate, name: "fetchNativeAppVersion")
+        webView.configuration.userContentController.add(delegate, name: "attemptBiometricLogin")
+
     }
     
     private func loadSpaPage(path: String)  {
@@ -137,8 +140,8 @@ class WebViewController: UIViewController, WKUIDelegate {
             webView.load(URLRequest(url: failedUrl))
         } else {
             webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
-            let vc = webViewDelegate?.viewController
-            vc!.tabBar.selectedItem = nil
+            let viewController = webViewDelegate?.viewController
+            viewController!.tabBar.selectedItem = nil
         }
     }
     
@@ -152,5 +155,13 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     func dismissSafariViewController() {
         webViewDelegate?.safariViewController?.dismiss(animated: true, completion: nil)
+    }
+
+    func setRedirectCompleted(redirect: Bool?){
+        self.redirect = redirect!
+    }
+    
+    func getRedirectCompleted() -> Bool{
+        return self.redirect
     }
 }

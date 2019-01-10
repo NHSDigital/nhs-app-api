@@ -29,14 +29,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func finishLoginToApp(_ url: String) {
-        let vc = rootViewController?.childViewControllers.first as! HomeViewController
-        vc.webViewController?.loadPage(url: url)
-        vc.webViewController?.dismissSafariViewController()
-        let theWebview = vc.webViewController?.webView
-        let v = UIView(frame: (theWebview?.frame)!)
-        v.backgroundColor = UIColor.white
-        v.tag = 2
-        theWebview?.addSubview(v);
+        let viewController = rootViewController?.childViewControllers.first as! HomeViewController
+        if(url == config().HomeUrl + config().FidoLoginErrorPath) {
+           viewController.showBiometricSessionError()
+        } else {
+           loadPageAndShowView(url, viewController)
+        }
+    }
+    
+    private func loadPageAndShowView(_ url: String,_ viewController: HomeViewController) {
+        viewController.webViewController?.loadPage(url: url)
+        viewController.webViewController?.dismissSafariViewController()
+        viewController.webViewController?.setRedirectCompleted(redirect: true)
+        let theWebview = viewController.webViewController?.webView
+        let view = UIView(frame: (theWebview?.frame)!)
+        view.backgroundColor = UIColor.white
+        view.tag = 2
+        theWebview?.addSubview(view);
     }
     
     func setLocale() {

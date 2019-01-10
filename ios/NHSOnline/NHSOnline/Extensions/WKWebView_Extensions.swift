@@ -7,4 +7,9 @@ extension WKWebView {
         
         self.load(urlRequest)
     }
+    
+    func refreshCookies() {
+        self.configuration.processPool = WKProcessPool()
+    }
 }
+

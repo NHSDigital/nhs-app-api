@@ -3,7 +3,7 @@ import SafariServices
 import WebKit
 import os.log
 
-class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
+class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
     let knownServices: KnownServices
     let viewController: HomeViewController
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
@@ -24,7 +24,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.viewController.view.addSubview(activityIndicator)
         self.webAppInterface = webAppInterface
     }
-    
+
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -98,16 +98,16 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
-            if(webView.url?.absoluteString == config().HomeUrl + config().NhsOnlineRequiredQueryString) {
-                self.viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
-            }
-
-            self.showWebViewContainer()
-            UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
-            
-            if !self.knownServices.isSameHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
-                self.viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
-            }
+        self.showWebViewContainer()
+        if(webView.url?.absoluteString == config().HomeUrl + config().NhsOnlineRequiredQueryString) {
+            self.viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
+        }
+        
+        UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
+        
+        if !self.knownServices.isSameHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
+            self.viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
+        }
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
@@ -158,6 +158,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             return false
         }
         
+        if(url.absoluteString.contains("login")) {
+            return false
+        }
+        
         if let _ = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
             return false
         }
@@ -167,7 +171,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     func openInSafari(url: URL) {
         self.safariViewController = SFSafariViewController(url: url)
+        self.safariViewController?.delegate = self
         self.viewController.present(safariViewController!, animated: true, completion: nil)
+    }
+    
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        self.viewController.delayedBiometricsStart(0.1)
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -228,8 +237,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case "setMenuBarItem":
                 setMenuBarItem(index: message.body as? Int ?? 0)
                 break
-            case "goToBiometrics":
-                goToBiometrics()
+            case "goToLoginOptions":
+                goToLoginOptions()
+                break
+            case "attemptBiometricLogin":
+                viewController.delayedBiometricsStart(0.3)
                 break
             case "completeAppIntro":
                 let defaults = UserDefaults.standard
@@ -263,7 +275,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
     }
     
-    func goToBiometrics() {
+    func goToLoginOptions() {
+        CookieHandler().readAccessTokenFromCookie()
         viewController.showBiometricViewContainer()
     }
     

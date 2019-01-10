@@ -8,7 +8,8 @@ struct Config: Decodable {
         case ResponseWaitingTime, SessionTimeout
         case IsFirstTimeOpened, HaveShownThrottlingCarouselBefore, CarouselDirectory, CarouselContentType, IntroCarouselFileName, ThrottlingCarouselFileName
         case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL
-        case BaseApiUrl, ConfigurationApiPath, AppStoreUrl
+        case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
+        case BiometricHelpURL, FidoLoginErrorPath, BiometricRedirectURL, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme
     }
     
     let HomeUrl: String
@@ -53,6 +54,17 @@ struct Config: Decodable {
     let BaseApiUrl: String
     let ConfigurationApiPath: String
     let AppStoreUrl: String
+    let SessionCookieName: String
+    let AAID: String
+    let PrivateKeyLabel: String
+    let FidoLoginErrorPath: String
+    let BiometricHelpURL: String
+    let BiometricRedirectURL: String
+    let BiometricsRegistrationResponseEndpoint: String
+    let BiometricsAuthenticationRequestEndpoint: String
+    let BiometricsRegistrationRequestEndpoint: String
+    let BiometricsDeregistrationRequestEndpoint: String
+    let BiometricsAssertionScheme: String
 }
 
 func config() -> Config {

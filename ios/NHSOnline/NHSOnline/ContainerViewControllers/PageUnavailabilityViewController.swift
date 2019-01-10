@@ -5,12 +5,15 @@ class PageUnavailabilityViewController: UIViewController {
     @IBOutlet weak var errorIconTextView: UITextView!
     @IBOutlet weak var errorTextView: ErrorTextView!
     @IBOutlet weak var tryAgainLabel: UILabel!
+    @IBOutlet weak var tryAgainButton: UIButton!
+    
     var failedUrl: String? = nil
     
     @IBAction func reloadPageTrigger(_ sender: Any) {
         let parentVC = self.parent as? HomeViewController
         parentVC?.webViewController?.reloadWebView()
-        NotificationCenter.default.post(name: CustomNotifications.pageUnavailabilityOnReloadWebView, object: self)
+        let name = CustomNotifications.pageUnavailabilityOnReloadWebView
+        NotificationCenter.default.post(name: name, object: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -31,5 +34,12 @@ class PageUnavailabilityViewController: UIViewController {
         }
         errorTextView.accessibilityValue = accessibilityText
     }
-
+    
+    func hideTryAgainLabel() {
+        self.tryAgainLabel.hideView()
+    }
+    
+    func setTryAgainButtonText(text: String) {
+        self.tryAgainButton.setTitle(text, for: .normal)
+    }
 }

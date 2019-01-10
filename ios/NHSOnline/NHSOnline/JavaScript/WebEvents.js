@@ -56,8 +56,8 @@ window.nativeApp.completeAppIntro = function(header) {
     window.webkit.messageHandlers.completeAppIntro.postMessage(null);
 };
 
-window.nativeApp.goToBiometrics = function(header) {
-    window.webkit.messageHandlers.goToBiometrics.postMessage(null);
+window.nativeApp.goToLoginOptions = function() {
+    window.webkit.messageHandlers.goToLoginOptions.postMessage(null);
 };
 
 window.nativeApp.onSessionExpiring = function(sessionDuration) {
@@ -70,4 +70,8 @@ window.nativeApp.focusElement = function(elementToFocus) {
 
 window.nativeApp.fetchNativeAppVersion = function() {
     window.webkit.messageHandlers.fetchNativeAppVersion.postMessage(null);
+};
+
+window.nativeApp.attemptBiometricLogin = function() {
+    window.webkit.messageHandlers.attemptBiometricLogin.postMessage(null);
 };

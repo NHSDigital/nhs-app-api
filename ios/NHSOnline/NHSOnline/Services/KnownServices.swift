@@ -106,7 +106,8 @@ class KnownServices {
         let openSourceLicensesURL: URL = URL(string: config.OpenSourceLicencesURL)!
         let medicalRecordAbbreviationsURL: URL = URL(string: config.MedicalRecordAbbreviationsURL)!
         let accessibilityStatementURL: URL = URL(string: config.AccessibilityStatementURL)!
-        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL, accessibilityStatementURL]
+        let biometricsHelpURl: URL = URL(string: config.BiometricHelpURL)!
+        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL, accessibilityStatementURL, biometricsHelpURl]
     }
     
     private func buildKnownServices() {

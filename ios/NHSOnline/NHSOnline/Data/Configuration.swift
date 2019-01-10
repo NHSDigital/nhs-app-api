@@ -1,6 +1,7 @@
 import Foundation
 
-struct Configuruation: Codable {
+struct Configuration: Codable {
     let isDeviceSupported: Bool
     let isThrottlingEnabled: Bool?
+    let fidoServerUrl: String
 }

@@ -6,8 +6,8 @@ class LifecycleHandlersTests: XCTestCase {
     var lifecycleHandlers: LifecycleHandlers?
     var knownServices: KnownServices?
     var homeController: HomeViewController?
+    var mockConfigurationService: MockConfigurationService?
     var webViewController: WebViewController?
-    var configurationService: MockConfigurationService?
     let queue = DispatchQueue(label: "MyTestQueue")
     
     override func setUp() {
@@ -19,9 +19,9 @@ class LifecycleHandlersTests: XCTestCase {
         
         webViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
         
-        configurationService = MockConfigurationService(homeViewController: homeController!)
+        mockConfigurationService = MockConfigurationService()
         
-        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, configurationService: configurationService!)
+        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, homeViewController: homeController!, configurationService: mockConfigurationService! as ConfigurationServiceProtocol)
     }
     
     override func tearDown() {
@@ -33,26 +33,26 @@ class LifecycleHandlersTests: XCTestCase {
     }
     
     func test_ensureValueForHasCheckedAppVersionSinceAppOpened_isTrueIfUserDeviceIsNotAllowed() {
-        self.configurationService?.isValidConfiguration = false
+        self.mockConfigurationService?.isValidConfiguration = false
         lifecycleHandlers?.performAppVersionCheck(onQueue: queue)
         queue.sync {}
         XCTAssertTrue(lifecycleHandlers!.hasCheckedAppVersionSinceAppOpened)
     }
     
     func test_ensureValueForHasCheckedAppVersionSinceAppOpened_isFalseIfUserDeviceIsAllowed() {
-        self.configurationService?.isValidConfiguration = true
+        self.mockConfigurationService?.isValidConfiguration = true
         lifecycleHandlers?.performAppVersionCheck(onQueue: queue)
         queue.sync {}
         XCTAssertFalse(lifecycleHandlers!.hasCheckedAppVersionSinceAppOpened)
     }
     
-    class MockConfigurationService: ConfigurationService {
+    class MockConfigurationService: ConfigurationServiceProtocol {
+        
         var isValidConfiguration = false
-        override func isUserDeviceAllowed(completionHandler: @escaping (ConfigurationResponse) -> Void) {
+        
+        func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {
             
-            let response = ConfigurationResponse(
-                isValidConfiguration: isValidConfiguration,
-                isThrottlingEnabled: false)
+            let response = ConfigurationResponse(isValidConfiguration, false, "", false)
             
             completionHandler(response)
         }

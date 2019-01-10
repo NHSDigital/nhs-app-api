@@ -2,6 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BiometricsAssertionScheme</key>
+	<string>UAFV1TLV</string>
+	<key>BiometricsDeregistrationRequestEndpoint</key>
+	<string>/deregRequest</string>
+	<key>BiometricsRegistrationRequestEndpoint</key>
+	<string>/regRequest</string>
+	<key>BiometricsAuthenticationRequestEndpoint</key>
+	<string>/authRequest</string>
+	<key>BiometricsRegistrationResponseEndpoint</key>
+	<string>/regResponse</string>
+	<key>FidoLoginErrorPath</key>
+	<string>auth-return?error=server_data_expired&amp;state=A</string>
+	<key>BiometricRedirectURL</key>
+	<string>login?device=ios&amp;fidoAuthResponse=</string>
+	<key>BiometricHelpURL</key>
+	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/apple-touch-and-face-ID-help/</string>
+	<key>PrivateKeyLabel</key>
+	<string>nhs-biometrics-key</string>
+	<key>AAID</key>
+	<string>EBA0#0001</string>
+	<key>SessionCookieName</key>
+	<string>nhso.session</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use this instead of a password and security code to log in.</string>
 	<key>AuthRedirectPath</key>
 	<string>$(AUTH_REDIRECT_PATH)</string>
 	<key>CFBundleDevelopmentRegion</key>

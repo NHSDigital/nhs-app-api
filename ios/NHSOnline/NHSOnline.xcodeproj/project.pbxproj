@@ -14,10 +14,56 @@
 		105BB9922179C0B100571671 /* Scratch9.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9912179C0B100571671 /* Scratch9.xcconfig */; };
 		105BB9942179C0C400571671 /* Scratch10.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 105BB9932179C0C400571671 /* Scratch10.xcconfig */; };
 		107EA7B721CCE3CC006C675B /* nativeAppAssets in Resources */ = {isa = PBXBuildFile; fileRef = 107EA7B621CCE3CC006C675B /* nativeAppAssets */; };
+		135171A521C9CCF8001EC74B /* FidoURLSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135171A421C9CCF8001EC74B /* FidoURLSessionManager.swift */; };
+		135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135171A621C9EF78001EC74B /* CookieHandler.swift */; };
+		135171A921CB1D52001EC74B /* FidoClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135171A821CB1D52001EC74B /* FidoClientTests.swift */; };
+		13730A1B2201C1BA00437FC1 /* FidoEndpointHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A1A2201C1BA00437FC1 /* FidoEndpointHelper.swift */; };
+		13730A1D2201C3E000437FC1 /* FidoRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A1C2201C3E000437FC1 /* FidoRequestHandler.swift */; };
+		13730A1F2201C80800437FC1 /* FidoEncodingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A1E2201C80800437FC1 /* FidoEncodingHandler.swift */; };
+		13730A22220454FF00437FC1 /* BiometricType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A21220454FF00437FC1 /* BiometricType.swift */; };
+		13730A24220460B700437FC1 /* BCryptSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13730A23220460B700437FC1 /* BCryptSwift.swift */; };
 		1381D46321BFFAE100B54300 /* Scratch12.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 1381D46221BFFAE100B54300 /* Scratch12.xcconfig */; };
+		1381D46A21BFFF9000B54300 /* AlgAndEncodingEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46821BFFF9000B54300 /* AlgAndEncodingEnum.swift */; };
+		1381D46B21BFFF9000B54300 /* TagsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46921BFFF9000B54300 /* TagsEnum.swift */; };
+		1381D46E21BFFFA800B54300 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D46D21BFFFA800B54300 /* SwiftyJSON.swift */; };
+		1381D48321BFFFD300B54300 /* DisplayPNGCharacteristicsDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47521BFFFCF00B54300 /* DisplayPNGCharacteristicsDescriptor.swift */; };
+		1381D48421BFFFD300B54300 /* FinalChallengeParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47621BFFFCF00B54300 /* FinalChallengeParams.swift */; };
+		1381D48621BFFFD300B54300 /* AAID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47821BFFFD000B54300 /* AAID.swift */; };
+		1381D48721BFFFD300B54300 /* RGBPalletteEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47921BFFFD000B54300 /* RGBPalletteEntry.swift */; };
+		1381D48821BFFFD300B54300 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47A21BFFFD000B54300 /* Operation.swift */; };
+		1381D48921BFFFD300B54300 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47B21BFFFD100B54300 /* KeyPair.swift */; };
+		1381D48A21BFFFD300B54300 /* FidoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47C21BFFFD100B54300 /* FidoRequest.swift */; };
+		1381D48B21BFFFD300B54300 /* ChannelBindings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47D21BFFFD100B54300 /* ChannelBindings.swift */; };
+		1381D48C21BFFFD300B54300 /* OperationHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47E21BFFFD200B54300 /* OperationHeader.swift */; };
+		1381D48D21BFFFD300B54300 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D47F21BFFFD200B54300 /* Extension.swift */; };
+		1381D48E21BFFFD300B54300 /* Policy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D48021BFFFD200B54300 /* Policy.swift */; };
+		1381D48F21BFFFD300B54300 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D48121BFFFD200B54300 /* Version.swift */; };
+		1381D49421C0000D00B54300 /* RegistrationAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D49221C0000D00B54300 /* RegistrationAssertionBuilder.swift */; };
+		1381D49821C0070000B54300 /* FidoKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D49721C0070000B54300 /* FidoKeyManager.swift */; };
+		1381D49A21C00AC500B54300 /* FidoClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1381D49921C00AC500B54300 /* FidoClient.swift */; };
+		138B177721F0DB97009FB223 /* FidoError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138B177621F0DB97009FB223 /* FidoError.swift */; };
+		139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */; };
+		139D331221F71B2200E6C92C /* BiometricAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331121F71B2200E6C92C /* BiometricAlert.swift */; };
+		139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331321F71B6700E6C92C /* BiometricControllerStrings.swift */; };
+		139D331621F71B8200E6C92C /* BiometricAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331521F71B8200E6C92C /* BiometricAlertType.swift */; };
+		139D331821F71C0700E6C92C /* BiometricResultStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331721F71C0700E6C92C /* BiometricResultStrings.swift */; };
+		139D331E21F8AFB700E6C92C /* DeregRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139D331D21F8AFB700E6C92C /* DeregRequest.swift */; };
 		139F19282181D73300ED59A1 /* HeaderBarSlim.xib in Resources */ = {isa = PBXBuildFile; fileRef = 139F19262181D73300ED59A1 /* HeaderBarSlim.xib */; };
 		139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */; };
 		13F588AE21BA863D002857EA /* BiometricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F588AD21BA863D002857EA /* BiometricsViewController.swift */; };
+		13F9698121C1224300F6ACC7 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F9698021C1224300F6ACC7 /* UserDefaultsManager.swift */; };
+		13F9698521C2ABB800F6ACC7 /* UserVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F9698421C2ABB800F6ACC7 /* UserVerification.swift */; };
+		13F9698721C2ABE300F6ACC7 /* KeyProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F9698621C2ABE300F6ACC7 /* KeyProtection.swift */; };
+		13F9698921C2ABFF00F6ACC7 /* MatcherProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F9698821C2ABFF00F6ACC7 /* MatcherProtection.swift */; };
+		1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702121EF96B4003E3EAB /* ConfigurationResponse.swift */; };
+		1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702521F5D334003E3EAB /* String_Extensions.swift */; };
+		1417702821F5D34D003E3EAB /* Data_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702721F5D34D003E3EAB /* Data_Extensions.swift */; };
+		14865E7E220AE7B300E72948 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14865E7D220AE7B300E72948 /* RegistrationRequest.swift */; };
+		14D4D20521E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */; };
+		14D4D20B21E8AD25008A65E0 /* EncodingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */; };
+		14D4D20D21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */; };
+		14D4D21521E8BA44008A65E0 /* DeregisterAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */; };
+		14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21821E8D711008A65E0 /* BiometricService.swift */; };
 		3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */; };
 		3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */; };
 		3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */; };
@@ -26,6 +72,14 @@
 		4793CF0D219AF18500C95F51 /* CustomNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4793CF0C219AF18500C95F51 /* CustomNotifications.swift */; };
 		4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4793CF0F219C319A00C95F51 /* ConfigurationService.swift */; };
 		47D88A4621998CBD004771B5 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D88A4521998CBD004771B5 /* Configuration.swift */; };
+		4A4F8E292201D59B00D6D224 /* BiometricErrorStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */; };
+		4A5483DC21F5C51000DA8076 /* FidoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5483DB21F5C51000DA8076 /* FidoResponse.swift */; };
+		4A5483DE21F5C87500DA8076 /* Assertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5483DD21F5C87500DA8076 /* Assertion.swift */; };
+		4A5483E021F5DF8D00DA8076 /* FidoAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5483DF21F5DF8D00DA8076 /* FidoAssertionBuilder.swift */; };
+		4A6A1AA421E6189E00795BE2 /* AssertionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A1AA321E6189E00795BE2 /* AssertionTests.swift */; };
+		4A8A3EA421E4E4AA00E49E01 /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8A3EA321E4E4AA00E49E01 /* ModelTests.swift */; };
+		4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */; };
+		4AD14FC521E8F9ED003D1904 /* BiometricState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD14FC421E8F9ED003D1904 /* BiometricState.swift */; };
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
 		9200DC9F21428562009EFFEF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200DC9E21428562009EFFEF /* Reachability.swift */; };
 		981E9E32214E5FB300DA80EB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981E9E31214E5FB300DA80EB /* Config.swift */; };
@@ -81,10 +135,56 @@
 		105BB9932179C0C400571671 /* Scratch10.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch10.xcconfig; sourceTree = "<group>"; };
 		105BB9A42186FA3E00571671 /* Defaults.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Defaults.xcconfig; sourceTree = "<group>"; };
 		107EA7B621CCE3CC006C675B /* nativeAppAssets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = nativeAppAssets; path = ../../nativeAppAssets; sourceTree = "<group>"; };
+		135171A421C9CCF8001EC74B /* FidoURLSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoURLSessionManager.swift; sourceTree = "<group>"; };
+		135171A621C9EF78001EC74B /* CookieHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CookieHandler.swift; sourceTree = "<group>"; };
+		135171A821CB1D52001EC74B /* FidoClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoClientTests.swift; sourceTree = "<group>"; };
+		13730A1A2201C1BA00437FC1 /* FidoEndpointHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoEndpointHelper.swift; sourceTree = "<group>"; };
+		13730A1C2201C3E000437FC1 /* FidoRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoRequestHandler.swift; sourceTree = "<group>"; };
+		13730A1E2201C80800437FC1 /* FidoEncodingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoEncodingHandler.swift; sourceTree = "<group>"; };
+		13730A21220454FF00437FC1 /* BiometricType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricType.swift; sourceTree = "<group>"; };
+		13730A23220460B700437FC1 /* BCryptSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCryptSwift.swift; sourceTree = "<group>"; };
 		1381D46221BFFAE100B54300 /* Scratch12.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Scratch12.xcconfig; sourceTree = "<group>"; };
+		1381D46821BFFF9000B54300 /* AlgAndEncodingEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlgAndEncodingEnum.swift; sourceTree = "<group>"; };
+		1381D46921BFFF9000B54300 /* TagsEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagsEnum.swift; sourceTree = "<group>"; };
+		1381D46D21BFFFA800B54300 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		1381D47521BFFFCF00B54300 /* DisplayPNGCharacteristicsDescriptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayPNGCharacteristicsDescriptor.swift; sourceTree = "<group>"; };
+		1381D47621BFFFCF00B54300 /* FinalChallengeParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinalChallengeParams.swift; sourceTree = "<group>"; };
+		1381D47821BFFFD000B54300 /* AAID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAID.swift; sourceTree = "<group>"; };
+		1381D47921BFFFD000B54300 /* RGBPalletteEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBPalletteEntry.swift; sourceTree = "<group>"; };
+		1381D47A21BFFFD000B54300 /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
+		1381D47B21BFFFD100B54300 /* KeyPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
+		1381D47C21BFFFD100B54300 /* FidoRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FidoRequest.swift; sourceTree = "<group>"; };
+		1381D47D21BFFFD100B54300 /* ChannelBindings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelBindings.swift; sourceTree = "<group>"; };
+		1381D47E21BFFFD200B54300 /* OperationHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationHeader.swift; sourceTree = "<group>"; };
+		1381D47F21BFFFD200B54300 /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		1381D48021BFFFD200B54300 /* Policy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Policy.swift; sourceTree = "<group>"; };
+		1381D48121BFFFD200B54300 /* Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
+		1381D49221C0000D00B54300 /* RegistrationAssertionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationAssertionBuilder.swift; sourceTree = "<group>"; };
+		1381D49721C0070000B54300 /* FidoKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoKeyManager.swift; sourceTree = "<group>"; };
+		1381D49921C00AC500B54300 /* FidoClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoClient.swift; sourceTree = "<group>"; };
+		138B177621F0DB97009FB223 /* FidoError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoError.swift; sourceTree = "<group>"; };
+		139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsResultViewController.swift; sourceTree = "<group>"; };
+		139D331121F71B2200E6C92C /* BiometricAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAlert.swift; sourceTree = "<group>"; };
+		139D331321F71B6700E6C92C /* BiometricControllerStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricControllerStrings.swift; sourceTree = "<group>"; };
+		139D331521F71B8200E6C92C /* BiometricAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAlertType.swift; sourceTree = "<group>"; };
+		139D331721F71C0700E6C92C /* BiometricResultStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricResultStrings.swift; sourceTree = "<group>"; };
+		139D331D21F8AFB700E6C92C /* DeregRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeregRequest.swift; sourceTree = "<group>"; };
 		139F19272181D73300ED59A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBarSlim.xib; sourceTree = "<group>"; };
 		139F19292181DCC600ED59A1 /* HeaderBarSlim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBarSlim.swift; sourceTree = "<group>"; };
 		13F588AD21BA863D002857EA /* BiometricsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsViewController.swift; sourceTree = "<group>"; };
+		13F9698021C1224300F6ACC7 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		13F9698421C2ABB800F6ACC7 /* UserVerification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVerification.swift; sourceTree = "<group>"; };
+		13F9698621C2ABE300F6ACC7 /* KeyProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyProtection.swift; sourceTree = "<group>"; };
+		13F9698821C2ABFF00F6ACC7 /* MatcherProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatcherProtection.swift; sourceTree = "<group>"; };
+		1417702121EF96B4003E3EAB /* ConfigurationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationResponse.swift; sourceTree = "<group>"; };
+		1417702521F5D334003E3EAB /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
+		1417702721F5D34D003E3EAB /* Data_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_Extensions.swift; sourceTree = "<group>"; };
+		14865E7D220AE7B300E72948 /* RegistrationRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
+		14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationAssertionBuilder.swift; sourceTree = "<group>"; };
+		14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodingHelper.swift; sourceTree = "<group>"; };
+		14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionAssertationBuilder.swift; sourceTree = "<group>"; };
+		14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeregisterAuthenticator.swift; sourceTree = "<group>"; };
+		14D4D21821E8D711008A65E0 /* BiometricService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
 		3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlersTests.swift; sourceTree = "<group>"; };
 		3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterface.swift; sourceTree = "<group>"; };
 		3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppInterface.swift; sourceTree = "<group>"; };
@@ -94,6 +194,14 @@
 		4793CF0C219AF18500C95F51 /* CustomNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNotifications.swift; sourceTree = "<group>"; };
 		4793CF0F219C319A00C95F51 /* ConfigurationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationService.swift; sourceTree = "<group>"; };
 		47D88A4521998CBD004771B5 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricErrorStrings.swift; sourceTree = "<group>"; };
+		4A5483DB21F5C51000DA8076 /* FidoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoResponse.swift; sourceTree = "<group>"; };
+		4A5483DD21F5C87500DA8076 /* Assertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assertion.swift; sourceTree = "<group>"; };
+		4A5483DF21F5DF8D00DA8076 /* FidoAssertionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidoAssertionBuilder.swift; sourceTree = "<group>"; };
+		4A6A1AA321E6189E00795BE2 /* AssertionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssertionTests.swift; sourceTree = "<group>"; };
+		4A8A3EA321E4E4AA00E49E01 /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
+		4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsStringsHandler.swift; sourceTree = "<group>"; };
+		4AD14FC421E8F9ED003D1904 /* BiometricState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricState.swift; sourceTree = "<group>"; };
 		5598FF712189C27100767CAC /* BrowserstackLocal.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserstackLocal.xcconfig; sourceTree = "<group>"; };
 		609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime_Extensions.swift; sourceTree = "<group>"; };
 		9200DC9E21428562009EFFEF /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -177,6 +285,115 @@
 			path = Configurations;
 			sourceTree = "<group>";
 		};
+		131999FE21FF5B6C0039DADB /* BiometricsAlertHandling */ = {
+			isa = PBXGroup;
+			children = (
+				4A8D336D21EDF13B00962BBE /* BiometricsStringsHandler.swift */,
+				139D331121F71B2200E6C92C /* BiometricAlert.swift */,
+				139D331521F71B8200E6C92C /* BiometricAlertType.swift */,
+			);
+			path = BiometricsAlertHandling;
+			sourceTree = "<group>";
+		};
+		131999FF21FF5BB50039DADB /* BiometricsViewHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				139D331721F71C0700E6C92C /* BiometricResultStrings.swift */,
+				139D331321F71B6700E6C92C /* BiometricControllerStrings.swift */,
+				4A4F8E282201D59B00D6D224 /* BiometricErrorStrings.swift */,
+				13730A21220454FF00437FC1 /* BiometricType.swift */,
+			);
+			path = BiometricsViewHelpers;
+			sourceTree = "<group>";
+		};
+		13199A0021FF5C200039DADB /* Fido */ = {
+			isa = PBXGroup;
+			children = (
+				13730A202201CD3800437FC1 /* AssertionBuilders */,
+				1381D47421BFFFC400B54300 /* Models */,
+				1381D46721BFFF8300B54300 /* Consts */,
+				138B177621F0DB97009FB223 /* FidoError.swift */,
+				14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */,
+				13F9698021C1224300F6ACC7 /* UserDefaultsManager.swift */,
+				135171A421C9CCF8001EC74B /* FidoURLSessionManager.swift */,
+				1381D49721C0070000B54300 /* FidoKeyManager.swift */,
+				1381D49921C00AC500B54300 /* FidoClient.swift */,
+				13730A1C2201C3E000437FC1 /* FidoRequestHandler.swift */,
+				13730A1E2201C80800437FC1 /* FidoEncodingHandler.swift */,
+				13730A1A2201C1BA00437FC1 /* FidoEndpointHelper.swift */,
+			);
+			path = Fido;
+			sourceTree = "<group>";
+		};
+		13730A202201CD3800437FC1 /* AssertionBuilders */ = {
+			isa = PBXGroup;
+			children = (
+				1381D49221C0000D00B54300 /* RegistrationAssertionBuilder.swift */,
+				14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */,
+				14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */,
+				4A5483DF21F5DF8D00DA8076 /* FidoAssertionBuilder.swift */,
+			);
+			path = AssertionBuilders;
+			sourceTree = "<group>";
+		};
+		1381D45721BFF90300B54300 /* Biometrics */ = {
+			isa = PBXGroup;
+			children = (
+				131999FF21FF5BB50039DADB /* BiometricsViewHelpers */,
+				131999FE21FF5B6C0039DADB /* BiometricsAlertHandling */,
+				14D4D21821E8D711008A65E0 /* BiometricService.swift */,
+				1381D46C21BFFF9B00B54300 /* Frameworks */,
+				13199A0021FF5C200039DADB /* Fido */,
+			);
+			path = Biometrics;
+			sourceTree = "<group>";
+		};
+		1381D46721BFFF8300B54300 /* Consts */ = {
+			isa = PBXGroup;
+			children = (
+				1381D46821BFFF9000B54300 /* AlgAndEncodingEnum.swift */,
+				1381D46921BFFF9000B54300 /* TagsEnum.swift */,
+				13F9698421C2ABB800F6ACC7 /* UserVerification.swift */,
+				13F9698621C2ABE300F6ACC7 /* KeyProtection.swift */,
+				13F9698821C2ABFF00F6ACC7 /* MatcherProtection.swift */,
+			);
+			path = Consts;
+			sourceTree = "<group>";
+		};
+		1381D46C21BFFF9B00B54300 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				13730A23220460B700437FC1 /* BCryptSwift.swift */,
+				1381D46D21BFFFA800B54300 /* SwiftyJSON.swift */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		1381D47421BFFFC400B54300 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				14865E7D220AE7B300E72948 /* RegistrationRequest.swift */,
+				1381D47821BFFFD000B54300 /* AAID.swift */,
+				1381D47D21BFFFD100B54300 /* ChannelBindings.swift */,
+				1381D47521BFFFCF00B54300 /* DisplayPNGCharacteristicsDescriptor.swift */,
+				1381D47F21BFFFD200B54300 /* Extension.swift */,
+				1381D47621BFFFCF00B54300 /* FinalChallengeParams.swift */,
+				1381D47B21BFFFD100B54300 /* KeyPair.swift */,
+				1381D47A21BFFFD000B54300 /* Operation.swift */,
+				1381D47E21BFFFD200B54300 /* OperationHeader.swift */,
+				1381D48021BFFFD200B54300 /* Policy.swift */,
+				1381D47C21BFFFD100B54300 /* FidoRequest.swift */,
+				139D331D21F8AFB700E6C92C /* DeregRequest.swift */,
+				1381D47921BFFFD000B54300 /* RGBPalletteEntry.swift */,
+				1381D48121BFFFD200B54300 /* Version.swift */,
+				14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */,
+				4AD14FC421E8F9ED003D1904 /* BiometricState.swift */,
+				4A5483DB21F5C51000DA8076 /* FidoResponse.swift */,
+				4A5483DD21F5C87500DA8076 /* Assertion.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		3067F25321E39BF7009734AF /* Lifecycle */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +457,7 @@
 				F07607F420B4655B00069F7F /* Utils */,
 				F07607F120B44B6900069F7F /* JavaScript */,
 				C276D560207B571A00F3B1E5 /* Views */,
+				1381D45721BFF90300B54300 /* Biometrics */,
 				C276D5542076557400F3B1E5 /* Services */,
 				F0D2E5D2205007200067DEC4 /* Delegates */,
 				F0B7D86D204EA0F40078D56E /* Extensions */,
@@ -264,9 +482,12 @@
 				F01745A6207B700700877E4D /* Info.plist */,
 				C20578172028B94800CDBDC5 /* SafariTests.swift */,
 				F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */,
+				135171A821CB1D52001EC74B /* FidoClientTests.swift */,
 				C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */,
 				C2357EB9216574F20033B98F /* KnownServiceTests.swift */,
 				C2357EBB216575460033B98F /* KnownServicesTests.swift */,
+				4A8A3EA321E4E4AA00E49E01 /* ModelTests.swift */,
+				4A6A1AA321E6189E00795BE2 /* AssertionTests.swift */,
 			);
 			path = NHSOnlineTests;
 			sourceTree = "<group>";
@@ -295,6 +516,7 @@
 			children = (
 				C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */,
 				47D88A4521998CBD004771B5 /* Configuration.swift */,
+				1417702121EF96B4003E3EAB /* ConfigurationResponse.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -329,6 +551,7 @@
 		F07607F420B4655B00069F7F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				135171A621C9EF78001EC74B /* CookieHandler.swift */,
 				F07607F520B465E400069F7F /* FileReader.swift */,
 			);
 			name = Utils;
@@ -340,6 +563,7 @@
 			children = (
 				F0F2A8B2205138C700394B2F /* PageUnavailabilityViewController.swift */,
 				13F588AD21BA863D002857EA /* BiometricsViewController.swift */,
+				139AD8CC21E7B21600E580CA /* BiometricsResultViewController.swift */,
 				F026199A2050AFE100EDDFE0 /* WebViewController.swift */,
 			);
 			path = ContainerViewControllers;
@@ -354,6 +578,8 @@
 				C2ED05D521427E950036189C /* TabBar_Extension.swift */,
 				609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */,
 				3EF9DDD321ABFDE40052C72A /* UIAlertController_Extensions.swift */,
+				1417702521F5D334003E3EAB /* String_Extensions.swift */,
+				1417702721F5D34D003E3EAB /* Data_Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -493,32 +719,83 @@
 			files = (
 				C21428212164B21300F00948 /* KnownService.swift in Sources */,
 				4793CF0D219AF18500C95F51 /* CustomNotifications.swift in Sources */,
+				1381D49821C0070000B54300 /* FidoKeyManager.swift in Sources */,
 				F0F2A8B3205138C700394B2F /* PageUnavailabilityViewController.swift in Sources */,
+				13730A24220460B700437FC1 /* BCryptSwift.swift in Sources */,
+				1381D46E21BFFFA800B54300 /* SwiftyJSON.swift in Sources */,
+				4AD14FC521E8F9ED003D1904 /* BiometricState.swift in Sources */,
 				139F192A2181DCC600ED59A1 /* HeaderBarSlim.swift in Sources */,
+				1417702821F5D34D003E3EAB /* Data_Extensions.swift in Sources */,
+				4A4F8E292201D59B00D6D224 /* BiometricErrorStrings.swift in Sources */,
 				C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */,
+				4A5483DE21F5C87500DA8076 /* Assertion.swift in Sources */,
+				1381D48421BFFFD300B54300 /* FinalChallengeParams.swift in Sources */,
+				1381D48821BFFFD300B54300 /* Operation.swift in Sources */,
+				1381D48921BFFFD300B54300 /* KeyPair.swift in Sources */,
+				139D331821F71C0700E6C92C /* BiometricResultStrings.swift in Sources */,
+				13730A1F2201C80800437FC1 /* FidoEncodingHandler.swift in Sources */,
+				14D4D20D21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift in Sources */,
+				1381D46A21BFFF9000B54300 /* AlgAndEncodingEnum.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
+				4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */,
+				1381D48321BFFFD300B54300 /* DisplayPNGCharacteristicsDescriptor.swift in Sources */,
+				1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */,
+				13F9698921C2ABFF00F6ACC7 /* MatcherProtection.swift in Sources */,
 				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
+				14D4D20521E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift in Sources */,
+				139D331E21F8AFB700E6C92C /* DeregRequest.swift in Sources */,
 				3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */,
 				4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
+				139D331221F71B2200E6C92C /* BiometricAlert.swift in Sources */,
 				3EF9DDD421ABFDE40052C72A /* UIAlertController_Extensions.swift in Sources */,
+				1381D46B21BFFF9000B54300 /* TagsEnum.swift in Sources */,
+				14D4D21521E8BA44008A65E0 /* DeregisterAuthenticator.swift in Sources */,
 				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
+				14D4D20B21E8AD25008A65E0 /* EncodingHelper.swift in Sources */,
+				4A5483DC21F5C51000DA8076 /* FidoResponse.swift in Sources */,
+				1381D48D21BFFFD300B54300 /* Extension.swift in Sources */,
+				13F9698121C1224300F6ACC7 /* UserDefaultsManager.swift in Sources */,
 				47D88A4621998CBD004771B5 /* Configuration.swift in Sources */,
+				1381D48E21BFFFD300B54300 /* Policy.swift in Sources */,
+				1381D48C21BFFFD300B54300 /* OperationHeader.swift in Sources */,
+				139D331621F71B8200E6C92C /* BiometricAlertType.swift in Sources */,
+				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
+				139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */,
+				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
+				139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */,
 				C2142823216512D200F00948 /* KnownServices.swift in Sources */,
+				13730A1B2201C1BA00437FC1 /* FidoEndpointHelper.swift in Sources */,
+				138B177721F0DB97009FB223 /* FidoError.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
+				14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */,
 				13F588AE21BA863D002857EA /* BiometricsViewController.swift in Sources */,
+				13730A1D2201C3E000437FC1 /* FidoRequestHandler.swift in Sources */,
+				135171A721C9EF78001EC74B /* CookieHandler.swift in Sources */,
 				C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */,
+				14865E7E220AE7B300E72948 /* RegistrationRequest.swift in Sources */,
 				9200DC9F21428562009EFFEF /* Reachability.swift in Sources */,
+				135171A521C9CCF8001EC74B /* FidoURLSessionManager.swift in Sources */,
+				1381D48721BFFFD300B54300 /* RGBPalletteEntry.swift in Sources */,
 				3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */,
+				1381D49A21C00AC500B54300 /* FidoClient.swift in Sources */,
 				C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */,
+				1381D49421C0000D00B54300 /* RegistrationAssertionBuilder.swift in Sources */,
 				C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */,
+				1381D48A21BFFFD300B54300 /* FidoRequest.swift in Sources */,
+				13F9698521C2ABB800F6ACC7 /* UserVerification.swift in Sources */,
+				13F9698721C2ABE300F6ACC7 /* KeyProtection.swift in Sources */,
+				4A5483E021F5DF8D00DA8076 /* FidoAssertionBuilder.swift in Sources */,
 				4793CF10219C319A00C95F51 /* ConfigurationService.swift in Sources */,
 				609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */,
+				1381D48F21BFFFD300B54300 /* Version.swift in Sources */,
+				1417702221EF96B4003E3EAB /* ConfigurationResponse.swift in Sources */,
+				1381D48B21BFFFD300B54300 /* ChannelBindings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,8 +805,11 @@
 			files = (
 				C2357EBC216575460033B98F /* KnownServicesTests.swift in Sources */,
 				F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */,
+				4A6A1AA421E6189E00795BE2 /* AssertionTests.swift in Sources */,
 				F01745BB207BA39200877E4D /* SafariTests.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
+				135171A921CB1D52001EC74B /* FidoClientTests.swift in Sources */,
+				4A8A3EA421E4E4AA00E49E01 /* ModelTests.swift in Sources */,
 				C2357EBA216574F20033B98F /* KnownServiceTests.swift in Sources */,
 				3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */,
 			);
@@ -1625,7 +1905,7 @@
 			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				APP_DISPLAY_NAME = Scratch10;
+				APP_DISPLAY_NAME = Scratch12;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1677,7 +1957,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1688,7 +1968,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1381D46221BFFAE100B54300 /* Scratch12.xcconfig */;
 			buildSettings = {
-				APP_DISPLAY_NAME = Scratch10;
+				APP_DISPLAY_NAME = Scratch12;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -1697,7 +1977,7 @@
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.scratch12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
@@ -1799,7 +2079,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.preview;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Preview";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = NO;
@@ -1903,7 +2183,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstacklocal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Browserstack";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = YES;
@@ -2162,7 +2442,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.development;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Scratch";
+				PROVISIONING_PROFILE_SPECIFIER = "NHS App Development";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = YES;
