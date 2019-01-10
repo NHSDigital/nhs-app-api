@@ -101,16 +101,6 @@ Feature: My appointments
     And booked appointments before and one appointment within cutoff time are correctly displayed with relevant ability to cancel
     And I can book an appointment
 
-  @long-running
-  @nativepending @NHSO-2974
-  Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
-    Given I have no upcoming appointments for EMIS
-    And I am logged in
-    And I am on the My Appointments page
-    When I am idle long enough for the session to expire
-    Then I see the login page with the session expiry notification
-    And the user login details are cleared from cookies
-
   @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
   Scenario: Requesting list of appointments, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have no upcoming appointments for EMIS

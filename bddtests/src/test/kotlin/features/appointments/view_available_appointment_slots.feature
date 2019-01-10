@@ -259,18 +259,6 @@ Feature: View available appointment slots
     When I decide I don't want to select an appointment and go back
     Then the My Appointments page is displayed
 
-
-  @long-running
-  @nativepending @NHSO-2974
-  Scenario: On session expiry (when on appointment booking page), a user on a secure screen is automatically signed out
-    #    GP System agnostic scenario, so only need to test with EMIS
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the Available Appointments page
-    When I am idle long enough for the session to expire
-    Then I see the login page with the session expiry notification
-    And the user login details are cleared from cookies
-
   @native
   @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
   Scenario: A user sees appropriate information message when internet connection has been lost

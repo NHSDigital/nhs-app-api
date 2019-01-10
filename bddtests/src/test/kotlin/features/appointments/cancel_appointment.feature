@@ -131,18 +131,6 @@ Feature: Ability to cancel an appointment
       | Unable to attend | EMIS      |
       | Reason 1         | VISION    |
 
-  @long-running
-  @nativepending @NHSO-2974
-  Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
-    Given I have upcoming appointments before cutoff time for VISION
-    And I am logged in
-    And I am on the My Appointments page
-    And I select a "Cancel appointment" link
-    Then I will be on the "Cancellation reason" screen
-    When I am idle long enough for the session to expire
-    Then I see the login page with the session expiry notification
-    And the user login details are cleared from cookies
-
   @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
   Scenario: Cancelling appointment, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have upcoming appointments before cutoff time for VISION

@@ -4,9 +4,14 @@
 @native
 @native-smoketest
 Feature: Session Expiry and Extend
+   Notes on the terminology for the following tests:
+   * A 'secure screen' is a page that is within our native app, e.g. Appointments Booking Page
+   * A 'non secure screen' is a page that is not within our native app, but surfaced as part of the functionality,
+   e.g. Health A-Z (accessed from the symptoms page)
 
   @long-running
   @nativepending @NHSO-2974
+  @tech-debt @NHSO-1742  
   Scenario: On session expiry, a user on a secure screen is automatically signed out
     Given I am a EMIS patient
     And I am logged in
