@@ -64,10 +64,8 @@ export default {
   created() {
     if (Sources.isNative(this.$route.query.source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
-    } else {
-      this.$store.dispatch('device/updateIsNativeApp', false);
+      this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
     }
-    this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
 
     const appVersion = this.$store.app.$env.VERSION_TAG;
     if (appVersion) {

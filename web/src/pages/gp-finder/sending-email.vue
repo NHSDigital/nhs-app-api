@@ -131,7 +131,7 @@ export default {
   },
   methods: {
     onReturnHomeClicked() {
-      this.$router.push(`${LOGIN.path}`);
+      this.$router.push(LOGIN.path);
     },
   },
 };
