@@ -36,7 +36,7 @@ services:
       - PORT=8082
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
-      - ConfigurationSettings__DefaultSessionExpiryMinutes=1
+      - ConfigurationSettings__DefaultSessionExpiryMinutes=3
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
       - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/

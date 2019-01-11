@@ -63,7 +63,12 @@ Feature: Login
       | EMIS      |
       | TPP       |
 
-
+  Scenario: A user can log in, and when they receive a 401 are redirected to the login page
+    Given I am logged in as a EMIS user
+    When I am idle long enough for the backend session to expire
+    And I navigate to prescriptions
+    Then I see the login page
+    
   @manual
   # to enable survey link change HOTJAR_SURVEY_VISIBLE env variable value
   Scenario Outline: A <GP System> user sees a survey link on the home page if enabled

@@ -32,6 +32,18 @@ const final = ({ self, commit }) => {
   }
 };
 
+const logoutCleanUp = ({ self }) => {
+  self.dispatch('session/clear');
+  self.dispatch('session/endValidationChecking');
+  self.dispatch('errors/disableApiError');
+  self.dispatch('navigation/clearPreviousSelectedMenuItem');
+
+  removeCookies({
+    cookies: self.app.$cookies,
+    key: ['nhso.terms', 'nhso.session'],
+  });
+};
+
 export default {
   handleAuthResponse({ commit, state }, code) {
     /**
@@ -82,15 +94,7 @@ export default {
     this.app.$cookies.removeAll();
   },
   logout({ commit }, { expired } = {}) {
-    this.dispatch('session/clear');
-    this.dispatch('session/endValidationChecking');
-    this.dispatch('errors/disableApiError');
-    this.dispatch('navigation/clearPreviousSelectedMenuItem');
-
-    removeCookies({
-      cookies: this.app.$cookies,
-      key: ['nhso.terms', 'nhso.session'],
-    });
+    logoutCleanUp({ self: this });
 
     return this
       .app
@@ -117,6 +121,7 @@ export default {
     commit(UPDATE_CONFIG, config);
   },
   unauthorised({ commit }) {
+    logoutCleanUp({ self: this });
     final({ self: this, commit, expired: this.state.session.showExpiryMessage });
   },
 };

@@ -205,6 +205,7 @@ class {{&className}} {
       if (!axios.isCancel(error)) {
         if (error.response !== undefined && 401 === error.response.status) {
           this.store.dispatch('auth/unauthorised');
+          resolve({ deferred, store: this.store });
         }
 
         this.store.dispatch('errors/addApiError', error);

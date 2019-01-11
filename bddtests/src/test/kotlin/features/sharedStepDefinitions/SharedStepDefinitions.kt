@@ -27,7 +27,7 @@ import webdrivers.options.WebDriverOption
 import java.net.URL
 
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
-private const val WAIT_IN_SECONDS = 70L
+private const val WAIT_IN_SECONDS = 190L
 
 open class SharedStepDefinitions {
 
