@@ -15,9 +15,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         {
             _mapper = mapper;
         }
+        
         public AppointmentsResponse Map(ViewAppointmentsReply viewAppointmentsReply)
         {
-            var appointments = _mapper.Map(viewAppointmentsReply.Appointments);
+            var appointments = _mapper.Map(viewAppointmentsReply?.Appointments);
             var response = new AppointmentsResponse { Appointments = appointments };
 
             return response;

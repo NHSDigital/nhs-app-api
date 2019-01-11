@@ -2,6 +2,7 @@
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using MedicationRootObject = NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.MedicationRootObject;
+using System;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -9,6 +10,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
     {
         public Immunisations Map(MedicationRootObject immunisationsGetResponse)
         {
+            if(immunisationsGetResponse == null)
+            {
+                throw new ArgumentNullException(nameof(immunisationsGetResponse));
+            }
+
             var immunisations = new Immunisations();
 
             if (immunisationsGetResponse.MedicalRecord == null) return immunisations;

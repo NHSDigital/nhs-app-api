@@ -102,7 +102,40 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             // Assert
             actualResponse.Should().BeEmpty();
         }
-        
+
+        [TestMethod]
+        public void Map_ReturnsNoLocationInResponse_WhenLocationsIsNull()
+        {
+            // Arrange
+            var appointmentSlotSession =
+                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T11:14:19", "Emergency", "Unknown");
+
+            var slotSessions = new[] { appointmentSlotSession };
+
+            var location = CreateLocation(23, "Leeds");
+            var sessionHolder = CreateSessionHolder(55, "Dr McCoy");
+            var session = CreateSession(new[] { sessionHolder.ClinicianId }, location.LocationId, 1, "Timed");
+            
+            var sessionHolders = new[] { sessionHolder };
+            var sessions = new[] { session };
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(slotSessions, null, sessionHolders, sessions);
+
+            // Assert
+            var expectedSlot = new Slot
+            {
+                Id = "101",
+                Clinicians = new[] { "Dr McCoy" },
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T11:14:19"),
+                Location = "",
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                Type = "Emergency"
+            };
+            var expectedResponse = new[] { expectedSlot };
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]

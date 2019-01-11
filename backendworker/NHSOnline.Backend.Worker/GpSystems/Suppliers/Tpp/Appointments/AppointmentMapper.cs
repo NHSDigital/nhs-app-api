@@ -20,7 +20,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         public IEnumerable<Appointment> Map(List<Models.Appointments.Appointment> appointments)
         {
             if (appointments == null)
+            {
                 yield break;
+            }
 
             var now = _dateTimeOffsetProvider.CreateDateTimeOffset();
 

@@ -214,7 +214,7 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
                 SessionName = "General Session Appointment",
                 SessionType = "Timed"
             };
-            
+ 
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
                 Sessions = new[]{ session },

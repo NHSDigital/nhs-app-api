@@ -35,12 +35,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             IEnumerable<SessionHolder> sessionHolders,
             IEnumerable<Models.Session> sessions)
         {
-            if (sessions == null || !sessions.Any())
+            if (slotSessions == null || !slotSessions.Any())
             {
                 yield break;
             }
-            
-            if (slotSessions==null || ! slotSessions.Any())
+
+            if (sessions == null || !sessions.Any())
             {
                 yield break;
             }
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private static string FindLocationForSession(int sessionId, IReadOnlyDictionary<int, Models.Session> sessions, IEnumerable<Location> locations)
         {
             var session = FindSession(sessionId, sessions);
-            var location = locations.FirstOrDefault(x => x.LocationId == session?.LocationId);
+            var location = locations?.FirstOrDefault(x => x.LocationId == session?.LocationId);
             return location?.LocationName ?? string.Empty;
         }
 

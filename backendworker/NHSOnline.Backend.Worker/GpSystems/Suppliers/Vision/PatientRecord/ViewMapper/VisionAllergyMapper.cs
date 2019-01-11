@@ -18,6 +18,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
         {
             var result = new Allergies();
 
+            if(response == null)
+            {
+                return result;
+            }
+
             var allergies = new List<AllergyItem>();
             var rawContent = response.Record;
 

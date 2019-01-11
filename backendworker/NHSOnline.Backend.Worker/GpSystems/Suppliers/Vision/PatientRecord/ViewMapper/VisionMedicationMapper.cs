@@ -23,6 +23,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
         {
             var medications = new Medications();
 
+            if(response == null)
+            {
+                return medications;
+            }
+
             var rawContent = response.Record;
 
             try

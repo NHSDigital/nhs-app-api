@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         }
         public AppointmentSlotsResponse Map(ListSlotsReply listSlotsReply)
         {
-            var slots = _sessionMapper.Map(listSlotsReply.Sessions);
+            var slots = _sessionMapper.Map(listSlotsReply?.Sessions);
 
             var response = new AppointmentSlotsResponse
             {

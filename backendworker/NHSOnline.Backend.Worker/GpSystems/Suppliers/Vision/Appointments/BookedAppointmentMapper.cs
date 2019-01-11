@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }
-        
+
         public IEnumerable<Appointment> Map(BookedAppointments bookedAppointments)
         {
             var mappedAppointments = new List<Appointment>();

@@ -26,7 +26,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
 
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-        } 
+        }
+
+        [TestMethod]
+        public void MapProblemRequestsGetResponseToProblemListResponse_WithNullResponse_ThrowsArgumentNullException()
+        {
+            Action act = () => new EmisProblemMapper().Map(null);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("problemsGetResponse");
+
+        }
 
         [TestMethod]
         public void MapProblemRequestsGetResponseToProblemListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()

@@ -6,6 +6,8 @@ using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support;
 using Address = NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Address;
 using Name = NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name;
+using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
@@ -17,20 +19,25 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         private readonly IMapper<string, Decision> _organDonationDecisionMapper;
         private readonly IMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;
         private readonly IMapper<string, ChoiceState> _organDonationChoiceStateMapper;
+        private readonly ILogger<OrganDonationRegistrationMapper> _logger;
 
         public OrganDonationRegistrationMapper(IMapper<string, Decision> organDonationDecisionMapper,
             IMapper<string, FaithDeclaration> organDonationFaithDeclarationMapper,
-            IMapper<string, ChoiceState> organDonationChoiceStateMapper)
+            IMapper<string, ChoiceState> organDonationChoiceStateMapper,
+            ILogger<OrganDonationRegistrationMapper> logger
+            )
         {
             _organDonationDecisionMapper = organDonationDecisionMapper;
             _organDonationChoiceStateMapper = organDonationChoiceStateMapper;
             _organDonationFaithDeclarationMapper = organDonationFaithDeclarationMapper;
+            _logger = logger;
         }
 
         public OrganDonationRegistration Map(DemographicsResponse source)
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
+            new ValidateAndLog(_logger)
+                .IsNotNull(source, nameof(source), ThrowError)
+                .IsValid();
 
             return new OrganDonationRegistration
             {
@@ -47,11 +54,10 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public OrganDonationRegistration Map(OrganDonationRegistration firstSource,
             OrganDonationSuccessResponse<RegistrationLookupResponse> secondSource)
         {
-            if (firstSource == null)
-                throw new ArgumentNullException(nameof(firstSource));
-
-            if (secondSource?.Entry?.FirstOrDefault()?.Resource == null)
-                throw new ArgumentNullException(nameof(secondSource));
+            new ValidateAndLog(_logger)
+                .IsNotNull(firstSource, nameof(firstSource), ThrowError)
+                .IsNotNull(secondSource, nameof(secondSource), ThrowError)
+                .IsValid();
 
             var existingRegistration = secondSource.Entry.First().Resource;
 

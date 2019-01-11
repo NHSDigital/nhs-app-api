@@ -18,6 +18,9 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionServiceDefinition;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Certificate;
+using NHSOnline.Backend.Worker.Support;
+
+using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
@@ -81,6 +84,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         public async Task<VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
             VisionConnectionToken token, string odsCode)
         {
+            new ValidateAndLog(_logger).IsNotNullOrWhitespace(odsCode, nameof(odsCode), ThrowError)
+                .IsNotNull(token, nameof(token), ThrowError)
+                .IsNotNullOrWhitespace(token?.RosuAccountId, nameof(VisionConnectionToken.RosuAccountId), ThrowError)
+                .IsNotNullOrWhitespace(token?.ApiKey, nameof(VisionConnectionToken.ApiKey), ThrowError)
+                .IsValid();
+
             var visionServiceDefinition = new ConfigurationServiceDefinition();
 
             var visionRequest = new VisionRequest<object>(

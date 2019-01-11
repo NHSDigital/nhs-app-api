@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support
         {
             var validator = new ValidateAndLog(_logger.Object)
                 .IsNotNullOrWhitespace("StringTest", "StringTest")
-                .IsNotNull(null, "DateTime");
+                .IsNotNull<DateTime?>(null, "DateTime");
 
             validator.IsValid().Should().BeFalse();
         }

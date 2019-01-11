@@ -80,6 +80,39 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         }
 
         [TestMethod]
+        public void Map_ReturnsNoLocation_WhenLocationsInResponseIsNull()
+        {
+            // Arrange
+            var location = CreateLocation(23, "Leeds");
+            var sessionHolder = CreateSessionHolder(55, "Dr Crusher");
+            var session = CreateSession(new[] { sessionHolder.ClinicianId }, location.LocationId, 1, "Timed");
+            
+            var sessionHolders = new[] { sessionHolder };
+            var sessions = new[] { session };
+
+            var appointment =
+                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+
+            var appointments = new[] { appointment };
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(appointments, null, sessionHolders, sessions);
+
+            // Assert
+            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
+            {
+                Id = "101",
+                Clinicians = new[] { "Dr Crusher" },
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                Location = "",
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                Type = "Emergency"
+            };
+            var expectedResponse = new[] { expectedAppointment };
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [TestMethod]
         public void Map_ReturnsEmptyArray_WhenAppointmentsInResponseIsEmpty()
         {
             // Arrange

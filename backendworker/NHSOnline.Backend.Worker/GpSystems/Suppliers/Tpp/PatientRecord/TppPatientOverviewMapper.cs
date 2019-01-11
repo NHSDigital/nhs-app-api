@@ -21,8 +21,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
         
         public Tuple<Allergies, Medications> Map(ViewPatientOverviewReply viewPatientOverviewGetResponse)
         {
+
             _logger.LogEnter();
-            
+
+            if (viewPatientOverviewGetResponse == null)
+            {
+                throw new ArgumentNullException(nameof(viewPatientOverviewGetResponse));
+            }
+
             var allergies = new Allergies();
             var allergiesData = new List<AllergyItem>();
             

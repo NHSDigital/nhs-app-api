@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
@@ -12,6 +13,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         
         public Problems Map(MedicationRootObject problemsGetResponse)
         {
+            if(problemsGetResponse == null)
+            {
+                throw new ArgumentNullException(nameof(problemsGetResponse));
+            }
+
             var problems = new Problems();
             
             if (problemsGetResponse.MedicalRecord != null)

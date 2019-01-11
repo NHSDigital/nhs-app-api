@@ -8,6 +8,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
     {
         public Allergies Map(MedicationRootObject allergiesGetResponse)
         {
+            if(allergiesGetResponse == null)
+            {
+                throw new System.ArgumentNullException(nameof(allergiesGetResponse));
+            }
+
             var allergies = new Allergies();
             
             if (allergiesGetResponse.MedicalRecord != null)

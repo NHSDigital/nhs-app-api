@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using Microsoft.Azure.Documents.SystemFunctions;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 
@@ -53,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         private TppDcrEvent MapEvent(Event inputEvent)
         {
-            return new TppDcrEvent()
+            return new TppDcrEvent
             {
                 Date = inputEvent.Date.SafeParseToNullableDateTimeOffset(),
                 LocationAndDoneBy = string.Format(CultureInfo.InvariantCulture, "{0} - {1}",

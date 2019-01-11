@@ -12,6 +12,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
     {
         public TestResults Map(MedicationRootObject testResultRequestsGetResponse)
         {
+            if (testResultRequestsGetResponse == null)
+            {
+                throw new ArgumentNullException(nameof(testResultRequestsGetResponse));
+            }
+
             var testResults = new TestResults();
 
             if (testResultRequestsGetResponse.MedicalRecord == null) return testResults;

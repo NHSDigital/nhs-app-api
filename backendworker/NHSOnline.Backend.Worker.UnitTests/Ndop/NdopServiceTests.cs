@@ -83,6 +83,51 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ndop
             // Assert
             _ndopSigning.Verify(x => x.GetSigningCredentials());
             ndopResponse.Should().BeOfType<GetNdopResult.SuccessfullyRetrieved>();          
-        }          
+        }
+
+        [DataTestMethod]
+        [DataRow("", "testissuer")]
+        [DataRow("testaudience", "")]
+        public void GetJwtToken_WhenCalledWithEmptyConfigurationValues_ReturnsUnsuccessfulResponse(string claimAudience, string claimIssuer)
+        {
+
+            // Arrange
+            const string key = "401b09eab3c013d4ca54922bb80";
+            const string testNhsNumber = "123456789";
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var credentials = new SigningCredentials
+                (securityKey, SecurityAlgorithms.HmacSha256);
+
+            _ndopSigning.Setup(x => x.GetSigningCredentials()).Returns(() => credentials);
+            _configuration.SetupGet(x => x["NDOP_CLAIM_AUDIENCE"]).Returns(claimAudience);
+            _configuration.SetupGet(x => x["NDOP_CLAIM_ISSUER"]).Returns(claimIssuer);
+
+            // Act
+            var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
+
+            // Assert
+            _ndopSigning.Verify(x => x.GetSigningCredentials());
+            ndopResponse.Should().BeOfType<GetNdopResult.Unsuccessful>();
+        }
+
+        public void GetJwtToken_WhenCalledWithEmptyCredentials_ReturnsUnsuccessfulResponse()
+        {
+            // Arrange
+            const string key = "401b09eab3c013d4ca54922bb80";
+            const string testNhsNumber = "123456789";
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+
+            _ndopSigning.Setup(x => x.GetSigningCredentials()).Returns(() => null);
+
+            // Act
+            var ndopResponse = _ndopService.GetJwtToken(testNhsNumber);
+
+            // Assert
+            _ndopSigning.Verify(x => x.GetSigningCredentials());
+            ndopResponse.Should().BeOfType<GetNdopResult.Unsuccessful>();
+
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using System.Net.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
@@ -21,9 +23,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         public AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse,
             AppointmentSlotsMetadataGetResponse slotsMetadataResponse, PracticeSettingsGetResponse body, EmisUserSession userSession)
         {
-            var slots = _slotMapper.Map(slotsResponse.Sessions, slotsMetadataResponse.Locations,
-                slotsMetadataResponse.SessionHolders, slotsMetadataResponse.Sessions);
-
+            if(slotsResponse == null)
+            {
+                throw new HttpRequestException();
+            }
+            var slots = _slotMapper.Map(slotsResponse?.Sessions, slotsMetadataResponse?.Locations,
+                slotsMetadataResponse?.SessionHolders, slotsMetadataResponse?.Sessions);
+            
             var response = new AppointmentSlotsResponse
             {
                 BookingGuidance = body?.Messages?.AppointmentsMessage ?? string.Empty,

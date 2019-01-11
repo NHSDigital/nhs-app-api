@@ -4,7 +4,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Worker.Areas.Ndop.Models;
+using NHSOnline.Backend.Worker.Support;
+using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.Worker.Ndop
 {
@@ -24,28 +27,33 @@ namespace NHSOnline.Backend.Worker.Ndop
         }
 
         public GetNdopResult GetJwtToken(string nhsNumber)
-        {           
+        {
             try
             {
                 var signingCredentials = _ndopSigning.GetSigningCredentials();
-                if (signingCredentials == null)
-                    return new GetNdopResult.Unsuccessful();
+                var claimAudience = _configuration.GetOrWarn("NDOP_CLAIM_AUDIENCE", _logger);
+                var claimIssuer = _configuration.GetOrWarn("NDOP_CLAIM_ISSUER", _logger);
 
+                var isValid = new ValidateAndLog(_logger)
+                    .IsNotNull(signingCredentials, nameof(signingCredentials))
+                    .IsNotNullOrWhitespace(claimAudience, nameof(claimAudience))
+                    .IsNotNullOrWhitespace(claimIssuer, nameof(claimIssuer))
+                    .IsValid();
+
+                if (!isValid)
+                {
+                    _logger.LogError("Could not get Ndop claim audience/issuer.");
+                    return new GetNdopResult.Unsuccessful();
+                }
+                
                 var claims = new[]
                 {
                     new Claim(ClaimTypeNhsNumber, nhsNumber.RemoveWhiteSpace())
                 };
 
                 var expiryTime = DateTime.UtcNow.AddSeconds(30);
-                
-                var claimAudience = _configuration.GetOrWarn("NDOP_CLAIM_AUDIENCE", _logger);
-                var claimIssuer = _configuration.GetOrWarn("NDOP_CLAIM_ISSUER", _logger);
 
-                if (string.IsNullOrEmpty(claimAudience) || string.IsNullOrEmpty(claimIssuer))
-                {
-                    _logger.LogError("Could not get Ndop claim audience/issuer.");
-                    return new GetNdopResult.Unsuccessful();
-                }
+                
 
                 var jwtToken = new JwtSecurityToken(
                     audience: claimAudience,

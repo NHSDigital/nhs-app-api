@@ -102,9 +102,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             IEnumerable<Location> locations)
         {
             var session = FindSession(sessionId, sessions);
-            var location = locations.FirstOrDefault(x => x.LocationId == session?.LocationId);
+            var location = locations?.FirstOrDefault(x => x.LocationId == session?.LocationId);
             return location?.LocationName ?? string.Empty;
         }
+
         private static Models.Session FindSession(int sessionId, IReadOnlyDictionary<int, Models.Session> sessions) =>
             sessions.ContainsKey(sessionId) ? sessions[sessionId] : null;
 

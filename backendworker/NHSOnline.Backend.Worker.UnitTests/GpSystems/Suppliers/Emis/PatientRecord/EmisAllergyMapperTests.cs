@@ -27,6 +27,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         } 
 
         [TestMethod]
+        public void MapAllergyRequestsGetResponseToAllergyListResponse_WithNullResponse_ThrowsArgumentNullException()
+        {
+            Action act = () => new EmisAllergyMapper().Map(null);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("allergiesGetResponse");
+        }
+
+        [TestMethod]
         public void MapAllergyRequestsGetResponseToAllergyListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
         {
             // Arrange

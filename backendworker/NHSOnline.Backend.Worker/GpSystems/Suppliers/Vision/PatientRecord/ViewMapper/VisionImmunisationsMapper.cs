@@ -18,6 +18,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
         {
             var immunisations = new Immunisations();
 
+            if(response == null)
+            {
+                return immunisations;
+            }
+
             var immunisationItems = new List<ImmunisationItem>();
             var rawContent = response.Record;
 

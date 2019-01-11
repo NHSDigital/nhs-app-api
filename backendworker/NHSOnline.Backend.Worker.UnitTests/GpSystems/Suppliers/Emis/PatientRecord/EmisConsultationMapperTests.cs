@@ -41,6 +41,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         }
 
         [TestMethod]
+        public void MapConsultationRequestGetResponseToConsultationListResponse_WithNullResponse_ThrowsNullReferenceException()
+        {
+            Action act = () => new EmisConsulationMapper().Map(null);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("consultationsGetResponse");
+        }
+
+        [TestMethod]
         public void MapConsultationRequestsGetResponseToConsultationListResponse_WithValues_ReturnsResultValues()
         {
             // Arrange
