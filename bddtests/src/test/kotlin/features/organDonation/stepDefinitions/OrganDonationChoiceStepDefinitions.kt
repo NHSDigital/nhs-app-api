@@ -1,5 +1,6 @@
 package features.organDonation.stepDefinitions
 
+import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
@@ -18,7 +19,7 @@ open class OrganDonationChoiceStepDefinitions {
     lateinit var organDonationChoicePage: OrganDonationChoicePage
 
     @When("^I navigate to the internal Organ Donation Choice Page")
-    fun iNavigateToTheInternalOrganDonationChoicePage(){
+    fun iNavigateToTheInternalOrganDonationChoicePage() {
         navBarNative.select(NavBarNative.NavBarType.MORE)
         browser.appendSourceQueryString("ios")
         morePage.btnOrganDonation.click()
@@ -27,8 +28,21 @@ open class OrganDonationChoiceStepDefinitions {
     }
 
     @When("^I choose to not donate my organs")
-    fun iChooseToNotDonateMyOrgans(){
+    fun iChooseToNotDonateMyOrgans() {
         val button = organDonationChoicePage.noButton.assertIsVisible()
         button.click()
+    }
+
+    @When("^I choose to donate my organs")
+    fun iChooseToDonateMyOrgans() {
+        val button = organDonationChoicePage.yesButton.assertIsVisible()
+        button.click()
+    }
+
+
+    @Then("^the internal Organ Donation Choice Page is displayed")
+    fun theInternalOrganDonationChoicePageIsDisplayed() {
+        organDonationChoicePage.waitForSpinnerToDisappear()
+        organDonationChoicePage.organDonationTitle.assertIsVisible()
     }
 }

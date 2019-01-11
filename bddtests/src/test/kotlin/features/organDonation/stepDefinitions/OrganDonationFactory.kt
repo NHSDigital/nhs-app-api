@@ -16,7 +16,7 @@ class OrganDonationFactory(val gpSystem: String) {
 
     val patient = setupPatient()
 
-    fun setupPatientForAppUse(){
+    fun setupPatientForAppUse() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
 
@@ -25,7 +25,7 @@ class OrganDonationFactory(val gpSystem: String) {
         }
     }
 
-    fun registeredUser(){
+    fun registeredUser() {
         val patient = setupPatient()
         mockingClient.forOrganDonation {
             lookupOrganDonationRegistration(patient).respondWithSuccess()
@@ -33,8 +33,8 @@ class OrganDonationFactory(val gpSystem: String) {
         DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
     }
 
-    fun unregisteredUser(patient:Patient? = null) {
-        val patientToUse  = patient ?: setupPatient()
+    fun unregisteredUser(patient: Patient? = null) {
+        val patientToUse = patient ?: setupPatient()
         mockingClient.forOrganDonation {
             lookupOrganDonationRegistration(patientToUse).respondWithNotFoundError()
         }
@@ -74,7 +74,7 @@ class OrganDonationFactory(val gpSystem: String) {
         DemographicsFactory.getForSupplier(gpSystem).enabledButTimesOut(patient)
     }
 
-    private fun setupPatient() : Patient{
+    private fun setupPatient(): Patient {
         val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(gpSystem)

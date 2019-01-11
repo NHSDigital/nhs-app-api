@@ -2,7 +2,7 @@
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <div>
       <div :class="$style.info">
-        <h2>{{ $t('organDonation.register.subheader') }}</h2>      
+        <h2>{{ $t('organDonation.register.subheader') }}</h2>
       </div>
       <div :class="$style['grid-container']">
         <organ-donation-button id="yes-button" :decision="noDecision"/>
