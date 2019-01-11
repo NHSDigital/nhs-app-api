@@ -130,7 +130,7 @@ const routes = {
   },
   ORGAN_DONATION_YOUR_CHOICE: {
     name: 'organ-donation-your-choice',
-    path: 'organ-donation/your-choice',
+    path: '/organ-donation/your-choice',
   },
   PRESCRIPTIONS: {
     name: 'prescriptions',

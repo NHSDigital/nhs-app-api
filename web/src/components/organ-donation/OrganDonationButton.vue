@@ -63,9 +63,6 @@ export default {
     border: none;
     cursor: pointer;
     outline: none;
-    width: 50%;
-    max-width: 175px;
-    float: left;
 
     h2 {
       font-size: 2em;
@@ -79,7 +76,7 @@ export default {
   }
 
   .no-button {
-    margin-right: $one;
+    float: left;
 
     h2 {
       color: $red;
@@ -91,7 +88,7 @@ export default {
   }
 
   .yes-button {
-    margin-left: $one;
+    float: right;
 
     h2 {
       color: $light_green;

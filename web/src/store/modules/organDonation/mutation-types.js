@@ -1,6 +1,7 @@
 export const LOADED = 'LOADED';
 export const LOADED_REFERENCE_DATA = 'LOADED_REFERENCE_DATA';
 export const MAKE_DECISION = 'MAKE_DECISION';
+export const SET_ALL_ORGANS = 'SET_ALL_ORGANS';
 
 export const DECISION_NOT_FOUND = 'NotFound';
 export const DECISION_OPT_IN = 'OptIn';
@@ -24,7 +25,7 @@ export const initialState = () => ({
     emailAddress: '',
     decision: 'NotFound',
     decisionDetails: {
-      all: false,
+      all: true,
       choices: [],
     },
     faithDeclaration: 'NotStated',

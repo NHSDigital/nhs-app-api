@@ -24,6 +24,7 @@ import {
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
+  ORGAN_DONATION_YOUR_CHOICE,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -109,6 +110,7 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.appointmentConfirmation';
       break;
     case ORGAN_DONATION.name:
+    case ORGAN_DONATION_YOUR_CHOICE.name:
       store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaders.organDonation';
       route.meta.pageTitleKey = 'pageTitles.organDonation';

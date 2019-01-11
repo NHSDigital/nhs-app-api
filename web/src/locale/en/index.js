@@ -605,7 +605,6 @@ export default {
     more: 'More',
     login: 'Login',
     termsAndConditions: 'Accept conditions of use',
-
   },
   myAccount: {
     detailsHeading: 'Details',
@@ -667,6 +666,21 @@ export default {
       yesButton: {
         header: 'YES',
         subheader: 'I want to donate my organs',
+      },
+    },
+    yourChoice: {
+      subheader: 'Your choice',
+      description: 'You can select to donate some, or all of your organs and tissue.',
+      backButtonText: 'Back',
+      choices: {
+        all: {
+          title: 'All my organs and tissue',
+          description: 'Help up to nine people through organ donation and even more through tissue',
+        },
+        some: {
+          title: 'Specific organs and tissue',
+          description: 'Choose which of your organs and tissue to donate',
+        },
       },
     },
   },

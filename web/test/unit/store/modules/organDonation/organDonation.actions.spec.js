@@ -3,6 +3,7 @@ import {
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
+  SET_ALL_ORGANS,
 } from '@/store/modules/organDonation/mutation-types';
 
 const createHttp = ({ result = {}, referenceData = {} } = {}) => ({
@@ -57,6 +58,13 @@ describe('organ donation actions', () => {
     it('will commit the reference data on completion', async () => {
       await actions.getReferenceData({ commit });
       expect(commit).toHaveBeenCalledWith(LOADED_REFERENCE_DATA, referenceData);
+    });
+  });
+
+  describe('setAllOrgans', () => {
+    it('will commit the SET_ALL_ORGANS mutation', () => {
+      actions.setAllOrgans({ commit }, true);
+      expect(commit).toHaveBeenCalledWith(SET_ALL_ORGANS, true);
     });
   });
 });

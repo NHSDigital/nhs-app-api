@@ -1,14 +1,13 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <div :class="$style.info">
-      <h2>{{ $t('organDonation.register.subheader') }}</h2>
-    </div>
     <div>
       <div :class="$style.info">
-        <p>{{ $t('organDonation.register.subheader') }}</p>
+        <h2>{{ $t('organDonation.register.subheader') }}</h2>      
       </div>
-      <organ-donation-button id="yes-button" :decision="noDecision"/>
-      <organ-donation-button id="no-button" :decision="yesDecision"/>
+      <div :class="$style['grid-container']">
+        <organ-donation-button id="yes-button" :decision="noDecision"/>
+        <organ-donation-button id="no-button" :decision="yesDecision"/>
+      </div>
     </div>
   </div>
 </template>
@@ -49,5 +48,11 @@ export default {
     color: $dark_grey;
     font-weight: bold;
   }
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 5px;
 }
 </style>
