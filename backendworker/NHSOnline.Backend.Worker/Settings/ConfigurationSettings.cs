@@ -29,6 +29,8 @@ namespace NHSOnline.Backend.Worker.Settings
         
         public string ThrottlingEnabled { get; set; }
 
+        public Uri FidoServerUrl { get; set; }
+
         public const string ConfigurationSectionName = "ConfigurationSettings";
 
         public static ConfigurationSettings GetSettings(IConfiguration configuration)
@@ -93,6 +95,11 @@ namespace NHSOnline.Backend.Worker.Settings
             if (ThrottlingEnabled == null)
             {
                 throw new ConfigurationNotFoundException(nameof(ThrottlingEnabled));
+            }
+
+            if (FidoServerUrl == null)
+            {
+                throw new ConfigurationNotFoundException(nameof(FidoServerUrl));
             }
         }
     }

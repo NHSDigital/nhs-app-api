@@ -1,4 +1,5 @@
-﻿using NHSOnline.Backend.Worker.Areas.Configuration.Models;
+﻿using System;
+using NHSOnline.Backend.Worker.Areas.Configuration.Models;
 
 namespace NHSOnline.Backend.Worker.Areas.Configuration
 {
@@ -12,12 +13,13 @@ namespace NHSOnline.Backend.Worker.Areas.Configuration
 
         public class SuccessfullyRetrieved : GetConfigurationResult
         {
-            public SuccessfullyRetrieved(bool isDeviceSupported, bool isThrottlingEnabled)
+            public SuccessfullyRetrieved(bool isDeviceSupported, bool isThrottlingEnabled, Uri fidoServerUrl)
             {
                 Response = new GetConfigurationResponse
                 {
                     IsDeviceSupported = isDeviceSupported,
-                    IsThrottlingEnabled = isThrottlingEnabled
+                    IsThrottlingEnabled = isThrottlingEnabled,
+                    FidoServerUrl = fidoServerUrl
                 };
             }
 

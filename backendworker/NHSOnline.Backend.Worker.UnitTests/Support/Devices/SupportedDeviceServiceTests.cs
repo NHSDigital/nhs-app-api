@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -23,6 +24,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Devices
         const string MinimumSupportedAndroidVersion = "2.1.0";
         const string MinimumSupportediOSVersion = "3.5.0";
 
+        private readonly Uri _testFidoServerUrl = new Uri("http://test.test.com");
+
         [TestInitialize]
         public void TestInitialise()
         {
@@ -30,7 +33,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Devices
             {
                 MinimumSupportedAndroidVersion = MinimumSupportedAndroidVersion,
                 MinimumSupportediOSVersion = MinimumSupportediOSVersion,
-                ThrottlingEnabled = "true"
+                ThrottlingEnabled = "true",
+                FidoServerUrl = _testFidoServerUrl
             });
 
             TestInitialiseWithOptions(_options);
@@ -146,7 +150,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Devices
             var options = Options.Create(new ConfigurationSettings
             {
                 MinimumSupportedAndroidVersion = "1.blah",
-                ThrottlingEnabled = "true"
+                ThrottlingEnabled = "true",
+                FidoServerUrl = _testFidoServerUrl
             });
 
             // Reinitialise with new options
