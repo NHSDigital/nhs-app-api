@@ -903,16 +903,16 @@ export default {
             'marketing purposes',
             'insurance purposes',
           ],
-          paragraph: '(unless you specifically request this).',
+          paragraph: '(unless you specifically request this)',
         },
         dataProtection: {
           title: 'How confidential patient information is protected',
           paragraphs: [
             'Protection of your confidential patient information is taken very seriously and it is looked after in accordance with good practice and the law. There are very strict rules on how any of your data can and cannot be used, and you have clear legal rights.',
-            'Every organisation that provides health and care services will take every step to:',
+            'Every organisation that provides health and care services must take every step to:',
           ],
           listItems: [
-            'ensure data remains secure',
+            'ensure all data remains secure',
             'use data that does not identify you whenever possible',
             'use confidential patient information to benefit health and care only',
             'not use confidential patient information for marketing or insurance purposes (unless you specifically request this)',
