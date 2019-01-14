@@ -7,6 +7,7 @@ import android.webkit.JavascriptInterface
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.Application
+import com.nhs.online.nhsonline.BuildConfig
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -119,5 +120,11 @@ class WebAppInterface(private val context: MainActivity) {
     fun onSessionExpiring(sessionDuration: Int) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showExtendSessionDialogue")
         context.runOnUiThread{context.showExtendSessionDialogue(sessionDuration)}
+    }
+
+    @JavascriptInterface
+    fun fetchNativeAppVersion() : String  {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering fetchNativeAppVersion")
+        return BuildConfig.VERSION_NAME
     }
 }

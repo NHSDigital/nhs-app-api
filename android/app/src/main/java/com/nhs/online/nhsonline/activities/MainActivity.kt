@@ -144,11 +144,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
-    private fun setupAppVersion() {
-        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updateNativeVersion', '${BuildConfig.VERSION_NAME}')")
-        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('appVersion/updatePlatform', 'Android')")
-    }
-
     private fun onErrorRetryButton() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering OnErrorRetryButton")
 
@@ -571,7 +566,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
         runOnUiThread {
             header.visibility = GONE
-            setupAppVersion()
         }
     }
 
@@ -607,7 +601,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
         runOnUiThread {
             header.visibility = VISIBLE
-            setupAppVersion()
         }
     }
 

@@ -13,11 +13,12 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
+import Sources from '@/lib/sources';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
-import Sources from '@/lib/sources';
+import NativeVersionSetup from '../services/nativeVersionSetup';
 
 export default {
   components: {
@@ -44,6 +45,9 @@ export default {
       return this.hasConnectionError() || this.hasApiError();
     },
   },
+  mounted() {
+    NativeVersionSetup(this.$store, this.$route);
+  },
   created() {
     const { source } = this.$route.query;
     if (Sources.isNative(source)) {
@@ -51,6 +55,7 @@ export default {
       this.$store.dispatch('device/setSourceDevice', source);
     }
   },
+
 };
 </script>
 

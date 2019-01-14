@@ -18,6 +18,7 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
+import Sources from '@/lib/sources';
 import A11yTitleAnnouncer from '@/components/widgets/A11yTitleAnnouncer';
 import NativeCallbacks from '@/services/native-app';
 import HeaderMenu from '@/components/HeaderMenu';
@@ -29,7 +30,7 @@ import FlashMessage from '@/components/widgets/FlashMessage';
 import SurveyBar from '@/components/SurveyBar';
 import HotJar from '@/components/widgets/HotJar';
 import { INDEX, LOGIN } from '@/lib/routes';
-import Sources from '@/lib/sources';
+import NativeVersionSetup from '../services/nativeVersionSetup';
 
 export default {
   components: {
@@ -44,7 +45,7 @@ export default {
     HotJar,
   },
   head() {
-    let { platform } = this.$store.state.appVersion;
+    let { platform } = this.$store.state.device.source;
     const { nativeVerison } = this.$store.state.appVersion;
 
     if (nativeVerison !== undefined) {
@@ -137,6 +138,7 @@ export default {
   },
   mounted() {
     if (process.client) {
+      NativeVersionSetup(this.$store, this.$route);
       if (this.loggedIn) {
         this.$store.dispatch('session/startValidationChecking');
         window.validateSession =

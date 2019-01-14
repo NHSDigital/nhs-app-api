@@ -161,4 +161,13 @@ export default {
     }
     return false;
   },
+
+  fetchNativeAppVersion() {
+    const app = window.nativeApp;
+    if (app && app.fetchNativeAppVersion) {
+      const appVersion = app.fetchNativeAppVersion();
+      return appVersion;
+    }
+    return '';
+  },
 };

@@ -13,14 +13,15 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
+import Sources from '@/lib/sources';
 import HeaderSlim from '@/components/HeaderSlim';
 import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import Sources from '@/lib/sources';
 import { LOGIN } from '@/lib/routes';
+import NativeVersionSetup from '../services/nativeVersionSetup';
 
 export default {
   components: {
@@ -69,6 +70,9 @@ export default {
       this.$store.dispatch('device/updateIsNativeApp', true);
       this.$store.dispatch('device/setSourceDevice', source);
     }
+  },
+  mounted() {
+    NativeVersionSetup(this.$store, this.$route);
   },
   methods: {
     pageTitle() {

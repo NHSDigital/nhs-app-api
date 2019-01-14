@@ -254,6 +254,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 
                 viewController.displayExtendSessionDialogue(sessionDuration: sessionDuration!)
                 break
+            case "fetchNativeAppVersion":
+                self.viewController.setupAppVersion()
+                break
             default:
                 break
             }

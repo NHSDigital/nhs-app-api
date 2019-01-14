@@ -15,6 +15,7 @@ describe('NATIVE CALLBACKS', () => {
     { fn: 'completeAppIntro' },
     { fn: 'resetPageFocus' },
     { fn: 'goToBiometrics' },
+    { fn: 'fetchNativeAppVersion' },
     {
       fn: 'updateHeaderText',
       param: 'headerText',

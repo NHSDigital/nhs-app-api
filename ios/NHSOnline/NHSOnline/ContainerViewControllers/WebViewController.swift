@@ -56,6 +56,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "onSessionExpiring")
         webView.configuration.userContentController.add(delegate, name: "goToBiometrics")
         webView.configuration.userContentController.add(delegate, name: "focusElement")
+        webView.configuration.userContentController.add(delegate, name: "fetchNativeAppVersion")
     }
     
     private func loadSpaPage(path: String)  {

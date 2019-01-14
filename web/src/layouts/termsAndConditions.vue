@@ -11,12 +11,13 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
+import Sources from '@/lib/sources';
 import HomeHeader from '@/components/HomeHeader';
 import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import Sources from '@/lib/sources';
+import NativeVersionSetup from '../services/nativeVersionSetup';
 
 export default {
   components: {
@@ -40,6 +41,7 @@ export default {
     };
   },
   mounted() {
+    NativeVersionSetup(this.$store, this.$route);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
   },
