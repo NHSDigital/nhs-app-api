@@ -51,6 +51,7 @@ namespace NHSOnline.Backend.Worker
         {
             public const string Im1ConnectionVerifyResponse = "Im1Connection_Verify_Response";
             public const string Im1ConnectionRegisterResponse = "Im1Connection_Register_Response";
+            public const string SessionCreateRequest = "Session_Create_Request";
             public const string SessionCreateResponse = "Session_Create_Response";
             public const string SessionDeleteRequest = "Session_Delete_Request";
             public const string SessionDeleteResponse = "Session_Delete_Response";

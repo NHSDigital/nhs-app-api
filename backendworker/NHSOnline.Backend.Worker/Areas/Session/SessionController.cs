@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 {
                     return new StatusCodeResult(citizenIdSessionResult.StatusCode);
                 }
-
+                
                 // Get a suitable GP system, based on the ODS code.
                 var gpSystemOption = await GetGpSystem(citizenIdSessionResult.OdsCode);
                 if (!gpSystemOption.HasValue)
@@ -84,11 +84,18 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 var gpSystem = gpSystemOption.ValueOrFailure();
                 _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
 
+                await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
+                    Constants.AuditingTitles.SessionCreateRequest,
+                    "Attempting to create Session");
+
                 // Validate the format of the IM1 connection token for this GP system.
                 var tokenValidationService = gpSystem.GetTokenValidationService();
                 if (!tokenValidationService.IsValidConnectionTokenFormat(citizenIdSessionResult.Im1ConnectionToken))
                 {
-                    _logger.LogError("Failed to validate Im1 connection");
+                    const string errorMessage = "Failed to validate Im1 connection";
+                    _logger.LogError(errorMessage);
+                    await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
+                        Constants.AuditingTitles.SessionCreateResponse, errorMessage);
                     return new StatusCodeResult(StatusCodes.Status403Forbidden);
                 }
 
@@ -97,8 +104,11 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                     citizenIdSessionResult.Im1ConnectionToken, citizenIdSessionResult.OdsCode, citizenIdSessionResult.NhsNumber);
                 if (!gpSessionCreatedResultVisited.SessionWasCreated)
                 {
-                    _logger.LogError(
-                        $"Creating the session failed with status code: '{gpSessionCreatedResultVisited.StatusCode}'");
+                    var errorMessage =
+                        $"Creating the session failed with status code: '{gpSessionCreatedResultVisited.StatusCode}'";                    
+                    _logger.LogError(errorMessage);
+                    await _auditor.AuditWithExplicitNhsNumber(citizenIdSessionResult.NhsNumber, gpSystem.Supplier,
+                        Constants.AuditingTitles.SessionCreateResponse, errorMessage);
                     return new StatusCodeResult(gpSessionCreatedResultVisited.StatusCode);
                 }
                 
