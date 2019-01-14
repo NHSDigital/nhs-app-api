@@ -12,7 +12,7 @@ import {
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
   GP_FINDER_SENDING_EMAIL,
-  GP_FINDER_SENDING_EMAIL_RESULT,
+  GP_FINDER_WAITING_LIST_JOINED,
   DATA_SHARING_PREFERENCES,
   INDEX,
   LOGIN,
@@ -72,11 +72,19 @@ export default function ({ route, store, app }) {
     case GP_FINDER.name:
     case GP_FINDER_RESULTS.name:
     case GP_FINDER_PARTICIPATION.name:
-    case GP_FINDER_SENDING_EMAIL.name:
-    case GP_FINDER_SENDING_EMAIL_RESULT.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaders.gpFinder';
       route.meta.pageTitleKey = 'pageTitles.gpFinder';
+      break;
+    case GP_FINDER_SENDING_EMAIL.name:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      route.meta.headerKey = 'pageHeaders.gpFinderWaitingListSignup';
+      route.meta.pageTitleKey = 'pageTitles.gpFinderWaitingListSignup';
+      break;
+    case GP_FINDER_WAITING_LIST_JOINED.name:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      route.meta.headerKey = 'pageHeaders.gpFinderWaitingListJoined';
+      route.meta.pageTitleKey = 'pageTitles.gpFinderWaitingListJoined';
       break;
     case SYMPTOMS.name:
     case CHECKYOURSYMPTOMS.name:

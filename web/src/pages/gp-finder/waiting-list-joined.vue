@@ -10,11 +10,15 @@
         </button>
       </form>
     </header>
-    <div v-if="showTemplate" id="mainDiv" :class="[$style.webHeader,
-                                                   $style.throttlingContent, 'pull-content']">
-      <h3>{{ this.$t('th06.letYouKnowText') }}</h3>
-      <p>{{ this.$t('th06.gpSurgeryFeatureText') }}</p>
-      <generic-button :class="[$style.button, $style.goToHomeScreenButton]"
+    <div v-if="showTemplate" id="mainDiv"
+         :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
+      <h2>{{ this.$t('th06.whatHappensNextHeading') }}</h2>
+      <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph1') }}</p>
+      <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph2') }}</p>
+      <p v-else>{{ this.$t('th06.whatHappensNextNotJoinedParagraph') }}</p>
+      <h2>{{ this.$t('th06.untilThenHeading') }}</h2>
+      <p>{{ this.$t('th06.untilThenParagraph') }}</p>
+      <generic-button :class="$style.goToHomeScreenButton" :button-classes="['grey']"
                       @click="onReturnHomeClicked">
         {{ this.$t('th06.homeButton') }}
       </generic-button>
@@ -40,8 +44,9 @@ export default {
   },
   data() {
     return {
-      headerText: this.$t('th06.header'),
+      headerText: this.$store.state.header.headerText,
       backLink: GP_FINDER.path,
+      joined: this.$route.query.choice === 'yes',
     };
   },
   methods: {

@@ -77,9 +77,9 @@ const routes = {
     path: '/gp-finder/sending-email',
     isAnonymous: true,
   },
-  GP_FINDER_SENDING_EMAIL_RESULT: {
-    name: 'gp-finder-sending-email-result',
-    path: '/gp-finder/sending-email-result',
+  GP_FINDER_WAITING_LIST_JOINED: {
+    name: 'gp-finder-waiting-list-joined',
+    path: '/gp-finder/waiting-list-joined',
     isAnonymous: true,
   },
   GP_FINDER_PARTICIPATION: {
@@ -187,7 +187,7 @@ export const {
   GP_FINDER_RESULTS,
   GP_FINDER_PARTICIPATION,
   GP_FINDER_SENDING_EMAIL,
-  GP_FINDER_SENDING_EMAIL_RESULT,
+  GP_FINDER_WAITING_LIST_JOINED,
   INDEX,
   LEGACY_MYRECORDWARNING,
   LOGIN,

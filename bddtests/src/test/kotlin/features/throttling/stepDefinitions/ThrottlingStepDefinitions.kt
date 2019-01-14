@@ -27,10 +27,8 @@ import pages.throttling.GPParticipationPage
 import pages.throttling.GPSearchResultsPage
 import pages.LoginPage
 import pages.throttling.SendingEmailPage
-import pages.throttling.SendingEmailResultsPage
+import pages.throttling.WaitingListJoinedPage
 
-private const val IS = "is"
-private const val IS_NOT = "is not"
 private const val TECHNICAL_PROBLEMS = "Technical problems"
 private const val TOO_MANY_RESULTS = "Too many results"
 private const val NO_RESULTS_FOUND = "No results found"
@@ -63,7 +61,7 @@ open class ThrottlingStepDefinitions {
     lateinit var gpSearchResultsPage: GPSearchResultsPage
     lateinit var gpParticipationPage: GPParticipationPage
     lateinit var sendingEmailPage: SendingEmailPage
-    lateinit var sendingEmailResultPage: SendingEmailResultsPage
+    lateinit var waitingListJoinedPage: WaitingListJoinedPage
 
     @Given("^I see the GP Search Results Page with " +
             "($NO_RESULTS_COUNT|$SOME_RESULTS_COUNT|$MAX_ORGANISATION_RESULTS_COUNT|$POSTCODE_SEARCH_RESULTS_COUNT) " +
@@ -177,9 +175,9 @@ open class ThrottlingStepDefinitions {
         iSeeTheGPSearchResultsPage("$SOME_RESULTS_COUNT")
     }
 
-    @When("^My GP Practice ($IS|$IS_NOT) participating in beta$")
+    @When("^My GP Practice (is|is not) participating in beta$")
     fun myGPPracticeIsOrIsNotParticipatingInBeta(isOrIsNot: String) {
-        val participating = isOrIsNot == IS
+        val participating = isOrIsNot == "is"
         gpSearchResultsPage.setPracticeToSelect(participating)
         gpParticipationPage.setHeaderToLookFor(participating)
     }
@@ -225,17 +223,17 @@ open class ThrottlingStepDefinitions {
         gpParticipationPage.ctaParticipatingContinueButton.click()
     }
 
-    @Then("^The ($TOO_MANY_RESULTS|$TECHNICAL_PROBLEMS|$NO_RESULTS_FOUND) error message ($IS|$IS_NOT) visible$")
+    @Then("^The ($TOO_MANY_RESULTS|$TECHNICAL_PROBLEMS|$NO_RESULTS_FOUND) error message (is|is not) visible$")
     fun theErrorMessageIsOrIsNotVisible(errorType: String, isOrIsNot: String) {
         when (errorType) {
             TECHNICAL_PROBLEMS -> {
-                gpSearchResultsPage.technicalProblemsErrorHeaderIsVisible(isOrIsNot == IS)
+                gpSearchResultsPage.technicalProblemsErrorHeaderIsVisible(isOrIsNot == "is")
             }
             TOO_MANY_RESULTS -> {
-                gpSearchResultsPage.tooManyResultsErrorHeaderIsVisible(isOrIsNot == IS)
+                gpSearchResultsPage.tooManyResultsErrorHeaderIsVisible(isOrIsNot == "is")
             }
             NO_RESULTS_FOUND -> {
-                gpSearchResultsPage.noResultsFoundErrorHeaderIsVisible(isOrIsNot == IS)
+                gpSearchResultsPage.noResultsFoundErrorHeaderIsVisible(isOrIsNot == "is")
             }
         }
     }
@@ -259,10 +257,8 @@ open class ThrottlingStepDefinitions {
     fun iSeeTheSendingEmailPage() {
         sendingEmailPage.waitingListResultsHeader.assertIsVisible()
         sendingEmailPage.emailFeatureText.assertIsVisible()
-        sendingEmailPage.contactYouText.assertIsVisible()
         sendingEmailPage.emailText.assertIsVisible()
         sendingEmailPage.continueButton.assertIsVisible()
-        sendingEmailPage.homeButton.assertIsVisible()
     }
 
     @Then("^I click the back button on Sending Email page$")
@@ -278,21 +274,39 @@ open class ThrottlingStepDefinitions {
         }
     }
 
-    @When("^I enter a valid email and submit$")
-    fun iEnterAValidEmailAndSubmit(){
-        sendingEmailPage.enterEmail(SendingEmailPage.validEmail)
-        sendingEmailPage.continueButton.click()
-    }
-
-    @When("^I enter a invalid email and submit$")
-    fun iEnterAInvalidEmailAndSubmit(){
-        sendingEmailPage.enterEmail(SendingEmailPage.invalidEmail)
-        sendingEmailPage.continueButton.click()
+    @When("^I enter (a valid|an invalid) email and submit$")
+    fun iEnterAValidOrInvalidEmailAndSubmit(validOrInvalid: String){
+        when (validOrInvalid) {
+            "a valid" -> {
+                sendingEmailPage.enterEmail(SendingEmailPage.validEmail)
+            }
+            "an invalid" -> {
+                sendingEmailPage.enterEmail(SendingEmailPage.invalidEmail)
+            }
+        }
+        iClickTheContinueButtonOnTheSendingEmailPage()
     }
 
     @When("^I click the back button on the Sending Email Results Page$")
     fun iClickTheBackButtonOnTheSendingEmailResultsPage(){
-        sendingEmailResultPage.homeButton.click()
+        waitingListJoinedPage.homeButton.click()
+    }
+
+    @When("^I choose (to|not to) sign up to brothermailer$")
+    fun iChooseToOrNotToSignUpToBrotherMailer(toOrNotTo: String) {
+        when (toOrNotTo) {
+            "to" -> {
+                sendingEmailPage.yesRadioButton.click()
+            }
+            "not to" -> {
+                sendingEmailPage.noRadioButton.click()
+            }
+        }
+    }
+
+    @When("^I click the continue button on the Sending Email page$")
+    fun iClickTheContinueButtonOnTheSendingEmailPage() {
+        sendingEmailPage.continueButton.click()
     }
 
     @Then("^I see the invalid email error$")
@@ -305,12 +319,20 @@ open class ThrottlingStepDefinitions {
         login.throttlingNotParticipatingHeader.assertIsVisible()
     }
 
-    @Then("^I see the Sending Email Results Page$")
-    fun iSeeTheSendingEmailResultsPage() {
-        sendingEmailResultPage.waitingListResultsHeader.assertIsVisible()
-        sendingEmailResultPage.letYouKnowText.assertIsVisible()
-        sendingEmailResultPage.gpSurgeryFeatureText.assertIsVisible()
-        sendingEmailResultPage.homeButton.assertIsVisible()
+    @Then("^I see the Waiting List (Joined|Not Joined) page$")
+    fun iSeeTheSendingEmailResultsPage(joinedOrNot: String) {
+        waitingListJoinedPage.waitingListResultsHeader.assertIsVisible()
+        waitingListJoinedPage.whatNextTitle.assertIsVisible()
+        waitingListJoinedPage.whatToDoTitle.assertIsVisible()
+        when (joinedOrNot) {
+            "Joined" -> {
+                waitingListJoinedPage.whatNextJoinedParagraph.assertIsVisible()
+            }
+            "Not Joined" -> {
+                waitingListJoinedPage.whatNextNotJoinedParagraph.assertIsVisible()
+            }
+        }
+        waitingListJoinedPage.homeButton.assertIsVisible()
     }
 
     @And("^The brothermailer service is down$")
@@ -334,6 +356,11 @@ open class ThrottlingStepDefinitions {
     @Then("^The GP Practice found matches the searched postcode$")
     fun theGPPracticeFoundMatchesThePostcode() {
         assertTrue(gpSearchResultsPage.gpPracticeFoundByPostcodeIsVisible())
+    }
+
+    @Then("^I see the make a choice error$")
+    fun iSeeTheMakeAChoiceError() {
+        sendingEmailPage.choiceError.assertIsVisible()
     }
 }
 

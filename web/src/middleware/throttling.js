@@ -7,6 +7,7 @@ import {
 } from '@/lib/routes';
 
 import moment from 'moment';
+import { GP_FINDER_WAITING_LIST_JOINED } from '../lib/routes';
 
 function hasCompletedThrottling(betaCookie) {
   if (betaCookie) {
@@ -56,7 +57,8 @@ export default function ({
     }
 
     return route.path.startsWith(GP_FINDER.path) &&
-           !route.path.startsWith(GP_FINDER_SENDING_EMAIL.path) ?
+           !route.path.startsWith(GP_FINDER_SENDING_EMAIL.path) &&
+           !route.path.startsWith(GP_FINDER_WAITING_LIST_JOINED.path) ?
       redirect(LOGIN.path) :
       undefined;
   }

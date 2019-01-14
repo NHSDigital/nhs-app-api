@@ -32,7 +32,7 @@ export default {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
-      title: `${this.$store.state.header.headerText} - ${this.$t('appTitle')}`,
+      title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
       script: [
         {
           src: this.$env.ANALYTICS_SCRIPT_URL,

@@ -80,21 +80,49 @@ Feature: Throttling
      When I browse to the page at /gp-finder
      Then I see the login page
 
-  Scenario: A user registers their email with brothermailer
+  Scenario: A user chooses to register their email with brothermailer and sees the Waiting list joined page
     Given The brothermailer service will return a successful response
     And There are multiple GP Practices for my search criteria
     When I submit my search
     Then I see the GP Search Results Page with 2 search results
-
     When My GP Practice is not participating in beta
     And I select my GP Practice
     Then I see the Practice Not Participating page
-
     When I click the Practice Not Participating continue button
     Then I see the Sending Email Page
 
+    When I choose to sign up to brothermailer
     And I enter a valid email and submit
-    Then I see the Sending Email Results Page
+    Then I see the Waiting List Joined page
+
+  Scenario: A user chooses not to register their email with brothermailer and sees the Waiting list not joined page
+    Given The brothermailer service will return a successful response
+    And There are multiple GP Practices for my search criteria
+    When I submit my search
+    Then I see the GP Search Results Page with 2 search results
+    When My GP Practice is not participating in beta
+    And I select my GP Practice
+    Then I see the Practice Not Participating page
+    When I click the Practice Not Participating continue button
+    Then I see the Sending Email Page
+
+    When I choose not to sign up to brothermailer
+    And I click the continue button on the Sending Email page
+    Then I see the Waiting List Not Joined page
+
+  Scenario: A user does not choose any option on the brothermailer signup page
+    Given The brothermailer service will return a successful response
+    And There are multiple GP Practices for my search criteria
+    When I submit my search
+    Then I see the GP Search Results Page with 2 search results
+    When My GP Practice is not participating in beta
+    And I select my GP Practice
+    Then I see the Practice Not Participating page
+    When I click the Practice Not Participating continue button
+    Then I see the Sending Email Page
+
+    When I click the continue button on the Sending Email page
+    Then I see the make a choice error
 
   Scenario: A user cant registers an invalid email with brothermailer
     Given There are multiple GP Practices for my search criteria
@@ -108,7 +136,7 @@ Feature: Throttling
     When I click the Practice Not Participating continue button
     Then I see the Sending Email Page
 
-    When I enter a invalid email and submit
+    When I enter an invalid email and submit
     Then I see the invalid email error
 
   Scenario: A user can get back to Participating page from Sending Email page
@@ -143,5 +171,6 @@ Feature: Throttling
     When I click the Practice Not Participating continue button
     Then I see the Sending Email Page
 
+    When I choose to sign up to brothermailer
     And I enter a valid email and submit
     Then I see the brothermailer service is down error
