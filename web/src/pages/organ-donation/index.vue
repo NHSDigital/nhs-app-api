@@ -4,8 +4,9 @@
       <div :class="$style.info">
         <h2>{{ $t('organDonation.register.subheader') }}</h2>
       </div>
-      <div :class="$style['grid-container']">
+      <div :class="$style['flexbox-container']">
         <organ-donation-button id="yes-button" :decision="noDecision"/>
+        <div :class="$style['divider']"/>
         <organ-donation-button id="no-button" :decision="yesDecision"/>
       </div>
     </div>
@@ -50,9 +51,12 @@ export default {
   }
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-gap: 5px;
+.flexbox-container {
+  display: flex;
+  align-items: top;
+}
+
+.divider {
+  margin: 5px;
 }
 </style>

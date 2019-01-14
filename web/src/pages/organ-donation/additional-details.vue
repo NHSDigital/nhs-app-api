@@ -36,8 +36,10 @@
       <p>{{ $t('organDonation.additionalDetails.description') }}</p>
     </div>
 
-    <form method="get">
-      <generic-button id="back-button" :class="[$style.button, $style.grey]">
+    <form id="back-form" :action="backAction" method="get">
+      <generic-button id="back-button"
+                      :class="[$style.button, $style.grey]"
+                      @click.prevent="backClicked">
         {{ $t('organDonation.additionalDetails.backButton') }}
       </generic-button>
     </form>
@@ -58,6 +60,7 @@ export default {
   },
   data() {
     return {
+      backAction: ORGAN_DONATION.path,
       selectedReligion: '',
       selectedEthnicity: '',
     };
@@ -87,6 +90,11 @@ export default {
     if (this.$store.state.organDonation.registration.decision === DECISION_NOT_FOUND) {
       this.$router.push(ORGAN_DONATION.path);
     }
+  },
+  methods: {
+    backClicked() {
+      this.$router.push(ORGAN_DONATION.path);
+    },
   },
 };
 </script>

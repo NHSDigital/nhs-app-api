@@ -1,9 +1,11 @@
 <template>
-  <no-js-form :action="formAction" :value="noJsValue">
+  <no-js-form :action="formAction" :value="noJsValue" :class-name="$style['flex-form']">
     <button :class="[style, $style['decision-button']]" @click.prevent="chooseDecision()">
-      <component :is="icon"/>
-      <h2>{{ $t(headerKey) }}</h2>
-      <p>{{ $t(subHeaderKey) }}</p>
+      <div>
+        <component :class="$style['button-content']" :is="icon"/>
+        <h2>{{ $t(headerKey) }}</h2>
+        <p>{{ $t(subHeaderKey) }}</p>
+      </div>
     </button>
   </no-js-form>
 </template>
@@ -63,6 +65,12 @@ export default {
     border: none;
     cursor: pointer;
     outline: none;
+    width: 100%;
+    height: 100%;
+
+    div {
+      height: 100%;
+    }
 
     h2 {
       font-size: 2em;
@@ -76,7 +84,6 @@ export default {
   }
 
   .no-button {
-    float: left;
 
     h2 {
       color: $red;
@@ -88,7 +95,6 @@ export default {
   }
 
   .yes-button {
-    float: right;
 
     h2 {
       color: $light_green;
@@ -97,5 +103,13 @@ export default {
     p {
       color: $light_green;
     }
+  }
+
+  .button-content {
+    vertical-align: top;
+  }
+
+  .flex-form {
+    flex: 0 50%;
   }
 </style>

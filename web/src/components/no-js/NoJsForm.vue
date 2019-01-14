@@ -1,5 +1,5 @@
 <template>
-  <form :action="action" method="get">
+  <form :class="className" :action="action" method="get">
     <input :name="inputName" :value="JSON.stringify(value)" type="hidden">
     <slot/>
   </form>
@@ -18,6 +18,11 @@ export default {
       type: String,
       required: true,
     },
+    className: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   computed: {
     inputName() {
@@ -26,4 +31,3 @@ export default {
   },
 };
 </script>
-
