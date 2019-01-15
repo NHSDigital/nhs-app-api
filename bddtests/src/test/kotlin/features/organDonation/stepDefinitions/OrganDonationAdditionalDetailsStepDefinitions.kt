@@ -32,9 +32,14 @@ open class OrganDonationAdditionalDetailsStepDefinitions {
         organDonationAdditionalDetailsPage.assertIsDisplayed()
 
         val expectedReligions = Serenity.sessionVariableCalled<ArrayList<String>>("ReferenceReligions")
-        expectedReligions.add("Please select")
+
+        if (!expectedReligions.contains("Please select")) {
+            expectedReligions.add("Please select")
+        }
         val expectedEthnicities = Serenity.sessionVariableCalled<ArrayList<String>>("ReferenceEthnicities")
-        expectedEthnicities.add("Please select")
+        if (!expectedEthnicities.contains("Please select")) {
+            expectedEthnicities.add("Please select")
+        }
 
         organDonationAdditionalDetailsPage.ethnicitySelector.assertContents(expectedEthnicities)
         organDonationAdditionalDetailsPage.religionSelector.assertContents(expectedReligions)

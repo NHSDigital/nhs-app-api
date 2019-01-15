@@ -1,4 +1,4 @@
-package pages.organDonation
+package pages.sharedElements
 
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert

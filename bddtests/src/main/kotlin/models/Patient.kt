@@ -166,6 +166,7 @@ data class Patient(
                 firstName = "Montel",
                 surname = "Frye",
                 dateOfBirth = "1972-04-12",
+                sex = Sex.Male,
                 address = defaultAddress,
                 contactDetails = defaultContactDetails,
                 odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,

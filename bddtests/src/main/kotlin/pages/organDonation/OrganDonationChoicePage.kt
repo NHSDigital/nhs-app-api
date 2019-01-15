@@ -17,12 +17,10 @@ class OrganDonationChoicePage : HybridPageObject() {
 
     val noButton = HybridPageElement(
             browserLocator = "//button[descendant::*[contains(text(),\"NO\")]]",
-            androidLocator = null,
             page = this
     )
     val yesButton = HybridPageElement(
             browserLocator = "//button[descendant::*[contains(text(),\"YES\")]]",
-            androidLocator = null,
             page = this
     )
 }

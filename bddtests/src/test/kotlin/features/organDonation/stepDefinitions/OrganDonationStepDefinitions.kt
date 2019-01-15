@@ -52,6 +52,7 @@ open class OrganDonationStepDefinitions {
 
     @Then("^the internal Organ Donation page is displayed$")
     fun iAmOnTheInternalOrganDonationPage() {
+        organDonationChoicePage.waitForSpinnerToDisappear()
         organDonationChoicePage.organDonationTitle.assertIsVisible()
     }
 

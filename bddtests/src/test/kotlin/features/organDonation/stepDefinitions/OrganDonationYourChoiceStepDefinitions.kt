@@ -8,7 +8,6 @@ open class OrganDonationYourChoiceStepDefinitions {
 
     lateinit var organDonationYourChoicePage: OrganDonationYourChoicePage
 
-
     @When("^I select the option to donate all my organs")
     fun iSelectTheOptionToDonateAllMyOrgans() {
         organDonationYourChoicePage.radioButtons.button(organDonationYourChoicePage.allOfMyOrgans).select()

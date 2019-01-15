@@ -1,4 +1,4 @@
-package pages.organDonation
+package pages.sharedElements
 
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
@@ -24,7 +24,7 @@ class DropdownElement(val label:String, val helpfulName:String, pageObject: Hybr
     fun selectByText(text: String) {
         assertIsVisible()
         dropDown.element.selectByVisibleText<WebElementFacade>(text)
-        Assert.assertEquals("Expected text to be selected", text, getSelectedValue())
+        assertSelected(text)
     }
 
     fun assertContents(expectedContents: ArrayList<String>) {
@@ -48,5 +48,9 @@ class DropdownElement(val label:String, val helpfulName:String, pageObject: Hybr
             optionsAsStrings.add(option.text.trim())
         }
         return optionsAsStrings
+    }
+
+    fun assertSelected(expected: String) {
+        Assert.assertEquals("Expected Value for $label", expected, getSelectedValue())
     }
 }
