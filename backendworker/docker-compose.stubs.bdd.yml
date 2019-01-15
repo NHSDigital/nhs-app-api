@@ -1,0 +1,94 @@
+version: "3.2"
+services:
+  nhsonline.redis.session:
+    image: nhsapp.azurecr.io/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - "6380:6379"
+  mongo_seed:
+    image: mongo:latest
+    links:
+      - nhsonline.mongodb.session
+    command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb.session --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
+    depends_on:
+      - nhsonline.mongodb.session
+  cid.local.bitraft.io:
+    image: nhsonline.backend.worker
+    depends_on:
+      - nhsonline.redis.sds
+      - nhsonline.redis.session
+    environment:
+      - BACKENDWORKER_RUNMODE=cid
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8084
+      - PORT=8084
+      - CORS_AUTHORITY=*
+      - CITIZEN_ID_BASE_URL=http://127.0.0.1:8080/citizenid/
+      - EMIS_BASE_URL=http://127.0.0.1:8080/emis/
+      - TPP_BASE_URL=http://127.0.0.1:8080/tpp/
+      - VISION_BASE_URI=http://127.0.0.1:8080/vision/
+      - VISION_PFS_PATH=pfs/
+      - VISION_LINKAGE_PATH=linkage/
+      - TPP_CERTIFICATE_PASSWORD
+      - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
+      - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - VISION_CERT_PASSPHRASE=GnewUt4z3y
+      - GP_PROVIDER_ENABLED_EMIS=true
+      - GP_PROVIDER_ENABLED_TPP=true
+      - GP_PROVIDER_ENABLED_VISION=true
+      - GP_PROVIDER_ENABLED_MICROTEST=false
+      - NDOP_CERTIFICATE_PASSWORD
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
+      - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
+      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
+      - STUB_TERMS_AND_CONDITIONS=true
+      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
+      - SESSION_MONGO_DATABASE_PORT=27017
+      - SESSION_MONGO_DATABASE_USERNAME=
+      - SESSION_MONGO_DATABASE_PASSWORD=
+      - TERMS_CONDITIONS_COSMOS_ENDPOINT_URI=https://nhsapp-local-test.documents.azure.com:443/
+      - TERMS_CONDITIONS_COLLECTION_LINK=dbs/local/colls/consent/
+      - TERMS_CONDITIONS_COSMOS_DATABASE_ID=local
+      - TERMS_CONDITIONS_COSMOS_COLLECTION_NAME=consent
+      - TERMS_CONDITIONS_COSMOS_AUTH_KEY=
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./src/main/kotlin/mocking/dummycerts:/app/bddcerts
+  nhsonline.mongodb.session:
+    image: mongo:latest
+    ports:
+    - "27017:27017"
+  stubs.local.bitraft.io:
+    image: rodolpheche/wiremock
+    command: --local-response-templating
+    ports:
+      - "8080:8080"
+  nhsonline.redis-data.sds:
+    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
+    environment:
+      - MODE=development
+      - REDIS_HOST=nhsonline.redis.sds
+    depends_on:
+      - nhsonline.redis.sds
+  nhsonline.redis.sds:
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - "6379:6379"
+    volumes:
+      - 'redis_data:/bitnami/redis'
+  mongo_seed:
+    image: mongo:latest
+    links:
+      - nhsonline.mongodb.session
+    command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb.session --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
+    depends_on:
+      - nhsonline.mongodb.session
+volumes:
+  redis_data:
+    driver: local

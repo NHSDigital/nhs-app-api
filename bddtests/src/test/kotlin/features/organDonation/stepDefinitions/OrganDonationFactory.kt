@@ -2,13 +2,19 @@ package features.organDonation.stepDefinitions
 
 import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
-import mocking.data.organDonation.OrganDonationReferenceData
+import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.stubs.StubbedEnvironment
+import mocking.models.Mapping
+import mocking.organDonation.OrganDonationLookupRegistrationBuilder
+import mocking.organDonation.OrganDonationSubmitDecisionBuilder
+import mocking.organDonation.models.OrganDonationAdditionalDetails
+import mocking.organDonation.models.OrganDonationRegistration
+import mocking.organDonation.models.OrganDonationRegistrationDecision
+import mocking.organDonation.models.OrganDonationRegistrationRequest
 import models.Patient
+import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
-import java.time.Duration
 
 class OrganDonationFactory(val gpSystem: String) {
 
@@ -21,49 +27,17 @@ class OrganDonationFactory(val gpSystem: String) {
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
 
         mockingClient.forOrganDonation {
-            referenceData().respondWithSuccess(OrganDonationReferenceData.getOrganDonationReferenceData())
+            referenceData().respondWithSuccess(OrganDonationReferenceDataBuilder.build())
         }
     }
 
-    fun registeredUser() {
-        val patient = setupPatient()
-        mockingClient.forOrganDonation {
-            lookupOrganDonationRegistration(patient).respondWithSuccess()
-        }
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
-    }
-
-    fun unregisteredUser(patient: Patient? = null) {
+    fun lookUpRegistrationWithSuccessfulDemographics(patient:Patient? = null,
+                                                     action: (OrganDonationLookupRegistrationBuilder) -> Mapping) {
         val patientToUse = patient ?: setupPatient()
         mockingClient.forOrganDonation {
-            lookupOrganDonationRegistration(patientToUse).respondWithNotFoundError()
+            action(lookupOrganDonationRegistration(patientToUse))
         }
         DemographicsFactory.getForSupplier(gpSystem).enabled(patientToUse)
-    }
-
-    fun conflict() {
-        val patient = setupPatient()
-        mockingClient.forOrganDonation {
-            lookupOrganDonationRegistration(patient).respondWithConflictError()
-        }
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
-    }
-
-    fun organDonationTimeout() {
-        val patient = setupPatient()
-        mockingClient.forOrganDonation {
-            lookupOrganDonationRegistration(patient).respondWithTimeoutError()
-                    .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))
-        }
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
-    }
-
-    fun organDonationInternalError() {
-        val patient = setupPatient()
-        mockingClient.forOrganDonation {
-            lookupOrganDonationRegistration(patient).respondWithInternalError()
-        }
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
     }
 
     fun demographicsTimeout() {
@@ -74,18 +48,28 @@ class OrganDonationFactory(val gpSystem: String) {
         DemographicsFactory.getForSupplier(gpSystem).enabledButTimesOut(patient)
     }
 
-    private fun setupPatient(): Patient {
-        val patient = Patient.getDefault(gpSystem)
-        SerenityHelpers.setPatient(patient)
-        SerenityHelpers.setGpSupplier(gpSystem)
-        return patient
-    }
-
     fun demographicsInternalError() {
         val patient = setupPatient()
         mockingClient.forOrganDonation {
             lookupOrganDonationRegistration(patient).respondWithSuccess()
         }
         DemographicsFactory.getForSupplier(gpSystem).throwInternalError(patient)
+    }
+
+    fun optOut(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
+        val patient = setupPatient()
+        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
+        val optOutRegistration = OrganDonationRegistrationRequest(OrganDonationRegistration.fromPatient(patient),
+                OrganDonationAdditionalDetails())
+        optOutRegistration.registration.decision = OrganDonationRegistrationDecision.OptOut
+        Serenity.setSessionVariable("OrganDonationDecision").to(optOutRegistration)
+        mockingClient.forOrganDonation { action(submitDecision(optOutRegistration))}
+    }
+
+    private fun setupPatient(): Patient {
+        val patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(gpSystem)
+        return patient
     }
 }

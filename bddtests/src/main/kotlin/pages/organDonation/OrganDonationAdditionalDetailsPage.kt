@@ -5,7 +5,7 @@ import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.sharedElements.DropdownElement
 
-@DefaultUrl("http://web.local.bitraft.io:3000/organDonation")
+@DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationAdditionalDetailsPage : HybridPageObject() {
 
     val additionalDetailsTitle = HybridPageElement(

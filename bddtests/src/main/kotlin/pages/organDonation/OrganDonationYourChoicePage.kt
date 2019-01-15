@@ -5,7 +5,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.sharedElements.RadioButtons
 
-@DefaultUrl("http://web.local.bitraft.io:3000/organDonation")
+@DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationYourChoicePage : HybridPageObject() {
 
     val yourChoiceTitle = HybridPageElement(

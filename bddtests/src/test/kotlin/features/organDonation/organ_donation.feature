@@ -41,7 +41,7 @@ Feature: Organ Donation
     Then the internal Organ Donation Choice Page is displayed
 
   Scenario Outline: A <GP System> user can opt to not donate their organs
-    Given I am a <GP System> user not registered with organ donation, who wishes to register
+    Given I am a <GP System> user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     When I navigate to the internal Organ Donation Choice Page
     When I choose to not donate my organs
@@ -49,7 +49,10 @@ Feature: Organ Donation
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
-    #Check can submit in future task
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'Submit my decision' button
+    Then the Organ Donation Confirmation page is displayed
+    And the decision to opt out of organ donation has been successfully created
   Examples:
   | GP System |
   | EMIS      |
@@ -57,7 +60,7 @@ Feature: Organ Donation
   | VISION    |
 
   Scenario: A user can choose to record their ethnicity when opting out of organ donation
-    Given I am a EMIS user not registered with organ donation, who wishes to register
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I choose to not donate my organs
@@ -67,10 +70,13 @@ Feature: Organ Donation
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
     And my ethnicity is recorded on the Organ Donation Check Details page
-    #Check can submit in future task
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'Submit my decision' button
+    Then the Organ Donation Confirmation page is displayed
+    And the decision to opt out of organ donation has been successfully created
 
   Scenario: A user can choose not to record their ethnicity when opting out of organ donation
-    Given I am a EMIS user not registered with organ donation, who wishes to register
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I choose to not donate my organs
@@ -79,10 +85,13 @@ Feature: Organ Donation
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
     And my ethnicity is recorded as not chosen on the Organ Donation Check Details page
-    #Check can submit in future task
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'Submit my decision' button
+    Then the Organ Donation Confirmation page is displayed
+    And the decision to opt out of organ donation has been successfully created
 
   Scenario: A user can choose to record their religion when opting out of organ donation
-    Given I am a EMIS user not registered with organ donation, who wishes to register
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I choose to not donate my organs
@@ -91,10 +100,13 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And my religion is recorded on the Organ Donation Check Details page
-    #Check can submit in future task
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'Submit my decision' button
+    Then the Organ Donation Confirmation page is displayed
+    And the decision to opt out of organ donation has been successfully created
 
   Scenario: A user can choose not to record their religion when opting out of organ donation
-    Given I am a EMIS user not registered with organ donation, who wishes to register
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I choose to not donate my organs
@@ -102,11 +114,14 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And my religion is recorded as not chosen on the Organ Donation Check Details page
-    #Check can submit in future task
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'Submit my decision' button
+    Then the Organ Donation Confirmation page is displayed
+    And the decision to opt out of organ donation has been successfully created
 
   Scenario: A user can navigate back to the Organ Donation Decision page from Additional Details after opting to not
   donate their organs
-    Given I am a EMIS user not registered with organ donation, who wishes to register
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I choose to not donate my organs
@@ -116,7 +131,7 @@ Feature: Organ Donation
 
   Scenario: A user can navigate back to the Additional Details page from Check Details page after opting to not donate
   their organs
-    Given I am a EMIS user not registered with organ donation, who wishes to register
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I choose to not donate my organs
@@ -127,7 +142,7 @@ Feature: Organ Donation
     Then the Organ Donation Decision Additional Details page is displayed
 
   Scenario: A user can view the privacy statement on the organ donation Check Details page
-    Given I am a EMIS user not registered with organ donation, who wishes to register
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I choose to not donate my organs
@@ -137,3 +152,14 @@ Feature: Organ Donation
     When I select the privacy statement link on the Organ Donation Check Details page
     Then a new tab opens https://www.nhsbt.nhs.uk/privacy/
 
+  Scenario: A user is shown a validation message if they submit their decision without ticking both the required
+  checkboxes
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    When I choose to not donate my organs
+    Then the Organ Donation Decision Additional Details page is displayed
+    When I click the 'Continue' button
+    Then the Organ Donation Check Details page is displayed
+    And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
+    Then a validation message is shown if both or either of the required conditions for organ donation are not checked

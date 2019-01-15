@@ -4,8 +4,10 @@ import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.sharedElements.CheckBoxElement
+import pages.sharedElements.BannerObject
 
-@DefaultUrl("http://web.local.bitraft.io:3000/organDonation")
+@DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationCheckDetailsPage : HybridPageObject() {
 
     val title = HybridPageElement(
@@ -13,30 +15,19 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
             page = this,
             helpfulName = "header").withText("Check your details before submitting")
 
-
     val privacyStatementLink = HybridPageElement(
             "//a[normalize-space() = 'privacy statement']",
             page = this,
             helpfulName = "privacy statement link")
 
-    private val checkBoxXPath = "//div/input[@type='checkbox']/following-sibling::label"
+    val accuracyCheckBox = CheckBoxElement(this,
+            "I confirm that the information given in this form is true, complete and accurate")
 
-    private val accuracyText = "I confirm that the information given in this form is true, complete and accurate"
+    val privacyStatementCheckBox = CheckBoxElement(this,
+            "I have read the privacy statement and give consent for the use of my information in " +
+                    "accordance with the terms")
 
-    private val accuracyCheckBox = HybridPageElement(
-            browserLocator = "$checkBoxXPath[normalize-space() = '$accuracyText']",
-            androidLocator = null,
-            page = this)
-
-    private val privacyStatementCheckBoxText = "I have read the privacy statement and give consent for the use " +
-            "of my information in accordance with the terms"
-
-    private val privacyStatementCheckBox = HybridPageElement(
-            browserLocator = "$checkBoxXPath[normalize-space() = '$privacyStatementCheckBoxText']",
-            androidLocator = null,
-            page = this)
-
-    val yourDecisionModule by lazy { OrganDonationYourDecisionModule(this) }
+    val validationBanner by lazy { BannerObject.error(this) }
 
     fun assertPersonalDetailsSection(patient: Patient) {
         OrganDonationDetailsAssertor("About you", this)
@@ -48,9 +39,11 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
                         "please contact your GP to amend them.")
     }
 
+    val yourDecisionModule by lazy { OrganDonationYourDecisionModule(this) }
+
     fun assertConfirmationCheckBoxes() {
-        accuracyCheckBox.assertSingleElementPresent().assertIsVisible()
-        privacyStatementCheckBox.assertSingleElementPresent().assertIsVisible()
+        accuracyCheckBox.assertIsVisible()
+        privacyStatementCheckBox.assertIsVisible()
     }
 
     fun assertEthnicity(ethnicity: String) {
@@ -63,6 +56,7 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
                 .assertPair("Religion", religion)
     }
 
+    fun clickSubmit() {
+        clickOnButtonContainingText("Submit my decision")
+    }
 }
-
-

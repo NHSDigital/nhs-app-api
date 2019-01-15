@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
 
-@DefaultUrl("http://web.local.bitraft.io:3000/organDonation")
+@DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 class OrganDonationChoicePage : HybridPageObject() {
 
     val organDonationTitle = HybridPageElement(

@@ -14,6 +14,12 @@ open class OrganDonationCheckDetailsDefinitions {
         organDonationCheckDetailsPage.privacyStatementLink.assertIsVisible().click()
     }
 
+    @When("^I confirm that my details are accurate, and accept the privacy statement for organ donation")
+    fun iConfirmThatMyDetailsAreAccurateAndAcceptThePrivacyStatement() {
+        organDonationCheckDetailsPage.accuracyCheckBox.click()
+        organDonationCheckDetailsPage.privacyStatementCheckBox.click()
+    }
+
     @Then("^the Organ Donation Check Details page is displayed")
     fun theOrganDonationCheckDetailsPageIsDisplayed() {
         val patient = SerenityHelpers.getPatient()
@@ -47,5 +53,38 @@ open class OrganDonationCheckDetailsDefinitions {
     @Then("^my religion is recorded as not chosen on the Organ Donation Check Details page")
     fun myReligionIsRecordedAsNotChosenOnTheOrganDonationCheckDetailsPage() {
         organDonationCheckDetailsPage.assertReligion("")
+    }
+
+    @Then("a validation message is shown if both or either of the required conditions for organ donation are not " +
+            "checked")
+    fun aValidationMessageIsShownIfBothOrEitherOfTheRequiredConditionsForOrganDonationAreNotChecked() {
+
+        val accuracyValidationMessage = "You must confirm that the information provided is true, complete and accurate."
+        val privacyStatementValidationMessage = "You must confirm that you have read the privacy statement " +
+                "and consent to your information being used accordingly."
+
+        organDonationCheckDetailsPage.accuracyCheckBox.assertIsVisible()
+
+        organDonationCheckDetailsPage.accuracyCheckBox.assertUnchecked()
+        organDonationCheckDetailsPage.privacyStatementCheckBox.assertUnchecked()
+        organDonationCheckDetailsPage.clickSubmit()
+
+        organDonationCheckDetailsPage.validationBanner.assertVisible(
+                arrayListOf(accuracyValidationMessage, privacyStatementValidationMessage))
+
+        organDonationCheckDetailsPage.accuracyCheckBox.click()
+        organDonationCheckDetailsPage.accuracyCheckBox.assertChecked()
+        organDonationCheckDetailsPage.privacyStatementCheckBox.assertUnchecked()
+        organDonationCheckDetailsPage.clickSubmit()
+
+        organDonationCheckDetailsPage.validationBanner.assertVisible(arrayListOf(privacyStatementValidationMessage))
+
+        organDonationCheckDetailsPage.accuracyCheckBox.click()
+        organDonationCheckDetailsPage.accuracyCheckBox.assertUnchecked()
+        organDonationCheckDetailsPage.privacyStatementCheckBox.click()
+        organDonationCheckDetailsPage.privacyStatementCheckBox.assertChecked()
+        organDonationCheckDetailsPage.clickSubmit()
+
+        organDonationCheckDetailsPage.validationBanner.assertVisible(arrayListOf(accuracyValidationMessage))
     }
 }

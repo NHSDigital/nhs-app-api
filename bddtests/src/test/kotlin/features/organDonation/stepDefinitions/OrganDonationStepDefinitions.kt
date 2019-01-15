@@ -29,7 +29,15 @@ open class OrganDonationStepDefinitions {
     fun iAmNotRegisteredWithOrganDonationWishToRegister(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.unregisteredUser()
+        factory.lookUpRegistrationWithSuccessfulDemographics { a->a.respondWithNotFoundError()}
+    }
+
+    @Given("^I am a (.*) user not registered with organ donation, who wishes to register and opt out$")
+    fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptOut(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.lookUpRegistrationWithSuccessfulDemographics { a->a.respondWithNotFoundError()}
+        factory.optOut { registration -> registration.respondWithSuccess("test") }
     }
 
     @Given("^the organ donation toggle is set to target the internal page$")

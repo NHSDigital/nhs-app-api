@@ -40,8 +40,8 @@ Feature: Organ Donation Backend
       | TPP       |
       | VISION    |
 
-  Scenario Outline: When looking for an organ donation registration but the call returns internal error, the
-  <GP System> user receives a 502 response
+  Scenario Outline: When looking for an organ donation registration but the call returns internal error, the <GP System>
+  user receives a 502 response
     Given I am a <GP System> user registered with organ donation, but organ donation call will return an internal error
     And I have logged in and have a valid session cookie
     When I request my organ donation details
@@ -103,3 +103,40 @@ Feature: Organ Donation Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+
+  Scenario Outline: When submitting an organ donation decision, an unregistered <GP System> user receives
+  a 201 response and a registration id
+    Given I am a <GP System> user who wants to opt-out of organ donation
+    And I have logged in and have a valid session cookie
+    When I submit my decision to organ donation
+    Then I receive my registration id from organ donation
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario Outline: When submitting an organ donation decision but the system times out, the <GP System>
+  user receives a 504 response
+    Given I am a <GP System> user who wants to opt-out of organ donation, but OD will time out
+    And I have logged in and have a valid session cookie
+    When I submit my decision to organ donation
+    Then I receive a "gateway timeout" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario Outline: When submitting an organ donation decision but the system returns internal error, the <GP System>
+  user receives a 502 response
+    Given I am a <GP System> user who wants to opt-out of organ donation, but OD will return an internal error
+    And I have logged in and have a valid session cookie
+    When I submit my decision to organ donation
+    Then I receive a "bad gateway" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+

@@ -14,7 +14,7 @@ class RadioButtons(allButtons: HybridPageElement) {
         val actualTitles = buttons.map { option -> option.title }
         val message = "Expected list of options. " +
                 "Expected: ${expectedTitles.joinToString()}. " +
-                "Actual: ${buttons.map { option -> option.title }.joinToString()}."
+                "Actual: ${buttons.joinToString { option -> option.title }}."
         Assert.assertEquals(message, expectedTitles.count(), actualTitles.count())
         Assert.assertTrue(message, actualTitles.containsAll(expectedTitles))
 

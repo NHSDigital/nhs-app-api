@@ -3,6 +3,7 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.stubs.StubbedEnvironment
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -11,32 +12,34 @@ import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.organdonation.OrganDonationSearchResponse
+import java.time.Duration
 
 class OrganDonationStepDefinitionsBackend {
 
     @Given("^I am a (.*) user registered with organ donation$")
     fun iAmAlreadyRegisteredWithOrganDonation(gpSystem: String) {
-        OrganDonationFactory(gpSystem).registeredUser()
+        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithSuccess()}
     }
 
     @Given("^I am a (.*) user not registered with organ donation$")
     fun iAmNotRegisteredWithOrganDonation(gpSystem: String) {
-        OrganDonationFactory(gpSystem).unregisteredUser()
+        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics { a->a.respondWithNotFoundError()}
     }
 
     @Given("^I am a (.*) user registered with organ donation, but organ donation will conflict$")
     fun iAmRegisteredWithOrganDonationButOrganDonationWillConflict(gpSystem: String) {
-        OrganDonationFactory(gpSystem).conflict()
+        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithConflictError()}
     }
 
     @Given("^I am a (.*) user registered with organ donation, but organ donation call will time out$")
     fun iAmRegisteredWithOrganDonationButOrganDonationWillThrowTimeout(gpSystem: String) {
-        OrganDonationFactory(gpSystem).organDonationTimeout()
+        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithTimeOutError()
+                .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))}
     }
 
     @Given("^I am a (.*) user registered with organ donation, but organ donation call will return an internal error$")
     fun iAmRegisteredWithOrganDonationButOrganDonationWillThrowInternalError(gpSystem: String) {
-        OrganDonationFactory(gpSystem).organDonationInternalError()
+        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithInternalError()}
     }
 
     @Given("^I am a (.*) user registered with organ donation, but demographics will time out$")
