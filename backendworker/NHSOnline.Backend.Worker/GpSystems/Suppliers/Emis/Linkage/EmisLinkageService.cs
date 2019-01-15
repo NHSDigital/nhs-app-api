@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
             var connectionToken = new EmisConnectionToken
             {
                 AccessIdentityGuid = addNhsUserResponse.AccessIdentityGuid.ToString(),
-                Im1CacheKey = key
+                Im1CacheKey = key,
             };
 
             await _im1CacheService.SaveIm1ConnectionToken(key, connectionToken);

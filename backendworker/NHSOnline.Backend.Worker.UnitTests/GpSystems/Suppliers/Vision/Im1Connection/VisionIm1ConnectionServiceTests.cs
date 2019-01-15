@@ -10,9 +10,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Connection
 {
@@ -28,19 +30,26 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
         private readonly DateTime _dob = DateTime.Now;
         private IFixture _fixture;
         private Mock<IVisionClient> _mockVisionClient;
+        private Mock<IIm1CacheService> _im1CacheService;
+        private Mock<IIm1CacheKeyGenerator> _im1CacheKeyGenerator;
         private ILogger<VisionIm1ConnectionService> _logger;
+        private VisionIm1ConnectionService _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
+            _im1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
+            _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _logger = Mock.Of<ILogger<VisionIm1ConnectionService>>();
+            _systemUnderTest = _fixture.Create<VisionIm1ConnectionService>();
         }
 
         [TestMethod]
         public async Task Verify_ReturnsAConnection_WhenRequested()
         {
+            // Arrange
             var patientConfiguration = _fixture.Create<PatientConfiguration>();
 
             var expectedNhsNumbers =
@@ -66,10 +75,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                         },
                     }));
 
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
+            // Act
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
-
+            // Assert
             var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
                 .Subject;
 
@@ -107,10 +116,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                         },
                     }));
 
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
-
             // Act
-            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.InvalidRequest>();
@@ -147,10 +154,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                         },
                     }));
 
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
-
             // Act
-            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.InvalidUserCredentials>();
@@ -177,10 +182,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                         },
                     }));
 
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
-
             // Act
-            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader>();
@@ -217,10 +220,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                         },
                     }));
 
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
-
             // Act
-            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.UnknownError>();
@@ -244,39 +245,28 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                         },
                     }));
 
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
-
             // Act
-            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
+            var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SupplierSystemUnavailable>();
         }
         
         [TestMethod]
-        public async Task Register_SuccessfulRegister_ObtainNHSnumber()
+        public async Task Register_WhenConnectionTokenCached_SuccessfulRegister_ObtainNHSnumber()
         {
-            var serviceContentAuthenticationRef = _fixture.Create<ServiceContentAuthenticationRef>();
-            _mockVisionClient.Setup(x =>
-                    x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(
-                    new VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse>(HttpStatusCode.OK)
-                    {
-                        RawResponse = new VisionResponseEnvelope<ServiceContentRegisterResponse>
-                        {
-                            Body = new VisionResponseBody<ServiceContentRegisterResponse>
-                            {
-                                VisionResponse = new VisionResponse<ServiceContentRegisterResponse>
-                                {
-                                    ServiceContent = new ServiceContentRegisterResponse
-                                    {
-                                        AuthenticationRef = serviceContentAuthenticationRef,
-                                    },
-                                },
-                            },
-                        },
-                    }));
+            // Arrange
+            var cacheKey = _fixture.Create<string>();
+            var apiKey = _fixture.Create<string>();
+
+            var connectionToken = new VisionConnectionToken
+            {
+                RosuAccountId = AccountId,
+                ApiKey = apiKey,
+            };
+            
             var patientConfiguration = _fixture.Create<PatientConfiguration>();
+
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
@@ -296,7 +286,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                             },
                         },
                     }));
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
+            
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
@@ -305,17 +295,115 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
-            var result = await systemUnderTest.Register(request);
+
+            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey)).Returns(cacheKey);
+            _im1CacheService
+                .Setup(x => x.GetIm1ConnectionToken<VisionConnectionToken>(cacheKey))
+                .Returns(Task.FromResult(Option.Some(connectionToken)))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+            
+            _mockVisionClient.Verify(x =>
+                    x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()), Times.Never);
+            _im1CacheService.Verify(x => x.SaveIm1ConnectionToken(It.IsAny<string>(), It.IsAny<VisionConnectionToken>()), Times.Never);
         }
-        
+
+        [TestMethod]
+        public async Task Register_WhenConnectionTokenNotCached_SuccessfulRegister_ObtainNHSnumber()
+        {
+            // Arrange
+            var apiKey = _fixture.Create<string>();
+            var cacheKey = _fixture.Create<string>();
+
+            var serviceContentAuthenticationRef = new ServiceContentAuthenticationRef
+            {
+                ApiToken = apiKey,
+            };
+
+            _mockVisionClient.Setup(x =>
+                    x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new VisionResponseEnvelope<ServiceContentRegisterResponse>
+                        {
+                            Body = new VisionResponseBody<ServiceContentRegisterResponse>
+                            {
+                                VisionResponse = new VisionResponse<ServiceContentRegisterResponse>
+                                {
+                                    ServiceContent = new ServiceContentRegisterResponse
+                                    {
+                                        AuthenticationRef = serviceContentAuthenticationRef,
+                                    },
+                                },
+                            },
+                        },
+                    }));
+
+            var patientConfiguration = _fixture.Create<PatientConfiguration>();
+
+            _mockVisionClient.Setup(x =>
+                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionPFSClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                        {
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
+                            {
+                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
+                                {
+                                    ServiceContent = new PatientConfigurationResponse
+                                    {
+                                        Configuration = patientConfiguration,
+                                    },
+                                },
+                            },
+                        },
+                    }));
+
+            var request = new PatientIm1ConnectionRequest
+            {
+                OdsCode = DefaultOdsCode,
+                AccountId = AccountId,
+                DateOfBirth = _dob,
+                LinkageKey = LinkageKey,
+                Surname = Surname
+            };
+
+            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey)).Returns(cacheKey).Verifiable();
+            _im1CacheService
+                .Setup(x => x.GetIm1ConnectionToken<VisionConnectionToken>(cacheKey))
+                .Returns(Task.FromResult(Option.None<VisionConnectionToken>()))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+
+            _im1CacheKeyGenerator.VerifyAll();
+            _im1CacheService.Verify(x => x.SaveIm1ConnectionToken(
+                cacheKey,
+                It.Is<VisionConnectionToken>(
+                    con => string.Equals(con.ApiKey, apiKey, StringComparison.Ordinal)
+                    && string.Equals(con.RosuAccountId, AccountId, StringComparison.Ordinal)
+                    && string.Equals(con.Im1CacheKey, cacheKey, StringComparison.Ordinal))));
+        }
+
         [TestMethod]
         public async Task Register_UserAccountLocked()
         {
+            // Arrange
             const string errorCode = "-15";
             const string errorDescription = "Record currently unavailable - please try again later or contact your Practice: VOSUsers record is locked, is patient selected in registration?";
             _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
@@ -324,17 +412,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
-            var result = await systemUnderTest.Register(request);
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
         }
         
         [TestMethod]
         public async Task Register_UserAlreadyRegistered()
         {
+            // Arrange
             const string errorCode = "-2";
             const string errorDescription = "User has already been registered";
             _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
@@ -343,17 +435,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
-            var result = await systemUnderTest.Register(request);
+            
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
         }
         
         [TestMethod]
         public async Task Register_IncorrectDetailsProvided()
         {
+            // Arrange
             const string errorCode = "-33";
             const string errorDescription = "No Match: couldn't link account with detail provided";
             _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
@@ -362,17 +458,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
-            var result = await systemUnderTest.Register(request);
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
         }
 
         [TestMethod]
         public async Task Register_IncorrectParametersProvided()
         {
+            // Arrange
             const string errorCode = "-31";
             const string errorDescription = "Invalid parameter provided";
             _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
-            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
@@ -381,7 +481,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
-            var result = await systemUnderTest.Register(request);
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
         }
         

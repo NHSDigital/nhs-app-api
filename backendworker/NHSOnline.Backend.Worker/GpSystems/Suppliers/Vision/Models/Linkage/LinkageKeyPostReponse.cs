@@ -7,5 +7,7 @@
         public string LinkageKey { get; set; }
 
         public string OdsCode { get; set; }
+
+        public string ApiKey { get; set; }
     }
 }

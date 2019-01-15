@@ -8,4 +8,5 @@ data class LinkageInformationFacade(
         var identityToken: String = "",
         var emailAddress: String = "",
         var surname: String = "",
-        var dateOfBirth: String = "")
+        var dateOfBirth: String = "",
+        var apiKey: String = "")

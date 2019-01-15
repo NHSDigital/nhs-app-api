@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Linkage;
 using NHSOnline.Backend.Worker.Support.Logging;
 
@@ -16,15 +17,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Linkage
         private readonly ILogger<VisionLinkageService> _logger;
         private readonly IVisionClient _visionClient;
         private readonly IVisionLinkageMapper _visionLinkageMapper;
+        private readonly IIm1CacheService _im1CacheService;
+        private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
 
         public VisionLinkageService(
             ILoggerFactory loggerFactory,
             IVisionClient visionClient,
-            IVisionLinkageMapper visionLinkageMapper)
+            IVisionLinkageMapper visionLinkageMapper,
+            IIm1CacheService im1CacheService,
+            IIm1CacheKeyGenerator im1CacheKeyGenerator)
         {
             _logger = loggerFactory.CreateLogger<VisionLinkageService>();
             _visionClient = visionClient;
             _visionLinkageMapper = visionLinkageMapper;
+            _im1CacheService = im1CacheService;
+            _im1CacheKeyGenerator = im1CacheKeyGenerator;
         }
 
         public async Task<LinkageResult> GetLinkageKey(GetLinkageRequest getLinkageRequest)
@@ -85,14 +92,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Linkage
                         DateOfBirth = createLinkageRequest.DateOfBirth.FormatToYYYYMMDD(),
                     },
                 };
-
-
+                
                 var linkageResponse = await _visionClient.CreateLinkageKey(request);
                 
                 if (linkageResponse.HasSuccessResponse)
                 {
                     var mapped = _visionLinkageMapper.Map(linkageResponse.Body);
-
+                    await StoreAccessGuidInCache(mapped, linkageResponse.Body.ApiKey);
                     return new LinkageResult.SuccessfullyCreated(mapped);
                 }
                 else if (linkageResponse.StatusCode == HttpStatusCode.Conflict)
@@ -113,6 +119,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Linkage
             {
                 _logger.LogExit();
             }
+        }
+
+        private async Task StoreAccessGuidInCache(LinkageResponse linkage, string apiKey)
+        {
+            var key = _im1CacheKeyGenerator.GenerateCacheKey(linkage.AccountId, linkage.OdsCode, linkage.LinkageKey);
+
+            var connectionToken = new VisionConnectionToken
+            {
+                ApiKey = apiKey,
+                RosuAccountId = linkage.AccountId,
+            };
+
+            await _im1CacheService.SaveIm1ConnectionToken(key, connectionToken);
         }
 
         private LinkageResult GetErrorRetrievingLinkageKey(VisionLinkageClient.VisionApiObjectResponse<LinkageKeyGetResponse> response)

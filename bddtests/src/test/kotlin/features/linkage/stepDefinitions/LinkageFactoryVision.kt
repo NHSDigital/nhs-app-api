@@ -13,13 +13,14 @@ import mockingFacade.linkage.LinkageInformationFacade
 class LinkageFactoryVision : LinkageFactory("VISION") {
 
     override val validLinkageDetails = LinkageInformationFacade(
-                odsCode =  VisionMockDefaults.DEFAULT_ODS_CODE_VISION,
-                linkageKey = "mw2cktkzypqhr32yt9w4qccnmtcva24gwhfd2ughgj4tuq8rbqe4ahbvfp4dfp8p",
-                accountId = "028738",
-                nhsNumber = "8747384738",
-                emailAddress = "visionuser@test.com",
-                surname = "Smyth",
-                dateOfBirth = "1997-05-01")
+            odsCode =  VisionMockDefaults.DEFAULT_ODS_CODE_VISION,
+            linkageKey = "mw2cktkzypqhr32yt9w4qccnmtcva24gwhfd2ughgj4tuq8rbqe4ahbvfp4dfp8p",
+            accountId = "028738",
+            nhsNumber = "8747384738",
+            emailAddress = "visionuser@test.com",
+            surname = "Smyth",
+            dateOfBirth = "1997-05-01",
+            apiKey = "82628-98721")
 
     override val validOtherLinkageDetails = validLinkageDetails
 
@@ -97,6 +98,9 @@ class LinkageFactoryVision : LinkageFactory("VISION") {
         return LinkageKeyGetResponse(
                 odsCode =  linkageInformationFacade.odsCode,
                 linkageKey = linkageInformationFacade.linkageKey,
-                accountId = linkageInformationFacade.accountId)
+                accountId = linkageInformationFacade.accountId,
+                surname = linkageInformationFacade.surname,
+                dateOfBirth = linkageInformationFacade.dateOfBirth,
+                apiKey = linkageInformationFacade.apiKey)
     }
 }

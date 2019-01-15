@@ -269,6 +269,8 @@ data class Patient(
 
         ////////// VISION PATIENTS /////////////
         val adreynCanonIm1ConnectionToken = Im1ConnectionToken(
+                im1CacheKey = "aHQMSopfOJlA5vk4zLJJfKEynO8ApadWcwZExxmhfXll0Eahv" +
+                        "bnqSg6GEL6h2vjze3egwyTNIp68Q5GT5o3CAg==",
                 rosuAccountId = "104969",
                 apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnh" +
                         "vfph76g2h6p9gywjq484c9ghan8tt"

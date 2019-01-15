@@ -23,6 +23,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
         private VisionLinkageService _systemUnderTest;
         private Mock<IVisionClient> _visionClient;
         private Mock<IVisionLinkageMapper> _visionLinkageMapper;
+        private Mock<IIm1CacheService> _im1CacheService;
+        private Mock<IIm1CacheKeyGenerator> _im1CacheKeyGenerator;
         private IFixture _fixture;
 
         [TestInitialize]
@@ -32,6 +34,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
 
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionLinkageMapper = _fixture.Freeze<Mock<IVisionLinkageMapper>>();
+            _im1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
+            _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _systemUnderTest = _fixture.Create<VisionLinkageService>();
         }
 
@@ -40,16 +44,29 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
         public async Task GetLinkageKey_ReturnsSuccessfulResponse_WhenSuccessfulResponseFromVision(HttpStatusCode httpStatusCode)
         {
             // Arrange
-            var getLinkageKeyResponse = _fixture.Create<LinkageKeyGetResponse>();
+            var accountId = _fixture.Create<string>();
             var nhsNumber = _fixture.Create<string>();
             var surname = _fixture.Create<string>();
             var dateOfBirth = _fixture.Create<DateTime>();
             var odsCode = _fixture.Create<string>();
+            var cacheKey = _fixture.Create<string>();
+            var apiKey = _fixture.Create<string>();
+            var linkageKey = _fixture.Create<string>();
+
+            var getLinkageKeyResponse = new LinkageKeyGetResponse
+            {
+                AccountId = accountId,
+                ApiKey = apiKey,
+                DateOfBirth = DateTimeExtensions.FormatToYYYYMMDD(dateOfBirth),
+                LinkageKey = linkageKey,
+                OdsCode = odsCode,
+                Surname = surname,
+            };
 
             var mappedResult = new LinkageResponse
             {
-                AccountId = "testAccountId",
-                LinkageKey = "testLinkageKey",
+                AccountId = accountId,
+                LinkageKey = linkageKey,
                 OdsCode = odsCode,
             };
 
@@ -62,11 +79,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
                     {
                         Body = getLinkageKeyResponse,
                     }));
-            
-            var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode);
 
+            var request = CreateGetLinkageRequest(nhsNumber, surname, dateOfBirth, odsCode);
             _visionLinkageMapper.Setup(x => x.Map(getLinkageKeyResponse)).Returns(mappedResult);
-            
+
             // Act
             var result = await _systemUnderTest.GetLinkageKey(request);
 
@@ -154,29 +170,56 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromVision()
         {
+            var accountId = _fixture.Create<string>();
+            var nhsNumber = _fixture.Create<string>();
+            var surname = _fixture.Create<string>();
+            var dateOfBirth = _fixture.Create<DateTime>();
+            var odsCode = _fixture.Create<string>();
+            var cacheKey = _fixture.Create<string>();
+            var apiKey = _fixture.Create<string>();
+            var linkageKey = _fixture.Create<string>();
+            var email = _fixture.Create<string>();
+            var identityToken = _fixture.Create<string>();
+
             // Arrange
-            var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
-            var linkageKeyPostResponse = _fixture.Create<LinkageKeyPostResponse>();
+            var createLinkageRequest = new CreateLinkageRequest
+            {
+                OdsCode = odsCode,
+                Surname = surname,
+                DateOfBirth = dateOfBirth,
+                EmailAddress = email,
+                IdentityToken = identityToken,
+                NhsNumber = nhsNumber,
+            };
+
+            var linkageKeyPostResponse = new LinkageKeyPostResponse
+            {
+                AccountId = accountId,
+                ApiKey = apiKey,
+                LinkageKey = linkageKey,
+                OdsCode = odsCode,
+            };
             
             _visionLinkageMapper
                 .Setup(x => 
                     x.Map(It.IsAny<LinkageKeyPostResponse>()))
                 .Returns(new LinkageResponse
                 {
-                    OdsCode = createLinkageRequest.OdsCode,
-
+                    OdsCode = odsCode,
+                    AccountId = accountId,
+                    LinkageKey = linkageKey,
                 });
 
             _visionClient
                 .Setup(x => x.CreateLinkageKey(
                     It.Is<CreateLinkageKey>(
-                        request => request.LinkageKeyPostRequest.NhsNumber.Equals(createLinkageRequest.NhsNumber,
+                        request => request.LinkageKeyPostRequest.NhsNumber.Equals(nhsNumber,
                                        StringComparison.Ordinal)
-                                   && request.OdsCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal)
+                                   && request.OdsCode.Equals(odsCode, StringComparison.Ordinal)
                                    && request.LinkageKeyPostRequest.DateOfBirth
-                                       .Equals(createLinkageRequest.DateOfBirth.FormatToYYYYMMDD(),
+                                       .Equals(DateTimeExtensions.FormatToYYYYMMDD(dateOfBirth),
                                        StringComparison.Ordinal)
-                                   && request.LinkageKeyPostRequest.LastName.Equals(createLinkageRequest.Surname,
+                                   && request.LinkageKeyPostRequest.LastName.Equals(surname,
                                        StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new VisionLinkageClient.VisionApiObjectResponse<LinkageKeyPostResponse>(HttpStatusCode.OK)
@@ -184,6 +227,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
                         Body = linkageKeyPostResponse,
                     }))
                 .Verifiable();
+            
+            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(accountId, odsCode, linkageKey)).Returns(cacheKey);
 
             // Act
             var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
@@ -195,6 +240,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
             var successResult = (LinkageResult.SuccessfullyCreated) result;
             successResult.Response.Should().NotBeNull();
             successResult.Response.OdsCode.Should().Be(createLinkageRequest.OdsCode);
+            _im1CacheService.Verify(x => x.SaveIm1ConnectionToken(
+                cacheKey,
+                It.Is<VisionConnectionToken>(
+                    con => string.Equals(con.ApiKey, apiKey, StringComparison.Ordinal)
+                    && string.Equals(con.RosuAccountId, accountId, StringComparison.Ordinal))));
         }
 
         [TestMethod]

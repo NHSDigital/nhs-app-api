@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.Support.Logging;
 
@@ -11,12 +12,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
 {
     public class VisionIm1ConnectionService : IIm1ConnectionService
     {
-        private readonly ILogger<VisionIm1ConnectionService> _logger;
         private readonly IVisionClient _visionClient;
+        private readonly IIm1CacheService _im1CacheService;
+        private readonly IIm1CacheKeyGenerator _im1CacheKeyGenerator;
+        private readonly ILogger<VisionIm1ConnectionService> _logger;
 
-        public VisionIm1ConnectionService(IVisionClient visionClient, ILogger<VisionIm1ConnectionService> logger)
+        public VisionIm1ConnectionService(
+            IVisionClient visionClient,
+            IIm1CacheService im1CacheService,
+            IIm1CacheKeyGenerator im1CacheKeyGenerator,
+            ILogger<VisionIm1ConnectionService> logger)
         {
             _visionClient = visionClient;
+            _im1CacheService = im1CacheService;
+            _im1CacheKeyGenerator = im1CacheKeyGenerator;
             _logger = logger;
         }
 
@@ -63,23 +72,43 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
 
             try
             {
-                var dob = request.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                var linkAccountRes = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
-                if (linkAccountRes.HasErrorResponse)
+                _logger.LogDebug("Checking cache for IM1 connection token");
+                var key = _im1CacheKeyGenerator.GenerateCacheKey(
+                    request.AccountId, request.OdsCode, request.LinkageKey);
+                var cachedConnectionToken =
+                    await _im1CacheService.GetIm1ConnectionToken<VisionConnectionToken>(key);
+
+                VisionConnectionToken connectionToken;
+
+                if (cachedConnectionToken.HasValue)
                 {
-                    return GetCorrectRegisterErrorResult(linkAccountRes);
+                    connectionToken = cachedConnectionToken.ValueOrFailure();
+                    _logger.LogDebug("IM1 connection token found in cache.");
                 }
-                var apiToken = linkAccountRes.Body.AuthenticationRef.ApiToken;
-                var visionConnectionToken = new VisionConnectionToken
+                else
                 {
-                    RosuAccountId = request.AccountId,
-                    ApiKey = apiToken,
-                };
-                var configResponse = await _visionClient.GetConfiguration(visionConnectionToken, request.OdsCode);
+                    var dob = request.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    var linkAccountRes = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
+                    if (linkAccountRes.HasErrorResponse)
+                    {
+                        return GetCorrectRegisterErrorResult(linkAccountRes);
+                    }
+                    var apiToken = linkAccountRes.Body.AuthenticationRef.ApiToken;
+                    connectionToken = new VisionConnectionToken
+                    {
+                        RosuAccountId = request.AccountId,
+                        ApiKey = apiToken,
+                        Im1CacheKey = key,
+                    };
+
+                    await _im1CacheService.SaveIm1ConnectionToken(key, connectionToken);
+                }
+
+                var configResponse = await _visionClient.GetConfiguration(connectionToken, request.OdsCode);
                 if (configResponse.HasErrorResponse)
                 {
                     _logger.LogError("Error occurred when trying to obtain nhs number from get configuration. " +
-                             $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " + 
+                             $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " +
                              $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
@@ -87,10 +116,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                 var nhsNumbers = configResponse.Body.Configuration.ExtractNhsNumbers();
                 var response = new PatientIm1ConnectionResponse
                 {
-                    ConnectionToken = visionConnectionToken.SerializeJson(),
+                    ConnectionToken = connectionToken.SerializeJson(),
                     NhsNumbers = nhsNumbers
                 };
-                 _logger.LogDebug($"{nameof(VisionIm1ConnectionService)} Register successfully completed");
+                _logger.LogDebug($"{nameof(VisionIm1ConnectionService)} Register successfully completed");
+
                 return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
             }
             catch (HttpRequestException e)
