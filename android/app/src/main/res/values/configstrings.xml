@@ -5,7 +5,7 @@
     <string name="baseHost">www-preview.dev.nonlive.nhsapp.service.nhs.uk</string>
     <string name="baseURL">https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
     <string name="baseApiURL">https://api-preview.dev.nonlive.nhsapp.service.nhs.uk/v1/</string>
-    <string name="cookieDomain">@string/baseHost</string>
+    <string name="cookieDomain">@string/baseURL</string>
     <string name="authRedirectPath">/auth-return</string>
     <string name="gpFinderPath">gp-finder</string>
     <string name="morePath">more</string>
