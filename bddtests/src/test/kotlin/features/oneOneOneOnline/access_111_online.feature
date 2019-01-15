@@ -12,7 +12,7 @@ Feature: Access 111 Online
 
   @smoketest
   Scenario: The user is logged in
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I am logged in
     When I navigate to Symptoms
     Then the Check My Symptoms page is displayed

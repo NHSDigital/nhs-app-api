@@ -6,7 +6,7 @@ Feature: View courses
   I want to see a list of repeat courses that I can order
 
   Scenario Outline: The <GP System> User has repeatable prescriptions
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat
@@ -20,9 +20,9 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
-  
+
   Scenario Outline: The <GP System> User has 0 repeatable prescriptions
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And I have 0 <GP System> assigned prescriptions
     And 0 of my prescriptions are of type repeat
@@ -37,9 +37,9 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
-  
+
   Scenario Outline: The <GP System> user has 1 repeatable prescription
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And I have 1 <GP System> assigned prescriptions
     And 1 of my prescriptions are of type repeat
@@ -53,9 +53,9 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
-  
+
   Scenario Outline: The user <GP System> should only see max 100 repeatable prescriptions
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And I have 101 <GP System> assigned prescriptions
     And 101 of my prescriptions are of type repeat
@@ -71,7 +71,7 @@ Feature: View courses
       | VISION    |
 
   Scenario Outline: The <GP System> user has the max number of repeatable prescriptions
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And I have 100 <GP System> assigned prescriptions
     And 100 of my prescriptions are of type repeat
@@ -85,9 +85,9 @@ Feature: View courses
       | EMIS      |
       | TPP       |
       | VISION    |
-  
+
   Scenario Outline: The <GP System> user has over 5 repeat dispense prescriptions
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And I have 10 <GP System> assigned prescriptions
     And 5 of my prescriptions are of type repeat
@@ -103,7 +103,7 @@ Feature: View courses
       | VISION    |
 
   Scenario Outline: The <GP System> User has selected repeat prescriptions to order
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And there are 5 <GP System> repeatable prescriptions available
     And I am logged in
@@ -118,7 +118,7 @@ Feature: View courses
       | VISION    |
 
   Scenario Outline: The <GP System> User has selected one repeat prescription to order
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And there are 1 <GP System> repeatable prescriptions available
     And I am logged in
@@ -133,7 +133,7 @@ Feature: View courses
       | VISION    |
 
   Scenario Outline: The <GP System> User has selected no repeat prescriptions to order
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And there are 5 <GP System> repeatable prescriptions available
     And I am logged in
@@ -152,7 +152,7 @@ Feature: View courses
       | VISION    |
 
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and views previous selection
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And there are 5 <GP System> repeatable prescriptions available
     And I am logged in
@@ -170,7 +170,7 @@ Feature: View courses
   @smoketest
   @nativebug @NHSO-3051
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And there are 5 <GP System> repeatable prescriptions available
     And I am logged in
@@ -194,7 +194,7 @@ Feature: View courses
 
 
   Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I have historic prescriptions
     And there are 1 <GP System> repeatable prescriptions available
     And I am logged in
@@ -209,7 +209,7 @@ Feature: View courses
       | VISION    |
 
   Scenario Outline: The user can't see prescription special request when the gp system <GP System> has disabled it
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And <GP System> has disabled special request text
     And I have historic prescriptions
     And there are 10 <GP System> repeatable prescriptions available
@@ -228,7 +228,7 @@ Feature: View courses
       | VISION    |
 
   Scenario Outline: The user can see prescription special request when the gp system <GP System> has enabled it
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And <GP System> has enabled special request text
     And I am logged in
     And I have historic prescriptions
@@ -245,7 +245,7 @@ Feature: View courses
 
   @nativepending @NHSO-2970
   Scenario Outline: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
-    Given a patient from <GP System> is defined
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And prescriptions is disabled at a GP Practice level
     And I have historic prescriptions
@@ -260,7 +260,7 @@ Feature: View courses
 
   @nativepending @NHSO-2970
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -270,7 +270,7 @@ Feature: View courses
     Then I see a message informing me that I don't currently have access to this service
 
   Scenario: The user has 1 repeatable prescription with missing quantity info
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -281,7 +281,7 @@ Feature: View courses
     Then I see the available repeatable prescriptions
 
   Scenario: The user has 1 repeatable prescription with missing dosage info
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -292,7 +292,7 @@ Feature: View courses
     Then I see the available repeatable prescriptions
 
   Scenario: The user has 1 repeatable prescription with missing dosage and quantity info
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -303,7 +303,7 @@ Feature: View courses
     Then I see the available repeatable prescriptions
 
   Scenario: The User has selected repeat prescriptions to order with missing quantity info
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -312,7 +312,7 @@ Feature: View courses
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
   Scenario: The User has selected repeat prescriptions to order with missing dosage info
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I have historic prescriptions
     And there are 1 EMIS repeatable prescriptions available
     And I am logged in
@@ -322,7 +322,7 @@ Feature: View courses
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
   Scenario: The User has selected repeat prescriptions to order with missing dosage and quantity info
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I have historic prescriptions
     And there are 1 EMIS repeatable prescriptions available
     And I am logged in

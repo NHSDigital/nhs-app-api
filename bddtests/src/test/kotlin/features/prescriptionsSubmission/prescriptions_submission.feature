@@ -8,7 +8,7 @@ Feature: Prescriptions submission
   @smoketest
   @nativebug @NHSO-3051
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -25,7 +25,7 @@ Feature: Prescriptions submission
     | VISION    |
 
   Scenario Outline: The <GP System> user orders a repeat prescription with 1 entries
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -41,7 +41,7 @@ Feature: Prescriptions submission
     | VISION    |
 
   Scenario Outline: The <GP System> user tries to submit potentially dangerous text for special request
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System to submit my prescription
     And I have 0 historic prescriptions in this scenario
     And I am logged in
@@ -56,7 +56,7 @@ Feature: Prescriptions submission
       | EMIS      |
 
   Scenario Outline: The <GP System> user should receive an error when they try to order a drug which they're ordered within the last 30 days
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in

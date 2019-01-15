@@ -6,7 +6,7 @@ Feature: Access 111 Online with no javascript
 
   Scenario: The User is logged in and can view the symptoms links with javascript disabled and can click to review their conditions
     Given I have disabled javascript
-    And a patient from EMIS is defined
+    And I am a EMIS patient
     And I am logged in
     When I navigate to Symptoms
     Then the Check My Symptoms page is displayed
@@ -17,7 +17,7 @@ Feature: Access 111 Online with no javascript
 
   Scenario: The User is logged in and can view the symptoms links with javascript disabled and can click the urgent help header
     Given I have disabled javascript
-    And a patient from EMIS is defined
+    And I am a EMIS patient
     And I am logged in
     When I navigate to Symptoms
     Then the Check My Symptoms page is displayed

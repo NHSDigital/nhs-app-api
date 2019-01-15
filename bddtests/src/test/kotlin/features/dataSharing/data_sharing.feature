@@ -4,7 +4,7 @@ Feature: Data Sharing
   A user can access Data Sharing
 
   Background:
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I am logged in
     And I navigate to more
     When I choose to set my data sharing preferences

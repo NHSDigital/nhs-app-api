@@ -1,23 +1,23 @@
 Feature: Use Terms and conditions page
 
-  Background:
-    Given a patient from EMIS is defined
-
   @cosmos
   Scenario: A patient who has not accepted the terms and conditions can log in and see the terms and conditions page
-    Given I have not already accepted terms and conditions
+    Given I am a EMIS patient
+    And I have not already accepted terms and conditions
     And I am logged in
     Then I am on the Terms and conditions page
 
   @cosmos
   Scenario: A patient who has accepted the terms and conditions log ins and does not see the terms and conditions page
-    Given I have already accepted terms and conditions
+    Given I am a EMIS patient
+    And I have already accepted terms and conditions
     And I am logged in
     Then I see the home page
 
   @cosmos
   Scenario: A patient cannot proceed to the app without accepting the terms and conditions
-    Given I have not already accepted terms and conditions
+    Given I am a EMIS patient
+    And I have not already accepted terms and conditions
     And I am logged in
     And I am on the Terms and conditions page
     When I click the continue button on Terms and Conditions
@@ -25,7 +25,8 @@ Feature: Use Terms and conditions page
 
   @cosmos
   Scenario: A patient can proceed to the app after accepting the terms and conditions
-    Given I have not already accepted terms and conditions
+    Given I am a EMIS patient
+    And I have not already accepted terms and conditions
     And I am logged in
     And I am on the Terms and conditions page
     When I check the agree to terms and conditions checkbox
@@ -34,7 +35,8 @@ Feature: Use Terms and conditions page
 
   @cosmos
   Scenario: A patient can proceed to the app after accepting updated terms and conditions
-    Given I have previously accepted terms and conditions and updated terms and conditions exist
+    Given I am a EMIS patient
+    And I have previously accepted terms and conditions and updated terms and conditions exist
     And I am logged in
     And I see the updated Terms and conditions page
 
@@ -46,7 +48,8 @@ Feature: Use Terms and conditions page
 
   @cosmos
   Scenario: A patient can navigate back to the the login page when clicking the back arrow
-    Given I have not already accepted terms and conditions
+    Given I am a EMIS patient
+    And I have not already accepted terms and conditions
     And I am logged in
     When I am on the Terms and conditions page
     And I click the back arrow
@@ -54,7 +57,8 @@ Feature: Use Terms and conditions page
 
   @cosmos
   Scenario: A patient can navigate to the Privacy policy page
-    Given I have not already accepted terms and conditions
+    Given I am a EMIS patient
+    And I have not already accepted terms and conditions
     And I am logged in
     And I am on the Terms and conditions page
     When I click on Privacy policy
@@ -62,7 +66,8 @@ Feature: Use Terms and conditions page
 
   @cosmos
   Scenario: A patient can navigate to the Cookies policy page
-    Given I have not already accepted terms and conditions
+    Given I am a EMIS patient
+    And I have not already accepted terms and conditions
     And I am logged in
     And I am on the Terms and conditions page
     When I click on Cookies policy
@@ -70,7 +75,8 @@ Feature: Use Terms and conditions page
 
   @cosmos
   Scenario: A patient can navigate to the Terms of use page
-    Given I have not already accepted terms and conditions
+    Given I am a EMIS patient
+    And I have not already accepted terms and conditions
     And I am logged in
     And I am on the Terms and conditions page
     When I click on Terms of use

@@ -2,7 +2,7 @@
 Feature: Use the navigation header bar
 
   Background:
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I am logged in
 
   Scenario: A patient can access the help and support page by clicking the help icon

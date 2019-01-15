@@ -22,7 +22,6 @@ class MyAppointmentsStepDefinitions {
     lateinit var myAppointmentsSteps: MyAppointmentsSteps
     lateinit var headerNative: HeaderNative
 
-
     @Then("^the Appointment Slot page is displayed$")
     fun theAppointmentSlotPageIsDisplayed() {
         headerNative.waitForPageHeaderText("Confirm appointment")

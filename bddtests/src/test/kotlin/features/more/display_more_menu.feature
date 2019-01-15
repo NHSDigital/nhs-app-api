@@ -6,7 +6,7 @@ Feature: Display More Menu
   @smoketest
   @nativepending @NHSO-2972
   Scenario: A logged in user can navigate to the more screen
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I am logged in
     And I navigate to More
     And I see the more page header
@@ -14,7 +14,7 @@ Feature: Display More Menu
     And I see and can follow links within the more page body
 
   Scenario: A user can navigate to the 'Find out why your data matters' page
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I am logged in
     And I navigate to more
     Given I am on the More Page

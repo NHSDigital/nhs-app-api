@@ -49,6 +49,7 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         Serenity.setSessionVariable(MyAppointmentsFacade::class).to(facade)
         Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
                 .to(getExpectedUiRepresentationOfSlots(facade))
+        generateDefaultUserData()
     }
 
     fun createSuccessfulUpcomingAppointmentsResponse(
@@ -115,6 +116,7 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
 
     fun createUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         mockUpcomingAppointments(mapping)
+        generateDefaultUserData()
     }
 
     private fun convertToMyAppointmentsFacade(facade: AppointmentSlotsResponseFacade): MyAppointmentsFacade {

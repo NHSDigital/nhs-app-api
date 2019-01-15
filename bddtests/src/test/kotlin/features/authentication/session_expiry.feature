@@ -4,13 +4,11 @@
 @native-android
 Feature: Session Expiry and Extend
 
-  Background:
-    Given EMIS is initialised
-
   @long-running
   @nativepending @NHSO-2948
   Scenario: On session expiry, a user on a secure screen is automatically signed out
-    Given I am logged in
+    Given I am a EMIS patient
+    And I am logged in
     And I am on the home page
     When I am idle long enough for the session to expire
     Then I see the login page with the session expiry notification
@@ -18,7 +16,8 @@ Feature: Session Expiry and Extend
 
   @pending @pending-web
   Scenario: On session expiry, a user on a non secure screen is signed out on navigating back to a secure screen
-    Given I am logged in
+    Given I am a EMIS patient
+    And I am logged in
     And I navigate to Symptoms
     When I am idle long enough for the session to expire
     And I navigate to Appointments
@@ -28,7 +27,8 @@ Feature: Session Expiry and Extend
   @tech-debt @NHSO-1742
   Scenario: On session expiry, a user of the native app, on a non secure screen,
   is signed out on navigating back to a secure screen and sending a request
-    Given I am logged in
+    Given I am a EMIS patient
+    And I am logged in
     And I navigate to Symptoms
     When I am idle long enough for the session to expire
     And I navigate to Appointments
@@ -37,7 +37,8 @@ Feature: Session Expiry and Extend
 
   @manual
   Scenario: On session expiry, a user without an active internet connection is automatically signed out
-    Given I am logged in
+    Given I am a EMIS patient
+    And I am logged in
     And I am on the home page
     And I have lost internet connection
     When I am idle long enough for the session to expire
@@ -47,7 +48,8 @@ Feature: Session Expiry and Extend
   @manual
   Scenario: Before session expiry, a user without an active internet connection is prompted with the session
   dialog box, extends their session and sees the internet connection error screen.
-    Given I am logged in
+    Given I am a EMIS patient
+    And I am logged in
     And I am on the home page
     And I have lost internet connection
     When I am idle long enough for the session expiry dialog box to appear
@@ -62,7 +64,8 @@ Feature: Session Expiry and Extend
   @manual
   Scenario: Before session expiry, a user without an active internet connection is prompted with the session
   dialog box, opts to logout.
-    Given I am logged in
+    Given I am a EMIS patient
+    And I am logged in
     And I am on the home page
     And I have lost internet connection
     When I am idle long enough for the session expiry dialog box to appear
@@ -77,7 +80,7 @@ Feature: Session Expiry and Extend
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
   dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
@@ -91,7 +94,7 @@ Feature: Session Expiry and Extend
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
   dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
@@ -104,7 +107,7 @@ Feature: Session Expiry and Extend
   Scenario: Before session expiry, a user of the native app, on a secure screen, is prompted with the session extension
   dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     When I am idle long enough for the session expiry dialog box to appear
     Then I am idle for a short time
@@ -117,7 +120,7 @@ Feature: Session Expiry and Extend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
   screen is prompted with the session extension dialog box, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     And I navigate to more
     When I choose to set my organ donation preferences
     When I am idle long enough for the session expiry dialog box to appear
@@ -133,7 +136,7 @@ Feature: Session Expiry and Extend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
   screen is prompted with the session extension dialog box, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     And I navigate to more
     When I choose to set my organ donation preferences
     When I am idle long enough for the session expiry dialog box to appear
@@ -150,7 +153,7 @@ Feature: Session Expiry and Extend
   Scenario: Before session expiry, a user of the native app, on a non secure screen, when navigating back to a secure
   screen is prompted with the session extension dialog box, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     And I navigate to more
     When I choose to set my organ donation preferences
     Then I scroll the device
@@ -168,7 +171,7 @@ Feature: Session Expiry and Extend
   Scenario: The session expires, a user of the native app, on a non secure screen, when navigating back to a secure
   screen is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     And I navigate to more
     When I choose to set my organ donation preferences
     When I am idle long enough for the session to expire
@@ -180,7 +183,7 @@ Feature: Session Expiry and Extend
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
   to the foreground and the session extension dialog box is displayed, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
     Then I see a dialog box prompting to extend the session
@@ -193,7 +196,7 @@ Feature: Session Expiry and Extend
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
   to the foreground and the session extension dialog box is displayed, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
     Then I see a dialog box prompting to extend the session
@@ -205,7 +208,7 @@ Feature: Session Expiry and Extend
   Scenario: The native app, on a secure screen is in the background. Prior to session expiry the user brings the app
   to the foreground and the session extension dialog box is displayed, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     Then I background the app long enough for the session warning dialog to appear and bring it back to foreground
     Then I see a dialog box prompting to extend the session
@@ -217,7 +220,7 @@ Feature: Session Expiry and Extend
   Scenario: The native app, on a secure screen is in the background. The session expires, the user brings the app
   to the foreground and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     Then I background the app long enough for the session expiry and bring it back to foreground
     Then I see the login page
@@ -226,7 +229,7 @@ Feature: Session Expiry and Extend
   Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
   unlocks the device and the session extension dialog box is displayed, extends their session and stays signed in
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     Then I lock the device
     When I am idle long enough for the session expiry dialog box to appear
@@ -242,7 +245,7 @@ Feature: Session Expiry and Extend
   Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
   unlocks the device and the session extension dialog box is displayed, opts to logout
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     Then I lock the device
     When I am idle long enough for the session expiry dialog box to appear
@@ -260,7 +263,7 @@ Feature: Session Expiry and Extend
   Scenario: The user has locked the device with the native app on a secure screen. Prior to session expiry the user
   unlocks the device and the session extension dialog box is displayed, does nothing and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I lock the device
     When I am idle long enough for the session expiry dialog box to appear
     Then I unlock the device
@@ -275,7 +278,7 @@ Feature: Session Expiry and Extend
   Scenario: The user has locked the device with the native app on a secure screen. The session expires, the user
   unlocks the device and is signed out
     Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     Then I navigate to Appointments
     Then I lock the device
     When I am idle long enough for the session to expire

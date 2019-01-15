@@ -4,11 +4,9 @@
 Feature: Authorisation occurs during each URL visit
   Access to the secure area is only granted to authenticated users.  This feature ensures this occurs when directly navigating using URLs too.
 
-  Background:
-    Given a patient from EMIS is defined
-
   Scenario: User has never logged in and attempts to navigate to a restricted url
-    Given I am not logged in
+    Given I am a EMIS patient
+    And I am not logged in
     When I browse to the pages at the following urls I see the login page
       | /account                                    |
       | /appointments                               |
@@ -30,7 +28,8 @@ Feature: Authorisation occurs during each URL visit
       | /terms-and-conditions                       |
 
   Scenario: User has just logged out and attempts to navigate to a restricted url
-    Given I have just logged out
+    Given I am a EMIS patient
+    And I have just logged out
     And I see the login page
     When I browse to the pages at the following urls I see the login page
       | /account                                    |
@@ -54,7 +53,8 @@ Feature: Authorisation occurs during each URL visit
 
   @tech-debt  @NHSO-3580
   Scenario: User session has expired and attempts to navigate to a restricted url
-    Given my session has expired
+    Given I am a EMIS patient
+    And my session has expired
     When I browse to the pages at the following urls I see the login page
       | /account                                    |
       | /appointments                               |
@@ -76,7 +76,8 @@ Feature: Authorisation occurs during each URL visit
       | /terms-and-conditions                       |
 
   Scenario: User browses to url when logged in
-    Given I am about to directly access every page
+    Given I am a EMIS patient
+    And I am about to directly access every page
     And I am logged in
     And I see the home page
     When I browse to the pages at the following urls I see the relevant page

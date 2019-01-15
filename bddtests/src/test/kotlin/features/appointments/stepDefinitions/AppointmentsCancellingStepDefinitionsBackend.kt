@@ -106,25 +106,6 @@ class AppointmentsCancellingStepDefinitionsBackend {
         }
     }
 
-    @When("^I send a cancellation request to the API without a cancellation reason$")
-    @Throws(Exception::class)
-    fun whenISendACancellationRequestToTheAPIWithoutACancellationReason() {
-        val body = worker.models.appointments.CancelAppointmentRequest(
-                cancelAppointmentSteps.retrieveSlotIdOfAppointmentToCancel().toString(),
-                ""
-        )
-
-        try {
-            val response = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.deleteAppointment(body)
-
-            SerenityHelpers.setHttpResponse(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
-    }
-
     @When("^I send a cancellation request to the API with an invalid cancellation reason$")
     @Throws(Exception::class)
     fun whenISendACancellationRequestToTheAPIWithAnInvalidCancellationReason() {

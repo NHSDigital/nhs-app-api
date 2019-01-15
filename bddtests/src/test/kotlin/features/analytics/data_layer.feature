@@ -5,6 +5,6 @@ Feature: Analytics
 
   @smoketest
   Scenario: The analytics data object is available
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     When I am logged in
     Then the analytics data object is available

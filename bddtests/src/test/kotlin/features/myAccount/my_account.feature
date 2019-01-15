@@ -2,7 +2,7 @@
 Feature: View My Account Page
 
   Background:
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I am logged in
     And I click the my account icon
 

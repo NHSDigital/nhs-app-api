@@ -4,7 +4,7 @@ Feature: My appointments
 
   Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
     Given the <GP System> GP appointment system is unavailable
-    And I am logged in as a <GP System> user
+    And I am logged in
     When I am on the My Appointments page
     Then I see page header indicating there is an appointment data error
     And I see the appropriate error messages for the appointment data error
@@ -16,7 +16,7 @@ Feature: My appointments
 
   Scenario Outline: A user has never booked an appointment
     Given I have no upcoming appointments for <GP System>
-    And I am logged in as a <GP System> user
+    And I am logged in
     When I am on the My Appointments page
     Then I am informed I have no booked appointments
     But I can book an appointment
@@ -30,7 +30,7 @@ Feature: My appointments
   @smoketest
   Scenario Outline: A <GP System> user can see their upcoming appointments
     Given I have upcoming appointments before cutoff time for <GP System>
-    And I am logged in as a <GP System> user
+    And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
@@ -48,14 +48,14 @@ Feature: My appointments
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
       # VISION Specific test
     Given Appointments are disabled for VISION at a GP Practice level
-    And I am logged in as a VISION user
+    And I am logged in
     When I am on the My Appointments page
     Then I see appropriate information message when appointments are disabled
     And there should not be an option to try again
 
   Scenario: Cancellation link won't be displayed for VISION appointment before cancellation cut off period without cancellation reason(s) available
     Given I have upcoming appointments before cutoff time for VISION without cancellation reasons
-    And I am logged in as a VISION user
+    And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
@@ -65,7 +65,7 @@ Feature: My appointments
 
   Scenario: Cancellation link won't be displayed for VISION appointment within cancellation cut off period without cancellation reason(s) available
     Given I have upcoming appointments within cutoff time for VISION without cancellation reasons
-    And I am logged in as a VISION user
+    And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
@@ -75,7 +75,7 @@ Feature: My appointments
 
   Scenario: Cancellation link won't be displayed for VISION appointment within cancellation cut off period with cancellation reason(s) available
     Given I have upcoming appointments within cutoff time for VISION with cancellation reasons
-    And I am logged in as a VISION user
+    And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
@@ -85,7 +85,7 @@ Feature: My appointments
 
   Scenario: Cancellation link will be displayed for VISION appointment only before cancellation cut off period with cancellation reason(s) available
     Given I have upcoming appointments before and within cutoff time for VISION with cancellation reasons
-    And I am logged in as a VISION user
+    And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
@@ -97,7 +97,7 @@ Feature: My appointments
   @nativepending @NHSO-2966
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have no upcoming appointments for EMIS
-    And I am logged in as a EMIS user
+    And I am logged in
     And I am on the My Appointments page
     When I am idle long enough for the session to expire
     Then I see the login page with the session expiry notification

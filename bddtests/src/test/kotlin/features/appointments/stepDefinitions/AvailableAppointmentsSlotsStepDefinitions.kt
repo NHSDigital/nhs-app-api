@@ -180,6 +180,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^Appointments are disabled for VISION at a GP Practice level")
     fun appointmentsAreDisabledForVisionAtAGPLevel() {
         Serenity.setSessionVariable(gpAppointmentsDisabled).to("true")
+        AppointmentsSlotsFactory.getForSupplier("VISION").generateDefaultUserData()
     }
 
 
@@ -388,23 +389,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
                         .text)
     }
 
-    @Then("^available slots are displayed that meet the new criteria$")
-    fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
-        val expectedDatesAndTimes = sessionVariableCalled<AppointmentFilterFacade>(
-                AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotSerenityKeys
-                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
-        ).filteredSlots
-        assertTrue("Invalid test as there are no expected slots stored. ", expectedDatesAndTimes.isNotEmpty())
-        val expectedNumberOfSlots = expectedDatesAndTimes.flatMap { it.value.toList() }.size
-        for (date in expectedDatesAndTimes.keys) {
-            for (time in expectedDatesAndTimes[date].orEmpty()) {
-                availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
-            }
-        }
-        availableAppointments.assertNumberOfSlotsPresent(expectedNumberOfSlots)
-    }
-
     @Then("^I only see results for days that have available slots$")
     fun onlyAvailableSlotsAreDisplayed() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
@@ -443,6 +427,22 @@ class AvailableAppointmentsSlotsStepDefinitions {
                 expectedDates,
                 AppointmentsSlotsExample.datesForNextWeek
         )
+    }
+
+    private fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
+        val expectedDatesAndTimes = sessionVariableCalled<AppointmentFilterFacade>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+        ).filteredSlots
+        assertTrue("Invalid test as there are no expected slots stored. ", expectedDatesAndTimes.isNotEmpty())
+        val expectedNumberOfSlots = expectedDatesAndTimes.flatMap { it.value.toList() }.size
+        for (date in expectedDatesAndTimes.keys) {
+            for (time in expectedDatesAndTimes[date].orEmpty()) {
+                availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
+            }
+        }
+        availableAppointments.assertNumberOfSlotsPresent(expectedNumberOfSlots)
     }
 
     @Then("^the appointment slot guidance content is displayed$")

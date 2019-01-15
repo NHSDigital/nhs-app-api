@@ -44,6 +44,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
             respondWithSuccess(example)
         }
         generateDefaultUserData()
+        createGetEmptyAppointmentList()
     }
 
     fun generateMultipleAvailableAppointmentSlotsForTheSameTime() {
@@ -80,8 +81,8 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         ) {
             respondWithSuccess(example)
         }
-
         generateDefaultUserData()
+        createGetEmptyAppointmentList()
     }
 
     private fun retrieveSlotsExample(): AppointmentSlotsResponseFacade {
@@ -112,6 +113,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
                 mapping
         )
         generateDefaultUserData()
+        createGetEmptyAppointmentList()
     }
 
     private fun defaultStartDate(): ZonedDateTime {

@@ -4,8 +4,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsBookingBackendFactory
-import features.appointments.factories.AppointmentsBookingBackendFactory.Companion.defaultApptBookingReason
-import features.appointments.factories.AppointmentsBookingBackendFactory.Companion.defaultTelephoneContactType
 import features.appointments.factories.AppointmentsBookingBackendFactory.Companion.defaultTelephoneNumber
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
@@ -42,7 +40,6 @@ open class AppointmentsBookingStepDefinitionsBackend {
         val request = factory.defaultAppointmentRequest(patient, slotId = slotId)
         factory.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
     }
-
 
     @Given("^an appointment booking for (.*) can be successful with booking reason of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForBookingReason(gpSystem: String,
@@ -144,7 +141,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
         val appointmentToBook =
                 Serenity.sessionVariableCalled<AppointmentBookRequest>(AppointmentsBookingBackendFactory
                         .appointmentToBookKey)
-submitAppointmentRequest(appointmentToBook)
+        submitAppointmentRequest(appointmentToBook)
     }
 
     @When("^an appointment booking is submitted with no slot identifier$")

@@ -3,7 +3,7 @@ Feature: View prescriptions error cases
   A user can view information about their prescriptions after logging in
 
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And I am logged in
     Given The prescriptions endpoint is timing out
@@ -17,7 +17,7 @@ Feature: View prescriptions error cases
       | VISION    |
 
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And I am logged in
     And The prescriptions endpoint is throwing a server error
@@ -31,7 +31,7 @@ Feature: View prescriptions error cases
 
   @nativepending @NHSO-2970
   Scenario: A user navigates to the prescriptions page and the session times out
-    Given a patient from EMIS is defined
+    Given I am a EMIS patient
     And I am using EMIS GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -40,7 +40,7 @@ Feature: View prescriptions error cases
     Then I see the login page with the session expiry notification
 
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order times out
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
@@ -57,7 +57,7 @@ Feature: View prescriptions error cases
       | VISION    |
 
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
@@ -74,7 +74,7 @@ Feature: View prescriptions error cases
 
   @nativepending @NHSO-2970
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
@@ -95,7 +95,7 @@ Feature: View prescriptions error cases
       | VISION    |
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
@@ -115,7 +115,7 @@ Feature: View prescriptions error cases
       | VISION    |
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an already ordered response
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
@@ -133,7 +133,7 @@ Feature: View prescriptions error cases
       | TPP       |
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an invalid guid error
-    Given <GP System> is initialised
+    Given I am a <GP System> patient
     And I am using <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions

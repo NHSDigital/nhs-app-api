@@ -56,31 +56,23 @@ open class SharedStepDefinitions {
         BrowserstackLocalService.stop()
     }
 
-    @Given("a patient from (.*) is defined")
-    fun systemPatient(gpSystem: String)
+    @Given("^I am a (.*) patient$")
+    fun initialisePatientAndGpSystem(gpSystem: String)
     {
         mockingClient.clearWiremock()
         mockingClient.favicon()
-        SharedStepDefinitions.patient = Patient.getDefault(gpSystem)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(SharedStepDefinitions.patient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-        SerenityHelpers.setPatient(patient)
-        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
-        SerenityHelpers.setGpSupplier(gpSystem)
-    }
 
-    @Given("(TPP|EMIS|VISION) is initialised")
-    fun system(system: String) {
-        SharedStepDefinitions.patient = Patient.getDefault(system)
-        SerenityHelpers.setPatient(SharedStepDefinitions.patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(SharedStepDefinitions.patient)
-        SessionCreateJourneyFactory.getForSupplier(system, mockingClient).createFor(SharedStepDefinitions.patient)
-        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(system)
-        SerenityHelpers.setGpSupplier(system)
+        patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(patient)
+        SerenityHelpers.setGpSupplier(gpSystem)
+        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
     }
 
     @Given("^I am logged in$")
-    open fun iAmLoggedIn() {
+    fun iAmLoggedIn() {
         SharedStepDefinitions.patient = SerenityHelpers.getPatientOrNull() ?: SharedStepDefinitions.patient
         browser.goToApp()
         login.using(patient)
