@@ -60,8 +60,8 @@
         "CITIZEN_ID_CLIENT_ID": "nhs-online",
         "CITIZEN_ID_CLIENT_SECRET": "secret",
         "CITIZEN_ID_JWT_ISSUER": "https://auth.ext.signin.nhs.uk",
-        "EMIS_APPLICATION_ID": "D66BA979-60D2-49AA-BE82-AEC06356E41F",
-        "EMIS_BASE_URL": "http://stubs.local.bitraft.io:8080/emis/",
+        "EMIS_APPLICATION_ID": "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7",
+        "EMIS_BASE_URL": "https://nhs70apptest.emishealth.com/PFS/",
         "EMIS_CERTIFICATE_PATH": "",
         "EMIS_VERSION": "2.1.0.0",
         "GP_PROVIDER_ENABLED_EMIS": "true",
@@ -88,7 +88,18 @@
         "VISION_SENDER_USERFULLNAME": "Name",
         "VISION_SENDER_USERIDENTITY": "65489761321654",
         "VISION_SENDER_USERNAME": "Username123123asdas",
-        "VISION_SENDER_USERROLE": "ROSU"
+        "VISION_SENDER_USERROLE": "ROSU",
+        "SESSION_MONGO_DATABASE_HOST": "localhost",
+        "SESSION_MONGO_DATABASE_PORT": "27017",
+        "SESSION_MONGO_DATABASE_USERNAME": "",
+        "SESSION_MONGO_DATABASE_PASSWORD": "",
+        "SESSION_MONGO_DATABASE_NAME": "development",
+        "SESSION_MONGO_DATABASE_COLLECTION": "session",
+        "STUB_TERMS_AND_CONDITIONS": "true",
+        "CORS_AUTHORITY": "http://web.local.bitraft.io:3000",
+        "CookieDomain": ".bitraft.io",
+        "runMode": "dev",
+        "ConfigurationSettings__CookieDomain": ".bitraft.io"
       }
     }
   }

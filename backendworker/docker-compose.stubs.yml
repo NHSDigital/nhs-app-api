@@ -1,5 +1,9 @@
 version: "3.2"
 services:
+  nhsonline.mongodb.session:
+    image: mongo:latest
+    ports:
+    - "27017:27017"
   stubs.local.bitraft.io:
     image: rodolpheche/wiremock
     command: --local-response-templating
@@ -21,6 +25,13 @@ services:
       - "6379:6379"
     volumes:
       - 'redis_data:/bitnami/redis'
+  mongo_seed:
+    image: mongo:latest
+    links:
+      - nhsonline.mongodb.session
+    command: /bin/bash -c "sleep 5; mongo --host nhsonline.mongodb.session --eval 'db.session.createIndex({_ts:1},{expireAfterSeconds:60})' development"
+    depends_on:
+      - nhsonline.mongodb.session
 volumes:
   redis_data:
     driver: local
