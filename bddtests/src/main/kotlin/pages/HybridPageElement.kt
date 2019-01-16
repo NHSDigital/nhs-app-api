@@ -29,7 +29,6 @@ open class HybridPageElement(
         helpfulName: String? = null
 ) {
     private val helpfulNameToUse = helpfulName ?: webDesktopLocator
-
     val element: WebElementFacade
         get() {
             return when (locatorStrategy()) {
@@ -181,5 +180,13 @@ open class HybridPageElement(
 
         return isBehindHeader.or(isBehindFooter)
 
+    }
+
+    fun waitForNativeSpinner(
+            milliseconds: Long = DEFAULT_NATIVE_SPINNER_WAIT): WebElementFacade {
+        //waiting for the native spinner can cause problems
+        //because it can vanish and comeback
+        Thread.sleep(milliseconds)
+        return this.element
     }
 }

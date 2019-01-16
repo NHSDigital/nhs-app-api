@@ -84,8 +84,11 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     }
 
     fun selectXPrescriptionsToOrder(numberOfSubscriptionsToSelect: Int) {
-        val repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
-
+        var repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
+        if(repeatPrescriptionContainers.isEmpty() && onMobile()){
+            waitForNativeStepToComplete()
+            repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
+        }
         for (i in 0..(numberOfSubscriptionsToSelect-1)) {
             val label = repeatPrescriptionContainers[i].findElement(By.tagName( "label"))
             label.click()

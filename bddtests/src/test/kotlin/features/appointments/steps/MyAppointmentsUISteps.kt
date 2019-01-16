@@ -20,7 +20,6 @@ open class MyAppointmentsUISteps {
 
     lateinit var myAppointmentsPage: MyAppointmentsPage
     lateinit var errorPage: ErrorPage
-
     lateinit var headerNative: HeaderNative
 
     private val pageHeader = "My appointments"
@@ -49,7 +48,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun clickOnBookAppointmentButton() {
-        myAppointmentsPage.waitForNativeStepToComplete()
+        myAppointmentsPage.assertNativeElementsLoaded()
         myAppointmentsPage.bookButton.click()
     }
 

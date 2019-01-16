@@ -4,7 +4,6 @@ import config.Config
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.SerenityWebdriverManager
-import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
@@ -16,7 +15,8 @@ import java.time.Duration
 import pages.sharedElements.BannerObject
 
 const val DEFAULT_SPINNER_WAIT: Long = 30
-const val DEFAULT_MOBILE_WAIT: Long = 5000
+const val DEFAULT_MOBILE_WAIT: Long = 2000
+const val DEFAULT_VISIBILITY_WAIT: Long = 300
 const val DEFAULT_NATIVE_SPINNER_WAIT: Long = 1000
 const val POOLING_FREQUENCY: Long = 100
 const val WEB_CONTEXT: String = "webview"
@@ -36,24 +36,20 @@ open class HybridPageObject : PageObject() {
     )
 
     fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
-        if (onMobile())
+        if (onMobile()) {
             spinner.waitForNativeSpinner()
+        }
 
-        if (!spinner.elements.isEmpty()) spinner.shouldNotBeVisible(seconds)
-    }
-
-    private fun HybridPageElement.waitForNativeSpinner(
-            milliseconds: Long = DEFAULT_NATIVE_SPINNER_WAIT): WebElementFacade {
-        //waiting for the native spinner can cause problems
-        //because it can vanish and comeback
-        Thread.sleep(milliseconds)
-        return this.element
+        if (!spinner.elements.isEmpty() && !onMobile()) {
+            spinner.shouldNotBeVisible(seconds)
+        }
     }
 
     fun waitForNativeStepToComplete(milliseconds: Long = DEFAULT_MOBILE_WAIT) {
         //Native execution/redirect is slow on browser stack
-        if (onMobile())
+        if (onMobile()) {
             Thread.sleep(milliseconds)
+        }
     }
 
     private fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
@@ -72,17 +68,23 @@ open class HybridPageObject : PageObject() {
         }
     }
 
-    fun onMobile(): Boolean {
-        return if (SerenityWebdriverManager.inThisTestThread().hasAnInstantiatedDriver()) {
-            driver.isAndroid().xor(driver.isIOS())
+    fun findAllByXpath(xpath: String): List<WebElementFacade> {
+        switchWebview()
+        logSelectorAndSource(xpath)
+        return findAll(By.xpath(xpath))
+    }
 
-        } else { //no driver yet instantiated so check the environment variables
 
-            val pathMatchesBrowserstack = Regex("bs://[a-z0-9]+").matches(Config.instance.appPath)
-            val pathMatchesLocalApk = Regex("[A-Z]:\\\\.+\\.apk").matches(Config.instance.appPath)
-
-            pathMatchesBrowserstack.xor(pathMatchesLocalApk)
+    fun findByXpath(xpath: String): WebElementFacade {
+        switchWebview()
+        val element: WebElementFacade
+        try {
+            logSelectorAndSource(xpath)
+            element = findBy(xpath)
+        } catch (e: NoSuchElementException) {
+            throw NoSuchElementException("No element found on page:\n${driver.pageSource}", e)
         }
+        return element
     }
 
     fun switchWebview() {
@@ -105,21 +107,6 @@ open class HybridPageObject : PageObject() {
         setDriver<HybridPageObject>(driver)
     }
 
-    fun hideKeyboardIfOnMobile(){
-        if (onMobile()) {
-            driver.getMobileDriver().hideKeyboard()
-        }
-    }
-
-    fun findByXpath(parent: WebElementFacade, xpath: String): WebElementFacade {
-        val elements = findAllByXpath(parent, xpath)
-
-        if(!elements.any()){
-            Assert.fail("No elements found for '$xpath'")
-        }
-        return elements.first()
-    }
-
     fun logSelectorAndSource(selector: String) {
         if (Config.instance.showPageSourceForXPathQuery == "true") {
             println("Selector: $selector")
@@ -127,28 +114,47 @@ open class HybridPageObject : PageObject() {
         }
     }
 
-    fun findByXpath(xpath: String): WebElementFacade {
-        switchWebview()
-        val element: WebElementFacade
+    fun shouldBeVisibleOnNative(elementToCheckFor:HybridPageElement, seconds: Long = DEFAULT_VISIBILITY_WAIT){
         try {
-            logSelectorAndSource(xpath)
-            element = findBy(xpath)
+            waitForSpinnerToDisappear()
+            val currentElement = elementToCheckFor.element
+            FluentWait<WebElementFacade>(currentElement)
+                    .withTimeout(Duration.ofSeconds(seconds))
+                    .pollingEvery(Duration.ofMillis(POOLING_FREQUENCY))
+                    .until {
+                        currentElement.isPresent
+                    }
+            if (!currentElement.isVisible) {
+                waitForNativeStepToComplete()
+            }
         } catch (e: NoSuchElementException) {
-            throw NoSuchElementException("No element found on page:\n${driver.pageSource}", e)
+            throw NoSuchElementException("Element $elementToCheckFor does not exist on the page.  " +
+                    "Page source:\n${driver.pageSource}\n")
         }
-        return element
     }
 
-    fun findAllByXpath(parent: WebElementFacade, xpath: String): List<WebElementFacade> {
-        switchWebview()
-        logSelectorAndSource(xpath)
-        return parent.thenFindAll(xpath)
+    override fun <T : PageObject?> switchToPage(pageObjectClass: Class<T>?): T {
+        val page = super.switchToPage(pageObjectClass)
+        return page
     }
 
-    fun findAllByXpath(xpath: String): List<WebElementFacade> {
-        switchWebview()
-        logSelectorAndSource(xpath)
-        return findAll(By.xpath(xpath))
+    fun onMobile(): Boolean {
+        return if (SerenityWebdriverManager.inThisTestThread().hasAnInstantiatedDriver()) {
+            driver.isAndroid().xor(driver.isIOS())
+
+        } else { //no driver yet instantiated so check the environment variables
+
+            val pathMatchesBrowserstack = Regex("bs://[a-z0-9]+").matches(Config.instance.appPath)
+            val pathMatchesLocalApk = Regex("[A-Z]:\\\\.+\\.apk").matches(Config.instance.appPath)
+
+            pathMatchesBrowserstack.xor(pathMatchesLocalApk)
+        }
+    }
+
+    fun hideKeyboardIfOnMobile(){
+        if (onMobile()) {
+            driver.getMobileDriver().hideKeyboard()
+        }
     }
 
     fun clickOnButtonContainingText(text: String) {

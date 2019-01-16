@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.navigation.HeaderNative
 
-class ErrorPage : HybridPageObject() {
+open class ErrorPage : HybridPageObject() {
     private val errorTextFinderFormat = "//div[@data-purpose='error']/p[@data-purpose='%s']"
 
     private val headerLocator = String.format(errorTextFinderFormat, "msg-header")
@@ -74,5 +74,11 @@ class ErrorPage : HybridPageObject() {
     fun assertErrorDetailText(errorDetailText: String): ErrorPage {
         assertEquals("Content message incorrect. ", errorDetailText, errorText2.element.text)
         return this
+    }
+
+    fun assertNativeElementsLoaded(){
+        if(onMobile()) {
+            shouldBeVisibleOnNative(heading)
+        }
     }
 }

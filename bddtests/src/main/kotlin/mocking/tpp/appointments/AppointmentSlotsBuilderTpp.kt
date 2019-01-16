@@ -37,11 +37,11 @@ class AppointmentSlotsBuilderTpp(
         val path = StringBuilder("//ListSlots[")
 
         if (startDate != null) {
-            // We'll only match on the date and time down to the minutes, as it's much harder to match seconds
-            // without creating many stubs. We are creating 1 stub for the current minute and 1 for the next minute.
+            //dropLast is dropping the separator and last digit of minutes below to ensure mocks
+            //are valid for more than 1 min
             val startDateParts = convertDateToTppTimeString(startDate).split(":")
             path.append("starts-with(@startDate, ")
-            path.append("'${startDateParts.joinToString(":", limit = 2, truncated = "")}') and ")
+            path.append("'${startDateParts.joinToString(":", limit = 2, truncated = "").dropLast(2)}') and ")
             path.append("substring(@startDate, string-length(@startDate)) = 'Z' and ")
         }
 

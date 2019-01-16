@@ -17,6 +17,8 @@ import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+private const val TRIM_MINUTES_AND_SECONDS = 4
+
 class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                                   patient: Patient,
                                   fromDateTime: ZonedDateTime? = null,
@@ -33,12 +35,13 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         requestBuilder.andHeader(HEADER_API_SESSION_ID, apiSessionId)
 
         if (fromDateTime != null) {
-            // We'll only match on the date and time down to the minutes, as it's much harder to match seconds
-            // without creating many stubs. We are creating 1 stub for the current minute and 1 for the next minute.
-            val fromDateParts = convertDateToEmisTimeString(fromDateTime).split(":")
+            // We'll only match on the date and time to the first digit of the minute,
+            // as it's much harder to match on seconds without creating many stubs.
+            // We are creating 1 stub for 10 mins from current minute and 1 for the next 10 minutes.
+            val fromDateParts = convertDateToEmisTimeString(fromDateTime).dropLast(TRIM_MINUTES_AND_SECONDS)
             requestBuilder.andQueryParameter(
                     "fromDateTime",
-                    fromDateParts.joinToString(":", limit = 2, truncated = ""),
+                    fromDateParts,
                     "contains")
         }
 

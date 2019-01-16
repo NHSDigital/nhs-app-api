@@ -62,4 +62,10 @@ class AppointmentGuidancePage : HybridPageObject() {
         return list
     }
 
+    fun assertNativeElementsLoaded(){
+        if(onMobile()) {
+            shouldBeVisibleOnNative(bookButton)
+        }
+    }
+
 }

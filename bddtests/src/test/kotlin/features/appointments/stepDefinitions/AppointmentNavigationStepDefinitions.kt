@@ -7,6 +7,7 @@ import features.appointments.steps.AvailableAppointmentsSteps
 import features.appointments.steps.MyAppointmentsUISteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
+import pages.ErrorPage
 import pages.navigation.NavBarNative
 
 class AppointmentNavigationStepDefinitions {
@@ -19,6 +20,8 @@ class AppointmentNavigationStepDefinitions {
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
+    @Steps
+    lateinit var errorPage: ErrorPage
 
 
     @Given("^I am on the My Appointments page$")
@@ -26,6 +29,15 @@ class AppointmentNavigationStepDefinitions {
         navigation.waitForSpinnerToDisappear()
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
         waitForSpinnerToDisappear()
+        myAppointmentsUI.myAppointmentsPage.assertNativeElementsLoaded()
+    }
+
+    @Given("^I am on the My Appointments error page$")
+    fun iAmOnMyAppointmentsErrorPage() {
+        navigation.waitForSpinnerToDisappear()
+        navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
+        waitForSpinnerToDisappear()
+        errorPage.assertNativeElementsLoaded()
     }
 
     @Given("^I am on the Appointment Guidance page$")
@@ -33,6 +45,7 @@ class AppointmentNavigationStepDefinitions {
         iAmOnMyAppointmentsPage()
         myAppointmentsUI.clickOnBookAppointmentButton()
         waitForSpinnerToDisappear()
+        appointmentGuidanceSteps.appointmentGuidancePage.assertNativeElementsLoaded()
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
@@ -41,6 +54,8 @@ class AppointmentNavigationStepDefinitions {
     fun iAmOnTheAvailableAppointmentsPage() {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
+        waitForSpinnerToDisappear()
+        myAppointmentsUI.myAppointmentsPage.assertNativeElementsLoaded()
         waitForSpinnerToDisappear()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }

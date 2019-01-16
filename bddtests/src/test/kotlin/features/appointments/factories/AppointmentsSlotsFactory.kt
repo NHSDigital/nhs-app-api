@@ -15,6 +15,7 @@ import java.time.ZonedDateTime
 import java.util.*
 
 private const val DEFAULT_NUMBER_OF_DAYS_IN_RANGE = 29L
+private const val APPOINTMENT_SLOT_RESPONSE_VALIDITY_TIME = 10L
 
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
@@ -74,7 +75,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         }
 
         generateAppointmentSlotResponse(
-                startDateToUseForMockResponse.plusMinutes(1),
+                startDateToUseForMockResponse.plusMinutes(APPOINTMENT_SLOT_RESPONSE_VALIDITY_TIME),
                 endDateToUseForMockResponse,
                 guidanceMessage,
                 reasonNecessity
@@ -105,8 +106,9 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
                 NecessityOption.OPTIONAL,
                 mapping
         )
+
         generateAppointmentSlotResponse(
-                defaultStartDate().plusMinutes(1),
+                defaultStartDate().plusMinutes(APPOINTMENT_SLOT_RESPONSE_VALIDITY_TIME),
                 defaultEndDate(),
                 null,
                 NecessityOption.OPTIONAL,

@@ -26,6 +26,7 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^the Appointment Booking success message is displayed$")
     fun appointmentBookingSuccessMessage() {
+        myAppointmentsUISteps.myAppointmentsPage.assertNativeElementsLoaded()
         myAppointmentsUISteps.checkBookingSuccessMessage()
     }
 
@@ -73,6 +74,7 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^the My Appointments page is displayed$")
     fun iWillBeOnTheMyAppointmentsScreen() {
+        myAppointmentsUISteps.myAppointmentsPage.assertNativeElementsLoaded()
         iCanBookAnAppointment()
         thePageTitleIsMyAppointments()
     }

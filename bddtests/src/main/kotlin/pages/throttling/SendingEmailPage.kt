@@ -6,7 +6,6 @@ import pages.HybridPageElement
 
 class SendingEmailPage : HybridPageObject() {
 
-
     companion object {
         val validEmail = "bddTest@nhs.com"
         val invalidEmail = "bddTest"

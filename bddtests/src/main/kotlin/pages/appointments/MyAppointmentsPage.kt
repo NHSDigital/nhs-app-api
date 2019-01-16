@@ -92,4 +92,10 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     fun getNumberOfAppointmentsThatCannotBeCancelled(): Int {
         return cannotCancelAppointmentText.elements.size
     }
+
+    fun assertNativeElementsLoaded(){
+        if(onMobile()) {
+            shouldBeVisibleOnNative(bookButton)
+        }
+    }
 }

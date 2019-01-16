@@ -5,7 +5,7 @@ Feature: My appointments UI with Javascript
   Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
     Given the <GP System> GP appointment system is unavailable
     And I am logged in
-    When I am on the My Appointments page
+    When I am on the My Appointments error page
     Then I see page header indicating there is an appointment data error
     And I see the appropriate error messages for the appointment data error
     Examples:

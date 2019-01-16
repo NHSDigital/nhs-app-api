@@ -10,7 +10,7 @@ open class HomePage : HybridPageObject() {
 
     val headerText: String = "Home"
 
-    private val greeting = HybridPageElement(
+    val greeting = HybridPageElement(
             webDesktopLocator = "//h2[@data-purpose='greeting']",
             androidLocator = null,
             page = this,
@@ -154,5 +154,11 @@ open class HomePage : HybridPageObject() {
         Assert.assertEquals("Expected survey content",
                 "Help us make this service better. Complete our quick survey.",
                 surveyContent.element.text)
+    }
+
+    fun assertNativeElementsLoaded(){
+        if(onMobile()) {
+            shouldBeVisibleOnNative(greeting)
+        }
     }
 }
