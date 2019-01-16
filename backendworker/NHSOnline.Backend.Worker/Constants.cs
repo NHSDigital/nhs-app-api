@@ -86,6 +86,8 @@ namespace NHSOnline.Backend.Worker
             public const string GetDemographicsAuditTypeResponse = "Demographics_Get_Response";
             public const string GetOrganDonationReferenceDataAuditTypeRequest = "OrganDonation_ReferenceData_Request";
             public const string GetOrganDonationReferenceDataAuditTypeResponse = "OrganDonation_ReferenceData_Response";
+            public const string GetTestResultAuditTypeRequest = "TestResult_Get_Request";
+            public const string GetTestResultAuditTypeResponse = "TestResult_Get_Response";
         }
 
         public static class HttpContextItems
