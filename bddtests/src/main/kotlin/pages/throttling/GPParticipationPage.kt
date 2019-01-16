@@ -13,19 +13,19 @@ private const val NUM_NOT_PARTICIPATING_UNAVAILABLE_FEATURES = 3
 class GPParticipationPage : HybridPageObject() {
 
     var featuresUsedHeader = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'Features used by ')]",
+        browserLocator = "//h2[contains(text(), 'NHS App features used by ')]",
         androidLocator = null,
         page = this
     )
 
     val featuresUsedHeaderParticipatingPractice = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'Features used by $ORGANISATION_NAME 1')]",
+        browserLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 1')]",
         androidLocator = null,
         page = this
     )
 
     val featuresUsedHeaderNotParticipatingPractice = HybridPageElement(
-        browserLocator = "//h2[contains(text(), 'Features used by $ORGANISATION_NAME 2')]",
+        browserLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 2')]",
         androidLocator = null,
         page = this
     )

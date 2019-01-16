@@ -840,7 +840,7 @@ export default {
   th04: {
     header: 'GP surgery features',
     title: 'Features used by your GP surgery',
-    featuresHeader: 'Features used by',
+    featuresHeader: 'NHS App features used by',
     currentlyAvailableHeader: 'Currently available',
     comingSoonHeader: 'Coming soon',
     defaultFeatures: [
