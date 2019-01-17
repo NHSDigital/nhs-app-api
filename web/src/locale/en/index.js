@@ -619,7 +619,7 @@ export default {
     cookiesPolicy: 'Cookies policy',
     openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
-    fingerprintID: 'Fingerprint ID',
+    passwordOptions: 'Login & password options',
     accessibilityStatement: 'Accessibility statement',
   },
   sc04: {

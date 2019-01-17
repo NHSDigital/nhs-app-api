@@ -8,10 +8,10 @@
       <h2>{{ $t('myAccount.accountSettingsHeading') }}</h2>
       <ul :class="$style['list-menu']">
         <li @click="goToBiometrics()">
-          <analytics-tracked-tag id="btn_fingerprintId"
-                                 :text="$t('myAccount.fingerprintID')"
+          <analytics-tracked-tag id="btn_passwordOptions"
+                                 :text="$t('myAccount.passwordOptions')"
                                  tag="a">
-            {{ $t('myAccount.fingerprintID') }}
+            {{ $t('myAccount.passwordOptions') }}
           </analytics-tracked-tag>
         </li>
       </ul>
