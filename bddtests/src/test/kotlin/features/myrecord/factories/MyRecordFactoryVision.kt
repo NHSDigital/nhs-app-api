@@ -3,6 +3,7 @@ package features.myrecord.factories
 import mocking.data.myrecord.AllergiesData
 import mocking.data.myrecord.ImmunisationsData
 import mocking.data.myrecord.TestResultsData
+import mocking.data.myrecord.DiagnosisData
 import mocking.vision.VisionConstants
 import models.Patient
 
@@ -27,5 +28,8 @@ class MyRecordFactoryVision: MyRecordFactory() {
 
         mocker.generatePatientDataResponse(patient, VisionConstants.testResultsView)
         { request -> request.respondWithSuccess(TestResultsData.getVisionTestResultsDataWithNoTestResults()) }
+
+        mocker.generatePatientDataResponse(patient, VisionConstants.diagnosisView)
+        { request -> request.respondWithSuccess(DiagnosisData.getVisionDiagnosisDataWithNoTestResults()) }
     }
 }

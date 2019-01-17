@@ -22,6 +22,7 @@ import {
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
+  MY_RECORD_VISION_DIAGNOSIS_DETAIL,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_FAITH,
@@ -147,6 +148,7 @@ export default function ({ route, store, app }) {
       break;
     case MYRECORD.name:
     case MYRECORDNOACCESS.name:
+    case MY_RECORD_VISION_DIAGNOSIS_DETAIL.name:
     case MY_RECORD_VISION_TEST_RESULTS_DETAIL.name:
     case MYRECORDTESTRESULT.name:
       store.dispatch('navigation/setNewMenuItem', 3);

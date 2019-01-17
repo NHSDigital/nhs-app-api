@@ -41,6 +41,22 @@
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
                   :supplier="record.supplier" />
+
+    <analytics-tracked-tag id="diagnosisHeader"
+                           :class ="[$style['record-title'],
+                                     getCollapsedState(isDiagnosisCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="DIAGNOSIS"
+                           :text="$t('my_record.diagnosis.sectionHeader.default')"
+                           :aria-expanded="!isDiagnosisCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $t('my_record.diagnosis.sectionHeader.default') }}
+    </analytics-tracked-tag>
+    <diagnosis :is-collapsed="isDiagnosisCollapsed"
+                       :results="record.diagnosis"
+                       :supplier="record.supplier"/>
   </div>
 </template>
 
@@ -49,11 +65,13 @@ import Immunisations from '@/components/my-record/SharedComponents/Immunisations
 import Problems from '@/components/my-record/SharedComponents/Problems';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import TestResults from '@/components/my-record/SharedComponents/TestResults';
+import Diagnosis from '@/components/my-record/SharedComponents/Diagnosis';
 import VueScrollTo from 'vue-scrollto';
 
 const IMMUNISATIONS = 'immunisations';
 const PROBLEMS = 'problems';
 const TESTRESULTS = 'testresults';
+const DIAGNOSIS = 'diagnosis';
 
 export default {
   components: {
@@ -61,6 +79,7 @@ export default {
     Immunisations,
     Problems,
     TestResults,
+    Diagnosis,
     VueScrollTo,
   },
   props: {
@@ -74,9 +93,11 @@ export default {
       IMMUNISATIONS,
       PROBLEMS,
       TESTRESULTS,
+      DIAGNOSIS,
       isProblemsCollapsed: process.client,
       isImmunisationsCollapsed: process.client,
       isTestResultsCollapsed: process.client,
+      isDiagnosisCollapsed: process.client,
     };
   },
   mounted() {
@@ -104,6 +125,10 @@ export default {
         case TESTRESULTS:
           this.isTestResultsCollapsed =
             !this.isTestResultsCollapsed;
+          break;
+        case DIAGNOSIS:
+          this.isDiagnosisCollapsed =
+            !this.isDiagnosisCollapsed;
           break;
         default:
           break;

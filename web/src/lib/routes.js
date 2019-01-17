@@ -116,6 +116,10 @@ const routes = {
     name: 'my-record-testresultdetail',
     path: '/my-record/testresultdetail/:testResultId',
   },
+  MY_RECORD_VISION_DIAGNOSIS_DETAIL: {
+    name: 'my-record-diagnosis-detail',
+    path: 'my-record/diagnosis-detail',
+  },
   MY_RECORD_VISION_TEST_RESULTS_DETAIL: {
     name: 'my-record-test-results-detail',
     path: '/my-record/test-results-detail',
@@ -208,6 +212,7 @@ export const {
   MYRECORD,
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
+  MY_RECORD_VISION_DIAGNOSIS_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,

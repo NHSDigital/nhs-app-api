@@ -544,6 +544,17 @@ export default {
       testResultTitle: 'Test results',
       noTestResultData: 'There is no detail to display here.',
     },
+    diagnosis: {
+      sectionHeader: {
+        default: 'Diagnosis',
+      },
+      visionDetailsLink: 'View your Diagnosis records',
+    },
+    diagnosisDetails: {
+      backButton: 'Back',
+      diagnosisTitle: 'Diagnosis',
+      noDiagnosisData: 'No information recorded for this section',
+    },
     clinicalTerms: {
       text: 'You may see medical abbreviations that you aren’t familiar with.',
       link: 'Help with abbreviations',

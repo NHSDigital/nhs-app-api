@@ -5,7 +5,7 @@ import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
 
-class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
+class MyRecordWrapper(header: String, pageObject: HybridPageObject) {
 
     private val headerPath = "//a[contains(text(),'$header')]"
     private val bodyPath = "$headerPath/following-sibling::div[1]"
@@ -34,7 +34,9 @@ class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
     val firstElement by lazy { recordItemElements }
 
     fun toggleShrub() {
-        header.assertSingleElementPresent().click()
+        header.scrollToElement()
+        header.elements.elementAt(0).click()
+
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 
@@ -55,13 +57,13 @@ class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
     }
 }
 
-class RecordItem(recordItem: WebElementFacade){
+class RecordItem(recordItem: WebElementFacade) {
 
     val element = recordItem
 
     val label = recordItem.find<WebElementFacade>(By.tagName("span")).text
 
-    val bodyElements = recordItem.thenFindAll(By.tagName("p")).map {
-        element->element.textValue
+    val bodyElements = recordItem.thenFindAll(By.tagName("p")).map { element ->
+        element.textValue
     }
 }
