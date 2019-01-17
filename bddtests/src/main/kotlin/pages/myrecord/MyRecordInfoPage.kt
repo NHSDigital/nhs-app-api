@@ -65,7 +65,7 @@ class MyRecordInfoPage : HybridPageObject() {
 
     val consultations by lazy { getSection("Consultations") }
 
-    val diagnosis by lazy { getSection( "Diagnosis") }
+    val diagnosis by lazy { getSection("Diagnosis") }
 
     fun assertSectionHeaderIsVisible(header: String) {
         MyRecordWrapper(header, this).header.assertSingleElementPresent().assertIsVisible()
@@ -93,34 +93,32 @@ class MyRecordInfoPage : HybridPageObject() {
         return testResults.firstParagraph.isCurrentlyVisible
     }
 
+    fun isVisionTestResultsLinkVisible(): Boolean {
+        return testResults.visionLink.element.isCurrentlyVisible
+    }
+
     fun isDiagnosisTextMsgVisible(): Boolean {
         return diagnosis.firstParagraph.isCurrentlyVisible
     }
 
     fun isDiagnosisPageVisible(): Boolean {
+        val viewDiagnosisRecordsLink =
+                HybridPageElement(
+                        browserLocator = "//a[contains(text(),'View your Diagnosis records')]",
+                        androidLocator = null,
+                        page = this)
 
-        try {
-            val viewDiagnosisRecordsLink =
-                    HybridPageElement(
-                            browserLocator = "//a[contains(text(),'View your Diagnosis records')]",
-                            androidLocator = null,
-                            page = this)
+        viewDiagnosisRecordsLink.click()
 
-            viewDiagnosisRecordsLink.click()
+        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS * 2)
 
-            Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS * 2)
+        val diagnosisPageHeader =
+                HybridPageElement(
+                        browserLocator = "//h2[contains(text(),'Diagnosis')]",
+                        androidLocator = null,
+                        page = this)
 
-            val diagnosisPageHeader =
-                    HybridPageElement(
-                            browserLocator = "//h2[contains(text(),'Diagnosis')]",
-                            androidLocator = null,
-                            page = this)
-
-            return diagnosisPageHeader.element.isVisible
-        } catch(ex:Exception){
-            println(ex)
-            throw ex
-        }
+        return diagnosisPageHeader.element.isVisible
     }
 
     fun getSummaryCareNoAccessMessage(): String {

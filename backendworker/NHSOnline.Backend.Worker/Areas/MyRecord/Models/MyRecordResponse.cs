@@ -11,6 +11,7 @@
             TestResults = new TestResults();
             TppDcrEvents = new TppDcrEvents();
             Consultations = new Consultations();
+            Diagnosis = new Diagnosis();
         }
         
         public bool HasSummaryRecordAccess { get; set; }
@@ -23,5 +24,6 @@
         public Problems Problems { get; set; }
         public TppDcrEvents TppDcrEvents { get; set; }
         public Consultations Consultations { get; set; }
+        public Diagnosis Diagnosis { get; set; }
     }
 }

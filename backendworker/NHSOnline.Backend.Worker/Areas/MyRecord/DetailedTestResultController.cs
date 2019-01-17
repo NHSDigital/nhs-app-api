@@ -7,16 +7,15 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
-    [Route("patient/test-result"),PfsSecurityMode]
-    public class TestResultController : Controller
+    [Route("patient/test-result"), PfsSecurityMode]
+    public class DetailedTestResultController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;
-        private readonly ILogger<TestResultController> _logger;
+        private readonly ILogger<DetailedTestResultController> _logger;
         private readonly IAuditor _auditor;
         
-        public TestResultController(
-
-            ILogger<TestResultController> logger,
+        public DetailedTestResultController(
+            ILogger<DetailedTestResultController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor)
         {
@@ -45,8 +44,8 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
                 _logger.LogInformation("Fetching detailed test result");
                 var result = await patientRecordService.GetDetailedTestResult(userSession, testResultId);
 
-                result.Accept(new TestResultAuditingVisitor(_auditor));
-                return result.Accept(new TestResultVisitor());
+                result.Accept(new DetailedTestResultAuditingVisitor(_auditor));
+                return result.Accept(new DetailedTestResultVisitor());
             }
             finally
             {

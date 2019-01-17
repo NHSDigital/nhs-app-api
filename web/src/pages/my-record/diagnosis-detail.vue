@@ -6,12 +6,12 @@
           <h2>{{ $t('my_record.diagnosisDetails.diagnosisTitle') }}</h2>
         </div>
         <div :class="$style['diagnosis-content']">
-          <div v-if="!diagnosis">
+          <div v-if="!$store.state.myRecord.diagnosis.markup">
             <p> {{ $t('my_record.diagnosisDetails.noDiagnosisData') }}</p>
           </div>
           <div v-else :class="$style['vision-diagnosis']">
             <p>
-              <span v-html="diagnosis"/>
+              <span v-html="$store.state.myRecord.diagnosis.markup"/>
             </p>
           </div>
         </div>
@@ -34,19 +34,14 @@ export default {
   components: {
     FloatingButtonBottom,
   },
+  async asyncData({ store }) {
+    await store.dispatch('myRecord/loadDiagnosis');
+  },
   data() {
     return {
       myRecordReturnPath: `${MYRECORD.path}#diagnosisHeader`,
       noJsWarningAcceptance: JSON.stringify({ myRecord: { hasAcceptedTerms: true } }),
     };
-  },
-  computed: {
-    diagnosis() {
-      return this.$store.state.myRecord.record.diagnosis &&
-        this.$store.state.myRecord.record.diagnosis.rawHtml ?
-        this.$store.state.myRecord.record.diagnosis.rawHtml :
-        undefined;
-    },
   },
   methods: {
     onBackButtonClicked(event) {
@@ -59,6 +54,11 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/spacings';
+@import '../../style/_textstyles';
+
+h3 {
+  @include h4;
+}
 
 .vision-diagnosis {
   min-width: 50em;
@@ -85,6 +85,9 @@ export default {
     background-color: #ffffff;
     @include space(margin, bottom, $three);
     overflow-x: scroll;
+    display: inline-block;
+    margin-right: 2em;
+    min-width: 100%;
 }
 
 .info h2 {

@@ -91,6 +91,12 @@
         "VISION_SENDER_USERIDENTITY": "65489761321654",
         "VISION_SENDER_USERNAME": "Username123123asdas",
         "VISION_SENDER_USERROLE": "ROSU",
+        "VISION_APPLICATION_PROVIDER_ID": "nhson001",
+        "VISION_CERT_PATH": "./certs/vps_nhson001.pfx",
+        "VISION_BASE_URI": "https://vs002-test.inps.co.uk/",
+        "VISION_USERNAME": "vps-nhson001",
+        "VISION_PFS_PATH": "PatientFacingServices",
+        "VISION_LINKAGE_PATH": "serverApi/v1/",
         "SESSION_MONGO_DATABASE_HOST": "localhost",
         "SESSION_MONGO_DATABASE_PORT": "27017",
         "SESSION_MONGO_DATABASE_USERNAME": "",
@@ -101,7 +107,8 @@
         "CORS_AUTHORITY": "http://web.local.bitraft.io:3000",
         "CookieDomain": ".bitraft.io",
         "runMode": "dev",
-        "ConfigurationSettings__CookieDomain": ".bitraft.io"
+        "ConfigurationSettings__CookieDomain": ".bitraft.io",
+        "ORGAN_DONATION_INTEGRATION_ENABLED": "false"
       }
     },
     "NHSOnline.Backend.Worker.Bdd": {

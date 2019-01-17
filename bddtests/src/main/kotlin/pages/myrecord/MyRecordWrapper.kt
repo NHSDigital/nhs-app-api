@@ -25,6 +25,11 @@ class MyRecordWrapper(header: String, pageObject: HybridPageObject) {
 
     val firstParagraph by lazy { paragraphElements.element }
 
+    val visionLink = HybridPageElement(
+            browserLocator = "//a[contains(text(),'View your Test Results')]",
+            androidLocator = null,
+            page = pageObject)
+
     private val recordItemElements =
             HybridPageElement(
                     browserLocator = "$bodyPath//div[@data-purpose='record-item']",

@@ -6,6 +6,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.TestResultsFactory
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.data.myrecord.TestResultsData
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
@@ -308,7 +309,13 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Then("^I see test result information$")
     fun thenISeeTestResultInformation() {
-        Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
+        val provider = Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE);
+
+        if (provider == "VISION") {
+            Assert.assertTrue(myRecordInfoPage.isVisionTestResultsLinkVisible())
+        } else {
+            Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
+        }
     }
 
     @Then("^I see (.*) test results$")

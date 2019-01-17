@@ -2,6 +2,8 @@ import {
   ACCEPT_TERMS,
   LOADED,
   LOADED_TEST_RESULTS,
+  LOADED_DIAGNOSIS,
+  LOADED_DETAILED_TEST_RESULT,
   RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
 } from './mutation-types';
@@ -16,8 +18,14 @@ export default {
     state.hasLoaded = true;
     state.isPatientDetailsCollapsed = false;
   },
-  [LOADED_TEST_RESULTS](state, { hasErrored, data }) {
-    state.testResults = { data, hasErrored, hasLoaded: true };
+  [LOADED_TEST_RESULTS](state, { record }) {
+    state.testResults = record;
+  },
+  [LOADED_DIAGNOSIS](state, { record }) {
+    state.diagnosis = record;
+  },
+  [LOADED_DETAILED_TEST_RESULT](state, { hasErrored, data }) {
+    state.detailedTestResult = { data, hasErrored, hasLoaded: true };
   },
   [RESET_TERMS](state) {
     state.hasAcceptedTerms = false;

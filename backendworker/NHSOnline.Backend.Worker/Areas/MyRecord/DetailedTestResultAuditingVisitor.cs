@@ -3,12 +3,12 @@ using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
-    public class TestResultAuditingVisitor : IDetailedTestResultVisitor<object>
+    public class DetailedTestResultAuditingVisitor : IDetailedTestResultVisitor<object>
     {
         private readonly IAuditor _auditor;
         private const string AuditType = Constants.AuditingTitles.GetTestResultAuditTypeResponse;
         
-        public TestResultAuditingVisitor(IAuditor auditor)
+        public DetailedTestResultAuditingVisitor(IAuditor auditor)
         {
             _auditor = auditor;
         }

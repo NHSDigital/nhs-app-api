@@ -21,15 +21,6 @@ class DiagnosisFactoryVision {
         }
     }
 
-    fun enabledWithBlankRecord(patient: Patient) {
-        mocker.generatePatientDataResponse(
-                patient,
-                diagnosisView,
-                htmlResponseFormat) {
-            request -> request.respondWithSuccess(DiagnosisData.getVisionDiagnosisDataWithNoTestResults())
-        }
-    }
-
     fun enabledWithRecords(patient: Patient) {
         mocker.generatePatientDataResponse(
                 patient,

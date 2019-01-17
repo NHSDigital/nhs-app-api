@@ -65,7 +65,9 @@ namespace NHSOnline.Backend.Worker
             public const string GetSlotsAuditTypeRequest = "Appointments_GetSlots_Request";
             public const string GetSlotsAuditTypeResponse = "Appointments_GetSlots_Response";
             public const string ViewPatientRecordAuditTypeRequest = "PatientRecord_View_Request";
+            public const string ViewPatientRecordSectionAuditTypeRequest = "PatientRecord_Section_View_Request";
             public const string ViewPatientRecordAuditTypeResponse = "PatientRecord_View_Response";
+            public const string ViewPatientRecordSectionAuditTypeResponse = "PatientRecord_Section_View_Response";
             public const string RepeatPrescriptionsViewHistoryRequest = "RepeatPrescriptions_ViewHistory_Request";
             public const string RepeatPrescriptionsViewHistoryResponse = "RepeatPrescriptions_ViewHistory_Response";
             public const string RepeatPrescriptionsViewRepeatMedicationsRequest = "RepeatPrescriptions_ViewRepeatMedications_Request";

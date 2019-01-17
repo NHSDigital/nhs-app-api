@@ -49,11 +49,6 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
         Assert.assertTrue(myRecordInfoPage.isDiagnosisPageVisible())
     }
 
-    @And("^I have no diagnosis$" )
-    fun andIHaveNoDiagnosisFor(heading: String) {
-        assertTextInSection(heading, "No information recorded")
-    }
-
     @And("^an error occurred retrieving the diagnosis")
     fun andAnErrorOccurredRetrievingTheDiagnosisFor() {
         setPatientToDefaultFor("VISION")
@@ -66,11 +61,4 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
         section.header.assertSingleElementPresent()
         assertEquals(message, section.firstParagraph.text)
     }
-
-
-
-
-
-
-
 }

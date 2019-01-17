@@ -27,35 +27,63 @@ paths:
           description: The GP system is currently unavailable.
         504:
           description: The GP system did not respond in a timely fashion.
+  /my-record/section:
+    get:
+      tags:
+        - myrecord section
+      summary: Gets a specific section from the record for the logged on user.
+      description: Returns only the specified section from the users medical record for the logged in user (Vision only). Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: section
+          type: string
+          enum: [TestResults, Diagnosis]
+          required: true
+          description: specific section to return
+      responses:
+        200:
+          description: Returns specified myrecord section for the logged in user.
+          schema:
+            $ref: '#/definitions/MyRecordSectionResponse'
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
   /test-result:
-      get:
-        tags:
-          - test result
-        summary: Returns a string which contains html from TPP for the selected test result.
-        produces:
-          - application/json
-        parameters:
-          - in: query
-            name: testResultId
-            type: string
-            required: true
-            description: id of selected test result
-        responses:
-          200:
-            description: Returns html for selected test result from TPP
-            schema:
-              $ref: "#/definitions/TestResultResponse"
-          400:
-            description: Bad request. A querystring parameter is not in the expected format.
-          401:
-            description: User session has expired.
-          500:
-            description: An unexpected error occurred processing the request.
-          502:
-            description: Bad response received from upstream system.
-          504:
-            description: Timeout when calling upstream system.
- 
+    get:
+      tags:
+        - test result
+      summary: Returns a string which contains html from TPP for the selected test result.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: testResultId
+          type: string
+          required: true
+          description: id of selected test result
+      responses:
+        200:
+          description: Returns html for selected test result from TPP
+          schema:
+            $ref: "#/definitions/TestResultResponse"
+        400:
+          description: Bad request. A querystring parameter is not in the expected format.
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: Bad response received from upstream system.
+        504:
+          description: Timeout when calling upstream system.
+
 definitions:
   TestResultResponse:
     type: object
@@ -66,7 +94,7 @@ definitions:
       testResult:
         type: string
         description: html represenation of test result data
-        
+
   MyRecordResponse:
     type: object
     properties:
@@ -100,6 +128,10 @@ definitions:
         type: object
         description: An object containing all test result details.
         $ref: '#/definitions/TestResults'
+      diagnosis:
+        type: object
+        description: Vision Only - An object containing Diagnosis markup to be rendered
+        $ref: '#/definitions/Diagnosis'
       problems:
         type: object
         description: An object containing all problems details.
@@ -112,6 +144,16 @@ definitions:
         type: object
         description: An object containing all consultation details.
         $ref: '#/definitions/Consultations'
+
+  MyRecordSectionResponse:
+    type: object
+    properties:
+      markup:
+        type: string
+        description: Markup for specified section (will be either HTML or XML)
+      sectionName:
+        type: string
+        description: Name of section requested
 
   Allergies:
     type: object
@@ -195,7 +237,7 @@ definitions:
         description: An array of line items
         items:
           type: string
-          
+
   Immunisations:
     type: object
     properties:
@@ -207,13 +249,13 @@ definitions:
         description: Some error occurred when attempting to retrieve this error.
       data:
         type: object
-        properties: 
+        properties:
           immunisations:
             type: array
             description: Array of immunisations.
             items:
               $ref: '#/definitions/ImmunisationItem'
-        
+
   ImmunisationItem:
     type: object
     properties:
@@ -222,7 +264,7 @@ definitions:
       term:
         type: string
         description: The name of the immunisation.
-            
+
   TestResults:
     type: object
     properties:
@@ -237,13 +279,26 @@ definitions:
         description: When working with Vision, raw HTML is returned instead of XML data
       data:
         type: object
-        properties: 
+        properties:
           testResults:
             type: array
             description: Array of test results
             items:
               $ref: '#/definitions/TestResultItem'
-        
+
+  Diagnosis:
+    type: object
+    properties:
+      hasAccess:
+        type: boolean
+        description: Does the patient have access to this data.
+      hasErrored:
+        type: boolean
+        description: Some error occurred when attempting to retrieve this error.
+      rawHtml:
+        type: string
+        description: This is for Vision Only, contains Raw HTML to be rendered on the web
+
   TestResultItem:
     type: object
     properties:
@@ -265,37 +320,37 @@ definitions:
         description: Array of test result child line items.
         items:
           $ref: '#/definitions/TestResultChildLineItem'
-  
+
   TestResultChildLineItem:
-      type: object
-      properties:
-        description:
+    type: object
+    properties:
+      description:
+        type: string
+        description: The name of the test result.
+      associatedTexts:
+        type: array
+        description: Array of associated texts.
+        items:
           type: string
-          description: The name of the test result.
-        associatedTexts:
-          type: array
-          description: Array of associated texts.
-          items:
-            type: string 
-                   
+
   Problems:
-      type: object
-      properties:
-        hasAccess:
-          type: boolean
-          description: Does the patient have access to this data.
-        hasErrored:
-          type: boolean
-          description: Some error occurred when attempting to retrieve this error.
-        data:
-          type: object
-          properties: 
-             problems:
-              type: array
-              description: Array of problems
-              items:
-                $ref: '#/definitions/ProblemItem'
-          
+    type: object
+    properties:
+      hasAccess:
+        type: boolean
+        description: Does the patient have access to this data.
+      hasErrored:
+        type: boolean
+        description: Some error occurred when attempting to retrieve this error.
+      data:
+        type: object
+        properties:
+          problems:
+            type: array
+            description: Array of problems
+            items:
+              $ref: '#/definitions/ProblemItem'
+
   ProblemItem:
     type: object
     properties:
@@ -306,7 +361,7 @@ definitions:
         description: An array of line items.
         items:
           $ref: '#/definitions/LineItem'
-  
+
   TppDcrEvents:
     type: object
     properties:
@@ -318,13 +373,13 @@ definitions:
         description: Some error occurred when attempting to retrieve this error.
       data:
         type: object
-        properties: 
-           problems:
+        properties:
+          problems:
             type: array
             description: Array of problems
             items:
               $ref: '#/definitions/TppDcrEvent'
-    
+
   TppDcrEvent:
     type: object
     properties:
@@ -339,26 +394,26 @@ definitions:
         type: array
         description: Array of event items
         items:
-          type: string 
+          type: string
 
   Consultations:
-      type: object
-      properties:
-        hasAccess:
-          type: boolean
-          description: Does the patient have access to this data.
-        hasErrored:
-          type: boolean
-          description: Some error occurred when attempting to retrieve this error.
-        data:
-          type: object
-          properties: 
-             problems:
-              type: array
-              description: Array of problems
-              items:
-                $ref: '#/definitions/ConsultationItem'
-  
+    type: object
+    properties:
+      hasAccess:
+        type: boolean
+        description: Does the patient have access to this data.
+      hasErrored:
+        type: boolean
+        description: Some error occurred when attempting to retrieve this error.
+      data:
+        type: object
+        properties:
+          problems:
+            type: array
+            description: Array of problems
+            items:
+              $ref: '#/definitions/ConsultationItem'
+
   ConsultationItem:
     type: object
     properties:
@@ -372,7 +427,7 @@ definitions:
         description: An array of consultationHeader.
         items:
           $ref: '#/definitions/ConsultationHeaderItem'
-          
+
   ConsultationHeaderItem:
     type: object
     properties:
@@ -385,11 +440,11 @@ definitions:
         items:
           $ref: '#/definitions/ObservationItem'
       associatedTexts:
-              type: array
-              description: An array of associated texts.
-              items:
-                type: string
-  
+        type: array
+        description: An array of associated texts.
+        items:
+          type: string
+
   ObservationItem:
     type: object
     properties:

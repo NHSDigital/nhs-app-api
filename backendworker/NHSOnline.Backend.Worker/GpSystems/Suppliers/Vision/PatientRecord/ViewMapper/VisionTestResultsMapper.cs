@@ -32,10 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
                 var sanitizedHtml = _htmlSanitizer.SanitizeHtml(response.Record);
                     
                 var formattedHtml = Regex.Replace(sanitizedHtml, @"((background:).*(;))", string.Empty);
-                 
-                formattedHtml = formattedHtml.Replace("<h3", "<h4", StringComparison.InvariantCultureIgnoreCase)
-                    .Replace("</h3>", "</h4>", StringComparison.InvariantCultureIgnoreCase);
-                    
+                formattedHtml = Regex.Replace(formattedHtml, @"((font-size:).*(!important;))", string.Empty);
                 formattedHtml = formattedHtml.Replace("tbody tr {", "tbody tr { line-height: 1.5em !important; ",
                     StringComparison.InvariantCultureIgnoreCase);
 

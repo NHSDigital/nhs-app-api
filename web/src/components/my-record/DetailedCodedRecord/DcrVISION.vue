@@ -27,7 +27,7 @@
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
 
-    <analytics-tracked-tag id="testResultsHeader"
+    <analytics-tracked-tag :id="`${TESTRESULTS}Header`"
                            :class="[$style['record-title'],
                                     getCollapsedState(isTestResultsCollapsed)]"
                            :click-func="myRecordSectionClick"
@@ -42,7 +42,7 @@
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
                   :supplier="record.supplier" />
 
-    <analytics-tracked-tag id="diagnosisHeader"
+    <analytics-tracked-tag :id="`${DIAGNOSIS}Header`"
                            :class ="[$style['record-title'],
                                      getCollapsedState(isDiagnosisCollapsed)]"
                            :click-func="myRecordSectionClick"
@@ -55,8 +55,8 @@
       {{ $t('my_record.diagnosis.sectionHeader.default') }}
     </analytics-tracked-tag>
     <diagnosis :is-collapsed="isDiagnosisCollapsed"
-                       :results="record.diagnosis"
-                       :supplier="record.supplier"/>
+               :results="record.diagnosis"
+               :supplier="record.supplier"/>
   </div>
 </template>
 
@@ -70,7 +70,7 @@ import VueScrollTo from 'vue-scrollto';
 
 const IMMUNISATIONS = 'immunisations';
 const PROBLEMS = 'problems';
-const TESTRESULTS = 'testresults';
+const TESTRESULTS = 'testResults';
 const DIAGNOSIS = 'diagnosis';
 
 export default {
@@ -103,9 +103,13 @@ export default {
   mounted() {
     if (this.$route.hash) {
       setTimeout((route) => {
-        VueScrollTo.scrollTo(route.hash, 500, { easing: VueScrollTo['ease-in'] });
+        const { hash } = route;
+        if (hash) {
+          const sectionName = hash.replace('Header', '').replace('#', '');
+          VueScrollTo.scrollTo(hash, 500, { easing: VueScrollTo['ease-in'] });
+          this.myRecordSectionClick(sectionName);
+        }
       }, 500, this.$route);
-      this.isTestResultsCollapsed = false;
     }
   },
   methods: {

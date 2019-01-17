@@ -1,4 +1,5 @@
 @my-record
+@test-results
 Feature: View My Medical Record Information - Test Results
 
   Scenario Outline: A <Service> user can view test result section

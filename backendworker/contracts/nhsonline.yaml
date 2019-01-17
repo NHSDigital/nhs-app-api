@@ -24,6 +24,8 @@ paths:
     $ref: './nhsonline.demographics.yaml#/paths/~1demographics'
   /v1/patient/my-record:
     $ref: './nhsonline.myrecord.yaml#/paths/~1my-record'
+  /v1/patient/my-record/section:
+    $ref: './nhsonline.myrecord.yaml#/paths/~1my-record~1section'
   /v1/patient/ndop:
     $ref: './nhsonline.ndop.yaml#/paths/~1ndop'
   /v1/patient/organdonation:

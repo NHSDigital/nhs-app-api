@@ -62,5 +62,8 @@
     <None Update="DevelopmentSessionEncryptionKey.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="certs\vps_nhson001.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

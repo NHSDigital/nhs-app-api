@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
     [TestClass]
     public class TestResultControllerTests
     {
-        private TestResultController _systemUnderTest;
+        private DetailedTestResultController _systemUnderTest;
         private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private UserSession _userSession;
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
 
             _fixture.Freeze<IDetailedTestResultVisitor<IActionResult>>();
 
-            _systemUnderTest = _fixture.Create<TestResultController>();
+            _systemUnderTest = _fixture.Create<DetailedTestResultController>();
 
             _systemUnderTest.ControllerContext = new ControllerContext
             {

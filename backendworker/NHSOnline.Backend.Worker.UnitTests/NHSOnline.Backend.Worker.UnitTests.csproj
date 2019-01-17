@@ -49,6 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Bridges\**" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis\CleanedDiagnosis.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis\CleanedDiagnosis.html" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis\VariousDiagnosis.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis\VariousDiagnosis.html" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\CleanedTestResults.html" />
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html" />
     <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html" />
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html" />
@@ -99,5 +104,8 @@
     <Content Update="GpSystems\Suppliers\Vision\TestData\requestWasInvalidResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis" />
   </ItemGroup>
 </Project>

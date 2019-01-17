@@ -4,6 +4,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 {
     public interface IVisionMyRecordMapper
     {
-        MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, Problems problems, TestResults testResults);
+        MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, Problems problems, TestResults testResults, Diagnosis diagnosis);
+        MyRecordSectionResponse MapSection(IVisionPatientDataModel detailedSection, string sectionName);
     }
 }

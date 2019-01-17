@@ -600,6 +600,19 @@
                                       description: "Array of associated texts."
                                       items: 
                                         type: "string"
+                diagnosis: 
+                  type: "object"
+                  description: "Vision Only - An object containing Diagnosis markup to be rendered"
+                  properties: 
+                    hasAccess: 
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored: 
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve this error."
+                    rawHtml: 
+                      type: "string"
+                      description: "This is for Vision Only, contains Raw HTML to be rendered on the web"
                 problems: 
                   type: "object"
                   description: "An object containing all problems details."
@@ -718,6 +731,44 @@
                                       description: "An array of associated texts."
                                       items: 
                                         type: "string"
+          401: 
+            description: "User session has expired."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "The GP system is currently unavailable."
+          504: 
+            description: "The GP system did not respond in a timely fashion."
+    /v1/patient/my-record/section: 
+      get: 
+        tags: 
+          - "myrecord section"
+        summary: "Gets a specific section from the record for the logged on user."
+        description: "Returns only the specified section from the users medical record for the logged in user (Vision only). Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        produces: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "query"
+            name: "section"
+            type: "string"
+            enum: 
+              - "TestResults"
+              - "Diagnosis"
+            required: true
+            description: "specific section to return"
+        responses: 
+          200: 
+            description: "Returns specified myrecord section for the logged in user."
+            schema: 
+              type: "object"
+              properties: 
+                markup: 
+                  type: "string"
+                  description: "Markup for specified section (will be either HTML or XML)"
+                sectionName: 
+                  type: "string"
+                  description: "Name of section requested"
           401: 
             description: "User session has expired."
           500: 

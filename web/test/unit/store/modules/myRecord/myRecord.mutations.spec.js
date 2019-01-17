@@ -3,7 +3,7 @@ import {
   initialState,
   ACCEPT_TERMS,
   LOADED,
-  LOADED_TEST_RESULTS,
+  LOADED_DETAILED_TEST_RESULT,
   RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
 } from '@/store/modules/myRecord/mutation-types';
@@ -53,19 +53,19 @@ describe('my record mutations', () => {
     });
   });
 
-  describe('LOADED_TEST_RESULTS', () => {
+  describe('LOADED_DETAILED_TEST_RESULT', () => {
     const testResults = { data: 'foobar' };
 
     beforeEach(() => {
-      mutations[LOADED_TEST_RESULTS](state, testResults);
+      mutations[LOADED_DETAILED_TEST_RESULT](state, testResults);
     });
 
     it('will set the test results data to the received test results', () => {
-      expect(state.testResults.data).toEqual(testResults.data);
+      expect(state.detailedTestResult.data).toEqual(testResults.data);
     });
 
     it('will set the has loaded property of the test results to true', () => {
-      expect(state.testResults.hasLoaded).toEqual(true);
+      expect(state.detailedTestResult.hasLoaded).toEqual(true);
     });
   });
 

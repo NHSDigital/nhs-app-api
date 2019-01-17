@@ -6,12 +6,12 @@
           <h2>{{ $t('my_record.testresultdetails.testResultTitle') }}</h2>
         </div>
         <div :class="$style['test-result-content']">
-          <div v-if="!testResults">
+          <div v-if="!$store.state.myRecord.testResults.markup">
             <p> {{ $t('my_record.testresultdetails.noTestResultData') }} </p>
           </div>
           <div v-else :class="$style['vision-test-results']">
             <p>
-              <span v-html="testResults"/>
+              <span v-html="$store.state.myRecord.testResults.markup"/>
             </p>
           </div>
         </div>
@@ -34,19 +34,14 @@ export default {
   components: {
     FloatingButtonBottom,
   },
+  async asyncData({ store }) {
+    await store.dispatch('myRecord/loadTestResults');
+  },
   data() {
     return {
       myRecordReturnPath: `${MYRECORD.path}#testResultsHeader`,
       noJsWarningAcceptance: JSON.stringify({ myRecord: { hasAcceptedTerms: true } }),
     };
-  },
-  computed: {
-    testResults() {
-      return this.$store.state.myRecord.record.testResults &&
-        this.$store.state.myRecord.record.testResults.rawHtml ?
-        this.$store.state.myRecord.record.testResults.rawHtml :
-        undefined;
-    },
   },
   methods: {
     onBackButtonClicked(event) {
@@ -60,6 +55,11 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../style/spacings';
+  @import '../../style/_textstyles';
+
+  h3 {
+    @include h4;
+  }
 
   .vision-test-results {
     min-width: 50em;
@@ -86,6 +86,9 @@ export default {
     background-color: #ffffff;
     @include space(margin, bottom, $three);
     overflow-x: scroll;
+    display: inline-block;
+    margin-right: 2em;
+    min-width: 100%;
   }
 
   .info h2 {

@@ -8,6 +8,8 @@ import mocking.emis.testResults.TestResultResponseModel
 import mocking.emis.testResults.TestResultValue
 import mocking.tpp.models.TestResultsViewReply
 import mocking.tpp.models.TestResultsViewReplyItem
+import java.io.File
+import java.nio.file.Paths
 
 object TestResultsData {
 
@@ -215,10 +217,14 @@ object TestResultsData {
     }
 
     fun getVisionTestResultsDataWithMultipleResults(): String {
+
         val response = "<![CDATA[<root><patient>"
         val responseStringEnd = "</patient></root>]]>"
 
-        return response + responseStringEnd
+        val path = Paths.get("").toAbsolutePath().toString()
+        val fileLocation = "$path/src/main/kotlin/mocking/data/myrecord/VariousTestResults.html"
+        val html = File(fileLocation).readText()
 
+        return response + html + responseStringEnd
     }
 }

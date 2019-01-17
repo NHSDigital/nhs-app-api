@@ -69,10 +69,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             // Assert
             Assert.IsTrue(mappedResponse != null);
             Assert.IsTrue(!string.IsNullOrEmpty(mappedResponse.RawHtml));
-            Assert.IsTrue(!mappedResponse.RawHtml.Contains("<h3", StringComparison.OrdinalIgnoreCase),
-                "h3 tag should be replaced by h4");
-            Assert.IsTrue(mappedResponse.RawHtml.Contains("<h4", StringComparison.OrdinalIgnoreCase),
-                "h4 tag not found");
             Assert.IsTrue(mappedResponse.RawHtml.Contains("tbody tr { line-height: 1.5em !important;",
                     StringComparison.OrdinalIgnoreCase),
                 "tbody tr line height not adjusted");

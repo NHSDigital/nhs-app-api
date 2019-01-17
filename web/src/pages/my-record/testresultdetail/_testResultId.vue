@@ -6,12 +6,12 @@
           <h2>{{ $t('my_record.testresultdetail.testResultTitle') }}</h2>
         </div>
         <div :class="$style['test-result-content']">
-          <div v-if="!$store.state.myRecord.testResults.data">
+          <div v-if="!$store.state.myRecord.detailedTestResult.data">
             <p> {{ $t('my_record.testresultdetail.noTestResultData') }} </p>
           </div>
           <div v-else>
             <p>
-              <span v-html="$store.state.myRecord.testResults.data"/>
+              <span v-html="$store.state.myRecord.detailedTestResult.data"/>
             </p>
           </div>
         </div>
@@ -35,7 +35,7 @@ export default {
     FloatingButtonBottom,
   },
   async asyncData({ route, store }) {
-    await store.dispatch('myRecord/loadTestResults', route.params.testResultId);
+    await store.dispatch('myRecord/loadDetailedTestResult', route.params.testResultId);
   },
   data() {
     return {

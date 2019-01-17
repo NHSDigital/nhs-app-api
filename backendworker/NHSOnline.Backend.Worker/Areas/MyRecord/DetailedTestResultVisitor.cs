@@ -4,7 +4,7 @@ using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
-    internal class TestResultVisitor : IDetailedTestResultVisitor<IActionResult>
+    internal class DetailedTestResultVisitor : IDetailedTestResultVisitor<IActionResult>
     {
         public IActionResult Visit(GetDetailedTestResult.SuccessfullyRetrieved result)
         {

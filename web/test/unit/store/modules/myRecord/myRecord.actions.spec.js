@@ -2,7 +2,7 @@ import actions from '@/store/modules/myRecord/actions';
 import {
   ACCEPT_TERMS,
   LOADED,
-  LOADED_TEST_RESULTS,
+  LOADED_DETAILED_TEST_RESULT,
   RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
 } from '@/store/modules/myRecord/mutation-types';
@@ -62,21 +62,21 @@ describe('my record actions', () => {
       });
     });
 
-    describe('loadTestResults', () => {
+    describe('loadDetailedTestResult', () => {
       const testResultId = 3456;
       const testResults = {};
 
       beforeEach(async () => {
         app.$http.getV1PatientTestResult.mockResolvedValue({ response: testResults });
-        await actions.loadTestResults(context, testResultId);
+        await actions.loadDetailedTestResult(context, testResultId);
       });
 
       it('will request patient test results with the supplied ID', () => {
         expect(app.$http.getV1PatientTestResult).toHaveBeenCalledWith({ testResultId });
       });
 
-      it('will commit LOADED_TEST_RESULTS with the received results', () => {
-        expect(context.commit).toHaveBeenCalledWith(LOADED_TEST_RESULTS, testResults);
+      it('will commit LOADED_DETAILED_TEST_RESULT with the received results', () => {
+        expect(context.commit).toHaveBeenCalledWith(LOADED_DETAILED_TEST_RESULT, testResults);
       });
     });
 
