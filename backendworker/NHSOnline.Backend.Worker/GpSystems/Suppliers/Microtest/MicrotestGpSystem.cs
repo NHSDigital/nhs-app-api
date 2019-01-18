@@ -10,6 +10,8 @@ using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using System.Diagnostics.CodeAnalysis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest
 {
@@ -50,17 +52,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest
 
         public IIm1ConnectionService GetIm1ConnectionService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestIm1ConnectionService>();
         }
 
         public ILinkageRequestValidationService GetLinkageRequestValidationService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestLinkageRequestValidationService>();
         }
 
         public ILinkageService GetLinkageService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestLinkageService>();
         }
 
         public IPatientRecordService GetPatientRecordService()

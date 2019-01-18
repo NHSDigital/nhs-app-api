@@ -28,6 +28,17 @@ Feature: Registration
     And the response has the expected NHS numbers
 
   @backend
+  Scenario Outline: Patient registers for a Microtest account with NHS Number of "one"
+    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
+    When I register the user's IM1 credentials
+    Then I receive a response
+    And the response has the expected connection token
+    And the response has the expected NHS numbers
+    Examples:
+      | GP System | NHS Numbers |
+      | MICROTEST |             |
+
+  @backend
   Scenario Outline: <GP System> Account ID doesn't match a user
     Given I have data for a <GP System> patient that does not exist
     And no IM1 Connection Token is currently cached
@@ -114,7 +125,7 @@ Feature: Registration
       | GP System | Response    |
       | EMIS      | Bad Request |
       | TPP       | Not Found   |
-      | VISION    | Not Found |
+      | VISION    | Not Found   |
 
   @backend
   Scenario Outline: <GP System> - Account ID not in the expected format
@@ -181,6 +192,7 @@ Feature: Registration
       | EMIS      | Bad Request |
       | TPP       | Bad Request |
       | VISION    | Bad Request |
+      | MICROTEST | Bad Request |
 
   @backend
   Scenario Outline: <GP System> - Missing Linkage Key
@@ -193,6 +205,7 @@ Feature: Registration
       | EMIS      | Bad Request |
       | TPP       | Bad Request |
       | VISION    | Bad Request |
+      | MICROTEST | Bad Request |
 
   @backend
   Scenario: Targeting the IM1 endpoint does not expose the Patient Facing Services endpoint

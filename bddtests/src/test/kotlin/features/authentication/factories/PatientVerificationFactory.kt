@@ -22,7 +22,7 @@ abstract class PatientVerificationFactory(protected val gpSystem: String)  {
             hashMapOf(
                     "EMIS" to { PatientVerificationFactoryEmis() },
                     "TPP" to { PatientVerificationFactoryTpp() },
-                    "VISION" to { PatientVerificationFactoryVision() })}
-
+                    "VISION" to { PatientVerificationFactoryVision() },
+                    "MICROTEST" to { PatientVerificationFactoryMicrotest() } )}
     }
 }

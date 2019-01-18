@@ -66,6 +66,7 @@ Feature: Patient Verification
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Non-existent ODS Code for <GP System>
     Given I have an <GP System> ODS Code that does not exists
@@ -77,6 +78,7 @@ Feature: Patient Verification
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: ODS Code not in the expected format <GP System>
     Given I have an <GP System> ODS Code not in expected format
@@ -88,6 +90,7 @@ Feature: Patient Verification
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: No ODS Code for <GP System>
     Given I have no <GP System> ODS Code
@@ -99,6 +102,7 @@ Feature: Patient Verification
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: <GP System> is not available
     Given <GP System> is not available

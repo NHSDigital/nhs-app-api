@@ -65,7 +65,7 @@ services:
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true
-      - GP_PROVIDER_ENABLED_MICROTEST=false
+      - GP_PROVIDER_ENABLED_MICROTEST=true
       - NDOP_CERTIFICATE_PASSWORD
       - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk

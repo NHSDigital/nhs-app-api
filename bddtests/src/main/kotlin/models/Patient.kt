@@ -9,6 +9,7 @@ import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
+import mocking.microtest.MicrotestMockDefaults
 import mocking.vision.VisionMockDefaults
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
@@ -98,6 +99,7 @@ data class Patient(
                 "EMIS" -> montelFrye
                 "TPP" -> kevinBarry
                 "VISION" -> aderynCanon
+                "MICROTEST" -> eldsonBuleck
                 else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
             }
         }
@@ -303,6 +305,34 @@ data class Patient(
                 accountId = "104969",
                 linkageKey = "kWWG9kHfNMSjm",
                 im1ConnectionTokenAsJson = adreynCanonIm1ConnectionToken,
+                organDonationDecision = "opt-out"
+        )
+
+        ////////// MICROTEST PATIENTS /////////////
+        val eldsonBuleck = Patient(
+                title = "Mr",
+                firstName = "Eldson",
+                surname = "Bulbeck",
+                dateOfBirth = "1986-04-10",
+                sex = Sex.Male,
+                address = Address(
+                        houseNameFlatNumber = "28 Central Path",
+                        numberStreet = "Troy Avenue",
+                        village = "Horsforth",
+                        town = "Leeds",
+                        county = "West Yorkshire",
+                        postcode = "LS18 5TN"
+                ),
+                contactDetails = defaultContactDetails,
+                odsCode = MicrotestMockDefaults.DEFAULT_ODS_CODE_MICROTEST,
+                nhsNumbers = listOf("5785445875"),
+                connectionToken = "{}",
+                rosuAccountId = "",
+                apiKey = "",
+                patientId = "",
+                accountId = "MICROTEST_ACCOUNT_ID",
+                linkageKey = "MICROTEST_LINKAGE_KEY",
+                im1ConnectionTokenAsJson = Im1ConnectionToken(),
                 organDonationDecision = "opt-out"
         )
 

@@ -19,10 +19,14 @@ Feature: Linkage Get Key
     When I call the TPP Linkage GET endpoint
     Then I receive a "Not Found" error
 
-  Scenario: Linkage request GET with correct values for Vision
-    Given I have valid VISION linkage details
-    When I call the VISION Linkage GET endpoint
+  Scenario Outline: Linkage request GET with patients who have linkage keys <GP System>
+    Given I have valid <GP System> linkage details
+    When I call the <GP System> Linkage GET endpoint
     Then I receive a valid linkage response
+    Examples:
+      | GP System |
+      | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Linkage request GET for <GP System> returns 400 Bad Request, empty OdsCode
     Given I have valid <GP System> linkage details apart from an empty OdsCode
@@ -33,6 +37,7 @@ Feature: Linkage Get Key
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Linkage request GET for <GP System> returns 400 Bad Request, empty NhsNumber
     Given I have valid <GP System> linkage details apart from an empty NhsNumber
@@ -43,6 +48,7 @@ Feature: Linkage Get Key
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Linkage request GET for <GP System> returns 501 Not Implemented, not found ods code
     Given I have valid <GP System> linkage details apart from a not found OdsCode
@@ -53,6 +59,7 @@ Feature: Linkage Get Key
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario: Linkage request GET for EMIS returns 400 Bad Request, empty identity token
     Given I have valid EMIS linkage details apart from an empty identity token

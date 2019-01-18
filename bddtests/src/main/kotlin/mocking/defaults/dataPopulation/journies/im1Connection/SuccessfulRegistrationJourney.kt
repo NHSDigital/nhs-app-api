@@ -31,6 +31,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
             "EMIS" -> generateEmisMocks(patient)
             "TPP" -> generateTppMocks(patient)
             "VISION" -> generateVisionMocks(patient)
+            "MICROTEST" -> {}
             else -> throw IllegalArgumentException("$gpSystem not recognised as a supported GP System.")
         }
     }

@@ -38,6 +38,7 @@ abstract class LinkageFactory(protected val gpSystem: String) {
             get() = hashMapOf(
                     "EMIS" to {LinkageFactoryEmis()},
                     "TPP" to {LinkageFactoryTpp()},
-                    "VISION" to {LinkageFactoryVision()})
+                    "VISION" to {LinkageFactoryVision()},
+                    "MICROTEST" to {LinkageFactoryMicrotest()})
     }
 }

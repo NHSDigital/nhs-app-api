@@ -35,8 +35,8 @@ abstract class AuthenticationFactory(protected val gpSystem: String) {
             hashMapOf(
                     "EMIS" to { AuthenticationFactoryEmis() },
                     "TPP" to { AuthenticationFactoryTpp() },
-                    "VISION" to { AuthenticationFactoryVision() })
+                    "VISION" to { AuthenticationFactoryVision() }
+            )
         }
-
     }
 }
