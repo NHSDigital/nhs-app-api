@@ -199,10 +199,15 @@ export default {
         gpPractice.County, gpPractice.Postcode].filter(Boolean).join(', ');
     },
     getHrefForGpPractice(gpPractice) {
-      return `${GP_FINDER_PARTICIPATION.path}?odsCode=${gpPractice.NACSCode}` +
+      return `${GP_FINDER_PARTICIPATION.path}?odsCode=${this.getPracticeCodeFromNACSCode(gpPractice.NACSCode)}` +
         `&practiceName=${encodeURIComponent(gpPractice.OrganisationName)}` +
         `&practiceAddress=${encodeURIComponent(this.formatAddress(gpPractice))}` +
         `&source=${this.$store.state.device.source}`;
+    },
+    getPracticeCodeFromNACSCode(nacsCode) {
+      return nacsCode && nacsCode.length > 6 ?
+        nacsCode.substring(0, 6) :
+        nacsCode;
     },
   },
 };
