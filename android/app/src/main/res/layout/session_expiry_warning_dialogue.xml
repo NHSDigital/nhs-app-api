@@ -24,7 +24,6 @@
         <TextView
             android:id="@+id/sessionExpiryWarningDurationInformation"
             style="@style/default_warning_text"
-            android:contentDescription="@string/sessionExpiryWarningDurationInformation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/errorTextSize"

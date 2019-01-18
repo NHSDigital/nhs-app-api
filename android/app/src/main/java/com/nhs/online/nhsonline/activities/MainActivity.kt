@@ -427,7 +427,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
         builder.setView(dialogView)
         builder.setCancelable(false)
         var textView = dialogView.findViewById(R.id.sessionExpiryWarningDurationInformation) as TextView
-        textView.text = resources.getString(R.string.sessionExpiryWarningDurationInformation).format(sessionDuration)
+        val sessionExpiryMessage = resources.getString(R.string.sessionExpiryWarningDurationInformation).format(sessionDuration)
+        textView.text = sessionExpiryMessage
+        textView.contentDescription = sessionExpiryMessage
         val extendSession = dialogView.findViewById(R.id.extendSession) as Button
         val logOut = dialogView.findViewById(R.id.logOut) as Button
         var dialog: AlertDialog = builder.create()
