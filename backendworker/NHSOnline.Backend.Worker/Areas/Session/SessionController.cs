@@ -71,7 +71,9 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 {
                     return new StatusCodeResult(citizenIdSessionResult.StatusCode);
                 }
-                
+
+                _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
+
                 // Get a suitable GP system, based on the ODS code.
                 var gpSystemOption = await GetGpSystem(citizenIdSessionResult.OdsCode);
                 if (!gpSystemOption.HasValue)
@@ -128,7 +130,6 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
                 _logger.LogDebug($"Finished session post with status code {gpSessionCreatedResultVisited.StatusCode}");
                 
-                _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
                 return await Task.FromResult(CreateCreatedResult(gpSessionCreatedResultVisited, userSession,
                     citizenIdSessionResult.DateOfBirth));
             }

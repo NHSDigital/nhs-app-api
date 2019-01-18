@@ -10,6 +10,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -43,6 +44,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IAuditor> _mockAuditor;
         private Mock<IIm1CacheService> _mockIm1CacheService;
         private Mock<ISessionMapper> _mockSessionMapper;
+        private Mock<ILogger<SessionController>> _mockLogger;
         
         private const string DateFormat = "yyyy-MM-dd";
 
@@ -179,6 +181,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
+            _mockLogger = _fixture.Freeze<Mock<ILogger<SessionController>>>();
+            _mockLogger.SetupLogger(LogLevel.Information, $"NhsNumber={_userProfile.NhsNumber}", null);
+
             _systemUnderTest = _fixture.Create<SessionController>();
 
             _systemUnderTest.ControllerContext = new ControllerContext
@@ -250,6 +255,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
             _mockAuditor.VerifyNoOtherCalls();
+            _mockLogger.Verify();
         }
 
         [TestMethod]
@@ -279,6 +285,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAuditor.Verify();
+            _mockLogger.Verify();
         }
 
         [TestMethod]
@@ -308,6 +315,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAuditor.Verify();
+            _mockLogger.Verify();
         }
 
         [TestMethod]
@@ -339,6 +347,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAuditor.Verify();
+            _mockLogger.Verify();
         }
 
         [TestMethod]
@@ -398,6 +407,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _authenticationServiceMock.VerifyAll();
             _mockSessionMapper.VerifyAll();
             _mockAuditor.VerifyAll();
+            _mockLogger.VerifyAll();
         }
         
         [TestMethod]
