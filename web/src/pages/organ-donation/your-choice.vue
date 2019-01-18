@@ -10,13 +10,11 @@
       <b>{{ $t('organDonation.yourChoice.choices.all.title') }}</b>
       <p>{{ $t('organDonation.yourChoice.choices.all.description') }}</p>
     </radio-button>
-    <form id="back-form" :action="organDonationPath" method="get">
-      <generic-button id="back-to-organdonation"
-                      :class="[$style.button, $style.grey]"
-                      @click.stop.prevent="goBack">
-        {{ $t('organDonation.yourChoice.backButtonText') }}
-      </generic-button>
-    </form>
+    <generic-button id="back-to-organdonation"
+                    :class="[$style.button, $style.grey]"
+                    @click.stop.prevent="goBack">
+      {{ $t('organDonation.yourChoice.backButtonText') }}
+    </generic-button>
   </div>
 </template>
 <script>
@@ -40,9 +38,6 @@ export default {
     currentChoice() {
       return get('all')(this.$store.state.organDonation.registration.decisionDetails);
     },
-    organDonationPath() {
-      return ORGAN_DONATION.path;
-    },
   },
   created() {
     if (isNil(this.$store.state.organDonation.registration.decisionDetails)) {
@@ -51,7 +46,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.push(this.organDonationPath);
+      this.$router.push(ORGAN_DONATION.path);
     },
   },
 };

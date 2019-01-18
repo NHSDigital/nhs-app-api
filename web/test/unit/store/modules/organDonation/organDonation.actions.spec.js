@@ -3,8 +3,10 @@ import {
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
-  SET_ALL_ORGANS,
+  SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
+  SET_ALL_ORGANS,
+  SET_PRIVACY_ACCEPTANCE,
 } from '@/store/modules/organDonation/mutation-types';
 
 const createHttp = ({ result = {}, referenceData = {} } = {}) => ({
@@ -29,6 +31,46 @@ describe('organ donation actions', () => {
     actions.app = {
       $http,
     };
+  });
+
+  describe('toggleAccuracyAcceptance', () => {
+    it(
+      'will commit SET_ACCURACY_ACCEPTANCE with a value of true when `isAccuracyAcceptance` is false',
+      () => {
+        const state = { isAccuracyAccepted: false };
+        actions.toggleAccuracyAcceptance({ commit, state });
+        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, true);
+      },
+    );
+
+    it(
+      'will commit SET_ACCURACY_ACCEPTANCE with a value of false when `isAccuracyAcceptance` is true',
+      () => {
+        const state = { isAccuracyAccepted: true };
+        actions.toggleAccuracyAcceptance({ commit, state });
+        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, false);
+      },
+    );
+  });
+
+  describe('togglePrivacyAcceptance', () => {
+    it(
+      'will commit SET_PRIVACY_ACCEPTANCE with a value of true when `isPrivacyAcceptance` is false',
+      () => {
+        const state = { isPrivacyAccepted: false };
+        actions.togglePrivacyAcceptance({ commit, state });
+        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, true);
+      },
+    );
+
+    it(
+      'will commit SET_PRIVACY_ACCEPTANCE with a value of false when `isPrivacyAcceptance` is true',
+      () => {
+        const state = { isPrivacyAccepted: true };
+        actions.togglePrivacyAcceptance({ commit, state });
+        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, false);
+      },
+    );
   });
 
   describe('makeDecision', () => {

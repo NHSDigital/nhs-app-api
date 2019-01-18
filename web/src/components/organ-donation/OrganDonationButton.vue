@@ -1,8 +1,5 @@
 <template>
-  <no-js-form :action="formAction"
-              :value="noJsValue"
-              :class-name="$style['flex-form']"
-              method="post">
+  <div :class-name="$style['flex-container']">
     <button :class="[style, $style['decision-button']]" @click.prevent="chooseDecision()">
       <div>
         <component :class="$style['button-content']" :is="icon"/>
@@ -10,16 +7,13 @@
         <p>{{ $t(subHeaderKey) }}</p>
       </div>
     </button>
-  </no-js-form>
+  </div>
 </template>
 
 <script>
-import cloneDeep from 'lodash/fp/cloneDeep';
-import { ORGAN_DONATION_ADDITIONAL_DETAILS,
-  ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
 
 export default {
@@ -27,7 +21,6 @@ export default {
   components: {
     NoIcon,
     YesIcon,
-    NoJsForm,
   },
   props: {
     decision: {
@@ -39,7 +32,8 @@ export default {
     const isOptOut = this.decision === DECISION_OPT_OUT;
 
     return {
-      formAction: isOptOut ? ORGAN_DONATION_ADDITIONAL_DETAILS.path
+      nextRoute: isOptOut
+        ? ORGAN_DONATION_ADDITIONAL_DETAILS.path
         : ORGAN_DONATION_YOUR_CHOICE.path,
       style: isOptOut ? this.$style['no-button'] : this.$style['yes-button'],
       headerKey: isOptOut ? 'organDonation.register.noButton.header' : 'organDonation.register.yesButton.header',
@@ -47,20 +41,10 @@ export default {
       icon: isOptOut ? NoIcon : YesIcon,
     };
   },
-  computed: {
-    noJsValue() {
-      const noJsValue = {
-        organDonation: cloneDeep(this.$store.state.organDonation),
-      };
-
-      noJsValue.organDonation.registration.decision = this.decision;
-      return noJsValue;
-    },
-  },
   methods: {
     chooseDecision() {
       this.$store.dispatch('organDonation/makeDecision', this.decision);
-      this.$router.push(this.formAction);
+      this.$router.push(this.nextRoute);
     },
   },
 };
@@ -123,7 +107,7 @@ export default {
     vertical-align: top;
   }
 
-  .flex-form {
+  .flex-container {
     flex: 0 50%;
   }
 </style>

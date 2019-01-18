@@ -1,5 +1,11 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
+    <message-dialog v-if="showErrors" id="errors">
+      <message-text v-for="error in validationErrors" :key="error">
+        {{ $t(error) }}
+      </message-text>
+    </message-dialog>
+
     <h2>{{ $t('organDonation.reviewYourDecision.header') }}</h2>
     <hr :class="$style.rule" aria-hidden="true">
     <about-you :name="$store.state.organDonation.registration.nameFull"
@@ -14,31 +20,32 @@
     <hr :class="$style.rule" aria-hidden="true">
     <your-decision :decision="$store.state.organDonation.registration.decision"/>
     <hr :class="$style.rule" aria-hidden="true">
-    <confirmation/>
-    <form :action="backRoute" method="post">
-      <input :value="JSON.stringify($store.state.organDonation)"
-             type="hidden"
-             name="nojs.organDonation">
-      <generic-button id="back-button"
-                      :class="[$style.button, $style.grey]"
-                      @click.prevent="clickBackButton">
-        {{ $t('organDonation.reviewYourDecision.backButton') }}
-      </generic-button>
-    </form>
+    <confirmation :is-accuracy-star-visible="isAccuracyStarVisible"
+                  :is-privacy-star-visible="isPrivacyStarVisible" />
+    <generic-button id="submit-button"
+                    :class="$style.green"
+                    @click="clickSubmit">
+      {{ $t('organDonation.reviewYourDecision.submitButton') }}
+    </generic-button>
+    <generic-button id="back-button"
+                    :class="[$style.button, $style.grey]"
+                    @click.prevent="clickBack">
+      {{ $t('organDonation.reviewYourDecision.backButton') }}
+    </generic-button>
   </div>
 </template>
 
 <script>
+import isEmpty from 'lodash/fp/isEmpty';
 import GenericButton from '@/components/widgets/GenericButton';
 import AboutYou from '@/components/organ-donation/AboutYou';
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
 import Confirmation from '@/components/organ-donation/Confirmation';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import {
-  ORGAN_DONATION_ADDITIONAL_DETAILS,
-  ORGAN_DONATION_YOUR_CHOICE,
-} from '@/lib/routes';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
 import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
 
 export default {
@@ -47,19 +54,56 @@ export default {
     AdditionalInformation,
     Confirmation,
     GenericButton,
+    MessageDialog,
+    MessageText,
     YourDecision,
   },
   mixins: [EnsureDecisionMixin],
+  data() {
+    return {
+      submitAttempted: false,
+    };
+  },
   computed: {
     backRoute() {
       return this.$store.state.organDonation.registration.decision === DECISION_OPT_OUT
         ? ORGAN_DONATION_ADDITIONAL_DETAILS.path
         : ORGAN_DONATION_YOUR_CHOICE.path;
     },
+    isAccuracyAccepted() {
+      return this.$store.state.organDonation.isAccuracyAccepted;
+    },
+    isAccuracyStarVisible() {
+      return this.submitAttempted && !this.isAccuracyAccepted;
+    },
+    isPrivacyAccepted() {
+      return this.$store.state.organDonation.isPrivacyAccepted;
+    },
+    isPrivacyStarVisible() {
+      return this.submitAttempted && !this.isPrivacyAccepted;
+    },
+    showErrors() {
+      return this.submitAttempted && !isEmpty(this.validationErrors);
+    },
+    validationErrors() {
+      const errors = [];
+      if (!this.isAccuracyAccepted) {
+        errors.push('organDonation.reviewYourDecision.confirmation.errors.accuracy');
+      }
+
+      if (!this.isPrivacyAccepted) {
+        errors.push('organDonation.reviewYourDecision.confirmation.errors.privacy');
+      }
+
+      return errors;
+    },
   },
   methods: {
-    clickBackButton() {
+    clickBack() {
       this.$router.push(this.backRoute);
+    },
+    clickSubmit() {
+      this.submitAttempted = true;
     },
   },
 };

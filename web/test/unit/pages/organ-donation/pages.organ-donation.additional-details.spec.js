@@ -191,26 +191,6 @@ describe('additional-details', () => {
           });
         });
       });
-
-      describe('form', () => {
-        let backForm;
-
-        beforeEach(() => {
-          backForm = wrapper.find('#back-form');
-        });
-
-        it('will exist', () => {
-          expect(backForm.exists()).toBe(true);
-        });
-
-        it('will have a method of "get"', () => {
-          expect(backForm.attributes().method).toEqual('get');
-        });
-
-        it('will have an action of ORGAN_DONATION path', () => {
-          expect(backForm.attributes().action).toEqual(ORGAN_DONATION.path);
-        });
-      });
     });
 
     describe('continue', () => {
@@ -218,7 +198,7 @@ describe('additional-details', () => {
         let continueButton;
 
         beforeEach(() => {
-          continueButton = wrapper.find('#continue-form #continue-button');
+          continueButton = wrapper.find('#continue-button');
         });
 
         it('will exist', () => {
@@ -245,26 +225,6 @@ describe('additional-details', () => {
           it('will push the confirmation page on the router', () => {
             expect($router).toContain(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
           });
-        });
-      });
-
-      describe('form', () => {
-        let continueForm;
-        beforeEach(() => {
-          continueForm = wrapper.find('#continue-form');
-        });
-
-        it('will exist', () => {
-          expect(continueForm.exists()).toBe(true);
-        });
-
-        it('will have a method of "post"', () => {
-          expect(continueForm.attributes().method).toEqual('post');
-        });
-
-        it('will have an action of ORGAN_DONATION_REVIEW_YOUR_DECISION route"', () => {
-          expect(continueForm.attributes().action)
-            .toEqual(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);
         });
       });
     });

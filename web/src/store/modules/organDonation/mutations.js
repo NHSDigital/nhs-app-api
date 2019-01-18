@@ -4,8 +4,10 @@ import {
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
+  SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
+  SET_PRIVACY_ACCEPTANCE,
   initialState,
 } from './mutation-types';
 
@@ -26,12 +28,18 @@ export default {
     state.additionalDetails = initialState().additionalDetails;
     state.registration.decision = decision;
   },
+  [SET_ADDITIONAL_DETAILS](state, { ethnicityId, religionId }) {
+    state.additionalDetails.ethnicityId = ethnicityId;
+    state.additionalDetails.religionId = religionId;
+  },
+  [SET_ACCURACY_ACCEPTANCE](state, value) {
+    state.isAccuracyAccepted = value;
+  },
   [SET_ALL_ORGANS](state, choice) {
     state.registration.decisionDetails =
       { ...state.registration.decisionDetails, ...{ all: choice } };
   },
-  [SET_ADDITIONAL_DETAILS](state, { ethnicityId, religionId }) {
-    state.additionalDetails.ethnicityId = ethnicityId;
-    state.additionalDetails.religionId = religionId;
+  [SET_PRIVACY_ACCEPTANCE](state, value) {
+    state.isPrivacyAccepted = value;
   },
 };

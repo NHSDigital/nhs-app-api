@@ -3,8 +3,10 @@ import {
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
+  SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
+  SET_PRIVACY_ACCEPTANCE,
 } from './mutation-types';
 
 export default {
@@ -25,5 +27,11 @@ export default {
   },
   setAdditionalDetails({ commit }, additionalDetails) {
     commit(SET_ADDITIONAL_DETAILS, additionalDetails);
+  },
+  toggleAccuracyAcceptance({ commit, state }) {
+    commit(SET_ACCURACY_ACCEPTANCE, !state.isAccuracyAccepted);
+  },
+  togglePrivacyAcceptance({ commit, state }) {
+    commit(SET_PRIVACY_ACCEPTANCE, !state.isPrivacyAccepted);
   },
 };

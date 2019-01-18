@@ -2,8 +2,8 @@ import OrganDonation from '@/pages/organ-donation';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import {
   DECISION_NOT_FOUND,
-  DECISION_OPT_OUT,
   DECISION_OPT_IN,
+  DECISION_OPT_OUT,
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';

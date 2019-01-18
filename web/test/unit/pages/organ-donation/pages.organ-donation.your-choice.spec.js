@@ -1,8 +1,6 @@
-
 import YourChoice from '@/pages/organ-donation/your-choice';
 import RadioButton from '@/components/widgets/RadioButton';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION } from '@/lib/routes';
 import { $t, createStore, mount } from '../../helpers';
 
 const createState = (choice = true) => {
@@ -49,26 +47,6 @@ describe('organ donation your choice page', () => {
       it('will be set as a grey button', () => {
         expect(backButton.classes()).toContain($style.button);
         expect(backButton.classes()).toContain($style.grey);
-      });
-
-      describe('form', () => {
-        let backForm;
-
-        beforeEach(() => {
-          backForm = wrapper.find('#back-form');
-        });
-
-        it('will exist', () => {
-          expect(backForm.exists()).toBe(true);
-        });
-
-        it('will have a method of "get"', () => {
-          expect(backForm.attributes().method).toEqual('get');
-        });
-
-        it('will have an action of ORGAN_DONATION path', () => {
-          expect(backForm.attributes().action).toEqual(ORGAN_DONATION.path);
-        });
       });
     });
   });

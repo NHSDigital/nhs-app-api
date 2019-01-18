@@ -690,6 +690,7 @@ export default {
     reviewYourDecision: {
       header: 'Check your details before submitting',
       backButton: 'Back',
+      submitButton: 'Submit my decision',
       aboutYou: {
         subheader: 'About you',
         nameheader: 'Name',
@@ -715,6 +716,10 @@ export default {
         privacyText1: 'I have read the ',
         privacyText2: ' and give consent for the use of my information in accordance with the terms',
         privacyLinkText: 'privacy statement',
+        errors: {
+          accuracy: 'You must confirm that the information provided is true, complete and accurate.',
+          privacy: 'You must confirm that you have read the privacy statement and consent to your information being used accordingly.',
+        },
       },
     },
   },

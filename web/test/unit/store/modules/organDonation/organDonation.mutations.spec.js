@@ -5,8 +5,10 @@ import {
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
-  SET_ALL_ORGANS,
+  SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
+  SET_ALL_ORGANS,
+  SET_PRIVACY_ACCEPTANCE,
 } from '@/store/modules/organDonation/mutation-types';
 
 describe('organ donation record mutations', () => {
@@ -56,6 +58,13 @@ describe('organ donation record mutations', () => {
     });
   });
 
+  describe('SET_ACCURACY_ACCEPTANCE', () => {
+    it('will set the isAccurancyAccepted value to the received value', () => {
+      mutations[SET_ACCURACY_ACCEPTANCE](state, true);
+      expect(state.isAccuracyAccepted).toEqual(true);
+    });
+  });
+
   describe('SET_ALL_ORGANS', () => {
     it('will set the organ donation registration decision "all" state to the received value', () => {
       mutations[SET_ALL_ORGANS](state, false);
@@ -77,6 +86,14 @@ describe('organ donation record mutations', () => {
 
     it('will set the religionId on the state', () => {
       expect(state.additionalDetails.religionId).toEqual('bar');
+    });
+  });
+
+
+  describe('SET_PRIVACY_ACCEPTANCE', () => {
+    it('will set the isPrivacyAccepted value to the received value', () => {
+      mutations[SET_PRIVACY_ACCEPTANCE](state, true);
+      expect(state.isPrivacyAccepted).toEqual(true);
     });
   });
 });
