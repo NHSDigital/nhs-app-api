@@ -58,7 +58,7 @@ class WebAppInterface(private val context: MainActivity) {
     @JavascriptInterface
     fun hideMenuBar() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideMenuBar")
-        context.hideMenuBar()
+        context.runOnUiThread{context.hideMenuBar()}
     }
 
     @JavascriptInterface

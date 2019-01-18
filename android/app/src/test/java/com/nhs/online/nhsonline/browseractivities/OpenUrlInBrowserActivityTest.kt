@@ -43,15 +43,22 @@ class OpenUrlInBrowserActivityTest: ResourceMockingClass() {
 
         val urls = listOf("https://111.nhs.uk/", "https://111.nhs.uk/Help/Terms")
 
-        var message = ""
-        try {
-            urls.forEach{url ->
+
+        var runtimeException: java.lang.RuntimeException?
+        runtimeException = null
+
+        urls.forEach{url ->
+            try {
+                runtimeException = null
                 openUrlInBrowserActivity.start(context, url)
+                Assert.fail("Expected `start()` to throw an exception for the given url: $url")
+            }catch (exception: RuntimeException){
+                runtimeException = exception
+            } finally {
+                Assert.assertNotNull(runtimeException)
+                Assert.assertEquals("Cannot open url in browser", runtimeException!!.message)
             }
-        } catch (exception: RuntimeException) {
-            message =  exception?.message ?:  ""
         }
 
-        Assert.assertEquals("Cannot open url in browser", message)
     }
 }

@@ -231,7 +231,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.webChromeClient = chromeClient
 
         webview.addJavascriptInterface(WebAppInterface(this), "nativeApp")
-
         webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
     }
 

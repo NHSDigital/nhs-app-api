@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.resources
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
@@ -8,6 +9,11 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhs.online.nhsonline.R
 import org.mockito.Mockito
+
+import android.content.pm.PackageManager
+import com.nhaarman.mockito_kotlin.eq
+import com.nhs.online.nhsonline.activities.SymptomsActivity
+import org.mockito.ArgumentMatchers.anyInt
 
 open class ResourceMockingClass {
 
@@ -65,6 +71,7 @@ open class ResourceMockingClass {
             on { getString(R.string.prescriptions_header) } doReturn "My repeat prescriptions"
             on { getString(R.string.more_header) } doReturn "More"
             on { getString(R.string.home_header) } doReturn "Home"
+
             on { getStringArray(R.array.nativeAppHosts) } doReturn arrayOf(
                     "https://111.nhs.uk/",
                     "https://111.service.nhs.uk/",
@@ -85,6 +92,11 @@ open class ResourceMockingClass {
     fun mockDisconnectedContext() : Context {
         val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
         val networkInfo = Mockito.mock( NetworkInfo::class.java )
+
+        Mockito.`when`( connectivityManager.activeNetworkInfo ).thenReturn(networkInfo)
+        Mockito.`when`( networkInfo.isConnected).thenReturn( false)
+        Mockito.`when`(networkInfo.isAvailable).thenReturn(false)
+        Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(false)
 
         Mockito.`when`( connectivityManager.activeNetworkInfo ).thenReturn(networkInfo)
         Mockito.`when`( networkInfo.isConnected).thenReturn( false)
@@ -124,6 +136,37 @@ open class ResourceMockingClass {
         return mock {
             on {getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
             on { resources } doReturn mockresource
+        }
+
+    }
+
+    // Returns an activity which does returns permission granted when fine location permission
+    // are checked
+    fun mockGeolocationPermissionsAllow() : Activity {
+        return mock {
+            on {checkPermission(eq("android.permission.ACCESS_FINE_LOCATION"), anyInt(), anyInt())} doReturn PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    fun mockGeolocationPermissionsDenyPermissionPopup() : Activity {
+
+        return mock {
+            on {checkPermission(eq("android.permission.ACCESS_FINE_LOCATION"),
+                    anyInt(), anyInt())} doReturn PackageManager.PERMISSION_DENIED
+            on {
+                shouldShowRequestPermissionRationale("android.permission.ACCESS_FINE_LOCATION")
+            } doReturn true
+        }
+    }
+
+    fun mockGeolocationPermissionsDenyRational() : Activity {
+
+        return mock {
+            on {checkPermission(eq("android.permission.ACCESS_FINE_LOCATION"),
+                    anyInt(), anyInt())} doReturn PackageManager.PERMISSION_DENIED
+            on {
+                shouldShowRequestPermissionRationale("android.permission.ACCESS_FINE_LOCATION")
+            } doReturn false
         }
     }
 }

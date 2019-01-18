@@ -266,7 +266,7 @@ class WebClientInterceptorTest {
         )
 
         val serviceInfo = KnownServices(tmpContext).findMatchingServiceInfo(
-                                tmpContext.resources.getString(R.string.conditions)
+                tmpContext.resources.getString(R.string.conditions)
         )
 
         val header = serviceInfo?.header
