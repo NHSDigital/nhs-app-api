@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace NHSOnline.Backend.Worker.Ndop
+﻿namespace NHSOnline.Backend.Worker.Ndop
 {
     public interface INdopService
     {

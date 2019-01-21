@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.Worker.HealthCheck.Redis;
 
 namespace NHSOnline.Backend.Worker.HealthCheck
 {

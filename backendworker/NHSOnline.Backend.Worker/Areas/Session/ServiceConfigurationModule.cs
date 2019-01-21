@@ -7,7 +7,6 @@ namespace NHSOnline.Backend.Worker.Areas.Session
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IMinimumAgeValidator, MinimumAgeValidator>();
             services.AddTransient<ISessionMapper, SessionMapper>();
             base.ConfigureServices(services, configuration);
         }

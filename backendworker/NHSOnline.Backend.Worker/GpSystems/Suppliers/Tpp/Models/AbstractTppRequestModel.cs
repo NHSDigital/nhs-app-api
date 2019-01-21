@@ -16,11 +16,5 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 
         [XmlIgnore]
         public abstract string RequestType { get; }
-
-        public void ApplyConfig(ITppConfig tppConfig)
-        {
-            ApiVersion = tppConfig.ApiVersion;
-            Uuid = tppConfig.CreateGuid();
-        }
     }
 }

@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         {
             var request = _fixture.Create<HttpRequestMessage>();
 
-            var expectedResponse = new HttpRequestIdentity()
+            var expectedResponse = new HttpRequestIdentity
             {
                 Provider = "CitizenId",
                 Identifier = null,
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         {
             HttpRequestMessage request = null;
 
-            var expectedResponse = new HttpRequestIdentity()
+            var expectedResponse = new HttpRequestIdentity
             {
                 Provider = "CitizenId",
                 Identifier = null,

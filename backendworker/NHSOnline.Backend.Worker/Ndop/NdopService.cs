@@ -1,13 +1,10 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Worker.Areas.Ndop.Models;
 using NHSOnline.Backend.Worker.Support;
-using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.Worker.Ndop
 {

@@ -13,6 +13,8 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest
 {
+    [SuppressMessage("NDepend", "ND1400:AvoidNamespacesMutuallyDependent",
+        Justification = "GpSystem responsibility is pointing to concrete classes in child namespaces.")]
     [SuppressMessage("Microsoft.Naming", "CA1024", Justification = "Methods are needed to match interface definition.")]
     public class MicrotestGpSystem : IGpSystem
     {

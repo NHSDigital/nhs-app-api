@@ -11,11 +11,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
         {
         }
 
-        public CancelAppointment(TppUserSession userSession, AppointmentCancelRequest request)
+        public CancelAppointment(ITppUserSession userSession, AppointmentCancelRequest request)
         {
             PatientId = userSession.PatientId;
             OnlineUserId = userSession.OnlineUserId;
-            UnitId = userSession.OdsCode;
+            UnitId = userSession.UnitId;
             
             ApptId = request.AppointmentId;
         }

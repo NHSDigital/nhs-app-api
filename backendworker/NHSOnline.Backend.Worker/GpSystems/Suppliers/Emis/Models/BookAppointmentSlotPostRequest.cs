@@ -7,9 +7,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
 {
     public class BookAppointmentSlotPostRequest
     {
-       public BookAppointmentSlotPostRequest (EmisUserSession emisUserSession, AppointmentBookRequest request)
+       public BookAppointmentSlotPostRequest (string userPatientLinkToken, AppointmentBookRequest request)
        {
-           UserPatientLinkToken = emisUserSession.UserPatientLinkToken;
+           UserPatientLinkToken = userPatientLinkToken;
            BookingReason = request.BookingReason;
            SlotId = Convert.ToInt64(request.SlotId, CultureInfo.InvariantCulture);
            

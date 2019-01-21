@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
             return fromDate != null && fromDate > defaultFromDate && fromDate < DateTimeOffset.Now;
         }
 
-        protected static bool IsValidSpecialRequest(string specialRequest)
+        private static bool IsValidSpecialRequest(string specialRequest)
         {
             return specialRequest == null || specialRequest.Length <= 1000;
         }

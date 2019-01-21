@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace NHSOnline.Backend.Worker.ValidationAttributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    sealed public class SafeStringAttribute : ValidationAttribute
+    public sealed class SafeStringAttribute : ValidationAttribute
     {
         public SafeStringAttribute()
             :base("The value was not deemed safe")
@@ -35,6 +35,5 @@ namespace NHSOnline.Backend.Worker.ValidationAttributes
 
             return ValidationResult.Success;
         }
-
     }
 }

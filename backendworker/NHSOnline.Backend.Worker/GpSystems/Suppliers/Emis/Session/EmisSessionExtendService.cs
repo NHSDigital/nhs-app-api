@@ -9,7 +9,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 {
     public class EmisSessionExtendService : ISessionExtendService
     {
-
         private readonly IEmisClient _emisClient;
         private readonly ILogger<EmisSessionExtendService> _logger;
 

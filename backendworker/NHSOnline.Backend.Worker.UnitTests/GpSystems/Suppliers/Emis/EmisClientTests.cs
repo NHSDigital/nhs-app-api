@@ -356,7 +356,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var userSession = new EmisUserSession();
 
             var response = await _sut.AppointmentsPost(new EmisHeaderParameters(userSession),
-                new BookAppointmentSlotPostRequest(userSession, new AppointmentBookRequest()));
+                new BookAppointmentSlotPostRequest(userSession.UserPatientLinkToken, new AppointmentBookRequest()));
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);

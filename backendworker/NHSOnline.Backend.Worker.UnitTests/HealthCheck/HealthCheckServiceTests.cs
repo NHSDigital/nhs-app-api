@@ -6,7 +6,6 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.HealthCheck;
-using NHSOnline.Backend.Worker.HealthCheck.Redis;
 using FluentAssertions;
 using Moq;
 

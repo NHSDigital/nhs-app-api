@@ -39,10 +39,10 @@ namespace NHSOnline.Backend.Worker
 
     public class MongoSessionCacheService : ISessionCacheService
     {
-        private static IMongoClient _mongoClient;
-        private static string _databaseName;
-        private static string _collectionName;
-        
+        private readonly string _databaseName;
+        private readonly string _collectionName;
+
+        private readonly IMongoClient _mongoClient;
         private readonly ICipherService _cipherService;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly ILogger<MongoSessionCacheService> _logger;
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.Worker
             }
         }
 
-        private static IMongoCollection<BsonDocument> GetCollection()
+        private IMongoCollection<BsonDocument> GetCollection()
         {
             return _mongoClient.GetDatabase(_databaseName).GetCollection<BsonDocument>(_collectionName);
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using Slot = NHSOnline.Backend.Worker.Areas.Appointments.Models.Slot;
 

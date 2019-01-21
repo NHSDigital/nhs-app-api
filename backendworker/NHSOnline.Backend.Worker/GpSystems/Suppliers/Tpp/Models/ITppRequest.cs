@@ -1,9 +1,13 @@
-﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
+﻿using System;
+
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 {
     public interface ITppRequest
     {
         string RequestType { get; }
 
-        void ApplyConfig(ITppConfig tppConfig);
+        string ApiVersion { get; set; }
+
+        Guid Uuid { get; set; }
     }
 }

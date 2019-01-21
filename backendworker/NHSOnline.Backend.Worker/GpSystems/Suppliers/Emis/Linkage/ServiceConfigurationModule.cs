@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
         {
             services.AddTransient<EmisLinkageService>();
             services.AddTransient<IEmisLinkageMapper, EmisLinkageMapper>();
-            services.AddSingleton<EmisLinkageRequestValidationService>();
+            services.AddSingleton<EmisLinkageRequestValidationService >();
             
             base.ConfigureServices(services, configuration);
         }

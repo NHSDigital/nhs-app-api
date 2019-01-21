@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.Worker.Support.Temporal
             services.AddSingleton<TimeZoneInfoProvider>();
             services.AddSingleton<TimeZoneConverter>();
             services.AddSingleton<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
+            services.AddTransient<IMinimumAgeValidator, MinimumAgeValidator>();
 
             base.ConfigureServices(services, configuration);
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
@@ -18,6 +18,8 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
+    [SuppressMessage("NDepend", "ND1400:AvoidNamespacesMutuallyDependent",
+        Justification = "GpSystem responsibility is pointing to concrete classes in child namespaces.")]
     public class VisionGpSystem : IGpSystem
     {
         private readonly IServiceProvider _serviceProvider;
@@ -39,8 +41,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return _serviceProvider.GetService<VisionAppointmentSlotsService>();
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
         public ICourseService GetCourseService()
         {
             return _serviceProvider.GetService<VisionCourseService>();
@@ -56,8 +56,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return _serviceProvider.GetService<VisionIm1ConnectionService>();
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
         public IPrescriptionService GetPrescriptionService()
         {
             return _serviceProvider.GetService<VisionPrescriptionService>();

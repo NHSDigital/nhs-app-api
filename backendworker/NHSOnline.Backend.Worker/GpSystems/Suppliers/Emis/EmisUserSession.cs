@@ -2,7 +2,7 @@
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
-    public class EmisUserSession: GpUserSession
+    public class EmisUserSession : GpUserSession
     {
         public override Supplier Supplier => Supplier.Emis;
         public string SessionId { get; set; }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NHSOnline.Backend.Worker.OrganDonation.Models
+﻿namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
     public class OrganDonationErrorResponse
     {

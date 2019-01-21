@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 {
-    public class LinkAccount : ITppRequest
+    public class LinkAccount : ITppApplicationRequest
     {
         [XmlIgnore]
         public string RequestType => "LinkAccount";
@@ -30,16 +30,5 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
         public DateTime DateofBirth { get; set; }
 
         public Application Application { get; set; }
-
-        public void ApplyConfig(ITppConfig tppConfig)
-        {
-            Application = Application ?? new Application();
-            Application.Name = tppConfig.ApplicationName;
-            Application.Version = tppConfig.ApplicationVersion;
-            Application.ProviderId = tppConfig.ApplicationProviderId;
-            Application.DeviceType = tppConfig.ApplicationDeviceType;
-            ApiVersion = tppConfig.ApiVersion;
-            Uuid = tppConfig.CreateGuid();
-        }
     }
 }

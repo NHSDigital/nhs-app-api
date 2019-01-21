@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.CitizenId

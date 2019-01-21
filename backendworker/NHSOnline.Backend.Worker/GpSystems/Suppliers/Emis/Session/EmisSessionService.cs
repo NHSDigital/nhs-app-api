@@ -12,7 +12,12 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 {
-    public class EmisSessionService : ISessionService, IEmisSessionService
+    public interface IEmisSessionService : ISessionService
+    {
+        Task<SessionsEndUserSessionPostResponse> SendSessionsEndUserSessionPost();
+    }
+
+    public class EmisSessionService : IEmisSessionService
     {
         private readonly IEmisClient _emisClient;
         private readonly ILogger<EmisSessionService> _logger;

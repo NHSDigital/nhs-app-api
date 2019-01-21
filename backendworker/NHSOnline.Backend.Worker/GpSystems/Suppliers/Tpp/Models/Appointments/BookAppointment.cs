@@ -13,14 +13,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
         {
         }
 
-        public BookAppointment(TppUserSession userSession, AppointmentBookRequest request, IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public BookAppointment(ITppUserSession userSession, AppointmentBookRequest request, IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
             PatientId = userSession.PatientId;
             SessionId = request.SlotId;
             StartDate = dateTimeOffsetProvider.ConvertToLocalTime(request.StartTime.Value).ToString(TppClient.TppDateTimeFormat, CultureInfo.InvariantCulture);
             EndDate = dateTimeOffsetProvider.ConvertToLocalTime(request.EndTime.Value).ToString(TppClient.TppDateTimeFormat, CultureInfo.InvariantCulture);
             Notes = request.BookingReason;
-            UnitId = userSession.OdsCode;
+            UnitId = userSession.UnitId;
             OnlineUserId = userSession.OnlineUserId;
         }
 

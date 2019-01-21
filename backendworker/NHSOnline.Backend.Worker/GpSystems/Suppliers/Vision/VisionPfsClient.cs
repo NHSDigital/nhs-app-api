@@ -10,7 +10,6 @@ using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
@@ -36,7 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         private readonly string _providerId;
         private readonly X509Certificate2 _certificate;
         private readonly ILogger<VisionPFSClient> _logger;
-        private static IEnvelopeService _envelopeService;
+        private readonly IEnvelopeService _envelopeService;
 
         private const string MediaType = "text/xml";
 

@@ -171,6 +171,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         public async Task<TppApiObjectResponse<AddNhsUserResponse>> NhsUserPost(AddNhsUserRequest addNhsUserRequest)
         {
+            SetApplicationOnRequest(addNhsUserRequest);
+
+            addNhsUserRequest.ApiVersion = _tppConfig.ApiVersion;
+            addNhsUserRequest.Uuid = _tppConfig.CreateGuid();
+
             var response = await Post<AddNhsUserRequest, AddNhsUserResponse>(addNhsUserRequest);
 
             if (response.Body != null)
@@ -228,7 +233,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model,
             string suid = null) where TRequest : ITppRequest
         {
-            model.ApplyConfig(_tppConfig);
+            if (model is ITppApplicationRequest applicationRequest)
+            {
+                SetApplicationOnRequest(applicationRequest);
+            }
+
+            model.ApiVersion = _tppConfig.ApiVersion;
+            model.Uuid = _tppConfig.CreateGuid();
+
             var authenticateXml = model.SerializeXml();
             var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, TppHttpClient.MediaType);
             var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
@@ -268,6 +280,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
             return await response.Parse(responseMessage, _responseParser, _logger);
+        }
+
+        private void SetApplicationOnRequest(ITppApplicationRequest request)
+        {
+            request.Application = request.Application ?? new Application();
+            request.Application.Name = _tppConfig.ApplicationName;
+            request.Application.Version = _tppConfig.ApplicationVersion;
+            request.Application.ProviderId = _tppConfig.ApplicationProviderId;
+            request.Application.DeviceType = _tppConfig.ApplicationDeviceType;
         }
 
         public abstract class TppApiResponse : ApiResponse

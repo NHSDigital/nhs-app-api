@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
@@ -17,6 +18,8 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
+    [SuppressMessage("NDepend", "ND1400:AvoidNamespacesMutuallyDependent",
+        Justification = "GpSystem responsibility is pointing to concrete classes in child namespaces.")]
     public class TppGpSystem : IGpSystem
     {
         private readonly IServiceProvider _serviceProvider;

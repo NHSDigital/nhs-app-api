@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                     return new AppointmentBookResult.BadRequest();
                 }
 
-                var postRequest = new BookAppointmentSlotPostRequest(emisUserSession, request);
+                var postRequest = new BookAppointmentSlotPostRequest(emisUserSession.UserPatientLinkToken, request);
                 var emisHeaders = new EmisHeaderParameters(emisUserSession);
 
                 var response = await _emisClient.AppointmentsPost(emisHeaders, postRequest);

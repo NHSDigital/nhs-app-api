@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<NDepend AppName="NHSOnline.Backend.Worker" Platform="DotNet" FileWrittenByProductVersion="2018.1.1.9040">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<NDepend AppName="NHSOnline.Backend.Worker" Platform="DotNet" FileWrittenByProductVersion="2018.2.1.9119">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
     <Name>NHSOnline.Backend.Worker</Name>
@@ -7,70 +7,107 @@
   </Assemblies>
   <FrameworkAssemblies>
     <Name>System.Runtime</Name>
-    <Name>Microsoft.AspNetCore.DataProtection.Abstractions</Name>
+    <Name>System.Resources.ResourceManager</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Core</Name>
+    <Name>Microsoft.AspNetCore.Razor.Runtime</Name>
     <Name>System.Diagnostics.Debug</Name>
-    <Name>StackExchange.Redis.StrongName</Name>
-    <Name>Microsoft.AspNetCore.Authentication.Cookies</Name>
+    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
     <Name>Microsoft.Extensions.Logging.Abstractions</Name>
+    <Name>StackExchange.Redis</Name>
+    <Name>Microsoft.AspNetCore.Authentication.Cookies</Name>
     <Name>System.Threading.Tasks</Name>
     <Name>Microsoft.AspNetCore.Authentication</Name>
+    <Name>Microsoft.AspNetCore.Http.Abstractions</Name>
+    <Name>Microsoft.Extensions.Primitives</Name>
     <Name>System.Security.Claims</Name>
     <Name>System.Diagnostics.Tools</Name>
-    <Name>System.Resources.ResourceManager</Name>
-    <Name>System.Net.Http</Name>
-    <Name>Microsoft.AspNetCore.Http.Abstractions</Name>
-    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
-    <Name>Microsoft.AspNetCore.Hosting.Abstractions</Name>
     <Name>System.Net.Primitives</Name>
-    <Name>Microsoft.Extensions.DependencyInjection.Abstractions</Name>
-    <Name>System.ComponentModel</Name>
-    <Name>Microsoft.AspNetCore.Mvc.Core</Name>
-    <Name>Microsoft.AspNetCore.Mvc.Formatters.Json</Name>
-    <Name>Microsoft.AspNetCore.Cors</Name>
+    <Name>MongoDB.Driver</Name>
     <Name>Newtonsoft.Json</Name>
-    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
-    <Name>System.Collections</Name>
-    <Name>Microsoft.AspNetCore.Mvc.ViewFeatures</Name>
-    <Name>Microsoft.AspNetCore.Authorization</Name>
+    <Name>MongoDB.Bson</Name>
+    <Name>Microsoft.Extensions.DependencyInjection.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Hosting.Abstractions</Name>
+    <Name>Microsoft.Extensions.Logging</Name>
+    <Name>System.Xml.XmlSerializer</Name>
+    <Name>System.Xml.ReaderWriter</Name>
+    <Name>System.Runtime.Extensions</Name>
+    <Name>System.ComponentModel</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Formatters.Json</Name>
+    <Name>Microsoft.AspNetCore.HttpsPolicy</Name>
+    <Name>Microsoft.AspNetCore.Cors</Name>
     <Name>System.ComponentModel.Annotations</Name>
+    <Name>Microsoft.Azure.DocumentDB.Core</Name>
+    <Name>System.Linq.Expressions</Name>
+    <Name>System.Collections</Name>
+    <Name>Microsoft.AspNetCore.Authentication.Abstractions</Name>
+    <Name>System.Net.Http</Name>
     <Name>Microsoft.Extensions.Options</Name>
+    <Name>System.Security.Cryptography.Csp</Name>
+    <Name>Microsoft.AspNetCore.Authorization</Name>
+    <Name>System.Security.Cryptography.Algorithms</Name>
+    <Name>System.Security.Cryptography.Primitives</Name>
+    <Name>System.Security.Cryptography.X509Certificates</Name>
+    <Name>System.Threading</Name>
+    <Name>System.Runtime.Serialization.Primitives</Name>
+    <Name>Microsoft.IdentityModel.Tokens</Name>
+    <Name>System.IdentityModel.Tokens.Jwt</Name>
+    <Name>System.Security.Cryptography.Xml</Name>
+    <Name>System.Text.RegularExpressions</Name>
+    <Name>Microsoft.AspNetCore.Http.Extensions</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Mvc.ViewFeatures</Name>
+    <Name>Microsoft.AspNetCore.Antiforgery</Name>
+    <Name>System.Collections.Concurrent</Name>
     <Name>System.Linq</Name>
     <Name>Microsoft.AspNetCore.Hosting</Name>
     <Name>Microsoft.Extensions.Configuration</Name>
     <Name>Microsoft.Extensions.Configuration.EnvironmentVariables</Name>
+    <Name>Microsoft.Extensions.Configuration.CommandLine</Name>
     <Name>Microsoft.AspNetCore</Name>
     <Name>System.Console</Name>
-    <Name>Microsoft.Extensions.Configuration.Binder</Name>
+    <Name>Microsoft.Extensions.Logging.Console</Name>
     <Name>Microsoft.Extensions.Options.ConfigurationExtensions</Name>
     <Name>Microsoft.AspNetCore.Mvc</Name>
-    <Name>Microsoft.AspNetCore.DataProtection</Name>
-    <Name>Microsoft.Extensions.Logging.Console</Name>
+    <Name>Microsoft.AspNetCore.Http.Features</Name>
     <Name>Microsoft.Extensions.Logging.Debug</Name>
     <Name>Microsoft.AspNetCore.Diagnostics</Name>
-    <Name>System.Runtime.Extensions</Name>
+    <Name>System.IO.FileSystem</Name>
+    <Name>Microsoft.Extensions.Configuration.Binder</Name>
+    <Name>Microsoft.Extensions.Http</Name>
+    <Name>System.Text.Encoding.Extensions</Name>
     <Name>System.Web.HttpUtility</Name>
-    <Name>System.Text.RegularExpressions</Name>
-    <Name>Microsoft.AspNetCore.Http.Extensions</Name>
-    <Name>Microsoft.AspNetCore.Authentication.Abstractions</Name>
-    <Name>Microsoft.AI.DependencyCollector</Name>
+    <Name>Microsoft.Extensions.Identity.Core</Name>
     <Name>Microsoft.EntityFrameworkCore</Name>
+    <Name>Microsoft.Net.Http.Headers</Name>
+    <Name>System.Linq.Queryable</Name>
     <Name>System.Security.Principal</Name>
     <Name>Microsoft.VisualStudio.TestPlatform.TestFramework</Name>
-    <Name>Microsoft.Extensions.DependencyInjection</Name>
     <Name>Moq</Name>
-    <Name>System.Linq.Expressions</Name>
     <Name>AutoFixture</Name>
+    <Name>Microsoft.Extensions.DependencyInjection</Name>
     <Name>RichardSzalay.MockHttp</Name>
+    <Name>Microsoft.AspNetCore.Http</Name>
+    <Name>System.Xml.XDocument</Name>
+    <Name>Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions</Name>
     <Name>FluentAssertions</Name>
+    <Name>System.Runtime.InteropServices.RuntimeInformation</Name>
     <Name>AutoFixture.AutoMoq</Name>
-    <Name>Microsoft.Extensions.Logging</Name>
+    <Name>Microsoft.AspNetCore.Routing.Abstractions</Name>
+    <Name>System.Threading.Thread</Name>
+    <Name>Castle.Core</Name>
+    <Name>Microsoft.Extensions.Caching.Abstractions</Name>
+    <Name>HtmlAgilityPack</Name>
+    <Name>Microsoft.Extensions.Caching.Memory</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.6</Dir>
+    <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.7</Dir>
     <Dir>C:\Program Files\dotnet\store\x64\netcoreapp2.0</Dir>
     <Dir>C:\Program Files\dotnet\sdk\NuGetFallbackFolder</Dir>
+    <Dir>C:\Users\Ian\.nuget\packages</Dir>
     <Dir>.\NHSOnline.Backend.Worker\bin\debug\netcoreapp2.0</Dir>
     <Dir>.\NHSOnline.Backend.Worker.UnitTests\bin\debug\netcoreapp2.0</Dir>
+    <Dir>.\NHSOnline.Backend.Worker\bin\debug\netcoreapp2.1</Dir>
+    <Dir>.\NHSOnline.Backend.Worker.UnitTests\bin\debug\netcoreapp2.1</Dir>
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />
@@ -136,8 +173,7 @@
       <High2Critical_SeverityThreshold>72000000000</High2Critical_SeverityThreshold>
       <Critical2Blocker_SeverityThreshold>360000000000</Critical2Blocker_SeverityThreshold>
     </DebtSettings>
-  </ProjectDebtSettings>
-  <Queries>
+  </ProjectDebtSettings><Queries>
     <Group Name="Quality Gates" Active="True" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Quality Gates Evolution</Name>
 from qg in QualityGates
@@ -3681,7 +3717,9 @@ select new {
 //</HowToFix>]]></Query>
     </Group>
     <Group Name="Architecture" Active="True" ShownInReport="False">
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Avoid namespaces mutually dependent</Name>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Id>ND1400:AvoidNamespacesMutuallyDependent</Id>
+
+// <Name>Avoid namespaces mutually dependent</Name>
 warnif count > 0
 
 // Optimization: restraint application assemblies set
@@ -11521,5 +11559,4 @@ select new {
 //</HowToFix>]]></Query>
       </Group>
     </Group>
-  </Queries>
-</NDepend>
+  </Queries></NDepend>

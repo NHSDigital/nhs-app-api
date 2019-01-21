@@ -223,7 +223,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsInternalServerError_WhenServiceReturnDemographicsInternalError()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.DemographicsInternalServerError();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
@@ -269,7 +268,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsForbidden_WhenServiceReturnDemographicsForbiddenResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.DemographicsForbidden();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
@@ -292,7 +290,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         public async Task Get_ReturnsBadGateway_WhenServiceReturnDemographicsBadGatewayResult()
         {
             // Arrange
-            var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.DemographicsBadGateway();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))

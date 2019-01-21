@@ -17,14 +17,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.demographics.yaml = contracts\nhsonline.demographics.yaml
 		contracts\nhsonline.myrecord.yaml = contracts\nhsonline.myrecord.yaml
 		contracts\nhsonline.ndop.yaml = contracts\nhsonline.ndop.yaml
+		contracts\nhsonline.odscode.yaml = contracts\nhsonline.odscode.yaml
+		contracts\nhsonline.organdonation.yaml = contracts\nhsonline.organdonation.yaml
 		contracts\nhsonline.prescriptions.yaml = contracts\nhsonline.prescriptions.yaml
 		contracts\nhsonline.termsandconditions.yaml = contracts\nhsonline.termsandconditions.yaml
 		contracts\nhsonline.usersession.yaml = contracts\nhsonline.usersession.yaml
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 		contracts\ReadMe.md = contracts\ReadMe.md
 		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
-		contracts\nhsonline.odscode.yaml = contracts\nhsonline.odscode.yaml
-		contracts\nhsonline.organdonation.yaml = contracts\nhsonline.organdonation.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"

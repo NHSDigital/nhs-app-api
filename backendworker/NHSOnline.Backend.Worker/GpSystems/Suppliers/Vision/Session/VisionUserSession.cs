@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using NHSOnline.Backend.Worker.Areas.SharedModels;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 {
-    public class VisionUserSession : GpUserSession
+    public class VisionUserSession : GpUserSession, IVisionUserSession
     {
         public override Supplier Supplier => Supplier.Vision;
 

@@ -8,6 +8,9 @@
   <PropertyGroup>
     <ThreadPoolMinThreads>100</ThreadPoolMinThreads>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP2_1;CODE_ANALYSIS</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.8.11" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
@@ -59,9 +62,5 @@
     <None Update="DevelopmentSessionEncryptionKey.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="OrganDonation\" />
-    <Folder Include="Support\Session" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.Conventions;
 using NHSOnline.Backend.Worker.HealthCheck;
 
 namespace NHSOnline.Backend.Worker.Areas.HealthCheck

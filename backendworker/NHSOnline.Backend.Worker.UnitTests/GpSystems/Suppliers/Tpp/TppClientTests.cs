@@ -27,6 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private const string ApplicationDeviceType = "deviceType";
         private static readonly Uri ApiUrl = new Uri("http://tppapitest:60015/Test/");
         private const string ApiVersion = "12";
+        private static readonly Guid Uuid = new Guid("8a1c6b80-7bcb-49fd-9c6f-4801e12207d6"); 
         private const string UnitId = "unitId";
 
         private const string MediaType = "application/xml";
@@ -52,7 +53,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _configMock.SetupGet(x => x.ApplicationDeviceType).Returns(ApplicationDeviceType);
             _configMock.SetupGet(x => x.ApiUrl).Returns(ApiUrl);
             _configMock.SetupGet(x => x.ApiVersion).Returns(ApiVersion);
-            _configMock.Setup(x => x.CreateGuid()).Returns(new Guid("8a1c6b80-7bcb-49fd-9c6f-4801e12207d6"));
+            _configMock.Setup(x => x.CreateGuid()).Returns(Uuid);
 
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new TppHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
@@ -68,7 +69,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
-            authenticateRequestModel.ApplyConfig(_configMock.Object);
+            authenticateRequestModel.Uuid = Uuid;
+            authenticateRequestModel.ApiVersion = ApiVersion;
             authenticateRequestModel.Application = new Application
             {
                 Name = _configMock.Object.ApplicationName,
@@ -110,7 +112,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
-            authenticateRequestModel.ApplyConfig(_configMock.Object);
+            authenticateRequestModel.Uuid = Uuid;
+            authenticateRequestModel.ApiVersion = ApiVersion;
             authenticateRequestModel.Application = new Application
             {
                 Name = _configMock.Object.ApplicationName,
@@ -150,7 +153,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
-            authenticateRequestModel.ApplyConfig(_configMock.Object);
+            authenticateRequestModel.Uuid = Uuid;
+            authenticateRequestModel.ApiVersion = ApiVersion;
             authenticateRequestModel.Application = new Application
             {
                 Name = _configMock.Object.ApplicationName,
@@ -182,7 +186,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             var requestMedicationRequestModel = _fixture.Create<RequestMedication>();
             requestMedicationRequestModel.UnitId = UnitId;
-            requestMedicationRequestModel.ApplyConfig(_configMock.Object);
+            requestMedicationRequestModel.Uuid = Uuid;
+            requestMedicationRequestModel.ApiVersion = ApiVersion;
             var expectedMedicationResponse = _fixture.Create<RequestMedicationReply>();
 
             var tppUserSession = _fixture.Create<TppUserSession>();
@@ -218,8 +223,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             var linkRequestModel = _fixture.Create<LinkAccount>();
             linkRequestModel.OrganisationCode = UnitId;
-            linkRequestModel.ApplyConfig(_configMock.Object);
-            
+            linkRequestModel.Uuid = Uuid;
+            linkRequestModel.ApiVersion = ApiVersion;
+            linkRequestModel.Application = new Application
+            {
+                Name = _configMock.Object.ApplicationName,
+                Version = _configMock.Object.ApplicationVersion,
+                ProviderId = _configMock.Object.ApplicationProviderId,
+                DeviceType = _configMock.Object.ApplicationDeviceType
+            };
+
             var expectedLinkAccountResponse = _fixture.Create<LinkAccountReply>();
             expectedLinkAccountResponse.ProviderId = _configMock.Object.ApplicationProviderId;
 
@@ -254,8 +267,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {            
             var linkAccountRequestModel = _fixture.Create<LinkAccount>();
             linkAccountRequestModel.OrganisationCode = UnitId;
-            linkAccountRequestModel.ApplyConfig(_configMock.Object);
-            
+            linkAccountRequestModel.Uuid = Uuid;
+            linkAccountRequestModel.ApiVersion = ApiVersion;
+            linkAccountRequestModel.Application = new Application
+            {
+                Name = _configMock.Object.ApplicationName,
+                Version = _configMock.Object.ApplicationVersion,
+                ProviderId = _configMock.Object.ApplicationProviderId,
+                DeviceType = _configMock.Object.ApplicationDeviceType
+            };
+
             var expectedErrorResponse = _fixture.Create<Error>();
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
@@ -287,7 +308,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             var linkAccountRequestModel = _fixture.Create<LinkAccount>();
             linkAccountRequestModel.OrganisationCode = UnitId;
-            linkAccountRequestModel.ApplyConfig(_configMock.Object);
+            linkAccountRequestModel.Uuid = Uuid;
+            linkAccountRequestModel.ApiVersion = ApiVersion;
+            linkAccountRequestModel.Application = new Application
+            {
+                Name = _configMock.Object.ApplicationName,
+                Version = _configMock.Object.ApplicationVersion,
+                ProviderId = _configMock.Object.ApplicationProviderId,
+                DeviceType = _configMock.Object.ApplicationDeviceType
+            };
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -310,8 +339,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             var addNhsUserRequestModel = _fixture.Create<AddNhsUserRequest>();
             addNhsUserRequestModel.OrganisationCode = UnitId;
-            addNhsUserRequestModel.ApplyConfig(_configMock.Object);
-            
+            addNhsUserRequestModel.Uuid = Uuid;
+            addNhsUserRequestModel.ApiVersion = ApiVersion;
+            addNhsUserRequestModel.Application = new Application
+            {
+                Name = _configMock.Object.ApplicationName,
+                Version = _configMock.Object.ApplicationVersion,
+                ProviderId = _configMock.Object.ApplicationProviderId,
+                DeviceType = _configMock.Object.ApplicationDeviceType
+            };
+
             var expectedLinkAccountResponse = _fixture.Create<AddNhsUserResponse>();
             expectedLinkAccountResponse.ProviderId = _configMock.Object.ApplicationProviderId;
 
@@ -346,8 +383,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {            
             var nhsAddUserRequestModel = _fixture.Create<AddNhsUserRequest>();
             nhsAddUserRequestModel.OrganisationCode = UnitId;
-            nhsAddUserRequestModel.ApplyConfig(_configMock.Object);
-            
+            nhsAddUserRequestModel.Uuid = Uuid;
+            nhsAddUserRequestModel.ApiVersion = ApiVersion;
+            nhsAddUserRequestModel.Application = new Application
+            {
+                Name = _configMock.Object.ApplicationName,
+                Version = _configMock.Object.ApplicationVersion,
+                ProviderId = _configMock.Object.ApplicationProviderId,
+                DeviceType = _configMock.Object.ApplicationDeviceType
+            };
+
             var expectedErrorResponse = _fixture.Create<Error>();
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
@@ -379,7 +424,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             var addNhsUserRequestModel = _fixture.Create<AddNhsUserRequest>();
             addNhsUserRequestModel.OrganisationCode = UnitId;
-            addNhsUserRequestModel.ApplyConfig(_configMock.Object);
+            addNhsUserRequestModel.Uuid = Uuid;
+            addNhsUserRequestModel.ApiVersion = ApiVersion;
+            addNhsUserRequestModel.Application = new Application
+            {
+                Name = _configMock.Object.ApplicationName,
+                Version = _configMock.Object.ApplicationVersion,
+                ProviderId = _configMock.Object.ApplicationProviderId,
+                DeviceType = _configMock.Object.ApplicationDeviceType
+            };
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
             {
@@ -402,8 +455,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {            
             var logoffRequestModel = _fixture.Create<Logoff>();
             logoffRequestModel.UnitId = null;
-            logoffRequestModel.ApplyConfig(_configMock.Object);
-            
+            logoffRequestModel.Uuid = Uuid;
+            logoffRequestModel.ApiVersion = ApiVersion;
+
             var expectedErrorResponse = _fixture.Create<Error>();
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
@@ -432,8 +486,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {            
             var logoffRequestModel = _fixture.Create<Logoff>();
             logoffRequestModel.UnitId = null;
-            logoffRequestModel.ApplyConfig(_configMock.Object);
-            
+            logoffRequestModel.Uuid = Uuid;
+            logoffRequestModel.ApiVersion = ApiVersion;
+
             var expectedLogoffResponse = _fixture.Create<LogoffReply>();
             var responseContent = new StringContent(expectedLogoffResponse.SerializeXml());
             var tppUserSession = _fixture.Create<TppUserSession>();
