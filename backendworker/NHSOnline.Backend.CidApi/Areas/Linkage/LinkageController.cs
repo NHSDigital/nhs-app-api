@@ -89,8 +89,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
                 var gpSystem = gpSystemOption.ValueOrFailure();
 
-                var validationService = gpSystem.GetLinkageRequestValidationService();
-                if (!validationService.Validate(getLinkageRequest))
+                var validationService = gpSystem.GetLinkageValidationService();
+                if (!validationService.IsGetValid(getLinkageRequest))
                 {
                     _logger.LogError($"Invalid parameters or parameters missing from get linkage request");
                     return BadRequest();
@@ -142,8 +142,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Linkage
 
                 var gpSystem = gpSystemOption.ValueOrFailure();
                 
-                var validationService = gpSystem.GetLinkageRequestValidationService();
-                if (!validationService.Validate(createLinkageRequest))
+                var validationService = gpSystem.GetLinkageValidationService();
+                if (!validationService.IsPostValid(createLinkageRequest))
                 {
                     _logger.LogError($"Invalid parameters or parameters missing from create linkage request");
                     return BadRequest();

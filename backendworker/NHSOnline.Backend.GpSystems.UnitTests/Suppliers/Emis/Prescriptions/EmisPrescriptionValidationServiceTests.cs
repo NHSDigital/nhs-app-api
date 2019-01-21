@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using Moq;
 using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
 {
     [TestClass]
-    public class EmisPrescriptionRequestValidationServiceTests
+    public class EmisPrescriptionValidationServiceTests
     {
-        private IPrescriptionRequestValidationService _prescriptionRequestValidationService;
+        private PrescriptionValidationService _prescriptionRequestValidationService;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _prescriptionRequestValidationService = new EmisPrescriptionRequestValidationService();
+            Mock<ILogger<EmisPrescriptionValidationService>> logger = new Mock<ILogger<EmisPrescriptionValidationService>>();
+            _prescriptionRequestValidationService = new EmisPrescriptionValidationService(logger.Object);
         }
 
         [TestMethod]
@@ -27,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var defaultFromDate = DateTimeOffset.Now.AddMonths(-6);
 
             // Act
-            var result = _prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate);
+            var result = _prescriptionRequestValidationService.IsGetValid(fromDate, defaultFromDate);
 
             // Assert
             result.Should().BeFalse();
@@ -41,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var fromDate = defaultFromDate.AddSeconds(-1);
             
             // Act
-            var result = _prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate);
+            var result = _prescriptionRequestValidationService.IsGetValid(fromDate, defaultFromDate);
 
             // Assert
             result.Should().BeFalse();
@@ -55,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var fromDate = DateTimeOffset.Now.AddDays(1); // to be sure to be in the future
 
             // Act
-            var result = _prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate);
+            var result = _prescriptionRequestValidationService.IsGetValid(fromDate, defaultFromDate);
 
             // Assert
             result.Should().BeFalse();
@@ -69,7 +72,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var fromDate = DateTimeOffset.Now.AddDays(-1); // greater than default, but less than today
 
             // Act
-            var result = _prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate);
+            var result = _prescriptionRequestValidationService.IsGetValid(fromDate, defaultFromDate);
 
             // Assert
             result.Should().BeTrue();
@@ -91,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(modelUnderTest);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest);
 
             // Assert
             result.Should().BeTrue();
@@ -111,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(modelUnderTest);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest);
 
             // Assert
             result.Should().BeFalse();
@@ -127,7 +130,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(modelUnderTest);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest);
 
             // Assert
             result.Should().BeFalse();
@@ -146,11 +149,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 {
                     Guid.NewGuid().ToString(),
                 },
-                SpecialRequest = new String('x', specialRequestLength),
+                SpecialRequest = new string('x', specialRequestLength),
             };
 
             // Act
-            var result = _prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(modelUnderTest);
+            var result = _prescriptionRequestValidationService.IsPostValid(modelUnderTest);
 
             // Assert
             result.Should().Be(isValid);

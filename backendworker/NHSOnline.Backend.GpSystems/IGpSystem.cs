@@ -17,6 +17,8 @@ namespace NHSOnline.Backend.GpSystems
 
         IAppointmentSlotsService GetAppointmentSlotsService();
 
+        IAppointmentsValidationService GetAppointmentsValidationService();
+
         ICourseService GetCourseService();
 
         IDemographicsService GetDemographicsService();
@@ -25,7 +27,7 @@ namespace NHSOnline.Backend.GpSystems
 
         IPrescriptionService GetPrescriptionService();
 
-        IPrescriptionRequestValidationService GetPrescriptionRequestValidationService();
+        IPrescriptionValidationService GetPrescriptionRequestValidationService();
 
         ISessionService GetSessionService();
 
@@ -37,6 +39,6 @@ namespace NHSOnline.Backend.GpSystems
 
         ILinkageService GetLinkageService();
 
-        ILinkageRequestValidationService GetLinkageRequestValidationService();
+        ILinkageValidationService GetLinkageValidationService();
     }
 }

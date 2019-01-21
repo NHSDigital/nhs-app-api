@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
         private IFixture _fixture;
         private IOptions<ConfigurationSettings> _options;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
-        private Mock<IPrescriptionRequestValidationService> _prescriptionRequestValidationService;
+        private Mock<IPrescriptionValidationService> _prescriptionRequestValidationService;
         private UserSession _userSession;
 
         private Mock<IAuditor> _mockAuditor;
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             _fixture.Inject(_options);
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
-            _prescriptionRequestValidationService = _fixture.Freeze<Mock<IPrescriptionRequestValidationService>>();
+            _prescriptionRequestValidationService = _fixture.Freeze<Mock<IPrescriptionValidationService>>();
 
             var httpContextItems = new Dictionary<object, object>
             {
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             prescriptionService.Setup(x => x.GetPrescriptions(_userSession.GpUserSession, date, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((PrescriptionResult)getPrescriptionsResult));
 
             _prescriptionRequestValidationService
-                .Setup(x => x.IsValidFromDate(date, It.IsAny<DateTimeOffset>()))
+                .Setup(x => x.IsGetValid(date, It.IsAny<DateTimeOffset>()))
                 .Returns(true);
 
             // Act
@@ -189,7 +189,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Callback((GpUserSession s, DateTimeOffset? fd, DateTimeOffset? td) => fromDateGenerated = fd);
 
             _prescriptionRequestValidationService
-                .Setup(x => x.IsValidFromDate(It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset>()))
+                .Setup(x => x.IsGetValid(It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset>()))
                 .Returns(false);
 
             // Act
@@ -243,7 +243,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
             
             _prescriptionRequestValidationService
-                .Setup(x => x.IsValidRepeatPrescriptionRequest(It.IsAny<RepeatPrescriptionRequest>()))
+                .Setup(x => x.IsPostValid(It.IsAny<RepeatPrescriptionRequest>()))
                 .Returns(true);
 
             // Act
@@ -292,7 +292,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             prescriptionService.Setup(x => x.OrderPrescription(_userSession.GpUserSession, It.IsAny<RepeatPrescriptionRequest>())).Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
             
             _prescriptionRequestValidationService
-                .Setup(x => x.IsValidRepeatPrescriptionRequest(It.IsAny<RepeatPrescriptionRequest>()))
+                .Setup(x => x.IsPostValid(It.IsAny<RepeatPrescriptionRequest>()))
                 .Returns(false);
 
             // Act

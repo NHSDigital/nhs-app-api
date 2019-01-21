@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Support;
-
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
     public static class VisionLoggingExtensions

@@ -37,6 +37,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             return _serviceProvider.GetService<VisionAppointmentsService>();
         }
 
+        public IAppointmentsValidationService GetAppointmentsValidationService()
+        {
+            return _serviceProvider.GetService<VisionAppointmentsValidationService>();
+        }
+
         public IAppointmentSlotsService GetAppointmentSlotsService()
         {
             return _serviceProvider.GetService<VisionAppointmentSlotsService>();
@@ -87,14 +92,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             return _serviceProvider.GetService<VisionLinkageService>();
         }
         
-        public ILinkageRequestValidationService GetLinkageRequestValidationService()
+        public ILinkageValidationService GetLinkageValidationService()
         {
-            return _serviceProvider.GetService<VisionLinkageRequestValidationService>();
+            return _serviceProvider.GetService<VisionLinkageValidationService>();
         }
         
-        public IPrescriptionRequestValidationService GetPrescriptionRequestValidationService()
+        public IPrescriptionValidationService GetPrescriptionRequestValidationService()
         {
-            return _serviceProvider.GetService<VisionPrescriptionRequestValidationService>();
+            return _serviceProvider.GetService<VisionPrescriptionValidationService>();
         }
     }
 }

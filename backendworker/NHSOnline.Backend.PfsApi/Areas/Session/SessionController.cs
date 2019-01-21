@@ -67,6 +67,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             {
                 _logger.LogEnter();
 
+                var validator = new SessionValidator(_logger);
+
+                if (!validator.IsPostValid(model))
+                {
+                    return BadRequest();
+                }
+
                 // Call Citizen ID to get the User Profile (IM1 connection token, ODS code, Date of Birth, NHS Number).
                 var citizenIdSessionResult = await _citizenIdSessionService.Create(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
 

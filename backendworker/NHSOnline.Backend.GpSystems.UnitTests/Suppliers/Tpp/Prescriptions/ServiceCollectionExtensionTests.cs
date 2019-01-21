@@ -29,8 +29,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var tppPrescriptionService = new ServiceDescriptor(typeof(TppPrescriptionService),
                 typeof(TppPrescriptionService), ServiceLifetime.Transient);
             var tppPrescriptionRequestValidationService = new ServiceDescriptor(
-                typeof(TppPrescriptionRequestValidationService),
-                typeof(TppPrescriptionRequestValidationService), ServiceLifetime.Transient);
+                typeof(TppPrescriptionValidationService),
+                typeof(TppPrescriptionValidationService), ServiceLifetime.Transient);
 
             var tppCourseMapper = new ServiceDescriptor(typeof(ITppCourseMapper),
                 typeof(TppCourseMapper), ServiceLifetime.Transient);

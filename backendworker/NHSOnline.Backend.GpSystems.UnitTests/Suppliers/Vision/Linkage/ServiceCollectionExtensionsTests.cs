@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             {
                 new ServiceDescriptor(typeof(VisionLinkageService), typeof(VisionLinkageService), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(IVisionLinkageMapper), typeof(VisionLinkageMapper), ServiceLifetime.Transient),
-                new ServiceDescriptor(typeof(VisionLinkageRequestValidationService), typeof(VisionLinkageRequestValidationService), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(VisionLinkageValidationService), typeof(VisionLinkageValidationService), ServiceLifetime.Singleton),
             };
 
             foreach (var dependency in dependencies)

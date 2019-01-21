@@ -1,4 +1,6 @@
+
 ﻿using Microsoft.Extensions.DependencyInjection;
+
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
@@ -19,7 +21,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             services.AddTransient<IAppointmentsReplyMapper, AppointmentsReplyMapper>();
             services.AddTransient<IAppointmentMapper, AppointmentMapper>();
             services.AddSingleton<IAppointmentsResultBuilder, TppAppointmentsResultBuilder>();
-
+            
+            services.AddSingleton<TppAppointmentsValidationService>();
+            
             return services;
         }
     }

@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage
         public static IServiceCollection RegisterMicrotestLinkageServices(this IServiceCollection services)
         {
             services.AddTransient<MicrotestLinkageService>();
-            services.AddSingleton<MicrotestLinkageRequestValidationService>();
+            services.AddSingleton<MicrotestLinkageValidationService>();
 
             return services;
         }

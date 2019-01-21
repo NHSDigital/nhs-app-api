@@ -41,6 +41,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return _serviceProvider.GetService<MicrotestAppointmentsService>();
         }
 
+        public IAppointmentsValidationService GetAppointmentsValidationService()
+        {
+            return _serviceProvider.GetService<MicrotestAppointmentsValidationService>();
+        }
+
         public ICourseService GetCourseService()
         {
             throw new NotImplementedException();
@@ -56,9 +61,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return _serviceProvider.GetService<MicrotestIm1ConnectionService>();
         }
 
-        public ILinkageRequestValidationService GetLinkageRequestValidationService()
+        public ILinkageValidationService GetLinkageValidationService()
         {
-            return _serviceProvider.GetService<MicrotestLinkageRequestValidationService>();
+            return _serviceProvider.GetService<MicrotestLinkageValidationService>();
         }
 
         public ILinkageService GetLinkageService()
@@ -71,7 +76,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             throw new NotImplementedException();
         }
 
-        public IPrescriptionRequestValidationService GetPrescriptionRequestValidationService()
+        public IPrescriptionValidationService GetPrescriptionRequestValidationService()
         {
             throw new NotImplementedException();
         }

@@ -9,24 +9,24 @@ using NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage;
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
 {
     [TestClass]
-    public class EmisLinkageRequestValidationServiceTests
+    public class EmisLinkageValidationServiceTests
     {
-        private EmisLinkageRequestValidationService _systemUnderTest;
+        private EmisLinkageValidationService _systemUnderTest;
         private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _systemUnderTest = _fixture.Create<EmisLinkageRequestValidationService>();
+            _systemUnderTest = _fixture.Create<EmisLinkageValidationService>();
         }
 
         [TestMethod]
         public void ValidateGetLinkageRequest_ForCompleteRequest_ReturnsTrue()
         {
-            var request = _fixture.Create<GetLinkageRequest>();
+            var request = ValidGetLinkageRequest();
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsGetValid(request);
 
             result.Should().BeTrue();
         }
@@ -36,10 +36,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateGetLinkageRequest_ForNoIdentityToken_ReturnsFalse(string identityToken)
         {
-            var request = _fixture.Create<GetLinkageRequest>();
+            var request = ValidGetLinkageRequest();
             request.IdentityToken = identityToken;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsGetValid(request);
 
             result.Should().BeFalse();
         }
@@ -49,10 +49,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateGetLinkageRequest_ForNoOdsCode_ReturnsFalse(string nhsNumber)
         {
-            var request = _fixture.Create<GetLinkageRequest>();
+            var request = ValidGetLinkageRequest();
             request.NhsNumber = nhsNumber;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsGetValid(request);
 
             result.Should().BeFalse();
         }
@@ -62,10 +62,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateGetLinkageRequest_ForOdsCode_ReturnsFalse(string odsCode)
         {
-            var request = _fixture.Create<GetLinkageRequest>();
+            var request = ValidGetLinkageRequest();
             request.OdsCode = odsCode;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsGetValid(request);
 
             result.Should().BeFalse();
         }
@@ -75,10 +75,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateGetLinkageRequest_ForNoSurname_ReturnsTrue(string surname)
         {
-            var request = _fixture.Create<GetLinkageRequest>();
+            var request = ValidGetLinkageRequest();
             request.Surname = surname;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsGetValid(request);
 
             result.Should().BeTrue();
         }
@@ -87,10 +87,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow(null)]
         public void ValidateGetLinkageRequest_NoDateOfBirth_ReturnsTrue(DateTime? dateOfBirth)
         {
-            var request = _fixture.Create<GetLinkageRequest>();
+            var request = ValidGetLinkageRequest();
             request.DateOfBirth = dateOfBirth;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsGetValid(request);
 
             result.Should().BeTrue();
         }
@@ -98,9 +98,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [TestMethod]
         public void ValidateCreateLinkageRequest_ForCompleteRequest_ReturnsTrue()
         {
-            var request = _fixture.Create<CreateLinkageRequest>();
+            var request = ValidCreateLinkageRequest();
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsPostValid(request);
 
             result.Should().BeTrue();
         }
@@ -110,10 +110,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateCreateLinkageRequest_ForNoEmailAddress_ReturnsFalse(string emailAddress)
         {
-            var request = _fixture.Create<CreateLinkageRequest>();
+            var request = ValidCreateLinkageRequest();
             request.EmailAddress = emailAddress;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsPostValid(request);
 
             result.Should().BeFalse();
         }
@@ -123,10 +123,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateCreateLinkageRequest_ForNoIdentityToken_ReturnsFalse(string identityToken)
         {
-            var request = _fixture.Create<CreateLinkageRequest>();
+            var request = ValidCreateLinkageRequest();
             request.IdentityToken = identityToken;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsPostValid(request);
 
             result.Should().BeFalse();
         }
@@ -135,10 +135,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow(null)]
         public void ValidateCreateLinkageRequest_ForNoDateOfBirth_ReturnsFalse(DateTime? dateOfBirth)
         {
-            var request = _fixture.Create<CreateLinkageRequest>();
+            var request = ValidCreateLinkageRequest();
             request.DateOfBirth = dateOfBirth;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsPostValid(request);
 
             result.Should().BeFalse();
         }
@@ -148,10 +148,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateCreateLinkageRequest_ForNoSurname_ReturnsTrue(string surname)
         {
-            var request = _fixture.Create<CreateLinkageRequest>();
+            var request = ValidCreateLinkageRequest();
             request.Surname = surname;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsPostValid(request);
 
             result.Should().BeTrue();
         }
@@ -161,10 +161,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateCreateLinkageRequest_ForNoNhsNumber_ReturnsFalse(string nhsNumber)
         {
-            var request = _fixture.Create<CreateLinkageRequest>();
+            var request = ValidCreateLinkageRequest();
             request.NhsNumber = nhsNumber;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsPostValid(request);
 
             result.Should().BeFalse();
         }
@@ -174,12 +174,26 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
         [DataRow("")]
         public void ValidateCreateLinkageRequest_ForNoOdsCode_ReturnsFalse(string odsCode)
         {
-            var request = _fixture.Create<CreateLinkageRequest>();
+            var request = ValidCreateLinkageRequest();
             request.OdsCode = odsCode;
 
-            var result = _systemUnderTest.Validate(request);
+            var result = _systemUnderTest.IsPostValid(request);
 
             result.Should().BeFalse();
+        }
+
+        private CreateLinkageRequest ValidCreateLinkageRequest()
+        {
+            var request = _fixture.Create<CreateLinkageRequest>();
+            request.OdsCode = "A12345";
+            return request;
+        }
+
+        private GetLinkageRequest ValidGetLinkageRequest()
+        {
+            var request = _fixture.Create<GetLinkageRequest>();
+            request.OdsCode = "A12345";
+            return request;
         }
     }
 }

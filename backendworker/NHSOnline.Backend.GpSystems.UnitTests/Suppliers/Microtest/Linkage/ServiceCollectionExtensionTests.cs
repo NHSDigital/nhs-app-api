@@ -25,8 +25,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
             var registeredService = serviceCollection.ToList();            
             var microtestLinkageService = new ServiceDescriptor(typeof(MicrotestLinkageService),
                 typeof(MicrotestLinkageService), ServiceLifetime.Transient);
-            var microtestLinkageRequestValidationService = new ServiceDescriptor(typeof(MicrotestLinkageRequestValidationService),
-                typeof(MicrotestLinkageRequestValidationService), ServiceLifetime.Singleton);
+            var microtestLinkageRequestValidationService = new ServiceDescriptor(typeof(MicrotestLinkageValidationService),
+                typeof(MicrotestLinkageValidationService), ServiceLifetime.Singleton);
             
             registeredService.Should().ContainEquivalentOf(microtestLinkageService);
             registeredService.Should().ContainEquivalentOf(microtestLinkageRequestValidationService);

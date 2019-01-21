@@ -37,6 +37,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return _serviceProvider.GetService<EmisAppointmentsService>();
         }
 
+        public IAppointmentsValidationService GetAppointmentsValidationService()
+        {
+            return _serviceProvider.GetService<EmisAppointmentsValidationService>();
+        }
+
         public IAppointmentSlotsService GetAppointmentSlotsService()
         {
             return _serviceProvider.GetService<EmisAppointmentSlotsService>();
@@ -67,9 +72,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return _serviceProvider.GetService<EmisPrescriptionService>();
         }
 
-        public IPrescriptionRequestValidationService GetPrescriptionRequestValidationService()
+        public IPrescriptionValidationService GetPrescriptionRequestValidationService()
         {
-            return _serviceProvider.GetService<EmisPrescriptionRequestValidationService>();
+            return _serviceProvider.GetService<EmisPrescriptionValidationService>();
         }
 
         public ISessionService GetSessionService()
@@ -92,9 +97,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return _serviceProvider.GetService<EmisLinkageService>();
         }
 
-        public ILinkageRequestValidationService GetLinkageRequestValidationService()
+        public ILinkageValidationService GetLinkageValidationService()
         {
-            return _serviceProvider.GetService<EmisLinkageRequestValidationService>();
+            return _serviceProvider.GetService<EmisLinkageValidationService>();
         }
     }
 }

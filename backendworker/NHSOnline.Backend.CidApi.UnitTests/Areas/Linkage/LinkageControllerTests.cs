@@ -413,7 +413,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
 
         private static Mock<IGpSystem> MockGpSystem(
             Mock<ILinkageService> linkageService = null,
-            Mock<ILinkageRequestValidationService> linkageValidationService = null)
+            Mock<ILinkageValidationService> linkageValidationService = null)
         {
             linkageService = linkageService ?? MockLinkageService();
             linkageValidationService = linkageValidationService ??
@@ -421,7 +421,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
 
             var mockGpSystem = new Mock<IGpSystem>();
             mockGpSystem.Setup(x => x.GetLinkageService()).Returns(linkageService.Object);
-            mockGpSystem.Setup(x => x.GetLinkageRequestValidationService()).Returns(linkageValidationService.Object);
+            mockGpSystem.Setup(x => x.GetLinkageValidationService()).Returns(linkageValidationService.Object);
 
             return mockGpSystem;
         }
@@ -441,14 +441,14 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Linkage
             return mockLinkageService;
         }
         
-        private static Mock<ILinkageRequestValidationService> MockLinkageValidationService(bool validationResult = false)
+        private static Mock<ILinkageValidationService> MockLinkageValidationService(bool validationResult = false)
         {
-            var mockLinkageValidationService = new Mock<ILinkageRequestValidationService>();
+            var mockLinkageValidationService = new Mock<ILinkageValidationService>();
 
-            mockLinkageValidationService.Setup(x => x.Validate(It.IsAny<GetLinkageRequest>()))
+            mockLinkageValidationService.Setup(x => x.IsGetValid(It.IsAny<GetLinkageRequest>()))
                 .Returns(validationResult);
             
-            mockLinkageValidationService.Setup(x => x.Validate(It.IsAny<CreateLinkageRequest>())
+            mockLinkageValidationService.Setup(x => x.IsPostValid(It.IsAny<CreateLinkageRequest>())
             ).Returns(validationResult);
 
             return mockLinkageValidationService;

@@ -3,11 +3,11 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.GpSystems.Linkage.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
 
-namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Linkage
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Linkage
 {
     [TestClass]
     public class MicrotestLinkageServiceTests

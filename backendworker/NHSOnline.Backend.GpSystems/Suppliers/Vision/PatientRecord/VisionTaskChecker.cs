@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;

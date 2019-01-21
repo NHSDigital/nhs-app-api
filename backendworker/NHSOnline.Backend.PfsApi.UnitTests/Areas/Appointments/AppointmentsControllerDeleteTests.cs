@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private AppointmentCancelRequest _appointmentCancelRequest;
         private UserSession _userSession;
         private Mock<IAppointmentsService> _mockAppointmentsService;
+        private Mock<IAppointmentsValidationService> _mockAppointmentsValidationService;
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private AppointmentsController _systemUnderTest;
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_Cancel_Request";
         private const string ResponseAuditType = "Appointments_Cancel_Response";
 
-        private const string RequestAuditMessage = "Attempting to cancel appointment with id: {0}";
+        private string RequestAuditMessage;
 
         [TestInitialize]
         public void TestInitialize()
@@ -50,15 +51,24 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
 
             _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
 
+            _mockAppointmentsValidationService = _fixture.Freeze<Mock<IAppointmentsValidationService>>();
+
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult) new AppointmentCancelResult.SuccessfullyCancelled()));
 
+            _mockAppointmentsValidationService.Setup(x => x.IsDeleteValid(_appointmentCancelRequest))
+                .Returns(true);
+
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             _mockGpSystem
                 .Setup(x => x.GetAppointmentsService())
                 .Returns(_mockAppointmentsService.Object);
+
+            _mockGpSystem
+                .Setup(x => x.GetAppointmentsValidationService())
+                .Returns(_mockAppointmentsValidationService.Object);
 
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _mockGpSystemFactory
@@ -74,6 +84,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             {
                 HttpContext = httpContextMock.Object
             };
+
+            RequestAuditMessage = $"Attempting to cancel appointment with id: {_appointmentCancelRequest.AppointmentId}";
         }
 
         [TestMethod]
@@ -103,8 +115,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
-                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to cancel appointment due to insufficent permissions for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
@@ -126,8 +137,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status409Conflict);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
-                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to cancel appointment due to it not being cancellable appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
@@ -148,8 +158,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status461TooLate);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
-                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to cancel appointment due to it being too late to cancel with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
@@ -169,8 +178,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
-                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to cancel appointment due to a bad request for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
@@ -191,8 +199,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
-                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to cancel appointment due to unavailable supplier for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
@@ -210,8 +217,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
-                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Appointment successfully cancelled for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));

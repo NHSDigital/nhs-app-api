@@ -51,11 +51,9 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
                     odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
                 }
 
-                var argumentValidator = new ValidateAndLog(_logger)
-                    .IsNotNullOrWhitespace(connectionToken, Constants.HttpHeaders.ConnectionToken)
-                    .IsNotNullOrWhitespace(odsCode, Constants.HttpHeaders.OdsCode);
+                var validator = new Im1ConnectionValidator(_logger);
 
-                if (!argumentValidator.IsValid())
+                if (!validator.IsGetValid(connectionToken, odsCode))
                 {
                     return BadRequest();
                 }
@@ -99,6 +97,13 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             {
                 _logger.LogEnter();
                 model.OdsCode = _odsCodeMassager.CheckOdsCode(model.OdsCode);
+
+                var validator = new Im1ConnectionValidator(_logger);
+
+                if (!validator.IsPostValid(model))
+                {
+                    return BadRequest();
+                }
 
                 var gpSystemOption = await GetGpSystem(model.OdsCode);
                 if (!gpSystemOption.HasValue)

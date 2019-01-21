@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Linkage
         {
             services.AddTransient<VisionLinkageService>();
             services.AddTransient<IVisionLinkageMapper, VisionLinkageMapper>();
-            services.AddSingleton<VisionLinkageRequestValidationService>();
+            services.AddSingleton<VisionLinkageValidationService>();
 
             return services;
         }

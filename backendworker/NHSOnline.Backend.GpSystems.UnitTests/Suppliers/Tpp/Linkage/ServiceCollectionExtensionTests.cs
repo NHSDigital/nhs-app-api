@@ -26,8 +26,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Linkage
             
             var tppLinkageService = new ServiceDescriptor(typeof(TppLinkageService),
                 typeof(TppLinkageService), ServiceLifetime.Transient);
-            var tppLinkageRequestValidationService = new ServiceDescriptor(typeof(TppLinkageRequestValidationService),
-                typeof(TppLinkageRequestValidationService), ServiceLifetime.Singleton);
+            var tppLinkageRequestValidationService = new ServiceDescriptor(typeof(TppLinkageValidationService),
+                typeof(TppLinkageValidationService), ServiceLifetime.Singleton);
             var tppLinkageMapper = new ServiceDescriptor(typeof(ITppLinkageMapper),
                 typeof(TppLinkageMapper), ServiceLifetime.Transient);
             

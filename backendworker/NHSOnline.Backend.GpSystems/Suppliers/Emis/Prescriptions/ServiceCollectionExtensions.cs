@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         {
             services.AddTransient<EmisCourseService>();
             services.AddTransient<EmisPrescriptionService>();
-            services.AddTransient<EmisPrescriptionRequestValidationService>();
+            services.AddTransient<EmisPrescriptionValidationService>();
 
             services.AddTransient<IEmisPrescriptionMapper, EmisPrescriptionMapper>();
 

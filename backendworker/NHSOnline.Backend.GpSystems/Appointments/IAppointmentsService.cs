@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support;
 

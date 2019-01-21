@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var dependencies = new List<ServiceDescriptor>
             {
                 new ServiceDescriptor(typeof(VisionPrescriptionService), typeof(VisionPrescriptionService), ServiceLifetime.Transient),
-                new ServiceDescriptor(typeof(VisionPrescriptionRequestValidationService), typeof(VisionPrescriptionRequestValidationService), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(VisionPrescriptionValidationService), typeof(VisionPrescriptionValidationService), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(IVisionPrescriptionMapper), typeof(VisionPrescriptionMapper), ServiceLifetime.Transient),
                 new ServiceDescriptor(typeof(VisionCourseService), typeof(VisionCourseService), ServiceLifetime.Transient),
             };

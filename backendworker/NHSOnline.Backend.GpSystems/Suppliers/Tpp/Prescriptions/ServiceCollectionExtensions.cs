@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
         {
             services.AddTransient<TppCourseService>();
             services.AddTransient<TppPrescriptionService>();
-            services.AddTransient<TppPrescriptionRequestValidationService>();
+            services.AddTransient<TppPrescriptionValidationService>();
 
             services.AddTransient<ITppCourseMapper, TppCourseMapper>();
             services.AddTransient<ITppPrescriptionMapper, TppPrescriptionMapper>();

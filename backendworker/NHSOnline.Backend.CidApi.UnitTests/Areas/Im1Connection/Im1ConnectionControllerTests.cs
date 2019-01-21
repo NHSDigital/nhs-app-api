@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
     [TestClass]
     public class Im1ConnectionControllerTests
     {
-        private const string DefaultOdsCode = "AB1234";
+        private const string DefaultOdsCode = "A12345";
         private const Supplier DefaultSupplier = Supplier.Emis;
         private const string DefaultPatientIdentifier = "XX00000A";
         private const string DefaultConnectionToken = "b2ed6831-cdd4-4ef7-a9b4-0880c2a35d78";
@@ -171,10 +171,12 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
         {
             // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
+            request.OdsCode = DefaultOdsCode;
 
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(request.OdsCode))
                 .Returns(Task.FromResult(Option.None<Supplier>()));
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(DefaultOdsCode)).Returns(DefaultOdsCode);
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
 
@@ -195,7 +197,8 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             const Supplier supplier = DefaultSupplier;
             const string patientIdentifier = DefaultConnectionToken;
 
-            var model = new PatientIm1ConnectionRequest { OdsCode = DefaultOdsCode };
+            var model = _fixture.Create<PatientIm1ConnectionRequest>();
+            model.OdsCode = odsCode;
 
             var expectedNhsNumbers = new[]
             {

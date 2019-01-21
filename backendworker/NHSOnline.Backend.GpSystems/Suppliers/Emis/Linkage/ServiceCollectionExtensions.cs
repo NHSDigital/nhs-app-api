@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
         {
             services.AddTransient<EmisLinkageService>();
             services.AddTransient<IEmisLinkageMapper, EmisLinkageMapper>();
-            services.AddSingleton<EmisLinkageRequestValidationService >();
+            services.AddSingleton<EmisLinkageValidationService>();
 
             return services;
         }

@@ -5,16 +5,16 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage
 {
-    public class MicrotestLinkageRequestValidationService : ILinkageRequestValidationService
+    public class MicrotestLinkageValidationService : LinkageValidationService
     {
-        private readonly ILogger<MicrotestLinkageRequestValidationService> _logger;
+        private readonly ILogger<MicrotestLinkageValidationService> _logger;
 
-        public MicrotestLinkageRequestValidationService(ILogger<MicrotestLinkageRequestValidationService> logger)
+        public MicrotestLinkageValidationService(ILogger<MicrotestLinkageValidationService> logger) : base(logger)
         {
             _logger = logger;
         }
 
-        public bool Validate(GetLinkageRequest request)
+        protected override bool IsSupplierGetValid(GetLinkageRequest request)
         {
             var validator = new ValidateAndLog(_logger)
                 .IsNotNullOrWhitespace(request.NhsNumber, Constants.HttpHeaders.NhsNumber)
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage
             return validator.IsValid();
         }
 
-        public bool Validate(CreateLinkageRequest request)
+        protected override bool IsSupplierPostValid(CreateLinkageRequest request)
         {
             var validator = new ValidateAndLog(_logger)
                 .IsNotNullOrWhitespace(request.NhsNumber, nameof(request.NhsNumber))

@@ -17,7 +17,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             services.AddTransient<EmisAppointmentsRetrievalService>();
             services.AddTransient<EmisAppointmentsBookingService>();
             services.AddTransient<EmisAppointmentsCancellationService>();
-            
+            services.AddSingleton<EmisAppointmentsValidationService>();
+
             services.AddTransient<IAppointmentSlotsResponseMapper, AppointmentSlotsResponseMapper>();
             services.AddTransient<IAppointmentSlotsMapper, AppointmentSlotsMapper>();
             services.AddTransient<IAppointmentsResponseMapper, AppointmentsResponseMapper>();

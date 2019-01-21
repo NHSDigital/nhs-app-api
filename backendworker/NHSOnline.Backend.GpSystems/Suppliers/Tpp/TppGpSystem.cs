@@ -37,6 +37,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             return _serviceProvider.GetService<TppAppointmentsService>();
         }
 
+        public IAppointmentsValidationService GetAppointmentsValidationService()
+        {
+            return _serviceProvider.GetService<TppAppointmentsValidationService>();
+        }
+
         public IAppointmentSlotsService GetAppointmentSlotsService()
         {
             return _serviceProvider.GetService<TppAppointmentSlotsService>();
@@ -67,9 +72,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             return _serviceProvider.GetService<TppPrescriptionService>();
         }
 
-        public IPrescriptionRequestValidationService GetPrescriptionRequestValidationService()
+        public IPrescriptionValidationService GetPrescriptionRequestValidationService()
         {
-            return _serviceProvider.GetService<TppPrescriptionRequestValidationService>();
+            return _serviceProvider.GetService<TppPrescriptionValidationService>();
         }
 
         public ISessionService GetSessionService()
@@ -92,9 +97,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             return _serviceProvider.GetService<TppLinkageService>();
         }
 
-        public ILinkageRequestValidationService GetLinkageRequestValidationService()
+        public ILinkageValidationService GetLinkageValidationService()
         {
-            return _serviceProvider.GetService<TppLinkageRequestValidationService>();
+            return _serviceProvider.GetService<TppLinkageValidationService>();
         }
     }
 }

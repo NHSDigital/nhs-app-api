@@ -16,6 +16,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             services.AddTransient<VisionAppointmentsBookingService>();
             services.AddTransient<VisionAppointmentsRetrievalService>();
             services.AddTransient<VisionAppointmentsCancellationService>();
+            
+            services.AddSingleton<VisionAppointmentsValidationService>();
 
             return services;
         }

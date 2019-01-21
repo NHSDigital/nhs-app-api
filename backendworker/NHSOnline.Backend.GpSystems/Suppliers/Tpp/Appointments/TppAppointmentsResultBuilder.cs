@@ -3,7 +3,6 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Support;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments

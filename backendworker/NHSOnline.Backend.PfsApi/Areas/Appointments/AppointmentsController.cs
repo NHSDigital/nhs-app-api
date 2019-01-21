@@ -1,14 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.ApiSupport;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -40,17 +39,25 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             {
                 _logger.LogEnter();
                 
-                await _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, "Attempting to cancel appointment with id: {0}",
-                    model.AppointmentId);
 
                 var userSession = HttpContext.GetUserSession();
 
-                var appointmentsService = GetAppointmentsService(userSession);
+                var appointmentValidator = GetAppointmentsValidationService(userSession);
 
+                if (!appointmentValidator.IsDeleteValid(model))
+                {
+                    _logger.LogError("Invalid request body supplied to delete request");
+                    return BadRequest();
+                }
+
+                await _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, $"Attempting to cancel appointment with id: {model.AppointmentId}");
+
+                var appointmentsService = GetAppointmentsService(userSession);
                 var cancelResult = await appointmentsService.Cancel(userSession.GpUserSession, model);
 
                 await cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, model.AppointmentId));
                 return cancelResult.Accept(new AppointmentCancelResultVisitor());
+                
             }
             finally
             {
@@ -82,22 +89,28 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogExit();
             }
         }
-        
+
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]AppointmentBookRequest model)
+        public async Task<IActionResult> Post([FromBody] AppointmentBookRequest model)
         {
             try
             {
                 _logger.LogEnter();
-                
+
                 await _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
-                    "Attempting to book appointment with id: {0} and startTime: {1:O}", model.SlotId, model.StartTime);
+                    $"Attempting to book appointment with id: {model.SlotId} and startTime: {model.StartTime:O}");
 
                 var userSession = HttpContext.GetUserSession();
 
-                var appointmentsService = GetAppointmentsService(userSession);
+                var appointentValidator = GetAppointmentsValidationService(userSession);
+                if (!appointentValidator.IsPostValid(model))
+                {
+                    _logger.LogError("Invalid request body supplied to post request");
+                    return BadRequest();
+                }
 
+                var appointmentsService = GetAppointmentsService(userSession);
                 var bookResult = await appointmentsService.Book(userSession.GpUserSession, model);
 
                 await bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, model.SlotId, model.StartTime));
@@ -116,6 +129,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             return _gpSystemFactory
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetAppointmentsService();
+        }
+
+        private IAppointmentsValidationService GetAppointmentsValidationService(UserSession userSession)
+        {
+            _logger.LogDebug($"Fetch Appointments Service for GP System: '{userSession.GpUserSession.Supplier}'.");
+
+            return _gpSystemFactory
+                .CreateGpSystem(userSession.GpUserSession.Supplier)
+                .GetAppointmentsValidationService();
         }
     }
 }

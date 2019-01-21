@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;

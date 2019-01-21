@@ -25,6 +25,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAppointmentsService> _mockAppointmentsService;
+        private Mock<IAppointmentsValidationService> _mockAppointmentsValidationService;
         private AppointmentBookRequest _appointmentBookRequest;
         private UserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
@@ -32,8 +33,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_Book_Request";
         private const string ResponseAuditType = "Appointments_Book_Response";
 
-        private const string RequestAuditMessage =
-            "Attempting to book appointment with id: {0} and startTime: {1:O}";
+        private string RequestAuditMessage()  =>  
+            $"Attempting to book appointment with id: { _appointmentBookRequest.SlotId} and startTime: {_appointmentBookRequest.StartTime:O}";
+
 
         [TestInitialize]
         public void TestInitialize()
@@ -51,6 +53,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             
             _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
 
+            _mockAppointmentsValidationService = _fixture.Freeze<Mock<IAppointmentsValidationService>>();
+
+            _mockAppointmentsValidationService.Setup(x => x.IsPostValid(_appointmentBookRequest))
+                .Returns(true);
+
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
@@ -60,6 +67,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystem
                 .Setup(x => x.GetAppointmentsService())
                 .Returns(_mockAppointmentsService.Object);
+
+            _mockGpSystem
+                .Setup(x => x.GetAppointmentsValidationService())
+                .Returns(_mockAppointmentsValidationService.Object);
 
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _mockGpSystemFactory
@@ -103,8 +114,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
-                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to book appointment due to insufficent permissions for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
@@ -124,8 +134,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status460LimitReached);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
-                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to book appointment due appointment limit reached for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
@@ -145,8 +154,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status409Conflict);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
-                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to book appointment due to appointment being unavailable for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
@@ -166,8 +174,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
-                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Unable to book appointment due to unavailable supplier for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
@@ -185,8 +192,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
-                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));

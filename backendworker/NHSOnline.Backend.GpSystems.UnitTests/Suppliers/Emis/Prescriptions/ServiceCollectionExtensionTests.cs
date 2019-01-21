@@ -27,8 +27,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
                 typeof(EmisCourseService), ServiceLifetime.Transient);
             var emisPrescriptionService = new ServiceDescriptor(typeof(EmisPrescriptionService),
                 typeof(EmisPrescriptionService), ServiceLifetime.Transient);
-            var emisPrescriptionRqstValidationService = new ServiceDescriptor(typeof(EmisPrescriptionRequestValidationService),
-                typeof(EmisPrescriptionRequestValidationService), ServiceLifetime.Transient);
+            var emisPrescriptionRqstValidationService = new ServiceDescriptor(typeof(EmisPrescriptionValidationService),
+                typeof(EmisPrescriptionValidationService), ServiceLifetime.Transient);
             var emisPrescriptionMapper = new ServiceDescriptor(typeof(IEmisPrescriptionMapper),
                 typeof(EmisPrescriptionMapper), ServiceLifetime.Transient);
             

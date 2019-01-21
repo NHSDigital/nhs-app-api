@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.GpUserSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
 
-            if (!prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate))
+            if (!prescriptionRequestValidationService.IsGetValid(fromDate, defaultFromDate))
             {
                 _logger.LogWarning($"Setting {nameof(fromDate)} to default {defaultFromDate:O} because value {fromDate:O} is earlier than allowed.");
                 fromDate = defaultFromDate;
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.GpUserSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
 
-            if (!prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(repeatPrescriptionRequest))
+            if (!prescriptionRequestValidationService.IsPostValid(repeatPrescriptionRequest))
             {
                 _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");
                 result = new PrescriptionResult.BadRequest();
