@@ -96,7 +96,7 @@ Feature: Login
       | TPP       |
 
 
-  @manual
+  @manual # covered in Manual Regression Test pack
   Scenario Outline: <GPSS> User logs in using CitizenID
     Given I am not logged in as a <GPSS> user
     When I log in

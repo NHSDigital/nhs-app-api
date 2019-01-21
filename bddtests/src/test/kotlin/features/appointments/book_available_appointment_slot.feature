@@ -452,7 +452,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
 
-  @manual
+  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
   Scenario: Booking a appointment when there is no internet connection
     Given I am logged in
     And I am on my appointments page

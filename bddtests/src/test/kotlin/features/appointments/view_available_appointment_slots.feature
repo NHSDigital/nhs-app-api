@@ -272,7 +272,7 @@ Feature: View available appointment slots
     And the user login details are cleared from cookies
 
   @native
-  @manual
+  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
   Scenario: A user sees appropriate information message when internet connection has been lost
     #    GP System agnostic scenario, so only need to test with EMIS
     Given I am on the My Appointments page

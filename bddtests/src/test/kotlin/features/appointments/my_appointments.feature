@@ -111,7 +111,7 @@ Feature: My appointments
     Then I see the login page with the session expiry notification
     And the user login details are cleared from cookies
 
-  @manual
+  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
   Scenario: Requesting list of appointments, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have no upcoming appointments for EMIS
     And I am logged in

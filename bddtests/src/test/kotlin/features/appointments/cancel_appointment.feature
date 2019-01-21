@@ -143,7 +143,7 @@ Feature: Ability to cancel an appointment
     Then I see the login page with the session expiry notification
     And the user login details are cleared from cookies
 
-  @manual
+  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
   Scenario: Cancelling appointment, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have upcoming appointments before cutoff time for VISION
     And I am logged in

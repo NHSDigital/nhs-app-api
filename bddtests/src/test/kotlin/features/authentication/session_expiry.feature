@@ -36,7 +36,7 @@ Feature: Session Expiry and Extend
     Then I see the login page with the session expiry notification
     And the user login details are cleared from cookies
 
-  @manual
+  @tech-debt   @NHSO-4064 # covered in Manual Regression Test pack
   Scenario: On session expiry, a user without an active internet connection is automatically signed out
     Given I am a EMIS patient
     And I am logged in
