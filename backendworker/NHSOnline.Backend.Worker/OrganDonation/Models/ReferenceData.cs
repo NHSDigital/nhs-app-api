@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
-    public class ReferenceDataResponse
+    internal class ReferenceData
     {
         public string Id{ get; set; }
 

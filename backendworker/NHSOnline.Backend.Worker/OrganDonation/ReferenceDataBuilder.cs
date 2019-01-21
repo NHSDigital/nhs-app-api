@@ -5,18 +5,18 @@ using NHSOnline.Backend.Worker.OrganDonation.Models;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class ReferenceDataBuilder
+    internal class ReferenceDataBuilder
     {
-        private readonly List<Entry<ReferenceDataResponse>> _sections = new List<Entry<ReferenceDataResponse>>();
+        private readonly List<Entry<ReferenceData>> _sections = new List<Entry<ReferenceData>>();
 
         public ReferenceDataBuilder AddSection(string id, Action<CodingListBuilder> actions)
         {
             var codes = new CodingListBuilder();
             actions.Invoke(codes);
 
-            _sections.Add(new Entry<ReferenceDataResponse>
+            _sections.Add(new Entry<ReferenceData>
             {
-                Resource = new ReferenceDataResponse
+                Resource = new ReferenceData
                 {
                     Id = id,
                     Concept = codes.Build()
@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         {
             return new OrganDonationResponse<ReferenceDataResponse>(HttpStatusCode.OK)
             {
-                Body = new OrganDonationSuccessResponse<ReferenceDataResponse>
+                Body = new ReferenceDataResponse
                 {
                     Entry = _sections
                 }

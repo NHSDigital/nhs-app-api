@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support.Auditing;
@@ -54,6 +55,30 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
                 result.Accept(new OrganDonationAuditingVisitor(_auditor));
 
                 return result.Accept(new OrganDonationResultVisitor());
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]OrganDonationRegistrationRequest model)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                await _auditor.Audit(Constants.AuditingTitles.OrganDonationRegistrationAuditTypeRequest,
+                    "Attempting to register organ donation decision");
+                
+                var userSession = HttpContext.GetUserSession();
+
+                var result = await _organDonationService.Register(model, userSession);
+
+                result.Accept(new OrganDonationRegistrationAuditingVisitor(_auditor));
+
+                return result.Accept(new OrganDonationRegistrationVisitor());
             }
             finally
             {

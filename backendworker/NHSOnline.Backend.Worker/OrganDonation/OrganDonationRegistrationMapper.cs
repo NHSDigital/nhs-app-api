@@ -1,31 +1,30 @@
 using System;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support;
+using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;
+using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
 using Address = NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Address;
 using Name = NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name;
-using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
-using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class OrganDonationRegistrationMapper : IMapper<DemographicsResponse, OrganDonationRegistration>,
-        IMapper<OrganDonationRegistration, OrganDonationSuccessResponse<RegistrationLookupResponse>,
+    internal class OrganDonationRegistrationMapper : IMapper<DemographicsResponse, OrganDonationRegistration>,
+        IMapper<OrganDonationRegistration, RegistrationLookupResponse,
             OrganDonationRegistration>
     {
-        private const string AllChoiceKey = "all";
-        private readonly IMapper<string, ChoiceState> _organDonationChoiceStateMapper;
-        private readonly IMapper<string, Decision> _organDonationDecisionMapper;
-        private readonly IMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;
+        private readonly IEnumMapper<string, Decision> _organDonationDecisionMapper;
+        private readonly IEnumMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;
+        private readonly IEnumMapper<string, ChoiceState> _organDonationChoiceStateMapper;
         private readonly ILogger<OrganDonationRegistrationMapper> _logger;
 
-        public OrganDonationRegistrationMapper(IMapper<string, Decision> organDonationDecisionMapper,
-            IMapper<string, FaithDeclaration> organDonationFaithDeclarationMapper,
-            IMapper<string, ChoiceState> organDonationChoiceStateMapper,
-            ILogger<OrganDonationRegistrationMapper> logger
-            )
+        public OrganDonationRegistrationMapper(IEnumMapper<string, Decision> organDonationDecisionMapper,
+            IEnumMapper<string, FaithDeclaration> organDonationFaithDeclarationMapper,
+            IEnumMapper<string, ChoiceState> organDonationChoiceStateMapper,
+            ILogger<OrganDonationRegistrationMapper> logger)
         {
             _organDonationDecisionMapper = organDonationDecisionMapper;
             _organDonationChoiceStateMapper = organDonationChoiceStateMapper;
@@ -52,7 +51,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         }
 
         public OrganDonationRegistration Map(OrganDonationRegistration firstSource,
-            OrganDonationSuccessResponse<RegistrationLookupResponse> secondSource)
+            RegistrationLookupResponse secondSource)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(firstSource, nameof(firstSource), ThrowError)
@@ -70,9 +69,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 Gender = firstSource.Gender,
                 NhsNumber = firstSource.NhsNumber,
                 DateOfBirth = firstSource.DateOfBirth,
-                Decision = _organDonationDecisionMapper.Map(existingRegistration.OrganDonationDecision),
+                Decision = _organDonationDecisionMapper.To(existingRegistration.OrganDonationDecision),
                 Identifier = existingRegistration.Identifier.FirstOrDefault()?.Value,
-                FaithDeclaration = _organDonationFaithDeclarationMapper.Map(existingRegistration.FaithDeclaration)
+                FaithDeclaration = _organDonationFaithDeclarationMapper.To(existingRegistration.FaithDeclaration)
             };
 
             if (result.Decision == Decision.OptIn)
@@ -135,15 +134,13 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             return name;
         }
 
-        private DecisionDetails MapDecisionDetails(RegistrationLookupResponse existingRegistration)
+        private DecisionDetails MapDecisionDetails(Registration existingRegistration)
         {
             var overallDecision =
-                _organDonationChoiceStateMapper.Map(existingRegistration.DonationWishes[AllChoiceKey]);
+                _organDonationChoiceStateMapper.To(existingRegistration.DonationWishes[AllOrgansChoiceKey]);
 
-            var choiceBreakdown =
-                existingRegistration
-                    .DonationWishes
-                    .Where(choice => !string.Equals(choice.Key, AllChoiceKey, StringComparison.Ordinal));
+            var choiceBreakdown = existingRegistration.DonationWishes.Where(choice =>
+                !string.Equals(choice.Key, AllOrgansChoiceKey, StringComparison.Ordinal));
 
             var decisionDetails = new DecisionDetails
             {
@@ -152,7 +149,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                     .Select(choice => new Choice
                     {
                         Name = choice.Key,
-                        Value = _organDonationChoiceStateMapper.Map(choice.Value)
+                        Value = _organDonationChoiceStateMapper.To(choice.Value)
                     })
                     .ToList()
             };

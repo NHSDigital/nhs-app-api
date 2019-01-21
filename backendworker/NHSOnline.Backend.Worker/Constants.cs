@@ -82,6 +82,8 @@ namespace NHSOnline.Backend.Worker
             public const string TermsAndConditionsAnalyticsCookieAcceptance = "TermsAndConditions_RecordAnalyticsCookie_Acceptance";
             public const string GetOrganDonationAuditTypeResponse = "OrganDonation_Get_Response";
             public const string GetOrganDonationAuditTypeRequest = "OrganDonation_Get_Request";
+            public const string OrganDonationRegistrationAuditTypeResponse = "OrganDonation_Registration_Response";
+            public const string OrganDonationRegistrationAuditTypeRequest = "OrganDonation_Registration_Request";
             public const string GetDemographicsAuditTypeRequest = "Demographics_Get_Request";
             public const string GetDemographicsAuditTypeResponse = "Demographics_Get_Response";
             public const string GetOrganDonationReferenceDataAuditTypeRequest = "OrganDonation_ReferenceData_Request";
@@ -126,6 +128,15 @@ namespace NHSOnline.Backend.Worker
         {
             public const string Android = "Android";
             public const string iOS = "iOS";
+        }
+
+        public static class OrganDonationConstants
+        {
+            public const string AllOrgansChoiceKey = "all";
+            public const string YesChoiceValue = "yes";
+            public const string NoChoiceValue = "no";
+            public const string NotStatedChoiceValue = "not-stated";
+            public const string DateFormat = "yyyy-MM-dd";
         }
     }
 }

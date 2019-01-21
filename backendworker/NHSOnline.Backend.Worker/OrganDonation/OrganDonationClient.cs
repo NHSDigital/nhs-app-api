@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.ResponseParsers;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class OrganDonationClient : IOrganDonationClient
+    internal class OrganDonationClient : IOrganDonationClient
     {
         private const string LookupPath = "Registration/_search";
+        private const string CreatePath = "Registration";
         private const string AllReferencePath = "ReferenceData";
 
         private const string SessionIdHeaderKey = "X-Session-ID";
@@ -40,7 +42,15 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public async Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
             LookupRegistrationRequest request, UserSession userSession)
         {
-            return await Post<LookupRegistrationRequest, RegistrationLookupResponse>(request, userSession, LookupPath);
+            return await Post<LookupRegistrationRequest, RegistrationLookupResponse>
+                (request, userSession, LookupPath);
+        }
+
+        public async Task<OrganDonationResponse<RegistrationResponse>> PostRegistration(
+            RegistrationRequest request, UserSession userSession)
+        {
+            return await Post<RegistrationRequest, RegistrationResponse>
+                (request, userSession, CreatePath);
         }
 
         public async Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData()
@@ -48,16 +58,14 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             return await Get<ReferenceDataResponse>(AllReferencePath);
         }
 
-        private async Task<OrganDonationResponse<TResponse>> Get<TResponse>(
-            string path)
+        private async Task<OrganDonationResponse<TResponse>> Get<TResponse>(string path)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, path);
             return await SendRequestAndParseResponse<TResponse>(request);
         }
 
-        private async Task<OrganDonationResponse<TResponse>> Post<TRequest, TResponse>(TRequest model,
-            UserSession userSession,
-            string path)
+        private async Task<OrganDonationResponse<TResponse>> Post<TRequest, TResponse>(
+            TRequest model, UserSession userSession, string path)
         {
             var request = BuildRegistrationRequest(HttpMethod.Post, userSession, path);
 
@@ -76,8 +84,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             return request;
         }
 
-        private async Task<OrganDonationResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
-            HttpRequestMessage request)
+        private async Task<OrganDonationResponse<TResponse>> SendRequestAndParseResponse<TResponse>(HttpRequestMessage request)
         {
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new OrganDonationResponse<TResponse>(responseMessage.StatusCode);

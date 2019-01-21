@@ -5,7 +5,7 @@ using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class OrganDonationDecisionMapper : EnumMapper<Decision>
+    internal class OrganDonationDecisionMapper : OneToOneEnumMapper<Decision>
     {
         public OrganDonationDecisionMapper(ILogger<Decision> logger) : base(logger)
         {

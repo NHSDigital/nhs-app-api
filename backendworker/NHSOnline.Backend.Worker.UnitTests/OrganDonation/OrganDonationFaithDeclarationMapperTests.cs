@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
     public class OrganDonationFaithDeclarationMapperTests
     {
         private IFixture _fixture;
-        private IMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;
+        private IEnumMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;
 
         [TestInitialize]
         public void TestInitialize()
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         public void MapStringToOrganDonationFaithDeclaration_WhenPassingInvalidValue_MapsToDefault(string value)
         {
             // Act and Assert
-            var result = _organDonationFaithDeclarationMapper.Map(value);
+            var result = _organDonationFaithDeclarationMapper.To(value);
 
 
             result.Should().Be(default(FaithDeclaration));
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             FaithDeclaration expected)
         {
             // Act and Assert
-            var result = _organDonationFaithDeclarationMapper.Map(value);
+            var result = _organDonationFaithDeclarationMapper.To(value);
 
 
             result.Should().Be(expected);

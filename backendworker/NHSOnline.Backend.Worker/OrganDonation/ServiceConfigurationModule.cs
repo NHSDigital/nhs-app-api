@@ -7,6 +7,8 @@ using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Http;
+using Address = NHSOnline.Backend.Worker.OrganDonation.Models.Address;
+using Name = NHSOnline.Backend.Worker.OrganDonation.Models.Name;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
@@ -29,8 +31,10 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 StringComparison.OrdinalIgnoreCase))
             {
                 services.AddSingleton<IOrganDonationClient, OrganDonationClient>();
+                services.AddSingleton<OrganDonationHttpClientHandler>();
 
                 services.AddHttpClient<OrganDonationHttpClient>()
+                    .ConfigurePrimaryHttpMessageHandler<OrganDonationHttpClientHandler>()
                     .AddHttpMessageHandler<HttpTimeoutHandler<OrganDonationHttpRequestIdentifier>>()
                     .AddHttpMessageHandler<HttpRequestIdentificationHandler<OrganDonationHttpRequestIdentifier>>();
             }
@@ -45,8 +49,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 OrganDonationRegistrationMapper>();
 
             services
-                .AddSingleton<IMapper<OrganDonationRegistration,
-                        OrganDonationSuccessResponse<RegistrationLookupResponse>, OrganDonationRegistration>,
+                .AddSingleton<IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>,
                     OrganDonationRegistrationMapper>();
 
             services.AddSingleton<IMapper<OrganDonationRegistration, LookupRegistrationRequest>,
@@ -55,10 +58,24 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             services
                 .AddSingleton<IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>,
                     OrganDonationReferenceDataResponseMapper>();
+            
+            services
+                .AddSingleton<IMapper<string, Areas.OrganDonation.Models.Address, Address>, OrganDonationAddressMapper>();
+            
+            services.AddSingleton<IMapper<string, Areas.OrganDonation.Models.Name, Name>, OrganDonationNameMapper>();
+            services
+                .AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, RegistrationRequestMapper>();
+            
+            services
+                .AddSingleton<IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>,
+                    OrganDonationRegistrationResponseMapper>();
 
-            services.AddSingleton<IMapper<string, Decision>, OrganDonationDecisionMapper>();
-            services.AddSingleton<IMapper<string, ChoiceState>, OrganDonationChoiceStateMapper>();
-            services.AddSingleton<IMapper<string, FaithDeclaration>, OrganDonationFaithDeclarationMapper>();
+            services.AddSingleton<IEnumMapper<string, Decision>, OrganDonationDecisionMapper>();
+            services.AddSingleton<IEnumMapper<string, ChoiceState>, OrganDonationChoiceStateMapper>();
+            services.AddSingleton<IEnumMapper<string, FaithDeclaration>, OrganDonationFaithDeclarationMapper>();
+
+            services.AddSingleton<IOrganDonationGenderMapper, OrganDonationGenderMapper>();
+            services.AddSingleton<IOrganDonationDonationWishesMapper, OrganDonationDonationWishesMapper>();
 
             base.ConfigureServices(services, configuration);
         }

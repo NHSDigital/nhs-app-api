@@ -71,6 +71,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="OrganDonation\Resources\mycert.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Remove="GpSystems\Suppliers\Vision\Resources\mycert.pfx" />
     <None Remove="GpSystems\Suppliers\Vision\TestData\invalidSecurityHeaderResponse.xml" />
     <None Remove="GpSystems\Suppliers\Vision\TestData\invalidUserCredentialsResponse.xml" />

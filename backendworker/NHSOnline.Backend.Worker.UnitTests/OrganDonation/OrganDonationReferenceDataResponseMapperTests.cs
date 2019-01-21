@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             // Arrange
             var response = new OrganDonationResponse<ReferenceDataResponse>(HttpStatusCode.OK)
             {
-                Body = new OrganDonationSuccessResponse<ReferenceDataResponse>
+                Body = new ReferenceDataResponse
                 {
                     Entry = null
                 }
@@ -83,9 +83,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             var withdrawReasons = _fixture.Create<Dictionary<string, string>>();
             var response = new OrganDonationResponse<ReferenceDataResponse>(HttpStatusCode.OK)
             {
-                Body = new OrganDonationSuccessResponse<ReferenceDataResponse>
+                Body = new ReferenceDataResponse
                 {
-                    Entry = new List<Entry<ReferenceDataResponse>>
+                    Entry = new List<Entry<ReferenceData>>
                     {
                         CreateEntry("titles", titles),
                         CreateEntry("religions", religions),
@@ -134,9 +134,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             // Arrange
             var response = new OrganDonationResponse<ReferenceDataResponse>(HttpStatusCode.OK)
             {
-                Body = new OrganDonationSuccessResponse<ReferenceDataResponse>
+                Body = new ReferenceDataResponse
                 {
-                    Entry = new List<Entry<ReferenceDataResponse>>
+                    Entry = new List<Entry<ReferenceData>>
                     {
                         CreateEntry("_invalid_", _fixture.Create<Dictionary<string, string>>())
                     }
@@ -155,11 +155,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             result.WithdrawReasons.Should().NotBeNull().And.HaveCount(0);
         }
 
-        private Entry<ReferenceDataResponse> CreateEntry(string key, Dictionary<string, string> options)
+        private Entry<ReferenceData> CreateEntry(string key, Dictionary<string, string> options)
         {
-            return new Entry<ReferenceDataResponse>
+            return new Entry<ReferenceData>
             {
-                Resource = new ReferenceDataResponse
+                Resource = new ReferenceData
                 {
                     Id = key,
                     Concept = options.Select(x => new Coding { Code = x.Key, Display = x.Value })

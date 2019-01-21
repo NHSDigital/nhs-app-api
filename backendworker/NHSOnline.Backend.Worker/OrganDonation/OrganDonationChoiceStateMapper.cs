@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support;
+using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class OrganDonationChoiceStateMapper : EnumMapper<ChoiceState>
+    public class OrganDonationChoiceStateMapper : OneToOneEnumMapper<ChoiceState>
     {
         public OrganDonationChoiceStateMapper(ILogger<ChoiceState> logger) : base(logger)
         {
@@ -13,9 +14,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
         protected override Dictionary<string, ChoiceState> MappingTable => new Dictionary<string, ChoiceState>
         {
-            { "yes", ChoiceState.Yes },
-            { "no", ChoiceState.No },
-            { "not-stated", ChoiceState.NotStated },
+            { YesChoiceValue, ChoiceState.Yes },
+            { NoChoiceValue, ChoiceState.No },
+            { NotStatedChoiceValue, ChoiceState.NotStated }
         };
     }
 }

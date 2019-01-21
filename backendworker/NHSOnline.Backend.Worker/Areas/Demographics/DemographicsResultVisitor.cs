@@ -6,7 +6,7 @@ using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics
 {
-    public class DemographicsResultVisitor : IDemographicsResultVisitor<IActionResult>
+    internal class DemographicsResultVisitor : IDemographicsResultVisitor<IActionResult>
     {
 
         private readonly IMapper<DemographicsResult.SuccessfullyRetrieved, SuccessfulDemographicsResult> _resultMapper;

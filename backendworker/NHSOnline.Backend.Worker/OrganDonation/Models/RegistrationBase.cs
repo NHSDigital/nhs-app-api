@@ -5,9 +5,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
     public abstract class RegistrationBase
     {
-        public string Id{ get; set; }
+        public string Id { get; set; }
 
-        public string ResourceType { get; set; }
+        public string ResourceType { get; } = "Registration";
 
         public List<Identifier> Identifier { get; set; }
 
@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation.Models
         
         public string Gender { get; set; }
 
-        public DateTimeOffset BirthDate { get; set; }
+        public string BirthDate { get; set; }
 
         public List<Address> Address { get; set; }
 

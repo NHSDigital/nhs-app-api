@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
     public class OrganDonationChoiceStateMapperTests
     {
         private IFixture _fixture;
-        private IMapper<string, ChoiceState> _organDonationChoiceStateMapper;
+        private IEnumMapper<string, ChoiceState> _organDonationChoiceStateMapper;
 
         [TestInitialize]
         public void TestInitialize()
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         public void MapStringToOrganDonationChoiceState_WhenPassingInvalidValue_MapsToDefault(string value)
         {
             // Act and Assert
-            var result = _organDonationChoiceStateMapper.Map(value);
+            var result = _organDonationChoiceStateMapper.To(value);
 
 
             result.Should().Be(default(ChoiceState));
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             ChoiceState expected)
         {
             // Act and Assert
-            var result = _organDonationChoiceStateMapper.Map(value);
+            var result = _organDonationChoiceStateMapper.To(value);
 
 
             result.Should().Be(expected);

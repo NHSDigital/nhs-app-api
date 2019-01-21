@@ -18,10 +18,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
     [TestClass]
     public sealed class OrganDonationClientTests : IDisposable
     {
-        public const string DefaultClientIdHeader = "DefaultClientIdHeader";
-        public const string DefaultSubscriptionHeader = "DefaultSubscriptionHeader";
-        public const string SearchPath = "Registration/_search";
-        public const string ReferenceDataPath = "ReferenceData";
+        private const string DefaultClientIdHeader = "DefaultClientIdHeader";
+        private const string DefaultSubscriptionHeader = "DefaultSubscriptionHeader";
+        private const string SearchPath = "Registration/_search";
+        private const string RegistrationPath = "Registration";
+        private const string ReferenceDataPath = "ReferenceData";
         public static readonly Uri BaseUri = new Uri("http://base_url/");
 
         private IOrganDonationClient _systemUnderTest;
@@ -57,7 +58,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         [TestMethod]
         public async Task PostLookup_ReturnsValidResponse()
         {
-            var expectedResponse = _fixture.Create<OrganDonationSuccessResponse<RegistrationLookupResponse>>();
+            var expectedResponse = _fixture.Create<RegistrationLookupResponse>();
             
             _mockHttpHandler
                 .WhenOrganDonation(HttpMethod.Post, SearchPath)
@@ -91,7 +92,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         [TestMethod]
         public async Task GetReferenceData_ReturnsValidResponse()
         {
-            var expectedResponse = _fixture.Create<OrganDonationSuccessResponse<ReferenceDataResponse>>();
+            var expectedResponse = _fixture.Create<ReferenceDataResponse>();
 
             _mockHttpHandler
                 .WhenOrganDonation(HttpMethod.Get, ReferenceDataPath)
@@ -117,6 +118,41 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                     JsonConvert.SerializeObject(expectedResponse));
 
             var response = await _systemUnderTest.GetAllReferenceData();
+
+            response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(errorCode);
+            response.Body.Should().BeNull();
+        }
+        
+        [TestMethod]
+        public async Task PostRegistration_ReturnsValidResponse()
+        {
+            var expectedResponse = _fixture.Create<RegistrationResponse>();
+
+            _mockHttpHandler
+                .WhenOrganDonation(HttpMethod.Post, RegistrationPath)
+                .Respond(System.Net.Mime.MediaTypeNames.Application.Json,
+                    JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _systemUnderTest.PostRegistration(new RegistrationRequest(), _userSession);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.NotFound)]
+        public async Task PostRegistration_ReturnsError(HttpStatusCode errorCode)
+        {
+            var expectedResponse = _fixture.Create<OrganDonationErrorResponse>();
+
+            _mockHttpHandler
+                .WhenOrganDonation(HttpMethod.Post, RegistrationPath)
+                .Respond(errorCode, System.Net.Mime.MediaTypeNames.Application.Json,
+                    JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _systemUnderTest.PostRegistration(new RegistrationRequest(), _userSession);
 
             response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(errorCode);

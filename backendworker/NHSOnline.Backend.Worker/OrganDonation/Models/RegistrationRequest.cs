@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
-    public class RegistrationCreateRequest : RegistrationBase
+    internal class RegistrationRequest : RegistrationBase
     {
+        [Required]
         public CodeableConcept EthnicCategory { get; set; }
 
+        [Required]
         public CodeableConcept ReligiousAffiliation { get; set; }
 
+        [Required]
         public string OrganDonationDecision { get; set; }
 
         public string FaithDeclaration { get; set; }

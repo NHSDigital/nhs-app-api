@@ -11,18 +11,24 @@ using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class OrganDonationService : IOrganDonationService
+    internal class OrganDonationService : IOrganDonationService
     {
         private const string ReferenceDataCacheKey = "_organDonationReferenceData";
         private readonly ILogger<OrganDonationService> _logger;
         private readonly IMapper<DemographicsResponse, OrganDonationRegistration> _demographicsRegistrationMapper;
         private readonly IMapper<OrganDonationRegistration, LookupRegistrationRequest> _lookupRegistrationRequestMapper;
 
-        private readonly IMapper<OrganDonationRegistration, OrganDonationSuccessResponse<RegistrationLookupResponse>,
+        private readonly IMapper<OrganDonationRegistration, RegistrationLookupResponse,
             OrganDonationRegistration> _registrationMapper;
 
         private readonly IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>
             _organDonationReferenceDataMapper;
+        
+        private readonly IMapper<OrganDonationRegistrationRequest, RegistrationRequest>
+            _registrationRequestMapper;
+        
+        private readonly IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>
+            _registrationResponseMapper;
 
         private readonly IOrganDonationClient _organDonationClient;
         private readonly IMemoryCache _memoryCache;
@@ -31,11 +37,12 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public OrganDonationService(
             ILoggerFactory loggerFactory,
             IMapper<DemographicsResponse, OrganDonationRegistration> demographicsRegistrationMapper,
-            IMapper<OrganDonationRegistration, OrganDonationSuccessResponse<RegistrationLookupResponse>,
-                OrganDonationRegistration> registrationMapper,
+            IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration> registrationMapper,
             IMapper<OrganDonationRegistration, LookupRegistrationRequest> lookupRegistrationRequestMapper,
             IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>
                 organDonationReferenceDataMapper,
+            IMapper<OrganDonationRegistrationRequest, RegistrationRequest> registrationRequestMapper,
+            IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse> registrationResponseMapper,
             IOrganDonationClient organDonationClient,
             IMemoryCache memoryCache,
             IOrganDonationConfig config)
@@ -46,6 +53,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             _registrationMapper = registrationMapper;
             _organDonationClient = organDonationClient;
             _organDonationReferenceDataMapper = organDonationReferenceDataMapper;
+            _registrationRequestMapper = registrationRequestMapper;
+            _registrationResponseMapper = registrationResponseMapper;
             _memoryCache = memoryCache;
             _config = config;
         }
@@ -105,26 +114,56 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         private OrganDonationResult GetDemographicsErrorResult(DemographicsResult myRecord)
         {
 
-            if (myRecord is DemographicsResult.Unsuccessful)
+            switch (myRecord)
             {
-                _logger.LogDebug("GP systems demographics call was unsuccessful");
-                return new OrganDonationResult.DemographicsBadGateway();
+                case DemographicsResult.Unsuccessful _:
+                    _logger.LogDebug("GP systems demographics call was unsuccessful");
+                    return new OrganDonationResult.DemographicsBadGateway();
+                case DemographicsResult.UserHasNoAccess _:
+                    _logger.LogDebug("GP systems demographics user has no access");
+                    return new OrganDonationResult.DemographicsForbidden();
+                case DemographicsResult.InternalServerError _:
+                    _logger.LogDebug("GP systems demographics threw an internal server error");
+                    return new OrganDonationResult.DemographicsInternalServerError();
+                default:
+                    _logger.LogDebug("GP systems demographics record not successfully retrieved");
+                    return new OrganDonationResult.DemographicsRetrievalFailed();
             }
+        }
 
-            if (myRecord is DemographicsResult.UserHasNoAccess)
+        public async Task<OrganDonationRegistrationResult> Register(
+            OrganDonationRegistrationRequest request,
+            UserSession userSession)
+        {
+            try
             {
-                _logger.LogDebug("GP systems demographics user has no access");
-                return new OrganDonationResult.DemographicsForbidden();
-            }
+                var registrationRequest = _registrationRequestMapper.Map(request);
+                
+                _logger.LogDebug("Attempting to register organ donation decision");
+                var clientResponse = await _organDonationClient.PostRegistration(registrationRequest, userSession);
 
-            if (myRecord is DemographicsResult.InternalServerError)
+                if (clientResponse.HasSuccessResponse)
+                {
+                    _logger.LogDebug("Registration successful");
+                    var response = _registrationResponseMapper.Map(clientResponse);
+                    return new OrganDonationRegistrationResult.SuccessfullyRegistered(response);
+                }
+
+                switch (clientResponse.StatusCode)
+                {
+                    case HttpStatusCode.RequestTimeout:
+                        _logger.LogDebug("The organ donation registration timed-out");
+                        return new OrganDonationRegistrationResult.Timeout();
+                    default:
+                        _logger.LogDebug("Something went wrong when registering organ donation decision");
+                        return new OrganDonationRegistrationResult.UpstreamError();
+                }
+            }
+            catch(HttpRequestException e)
             {
-                _logger.LogDebug("GP systems demographics threw an internal server error");
-                return new OrganDonationResult.DemographicsInternalServerError();
+                _logger.LogError(e, "Unsuccessful request to register organ donation decision");
+                return new OrganDonationRegistrationResult.SystemError();
             }
-
-            _logger.LogDebug("GP systems demographics record not successfully retrieved");
-            return new OrganDonationResult.DemographicsRetrievalFailed();
         }
 
         public async Task<OrganDonationReferenceDataResult> GetReferenceData()

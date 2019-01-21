@@ -73,6 +73,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Demograp
                 Sex = item.Gender?.Text,
                 NhsNumber = testNhsNumber,
                 Address = "The Lodge, 12 Test Street, Test Town, L1 511",
+                AddressParts = new DemographicsAddress
+                {
+                    Text = "The Lodge, 12 Test Street, Test Town",
+                    Postcode = "L1 511"
+                },
+                NameParts = new DemographicsName
+                {
+                    Title = "Mr",
+                    Given = "Test",
+                    Surname = "Tester"
+                }
             };
 
             result.Should().BeEquivalentTo(expectedResult);
@@ -103,6 +114,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Demograp
                 Sex = item.Gender?.Text,
                 NhsNumber = testNhsNumber,
                 Address = "The Lodge, Test Street, L1 511",
+                AddressParts = new DemographicsAddress
+                {
+                    Text = "The Lodge, Test Street",
+                    Postcode = "L1 511"
+                },
+                NameParts = new DemographicsName
+                {
+                    Title = "Mr",
+                    Given = "Test",
+                    Surname = "Tester"
+                }
             };
 
             result.Should().BeEquivalentTo(expectedResult);
@@ -133,6 +155,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Demograp
                 Sex = item.Gender?.Text,
                 NhsNumber = testNhsNumber,
                 Address = "The Lodge, 12 Test Street, L1 511",
+                AddressParts = new DemographicsAddress
+                {
+                    Text = "The Lodge, 12 Test Street",
+                    Postcode = "L1 511"
+                },
+                NameParts = new DemographicsName
+                {
+                    Title = "Mr",
+                    Given = "Test",
+                    Surname = "Tester"
+                }
             };
 
             result.Should().BeEquivalentTo(expectedResult);

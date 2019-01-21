@@ -28,6 +28,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         private Mock<IOrganDonationConfig> _mockOrganDonationConfig;
         private Mock<IMapper<OrganDonationRegistration, LookupRegistrationRequest>>
             _mockLookupRegistrationRequestMapper;
+        private Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>
+            _mockRegistrationRequestMapper;
         
         // needed for Callback
         private delegate void TryGetValueCallback(object key, out object value);
@@ -42,6 +44,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _mockOrganDonationConfig = fixture.Freeze<Mock<IOrganDonationConfig>>();
             _mockLookupRegistrationRequestMapper =
                 fixture.Freeze<Mock<IMapper<OrganDonationRegistration, LookupRegistrationRequest>>>();
+            
+            _mockRegistrationRequestMapper =
+                fixture.Freeze<Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>>();
 
             _userSession = fixture.Create<UserSession>();
             _organDonationService = fixture.Create<OrganDonationService>();
@@ -161,7 +166,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
         [TestMethod]
         public void
-            GetRegistration_WhenCalledAndDemographicstRetrievedUnsuccessfully_ReturnsDemographicsBadGateway()
+            GetOrganDonation_WhenCalledAndDemographicstRetrievedUnsuccessfully_ReturnsDemographicsBadGateway()
         {
             // Arrange 
             var demographicsResult = new DemographicsResult.Unsuccessful();
@@ -176,7 +181,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
         [TestMethod]
         public void
-            GetRegistration_WhenCalledAndDemographicsUserHasNoAccess_ReturnsDemographicsForbidden()
+            GetOrganDonation_WhenCalledAndDemographicsUserHasNoAccess_ReturnsDemographicsForbidden()
         {
             // Arrange 
             var demographicsResult = new DemographicsResult.UserHasNoAccess();
@@ -191,7 +196,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
         [TestMethod]
         public void
-            GetRegistration_WhenCalledAndDemographicsInternalServerError_ReturnsDemographicsInternalServerError()
+            GetOrganDonation_WhenCalledAndDemographicsInternalServerError_ReturnsDemographicsInternalServerError()
         {
             // Arrange 
             var demographicsResult = new DemographicsResult.InternalServerError();
@@ -206,7 +211,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
         [TestMethod]
         public void
-            GetRegistration_WhenCalledAndDemographicsSupplierSystemUnavailable_ReturnsDemographicsRetrievalFailed()
+            GetOrganDonation_WhenCalledAndDemographicsSupplierSystemUnavailable_ReturnsDemographicsRetrievalFailed()
         {
             // Arrange 
             var demographicsResult = new DemographicsResult.SupplierSystemUnavailable();
@@ -313,7 +318,78 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             context.AbsoluteExpiration.Should().BeNull();
             result.Result.Should().BeOfType<OrganDonationReferenceDataResult.SystemError>();
         }
+        
+        [TestMethod]
+        public void Register_WhenCalledWithRequest_ReturnsSuccessfullyRegisteredResponse()
+        {
+            // Arrange 
+            var context = SetupRegistrationTest();
+            
+            // Act
+            var result = _organDonationService.Register(context.RegistrationRequest, _userSession);
 
+            // Assert
+            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));
+
+            result.Result.Should().BeOfType<OrganDonationRegistrationResult.SuccessfullyRegistered>();
+        }
+
+        [TestMethod]
+        [DataRow(HttpStatusCode.InternalServerError)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.NotFound)]
+        [DataRow(HttpStatusCode.MethodNotAllowed)]
+        [DataRow(HttpStatusCode.Conflict)]
+        [DataRow(HttpStatusCode.UnsupportedMediaType)]
+        [DataRow(HttpStatusCode.UnprocessableEntity)]
+        [DataRow(HttpStatusCode.TooManyRequests)]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.ServiceUnavailable)]
+        [DataRow(HttpStatusCode.GatewayTimeout)]
+        public void Register_WhenCalledAndRetrievalFailsWithError_ReturnSystemErrorResponse(HttpStatusCode httpStatus)
+        {
+            // Arrange
+            var context = SetupRegistrationTest(httpStatus: httpStatus);
+
+            // Act
+            var result = _organDonationService.Register(context.RegistrationRequest, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));
+
+            result.Result.Should().BeOfType<OrganDonationRegistrationResult.UpstreamError>();
+        }
+        
+        [TestMethod]
+        public void Register_WhenCalledAndRetrievalFailsWithTimeout_ReturnTimeoutResponse()
+        {
+            // Arrange
+            var context = SetupRegistrationTest(httpStatus: HttpStatusCode.RequestTimeout);
+
+            // Act
+            var result = _organDonationService.Register(context.RegistrationRequest, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));
+
+            result.Result.Should().BeOfType<OrganDonationRegistrationResult.Timeout>();
+        }
+        
+        [TestMethod]
+        public void Register_WhenCalledAndRetrievalFailsWithException_ReturnSystemUnavaivableResponseWithNoCaching()
+        {
+            // Arrange
+            var context = SetupRegistrationTest(true);
+
+            // Act
+            var result = _organDonationService.Register(context.RegistrationRequest, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));
+
+            result.Result.Should().BeOfType<OrganDonationRegistrationResult.SystemError>();
+        }
+        
         private GetReferenceDataTestContext SetupGetReferenceDataTest(
             bool throwException = false, 
             HttpStatusCode httpStatus = HttpStatusCode.OK,
@@ -329,6 +405,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         )
         {
             return new GetOrganDonationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus, _mockLookupRegistrationRequestMapper);
+        }
+        
+        private RegistrationTestContext SetupRegistrationTest(
+            bool throwException = false, 
+            HttpStatusCode httpStatus = HttpStatusCode.OK
+        )
+        {
+            return new RegistrationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus, _mockRegistrationRequestMapper);
         }
 
         private class GetOrganDonationTestContext
@@ -362,6 +446,38 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             }
 
             public DemographicsResult DemographicsResult { get; }
+        }
+        
+        private class RegistrationTestContext
+        {
+            public RegistrationTestContext(
+                Mock<IOrganDonationClient> mockClient, 
+                UserSession userSession, 
+                bool throwException, 
+                HttpStatusCode httpStatus,
+                Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
+            )
+            {
+                RegistrationRequest = new OrganDonationRegistrationRequest();
+                var organDonationResponse = new OrganDonationResponse<RegistrationResponse>(httpStatus);
+
+                if (throwException)
+                {
+                    mockClient.Setup(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), userSession))
+                        .Throws<HttpRequestException>();    
+                }
+                else
+                {
+                    mockClient.Setup(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), userSession))
+                        .Returns(Task.FromResult(organDonationResponse));    
+                }              
+                
+                mockRegistrationRequestMapper
+                    .Setup(x => x.Map(It.IsAny<OrganDonationRegistrationRequest>()))
+                    .Returns(new RegistrationRequest());
+            }
+            
+            public OrganDonationRegistrationRequest RegistrationRequest { get; }
         }
         
         private class GetReferenceDataTestContext

@@ -1,10 +1,11 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class OrganDonationMockClient : IOrganDonationClient
+    internal class OrganDonationMockClient : IOrganDonationClient
     {
         public Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
             LookupRegistrationRequest request,
@@ -12,6 +13,19 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         {
             return Task.FromResult(
                 new OrganDonationResponse<RegistrationLookupResponse>(HttpStatusCode.NotFound));
+        }
+
+        public Task<OrganDonationResponse<RegistrationResponse>> PostRegistration(
+            RegistrationRequest request,
+            UserSession userSession)
+        {
+            return Task.FromResult(new OrganDonationResponse<RegistrationResponse>(HttpStatusCode.OK)
+            {
+                Body = new RegistrationResponse
+                {
+                    Id = Guid.NewGuid().ToString()
+                }
+            });
         }
 
         public Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData()

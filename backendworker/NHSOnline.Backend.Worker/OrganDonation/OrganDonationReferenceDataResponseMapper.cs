@@ -7,7 +7,7 @@ using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class OrganDonationReferenceDataResponseMapper :
+    internal class OrganDonationReferenceDataResponseMapper :
         IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>
     {
         public OrganDonationReferenceDataResponse Map(OrganDonationResponse<ReferenceDataResponse> source)
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             };
         }
 
-        private List<SelectOption> MapOptions(string id, Dictionary<string, ReferenceDataResponse> entries)
+        private List<SelectOption> MapOptions(string id, Dictionary<string, ReferenceData> entries)
         {
             return entries?.ContainsKey(id) == true
                 ? entries[id].Concept

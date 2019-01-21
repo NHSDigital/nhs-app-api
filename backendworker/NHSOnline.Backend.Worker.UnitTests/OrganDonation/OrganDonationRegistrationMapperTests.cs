@@ -20,12 +20,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         private IFixture _fixture;
         private IMapper<DemographicsResponse, OrganDonationRegistration> _demographicsToRegistrationMapper;
 
-        private IMapper<OrganDonationRegistration, OrganDonationSuccessResponse<RegistrationLookupResponse>,
-            OrganDonationRegistration> _lookupToRegistrationMapper;
+        private IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
+            _lookupToRegistrationMapper;
 
-        private Mock<IMapper<string, Decision>> _decisionMapper;
-        private Mock<IMapper<string, FaithDeclaration>> _faithDeclarationMapper;
-        private Mock<IMapper<string, ChoiceState>> _choiceStateMapper;
+        private Mock<IEnumMapper<string, Decision>> _decisionMapper;
+        private Mock<IEnumMapper<string, FaithDeclaration>> _faithDeclarationMapper;
+        private Mock<IEnumMapper<string, ChoiceState>> _choiceStateMapper;
 
 
         [TestInitialize]
@@ -34,9 +34,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
 
-            _decisionMapper = _fixture.Freeze<Mock<IMapper<string, Decision>>>();
-            _faithDeclarationMapper = _fixture.Freeze<Mock<IMapper<string, FaithDeclaration>>>();
-            _choiceStateMapper = _fixture.Freeze<Mock<IMapper<string, ChoiceState>>>();
+            _decisionMapper = _fixture.Freeze<Mock<IEnumMapper<string, Decision>>>();
+            _faithDeclarationMapper = _fixture.Freeze<Mock<IEnumMapper<string, FaithDeclaration>>>();
+            _choiceStateMapper = _fixture.Freeze<Mock<IEnumMapper<string, ChoiceState>>>();
 
             _demographicsToRegistrationMapper = _fixture.Create<OrganDonationRegistrationMapper>();
             _lookupToRegistrationMapper = _fixture.Create<OrganDonationRegistrationMapper>();
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             MapRegistrationLookupResponseToOrganDonationRegistration_WhenPassingNullRegistration_ThrowsArgumentNullException()
         {
             // Arrange
-            var response = _fixture.Create<OrganDonationSuccessResponse<RegistrationLookupResponse>>();
+            var response = _fixture.Create<RegistrationLookupResponse>();
 
             // Act and Assert
             Action act = () => _lookupToRegistrationMapper.Map(null, response);
@@ -180,7 +180,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Arrange
             var registration = _fixture.Create<OrganDonationRegistration>();
-            var response = new OrganDonationSuccessResponse<RegistrationLookupResponse>
+            var response = new RegistrationLookupResponse
             {
                 Entry = null
             };
@@ -198,9 +198,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Arrange
             var registration = _fixture.Create<OrganDonationRegistration>();
-            var response = new OrganDonationSuccessResponse<RegistrationLookupResponse>
+            var response = new RegistrationLookupResponse
             {
-                Entry = new List<Entry<RegistrationLookupResponse>>()
+                Entry = new List<Entry<Registration>>()
             };
 
             // Act and Assert
@@ -214,7 +214,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         public void MapRegistrationLookupResponseToOrganDonationRegistration_WithAllValues_MapsCorrectly()
         {
             // Arrange
-            var response = _fixture.Create<OrganDonationSuccessResponse<RegistrationLookupResponse>>();
+            var response = _fixture.Create<RegistrationLookupResponse>();
             var resource = response.Entry.First().Resource;
             resource.DonationWishes = new Dictionary<string, string>
             {
@@ -226,13 +226,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
             var registration = _fixture.Create<OrganDonationRegistration>();
 
-            _decisionMapper.Setup(x => x.Map(resource.OrganDonationDecision)).Returns(Decision.OptIn);
-            _faithDeclarationMapper.Setup(x => x.Map(resource.FaithDeclaration)).Returns(FaithDeclaration.No);
-            _choiceStateMapper.Setup(x => x.Map(resource.DonationWishes.First().Value)).Returns(ChoiceState.Yes);
-            _choiceStateMapper.Setup(x => x.Map(resource.DonationWishes.ElementAt(1).Value)).Returns(ChoiceState.No);
-            _choiceStateMapper.Setup(x => x.Map(resource.DonationWishes.ElementAt(2).Value))
+            _decisionMapper.Setup(x => x.To(resource.OrganDonationDecision)).Returns(Decision.OptIn);
+            _faithDeclarationMapper.Setup(x => x.To(resource.FaithDeclaration)).Returns(FaithDeclaration.No);
+            _choiceStateMapper.Setup(x => x.To(resource.DonationWishes.First().Value)).Returns(ChoiceState.Yes);
+            _choiceStateMapper.Setup(x => x.To(resource.DonationWishes.ElementAt(1).Value)).Returns(ChoiceState.No);
+            _choiceStateMapper.Setup(x => x.To(resource.DonationWishes.ElementAt(2).Value))
                 .Returns(ChoiceState.NotStated);
-            _choiceStateMapper.Setup(x => x.Map(resource.DonationWishes.ElementAt(3).Value)).Returns(ChoiceState.Yes);
+            _choiceStateMapper.Setup(x => x.To(resource.DonationWishes.ElementAt(3).Value)).Returns(ChoiceState.Yes);
 
             // Act
             var result = _lookupToRegistrationMapper.Map(registration, response);
@@ -252,14 +252,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             result.NhsNumber.Should().Be(registration.NhsNumber);
             result.Gender.Should().Be(registration.Gender);
 
-            _decisionMapper.Verify(x => x.Map(resource.OrganDonationDecision));
+            _decisionMapper.Verify(x => x.To(resource.OrganDonationDecision));
             _decisionMapper.VerifyNoOtherCalls();
-            _faithDeclarationMapper.Verify(x => x.Map(resource.FaithDeclaration));
+            _faithDeclarationMapper.Verify(x => x.To(resource.FaithDeclaration));
             _faithDeclarationMapper.VerifyNoOtherCalls();
-            _choiceStateMapper.Verify(x => x.Map(resource.DonationWishes.First().Value));
-            _choiceStateMapper.Verify(x => x.Map(resource.DonationWishes.ElementAt(1).Value));
-            _choiceStateMapper.Verify(x => x.Map(resource.DonationWishes.ElementAt(2).Value));
-            _choiceStateMapper.Verify(x => x.Map(resource.DonationWishes.ElementAt(3).Value));
+            _choiceStateMapper.Verify(x => x.To(resource.DonationWishes.First().Value));
+            _choiceStateMapper.Verify(x => x.To(resource.DonationWishes.ElementAt(1).Value));
+            _choiceStateMapper.Verify(x => x.To(resource.DonationWishes.ElementAt(2).Value));
+            _choiceStateMapper.Verify(x => x.To(resource.DonationWishes.ElementAt(3).Value));
             _choiceStateMapper.VerifyNoOtherCalls();
 
             result.Identifier.Should().Be(resource.Identifier.First().Value);
@@ -281,7 +281,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         public void MapRegistrationLookupResponseToOrganDonationRegistration_WithAppRepDecision_ShouldNotMapDetails()
         {
             // Arrange
-            var response = _fixture.Create<OrganDonationSuccessResponse<RegistrationLookupResponse>>();
+            var response = _fixture.Create<RegistrationLookupResponse>();
             var resource = response.Entry.First().Resource;
             resource.OrganDonationDecision = "app-rep";
             resource.DonationWishes = new Dictionary<string, string>
@@ -293,7 +293,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             };
             
             var registration = _fixture.Create<OrganDonationRegistration>();
-            _choiceStateMapper.Setup(x => x.Map(It.IsAny<string>())).Returns(ChoiceState.No);
+            _choiceStateMapper.Setup(x => x.To(It.IsAny<string>())).Returns(ChoiceState.No);
 
             // Act
             var result = _lookupToRegistrationMapper.Map(registration, response);
@@ -308,7 +308,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         public void MapRegistrationLookupResponseToOrganDonationRegistration_WithOptOutDecision_ShouldNotMapDetails()
         {
             // Arrange
-            var response = _fixture.Create<OrganDonationSuccessResponse<RegistrationLookupResponse>>();
+            var response = _fixture.Create<RegistrationLookupResponse>();
             var resource = response.Entry.First().Resource;
             resource.DonationWishes = new Dictionary<string, string>
             {
@@ -319,8 +319,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             };
             
             var registration = _fixture.Create<OrganDonationRegistration>();
-            _decisionMapper.Setup(x => x.Map(resource.OrganDonationDecision)).Returns(Decision.OptOut);
-            _choiceStateMapper.Setup(x => x.Map(It.IsAny<string>())).Returns(ChoiceState.No);
+            _decisionMapper.Setup(x => x.To(resource.OrganDonationDecision)).Returns(Decision.OptOut);
+            _choiceStateMapper.Setup(x => x.To(It.IsAny<string>())).Returns(ChoiceState.No);
 
             // Act
             var result = _lookupToRegistrationMapper.Map(registration, response);

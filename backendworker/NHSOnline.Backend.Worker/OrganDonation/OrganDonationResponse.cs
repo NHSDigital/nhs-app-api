@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
         public OrganDonationErrorResponse ErrorResponse { get; private set; }
 
-        public OrganDonationSuccessResponse<TBody> Body { get; set; }
+        public TBody Body { get; set; }
 
         public async Task<OrganDonationResponse<TBody>> Parse(
             HttpResponseMessage responseMessage,
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 return this;
             }
 
-            Body = responseParser.ParseBody<OrganDonationSuccessResponse<TBody>>(stringResponse, responseMessage);
+            Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
             return this;
         }
 
