@@ -1,9 +1,11 @@
 package pages.navigation
 
 import org.junit.Assert
-import org.openqa.selenium.TimeoutException
+import org.openqa.selenium.StaleElementReferenceException
 import pages.NativePageElement
 import pages.NativePageObject
+
+const val WAIT_FOR_PAGE_MS = 3000L
 
 class HeaderNative : NativePageObject() {
 
@@ -59,21 +61,20 @@ class HeaderNative : NativePageObject() {
     }
 
     fun waitForPageHeaderText(expectedHeaderText: String) {
-        Assert.assertEquals(
-                "Header is incorrect",
-                true,
-                try {
-                    waitFor {
-                        checkPageHeaderText(expectedHeaderText) == true
-                    }
-                    true
-                } catch (e: TimeoutException) {
-                    false
-                }
-        )
-    }
 
-    private fun checkPageHeaderText(title: String): Boolean {
-            return getPageTitle(title).text == title
+        Thread.sleep(WAIT_FOR_PAGE_MS)
+
+        var text = ""
+        var staleElement = true
+        while(staleElement) {
+            try {
+                text = getPageTitle(expectedHeaderText).text
+                staleElement = false
+            }
+            catch(e: StaleElementReferenceException) {
+                staleElement = true
+            }
+        }
+        Assert.assertEquals("Header is correct", expectedHeaderText, text)
     }
 }

@@ -13,11 +13,7 @@ info "Output currently executing docker containers to aid debug"
 docker ps
 
 info "Cleaning up hanging containers"
-RUNNING=$(docker ps | wc -l | awk {'print $1'})
-if [ $RUNNING != "1" ]
-then
-  docker kill $(docker ps -q)
-fi
+docker kill $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}')
 
 # Check if DOCKER_TAG exists in envvar
 [ -z $APP_DOCKER_TAG ] && die "APP_DOCKER_TAG is not specified, it should be so we can pin builds to a specific version rather than latest"
