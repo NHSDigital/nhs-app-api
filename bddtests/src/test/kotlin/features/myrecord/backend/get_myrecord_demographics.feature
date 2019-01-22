@@ -29,7 +29,7 @@ Feature: Get demographic data
       | TPP     |
       | VISION  |
 
-  @NHSO-2549 @tech-debt
+  @tech-debt  @NHSO-2549   # covered in Manual Regression Test pack
   Scenario Outline: GP System Unavailable
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -42,7 +42,7 @@ Feature: Get demographic data
       | EMIS    |
       | TPP     |
 
-  @NHSO-2549 @tech-debt
+  @tech-debt  @NHSO-2549   # covered in Manual Regression Test pack
   Scenario Outline: GP System Times Out
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
