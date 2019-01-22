@@ -57,6 +57,38 @@
     <diagnosis :is-collapsed="isDiagnosisCollapsed"
                :results="record.diagnosis"
                :supplier="record.supplier"/>
+
+    <analytics-tracked-tag id="examinationsHeader"
+                           :class ="[$style['record-title'],
+                                     getCollapsedState(isExaminationsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="EXAMINATIONS"
+                           :text="$t('my_record.examinations.sectionHeader.default')"
+                           :aria-expanded="!isExaminationsCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $T('my_record.examinations.sectionHeader.default') }}
+    </analytics-tracked-tag>
+
+    <examinations :is-collapsed="isExaminationCollapsed"
+                  :results="record.examinations"
+                  :supplier="record.supplier"/>
+    <analytics-tracked-tag id="proceduresHeader"
+                           :class ="[$style['record-title'],
+                                     getCollapsedState(isProceduresCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="PROCEDURES"
+                           :text="$t('my_record.procedures.sectionHeader.default')"
+                           :aria-expanded="!isProceduresCollapsed ? 'true' : 'false'"
+                           data-purpose="accordion"
+                           role="button"
+                           tag="a">
+      {{ $T('my_record.procedures.sectionHeader.default') }}
+    </analytics-tracked-tag>
+    <procedures :is-collapsed="isProceduresCollapsed"
+                :results="record.procedures"
+                :supplier="record.supplier"/>
   </div>
 </template>
 
@@ -66,12 +98,16 @@ import Problems from '@/components/my-record/SharedComponents/Problems';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import TestResults from '@/components/my-record/SharedComponents/TestResults';
 import Diagnosis from '@/components/my-record/SharedComponents/Diagnosis';
+import Examinations from '@/components/my-record/SharedComponents/Examinations';
+import Procedures from '@/components/my-record/SharedComponents/Procedures';
 import VueScrollTo from 'vue-scrollto';
 
 const IMMUNISATIONS = 'immunisations';
 const PROBLEMS = 'problems';
 const TESTRESULTS = 'testResults';
 const DIAGNOSIS = 'diagnosis';
+const EXAMINATIONS = 'examinations';
+const PROCEDURES = 'procedures';
 
 export default {
   components: {
@@ -80,6 +116,8 @@ export default {
     Problems,
     TestResults,
     Diagnosis,
+    Examinations,
+    Procedures,
     VueScrollTo,
   },
   props: {
@@ -94,6 +132,8 @@ export default {
       PROBLEMS,
       TESTRESULTS,
       DIAGNOSIS,
+      EXAMINATIONS,
+      PROCEDURES,
       isProblemsCollapsed: process.client,
       isImmunisationsCollapsed: process.client,
       isTestResultsCollapsed: process.client,
@@ -133,6 +173,14 @@ export default {
         case DIAGNOSIS:
           this.isDiagnosisCollapsed =
             !this.isDiagnosisCollapsed;
+          break;
+        case EXAMINATIONS:
+          this.isExaminationsCollapsed =
+            !this.isExaminationsCollapsed;
+          break;
+        case PROCEDURES:
+          this.isProceduresCollapsed =
+            !this.isProcesduresCollapsed;
           break;
         default:
           break;

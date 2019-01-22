@@ -120,6 +120,14 @@ const routes = {
     name: 'my-record-diagnosis-detail',
     path: 'my-record/diagnosis-detail',
   },
+  MY_RECORD_VISION_EXAMINATIONS_DETAIL: {
+    name: 'my-record-examinations-detail',
+    path: '/my-record/examinations-detail',
+  },
+  MY_RECORD_VISION_PROCEDURES_DETAIL: {
+    name: 'my-record-procedures-detail',
+    path: '/my-record/procedures-detail',
+  },
   MY_RECORD_VISION_TEST_RESULTS_DETAIL: {
     name: 'my-record-test-results-detail',
     path: '/my-record/test-results-detail',
@@ -213,6 +221,8 @@ export const {
   MYRECORDNOACCESS,
   MYRECORDTESTRESULT,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
+  MY_RECORD_VISION_EXAMINATIONS_DETAIL,
+  MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,

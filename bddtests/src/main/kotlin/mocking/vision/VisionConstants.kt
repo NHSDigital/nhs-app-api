@@ -41,6 +41,8 @@ object VisionConstants {
     const val immunisationsView: String = "PROCEDURES"
     const val problemsView: String = "PROBLEMS"
     const val diagnosisView: String = "DIAGNOSIS"
+    const val examinationsView: String = "EXAMINATIONS"
+    const val proceduresView: String = "PROCEDURES"
 
     const val bookAppointmentName: String = "VOAPP.BookAppointment"
     const val bookAppointmentVersion: String = "2.0.0"

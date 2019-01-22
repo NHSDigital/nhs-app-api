@@ -555,6 +555,28 @@ export default {
       diagnosisTitle: 'Diagnosis',
       noDiagnosisData: 'No information recorded for this section',
     },
+    examinations: {
+      visionDetailsLink: 'View your Examination records',
+      sectionHeader: {
+        default: 'Examinations',
+      },
+    },
+    examinationDetails: {
+      backButton: 'Back',
+      examinationTitle: 'Examinations',
+      noExaminationData: 'No information recorded for this section',
+    },
+    procedures: {
+      visionDetailsLink: 'View your Procedures records',
+      sectionHeader: {
+        default: 'Procedures',
+      },
+    },
+    procedureDetails: {
+      backButton: 'Back',
+      procedureTitle: 'Procedures',
+      noProcedureData: 'No information recorded for this section',
+    },
     clinicalTerms: {
       text: 'You may see medical abbreviations that you aren’t familiar with.',
       link: 'Help with abbreviations',
