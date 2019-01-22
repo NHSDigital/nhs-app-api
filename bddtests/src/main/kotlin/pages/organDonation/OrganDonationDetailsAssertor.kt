@@ -34,10 +34,9 @@ class OrganDonationDetailsAssertor(title: String, val page: HybridPageObject) {
 
     fun assert(expectedText: String): OrganDonationDetailsAssertor {
         HybridPageElement(
-                "$containerXPath//p",
+                "$containerXPath//p[normalize-space() = \"$expectedText\"]",
                 page = page,
                 helpfulName = "Explanatory text")
-                .withText(expectedText)
                 .assertSingleElementPresent()
                 .assertIsVisible()
         return this

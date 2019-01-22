@@ -39,7 +39,11 @@ export default {
   },
   [SET_ALL_ORGANS](state, choice) {
     state.registration.decisionDetails =
-      { ...state.registration.decisionDetails, ...{ all: choice } };
+      { ...state.registration.decisionDetails,
+        ...{ all: choice,
+          choices: initialState().registration.decisionDetails.choices,
+        },
+      };
   },
   [SET_FAITH_DECLARATION](state, faithDeclaration) {
     state.registration.faithDeclaration = faithDeclaration;

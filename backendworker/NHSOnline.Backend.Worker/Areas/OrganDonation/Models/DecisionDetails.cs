@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation.Models
     public class DecisionDetails
     {
         public bool All { get; set; }
-
-        public IEnumerable<Choice> Choices { get; set; }
+        
+        public IDictionary<string,ChoiceState> Choices { get; set; }
     }
 }

@@ -5,9 +5,9 @@ import org.junit.Assert
 import org.openqa.selenium.By
 import pages.HybridPageElement
 
-class RadioButtons(allButtons: HybridPageElement) {
+class RadioButtons2(allButtons: HybridPageElement) {
 
-    private val buttons = allButtons.elements.map { element -> RadioButton(element) }
+    private val buttons = allButtons.elements.map { element -> RadioButton2(element) }
 
     fun assertAreEqual(expectedOptions: List<Pair<String, String>>) {
         val expectedTitles = expectedOptions.map { option -> option.first }
@@ -20,12 +20,13 @@ class RadioButtons(allButtons: HybridPageElement) {
 
         expectedOptions.forEach { expected ->
             val actual = buttons.first { button -> button.title == expected.first }
+            if(!expected.second.isEmpty())
             Assert.assertEquals("Expected description for button '${actual.title}'",
                     expected.second, actual.description)
         }
     }
 
-    fun button(title: String): RadioButton {
+    fun button(title: String): RadioButton2 {
         return buttons.first { button -> button.title == title }
     }
 
@@ -46,22 +47,23 @@ class RadioButtons(allButtons: HybridPageElement) {
     }
 }
 
-class RadioButton(val element : WebElementFacade) {
+class RadioButton2(val element : WebElementFacade) {
 
     fun assertSelected() {
-        Assert.assertTrue("$title should be selected but is not", selected)
+        Assert.assertEquals("$title should be selected but is not", 1, selectedIndicator().count() )
     }
 
     fun assertNotSelected() {
-        Assert.assertFalse("$title should not be selected but is", selected)
+        Assert.assertEquals("$title should not be selected but is", 0, selectedIndicator().count())
     }
 
     fun select() {
         element.click()
     }
 
-    private val selected: Boolean = element.find<WebElementFacade>(By.xpath("./input")).getAttribute("value") == "true"
+    private fun selectedIndicator() = element.findElements(By.xpath("./div/div"))
 
-    val title: String = element.find<WebElementFacade>(By.xpath("./b")).text
-    val description: String = element.find<WebElementFacade>(By.xpath("./p")).text
+
+    val title: String = element.find<WebElementFacade>(By.xpath("./label/span")).text
+    val description: String by lazy {element.find<WebElementFacade>(By.xpath("./label/p")).text}
 }

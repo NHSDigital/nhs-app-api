@@ -40,6 +40,7 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
     }
 
     val yourDecisionModule by lazy { OrganDonationYourDecisionModule(this) }
+    val faithAndBeliefsModule by lazy { OrganDonationFaithModule(this) }
 
     fun assertConfirmationCheckBoxes() {
         accuracyCheckBox.assertIsVisible()
@@ -57,6 +58,6 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
     }
 
     fun clickSubmit() {
-        clickOnButtonContainingText("Submit my decision")
+        clickOnButtonContainingText("Yes I want to be a donor")
     }
 }

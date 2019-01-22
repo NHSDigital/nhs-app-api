@@ -22,6 +22,10 @@ open class OrganDonationConfirmationPage : HybridPageObject() {
         decision.withText("No, I do not want to donate my organs").assertSingleElementPresent()
     }
 
+    fun assertDecisionIsYes() {
+        decision.withText("Yes, I do want to donate my organs").assertSingleElementPresent()
+    }
+
     fun assertSuccessBanner() {
         BannerObject.success(this).assertVisible("We have updated your decision")
     }

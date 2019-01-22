@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 { AllOrgansChoiceKey, source.All ? YesChoiceValue : NoChoiceValue }
             };
 
-            source.Choices.ToList().ForEach(c => donationWishes.Add(c.Name, _choiceStateMapper.From(c.Value)));
+            source.Choices.ToList().ForEach(c => donationWishes.Add(c.Key, _choiceStateMapper.From(c.Value)));
 
             return donationWishes;
         }

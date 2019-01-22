@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
@@ -11,8 +12,44 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             LookupRegistrationRequest request,
             UserSession userSession)
         {
+            OrganDonationResponse<RegistrationLookupResponse> response;
+
+            switch (request.NhsNumber)
+            {
+                // William Raymond
+                case ("9458248744"):
+                    var builder1 = new RegistrationLookupResponseBuilder();
+                    response = builder1
+                        .AddIdentifier(request.NhsNumber)
+                        .AddOptInSomeOrgansDecision()
+                        .AddFaithDeclaration(FaithDeclaration.Yes)
+                        .Build();
+                    break;
+                //Paul Smith
+                case ("8434446473"):
+                    var builder2 = new RegistrationLookupResponseBuilder();
+                    response = builder2
+                        .AddIdentifier(request.NhsNumber)
+                        .AddOptOutDecision()
+                        .AddFaithDeclaration(FaithDeclaration.Yes)
+                        .Build();
+                    break;
+                //Mary Davies
+                case ("9987574309"):
+                    var builder3 = new RegistrationLookupResponseBuilder();
+                    response = builder3
+                        .AddIdentifier(request.NhsNumber)
+                        .AddOptInAllOrgansDecision()
+                        .AddFaithDeclaration(FaithDeclaration.No)
+                        .Build();
+                    break;
+                default:
+                    response = new OrganDonationResponse<RegistrationLookupResponse>(HttpStatusCode.NotFound);
+                    break;
+            }
+
             return Task.FromResult(
-                new OrganDonationResponse<RegistrationLookupResponse>(HttpStatusCode.NotFound));
+                response);
         }
 
         public Task<OrganDonationResponse<RegistrationResponse>> PostRegistration(

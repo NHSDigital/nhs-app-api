@@ -64,7 +64,6 @@ Feature: Organ Donation Backend
       | TPP       |
       | VISION    |
 
-
   Scenario Outline: When looking for an organ donation registration with an invalid session, the <GP System> user
   receives a 401 response
     Given I am a <GP System> user registered with organ donation
@@ -104,9 +103,46 @@ Feature: Organ Donation Backend
       | TPP       |
       | VISION    |
 
-  Scenario Outline: When submitting an organ donation decision, an unregistered <GP System> user receives
+  Scenario Outline: A <GP System> user chooses to donate their organs and submits their Faiths And Beliefs and a POST
+      request is made containing user's choices
+      Given I am a <GP System> user who wants to opt-in to organ donation
+      And I have logged in and have a valid session cookie
+      When I submit a request to set my organ donation preferences with all organs and my faiths and beliefs decision
+      Then I receive my registration id from organ donation
+
+      Examples:
+        | GP System |
+        | EMIS      |
+        | TPP       |
+        | VISION    |
+
+  Scenario Outline: When submitting an organ donation opt out decision, an unregistered <GP System> user receives
   a 201 response and a registration id
     Given I am a <GP System> user who wants to opt-out of organ donation
+    And I have logged in and have a valid session cookie
+    When I submit my decision to organ donation
+    Then I receive my registration id from organ donation
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario Outline: When submitting an organ donation opt in decision, an unregistered <GP System> user receives
+  a 201 response and a registration id
+    Given I am a <GP System> user who wants to opt-in to organ donation
+    And I have logged in and have a valid session cookie
+    When I submit my decision to organ donation
+    Then I receive my registration id from organ donation
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+  Scenario Outline: When submitting an organ donation some organs decision, an unregistered <GP System> user receives
+  a 201 response and a registration id
+    Given I am a <GP System> user who wants to donate some but not all organs
     And I have logged in and have a valid session cookie
     When I submit my decision to organ donation
     Then I receive my registration id from organ donation

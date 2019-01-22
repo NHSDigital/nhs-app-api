@@ -22,6 +22,10 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
         assertText("No, I do not want to donate my organs")
     }
 
+    fun assertDecisionIsYes() {
+        assertText("Yes, I do want to donate my organs")
+    }
+
     private fun assertText(expectedText: String) {
         HybridPageElement(
                 "$containerXPath//span",

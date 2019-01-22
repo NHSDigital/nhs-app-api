@@ -267,13 +267,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             result.DecisionDetails.Should().NotBeNull();
             result.DecisionDetails.All.Should().Be(true);
             result.DecisionDetails.Choices.Should().HaveCount(3);
-            result.DecisionDetails.Choices.Should()
-                .Contain(x =>
-                    string.Equals(x.Name, "pancreas", StringComparison.Ordinal) && x.Value == ChoiceState.No);
-            result.DecisionDetails.Choices.Should().Contain(x =>
-                string.Equals(x.Name, "heart", StringComparison.Ordinal) && x.Value == ChoiceState.NotStated);
-            result.DecisionDetails.Choices.Should().Contain(x =>
-                string.Equals(x.Name, "tissue", StringComparison.Ordinal) && x.Value == ChoiceState.Yes);
+            result.DecisionDetails.Choices.Should().Contain("pancreas", ChoiceState.No);
+            result.DecisionDetails.Choices.Should().Contain("heart", ChoiceState.NotStated);
+            result.DecisionDetails.Choices.Should().Contain("tissue", ChoiceState.Yes);
             result.FaithDeclaration.Should().Be(FaithDeclaration.No);
         }
         

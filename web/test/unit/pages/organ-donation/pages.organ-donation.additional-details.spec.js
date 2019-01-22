@@ -1,6 +1,6 @@
 import find from 'lodash/fp/find';
 import AdditionalDetails from '@/pages/organ-donation/additional-details';
-import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
+import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION, ORGAN_DONATION_FAITH } from '@/lib/routes';
 import { DECISION_NOT_FOUND, DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
@@ -187,7 +187,7 @@ describe('additional-details', () => {
           });
 
           it('will push the organ donation page on the router', () => {
-            expect($router).toContain(ORGAN_DONATION.path);
+            expect($router).toContain(ORGAN_DONATION_FAITH.path);
           });
         });
       });

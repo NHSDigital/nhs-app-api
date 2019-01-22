@@ -12,12 +12,12 @@ data class OrganDonationRegistration(
         var address: Address,
         var emailAddresss: String,
         var decision: OrganDonationRegistrationDecision,
-        var decisionDetails: String?,
+        var decisionDetails: DecisionDetails?,
         var faithDeclaration: String
 ) {
     companion object {
 
-        fun fromPatient(patient: Patient): OrganDonationRegistration {
+        fun optOut(patient: Patient): OrganDonationRegistration {
             return OrganDonationRegistration(
                     identifier = "123",
                     nhsNumber = patient.formattedNHSNumber(),
@@ -31,6 +31,27 @@ data class OrganDonationRegistration(
                     decisionDetails = null,
                     faithDeclaration = patient.organDonationDemographics.faithDeclaration.toString()
             )
+        }
+
+        fun optIn(patient: Patient): OrganDonationRegistration {
+            val registration = optOut(patient)
+            registration.decision = OrganDonationRegistrationDecision.OptIn
+            registration.decisionDetails = DecisionDetails(true,
+                    hashMapOf("heart" to "NotStated",
+                            "lungs" to "NotStated",
+                            "fingers" to "NotStated",
+                            "toes" to "NotStated"))
+            return registration
+        }
+
+        fun some(patient: Patient): OrganDonationRegistration {
+            val registration = optIn(patient)
+            registration.decisionDetails = DecisionDetails(false,
+                    hashMapOf("heart" to "yes",
+                            "lungs" to "no",
+                            "fingers" to "yes",
+                            "toes" to "no"))
+            return registration
         }
     }
 }

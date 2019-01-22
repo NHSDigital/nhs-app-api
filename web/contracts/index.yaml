@@ -815,17 +815,14 @@
                       type: "boolean"
                       description: "Users agreed to donate all organs."
                     choices: 
-                      type: "array"
-                      items: 
-                        type: "object"
-                        description: "Users individual organ donation choices."
-                        properties: 
-                          name: 
-                            type: "string"
-                            description: "Name of the choice."
-                          value: 
-                            type: "string"
-                            description: "Value of the choice - Yes, No, NotStated."
+                      description: "Users individual organ donation choices."
+                      additionalProperties: 
+                        type: "string"
+                        description: "Value of the choice - Yes, No, NotStated."
+                      example: 
+                        heart: "Yes"
+                        lungs: "NotStated"
+                        kidney: "No"
                 faithDeclaration: 
                   type: "string"
                   description: "Users faith decision - Yes, No, NotStated."

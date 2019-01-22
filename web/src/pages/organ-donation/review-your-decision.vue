@@ -27,7 +27,7 @@
     <confirmation :is-accuracy-star-visible="isAccuracyStarVisible"
                   :is-privacy-star-visible="isPrivacyStarVisible" />
     <generic-button id="submit-button"
-                    :class="$style.green"
+                    :class="[$style.button, $style.green]"
                     @click="clickSubmit">
       {{ $t('organDonation.reviewYourDecision.submitButton') }}
     </generic-button>
@@ -50,8 +50,8 @@ import FaithDetails from '@/components/organ-donation/FaithDetails';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE, ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
-import { DECISION_OPT_OUT, DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
+import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   components: {
@@ -71,11 +71,6 @@ export default {
     };
   },
   computed: {
-    backRoute() {
-      return this.$store.state.organDonation.registration.decision === DECISION_OPT_OUT
-        ? ORGAN_DONATION_ADDITIONAL_DETAILS.path
-        : ORGAN_DONATION_YOUR_CHOICE.path;
-    },
     isAccuracyAccepted() {
       return this.$store.state.organDonation.isAccuracyAccepted;
     },
@@ -106,9 +101,12 @@ export default {
       return errors;
     },
   },
+  created() {
+    this.$store.dispatch('organDonation/resetAcceptanceChecks');
+  },
   methods: {
     clickBack() {
-      this.$router.push(this.backRoute);
+      this.$router.push(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
     },
     clickSubmit() {
       this.submitAttempted = true;

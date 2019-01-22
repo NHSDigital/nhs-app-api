@@ -23,6 +23,22 @@ class OrganDonationSubmitStepDefinitionsBackend {
         factory.optOut { registration -> registration.respondWithSuccess(registrationId) }
     }
 
+    @Given("^I am a (.*) user who wants to opt-in to organ donation$")
+    fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptIn(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        val registrationId = "NewOrganDonationId"
+        Serenity.setSessionVariable("ExpectedOrganDonationRegistrationId").to(registrationId)
+        factory.optIn { registration -> registration.respondWithSuccess(registrationId) }
+    }
+
+    @Given("^I am a (.*) user who wants to donate some but not all organs$")
+    fun iAmAUserWhoWantsToDonateSomeButNotAllOrgans(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        val registrationId = "NewOrganDonationId"
+        Serenity.setSessionVariable("ExpectedOrganDonationRegistrationId").to(registrationId)
+        factory.some { registration -> registration.respondWithSuccess(registrationId) }
+    }
+
     @Given("^I am a (.*) user who wants to opt-out of organ donation, but OD will time out$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOutButOrganDonationWillTimeOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
@@ -37,12 +53,27 @@ class OrganDonationSubmitStepDefinitionsBackend {
 
     @When("^I submit my decision to organ donation$")
     fun iSubmitMyDecisionToOrganDonation() {
-        val optOutRegistration = Serenity.sessionVariableCalled<OrganDonationRegistrationRequest>(
-                "OrganDonationDecision")
+        val registration = Serenity.sessionVariableCalled<OrganDonationRegistrationRequest>(
+                ORGAN_DONATION_DECISION)
         try {
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .organDonation
-                    .postRegistration(optOutRegistration)
+                    .postRegistration(registration)
+            setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
+    }
+
+    @When("^I submit a request to set my organ donation preferences with all organs and my faiths and beliefs decision")
+    fun iSubmitARequestToSetMyOrganDonationPreferencesWithAllOrgansAndMyFaithsAndBeliefsDecision() {
+        val registration = Serenity.sessionVariableCalled<OrganDonationRegistrationRequest>(
+                ORGAN_DONATION_DECISION)
+        registration.registration.faithDeclaration = "Yes"
+        try {
+            val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .organDonation
+                    .postRegistration(registration)
             setSessionVariable(OrganDonationRegistrationResponse::class).to(response)
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)

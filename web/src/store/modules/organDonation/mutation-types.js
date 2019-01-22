@@ -48,7 +48,16 @@ export const initialState = () => ({
     decision: DECISION_NOT_FOUND,
     decisionDetails: {
       all: '',
-      choices: [],
+      choices: {
+        heart: 'NotStated',
+        lungs: 'NotStated',
+        kidney: 'NotStated',
+        liver: 'NotStated',
+        corneas: 'NotStated',
+        pancreas: 'NotStated',
+        tissue: 'NotStated',
+        smallBowel: 'NotStated',
+      },
     },
     faithDeclaration: '',
   },

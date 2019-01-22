@@ -39,6 +39,7 @@ export default {
   },
   created() {
     this.$store.dispatch('organDonation/setAdditionalDetails', { ethnicityId: '', religionId: '' });
+    this.$store.dispatch('organDonation/resetAcceptanceChecks');
   },
 };
 </script>

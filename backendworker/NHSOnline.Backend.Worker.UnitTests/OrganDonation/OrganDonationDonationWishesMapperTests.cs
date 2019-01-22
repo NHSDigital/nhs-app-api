@@ -65,11 +65,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             var result = _organDonationDonationWishesMapper.Map(new DecisionDetails
             {
                 All = true,
-                Choices = new List<Choice>
+                Choices = new Dictionary<string, ChoiceState>()
                 {
-                    new Choice { Name = "heart", Value = ChoiceState.Yes },
-                    new Choice { Name = "liver", Value = ChoiceState.No },
-                    new Choice { Name = "tissue", Value = ChoiceState.NotStated }
+                    { "heart", ChoiceState.Yes },
+                    { "liver", ChoiceState.No },
+                    { "tissue", ChoiceState.NotStated }
                 }
             });
 

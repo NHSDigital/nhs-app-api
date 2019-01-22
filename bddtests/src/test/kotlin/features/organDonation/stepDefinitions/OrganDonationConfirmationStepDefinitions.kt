@@ -17,4 +17,10 @@ open class OrganDonationConfirmationStepDefinitions {
         organDonationConfirmationPage.assertDecisionIsNo()
         organDonationConfirmationPage.assertSuccessBanner()
     }
+
+    @Then("^the decision to opt in to organ donation has been successfully created$")
+    fun theDecisionToOptInToOrganDonationHasBeenSuccessfullyCreated(){
+        organDonationConfirmationPage.assertDecisionIsYes()
+        organDonationConfirmationPage.assertSuccessBanner()
+    }
 }

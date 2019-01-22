@@ -49,4 +49,8 @@ export default {
   togglePrivacyAcceptance({ commit, state }) {
     commit(SET_PRIVACY_ACCEPTANCE, !state.isPrivacyAccepted);
   },
+  resetAcceptanceChecks({ commit }) {
+    commit(SET_PRIVACY_ACCEPTANCE, false);
+    commit(SET_ACCURACY_ACCEPTANCE, false);
+  },
 };

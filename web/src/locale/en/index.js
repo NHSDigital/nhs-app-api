@@ -723,7 +723,7 @@ export default {
     reviewYourDecision: {
       header: 'Check your details before submitting',
       backButton: 'Back',
-      submitButton: 'Submit my decision',
+      submitButton: 'Yes I want to be a donor',
       aboutYou: {
         subheader: 'About you',
         nameheader: 'Name',
