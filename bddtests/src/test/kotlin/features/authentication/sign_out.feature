@@ -27,7 +27,7 @@ Feature: Sign out of mobile web
       | TPP         |
       | VISION      |
 
-  @manual
+  @manual # covered in Manual Regression Test pack
   Scenario: The nsho cookie should be clear of session and user information if server side sign out fails
     # Cannot induce session sign-out failure.
     Given I am logged in

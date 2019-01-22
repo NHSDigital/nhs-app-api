@@ -13,7 +13,7 @@ Feature: Session Registration
     And the response has a session timeout
     And the cookie contains a session guid with http-only
 
-  @tech-debt @NHSO-725
+  @tech-debt @NHSO-725  # covered in Manual Regression Test pack
   Scenario: We check the session cookie and response body for https
     Given I have a valid authCode and codeVerifier
     When I create a user session
@@ -101,14 +101,8 @@ Feature: Session Registration
       | TPP       |
       | VISION    |
 
-  @manual
-  Scenario Outline: <GP System> session fails to be saved in cache
+  @manual # covered in Manual Regression Test pack
+  Scenario: session fails to be saved in cache
     Given I have valid OAuth details and the <GP System> session fails to be saved in cache
     When I create a user session
     Then I get a "Server Error" error
-
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
