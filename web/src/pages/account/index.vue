@@ -7,7 +7,7 @@
     <div v-if="shouldShowBiometrics">
       <h2>{{ $t('myAccount.accountSettingsHeading') }}</h2>
       <ul :class="$style['list-menu']">
-        <li @click="goToBiometrics()">
+        <li @click="goToLoginOptions()">
           <analytics-tracked-tag id="btn_passwordOptions"
                                  :text="$t('myAccount.passwordOptions')"
                                  tag="a">
@@ -97,18 +97,27 @@ export default {
     WelcomeSection,
     CeMarkIcon,
   },
+  data() {
+    return {
+      nativeLoginOptionsMethodExists: true,
+    };
+  },
   computed: {
     shouldShowBiometrics() {
-      return this.$env.BIOMETRICS_ENABLED && (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios');
+      return this.$env.BIOMETRICS_ENABLED && this.nativeLoginOptionsMethodExists &&
+      (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios');
     },
+  },
+  mounted() {
+    this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
   },
   methods: {
     signout(event) {
       event.preventDefault();
       this.$store.dispatch('auth/logout');
     },
-    goToBiometrics() {
-      NativeCallbacks.goToBiometrics();
+    goToLoginOptions() {
+      NativeCallbacks.goToLoginOptions();
     },
   },
 };

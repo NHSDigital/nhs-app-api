@@ -135,10 +135,18 @@ export default {
     return false;
   },
 
-  goToBiometrics() {
+  goToLoginOptions() {
     const app = window.nativeApp;
-    if (app && app.goToBiometrics) {
-      app.goToBiometrics();
+    if (app && app.goToLoginOptions) {
+      app.goToLoginOptions();
+      return true;
+    }
+    return false;
+  },
+
+  goToLoginOptionsExists() {
+    const app = window.nativeApp;
+    if (app && app.goToLoginOptions) {
       return true;
     }
     return false;
