@@ -8,6 +8,7 @@ class LifecycleHandlersTests: XCTestCase {
     var homeController: HomeViewController?
     var webViewController: WebViewController?
     var configurationService: MockConfigurationService?
+    let queue = DispatchQueue(label: "MyTestQueue")
     
     override func setUp() {
         super.setUp()
@@ -33,21 +34,15 @@ class LifecycleHandlersTests: XCTestCase {
     
     func test_ensureValueForHasCheckedAppVersionSinceAppOpened_isTrueIfUserDeviceIsNotAllowed() {
         self.configurationService?.isValidConfiguration = false
-        let expectation = XCTestExpectation(description: "version check complete")
-        lifecycleHandlers?.performAppVersionCheck(completionHandler: {
-            expectation.fulfill()
-        })
-        wait(for: [expectation], timeout: TimeInterval(exactly: 10)!)
+        lifecycleHandlers?.performAppVersionCheck(onQueue: queue)
+        queue.sync {}
         XCTAssertTrue(lifecycleHandlers!.hasCheckedAppVersionSinceAppOpened)
     }
     
     func test_ensureValueForHasCheckedAppVersionSinceAppOpened_isFalseIfUserDeviceIsAllowed() {
         self.configurationService?.isValidConfiguration = true
-        let expectation = XCTestExpectation(description: "version check complete")
-        lifecycleHandlers?.performAppVersionCheck(completionHandler: {
-            expectation.fulfill()
-        })
-        wait(for: [expectation], timeout: TimeInterval(exactly: 10)!)
+        lifecycleHandlers?.performAppVersionCheck(onQueue: queue)
+        queue.sync {}
         XCTAssertFalse(lifecycleHandlers!.hasCheckedAppVersionSinceAppOpened)
     }
     

@@ -28,16 +28,13 @@ class LifecycleHandlers: NSObject {
     }
     
     @objc
-    func performAppVersionCheck(completionHandler: (() -> Void)? = nil) {
+    func performAppVersionCheck(onQueue queue: DispatchQueue = DispatchQueue.main) {
         if (hasCheckedAppVersionSinceAppOpened == false) {
             configurationService.isUserDeviceAllowed { (result) in
                 if (result.isValidConfiguration == false) {
-                    DispatchQueue.main.async {
+                    queue.async {
                         self.displayAppVersionOutOfDate()
-                        completionHandler?()
                     }
-                } else {
-                    completionHandler?()
                 }
             }
         }
