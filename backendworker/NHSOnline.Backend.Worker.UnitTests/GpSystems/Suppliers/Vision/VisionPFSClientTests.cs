@@ -10,6 +10,7 @@ using System.Xml;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
@@ -20,6 +21,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Certificate;
 using RichardSzalay.MockHttp;
 
@@ -31,6 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
     {
         private IVisionPFSClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
+        private IOptions<ConfigurationSettings> _options;
         private Mock<IVisionPFSConfig> _configMock;
         private IFixture _fixture;
         private VisionConnectionToken _connectionToken;
@@ -48,8 +51,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         private const string GetHistoryServiceDefinitionName = "VONREP.GetHistory";
         private const string OrderNewPrescriptionServiceDefinitionName = "VONREP.NewPrescription";
         private const string GetAvailableAppointmentsServiceDefinitionName = "VOAPP.GetAvailableAppointments";
+        private const int VisionAppointmentSlotsRequestCount = 50;
         
-
         private Mock<ICertificateService> _mockCertificateService;
         private Mock<IEnvelopeService> _mockEnvelopeService;
 
@@ -57,6 +60,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _options = Options.Create(new ConfigurationSettings
+            {
+                VisionAppointmentSlotsRequestCount = VisionAppointmentSlotsRequestCount
+            });
+            _fixture.Inject(_options);
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
             _configMock = _fixture.Freeze<Mock<IVisionPFSConfig>>();
             _configMock.SetupGet(x => x.ApiUrl).Returns(ApiUrl);
@@ -351,7 +359,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 Page = new Page
                 {
                     Number = 1,
-                    SlotsPerPage = 100
+                    SlotsPerPage = VisionAppointmentSlotsRequestCount
                 },
                 Locations = _visionUserSession.LocationIds,
                 Owners = new List<string> { "ALL" },
