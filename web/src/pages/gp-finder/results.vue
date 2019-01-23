@@ -53,7 +53,7 @@
             {{ suggestion }}
           </li>
         </ul>
-        <hr>
+        <hr aria-hidden="true">
       </div>
 
       <ul v-if="!technicalError && !noResultsFound" id="searchResults" :class="$style['list-menu']">
