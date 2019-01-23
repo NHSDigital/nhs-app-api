@@ -21,6 +21,7 @@ open class OrganDonationChoiceStepDefinitions {
     @When("^I navigate to the internal Organ Donation Choice Page")
     fun iNavigateToTheInternalOrganDonationChoicePage() {
         navBarNative.select(NavBarNative.NavBarType.MORE)
+        morePage.waitForSpinnerToDisappear()
         browser.appendSourceQueryString("ios")
         morePage.btnOrganDonation.click()
         organDonationChoicePage.waitForSpinnerToDisappear()
