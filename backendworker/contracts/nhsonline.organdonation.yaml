@@ -40,21 +40,18 @@ paths:
         parameters:
           - in: body
             required: true
-            description:
-            properties:
-              registration:
-                type: object
-                $ref: '#/definitions/organDonationRegistration'
-              additionalDetails:
-                type: object
-                $ref: '#/definitions/additionalDetails'
+            description: Details of the organ donation registration request.
+            schema:
+              $ref: '#/definitions/organDonationRegistrationRequest'
         responses:
           201:
-            properties:
-              identifier:
-                type: string
-                description: Users organ donation identifier.
-            description: Successfully created the organ donation record and returned the record identifier.
+            description: "Successfully created the organ donation record and returned the record identifier."
+            schema:
+              type: "object"
+              properties:
+                identifier:
+                  type: "string"
+                  description: "Users organ donation identifier."
           400:
             description: Bad request. Supplied request is incomplete or invalid.
           401:
@@ -212,3 +209,11 @@ definitions:
       value:
         type: string
         description: Value of the choice - Yes, No, NotStated.
+  organDonationRegistrationRequest:
+    type: object
+    description: Details of the organ donation registration request.
+    properties:
+      registration:
+          $ref: '#/definitions/organDonationRegistration'
+      additionalDetails:
+          $ref: '#/definitions/additionalDetails'
