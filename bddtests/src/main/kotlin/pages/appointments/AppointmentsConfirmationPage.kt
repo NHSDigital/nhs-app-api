@@ -1,5 +1,6 @@
 package pages.appointments
 
+import models.Slot
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
@@ -36,6 +37,8 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
             page = this
     )
 
+    private val selectedAppointmentParentXpath = "//div[@aria-label='selected appointment']"
+
     fun clickOnConfirmAndBookAppointmentButton() {
         confirmAndBookAppointmentButton.click()
     }
@@ -63,5 +66,10 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     fun describeTelephoneNumber(telephoneNumber: String) {
         telephoneNumberDiv.element.type<WebElementFacade>(telephoneNumber)
         hideKeyboardIfOnMobile()
+    }
+
+    fun getAppointmentSlot(areCliniciansExpected: Boolean = false): Slot {
+        val slotsArray = getAllSlots(selectedAppointmentParentXpath, areCliniciansExpected)
+        return slotsArray[0]
     }
 }

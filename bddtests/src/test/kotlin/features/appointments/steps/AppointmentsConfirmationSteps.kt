@@ -1,6 +1,9 @@
 package features.appointments.steps
 
+import features.appointments.factories.AppointmentsBookingFactory
 import mocking.MockingClient
+import models.Slot
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -41,6 +44,15 @@ open class AppointmentsConfirmationSteps {
     fun checkTelephoneNumberRequiredErrorMessage() {
         val message = appointmentsConfirmation.telephoneError.element.text
         assertEquals("Enter a telephone number", message)
+    }
+
+    @Step
+    fun checkAppointmentDetails() {
+        val expectedSlot =  Serenity.sessionVariableCalled<Slot>(AppointmentsBookingFactory.SelectedSlot)
+                .copy(id = null)
+        val areCliniciansExpected = expectedSlot.clinicians.isNotEmpty()
+        val actualSlot = appointmentsConfirmation.getAppointmentSlot(areCliniciansExpected)
+        assertEquals("Exact expected Appointment not found. ", expectedSlot, actualSlot)
     }
 
     @Step

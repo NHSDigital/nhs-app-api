@@ -56,11 +56,13 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
 
     private fun generateBookingResponse(bookingReason: String, booker: (IBookAppointmentsBuilder) ->
     Mapping) {
-        val slotToSelect = Serenity.sessionVariableCalled<List<AppointmentSessionFacade>>(
+        val sessionToSelect = Serenity.sessionVariableCalled<List<AppointmentSessionFacade>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .APPOINTMENT_SLOTS_EXAMPLE_SESSIONS
-        ).first().slots.first()
+        ).first()
+        val slotToSelect = sessionToSelect.slots.first()
+        setSessionVariable(SelectedSlot).to(getExpectedUiRepresentationOfSlot(slotToSelect, sessionToSelect))
         appointmentMapper.requestMapping {
             booker(bookAppointmentSlotRequest(patient,
                     BookAppointmentSlotFacade(patient.userPatientLinkToken, slotToSelect.slotId!!.toInt(),
@@ -81,5 +83,6 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
 
         const val SymptomsToEnter = "SymptomsToEnter"
         const val TelephoneNumberToEnter = "TelephoneNumberToEnter"
+        const val SelectedSlot = "SelectedSlot"
     }
 }

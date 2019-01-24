@@ -58,7 +58,7 @@ class UpcomingAppointmentsFactoryEmis : UpcomingAppointmentsFactory("EMIS") {
         } ?: emptyList()
     }
 
-    private fun getExpectedUiRepresentationOfSlot(
+    override fun getExpectedUiRepresentationOfSlot(
             slot: AppointmentSlotFacade, session: AppointmentSessionFacade
     ): Slot {
         val startDate = gpDateTimeFormat.parse(slot.startTime)
@@ -79,4 +79,5 @@ class UpcomingAppointmentsFactoryEmis : UpcomingAppointmentsFactory("EMIS") {
                 id = slot.slotId
         )
     }
+
 }

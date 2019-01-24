@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.factories.UpcomingAppointmentsFactory
+import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.MyAppointmentsSteps
 import mocking.data.appointments.AppointmentsSlotsExample
 import net.serenitybdd.core.Serenity
@@ -21,10 +22,13 @@ class MyAppointmentsStepDefinitions {
     @Steps
     lateinit var myAppointmentsSteps: MyAppointmentsSteps
     lateinit var headerNative: HeaderNative
+    @Steps
+    lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
     @Then("^the Appointment Slot page is displayed$")
     fun theAppointmentSlotPageIsDisplayed() {
         headerNative.waitForPageHeaderText("Confirm appointment")
+        appointmentsConfirmationSteps.checkAppointmentDetails()
     }
 
     @Then("^the Appointment Booking success message is displayed$")

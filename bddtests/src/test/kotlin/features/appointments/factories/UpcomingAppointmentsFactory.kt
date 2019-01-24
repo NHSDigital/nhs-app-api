@@ -1,7 +1,6 @@
 package features.appointments.factories
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
-import constants.DateTimeFormats
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
@@ -16,16 +15,12 @@ import models.Slot
 import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
 import worker.models.appointments.MyAppointmentsResponse
-import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
 
 private const val DELAY_IN_SECONDS = 90L
 
 abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
-
-    private val timeZone = TimeZone.getTimeZone("Europe/London")
-    protected val gpDateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
     private val baseDate = Calendar.getInstance(timeZone)
     private val appointmentsFromDate = gpDateTimeFormat.format(baseDate.time)
 
@@ -126,26 +121,8 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         )
     }
 
-    private fun createBackendDateTimeFormatWithoutTimezone(): SimpleDateFormat {
-        val sdf = SimpleDateFormat(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
-        sdf.timeZone = timeZone
-        return sdf
-    }
-
     private fun mockUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         appointmentMapper.requestMapping { mapping(viewMyAppointmentsRequest(patient)) }
-    }
-
-    protected fun slotDateFormat(dateTimeToConvert: Date): String {
-        val slotDateFormat = SimpleDateFormat(DateTimeFormats.frontendDateFormat)
-        slotDateFormat.timeZone = timeZone
-        return slotDateFormat.format(dateTimeToConvert)
-    }
-
-    protected fun slotTimeFormat(dateTimeToConvert: Date): String {
-        val slotTimeFormat = SimpleDateFormat(DateTimeFormats.frontendTimeFormat)
-        slotTimeFormat.timeZone = timeZone
-        return slotTimeFormat.format(dateTimeToConvert).toLowerCase()
     }
 
     abstract fun getExpectedApiResponse(facade: ArrayList<AppointmentSessionFacade>): MyAppointmentsResponse
