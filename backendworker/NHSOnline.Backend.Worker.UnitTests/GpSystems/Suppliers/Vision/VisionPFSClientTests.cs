@@ -351,7 +351,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 Page = new Page
                 {
                     Number = 1,
-                    SlotsPerPage = 50
+                    SlotsPerPage = 100
                 },
                 Locations = _visionUserSession.LocationIds,
                 Owners = new List<string> { "ALL" },
