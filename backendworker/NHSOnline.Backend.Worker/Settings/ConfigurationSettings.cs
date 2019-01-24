@@ -30,8 +30,6 @@ namespace NHSOnline.Backend.Worker.Settings
         public string ThrottlingEnabled { get; set; }
 
         public Uri FidoServerUrl { get; set; }
-        
-        public int? VisionAppointmentSlotsRequestCount { get; set; }
 
         public const string ConfigurationSectionName = "ConfigurationSettings";
 
@@ -102,11 +100,6 @@ namespace NHSOnline.Backend.Worker.Settings
             if (FidoServerUrl == null)
             {
                 throw new ConfigurationNotFoundException(nameof(FidoServerUrl));
-            }
-            
-            if (VisionAppointmentSlotsRequestCount == null)
-            {
-                throw new ConfigurationNotFoundException(nameof(VisionAppointmentSlotsRequestCount));
             }
         }
     }

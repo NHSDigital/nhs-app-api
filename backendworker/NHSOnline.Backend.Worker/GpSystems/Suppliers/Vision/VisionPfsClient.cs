@@ -5,7 +5,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
@@ -17,7 +16,6 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionServiceDefinition;
 using NHSOnline.Backend.Worker.ResponseParsers;
-using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Certificate;
 using NHSOnline.Backend.Worker.Support;
 
@@ -38,7 +36,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         private readonly X509Certificate2 _certificate;
         private readonly ILogger<VisionPFSClient> _logger;
         private readonly IEnvelopeService _envelopeService;
-        private readonly ConfigurationSettings _settings;
 
         private const string MediaType = "text/xml";
 
@@ -47,8 +44,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             ICertificateService certificateService,
             IEnvelopeService envelopeService,
             VisionPFSHttpClient httpClient,
-            IXmlResponseParser responseParser,
-            IOptions<ConfigurationSettings> settings)
+            IXmlResponseParser responseParser)
         {
             _targetUri = visionConfig.ApiUrl;
             _requestUsername = visionConfig.RequestUsername;
@@ -59,7 +55,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             _responseParser = responseParser;
             _certificate =
                 certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
-            _settings = settings.Value;
         }
 
         public async Task<VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(
@@ -183,7 +178,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 Page = new Page
                 {
                     Number = 1,
-                    SlotsPerPage = _settings.VisionAppointmentSlotsRequestCount.Value
+                    SlotsPerPage = 50
                 },
                 Locations = visionUserSession.LocationIds,
                 DateRange = new DateRange
