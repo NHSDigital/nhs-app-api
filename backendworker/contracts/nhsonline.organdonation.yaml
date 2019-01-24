@@ -40,6 +40,7 @@ paths:
         parameters:
           - in: body
             required: true
+            name: 'organDonationRegistrationRequest'
             description: Details of the organ donation registration request.
             schema:
               $ref: '#/definitions/organDonationRegistrationRequest'

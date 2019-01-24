@@ -45,7 +45,7 @@ import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE, ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
 import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
 
 export default {
@@ -94,7 +94,6 @@ export default {
       if (!this.isPrivacyAccepted) {
         errors.push('organDonation.reviewYourDecision.confirmation.errors.privacy');
       }
-
       return errors;
     },
   },
@@ -104,6 +103,16 @@ export default {
     },
     clickSubmit() {
       this.submitAttempted = true;
+
+      if (this.showErrors) {
+        window.scrollTo(0, 0);
+        return;
+      }
+      this.confirmTheRegistration();
+    },
+    async confirmTheRegistration() {
+      await this.$store.dispatch('organDonation/postRegistration');
+      this.$router.push(ORGAN_DONATION_VIEW_DECISION.path);
     },
   },
 };

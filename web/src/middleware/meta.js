@@ -26,6 +26,7 @@ import {
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_YOUR_CHOICE,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
+  ORGAN_DONATION_VIEW_DECISION,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -122,6 +123,7 @@ export default function ({ route, store, app }) {
     case ORGAN_DONATION_ADDITIONAL_DETAILS.name:
     case ORGAN_DONATION_REVIEW_YOUR_DECISION.name:
     case ORGAN_DONATION_YOUR_CHOICE.name:
+    case ORGAN_DONATION_VIEW_DECISION.name:
       store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaders.organDonation';
       route.meta.pageTitleKey = 'pageTitles.organDonation';

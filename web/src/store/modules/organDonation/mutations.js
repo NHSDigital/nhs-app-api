@@ -8,6 +8,7 @@ import {
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
   SET_PRIVACY_ACCEPTANCE,
+  SET_REGISTRATION_ID,
   initialState,
 } from './mutation-types';
 
@@ -41,5 +42,8 @@ export default {
   },
   [SET_PRIVACY_ACCEPTANCE](state, value) {
     state.isPrivacyAccepted = value;
+  },
+  [SET_REGISTRATION_ID](state, registrationId) {
+    state.registration.identifier = registrationId;
   },
 };

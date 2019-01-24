@@ -136,6 +136,10 @@ const routes = {
     name: 'organ-donation-review-your-decision',
     path: '/organ-donation/review-your-decision',
   },
+  ORGAN_DONATION_VIEW_DECISION: {
+    name: 'organ-donation-view-decision',
+    path: '/organ-donation/view-decision',
+  },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',
@@ -205,6 +209,7 @@ export const {
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_YOUR_CHOICE,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
+  ORGAN_DONATION_VIEW_DECISION,
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,

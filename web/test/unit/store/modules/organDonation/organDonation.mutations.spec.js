@@ -9,6 +9,7 @@ import {
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
   SET_PRIVACY_ACCEPTANCE,
+  SET_REGISTRATION_ID,
 } from '@/store/modules/organDonation/mutation-types';
 
 describe('organ donation record mutations', () => {
@@ -94,6 +95,13 @@ describe('organ donation record mutations', () => {
     it('will set the isPrivacyAccepted value to the received value', () => {
       mutations[SET_PRIVACY_ACCEPTANCE](state, true);
       expect(state.isPrivacyAccepted).toEqual(true);
+    });
+  });
+
+  describe('SET_REGISTRATION_ID', () => {
+    it('will set the organ donation registration identifier state to the received value', () => {
+      mutations[SET_REGISTRATION_ID](state, 'identity');
+      expect(state.registration.identifier).toEqual('identity');
     });
   });
 });

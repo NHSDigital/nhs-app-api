@@ -78,7 +78,7 @@
             description: "the ods code was not provided"
           500: 
             description: "An unexpected error occurred processing the request."
-    /v1/patient/appointments:
+    /v1/patient/appointments: 
       delete: 
         tags: 
           - "appointments"
@@ -841,13 +841,62 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+      post: 
+        tags: 
+          - "organDonation"
+        summary: "Creates a users organ donation record"
+        description: "Creates the users organ donation record and returns the record identifier."
+        consumes: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "body"
+            required: true
+            name: "organDonationRegistrationRequest"
+            description: "Details of the organ donation registration request."
+            schema: 
+              type: "object"
+              description: "Details of the organ donation registration request."
+              properties: 
+                registration: 
+                  $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/schema"
+                additionalDetails: 
+                  type: "object"
+                  properties: 
+                    religionId: 
+                      type: "string"
+                      description: "The identifier for the select religion."
+                    ethnicityId: 
+                      type: "string"
+                      description: "The identifier for the select ethnicity."
+        responses: 
+          201: 
+            description: "Successfully created the organ donation record and returned the record identifier."
+            schema: 
+              type: "object"
+              properties: 
+                identifier: 
+                  type: "string"
+                  description: "Users organ donation identifier."
+          400: 
+            description: "Bad request. Supplied request is incomplete or invalid."
+          401: 
+            description: "User session missing or expired."
+          409: 
+            description: "Conflicts on organ donation record."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
+          504: 
+            description: "Timeout when calling upstream system."
     /v1/patient/organdonation/referencedata: 
       get: 
         tags: 
           - "organDonation"
         summary: "Get the reference data required for registering an organ donation decision."
         description: "Returns the reference data for titles, genders, religions, ethnicities and withdrawal reasons."
-        consumes: 
+        produces: 
           - "application/json"
         responses: 
           200: 

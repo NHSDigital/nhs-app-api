@@ -122,19 +122,21 @@ describe('review your decision', () => {
   describe('submit button', () => {
     let submitButton;
 
-    it('will exist', () => {
+    beforeEach(() => {
+      $store.state.organDonation.isAccuracyAccepted = false;
+      $store.state.organDonation.isPrivacyAccepted = false;
       wrapper = mountPage();
       submitButton = wrapper.find('#submit-button');
+    });
+
+    it('will exist', () => {
       expect(submitButton.exists()).toBe(true);
     });
 
     describe('accuracy not accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = false;
-        wrapper = mountPage();
-        submitButton = wrapper.find('#submit-button');
+        $store.state.organDonation.isPrivacyAccepted = true;
       });
-
 
       it(
         'will add "organDonation.reviewYourDecision.confirmation.errors.accuracy" to the validation errors when clicked',
@@ -148,9 +150,7 @@ describe('review your decision', () => {
 
     describe('privacy not accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.isPrivacyAccepted = false;
-        wrapper = mountPage();
-        submitButton = wrapper.find('#submit-button');
+        $store.state.organDonation.isAccuracyAccepted = true;
       });
 
       it(
@@ -161,6 +161,18 @@ describe('review your decision', () => {
             .toContain('organDonation.reviewYourDecision.confirmation.errors.privacy');
         },
       );
+    });
+
+    describe('when clicked', () => {
+      beforeEach(() => {
+        $store.state.organDonation.isAccuracyAccepted = true;
+        $store.state.organDonation.isPrivacyAccepted = true;
+      });
+
+      it('it will call organDonation/postRegistration', () => {
+        submitButton.trigger('click');
+        expect($store.dispatch).toHaveBeenCalledWith('organDonation/postRegistration');
+      });
     });
   });
 });
