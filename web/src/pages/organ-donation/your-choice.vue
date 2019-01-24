@@ -10,6 +10,11 @@
       <b>{{ $t('organDonation.yourChoice.choices.all.title') }}</b>
       <p>{{ $t('organDonation.yourChoice.choices.all.description') }}</p>
     </radio-button>
+    <generic-button id="continue-button"
+                    :class="[$style.button, $style.green]"
+                    @click.stop.prevent="continueClicked">
+      {{ $t('organDonation.yourChoice.continueButtonText') }}
+    </generic-button>
     <generic-button id="back-to-organdonation"
                     :class="[$style.button, $style.grey]"
                     @click.stop.prevent="goBack">
@@ -20,7 +25,7 @@
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
 import RadioButton from '@/components/widgets/RadioButton';
-import { ORGAN_DONATION } from '@/lib/routes';
+import { ORGAN_DONATION, ORGAN_DONATION_FAITH } from '@/lib/routes';
 import isNil from 'lodash/fp/isNil';
 import get from 'lodash/fp/get';
 
@@ -41,12 +46,15 @@ export default {
   },
   created() {
     if (isNil(this.$store.state.organDonation.registration.decisionDetails)) {
-      this.$store.dispatch(this.setAllOrgansAction, true);
+      this.$store.dispatch(this.setAllOrgansAction, '');
     }
   },
   methods: {
     goBack() {
       this.$router.push(ORGAN_DONATION.path);
+    },
+    continueClicked() {
+      this.$router.push(ORGAN_DONATION_FAITH.path);
     },
   },
 };

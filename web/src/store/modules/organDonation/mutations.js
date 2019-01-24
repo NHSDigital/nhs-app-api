@@ -7,6 +7,7 @@ import {
   SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
+  SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
   initialState,
@@ -39,6 +40,9 @@ export default {
   [SET_ALL_ORGANS](state, choice) {
     state.registration.decisionDetails =
       { ...state.registration.decisionDetails, ...{ all: choice } };
+  },
+  [SET_FAITH_DECLARATION](state, faithDeclaration) {
+    state.registration.faithDeclaration = faithDeclaration;
   },
   [SET_PRIVACY_ACCEPTANCE](state, value) {
     state.isPrivacyAccepted = value;

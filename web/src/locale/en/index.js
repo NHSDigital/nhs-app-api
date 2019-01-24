@@ -661,6 +661,38 @@ export default {
       },
       subheader: 'Additional details',
     },
+    faith: {
+      subheader: 'Faith / beliefs',
+      backButtonText: 'Back',
+      continueButtonText: 'Continue',
+      errorMsgHeader: 'There\'s a problem',
+      errorMsgText: 'You cannot continue without making a selection',
+      why: {
+        header: 'Why they matter for organ donation',
+        paragraphs: [
+          'When organ donation is a possibility, NHS staff will always speak to a donor\'s family about the donor\'s decision, medical history, and anything else that would be relevant to organ donation.',
+          'We recognise that for some people, this will include their faith or beliefs and they would want organ donation to go ahead in a way that is in line with their beliefs or customs.',
+        ],
+      },
+      help: {
+        header: 'What we can do to help',
+        description: 'Let us know if you want your faith and beliefs to be a part of discussions between NHS staff, your family, and anyone suggested by your family, when organ donation is a possibility.',
+      },
+      choices: {
+        header: 'Would you like NHS staff to speak to your family (and anyone else appropriate) about how organ donation can go ahead in line with your faith or beliefs?',
+        yes: {
+          title: 'Yes',
+          description: 'I want NHS staff to talk to my family (and other relevant people) about how organ donation works with my faith/beliefs.',
+        },
+        no: {
+          title: 'No',
+          description: 'I do not want NHS staff to talk to anyone about organ donation and my faith/beliefs.',
+        },
+        preferNotToSay: {
+          title: 'Prefer not to say',
+        },
+      },
+    },
     register: {
       subheader: 'Register your organ donation decision',
       noButton: {
@@ -676,6 +708,7 @@ export default {
       subheader: 'Your choice',
       description: 'You can select to donate some, or all of your organs and tissue.',
       backButtonText: 'Back',
+      continueButtonText: 'Continue',
       choices: {
         all: {
           title: 'All my organs and tissue',

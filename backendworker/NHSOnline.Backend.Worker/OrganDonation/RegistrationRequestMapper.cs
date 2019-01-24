@@ -62,9 +62,14 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             if (source.Registration.Decision != Decision.OptIn)
                 return registrationRequest;
 
+            new ValidateAndLog(_logger)
+                .IsNotNull(source.Registration.FaithDeclaration, nameof(source.Registration.FaithDeclaration),
+                    ThrowError)
+                .IsValid();
+
             registrationRequest.DonationWishes = _donationWishesMapper.Map(source.Registration.DecisionDetails);
             registrationRequest.FaithDeclaration =
-                _faithDeclarationMapper.From(source.Registration.FaithDeclaration);
+                _faithDeclarationMapper.From(source.Registration.FaithDeclaration.Value);
 
             return registrationRequest;
         }

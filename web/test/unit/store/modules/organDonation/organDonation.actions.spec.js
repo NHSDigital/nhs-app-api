@@ -6,6 +6,7 @@ import {
   SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
+  SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
 } from '@/store/modules/organDonation/mutation-types';
 
@@ -120,6 +121,13 @@ describe('organ donation actions', () => {
 
       actions.setAdditionalDetails({ commit }, additionalDetails);
       expect(commit).toHaveBeenCalledWith(SET_ADDITIONAL_DETAILS, additionalDetails);
+    });
+  });
+
+  describe('setFaithDeclaration', () => {
+    it('will commit the faith declaration', () => {
+      actions.setFaithDeclaration({ commit }, 'Yes');
+      expect(commit).toHaveBeenCalledWith(SET_FAITH_DECLARATION, 'Yes');
     });
   });
 });

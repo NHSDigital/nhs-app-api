@@ -8,6 +8,7 @@ import {
   SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
+  SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
 } from '@/store/modules/organDonation/mutation-types';
@@ -90,6 +91,12 @@ describe('organ donation record mutations', () => {
     });
   });
 
+  describe('SET_FAITH_DECLARATION', () => {
+    it('will set the organ donation registration "faith declaration" state to the received value', () => {
+      mutations[SET_FAITH_DECLARATION](state, 'foo');
+      expect(state.registration.faithDeclaration).toEqual('foo');
+    });
+  });
 
   describe('SET_PRIVACY_ACCEPTANCE', () => {
     it('will set the isPrivacyAccepted value to the received value', () => {

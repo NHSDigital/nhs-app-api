@@ -36,7 +36,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _decisionMapperMock = _fixture.Freeze<Mock<IEnumMapper<string, Decision>>>();
             _faithDeclarationMapperMock = _fixture.Freeze<Mock<IEnumMapper<string, FaithDeclaration>>>();
             _nameMapperMock = _fixture.Freeze<Mock<IMapper<string, Worker.Areas.OrganDonation.Models.Name, Name>>>();
-            _addressMapperMock = _fixture.Freeze<Mock<IMapper<string, Worker.Areas.OrganDonation.Models.Address, Address>>>();
+            _addressMapperMock =
+                _fixture.Freeze<Mock<IMapper<string, Worker.Areas.OrganDonation.Models.Address, Address>>>();
             _donationWishesMapperMock = _fixture.Freeze<Mock<IOrganDonationDonationWishesMapper>>();
             _genderMapperMock = _fixture.Freeze<Mock<IOrganDonationGenderMapper>>();
 
@@ -53,10 +54,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 .And.InnerExceptions.Should().HaveCount(3)
                 .And.AllBeOfType<ArgumentNullException>()
                 .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("source", StringComparison.Ordinal))
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("AdditionalDetails", StringComparison.Ordinal))
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("Registration", StringComparison.Ordinal));
+                .And.Contain(x =>
+                    ((ArgumentNullException) x).ParamName.Equals("AdditionalDetails", StringComparison.Ordinal))
+                .And.Contain(
+                    x => ((ArgumentNullException) x).ParamName.Equals("Registration", StringComparison.Ordinal));
         }
-        
+
         [TestMethod]
         public void MapToRegistrationRequest_WhenNotPassingRegistrationAndAddtionalDetails_ThrowsAggregateException()
         {
@@ -66,10 +69,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(2)
                 .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("AdditionalDetails", StringComparison.Ordinal))
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("Registration", StringComparison.Ordinal));
+                .And.Contain(x =>
+                    ((ArgumentNullException) x).ParamName.Equals("AdditionalDetails", StringComparison.Ordinal))
+                .And.Contain(
+                    x => ((ArgumentNullException) x).ParamName.Equals("Registration", StringComparison.Ordinal));
         }
-        
+
         [TestMethod]
         public void MapToRegistrationRequest_WhenNotPassingAdditionalDetails_ThrowsArgumentNullException()
         {
@@ -81,7 +86,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("AdditionalDetails");
         }
-        
+
         [TestMethod]
         public void MapToRegistrationRequest_WhenNotPassingRegistration_ThrowsArgumentNullException()
         {
@@ -93,7 +98,26 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("Registration");
         }
-        
+
+        [TestMethod]
+        public void
+            MapToRegistrationRequest_WhenPassingOptInRegistrationWithoutFaithDeclaration_ThrowsArgumentNullException()
+        {
+            // Arrange 
+            var registration = _fixture.Create<OrganDonationRegistration>();
+            registration.Decision = Decision.OptIn;
+            registration.FaithDeclaration = null;
+
+            // Act and Assert
+            Action act = () => _registrationRequestMapper.Map(new OrganDonationRegistrationRequest
+            {
+                AdditionalDetails = new AdditionalDetails(),
+                Registration = registration
+            });
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("FaithDeclaration");
+        }
+
         [TestMethod]
         public void MapToRegistrationRequest_WithOptIn_MapsCorrectly()
         {
@@ -133,8 +157,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _decisionMapperMock.Setup(x => x.From(It.IsAny<Decision>())).Returns("opt-in");
             _donationWishesMapperMock.Setup(x => x.Map(It.IsAny<DecisionDetails>())).Returns(donationWishes);
             _faithDeclarationMapperMock.Setup(x => x.From(It.IsAny<FaithDeclaration>())).Returns("yes");
-            _nameMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Name>())).Returns(name);
-            _addressMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Address>())).Returns(address);
+            _nameMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Name>()))
+                .Returns(name);
+            _addressMapperMock
+                .Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Address>()))
+                .Returns(address);
             _genderMapperMock.Setup(x => x.Map(It.IsAny<string>())).Returns("male");
 
             // Act
@@ -148,7 +175,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _addressMapperMock.Verify(x =>
                 x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Address>()));
             _genderMapperMock.Verify(x => x.Map(It.IsAny<string>()));
-            
+
             result.Should().NotBeNull();
             result.OrganDonationDecision.Should().Be("opt-in");
             result.DonationWishes.Should().BeEquivalentTo(donationWishes);
@@ -165,7 +192,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 .Be(response.AdditionalDetails.ReligionId);
             result.Identifier.Should().ContainSingle().Which.Value.Should().Be(response.Registration.NhsNumber);
         }
-        
+
         [TestMethod]
         public void MapToRegistrationRequest_WithOptOut_MapsCorrectly()
         {
@@ -205,8 +232,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _decisionMapperMock.Setup(x => x.From(It.IsAny<Decision>())).Returns("opt-out");
             _donationWishesMapperMock.Setup(x => x.Map(It.IsAny<DecisionDetails>())).Returns(donationWishes);
             _faithDeclarationMapperMock.Setup(x => x.From(It.IsAny<FaithDeclaration>())).Returns("yes");
-            _nameMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Name>())).Returns(name);
-            _addressMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Address>())).Returns(address);
+            _nameMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Name>()))
+                .Returns(name);
+            _addressMapperMock
+                .Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Address>()))
+                .Returns(address);
             _genderMapperMock.Setup(x => x.Map(It.IsAny<string>())).Returns("male");
 
             // Act
@@ -220,7 +250,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _addressMapperMock.Verify(x =>
                 x.Map(It.IsAny<string>(), It.IsAny<Worker.Areas.OrganDonation.Models.Address>()));
             _genderMapperMock.Verify(x => x.Map(It.IsAny<string>()));
-            
+
             result.Should().NotBeNull();
             result.OrganDonationDecision.Should().Be("opt-out");
             result.DonationWishes.Should().BeNull();
