@@ -1,32 +1,21 @@
 <template>
   <div id="app">
     <main>
-      <div v-if="showErrorMessageContainer" :class="$style.errorMessageContainer">
-        <connection-error />
-        <api-error />
-        <flash-message />
-      </div>
+      <spinner />
       <nuxt />
     </main>
   </div>
 </template>
 
 <script>
-/* eslint-disable no-underscore-dangle */
+import Spinner from '@/components/widgets/Spinner';
 import Sources from '@/lib/sources';
-import ApiError from '@/components/errors/ApiError';
-import ConnectionError from '@/components/errors/ConnectionError';
-import FlashMessage from '@/components/widgets/FlashMessage';
-import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
-import NativeVersionSetup from '../services/nativeVersionSetup';
+import NativeVersionSetup from '@/services/nativeVersionSetup';
 
 export default {
   components: {
-    ApiError,
-    ConnectionError,
-    FlashMessage,
+    Spinner,
   },
-  mixins: [ErrorMessageMixin],
   head() {
     return {
       htmlAttrs: {
@@ -39,11 +28,6 @@ export default {
         },
       ],
     };
-  },
-  computed: {
-    showErrorMessageContainer() {
-      return this.hasConnectionError() || this.hasApiError();
-    },
   },
   mounted() {
     NativeVersionSetup(this.$store, this.$route);

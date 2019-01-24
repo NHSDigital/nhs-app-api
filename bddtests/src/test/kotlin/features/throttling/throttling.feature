@@ -74,10 +74,8 @@ Feature: Throttling
      When I submit blank search criteria
      Then I see the GP Finder page with a search criteria error message
 
-  Scenario: A user skips the throttling flow and sees the login page and cannot navigate directly back to the GP Finder
+  Scenario: A user skips the throttling flow and sees the login page
      When I click the link to skip the throttling flow
-     Then I see the login page
-     When I browse to the page at /gp-finder
      Then I see the login page
 
   Scenario: A user chooses to register their email with brothermailer and sees the Waiting list joined page
@@ -158,6 +156,7 @@ Feature: Throttling
     When I click the Practice Not Participating continue button
     Then I see the Sending Email Page
 
+  @totest
   Scenario: Brothermailer email registration service is down
     Given The brothermailer service is down
     And There are multiple GP Practices for my search criteria

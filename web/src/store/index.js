@@ -18,6 +18,7 @@ import termsAndConditions from './modules/termsAndConditions';
 import appVersion from './modules/appVersion';
 import myRecord from './modules/myRecord';
 import organDonation from './modules/organDonation';
+import throttling from './modules/throttling';
 
 const createStore = () => new Vuex.Store({
   modules: {
@@ -39,6 +40,7 @@ const createStore = () => new Vuex.Store({
     termsAndConditions,
     appVersion,
     organDonation,
+    throttling,
   },
   actions: {
     async nuxtServerInit({ dispatch }) {

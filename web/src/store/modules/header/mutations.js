@@ -7,9 +7,8 @@ export default {
   [UPDATE_HEADER_TEXT](state, header) {
     if (process.client && window.nativeApp) {
       NativeCallbacks.updateHeaderText(header);
-    } else {
-      state.headerText = header;
     }
+    state.headerText = header;
   },
   [INIT_HEADER](state) {
     state = Object.assign({}, {

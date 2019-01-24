@@ -14,7 +14,7 @@ h4 {
 .choiceRadioButton {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
-  &:last-of-type {
+  &.last {
     margin-bottom: 1.5em;
   }
 }

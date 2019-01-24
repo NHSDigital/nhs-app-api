@@ -89,7 +89,7 @@ class Config private constructor() {
 
         mongoDbHost = envOrDefault("SESSION_MONGO_DATABASE_HOST", "127.0.0.1")
         mongoDbPort = envOrDefault("SESSION_MONGO_DATABASE_PORT", MONGODB_DEFAULT_PORT)
-        brotherMailerPath = "/brothermailer/signup"
+        brotherMailerPath = "/brothermailer/signup.ashx"
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
         postcodeLookupSearchRadiusKm = envOrDefault("POSTCODE_LOOKUP_SEARCH_RADIUS_KM", "10");

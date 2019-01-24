@@ -77,10 +77,14 @@ export default function ({ route, store, app }) {
       break;
     case GP_FINDER.name:
     case GP_FINDER_RESULTS.name:
-    case GP_FINDER_PARTICIPATION.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaders.gpFinder';
       route.meta.pageTitleKey = 'pageTitles.gpFinder';
+      break;
+    case GP_FINDER_PARTICIPATION.name:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      route.meta.headerKey = 'pageHeaders.gpFinderParticipation';
+      route.meta.pageTitleKey = 'pageTitles.gpFinderParticipation';
       break;
     case GP_FINDER_SENDING_EMAIL.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');

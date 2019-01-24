@@ -3,16 +3,14 @@
 
     <header :class="[$style.slim]">
       <h1 :class="[$style.h1]"> {{ getHeaderText }} </h1>
-      <form :action="backLink" method="get">
-        <input :value="true" type="hidden" name="reset">
-        <input :value="this.$store.state.device.source" type="hidden" name="source">
-        <button type="submit">
+      <analytics-tracked-tag text="back">
+        <button @click="backButtonClicked">
           <back-icon/>
         </button>
-      </form>
+      </analytics-tracked-tag>
     </header>
 
-    <div v-if="showTemplate" :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
+    <div :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
 
       <div v-if="noResultsFound">
         <h2 :key="'noResultsFoundHeader'">
@@ -58,31 +56,28 @@
 
       <ul v-if="!technicalError && !noResultsFound" id="searchResults" :class="$style['list-menu']">
         <li v-for="gpPractice in gpPractices"
-            :key="`gpPractice-${gpPractice.NACSCode}`">
-          <analytics-tracked-tag :id="`btnGpPractice-${gpPractice.NACSCode}`"
+            :key="`gpPractice-${gpPractice.nacsCode}`">
+          <analytics-tracked-tag :id="`btnGpPractice-${gpPractice.nacsCode}`"
                                  :class="$style['no-decoration']"
-                                 :href="getHrefForGpPractice(gpPractice)"
-                                 text=""
-                                 tag="a">
+                                 text="GP practice"
+                                 tag="a"
+                                 href="#"
+                                 @click.native="gpPracticeClicked(gpPractice)">
             <span :class="$style.fieldName">
-              {{ gpPractice.OrganisationName }}
+              {{ gpPractice.organisationName }}
             </span>
-            <p> {{ formatAddress(gpPractice) }} </p>
+            <p> {{ gpPractice.formattedAddress = formatAddress(gpPractice) }} </p>
           </analytics-tracked-tag>
         </li>
       </ul>
 
-      <form v-if="tooManyResults || technicalError || noResultsFound"
-            :action="backLink"
-            method="get">
-        <input :value="true" type="hidden" name="reset">
-        <input :value="this.$store.state.device.source" type="hidden" name="source">
-        <generic-button :class="[$style.button, $style.grey, $style.back]"
-                        tabindex="0"
-                        type="submit">
+      <analytics-tracked-tag :text="$t('th03.errors.backButton')">
+        <generic-button v-if="tooManyResults || technicalError || noResultsFound"
+                        :button-classes="['grey']" :class="$style.back"
+                        tabindex="0" @click="backButtonClicked">
           {{ $t('th03.errors.backButton') }}
         </generic-button>
-      </form>
+      </analytics-tracked-tag>
 
       <p v-if="technicalError">
         {{ $t('th03.errors.serviceUnavailable.mainContent') }}
@@ -94,19 +89,20 @@
 
 <script>
 /* eslint-disable global-require */
-/* eslint-disable dot-notation */
-import BackIcon from '@/components/icons/BackIcon';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import NHSSearchService from '@/services/nhs-search-service';
+import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
+import { setCookie } from '@/lib/cookie-manager';
 import { GP_FINDER, GP_FINDER_PARTICIPATION } from '@/lib/routes';
+import NativeCallbacks from '@/services/native-app';
+import moment from 'moment';
 
 export default {
   layout: 'throttling',
   components: {
-    BackIcon,
     AnalyticsTrackedTag,
+    BackIcon,
     GenericButton,
     MessageDialog,
   },
@@ -116,21 +112,23 @@ export default {
     };
   },
   data() {
+    const { searchResults, searchQuery } = this.$store.state.throttling;
+    const { organisations, technicalError, noResultsFound, tooManyResults } = searchResults;
     return {
-      searchQuery: undefined,
-      searchResults: [],
-      tooManyResults: false,
-      noResultsFound: false,
-      technicalError: false,
-      backLink: GP_FINDER.path,
+      technicalError,
+      noResultsFound,
+      tooManyResults,
+      organisations,
+      searchQuery,
+      practiceClicked: false,
     };
   },
   computed: {
     showGpPractices() {
-      return this.searchResults && this.searchResults.length > 0;
+      return !this.noResultsFound;
     },
     gpPractices() {
-      return this.searchResults ? this.searchResults : undefined;
+      return this.organisations;
     },
     getHeaderText() {
       let header = this.$t('th03.header');
@@ -158,51 +156,70 @@ export default {
       return this.$t('th03.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
     },
   },
-  asyncData({ route, redirect }) {
-    const { searchQuery } = route.query;
-    if (!searchQuery || typeof searchQuery !== 'string' || !searchQuery.trim()) {
-      return redirect(`${GP_FINDER.path}?error=true`);
+  mounted() {
+    if (!this.searchQuery ||
+      (!this.organisations && !this.technicalError &&
+       !this.noResultsFound && !this.tooManyResults)) {
+      this.goToUrl(GP_FINDER.path);
     }
-
-    const serviceResponse = NHSSearchService.searchGPPractices(searchQuery);
-    if (serviceResponse.then) {
-      return serviceResponse.then((response) => {
-        if (response.postcodeSearchError) {
-          return { technicalError: true };
-        }
-        if (response.noResultsFound) {
-          return { noResultsFound: true, searchQuery };
-        }
-        return {
-          tooManyResults: response.data['@odata.count'] > process.env['GP_LOOKUP_API_RESULTS_LIMIT'],
-          noResultsFound: !response.data['@odata.count'],
-          searchResults: response.data.value,
-          searchQuery,
-        };
-      })
-        .catch((error) => {
-          if (process.server) {
-            const consola = require('consola');
-            consola.error(new Error(`Error searching for GP practice: response: ${error}`));
-          }
-          return { technicalError: true };
-        });
-    }
-    if (serviceResponse.queryError) {
-      return redirect(`${GP_FINDER.path}?error=true`);
-    }
-    return { technicalError: true };
   },
   methods: {
     formatAddress(gpPractice) {
-      return [gpPractice.Address1, gpPractice.Address2, gpPractice.Address3, gpPractice.City,
-        gpPractice.County, gpPractice.Postcode].filter(Boolean).join(', ');
+      return [gpPractice.address1, gpPractice.address2, gpPractice.address3, gpPractice.city,
+        gpPractice.county, gpPractice.postcode].filter(Boolean).join(', ');
     },
-    getHrefForGpPractice(gpPractice) {
-      return `${GP_FINDER_PARTICIPATION.path}?odsCode=${this.getPracticeCodeFromNACSCode(gpPractice.NACSCode)}` +
-        `&practiceName=${encodeURIComponent(gpPractice.OrganisationName)}` +
-        `&practiceAddress=${encodeURIComponent(this.formatAddress(gpPractice))}` +
-        `&source=${this.$store.state.device.source}`;
+    async gpPracticeClicked(gpPractice) {
+      if (this.practiceClicked) return;
+      this.practiceClicked = true;
+
+      const formattedGpPractice = {
+        PracticeAddress: gpPractice.formattedAddress,
+        PracticeName: gpPractice.organisationName,
+        ODSCode: this.getPracticeCodeFromNACSCode(gpPractice.nacsCode),
+      };
+
+      const self = this;
+      await this.$store.app.$http.getV1Odscodelookup({ odsCode: formattedGpPractice.ODSCode })
+        .then((response) => {
+          formattedGpPractice.PracticeParticipating = response && response.isGpSystemSupported;
+        })
+        .catch(() => {
+          self.technicalError = true;
+        });
+
+      if (formattedGpPractice.PracticeParticipating !== undefined) {
+        this.updateBetaCookie(formattedGpPractice);
+        this.$store.dispatch('throttling/setSelectedGpPractice', formattedGpPractice);
+        this.goToUrl(GP_FINDER_PARTICIPATION.path);
+      }
+
+      this.practiceClicked = false;
+    },
+    updateBetaCookie(gpPractice) {
+      let betaCookie = this.$store.app.$cookies.get('BetaCookie');
+
+      betaCookie = {
+        ...betaCookie,
+        ...gpPractice,
+        Complete: true,
+      };
+
+      setCookie({
+        cookies: this.$store.app.$cookies,
+        key: 'BetaCookie',
+        value: betaCookie,
+        options: {
+          maxAge: moment.duration(1, 'y').asSeconds(),
+        },
+      });
+
+      if (process.client) {
+        NativeCallbacks.storeBetaCookie();
+      }
+    },
+    backButtonClicked() {
+      this.$store.dispatch('throttling/init');
+      this.goToUrl(GP_FINDER.path);
     },
     getPracticeCodeFromNACSCode(nacsCode) {
       return nacsCode && nacsCode.length > 6 ?

@@ -12,37 +12,43 @@
         <input :value="responseType" type="hidden" name="response_type">
         <LoginButton />
       </form>
-      <a v-if="showCheckFeaturesLink" :class="$style.checkFeaturesLink"
-         :href="gpFinderResetLink">
-        {{ $t('login.checkWhatFeaturesYouCanUse') }}
-      </a>
-      <div :class="$style.appVersion">
-        Version {{ this.$store.state.appVersion.webVersion }}
-        <span v-if="this.$store.state.appVersion.nativeVersion">
-          ({{ this.$store.state.appVersion.nativeVersion }})
-        </span>
-      </div>
     </div>
-    <div>
-      <div v-if="!isPracticeParticipating">
-        <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
-        <h5>{{ notParticipatingSurgeryName }}</h5>
-        <p>{{ notParticipatingSurgeryAddress }}</p>
-        <a :class="$style.notMySurgeryLink" :href="gpFinderResetLink">
-          {{ $t('login.notMyGpSurgery') }}
-        </a>
+    <no-ssr placeholder="">
+      <div :class="$style.throttlingContent">
+        <analytics-tracked-tag v-if="showCheckFeaturesLink && isPracticeParticipating"
+                               :class="$style.checkFeaturesLink"
+                               :text="$t('login.checkWhatFeaturesYouCanUse')"
+                               :click-func="resetAndGoToGPFinder" tag="a">
+          {{ $t('login.checkWhatFeaturesYouCanUse') }}
+        </analytics-tracked-tag>
+        <div v-if="!isPracticeParticipating">
+          <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
+          <h5>{{ notParticipatingSurgeryName }}</h5>
+          <p>{{ notParticipatingSurgeryAddress }}</p>
+          <analytics-tracked-tag :text="$t('login.notMyGpSurgery')" :class="$style.notMySurgeryLink"
+                                 :click-func="resetAndGoToGPFinder" tag="a">
+            {{ $t('login.notMyGpSurgery') }}
+          </analytics-tracked-tag>
+        </div>
       </div>
+    </no-ssr>
+    <div :class="$style.appVersion">
+      Version {{ this.$store.state.appVersion.webVersion }}
+      <span v-if="this.$store.state.appVersion.nativeVersion">
+        ({{ this.$store.state.appVersion.nativeVersion }})
+      </span>
     </div>
   </div>
 </template>
 <script>
-import AuthorisationService from '@/services/authorisation-service';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import LoginButton from '@/components/LoginButton';
-
+import { setCookie } from '@/lib/cookie-manager';
 import { BEGINLOGIN, GP_FINDER } from '@/lib/routes';
+import AuthorisationService from '@/services/authorisation-service';
 import NativeCallbacks from '@/services/native-app';
-import querystring from 'querystring';
 import moment from 'moment';
+import querystring from 'querystring';
 
 export default {
   head() {
@@ -52,6 +58,7 @@ export default {
   },
   layout: 'login',
   components: {
+    AnalyticsTrackedTag,
     LoginButton,
   },
   data() {
@@ -65,7 +72,7 @@ export default {
       responseType: '',
       clientId: '',
       fidoAuthResponse: '',
-      isPracticeParticipating: true,
+      practiceParticipating: true,
       practiceName: undefined,
       practiceAddress: undefined,
     };
@@ -73,28 +80,40 @@ export default {
   asyncData(context) {
     const { store, app } = context;
     const betaCookie = store.$cookies.get('BetaCookie');
-    if (betaCookie && !betaCookie.PracticeParticipating && betaCookie.ODSCode) {
+    if (betaCookie && !betaCookie.PracticeParticipating && betaCookie.ODSCode
+      && !betaCookie.Skipped) {
       return app.$http.getV1Odscodelookup({
         odsCode: betaCookie.ODSCode,
       }).then((response) => {
-        const isPracticeParticipating = response && response.isGpSystemSupported;
-        betaCookie.PracticeParticipating = isPracticeParticipating;
+        const practiceParticipating = response && response.isGpSystemSupported;
+        betaCookie.PracticeParticipating = practiceParticipating;
 
-        store.$cookies.set('BetaCookie', betaCookie, {
-          path: '/',
-          maxAge: moment.duration(1, 'y').asSeconds(),
+        setCookie({
+          cookies: store.$cookies,
+          key: 'BetaCookie',
+          value: betaCookie,
+          options: {
+            maxAge: moment.duration(1, 'y').asSeconds(),
+          },
         });
 
         return {
-          isPracticeParticipating,
+          practiceParticipating,
           practiceName: betaCookie.PracticeName,
           practiceAddress: betaCookie.PracticeAddress,
         };
       }).catch(() => Promise.resolve());
     }
-    return {};
+    return {
+      practiceParticipating: true,
+      practiceName: undefined,
+      practiceAddress: undefined,
+    };
   },
   computed: {
+    isPracticeParticipating() {
+      return this.practiceParticipating;
+    },
     shouldShowBiometrics() {
       return this.$env.BIOMETRICS_ENABLED && (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios');
     },
@@ -110,19 +129,22 @@ export default {
         (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
         this.$store.app.$env.THROTTLING_ENABLED === true);
     },
-    gpFinderResetLink() {
-      return `${GP_FINDER.path}?reset=true`;
-    },
   },
   mounted() {
+    const betaCookie = this.$cookies.get('BetaCookie');
+    const throttlingEnabled = this.$env.THROTTLING_ENABLED === true || this.$env.THROTTLING_ENABLED === 'true';
+
+    if (throttlingEnabled && !betaCookie) {
+      this.goToUrl(GP_FINDER.path);
+      return;
+    }
+
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.hideHeader();
       NativeCallbacks.hideMenuBar();
       NativeCallbacks.hideHeaderSlim();
       NativeCallbacks.hideWhiteScreen();
-      const betaCookie = this.$cookies.get('BetaCookie');
-      if ((this.$env.THROTTLING_ENABLED === true || this.$env.THROTTLING_ENABLED === 'true') &&
-          betaCookie && betaCookie.Skipped) {
+      if (throttlingEnabled && betaCookie && betaCookie.Skipped) {
         NativeCallbacks.storeBetaCookie();
       }
     }
@@ -163,6 +185,17 @@ export default {
     camelToUnderscore(key) {
       return key.replace(/([A-Z])/g, '_$1').toLowerCase();
     },
+    resetAndGoToGPFinder() {
+      setCookie({
+        cookies: this.$store.app.$cookies,
+        key: 'BetaCookie',
+        value: {},
+        options: {
+          maxAge: -1,
+        },
+      });
+      this.goToUrl(GP_FINDER.path);
+    },
   },
 };
 </script>
@@ -172,5 +205,8 @@ export default {
   text-align: center;
   color: #637683;
   font-size: small;
+}
+.throttlingContent+.appVersion {
+  margin-top: 0.5em;
 }
 </style>

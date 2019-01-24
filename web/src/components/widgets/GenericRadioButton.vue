@@ -1,6 +1,5 @@
 <template>
-  <div :class="$style['radio-button-label']" tabindex="0" @click="selected"
-       @keypress="onKeyDown">
+  <div :class="$style['radio-button-label']" tabindex="0" @keypress="onKeyDown">
     <radio-button-icon :selected="isSelected" :id="value"/>
     <input :id="name + '-' + value" :value="value" :name="name"
            :checked="model === value" tabindex="-1" type="radio" @change="selected">

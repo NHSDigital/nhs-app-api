@@ -61,7 +61,7 @@ class GPParticipationPage : HybridPageObject() {
     )
 
     val ctaNotParticipatingContinueButton = HybridPageElement(
-            browserLocator = "//a[contains(text(), 'Continue')]",
+            browserLocator = "//button[contains(text(), 'Continue')]",
             androidLocator = null,
             page = this
     )

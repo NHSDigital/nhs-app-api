@@ -14,9 +14,11 @@ fun getGeoDistanceOrderbyForLatLon(lat: Int, lon: Int): String {
 
 const val FILTER_LOCAL_TYPE_POSTCODE = "LocalType eq 'Postcode'"
 const val FILTER_TYPE_POSTCODE_OUT_CODE = "Type eq 'PostcodeOutCode'"
+const val SELECT_ORGANISATIONS_GEOCODE_SEARCH = "OrganisationID,OrganisationName,Address1,Address2,Address3,City," +
+        "County,Postcode,NACSCode,Geocode"
 
 data class NhsAzureSearchOrganisationRequestBody(
-        val top: String = NhsAzureSearchData.ORGANISATION_LIMIT.toString(),
+        val top: Int = NhsAzureSearchData.ORGANISATION_LIMIT,
         val search: String? = "",
         val searchFields: String? = "OrganisationName,Address2,Address3,City",
         val select: String = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,County,Postcode," +

@@ -38,7 +38,6 @@ const config = {
     middleware: [
       'noJsState',
       'urlResolution',
-      'throttling',
       'auth',
       'meta',
       'analytics',
@@ -99,8 +98,9 @@ const config = {
     STUB_TERMS_AND_CONDITIONS: true,
     // App Version
     VERSION_TAG: 'dev_web_npm',
-    // Feature Toggles
+    // Throttling
     THROTTLING_ENABLED: false,
+    GP_LOOKUP_API_RESULTS_LIMIT: 20,
     COMMIT_ID: 'dev',
     CE_MARK_ENABLED: false,
     ORGAN_DONATION_INTEGRATION_ENABLED: false,

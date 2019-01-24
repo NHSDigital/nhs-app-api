@@ -47,12 +47,6 @@ const routes = {
     path: '/begin-login',
     isAnonymous: true,
   },
-  BROTHERMAILER_SIGNUP_NOJS: {
-    name: 'brothermailer-signup-noJs',
-    path: '/nojs/brothermailer/signup',
-    noJsApiPath: '/nojs/brothermailer/signup',
-    isAnonymous: true,
-  },
   CHECKYOURSYMPTOMS: {
     name: 'check-your-symptoms',
     path: '/check-your-symptoms',
@@ -203,7 +197,6 @@ export const {
   APPOINTMENT_BOOKING,
   APPOINTMENT_CONFIRMATIONS,
   AUTH_RETURN,
-  BROTHERMAILER_SIGNUP_NOJS,
   BEGINLOGIN,
   CHECKYOURSYMPTOMS,
   DATA_SHARING_PREFERENCES,

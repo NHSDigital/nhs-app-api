@@ -1,24 +1,25 @@
 <template>
   <div>
+
     <header :class="[$style.slim]">
-      <h1 :class="[$style.h1]"> {{ headerText }} </h1>
-      <form :action="backLink" method="get">
-        <input :value="true" type="hidden" name="reset">
-        <input :value="this.$store.state.device.source" type="hidden" name="source">
-        <button tabindex="0" type="submit">
+      <h1 :class="[$style.h1]"> {{ getHeaderText }} </h1>
+      <analytics-tracked-tag text="back">
+        <button @click="backButtonClicked">
           <back-icon/>
         </button>
-      </form>
+      </analytics-tracked-tag>
     </header>
+
     <div v-if="showTemplate" :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
 
       <h2>{{ `${$t('th04.featuresHeader')} ${practiceName}` }}</h2>
-      <form :action="backLink" method="get">
-        <input :value="true" type="hidden" name="reset">
-        <input :value="this.$store.state.device.source" type="hidden" name="source">
-        <a :href="`${backLink}?reset=true`" :class="$style.linkBack">
-          {{ $t('th04.ctaNotMySurgery') }}</a>
-      </form>
+      <analytics-tracked-tag :text="$t('th04.ctaNotMySurgery')"
+                             :click-func="backButtonClicked"
+                             :class="$style.linkBack"
+                             tag="a">
+        {{ $t('th04.ctaNotMySurgery') }}
+      </analytics-tracked-tag>
+
       <hr>
 
       <h2>{{ $t('th04.currentlyAvailableHeader') }}</h2>
@@ -33,11 +34,12 @@
         </ul>
       </div>
 
-      <p v-if="participating" id="createAccountMessage" :class="$style.createAccountMessage">
+      <p v-if="practiceParticipating" id="createAccountMessage"
+         :class="$style.createAccountMessage">
         {{ $t('th04.createAccountMessage') }}
       </p>
 
-      <form v-if="participating" :action="authoriseUrl" method="get">
+      <form v-if="practiceParticipating" :action="authoriseUrl" method="get">
         <input :value="scope" type="hidden" name="scope">
         <input :value="clientId" type="hidden" name="client_id">
         <input :value="codeChallenge" type="hidden" name="code_challenge">
@@ -45,53 +47,43 @@
         <input :value="redirectUri" type="hidden" name="redirect_uri">
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
-        <generic-button :class="[$style.button, $style.green, $style.continue]" type="submit">
+        <analytics-tracked-tag :text="this.$t('th04.ctaContinue')">
+          <generic-button :class="$style.continue" :button-classes="['green']">
+            {{ this.$t('th04.ctaContinue') }}
+          </generic-button>
+        </analytics-tracked-tag>
+      </form>
+
+      <analytics-tracked-tag v-else :text="this.$t('th04.ctaContinue')">
+        <generic-button :button-classes="['green']" :class="$style.continue"
+                        @click="notParticipatingCTAClicked">
           {{ this.$t('th04.ctaContinue') }}
         </generic-button>
-      </form>
-      <a v-else :href="sendingEmail" :class="[$style.button, $style.green, $style.continue]">
-        {{ this.$t('th04.ctaContinue') }}
-      </a>
+      </analytics-tracked-tag>
 
-      <p v-if="participating" id="limitingFeaturesWarning">
+      <p v-if="practiceParticipating" id="limitingFeaturesWarning">
         {{ $t('th04.limitingFeaturesWarning') }}
       </p>
-
     </div>
   </div>
 </template>
 
 <script>
-import AuthorisationService from '@/services/authorisation-service';
-import { INDEX, GP_FINDER, BEGINLOGIN, GP_FINDER_SENDING_EMAIL } from '@/lib/routes';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
-import moment from 'moment';
-import NativeCallbacks from '@/services/native-app';
+import { GP_FINDER, BEGINLOGIN, GP_FINDER_SENDING_EMAIL } from '@/lib/routes';
+import get from 'lodash/fp/get';
 
 export default {
   layout: 'throttling',
   components: {
+    AnalyticsTrackedTag,
     BackIcon,
     GenericButton,
   },
-  beforeRouteEnter(to, from, next) {
-    if (to.query.odsCode) {
-      return next();
-    }
-    return next(INDEX.path);
-  },
-  head() {
-    return {
-      title: `${this.$t('th04.title')} - ${this.$t('appTitle')}`,
-    };
-  },
   data() {
     return {
-      practiceName: undefined,
-      practiceAddress: undefined,
-      odsCode: undefined,
-      participating: false,
       defaultFeatures: this.$t('th04.defaultFeatures'),
       conditionalFeatures: this.$t('th04.conditionalFeatures'),
       authoriseUrl: BEGINLOGIN.path,
@@ -102,72 +94,40 @@ export default {
       state: '',
       responseType: '',
       clientId: '',
-      headerText: this.$t('th04.header'),
-      backLink: GP_FINDER.path,
-      sendingEmail: GP_FINDER_SENDING_EMAIL.path,
     };
   },
-  asyncData(context) {
-    return context.store.app.$http
-      .getV1Odscodelookup({ odsCode: context.route.query.odsCode })
-      .then((response) => {
-        const participating = response && response.isGpSystemSupported;
-        let data = { participating };
-
-        if (participating) {
-          const authorisationService = new AuthorisationService(context.store.app.$env);
-          const loginValues = authorisationService.generateLoginValues(
-            context.route.query.source,
-            context.store.$cookies,
-          );
-
-          data = Object.assign(data, loginValues);
-        }
-        return data;
-      });
-  },
   computed: {
+    getHeaderText() {
+      return this.$store.state.header.headerText;
+    },
     availableFeatures() {
-      return this.participating ?
+      return this.practiceParticipating ?
         this.defaultFeatures.concat(this.conditionalFeatures) : this.defaultFeatures;
     },
     unavailableFeatures() {
-      return !this.participating ? this.conditionalFeatures : undefined;
+      return !this.practiceParticipating ? this.conditionalFeatures : undefined;
     },
     practiceParticipating() {
-      return this.participating;
+      return get('PracticeParticipating')(this.$store.state.throttling.selectedGpPractice);
+    },
+    practiceName() {
+      return get('PracticeName')(this.$store.state.throttling.selectedGpPractice);
     },
   },
-  created() {
-    const { query } = this.$route;
-    const { router } = this.$store.app;
-
-    if (query && query.practiceName && query.practiceAddress && query.odsCode) {
-      const cookies = this.$store.$cookies;
-      const { odsCode, practiceName, practiceAddress } = query;
-      this.practiceName = practiceName;
-      this.practiceAddress = practiceAddress;
-
-      const betaCookie = Object.assign(
-        {},
-        cookies.get('BetaCookie'),
-        {
-          ODSCode: odsCode,
-          PracticeName: practiceName,
-          PracticeAddress: practiceAddress,
-          PracticeParticipating: this.participating,
-          Complete: true,
-        },
-      );
-
-      cookies.set('BetaCookie', betaCookie, { path: '/', maxAge: moment.duration(1, 'y').asSeconds() });
-
-      if (process.client) {
-        NativeCallbacks.storeBetaCookie();
-      }
-    } else {
-      router.push({ path: GP_FINDER.path, query: { reset: true } });
+  mounted() {
+    if (!this.$store.state.throttling.selectedGpPractice) {
+      this.$store.dispatch('throttling/init');
+      this.goToUrl(GP_FINDER.path);
     }
+  },
+  methods: {
+    notParticipatingCTAClicked() {
+      this.goToUrl(GP_FINDER_SENDING_EMAIL.path);
+    },
+    backButtonClicked() {
+      this.$store.dispatch('throttling/init');
+      this.goToUrl(GP_FINDER.path);
+    },
   },
 };
 </script>
@@ -177,5 +137,4 @@ export default {
 @import "../../style/headerslim";
 @import '../../style/throttling/throttling';
 @import '../../style/throttling/gpfinderparticipation';
-
 </style>

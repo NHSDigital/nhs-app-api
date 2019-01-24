@@ -8,7 +8,6 @@ import {
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
 } from '@/lib/routes';
 import appointments from '@/middleware-server/routes/appointments';
-import brothermailer from '@/middleware-server/routes/brothermailer';
 import organDonation from '@/middleware-server/routes/organ-donation';
 
 
@@ -23,7 +22,6 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(appointments());
-app.use(brothermailer());
 app.use(organDonation());
 
 const router = Router();

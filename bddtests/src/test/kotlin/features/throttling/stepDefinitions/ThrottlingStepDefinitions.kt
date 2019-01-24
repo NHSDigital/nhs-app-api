@@ -15,6 +15,7 @@ import mocking.nhsAzureSearchService.FILTER_TYPE_POSTCODE_OUT_CODE
 import mocking.nhsAzureSearchService.NHSAzureSearchOrganisationReply
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationRequestBody
 import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesRequestBody
+import mocking.nhsAzureSearchService.SELECT_ORGANISATIONS_GEOCODE_SEARCH
 import mocking.nhsAzureSearchService.getGeoDistanceFilterForLatLon
 import mocking.nhsAzureSearchService.getGeoDistanceOrderbyForLatLon
 import models.Patient
@@ -39,7 +40,6 @@ private const val POSTCODE_SEARCH_RESULTS_COUNT = 1
 private const val FULL_POSTCODE_WITH_SPACE = "SW9 1NG"
 private const val FULL_POSTCODE_WITHOUT_SPACE = "SW91NG"
 private const val FULL_POSTCODE_MIXED_CASE_NO_SPACE = "Sw91ng"
-private const val FULL_POSTCODE_MIXED_CASE_WITH_SPACE = "Sw9 1ng"
 private const val OUTWARD_CODE = "SW9"
 private const val NO = "no"
 private const val BLANK = "blank"
@@ -74,19 +74,12 @@ open class ThrottlingStepDefinitions {
             "($FULL_POSTCODE_WITHOUT_SPACE|$FULL_POSTCODE_WITH_SPACE|$FULL_POSTCODE_MIXED_CASE_NO_SPACE" +
             "|$OUTWARD_CODE)$")
     fun thereIsAtLeastOneGPPracticeWithAPostcodeLike(postcode: String) {
-        var expectedSearch = ""
+        var expectedSearch = postcode
         var filterType = FILTER_LOCAL_TYPE_POSTCODE
         when (postcode) {
             OUTWARD_CODE -> {
                 expectedSearch = OUTWARD_CODE
                 filterType = FILTER_TYPE_POSTCODE_OUT_CODE
-            }
-            FULL_POSTCODE_WITH_SPACE,
-            FULL_POSTCODE_WITHOUT_SPACE -> {
-                expectedSearch = FULL_POSTCODE_WITH_SPACE
-            }
-            FULL_POSTCODE_MIXED_CASE_NO_SPACE -> {
-                expectedSearch = FULL_POSTCODE_MIXED_CASE_WITH_SPACE
             }
         }
         searchText = postcode
@@ -99,6 +92,7 @@ open class ThrottlingStepDefinitions {
         mockingClient.forNhsAzureSearchOrganisation {
             nhsAzureSearch.nhsAzureSearchOrganisationRequest(NhsAzureSearchOrganisationRequestBody(
                     filter = getGeoDistanceFilterForLatLon(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
+                    select = SELECT_ORGANISATIONS_GEOCODE_SEARCH,
                     search = null,
                     searchFields = null,
                     queryType = null,

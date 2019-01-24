@@ -15,7 +15,7 @@ describe('UPDATE_HEADER_TEXT', () => {
 
     mutations[UPDATE_HEADER_TEXT](state, newHeaderText);
 
-    expect(state.headerText).toEqual('');
+    expect(state.headerText).toEqual('new page header');
     expect(mockUpdateHeaderFunction).toHaveBeenCalledWith(newHeaderText);
   });
 

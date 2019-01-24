@@ -8,7 +8,9 @@ class BrotherMailerResultBuilder
 
     fun respondWithOkResponse(): Mapping {
         return respondWith(HttpStatus.SC_MOVED_TEMPORARILY) {
-            andJsonBody("?result=success").build()
+            andHeader("Location","result=success")
+                    .andBody("text", "text/plain")
+                    .build()
         }
     }
 

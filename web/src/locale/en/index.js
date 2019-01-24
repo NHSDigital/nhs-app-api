@@ -602,6 +602,7 @@ export default {
   pageHeaders: {
     home: 'Home',
     gpFinder: 'Check what features you can use',
+    gpFinderParticipation: 'GP surgery features',
     gpFinderWaitingListSignup: 'Waiting list',
     gpFinderWaitingListJoined: 'Next steps',
     prescriptions: 'My repeat prescriptions',
@@ -624,6 +625,7 @@ export default {
   pageTitles: {
     home: 'Home',
     gpFinder: 'GP Finder',
+    gpFinderParticipation: 'Features used by your GP surgery',
     gpFinderWaitingListSignup: 'Want us to email you when all features are available at your GP surgery?',
     gpFinderWaitingListJoined: 'What happens next',
     prescriptions: 'Repeat prescriptions',
@@ -929,8 +931,6 @@ export default {
     },
   },
   th04: {
-    header: 'GP surgery features',
-    title: 'Features used by your GP surgery',
     featuresHeader: 'NHS App features used by',
     currentlyAvailableHeader: 'Currently available',
     comingSoonHeader: 'Coming soon',
@@ -960,7 +960,7 @@ export default {
     privacyStatement: 'We will only use this email address to contact you about the NHS App. We will store your email address for a maximum of 12 months, as outlined in ',
     privacyPolicyLinkText: 'our privacy policy.',
     emailText: 'Email address',
-    continueButton: 'Continue',
+    callToAction: 'Continue',
   },
   th06: {
     header: 'Waiting list',

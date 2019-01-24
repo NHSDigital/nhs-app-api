@@ -1,42 +1,49 @@
 <template>
   <div>
+
     <header :class="[$style.slim]">
-      <h1 :class="[$style.h1]"> {{ headerText }} </h1>
-      <form :action="backLink" method="get">
-        <input :value="'true'" type="hidden" name="reset">
-        <input :value="this.$store.state.device.source" type="hidden" name="source">
-        <button type="submit">
+      <h1 :class="[$style.h1]"> {{ getHeaderText }} </h1>
+      <analytics-tracked-tag text="back">
+        <button @click="backButtonClicked">
           <back-icon/>
         </button>
-      </form>
+      </analytics-tracked-tag>
     </header>
-    <div v-if="showTemplate" id="mainDiv"
-         :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
+
+    <div v-if="showTemplate" :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
       <h2>{{ this.$t('th06.whatHappensNextHeading') }}</h2>
       <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph1') }}</p>
       <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph2') }}</p>
       <p v-else>{{ this.$t('th06.whatHappensNextNotJoinedParagraph') }}</p>
       <h2>{{ this.$t('th06.untilThenHeading') }}</h2>
       <p>{{ this.$t('th06.untilThenParagraph') }}</p>
-      <generic-button :class="$style.goToHomeScreenButton" :button-classes="['grey']"
-                      @click="onReturnHomeClicked">
-        {{ this.$t('th06.homeButton') }}
-      </generic-button>
+      <analytics-tracked-tag :text="this.$t('th06.homeButton')">
+        <generic-button :class="$style.goToHomeScreenButton"
+                        :button-classes="['grey']"
+                        @click="onReturnHomeClicked">
+          {{ this.$t('th06.homeButton') }}
+        </generic-button>
+      </analytics-tracked-tag>
     </div>
   </div>
 </template>
 
 <script>
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import BackIcon from '@/components/icons/BackIcon';
 import HeaderSlim from '@/components/HeaderSlim';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
 import { LOGIN, GP_FINDER } from '@/lib/routes';
+import { setCookie } from '@/lib/cookie-manager';
+import NativeCallbacks from '@/services/native-app';
+import get from 'lodash/fp/get';
 import moment from 'moment';
 
 export default {
   layout: 'throttling',
   components: {
+    AnalyticsTrackedTag,
     HeaderSlim,
     BackIcon,
     GenericTextInput,
@@ -44,20 +51,38 @@ export default {
   },
   data() {
     return {
-      headerText: this.$store.state.header.headerText,
-      backLink: GP_FINDER.path,
-      joined: this.$route.query.choice === 'yes',
+      joined: get('throttling.waitingListChoice')(this.$store.state) !== 'no',
     };
+  },
+  computed: {
+    getHeaderText() {
+      return this.$store.state.header.headerText;
+    },
   },
   methods: {
     onReturnHomeClicked() {
       const betaCookie = this.$store.app.$cookies.get('BetaCookie');
+
       betaCookie.Complete = true;
-      this.$store.app.$cookies.set('BetaCookie', betaCookie, {
-        path: '/',
-        maxAge: moment.duration(1, 'y').asSeconds(),
+
+      setCookie({
+        cookies: this.$store.app.$cookies,
+        key: 'BetaCookie',
+        value: betaCookie,
+        options: {
+          maxAge: moment.duration(1, 'y').asSeconds(),
+        },
       });
-      this.$router.push(LOGIN.path);
+
+      if (process.client) {
+        NativeCallbacks.storeBetaCookie();
+      }
+
+      this.goToUrl(LOGIN.path);
+    },
+    backButtonClicked() {
+      this.$store.dispatch('throttling/init');
+      this.goToUrl(GP_FINDER.path);
     },
   },
 };
