@@ -14,6 +14,11 @@ export default {
       message: 'Try again in a few moments.',
     },
   },
+  generic: {
+    backButton: {
+      text: 'Back',
+    },
+  },
   auth_return: {
     errors: {
       pageTitle: 'Session error',
@@ -689,7 +694,6 @@ export default {
   },
   organDonation: {
     additionalDetails: {
-      backButton: 'Back',
       continueButton: 'Continue',
       description: 'This optional information is only used by NHSBT for analysis of the NHS Organ Donor Register and is not stored against your registration.',
       ethnicity: {
@@ -704,7 +708,6 @@ export default {
     },
     faith: {
       subheader: 'Faith / beliefs',
-      backButtonText: 'Back',
       continueButtonText: 'Continue',
       errorMsgHeader: 'There\'s a problem',
       errorMsgText: 'You cannot continue without making a selection',
@@ -748,8 +751,9 @@ export default {
     yourChoice: {
       subheader: 'Your choice',
       description: 'You can select to donate some, or all of your organs and tissue.',
-      backButtonText: 'Back',
       continueButtonText: 'Continue',
+      errorMessageHeader: 'There\'s a problem',
+      errorMessageText: 'Make a decision to continue',
       choices: {
         all: {
           title: 'All my organs and tissue',
@@ -763,7 +767,6 @@ export default {
     },
     reviewYourDecision: {
       header: 'Check your details before submitting',
-      backButton: 'Back',
       errorMsgHeader: 'There\'s a problem',
       submitButton: 'Yes I want to be a donor',
       submitNoButton: 'No I do not want to be a donor',
@@ -790,10 +793,25 @@ export default {
           NotStated: 'Prefer not to say',
         },
       },
+      decisionDetails: {
+        chosenHeader: 'You have chosen to donate:',
+        notChosenHeader: 'You have chosen not to donate:',
+        choices: {
+          heart: 'Heart',
+          lungs: 'Lungs',
+          kidney: 'Kidney',
+          liver: 'Liver',
+          corneas: 'Corneas',
+          pancreas: 'Pancreas',
+          tissue: 'Tissue',
+          smallBowel: 'Small bowel',
+        },
+      },
       yourDecision: {
         subheader: 'Your decision',
         optoutDecisionText: 'No, I do not want to donate my organs',
         optinDecisionText: 'Yes, I do want to donate my organs',
+        optinSomeDecisionText: 'Specific organs and tissue',
       },
       confirmation: {
         subheader: 'Confirmation',
@@ -815,6 +833,24 @@ export default {
           body: 'If you want to give more, why not sign up to give blood? You can easily book an appointment and find your local centre via the app.',
         },
       },
+    },
+    someOrgans: {
+      subheader: 'Your choice',
+      description: 'Please select which organs and tissue you wish to donate:',
+      continueButtonText: 'Continue',
+      errorMsgHeader: 'There\'s a problem',
+      allSelectedValidationText: 'Make a decision for all categories to continue',
+      yesRequiredValidationText: 'At least one category must be set to yes to continue',
+      choiceYes: 'Yes',
+      choiceNo: 'No',
+      heartTitle: 'Heart',
+      lungsTitle: 'Lungs',
+      kidneyTitle: 'Kidney',
+      liverTitle: 'Liver',
+      corneasTitle: 'Corneas',
+      pancreasTitle: 'Pancreas',
+      tissueTitle: 'Tissue',
+      smallBowelTitle: 'Small bowel',
     },
   },
   symptomBanner: {

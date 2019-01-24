@@ -51,33 +51,32 @@
                     @click.stop.prevent="continueClicked">
       {{ $t('organDonation.faith.continueButtonText') }}
     </generic-button>
-    <generic-button id="back-to-your-choice"
-                    :class="[$style.button, $style.grey]"
-                    @click.stop.prevent="goBack">
-      {{ $t('organDonation.faith.backButtonText') }}
-    </generic-button>
+
+    <back-button />
   </div>
 </template>
 
 <script>
+import BackButton from '@/components/BackButton';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import { YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION_YOUR_CHOICE, ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
-import { EnsureAllOrgansDecision } from '@/components/organ-donation/EnsureDecisionMixin';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
+import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 
 export default {
   components: {
+    BackButton,
     GenericButton,
     GenericRadioButton,
     MessageDialog,
     MessageList,
     MessageText,
   },
-  mixins: [EnsureAllOrgansDecision],
+  mixins: [EnsureOptInDecision],
   data() {
     return {
       yesValue: YES,
@@ -100,9 +99,6 @@ export default {
   methods: {
     radioButtonSelected(value) {
       this.$store.dispatch('organDonation/setFaithDeclaration', value);
-    },
-    goBack() {
-      this.$router.push(ORGAN_DONATION_YOUR_CHOICE.path);
     },
     continueClicked() {
       this.hasTriedToContinue = true;

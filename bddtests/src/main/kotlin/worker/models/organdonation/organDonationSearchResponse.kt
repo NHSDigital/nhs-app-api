@@ -24,6 +24,4 @@ data class Address(var text: String,
                    var postCode: String)
 
 data class DecisionDetails(var all: Boolean,
-                           var choices: List<Choice>)
-
-data class Choice(var name: String, var value: String)
+                           var choices: HashMap<String, String>)

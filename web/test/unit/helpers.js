@@ -20,6 +20,11 @@ export const mockCookies = () => ({
 
 export const createEvent = event => ({ preventDefault: jest.fn(), ...event });
 
+export const createRouter = () => ({
+  go: jest.fn(),
+  push: jest.fn(),
+});
+
 export const createStore = ({ $env = {}, $http = {}, state = {} } = {}) => ({
   dispatch: jest.fn(),
   state,

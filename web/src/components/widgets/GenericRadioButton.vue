@@ -16,6 +16,7 @@
 import RadioButtonIcon from '@/components/icons/RadioButtonIcon';
 
 export default {
+  name: 'GenericRadioButton',
   components: {
     RadioButtonIcon,
   },
@@ -28,9 +29,9 @@ export default {
       type: String,
       default: 'radioButton',
     },
+    // eslint-disable-next-line vue/require-prop-types
     value: {
-      type: String,
-      default: '0',
+      default: '',
     },
     label: {
       type: String,
@@ -40,9 +41,9 @@ export default {
       type: String,
       default: undefined,
     },
+    // eslint-disable-next-line vue/require-prop-types
     model: {
-      type: String,
-      default: undefined,
+      default: '',
     },
   },
   computed: {

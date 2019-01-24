@@ -1,4 +1,7 @@
+import BackButton from '@/components/BackButton';
 import ReviewYourDecision from '@/pages/organ-donation/review-your-decision';
+import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import YourDecision from '@/components/organ-donation/YourDecision';
 import { initialState, DECISION_OPT_OUT, DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
@@ -7,13 +10,7 @@ describe('review your decision', () => {
   let $style;
   let wrapper;
 
-  const createState = () => {
-    const state = {
-      organDonation: initialState(),
-    };
-
-    return state;
-  };
+  const createState = (state = { organDonation: initialState() }) => state;
 
   const mountPage = () => mount(ReviewYourDecision, { $store, $style, $t });
 
@@ -125,7 +122,7 @@ describe('review your decision', () => {
     let backButton;
 
     beforeEach(() => {
-      backButton = wrapper.find('#back-button');
+      backButton = wrapper.find(BackButton);
     });
 
     it('will exist', () => {
@@ -186,6 +183,48 @@ describe('review your decision', () => {
       it('it will call organDonation/postRegistration', () => {
         submitButton.trigger('click');
         expect($store.dispatch).toHaveBeenCalledWith('organDonation/postRegistration');
+      });
+    });
+  });
+
+  describe('decision details', () => {
+    describe('selected all organs', () => {
+      beforeEach(() => {
+        const state = createState();
+        state.organDonation.registration.decision = DECISION_OPT_IN;
+        state.organDonation.registration.decisionDetails.all = true;
+        $store = createStore({ state });
+        wrapper = mountPage();
+      });
+
+      it('will show the opt-in decision text', () => {
+        const yourDecision = wrapper.find(YourDecision);
+        expect(yourDecision.text())
+          .toContain('translate_organDonation.reviewYourDecision.yourDecision.optinDecisionText');
+      });
+
+      it('will not show the decision details', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+      });
+    });
+
+    describe('selected some organs', () => {
+      beforeEach(() => {
+        const state = createState();
+        state.organDonation.registration.decision = DECISION_OPT_IN;
+        state.organDonation.registration.decisionDetails.all = false;
+        $store = createStore({ state });
+        wrapper = mountPage();
+      });
+
+      it('will show the opt-in some decision text', () => {
+        const yourDecision = wrapper.find(YourDecision);
+        expect(yourDecision.text())
+          .toContain('translate_organDonation.reviewYourDecision.yourDecision.optinSomeDecisionText');
+      });
+
+      it('will show the decision details', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(true);
       });
     });
   });

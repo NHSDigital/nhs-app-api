@@ -30,9 +30,11 @@ describe('organ donation record mutations', () => {
 
   describe('LOADED', () => {
     it('will set the organ donation registration state to the received value', () => {
-      const data = { registration: 'from service' };
-      mutations[LOADED](state, data);
-      expect(state.registration).toEqual(data);
+      const { registration } = initialState();
+      registration.emailAddress = 'foo@bar';
+      mutations[LOADED](state, registration);
+      expect(state.registration).toEqual(registration);
+      expect(state.registration.emailAddress).toEqual('foo@bar');
     });
   });
 

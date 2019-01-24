@@ -43,26 +43,22 @@
         {{ $t('organDonation.additionalDetails.continueButton') }}
       </generic-button>
 
-      <generic-button id="back-button"
-                      :class="[$style.button, $style.grey]"
-                      @click.prevent="backClicked">
-        {{ $t('organDonation.additionalDetails.backButton') }}
-      </generic-button>
+      <back-button />
     </div>
   </div>
 </template>
 
 <script>
 import get from 'lodash/fp/get';
+import BackButton from '@/components/BackButton';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import GenericButton from '@/components/widgets/GenericButton';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import {
   ORGAN_DONATION,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
-  ORGAN_DONATION_FAITH,
 } from '@/lib/routes';
-import { DECISION_OPT_IN, DECISION_NOT_FOUND } from '@/store/modules/organDonation/mutation-types';
+import { DECISION_NOT_FOUND } from '@/store/modules/organDonation/mutation-types';
 
 const mapAdditionalDetails = self => ({
   ethnicityId: self.ethnicityId,
@@ -71,6 +67,7 @@ const mapAdditionalDetails = self => ({
 
 export default {
   components: {
+    BackButton,
     GenericButton,
     SelectDropdown,
   },
@@ -104,12 +101,6 @@ export default {
     }
   },
   methods: {
-    backClicked() {
-      if (this.$store.state.organDonation.registration.decision === DECISION_OPT_IN) {
-        return this.$router.push(ORGAN_DONATION_FAITH.path);
-      }
-      return this.$router.push(ORGAN_DONATION.path);
-    },
     continueClicked() {
       this.$store.dispatch('organDonation/setAdditionalDetails', mapAdditionalDetails(this));
       this.$router.push(ORGAN_DONATION_REVIEW_YOUR_DECISION.path);

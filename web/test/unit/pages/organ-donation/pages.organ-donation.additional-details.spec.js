@@ -1,6 +1,7 @@
 import find from 'lodash/fp/find';
 import AdditionalDetails from '@/pages/organ-donation/additional-details';
-import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION, ORGAN_DONATION_FAITH } from '@/lib/routes';
+import BackButton from '@/components/BackButton';
+import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 import { DECISION_NOT_FOUND, DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
@@ -56,6 +57,7 @@ describe('additional-details', () => {
   describe('decision set', () => {
     beforeEach(() => {
       state.organDonation.registration.decision = DECISION_OPT_IN;
+      state.organDonation.registration.decisionDetails.all = true;
       $store = createStore({ state });
       wrapper = mountWrapper({ });
     });
@@ -164,31 +166,11 @@ describe('additional-details', () => {
         let backButton;
 
         beforeEach(() => {
-          backButton = wrapper.find('#back-button');
+          backButton = wrapper.find(BackButton);
         });
 
         it('will exist', () => {
           expect(backButton.exists()).toBe(true);
-        });
-
-        it('will display the back button text for the additional details', () => {
-          const key = 'organDonation.additionalDetails.backButton';
-          expect(backButton.text()).toEqual(`translate_${key}`);
-        });
-
-        it('will be set as a grey button', () => {
-          expect(backButton.classes()).toContain($style.button);
-          expect(backButton.classes()).toContain($style.grey);
-        });
-
-        describe('when clicked', () => {
-          beforeEach(() => {
-            backButton.trigger('click');
-          });
-
-          it('will push the organ donation page on the router', () => {
-            expect($router).toContain(ORGAN_DONATION_FAITH.path);
-          });
         });
       });
     });

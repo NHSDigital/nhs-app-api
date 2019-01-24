@@ -145,7 +145,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             var decisionDetails = new DecisionDetails
             {
                 All = overallDecision == ChoiceState.Yes,
-                Choices = choiceBreakdown.ToDictionary(p => p.Key,k=> _organDonationChoiceStateMapper.To(k.Value))
+                Choices = choiceBreakdown.ToDictionary(x => x.Key, x => _organDonationChoiceStateMapper.To(x.Value))
             };
 
             return decisionDetails;

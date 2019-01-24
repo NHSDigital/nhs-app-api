@@ -12,6 +12,7 @@
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
 import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
+import get from 'lodash/fp/get';
 
 export default {
   name: 'YourDecision',
@@ -24,12 +25,18 @@ export default {
       type: String,
       required: true,
     },
+    decisionDetails: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     const isOptOut = this.decision === DECISION_OPT_OUT;
+    const allOrgans = !!get('all')(this.decisionDetails);
     const key = isOptOut ? 'optout' : 'optin';
+    const organsKey = isOptOut || allOrgans ? '' : 'Some';
     return {
-      decisionTextKey: `organDonation.reviewYourDecision.yourDecision.${key}DecisionText`,
+      decisionTextKey: `organDonation.reviewYourDecision.yourDecision.${key}${organsKey}DecisionText`,
       icon: isOptOut ? NoIcon : YesIcon,
       style: this.$style[`${key}-label`],
     };

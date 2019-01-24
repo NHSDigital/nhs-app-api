@@ -10,6 +10,7 @@ import {
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
+  SET_SOME_ORGANS,
   initialState,
 } from './mutation-types';
 
@@ -29,6 +30,14 @@ export default {
   [MAKE_DECISION](state, decision) {
     state.additionalDetails = initialState().additionalDetails;
     state.registration.decision = decision;
+  },
+  [SET_ALL_ORGANS](state, choice) {
+    state.registration.decisionDetails =
+      { ...state.registration.decisionDetails,
+        ...{ all: choice,
+          choices: initialState().registration.decisionDetails.choices,
+        },
+      };
   },
   [SET_ADDITIONAL_DETAILS](state, { ethnicityId, religionId }) {
     state.additionalDetails.ethnicityId = ethnicityId;
@@ -53,5 +62,8 @@ export default {
   },
   [SET_REGISTRATION_ID](state, registrationId) {
     state.registration.identifier = registrationId;
+  },
+  [SET_SOME_ORGANS](state, { value, choice }) {
+    state.registration.decisionDetails.choices[choice] = value;
   },
 };

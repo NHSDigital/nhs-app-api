@@ -21,7 +21,10 @@
                             :religion-id="$store.state.organDonation.additionalDetails.religionId"
                             :reference-data="$store.state.organDonation.referenceData"/>
     <hr :class="$style.rule" aria-hidden="true">
-    <your-decision :decision="$store.state.organDonation.registration.decision"/>
+    <your-decision :decision-details="$store.state.organDonation.registration.decisionDetails"
+                   :decision="$store.state.organDonation.registration.decision"/>
+    <decision-details v-if="isOptInDecision && !allOrgans"
+                      :choices="currentChoices"/>
     <hr :class="$style.rule" aria-hidden="true">
     <div v-if="isOptInDecision" id="faithDetails">
       <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
@@ -34,34 +37,35 @@
                     @click="clickSubmit">
       {{ submitButtonText }}
     </generic-button>
-    <generic-button id="back-button"
-                    :class="[$style.button, $style.grey]"
-                    @click.prevent="clickBack">
-      {{ $t('organDonation.reviewYourDecision.backButton') }}
-    </generic-button>
+    <back-button />
   </div>
 </template>
 
 <script>
 import isEmpty from 'lodash/fp/isEmpty';
-import GenericButton from '@/components/widgets/GenericButton';
+import get from 'lodash/fp/get';
 import AboutYou from '@/components/organ-donation/AboutYou';
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
+import BackButton from '@/components/BackButton';
+import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import Confirmation from '@/components/organ-donation/Confirmation';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import FaithDetails from '@/components/organ-donation/FaithDetails';
+import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
+import { ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
 import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   components: {
     AboutYou,
     AdditionalInformation,
+    BackButton,
     Confirmation,
+    DecisionDetails,
     FaithDetails,
     GenericButton,
     MessageDialog,
@@ -76,6 +80,12 @@ export default {
     };
   },
   computed: {
+    allOrgans() {
+      return !!get('all')(this.$store.state.organDonation.registration.decisionDetails);
+    },
+    currentChoices() {
+      return get('choices')(this.$store.state.organDonation.registration.decisionDetails) || {};
+    },
     isAccuracyAccepted() {
       return this.$store.state.organDonation.isAccuracyAccepted;
     },
@@ -115,9 +125,6 @@ export default {
     this.$store.dispatch('organDonation/resetAcceptanceChecks');
   },
   methods: {
-    clickBack() {
-      this.$router.push(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
-    },
     clickSubmit() {
       this.submitAttempted = true;
 

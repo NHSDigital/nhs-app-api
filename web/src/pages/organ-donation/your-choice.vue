@@ -1,47 +1,85 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
+    <message-dialog v-if="hasTriedToContinue && !hasMadeDecision" message-type="error">
+      <message-text data-purpose="error-heading">
+        {{ $t('organDonation.yourChoice.errorMessageHeader') }}
+      </message-text>
+      <message-list data-purpose="reason-error">
+        <li>{{ $t('organDonation.yourChoice.errorMessageText') }}</li>
+      </message-list>
+    </message-dialog>
     <div :class="$style.info">
       <h2>{{ $t('organDonation.yourChoice.subheader') }}</h2>
       <p>{{ $t('organDonation.yourChoice.description') }}</p>
     </div>
-    <radio-button :action="setAllOrgansAction"
-                  :state="'organDonation.registration.decisionDetails.all'"
-                  :value="true">
-      <b>{{ $t('organDonation.yourChoice.choices.all.title') }}</b>
-      <p>{{ $t('organDonation.yourChoice.choices.all.description') }}</p>
-    </radio-button>
+    <generic-radio-button
+      :class="$style['radio-button']"
+      :name="allOrgansName"
+      :value="true"
+      :model="currentChoice"
+      @select="isSelected">
+      <div>
+        <b>{{ $t('organDonation.yourChoice.choices.all.title') }}</b>
+        <p>{{ $t('organDonation.yourChoice.choices.all.description') }}</p>
+      </div>
+    </generic-radio-button>
+    <generic-radio-button
+      :class="$style['radio-button']"
+      :name="allOrgansName"
+      :value="false"
+      :model="currentChoice"
+      @select="isSelected">
+      <div>
+        <b>{{ $t('organDonation.yourChoice.choices.some.title') }}</b>
+        <p>{{ $t('organDonation.yourChoice.choices.some.description') }}</p>
+      </div>
+    </generic-radio-button>
     <generic-button id="continue-button"
                     :class="[$style.button, $style.green]"
-                    @click.stop.prevent="continueClicked">
+                    @click.prevent="continueClicked">
       {{ $t('organDonation.yourChoice.continueButtonText') }}
     </generic-button>
-    <generic-button id="back-to-organdonation"
-                    :class="[$style.button, $style.grey]"
-                    @click.stop.prevent="goBack">
-      {{ $t('organDonation.yourChoice.backButtonText') }}
-    </generic-button>
+    <back-button />
   </div>
 </template>
 <script>
-import GenericButton from '@/components/widgets/GenericButton';
-import RadioButton from '@/components/widgets/RadioButton';
-import { ORGAN_DONATION, ORGAN_DONATION_FAITH } from '@/lib/routes';
-import isNil from 'lodash/fp/isNil';
 import get from 'lodash/fp/get';
+import isNil from 'lodash/fp/isNil';
+import BackButton from '@/components/BackButton';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
+import GenericRadioButton from '@/components/widgets/GenericRadioButton';
+import GenericButton from '@/components/widgets/GenericButton';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
+import MessageList from '@/components/widgets/MessageList';
+import {
+  ORGAN_DONATION_FAITH,
+  ORGAN_DONATION_SOME_ORGANS,
+} from '@/lib/routes';
 
 export default {
   components: {
+    BackButton,
+    ErrorMessage,
     GenericButton,
-    RadioButton,
+    GenericRadioButton,
+    MessageDialog,
+    MessageList,
+    MessageText,
   },
   data() {
     return {
       setAllOrgansAction: 'organDonation/setAllOrgans',
+      hasTriedToContinue: false,
+      allOrgansName: 'AllOrgans',
     };
   },
   computed: {
     currentChoice() {
-      return get('all')(this.$store.state.organDonation.registration.decisionDetails);
+      return get('$store.state.organDonation.registration.decisionDetails.all')(this);
+    },
+    hasMadeDecision() {
+      return !(this.currentChoice === '' || this.currentChoice === undefined);
     },
   },
   created() {
@@ -50,11 +88,21 @@ export default {
     }
   },
   methods: {
-    goBack() {
-      this.$router.push(ORGAN_DONATION.path);
+    isSelected(value) {
+      this.$store.dispatch(this.setAllOrgansAction, value);
     },
     continueClicked() {
-      this.$router.push(ORGAN_DONATION_FAITH.path);
+      this.hasTriedToContinue = true;
+      if (this.hasMadeDecision && this.currentChoice === false) {
+        this.$router.push(ORGAN_DONATION_SOME_ORGANS.path);
+        return;
+      }
+      if (this.hasMadeDecision && this.currentChoice === true) {
+        this.$router.push(ORGAN_DONATION_FAITH.path);
+        return;
+      }
+
+      window.scrollTo(0, 0);
     },
   },
 };
@@ -63,10 +111,9 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/info";
 @import "../../style/buttons";
+@import "../../style/spacings";
 
-noscript {
-  b {
-    display: inline;
-  }
+.radio-button {
+  margin-bottom: $three;
 }
 </style>

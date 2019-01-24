@@ -1,7 +1,8 @@
+import BackButton from '@/components/BackButton';
 import Faith from '@/pages/organ-donation/faith';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
-import { $t, createStore, mount } from '../../helpers';
+import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
+import { $t, createRouter, createStore, mount } from '../../helpers';
 
 describe('organ donation faith page', () => {
   let $store;
@@ -20,7 +21,7 @@ describe('organ donation faith page', () => {
   };
 
   beforeEach(() => {
-    $router = [];
+    $router = createRouter();
     $store = createStore({ state: createState() });
     wrapper = mount(Faith, {
       $router,
@@ -35,7 +36,7 @@ describe('organ donation faith page', () => {
       let backButton;
 
       beforeEach(() => {
-        backButton = wrapper.find('#back-to-your-choice');
+        backButton = wrapper.find(BackButton);
         $style = {
           button: 'button',
           grey: 'grey',
@@ -44,26 +45,6 @@ describe('organ donation faith page', () => {
 
       it('will exist', () => {
         expect(backButton.exists()).toBe(true);
-      });
-
-      it('will display the back button text for the faith', () => {
-        const key = 'organDonation.faith.backButtonText';
-        expect(backButton.text()).toEqual(`translate_${key}`);
-      });
-
-      it('will be set as a grey button', () => {
-        expect(backButton.classes()).toContain($style.button);
-        expect(backButton.classes()).toContain($style.grey);
-      });
-
-      describe('when clicked', () => {
-        beforeEach(() => {
-          backButton.trigger('click');
-        });
-
-        it('will push the organ donation your choice page on the router', () => {
-          expect($router).toContain(ORGAN_DONATION_YOUR_CHOICE.path);
-        });
       });
     });
   });
@@ -105,7 +86,7 @@ describe('organ donation faith page', () => {
           });
 
           it('will not push the organ donation additional details page on the router', () => {
-            expect($router).not.toContain(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
+            expect($router.push).not.toHaveBeenCalledWith(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
           });
         });
       });
@@ -125,7 +106,7 @@ describe('organ donation faith page', () => {
           });
 
           it('will push the organ donation additional details page on the router', () => {
-            expect($router).toContain(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
+            expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
           });
         });
       });

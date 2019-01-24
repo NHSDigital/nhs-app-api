@@ -1,10 +1,11 @@
+import BackButton from '@/components/BackButton';
 import YourChoice from '@/pages/organ-donation/your-choice';
-import RadioButton from '@/components/widgets/RadioButton';
+import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_FAITH } from '@/lib/routes';
 import { $t, createStore, mount } from '../../helpers';
 
-const createState = (choice = true) => {
+const createState = (choice = '') => {
   const state = {
     organDonation: initialState(),
   };
@@ -36,7 +37,7 @@ describe('organ donation your choice page', () => {
       let backButton;
 
       beforeEach(() => {
-        backButton = wrapper.find('#back-to-organdonation');
+        backButton = wrapper.find(BackButton);
         $style = {
           button: 'button',
           grey: 'grey',
@@ -46,16 +47,6 @@ describe('organ donation your choice page', () => {
       it('will exist', () => {
         expect(backButton.exists()).toBe(true);
       });
-
-      it('will display the back button text for the your choice', () => {
-        const key = 'organDonation.yourChoice.backButtonText';
-        expect(backButton.text()).toEqual(`translate_${key}`);
-      });
-
-      it('will be set as a grey button', () => {
-        expect(backButton.classes()).toContain($style.button);
-        expect(backButton.classes()).toContain($style.grey);
-      });
     });
   });
 
@@ -64,11 +55,18 @@ describe('organ donation your choice page', () => {
       let continueButton;
 
       beforeEach(() => {
-        continueButton = wrapper.find('#continue-button');
         $style = {
           button: 'button',
           green: 'green',
         };
+        $store.state.organDonation.registration.decisionDetails.all = true;
+        wrapper = mount(YourChoice, {
+          $router,
+          $store,
+          $t,
+          $style,
+        });
+        continueButton = wrapper.find('#continue-button');
       });
 
       it('will exist', () => {
@@ -98,16 +96,18 @@ describe('organ donation your choice page', () => {
     });
   });
 
-  describe('for new registrations or when donate all organs is "true"', () => {
+  describe('for new registrations', () => {
     let allOrgansButton;
+    let someOrgansButton;
 
     beforeEach(() => {
-      allOrgansButton = wrapper.findAll(RadioButton).at(0);
+      allOrgansButton = wrapper.findAll(GenericRadioButton).at(0);
+      someOrgansButton = wrapper.findAll(GenericRadioButton).at(1);
     });
 
     describe('currentChoice', () => {
       it('will equal true', () => {
-        expect(wrapper.vm.currentChoice).toEqual(true);
+        expect(wrapper.vm.currentChoice).toEqual('');
       });
     });
 
@@ -116,8 +116,18 @@ describe('organ donation your choice page', () => {
         expect(allOrgansButton.exists()).toBe(true);
       });
 
-      it('will be selected', () => {
-        expect(allOrgansButton.vm.isSelected).toEqual(true);
+      it('will not be selected', () => {
+        expect(allOrgansButton.vm.isSelected).toEqual(false);
+      });
+    });
+
+    describe('some organs radio button', () => {
+      it('will exist', () => {
+        expect(someOrgansButton.exists()).toBe(true);
+      });
+
+      it('will not be selected', () => {
+        expect(someOrgansButton.vm.isSelected).toEqual(false);
       });
     });
   });

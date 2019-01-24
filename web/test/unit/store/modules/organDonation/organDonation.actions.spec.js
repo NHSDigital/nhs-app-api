@@ -74,6 +74,17 @@ describe('organ donation actions', () => {
     );
   });
 
+  describe('resetAcceptanceChecks', () => {
+    it(
+      'will commit SET_PRIVACY_ACCEPTANCE and SET_ACCURACY_ACCEPTANCE with a value of false',
+      () => {
+        actions.resetAcceptanceChecks({ commit });
+        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, false);
+        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, false);
+      },
+    );
+  });
+
   describe('makeDecision', () => {
     it('will commit the MAKE_DECISION mutation', () => {
       actions.makeDecision({ commit }, 'foo');

@@ -9,6 +9,7 @@ import {
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
+  SET_SOME_ORGANS,
 } from './mutation-types';
 
 export default {
@@ -42,6 +43,9 @@ export default {
   },
   setFaithDeclaration({ commit }, faithDeclaration) {
     commit(SET_FAITH_DECLARATION, faithDeclaration);
+  },
+  setSomeOrgans({ commit }, { value, choice }) {
+    commit(SET_SOME_ORGANS, { value, choice });
   },
   toggleAccuracyAcceptance({ commit, state }) {
     commit(SET_ACCURACY_ACCEPTANCE, !state.isAccuracyAccepted);
