@@ -1,5 +1,5 @@
 import ReviewYourDecision from '@/pages/organ-donation/review-your-decision';
-import { initialState } from '@/store/modules/organDonation/mutation-types';
+import { initialState, DECISION_OPT_OUT, DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
 describe('review your decision', () => {
@@ -172,6 +172,34 @@ describe('review your decision', () => {
       it('it will call organDonation/postRegistration', () => {
         submitButton.trigger('click');
         expect($store.dispatch).toHaveBeenCalledWith('organDonation/postRegistration');
+      });
+    });
+  });
+
+  describe('faith details', () => {
+    let faithDetails;
+
+    beforeEach(() => {
+      faithDetails = wrapper.find('#faithDetails');
+    });
+
+    describe('when opt out', () => {
+      beforeEach(() => {
+        $store.state.organDonation.registration.decision = DECISION_OPT_OUT;
+      });
+
+      it('will not show the faith details', () => {
+        expect(faithDetails.exists()).toBe(false);
+      });
+    });
+
+    describe('when opt in', () => {
+      beforeEach(() => {
+        $store.state.organDonation.registration.decision = DECISION_OPT_IN;
+      });
+
+      it('will show the faith details', () => {
+        expect(faithDetails.exists()).toBe(false);
       });
     });
   });

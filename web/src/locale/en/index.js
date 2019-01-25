@@ -738,6 +738,15 @@ export default {
         ethnicityheader: 'Ethnicity',
         religionheader: 'Religion',
       },
+      faith: {
+        subheader: 'Faith / beliefs details',
+        description: 'I would like NHS staff to speak to my family and anyone else appropriate about how organ donation can go ahead in line with my faith or beliefs',
+        declaration: {
+          Yes: 'Yes',
+          No: 'No',
+          NotStated: 'Prefer not to say',
+        },
+      },
       yourDecision: {
         subheader: 'Your decision',
         optoutDecisionText: 'No, I do not want to donate my organs',

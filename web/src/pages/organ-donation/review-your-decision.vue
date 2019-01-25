@@ -20,6 +20,10 @@
     <hr :class="$style.rule" aria-hidden="true">
     <your-decision :decision="$store.state.organDonation.registration.decision"/>
     <hr :class="$style.rule" aria-hidden="true">
+    <div v-if="isOptInDecision" id="faithDetails">
+      <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
+      <hr :class="$style.rule" aria-hidden="true">
+    </div>
     <confirmation :is-accuracy-star-visible="isAccuracyStarVisible"
                   :is-privacy-star-visible="isPrivacyStarVisible" />
     <generic-button id="submit-button"
@@ -42,17 +46,19 @@ import AboutYou from '@/components/organ-donation/AboutYou';
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
 import Confirmation from '@/components/organ-donation/Confirmation';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
+import FaithDetails from '@/components/organ-donation/FaithDetails';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE, ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
-import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
+import { DECISION_OPT_OUT, DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   components: {
     AboutYou,
     AdditionalInformation,
     Confirmation,
+    FaithDetails,
     GenericButton,
     MessageDialog,
     MessageText,
@@ -75,6 +81,9 @@ export default {
     },
     isAccuracyStarVisible() {
       return this.submitAttempted && !this.isAccuracyAccepted;
+    },
+    isOptInDecision() {
+      return this.$store.state.organDonation.registration.decision === DECISION_OPT_IN;
     },
     isPrivacyAccepted() {
       return this.$store.state.organDonation.isPrivacyAccepted;
