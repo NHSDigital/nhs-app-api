@@ -49,6 +49,13 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
         }
     }
 
+    override fun gpSessionHasExpired() {
+        mockingClient.forTpp {
+            prescriptions.listRepeatMedication(patient)
+                    .respondWithTppNotAuthorised("")
+        }
+    }
+
     override fun disableAtGPLevel() {
         mockingClient
                 .forTpp {

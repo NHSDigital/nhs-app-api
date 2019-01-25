@@ -9,12 +9,12 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
-using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Http;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppClient;
 
@@ -162,6 +162,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Linkage
             result.Should().BeAssignableTo<LinkageResult.InternalServerError>();
         }
 
+        [TestMethod]
+        public async Task CreateLinkageKey_ReturnsSupplierSystemUnavailable_WhenUnauthorisedGpSystemHttpRequestExceptionOccurs()
+        {
+            // Arrange
+            var request = ValidCreateLinkageRequest();
+            var exception = new UnauthorisedGpSystemHttpRequestException();
+            _tppClient
+                .Setup(x => x.NhsUserPost(It.IsAny<AddNhsUserRequest>()))
+                .ThrowsAsync(exception);
+
+            // Act
+            var result = await _systemUnderTest.CreateLinkageKey(request);
+
+            // Assert
+            result.GetType().Should().Be(typeof(LinkageResult.SupplierSystemUnavailable));
+        }
+        
         [TestMethod]
         public async Task CreateLinkageKey_ReturnsSupplierSystemUnavailable_WhenNotAuthenticated()
         {

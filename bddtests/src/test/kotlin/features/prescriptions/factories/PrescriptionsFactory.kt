@@ -39,6 +39,7 @@ abstract class PrescriptionsFactory(gpSupplier:String) {
     abstract fun prescriptionsEndpointThrowServerError(patient : Patient    )
     abstract fun coursesEndpointTimeout(patient : Patient)
     abstract fun coursesEndpointThrowingServerError(patient : Patient)
+    abstract fun gpSessionHasExpired()
 
     val mockingClient = MockingClient.instance
     val patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)

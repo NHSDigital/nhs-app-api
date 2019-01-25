@@ -62,6 +62,10 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
         }
     }
 
+    override fun gpSessionHasExpired() {
+        throw NotImplementedError()
+    }
+
     override fun disableAtGPLevel() {}
 
     override fun prescriptionsEndpointTimeout(patient: Patient) {

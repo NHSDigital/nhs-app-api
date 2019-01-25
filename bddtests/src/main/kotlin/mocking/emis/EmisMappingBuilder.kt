@@ -61,6 +61,12 @@ open class EmisMappingBuilder(configuration: EmisConfiguration?,
         return respondWith(HttpStatus.SC_OK) { andHtmlBody(content) }
     }
 
+    fun respondWithEmisNotAuthorised(): Mapping {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
+            andBody("Missing or invalid EndUserSessionId", "application/json")
+        }
+    }
+
     fun respondWithEmisUnknownError(): Mapping {
         val exceptionResponse = ExceptionResponse(ErrorResponseCodeEmis.UNKNOWN_EXCEPTION,
                 "Unknown Exception")

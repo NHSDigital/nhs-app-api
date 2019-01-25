@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.Support.Http;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
@@ -81,12 +82,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                 var tppUserSession = (TppUserSession) userSession.GpUserSession;
                 var logoffReply = await _client.LogoffPost(tppUserSession);
 
-                if (logoffReply.NotAuthenticated)
-                {
-                    _logger.LogWarning("User does not have a valid session");
-                    return new SessionLogoffResult.NotAuthenticated();
-                }
-
                 if (!logoffReply.HasSuccessResponse) 
                 {
                     return new SessionLogoffResult.SupplierSystemUnavailable();
@@ -100,6 +95,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogError(e, "Failed request to logoff TPP user session, HttpRequestException has been thrown.");
                 return new SessionLogoffResult.SupplierSystemUnavailable();
+            }
+            catch (UnauthorisedGpSystemHttpRequestException e)
+            {
+                _logger.LogWarning(e, "User does not have a valid session");
+                return new SessionLogoffResult.NotAuthenticated();
             }
             finally
             {

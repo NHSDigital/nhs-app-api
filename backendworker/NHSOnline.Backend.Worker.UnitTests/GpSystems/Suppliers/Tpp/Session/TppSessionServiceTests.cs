@@ -15,6 +15,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
 {
@@ -335,14 +336,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
 
             _mockTppClient
                 .Setup(x => x.LogoffPost(It.IsAny<TppUserSession>()))
-                .Returns(
-                    Task.FromResult(
-                        new TppClient.TppApiObjectResponse<LogoffReply>(HttpStatusCode.OK)
-                        {
-                            ErrorResponse = notAuthenticatedResponse
-                        }
-                    )
-                );
+                .ThrowsAsync(new UnauthorisedGpSystemHttpRequestException());
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
 

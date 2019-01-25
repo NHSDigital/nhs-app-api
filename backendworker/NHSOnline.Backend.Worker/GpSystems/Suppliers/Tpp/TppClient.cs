@@ -12,6 +12,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Support.Http;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
@@ -277,7 +278,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
-            return await response.Parse(responseMessage, _responseParser, _logger);
+            await response.Parse(responseMessage, _responseParser, _logger);
+
+            if (response.IsUnauthorisedResponse)
+            {
+                _logger.LogInformation("Unauthorised TPP response");
+                throw new UnauthorisedGpSystemHttpRequestException();
+            }
+
+            return response;
         }
 
         private void SetApplicationOnRequest(ITppApplicationRequest request)
@@ -295,7 +304,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             {}
 
             public Error ErrorResponse { get; set; }
+
             public override bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
+
+            internal bool IsUnauthorisedResponse =>
+                ErrorResponse != null &&
+                TppApiErrorCodes.NotAuthenticated.Equals(ErrorResponse.ErrorCode, StringComparison.Ordinal);
 
             public bool HasErrorWithCode(string errorCode)
             {
@@ -306,10 +320,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             public bool HasForbiddenResponse => ErrorResponse != null &&
                                                 TppApiErrorCodes.NoAccess.Equals(ErrorResponse.ErrorCode,
                                                     StringComparison.Ordinal);
-
-            public bool NotAuthenticated => ErrorResponse != null &&
-                                            TppApiErrorCodes.NotAuthenticated.Equals(ErrorResponse.ErrorCode,
-                                                StringComparison.Ordinal);
 
             public bool HasErrorMessageContaining(string message)
             {
@@ -324,14 +334,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             }
 
 
-            public async Task<TppApiObjectResponse<TBody>> Parse(
+            public async Task Parse(
                 HttpResponseMessage responseMessage,
                 IXmlResponseParser responseParser,
                 ILogger logger)
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
-                return string.IsNullOrEmpty(stringResponse) 
-                    ? this : ParseResponse(responseParser, logger, stringResponse, responseMessage);
+                if (!string.IsNullOrEmpty(stringResponse))
+                {
+                    ParseResponse(responseParser, logger, stringResponse, responseMessage);
+                }
             }
 
             public TBody Body { get; set; }

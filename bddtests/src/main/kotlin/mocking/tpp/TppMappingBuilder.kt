@@ -54,6 +54,11 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
         return respondWith(error)
     }
 
+    fun respondWithTppNotAuthorised(errorText:String) :Mapping {
+        val error = Error(ErrorResponseCodeTpp.NOT_AUTHENTICATED, errorText, TppConfig.uuid)
+        return respondWith(error)
+    }
+
     protected inline fun <reified T : Any> respondWith(response: T): Mapping {
 
         val xmlBody = JSonXmlConverter.toXML(response)

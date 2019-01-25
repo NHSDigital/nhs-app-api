@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
             {
                 new LinkageError
                 {
-                    IsInvalid = (resp, req) => resp.NotAuthenticated,
+                    IsInvalid = (resp, req) => resp.IsUnauthorisedResponse,
                     ResultingError = new LinkageResult.SupplierSystemUnavailable(),
                     Message = "Tpp system is currently unavailable."
                 },

@@ -16,6 +16,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Support.Http;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
@@ -295,7 +296,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
-            return await response.Parse(responseMessage, _responseParser, _logger);
+            await response.Parse(responseMessage, _responseParser, _logger);
+
+            if (response.IsUnauthorisedResponse)
+            {
+                _logger.LogInformation("Unauthorised EMIS response");
+                throw new UnauthorisedGpSystemHttpRequestException();
+            }
+
+            return response;
         }
 
         public abstract class EmisApiResponse: ApiResponse
@@ -303,10 +312,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             protected EmisApiResponse(HttpStatusCode statusCode) :base(statusCode)
             {}
 
+            public string RawResponse { get; protected set; }
             public StandardErrorResponse StandardErrorResponse { get; set; }
             public ExceptionErrorResponse ExceptionErrorResponse { get; set; }
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
+
+            internal bool IsUnauthorisedResponse =>
+                StatusCode == HttpStatusCode.Unauthorized ||
+                string.Equals(RawResponse, EmisApiErrorMessages.EmisService_UnauthorisedRequest, StringComparison.Ordinal);
 
             public bool HasInternalErrorCode(EmisApiErrorCode code)
             {
@@ -369,20 +383,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         public class EmisApiObjectResponse<TBody> : EmisApiResponse
         {
             public TBody Body { get; set; }
+
             public EmisApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
             {}
 
-            public async Task<EmisApiObjectResponse<TBody>> Parse(
+            public async Task Parse(
                 HttpResponseMessage responseMessage,
                 IJsonResponseParser responseParser,
                 ILogger logger)
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
-                return string.IsNullOrEmpty(stringResponse)
-                    ? this : ParseResponse(responseParser, stringResponse, responseMessage);
+                RawResponse = stringResponse;
+                if (!string.IsNullOrEmpty(stringResponse))
+                {
+                    ParseResponse(responseParser, stringResponse, responseMessage);
+                }
             }
 
-            private  EmisApiObjectResponse<TBody> ParseResponse(
+            private EmisApiObjectResponse<TBody> ParseResponse(
                 IResponseParser responseParser, 
                 string stringResponse, 
                 HttpResponseMessage responseMessage)

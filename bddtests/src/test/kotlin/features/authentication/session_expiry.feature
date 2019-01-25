@@ -290,3 +290,28 @@ Feature: Session Expiry and Extend
     When I am idle long enough for the session to expire
     Then I unlock the device
     Then I see the login page with the session expiry notification
+
+  @backend
+  Scenario Outline: <GP System> GP practice session has expired
+    Given I have logged into <GP System> and have a valid session cookie
+    And the GP System session has expired when viewing prescriptions
+    When I request prescriptions for the last 6 months
+    Then I receive a "Unauthorized" error
+
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  Scenario Outline: The <GP System> GP practice session has expired and user selects the prescriptions button
+    Given I am a <GP System> patient
+    And I am using <GP System> GP System
+    And I am logged in
+    Given the GP System session has expired when viewing prescriptions
+    When I navigate to prescriptions
+    Then I see the login page with the session expiry notification
+
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |

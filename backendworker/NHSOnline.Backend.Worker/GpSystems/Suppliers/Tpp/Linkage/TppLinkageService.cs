@@ -10,6 +10,7 @@ using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppClient;
+using NHSOnline.Backend.Worker.Support.Http;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
 {
@@ -51,8 +52,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
             {
                 _logger.LogEnter();
                 var request = CreateRequest(createLinkageRequest);
-                var createNhsUserResponse = await _tppClient.NhsUserPost(request);
 
+                TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse = await _tppClient.NhsUserPost(request);
+                
                 if (!createNhsUserResponse.HasSuccessResponse)
                 {
                     var errors = new TppLinkageErrors(_minimumAgeValidator, _logger, _settings);
@@ -73,7 +75,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
                     return new LinkageResult.InternalServerError();
                 }
             }
-            catch (HttpRequestException e)
+            catch (Exception e) when (e is HttpRequestException || e is UnauthorisedGpSystemHttpRequestException)
             {
                 _logger.LogError(e, "Unsuccessful request creating linkage key");
                 return new LinkageResult.SupplierSystemUnavailable();

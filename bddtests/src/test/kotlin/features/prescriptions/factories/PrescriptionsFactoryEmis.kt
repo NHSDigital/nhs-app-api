@@ -73,6 +73,13 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
         return currentScenarioState
     }
 
+    override fun gpSessionHasExpired() {
+        mockingClient.forEmis {
+            prescriptions.prescriptionsRequest(patient)
+                    .respondWithEmisNotAuthorised()
+        }
+    }
+
     override fun disableAtGPLevel() {
         mockingClient
                 .forEmis {

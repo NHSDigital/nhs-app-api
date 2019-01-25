@@ -127,6 +127,7 @@ namespace NHSOnline.Backend.Worker
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
+            options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttributeAttribute));
         }
 
         private void ConfigureServiceCookies(CookieAuthenticationOptions options)

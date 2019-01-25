@@ -12,6 +12,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Support.Http;
 using RichardSzalay.MockHttp;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
@@ -511,7 +512,55 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             response.ErrorResponse.Should().BeNull();
             response.Headers.Should().BeNull();
         }
-        
+
+        [TestMethod]
+        public async Task AnyRequest_ThrowsUnauthorisedHttpResponseException_WhenResponseIndicatesNotAuthorised()
+        {
+            // Arrange
+            var linkAccountRequestModel = _fixture.Create<LinkAccount>();
+            linkAccountRequestModel.OrganisationCode = UnitId;
+            linkAccountRequestModel.Uuid = Uuid;
+            linkAccountRequestModel.ApiVersion = ApiVersion;
+            linkAccountRequestModel.Application = new Application
+            {
+                Name = _configMock.Object.ApplicationName,
+                Version = _configMock.Object.ApplicationVersion,
+                ProviderId = _configMock.Object.ApplicationProviderId,
+                DeviceType = _configMock.Object.ApplicationDeviceType
+            };
+
+            var expectedErrorResponse = new Error
+            {
+                ErrorCode = TppApiErrorCodes.NotAuthenticated,
+            };
+
+            var tppRequestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, linkAccountRequestModel.RequestType)
+            };
+
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(tppRequestHeaders)
+                .WithContent(linkAccountRequestModel.SerializeXml())
+                .Respond(MediaType, expectedErrorResponse.SerializeXml());
+
+            UnauthorisedGpSystemHttpRequestException caughtException = null;
+
+            // Act
+            try
+            {
+                await _sut.LinkAccountPost(linkAccountRequestModel);
+            }
+            catch (UnauthorisedGpSystemHttpRequestException e)
+            {
+                caughtException = e;
+            }
+
+            // Assert
+            Assert.IsNotNull(caughtException);
+        }
+
         [TestCleanup]
         public void Dispose()
         {

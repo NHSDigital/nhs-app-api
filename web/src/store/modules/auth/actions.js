@@ -123,6 +123,7 @@ export default {
   },
   unauthorised({ commit }) {
     logoutCleanUp({ self: this });
+    this.dispatch('session/showExpiryMessage');
     final({ self: this, commit, expired: this.state.session.showExpiryMessage });
   },
 };

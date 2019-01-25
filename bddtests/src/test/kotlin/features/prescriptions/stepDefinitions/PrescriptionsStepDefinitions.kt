@@ -284,6 +284,15 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         PrescriptionsFactory.getForSupplier(currentProvider.toString()).disableAtGPLevel()
     }
 
+    @But("^the GP System session has expired when viewing prescriptions$")
+    fun theGPSystemSessionHasExpired() {
+        if (currentProvider == null) {
+            initialize(Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM))
+        }
+        SerenityHelpers.setPatient(currentPatient)
+        PrescriptionsFactory.getForSupplier(currentProvider.toString()).gpSessionHasExpired()
+    }
+
     fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
         return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }

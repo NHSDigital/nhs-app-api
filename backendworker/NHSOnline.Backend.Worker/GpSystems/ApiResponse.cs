@@ -13,8 +13,11 @@ namespace NHSOnline.Backend.Worker.GpSystems
         }
 
         public HttpStatusCode StatusCode { get; set; }
+
         public abstract bool HasSuccessResponse { get; }
+
         public abstract string ErrorForLogging { get; }
+
         protected abstract bool FormatResponseIfUnsuccessful { get; }
 
         public async Task<string> GetStringResponse(HttpResponseMessage responseMessage, ILogger logger)
@@ -37,7 +40,7 @@ namespace NHSOnline.Backend.Worker.GpSystems
             var stringResponse = responseMessage.Content != null
                 ? await responseMessage.Content.ReadAsStringAsync()
                 : null;
-
+            
             if (string.IsNullOrEmpty(stringResponse))
             {
                 logger.LogError($"Response with status code {responseMessage.StatusCode} and no body");
