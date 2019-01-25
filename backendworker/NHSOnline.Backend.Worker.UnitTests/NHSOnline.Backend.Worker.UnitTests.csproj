@@ -49,6 +49,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Bridges\**" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html" />
+    <None Remove="GpSystems\Suppliers\TestData\HtmlDataToSanitize.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\TestData\HtmlDataToSanitize.html" />
+    <None Remove="GpSystems\Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
+    <None Remove="GpSystems\Suppliers\TestData\VisionDataSample.html" />
   </ItemGroup>
   <ItemGroup>
     <None Update="GpSystems\Suppliers\Emis\Resources\EMISTestCert.cer">
@@ -60,15 +69,6 @@
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidImmunisationResponseContent.xml" />
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoImmunisationResponseContent.xml" />
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidImmunisationsResponseContent.xml" />
-    <None Update="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\CleanedTestResults.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="OrganDonation\Resources\mycert.pfx">

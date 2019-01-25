@@ -23,7 +23,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
         private readonly VisionImmunisationsMapper _immunisationsMapper;
         private readonly VisionProblemsMapper _problemsMapper;
         private readonly VisionTestResultsMapper _testResultsMapper;
-
+        private readonly IHtmlSanitizer _htmlSanitizer;
+        
         public VisionPatientRecordService(ILogger<VisionPatientRecordService> logger,
             IVisionClient visionClient,
             IVisionPFSConfig visionConfig,
@@ -32,7 +33,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             VisionMedicationMapper medicationMapper,
             VisionImmunisationsMapper immunisationsMapper,
             VisionProblemsMapper problemsMapper,
-            VisionTestResultsMapper testResultsMapper
+            VisionTestResultsMapper testResultsMapper,
+            IHtmlSanitizer htmlSanitizer
         )
         {
             _logger = logger;
@@ -44,6 +46,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             _immunisationsMapper = immunisationsMapper;
             _problemsMapper = problemsMapper;
             _testResultsMapper = testResultsMapper;
+            _htmlSanitizer = htmlSanitizer;
         }
 
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
@@ -69,7 +72,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                     var checkedImmunisations = new VisionTaskChecker<Immunisations>(_logger, _immunisationsMapper, VisionMapperType.Immunisations).Check(immunisationsTask);
                     var checkedProblems = new VisionTaskChecker<Problems>(_logger, _problemsMapper, VisionMapperType.Problems).Check(problemsTask);
                     var checkedTestResults = new VisionTaskChecker<TestResults>(_logger, _testResultsMapper, VisionMapperType.TestResults).Check(testResultsTask);
-
+                    
                     var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems, checkedTestResults);
                     response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     

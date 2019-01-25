@@ -1,6 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 
@@ -9,61 +18,71 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
     [TestClass]
     public class TppDetailedTestResultMapperTests
     {
-         private ITppDetailedTestResultMapper _mapper;
-
+        private ITppDetailedTestResultMapper _mapper;
+        private ILogger<TppDetailedTestResultMapper> _logger;
+        private IFixture _fixture;
+        private Mock<IHtmlSanitizer> _htmlSanitizer;
+        
         [TestInitialize]
         public void TestInitialize()
         {
-            _mapper = new TppDetailedTestResultMapper();
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _logger = _fixture.Freeze<ILogger<TppDetailedTestResultMapper>>();
+            _htmlSanitizer = new Mock<IHtmlSanitizer>(MockBehavior.Strict);
+            _mapper = new TppDetailedTestResultMapper(_logger, _htmlSanitizer.Object);
         }
 
         [TestMethod]
-        public void MapTestResultsViewReplyToTestResultsResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
+        public async Task MapTestResultsViewReplyToTestResultsResponse_CallsHtmlSanitizer_WhenMappingHtml()
         {
             // Arrange
-            var item = new TestResultsViewReply();
+            var testResultsHtml =
+                await ReadTestDataFile(
+                    "NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientRecord.TestData.TppTestResultData.html");
 
-            // Act
-            var result = _mapper.Map(item);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.TestResult.Should().BeEmpty();           
-        }
-
-        [TestMethod]
-        public void MapTestResultsViewReplyToTestResultsResponse_WithValues_ReturnsResultValues()
-        {
-            // Arrange
+            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns("<p>sanitized html</p>");
+            
             var testResultsViewReply = new TestResultsViewReply
             {
                 Items = new List<TestResultsViewReplyItem>
                 {
                     new TestResultsViewReplyItem
                     {
-                        Value =
-                            "&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML Strict//EN&quot;&gt;&lt;html&gt;&lt;head&gt;" +
-                            "&lt;META http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=ISO-8859-1&quot;&gt;" +
-                            "&lt;/head&gt;&lt;body&gt;&lt;table&gt;&lt;TR ID=&quot;testResultData&quot;&gt;&lt;TD&gt;Clinician viewed" +
-                            "&lt;/TD&gt;&lt;TD&gt;13 Jul 2018&lt;/TD&gt;&lt;/tr&gt;&lt;TR ID=&quot;testResultData&quot;&gt;&lt;" +
-                            "TD&gt;Result type&lt;/TD&gt;&lt;TD&gt;Pathology&lt;/TD&gt;&lt;/tr&gt;&lt;TR ID=&quot;" +
-                            "testResultData&quot;&gt;&lt;TD&gt;Tests&lt;/TD&gt;&lt;TD&gt;Urine&lt;BR&gt;&lt;/TD&gt;&lt;/tr&gt;&lt;" +
-                            "TR ID=&quot;testResultData&quot;&gt;&lt;TD&gt;Filed by&lt;/TD&gt;&lt;TD" +
-                            "&gt;Mr General Nhsapp at Kainos GP Demo Unit (Kainos) - 13 Jul 2018 16:45&lt;/TD&gt;&lt;/tr&gt;" +
-                            "&lt;TR ID=&quot;testResultData&quot;&gt;&lt;TD&gt;&lt;b&gt;Result&lt;/b&gt;&lt;/TD&gt;&lt;TD" +
-                            "&gt;&lt;b&gt;Normal&lt;/b&gt;&lt;/TD&gt;&lt;/tr&gt;&lt;TR ID=&quot;testResultData&quot;" +
-                            "&gt;&lt;TD&gt;&lt;b&gt;What you need to do&lt;/b&gt;&lt;/TD&gt;&lt;TD&gt;&lt;b&gt;No Further Action" +
-                            "&lt;/b&gt;&lt;/TD&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br/&gt;&lt;/body&gt;&lt;/html&gt;"
+                        Value = testResultsHtml
                     }
                 }
             };
             
             // Act
-            var result = new TppDetailedTestResultMapper().Map(testResultsViewReply);
+            var result = _mapper.Map(testResultsViewReply);
             
             // Assert
+            _htmlSanitizer.Verify(mock => mock.SanitizeHtml(testResultsHtml));
+            Assert.IsTrue(!string.IsNullOrEmpty(result.TestResult));
+        }
+        
+        [TestMethod]
+        public void MapTestResultsViewReplyToTestResultsResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
+        {
+            // Arrange
+            var item = new TestResultsViewReply();
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
             result.Should().NotBeNull();
-            result.TestResult.Should().Be(testResultsViewReply.Items[0].Value);
+            result.TestResult.Should().BeNull();           
+        }
+        
+        private static async Task<string> ReadTestDataFile(string resourceFile)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceStream = assembly.GetManifestResourceStream(resourceFile);
+
+            using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
+            {
+                return await reader.ReadToEndAsync();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -29,6 +30,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             {
                 _logger.LogDebug($"Mapping TPP {nameof(TestResultsViewReply)} response to instance of standardised {nameof(TestResultResponse)} class");
                 _logger.LogExitWith($"{nameof(taskResponse.HasSuccessResponse)}=true");
+                                                
                 return _testResultsMapper.Map(taskResponse.Body);             
             }
             
