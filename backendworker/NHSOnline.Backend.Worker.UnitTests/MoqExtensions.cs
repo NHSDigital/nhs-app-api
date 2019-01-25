@@ -17,5 +17,15 @@ namespace NHSOnline.Backend.Worker.UnitTests
                  exception,
                  It.IsAny<Func<object, Exception, string>>()));
         }
+
+        public static void VerifyLogger<T>(this Mock<ILogger<T>> mockLogger, LogLevel logLevel, string message, Exception exception, Times times)
+        {
+            mockLogger.Verify(x => x.Log(
+                logLevel,
+                It.IsAny<EventId>(),
+                It.Is<FormattedLogValues>(flv => flv.ToString().Contains(message, StringComparison.InvariantCulture)),
+                exception,
+                It.IsAny<Func<object, Exception, string>>()), times);
+        }
     }
 }

@@ -183,7 +183,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 Page = new Page
                 {
                     Number = 1,
-                    SlotsPerPage = _settings.VisionAppointmentSlotsRequestCount.Value
+                    SlotsPerPage = _settings.VisionAppointmentSlotsRequestCount
                 },
                 Locations = visionUserSession.LocationIds,
                 DateRange = new DateRange

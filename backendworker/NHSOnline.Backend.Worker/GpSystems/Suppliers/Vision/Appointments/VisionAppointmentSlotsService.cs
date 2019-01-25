@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
@@ -14,15 +17,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         private readonly IVisionClient _visionClient;
         private readonly ILogger<VisionAppointmentSlotsService> _logger;
         private readonly IAvailableAppointmentsResponseMapper _mapper;
+        private readonly ConfigurationSettings _settings;
         
         public VisionAppointmentSlotsService(
             IVisionClient visionClient, 
             ILogger<VisionAppointmentSlotsService> logger,
-            IAvailableAppointmentsResponseMapper mapper)
+            IAvailableAppointmentsResponseMapper mapper,
+            IOptions<ConfigurationSettings> settings)
         {
             _visionClient = visionClient;
             _logger = logger;
             _mapper = mapper;
+            _settings = settings.Value;
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(UserSession userSession, AppointmentSlotsDateRange dateRange)
@@ -91,9 +97,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             
             try
             {
-                return new AppointmentSlotsResult.SuccessfullyRetrieved(_mapper.Map(slotsResponse.Body,
-                    configResponse?.Body,
-                    userSession));
+                var response = _mapper.Map(slotsResponse.Body, configResponse?.Body, userSession);
+
+                if (response.Slots.Count() == _settings.VisionAppointmentSlotsRequestCount)
+                {
+                    _logger.LogWarning($"Appointment slots retrieved for Vision patient is equal to the maximum requested ({_settings.VisionAppointmentSlotsRequestCount}).");
+                }
+                
+                return new AppointmentSlotsResult.SuccessfullyRetrieved(response);
             }
             catch (Exception e)
             {
