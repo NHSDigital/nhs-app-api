@@ -28,6 +28,7 @@ services:
       - NHS_WEB_APP_BASE_URL=http://web.local.bitraft.io:3000/
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
+      - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=10
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
       - VISION_SENDER_USERNAME=Username123123asdas
@@ -67,6 +68,7 @@ services:
       - NHS_WEB_APP_BASE_URL=http://web.local.bitraft.io:3000/
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
+      - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=15
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
       - ASPNETCORE_ENVIRONMENT=Development

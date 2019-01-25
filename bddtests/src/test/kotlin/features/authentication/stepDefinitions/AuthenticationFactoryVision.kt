@@ -6,8 +6,6 @@ import org.junit.Assert
 import utils.SerenityHelpers
 import java.time.Duration
 
-private const val DELAY_BY_SECONDS = 31L
-
 class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
 
     override fun patientWithIncompleteResponse(patient: Patient) {
@@ -46,12 +44,12 @@ class AuthenticationFactoryVision : AuthenticationFactory("VISION") {
         createInvalidTestForVision(patient, "Invalid Parameter")
     }
 
-    override fun validOAuthDetailsAndGpSystemSlowToRespond() {
+    override fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long) {
         mockingClient
                 .forVision {
                     authentication.getConfigurationRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionMockDefaults.visionConfigurationResponse)
-                            .delayedBy(Duration.ofSeconds(DELAY_BY_SECONDS))
+                            .delayedBy(Duration.ofSeconds(delayBySeconds))
                 }
     }
 

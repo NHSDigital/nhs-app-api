@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Moq.Protected;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
@@ -18,6 +21,8 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Http;
 using RichardSzalay.MockHttp;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
@@ -35,19 +40,32 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         private Mock<IEmisConfig> _configMock;
         private EmisHttpClient _httpClient;
         private IFixture _fixture;
+        private Mock<IOptions<ConfigurationSettings>> _settings;
+        private ConfigurationSettings _configurationSettings;
+        private Mock<HttpMessageHandler> mockedHandler;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
-            
+
             _mockHttpHandler = new MockHttpMessageHandler();
-            
+
             _configMock = new Mock<IEmisConfig>();
             _configMock.SetupGet(x => x.BaseUrl).Returns(BaseUri);
             _configMock.SetupGet(x => x.Version).Returns(DefaultEmisVersion);
             _configMock.SetupGet(x => x.ApplicationId).Returns(DefaultEmisApplicationId);
+
+            _settings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
+
+            _configurationSettings = _fixture.Create<ConfigurationSettings>();
+            _configurationSettings.DefaultHttpTimeoutSeconds = 2;
+            _configurationSettings.EmisExtendedHttpTimeoutSeconds = 6;
+
+            _settings
+                .Setup(x => x.Value)
+                .Returns(_configurationSettings);
 
             _httpClient = new EmisHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 
@@ -274,13 +292,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .WithEmisHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _sut.MedicalRecordGet(userPatientLinkToken, sessionId, endUserSessionId, RecordType.Allergies);
+            var response = await _sut.MedicalRecordGet(userPatientLinkToken, sessionId, endUserSessionId,
+                RecordType.Allergies);
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
             response.ExceptionErrorResponse.Should().Be(null);
         }
-        
+
         [TestMethod]
         public async Task PrescriptionsGet_ReturnsAPrescriptionsResponse_WhenValidlyRequested()
         {
@@ -300,13 +319,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             _mockHttpHandler
                 .WhenEmis(HttpMethod.Get,
-                    "prescriptionrequests?userPatientLinkToken=" + userPatientLinkToken+ "&filterFromDate="
+                    "prescriptionrequests?userPatientLinkToken=" + userPatientLinkToken + "&filterFromDate="
                     + HttpUtility.UrlEncode(fromDateTime.ToString("O", CultureInfo.InvariantCulture)) + "&filterToDate="
-                    + HttpUtility.UrlEncode(toDateTime.ToString("O",  CultureInfo.InvariantCulture)))
+                    + HttpUtility.UrlEncode(toDateTime.ToString("O", CultureInfo.InvariantCulture)))
                 .WithEmisHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _sut.PrescriptionsGet(userPatientLinkToken, sessionId, endUserSessionId, fromDateTime, toDateTime);
+            var response = await _sut.PrescriptionsGet(userPatientLinkToken, sessionId, endUserSessionId, fromDateTime,
+                toDateTime);
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
@@ -376,7 +396,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             {
                 EndUserSessionId = endUserSessionId,
             };
-            
+
             var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
@@ -444,6 +464,137 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             response.ExceptionErrorResponse.Should().Be(null);
         }
 
+        [TestMethod]
+        public async Task SessionsEndUserSessionPost_VerifyCustomTimeoutHeaderPresent()
+        {
+            // Arrange
+            SetupMockedHandlerEmisForEmisCustomTimeout();
+            
+            // Act
+            await _sut.SessionsEndUserSessionPost();
+
+            // Assert
+            VerifyCustomTimeoutPresentInRequest();
+        }
+        
+        [TestMethod]
+        public async Task NhsUserPost_VerifyCustomTimeoutHeaderPresent()
+        {
+            // Arrange
+            SetupMockedHandlerEmisForEmisCustomTimeout();
+            
+            const string endUserSessionId = "2ijfd";
+
+            var emisUserSession = new EmisUserSession
+            {
+                EndUserSessionId = endUserSessionId,
+            };
+
+            var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
+            var requestBody = _fixture.Create<AddNhsUserRequest>();
+            
+            // Act
+            await _sut.NhsUserPost(emisHeaderParameters, requestBody);
+
+            // Assert
+            VerifyCustomTimeoutPresentInRequest();
+        }
+        
+        [TestMethod]
+        public async Task VerificationPost_VerifyCustomTimeoutHeaderPresent()
+        {
+            // Arrange
+            const string endUserSessionId = "2ijfd";
+            const string nhsNumber = "nhsNumber123";
+            const string odsCode = "odsCode";
+            const string token = "token1";
+
+            SetupMockedHandlerEmisForEmisCustomTimeout();
+            
+            var emisUserSession = new EmisUserSession
+            {
+                EndUserSessionId = endUserSessionId,
+            };
+
+            var addVerificationRequest = new AddVerificationRequest
+            {
+                NhsNumber = nhsNumber,
+                NationalPracticeCode = odsCode,
+                Token = token,
+            };
+
+            var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
+            
+            // Act
+            await _sut.VerificationPost(emisHeaderParameters, addVerificationRequest);
+
+            // Assert
+            VerifyCustomTimeoutPresentInRequest();
+        }
+        
+        [TestMethod]
+        public async Task CoursesGet_VerifyDefaultTimeIsUsed()
+        {
+            // Arrange
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+
+            SetupMockedHandlerEmisForEmisCustomTimeout();
+            
+            // Act
+            await _sut.CoursesGet(userPatientLinkToken, sessionId, endUserSessionId);
+
+            // Assert
+            mockedHandler.Protected().Verify(
+                "SendAsync",
+                Times.Once(),
+                ItExpr.Is<HttpRequestMessage>(req =>
+                    req.Properties.Count == 0
+                ),
+                ItExpr.IsAny<CancellationToken>()
+            );
+        }
+
+        private void SetupMockedHandlerEmisForEmisCustomTimeout()
+        {
+            mockedHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            mockedHandler
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )                
+                .ReturnsAsync(new HttpResponseMessage()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("Anything"),
+                })
+                .Verifiable();
+
+            var httpClient = new EmisHttpClient(new HttpClient(mockedHandler.Object), _configMock.Object);
+
+            _fixture.Inject(_configMock);
+            _fixture.Inject(httpClient);
+
+            _sut = _fixture.Create<EmisClient>();
+        }
+
+        private void VerifyCustomTimeoutPresentInRequest()
+        {
+            mockedHandler.Protected().Verify(
+                "SendAsync",
+                Times.Once(),
+                ItExpr.Is<HttpRequestMessage>(req =>
+                    req.Properties.Count == 1
+                    && (int)req.Properties[HttpRequestConstants.CustomTimeout]
+                    == _configurationSettings.EmisExtendedHttpTimeoutSeconds
+                ),
+                ItExpr.IsAny<CancellationToken>()
+            );
+        }
+          
         public void Dispose()
         {
             _mockHttpHandler.Dispose();

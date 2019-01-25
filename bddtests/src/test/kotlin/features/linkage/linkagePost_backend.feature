@@ -11,6 +11,20 @@ Feature: Linkage Post Key
     Then I receive a valid linkage response
     And the IM1 Connection Token is in the cache
 
+  Scenario: Linkage request POST after delayed response from EMIS and an Im1 Connection Token is cached
+    Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
+    And no IM1 Connection Token is currently cached
+    When I call the EMIS Linkage POST endpoint which responds after 11 seconds
+    Then I receive a valid linkage response
+    And the IM1 Connection Token is in the cache
+
+  Scenario: Linkage request EMIS POST connection closes and an Im1 Connection Token is cached
+    Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
+    And no IM1 Connection Token is currently cached
+    When I call the EMIS Linkage POST endpoint CID connection times out
+    And Wait for the request to complete
+    Then the IM1 Connection Token is in the cache
+
   Scenario: Linkage request POST for TPP returns success with LinkageResponse and an Im1 Connection Token is cached
     Given I have valid TPP linkage details for posting
     And no IM1 Connection Token is currently cached

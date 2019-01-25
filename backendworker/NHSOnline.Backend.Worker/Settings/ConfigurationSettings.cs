@@ -17,6 +17,8 @@ namespace NHSOnline.Backend.Worker.Settings
 
         public int DefaultHttpTimeoutSeconds { get; set; }
         
+        public int EmisExtendedHttpTimeoutSeconds { get; set; }
+        
         public int MinimumAppAge { get; set; }
         
         public int MinimumLinkageAge { get; set; }
@@ -67,6 +69,11 @@ namespace NHSOnline.Backend.Worker.Settings
             if (DefaultHttpTimeoutSeconds == default(int))
             {
                 throw new ConfigurationNotFoundException(nameof(DefaultHttpTimeoutSeconds));
+            }
+            
+            if (EmisExtendedHttpTimeoutSeconds == default(int))
+            {
+                throw new ConfigurationNotFoundException(nameof(EmisExtendedHttpTimeoutSeconds));
             }
             
             if (MinimumAppAge == default(int))

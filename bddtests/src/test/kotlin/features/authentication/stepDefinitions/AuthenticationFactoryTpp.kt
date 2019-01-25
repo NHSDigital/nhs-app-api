@@ -8,8 +8,6 @@ import mocking.tpp.models.Error
 import models.Patient
 import java.time.Duration
 
-private const val DELAY_BY_SECONDS = 31L
-
 class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
 
     override fun patientWithIncompleteResponse(patient: Patient) {
@@ -55,11 +53,11 @@ class AuthenticationFactoryTpp : AuthenticationFactory("TPP") {
         createInvalidLinkageTest(patient)
     }
 
-    override fun validOAuthDetailsAndGpSystemSlowToRespond() {
+    override fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long) {
         mockingClient.forTpp {
             authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
                     .respondWithSuccess(AuthenticateReply())
-                    .delayedBy(Duration.ofSeconds(DELAY_BY_SECONDS))
+                    .delayedBy(Duration.ofSeconds(delayBySeconds))
         }
     }
 

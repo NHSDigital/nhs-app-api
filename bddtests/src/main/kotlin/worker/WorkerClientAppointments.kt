@@ -69,7 +69,7 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
 
         val response = sender.sendAsync(httpDelete)
         httpDelete.releaseConnection()
-        return response
+        return response!!
     }
 
     fun postAppointment(appointmentBookRequest: AppointmentBookRequest, sessionCookie: Cookie? = null): HttpResponse {
@@ -82,6 +82,6 @@ class WorkerClientAppointments(val config: Config, val sender: WorkerClientSende
 
         val response = sender.sendAsync(httpPost, null)
         httpPost.releaseConnection()
-        return response
+        return response!!
     }
 }

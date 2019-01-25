@@ -18,7 +18,7 @@ class LinkageFactoryMicrotest : LinkageFactory("MICROTEST") {
     override val linkageDateOfBirthFormat = DateTimeFormats.backendDateTimeFormatWithoutTimezone
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
-                                       linkageResult: LinkageResult) {
+                                       linkageResult: LinkageResult, delay: Long?) {
     }
 
     override fun mockLinkageGetResult(linkageInformationFacade: LinkageInformationFacade,

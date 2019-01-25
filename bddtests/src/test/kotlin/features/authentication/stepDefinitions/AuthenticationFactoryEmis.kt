@@ -9,8 +9,6 @@ import models.Patient
 import org.junit.Assert
 import java.time.Duration
 
-private const val DELAY_BY_SECONDS = 31L
-
 class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
 
     override fun patientWithIncompleteResponse(patient: Patient) {
@@ -52,9 +50,9 @@ class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
         createInvalidLinkageTest(patient) { respondWithIncorrectSurnameOrDateOfBirth() }
     }
 
-    override fun validOAuthDetailsAndGpSystemSlowToRespond() {
+    override fun validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds: Long) {
         mockingClient.forEmis { authentication.endUserSessionRequest()
-                .respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(DELAY_BY_SECONDS)) }
+                .respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(delayBySeconds)) }
         mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, associationType) }
     }
 

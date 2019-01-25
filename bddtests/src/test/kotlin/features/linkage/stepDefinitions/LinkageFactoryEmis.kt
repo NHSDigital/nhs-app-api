@@ -12,6 +12,7 @@ import mocking.emis.models.AddVerificationRequest
 import mocking.emis.models.AddVerificationResponse
 import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade
+import java.time.Duration
 
 class LinkageFactoryEmis : LinkageFactory("EMIS") {
     override val validOtherLinkageDetails = LinkageInformationFacade(
@@ -37,7 +38,7 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
     override val linkageDateOfBirthFormat = DateTimeFormats.backendDateTimeFormatWithoutTimezone
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
-                                       linkageResult: LinkageResult) {
+                                       linkageResult: LinkageResult, delay: Long?) {
         val linkageToPostRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyRetrieved to successfulPost(linkageInformationFacade),
                 LinkageResult.SuccessfullyCreated to successfulPost(linkageInformationFacade),
@@ -73,13 +74,15 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
 
         val response = responseFromMap(linkageToPostRequestResponse, linkageResult)
 
+
         if (response != null) {
             mockingClient.forEmis {
                 response(authentication.linkageKeyPOSTRequest(
                         AddNhsUserRequest(
                                 linkageInformationFacade.odsCode,
                                 linkageInformationFacade.nhsNumber,
-                                linkageInformationFacade.emailAddress)))
+                                linkageInformationFacade.emailAddress))
+                ).delayedBy(Duration.ofSeconds(if (delay != null) delay else 0))
             }
         }
 

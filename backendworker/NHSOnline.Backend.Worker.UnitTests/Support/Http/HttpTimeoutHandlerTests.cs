@@ -22,6 +22,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Http
         private IFixture _fixture;
         private Mock<IOptions<ConfigurationSettings>> _settings;
         private Mock<IHttpRequestIdentifier> _requestIdentifier;
+        private ConfigurationSettings _configurationSettings;
 
         [TestInitialize]
         public void TestInitialize()
@@ -32,12 +33,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Http
             _requestIdentifier = _fixture.Freeze<Mock<IHttpRequestIdentifier>>();
             _settings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
             
-            var configurationSettings = _fixture.Create<ConfigurationSettings>();
-            configurationSettings.DefaultHttpTimeoutSeconds = 2;
+            _configurationSettings = _fixture.Create<ConfigurationSettings>();
+            _configurationSettings.DefaultHttpTimeoutSeconds = 2;
+            _configurationSettings.EmisExtendedHttpTimeoutSeconds = 6;
 
             _settings
                 .Setup(x => x.Value)
-                .Returns(configurationSettings);
+                .Returns(_configurationSettings);
         }
 
         [TestMethod]
@@ -76,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Http
         }
         
         [TestMethod]
-        public async Task SendAsyc_ReturnsHttpResponseMessage_WhenSuccessfull()
+        public async Task SendAsyc_ReturnsHttpResponseMessage_WhenSuccessful()
         {
             var httpRequestMessage = _fixture.Create<HttpRequestMessage>();
             var httpContent = _fixture.Create<HttpContent>();
@@ -89,6 +91,70 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Http
             _mockHttpHandler.Fallback.Respond(async () =>
             {
                 await Task.Delay(10000);
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            });
+
+            var systemUnderTest = _fixture.Create<HttpTimeoutHandler<IHttpRequestIdentifier>>();
+            systemUnderTest.InnerHandler = _mockHttpHandler;
+
+            var invoker = new HttpMessageInvoker(systemUnderTest);
+            var result = await invoker.SendAsync(httpRequestMessage, new CancellationToken());
+
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
+            result.Content.Should().BeEquivalentTo(httpContent);
+            
+            _mockHttpHandler.Dispose();
+        }
+        
+        [TestMethod]
+        public async Task SendAsyc_EmisExtendedTimeout_TimeoutGreaterThanDefault_Successful()
+        {
+            var httpRequestMessage = _fixture.Create<HttpRequestMessage>();
+            var httpContent = _fixture.Create<HttpContent>();
+            
+            MockHttpMessageHandler _mockHttpHandler = new MockHttpMessageHandler();
+            _mockHttpHandler
+                .When(httpRequestMessage.Method, httpRequestMessage.RequestUri.ToString())
+                .Respond(httpContent);
+
+            httpRequestMessage.Properties.Add(HttpRequestConstants.CustomTimeout,
+                _configurationSettings.EmisExtendedHttpTimeoutSeconds);
+            
+            _mockHttpHandler.Fallback.Respond(async () =>
+            {
+                await Task.Delay(3000);
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            });
+
+            var systemUnderTest = _fixture.Create<HttpTimeoutHandler<IHttpRequestIdentifier>>();
+            systemUnderTest.InnerHandler = _mockHttpHandler;
+
+            var invoker = new HttpMessageInvoker(systemUnderTest);
+            var result = await invoker.SendAsync(httpRequestMessage, new CancellationToken());
+
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
+            result.Content.Should().BeEquivalentTo(httpContent);
+            
+            _mockHttpHandler.Dispose();
+        }
+        
+        [TestMethod]
+        public async Task SendAsyc_EmisExtendedTimeout_TimeoutEmisExtendedTimeout_ThrowException()
+        {
+            var httpRequestMessage = _fixture.Create<HttpRequestMessage>();
+            var httpContent = _fixture.Create<HttpContent>();
+            
+            MockHttpMessageHandler _mockHttpHandler = new MockHttpMessageHandler();
+            _mockHttpHandler
+                .When(httpRequestMessage.Method, httpRequestMessage.RequestUri.ToString())
+                .Respond(httpContent);
+
+            httpRequestMessage.Properties.Add(HttpRequestConstants.CustomTimeout,
+                _configurationSettings.EmisExtendedHttpTimeoutSeconds);
+            
+            _mockHttpHandler.Fallback.Respond(async () =>
+            {
+                await Task.Delay(8000);
                 return new HttpResponseMessage(HttpStatusCode.OK);
             });
 

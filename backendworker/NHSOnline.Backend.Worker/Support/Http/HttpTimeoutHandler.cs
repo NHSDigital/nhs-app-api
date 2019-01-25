@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace NHSOnline.Backend.Worker.Support.Http
         private readonly ILogger<HttpTimeoutHandler<TRequestIdentifier>> _logger;
         private readonly IOptions<ConfigurationSettings> _settings;
         private readonly IHttpRequestIdentifier _requestIdentifier;
-        private readonly TimeSpan _timeOut;
+        private readonly TimeSpan _defaultTimeout;
 
         public HttpTimeoutHandler(ILogger<HttpTimeoutHandler<TRequestIdentifier>> logger, IOptions<ConfigurationSettings> settings
             , TRequestIdentifier requestIdentifier)
@@ -21,13 +22,18 @@ namespace NHSOnline.Backend.Worker.Support.Http
             _logger = logger;
             _settings = settings;
             _requestIdentifier = requestIdentifier;
-            _timeOut = TimeSpan.FromSeconds(_settings.Value.DefaultHttpTimeoutSeconds);
+            _defaultTimeout = TimeSpan.FromSeconds(_settings.Value.DefaultHttpTimeoutSeconds);
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            using (var cts = GetCancellationTokenSource(cancellationToken))
+            object value = "";
+             var timeOut = request.Properties.TryGetValue(HttpRequestConstants.CustomTimeout, out value)
+                ? TimeSpan.FromSeconds((int) value)
+                : _defaultTimeout;
+
+            using (var cts = GetCancellationTokenSource(timeOut, cancellationToken))
             {
                 try
                 {
@@ -43,15 +49,15 @@ namespace NHSOnline.Backend.Worker.Support.Http
             }
         }
         
-        private CancellationTokenSource GetCancellationTokenSource(CancellationToken cancellationToken)
+        private static CancellationTokenSource GetCancellationTokenSource(TimeSpan timeOut, CancellationToken cancellationToken)
         {
-            if (_timeOut == Timeout.InfiniteTimeSpan)
+            if (timeOut == Timeout.InfiniteTimeSpan)
             {
                 return null;
             }
 
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            cts.CancelAfter(_timeOut);
+            cts.CancelAfter(timeOut);
             return cts;
         }
     }

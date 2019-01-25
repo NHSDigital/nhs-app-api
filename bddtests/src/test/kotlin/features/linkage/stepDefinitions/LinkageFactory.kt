@@ -17,7 +17,9 @@ abstract class LinkageFactory(protected val gpSystem: String) {
 
     abstract fun mockLinkageGetResult(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult)
 
-    abstract fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult)
+    abstract fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
+                                       linkageResult: LinkageResult,
+                                       delay: Long?)
 
     abstract val validLinkageDetails: LinkageInformationFacade
 

@@ -159,12 +159,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         AuthenticationFactory.getForSupplier(gpSystem).validOAuthDetailsCidConnectionTokenFailsToAuthenticate()
     }
 
-    @Given("^I have valid OAuth details and (.*) fails to respond in 30 seconds$")
-    fun iHaveValidOAuthDetailsAndEmisFailsToRespondInThirtySeconds(gpSystem: String) {
+    @Given("^I have valid OAuth details and (.*) fails to respond in (\\d+) seconds$")
+    fun iHaveValidOAuthDetailsAndEmisFailsToRespondInXSeconds(gpSystem: String, delayBySeconds: Int) {
 
-        mockingClient = SerenityHelpers.getMockingClient()
-        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
-        AuthenticationFactory.getForSupplier(gpSystem).validOAuthDetailsAndGpSystemSlowToRespond()
+            mockingClient = SerenityHelpers.getMockingClient()
+            CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
+            AuthenticationFactory.getForSupplier(gpSystem)
+                    .validOAuthDetailsAndGpSystemSlowToRespond(delayBySeconds.toLong())
     }
 
     @Given("^I have a new (.+) patient with Nhs Numbers of (.*)$")

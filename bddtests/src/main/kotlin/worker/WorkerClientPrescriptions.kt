@@ -32,7 +32,7 @@ class WorkerClientPrescriptions(val config: Config, val sender: WorkerClientSend
 
         val response = sender.sendAsync(httpPost)
         httpPost.releaseConnection()
-        return response
+        return response!!
     }
 
     fun getCoursesConnection(): CoursesListResponse {

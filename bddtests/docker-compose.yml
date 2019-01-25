@@ -35,6 +35,7 @@ services:
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
       - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/
+      - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=10
       - VISION_PFS_PATH=pfs/
       - VISION_LINKAGE_PATH=linkage/
       - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
@@ -91,6 +92,7 @@ services:
       - BACKENDWORKER_RUNMODE=cid
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8084
+      - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=15
       - PORT=8084
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/

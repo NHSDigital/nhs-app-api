@@ -90,8 +90,8 @@ Feature: Session Registration
     When I create a user session
     Then I get a "Bad Gateway" error
 
-  Scenario Outline: <GP System> fails to respond in 30 seconds
-    Given I have valid OAuth details and <GP System> fails to respond in 30 seconds
+  Scenario Outline: <GP System> fails to respond in 31 seconds
+    Given I have valid OAuth details and <GP System> fails to respond in 31 seconds
     When I create a user session
     Then I get a "Gateway Timeout" error
 

@@ -12,6 +12,6 @@ class WorkerClientSession(val config: Config, val sender: WorkerClientSender, va
 
         val response = sender.sendAsync(httpPost)
         httpPost.releaseConnection()
-        return response
+        return response!!
     }
 }

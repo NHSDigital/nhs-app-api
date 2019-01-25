@@ -34,7 +34,7 @@ class LinkageFactoryTpp:  LinkageFactory("TPP") {
     override val linkageDateOfBirthFormat = DateTimeFormats.backendDateTimeFormatWithoutTimezone
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
-                                       linkageResult: LinkageResult) {
+                                       linkageResult: LinkageResult, delay: Long?) {
 
         val linkageToPostRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyCreated to successfulPost(linkageInformationFacade),

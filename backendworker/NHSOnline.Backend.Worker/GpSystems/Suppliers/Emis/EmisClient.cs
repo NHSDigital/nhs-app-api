@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -7,15 +6,15 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Http;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
@@ -49,25 +48,28 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string UsersNhsPath = "users/nhs";
 
         private readonly EmisHttpClient _httpClient;
-        
+        private readonly IOptions<ConfigurationSettings> _settings;
+
         private readonly ILogger<EmisClient> _logger;
         private readonly IJsonResponseParser _responseParser;
 
         public EmisClient(EmisHttpClient httpClient,
             TimeZoneConverter localTimeZoneConverter,
             ILogger<EmisClient> logger,
-            IJsonResponseParser responseParser)
+            IJsonResponseParser responseParser,
+            IOptions<ConfigurationSettings> settings)
         {
             _logger = logger;
             _localTimeZoneConverter = localTimeZoneConverter;
             _httpClient = httpClient;
-
+            _settings = settings;
             _responseParser = responseParser;
         }
 
         public async Task<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost()
         {
-            return await Post<SessionsEndUserSessionPostResponse>(SessionsEndUserSessionPath);
+            return await Post<SessionsEndUserSessionPostResponse>(
+                SessionsEndUserSessionPath, customTimeout: _settings.Value.EmisExtendedHttpTimeoutSeconds);
         }
 
         public async Task<EmisApiObjectResponse<SessionsPostResponse>> SessionsPost(string endUserSessionId,
@@ -218,13 +220,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             EmisHeaderParameters headerParameters, AddVerificationRequest addVerificationRequest)
         {
             return await Post<AddVerificationRequest, AddVerificationResponse>(
-                addVerificationRequest, MeVerificationsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
+                addVerificationRequest, MeVerificationsPath,
+                headerParameters.EndUserSessionId,
+                headerParameters.SessionId,
+                _settings.Value.EmisExtendedHttpTimeoutSeconds);
         }
 
         public async Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(EmisHeaderParameters headerParameters, AddNhsUserRequest addNhsUserRequest)
         {
             return await Post<AddNhsUserRequest, AddNhsUserResponse>(
-                addNhsUserRequest, UsersNhsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
+                addNhsUserRequest, UsersNhsPath,
+                headerParameters.EndUserSessionId,
+                headerParameters.SessionId,
+                _settings.Value.EmisExtendedHttpTimeoutSeconds);
         }
         
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,
@@ -239,16 +247,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Get<TResponse>(string path,
-            string endUserSessionId = null, string sessionId = null)
+            string endUserSessionId = null, string sessionId = null, int? customTimeout = null)
         {
             var request = BuildEmisRequest(HttpMethod.Get, path, endUserSessionId, sessionId);
+
+            request.CheckAndSetCustomTimeout(customTimeout);
+
             return await SendRequestAndParseResponse<TResponse>(request);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string path,
-            string endUserSessionId = null, string sessionId = null)
+            string endUserSessionId = null, string sessionId = null, int? customTimeout = null)
         {
             var request = BuildEmisRequest(HttpMethod.Post, path, endUserSessionId, sessionId);
+
+            request.CheckAndSetCustomTimeout(customTimeout);
 
             var body = JsonConvert.SerializeObject(model);
             request.Content = new StringContent(body, Encoding.UTF8, "application/json");
@@ -257,9 +270,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Post<TResponse>(string path,
-            string endUserSessionId = null, string sessionId = null)
+            string endUserSessionId = null, string sessionId = null, int? customTimeout = null)
         {
             var request = BuildEmisRequest(HttpMethod.Post, path, endUserSessionId, sessionId);
+
+            request.CheckAndSetCustomTimeout(customTimeout);
 
             return await SendRequestAndParseResponse<TResponse>(request);
         }

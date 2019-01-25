@@ -27,7 +27,7 @@ class LinkageFactoryVision : LinkageFactory("VISION") {
     override val linkageDateOfBirthFormat = DateTimeFormats.dateWithoutTimeFormat
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade,
-                                       linkageResult: LinkageResult) {
+                                       linkageResult: LinkageResult, delay: Long?) {
         val linkageToPostRequestResponse = hashMapOf<LinkageResult, ((VisionLinkagePOSTBuilder) -> Mapping)?>(
                 LinkageResult.SuccessfullyCreated to { get ->
                     get.respondWithSuccessfullyCreated(successfulLinkageResponse(linkageInformationFacade))

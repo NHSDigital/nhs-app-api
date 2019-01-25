@@ -39,7 +39,7 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         httpPost.entity = entity
 
         val response = sender.sendAsync(httpPost)
-        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val rd = BufferedReader(InputStreamReader(response!!.entity.content))
         val result = rd.use { it.readText() }
         httpPost.releaseConnection()
         println(result)
@@ -76,15 +76,22 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         return gson.fromJson(result, LinkageResponse::class.java)
     }
 
-    fun postLinkageKey(requestBody: CreateLinkageRequest): LinkageResponse {
+    fun postLinkageKey(requestBody: CreateLinkageRequest, timeout: Int? = null): LinkageResponse {
         val httpPost = HttpPost(config.cidBackendUrl + WorkerPaths.LinkageKey)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpPost.entity = entity
 
+        if(timeout != null) {
+            sender.setConnectionTimeout(timeout)
+        }
         val result = sender.sendAsyncAndGetResult(httpPost)
         httpPost.releaseConnection()
         println(result)
-        return gson.fromJson<LinkageResponse>(result, LinkageResponse::class.java)
+        if(result !=  null) {
+            return gson.fromJson<LinkageResponse>(result, LinkageResponse::class.java)
+        } else {
+            return LinkageResponse("default", "default", "default")
+        }
     }
 }
