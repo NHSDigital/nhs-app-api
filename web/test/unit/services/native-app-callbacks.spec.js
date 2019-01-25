@@ -16,6 +16,7 @@ describe('NATIVE CALLBACKS', () => {
     { fn: 'resetPageFocus' },
     { fn: 'goToLoginOptions' },
     { fn: 'fetchNativeAppVersion' },
+    { fn: 'attemptBiometricLogin' },
     {
       fn: 'updateHeaderText',
       param: 'headerText',

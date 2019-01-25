@@ -152,6 +152,15 @@ export default {
     return false;
   },
 
+  attemptBiometricLogin() {
+    const app = window.nativeApp;
+    if (app && app.attemptBiometricLogin) {
+      app.attemptBiometricLogin();
+      return true;
+    }
+    return false;
+  },
+
   storeBetaCookie() {
     const app = window.nativeApp;
     if (app && app.storeBetaCookie) {

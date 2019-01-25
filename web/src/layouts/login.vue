@@ -24,6 +24,8 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import SessionExpiredBanner from '@/components/SessionExpiredBanner';
+import NativeCallbacks from '@/services/native-app';
+
 import NativeVersionSetup from '../services/nativeVersionSetup';
 
 export default {
@@ -59,6 +61,11 @@ export default {
     };
   },
   mounted() {
+    if (this.$store.state.device.isNativeApp) {
+      this.$nextTick(() => {
+        NativeCallbacks.attemptBiometricLogin();
+      });
+    }
     NativeVersionSetup(this.$store, this.$route);
     window.validateSession =
       window.validateSession || (() => this.$store.dispatch('session/validate'));
