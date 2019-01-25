@@ -18,13 +18,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
     {
         private IFixture _fixture;
         private IVisionMapper<Immunisations> _mapper;
-        private ILogger<IVisionMapper<Immunisations>> _logger;
+        private ILogger<VisionImmunisationsMapper> _logger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = _fixture.Freeze<ILogger<IVisionMapper<Immunisations>>>();
+            _logger = _fixture.Freeze<ILogger<VisionImmunisationsMapper>>();
             _mapper = new VisionImmunisationsMapper(_logger);
         }
 

@@ -54,10 +54,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         public EmisClient(EmisHttpClient httpClient,
             TimeZoneConverter localTimeZoneConverter,
-            ILoggerFactory loggerFactory,
+            ILogger<EmisClient> logger,
             IJsonResponseParser responseParser)
         {
-            _logger = loggerFactory.CreateLogger<EmisClient>();
+            _logger = logger;
             _localTimeZoneConverter = localTimeZoneConverter;
             _httpClient = httpClient;
 

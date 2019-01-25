@@ -7,11 +7,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope
 {
     public class EnvelopeService : IEnvelopeService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EnvelopeService> _logger;
 
-        public EnvelopeService(ILoggerFactory loggerFactory)
+        public EnvelopeService(ILogger<EnvelopeService> logger)
         {
-            _logger = loggerFactory.CreateLogger<EnvelopeService>();
+            _logger = logger;
         }
 
         private static VisionEnvelope GetVisionEnvelope(X509Certificate2 certificate, string requestUsername)

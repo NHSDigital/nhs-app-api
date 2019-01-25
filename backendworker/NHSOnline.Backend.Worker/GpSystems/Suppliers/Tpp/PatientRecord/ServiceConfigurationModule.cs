@@ -25,6 +25,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             services.AddTransient<ITppDcrEventItemsMapper, TppDcrEventItemsMapper>();
             services.AddTransient<ITppDetailedTestResultMapper, TppDetailedTestResultMapper>();
             services.AddTransient<ITppTestResultsMapper, TppTestResultsMapper>();
+            services.AddTransient<TppPatientOverviewMapper>();
             base.ConfigureServices(services, configuration);
         }
     }

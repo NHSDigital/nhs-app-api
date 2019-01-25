@@ -22,12 +22,12 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private readonly ILogger<CitizenIdService>  _logger;
 
         public CitizenIdService(ICitizenIdClient citizenIdClient, ICitizenIdSigningKeysService citizenIdKeysService,
-            IJwtTokenService<UserProfile> idTokenService, ILoggerFactory loggerFactory)
+            IJwtTokenService<UserProfile> idTokenService, ILogger<CitizenIdService> logger)
         {
             _citizenIdClient = citizenIdClient;
             _citizenIdKeysService = citizenIdKeysService;
             _idTokenService = idTokenService;
-            _logger = loggerFactory.CreateLogger<CitizenIdService>();
+            _logger = logger;
         }
 
         [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]

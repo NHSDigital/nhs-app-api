@@ -19,14 +19,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
     {
         private IFixture _fixture;
         private ITppMyRecordMapper _mapper;
-        private ILogger<GetPatientOverviewTaskChecker> _logger;
+        private ILogger<TppPatientOverviewMapper> _logger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mapper = new TppMyRecordMapper();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = Mock.Of<ILogger<GetPatientOverviewTaskChecker>>();
+            _logger = Mock.Of<ILogger<TppPatientOverviewMapper>>();
         } 
 
         [TestMethod]

@@ -10,7 +10,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
     {
         private readonly VisionAppointmentsRetrievalService _getter;
         private readonly VisionAppointmentsBookingService _booker;
-        
         private readonly VisionAppointmentsCancellationService _canceller;
 
         public VisionAppointmentsService(

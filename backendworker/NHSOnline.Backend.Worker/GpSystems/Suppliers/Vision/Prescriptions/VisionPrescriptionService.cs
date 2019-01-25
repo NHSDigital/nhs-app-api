@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                         return new PrescriptionResult.InternalServerError();
                     }
                 }
-
+                
                 _logger.LogError($"Vision system encountered an error: { prescriptionsResponse.ErrorForLogging }");
                 return new PrescriptionResult.SupplierSystemUnavailable();
             }

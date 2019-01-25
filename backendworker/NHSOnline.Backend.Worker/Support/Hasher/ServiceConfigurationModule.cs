@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Cryptography;
 
 namespace NHSOnline.Backend.Worker.Support.Hasher
 {
@@ -7,6 +8,7 @@ namespace NHSOnline.Backend.Worker.Support.Hasher
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<SHA512CryptoServiceProvider>();
             services.AddSingleton<IHashingService, HashingService>();
             base.ConfigureServices(services, configuration);
         }

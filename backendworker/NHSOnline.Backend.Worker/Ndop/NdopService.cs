@@ -16,11 +16,11 @@ namespace NHSOnline.Backend.Worker.Ndop
 
         private const string ClaimTypeNhsNumber = "nhs_number";
         
-        public NdopService(INdopSigning ndopSigning, IConfiguration configuration, ILoggerFactory loggerFactory)
+        public NdopService(INdopSigning ndopSigning, IConfiguration configuration, ILogger<NdopService> logger)
         {
             _ndopSigning = ndopSigning;
             _configuration = configuration;
-            _logger = loggerFactory.CreateLogger<NdopService>();
+            _logger = logger;
         }
 
         public GetNdopResult GetJwtToken(string nhsNumber)

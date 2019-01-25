@@ -8,9 +8,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
 {
     public class VisionImmunisationsMapper : IVisionMapper<Immunisations>
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<VisionImmunisationsMapper> _logger;
 
-        public VisionImmunisationsMapper(ILogger logger) {
+        public VisionImmunisationsMapper(ILogger<VisionImmunisationsMapper> logger) {
             _logger = logger;
         }
 

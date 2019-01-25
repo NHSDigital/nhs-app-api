@@ -15,10 +15,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
     public class GetPatientOverviewTaskChecker : IGetPatientOverviewTaskChecker
     {
         private readonly ILogger<GetPatientOverviewTaskChecker> _logger;
+        private readonly TppPatientOverviewMapper _tppPatientOverviewMapper;
         
-        public GetPatientOverviewTaskChecker(ILogger<GetPatientOverviewTaskChecker> logger)
+        public GetPatientOverviewTaskChecker(ILogger<GetPatientOverviewTaskChecker> logger, TppPatientOverviewMapper tppPatientOverviewMapper)
         {
             _logger = logger;
+            _tppPatientOverviewMapper = tppPatientOverviewMapper;
         }
 
         public Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse)
@@ -54,7 +56,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             else
             {
                 _logger.LogDebug("Mapping TPP response to allergies and medications");
-                result = new TppPatientOverviewMapper(_logger).Map(taskResponse.Body);
+                result = _tppPatientOverviewMapper.Map(taskResponse.Body);
             }
 
             _logger.LogExit();

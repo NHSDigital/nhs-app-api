@@ -28,14 +28,14 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
         private readonly IOptions<ConfigurationSettings> _settings;
 
         public LinkageController(
-            ILoggerFactory loggerFactory,
+            ILogger<LinkageController> logger,
             IGpSystemFactory gpSystemFactory,
             IOdsCodeLookup odsCodeLookup,
             IAuditor auditor,
             IMinimumAgeValidator minimumAgeValidator,
             IOptions<ConfigurationSettings> settings)
         {
-            _logger = loggerFactory.CreateLogger<LinkageController>();
+            _logger = logger;
             _odsCodeLookup = odsCodeLookup;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;

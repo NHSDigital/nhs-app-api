@@ -8,11 +8,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
 {
     public class VisionProblemsMapper : IVisionMapper<Problems>
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<VisionProblemsMapper> _logger;
         private const string PastProblem = "PastProblem";
         private const string CurrentProblem = "CurrentProblem";
         
-        public VisionProblemsMapper(ILogger logger) {
+        public VisionProblemsMapper(ILogger<VisionProblemsMapper> logger) {
             _logger = logger;
         }
 

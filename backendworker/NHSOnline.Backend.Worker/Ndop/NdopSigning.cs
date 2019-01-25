@@ -10,15 +10,15 @@ namespace NHSOnline.Backend.Worker.Ndop
     {
         private readonly IConfiguration _configuration;
         private readonly ICertificateService _certificateService;
-        private readonly ILogger<NdopService> _logger;
+        private readonly ILogger<NdopSigning> _logger;
         
         public NdopSigning(IConfiguration configuration,
-            ILoggerFactory loggerFactory,
+            ILogger<NdopSigning> logger,
             ICertificateService certificateService)
         {
             _configuration = configuration;
             _certificateService = certificateService;
-            _logger = loggerFactory.CreateLogger<NdopService>();
+            _logger = logger;
         }
         
         public SigningCredentials GetSigningCredentials()

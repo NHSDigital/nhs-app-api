@@ -8,9 +8,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
 {
     public class VisionAllergyMapper : IVisionMapper<Allergies>
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<VisionAllergyMapper> _logger;
 
-        public VisionAllergyMapper(ILogger logger) {
+        public VisionAllergyMapper(ILogger<VisionAllergyMapper> logger) {
             _logger = logger;
         }
 

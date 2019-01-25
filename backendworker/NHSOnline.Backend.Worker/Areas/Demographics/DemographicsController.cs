@@ -17,13 +17,13 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
         private readonly IAuditor _auditor;
 
         public DemographicsController(
-            ILoggerFactory loggerFactory,
+            ILogger<DemographicsController> logger,
             IGpSystemFactory gpSystemFactory,
             IDemographicsResultVisitor<IActionResult> demographicsResultVisitor,
             IAuditor auditor)
         {
             _gpSystemFactory = gpSystemFactory;
-            _logger = loggerFactory.CreateLogger<DemographicsController>();
+            _logger = logger;
             _demographicsResultVisitor = demographicsResultVisitor;
             _auditor = auditor;
         }

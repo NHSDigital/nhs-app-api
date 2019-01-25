@@ -8,11 +8,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class GetTestResultsTaskChecker
     {
-        private readonly ILogger<EmisPatientRecordService> _logger;
+        private readonly ILogger<GetTestResultsTaskChecker> _logger;
+        EmisTestResultMapper _mapper;
         
-        public GetTestResultsTaskChecker(ILogger<EmisPatientRecordService> logger)
+        public GetTestResultsTaskChecker(ILogger<GetTestResultsTaskChecker> logger, EmisTestResultMapper mapper)
         {
             _logger = logger;
+            _mapper = mapper;
         }
         
         public TestResults Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
@@ -56,7 +58,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             }
 
             _logger.LogExit();
-            return testResults ?? new EmisTestResultMapper().Map(testResultsResponse.Body);
+            return testResults ?? _mapper.Map(testResultsResponse.Body);
         }
     }
 }

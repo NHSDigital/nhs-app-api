@@ -9,10 +9,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
     public class GetAllergiesTaskChecker
     {
         private readonly ILogger<EmisPatientRecordService> _logger;
+        private readonly EmisAllergyMapper _mapper;
         
-        public GetAllergiesTaskChecker(ILogger<EmisPatientRecordService> logger)
+        public GetAllergiesTaskChecker(ILogger<EmisPatientRecordService> logger, EmisAllergyMapper mapper)
         {
             _logger = logger;
+            _mapper = mapper;
         }
         
         public Allergies Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
@@ -56,7 +58,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             }
 
             _logger.LogExit();
-            return allergies ?? new EmisAllergyMapper().Map(allergiesResponse.Body);
+            return allergies ?? _mapper.Map(allergiesResponse.Body);
         }
     }
 }

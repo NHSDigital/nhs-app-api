@@ -15,13 +15,13 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
         private readonly IAuditor _auditor;
         
         public TestResultController(
-            ILoggerFactory loggerFactory,
+
+            ILogger<TestResultController> logger,
             IGpSystemFactory gpSystemFactory,
-            IAuditor auditor
-        )
+            IAuditor auditor)
         {
             _gpSystemFactory = gpSystemFactory;
-            _logger = loggerFactory.CreateLogger<TestResultController>();
+            _logger = logger;
             _auditor = auditor;
         }
 

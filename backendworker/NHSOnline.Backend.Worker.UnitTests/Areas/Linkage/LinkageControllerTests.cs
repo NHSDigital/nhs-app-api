@@ -384,9 +384,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             odsCodeLookupMock = odsCodeLookupMock ?? MockOdsCodeLookup();
             gpSystemFactoryMock = gpSystemFactoryMock ??
                                   MockGpSystemFactory();
-            var logger = new LoggerFactory();
+            var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
 
-            return new LinkageController(logger, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object, _mockMinimumAgeValidator.Object, _settings.Object);
+            return new LinkageController(logger.Object, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object, _mockMinimumAgeValidator.Object, _settings.Object);
         }
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(

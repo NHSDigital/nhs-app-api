@@ -10,10 +10,10 @@ using Microsoft.Extensions.Logging;
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public class TppPatientOverviewMapper
-    {       
-        private readonly ILogger<GetPatientOverviewTaskChecker> _logger;
+    {
+        private readonly ILogger<TppPatientOverviewMapper> _logger;
         
-        public TppPatientOverviewMapper(ILogger<GetPatientOverviewTaskChecker> logger)
+        public TppPatientOverviewMapper(ILogger<TppPatientOverviewMapper> logger)
         {
             _logger = logger;
         }

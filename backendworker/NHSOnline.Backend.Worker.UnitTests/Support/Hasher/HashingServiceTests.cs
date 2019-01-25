@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Support.Hasher;
+using System.Security.Cryptography;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Support.Hasher
 {
@@ -13,7 +14,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Hasher
         [TestInitialize]
         public void TestInitialise()
         {
-            _hashService = new HashingService();
+            SHA512CryptoServiceProvider provider = new SHA512CryptoServiceProvider();
+            _hashService = new HashingService(provider);
         }
 
         [TestMethod]

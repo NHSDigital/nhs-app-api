@@ -9,12 +9,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
 {
     public class VisionMedicationMapper : IVisionMapper<Medications>
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<VisionMedicationMapper> _logger;
         private const string Acute = "Acute";
         private const string CurrentRepeat = "CurrentRepeat";
         private const string DiscontinuedRepeat = "DiscontinuedRepeat";
         
-        public VisionMedicationMapper(ILogger logger)
+        public VisionMedicationMapper(ILogger<VisionMedicationMapper> logger)
         {
             _logger = logger;
         }

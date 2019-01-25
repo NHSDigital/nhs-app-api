@@ -8,11 +8,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class GetImmunisationsTaskChecker
     {
-        private readonly ILogger<EmisPatientRecordService> _logger;
+        private readonly ILogger<GetImmunisationsTaskChecker> _logger;
+        private readonly EmisImmunisationMapper _mapper;
         
-        public GetImmunisationsTaskChecker(ILogger<EmisPatientRecordService> logger)
+        public GetImmunisationsTaskChecker(ILogger<GetImmunisationsTaskChecker> logger, EmisImmunisationMapper mapper)
         {
             _logger = logger;
+            _mapper = mapper;
         }
         
         public Immunisations Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
@@ -56,7 +58,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             }
 
             _logger.LogExit();
-            return immunisations ?? new EmisImmunisationMapper().Map(immunisationsResponse.Body);
+            return immunisations ?? _mapper.Map(immunisationsResponse.Body);
         }
     }
 }

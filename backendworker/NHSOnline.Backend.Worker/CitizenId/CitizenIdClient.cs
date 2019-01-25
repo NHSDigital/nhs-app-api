@@ -33,11 +33,11 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
         public CitizenIdClient(
             CitizenIdHttpClient httpClient, 
-            ICitizenIdConfig config, 
-            ILoggerFactory loggerFactory,
+            ICitizenIdConfig config,
+            ILogger<CitizenIdClient> logger,
             IJsonResponseParser responseParser)
         {
-            _logger = loggerFactory.CreateLogger<CitizenIdClient>();
+            _logger = logger;
             _httpClient = httpClient;
             
             _responseParser = responseParser;

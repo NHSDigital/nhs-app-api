@@ -14,11 +14,34 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         private readonly IEmisClient _emisClient;
         private readonly IEmisMyRecordMapper _emisMyRecordMapper;
 
-        public EmisPatientRecordService(ILogger<EmisPatientRecordService> logger, IEmisClient emisClient, IEmisMyRecordMapper emisMyRecordMapper)
+        private readonly GetAllergiesTaskChecker _allergiesTaskChecker;
+        private readonly GetMedicationsTaskChecker _medicationsTaskChecker;
+        private readonly GetImmunisationsTaskChecker _immunistationsTaskChecker;
+        private readonly GetTestResultsTaskChecker _testResultsTaskChecker;
+        private readonly GetProblemsTaskChecker _problemsTaskChecker;
+        private readonly GetConsultationsTaskChecker _consultationsTaskChecker;
+
+        public EmisPatientRecordService(
+            ILogger<EmisPatientRecordService> logger,
+            IEmisClient emisClient, IEmisMyRecordMapper emisMyRecordMapper,
+            GetAllergiesTaskChecker allergiesTaskChecker,
+            GetMedicationsTaskChecker medicationsTaskChecker, 
+            GetImmunisationsTaskChecker immunisationsTaskChecker,
+            GetTestResultsTaskChecker testResultsTaskChecker, 
+            GetProblemsTaskChecker problemsTaskChecker,
+            GetConsultationsTaskChecker consultationsTaskChecker
+        )
         {
             _emisClient = emisClient;
             _emisMyRecordMapper = emisMyRecordMapper;
             _logger = logger;
+
+            _allergiesTaskChecker =allergiesTaskChecker;
+            _medicationsTaskChecker = medicationsTaskChecker;
+            _immunistationsTaskChecker = immunisationsTaskChecker;
+            _testResultsTaskChecker = testResultsTaskChecker;
+            _problemsTaskChecker = problemsTaskChecker;
+            _consultationsTaskChecker = consultationsTaskChecker;
         }
 
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
@@ -52,12 +75,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 _logger.LogInformation("Patient record tasks completed");
 
                 _logger.LogInformation("Checking status of all patient record tasks");
-                var allergies = new GetAllergiesTaskChecker(_logger).Check(allergiesTask);
-                var medications = new GetMedicationsTaskChecker(_logger).Check(medicationsTask);
-                var immunisations = new GetImmunisationsTaskChecker(_logger).Check(immunisationsTask);
-                var testResults = new GetTestResultsTaskChecker(_logger).Check(testResultsTask);
-                var problems = new GetProblemsTaskChecker(_logger).Check(problemsTask);
-                var consultations = new GetConsultationsTaskChecker(_logger).Check(consultationsTask);
+                var allergies = _allergiesTaskChecker.Check(allergiesTask);
+                var medications = _medicationsTaskChecker.Check(medicationsTask);
+                var immunisations = _immunistationsTaskChecker.Check(immunisationsTask);
+                var testResults = _testResultsTaskChecker.Check(testResultsTask);
+                var problems = _problemsTaskChecker.Check(problemsTask);
+                var consultations = _consultationsTaskChecker.Check(consultationsTask);
 
                 _logger.LogInformation("Mapping EMIS responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations);

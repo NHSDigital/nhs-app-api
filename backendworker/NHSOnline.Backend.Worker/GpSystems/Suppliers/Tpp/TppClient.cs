@@ -29,15 +29,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         private readonly ITppConfig _tppConfig;
         private readonly IXmlResponseParser _responseParser;
         private readonly ILogger<TppClient> _logger;
-
-        public TppClient(TppHttpClient httpClient, ITppConfig tppConfig, IXmlResponseParser responseParser,
-            ILoggerFactory loggerFactory)
+        public TppClient(TppHttpClient httpClient, ITppConfig tppConfig, IXmlResponseParser responseParser, ILogger<TppClient> logger)
         {
             _httpClient = httpClient;
             _tppConfig = tppConfig;
             _responseParser = responseParser;
 
-            _logger = loggerFactory.CreateLogger<TppClient>();
+            _logger = logger;
         }
 
         public async Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel)

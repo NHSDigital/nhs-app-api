@@ -15,12 +15,12 @@ namespace NHSOnline.Backend.Worker.Areas.Ndop
         private readonly IAuditor _auditor;
     
         public NdopController(
-            ILoggerFactory loggerFactory,
+            ILogger<NdopController> logger,
             INdopService ndopService, 
             IAuditor auditor)
         {
             _ndopService = ndopService;
-            _logger = loggerFactory.CreateLogger<NdopController>();
+            _logger = logger;
             _auditor = auditor;
         }
 
