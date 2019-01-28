@@ -766,6 +766,15 @@ export default {
         },
       },
     },
+    viewDecision: {
+      otherThings: {
+        subheader: 'Other things you can do',
+        bloodDonation: {
+          subheader: 'Register to be a blood donor',
+          body: 'If you want to give more, why not sign up to give blood? You can easily book an appointment and find your local centre via the app.',
+        },
+      },
+    },
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',

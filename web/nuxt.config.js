@@ -70,6 +70,7 @@ const config = {
     CID_AUTH_ENDPOINT: 'https://auth.ext.signin.nhs.uk/authorize',
     // Organ Donation
     ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',
+    BLOOD_DONATION_URL: 'https://my.blood.co.uk/preregister',
     // Data Opt-Out
     DATA_SHARING_URL: 'https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/',
     DATA_PREFERENCES_URL: 'https://ndopapp-int1.thunderbird.service.nhs.uk/createsession',
