@@ -110,7 +110,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 : null;
         }
 
-        private List<string> MapGiven(string firstName) =>
+        private static List<string> MapGiven(string firstName) =>
             firstName != null ? new List<string> { firstName } : null;
     }
 }

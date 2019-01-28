@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             return registrationRequest;
         }
 
-        private List<T> MapList<T>(T entry) => new List<T> { entry };
+        private static List<T> MapList<T>(T entry) => new List<T> { entry };
 
         private CodeableConcept MapConcept(string code) =>
             new CodeableConcept
