@@ -13,6 +13,11 @@ open class OrganDonationConfirmationPage : HybridPageObject() {
             page = this,
             helpfulName = "header").withText("Your decision")
 
+    val registerBloodDonorLink = HybridPageElement(
+            "//a//h2",
+            page = this,
+            helpfulName = "link").withText("Register to be a blood donor")
+
     private val decision = HybridPageElement(
             "//span",
             page = this,

@@ -1,6 +1,7 @@
 package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import pages.organDonation.OrganDonationConfirmationPage
 
 open class OrganDonationConfirmationStepDefinitions {
@@ -22,5 +23,10 @@ open class OrganDonationConfirmationStepDefinitions {
     fun theDecisionToOptInToOrganDonationHasBeenSuccessfullyCreated(){
         organDonationConfirmationPage.assertDecisionIsYes()
         organDonationConfirmationPage.assertSuccessBanner()
+    }
+    
+    @When("I select the register to be a blood donor link on the Organ Donation Confirmation page")
+    fun iSelectThePrivacyStatementLinkOnTheOrganDonationCheckDetailsPage() {
+        organDonationConfirmationPage.registerBloodDonorLink.assertIsVisible().click()
     }
 }
