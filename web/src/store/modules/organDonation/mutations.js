@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/fp/cloneDeep';
 import mapKeys from 'lodash/fp/mapKeys';
 import {
   INIT,
@@ -11,6 +12,7 @@ import {
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
   SET_SOME_ORGANS,
+  UPDATE_ORIGINAL_REGISTRATION,
   initialState,
 } from './mutation-types';
 
@@ -23,6 +25,7 @@ export default {
   },
   [LOADED](state, registration) {
     state.registration = registration;
+    state.originalRegistration = cloneDeep(state.registration);
   },
   [LOADED_REFERENCE_DATA](state, referenceData) {
     state.referenceData = referenceData;
@@ -65,5 +68,8 @@ export default {
   },
   [SET_SOME_ORGANS](state, { value, choice }) {
     state.registration.decisionDetails.choices[choice] = value;
+  },
+  [UPDATE_ORIGINAL_REGISTRATION](state) {
+    state.originalRegistration = cloneDeep(state.registration);
   },
 };

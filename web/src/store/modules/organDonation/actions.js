@@ -10,6 +10,7 @@ import {
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
   SET_SOME_ORGANS,
+  UPDATE_ORIGINAL_REGISTRATION,
 } from './mutation-types';
 
 export default {
@@ -31,6 +32,7 @@ export default {
     };
     const { identifier } = await this.app.$http.postV1PatientOrgandonation(request);
     commit(SET_REGISTRATION_ID, identifier);
+    commit(UPDATE_ORIGINAL_REGISTRATION);
   },
   makeDecision({ commit }, decision) {
     commit(MAKE_DECISION, decision);

@@ -11,6 +11,7 @@ import {
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
+  UPDATE_ORIGINAL_REGISTRATION,
 } from '@/store/modules/organDonation/mutation-types';
 
 describe('organ donation record mutations', () => {
@@ -35,6 +36,16 @@ describe('organ donation record mutations', () => {
       mutations[LOADED](state, registration);
       expect(state.registration).toEqual(registration);
       expect(state.registration.emailAddress).toEqual('foo@bar');
+    });
+
+    it('will set the organ donation original registration to a clone of the received value', () => {
+      const data = { nhsNumber: '12345' };
+      mutations[LOADED](state, data);
+      expect(state.originalRegistration).toEqual(data);
+
+      // Check that it is a clone
+      state.registration.nhsNumber = '45678';
+      expect(state.originalRegistration.nhsNumber).toEqual('12345');
     });
   });
 
@@ -111,6 +122,16 @@ describe('organ donation record mutations', () => {
     it('will set the organ donation registration identifier state to the received value', () => {
       mutations[SET_REGISTRATION_ID](state, 'identity');
       expect(state.registration.identifier).toEqual('identity');
+    });
+  });
+
+  describe('UPDATE_ORIGINAL_REGISTRATION', () => {
+    it('will set the originalRegistration to a deep clone of registration', () => {
+      state.registration.address.text = 'changed address';
+      state.originalRegistration.address.text = 'original address';
+      mutations[UPDATE_ORIGINAL_REGISTRATION](state);
+      expect(state.originalRegistration.address.text).toEqual(state.registration.address.text);
+      expect(state.originalRegistration.address).not.toBe(state.registration.address);
     });
   });
 });

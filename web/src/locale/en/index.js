@@ -748,6 +748,14 @@ export default {
         subheader: 'I want to donate my organs',
       },
     },
+    registered: {
+      yourDecision: {
+        subheader: 'Your decision',
+      },
+      decisionDetails: {
+        all: 'I want to donate all my organs and tissue.',
+      },
+    },
     yourChoice: {
       subheader: 'Your choice',
       description: 'You can select to donate some, or all of your organs and tissue.',

@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.info">
-    <h2>{{ $t('organDonation.reviewYourDecision.yourDecision.subheader') }}</h2>
+    <h2>{{ $t(headerKey) }}</h2>
     <p :class="$style['flex-container']">
       <component :class="$style.icon" :is="icon"/>
       <span :class="[style, $style.label]">{{ $t(decisionTextKey) }}</span>
@@ -28,6 +28,10 @@ export default {
     decisionDetails: {
       type: Object,
       default: () => {},
+    },
+    headerKey: {
+      type: String,
+      default: 'organDonation.reviewYourDecision.yourDecision.subheader',
     },
   },
   data() {

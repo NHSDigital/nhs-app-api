@@ -8,14 +8,20 @@ import {
   SET_ALL_ORGANS,
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
+  SET_REGISTRATION_ID,
+  UPDATE_ORIGINAL_REGISTRATION,
 } from '@/store/modules/organDonation/mutation-types';
 
-const createHttp = ({ result = {}, referenceData = {} } = {}) => ({
+const createHttp = ({ result = {}, referenceData = {}, identifier = 'boo' } = {}) => ({
   getV1PatientOrgandonation: jest.fn().mockImplementation(() => Promise.resolve(result)),
   getV1PatientOrgandonationReferencedata:
     jest
       .fn()
       .mockImplementation(() => Promise.resolve(referenceData)),
+  postV1PatientOrgandonation:
+    jest
+      .fn()
+      .mockImplementation(() => Promise.resolve({ identifier })),
 });
 
 describe('organ donation actions', () => {
@@ -30,7 +36,9 @@ describe('organ donation actions', () => {
     commit = jest.fn();
     $http = createHttp({ result, referenceData });
     actions.app = {
-      $http,
+      get $http() {
+        return $http;
+      },
     };
   });
 
@@ -113,6 +121,39 @@ describe('organ donation actions', () => {
     it('will commit the reference data on completion', async () => {
       await actions.getReferenceData({ commit });
       expect(commit).toHaveBeenCalledWith(LOADED_REFERENCE_DATA, referenceData);
+    });
+  });
+
+  describe('postRegistration', () => {
+    let state;
+    let expectedIdentifier;
+
+    beforeEach(async () => {
+      expectedIdentifier = '999';
+      $http = createHttp({ result, referenceData, identifier: expectedIdentifier });
+      state = {
+        additionalDetails: 'additional details',
+        registration: { nhsNumber: '12345' },
+      };
+
+      await actions.postRegistration({ commit, state });
+    });
+
+    it('will post to the `postV1PatientOrgandonation` endpoint', () => {
+      expect($http.postV1PatientOrgandonation).toHaveBeenCalledWith({
+        organDonationRegistrationRequest: {
+          additionalDetails: state.additionalDetails,
+          registration: state.registration,
+        },
+      });
+    });
+
+    it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {
+      expect(commit).toHaveBeenCalledWith(SET_REGISTRATION_ID, expectedIdentifier);
+    });
+
+    it('will commit the UPDATE_ORIGINAL_REGISTRATION mutation type', () => {
+      expect(commit).toHaveBeenCalledWith(UPDATE_ORIGINAL_REGISTRATION);
     });
   });
 

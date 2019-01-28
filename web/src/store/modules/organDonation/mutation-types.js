@@ -9,6 +9,7 @@ export const SET_FAITH_DECLARATION = 'SET_FAITH_DECLARATION';
 export const SET_SOME_ORGANS = 'SET_SOME_ORGANS';
 export const SET_PRIVACY_ACCEPTANCE = 'SET_PRIVACY_ACCEPTANCE';
 export const SET_REGISTRATION_ID = 'SET_REGISTRATION_ID';
+export const UPDATE_ORIGINAL_REGISTRATION = 'UPDATE_ORIGINAL_REGISTRATION';
 export const DECISION_NOT_FOUND = 'NotFound';
 export const DECISION_OPT_IN = 'OptIn';
 export const DECISION_OPT_OUT = 'OptOut';
@@ -17,50 +18,53 @@ export const YES = 'Yes';
 export const NO = 'No';
 export const NOT_STATED = 'NotStated';
 
+const createRegistration = () => ({
+  identifier: '',
+  nhsNumber: '',
+  nameFull: '',
+  name: {
+    title: '',
+    givenName: '',
+    surname: '',
+  },
+  gender: '',
+  dateOfBirth: '',
+  addressFull: '',
+  address: {
+    text: '',
+    postcode: '',
+  },
+  emailAddress: '',
+  decision: DECISION_NOT_FOUND,
+  decisionDetails: {
+    all: '',
+    choices: {
+      heart: 'NotStated',
+      lungs: 'NotStated',
+      kidney: 'NotStated',
+      liver: 'NotStated',
+      corneas: 'NotStated',
+      pancreas: 'NotStated',
+      tissue: 'NotStated',
+      smallBowel: 'NotStated',
+    },
+  },
+  faithDeclaration: '',
+});
+
 export const initialState = () => ({
   additionalDetails: {
     ethnicityId: '',
     religionId: '',
   },
+  originalRegistration: createRegistration(),
   referenceData: {
     ethnicities: [],
     genders: [],
     religions: [],
     titles: [],
   },
-  registration: {
-    identifier: '',
-    nhsNumber: '',
-    nameFull: '',
-    name: {
-      title: '',
-      givenName: '',
-      surname: '',
-    },
-    gender: '',
-    dateOfBirth: '',
-    addressFull: '',
-    address: {
-      text: '',
-      postcode: '',
-    },
-    emailAddress: '',
-    decision: DECISION_NOT_FOUND,
-    decisionDetails: {
-      all: '',
-      choices: {
-        heart: 'NotStated',
-        lungs: 'NotStated',
-        kidney: 'NotStated',
-        liver: 'NotStated',
-        corneas: 'NotStated',
-        pancreas: 'NotStated',
-        tissue: 'NotStated',
-        smallBowel: 'NotStated',
-      },
-    },
-    faithDeclaration: '',
-  },
+  registration: createRegistration(),
   isAccuracyAccepted: false,
   isPrivacyAccepted: false,
 });
