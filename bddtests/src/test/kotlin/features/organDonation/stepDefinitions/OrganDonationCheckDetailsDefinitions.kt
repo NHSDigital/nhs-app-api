@@ -69,6 +69,7 @@ open class OrganDonationCheckDetailsDefinitions {
             "checked")
     fun aValidationMessageIsShownIfBothOrEitherOfTheRequiredConditionsForOrganDonationAreNotChecked() {
 
+        val problem = "There's a problem"
         val accuracyValidationMessage = "You must confirm that the information provided is true, complete and accurate."
         val privacyStatementValidationMessage = "You must confirm that you have read the privacy statement " +
                 "and consent to your information being used accordingly."
@@ -80,14 +81,15 @@ open class OrganDonationCheckDetailsDefinitions {
         organDonationCheckDetailsPage.clickSubmit()
 
         organDonationCheckDetailsPage.validationBanner.assertVisible(
-                arrayListOf(accuracyValidationMessage, privacyStatementValidationMessage))
+                arrayListOf(problem, "$accuracyValidationMessage\n$privacyStatementValidationMessage"))
 
         organDonationCheckDetailsPage.accuracyCheckBox.click()
         organDonationCheckDetailsPage.accuracyCheckBox.assertChecked()
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertUnchecked()
         organDonationCheckDetailsPage.clickSubmit()
 
-        organDonationCheckDetailsPage.validationBanner.assertVisible(privacyStatementValidationMessage)
+        organDonationCheckDetailsPage.validationBanner.assertVisible(
+                arrayListOf(problem, privacyStatementValidationMessage))
 
         organDonationCheckDetailsPage.accuracyCheckBox.click()
         organDonationCheckDetailsPage.accuracyCheckBox.assertUnchecked()
@@ -95,6 +97,7 @@ open class OrganDonationCheckDetailsDefinitions {
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertChecked()
         organDonationCheckDetailsPage.clickSubmit()
 
-        organDonationCheckDetailsPage.validationBanner.assertVisible(accuracyValidationMessage)
+        organDonationCheckDetailsPage.validationBanner.assertVisible(
+                arrayListOf(problem, accuracyValidationMessage))
     }
 }

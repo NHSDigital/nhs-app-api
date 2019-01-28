@@ -1,6 +1,7 @@
 package pages.organDonation
 
 import models.Patient
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.HybridPageObject
@@ -58,6 +59,7 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
     }
 
     fun clickSubmit() {
-        clickOnButtonContainingText("Yes I want to be a donor")
+        val optIn = Serenity.sessionVariableCalled<Boolean>("ORGAN_DONATION_DECISION_OPT_IN")
+        clickOnButtonContainingText(if(optIn) "Yes I want to be a donor" else "No I do not want to be a donor")
     }
 }

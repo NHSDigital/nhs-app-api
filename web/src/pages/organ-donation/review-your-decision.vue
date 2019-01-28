@@ -1,9 +1,12 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <message-dialog v-if="showErrors" id="errors">
-      <message-text v-for="error in validationErrors" :key="error">
-        {{ $t(error) }}
+      <message-text data-purpose="error-heading">
+        {{ $t('organDonation.reviewYourDecision.errorMsgHeader') }}
       </message-text>
+      <message-list data-purpose="reason-error">
+        <li v-for="error in validationErrors" :key="error">{{ $t(error) }}</li>
+      </message-list>
     </message-dialog>
 
     <h2>{{ $t('organDonation.reviewYourDecision.header') }}</h2>
@@ -29,7 +32,7 @@
     <generic-button id="submit-button"
                     :class="[$style.button, $style.green]"
                     @click="clickSubmit">
-      {{ $t('organDonation.reviewYourDecision.submitButton') }}
+      {{ submitButtonText }}
     </generic-button>
     <generic-button id="back-button"
                     :class="[$style.button, $style.grey]"
@@ -48,6 +51,7 @@ import Confirmation from '@/components/organ-donation/Confirmation';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import FaithDetails from '@/components/organ-donation/FaithDetails';
 import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
@@ -61,6 +65,7 @@ export default {
     FaithDetails,
     GenericButton,
     MessageDialog,
+    MessageList,
     MessageText,
     YourDecision,
   },
@@ -88,6 +93,11 @@ export default {
     },
     showErrors() {
       return this.submitAttempted && !isEmpty(this.validationErrors);
+    },
+    submitButtonText() {
+      return this.isOptInDecision
+        ? this.$t('organDonation.reviewYourDecision.submitButton')
+        : this.$t('organDonation.reviewYourDecision.submitNoButton');
     },
     validationErrors() {
       const errors = [];

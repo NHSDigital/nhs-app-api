@@ -73,6 +73,9 @@ export default {
 
     a {
       display: inline-block;
+      padding-top: 0;
+      padding-bottom: 0;
+      vertical-align: baseline;
     }
   }
   .red {

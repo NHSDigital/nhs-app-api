@@ -50,7 +50,7 @@ describe('review your decision', () => {
         });
 
         it('will show a message for each validation error', () => {
-          const errorTexts = wrapper.findAll('#errors p');
+          const errorTexts = wrapper.findAll('#errors li');
           expect(errorTexts.length).toEqual(wrapper.vm.validationErrors.length);
           expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.confirmation.errors.accuracy');
           expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.confirmation.errors.privacy');
@@ -98,12 +98,26 @@ describe('review your decision', () => {
       expect(submitButton.classes()).toContain($style.button);
     });
 
-    it('will us "organDonation.reviewYourDecision.submitButton" for text', () => {
-      expect(submitButton.text())
-        .toEqual('translate_organDonation.reviewYourDecision.submitButton');
+    describe('when opt out', () => {
+      beforeEach(() => {
+        $store.state.organDonation.registration.decision = DECISION_OPT_OUT;
+      });
+
+      it('will use "organDonation.reviewYourDecision.submitNoButton" for text', () => {
+        expect(submitButton.text())
+          .toEqual('translate_organDonation.reviewYourDecision.submitNoButton');
+      });
     });
 
-    describe('both checkboxes checked', () => {
+    describe('when opt in', () => {
+      beforeEach(() => {
+        $store.state.organDonation.registration.decision = DECISION_OPT_IN;
+      });
+
+      it('will use "organDonation.reviewYourDecision.submitButton" for text', () => {
+        expect(submitButton.text())
+          .toEqual('translate_organDonation.reviewYourDecision.submitButton');
+      });
     });
   });
 

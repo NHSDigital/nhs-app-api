@@ -57,6 +57,7 @@ class OrganDonationFactory(val gpSystem: String) {
     }
 
     fun optOut(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
+        Serenity.setSessionVariable("ORGAN_DONATION_DECISION_OPT_IN").to(false)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.optOut(patient),
                 OrganDonationAdditionalDetails.fromPatient(patient))
@@ -64,6 +65,7 @@ class OrganDonationFactory(val gpSystem: String) {
     }
 
     fun optIn(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
+        Serenity.setSessionVariable("ORGAN_DONATION_DECISION_OPT_IN").to(true)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.optIn(patient),
                 OrganDonationAdditionalDetails.fromPatient(patient))
@@ -71,6 +73,7 @@ class OrganDonationFactory(val gpSystem: String) {
     }
 
     fun some(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
+        Serenity.setSessionVariable("ORGAN_DONATION_DECISION_OPT_IN").to(true)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.optIn(patient),
                 OrganDonationAdditionalDetails.fromPatient(patient))

@@ -60,22 +60,22 @@
 </template>
 
 <script>
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
-import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import GenericButton from '@/components/widgets/GenericButton';
+import GenericRadioButton from '@/components/widgets/GenericRadioButton';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageList from '@/components/widgets/MessageList';
+import MessageText from '@/components/widgets/MessageText';
 import { YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_YOUR_CHOICE, ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
 import { EnsureAllOrgansDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 
 export default {
   components: {
-    GenericRadioButton,
     GenericButton,
+    GenericRadioButton,
     MessageDialog,
-    MessageText,
     MessageList,
+    MessageText,
   },
   mixins: [EnsureAllOrgansDecision],
   data() {

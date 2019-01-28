@@ -10,7 +10,7 @@
            :aria-labelledby="aLabelledBy"
            v-model="selected"
            type="checkbox"
-           @click="check">
+           @click.prevent="check">
     <slot/>
   </div>
 </template>
