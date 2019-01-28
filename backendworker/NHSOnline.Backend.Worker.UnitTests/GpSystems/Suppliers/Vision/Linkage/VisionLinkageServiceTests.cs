@@ -227,9 +227,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
                         Body = linkageKeyPostResponse,
                     }))
                 .Verifiable();
-            
-            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(accountId, odsCode, linkageKey)).Returns(cacheKey);
-
+                     
             // Act
             var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
 
@@ -240,11 +238,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Linkage
             var successResult = (LinkageResult.SuccessfullyCreated) result;
             successResult.Response.Should().NotBeNull();
             successResult.Response.OdsCode.Should().Be(createLinkageRequest.OdsCode);
-            _im1CacheService.Verify(x => x.SaveIm1ConnectionToken(
-                cacheKey,
-                It.Is<VisionConnectionToken>(
-                    con => string.Equals(con.ApiKey, apiKey, StringComparison.Ordinal)
-                    && string.Equals(con.RosuAccountId, accountId, StringComparison.Ordinal))));
         }
 
         [TestMethod]

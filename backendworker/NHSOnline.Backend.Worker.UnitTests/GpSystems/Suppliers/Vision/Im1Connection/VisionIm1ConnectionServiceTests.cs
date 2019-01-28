@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -26,7 +27,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
         private const string AccountId = "account_id";
         private const string Surname = "surname";
         private const string LinkageKey = "key";
-        
         private readonly DateTime _dob = DateTime.Now;
         private IFixture _fixture;
         private Mock<IVisionClient> _mockVisionClient;
@@ -74,7 +74,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                             },
                         },
                     }));
-
             // Act
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -264,7 +263,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                 RosuAccountId = AccountId,
                 ApiKey = apiKey,
             };
-            
+
             var patientConfiguration = _fixture.Create<PatientConfiguration>();
 
             _mockVisionClient.Setup(x =>
@@ -286,17 +285,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                             },
                         },
                     }));
-            
+
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
                 AccountId = AccountId,
-                DateOfBirth  = _dob,
+                DateOfBirth = _dob,
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
 
-            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey)).Returns(cacheKey);
+            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey))
+                .Returns(cacheKey);
             _im1CacheService
                 .Setup(x => x.GetIm1ConnectionToken<VisionConnectionToken>(cacheKey))
                 .Returns(Task.FromResult(Option.Some(connectionToken)))
@@ -307,10 +307,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
-            
+
             _mockVisionClient.Verify(x =>
-                    x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()), Times.Never);
-            _im1CacheService.Verify(x => x.SaveIm1ConnectionToken(It.IsAny<string>(), It.IsAny<VisionConnectionToken>()), Times.Never);
+                    x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()),
+                Times.Never);
+            _im1CacheService.Verify(
+                x => x.SaveIm1ConnectionToken(It.IsAny<string>(), It.IsAny<VisionConnectionToken>()), Times.Never);
         }
 
         [TestMethod]
@@ -376,7 +378,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                 Surname = Surname
             };
 
-            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey)).Returns(cacheKey).Verifiable();
+            _im1CacheKeyGenerator.Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey))
+                .Returns(cacheKey).Verifiable();
             _im1CacheService
                 .Setup(x => x.GetIm1ConnectionToken<VisionConnectionToken>(cacheKey))
                 .Returns(Task.FromResult(Option.None<VisionConnectionToken>()))
@@ -393,8 +396,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
                 cacheKey,
                 It.Is<VisionConnectionToken>(
                     con => string.Equals(con.ApiKey, apiKey, StringComparison.Ordinal)
-                    && string.Equals(con.RosuAccountId, AccountId, StringComparison.Ordinal)
-                    && string.Equals(con.Im1CacheKey, cacheKey, StringComparison.Ordinal))));
+                           && string.Equals(con.RosuAccountId, AccountId, StringComparison.Ordinal)
+                           && string.Equals(con.Im1CacheKey, cacheKey, StringComparison.Ordinal))));
         }
 
         [TestMethod]
@@ -402,13 +405,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
         {
             // Arrange
             const string errorCode = "-15";
-            const string errorDescription = "Record currently unavailable - please try again later or contact your Practice: VOSUsers record is locked, is patient selected in registration?";
+            const string errorDescription =
+                "Record currently unavailable - please try again later or contact your Practice: VOSUsers record is locked, is patient selected in registration?";
             _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
                 AccountId = AccountId,
-                DateOfBirth  = _dob,
+                DateOfBirth = _dob,
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
@@ -419,7 +423,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
         }
-        
+
         [TestMethod]
         public async Task Register_UserAlreadyRegistered()
         {
@@ -431,18 +435,52 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             {
                 OdsCode = DefaultOdsCode,
                 AccountId = AccountId,
-                DateOfBirth  = _dob,
+                DateOfBirth = _dob,
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
-            
+
             // Act
             var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
         }
-        
+
+        [TestMethod]
+        public async Task Register_WhenPostLinkAccount_ThrowsSocketException_AccountAlreadyExists()
+        {
+            // Arrange
+            var cacheKey = _fixture.Create<string>();
+
+            var request = new PatientIm1ConnectionRequest
+            {
+                OdsCode = DefaultOdsCode,
+                AccountId = AccountId,
+                DateOfBirth = _dob,
+                LinkageKey = LinkageKey,
+                Surname = Surname
+            };
+
+            _mockVisionClient.Setup(x =>
+                    x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()))
+                .Throws<SocketException>();
+
+            _im1CacheKeyGenerator
+                .Setup(x => x.GenerateCacheKey(request.AccountId, request.OdsCode, request.LinkageKey))
+                .Returns(cacheKey);
+
+            _im1CacheService
+                .Setup(x => x.GetIm1ConnectionToken<VisionConnectionToken>(cacheKey))
+                .Returns(Task.FromResult(Option.None<VisionConnectionToken>()));
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
+        }
+
         [TestMethod]
         public async Task Register_IncorrectDetailsProvided()
         {
@@ -454,7 +492,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             {
                 OdsCode = DefaultOdsCode,
                 AccountId = AccountId,
-                DateOfBirth  = _dob,
+                DateOfBirth = _dob,
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
@@ -477,7 +515,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             {
                 OdsCode = DefaultOdsCode,
                 AccountId = AccountId,
-                DateOfBirth  = _dob,
+                DateOfBirth = _dob,
                 LinkageKey = LinkageKey,
                 Surname = Surname
             };
@@ -488,7 +526,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
         }
-        
+
         private Mock<IVisionClient> PostLinkMockError(string errorCode, string errorDescription)
         {
             _mockVisionClient.Setup(x =>

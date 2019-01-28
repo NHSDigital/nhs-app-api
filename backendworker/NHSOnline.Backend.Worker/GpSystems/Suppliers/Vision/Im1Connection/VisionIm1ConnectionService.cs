@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
@@ -88,7 +89,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                 else
                 {
                     var dob = request.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    var linkAccountRes = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
+                    
+                    VisionPFSClient.VisionApiObjectResponse<ServiceContentRegisterResponse> linkAccountRes;
+                    
+                    try
+                    {
+                        linkAccountRes = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
+                    }
+                    catch (SocketException ex)
+                    {
+                        _logger.LogError(ex, $"Vision user with AccountId:{request.AccountId} throwing a Socket Exception.  Possibly already linked." + ex.ToString() );
+                        return new Im1ConnectionRegisterResult.AccountAlreadyExists();
+                    }
+
                     if (linkAccountRes.HasErrorResponse)
                     {
                         return GetCorrectRegisterErrorResult(linkAccountRes);

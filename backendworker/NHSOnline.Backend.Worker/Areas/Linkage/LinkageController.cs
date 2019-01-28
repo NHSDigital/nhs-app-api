@@ -59,11 +59,12 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             try
             {
                 _logger.LogEnter();
-
+                            
                 if (string.IsNullOrWhiteSpace(odsCode))
                 {
                     return BadRequest();
                 }
+                odsCode = OdsCodeMassager.CheckOdsCode(odsCode);
 
                 var getLinkageRequest = new GetLinkageRequest()
                 {
@@ -119,6 +120,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                 {
                     return BadRequest();
                 }
+                createLinkageRequest.OdsCode = OdsCodeMassager.CheckOdsCode(createLinkageRequest.OdsCode);
 
                 var gpSystemOption = await GetGpSystem(createLinkageRequest.OdsCode);
                 if (!gpSystemOption.HasValue)

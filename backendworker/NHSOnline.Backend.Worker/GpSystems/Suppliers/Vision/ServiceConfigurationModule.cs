@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -7,8 +8,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
     public class ServiceConfigurationModule : Support.DependencyInjection.SupplierServiceConfigurationModule
     {
+        private readonly ILogger<ServiceConfigurationModule> _logger;
+
         public ServiceConfigurationModule(ILoggerFactory loggerFactory) : base(loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger<ServiceConfigurationModule>();
         }
 
         protected override Supplier Supplier => Supplier.Vision;
@@ -38,6 +42,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 .AddHttpMessageHandler<HttpTimeoutHandler<VisionLinkageHttpRequestIdentifier>>()
                 .AddHttpMessageHandler<HttpRequestIdentificationHandler<VisionLinkageHttpRequestIdentifier>>();
 
+            OdsCodeMassager.IsEnabled = bool.TrueString.Equals(
+                    configuration.GetOrWarn("VISION_ODS_REMAP_ENABLED", _logger),
+                    StringComparison.OrdinalIgnoreCase);
+                         
             base.ConfigureServices(services, configuration);
         }
     }

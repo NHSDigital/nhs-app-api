@@ -44,7 +44,8 @@
         "TPP_APPLICATION_VERSION": "1.0",
         "TPP_BASE_URL": "https://systmonline2.tpp-uk.com:60015/Patient/",
         "TPP_CERTIFICATE_PASSWORD": "",
-        "TPP_CERTIFICATE_PATH": "./certs/TppNhsTest.pfx"
+        "TPP_CERTIFICATE_PATH": "./certs/TppNhsTest.pfx",
+        "VISION_ODS_REMAP_ENABLED": "false"
       }
     },
     "NHSOnline.Backend.Worker": {
@@ -113,7 +114,8 @@
         "BROTHER_MAILER_URL": "",
         "BROTHER_MAILER_ADDRESSBOOK_ID": "",
         "BROTHER_MAILER_SIG": "",
-        "BROTHER_MAILER_USER_ID": ""
+        "BROTHER_MAILER_USER_ID": "",
+        "VISION_ODS_REMAP_ENABLED": "false"
       }
     },
     "NHSOnline.Backend.Worker.Bdd": {
@@ -171,7 +173,8 @@
         "VISION_SENDER_USERFULLNAME": "Name",
         "VISION_SENDER_USERIDENTITY": "65489761321654",
         "VISION_SENDER_USERNAME": "Username123123asdas",
-        "VISION_SENDER_USERROLE": "ROSU"
+        "VISION_SENDER_USERROLE": "ROSU",
+        "VISION_ODS_REMAP_ENABLED": "false"
       }
     }
   }
