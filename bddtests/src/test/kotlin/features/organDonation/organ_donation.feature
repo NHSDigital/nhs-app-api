@@ -160,6 +160,20 @@ Feature: Organ Donation
     When I select the privacy statement link on the Organ Donation Check Details page
     Then a new tab opens https://www.nhsbt.nhs.uk/privacy/
 
+  Scenario: A user can register to be a blood donor on the organ donation Confirmation page
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    When I choose to not donate my organs
+    Then the Organ Donation Decision Additional Details page is displayed
+    And I click the 'Continue' button
+    Then the Organ Donation Check Details page is displayed
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'No I do not want to be a donor' button
+    Then the Organ Donation Confirmation page is displayed
+    When I select the register to be a blood donor link on the Organ Donation Confirmation page
+    Then a new tab opens https://my.blood.co.uk/preregister
+
   Scenario: A user can navigate back through the opt out journey
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
