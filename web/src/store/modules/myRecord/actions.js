@@ -3,6 +3,8 @@ import {
   LOADED,
   LOADED_TEST_RESULTS,
   LOADED_DIAGNOSIS,
+  LOADED_EXAMINATIONS,
+  LOADED_PROCEDURES,
   LOADED_DETAILED_TEST_RESULT,
   RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
@@ -28,6 +30,18 @@ export default {
     const { response: record } =
       await this.app.$http.getV1PatientMyRecordSection({ section }) || {};
     commit(LOADED_DIAGNOSIS, { record });
+  },
+  async loadExaminations({ commit }) {
+    const section = 'Examinations';
+    const { response: record } =
+      await this.app.$http.getV1PatientMyRecordSection({ section }) || {};
+    commit(LOADED_EXAMINATIONS, { record });
+  },
+  async loadProcedures({ commit }) {
+    const section = 'Procedures';
+    const { response: record } =
+      await this.app.$http.getV1PatientMyRecordSection({ section }) || {};
+    commit(LOADED_PROCEDURES, { record });
   },
   async loadDetailedTestResult({ commit }, testResultId) {
     const { response } = await this.app.$http.getV1PatientTestResult({ testResultId }) || {};

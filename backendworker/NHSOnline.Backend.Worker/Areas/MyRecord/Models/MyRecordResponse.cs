@@ -12,6 +12,8 @@
             TppDcrEvents = new TppDcrEvents();
             Consultations = new Consultations();
             Diagnosis = new Diagnosis();
+            Examinations = new Examinations();
+            Procedures = new Procedures();
         }
         
         public bool HasSummaryRecordAccess { get; set; }
@@ -25,5 +27,7 @@
         public TppDcrEvents TppDcrEvents { get; set; }
         public Consultations Consultations { get; set; }
         public Diagnosis Diagnosis { get; set; }
+        public Examinations Examinations { get; set; }
+        public Procedures Procedures { get; set; }
     }
 }

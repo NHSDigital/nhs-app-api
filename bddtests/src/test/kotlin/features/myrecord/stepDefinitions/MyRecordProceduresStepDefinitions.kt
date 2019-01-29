@@ -4,6 +4,7 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.ProceduresFactoryVision
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.myrecord.MyRecordInfoPage
 
@@ -53,6 +54,12 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
         val section = myRecordInfoPage.getSection(heading)
         section.header.assertSingleElementPresent()
         assertEquals(message, section.firstParagraph.text)
+    }
+
+    @Then( "^I see procedures information$" )
+    fun thenISeeProceduresInformation() {
+        val sectionName = "Procedures"
+        Assert.assertTrue(myRecordInfoPage.isVisionSectionPageVisible(sectionName, sectionName))
     }
 
 }

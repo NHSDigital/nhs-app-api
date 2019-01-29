@@ -1,14 +1,9 @@
-using System;
-using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
@@ -16,39 +11,39 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.ViewMapp
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord
 {
     [TestClass]
-    public class VisionDiagnosisMapperTests
+    public class VisionProceduresMapperTests
     {
         private IFixture _fixture;
-        private VisionDiagnosisMapper _mapper;
-        private ILogger<VisionDiagnosisMapper> _logger;
+        private VisionProceduresMapper _mapper;
+        private ILogger<VisionProceduresMapper> _logger;
         private Mock<IHtmlSanitizer> _htmlSanitizer;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = _fixture.Freeze<ILogger<VisionDiagnosisMapper>>();
+            _logger = _fixture.Freeze<ILogger<VisionProceduresMapper>>();
             _htmlSanitizer = new Mock<IHtmlSanitizer>(MockBehavior.Strict);
-            _mapper = new VisionDiagnosisMapper(_logger, _htmlSanitizer.Object);
+            _mapper = new VisionProceduresMapper(_logger, _htmlSanitizer.Object);
         }
 
         [TestMethod]
-        public async Task Vision_Diagnosis_Mapper_Returns_Cleaned_Html_When_Results_Present()
+        public async Task Vision_Procedures_Mapper_Returns_Cleaned_Html_When_Results_Present()
         {
             //Arrange
-            var diagnosisHtml =
+            var proceduresHtml =
                 await EmbeddedResourceFileHelper.ReadEmbeddedResource(
-                    "NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData.Diagnosis.VariousDiagnosis.html");
+                    "NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData.Procedures.VariousProcedures.html");
             var expectedCleanMarkup =
                 await EmbeddedResourceFileHelper.ReadEmbeddedResource(
-                    "NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData.Diagnosis.CleanedDiagnosis.html");
+                    "NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData.Procedures.CleanedProcedures.html");
 
-            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns(diagnosisHtml);
-            
+            _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns(proceduresHtml);
+
             //Act
             var mappedResponse = _mapper.Map(new VisionPatientDataResponse()
             {
-                Record = diagnosisHtml
+                Record = proceduresHtml
             });
 
             //Assert

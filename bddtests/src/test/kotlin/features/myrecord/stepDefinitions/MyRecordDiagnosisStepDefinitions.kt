@@ -5,7 +5,6 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.DiagnosisFactoryVision
 import org.junit.Assert
-import org.junit.Assert.assertEquals
 import pages.myrecord.MyRecordInfoPage
 
 open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinitions() {
@@ -46,7 +45,8 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
 
     @Then( "^I see diagnosis information$" )
     fun thenISeeDiagnosisInformation() {
-        Assert.assertTrue(myRecordInfoPage.isDiagnosisPageVisible())
+        val sectionName = "Diagnosis"
+        Assert.assertTrue(myRecordInfoPage.isVisionSectionPageVisible(sectionName, sectionName))
     }
 
     @And("^an error occurred retrieving the diagnosis")
@@ -54,11 +54,5 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
         setPatientToDefaultFor("VISION")
         diagnosisFactoryVision = DiagnosisFactoryVision()
         diagnosisFactoryVision.errorRetrieving(patient)
-    }
-
-    private fun assertTextInSection(heading:String, message: String){
-        val section = myRecordInfoPage.getSection(heading)
-        section.header.assertSingleElementPresent()
-        assertEquals(message, section.firstParagraph.text)
     }
 }

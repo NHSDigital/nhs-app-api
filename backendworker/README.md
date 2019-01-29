@@ -16,8 +16,6 @@ Steps to follow:
    - web folder
    - bddtests folder
 
-If you want to run backendworker from Visual Studio or Rider then TPP_CERTIFICATE_PATH and TPP_CERTIFICATE_PASSWORD needs to be set in launchSettings.json or in IDE environment variables depends on how you run it.
-
 ### Adding Vision certificate locally
 In order to use Vision integration in your local docker environment, you need to add the Vision certificate manually and set its password in environment variables.
 
@@ -29,14 +27,6 @@ Steps to follow:
 2. Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
    - backendworker folder
    - web folder
-   
-If you want to run backendworker from Visual Studio or Rider then the following environmental variables need to be set:
-
-* VISION_APPLICATION_PROVIDER_ID: nhson001
-* VISION_CERT_PASSPHRASE: *from Keybase*
-* VISION_CERT_PATH: *path-to-backendworker*/NHSOnline.Backend.Worker/certs/vps_nhson001.pfx
-* VISION_URI: https://vs002-test.inps.co.uk/PatientFacingServices
-* VISION_USERNAME: vps-nhson001
 
 ### Running the backend worker on its own
 There are circumstances, however, when you will want to spin up the backend worker on its
@@ -47,14 +37,18 @@ and the Redis instances run the following in the backend worker directory:
 docker-compose up --build
 ```
 
-### Running Wiremock & Redis on their own
-If you need to debug the backend worker and want to run it using Visual Studio or Rider you will
-need to run Wiremock and Redis on their own.  To do this run the following in the backend
-worker directory:
+### Debugging the backendworker
+If you need to debug the backend worker and want to run it using Visual Studio, Visual Studio Code or Rider you will need to run Wiremock and Redis on their own.  To do this run the following in the backend worker directory:
 
 ```
 docker-compose -f docker-compose.stubs.yml up
 ```
+
+Secondly, you will need top copy any certificates you find inside the *gp practice details* directory in Keybase into the base of the *certs* directory inside *NHSOnline.Backend.Worker*.
+
+Finally, you will also need to create a second appsettings file called *appsettings.Development.json.* Add any values you find in *docker-compose.override.yml* to this file as well. Whenever you start the debugger, the values inside *Properties/launchSettings.json* will be combined with the files *appsettings.Development.json* to form your configuration.
+
+*appsettings.Development.json* is ignored by Git.
 
 ## Example curls to verify
 ### STUBS

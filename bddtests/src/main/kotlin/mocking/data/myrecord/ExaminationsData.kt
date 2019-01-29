@@ -1,19 +1,17 @@
 package mocking.data.myrecord
 
+import java.io.File
+import java.nio.file.Paths
+
 object ExaminationsData {
-
-    fun getVisionExaminationsDataWithNoExaminations(): String {
+    fun getVisionExaminationsDataWithMultipleResults(): String {
         val response = "<![CDATA[<root><patient>"
         val responseStringEnd = "</patient></root>]]>"
 
-        return response + responseStringEnd
-    }
+        val path = Paths.get("").toAbsolutePath().toString()
+        val fileLocation = "$path/src/main/kotlin/mocking/data/myrecord/VariousExaminations.html"
+        val html = File(fileLocation).readText()
 
-    fun getVisionTestResultsDataWithMultipleResults(): String {
-        val response = "<![CDATA[<root><patient>"
-        val responseStringEnd = "</patient></root>]]>"
-
-        return response + responseStringEnd
-
+        return response + html + responseStringEnd
     }
 }

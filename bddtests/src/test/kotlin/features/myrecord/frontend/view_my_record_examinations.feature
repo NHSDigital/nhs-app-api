@@ -1,16 +1,6 @@
 @my-record
+@vision-examinations
 Feature: View My Medical Record Information - Examinations
-
-  Scenario Outline: A <Service> user can view examinations section
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality for <Service>
-    And I am on my record information page
-    Then I see the examinations heading
-    And I see the examinations section collapsed
-
-    Examples:
-      | Service |
-      | VISION  |
 
   Scenario Outline: A <Service> user can view examinations information
     Given the my record wiremocks are initialised for <Service>
@@ -36,19 +26,7 @@ Feature: View My Medical Record Information - Examinations
       | Service |
       | VISION  |
 
-  Scenario Outline: A <Service> user has no examinations
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality for <Service>
-    And I have no examinations
-    And I am on my record information page
-    When I click the examinations section
-    Then I see a message indicating that I have no information recorded for Examinations on My Record
-
-    Examples:
-      | Service |
-      | VISION  |
-
-  Scenario Outline: An error occurs when trying to retrieve examination data from <Service>
+  Scenario Outline: An error occurs when trying to retrieve examinations data from <Service>
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And an error occurred retrieving the examinations

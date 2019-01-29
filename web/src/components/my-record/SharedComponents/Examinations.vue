@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     viewExaminations(event) {
-      event.PreventDefault();
+      event.preventDefault();
       this.$router.push(MY_RECORD_VISION_EXAMINATIONS_DETAIL.path);
     },
   },

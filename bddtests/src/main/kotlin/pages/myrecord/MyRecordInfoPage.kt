@@ -105,24 +105,24 @@ class MyRecordInfoPage : HybridPageObject() {
         return diagnosis.firstParagraph.isCurrentlyVisible
     }
 
-    fun isDiagnosisPageVisible(): Boolean {
-        val viewDiagnosisRecordsLink =
+    fun isVisionSectionPageVisible(linkText: String, sectionName: String): Boolean {
+        val sectionLink =
                 HybridPageElement(
-                        browserLocator = "//a[contains(text(),'View your Diagnosis records')]",
+                        browserLocator = "//a[contains(text(),'View your $linkText records')]",
                         androidLocator = null,
                         page = this)
 
-        viewDiagnosisRecordsLink.click()
+        sectionLink.click()
 
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS * 2)
 
-        val diagnosisPageHeader =
+        val sectionPageHeader =
                 HybridPageElement(
-                        browserLocator = "//h2[contains(text(),'Diagnosis')]",
+                        browserLocator = "//h2[contains(text(),'$sectionName')]",
                         androidLocator = null,
                         page = this)
 
-        return diagnosisPageHeader.element.isVisible
+        return sectionPageHeader.element.isVisible
     }
 
     fun isExaminationsTextMsgVisible(): Boolean {

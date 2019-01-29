@@ -1,14 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
@@ -37,7 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
         {
             // Arrange
             var testResultsHtml =
-                await ReadTestDataFile(
+                await EmbeddedResourceFileHelper.ReadEmbeddedResource(
                     "NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData.TestResults.VariousTestResults.html");
             
             // Act
@@ -56,7 +52,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
         {
             // Arrange
             var sanitizedHtml =
-                await ReadTestDataFile(
+                await EmbeddedResourceFileHelper.ReadEmbeddedResource(
                     "NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData.TestResults.VariousTestResults.html");                              
             _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns(sanitizedHtml);
             
@@ -80,7 +76,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
         {
             // Arrange
             var noTestResultsHtml =
-                await ReadTestDataFile(
+                await EmbeddedResourceFileHelper.ReadEmbeddedResource(
                     "NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData.TestResults.NoTestResults.html");          
             _htmlSanitizer.Setup(h => h.SanitizeHtml(It.IsAny<string>())).Returns(noTestResultsHtml);
         
@@ -93,17 +89,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             // Assert
             Assert.IsTrue(mappedResponse != null);
             Assert.IsTrue(string.IsNullOrEmpty(mappedResponse.RawHtml));
-        }
-
-        private static async Task<string> ReadTestDataFile(string resourceFile)
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceStream = assembly.GetManifestResourceStream(resourceFile);
-
-            using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
-            {
-                return await reader.ReadToEndAsync();
-            }
         }
     }
 }

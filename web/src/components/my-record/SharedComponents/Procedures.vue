@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     viewProcedures(event) {
-      event.PreventDefault();
+      event.preventDefault();
       this.$router.push(MY_RECORD_VISION_PROCEDURES_DETAIL.path);
     },
   },

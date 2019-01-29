@@ -56,25 +56,26 @@
     </analytics-tracked-tag>
     <diagnosis :is-collapsed="isDiagnosisCollapsed"
                :results="record.diagnosis"
-               :supplier="record.supplier"/>
+               :supplier="record.supplier" />
 
-    <analytics-tracked-tag id="examinationsHeader"
+    <analytics-tracked-tag :id="`${EXAMINATIONS}Header`"
                            :class ="[$style['record-title'],
-                                     getCollapsedState(isExaminationsCollapsed)]"
+                                     getCollapsedState(isExaminationCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="EXAMINATIONS"
                            :text="$t('my_record.examinations.sectionHeader.default')"
-                           :aria-expanded="!isExaminationsCollapsed ? 'true' : 'false'"
+                           :aria-expanded="!isExaminationCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $T('my_record.examinations.sectionHeader.default') }}
+      {{ $t('my_record.examinations.sectionHeader.default') }}
     </analytics-tracked-tag>
 
     <examinations :is-collapsed="isExaminationCollapsed"
                   :results="record.examinations"
-                  :supplier="record.supplier"/>
-    <analytics-tracked-tag id="proceduresHeader"
+                  :supplier="record.supplier" />
+
+    <analytics-tracked-tag :id="`${PROCEDURES}Header`"
                            :class ="[$style['record-title'],
                                      getCollapsedState(isProceduresCollapsed)]"
                            :click-func="myRecordSectionClick"
@@ -84,11 +85,11 @@
                            data-purpose="accordion"
                            role="button"
                            tag="a">
-      {{ $T('my_record.procedures.sectionHeader.default') }}
+      {{ $t('my_record.procedures.sectionHeader.default') }}
     </analytics-tracked-tag>
     <procedures :is-collapsed="isProceduresCollapsed"
                 :results="record.procedures"
-                :supplier="record.supplier"/>
+                :supplier="record.supplier" />
   </div>
 </template>
 
@@ -106,7 +107,7 @@ const IMMUNISATIONS = 'immunisations';
 const PROBLEMS = 'problems';
 const TESTRESULTS = 'testResults';
 const DIAGNOSIS = 'diagnosis';
-const EXAMINATIONS = 'examinations';
+const EXAMINATIONS = 'examination';
 const PROCEDURES = 'procedures';
 
 export default {
@@ -138,6 +139,8 @@ export default {
       isImmunisationsCollapsed: process.client,
       isTestResultsCollapsed: process.client,
       isDiagnosisCollapsed: process.client,
+      isExaminationCollapsed: process.client,
+      isProceduresCollapsed: process.client,
     };
   },
   mounted() {
@@ -175,12 +178,12 @@ export default {
             !this.isDiagnosisCollapsed;
           break;
         case EXAMINATIONS:
-          this.isExaminationsCollapsed =
-            !this.isExaminationsCollapsed;
+          this.isExaminationCollapsed =
+            !this.isExaminationCollapsed;
           break;
         case PROCEDURES:
           this.isProceduresCollapsed =
-            !this.isProcesduresCollapsed;
+            !this.isProceduresCollapsed;
           break;
         default:
           break;

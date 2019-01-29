@@ -6,12 +6,12 @@
           <h2>{{ $t('my_record.procedureDetails.procedureTitle') }}</h2>
         </div>
         <div :class="$style['procedures-content']">
-          <div v-if="!procedures">
+          <div v-if="!$store.state.myRecord.procedures.markup">
             <p> {{ $t('my_record.procedureDetails.noProcedureData') }}</p>
           </div>
           <div v-else :class="$style['vision-procedures']">
             <p>
-              <span v-html="procedures"/>
+              <span v-html="$store.state.myRecord.procedures.markup"/>
             </p>
           </div>
         </div>
@@ -24,7 +24,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -35,19 +34,14 @@ export default {
   components: {
     FloatingButtonBottom,
   },
+  async asyncData({ store }) {
+    await store.dispatch('myRecord/loadProcedures');
+  },
   data() {
     return {
       myRecordReturnPath: `${MYRECORD.path}#proceduresHeader`,
       noJsWarningAcceptance: JSON.stringify({ myRecord: { hasAcceptedTerms: true } }),
     };
-  },
-  computed: {
-    procedures() {
-      return this.$store.state.myRecord.record.procedures &&
-        this.$store.state.myRecord.record.procedures.rawHtml ?
-        this.$store.state.myRecord.record.procedures.rawHtml :
-        undefined;
-    },
   },
   methods: {
     onBackButtonClicked(event) {
@@ -59,8 +53,13 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style module lang="scss" scoped>
 @import '../../style/spacings';
+@import '../../style/_textstyles';
+
+h3 {
+  @include h4;
+}
 
 .vision-procedures {
   min-width: 50em;
@@ -87,6 +86,9 @@ export default {
     background-color: #ffffff;
     @include space(margin, bottom, $three);
     overflow-x: scroll;
+    display: inline-block;
+    margin-right: 2em;
+    min-width: 100%;
 }
 
 .info h2 {

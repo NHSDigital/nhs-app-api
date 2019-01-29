@@ -25,7 +25,7 @@ class ExaminationsFactoryVision {
                 patient,
                 VisionConstants.examinationsView,
                 VisionConstants.htmlResponseFormat) {
-            request -> request.respondWithSuccess(ExaminationsData.getVisionTestResultsDataWithMultipleResults())
+            request -> request.respondWithSuccess(ExaminationsData.getVisionExaminationsDataWithMultipleResults())
         }
     }
 

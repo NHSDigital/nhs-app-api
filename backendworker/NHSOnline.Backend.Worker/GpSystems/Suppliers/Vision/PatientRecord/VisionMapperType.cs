@@ -2,6 +2,6 @@
 {
     public enum VisionMapperType
     {
-        Medications, Allergies, Immunisations, Problems, TestResults, Diagnosis
+        Medications, Allergies, Immunisations, Problems, TestResults, Diagnosis, Examinations, Procedures
     }
 }

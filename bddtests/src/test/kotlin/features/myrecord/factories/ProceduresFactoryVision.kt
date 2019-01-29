@@ -20,15 +20,6 @@ class ProceduresFactoryVision {
         }
     }
 
-    fun enabledWithBlankRecord(patient: Patient) {
-        mocker.generatePatientDataResponse(
-                patient,
-                VisionConstants.proceduresView,
-                VisionConstants.htmlResponseFormat) {
-            request -> request.respondWithSuccess(ProceduresData.getVisionProceduresDataWithNoProcedures())
-        }
-    }
-
     fun enabledWithRecords(patient: Patient) {
         mocker.generatePatientDataResponse(
                 patient,

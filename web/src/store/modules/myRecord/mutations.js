@@ -3,6 +3,8 @@ import {
   LOADED,
   LOADED_TEST_RESULTS,
   LOADED_DIAGNOSIS,
+  LOADED_EXAMINATIONS,
+  LOADED_PROCEDURES,
   LOADED_DETAILED_TEST_RESULT,
   RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
@@ -23,6 +25,12 @@ export default {
   },
   [LOADED_DIAGNOSIS](state, { record }) {
     state.diagnosis = record;
+  },
+  [LOADED_EXAMINATIONS](state, { record }) {
+    state.examinations = record;
+  },
+  [LOADED_PROCEDURES](state, { record }) {
+    state.procedures = record;
   },
   [LOADED_DETAILED_TEST_RESULT](state, { hasErrored, data }) {
     state.detailedTestResult = { data, hasErrored, hasLoaded: true };

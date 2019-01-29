@@ -24,6 +24,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
         private readonly VisionProblemsMapper _problemsMapper;
         private readonly VisionTestResultsMapper _testResultsMapper;
         private readonly VisionDiagnosisMapper _diagnosisMapper;
+        private readonly VisionExaminationsMapper _examinationsMapper;
+        private readonly VisionProceduresMapper _proceduresMapper;
 
         public VisionPatientRecordService(
             ILogger<VisionPatientRecordService> logger,
@@ -35,8 +37,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             VisionImmunisationsMapper immunisationsMapper,
             VisionProblemsMapper problemsMapper,
             VisionTestResultsMapper testResultsMapper,
-            VisionDiagnosisMapper diagnosisMapper
-        )
+            VisionDiagnosisMapper diagnosisMapper, 
+            VisionExaminationsMapper examinationsMapper, 
+            VisionProceduresMapper proceduresMapper)
         {
             _logger = logger;
             _visionClient = visionClient;
@@ -48,6 +51,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             _problemsMapper = problemsMapper;
             _testResultsMapper = testResultsMapper;
             _diagnosisMapper = diagnosisMapper;
+            _examinationsMapper = examinationsMapper;
+            _proceduresMapper = proceduresMapper;
         }
 
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
@@ -63,8 +68,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                 var problemsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML ,Views.PROBLEMS));
                 var testResultsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.TEST_RESULTS));
                 var diagnosisTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.DIAGNOSIS));
+                var examinationsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.EXAM_FINDINGS));
+                var proceduresTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.PROCEDURES));
                 
-                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, problemsTask, testResultsTask, diagnosisTask);
+                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, problemsTask, testResultsTask, diagnosisTask, examinationsTask, proceduresTask);
                 _logger.LogInformation("Patient record tasks completed");
 
                 try
@@ -75,8 +82,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                     var checkedProblems = new VisionTaskChecker<Problems>(_logger, _problemsMapper, VisionMapperType.Problems).Check(problemsTask.Result);
                     var checkedTestResults = new VisionTaskChecker<TestResults>(_logger, _testResultsMapper, VisionMapperType.TestResults).Check(testResultsTask.Result);
                     var checkedDiagnosis = new VisionTaskChecker<Diagnosis>(_logger, _diagnosisMapper, VisionMapperType.Diagnosis).Check(diagnosisTask.Result);
+                    var checkedExaminations = new VisionTaskChecker<Examinations>(_logger, _examinationsMapper, VisionMapperType.Examinations).Check(examinationsTask.Result);
+                    var checkedProcedures = new VisionTaskChecker<Procedures>(_logger, _proceduresMapper, VisionMapperType.Procedures).Check(proceduresTask.Result);
                     
-                    var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems, checkedTestResults, checkedDiagnosis);
+                    var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems, checkedTestResults, checkedDiagnosis, checkedExaminations, checkedProcedures);
                     response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     
                     return new GetMyRecordResult.SuccessfullyRetrieved(response);
@@ -104,9 +113,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             {
                 return await GetTestResults(userSession);
             }
-            else if (section == VisionMapperType.Diagnosis)
+            if (section == VisionMapperType.Diagnosis)
             {
                 return await GetDiagnosisResults(userSession);
+            }
+            if (section == VisionMapperType.Examinations)
+            {
+                return await GetExaminationResults(userSession);
+            }
+            if (section == VisionMapperType.Procedures)
+            {
+                return await GetProcedureResults(userSession);
             }
             
             return new GetMyRecordSectionResult.InvalidRequest();
@@ -114,7 +131,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 
         private async Task<GetMyRecordSectionResult> GetTestResults(UserSession userSession)
         {
-            return await GetMyRecordSection<TestResults>(
+            return await GetMyRecordSection(
                 userSession,
                 _testResultsMapper,
                 VisionMapperType.TestResults,
@@ -124,11 +141,31 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 
         private async Task<GetMyRecordSectionResult> GetDiagnosisResults(UserSession userSession)
         {
-            return await GetMyRecordSection<Diagnosis>(
+            return await GetMyRecordSection(
                 userSession,
                 _diagnosisMapper,
                 VisionMapperType.Diagnosis,
                 Views.DIAGNOSIS,
+                ResponseFormats.HTML);
+        }
+        
+        private async Task<GetMyRecordSectionResult> GetExaminationResults(UserSession userSession)
+        {
+            return await GetMyRecordSection(
+                userSession,
+                _examinationsMapper,
+                VisionMapperType.Examinations,
+                Views.EXAM_FINDINGS,
+                ResponseFormats.HTML);
+        }
+        
+        private async Task<GetMyRecordSectionResult> GetProcedureResults(UserSession userSession)
+        {
+            return await GetMyRecordSection(
+                userSession,
+                _proceduresMapper,
+                VisionMapperType.Procedures,
+                Views.PROCEDURES,
                 ResponseFormats.HTML);
         }
         
@@ -214,31 +251,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             public const string TEST_RESULTS = "TEST RESULTS";
             public const string EXAM_FINDINGS = "EXAM FINDINGS";
             public const string VPS_EVENT_HISTORY = "VPS_EVENT_HISTORY";
-        }
-
-        private static GetMyRecordResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
-        {
-            if (response.IsInvalidRequestError)
-            {
-                return new GetMyRecordResult.InvalidRequest();
-            }
-
-            if (response.IsInvalidUserCredentialsError)
-            {
-                return new GetMyRecordResult.InvalidUserCredentials();
-            }
-
-            if (response.IsInvalidSecurityHeaderError)
-            {
-                return new GetMyRecordResult.ErrorProcessingSecurityHeader();
-            }
-
-            if (response.IsUnknownError)
-            {
-                return new GetMyRecordResult.UnknownError();
-            }
-
-            return new GetMyRecordResult.Unsuccessful();
         }
     }
 }

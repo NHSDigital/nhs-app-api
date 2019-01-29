@@ -4,7 +4,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 {
     public class VisionMyRecordMapper : IVisionMyRecordMapper
     {
-        public MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, Problems problems, TestResults testResults, Diagnosis diagnosis)
+        public MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, Problems problems, TestResults testResults, Diagnosis diagnosis, Examinations examinations, Procedures procedures)
         {
             return new MyRecordResponse
             {
@@ -14,12 +14,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                 Problems = problems,
                 TestResults = testResults,
                 Diagnosis = diagnosis,
+                Examinations = examinations,
+                Procedures = procedures,
                 HasSummaryRecordAccess = allergies?.HasAccess ?? false,
                 HasDetailedRecordAccess = (
                     (immunisations != null && immunisations.HasAccess) || 
                     (problems != null && problems.HasAccess) || 
                     (testResults != null && testResults.HasAccess) || 
-                    (diagnosis != null && diagnosis.HasAccess))
+                    (diagnosis != null && diagnosis.HasAccess) ||
+                    (examinations != null && examinations.HasAccess) ||
+                    (procedures != null && procedures.HasAccess))
             };
         }
 

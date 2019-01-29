@@ -318,4 +318,7 @@ audit.txt
 # Coverage Exclusions
 coverage/
 
+# Developer AppSettings
+appsettings.Development.json
+
 # End of https://www.gitignore.io/api/osx,aspnetcore

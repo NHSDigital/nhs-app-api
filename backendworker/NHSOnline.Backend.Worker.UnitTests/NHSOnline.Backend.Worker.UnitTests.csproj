@@ -63,6 +63,14 @@
     <None Remove="GpSystems\Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
     <EmbeddedResource Include="GpSystems\Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
     <None Remove="GpSystems\Suppliers\TestData\VisionDataSample.html" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations\VariousExaminations.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations\VariousExaminations.html" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures\VariousProcedures.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures\VariousProcedures.html" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations\CleanedExaminations.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations\CleanedExaminations.html" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures\CleanedProcedures.html" />
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures\CleanedProcedures.html" />
   </ItemGroup>
   <ItemGroup>
     <None Update="GpSystems\Suppliers\Emis\Resources\EMISTestCert.cer">
@@ -107,5 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis" />
+    <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations" />
+    <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures" />
   </ItemGroup>
 </Project>
