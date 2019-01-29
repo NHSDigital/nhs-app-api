@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                 return await GetDiagnosisResults(userSession);
             }
             
-            return new GetMyRecordSectionResult.InvalidRequest();;
+            return new GetMyRecordSectionResult.InvalidRequest();
         }
 
         private async Task<GetMyRecordSectionResult> GetTestResults(UserSession userSession)
