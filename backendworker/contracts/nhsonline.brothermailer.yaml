@@ -1,0 +1,43 @@
+﻿swagger: "2.0"
+
+info:
+  version: 0.0.7
+  title: NHS App Sub-API - Brothermailer
+  description: NHS App Sub-API - Endpoint to facilitate signing up to brothermailer
+
+paths:
+  /brothermailer:
+    post:
+      tags:
+        - brothermailer
+      summary: Signup to Brothermailer
+      description: Returns status code indicating if signup to brothermailer was successful
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: BrothermailerRequest
+          required: true
+          description: Details of OdsCode and Email Address used for signup to Brothermailer
+          schema:
+            $ref: "#/definitions/BrothermailerRequest"
+      responses:
+        200:
+          description: Successfully signed up
+        400:
+          description: Bad request. Supplied request is incomplete or invalid.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: Bad response received from upstream system.
+definitions:
+  BrothermailerRequest:
+    type: object
+    description: Brothermailer Request
+    properties:
+      emailAddress:
+        type: string
+        description: Email Address to signup with
+      odsCode:
+        type: string
+        description: Ods Code of selected GP Practice

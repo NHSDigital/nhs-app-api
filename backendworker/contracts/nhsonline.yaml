@@ -38,6 +38,10 @@ paths:
     $ref: './nhsonline.termsandconditions.yaml#/paths/~1consent'
   /v1/patient/test-result:
     $ref: './nhsonline.myrecord.yaml#/paths/~1test-result'
+  /v1/gpsearch:
+    $ref: './nhsonline.gpsearch.yaml#/paths/~1gpsearch'
+  /v1/brothermailer:
+    $ref: './nhsonline.brothermailer.yaml#/paths/~1brothermailer'
   /v1/session:
     $ref: './nhsonline.usersession.yaml#/paths/~1session'
   /v1/session/extend:

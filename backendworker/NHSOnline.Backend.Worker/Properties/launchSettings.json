@@ -106,6 +106,14 @@
         "runMode": "dev",
         "ConfigurationSettings__CookieDomain": ".bitraft.io",
         "ORGAN_DONATION_INTEGRATION_ENABLED": "false"
+        "POSTCODE_LOOKUP_SEARCH_RADIUS_KM": "",
+        "GP_LOOKUP_API_RESULTS_LIMIT": "",
+        "GP_LOOKUP_API_KEY": "",
+        "NHS_SEARCH_BASE_URL": "",
+        "BROTHER_MAILER_URL": "",
+        "BROTHER_MAILER_ADDRESSBOOK_ID": "",
+        "BROTHER_MAILER_SIG": "",
+        "BROTHER_MAILER_USER_ID": ""
       }
     },
     "NHSOnline.Backend.Worker.Bdd": {

@@ -1203,6 +1203,107 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+    /v1/gpsearch: 
+      post: 
+        tags: 
+          - "gpsearch"
+        summary: "Search for Gp Practices"
+        description: "Returns Response object containing list of GP Practices"
+        consumes: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "body"
+            name: "GpSearchRequest"
+            required: true
+            description: "Search Term to be used when searching for GP Practices"
+            schema: 
+              type: "object"
+              required: 
+                - "searchTerm"
+              properties: 
+                searchTerm: 
+                  type: "string"
+                  description: "Search Term"
+                  minLength: 1
+        responses: 
+          200: 
+            description: "Search Executed Successfully"
+            schema: 
+              type: "object"
+              properties: 
+                organisations: 
+                  type: "array"
+                  description: "Array of organisations matched in search"
+                  items: 
+                    type: "object"
+                    properties: 
+                      organisationName: 
+                        type: "string"
+                        description: "Name of practice"
+                      address1: 
+                        type: "string"
+                        description: "Address line 1"
+                      address2: 
+                        type: "string"
+                        description: "Address line 2"
+                      address3: 
+                        type: "string"
+                        description: "Address line 3"
+                      city: 
+                        type: "string"
+                        description: "City"
+                      county: 
+                        type: "string"
+                        description: "County"
+                      postcode: 
+                        type: "string"
+                        description: "Postcode"
+                      nacsCode: 
+                        type: "string"
+                        description: "ODSCode"
+                organisationQueryCount: 
+                  type: "integer"
+                  description: "Total count of Gp Practices in query"
+          400: 
+            description: "Bad request. Supplied request is incomplete or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
+    /v1/brothermailer: 
+      post: 
+        tags: 
+          - "brothermailer"
+        summary: "Signup to Brothermailer"
+        description: "Returns status code indicating if signup to brothermailer was successful"
+        consumes: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "body"
+            name: "BrothermailerRequest"
+            required: true
+            description: "Details of OdsCode and Email Address used for signup to Brothermailer"
+            schema: 
+              type: "object"
+              description: "Brothermailer Request"
+              properties: 
+                emailAddress: 
+                  type: "string"
+                  description: "Email Address to signup with"
+                odsCode: 
+                  type: "string"
+                  description: "Ods Code of selected GP Practice"
+        responses: 
+          200: 
+            description: "Successfully signed up"
+          400: 
+            description: "Bad request. Supplied request is incomplete or invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
     /v1/session: 
       post: 
         tags: 
