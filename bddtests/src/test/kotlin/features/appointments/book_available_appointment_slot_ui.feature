@@ -1,5 +1,5 @@
 @appointment
-Feature: Book an available appointment slot
+Feature: Book an available appointment slot UI with Javascript
   In order to complete a booking appointment
   As a logged in user
   I want to be able to select, confirm and book selected appointment
@@ -272,6 +272,7 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
 
+
 # EMIS Specific Scenarios (For EMIS reason necessity)
 # The following scenarios covered only Optional and Not-Required reason necessity options.
 # The default is mandatory and if the option is not specified in a scenario, it is set to MANDATORY by default.
@@ -308,133 +309,352 @@ Feature: Book an available appointment slot
     And  I click the 'Confirm and book appointment' button
     Then a message is displayed indicating that user has reached maximum appointment limit
 
+
 # EMIS Specific Scenarios (For EMIS telephone appointment)
 # The following scenarios covered only telephone appointment options.
 # The telephone number is mandatory if telephone appointment slot selected.
-  Scenario: An EMIS user cannot enter a phone number for non phone appointments
+
+    # Positive submission cases
+
+  Scenario: An EMIS user cannot enter or select a phone number for non phone appointments
     Given there are EMIS appointments available to book
     And I am logged in
     And I am on the Available Appointments page
-    When I have selected an appointment slot to book
+    And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
     And I do not see a text input to enter phone number
+    And I do not see any phone numbers to select
 
-  Scenario: An EMIS user can enter a phone number for phone appointments
-    Given there are EMIS appointments available to book which are of telephone type
+  Scenario: An EMIS user is only given an option to enter their phone number for telephone appointments, when they don't have one saved, and can successfully book
+    Given I have no telephone number(s) stored
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    When I have selected a telephone appointment slot to book
+    Then the Appointment Slot page is displayed
+    And I do not see any phone numbers to select
+    And I see a text input to enter phone number
+    When I enter a phone number for the appointment
+    And I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+
+  Scenario Outline: An EMIS user can select one of their phone numbers for phone appointments, when they have <User's Telephone Numbers> phone number saved, and can successfully book
+    Given I have <User's Telephone Numbers> telephone number(s) stored
+    And I wish to book a telephone appointment using my <Telephone Number Type To Select> phone number
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    When I have selected a telephone appointment slot to book
+    Then the Appointment Slot page is displayed
+    And I see radio buttons to select the user's telephone numbers
+    And I see a radio button to select an alternate number
+    And none of available phone numbers are selected
+    And the phone number text field is not displayed
+    When I select the <Telephone Number Type To Select> number from available ones
+    And I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    Examples:
+      | User's Telephone Numbers | Telephone Number Type To Select |
+      | only a home              | home                            |
+      | only a mobile            | mobile                          |
+      | both home and mobile     | home                            |
+      | both home and mobile     | mobile                          |
+
+  Scenario Outline: An Emis user can enter a different phone number even when they have <User's Telephone Numbers> phone number saved
+    Given I have <User's Telephone Numbers> telephone number(s) stored
+    And there are appointments available to book which are of telephone type
     And I am logged in
     And I am on the Available Appointments page
     And I have selected a telephone appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
-    And I enter a phone number for the appointment
+    And the Appointment Slot page is displayed
+    When I select the radio button for an alternative phone number to those stored
+    Then I see a text input to enter phone number
+    When I enter a phone number for the appointment
+    Then the radio button for an alternate phone number remains selected
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then the booked appointment before cutoff time is correctly displayed with ability to cancel
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    Examples:
+      | User's Telephone Numbers |
+      | only a home              |
+      | only a mobile            |
+      | both home and mobile     |
+
+  Scenario Outline: An Emis user can manually enter their <Telephone Number To Type> number from their stored phone numbers and still submit
+    Given I have both home and mobile telephone number(s) stored
+    And I wish to book a telephone appointment using my <Telephone Number To Type> phone number
+    But I will manually enter this phone number
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    And the Appointment Slot page is displayed
+    When I select the radio button for an alternative phone number to those stored
+    Then I see a text input to enter phone number
+    When I enter a phone number for the appointment
+    Then the radio button for an alternate phone number remains selected
+    When I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+    Examples:
+      | Telephone Number To Type |
+      | home                     |
+      | mobile                   |
+
+    # Scenarios for alternating between the different options
+
+  Scenario: An EMIS user can select different phone number options and only the last one will be selected
+    Given I have both home and mobile telephone number(s) stored
+    And I wish to book a telephone appointment using my mobile phone number
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    And the Appointment Slot page is displayed
+    When I alternate between the different number options from available ones
+      | home        |
+      | home        |
+      | mobile      |
+      | mobile      |
+      | alternative |
+      | alternative |
+      | home        |
+      | alternative |
+      | mobile      |
+      | alternative |
+      | mobile      |
+      | home        |
+      | mobile      |
+      | alternative |
+    And I enter a phone number for the appointment
+    And I alternate between the different number options from available ones
+      | home        |
+      | alternative |
+    And I select the mobile number from available ones
+    And I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+
+  Scenario: An Emis user alternates between selecting their phone number and selecting and entering a different one, the latter is be submitted
+    Given I have only a mobile telephone number(s) stored
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    And the Appointment Slot page is displayed
+    When I select the mobile number from available ones
+    And I select the radio button for an alternative phone number to those stored
+    And I enter a phone number for the appointment
+    And I select the mobile number from available ones
+    And I select the radio button for an alternative phone number to those stored
+    And I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+
+  Scenario: An Emis user alternates between entering a different phone number and selecting their phone number, the latter is be submitted
+    Given I have only a mobile telephone number(s) stored
+    And I wish to book a telephone appointment using my mobile phone number
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    And the Appointment Slot page is displayed
+    When I select the radio button for an alternative phone number to those stored
+    And I enter a phone number for the appointment
+    And I select the mobile number from available ones
+    And I select the radio button for an alternative phone number to those stored
+    And I select the mobile number from available ones
+    And I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+
+    # Telephone number error scenarios
 
   Scenario: An EMIS user receives an error if a phone number is not provided for telephone appointments
-    Given there are EMIS appointments available to book which are of telephone type
+    Given I have no telephone number(s) stored
+    And there are appointments available to book which are of telephone type
     And I am logged in
     And I am on the Available Appointments page
     And I have selected a telephone appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
-    When I enter symptoms
-    And I click the 'Confirm and book appointment' button
-    Then a message is displayed indicating a phone number is required
-
-  Scenario: An EMIS user receives an error if an empty string or whitespace provided for telephone appointments
-    Given there are EMIS appointments available to book which are of telephone type
-    And I am logged in
-    And I am on the Available Appointments page
-    And I have selected a telephone appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
-    And I enter whitespace instead of a phone number for the appointment
+    And the Appointment Slot page is displayed
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
 
   Scenario: An EMIS user receives errors if a phone number and booking reason are not provided for telephone appointments
-    Given there are EMIS appointments available to book which are of telephone type
+    Given I have no telephone number(s) stored
+    And there are appointments available to book which are of telephone type
     And I am logged in
     And I am on the Available Appointments page
     And I have selected a telephone appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
+    And the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
     And an error is displayed that "Describe your symptoms" is mandatory
 
   Scenario: An EMIS user receives an error if a phone number is not provided for telephone appointments with optional booking reason
-    Given there are EMIS appointments available to book which are of telephone type with optional booking reason
+    Given I have no telephone number(s) stored
+    And there are appointments available to book which are of telephone type with optional booking reason
     And I am logged in
     And I am on the Available Appointments page
     And I have selected a telephone appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
+    And the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
     Then a message is displayed indicating a phone number is required
 
-  @noJs
-  Scenario: An EMIS user with noJs can enter a phone number for phone appointments with JS off
-    Given I have disabled javascript
-    And there are EMIS appointments available to book which are of telephone type
+  Scenario: An EMIS user receives an error if a phone number is not selected for telephone appointments, but symptoms have been entered
+    Given I have both home and mobile telephone number(s) stored
+    And there are appointments available to book which are of telephone type with optional booking reason
     And I am logged in
     And I am on the Available Appointments page
-    And I have filtered such that there is one time displayed that represents multiple slots
-    And I click the 'Find available appointments' button
     And I have selected a telephone appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
-    When I enter a phone number for the appointment
-    And I enter symptoms
-    And I click the 'Confirm and book appointment' button
-    Then the booked appointment before cutoff time is correctly displayed with ability to cancel
-
-  @noJs
-  Scenario: An EMIS user with noJs receives an error if a phone number is not provided for telephone appointments with JS off
-    Given I have disabled javascript
-    And there are EMIS appointments available to book which are of telephone type
-    And I am logged in
-    And I am on the Available Appointments page
-    And I have filtered such that there is one time displayed that represents multiple slots
-    And I click the 'Find available appointments' button
-    And I have selected a telephone appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
+    And the Appointment Slot page is displayed
     When I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then the focus will go back to empty phone number input box
+    Then a message is displayed indicating a phone number is required
 
-  @noJs
-  Scenario: An EMIS user with noJs receives an error if an empty string or whitespace provided for telephone appointments
-    Given I have disabled javascript
-    And there are EMIS appointments available to book which are of telephone type
+  Scenario: An EMIS user receives an error if a phone number is not selected for telephone appointments with optional booking reason
+    Given I have both home and mobile telephone number(s) stored
+    And there are appointments available to book which are of telephone type with optional booking reason
     And I am logged in
     And I am on the Available Appointments page
-    And I have filtered such that there is one time displayed that represents multiple slots
-    And I click the 'Find available appointments' button
     And I have selected a telephone appointment slot to book
-    Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
-    When I enter whitespace instead of a phone number for the appointment
+    And the Appointment Slot page is displayed
+    When I click the 'Confirm and book appointment' button
+    And a message is displayed indicating a phone number is required
+
+  Scenario: An EMIS user receives an error if an alternate phone number is selected for telephone appointments without a number entered, but symptoms have been entered
+    Given I have both home and mobile telephone number(s) stored
+    And there are appointments available to book which are of telephone type with optional booking reason
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    And the Appointment Slot page is displayed
+    When I select the radio button for an alternative phone number to those stored
     And I enter symptoms
     And I click the 'Confirm and book appointment' button
-    Then the focus will go back to empty phone number input box
+    Then a message is displayed indicating a phone number is required
 
-  @noJs
-  Scenario: An EMIS user with noJs receives an error if a phone number is not provided for telephone appointments with optional booking reason
-    Given I have disabled javascript
-    And there are EMIS appointments available to book which are of telephone type with optional booking reason
+  Scenario: An EMIS user receives an error if an alternate phone number is selected for telephone appointments with optional booking reason, but without a number entered
+    Given I have both home and mobile telephone number(s) stored
+    And there are appointments available to book which are of telephone type with optional booking reason
     And I am logged in
     And I am on the Available Appointments page
-    And I have filtered such that there is one time displayed that represents multiple slots
-    And I click the 'Find available appointments' button
+    And I have selected a telephone appointment slot to book
+    And the Appointment Slot page is displayed
+    When I select the radio button for an alternative phone number to those stored
+    And I click the 'Confirm and book appointment' button
+    Then a message is displayed indicating a phone number is required
+
+  Scenario: An EMIS user receives an error if an empty string or whitespace provided for telephone appointments
+    Given I have no telephone number(s) stored
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
     And I have selected a telephone appointment slot to book
     Then the Appointment Slot page is displayed
-    And I see a text input to enter phone number
+    And I enter whitespace instead of a phone number for the appointment
+    When I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then a message is displayed indicating a phone number is required
+
+  Scenario: An EMIS user receives an error if an empty string or whitespace provided for telephone appointments, when alternate phone number is selected
+    Given I have both home and mobile telephone number(s) stored
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    And the Appointment Slot page is displayed
+    When I select the radio button for an alternative phone number to those stored
+    And I enter whitespace instead of a phone number for the appointment
+    And I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then a message is displayed indicating a phone number is required
+
+    # Regression Test scenarios to ensure booking reason is still validated for telephone appointments
+
+  Scenario: An EMIS user receives an error if a phone number is entered for telephone appointments, but no reason
+    Given I wish to book an appointment without specifying a reason
+    And I have no telephone number(s) stored
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    And I enter a phone number for the appointment
     When I click the 'Confirm and book appointment' button
-    Then the focus will go back to empty phone number input box
+    Then an error is displayed that "Describe your symptoms" is mandatory
+
+  Scenario: An appointment is booked for an EMIS user if a phone number is provided for telephone appointments with optional booking reason
+    Given I wish to book an appointment without specifying a reason
+    And I have no telephone number(s) stored
+    And there are appointments available to book which are of telephone type with optional booking reason
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    And I enter a phone number for the appointment
+    When I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+
+  Scenario: An EMIS user receives an error if a stored phone number is selected for telephone appointments, but no reason entered
+    Given I wish to book an appointment without specifying a reason
+    And I have both home and mobile telephone number(s) stored
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    When I select the mobile number from available ones
+    And I click the 'Confirm and book appointment' button
+    Then an error is displayed that "Describe your symptoms" is mandatory
+
+  Scenario: An appointment is booked for an EMIS user if a stored phone number is selected for telephone appointments with optional booking reason
+    Given I wish to book an appointment without specifying a reason
+    And I have both home and mobile telephone number(s) stored
+    And I wish to book a telephone appointment using my mobile phone number
+    And there are appointments available to book which are of telephone type with optional booking reason
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    When I select the mobile number from available ones
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+
+  Scenario: An EMIS user receives an error if an alternate phone number is selected and entered for telephone appointments, but no reason entered
+    Given I wish to book an appointment without specifying a reason
+    And I have both home and mobile telephone number(s) stored
+    And there are appointments available to book which are of telephone type
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    When I select the radio button for an alternative phone number to those stored
+    And I enter a phone number for the appointment
+    And I click the 'Confirm and book appointment' button
+    Then an error is displayed that "Describe your symptoms" is mandatory
+
+  Scenario: An appointment is booked for an EMIS user if an alternate phone number is selected and entered for telephone appointments with optional booking reason
+    Given I wish to book an appointment without specifying a reason
+    And I have both home and mobile telephone number(s) stored
+    And I wish to book a telephone appointment using my mobile phone number
+    And there are appointments available to book which are of telephone type with optional booking reason
+    And I am logged in
+    And I am on the Available Appointments page
+    And I have selected a telephone appointment slot to book
+    When I select the radio button for an alternative phone number to those stored
+    And I enter a phone number for the appointment
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking success message is displayed
+    And the booked appointment before cutoff time is correctly displayed with ability to cancel
+
 
   Scenario Outline: An <GP System> user sees no booking symptoms text box displayed if practice settings disallow booking reasons
     Given there are <GP System> appointments available to book where booking reason option is set not required
@@ -459,23 +679,3 @@ Feature: Book an available appointment slot
     And I lose my internet connection
     When an appointment booking is submitted
     Then I see a message indicating user may have connectivity problems
-
-  @noJs
-  Scenario Outline: A user can find available appointments with javascript disabled
-    Given I have disabled javascript
-    And there are multiple appointment slots at the same time, provided by <GP System>
-    And I am logged in
-    And I am on the Available Appointments page
-    And I have filtered such that there is one time displayed that represents multiple slots
-    And I click the 'Find available appointments' button
-    And I have selected a time when multiple slots are available
-    Then the Appointment Slot page is displayed
- #   When I enter symptoms
- #   And  I click the 'Confirm and book appointment' button
- #   Then the Appointment Booking success message is displayed
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-

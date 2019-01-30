@@ -11,33 +11,33 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
     private val timeSlotXpathFormat = "//form//h2%s/following-sibling::ul/li/a%s"
     private val timeSlotByDateAndTimeXpath = String.format(timeSlotXpathFormat,
-                                                           containsTextXpathSubstring,
-                                                           containsTextXpathSubstring)
+            containsTextXpathSubstring,
+            containsTextXpathSubstring)
     private val timeSlotsXpath = String.format(timeSlotXpathFormat, "", "")
     private val noAppointmentsAvailableForDateTextByDateXpathFormat =
             "$dateHeadingByTextXpathFormat/following-sibling::p"
 
     val guidance = AppointmentGuidancePageObject(this)
 
-    val appointmentTypeFilter = AvailableAppointmentFilter (
+    val appointmentTypeFilter = AvailableAppointmentFilter(
             "type",
-             "Appointment Type filter",
+            "Appointment Type filter",
             this
     )
 
-    val locationFilter = AvailableAppointmentFilter (
+    val locationFilter = AvailableAppointmentFilter(
             "location",
             "Appointment Location filter",
             this
     )
 
-    val clinicianFilter = AvailableAppointmentFilter (
+    val clinicianFilter = AvailableAppointmentFilter(
             "clinician",
             "Appointment Clinician filter",
             this
     )
 
-    val timePeriodFilter =AvailableAppointmentFilter (
+    val timePeriodFilter = AvailableAppointmentFilter(
             "time-period",
             "Appointment time period filter",
             this

@@ -2,17 +2,21 @@ package features.appointments.stepDefinitions
 
 import cucumber.api.java.en.Given
 import features.appointments.factories.AppointmentsBookingFactory
-import features.appointments.factories.AppointmentsBookingFactory.Companion.SymptomsToEnter
+import features.appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
 import features.appointments.factories.UpcomingAppointmentsFactory
+import features.appointments.steps.AppointmentsConfirmationSteps
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity
+import utils.SerenityHelpers
 import java.time.Duration
 
 private const val DELAY_IN_SECONDS = 12L
 
 class AppointmentsBookingStepDefinitions {
+
+    private var emptyReason: Boolean = false
 
     @Given("^there are (.*) appointments available to book$")
     fun thereAreAvailableAppointmentsToBook(gpSystem: String) {
@@ -54,7 +58,7 @@ class AppointmentsBookingStepDefinitions {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateSuccessfulBookingResponse(bookingReasonOfSpecifiedLength)
-        Serenity.setSessionVariable(SymptomsToEnter).to(symptomsToEnter)
+        Serenity.setSessionVariable(AppointmentsBookingFactory.symptomsToEnter).to(symptomsToEnter)
     }
 
     @Given("^there are (.*) appointments available to book and user attempts to enter booking reason (.*)\$")
@@ -62,7 +66,7 @@ class AppointmentsBookingStepDefinitions {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateSuccessfulBookingResponse(bookingReason)
-        Serenity.setSessionVariable(SymptomsToEnter).to(bookingReason)
+        Serenity.setSessionVariable(symptomsToEnter).to(bookingReason)
     }
 
     @Given("^there are (.*) appointments available to book, " +
@@ -71,8 +75,10 @@ class AppointmentsBookingStepDefinitions {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
 
-        factory.generateBookingResponse { bookRequest -> bookRequest.withDelay(Duration.ofSeconds(DELAY_IN_SECONDS))
-                .respondWithSuccess() }
+        factory.generateBookingResponse { bookRequest ->
+            bookRequest.withDelay(Duration.ofSeconds(DELAY_IN_SECONDS))
+                    .respondWithSuccess()
+        }
     }
 
     @Given("^there are (.*) appointments available to book, but the GP system is unavailable$")
@@ -110,14 +116,13 @@ class AppointmentsBookingStepDefinitions {
             (bookRequest as BookAppointmentsBuilderEmis)
                     .respondWithBookingLimitExceptionForOldEMIS()
         }
-
     }
 
     @Given("^there are EMIS appointments available to book where booking reason is set optional$")
     fun thereAreEMISAppointmentsAvailableToBookWhereBookingReasonIsSetOptional() {
         val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.OPTIONAL)
-        factory.generateSuccessfulBookingResponseEmptyReason()
+        factory.generateSuccessfulBookingResponse("")
     }
 
     @Given("^there are EMIS appointments available to book where booking reason is set optional " +
@@ -132,31 +137,43 @@ class AppointmentsBookingStepDefinitions {
     fun thereAreAppointmentsAvailableToBookWhereBookingReasonIsSetRequired(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessityOption = NecessityOption.NOT_ALLOWED)
-        factory.generateSuccessfulBookingResponseEmptyReason()
+        factory.generateSuccessfulBookingResponse("")
     }
 
-    @Given("^there are (.*) appointments available to book which are of telephone type$")
-    fun thereAreAvailableAppointmentsToBookWhichAreOfTelephoneType(gpSystem: String) {
-        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        val telephoneNumberToEnter = "7777777777"
-
-        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = null,
-        reasonNecessityOption = NecessityOption.MANDATORY,
-        telephoneNumberToEnter =telephoneNumberToEnter)
-
-        factory.generateSuccessfulBookingResponse()
+    @Given("^there are appointments available to book which are of telephone type$")
+    fun thereAreAvailableAppointmentsToBookWhichAreOfTelephoneType() {
+        generateStubsForTelephoneAppointments(NecessityOption.MANDATORY)
     }
 
-    @Given("^there are EMIS appointments available to book which are of telephone type with " +
+    @Given("I wish to book an appointment without specifying a reason$")
+    fun iWishToBookAnAppointmentWithoutSpecifyingAReason() {
+        emptyReason = true
+    }
+
+    @Given("^there are appointments available to book which are of telephone type with " +
             "optional booking reason$")
-    fun thereAreEMISAppointmentsAvailableToBookWhichAreOfTelephoneTypeWithOptionalBookingReason() {
-        val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
-        val telephoneNumberToEnter = "7777777777"
+    fun thereAreAppointmentsAvailableToBookWhichAreOfTelephoneTypeWithOptionalBookingReason() {
+        generateStubsForTelephoneAppointments(NecessityOption.OPTIONAL)
+    }
 
-        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(guidanceMessage = null,
-                reasonNecessityOption = NecessityOption.OPTIONAL,
-                telephoneNumberToEnter =telephoneNumberToEnter
-        )
-        factory.generateSuccessfulBookingResponse()
+    private fun generateStubsForTelephoneAppointments(necessityOption: NecessityOption) {
+        val factory = AppointmentsBookingFactory.getForSupplier("EMIS")
+        val telephoneNumber = Serenity.sessionVariableCalled<String>(AppointmentsConfirmationSteps
+                .SerenityVariable.TELEPHONE_NUMBER_TO_BOOK_AGAINST) ?: "7777777777"
+
+        if (SerenityHelpers.getValueOrNull<String>(AppointmentsBookingFactory.telephoneNumberToEnter) == null) {
+            Serenity.setSessionVariable(AppointmentsBookingFactory.telephoneNumberToEnter).to(telephoneNumber)
+        }
+
+        factory.generateAvailableSlotExampleIncludingTelephoneAppointment(reasonNecessityOption = necessityOption)
+
+        factory.telephoneAppointmentBookingSetupWithResult(telephoneNumber, emptyReason) { builder ->
+            builder
+                    .respondWithSuccess()
+                    .inScenario("Appointments")
+                    .willSetStateTo("Appointment Booked")
+        }
+
+        aBookedAppointmentCanBeCancelled()
     }
 }

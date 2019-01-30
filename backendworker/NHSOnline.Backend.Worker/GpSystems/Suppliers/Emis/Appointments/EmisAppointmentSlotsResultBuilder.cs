@@ -15,12 +15,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private readonly Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> _metaTask;
         private readonly Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> _slotTask;
         private readonly Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> _practiceSettingsTask;
+        private readonly Task<EmisClient.EmisApiObjectResponse<DemographicsGetResponse>> _demographicsTask;
         private readonly EmisUserSession _userSession;
 
         private EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> MetaResponse => _metaTask.Result;
         private EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse> SlotResponse => _slotTask.Result;
         private EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse> PracticeSettingsResponse
             => _practiceSettingsTask.Status == TaskStatus.RanToCompletion ? _practiceSettingsTask.Result : null;
+        private EmisClient.EmisApiObjectResponse<DemographicsGetResponse> DemographicsResponse
+            => _demographicsTask.Status == TaskStatus.RanToCompletion ? _demographicsTask.Result : null;
 
         public EmisAppointmentSlotsResultBuilder(
             ILogger<EmisAppointmentSlotsService> logger,
@@ -28,6 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> metaTask,
             Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> slotTask,
             Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> practiceSettingsTask,
+            Task<EmisClient.EmisApiObjectResponse<DemographicsGetResponse>> demographicsTask,
             EmisUserSession userSession
             )
         {
@@ -36,6 +40,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             _metaTask = metaTask;
             _slotTask = slotTask;
             _practiceSettingsTask = practiceSettingsTask;
+            _demographicsTask = demographicsTask;
             _userSession = userSession;
         }
 
@@ -119,6 +124,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                             SlotResponse.Body,
                             MetaResponse.Body,
                             PracticeSettingsResponse?.Body,
+                            DemographicsResponse?.Body,
                             _userSession));
 
                 return Option.Some<AppointmentSlotsResult>(result);

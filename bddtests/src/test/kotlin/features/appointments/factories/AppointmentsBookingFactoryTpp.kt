@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter
 
 private const val TIME_TO_ADD_IN_MINUTES = 30L
 
-class AppointmentsBookingBackendFactoryTpp : AppointmentsBookingBackendFactory("TPP") {
+class AppointmentsBookingFactoryTpp : AppointmentsBookingFactory("TPP") {
 
     override fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int?,

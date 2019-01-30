@@ -1,5 +1,5 @@
-﻿using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
+using System;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using System.Net.Http;
 
@@ -8,7 +8,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public interface IAppointmentSlotsResponseMapper
     {
         AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse,
-            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, PracticeSettingsGetResponse body, EmisUserSession userSession);
+            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, 
+            PracticeSettingsGetResponse body, 
+            DemographicsGetResponse demographics,
+            EmisUserSession userSession);
     }
 
     public class AppointmentSlotsResponseMapper : IAppointmentSlotsResponseMapper
@@ -21,7 +24,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         }
 
         public AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse,
-            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, PracticeSettingsGetResponse body, EmisUserSession userSession)
+            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, 
+            PracticeSettingsGetResponse body, 
+            DemographicsGetResponse demographics,
+            EmisUserSession userSession)
         {
             if(slotsResponse == null)
             {
@@ -34,7 +40,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 BookingGuidance = body?.Messages?.AppointmentsMessage?.Trim() ?? string.Empty,
                 Slots = slots,
-                BookingReasonNecessity = userSession.AppointmentBookingReasonNecessity
+                BookingReasonNecessity = userSession.AppointmentBookingReasonNecessity,
+                TelephoneNumbers = demographics?.ContactDetails?.GetTelephoneArray() ?? Array.Empty<PatientTelephoneNumber>()
             };
 
             return response;

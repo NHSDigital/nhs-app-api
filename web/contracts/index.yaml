@@ -280,6 +280,15 @@
             schema: 
               type: "object"
               properties: 
+                telephoneNumbers: 
+                  type: "array"
+                  description: "Patient's telephone numbers."
+                  items: 
+                    type: "object"
+                    properties: 
+                      telephoneNumber: 
+                        type: "string"
+                        description: "Patient's telephone number."
                 guidanceMessage: 
                   type: "string"
                   description: "Guidance message from GP practice explaining which appointment slot to book."

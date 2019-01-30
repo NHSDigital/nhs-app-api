@@ -26,13 +26,6 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
             helpfulName = "Reason Error"
     )
 
-    val telephoneError = HybridPageElement(
-            browserLocator = "//*[@data-purpose='telephone-error']",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Telephone Error"
-    )
-
     val selectedAppointmentDate = HybridPageElement(
             browserLocator = xPathRoot + appointmentDateXpath,
             androidLocator = null,

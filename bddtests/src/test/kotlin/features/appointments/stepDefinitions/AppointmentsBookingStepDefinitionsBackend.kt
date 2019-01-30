@@ -3,8 +3,8 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.factories.AppointmentsBookingBackendFactory
-import features.appointments.factories.AppointmentsBookingBackendFactory.Companion.defaultTelephoneNumber
+import features.appointments.factories.AppointmentsBookingFactory
+import features.appointments.factories.AppointmentsBookingFactory.Companion.defaultTelephoneNumber
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import net.serenitybdd.core.Serenity
@@ -34,7 +34,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     @Given("^an appointment booking for (.*) can be successful with slot identifier of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForSlotId(gpSystem: String,
                                                                                numberOfCharacters: Int) {
-        val factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         val patient = factory.patient
         val slotId = "1".repeat(numberOfCharacters).toInt()
         val request = factory.defaultAppointmentRequest(patient, slotId = slotId)
@@ -44,7 +44,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     @Given("^an appointment booking for (.*) can be successful with booking reason of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForBookingReason(gpSystem: String,
                                                                                       numberOfCharacters: Int) {
-        val factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         val patient = factory.patient
         val bookingReason = "a".repeat(numberOfCharacters)
         val request = factory.defaultAppointmentRequest(patient, bookingReason = bookingReason)
@@ -103,45 +103,62 @@ open class AppointmentsBookingStepDefinitionsBackend {
                 .respondWithSuccess() }
     }
 
+    @Given("^a telephone appointment booking for EMIS can be successful$")
+    fun aTelephoneAppointmentBookingForCanBeSuccessful() {
+
+        telephoneAppointmentBookingSetupWithResult(defaultTelephoneNumber) {
+            builder -> builder.respondWithSuccess() }
+    }
+
+    @Given("^a telephone appointment booking for EMIS cannot be successful without phone number$")
+    fun aTelephoneAppointmentBookingForCannotBeSuccessfulWithoutPhoneNumber() {
+        telephoneAppointmentBookingSetupWithResult {
+            builder -> builder.respondWithExceptionWhenRequiredFieldMissing() }
+    }
+
     private fun defaultAppointmentBookingSetupWithResult(
             gpSystem: String,
             bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-        AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        AppointmentsBookingFactory.getForSupplier(gpSystem)
                 .defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)
     }
 
     private fun telephoneAppointmentBookingSetupWithResult(
-            gpSystem: String,
-            telephoneNumber: String,
+            telephoneNumber: String? = null,
             bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-        AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
-                .telephoneAppointmentBookingSetupWithResult(bookAppointmentsBuilder, telephoneNumber)
+        //currently only telephone appointments are applicable to EMIS
+        AppointmentsBookingFactory.getForSupplier("EMIS")
+                .telephoneAppointmentBookingSetupWithResult(
+                        telephoneNumber,
+                        slotId = AppointmentsBookingFactory.defaultApptBookingSlotId,
+                        bookAppointmentsBuilder = bookAppointmentsBuilder
+                )
     }
 
     @When("^an appointment booking is submitted with phone number$")
     fun anAppointmentBookingIsSubmittedWithPhoneNumber() {
         val appointmentBookRequest = AppointmentBookRequest(
-                slotId = AppointmentsBookingBackendFactory.defaultApptBookingSlotId.toString(),
-                bookingReason = AppointmentsBookingBackendFactory.defaultApptBookingReason,
-                telephoneNumber = AppointmentsBookingBackendFactory.defaultTelephoneNumber,
-                telephoneContactType = AppointmentsBookingBackendFactory.defaultTelephoneContactType)
+                slotId = AppointmentsBookingFactory.defaultApptBookingSlotId.toString(),
+                bookingReason = AppointmentsBookingFactory.defaultApptBookingReason,
+                telephoneNumber = AppointmentsBookingFactory.defaultTelephoneNumber,
+                telephoneContactType = AppointmentsBookingFactory.defaultTelephoneContactType)
         submitAppointmentRequest(appointmentBookRequest)
     }
 
     @When("^an appointment booking is submitted without phone number$")
     fun anAppointmentBookingIsSubmittedWithoutPhoneNumber() {
         val appointmentBookRequest = AppointmentBookRequest(
-                slotId = AppointmentsBookingBackendFactory.defaultApptBookingSlotId.toString(),
-                bookingReason = AppointmentsBookingBackendFactory.defaultApptBookingReason)
+                slotId = AppointmentsBookingFactory.defaultApptBookingSlotId.toString(),
+                bookingReason = AppointmentsBookingFactory.defaultApptBookingReason)
         submitAppointmentRequest(appointmentBookRequest)
     }
 
     @When("^an appointment booking is submitted$")
     fun anAppointmentBookingIsSubmitted() {
         val appointmentToBook =
-                Serenity.sessionVariableCalled<AppointmentBookRequest>(AppointmentsBookingBackendFactory
+                Serenity.sessionVariableCalled<AppointmentBookRequest>(AppointmentsBookingFactory
                         .appointmentToBookKey)
-        submitAppointmentRequest(appointmentToBook)
+submitAppointmentRequest(appointmentToBook)
     }
 
     @When("^an appointment booking is submitted with no slot identifier$")
@@ -149,7 +166,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
         val workerAppointmentRequest =
                 AppointmentBookRequest(
                         null,
-                       AppointmentsBookingBackendFactory. defaultApptBookingReason)
+                       AppointmentsBookingFactory. defaultApptBookingReason)
         submitAppointmentRequest(workerAppointmentRequest)
     }
 
@@ -158,7 +175,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
         val slotIdOfSpecifiedLength = "1".repeat(numberOfCharacters)
         val workerAppointmentRequest = AppointmentBookRequest(
                 slotId = slotIdOfSpecifiedLength,
-                bookingReason = AppointmentsBookingBackendFactory. defaultApptBookingReason)
+                bookingReason = AppointmentsBookingFactory. defaultApptBookingReason)
         submitAppointmentRequest(workerAppointmentRequest)
     }
 
@@ -166,7 +183,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
     fun anAppointmentIsSubmittedWithNoBookingReason() {
         val workerAppointmentRequest =
                 AppointmentBookRequest(
-                        AppointmentsBookingBackendFactory. defaultApptBookingSlotId.toString(),
+                        AppointmentsBookingFactory. defaultApptBookingSlotId.toString(),
                         null)
         submitAppointmentRequest(workerAppointmentRequest)
     }
@@ -175,11 +192,10 @@ open class AppointmentsBookingStepDefinitionsBackend {
     fun anAppointmentIsSubmittedWithANumberOfCharactersForBookingReason(numberOfCharacters: Int) {
         val bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharacters)
         val workerAppointmentRequest = AppointmentBookRequest(
-                slotId = AppointmentsBookingBackendFactory. defaultApptBookingSlotId.toString(),
+                slotId = AppointmentsBookingFactory. defaultApptBookingSlotId.toString(),
                 bookingReason = bookingReasonOfSpecifiedLength)
         submitAppointmentRequest(workerAppointmentRequest)
     }
-
 
     private fun submitAppointmentRequest(workerAppointmentRequest: AppointmentBookRequest) {
         try {
@@ -190,18 +206,6 @@ open class AppointmentsBookingStepDefinitionsBackend {
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)
         }
-    }
-
-    @Given("^a telephone appointment booking for (.*) can be successful$")
-    fun aTelephoneAppointmentBookingForCanBeSuccessful(gpSystem: String) {
-        telephoneAppointmentBookingSetupWithResult(gpSystem, defaultTelephoneNumber) {
-                            builder -> builder.respondWithSuccess() }
-    }
-
-    @Given("^a telephone appointment booking for (.*) cannot be successful without phone number$")
-    fun aTelephoneAppointmentBookingForCannotBeSuccessfulWithoutPhoneNumber(gpSystem: String) {
-        telephoneAppointmentBookingSetupWithResult(gpSystem, "") {
-                            builder -> builder.respondWithExceptionWhenRequiredFieldMissing() }
     }
 
     @Then("^a successful response for appointment booking is returned$")

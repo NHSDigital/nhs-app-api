@@ -190,6 +190,11 @@ definitions:
   AppointmentSlotsResponse:
     type: object
     properties:
+      telephoneNumbers:
+        type: array
+        description: Patient's telephone numbers.
+        items:
+          $ref: '#/definitions/PatientTelephoneNumber'
       guidanceMessage:
         type: string
         description: Guidance message from GP practice explaining which appointment slot to book.
@@ -239,6 +244,12 @@ definitions:
       displayName:
         type: string
         description: Cancellation Reason Description.
+  PatientTelephoneNumber:
+    type: object
+    properties:
+      telephoneNumber:
+        type: string
+        description: Patient's telephone number.
   Slot:
     type: object
     properties:

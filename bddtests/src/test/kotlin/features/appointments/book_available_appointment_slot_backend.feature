@@ -1,6 +1,6 @@
 @appointment
 @backend
-Feature: Book appointments
+Feature: Book appointments API
   In order to visit a clinician
   As a logged in user
   I want to book an appointment to see a clinician at my GP practice
@@ -207,20 +207,15 @@ Feature: Book appointments
       | TPP       |
       | VISION    |
 
-  Scenario Outline: Booking a telephone appointment with Emis returns successful response if the phone number is provided
-    Given a telephone appointment booking for <GP System> can be successful
-    And I have logged into <GP System> and have a valid session cookie
+#    The handling of telephone appointments is currently only a requirement for EMIS
+  Scenario: Booking a telephone appointment with Emis returns successful response if the phone number is provided
+    Given a telephone appointment booking for EMIS can be successful
+    And I have logged into EMIS and have a valid session cookie
     When an appointment booking is submitted with phone number
     Then a successful response for appointment booking is returned
-    Examples:
-      | GP System |
-      | EMIS      |
 
-  Scenario Outline: Booking a telephone appointment with Emis returns an error response if the phone number is not provided
-    Given a telephone appointment booking for <GP System> cannot be successful without phone number
-    And I have logged into <GP System> and have a valid session cookie
+  Scenario: Booking a telephone appointment with Emis returns an error response if the phone number is not provided
+    Given a telephone appointment booking for EMIS cannot be successful without phone number
+    And I have logged into EMIS and have a valid session cookie
     When an appointment booking is submitted without phone number
     Then I receive a "Bad Request" error
-    Examples:
-      | GP System |
-      | EMIS      |

@@ -42,19 +42,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 _logger.LogInformation("Creating appointment slots requests");
                 var metaTask = _emisClient.AppointmentSlotsMetadataGet(headerParams, metaParams);
                 var slotTask = _emisClient.AppointmentSlotsGet(headerParams, slotsParams);
-                var practiceTask = _emisClient.PracticeSettingsGet(headerParams, emisUserSession.OdsCode);
 
                 await Task.WhenAll(metaTask, slotTask);
                 _logger.LogInformation("Appointment slot requests completed");
 
-                // Wait for practice task to complete, but unlike the other tasks suppress any errors such as timeout.
+                var practiceTask = _emisClient.PracticeSettingsGet(headerParams, emisUserSession.OdsCode);
+                var demographicsTask = _emisClient.DemographicsGet(
+                    emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, 
+                    emisUserSession.EndUserSessionId);
+                
+                // Wait for practice and demographics tasks to complete, but unlike the other tasks suppress any errors such as timeout.
                 try
                 {
-                    await Task.WhenAll(practiceTask);
+                    await Task.WhenAll(practiceTask, demographicsTask);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Exception has been thrown calling emis practice details.");
+                    _logger.LogError(e, "Exception has been thrown calling Emis.");
                 }
 
                 var result =
@@ -64,6 +69,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                             metaTask,
                             slotTask,
                             practiceTask,
+                            demographicsTask,
                             emisUserSession)
                         .Build();
 

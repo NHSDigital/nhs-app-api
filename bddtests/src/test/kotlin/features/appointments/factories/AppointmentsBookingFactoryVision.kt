@@ -3,7 +3,7 @@ package features.appointments.factories
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 
-class AppointmentsBookingBackendFactoryEmis : AppointmentsBookingBackendFactory("EMIS") {
+class AppointmentsBookingFactoryVision : AppointmentsBookingFactory("VISION") {
 
     override fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int?,
@@ -12,9 +12,8 @@ class AppointmentsBookingBackendFactoryEmis : AppointmentsBookingBackendFactory(
         return BookAppointmentSlotFacade(
                 patient.userPatientLinkToken,
                 slotId ?: defaultApptBookingSlotId,
-                bookingReason ?: defaultApptBookingReason,
-                null,
-                null)
+                bookingReason ?: defaultApptBookingReason
+        )
     }
 
     override fun telephoneAppointmentRequest(patient: Patient,
@@ -23,20 +22,7 @@ class AppointmentsBookingBackendFactoryEmis : AppointmentsBookingBackendFactory(
                                              telephoneNumber: String?,
                                              telephoneContactType: String?): BookAppointmentSlotFacade {
 
-        return if (telephoneNumber.isNullOrEmpty()) {
-            BookAppointmentSlotFacade(
-                    patient.userPatientLinkToken,
-                    slotId ?: defaultApptBookingSlotId,
-                    bookingReason ?: defaultApptBookingReason)
-        } else {
-            BookAppointmentSlotFacade(
-                    patient.userPatientLinkToken,
-                    slotId ?: defaultApptBookingSlotId,
-                    bookingReason ?: defaultApptBookingReason,
-                    null,
-                    null,
-                    telephoneNumber,
-                    telephoneContactType ?: defaultTelephoneContactType)
-        }
+        throw NotImplementedError("Telephone appointment not available")
+
     }
 }

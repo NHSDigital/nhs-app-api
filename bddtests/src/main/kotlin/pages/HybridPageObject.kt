@@ -157,4 +157,10 @@ open class HybridPageObject : PageObject() {
         )
                 .withText(text, false).assertIsVisible().click()
     }
+
+    fun isButtonVisible(button: String): Boolean {
+        return findBy<WebElementFacade>(
+                "//button[contains(text()," +
+                        "'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
+    }
 }

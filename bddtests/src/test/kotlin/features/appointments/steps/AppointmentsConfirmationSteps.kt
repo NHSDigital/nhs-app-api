@@ -19,22 +19,6 @@ open class AppointmentsConfirmationSteps {
     val mockingClient = MockingClient.instance
 
     @Step
-    fun clickOnConfirmAndBookAppointmentButton() {
-        appointmentsConfirmation.clickOnConfirmAndBookAppointmentButton()
-        appointmentsConfirmation.waitForSpinnerToDisappear()
-    }
-
-    @Step
-    fun goBackToMyAppointments() {
-        appointmentsConfirmation.backToMyAppointmentsButton.click()
-    }
-
-    @Step
-    fun clickErrorPageBackButton() {
-        errorPage.button.click()
-    }
-
-    @Step
     fun checkValidationErrorMessage() {
         val message = appointmentsConfirmation.reasonError.element.text
         assertEquals("Enter a reason for this appointment", message)
@@ -48,21 +32,11 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkAppointmentDetails() {
-        val expectedSlot =  Serenity.sessionVariableCalled<Slot>(AppointmentsBookingFactory.SelectedSlot)
+        val expectedSlot =  Serenity.sessionVariableCalled<Slot>(AppointmentsBookingFactory.selectedSlot)
                 .copy(id = null)
         val areCliniciansExpected = expectedSlot.clinicians.isNotEmpty()
         val actualSlot = appointmentsConfirmation.getAppointmentSlot(areCliniciansExpected)
         assertEquals("Exact expected Appointment not found. ", expectedSlot, actualSlot)
-    }
-
-    @Step
-    fun describeSymptoms(symptoms: String) {
-        appointmentsConfirmation.describeSymptoms(symptoms)
-    }
-
-    @Step
-    fun describeTelephoneNumber(telephoneNumber: String) {
-        appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
     }
 
     @Step
@@ -97,13 +71,37 @@ open class AppointmentsConfirmationSteps {
     }
 
     @Step
-    fun pasteSymptoms(symptoms: String) {
-        appointmentsConfirmation.pasteSymptoms(symptoms)
-    }
-
-    @Step
     fun checkIfButtonIsVisible(button: String) {
         val isVisible = appointmentsConfirmation.isButtonVisible(button)
         Assert.assertTrue(isVisible)
+    }
+
+    @Step
+    fun checkRadioButtonsDisplayedForPhoneNumbers(usersPhoneNumbers: ArrayList<String>) {
+        for (phoneNumber in usersPhoneNumbers) {
+            appointmentsConfirmation.assertRadioButtonDisplayedForPhoneNumber(phoneNumber)
+        }
+    }
+
+    @Step
+    fun checkNoPhoneNumberRadioButtonsAreSelected() {
+        checkNumberOfPhoneNumberRadioButtonsSelected(0)
+    }
+
+    @Step
+    fun checkOnlyOnePhoneNumberRadioButtonIsSelected() {
+        checkNumberOfPhoneNumberRadioButtonsSelected(1)
+    }
+
+    private fun checkNumberOfPhoneNumberRadioButtonsSelected(expectedNumberOfRadioButtonsSelected: Int) {
+        Assert.assertEquals(
+                "Incorrect number of radio buttons selected. ",
+                expectedNumberOfRadioButtonsSelected,
+                appointmentsConfirmation.getNumberOfSelectedPhoneNumberRadioButtons()
+        )
+    }
+
+    enum class SerenityVariable {
+        TELEPHONE_NUMBER_TO_BOOK_AGAINST
     }
 }

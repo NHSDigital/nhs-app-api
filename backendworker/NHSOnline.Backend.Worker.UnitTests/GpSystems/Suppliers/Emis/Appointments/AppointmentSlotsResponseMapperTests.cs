@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         private IAppointmentSlotsResponseMapper _sut;
         private EmisUserSession _userSession;
+        DemographicsGetResponse _demographics;
 
         [TestInitialize]
         public void TestInitialize()
@@ -36,7 +37,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
+            configBuilder.AddInMemoryCollection(new[]
+            {
+                new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform())
+            });
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
 
@@ -50,12 +54,59 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 OdsCode = "TestOds",
                 AppointmentBookingReasonNecessity = Necessity.Optional
             };
-            
-            var enumLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
 
-            _sut = new AppointmentSlotsResponseMapper(new AppointmentSlotsMapper(_dateTimeOffsetProvider, slotsMapperLogger,_fixture.Create<EmisEnumMapper>()));
+            _demographics = new DemographicsGetResponse();
+
+            _sut =
+                new AppointmentSlotsResponseMapper(new AppointmentSlotsMapper(_dateTimeOffsetProvider, slotsMapperLogger,_fixture.Create<EmisEnumMapper>()));
         }
-        
+
+        [TestMethod]
+        public void Map_WhenPatientHasTelephoneNumbers_ReturnsTelephoneNumbersArray()
+        {
+            // Arrange
+            var slotsResponse = new AppointmentSlotsGetResponse();
+
+            var location = CreateLocation(23, "Leeds");
+            var session = CreateSession(location.LocationId, 1, "General Appointment Session", "Timed");
+
+            var practiceSettigsResponse = new PracticeSettingsGetResponse
+            {
+                Messages = new PracticeSettingsMessages()
+            };
+
+            var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
+            {
+                Sessions = new[] { session }
+            };
+
+            var demographicsWithTelephone = new DemographicsGetResponse()
+            {
+                ContactDetails = new ContactDetails()
+                {
+                    TelephoneNumber = "01243254363",
+                    MobileNumber = "07213432543"
+                }
+            };
+
+            var expectedResponse = new AppointmentSlotsResponse
+            {
+                Slots = Array.Empty<Slot>(),
+                BookingReasonNecessity = Necessity.Optional,
+                TelephoneNumbers = new List<PatientTelephoneNumber> {
+                    new PatientTelephoneNumber(){TelephoneNumber = "01243254363"},
+                    new PatientTelephoneNumber(){TelephoneNumber = "07213432543"}
+                } 
+            };
+
+            // Act
+            var actualResponse =
+                _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, demographicsWithTelephone, _userSession);
+
+            // Assert
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
         [TestMethod]
         public void Map_WhenSessionInAppointmentsSlotsResponseIsNull_ReturnsEmptySetOfSlots()
         {
@@ -82,7 +133,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _userSession);
+            var actualResponse = 
+                _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -117,7 +169,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _userSession);
+            var actualResponse = 
+                _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -156,7 +209,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 BookingReasonNecessity = Necessity.Optional
             };
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _userSession);
+            var actualResponse = 
+                _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -178,8 +232,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             var practiceSettigsResponse = new PracticeSettingsGetResponse
             {
-Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not book appointments if you have a sore throat." }
-};
+                Messages = new PracticeSettingsMessages
+                {
+                    AppointmentsMessage = "Please do not book appointments if you have a sore throat."
+                }
+            };
 
             var appointmentSlotSession =
                 CreateAppointmentsSlotSession(1, 2, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
@@ -197,7 +254,7 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _userSession);
+            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -253,7 +310,7 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettingsResponse, _userSession);
+            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettingsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -309,7 +366,7 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _userSession);
+            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);

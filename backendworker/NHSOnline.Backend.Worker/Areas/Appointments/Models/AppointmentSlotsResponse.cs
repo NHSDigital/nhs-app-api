@@ -14,5 +14,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         public Necessity BookingReasonNecessity { get; set; } = Necessity.Mandatory;
 
         public IEnumerable<Slot> Slots { get; set; } = Array.Empty<Slot>();
+        public IEnumerable<PatientTelephoneNumber> TelephoneNumbers { get; set; } = Array.Empty<PatientTelephoneNumber>();
     }
 }

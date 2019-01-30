@@ -3,7 +3,7 @@ package features.authentication.stepDefinitions
 import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.appointments.factories.AppointmentsBookingBackendFactory
+import features.appointments.factories.AppointmentsBookingFactory
 import features.sharedStepDefinitions.backend.AbstractSteps
 import utils.SerenityHelpers
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
@@ -32,7 +32,7 @@ class EndpointStepDefinitions : AbstractSteps() {
         SerenityHelpers.setPatient(patient)
         SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-        AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        AppointmentsBookingFactory.getForSupplier(gpSystem)
                 .defaultAppointmentBookingSetupWithResult { builder -> builder.respondWithSuccess() }
     }
 
@@ -107,7 +107,7 @@ class EndpointStepDefinitions : AbstractSteps() {
 
     private fun retrievePFS() {
         val appointmentToBook = Serenity.sessionVariableCalled<AppointmentBookRequest>(
-                AppointmentsBookingBackendFactory.appointmentToBookKey)
+                AppointmentsBookingFactory.appointmentToBookKey)
         submitRequest(_pfsResponse, _pfsException) { worker -> worker.appointments.postAppointment(appointmentToBook) }
 
     }

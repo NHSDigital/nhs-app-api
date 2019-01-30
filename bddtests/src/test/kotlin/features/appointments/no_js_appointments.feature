@@ -2,11 +2,13 @@
 @noJs
 Feature: Appointment Service with no Javascript
 
+  Background:
+    Given I have disabled javascript
+
   @bug @NHSO-3651
   Scenario Outline: A <GP System> user is presented with guidance when booking an appointment and can proceed to check
   their symptoms with javascript disabled
-    Given I have disabled javascript
-    And there are available appointment slots with different criteria for <GP System>
+    Given there are available appointment slots with different criteria for <GP System>
     And I am logged in
     And I am on the Appointment Guidance page
     When I click the 'Check symptoms' button
@@ -23,15 +25,13 @@ Feature: Appointment Service with no Javascript
   # with javascript
   @bug @NSHO-3650
   Scenario: An EMIS user can view appointment slot guidance with javascript disabled
-    Given I have disabled javascript
-    And there are available appointment slots with different criteria for EMIS
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the Available Appointments page
     Then the appointment slot guidance content is displayed
 
   Scenario Outline: A <GP System> user can find and book available appointments with javascript disabled
-    Given I have disabled javascript
-    And there are multiple appointment slots at the same time, provided by <GP System>
+    Given there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
     And I am on the My Appointments page
     Then I am informed I have no booked appointments
@@ -65,8 +65,7 @@ Feature: Appointment Service with no Javascript
       | VISION    |
 
   Scenario Outline: A <GP System> user can cancel appointments with javascript disabled
-    Given I have disabled javascript
-    And <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
+    Given <GP System> is available to cancel a previously booked appointment before cutoff time because <Reason>
     And I am logged in
     And I am on the My Appointments page
     And I select a "Cancel appointment" link
@@ -80,8 +79,7 @@ Feature: Appointment Service with no Javascript
       | Reason 1           | VISION    |
 
   Scenario: A TPP user can cancel appointments with javascript disabled
-    Given I have disabled javascript
-    And TPP is available to cancel a previously booked appointment before cutoff time
+    Given TPP is available to cancel a previously booked appointment before cutoff time
     And I am logged in
     And I am on the My Appointments page
     And I select a "Cancel appointment" link

@@ -129,9 +129,8 @@ class CommonSteps : AbstractSteps() {
 
     @Given("^I have logged in and have a valid session cookie$")
     fun givenIHaveLoggedInAndHaveAValidSessionCookie() {
-        val patient = SerenityHelpers.getPatient()
         val gpSystem = SerenityHelpers.getGpSupplier()
-
+        val patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
         sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication

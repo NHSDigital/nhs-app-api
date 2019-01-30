@@ -60,6 +60,7 @@ describe('CLEAR', () => {
     const expectedState = {
       slots: [],
       filteredSlots: [],
+      telephoneNumbers: [],
       hasLoaded: false,
       selectedSlot: slot,
       booked: true,
@@ -129,6 +130,7 @@ describe('INIT', () => {
     const expectedState = {
       slots: [],
       filteredSlots: [],
+      telephoneNumbers: [],
       hasLoaded: false,
       selectedSlot: null,
       booked: false,

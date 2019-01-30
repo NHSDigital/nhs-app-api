@@ -10,6 +10,7 @@ export const initialState = () => ({
   slots: new Map(),
   bookingGuidance: '',
   bookingReasonNecessity: '',
+  patientTelephoneNumbers: [],
   filteredSlots: [],
   hasLoaded: false,
   selectedSlot: null,

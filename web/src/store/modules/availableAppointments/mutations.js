@@ -18,6 +18,7 @@ import {
 const clearState = (state) => {
   state.slots = [];
   state.filteredSlots = [];
+  state.telephoneNumbers = [];
   state.hasLoaded = false;
   state.filtersOptions = {
     types: [],
@@ -66,6 +67,7 @@ export default {
     state.filtersOptions = result.filtersOptions;
     state.selectedOptions.location = result.defaultLocationSelectedOption;
     state.telephoneNumber = data.telephoneNumber;
+    state.patientTelephoneNumbers = data.telephoneNumbers;
   },
   [FILTER](state) {
     const mutation = new FilterMutation(DateProvider, new DateFilterMapper(DateProvider));

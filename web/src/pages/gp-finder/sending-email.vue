@@ -57,7 +57,6 @@
                               value="no"
                               name="choice"
                               @select="radioButtonSelected"/>
-
         <input id="odsCode" :value="odsCode" type="hidden" name="odsCode">
         <generic-button :class="[$style.button, $style.green]" :type="'submit'">
           {{ this.$t('th05.continueButton') }}
