@@ -1,18 +1,13 @@
 package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.sharedElements.RadioButtons2
-import pages.sharedElements.BannerObject
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
-open class OrganDonationFaithAndBeliefsPage : HybridPageObject() {
+open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
 
-    private val title = HybridPageElement(
-            "//h2",
-            page = this,
-            helpfulName = "header").withText("Faith / beliefs")
+    override val titleText: String = "Faith / beliefs"
 
     val radioButtons by lazy {
         RadioButtons2(HybridPageElement(
@@ -20,8 +15,6 @@ open class OrganDonationFaithAndBeliefsPage : HybridPageObject() {
                 page = this,
                 helpfulName = "Radio Buttons"))
     }
-
-    val validationBanner by lazy { BannerObject.error(this) }
 
     private val expectedOptions by lazy {
         arrayListOf(
@@ -33,8 +26,8 @@ open class OrganDonationFaithAndBeliefsPage : HybridPageObject() {
         )
     }
 
-    fun assertIsDisplayed() {
-        title.assertIsVisible()
+    override fun assertDisplayed() {
+        assertPageFullyLoaded()
         assertInformation()
         radioButtons.assertAreEqual(expectedOptions)
     }
@@ -60,8 +53,4 @@ open class OrganDonationFaithAndBeliefsPage : HybridPageObject() {
             "//b[normalize-space() = \"$questionContent\"]",
             page = this,
             helpfulName = "question")
-
-    fun clickContinue() {
-        clickOnButtonContainingText("Continue")
-    }
 }

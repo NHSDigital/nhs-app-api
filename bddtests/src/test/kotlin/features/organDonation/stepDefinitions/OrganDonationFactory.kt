@@ -11,11 +11,13 @@ import mocking.organDonation.OrganDonationSubmitDecisionBuilder
 import mocking.organDonation.models.OrganDonationAdditionalDetails
 import mocking.organDonation.models.OrganDonationRegistration
 import mocking.organDonation.models.OrganDonationRegistrationRequest
+import models.KeyValuePair
 import models.Patient
 import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
 
 const val ORGAN_DONATION_DECISION = "ORGAN_DONATION_DECISION"
+const val ORGAN_DONATION_DECISION_SOME_ORGANS = "ORGAN_DONATION_DECISION_SOME_ORGANS"
 class OrganDonationFactory(val gpSystem: String) {
 
     val mockingClient = MockingClient.instance
@@ -73,9 +75,18 @@ class OrganDonationFactory(val gpSystem: String) {
     }
 
     fun some(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        Serenity.setSessionVariable("ORGAN_DONATION_DECISION_OPT_IN").to(true)
+        val organsToDonate = arrayListOf(
+                KeyValuePair("Heart", true),
+                KeyValuePair("Lungs", false),
+                KeyValuePair("Kidney", true),
+                KeyValuePair("Liver", true),
+                KeyValuePair("Corneas", false),
+                KeyValuePair("Pancreas", true),
+                KeyValuePair("Tissue", false),
+                KeyValuePair("Small bowel", false))
+        Serenity.setSessionVariable(ORGAN_DONATION_DECISION_SOME_ORGANS).to(organsToDonate)
         val registration = OrganDonationRegistrationRequest(
-                OrganDonationRegistration.optIn(patient),
+                OrganDonationRegistration.some(patient, organsToDonate),
                 OrganDonationAdditionalDetails.fromPatient(patient))
         registrationSetup(registration, action)
     }

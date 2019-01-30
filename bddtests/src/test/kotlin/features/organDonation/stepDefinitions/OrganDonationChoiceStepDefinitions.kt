@@ -25,7 +25,7 @@ open class OrganDonationChoiceStepDefinitions {
         browser.appendSourceQueryString("ios")
         morePage.btnOrganDonation.click()
         organDonationChoicePage.waitForSpinnerToDisappear()
-        organDonationChoicePage.organDonationTitle.assertIsVisible()
+        organDonationChoicePage.assertDisplayed()
     }
 
     @When("^I choose to not donate my organs")
@@ -40,10 +40,9 @@ open class OrganDonationChoiceStepDefinitions {
         button.click()
     }
 
-
     @Then("^the internal Organ Donation Choice Page is displayed")
     fun theInternalOrganDonationChoicePageIsDisplayed() {
         organDonationChoicePage.waitForSpinnerToDisappear()
-        organDonationChoicePage.organDonationTitle.assertIsVisible()
+        organDonationChoicePage.assertDisplayed()
     }
 }

@@ -1,20 +1,13 @@
 package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageObject
 import pages.HybridPageElement
 import pages.sharedElements.DropdownElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
-open class OrganDonationAdditionalDetailsPage : HybridPageObject() {
+open class OrganDonationAdditionalDetailsPage : OrganDonationBasePage() {
 
-    val additionalDetailsTitle = HybridPageElement(
-            "//h2",
-            "//h2",
-            null,
-            null,
-            this,
-            "header").withText("Additional details")
+    override val titleText: String = "Additional details"
 
     private val defaultDropDownValue = "Please select"
 
@@ -30,7 +23,8 @@ open class OrganDonationAdditionalDetailsPage : HybridPageObject() {
             this
     )
 
-    fun assertIsDisplayed() {
+    override fun assertDisplayed() {
+        assertPageFullyLoaded()
         ethnicitySelector.assertIsVisible()
         ethnicitySelector.assertSelected(defaultDropDownValue)
         religionSelector.assertIsVisible()

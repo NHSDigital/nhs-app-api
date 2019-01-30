@@ -89,6 +89,35 @@ Feature: Organ Donation
   | TPP       |
   | VISION    |
 
+  Scenario Outline: A <GP System> user can opt to donate some of their organs
+    Given I am a <GP System> user not registered with organ donation, who wishes to register and donate some organs
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    And I choose to donate my organs
+    Then the Organ Donation Your Choice page is displayed
+    When I select the option to donate some of my organs
+    And I click the 'Continue' button
+    Then the Organ Donation Specific Organ Choice page is displayed
+    When I choose which organs to donate
+    And I click the 'Continue' button
+    Then the Organ Donation Faith And Beliefs page is displayed
+    And no options on the Organ Donation Faith And Beliefs page are selected
+    When I select the option 'No' to share my organ donation faith and beliefs
+    And I click the 'Continue' button
+    Then the Organ Donation Decision Additional Details page is displayed
+    When I click the 'Continue' button
+    Then the Organ Donation Check Details page is displayed
+    And my specific organ donation choices are displayed on the Organ Donation Check Details page
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'Yes I want to be a donor' button
+    Then the Organ Donation Confirmation page is displayed
+    And the decision to opt in to organ donation with some organs has been successfully created
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
   Scenario: A user can choose to record their ethnicity when opting out of organ donation
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
@@ -212,6 +241,36 @@ Feature: Organ Donation
     Then the Organ Donation Your Choice page is displayed
     When I click the 'Back' button
     Then the internal Organ Donation Choice Page is displayed
+    
+  Scenario: A user can navigate back through the opt in with some organs journey
+    Given I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    And I choose to donate my organs
+    Then the Organ Donation Your Choice page is displayed
+    When I select the option to donate some of my organs
+    And I click the 'Continue' button
+    Then the Organ Donation Specific Organ Choice page is displayed
+    When I choose which organs to donate
+    And I click the 'Continue' button
+    Then the Organ Donation Faith And Beliefs page is displayed
+    And no options on the Organ Donation Faith And Beliefs page are selected
+    When I select the option 'Yes' to share my organ donation faith and beliefs
+    And I click the 'Continue' button
+    Then the Organ Donation Decision Additional Details page is displayed
+    When I click the 'Continue' button
+    Then the Organ Donation Check Details page is displayed
+    When I click the 'Back' button
+    Then the Organ Donation Decision Additional Details page is displayed
+    When I click the 'Back' button
+    Then the Organ Donation Faith And Beliefs page is displayed
+    When I click the 'Back' button
+    Then the Organ Donation Specific Organ Choice page is displayed
+    And my previous decisions are displayed on the Organ Donation Specific Organ Choice page
+    When I click the 'Back' button
+    Then the Organ Donation Your Choice page is displayed
+    When I click the 'Back' button
+    Then the internal Organ Donation Choice Page is displayed
 
   Scenario: A user is shown a validation message if they submit their decision without ticking both the required checkboxes
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
@@ -234,3 +293,33 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     Then a validation message is shown if a user attempts to continue without selecting a faith and belief option
+
+  Scenario: A user is shown a validation message if they attempt to continue opting in without selecting 'All' or 'Some'
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt in
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    And I choose to donate my organs
+    Then the Organ Donation Your Choice page is displayed
+    And a validation message is shown if a user attempts to continue without choosing to donate all or some organs
+
+  Scenario: A user is shown a validation error if they submit their decision without choosing an option for each organ
+    Given I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
+    And I am logged in
+    When I navigate to the internal Organ Donation Choice Page
+    And I choose to donate my organs
+    Then the Organ Donation Your Choice page is displayed
+    When I select the option to donate some of my organs
+    And I click the 'Continue' button
+    Then the Organ Donation Specific Organ Choice page is displayed
+    And a validation message is shown if a user attempts to continue without selecting a decision for all organs
+
+  Scenario: A user is shown a validation error if they select 'no' for all specific organ and tissue donation choices
+    Given I am a EMIS user not registered with organ donation, who wishes to register
+    And I am logged in
+    When I navigate to the internal Organ Donation Choice Page
+    And I choose to donate my organs
+    Then the Organ Donation Your Choice page is displayed
+    When I select the option to donate some of my organs
+    And I click the 'Continue' button
+    Then the Organ Donation Specific Organ Choice page is displayed
+    And a validation message is shown if a user attempts to continue with all specific organ options set to no

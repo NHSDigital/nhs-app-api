@@ -1,5 +1,7 @@
 package pages.organDonation
 
+import models.KeyValuePair
+import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
 
@@ -34,5 +36,33 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
                 .withText(expectedText)
                 .assertSingleElementPresent()
                 .assertIsVisible()
+    }
+
+    fun assertDecisionIsSome(organsToDonate: ArrayList<KeyValuePair<String, Boolean>>) {
+        assertText("Specific organs and tissue")
+
+        val listOfToDonate = arrayListOf<String>()
+        val listOfNotToDonate = arrayListOf<String>()
+
+        organsToDonate.forEach { organ ->
+            if (organ.value) listOfToDonate.add(organ.key)
+            else listOfNotToDonate.add(organ.key)
+        }
+
+        assertPair("You have chosen to donate:", listOfToDonate)
+        assertPair("You have chosen not to donate:", listOfNotToDonate)
+    }
+
+    private fun assertPair(expectedKey: String, expectedValues: ArrayList<String>) {
+        val actualValues = HybridPageElement(
+                "//h4[text()='$expectedKey']/following-sibling::ul/li",
+                page = page,
+                helpfulName = "label '$expectedKey'").elements.map { element -> element.text }
+
+        val message = "Expected list of options. " +
+                "Expected: ${expectedValues.joinToString()}. " +
+                "Actual: ${actualValues.joinToString()}."
+        Assert.assertEquals(message, expectedValues.count(), actualValues.count())
+        Assert.assertTrue(message, actualValues.containsAll(expectedValues))
     }
 }

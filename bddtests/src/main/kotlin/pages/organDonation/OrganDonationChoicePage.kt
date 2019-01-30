@@ -2,19 +2,11 @@ package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
-import pages.HybridPageObject
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
-class OrganDonationChoicePage : HybridPageObject() {
+class OrganDonationChoicePage : OrganDonationBasePage() {
 
-    val organDonationTitle = HybridPageElement(
-            webDesktopLocator = "//h2",
-            webMobileLocator = "//h2",
-            androidLocator = null,
-            page = this,
-            helpfulName = "Title"
-    ).withText("Register your organ donation decision")
-
+    override val titleText: String = "Register your organ donation decision"
 
     val noButton = HybridPageElement(
             webDesktopLocator = "//button[descendant::*[contains(text(),\"NO\")]]",
@@ -27,6 +19,13 @@ class OrganDonationChoicePage : HybridPageObject() {
             webDesktopLocator = "//button[descendant::*[contains(text(),\"YES\")]]",
             webMobileLocator = "//button[descendant::*[contains(text(),\"YES\")]]",
             androidLocator = null,
-            page = this
+            page = this,
+            helpfulName = "No option"
     )
+
+    override fun assertDisplayed() {
+        title.assertIsVisible()
+        noButton.assertIsVisible()
+        yesButton.assertIsVisible()
+    }
 }

@@ -28,8 +28,7 @@ open class OrganDonationAdditionalDetailsStepDefinitions {
 
     @Then("^the Organ Donation Decision Additional Details page is displayed")
     fun theOrganDonationDecisionAdditionalDetailsPageIsDisplayed() {
-        organDonationAdditionalDetailsPage.additionalDetailsTitle.assertIsVisible()
-        organDonationAdditionalDetailsPage.assertIsDisplayed()
+        organDonationAdditionalDetailsPage.assertDisplayed()
 
         val expectedReligions = Serenity.sessionVariableCalled<ArrayList<String>>("ReferenceReligions")
 

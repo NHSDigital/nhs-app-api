@@ -16,7 +16,7 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
 
     @Then("^the Organ Donation Faith And Beliefs page is displayed")
     fun theOrganDonationFaithAndBeliefsPageIsDisplayed() {
-        organDonationFaithAndBeliefsPage.assertIsDisplayed()
+        organDonationFaithAndBeliefsPage.assertDisplayed()
     }
 
     @Then("^no options on the Organ Donation Faith And Beliefs page are selected")

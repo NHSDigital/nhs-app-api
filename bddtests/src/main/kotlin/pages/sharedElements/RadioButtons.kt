@@ -3,6 +3,7 @@ package pages.sharedElements
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 
 class RadioButtons(allButtons: HybridPageElement) {
@@ -49,19 +50,25 @@ class RadioButtons(allButtons: HybridPageElement) {
 class RadioButton(val element : WebElementFacade) {
 
     fun assertSelected() {
-        Assert.assertTrue("$title should be selected but is not", selected)
+        Assert.assertEquals("$title should be selected but is not", 1, selectedIndicator().count())
     }
 
     fun assertNotSelected() {
-        Assert.assertFalse("$title should not be selected but is", selected)
+        Assert.assertEquals("$title should not be selected but is", 0, selectedIndicator().count())
     }
 
     fun select() {
         element.click()
     }
 
-    private val selected: Boolean = element.find<WebElementFacade>(By.xpath("./input")).getAttribute("value") == "true"
+    private fun selectedIndicator() = element.findElements(By.xpath("./div/div"))
 
-    val title: String = element.find<WebElementFacade>(By.xpath("./b")).text
-    val description: String = element.find<WebElementFacade>(By.xpath("./p")).text
+    val title: String = findSingle("./label/div/b", "title").text
+    val description: String = findSingle("./label/div/p", "description").text
+
+    fun findSingle(xpath:String, name:String): WebElement {
+        val found = element.findElements(By.xpath(xpath))
+        Assert.assertEquals("Expected found element for $name", 1, found.count())
+        return found.single()
+    }
 }

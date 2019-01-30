@@ -2,24 +2,17 @@ package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
-import pages.HybridPageObject
 import pages.sharedElements.RadioButtons
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
-open class OrganDonationYourChoicePage : HybridPageObject() {
+open class OrganDonationYourChoicePage : OrganDonationBasePage() {
 
-    val yourChoiceTitle = HybridPageElement(
-            "//h2",
-            "//h2",
-            null,
-            null,
-            this,
-            "header").withText("Your choice")
+    override val titleText: String = "Your choice"
 
     val radioButtons by lazy {
         RadioButtons(HybridPageElement(
-                "//label[input]",
-                "//label[input]",
+                "//div[input][label]",
+                "//div[input][label]",
                 null,
                 null,
                 this,
@@ -28,11 +21,18 @@ open class OrganDonationYourChoicePage : HybridPageObject() {
 
     private val expectedOptions by lazy {
         arrayListOf(
-                Pair(allOfMyOrgans, "Help up to nine people through organ donation and even more through tissue")
+                Pair(allOfMyOrgans, "Help up to nine people through organ donation and even more through tissue"),
+                Pair(someOfMyOrgans, "Choose which of your organs and tissue to donate")
         )
     }
 
     val allOfMyOrgans: String = "All my organs and tissue"
+    val someOfMyOrgans: String = "Specific organs and tissue"
+
+    override fun assertDisplayed() {
+        assertPageFullyLoaded()
+        assertOptions()
+    }
 
     fun assertOptions() {
         radioButtons.assertAreEqual(expectedOptions)

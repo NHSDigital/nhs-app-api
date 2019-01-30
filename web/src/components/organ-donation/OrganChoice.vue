@@ -54,10 +54,11 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/info";
 @import "../../style/buttons";
+@import "../../style/spacings";
 
 .horizontal-radio {
   float: left;
-  margin-right: 10px;
+  margin-right: $four;
 }
 
 .new-choice {
@@ -65,8 +66,8 @@ export default {
 }
 
 .choice-radio-button {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
+  margin-top: $one;
+  margin-bottom: $two;
   &:last-of-type {
     margin-bottom: 1.5em;
   }

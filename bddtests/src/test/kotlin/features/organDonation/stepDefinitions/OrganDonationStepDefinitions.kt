@@ -48,6 +48,14 @@ open class OrganDonationStepDefinitions {
         factory.optIn { registration -> registration.respondWithSuccess("test") }
     }
 
+    @Given("^I am a (.*) user not registered with organ donation, who wishes to register and donate some organs$")
+    fun iAmNotRegisteredWithOrganDonationWishToRegisterAndDonateSomeOrgans(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
+        factory.some { registration -> registration.respondWithSuccess("test") }
+    }
+
     @Given("^the organ donation toggle is set to target the internal page$")
     fun toggleOrganDonationSiteLink() {
         organDonationChoicePage.waitForSpinnerToDisappear()
@@ -70,7 +78,7 @@ open class OrganDonationStepDefinitions {
     @Then("^the internal Organ Donation page is displayed$")
     fun iAmOnTheInternalOrganDonationPage() {
         organDonationChoicePage.waitForSpinnerToDisappear()
-        organDonationChoicePage.organDonationTitle.assertIsVisible()
+        organDonationChoicePage.assertDisplayed()
     }
 
     private fun aNewTabOpens(url: String) {

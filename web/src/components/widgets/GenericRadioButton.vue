@@ -70,5 +70,6 @@ export default {
 
 .radio-label {
   font-weight: normal;
+
 }
 </style>

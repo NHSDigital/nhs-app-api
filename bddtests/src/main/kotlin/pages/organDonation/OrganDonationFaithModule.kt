@@ -5,7 +5,7 @@ import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
 
-class OrganDonationFaithModule(private val page: HybridPageObject) {
+class OrganDonationFaithModule(page: HybridPageObject) {
 
     private val title = "Faith / beliefs details"
 

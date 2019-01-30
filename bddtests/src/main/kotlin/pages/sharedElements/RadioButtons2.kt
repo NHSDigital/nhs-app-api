@@ -47,10 +47,10 @@ class RadioButtons2(allButtons: HybridPageElement) {
     }
 }
 
-class RadioButton2(val element : WebElementFacade) {
+class RadioButton2(private val element : WebElementFacade) {
 
     fun assertSelected() {
-        Assert.assertEquals("$title should be selected but is not", 1, selectedIndicator().count() )
+        Assert.assertEquals("$title should be selected but is not", 1, selectedIndicator().count())
     }
 
     fun assertNotSelected() {
@@ -65,5 +65,5 @@ class RadioButton2(val element : WebElementFacade) {
 
 
     val title: String = element.find<WebElementFacade>(By.xpath("./label/span")).text
-    val description: String by lazy {element.find<WebElementFacade>(By.xpath("./label/p")).text}
+    val description: String by lazy { element.find<WebElementFacade>(By.xpath("./label/p")).text }
 }

@@ -8,7 +8,7 @@ class GenericPageStepDefinitions {
     lateinit var genericPage: HybridPageObject
 
      @When("^I click the '(.*)' button$")
-     fun iClickTheFindAvailableAppointmentsButton(buttonText: String) {
+     fun iClickTheButton(buttonText: String) {
          genericPage.clickOnButtonContainingText(buttonText)
      }
 }

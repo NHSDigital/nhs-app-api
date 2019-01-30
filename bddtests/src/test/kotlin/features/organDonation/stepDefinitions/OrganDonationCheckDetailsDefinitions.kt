@@ -2,6 +2,8 @@ package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import models.KeyValuePair
+import net.serenitybdd.core.Serenity
 import pages.organDonation.OrganDonationCheckDetailsPage
 import utils.SerenityHelpers
 
@@ -23,9 +25,8 @@ open class OrganDonationCheckDetailsDefinitions {
     @Then("^the Organ Donation Check Details page is displayed")
     fun theOrganDonationCheckDetailsPageIsDisplayed() {
         val patient = SerenityHelpers.getPatient()
-        organDonationCheckDetailsPage.title.assertIsVisible()
+        organDonationCheckDetailsPage.assertDisplayed()
         organDonationCheckDetailsPage.assertPersonalDetailsSection(patient)
-        organDonationCheckDetailsPage.assertConfirmationCheckBoxes()
     }
 
     @Then("^the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page")
@@ -36,6 +37,13 @@ open class OrganDonationCheckDetailsDefinitions {
     @Then("^the choice of wishing to donate organs is displayed on the Organ Donation Check Details page")
     fun choiceOfWishingToDonateOrgansIsDisplayedOnTheOrganDonationCheckDetailsPage() {
         organDonationCheckDetailsPage.yourDecisionModule.assertDecisionIsYes()
+    }
+
+    @Then("^my specific organ donation choices are displayed on the Organ Donation Check Details page")
+    fun mySpecificOrganDonationChoicesAreDisplayedOnTheOrganDonaitonCheckDetailsPage(){
+        val organsToDonate = Serenity.sessionVariableCalled<ArrayList<KeyValuePair<String, Boolean>>>(
+                ORGAN_DONATION_DECISION_SOME_ORGANS)
+        organDonationCheckDetailsPage.yourDecisionModule.assertDecisionIsSome(organsToDonate)
     }
 
     @Then("^my ethnicity is recorded on the Organ Donation Check Details page")

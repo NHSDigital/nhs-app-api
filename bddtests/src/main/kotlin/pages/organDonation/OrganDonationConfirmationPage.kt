@@ -1,35 +1,24 @@
 package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageElement
-import pages.HybridPageObject
 import pages.sharedElements.BannerObject
+import pages.HybridPageElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
-open class OrganDonationConfirmationPage : HybridPageObject() {
+open class OrganDonationConfirmationPage : OrganDonationBasePage() {
 
-    val title = HybridPageElement(
-            "//h2",
-            page = this,
-            helpfulName = "header").withText("Your decision")
+    override fun assertDisplayed() {
+        title.assertIsVisible()
+    }
+
+    override val titleText: String = "Your decision"
+
+    val decisionModule by lazy { OrganDonationYourDecisionModule(this) }
 
     val registerBloodDonorLink = HybridPageElement(
             "//a//h2",
             page = this,
             helpfulName = "link").withText("Register to be a blood donor")
-
-    private val decision = HybridPageElement(
-            "//span",
-            page = this,
-            helpfulName = "header")
-
-    fun assertDecisionIsNo() {
-        decision.withText("No, I do not want to donate my organs").assertSingleElementPresent()
-    }
-
-    fun assertDecisionIsYes() {
-        decision.withText("Yes, I do want to donate my organs").assertSingleElementPresent()
-    }
 
     fun assertSuccessBanner() {
         BannerObject.success(this).assertVisible("We have updated your decision")

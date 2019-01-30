@@ -95,13 +95,4 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/info";
 @import "../../style/buttons";
-
-.horizontalradio {
-    float: left;
-    margin-right: 10px;
-}
-
-.newChoice {
-    clear: left;
-}
 </style>

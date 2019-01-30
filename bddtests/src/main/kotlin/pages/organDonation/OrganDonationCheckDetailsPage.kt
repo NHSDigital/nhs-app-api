@@ -4,17 +4,12 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
-import pages.HybridPageObject
 import pages.sharedElements.CheckBoxElement
-import pages.sharedElements.BannerObject
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
-open class OrganDonationCheckDetailsPage : HybridPageObject() {
+open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
 
-    val title = HybridPageElement(
-            "//h2",
-            page = this,
-            helpfulName = "header").withText("Check your details before submitting")
+    override val titleText: String = "Check your details before submitting"
 
     val privacyStatementLink = HybridPageElement(
             "//a[normalize-space() = 'privacy statement']",
@@ -27,7 +22,6 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
     val privacyStatementCheckBox = CheckBoxElement(this,
             "I have read the privacy statement and give consent for the use of my information in " +
                     "accordance with the terms")
-    val validationBanner by lazy { BannerObject.error(this) }
 
     fun assertPersonalDetailsSection(patient: Patient) {
         OrganDonationDetailsAssertor("About you", this)
@@ -42,7 +36,13 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
     val yourDecisionModule by lazy { OrganDonationYourDecisionModule(this) }
     val faithAndBeliefsModule by lazy { OrganDonationFaithModule(this) }
 
-    fun assertConfirmationCheckBoxes() {
+
+    override fun assertDisplayed() {
+        assertPageFullyLoaded()
+        assertConfirmationCheckBoxes()
+    }
+
+    private fun assertConfirmationCheckBoxes() {
         accuracyCheckBox.assertIsVisible()
         privacyStatementCheckBox.assertIsVisible()
     }
@@ -59,6 +59,6 @@ open class OrganDonationCheckDetailsPage : HybridPageObject() {
 
     fun clickSubmit() {
         val optIn = Serenity.sessionVariableCalled<Boolean>("ORGAN_DONATION_DECISION_OPT_IN")
-        clickOnButtonContainingText(if(optIn) "Yes I want to be a donor" else "No I do not want to be a donor")
+        clickOnButtonContainingText(if (optIn) "Yes I want to be a donor" else "No I do not want to be a donor")
     }
 }
