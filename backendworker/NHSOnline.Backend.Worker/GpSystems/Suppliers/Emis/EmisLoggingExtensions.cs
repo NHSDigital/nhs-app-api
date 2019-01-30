@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             try
             {
                 var initialResponse = CensorResponse(response);
-                if (null != initialResponse)
+                if (initialResponse != null)
                 {
                     logger.LogError("EMIS Response: " + initialResponse.SerializeJson());
                 }

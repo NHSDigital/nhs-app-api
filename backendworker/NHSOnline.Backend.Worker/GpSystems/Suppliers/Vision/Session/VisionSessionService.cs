@@ -38,6 +38,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                 var responseBody = response.Body;
                 if(!IsResponseBodyValid(responseBody))
                 {
+                    _logger.LogError("Vision HttpRequestException has been thrown.");
                     return new GpSessionCreateResult.SupplierSystemBadResponse();
                 }
 
@@ -57,8 +58,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                     }
                 );
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
+                _logger.LogError(ex, "Vision HttpRequestException has been thrown.");
                 return new GpSessionCreateResult.SupplierSystemUnavailable();
             }
             finally
@@ -75,31 +77,44 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
         // Vision does not have a logoff endpoint, returning successfully deleted
         public Task<SessionLogoffResult> Logoff(UserSession userSession)
         {
+            _logger.LogEnter();
+            _logger.LogDebug("Vision user successfully deleted");
             return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
         }
 
-        private static GpSessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
+        private GpSessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {
+                _logger.LogError($"Vision invalid request error {response.StatusCode}");
+                _logger.LogVisionErrorResponse(response);
                 return new GpSessionCreateResult.InvalidRequest();
             }
 
             if (response.IsInvalidUserCredentialsError)
             {
+                _logger.LogError($"Vision invalid user credentials {response.StatusCode}");
+                _logger.LogVisionErrorResponse(response);
                 return new GpSessionCreateResult.InvalidUserCredentials();
             }
 
             if (response.IsInvalidSecurityHeaderError)
             {
+                _logger.LogError($"Vision invalid security header {response.StatusCode}");
+                _logger.LogVisionErrorResponse(response);
                 return new GpSessionCreateResult.ErrorProcessingSecurityHeader();
             }
 
             if (response.IsUnknownError)
             {
+                _logger.LogError($"Vision unknown error {response.StatusCode}");
+                _logger.LogVisionErrorResponse(response);
                 return new GpSessionCreateResult.UnknownError();
             }
 
+            _logger.LogError($"Vision system is currently unavailable {response.StatusCode}");
+            _logger.LogVisionErrorResponse(response);
+            
             return new GpSessionCreateResult.SupplierSystemUnavailable();
         }
 
