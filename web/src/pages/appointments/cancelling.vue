@@ -12,41 +12,53 @@
       <p>{{ $t('appointments.cancelling.info') }}</p>
     </div>
 
-    <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false" />
+    <div :class="$style.appointmentContainer">
+      <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false" />
+    </div>
     <form-post :action="appointmentCancelPath">
       <input :value="appointment.id" type="hidden" name="id">
-      <div v-if="isReasonRequired" :class="$style.form">
-        <label for="txt_reason">
-          {{ $t('appointments.cancelling.form_label') }}
-        </label>
+      <div :class="[$style.form, $style.cancellationReason,
+                    !$store.state.device.isNativeApp && $style.desktopWeb]">
+        <div v-if="isReasonRequired">
+          <label for="txt_reason">
+            {{ $t('appointments.cancelling.form_label') }}
+          </label>
 
-        <error-message v-if="showError" id="error-label" :class="$style.form">
-          {{ $t('appointments.cancelling.noReasonError') }}
-        </error-message>
+          <error-message v-if="showError" id="error-label" :class="$style.form">
+            {{ $t('appointments.cancelling.noReasonError') }}
+          </error-message>
 
-        <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
-                         select-id = "txt_reason" select-name="reason">
-          <option disabled="" selected="" value="">
-            {{ $t('appointments.cancelling.dropdownDefaultOption') }}
-          </option>
-          <option v-for="reason in cancellationReasons" :key="reason.id" :value="reason.id">
-            {{ reason.displayName }}
-          </option>
-        </select-dropdown>
+          <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
+                           :class="[$style.reason, showError && $style.errorBorder]"
+                           select-id="txt_reason" select-name="reason">
+            <option disabled="" selected="" value="">
+              {{ $t('appointments.cancelling.dropdownDefaultOption') }}
+            </option>
+            <option v-for="reason in cancellationReasons" :key="reason.id" :value="reason.id">
+              {{ reason.displayName }}
+            </option>
+          </select-dropdown>
+
+        </div>
+        <generic-button id="btn_cancel_appointment"
+                        :class="[$style.button, $style.green]"
+                        @click.stop.prevent="onCancelButtonClicked($event)">
+          {{ $t('appointments.cancelling.cancelButtonText') }}
+        </generic-button>
       </div>
-
-      <generic-button id="btn_cancel_appointment"
-                      :class="[$style.button, $style.green]"
-                      @click.stop.prevent="onCancelButtonClicked($event)">
-        {{ $t('appointments.cancelling.cancelButtonText') }}
-      </generic-button>
     </form-post>
-    <form :action="appointmentPath">
-      <generic-button id="btn_back_appointment"
-                      :class="[$style.button, $style.grey]"
-                      @click.stop.prevent="onBackButtonClicked($event)">
-        {{ $t('appointments.cancelling.backButtonText') }}
-      </generic-button>
+
+    <generic-button v-if="$store.state.device.isNativeApp"
+                    id="btn_back_appointment"
+                    :class="[$style.button, $style.grey]"
+                    @click.stop.prevent="onBackButtonClicked($event)">
+      {{ $t('appointments.cancelling.backButtonText') }}
+    </generic-button>
+    <form v-else :action="appointmentPath">
+      <desktopGenericBackLink
+
+        :path="appointmentPath"
+        :button-text="'appointments.cancelling.backButtonText'"/>
     </form>
   </div>
 </template>
@@ -62,9 +74,12 @@ import GenericButton from '@/components/widgets/GenericButton';
 import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS } from '@/lib/routes';
 import FormPost from '@/components/FormPost';
 import { redirectTo } from '@/lib/utils';
+import NoJsForm from '@/components/no-js/NoJsForm';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
 export default {
   components: {
+    DesktopGenericBackLink,
     GenericButton,
     Appointment,
     MessageDialog,
@@ -73,6 +88,7 @@ export default {
     ErrorMessage,
     SelectDropdown,
     FormPost,
+    NoJsForm,
   },
   data() {
     return {
@@ -141,4 +157,25 @@ export default {
 @import "../../style/buttons";
 @import "../../style/forms";
 @import "../../style/info";
+@import "../../style/desktopWeb/inputcontrol";
+
+.cancellationReason {
+  &.desktopWeb {
+    max-width: 540px;
+  }
+  .reason {
+    margin-bottom: 2em;
+  }
+}
+
+.button.green:focus{
+  outline-color: $focus_highlight;
+  box-shadow: inset 0 0 0 4px $focus_highlight;
+}
+
+
+.appointmentContainer {
+  margin-bottom: 1em;
+}
+
 </style>

@@ -112,7 +112,7 @@
                              :initial-contents="symptoms"
                              :text-area-classes="defaultClasses"
                              :required="true"
-                             :class="showReasonError && $style.desktopWebErrorBorder"
+                             :class="showReasonError && $style.errorBorder"
                              v-model="symptoms"
                              name="bookingReason"
                              maxlength="150"/>
@@ -374,6 +374,7 @@ export default {
 @import "../../style/buttons";
 @import "../../style/forms";
 @import "../../style/info";
+@import "../../style/desktopWeb/inputcontrol";
 
 .reasonForm {
  &.web {
@@ -411,7 +412,7 @@ export default {
   margin-right: 1em;
 }
 .patientPhoneNumberRadioLabel {
-  padding-top: 0em;
+  padding-top: 0;
 }
 
 .patientTelephoneNumberLabel {
@@ -508,15 +509,7 @@ export default {
  box-shadow: inset 0 0 0 4px $focus_highlight;
 }
 
- .desktopWebErrorBorder{
-  box-sizing: content-box;
-  outline-color: red;
-  box-shadow: 0 0 0 3px red;
-  border-radius: 0.313em;
-  outline-width: thick;
- }
-
- .confirmButton {
+.confirmButton {
   margin-top: 1em;
  }
 

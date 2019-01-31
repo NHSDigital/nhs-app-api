@@ -135,6 +135,11 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
+    @When("^I select a \"Back\" link$")
+    fun iSelectABackLink() {
+        myAppointmentsUISteps.myAppointmentsPage.clickOnLinkContainingText("Back")
+    }
+
     @Then("^a \"Cancellation confirmed\" message is displayed$")
     fun cancellationConfirmationMessage() {
         myAppointmentsUISteps.verifyCancellationConfirmationMessage()

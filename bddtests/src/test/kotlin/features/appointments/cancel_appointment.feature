@@ -105,7 +105,7 @@ Feature: Ability to cancel an appointment
     And I am logged in
     And I am on the My Appointments page
     And I select a "Cancel appointment" link
-    When I select "Back" button
+    When I select a "Back" link
     Then the My Appointments page is displayed
     Examples:
       | GP System |
