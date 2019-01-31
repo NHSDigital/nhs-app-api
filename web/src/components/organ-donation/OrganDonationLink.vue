@@ -38,8 +38,8 @@ export default {
       required: true,
     },
     className: {
-      type: String,
-      default: '',
+      type: Array,
+      default: () => [],
     },
   },
   computed: {

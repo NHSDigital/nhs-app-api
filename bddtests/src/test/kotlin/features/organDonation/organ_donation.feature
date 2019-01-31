@@ -37,9 +37,12 @@ Feature: Organ Donation
     And I click the 'Yes I want to be a donor' button
     Then the Organ Donation Confirmation page is displayed
     And the decision to opt in to organ donation has been successfully created
+    @smoketest
     Examples:
       | GP System |
       | EMIS      |
+    Examples:
+      | GP System |
       | TPP       |
       | VISION    |
 
@@ -83,11 +86,14 @@ Feature: Organ Donation
     And I click the 'No I do not want to be a donor' button
     Then the Organ Donation Confirmation page is displayed
     And the decision to opt out of organ donation has been successfully created
-  Examples:
-  | GP System |
-  | EMIS      |
-  | TPP       |
-  | VISION    |
+    @smoketest
+    Examples:
+      | GP System |
+      | VISION    |
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   Scenario Outline: A <GP System> user can opt to donate some of their organs
     Given I am a <GP System> user not registered with organ donation, who wishes to register and donate some organs
@@ -112,10 +118,13 @@ Feature: Organ Donation
     And I click the 'Yes I want to be a donor' button
     Then the Organ Donation Confirmation page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
+  @smoketest
+    Examples:
+      | GP System |
+      | TPP       |
     Examples:
       | GP System |
       | EMIS      |
-      | TPP       |
       | VISION    |
 
   Scenario: A user can choose to record their ethnicity when opting out of organ donation

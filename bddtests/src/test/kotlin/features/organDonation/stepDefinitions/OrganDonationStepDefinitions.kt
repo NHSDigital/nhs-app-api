@@ -24,6 +24,26 @@ open class OrganDonationStepDefinitions {
 
     lateinit var organDonationChoicePage: OrganDonationChoicePage
 
+    @Given("I am a (.*) user registered with organ donation to not donate my organs")
+    fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existingOptOut()
+    }
+
+    @Given("I am a (.*) user registered with organ donation to donate all organs")
+    fun iAmRegisteredWithOrganDonationToDonateAllOrgans(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existingOptIn()
+    }
+
+    @Given("I am a (.*) user registered with organ donation to donate some organs")
+    fun iAmRegisteredWithOrganDonationToDonateSomeOrgans(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existingOptInSome()
+    }
 
     @Given("^I am a (.*) user not registered with organ donation, who wishes to register$")
     fun iAmNotRegisteredWithOrganDonationWishToRegister(gpSystem: String) {
@@ -77,7 +97,6 @@ open class OrganDonationStepDefinitions {
 
     @Then("^the internal Organ Donation page is displayed$")
     fun iAmOnTheInternalOrganDonationPage() {
-        organDonationChoicePage.waitForSpinnerToDisappear()
         organDonationChoicePage.assertDisplayed()
     }
 

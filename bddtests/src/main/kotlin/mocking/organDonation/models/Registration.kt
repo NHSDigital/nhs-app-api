@@ -14,7 +14,8 @@ data class Resource(
         var addressFull: String,
         var telecom: List<Identifier>,
         var organDonationDecision: String,
-        var faithDeclaration: String
+        var faithDeclaration: String,
+        var donationWishes: HashMap<String,String>? = null
 )
 
 data class Identifier(

@@ -8,20 +8,19 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
 
     override val titleText: String = "Register your organ donation decision"
 
-    val noButton = HybridPageElement(
-            webDesktopLocator = "//button[descendant::*[contains(text(),\"NO\")]]",
-            webMobileLocator = "//button[descendant::*[contains(text(),\"NO\")]]",
-            androidLocator = null,
-            page = this
-    )
+    val noButton = button("NO")
 
-    val yesButton = HybridPageElement(
-            webDesktopLocator = "//button[descendant::*[contains(text(),\"YES\")]]",
-            webMobileLocator = "//button[descendant::*[contains(text(),\"YES\")]]",
-            androidLocator = null,
-            page = this,
-            helpfulName = "No option"
-    )
+    val yesButton = button("YES")
+
+    private fun button(option: String): HybridPageElement {
+        return HybridPageElement(
+                webDesktopLocator = "//button[descendant::*[contains(text(),\"$option\")]]",
+                webMobileLocator = "//button[descendant::*[contains(text(),\"$option\")]]",
+                androidLocator = null,
+                page = this,
+                helpfulName = "$option option"
+        )
+    }
 
     override fun assertDisplayed() {
         title.assertIsVisible()

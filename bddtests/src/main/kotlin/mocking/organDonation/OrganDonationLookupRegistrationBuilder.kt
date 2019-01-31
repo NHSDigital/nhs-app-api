@@ -1,12 +1,12 @@
 package mocking.organDonation
 
-import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.models.Mapping
 import mocking.organDonation.models.CodeableConcept
 import mocking.organDonation.models.Coding
 import mocking.organDonation.models.Entry
 import mocking.organDonation.models.OrganDonationErrorResponse
 import mocking.organDonation.models.OrganDonationSuccessResponse
+import mocking.organDonation.models.Resource
 import models.Patient
 import org.apache.http.HttpStatus
 
@@ -22,12 +22,10 @@ class OrganDonationLookupRegistrationBuilder(patient: Patient)
                 .andBody(patient.dateOfBirth, "contains")
     }
 
-    private val currentPatient = patient
-
-    fun respondWithSuccess(): Mapping {
+    fun respondWithSuccess(resource : Resource): Mapping {
 
         val responseBody = OrganDonationSuccessResponse(
-                listOf(Entry(OrganDonationRegistrationDataBuilder.build(currentPatient)))
+                listOf(Entry(resource))
         )
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(responseBody)

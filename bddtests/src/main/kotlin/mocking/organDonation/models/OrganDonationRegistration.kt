@@ -1,6 +1,5 @@
 package mocking.organDonation.models
 
-import models.KeyValuePair
 import models.Patient
 
 data class OrganDonationRegistration(
@@ -45,12 +44,9 @@ data class OrganDonationRegistration(
             return registration
         }
 
-        fun some(patient: Patient, organsToDonate: ArrayList<KeyValuePair<String, Boolean>>)
-                : OrganDonationRegistration {
+        fun some(patient: Patient, organsToDonate: HashMap<String, String>): OrganDonationRegistration {
             val registration = optIn(patient)
-            val decision = hashMapOf<String,String>()
-            organsToDonate.forEach { organ-> decision.put(organ.key, if(organ.value) "yes" else "no") }
-            registration.decisionDetails = DecisionDetails(false, decision)
+            registration.decisionDetails = DecisionDetails(false, organsToDonate)
             return registration
         }
     }

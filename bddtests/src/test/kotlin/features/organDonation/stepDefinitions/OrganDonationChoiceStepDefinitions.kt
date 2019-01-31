@@ -18,13 +18,17 @@ open class OrganDonationChoiceStepDefinitions {
     lateinit var morePage: MorePage
     lateinit var organDonationChoicePage: OrganDonationChoicePage
 
-    @When("^I navigate to the internal Organ Donation Choice Page")
-    fun iNavigateToTheInternalOrganDonationChoicePage() {
+    @When("^I navigate to the internal Organ Donation Page")
+    fun iNavigateToTheInternalOrganDonationPage() {
         navBarNative.select(NavBarNative.NavBarType.MORE)
         morePage.waitForSpinnerToDisappear()
         browser.appendSourceQueryString("ios")
         morePage.btnOrganDonation.click()
-        organDonationChoicePage.waitForSpinnerToDisappear()
+    }
+
+    @When("^I navigate to the internal Organ Donation Choice Page")
+    fun iNavigateToTheInternalOrganDonationChoicePage() {
+        iNavigateToTheInternalOrganDonationPage()
         organDonationChoicePage.assertDisplayed()
     }
 
@@ -42,7 +46,6 @@ open class OrganDonationChoiceStepDefinitions {
 
     @Then("^the internal Organ Donation Choice Page is displayed")
     fun theInternalOrganDonationChoicePageIsDisplayed() {
-        organDonationChoicePage.waitForSpinnerToDisappear()
         organDonationChoicePage.assertDisplayed()
     }
 }

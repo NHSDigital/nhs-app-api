@@ -3,6 +3,7 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.stubs.StubbedEnvironment
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
@@ -18,7 +19,10 @@ class OrganDonationStepDefinitionsBackend {
 
     @Given("^I am a (.*) user registered with organ donation$")
     fun iAmAlreadyRegisteredWithOrganDonation(gpSystem: String) {
-        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithSuccess()}
+        val factory = OrganDonationFactory(gpSystem)
+        val patient = factory.patient
+        val registration = OrganDonationRegistrationDataBuilder.optOut(patient)
+        factory.lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithSuccess(registration)}
     }
 
     @Given("^I am a (.*) user not registered with organ donation$")

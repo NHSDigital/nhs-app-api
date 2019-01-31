@@ -29,6 +29,7 @@ abstract class OrganDonationBasePage: HybridPageObject() {
     abstract fun assertDisplayed()
 
     protected fun assertPageFullyLoaded() {
+        waitForSpinnerToDisappear()
         title.assertIsVisible()
         waitForBackButton()
     }

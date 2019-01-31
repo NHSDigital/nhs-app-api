@@ -8,6 +8,7 @@ import pages.HybridPageElement
 open class OrganDonationConfirmationPage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
+        waitForSpinnerToDisappear()
         title.assertIsVisible()
     }
 

@@ -32,10 +32,26 @@ open class OrganDonationConfirmationStepDefinitions {
         organDonationConfirmationPage.decisionModule.assertDecisionIsYes()
     }
 
-
     @Then("^the decision to opt in to organ donation with some organs has been successfully created$")
     fun theDecisionToOptInToOrganDonationWithSomeOrgansHasBeenSuccessfullyCreated(){
         organDonationConfirmationPage.assertSuccessBanner()
+        val organsToDonate = Serenity.sessionVariableCalled<ArrayList<KeyValuePair<String, Boolean>>>(
+                ORGAN_DONATION_DECISION_SOME_ORGANS)
+        organDonationConfirmationPage.decisionModule.assertDecisionIsSome(organsToDonate)
+    }
+
+    @Then("^the decision to opt out of organ donation is displayed$")
+    fun theDecisionToOptOutOfOrganDonationIsDisplayed() {
+        organDonationConfirmationPage.decisionModule.assertDecisionIsNo()
+    }
+
+    @Then("^the decision to opt in to organ donation with all organs is displayed$")
+    fun theDecisionToOptInToAllOrganDonationIsDisplayed() {
+        organDonationConfirmationPage.decisionModule.assertDecisionIsYes()
+    }
+
+    @Then("^the decision to opt in to organ donation with some organs is displayed$")
+    fun theDecisionToOptInToSomeOrganDonationIsDisplayed() {
         val organsToDonate = Serenity.sessionVariableCalled<ArrayList<KeyValuePair<String, Boolean>>>(
                 ORGAN_DONATION_DECISION_SOME_ORGANS)
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(organsToDonate)
