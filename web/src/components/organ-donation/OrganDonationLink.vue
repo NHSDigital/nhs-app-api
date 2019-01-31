@@ -71,7 +71,4 @@ export default {
 </script>
 
 <style module lang="scss">
-  .no-decoration {
-    text-decoration: none;
-  }
 </style>

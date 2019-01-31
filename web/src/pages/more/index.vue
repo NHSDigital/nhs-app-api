@@ -2,7 +2,7 @@
   <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <ul :class="$style['list-menu']">
       <li>
-        <organ-donation-link id="btn_organ_donation" class-name="$style['no-decoration']">
+        <organ-donation-link id="btn_organ_donation" :class-name="$style['no-decoration']">
           <h2>{{ $t('sc04.organDonation.subheader') }}</h2>
           <p>{{ $t('sc04.organDonation.body') }}</p>
         </organ-donation-link>
@@ -47,7 +47,7 @@ export default {
 };
 </script>
 
-<style module lang="scss" scoped>
+<style module lang="scss">
 @import '../../style/listmenu';
 
 .no-decoration {
