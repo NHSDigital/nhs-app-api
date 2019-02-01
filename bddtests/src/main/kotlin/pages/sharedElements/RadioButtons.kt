@@ -3,12 +3,10 @@ package pages.sharedElements
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.By
-import org.openqa.selenium.WebElement
 import pages.HybridPageElement
+import pages.HybridPageObject
 
-class RadioButtons(allButtons: HybridPageElement) {
-
-    private val buttons = allButtons.elements.map { element -> RadioButton(element) }
+class RadioButtons private constructor(private val buttons: List<RadioButton>) {
 
     fun assertAreEqual(expectedOptions: List<Pair<String, String>>) {
         val expectedTitles = expectedOptions.map { option -> option.first }
@@ -21,8 +19,9 @@ class RadioButtons(allButtons: HybridPageElement) {
 
         expectedOptions.forEach { expected ->
             val actual = buttons.first { button -> button.title == expected.first }
-            Assert.assertEquals("Expected description for button '${actual.title}'",
-                    expected.second, actual.description)
+            if (!expected.second.isEmpty())
+                Assert.assertEquals("Expected description for button '${actual.title}'",
+                        expected.second, actual.description)
         }
     }
 
@@ -45,9 +44,30 @@ class RadioButtons(allButtons: HybridPageElement) {
             button.assertNotSelected()
         }
     }
+
+    companion object {
+        fun create(page: HybridPageObject, locator: String? = null): RadioButtons {
+            return RadioButtons(getElements(page, locator).map { element -> RadioButton(element) })
+        }
+
+        private fun getElements(page: HybridPageObject, locator: String?):
+                List<WebElementFacade> {
+            return HybridPageElement(
+                    locator ?: "//div[input][label]",
+                    locator ?: "//div[input][label]",
+                    page = page,
+                    helpfulName = "Radio Buttons").elements
+        }
+    }
 }
 
-class RadioButton(val element : WebElementFacade) {
+class RadioButton(private val element : WebElementFacade) {
+
+    private val allTextElements = element.findElements(
+            By.xpath("./descendant::*[text()]")).map{e->e.text}
+
+    val title: String = allTextElements.first()
+    val description: String by lazy { allTextElements[1] }
 
     fun assertSelected() {
         Assert.assertEquals("$title should be selected but is not", 1, selectedIndicator().count())
@@ -62,13 +82,4 @@ class RadioButton(val element : WebElementFacade) {
     }
 
     private fun selectedIndicator() = element.findElements(By.xpath("./div/div"))
-
-    val title: String = findSingle("./label/div/b", "title").text
-    val description: String = findSingle("./label/div/p", "description").text
-
-    fun findSingle(xpath:String, name:String): WebElement {
-        val found = element.findElements(By.xpath(xpath))
-        Assert.assertEquals("Expected found element for $name", 1, found.count())
-        return found.single()
-    }
 }

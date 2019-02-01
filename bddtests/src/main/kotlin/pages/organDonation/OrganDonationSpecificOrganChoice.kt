@@ -2,7 +2,7 @@ package pages.organDonation
 
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.sharedElements.RadioButtons2
+import pages.sharedElements.RadioButtons
 
 class OrganDonationSpecificOrganChoice(val title:String, page: HybridPageObject) {
 
@@ -13,13 +13,8 @@ class OrganDonationSpecificOrganChoice(val title:String, page: HybridPageObject)
                 helpfulName = "$title div")
     }
 
-
     private val radioButtons by lazy {
-        RadioButtons2(HybridPageElement(
-                "//div[h3[text()=\"$title\"]]/div/div[input][label]",
-                page = page,
-                helpfulName = "$title buttons"))
-    }
+        RadioButtons.create(page, "//div[h3[text()=\"$title\"]]/div/div[input][label]" )}
 
     private val expectedOptions by lazy {
         arrayListOf(

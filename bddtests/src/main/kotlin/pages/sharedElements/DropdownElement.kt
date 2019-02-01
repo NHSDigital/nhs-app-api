@@ -34,15 +34,15 @@ class DropdownElement(val label:String, val helpfulName:String, pageObject: Hybr
                 "Expected: ${expectedContents.joinToString()}. " +
                 "Actual: ${actualContents.joinToString()}."
 
-        Assert.assertEquals(message, expectedContents.count(), actualContents.count())
+        Assert.assertEquals(message, expectedContents.distinct().count(), actualContents.count())
         Assert.assertTrue(message, actualContents.containsAll(expectedContents))
     }
 
-    private fun getSelectedValue(): String {
+    fun getSelectedValue(): String {
         return dropDown.element.selectedVisibleTextValue.trim()
     }
 
-    private fun getContents(): ArrayList<String> {
+    fun getContents(): ArrayList<String> {
         val optionElements = dropDown.element.findElements(By.xpath("./option"))
         val optionsAsStrings = arrayListOf<String>()
         for (option in optionElements) {
@@ -53,5 +53,9 @@ class DropdownElement(val label:String, val helpfulName:String, pageObject: Hybr
 
     fun assertSelected(expected: String) {
         Assert.assertEquals("Expected Value for $label", expected, getSelectedValue())
+    }
+
+    fun assertNotPresent() {
+        dropDown.assertElementNotPresent()
     }
 }

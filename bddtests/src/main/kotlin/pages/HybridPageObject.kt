@@ -13,6 +13,7 @@ import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
 import java.time.Duration
+import pages.sharedElements.BannerObject
 
 const val DEFAULT_SPINNER_WAIT: Long = 30
 const val DEFAULT_MOBILE_WAIT: Long = 5000
@@ -24,7 +25,7 @@ open class HybridPageObject : PageObject() {
 
     val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
 
-    val errorBanner by lazy { ErrorBannerPageObject(this) }
+    val validationBanner by lazy { BannerObject.error(this) }
 
     val spinner = HybridPageElement(
             webDesktopLocator = "//*[@id='loading-spinner']",

@@ -3,6 +3,8 @@ package pages.appointments
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertTrue
 import pages.HybridPageElement
+import pages.sharedElements.BannerObject
+import pages.sharedElements.DropdownElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
@@ -19,35 +21,33 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     val guidance = AppointmentGuidancePageObject(this)
 
-    val appointmentTypeFilter = AvailableAppointmentFilter(
-            "type",
+    val appointmentTypeFilter = DropdownElement(
+            "Type of appointment",
             "Appointment Type filter",
             this
     )
 
-    val locationFilter = AvailableAppointmentFilter(
-            "location",
+    val locationFilter = DropdownElement(
+            "Location",
             "Appointment Location filter",
             this
     )
 
-    val clinicianFilter = AvailableAppointmentFilter(
-            "clinician",
+    val clinicianFilter = DropdownElement(
+            "Practice member",
             "Appointment Clinician filter",
             this
     )
 
-    val timePeriodFilter = AvailableAppointmentFilter(
-            "time-period",
+    val timePeriodFilter = DropdownElement(
+            "Filter by date",
             "Appointment time period filter",
             this
     )
 
-    val warningMessage = HybridPageElement(
-            webDesktopLocator = "//div[@data-purpose='warning']",
-            androidLocator = null,
-            page = this
-    )
+    fun warning(title:String? = null): BannerObject{
+        return  BannerObject.warning(this, title = title)
+    }
 
     fun timeSlotForDateAndTime(date: String, time: String) = HybridPageElement(
             webDesktopLocator = String.format(timeSlotByDateAndTimeXpath, date, time),

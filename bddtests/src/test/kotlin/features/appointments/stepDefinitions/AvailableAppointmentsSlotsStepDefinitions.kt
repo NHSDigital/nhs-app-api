@@ -364,29 +364,20 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^a message is displayed indicating there are no slots available$")
     fun aMessageIsDisplayedIndicatingThereAreNoSlotAvailable() {
-        assertEquals("No appointments available\n" +
+        availableAppointments.availableAppointmentsPage.warning().assertVisible(
+                arrayListOf("No appointments available",
                 "There are currently no appointments available to book online right now. " +
-                "If you need to book one now, call your GP surgery.\n" +
-                "If it's urgent and you don't know what to do, call 111 to get help near you.",
-                availableAppointments
-                        .availableAppointmentsPage
-                        .warningMessage
-                        .assertSingleElementPresent()
-                        .element
-                        .text)
+                "If you need to book one now, call your GP surgery.",
+                "If it's urgent and you don't know what to do, call 111 to get help near you."))
     }
 
     @Then("^a message is displayed indicating there are no slots for selected criteria$")
     fun aMessageIsDisplayedIndicatingThereAreNoSlotsForSelectedCriteria() {
-        assertEquals("Try selecting a different date and time, or without a preferred practice member " +
-                "selected. If you can't find the appointment you need, call your GP surgery.\n" +
-                "If it's urgent and you don't know what to do, call 111 to get help near you.",
-                availableAppointments
-                        .availableAppointmentsPage
-                        .warningMessage
-                        .assertSingleElementPresent()
-                        .element
-                        .text)
+        availableAppointments.availableAppointmentsPage.warning("No appointments available").assertVisible(
+                arrayListOf(
+                        "Try selecting a different date and time, or without a preferred practice member selected. " +
+                                "If you can't find the appointment you need, call your GP surgery.",
+                        "If it's urgent and you don't know what to do, call 111 to get help near you."))
     }
 
     @Then("^I only see results for days that have available slots$")

@@ -136,7 +136,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
-
+    
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by tomorrow but no appointments are available
     Given there are appointment slots on some days other than tomorrow, provided by <GP System>
     And I am logged in

@@ -1,7 +1,6 @@
 package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageElement
 import pages.sharedElements.RadioButtons
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
@@ -10,13 +9,7 @@ open class OrganDonationYourChoicePage : OrganDonationBasePage() {
     override val titleText: String = "Your choice"
 
     val radioButtons by lazy {
-        RadioButtons(HybridPageElement(
-                "//div[input][label]",
-                "//div[input][label]",
-                null,
-                null,
-                this,
-                "Radio Buttons"))
+        RadioButtons.create(this,  "//div[input][label]")
     }
 
     private val expectedOptions by lazy {

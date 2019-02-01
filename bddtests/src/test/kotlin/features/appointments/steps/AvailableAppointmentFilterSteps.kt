@@ -22,7 +22,7 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {
-        val actualAppointmentTypeOptions = availableAppointmentsPage.appointmentTypeFilter.getFilterContents()
+        val actualAppointmentTypeOptions = availableAppointmentsPage.appointmentTypeFilter.getContents()
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
         val expected = Serenity.sessionVariableCalled<ArrayList<String>>(
@@ -39,7 +39,7 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
-        val actualLocationOptions = availableAppointmentsPage.locationFilter.getFilterContents()
+        val actualLocationOptions = availableAppointmentsPage.locationFilter.getContents()
         val expectedLocations =
                 Serenity.sessionVariableCalled<ArrayList<String>>(
                         AppointmentsSlotsExampleBuilderWithExpectations
@@ -60,7 +60,7 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatCliniciansFilterExistsAndIsCorrectlyPopulated() {
-        val actualClinicianOptions = availableAppointmentsPage.clinicianFilter.getFilterContents()
+        val actualClinicianOptions = availableAppointmentsPage.clinicianFilter.getContents()
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
 
         val expectedClinicians =
@@ -84,7 +84,7 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatTimePeriodFilterExistsAndIsCorrectlyPopulated() {
-        val actualTimePeriodOptions = availableAppointmentsPage.timePeriodFilter.getFilterContents()
+        val actualTimePeriodOptions = availableAppointmentsPage.timePeriodFilter.getContents()
         assertOptionExists(TODAY_OPTION, actualTimePeriodOptions)
         assertOptionExists(TOMORROW_OPTION, actualTimePeriodOptions)
         assertOptionExists(THIS_WEEK_OPTION, actualTimePeriodOptions)

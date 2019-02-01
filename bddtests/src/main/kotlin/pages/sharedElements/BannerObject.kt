@@ -14,6 +14,7 @@ class BannerObject private constructor(page : HybridPageObject,
 
     private val container = HybridPageElement(
             containerXPath,
+            webMobileLocator = containerXPath,
             page = page,
             helpfulName = "$title Banner Container")
 
@@ -29,7 +30,7 @@ class BannerObject private constructor(page : HybridPageObject,
         Assert.assertEquals("Expected banner title", title, bannerTitle)
 
         val bannerText = container.element.findElements(By.xpath("./$innerXPath/*"))
-                .map{element->element.text}
+                .map { element -> element.text }
 
         val message = "Expected banner text. " +
                 "Expected: ${expectedText.joinToString()}. " +
@@ -46,6 +47,10 @@ class BannerObject private constructor(page : HybridPageObject,
 
         fun error(page: HybridPageObject): BannerObject {
             return BannerObject(page, "Error", "error")
+        }
+
+        fun warning(page: HybridPageObject, title: String? = null): BannerObject {
+            return BannerObject(page, title ?: "Warning", "warning")
         }
     }
 }

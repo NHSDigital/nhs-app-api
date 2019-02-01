@@ -3,12 +3,9 @@ package pages.organDonation
 import org.openqa.selenium.StaleElementReferenceException
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.sharedElements.BannerObject
 
 private const val WAIT_FOR_PAGE = 1000L
 abstract class OrganDonationBasePage: HybridPageObject() {
-
-    val validationBanner by lazy { BannerObject.error(this) }
 
     abstract val titleText: String
 
