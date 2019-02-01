@@ -22,6 +22,7 @@ export const createEvent = event => ({ preventDefault: jest.fn(), ...event });
 
 export const createRouter = () => ({
   go: jest.fn(),
+  goBack: jest.fn(),
   push: jest.fn(),
 });
 

@@ -30,7 +30,7 @@ export default {
   methods: {
     goBack() {
       if (this.gotoPath) this.$router.push(this.gotoPath);
-      else this.$router.go(-1);
+      else this.$router.goBack();
     },
   },
 };

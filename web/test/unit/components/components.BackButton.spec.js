@@ -23,7 +23,7 @@ describe('Back Button', () => {
 
     it('will go to the previous page when clicked', () => {
       wrapper.trigger('click');
-      expect($router.go).toHaveBeenCalledWith(-1);
+      expect($router.goBack).toHaveBeenCalled();
     });
   });
 

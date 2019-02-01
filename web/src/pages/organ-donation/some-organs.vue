@@ -47,6 +47,7 @@ import { initialState } from '@/store/modules/organDonation/mutation-types';
 import includes from 'lodash/fp/includes';
 
 export default {
+  scrollToTop: true,
   components: {
     BackButton,
     ErrorMessage,

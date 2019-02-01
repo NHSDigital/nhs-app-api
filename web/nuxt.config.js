@@ -21,6 +21,7 @@ const config = {
     'cookie-universal-nuxt',
   ],
   plugins: [
+    '~/plugins/routing.js',
     '~/plugins/environmentVariables.js',
     '~/plugins/i18n.js',
     '~/plugins/api.js',
