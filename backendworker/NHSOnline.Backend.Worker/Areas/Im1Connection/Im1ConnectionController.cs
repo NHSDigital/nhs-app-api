@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 _logger.LogEnter();
                 if (odsCode != null)
                 {
-                    odsCode = OdsCodeMassager.CheckOdsCode(odsCode);
+                    odsCode = OdsCodeMassager.CheckOdsCode(odsCode, _logger);
                 }
 
 
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             try
             {
                 _logger.LogEnter();
-                model.OdsCode = OdsCodeMassager.CheckOdsCode(model.OdsCode);
+                model.OdsCode = OdsCodeMassager.CheckOdsCode(model.OdsCode, _logger);
 
                 var gpSystemOption = await GetGpSystem(model.OdsCode);
                 if (!gpSystemOption.HasValue)

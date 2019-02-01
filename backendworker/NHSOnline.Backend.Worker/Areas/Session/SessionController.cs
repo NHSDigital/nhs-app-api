@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 {
                     return new StatusCodeResult(citizenIdSessionResult.StatusCode);
                 }
-                citizenIdSessionResult.OdsCode = OdsCodeMassager.CheckOdsCode(citizenIdSessionResult.OdsCode);
+                citizenIdSessionResult.OdsCode = OdsCodeMassager.CheckOdsCode(citizenIdSessionResult.OdsCode, _logger);
 
                 _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
 

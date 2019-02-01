@@ -63,7 +63,8 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                 {
                     return BadRequest();
                 }
-                odsCode = OdsCodeMassager.CheckOdsCode(odsCode);
+                var cidOdsCode = odsCode;
+                odsCode = OdsCodeMassager.CheckOdsCode(odsCode, _logger);
 
                 var getLinkageRequest = new GetLinkageRequest()
                 {
@@ -98,6 +99,11 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
 
                 var result = await linkageService.GetLinkageKey(getLinkageRequest);
 
+                if (OdsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyRetrieved)
+                {
+                    ((LinkageResult.SuccessfullyRetrieved) result).Response.OdsCode = cidOdsCode;
+                }
+
                 return result.Accept(new LinkageResultAuditingVisitor(
                     _auditor, gpSystem.Supplier, nhsNumber,
                     Constants.AuditingTitles.GetLinkageDetailsAuditTypeResponse));
@@ -119,7 +125,8 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                 {
                     return BadRequest();
                 }
-                createLinkageRequest.OdsCode = OdsCodeMassager.CheckOdsCode(createLinkageRequest.OdsCode);
+                var cidOdsCode = createLinkageRequest.OdsCode;
+                createLinkageRequest.OdsCode = OdsCodeMassager.CheckOdsCode(createLinkageRequest.OdsCode, _logger);
 
                 var gpSystemOption = await GetGpSystem(createLinkageRequest.OdsCode);
                 if (!gpSystemOption.HasValue)
@@ -154,6 +161,11 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                     Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
 
                 var result = await linkageService.CreateLinkageKey(createLinkageRequest);
+
+                if (OdsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyCreated)
+                {
+                    ((LinkageResult.SuccessfullyCreated) result).Response.OdsCode = cidOdsCode;
+                }
 
                 return result.Accept(new LinkageResultAuditingVisitor(
                     _auditor, gpSystem.Supplier, createLinkageRequest.NhsNumber,
