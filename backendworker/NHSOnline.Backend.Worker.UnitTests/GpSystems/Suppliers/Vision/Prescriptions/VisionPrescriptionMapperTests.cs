@@ -7,8 +7,8 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                     new PrescriptionItem
                     {
                         OrderDate = item.Requests.ElementAt(0).Date.Date,
-                        Status = Worker.Areas.Prescriptions.Models.Status.Approved,
+                        Status = Worker.GpSystems.Prescriptions.Models.Status.Approved,
                         Courses = new List<CourseEntry>
                         {
                             new CourseEntry
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                     new PrescriptionItem
                     {
                         OrderDate = item.Requests.ElementAt(1).Date.Date,
-                        Status = Worker.Areas.Prescriptions.Models.Status.Rejected,
+                        Status = Worker.GpSystems.Prescriptions.Models.Status.Rejected,
                         Courses = new List<CourseEntry>
                         {
                             new CourseEntry
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                     new PrescriptionItem
                     {
                         OrderDate = item.Requests.ElementAt(2).Date.Date,
-                        Status = Worker.Areas.Prescriptions.Models.Status.Requested,
+                        Status = Worker.GpSystems.Prescriptions.Models.Status.Requested,
                         Courses = new List<CourseEntry>
                         {
                             new CourseEntry
@@ -198,7 +198,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                     new PrescriptionItem
                     {
                         OrderDate = item.Requests.ElementAt(3).Date.Date,
-                        Status = Worker.Areas.Prescriptions.Models.Status.Requested,
+                        Status = Worker.GpSystems.Prescriptions.Models.Status.Requested,
                         Courses = new List<CourseEntry>
                         {
                             new CourseEntry
@@ -306,7 +306,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                     new PrescriptionItem
                     {
                         OrderDate = today,
-                        Status = Worker.Areas.Prescriptions.Models.Status.Approved,
+                        Status = Worker.GpSystems.Prescriptions.Models.Status.Approved,
                         Courses = new List<CourseEntry>
                         {
                             new CourseEntry { CourseId = result.Courses.ElementAt(0).Id },

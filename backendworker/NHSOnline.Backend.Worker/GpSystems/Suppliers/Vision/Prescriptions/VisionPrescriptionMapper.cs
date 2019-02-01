@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             var result = new CourseListResponse
             {
                 Courses = eligibleRepeatsResponse.Repeats.Select(MapRepeatToCourse),
-                SpecialRequestNecessity = eligibleRepeatsResponse.Settings?.AllowFreeText == true ? Areas.SharedModels.Necessity.Optional : Areas.SharedModels.Necessity.NotAllowed,
+                SpecialRequestNecessity = eligibleRepeatsResponse.Settings?.AllowFreeText == true ? GpSystems.SharedModels.Necessity.Optional : GpSystems.SharedModels.Necessity.NotAllowed,
             };
 
             return result;
@@ -139,22 +139,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             return details;
         }
 
-        private static Areas.Prescriptions.Models.Status MapStatus(Status value)
+        private static GpSystems.Prescriptions.Models.Status MapStatus(Status value)
         {
             switch (value.Code)
             {
                 case PrescriptionRepeatStatusCode.Processed:
-                    return Areas.Prescriptions.Models.Status.Approved;
+                    return GpSystems.Prescriptions.Models.Status.Approved;
 
                 case PrescriptionRepeatStatusCode.Rejected:
-                    return Areas.Prescriptions.Models.Status.Rejected;
+                    return GpSystems.Prescriptions.Models.Status.Rejected;
 
                 case PrescriptionRepeatStatusCode.NotProcessed:
                 case PrescriptionRepeatStatusCode.InProgress:
-                    return Areas.Prescriptions.Models.Status.Requested;
+                    return GpSystems.Prescriptions.Models.Status.Requested;
 
                 default:
-                    return Areas.Prescriptions.Models.Status.Unknown;
+                    return GpSystems.Prescriptions.Models.Status.Unknown;
             }
         }
     }

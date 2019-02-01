@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NHSOnline.Backend.Worker.Areas.SharedModels
+namespace NHSOnline.Backend.Worker.GpSystems.SharedModels
 {
     public sealed class VersionTag
     {

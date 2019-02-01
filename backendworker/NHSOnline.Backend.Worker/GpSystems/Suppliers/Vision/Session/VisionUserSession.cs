@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
+using NHSOnline.Backend.Worker.GpSystems.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session

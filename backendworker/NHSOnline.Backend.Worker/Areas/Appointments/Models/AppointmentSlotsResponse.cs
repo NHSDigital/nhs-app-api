@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
+using NHSOnline.Backend.Worker.GpSystems.SharedModels;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
 {

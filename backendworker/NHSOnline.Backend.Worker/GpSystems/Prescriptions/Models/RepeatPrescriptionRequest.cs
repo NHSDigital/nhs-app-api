@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NHSOnline.Backend.Worker.ValidationAttributes;
 
-namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models
 {
     public class RepeatPrescriptionRequest
     {

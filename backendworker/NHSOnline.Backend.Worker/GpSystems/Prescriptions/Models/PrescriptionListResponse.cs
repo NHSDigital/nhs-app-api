@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models
 {
     public class PrescriptionListResponse
     {

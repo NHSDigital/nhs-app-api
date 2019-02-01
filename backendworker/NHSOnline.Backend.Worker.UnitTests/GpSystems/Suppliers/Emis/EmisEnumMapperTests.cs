@@ -3,7 +3,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.SharedModels;
+using NHSOnline.Backend.Worker.GpSystems.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using System;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;

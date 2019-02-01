@@ -10,7 +10,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
@@ -149,10 +149,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             {
                 Prescriptions = new List<PrescriptionItem>
                 {
-                    new PrescriptionItem { Status = Worker.Areas.Prescriptions.Models.Status.Approved },
-                    new PrescriptionItem { Status = Worker.Areas.Prescriptions.Models.Status.Rejected },
-                    new PrescriptionItem { Status = Worker.Areas.Prescriptions.Models.Status.Requested },
-                    new PrescriptionItem { Status = Worker.Areas.Prescriptions.Models.Status.Unknown },
+                    new PrescriptionItem { Status = Worker.GpSystems.Prescriptions.Models.Status.Approved },
+                    new PrescriptionItem { Status = Worker.GpSystems.Prescriptions.Models.Status.Rejected },
+                    new PrescriptionItem { Status = Worker.GpSystems.Prescriptions.Models.Status.Requested },
+                    new PrescriptionItem { Status = Worker.GpSystems.Prescriptions.Models.Status.Unknown },
                 },
                 Courses = new List<Course>(),
             };
@@ -168,9 +168,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             var successfulGet = (PrescriptionResult.SuccessfulGet)result;
             successfulGet.Response.Should().NotBeNull();
             successfulGet.Response.Prescriptions.Count().Should().Be(3);
-            successfulGet.Response.Prescriptions.ElementAt(0).Status.Should().Be(Worker.Areas.Prescriptions.Models.Status.Approved);
-            successfulGet.Response.Prescriptions.ElementAt(1).Status.Should().Be(Worker.Areas.Prescriptions.Models.Status.Rejected);
-            successfulGet.Response.Prescriptions.ElementAt(2).Status.Should().Be(Worker.Areas.Prescriptions.Models.Status.Requested);
+            successfulGet.Response.Prescriptions.ElementAt(0).Status.Should().Be(Worker.GpSystems.Prescriptions.Models.Status.Approved);
+            successfulGet.Response.Prescriptions.ElementAt(1).Status.Should().Be(Worker.GpSystems.Prescriptions.Models.Status.Rejected);
+            successfulGet.Response.Prescriptions.ElementAt(2).Status.Should().Be(Worker.GpSystems.Prescriptions.Models.Status.Requested);
         }
 
         [TestMethod]

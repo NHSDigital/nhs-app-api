@@ -1,4 +1,4 @@
-﻿using NHSOnline.Backend.Worker.Areas.SharedModels;
+﻿using NHSOnline.Backend.Worker.GpSystems.SharedModels;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {

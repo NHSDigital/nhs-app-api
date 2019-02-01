@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
 {

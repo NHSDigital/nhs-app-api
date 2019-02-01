@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Models
+﻿namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models
 {
     public class Course
     {

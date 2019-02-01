@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models
 {
     public class PrescriptionItem
     {

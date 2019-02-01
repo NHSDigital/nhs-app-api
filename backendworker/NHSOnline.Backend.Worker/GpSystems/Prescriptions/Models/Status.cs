@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models
 {
     [SuppressMessage("Microsoft.Naming", "CA1717", Justification = "False Positive - 'Status' is not a plural")]
     public enum Status

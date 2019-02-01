@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.Worker.Areas.SharedModels
+namespace NHSOnline.Backend.Worker.GpSystems.SharedModels
 {
     public enum Necessity
     {

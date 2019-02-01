@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
@@ -72,11 +72,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                         
                         if (mappedPrescriptionList != null)
                         {
-                            var allowedStatuses = new List<Areas.Prescriptions.Models.Status>
+                            var allowedStatuses = new List<GpSystems.Prescriptions.Models.Status>
                             {
-                                Areas.Prescriptions.Models.Status.Approved,
-                                Areas.Prescriptions.Models.Status.Rejected,
-                                Areas.Prescriptions.Models.Status.Requested,
+                                GpSystems.Prescriptions.Models.Status.Approved,
+                                GpSystems.Prescriptions.Models.Status.Rejected,
+                                GpSystems.Prescriptions.Models.Status.Requested,
                             };
 
                             mappedPrescriptionList.Prescriptions = mappedPrescriptionList.Prescriptions
