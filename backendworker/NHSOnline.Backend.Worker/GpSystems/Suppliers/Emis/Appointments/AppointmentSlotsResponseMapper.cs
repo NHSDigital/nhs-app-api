@@ -1,5 +1,5 @@
 using System;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using System.Net.Http;
 

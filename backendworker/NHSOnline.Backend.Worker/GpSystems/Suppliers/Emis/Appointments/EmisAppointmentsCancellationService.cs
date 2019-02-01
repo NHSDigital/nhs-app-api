@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Resources;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.Support;

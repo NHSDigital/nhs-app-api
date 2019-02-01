@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Appointments.Models
 {
     public class AppointmentsResponse
     {

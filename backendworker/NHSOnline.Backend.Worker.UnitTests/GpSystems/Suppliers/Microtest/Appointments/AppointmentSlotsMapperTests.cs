@@ -6,7 +6,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Models.Appointments;
 
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Microtest.Appoi
             var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse);
 
             // Assert
-            var expectedSlot = new Worker.Areas.Appointments.Models.Slot
+            var expectedSlot = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "132",
                 Clinicians = new[] { "Dr Spears" },

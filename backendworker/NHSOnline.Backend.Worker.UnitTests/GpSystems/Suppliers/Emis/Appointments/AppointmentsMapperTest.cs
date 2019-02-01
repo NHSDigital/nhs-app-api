@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(appointments, null, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+            var expectedAppointment = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
             {
                 Id = "101",
                 Clinicians = new[] { "Dr Crusher" },
@@ -182,7 +182,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(appointments, locations, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+            var expectedAppointment = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
@@ -223,7 +223,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(appointments, locations, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+            var expectedAppointment = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
             {
                 Id = "901",
                 Clinicians = new[] { "Dr House" },
@@ -272,7 +272,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(appointnments, locations, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment1 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+            var expectedAppointment1 = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
             {
                 Id = "901",
                 Clinicians = new[]{ "Dr House" },
@@ -282,7 +282,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Type = "Emergency"
             };
             
-            var expectedAppointment2 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+            var expectedAppointment2 = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
             {
                 Id = "101",
                 Clinicians = new[]{ "Dr House" },
@@ -291,8 +291,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddDays(1)),
                 Type = "Emergency"
             };
-
-            var expectedAppointment3 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+            
+            var expectedAppointment3 = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
             {
                 Id = "102",
                 Clinicians = new[] { "Dr House" },
@@ -302,7 +302,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Type = string.Empty
             };
             
-            var expectedAppointment4 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.PastAppointment
+            var expectedAppointment4 = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.PastAppointment
             {
                 Id = "103",
                 Clinicians = new[]{ "Dr House" },
@@ -312,7 +312,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Type = "Emergency"
             };
 
-            var expectedAppointment5 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.PastAppointment
+            var expectedAppointment5 = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.PastAppointment
             {
                 Id = "104",
                 Clinicians = new[] { "Dr House" },
@@ -322,7 +322,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Type = string.Empty
             };
             
-            var expectedResponse = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment[]{ expectedAppointment1, expectedAppointment2, expectedAppointment3, expectedAppointment4, expectedAppointment5 };
+            var expectedResponse = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.Appointment[]{ expectedAppointment1, expectedAppointment2, expectedAppointment3, expectedAppointment4, expectedAppointment5 };
             
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
@@ -348,7 +348,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment = new Worker.Areas.Appointments.Models.UpcomingAppointment
+            var expectedAppointment = new Worker.GpSystems.Appointments.Models.UpcomingAppointment
             {
                 Id = "901",
                 Clinicians = new List<string>(),

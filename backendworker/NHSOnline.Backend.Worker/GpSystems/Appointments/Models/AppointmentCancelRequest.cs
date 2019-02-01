@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Appointments.Models
 {
     public class AppointmentCancelRequest
     {

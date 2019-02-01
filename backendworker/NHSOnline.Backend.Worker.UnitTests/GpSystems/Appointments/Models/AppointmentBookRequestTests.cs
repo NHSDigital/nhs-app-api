@@ -4,9 +4,9 @@ using System.Linq;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments.Models
+namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments.Models
 {
     [TestClass]
     public class AppointmentBookRequestTests

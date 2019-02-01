@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             {
                 PastAppointments = new[]
                 {
-                    new Worker.Areas.Appointments.Models.PastAppointment
+                    new Worker.GpSystems.Appointments.Models.PastAppointment
                     {
                         StartTime = new DateTimeOffset(DateTime.Parse("2017-12-12T09:30:00", CultureInfo.InvariantCulture)),
                         EndTime = new DateTimeOffset(DateTime.Parse("2017-12-12T09:40:00", CultureInfo.InvariantCulture)),
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 },
                 UpcomingAppointments = new[]
                 {
-                    new Worker.Areas.Appointments.Models.UpcomingAppointment
+                    new UpcomingAppointment
                     {
                         StartTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:30:00", CultureInfo.InvariantCulture)),
                         EndTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:40:00", CultureInfo.InvariantCulture)),

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NHSOnline.Backend.Worker.GpSystems.SharedModels;
 
-namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Appointments.Models
 {
     public class AppointmentSlotsResponse
     {

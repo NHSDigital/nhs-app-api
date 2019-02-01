@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Models.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments
@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments
     {
         public AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse)
         {
-            var slots = new List<Areas.Appointments.Models.Slot>();
+            var slots = new List<GpSystems.Appointments.Models.Slot>();
 
             foreach (var sourceSlot in slotsResponse.Slots)
             {
@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments
                     continue;
                 }
 
-                var resultSlot = new Areas.Appointments.Models.Slot
+                var resultSlot = new GpSystems.Appointments.Models.Slot
                 {
                     Id = sourceSlot.Id,
                     StartTime = sourceSlot.StartTime.Value,

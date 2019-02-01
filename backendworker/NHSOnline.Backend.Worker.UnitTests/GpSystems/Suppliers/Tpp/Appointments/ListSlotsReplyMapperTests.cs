@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var listSlotsReply = new ListSlotsReply { Sessions = new [] { session }.ToList() };
 
-            var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Worker.Areas.Appointments.Models.Slot>() };
+            var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Worker.GpSystems.Appointments.Models.Slot>() };
 
             var actualResponse = _systemUnderTest.Map(listSlotsReply);
 
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var listSlotsReply = new ListSlotsReply { Sessions = new [] { session }.ToList() };
 
-            var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Worker.Areas.Appointments.Models.Slot>() };
+            var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Worker.GpSystems.Appointments.Models.Slot>() };
 
             var actualResponse = _systemUnderTest.Map(listSlotsReply);
 
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Sessions = new [] { session }.ToList()
             };
 
-            var expectedSlot = new Worker.Areas.Appointments.Models.Slot
+            var expectedSlot = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "101",
                 Clinicians =  Array.Empty<string>(),
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Sessions = new List<Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session> { session }
             };
 
-            var expectedSlot = new Worker.Areas.Appointments.Models.Slot
+            var expectedSlot = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },

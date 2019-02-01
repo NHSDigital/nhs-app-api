@@ -9,7 +9,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using Slot = NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Slot;
 
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var actualResponse = _systemUnderTest.Map(sessions);
 
             // Assert
-            var slot1 = new Worker.Areas.Appointments.Models.Slot
+            var slot1 = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Channel = Channel.Unknown
             };
 
-            var slot2 = new Worker.Areas.Appointments.Models.Slot
+            var slot2 = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Channel = Channel.Unknown
             };
 
-            var slot3 = new Worker.Areas.Appointments.Models.Slot
+            var slot3 = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "102",
                 Clinicians = new[] { "Dr House" },
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var actualResponse = _systemUnderTest.Map(sessions);
 
-            var slot1 = new Worker.Areas.Appointments.Models.Slot
+            var slot1 = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Type = "GP Session - Emergency"
             };
 
-            var slot2 = new Worker.Areas.Appointments.Models.Slot
+            var slot2 = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
@@ -163,7 +163,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Type = "GP Session"
             };
 
-            var slot3 = new Worker.Areas.Appointments.Models.Slot
+            var slot3 = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "102",
                 Clinicians = new[] { "Dr House" },
@@ -214,7 +214,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var actualResponse = _systemUnderTest.Map(new[] { session });
 
             // Assert
-            var expectedSlot = new Worker.Areas.Appointments.Models.Slot
+            var expectedSlot = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
@@ -244,7 +244,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var actualResponse = _systemUnderTest.Map(new[] { session });
 
             // Assert
-            var expectedSlot = new Worker.Areas.Appointments.Models.Slot
+            var expectedSlot = new Worker.GpSystems.Appointments.Models.Slot
             {
                 Id = "901",
                 Clinicians = new[] { "Dr House" },

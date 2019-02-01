@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using System.Threading.Tasks;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments

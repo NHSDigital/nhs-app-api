@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var expectedResponse = new[] 
             {
-                new Worker.Areas.Appointments.Models.UpcomingAppointment
+                new Worker.GpSystems.Appointments.Models.UpcomingAppointment
                     {
                         Id = "0547d0000",
                         Type =  "Clinician: Dr House",
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                         Location = "The Frankenstein Place",
                         StartTime = appt1.Start
                     },
-                new Worker.Areas.Appointments.Models.UpcomingAppointment
+                new Worker.GpSystems.Appointments.Models.UpcomingAppointment
                     {
                         Id = "0647d0000",
                         Type =  "Clinician: Dr House",
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                         Location = "The Frankenstein Place",
                         StartTime = appt2.Start
                     },
-                new Worker.Areas.Appointments.Models.UpcomingAppointment
+                new Worker.GpSystems.Appointments.Models.UpcomingAppointment
                     {
                         Id = "0747d0000",
                         Type =  "Clinician: Dr House",
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             // Assert
             var expectedResponse = new[]
             {
-                new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+                new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
                 {
                     Id = "0547d0000",
                     Type =  "Clinician: Dr House",
@@ -149,9 +149,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var actualResponse = _systemUnderTest.Map(appointments);
 
             // Assert
-            var expectedResponse = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment[]
+            var expectedResponse = new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.Appointment[]
             {
-                new NHSOnline.Backend.Worker.Areas.Appointments.Models.PastAppointment
+                new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.PastAppointment
                 {
                     Id = "0547d0000",
                     Type =  "Clinician: Dr House",
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                     StartTime = appt1.Start,
                     EndTime = appt1.End
                 },
-                new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+                new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
                 {
                     Id = "0647d0000",
                     Type =  "Clinician: Dr House",
@@ -195,7 +195,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             // Assert
             var expectedResponse = new[]
             {
-                new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
+                new NHSOnline.Backend.Worker.GpSystems.Appointments.Models.UpcomingAppointment
                 {
                     Id = "0647d0000",
                     Type =  "Clinician: Dr House",

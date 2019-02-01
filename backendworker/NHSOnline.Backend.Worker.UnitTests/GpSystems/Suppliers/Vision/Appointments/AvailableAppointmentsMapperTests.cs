@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.Support.Temporal;
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             
             var expectedResponse = new[] 
             {
-                new Worker.Areas.Appointments.Models.Slot
+                new Slot
                 {
                     Id = "SLOTX01",
                     Type =  "General Session - General Type",
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     Clinicians = new []{ "Owner1" },
                     Channel = Channel.Unknown
                 },
-                new Worker.Areas.Appointments.Models.Slot
+                new Slot
                 {
                     Id = "SLOTX02",
                     Type =  "General Session",
@@ -257,7 +257,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             // Assert
             var expectedResponse = new[] 
             {
-                new Worker.Areas.Appointments.Models.Slot
+                new Slot
                 {
                     Id = "SLOTX02",
                     Type =  "General Session",

@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 {
     public interface ISessionMapper
     {
-        IEnumerable<Areas.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions);
+        IEnumerable<GpSystems.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions);
     }
     
     public class SessionMapper : ISessionMapper
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _logger = logger;
         }
 
-        public IEnumerable<Areas.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions)
+        public IEnumerable<GpSystems.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions)
         {
             if (sessions == null)
                 yield break;
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                         _logger.LogWarning($"Unable to create {nameof(DateTimeOffset)} from slot {nameof(slot.EndDate)} '{slot.EndDate}'.");
                     }
 
-                    yield return new Areas.Appointments.Models.Slot
+                    yield return new GpSystems.Appointments.Models.Slot
                     {
                         Clinicians = GetCliniciansForSession(session),
                         EndTime = endDate,

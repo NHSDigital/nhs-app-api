@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments

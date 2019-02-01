@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using NHSOnline.Backend.Worker.ValidationAttributes;
 
-namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Appointments.Models
 {
     public class AppointmentBookRequest
     {
