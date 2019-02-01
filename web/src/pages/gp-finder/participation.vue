@@ -48,14 +48,14 @@
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
         <analytics-tracked-tag :text="this.$t('th04.ctaContinue')">
-          <generic-button :class="$style.continue" :button-classes="['green']">
+          <generic-button :class="$style.continue" :button-classes="['green', 'button']">
             {{ this.$t('th04.ctaContinue') }}
           </generic-button>
         </analytics-tracked-tag>
       </form>
 
       <analytics-tracked-tag v-else :text="this.$t('th04.ctaContinue')">
-        <generic-button :button-classes="['green']" :class="$style.continue"
+        <generic-button :button-classes="['green', 'button']" :class="$style.continue"
                         @click="notParticipatingCTAClicked">
           {{ this.$t('th04.ctaContinue') }}
         </generic-button>

@@ -37,7 +37,7 @@
                             name="searchQuery"
                             maxlength="150"/>
         <analytics-tracked-tag :text="$t('th02.callToAction')">
-          <generic-button :button-classes="['green']"
+          <generic-button :button-classes="['green', 'button']"
                           @click="ctaClicked">
             {{ $t('th02.callToAction') }}
           </generic-button>

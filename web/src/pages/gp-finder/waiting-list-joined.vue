@@ -19,7 +19,7 @@
       <p>{{ this.$t('th06.untilThenParagraph') }}</p>
       <analytics-tracked-tag :text="this.$t('th06.homeButton')">
         <generic-button :class="$style.goToHomeScreenButton"
-                        :button-classes="['grey']"
+                        :button-classes="['grey', 'button']"
                         @click="onReturnHomeClicked">
           {{ this.$t('th06.homeButton') }}
         </generic-button>

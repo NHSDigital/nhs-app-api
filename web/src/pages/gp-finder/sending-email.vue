@@ -59,7 +59,7 @@
                               @select="radioButtonSelected"/>
 
         <analytics-tracked-tag :text="this.$t('th05.callToAction')">
-          <generic-button :button-classes="['green']" @click="callToActionClicked">
+          <generic-button :button-classes="['green', 'button']" @click="callToActionClicked">
             {{ this.$t('th05.callToAction') }}
           </generic-button>
         </analytics-tracked-tag>

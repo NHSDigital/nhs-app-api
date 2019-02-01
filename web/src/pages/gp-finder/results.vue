@@ -73,7 +73,7 @@
 
       <analytics-tracked-tag :text="$t('th03.errors.backButton')">
         <generic-button v-if="tooManyResults || technicalError || noResultsFound"
-                        :button-classes="['grey']" :class="$style.back"
+                        :button-classes="['grey', 'button']" :class="$style.back"
                         tabindex="0" @click="backButtonClicked">
           {{ $t('th03.errors.backButton') }}
         </generic-button>
