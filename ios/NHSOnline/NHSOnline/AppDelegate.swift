@@ -1,4 +1,5 @@
 import UIKit
+import WebKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -6,6 +7,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var rootViewController: UINavigationController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        clearCaches()
+        
         application.ignoreSnapshotOnNextApplicationLaunch()
         let navigationController = UINavigationController(rootViewController: (self.window?.rootViewController as? HomeViewController)!)
         self.window?.rootViewController = navigationController
@@ -17,15 +20,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        clearCaches()
+        
         let webPageUrl = userActivity.webpageURL?.absoluteString
         self.finishLoginToApp(webPageUrl!)
         return true
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        clearCaches()
+        
         let webPageUrl = resolveAppScheme(url: url)
         self.finishLoginToApp(webPageUrl)
         return true
+    }
+    
+    private func clearCaches() {
+        URLCache.shared.removeAllCachedResponses()
+
+        WKWebsiteDataStore.default().removeData(ofTypes: Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache]), modifiedSince: Date(timeIntervalSince1970: 0), completionHandler: {})
     }
     
     private func finishLoginToApp(_ url: String) {
