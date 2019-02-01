@@ -28,7 +28,7 @@ export default {
     HomeHeader,
   },
   head() {
-    return {
+    const head = {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
@@ -38,7 +38,22 @@ export default {
           src: this.$store.app.$env.ANALYTICS_SCRIPT_URL,
         },
       ],
+      __dangerouslyDisableSanitizers: ['noscript'],
     };
+
+    const sessionCookie = this.$store.app.$cookies.get('nhso.session');
+
+    if (sessionCookie) {
+      const { durationSeconds } = sessionCookie;
+
+      if (durationSeconds) {
+        head.noscript = [
+          { innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};URL='/account/signout'">`, body: false },
+        ];
+      }
+    }
+
+    return head;
   },
   mounted() {
     NativeVersionSetup(this.$store, this.$route);

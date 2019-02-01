@@ -75,7 +75,20 @@ export default {
         { name: 'web version', content: this.$store.state.appVersion.webVersion },
         { name: 'platform', content: platform },
       ],
+      __dangerouslyDisableSanitizers: ['noscript'],
     };
+
+    const sessionCookie = this.$store.app.$cookies.get('nhso.session');
+
+    if (sessionCookie) {
+      const { durationSeconds } = sessionCookie;
+
+      if (durationSeconds) {
+        head.noscript = [
+          { innerHTML: `<meta http-equiv="refresh" content="${durationSeconds};URL='/account/signout'">`, body: false },
+        ];
+      }
+    }
 
     const analyticsScript = [
       {
@@ -154,7 +167,6 @@ export default {
       this.$store.dispatch('device/updateIsNativeApp', false);
     }
     this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
-
 
     if (process.browser) {
       this.$store.dispatch('session/updateLastCalledAt');

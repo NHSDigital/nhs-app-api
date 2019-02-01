@@ -8,7 +8,7 @@ export default {
   head() {
     return {
       noscript: [
-        { innerHTML: '<meta http-equiv="refresh" content="0;URL=\'/\'">', body: false },
+        { innerHTML: '<meta http-equiv="refresh" content="0;URL=\'/Login?showExpiryMessage=true\'">', body: false },
       ],
       title: `${this.$store.state.header.headerText} screen`,
       __dangerouslyDisableSanitizers: ['noscript'],

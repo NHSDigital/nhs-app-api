@@ -80,7 +80,7 @@ export default {
   },
   computed: {
     showSessionExpiredBanner() {
-      return this.$store.state.session.showExpiryMessage;
+      return this.$store.state.session.showExpiryMessage || this.$route.query.showExpiryMessage;
     },
     isErrorVisible() {
       return this.$store.getters['errors/showApiError'] || this.$store.state.errors.hasConnectionProblem;
