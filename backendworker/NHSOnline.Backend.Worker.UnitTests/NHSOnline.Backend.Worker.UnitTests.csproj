@@ -114,6 +114,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="GpSystems\Im1Connection" />
     <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis" />
     <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations" />
     <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures" />

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
 {

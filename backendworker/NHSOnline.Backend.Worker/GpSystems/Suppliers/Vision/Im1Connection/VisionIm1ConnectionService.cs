@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;

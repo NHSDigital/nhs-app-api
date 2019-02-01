@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;

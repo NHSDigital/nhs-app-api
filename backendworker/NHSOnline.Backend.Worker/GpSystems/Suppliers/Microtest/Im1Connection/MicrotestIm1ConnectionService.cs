@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Models.Im1Connection;
 

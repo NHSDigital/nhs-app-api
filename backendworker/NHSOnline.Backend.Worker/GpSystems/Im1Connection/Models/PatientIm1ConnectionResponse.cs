@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models
 {
     public class PatientIm1ConnectionResponse
     {

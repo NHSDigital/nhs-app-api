@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models
 {
     public class PatientIm1ConnectionRequest
     {

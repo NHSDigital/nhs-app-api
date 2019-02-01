@@ -3,7 +3,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Im1Connection;
 

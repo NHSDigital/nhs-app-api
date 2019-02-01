@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;

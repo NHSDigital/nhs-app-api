@@ -4,9 +4,9 @@ using System.Linq;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Models
+namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Im1Connection.Models
 {
     [TestClass]
     public class Im1ConnectionRequestTests

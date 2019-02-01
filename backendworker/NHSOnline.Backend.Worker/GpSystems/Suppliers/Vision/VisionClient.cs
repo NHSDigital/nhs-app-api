@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
