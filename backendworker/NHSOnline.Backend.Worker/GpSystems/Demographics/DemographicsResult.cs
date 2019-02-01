@@ -1,5 +1,5 @@
 ﻿using NHSOnline.Backend.Worker.Areas.Demographics;
-using NHSOnline.Backend.Worker.Areas.Demographics.Models;
+using NHSOnline.Backend.Worker.GpSystems.Demographics.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Demographics
 {

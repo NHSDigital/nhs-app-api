@@ -1,6 +1,6 @@
 using System;
 
-namespace NHSOnline.Backend.Worker.Areas.Demographics.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Demographics.Models
 {
     public class SuccessfulDemographicsResponse
     {
