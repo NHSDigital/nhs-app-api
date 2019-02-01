@@ -186,8 +186,8 @@ export default {
           this.goToUrl(GP_FINDER_WAITING_LIST_JOINED.path);
         })
         .catch((error) => {
-          const { status } = error.response;
-          if (status === 502 || status === 500) {
+          if (!error.response || !error.response.status ||
+            error.response.status === 502 || error.response.status === 500) {
             this.submissionError = true;
             return;
           }

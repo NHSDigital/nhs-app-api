@@ -208,9 +208,12 @@ export default {
           gpSearchResult.noResultsFound = !response.organisationQueryCount;
         })
         .catch((error) => {
-          const { status } = error.response;
+          if (!error.response || !error.response.status) {
+            gpSearchResult.technicalError = true;
+            return;
+          }
 
-          if (status === 400) {
+          if (error.response.status === 400) {
             gpSearchResult.submissionError = true;
             return;
           }
