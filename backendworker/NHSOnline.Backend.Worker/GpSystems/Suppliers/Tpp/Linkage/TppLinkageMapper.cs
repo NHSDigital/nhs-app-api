@@ -1,7 +1,7 @@
 using System;
 using System.Web;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Linkage.Models;
+using NHSOnline.Backend.Worker.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.Support;
 

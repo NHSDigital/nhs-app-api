@@ -1,5 +1,5 @@
 ﻿using System;
-using NHSOnline.Backend.Worker.Areas.Linkage.Models;
+using NHSOnline.Backend.Worker.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Linkage

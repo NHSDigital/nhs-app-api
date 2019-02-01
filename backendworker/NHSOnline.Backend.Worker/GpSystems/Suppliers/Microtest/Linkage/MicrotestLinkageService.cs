@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.Linkage.Models;
+using NHSOnline.Backend.Worker.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Linkage

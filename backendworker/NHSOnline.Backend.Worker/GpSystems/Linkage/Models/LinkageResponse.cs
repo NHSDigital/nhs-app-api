@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.Worker.Areas.Linkage.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Linkage.Models
 {
     public class LinkageResponse
     {

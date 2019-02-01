@@ -1,4 +1,4 @@
-using NHSOnline.Backend.Worker.Areas.Linkage.Models;
+using NHSOnline.Backend.Worker.GpSystems.Linkage.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
