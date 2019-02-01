@@ -35,7 +35,7 @@ class FingerprintSystemChecker(
             alertHelper.showDialog(
                 context.resources.getString(R.string.fingerprints_not_enabled_header),
                 context.resources.getString(R.string.fingerprints_not_enabled_message),
-                true)
+                context.resources.getString(R.string.biometricsHelpURL))
             return false
         }
         return true
@@ -88,6 +88,7 @@ class FingerprintSystemChecker(
         fun checkIfAndroidMOrAbove(): Boolean {
             return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         }
+
         fun showCurrentOSNotSupportDialog(context: Context) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 AlertHelper(context).showDialog(

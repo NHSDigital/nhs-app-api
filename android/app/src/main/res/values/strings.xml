@@ -113,9 +113,9 @@
     <string name="version_not_supported_message">You may be able to use it if you can update your operating system. Check with your operating system developer.</string>
     <string name="fingerprints_not_enabled_header">We can\'t find your fingerprint</string>
 
-    <string name="fingerprints_not_enabled_message">
-        You can &lt;a href=\"https://www.nhs.uk/\">get help with missing fingerprints on Android devices. &lt;/a>.
-    </string>
+    <string name="biometrics_dialog_get_help">Get Help</string>
+
+    <string name="fingerprints_not_enabled_message">You can get help with missing fingerprints on Android devices.</string>
 
     <!--Fingerprint Login generic error contents-->
     <string name="fingerprint_login_error_title">Something went wrong</string>

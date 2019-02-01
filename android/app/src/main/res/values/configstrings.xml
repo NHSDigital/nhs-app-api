@@ -40,6 +40,7 @@
     <string name="secureFlag">enabled</string>
     <string name="hotjarLink">https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
     <string name="helpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/</string>
+    <string name="biometricsHelpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/android-fingerprint-ID-help/</string>
     <string name="termsAndConditionsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/</string>
     <string name="privacyPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/</string>
     <string name="cookiesPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/</string>
@@ -58,6 +59,7 @@
 
     <string-array name="externalSiteUrls">
         <item>@string/hotjarLink</item>
+        <item>@string/biometricsHelpURL</item>
         <item>@string/helpURL</item>
         <item>@string/termsAndConditionsURL</item>
         <item>@string/privacyPolicyURL</item>
