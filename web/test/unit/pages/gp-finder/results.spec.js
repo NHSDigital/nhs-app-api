@@ -1,4 +1,5 @@
 import ResultsPage from '@/pages/gp-finder/results';
+import 'babel-polyfill';
 
 describe(('GP Finder results page'), () => {
   describe(('getPracticeCodeFromNACSCode'), () => {

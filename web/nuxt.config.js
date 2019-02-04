@@ -29,6 +29,7 @@ const config = {
     '~/plugins/mixins.js',
     '~/plugins/analytics.js',
     '~/plugins/logging.js',
+    '~/plugins/polyfills.js',
   ],
   serverMiddleware: [
     './.transpiled/middleware-server/noJsApi.js',
