@@ -65,4 +65,8 @@ export default {
     line-height: 1.5em;
     color: #425563;
   }
+
+ .welcomeInfo {
+  padding-bottom: 1em;
+ }
 </style>
