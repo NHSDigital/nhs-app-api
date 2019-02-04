@@ -29,3 +29,29 @@
     padding-top: 0.5em;
   }
 }
+
+.app-container-desktop {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: stretch;
+  align-items: flex-start;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.header-container-desktop, .footer-container-desktop {
+  order: 0;
+  flex: 0 1 auto;
+  align-self: stretch;
+}
+
+.main-container-desktop {
+  order: 0;
+  flex: 1 1 auto;
+  align-self: stretch;
+}

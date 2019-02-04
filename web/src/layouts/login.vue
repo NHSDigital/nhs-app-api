@@ -7,7 +7,9 @@
     <div v-else id="app" :class="$style['login-app-header']">
       <div :class="dynamicStyle('login-app-header-flex-container')">
         <home-header v-if="this.$store.state.device.isNativeApp"/>
-        <web-header v-else :show-menu="false" :show-links="false"/>
+        <div v-else :class="$style['header-container-desktop']">
+          <web-header :show-menu="false" :show-links="false"/>
+        </div>
         <session-expired-banner v-if="showSessionExpiredBanner"/>
         <div v-if="this.$store.state.device.isNativeApp">
           <main :class="this.$style.homeMain">
@@ -15,7 +17,7 @@
             <nuxt/>
           </main>
         </div>
-        <div v-else>
+        <div v-else :class="$style['main-container-desktop']">
           <div :class="$style['banner-container']">
             <div>
               <beta-banner :banner-class="[$style.banner]" data-sid="beta-flag"/>
@@ -36,7 +38,10 @@
               <symptom-banner/>
             </main>
           </section>
-          <web-footer v-if="!this.$store.state.device.isNativeApp"/>
+        </div>
+        <div v-if="!this.$store.state.device.isNativeApp"
+             :class="$style['footer-container-desktop']">
+          <web-footer/>
         </div>
       </div>
     </div>
@@ -179,10 +184,20 @@ export default {
 }
 
 .login-app-header-flex-container-desktop {
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: stretch;
+  align-items: flex-start;
+  position: absolute;
   margin: 0 auto;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
   background: #f0f4f5;
+  width: 100%;
 }
 
 .error-container {

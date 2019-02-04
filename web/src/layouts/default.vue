@@ -1,18 +1,28 @@
 <template>
-  <div id="app">
-    <web-header v-if="!$store.state.device.isNativeApp" ref="headerMenu"/>
-    <main :class="[mainClass, isDesktopWeb ? $style.desktopWeb : $style.web]">
+  <div id="app" :class="isDesktopWeb && $style['app-container-desktop']">
+    <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
+      <web-header ref="headerMenu"/>
+    </div>
+
+    <main :class="[mainClass, isDesktopWeb ? [$style['main-container-desktop'], $style.desktopWeb]
+    : $style.web]">
       <spinner />
       <connection-error />
       <api-error />
       <flash-message />
       <nuxt/>
     </main>
+
     <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                 @onBarStatusChanged="setSurveyBarStatus"/>
+
     <hot-jar v-if="isAnalyticsCookieAccepted()"/>
+
     <a11y-title-announcer v-if="!$store.state.device.isNativeApp" ref="a11yAnnouncer"/>
-    <web-footer v-if="!$store.state.device.isNativeApp"/>
+
+    <div v-if="!$store.state.device.isNativeApp" :class="$style['footer-container-desktop']">
+      <web-footer/>
+    </div>
   </div>
 </template>
 
@@ -171,7 +181,6 @@ export default {
         this.resetFocus();
       }
     }
-    this.isWeb = this.$store.state.device.isNativeApp;
   },
   updated() {
     if (this.pathChanged) {
@@ -218,9 +227,9 @@ export default {
   @import "../style/main";
   @import "../style/pulltorefresh";
   @import "../style/elements";
-  @import "../style/webshared";
 </style>
 
 <style module lang="scss" scoped>
 @import "../style/home";
+@import "../style/webshared";
 </style>

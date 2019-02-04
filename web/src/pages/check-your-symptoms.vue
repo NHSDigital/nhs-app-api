@@ -40,7 +40,7 @@ export default {
   }
 
   .nativeHeader {
-    padding: 0em 0em 3.125em 2.0px;
+    padding: 0 0 3.125em 2.0px;
   }
 
 </style>
