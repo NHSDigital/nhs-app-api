@@ -24,13 +24,17 @@
 
       <h2>{{ $t('th04.currentlyAvailableHeader') }}</h2>
       <ul id="availableFeatures" :class="$style.availableFeatures">
-        <li v-for="feature in availableFeatures" :key="feature">{{ feature }}</li>
+        <li v-for="(feature, index) in availableFeatures" :key="`feature-${index}`">
+          {{ feature }}
+        </li>
       </ul>
 
       <div v-if="unavailableFeatures">
         <h2>{{ $t('th04.comingSoonHeader') }}</h2>
         <ul id="unavailableFeatures" :class="$style.unavailableFeatures">
-          <li v-for="feature in unavailableFeatures" :key="feature">{{ feature }}</li>
+          <li v-for="(feature, index) in unavailableFeatures" :key="`feature-${index}`">
+            {{ feature }}
+          </li>
         </ul>
       </div>
 
@@ -73,6 +77,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import { GP_FINDER, BEGINLOGIN, GP_FINDER_SENDING_EMAIL } from '@/lib/routes';
+import AuthorisationService from '@/services/authorisation-service';
 import get from 'lodash/fp/get';
 
 export default {
@@ -95,6 +100,16 @@ export default {
       responseType: '',
       clientId: '',
     };
+  },
+  asyncData({ store }) {
+    if (get('PracticeParticipating')(store.state.throttling.selectedGpPractice)) {
+      const authorisationService = new AuthorisationService(store.app.$env);
+      return authorisationService.generateLoginValues(
+        store.state.device.source,
+        store.$cookies,
+      );
+    }
+    return {};
   },
   computed: {
     getHeaderText() {
