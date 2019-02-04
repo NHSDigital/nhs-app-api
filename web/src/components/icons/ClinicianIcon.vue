@@ -17,4 +17,8 @@ export default {};
 <style module lang="scss" scoped>
 @import "../../style/icons";
 @import "../../style/colours";
+svg {
+  width: 20px;
+  height: 16px;
+}
 </style>
