@@ -7,7 +7,7 @@ Feature: Login
 
   @smoketest
   Scenario Outline: A <GP System> user sees the home page after logging in
-    Given I have no upcoming appointments for <GP System>
+    Given I have no booked appointments for <GP System>
     And I have no repeat prescriptions for <GP System>
     And I am logged in
     Then I see a welcome message

@@ -38,7 +38,7 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
 
     override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
         val viewAppointmentsReply = viewAppointmentsReplyBase()
-        if (facade.slots != null) {
+        if (facade.myAppointments != null) {
             viewAppointmentsReply.Appointment = extractAppointmentsFromFacade(facade)
         }
         return respondWithSuccess(JSonXmlConverter.toXML(viewAppointmentsReply))
@@ -56,7 +56,7 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
     }
 
     private fun extractAppointmentsFromFacade(facade: MyAppointmentsFacade): List<Appointment> {
-        return facade.slots?.sessions?.flatMap { session ->
+        return facade.myAppointments?.sessions?.flatMap { session ->
             session.slots.map { slot ->
                 Appointment(
                         slot.slotId!!.toString(),

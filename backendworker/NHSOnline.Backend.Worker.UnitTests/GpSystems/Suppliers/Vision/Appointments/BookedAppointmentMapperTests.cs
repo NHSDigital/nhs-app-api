@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             
             var expectedResponse = new[] 
             {
-                new Worker.Areas.Appointments.Models.Appointment
+                new Worker.Areas.Appointments.Models.UpcomingAppointment
                 {
                     Id = "SLOTX01",
                     Type =  $"{_generalSession.Description} - {_slotTypeWithDescription.Description}",
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     EndTime = slotTime1.End,
                     Clinicians = new []{ _owner1.Name }
                 },
-                new Worker.Areas.Appointments.Models.Appointment
+                new Worker.Areas.Appointments.Models.UpcomingAppointment
                 {
                     Id = "SLOTX02",
                     Type =  $"{_generalSession.Description}",
@@ -199,7 +199,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             // Assert
             var expectedResponse = new[] 
             {
-                new Worker.Areas.Appointments.Models.Appointment
+                new Worker.Areas.Appointments.Models.UpcomingAppointment
                 {
                     Id = "SLOTX02",
                     Type =  _generalSession.Description,
@@ -269,7 +269,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             var expectedResponse = new[] 
             {
-                new Worker.Areas.Appointments.Models.Appointment
+                new Worker.Areas.Appointments.Models.UpcomingAppointment
                 {
                     Id = "SLOTX01",
                     Type = $"{_generalSession.Description} - {_slotTypeWithDescription.Description}",
@@ -279,7 +279,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     Clinicians = new []{ _owner1.Name },
                     DisableCancellation = true
                 },
-                new Worker.Areas.Appointments.Models.Appointment
+                new Worker.Areas.Appointments.Models.UpcomingAppointment
                 {
                     Id = "SLOTX02",
                     Type = $"{_generalSession.Description}",

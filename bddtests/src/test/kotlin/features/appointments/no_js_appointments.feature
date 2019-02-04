@@ -34,7 +34,7 @@ Feature: Appointment Service with no Javascript
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
     And I am on the My Appointments page
-    Then I am informed I have no booked appointments
+    Then I am informed I have no upcoming appointments
 
     When I click the 'Book new appointment' button
     Then I am given guidance as to my options before booking an appointment

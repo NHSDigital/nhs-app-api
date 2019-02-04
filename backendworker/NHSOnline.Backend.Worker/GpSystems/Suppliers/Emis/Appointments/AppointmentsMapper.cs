@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using Appointment = NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment;
@@ -32,9 +33,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         }
 
         public IEnumerable<Appointment> Map(
-            IEnumerable<Models.Appointment> sourceAppointments, 
+            IEnumerable<Models.Appointment> sourceAppointments,
             IEnumerable<Location> locations,
-            IEnumerable<SessionHolder> sessionHolders, 
+            IEnumerable<SessionHolder> sessionHolders,
             IEnumerable<Models.Session> sessions)
         {
             var appointments = new List<Appointment>();
@@ -62,15 +63,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 var endTime = ParseSlotTime(sourceAppointment.EndTime, "End");
                 var sessionId = sourceAppointment.SessionId;
 
-                var appointment = new Appointment
-                {
-                    Id = sourceAppointment.SlotId.ToString(CultureInfo.InvariantCulture),
-                    StartTime = startTime.GetValueOrDefault(),
-                    EndTime = endTime,
-                    Clinicians = FindCliniciansForSession(sessionId, keyedSessions, sessionHolders),
-                    Location = FindLocationForSession(sessionId, keyedSessions, locations),
-                    Type = CreateTypeFromAppointmentAndSession(sourceAppointment, FindSession(sessionId, keyedSessions))
-                };
+                var appointment = DateTime.Now >= startTime
+                    ? (Appointment) new PastAppointment()
+                    : new UpcomingAppointment();
+
+                appointment.Id = sourceAppointment.SlotId.ToString(CultureInfo.InvariantCulture);
+                appointment.StartTime = startTime.GetValueOrDefault();
+                appointment.EndTime = endTime;
+                appointment.Clinicians = FindCliniciansForSession(sessionId, keyedSessions, sessionHolders);
+                appointment.Location = FindLocationForSession(sessionId, keyedSessions, locations);
+                appointment.Type = CreateTypeFromAppointmentAndSession(sourceAppointment,
+                    FindSession(sessionId, keyedSessions));
 
                 appointments.Add(appointment);
             }

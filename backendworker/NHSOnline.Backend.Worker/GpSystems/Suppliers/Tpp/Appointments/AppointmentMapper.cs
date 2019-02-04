@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 {
     public interface IAppointmentMapper
     {
-        IEnumerable<Appointment> Map(List<Models.Appointments.Appointment> appointments);
+        IEnumerable<UpcomingAppointment> Map(List<Models.Appointments.Appointment> appointments);
     }
     public class AppointmentMapper : IAppointmentMapper
     {
@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }
 
-        public IEnumerable<Appointment> Map(List<Models.Appointments.Appointment> appointments)
+        public IEnumerable<UpcomingAppointment> Map(List<Models.Appointments.Appointment> appointments)
         {
             if (appointments == null)
             {
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 
                 _dateTimeOffsetProvider.TryCreateDateTimeOffset(appointment.EndDate?.TrimEnd('Z'), out var endTime);
 
-                yield return new Appointment
+                yield return new UpcomingAppointment
                 {
                     Id = appointment.ApptId,
                     StartTime = startTime.GetValueOrDefault(),

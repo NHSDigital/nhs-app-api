@@ -191,25 +191,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
-        [SuppressMessage("Microsoft.Globalization", "CA1308", 
-            Justification = "We need the fetchPreviousAppointments parameter to be in lowercase to match EMIS API expectations.")]
         public async Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
-            EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
-            DateTimeOffset? previousAppointmentsFromDate)
+            EmisHeaderParameters headerParameters, string userPatientLinkToken)
         {
+            var queryParams = string.Format(CultureInfo.InvariantCulture,
+                "?UserPatientLinkToken={0}&FetchPreviousAppointments=true&PreviousAppointmentsFromDate={1}", 
+                userPatientLinkToken,
+                DateTime.Today.AddYears(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
-            var qb = new QueryBuilder
-            {
-                { nameof(userPatientLinkToken), userPatientLinkToken },
-                { nameof(fetchPreviousAppointments), fetchPreviousAppointments.ToString(CultureInfo.InvariantCulture).ToLowerInvariant() }
-            };
 
-            if (fetchPreviousAppointments && previousAppointmentsFromDate.HasValue)
-            {
-                qb.Add(nameof(previousAppointmentsFromDate), EncodeDateTimeOffsetToIso(previousAppointmentsFromDate.Value));
-            }
-
-            var path = $"{AppointmentsPath}{qb.ToQueryString()}";
+            var path = $"{AppointmentsPath}{queryParams}";
 
             var response =
                 await Get<AppointmentsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);

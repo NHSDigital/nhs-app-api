@@ -3,8 +3,8 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
-import features.appointments.factories.UpcomingAppointmentsFactory
 import features.appointments.steps.AppointmentsConfirmationSteps
+import features.appointments.factories.MyAppointmentsFactory
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.emis.appointments.BookAppointmentsBuilderEmis
 import mocking.emis.practices.NecessityOption
@@ -28,8 +28,8 @@ class AppointmentsBookingStepDefinitions {
     @Given("^a booked appointment can be cancelled$")
     fun aBookedAppointmentCanBeCancelled() {
         val gpSystem = Serenity.sessionVariableCalled<String>(SupplierSpecificFactory.SerenityKey.GP_SYSTEM)
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponseOnceBooked()
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponseOnceBooked()
     }
 
     @Given("^there are multiple appointment slots at the same time, provided by (.*)$")

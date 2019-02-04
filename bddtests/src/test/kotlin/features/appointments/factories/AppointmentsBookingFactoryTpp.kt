@@ -31,6 +31,5 @@ class AppointmentsBookingFactoryTpp : AppointmentsBookingFactory("TPP") {
                                              telephoneContactType: String?): BookAppointmentSlotFacade {
 
         throw NotImplementedError("Telephone appointment not available")
-
     }
 }

@@ -40,6 +40,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
 
             response.CancellationReasons.Should().BeEquivalentTo(expectedCancellationReasons);
+            response.PastAppointmentsEnabled.Should().BeTrue();
         }
     }
 }

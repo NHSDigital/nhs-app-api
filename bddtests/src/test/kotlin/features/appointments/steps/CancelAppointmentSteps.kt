@@ -1,7 +1,7 @@
 package features.appointments.steps
 
 import features.appointments.factories.AppointmentsCancellingFactory
-import features.appointments.factories.UpcomingAppointmentsFactory
+import features.appointments.factories.MyAppointmentsFactory
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
@@ -83,7 +83,7 @@ open class CancelAppointmentSteps {
     @Step
     private fun retrieveSlotOfAppointmentToCancel(): Slot {
         return Serenity.sessionVariableCalled<List<Slot>>(
-                UpcomingAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
+                MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
         ).first()
     }
 
@@ -96,9 +96,9 @@ open class CancelAppointmentSteps {
 
         val patient = Patient.getDefault(gpSystem)
 
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
         Serenity.setSessionVariable(Patient::class).to(patient)
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse()
 
         val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
         val request = factory.defaultRequest(
@@ -106,7 +106,7 @@ open class CancelAppointmentSteps {
                 retrieveSlotIdOfAppointmentToCancel(),
                 reason
                         ?: Serenity.sessionVariableCalled<MyAppointmentsFacade>(MyAppointmentsFacade::class)
-                                .slots!!
+                                .myAppointments!!
                                 .cancellationReasons!!
                                 .first()
                                 .displayName

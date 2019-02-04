@@ -26,9 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         }
 
         public async Task<AppointmentsResult> GetAppointments(
-            GpUserSession userSession, 
-            bool includePastAppointments,
-            DateTimeOffset? pastAppointmentsFromDate)
+            GpUserSession userSession)
         {
             try
             {
@@ -37,10 +35,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 var emisUserSession = (EmisUserSession) userSession;
                 var emisHeaders = new EmisHeaderParameters(emisUserSession);
                 
-                var response = await _emisClient.AppointmentsGet(emisHeaders,
-                    emisUserSession.UserPatientLinkToken,
-                    includePastAppointments,
-                    pastAppointmentsFromDate);
+                var response = await _emisClient.AppointmentsGet(
+                    emisHeaders,
+                    emisUserSession.UserPatientLinkToken);
                 return InterpretAppointmentsGetResponse(response);
             }
             catch (HttpRequestException exception)

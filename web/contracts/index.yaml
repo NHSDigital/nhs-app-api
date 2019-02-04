@@ -130,20 +130,6 @@
         description: "Returns list of booked appointments for the logged on user, and associated metadata including list of cancellation reasons that can be used to cancel upcoming appointments. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
         produces: 
           - "application/json"
-        parameters: 
-          - 
-            in: "query"
-            name: "includePastAppointments"
-            type: "boolean"
-            required: true
-            description: "Indicates whether the response should include historical appointments. See also the optional pastAppointmentsFromDate parameter that can be used to limit the number of returned historical appointments."
-          - 
-            in: "query"
-            name: "pastAppointmentsFromDate"
-            type: "string"
-            format: "date-time"
-            required: false
-            description: "Earliest datetime for which to return historical appointments. Will only have any effect if includePastAppointments is set to true."
         responses: 
           200: 
             description: "Returns list of booked appointments and associated meta data. Returns empty collection of appointments if GP system does not return a list of appointmetns."
@@ -152,7 +138,7 @@
               properties: 
                 appointments: 
                   type: "array"
-                  description: "Array of booked Appointments."
+                  description: "Array of booked upcoming Appointments."
                   items: 
                     type: "object"
                     properties: 
@@ -181,6 +167,34 @@
                       disableCancellation: 
                         type: "boolean"
                         description: "Indicates the appointment cannot be cancelled."
+                pastAppointments: 
+                  type: "array"
+                  description: "Array of past Appointments."
+                  items: 
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "Appointment Identifier."
+                      type: 
+                        type: "string"
+                        description: "Type of appointment slot, e.g. \"Baby immunisations\"."
+                      startTime: 
+                        type: "string"
+                        format: "date-time"
+                        description: "Appointment Start Date Time."
+                      endTime: 
+                        type: "string"
+                        format: "date-time"
+                        description: "Appointment End Date Time."
+                      location: 
+                        type: "string"
+                        description: "Physical location of the appointment."
+                      clinicians: 
+                        type: "array"
+                        description: "Array of Clinicians, accounts for joint sessions."
+                        items: 
+                          type: "string"
                 cancellationReasons: 
                   type: "array"
                   description: "Array of Cancellation Reasons."
@@ -196,6 +210,9 @@
                 disableCancellation: 
                   type: "boolean"
                   description: "Indicates whether appointment cancellation is disabled."
+                pastAppointmentsEnabled: 
+                  type: "boolean"
+                  description: "Indicates whether past appointments are enabled."
           400: 
             description: "Bad request. A querystring parameter is not in the expected format."
           401: 

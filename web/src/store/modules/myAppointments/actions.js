@@ -12,7 +12,7 @@ export default {
   load({ commit }) {
     this.dispatch('myAppointments/init');
     return this.app.$http
-      .getV1PatientAppointments({ includePastAppointments: false })
+      .getV1PatientAppointments()
       .then((data) => {
         commit(LOADED, data);
       });

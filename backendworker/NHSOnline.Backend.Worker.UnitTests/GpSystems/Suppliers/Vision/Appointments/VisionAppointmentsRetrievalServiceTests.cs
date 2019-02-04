@@ -71,8 +71,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
 
-            response.Appointments.Should().BeEmpty();
+            response.UpcomingAppointments.Should().BeEmpty();
             response.CancellationReasons.Should().BeEmpty();
+            response.PastAppointmentsEnabled.Should().BeFalse();
             _mockVisionClient.VerifyAll();
         }
 

@@ -1,57 +1,84 @@
 @appointment
-Feature: My appointments
+@noJs
+Feature: My appointments UI without Javascript
   Users can view their upcoming and past appointments in the My Appointments screen.
 
-  Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
-    Given the <GP System> GP appointment system is unavailable
+  Background:
+    Given I have disabled javascript
+
+#    Only testing for 1 GP System for no JS
+  @bug  @NHSO-4129
+  Scenario: An EMIS user sees Service currently unavailable message when GP system is unavailable
+    Given the EMIS GP appointment system is unavailable
     And I am logged in
     When I am on the My Appointments page
     Then I see page header indicating there is an appointment data error
     And I see the appropriate error messages for the appointment data error
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
 
-  @native-smoketest
-    Examples:
-      | GP System |
-      | EMIS      |
 
-  Scenario Outline: A user has never booked an appointment
-    Given I have no upcoming appointments for <GP System>
+  Scenario: An EMIS user sees appropriate messages when they have no upcoming or historical appointments
+    Given I have no booked appointments for EMIS
     And I am logged in
     When I am on the My Appointments page
-    Then I am informed I have no booked appointments
-    But I can book an appointment
+    Then the page title is "My appointments"
+    And I am informed I have no upcoming appointments
+    And I am informed I have no historical appointments
+    And I can book an appointment
 
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
 
-  @smoketest
-  Scenario Outline: A <GP System> user can see their upcoming appointments
-    Given I have upcoming appointments before cutoff time for <GP System>
+#  Only testing for 1 GP System for no JS
+#  This Scenario can be removed once implemented for ALL GP Systems
+  Scenario: A TPP user sees appropriate messages when they have no upcoming or historical appointments
+    Given I have no booked appointments for TPP
+    And I am logged in
+    When I am on the My Appointments page
+    Then the page title is "My appointments"
+    And I am informed I have no upcoming appointments
+    And I am not informed I have no historical appointments
+    And I can book an appointment
+
+
+  Scenario: An EMIS user can see their upcoming appointments and a message if there are no historical appointments
+    Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
-    And appointments are in chronological order
     And each appointment can be cancelled
+    And I am informed I have no historical appointments
     And I can book an appointment
 
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
+  Scenario: An EMIS user sees their historical appointments and a message if they have no upcoming appointments
+    Given I have historical appointments for EMIS
+    And I am logged in
+    When I am on the My Appointments page
+    Then the page title is "My appointments"
+    And I am informed I have no upcoming appointments
+    And I am given the list of historical appointments
+    And I can book an appointment
 
-  @native-smoketest
-    Examples:
-      | GP System |
-      | EMIS      |
+  Scenario: An EMIS user sees both their upcoming and historical appointments
+    Given I have historical and upcoming appointments for EMIS
+    And I am logged in
+    When I am on the My Appointments page
+    Then the page title is "My appointments"
+    And I am given the list of upcoming appointments
+    And each appointment can be cancelled
+    And I am given the list of historical appointments
+    And I can book an appointment
 
+
+#  Only testing for 1 GP System for no JS
+#  This Scenario can be removed once implemented for ALL GP Systems
+  Scenario: A TPP user can see their upcoming appointments
+    Given I have upcoming appointments before cutoff time for TPP
+    And I am logged in
+    When I am on the My Appointments page
+    Then the page title is "My appointments"
+    And I am given the list of upcoming appointments
+    And each appointment can be cancelled
+    And I am not informed I have no historical appointments
+    And I can book an appointment
 
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
       # VISION Specific test
@@ -67,7 +94,6 @@ Feature: My appointments
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
-    And appointments are in chronological order
     And no appointment can be cancelled
     And I can book an appointment
 
@@ -77,7 +103,6 @@ Feature: My appointments
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
-    And appointments are in chronological order
     And no appointment can be cancelled
     And I can book an appointment
 
@@ -87,7 +112,6 @@ Feature: My appointments
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
-    And appointments are in chronological order
     And no appointment can be cancelled
     And I can book an appointment
 
@@ -97,14 +121,5 @@ Feature: My appointments
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments
-    And appointments are in chronological order
     And booked appointments before and one appointment within cutoff time are correctly displayed with relevant ability to cancel
     And I can book an appointment
-
-  @tech-debt   @NHSO-4061 # covered in Manual Regression Test pack
-  Scenario: Requesting list of appointments, when there is no internet connection should result with a message indicating user may have connectivity problems
-    Given I have no upcoming appointments for EMIS
-    And I am logged in
-    And I lose my internet connection
-    When I am on the My Appointments page
-    Then I see a message indicating user may have connectivity problems

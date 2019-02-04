@@ -1,13 +1,15 @@
 <template>
   <span>
-    <h2>{{ $t('appointments.index.upcoming.header') }}</h2>
+    <h2 :class="[isDesktopWeb ? $style.desktopWeb : undefined]">
+      {{ $t('appointments.index.past.header') }}</h2>
 
     <appointment v-for="appointment in appointments"
-                 :class="[$style.upcoming]"
+                 :class="[$style.past]"
                  :key="appointment.id"
                  :appointment="appointment"
-                 :cancellation-disabled="cancellationDisabled"
-                 data-purpose="upcoming-appointments" />
+                 :cancellation-disabled="true"
+                 :show-cancellation-link="false"
+                 data-purpose="past-appointments" />
   </span>
 </template>
 
@@ -27,18 +29,26 @@ export default {
       type: Array,
       default: () => [],
     },
-    cancellationDisabled: {
-      default: false,
-      type: Boolean,
-    },
+  },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
   },
 };
 </script>
 
 <style module lang="scss" scoped>
 
-.upcoming {
+.past {
   display: table !important;
+}
+
+h2 {
+ &.desktopWeb {
+  margin-top: 1em;
+ }
 }
 
 </style>

@@ -1,5 +1,6 @@
 package mocking.emis.appointments
 
+import constants.DateTimeFormats
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -11,18 +12,29 @@ import mocking.models.Mapping
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
 import org.apache.http.HttpStatus
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
-class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Patient,
-                                fetchPreviousAppointments: Boolean = false)
+class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Patient)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointments"), IMyAppointmentsBuilder {
 
     init {
+        val fetchPreviousAppointments = true
+        val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.dateWithoutTimeFormat)
+        val currentDateMinusOneYear = ZonedDateTime.now().minusYears(1)
+                .withZoneSameInstant(TimeZone.getTimeZone("Europe/London").toZoneId())
+
         requestBuilder
                 .andHeader(HEADER_API_END_USER_SESSION_ID, patient.endUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, patient.sessionId)
-                .andQueryParameter("userPatientLinkToken", patient.userPatientLinkToken)
-                .andQueryParameter("fetchPreviousAppointments", fetchPreviousAppointments.toString())
+                .andQueryParameter("UserPatientLinkToken", patient.userPatientLinkToken)
+                .andQueryParameter("FetchPreviousAppointments", fetchPreviousAppointments.toString())
+                .andQueryParameter(
+                        "PreviousAppointmentsFromDate",
+                        queryDateFormat.format(currentDateMinusOneYear)
+                )
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
@@ -42,9 +54,13 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
     }
 
     override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
+        val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+        val currentDateMinusOneYear = ZonedDateTime.now().minusYears(1)
+                .withZoneSameInstant(TimeZone.getTimeZone("Europe/London").toZoneId())
+
         return respondWithBody(
                 GetAppointmentsResponseModel(
-                        facade.appointmentsFromDateTime,
+                        queryDateFormat.format(currentDateMinusOneYear),
                         GetAppointmentHelper.extractListOfAppointmentsFromFacade(facade),
                         GetAppointmentHelper.extractLocationsFromFacade(facade),
                         GetAppointmentHelper.extractCliniciansFromFacade(facade),

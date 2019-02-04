@@ -17,18 +17,16 @@ import utils.SerenityHelpers
 import worker.models.appointments.MyAppointmentsResponse
 import java.time.Duration
 import java.util.*
+import kotlin.collections.ArrayList
 
 private const val DELAY_IN_SECONDS = 90L
 
-abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
-    private val baseDate = Calendar.getInstance(timeZone)
-    private val appointmentsFromDate = gpDateTimeFormat.format(baseDate.time)
+abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
-    fun createSuccessfulEmptyUpcomingAppointmentResponse(
+    fun createSuccessfulEmptyMyAppointmentResponse(
             cancellationReasons: List<AppointmentCancellationReason> = getDefaultCancellationReasons()
     ) {
-        val facade = MyAppointmentsFacade(
-                appointmentsFromDate,
+        val myAppointmentsFacade = MyAppointmentsFacade(
                 AppointmentSlotsResponseFacade(
                         cancellationReasons = cancellationReasons,
                         bookingReasonNecessityOption =
@@ -36,18 +34,16 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
                                 ?: NecessityOption.NOT_ALLOWED
                 )
         )
-        mockUpcomingAppointments {
-            respondWithSuccess(facade)
+        mockMyAppointments {
+            respondWithSuccess(myAppointmentsFacade)
                     .inScenario("Appointments")
                     .whenScenarioStateIs(Scenario.STARTED)
         }
-        Serenity.setSessionVariable(MyAppointmentsFacade::class).to(facade)
-        Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
-                .to(getExpectedUiRepresentationOfSlots(facade))
+        setSerenityVariablesForUITests(myAppointmentsFacade)
         generateDefaultUserData()
     }
 
-    fun createSuccessfulUpcomingAppointmentsResponse(
+    fun createSuccessfulMyAppointmentsResponse(
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
             = AppointmentsSlotsExample.getGenericExample(),
             numberOfCancellationReasons: Int = getDefaultCancellationReasons().size
@@ -58,17 +54,15 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         )
 
         val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
-        createUpcomingAppointments {
+        createMyAppointments {
             respondWithSuccess(myAppointmentsFacade)
         }
-        Serenity.setSessionVariable(MyAppointmentsFacade::class).to(myAppointmentsFacade)
-        Serenity.setSessionVariable(Expectations.EXPECTED_API_RESPONSE_OF_MY_UPCOMING_APPOINTMENTS)
-                .to(getExpectedApiResponse(myAppointmentsFacade.slots!!.sessions))
-        Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
-                .to(getExpectedUiRepresentationOfSlots(myAppointmentsFacade))
+        Serenity.setSessionVariable(Expectations.EXPECTED_API_RESPONSE_OF_MY_APPOINTMENTS)
+                .to(getExpectedApiResponse(myAppointmentsFacade))
+        setSerenityVariablesForUITests(myAppointmentsFacade)
     }
 
-    fun createSuccessfulUpcomingAppointmentsResponseOnceBooked(
+    fun createSuccessfulMyAppointmentsResponseOnceBooked(
             numberOfCancellationReasons: Int = getDefaultCancellationReasons().size
     ) {
         val sessionOfSelectedSlot = Serenity.sessionVariableCalled<List<AppointmentSessionFacade>>(
@@ -86,68 +80,73 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         )
 
         val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
-        createUpcomingAppointments {
+        createMyAppointments {
             respondWithSuccess(myAppointmentsFacade)
                     .inScenario("Appointments")
                     .whenScenarioStateIs("Appointment Booked")
         }
-
-        Serenity.setSessionVariable(MyAppointmentsFacade::class).to(myAppointmentsFacade)
-        Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
-                .to(getExpectedUiRepresentationOfSlots(myAppointmentsFacade))
+        setSerenityVariablesForUITests(myAppointmentsFacade)
     }
 
-    fun createTimeoutUpcomingAppointmentsResponse(
+    fun createTimeoutMyAppointmentsResponse(
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade = AppointmentsSlotsExample
                     .getGenericExample()
     ) {
         appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons()
 
         val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
-        createUpcomingAppointments {
+        createMyAppointments {
             respondWithSuccess(myAppointmentsFacade).delayedBy(Duration.ofSeconds(DELAY_IN_SECONDS))
         }
     }
 
-    fun createUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
-        mockUpcomingAppointments(mapping)
+    fun createMyAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
+        mockMyAppointments(mapping)
         generateDefaultUserData()
     }
 
     private fun convertToMyAppointmentsFacade(facade: AppointmentSlotsResponseFacade): MyAppointmentsFacade {
-        return MyAppointmentsFacade(
-                appointmentsFromDate,
-                facade
-        )
+        return MyAppointmentsFacade(facade)
     }
 
-    private fun mockUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
+    private fun mockMyAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         appointmentMapper.requestMapping { mapping(viewMyAppointmentsRequest(patient)) }
     }
 
-    abstract fun getExpectedApiResponse(facade: ArrayList<AppointmentSessionFacade>): MyAppointmentsResponse
+    private fun setSerenityVariablesForUITests(myAppointmentsFacade: MyAppointmentsFacade) {
+        Serenity.setSessionVariable(MyAppointmentsFacade::class).to(myAppointmentsFacade)
+        Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
+                .to(getExpectedUiRepresentationOfUpcomingSlots(myAppointmentsFacade))
+        Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS)
+                .to(getExpectedUiRepresentationOfHistoricalSlots(myAppointmentsFacade))
+    }
 
-    abstract fun getExpectedUiRepresentationOfSlots(facade: MyAppointmentsFacade): List<Slot>
+    abstract fun getExpectedApiResponse(facade: MyAppointmentsFacade): MyAppointmentsResponse
+
+    abstract fun getExpectedUiRepresentationOfUpcomingSlots(facade: MyAppointmentsFacade): List<Slot>
+
+    abstract fun getExpectedUiRepresentationOfHistoricalSlots(facade: MyAppointmentsFacade): List<Slot>
 
     abstract fun filterUpcomingAppointmentsWhenAppropriate(facade: ArrayList<AppointmentSessionFacade>):
             List<AppointmentSessionFacade>
 
     abstract fun getDefaultCancellationReasons(): List<AppointmentCancellationReason>
 
-    companion object : SupplierSpecificFactory<UpcomingAppointmentsFactory>() {
+    companion object : SupplierSpecificFactory<MyAppointmentsFactory>() {
 
-        override val map: HashMap<String, (() -> (UpcomingAppointmentsFactory))> by lazy {
+        override val map: HashMap<String, (() -> (MyAppointmentsFactory))> by lazy {
             hashMapOf(
-                    "EMIS" to { UpcomingAppointmentsFactoryEmis() },
-                    "TPP" to { UpcomingAppointmentsFactoryTpp() },
-                    "VISION" to { UpcomingAppointmentsFactoryVision() }
+                    "EMIS" to { MyAppointmentsFactoryEmis() },
+                    "TPP" to { MyAppointmentsFactoryTpp() },
+                    "VISION" to { MyAppointmentsFactoryVision() }
             )
         }
     }
 
     enum class Expectations {
         EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS,
-        EXPECTED_API_RESPONSE_OF_MY_UPCOMING_APPOINTMENTS
+        EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS,
+        EXPECTED_API_RESPONSE_OF_MY_APPOINTMENTS
     }
 
 }

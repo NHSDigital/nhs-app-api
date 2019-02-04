@@ -1,13 +1,15 @@
 <template>
   <div v-if="showTemplate" :class="[$style.content, 'pull-content',
                                     isDesktopWeb ? $style.desktopWeb : $style.web]">
-    <div v-if="showNoUpcomingAppointments" data-purpose="info">
+    <div v-if="showNoUpcomingAppointments" data-purpose="upcoming-info">
       <h2>{{ $t('appointments.index.empty.header') }}</h2>
       <div :class="isDesktopWeb && $style.upComingAppointments">
         <p :class="isDesktopWeb && $style.upComingAppointments">
           {{ $t('appointments.index.empty.text1') }}</p>
         <p :class="isDesktopWeb && $style.upComingAppointments">
           {{ $t('appointments.index.empty.text2') }} </p>
+        <p :class="isDesktopWeb && $style.upComingAppointments">
+          {{ $t('appointments.index.empty.text3') }} </p>
       </div>
     </div>
 
@@ -15,6 +17,17 @@
                            :appointments = "upcomingAppointments"
                            :cancellation-disabled = "cancellationDisabled"
                            :class="$style.upcomingAppointmentContainer"/>
+
+    <div v-if="showNoPastAppointments" data-purpose="past-info">
+      <h2>{{ $t('appointments.index.emptyPast.header') }}</h2>
+      <div :class="$style.info">
+        <p>{{ $t('appointments.index.emptyPast.text1') }}</p>
+      </div>
+    </div>
+
+    <past-appointments v-if="showPastAppointments"
+                       :appointments = "pastAppointments" />
+
     <no-js-form v-if="!shouldShowDesktopVersion" :action="guidancePath" :value="formData">
       <floating-button-bottom v-if="showBookAppointmentButton"
                               id="book-appointments-button"
@@ -26,6 +39,7 @@
 </template>
 
 <script>
+import PastAppointments from '@/components/appointments/PastAppointments';
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import NoJsForm from '@/components/no-js/NoJsForm';
@@ -34,6 +48,7 @@ import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
 export default {
   components: {
     FloatingButtonBottom,
+    PastAppointments,
     UpcomingAppointments,
     NoJsForm,
   },
@@ -46,13 +61,27 @@ export default {
     showNoUpcomingAppointments() {
       return (
         this.$store.state.myAppointments.hasLoaded &&
-        this.$store.state.myAppointments.appointments.length === 0
+        this.$store.state.myAppointments.upcomingAppointments.length === 0
+      );
+    },
+    showNoPastAppointments() {
+      return (
+        this.$store.state.myAppointments.hasLoaded &&
+        this.$store.state.myAppointments.pastAppointments.length === 0 &&
+        this.$store.state.myAppointments.pastAppointmentsEnabled
       );
     },
     showUpcomingAppointments() {
       return (
         this.$store.state.myAppointments.hasLoaded &&
-        this.$store.state.myAppointments.appointments.length > 0
+        this.$store.state.myAppointments.upcomingAppointments.length > 0
+      );
+    },
+    showPastAppointments() {
+      return (
+        this.$store.state.myAppointments.hasLoaded &&
+        this.$store.state.myAppointments.pastAppointments.length > 0 &&
+        this.$store.state.myAppointments.pastAppointmentsEnabled
       );
     },
     showBookAppointmentButton() {
@@ -61,7 +90,10 @@ export default {
       );
     },
     upcomingAppointments() {
-      return this.$store.state.myAppointments.appointments;
+      return this.$store.state.myAppointments.upcomingAppointments;
+    },
+    pastAppointments() {
+      return this.$store.state.myAppointments.pastAppointments;
     },
     cancellationDisabled() {
       return this.$store.state.myAppointments.disableCancellation;

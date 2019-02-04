@@ -6,5 +6,6 @@ data class AppointmentResponseObject(
         val startTime: String,
         val endTime: String? = null,
         val location: String,
-        val clinicians: List<String>? = null
+        val clinicians: List<String>? = null,
+        val disableCancellation: String? = "false"
 )

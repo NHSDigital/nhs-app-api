@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
@@ -31,13 +30,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             return await _canceller.Cancel((EmisUserSession) userSession.GpUserSession, request);
         }
 
-        public async Task<AppointmentsResult> GetAppointments(UserSession userSession, 
-            bool includePastAppointments,
-            DateTimeOffset? pastAppointmentsFromDate)
+        public async Task<AppointmentsResult> GetAppointments(UserSession userSession)
         {
-            return await _getter.GetAppointments((EmisUserSession) userSession.GpUserSession,
-                includePastAppointments,
-                pastAppointmentsFromDate);
+            return await _getter.GetAppointments((EmisUserSession) userSession.GpUserSession);
         }
     }
 }

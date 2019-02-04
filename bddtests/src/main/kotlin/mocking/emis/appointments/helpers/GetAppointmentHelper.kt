@@ -16,7 +16,7 @@ class GetAppointmentHelper {
     companion object {
 
         fun extractListOfAppointmentsFromFacade(facade: MyAppointmentsFacade): List<Appointment> {
-            return facade.slots?.sessions?.flatMap { session ->
+            return facade.myAppointments?.sessions?.flatMap { session ->
                 session.slots.map { slot ->
                     Appointment(
                             slot.slotId!!,
@@ -38,12 +38,13 @@ class GetAppointmentHelper {
         }
 
         fun extractLocationsFromFacade(facade: MyAppointmentsFacade): List<Location> {
-            return facade.slots?.sessions?.map { session -> Location(session.locationid!!, session.location!!) }
-                    ?: emptyList()
+            return facade.myAppointments?.sessions?.map { session ->
+                Location(session.locationid!!, session.location!!)
+            } ?: emptyList()
         }
 
         fun extractCliniciansFromFacade(facade: MyAppointmentsFacade): List<SessionHolder> {
-            val cliniciansAcrossAllSessions = facade.slots?.sessions?.flatMap { session ->
+            val cliniciansAcrossAllSessions = facade.myAppointments?.sessions?.flatMap { session ->
                 session.staffDetails.map { clinician ->
                     SessionHolder(clinician.staffDetailsid!!, clinician.staffName!!)
                 }
@@ -52,7 +53,7 @@ class GetAppointmentHelper {
         }
 
         fun extractSessionsFromFacade(facade: MyAppointmentsFacade): List<Session> {
-            return facade.slots?.sessions?.map { session ->
+            return facade.myAppointments?.sessions?.map { session ->
                 Session(
                         session.sessionType!!,
                         session.sessionId!!,

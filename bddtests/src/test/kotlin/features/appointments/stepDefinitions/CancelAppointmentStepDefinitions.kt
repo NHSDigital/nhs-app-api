@@ -36,7 +36,7 @@ class CancelAppointmentStepDefinitions {
     fun iSelectTheCancellationReason() {
         iSelectACancellationReason(
                 Serenity.sessionVariableCalled<MyAppointmentsFacade>(MyAppointmentsFacade::class)
-                        .slots!!
+                        .myAppointments!!
                         .cancellationReasons!!
                         .first()
                         .displayName

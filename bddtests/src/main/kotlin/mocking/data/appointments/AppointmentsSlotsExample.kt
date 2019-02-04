@@ -135,6 +135,29 @@ class AppointmentsSlotsExample {
                     }
                 }.build()
 
+        val historicalAppointmentSession = AppointmentSessionFacadeBuilder()
+                .sessionId(slot2ID)
+                .sessionType(clinicSessionType)
+                .staffDetails(arrayListOf(staffDrWho))
+                .location(locationLeeds)
+                .slots {
+                    addAppointment {
+                        slotId(slot2ID)
+                                .startDate(DateTimeWrapper(
+                                        LocalDateTime.now().minusMonths(6)).dateTimeAsBackendString
+                                )
+                                .endDate(
+                                        DateTimeWrapper(
+                                                LocalDateTime.now()
+                                                        .minusMonths(6)
+                                                        .plusMinutes(duration.toLong())
+                                        )
+                                                .dateTimeAsBackendString
+                                )
+                                .setSlotInThePast()
+                    }
+                }.build()
+
         fun getExampleWithAppointmentWithinCutoffTime(): AppointmentSlotsResponseFacade {
             return getGenericExample(
                     arrayListOf(appointmentSessionWithinCutoffTime).plus(appointmentSessions)
@@ -271,8 +294,6 @@ class AppointmentsSlotsExample {
                     .appointmentSessions(appointmentSessionFacade)
                     .build()
         }
-
-
 
         private fun getGenericExampleBuilder(): AppointmentsSlotsExampleBuilder {
             return AppointmentsSlotsExampleBuilderWithExpectations()

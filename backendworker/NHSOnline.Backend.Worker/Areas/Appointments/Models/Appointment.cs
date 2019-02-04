@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
 {
-    public class Appointment
+    public abstract class Appointment
     {
         public string Id { get; set; }
         public DateTimeOffset StartTime { get; set; }
@@ -11,7 +11,5 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         public string Location { get; set; }
         public IEnumerable<string> Clinicians { get; set; }
         public string Type { get; set; }
-
-        public bool DisableCancellation { get; set; }
     }
 }

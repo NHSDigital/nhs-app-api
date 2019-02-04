@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
 {
     public interface IBookedAppointmentMapper
     {
-        IEnumerable<Appointment> Map(BookedAppointments bookedAppointments);
+        IEnumerable<UpcomingAppointment> Map(BookedAppointments bookedAppointments);
     }
     
     public class BookedAppointmentMapper: IBookedAppointmentMapper
@@ -22,9 +22,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }
 
-        public IEnumerable<Appointment> Map(BookedAppointments bookedAppointments)
+        public IEnumerable<UpcomingAppointment> Map(BookedAppointments bookedAppointments)
         {
-            var mappedAppointments = new List<Appointment>();
+            var mappedAppointments = new List<UpcomingAppointment>();
             
             if (bookedAppointments?.Slots == null)
                 return mappedAppointments;
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 var slotType = slotTypes.GetValueOrDefault(slot.Type, null);
                 var session = sessions.GetValueOrDefault(slot.Session, null);
 
-                mappedAppointments.Add(new Appointment
+                mappedAppointments.Add(new UpcomingAppointment
                 {
                     Id = slot.Id,
                     StartTime = startTime.GetValueOrDefault(),

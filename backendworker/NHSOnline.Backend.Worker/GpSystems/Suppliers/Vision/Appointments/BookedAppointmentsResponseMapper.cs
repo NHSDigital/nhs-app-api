@@ -29,9 +29,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             var cancellationReasons = _cancellationReasonMapper.Map(bookedAppointmentsResponse);
             var response = new AppointmentsResponse
             {
-                Appointments = appointments, 
+                UpcomingAppointments = appointments, 
                 CancellationReasons = cancellationReasons,
-                DisableCancellation = !cancellationReasons.Any()
+                DisableCancellation = !cancellationReasons.Any(),
+                PastAppointmentsEnabled = false
             };
 
             return response;

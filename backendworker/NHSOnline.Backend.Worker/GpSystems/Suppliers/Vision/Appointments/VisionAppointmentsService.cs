@@ -32,9 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             return await _canceller.Cancel((VisionUserSession) userSession.GpUserSession, request);
         }
 
-        public async Task<AppointmentsResult> GetAppointments(UserSession userSession, 
-            bool includePastAppointments,
-            DateTimeOffset? pastAppointmentsFromDate)
+        public async Task<AppointmentsResult> GetAppointments(UserSession userSession)
         {
             return await _getter.GetAppointments(userSession);
         }

@@ -54,9 +54,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(
-            [FromQuery] bool includePastAppointments,
-            [FromQuery] DateTimeOffset? pastAppointmentsFromDate = null)
+        public async Task<IActionResult> Get()
         {
             try
             {
@@ -69,8 +67,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 var appointmentsService = GetAppointmentsService(userSession);
 
                 var result =
-                    await appointmentsService.GetAppointments(userSession, includePastAppointments,
-                        pastAppointmentsFromDate);
+                    await appointmentsService.GetAppointments(userSession);
 
                 result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));
 

@@ -4,7 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
 import features.appointments.steps.AvailableAppointmentsSteps
-import features.appointments.steps.MyAppointmentsSteps
+import features.appointments.steps.MyAppointmentsUISteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import pages.navigation.NavBarNative
@@ -14,7 +14,7 @@ class AppointmentNavigationStepDefinitions {
     @Steps
     lateinit var navigation: NavigationSteps
     @Steps
-    lateinit var myAppointments: MyAppointmentsSteps
+    lateinit var myAppointmentsUI: MyAppointmentsUISteps
     @Steps
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
     @Steps
@@ -25,14 +25,14 @@ class AppointmentNavigationStepDefinitions {
     fun iAmOnMyAppointmentsPage() {
         navigation.waitForSpinnerToDisappear()
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
-        myAppointments.waitForSpinnerToDisappear()
+        waitForSpinnerToDisappear()
     }
 
     @Given("^I am on the Appointment Guidance page$")
     fun iAmOnTheGuidancePage() {
         iAmOnMyAppointmentsPage()
-        myAppointments.clickOnBookAppointmentButton()
-        myAppointments.waitForSpinnerToDisappear()
+        myAppointmentsUI.clickOnBookAppointmentButton()
+        waitForSpinnerToDisappear()
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
@@ -41,7 +41,7 @@ class AppointmentNavigationStepDefinitions {
     fun iAmOnTheAvailableAppointmentsPage() {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
-        myAppointments.waitForSpinnerToDisappear()
+        waitForSpinnerToDisappear()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
@@ -49,5 +49,9 @@ class AppointmentNavigationStepDefinitions {
     fun iTryToProgressToTheAvailableAppointmentsPage() {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
+    }
+
+    private fun waitForSpinnerToDisappear() {
+        myAppointmentsUI.myAppointmentsPage.waitForSpinnerToDisappear()
     }
 }

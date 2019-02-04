@@ -10,7 +10,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Appointments
 
         Task<AppointmentCancelResult> Cancel(UserSession userSession, AppointmentCancelRequest request);
 
-        Task<AppointmentsResult> GetAppointments(UserSession userSession, bool includePastAppointments,
-            DateTimeOffset? pastAppointmentsFromDate);
+        Task<AppointmentsResult> GetAppointments(UserSession userSession);
     }
 }

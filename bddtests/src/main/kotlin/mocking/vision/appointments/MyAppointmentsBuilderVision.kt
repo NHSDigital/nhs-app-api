@@ -54,7 +54,7 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
     }
 
     override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
-        val bookedAppointmentsResponse = extractResponseFromFacade(facade.slots!!)
+        val bookedAppointmentsResponse = extractResponseFromFacade(facade.myAppointments!!)
 
         val jaxbContext = JAXBContext.newInstance(BookedAppointmentsResponse::class.java)
         val marshaller = jaxbContext.createMarshaller()

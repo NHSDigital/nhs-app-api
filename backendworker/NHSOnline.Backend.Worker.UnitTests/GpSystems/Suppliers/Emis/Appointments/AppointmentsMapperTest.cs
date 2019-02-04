@@ -22,6 +22,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         private AppointmentsMapper _systemUnderTest;
+        private DateTime _tomorrow;
 
         [TestInitialize]
         public void TestInitialize()
@@ -36,6 +37,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var logger = _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentsMapper>();
             
             _systemUnderTest = new AppointmentsMapper(_dateTimeOffsetProvider, logger);
+            
+            _tomorrow = DateTime.Now.AddDays(1);
         }
 
         [TestMethod]
@@ -91,7 +94,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var sessions = new[] { session };
 
             var appointment =
-                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointment(101, 1, UnitTestHelpers.DateTimeToJson(_tomorrow), UnitTestHelpers.DateTimeToJson(_tomorrow), "Emergency");
 
             var appointments = new[] { appointment };
 
@@ -99,13 +102,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(appointments, null, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
+            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
             {
                 Id = "101",
                 Clinicians = new[] { "Dr Crusher" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow),
                 Location = "",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow),
                 Type = "Emergency"
             };
             var expectedResponse = new[] { expectedAppointment };
@@ -163,7 +166,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointment =
-                CreateAppointment(101, 1, "2018-05-09T10:59:19", invalidEndTime, "Emergency");
+                CreateAppointment(101, 1, UnitTestHelpers.DateTimeToJson(_tomorrow), invalidEndTime, "Emergency");
 
             var appointments = new[] { appointment };
 
@@ -179,13 +182,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(appointments, locations, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
+            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
                 EndTime = null,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow),
                 Type = "Emergency"
             };
             var expectedResponse = new[] { expectedAppointment };
@@ -200,10 +203,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointmentWithInvalidStartTime =
-                CreateAppointment(101, 1, invalidStartTime, "2018-05-09T10:59:19", "Emergency");
+                CreateAppointment(101, 1, invalidStartTime, UnitTestHelpers.DateTimeToJson(_tomorrow), "Emergency");
 
             var appointment2 =
-                CreateAppointment(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+                CreateAppointment(901, 9, UnitTestHelpers.DateTimeToJson(_tomorrow.AddDays(1)), UnitTestHelpers.DateTimeToJson(_tomorrow.AddDays(1)), "Emergency");
 
             var appointments = new[] { appointmentWithInvalidStartTime, appointment2 };
 
@@ -220,13 +223,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(appointments, locations, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
+            var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
             {
                 Id = "901",
                 Clinicians = new[] { "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddDays(1)),
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddDays(1)),
                 Type = "Emergency"
             };
 
@@ -236,19 +239,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         }
 
         [TestMethod]
-        public void Map_HappyPath_ReturnsAnEnumerableOfAppointments()
+        public void Map_HappyPath_ReturnsAnEnumerableOfPastAndUpcomingAppointments()
         {
             // Arrange
             var appointment1 =
-                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointment(101, 1, UnitTestHelpers.DateTimeToJson(_tomorrow.AddDays(1)), UnitTestHelpers.DateTimeToJson(_tomorrow.AddDays(1)), "Emergency");
             
             var appointment2=
-                CreateAppointment(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+                CreateAppointment(901, 9, UnitTestHelpers.DateTimeToJson(_tomorrow), UnitTestHelpers.DateTimeToJson(_tomorrow), "Emergency");
 
             var appointment3 =
-                CreateAppointment(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null);
+                CreateAppointment(102, 9, UnitTestHelpers.DateTimeToJson(_tomorrow.AddMonths(1)), UnitTestHelpers.DateTimeToJson(_tomorrow.AddMonths(1)), null);
+            
+            var appointment4 =
+                CreateAppointment(103, 1, UnitTestHelpers.DateTimeToJson(_tomorrow.AddDays(-1)), UnitTestHelpers.DateTimeToJson(_tomorrow.AddDays(-1)), "Emergency");
 
-            var appointnments = new[] { appointment1, appointment2, appointment3 };
+            var appointment5 =
+                CreateAppointment(104, 9, UnitTestHelpers.DateTimeToJson(_tomorrow.AddMonths(-1)), UnitTestHelpers.DateTimeToJson(_tomorrow.AddMonths(-1)), null);
+
+            var appointnments = new[] { appointment1, appointment2, appointment3, appointment4, appointment5 };
             
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
@@ -263,37 +272,57 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(appointnments, locations, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment1 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
+            var expectedAppointment1 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
             {
                 Id = "901",
                 Clinicians = new[]{ "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow),
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow),
                 Type = "Emergency"
             };
             
-            var expectedAppointment2 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
+            var expectedAppointment2 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
             {
                 Id = "101",
                 Clinicians = new[]{ "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddDays(1)),
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddDays(1)),
                 Type = "Emergency"
             };
 
-            var expectedAppointment3 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
+            var expectedAppointment3 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
             {
                 Id = "102",
                 Clinicians = new[] { "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddMonths(1)),
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddMonths(1)),
                 Type = string.Empty
             };
+            
+            var expectedAppointment4 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.PastAppointment
+            {
+                Id = "103",
+                Clinicians = new[]{ "Dr House" },
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddDays(-1)),
+                Location = "Leeds",
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddDays(-1)),
+                Type = "Emergency"
+            };
 
-            var expectedResponse = new[]{ expectedAppointment1, expectedAppointment2, expectedAppointment3 };
+            var expectedAppointment5 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.PastAppointment
+            {
+                Id = "104",
+                Clinicians = new[] { "Dr House" },
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddMonths(-1)),
+                Location = "Leeds",
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow.AddMonths(-1)),
+                Type = string.Empty
+            };
+            
+            var expectedResponse = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment[]{ expectedAppointment1, expectedAppointment2, expectedAppointment3, expectedAppointment4, expectedAppointment5 };
             
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
@@ -303,7 +332,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointmentSlotSession1 =
-                CreateAppointment(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+                CreateAppointment(901, 9, UnitTestHelpers.DateTimeToJson(_tomorrow), UnitTestHelpers.DateTimeToJson(_tomorrow), "Emergency");
 
             var slotSessions = new[] { appointmentSlotSession1 };
 
@@ -319,13 +348,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
 
             // Assert
-            var expectedAppointment = new Worker.Areas.Appointments.Models.Appointment
+            var expectedAppointment = new Worker.Areas.Appointments.Models.UpcomingAppointment
             {
                 Id = "901",
                 Clinicians = new List<string>(),
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow),
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(_tomorrow),
                 Type = "Emergency"
             };
 

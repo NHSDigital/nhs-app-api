@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _appointmentsResponse = _fixture.Create<AppointmentsResponse>();
             var result = new AppointmentsResult.SuccessfullyRetrieved(_appointmentsResponse);
 
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession, false, null))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
                 .Returns(Task.FromResult((AppointmentsResult)result));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -83,29 +83,29 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var appointmentsResponse = _fixture.Create<AppointmentsResponse>();
             var successResponse = new AppointmentsResult.SuccessfullyRetrieved(appointmentsResponse);
 
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession, false, null))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
                 .Returns(Task.FromResult((AppointmentsResult) successResponse));
 
             // Act
-            var result = await _systemUnderTest.Get(false);
+            var result = await _systemUnderTest.Get();
 
             // Assert
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(appointmentsResponse);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Booked appointments successfully viewed - {appointmentsResponse.Appointments.Count()} appointments"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Booked appointments successfully viewed - {appointmentsResponse.UpcomingAppointments.Count()} appointments"));
         }
 
         [TestMethod]
         public async Task Get_ReturnsBadGateway_WhenServiceReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession, false, null))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
                 .Returns(Task.FromResult((AppointmentsResult) new AppointmentsResult.SupplierSystemUnavailable()));
 
             // Act
-            var result = await _systemUnderTest.Get(false);
+            var result = await _systemUnderTest.Get();
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
@@ -121,11 +121,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var badResult = new AppointmentsResult.BadRequest();
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession, false, null))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
                 .Returns(Task.FromResult((AppointmentsResult)badResult));
 
             // Act
-            var result = await _systemUnderTest.Get(false);
+            var result = await _systemUnderTest.Get();
 
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
@@ -140,11 +140,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var badResult = new AppointmentsResult.InternalServerError();
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession, false, null))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
                 .Returns(Task.FromResult((AppointmentsResult)badResult));
 
             // Act
-            var result = await _systemUnderTest.Get(false);
+            var result = await _systemUnderTest.Get();
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
@@ -161,14 +161,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Arrange
 
             // Act
-            await _systemUnderTest.Get(false);
+            await _systemUnderTest.Get();
 
             // Assert
             _mockGpSystem.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Booked appointments successfully viewed - {_appointmentsResponse.Appointments.Count()} appointments"));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Booked appointments successfully viewed - {_appointmentsResponse.UpcomingAppointments.Count()} appointments"));
         }
     }
 }

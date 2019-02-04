@@ -72,8 +72,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             BookAppointmentSlotPostRequest postRequest);
 
         Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
-            EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
-            DateTimeOffset? previousAppointmentsFromDate);
+            EmisHeaderParameters headerParameters, string userPatientLinkToken);
 
         Task<EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
             EmisHeaderParameters headerParameters,

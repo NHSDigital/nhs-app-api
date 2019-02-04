@@ -5,12 +5,11 @@ export const CLEAR_SELECTED_APPOINTMENT = 'CLEAR_SELECTED_APPOINTMENT';
 export const SELECT = 'SELECT';
 export const CLEAR_APPOINTMENTS = 'CLEAR_APPOINTMENTS';
 export const initialState = () => ({
-  appointmentSessions: [],
-  clinicians: [],
-  locations: [],
-  appointments: [],
+  pastAppointments: [],
+  upcomingAppointments: [],
   cancellationReasons: [],
   selectedAppointment: null,
   hasLoaded: false,
   hasErrored: false,
+  pastAppointmentsEnabled: false,
 });

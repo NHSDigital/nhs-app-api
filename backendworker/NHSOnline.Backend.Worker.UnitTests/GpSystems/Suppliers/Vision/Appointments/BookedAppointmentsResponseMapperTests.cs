@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
     {
         private IFixture _fixture;
         private List<CancellationReason> _cancellationReasons;
-        private List<Appointment> _appointments;
+        private List<UpcomingAppointment> _appointments;
         private BookedAppointmentsResponse _bookedAppointmentsResponse;
         private BookedAppointmentsResponseMapper _systemUnderTest;
         private Mock<IBookedAppointmentMapper> _bookedAppointmentMapper;
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _cancellationReasonMapper = _fixture.Freeze<Mock<ICancellationReasonMapper>>();
 
             _cancellationReasons = _fixture.CreateMany<CancellationReason>().ToList();
-            _appointments = _fixture.CreateMany<Appointment>().ToList();
+            _appointments = _fixture.CreateMany<UpcomingAppointment>().ToList();
 
             _bookedAppointmentMapper.Setup(b => b.Map(_bookedAppointmentsResponse.Appointments))
                 .Returns(_appointments);
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             // Assert
             response.CancellationReasons.Should().BeEquivalentTo(_cancellationReasons);
-            response.Appointments.Should().BeEquivalentTo(_appointments);
+            response.UpcomingAppointments.Should().BeEquivalentTo(_appointments);
         }
 
         [TestMethod]

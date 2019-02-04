@@ -17,9 +17,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments
             return await Task.FromResult(new AppointmentCancelResult.BadRequest());
         }
 
-        public async Task<AppointmentsResult> GetAppointments(UserSession userSession, 
-            bool includePastAppointments,
-            DateTimeOffset? pastAppointmentsFromDate)
+        public async Task<AppointmentsResult> GetAppointments(UserSession userSession)
         {
             var emptyResponse = new AppointmentsResponse();
             return await Task.FromResult(new AppointmentsResult.SuccessfullyRetrieved(emptyResponse));

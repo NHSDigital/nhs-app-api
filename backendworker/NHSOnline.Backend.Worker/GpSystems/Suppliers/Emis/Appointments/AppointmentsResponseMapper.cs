@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -25,18 +26,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         public AppointmentsResponse Map(AppointmentsGetResponse sourceAppointments)
         {
-            var appointments = _appointmentsMapper.Map(
+            var allAppointments = _appointmentsMapper.Map(
                 sourceAppointments.Appointments,
                 sourceAppointments.Locations,
                 sourceAppointments.SessionHolders,
                 sourceAppointments.Sessions);
 
+            var pastAppointments = allAppointments.Where(x => x is PastAppointment).Cast<PastAppointment>();
+            var upcomingAppointments = allAppointments
+                .Where(x => x is UpcomingAppointment).Cast<UpcomingAppointment>();
+
             var cancellationReasons = GetDefaultCancellationReasons();
 
             var response = new AppointmentsResponse
             {
-                Appointments = appointments,
-                CancellationReasons = cancellationReasons
+                PastAppointments = pastAppointments,
+                UpcomingAppointments = upcomingAppointments,
+                CancellationReasons = cancellationReasons,
+                PastAppointmentsEnabled = true
             };
 
             return response;

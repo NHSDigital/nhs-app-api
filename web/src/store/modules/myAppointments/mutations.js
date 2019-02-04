@@ -1,4 +1,4 @@
-import { assign, find, get, map, mapKeys, sortBy } from 'lodash/fp';
+import { get, mapKeys, sortBy } from 'lodash/fp';
 import {
   CLEAR,
   LOADED,
@@ -9,19 +9,16 @@ import {
   initialState,
 } from './mutation-types';
 
-const findById = (id, collection) => find(item => item.id === id)(collection);
-const findByIds = (ids, collection) => map(id => findById(id, collection))(ids);
 const sortSlots = sortBy(slot => [
   slot.startTime,
   get('clinicians[0].displayName')(slot),
 ]);
 const clearAppointments = (state) => {
-  state.appointmentSessions = [];
-  state.clinicians = [];
-  state.locations = [];
-  state.appointments = [];
+  state.pastAppointments = [];
+  state.upcomingAppointments = [];
   state.hasLoaded = false;
   state.hasErrored = false;
+  state.pastAppointmentsEnabled = false;
 };
 const clearSelectedAppointment = (state) => {
   state.selectedAppointment = null;
@@ -32,29 +29,12 @@ export default {
   /* eslint-disable no-unused-vars */
   [LOADED](state, data) {
     mapKeys((key) => {
-      state[key] = data[key];
+      const stateKey = key === 'appointments' ? 'upcomingAppointments' : key;
+      state[stateKey] = data[key];
     })(data);
 
-    state.appointments = map((appointment) => {
-      const result = assign({}, appointment);
-      const location = findById(appointment.locationId, state.locations);
-      if (location) {
-        result.location = location;
-      }
-
-      const appointmentSession =
-        findById(appointment.appointmentSessionId, state.appointmentSessions);
-      if (appointmentSession) {
-        result.appointmentSession = appointmentSession;
-      }
-
-      const clinicians = findByIds(appointment.clinicianIds, state.clinicians);
-      if (clinicians && clinicians.length > 0) {
-        result.clinicians = clinicians;
-      }
-      return result;
-    })(state.appointments);
-    state.appointments = sortSlots(state.appointments);
+    state.upcomingAppointments = sortSlots(state.upcomingAppointments);
+    state.pastAppointments = sortSlots(state.pastAppointments).reverse();
     state.hasLoaded = true;
   },
   [INIT](state) {

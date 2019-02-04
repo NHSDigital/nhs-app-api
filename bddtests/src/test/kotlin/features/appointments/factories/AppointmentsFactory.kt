@@ -16,7 +16,7 @@ import java.util.*
 
 abstract class AppointmentsFactory(gpSupplier: String) {
 
-    protected val timeZone = TimeZone.getTimeZone("Europe/London")
+    private val timeZone = TimeZone.getTimeZone("Europe/London")
     protected val gpDateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
     val mockingClient = MockingClient.instance
     val patient: Patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)
@@ -36,8 +36,8 @@ abstract class AppointmentsFactory(gpSupplier: String) {
     }
 
     fun createGetEmptyAppointmentList() {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(supplier)
-        viewAppointmentFactory.createSuccessfulEmptyUpcomingAppointmentResponse()
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(supplier)
+        viewAppointmentFactory.createSuccessfulEmptyMyAppointmentResponse()
     }
 
     open fun getExpectedUiRepresentationOfSlot(

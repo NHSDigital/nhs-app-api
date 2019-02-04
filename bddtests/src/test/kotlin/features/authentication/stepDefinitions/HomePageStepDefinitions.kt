@@ -3,7 +3,7 @@ package features.authentication.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.steps.MyAppointmentsSteps
+import features.appointments.steps.MyAppointmentsUISteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.stepDefinitions.MyRecordStepDefinitions
@@ -33,7 +33,7 @@ class HomePageStepDefinitions : AbstractSteps() {
     @Steps
     private lateinit var checkMySymptoms: CheckMySymptoms
     @Steps
-    private lateinit var myAppointmentsSteps: MyAppointmentsSteps
+    private lateinit var myAppointmentsUISteps: MyAppointmentsUISteps
     @Steps
     private lateinit var prescriptions: PrescriptionsSteps
     @Steps
@@ -119,8 +119,8 @@ class HomePageStepDefinitions : AbstractSteps() {
 
     private fun followAppointmentsLink() {
         homeSteps.homePage.bookAndManageAppointmentsLink.click()
-        myAppointmentsSteps.checkHeaderTextIsCorrect()
-        myAppointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
+        myAppointmentsUISteps.checkHeaderTextIsCorrect()
+        myAppointmentsUISteps.checkNoUpcomingAppointmentsTextIsDisplaying()
         navBar.isHighlighted(NavBarNative.NavBarType.APPOINTMENTS)
     }
 

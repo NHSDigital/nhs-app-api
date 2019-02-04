@@ -166,13 +166,21 @@ export default {
       cancelButtonText: 'Cancel appointment',
       cancellationDisabledText: 'To cancel this appointment, contact your GP surgery.',
       empty: {
-        header: 'You don\'t currently have any appointments booked',
-        text1: 'Once you\'ve booked an appointment here, you\'ll be able to view details and cancel it.',
-        text2: 'If you have an upcoming appointment that isn\'t shown here, contact your GP surgery for more information.',
+        header: 'Upcoming appointments',
+        text1: 'You don\'t currently have any appointments booked.',
+        text2: 'Once you\'ve booked an appointment here, you\'ll be able to view details and cancel it.',
+        text3: 'If you have an upcoming appointment that isn\'t shown here, contact your GP surgery for more information.',
+      },
+      emptyPast: {
+        header: 'Past appointments',
+        text1: 'You have no recent past appointments. To find out about older appointments, contact your GP surgery.',
       },
       upcoming: {
         header: 'Upcoming appointments',
         info: 'Click in the appointment if you need to cancel it',
+      },
+      past: {
+        header: 'Past appointments',
       },
       errors: {
         pageTitle: 'Appointment data error',

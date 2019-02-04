@@ -3,9 +3,10 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.factories.UpcomingAppointmentsFactory
+import features.appointments.factories.MyAppointmentsFactory
 import features.appointments.steps.AppointmentsConfirmationSteps
-import features.appointments.steps.MyAppointmentsSteps
+import features.appointments.steps.MyAppointmentsBackendSteps
+import features.appointments.steps.MyAppointmentsUISteps
 import mocking.data.appointments.AppointmentsSlotsExample
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.pages.WebElementFacade
@@ -20,7 +21,11 @@ import java.time.LocalDateTime
 class MyAppointmentsStepDefinitions {
 
     @Steps
-    lateinit var myAppointmentsSteps: MyAppointmentsSteps
+    lateinit var myAppointmentsUISteps: MyAppointmentsUISteps
+
+    @Steps
+    lateinit var myAppointmentsBackendSteps: MyAppointmentsBackendSteps
+
     lateinit var headerNative: HeaderNative
     @Steps
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
@@ -33,49 +38,49 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^the Appointment Booking success message is displayed$")
     fun appointmentBookingSuccessMessage() {
-        myAppointmentsSteps.checkBookingSuccessMessage()
+        myAppointmentsUISteps.checkBookingSuccessMessage()
     }
 
     @Then("^the booked appointment before cutoff time is correctly displayed with ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithCancel() {
-        myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
-        myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
+        myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
+        myAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 
     @Then("^booked appointments before and one appointment within cutoff time " +
             "are correctly displayed with relevant ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithCancelExceptOnesWithinCutoffTime() {
-        myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
-        myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment(1)
+        myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
+        myAppointmentsUISteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment(1)
     }
 
     @Then("^the Appointment Booking success message is displayed without reference to being able to cancel$")
     fun appointmentBookingConfirmationScreenIsDisplayedWithoutReferenceToCancel() {
-        myAppointmentsSteps.checkBookingSuccessMessage(false)
+        myAppointmentsUISteps.checkBookingSuccessMessage(false)
 
     }
 
     @Then("^the booked appointment is correctly displayed without ability to cancel$")
     fun bookedAppointmentIsCorrectlyDisplayedWithoutCancel() {
-        myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
-        myAppointmentsSteps.verifyThatThereAreNoCancelLinks()
+        myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
+        myAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
     }
 
     @Then("^I can book an appointment$")
     fun iCanBookAnAppointment() {
-        myAppointmentsSteps.myAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
-        myAppointmentsSteps.myAppointmentsPage.bookButton.element.waitUntilPresent<WebElementFacade>()
+        myAppointmentsUISteps.myAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
+        myAppointmentsUISteps.myAppointmentsPage.bookButton.element.waitUntilPresent<WebElementFacade>()
 
         Assert.assertTrue("Book an appointment is not displaying",
-                myAppointmentsSteps.myAppointmentsPage.bookButton.element.isDisplayed)
+                myAppointmentsUISteps.myAppointmentsPage.bookButton.element.isDisplayed)
 
         Assert.assertTrue("Book an appointment is not enabled",
-                myAppointmentsSteps.myAppointmentsPage.bookButton.element.isCurrentlyEnabled)
+                myAppointmentsUISteps.myAppointmentsPage.bookButton.element.isCurrentlyEnabled)
     }
 
     @Then("^the page title is \"My appointments\"$")
     fun thePageTitleIsMyAppointments() {
-        myAppointmentsSteps.checkHeaderTextIsCorrect()
+        myAppointmentsUISteps.checkHeaderTextIsCorrect()
     }
 
     @Then("^the My Appointments page is displayed$")
@@ -84,47 +89,80 @@ class MyAppointmentsStepDefinitions {
         thePageTitleIsMyAppointments()
     }
 
-    @Then("^I am informed I have no booked appointments$")
+    @Then("^I am informed I have no upcoming appointments$")
     fun thenIAmInformedIHaveNoBookedAppointments() {
-        myAppointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
+        myAppointmentsUISteps.checkNoUpcomingAppointmentsTextIsDisplaying()
     }
 
-    @Given("^I have no upcoming appointments for (.*)$")
-    fun iHaveNoUpcomingAppointments(gpService: String) {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
-        viewAppointmentFactory.createSuccessfulEmptyUpcomingAppointmentResponse()
+    @Then("^I am informed I have no historical appointments$")
+    fun thenIAmInformedIHaveNoHistoricalAppointments() {
+        myAppointmentsUISteps.checkNoHistoricalAppointmentsTextIsDisplaying()
+    }
+
+    @Then("^I am not informed I have no historical appointments$")
+    fun thenIAmNotInformedIHaveNoHistoricalAppointments() {
+        myAppointmentsUISteps.myAppointmentsPage.assertPastTextNotPresent()
+    }
+
+    @Given("^I have no booked appointments for (.*)$")
+    fun iHaveNoBookedAppointments(gpService: String) {
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulEmptyMyAppointmentResponse()
     }
 
     @Given("^I have upcoming appointments before cutoff time for (\\w+)$")
     fun iHaveUpcomingAppointments(gpService: String) {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse()
+    }
+
+    @Given("^I have historical appointments for (\\w+)$")
+    fun iHaveHistoricalAppointments(gpService: String) {
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
+                AppointmentsSlotsExample.getGenericExample(
+                        arrayListOf(AppointmentsSlotsExample.historicalAppointmentSession)
+                )
+        )
+    }
+
+    @Given("^I have historical and upcoming appointments for (\\w+)$")
+    fun iHaveHistoricalAndUpcomingAppointments(gpService: String) {
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
+                AppointmentsSlotsExample.getGenericExample(
+                        arrayListOf(
+                                AppointmentsSlotsExample.historicalAppointmentSession,
+                                AppointmentsSlotsExample.appointmentSessionWithinCutoffTime
+                        )
+                )
+        )
     }
 
     @Given("^I have upcoming appointments for (\\w+), with one in the past$")
     fun iHaveUpcomingAppointmentsAndOneInThePast(gpService: String) {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 AppointmentsSlotsExample.getExampleWithPastAppointment()
         )
     }
 
     @Given("^I have upcoming appointments before cutoff time for VISION with only one cancellation reason$")
     fun iHaveUpcomingAppointmentsBeforeCutoffWithOneCancellationReason() {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(numberOfCancellationReasons = 1)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(numberOfCancellationReasons = 1)
     }
 
     @Given("^I have upcoming appointments before cutoff time for VISION without cancellation reasons$")
     fun iHaveUpcomingAppointmentsBeforeCutoffWithoutCancellationReasons() {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(numberOfCancellationReasons = 0)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(numberOfCancellationReasons = 0)
     }
 
     @Given("^I have upcoming appointments within cutoff time for VISION with cancellation reasons$")
     fun iHaveUpcomingAppointmentsWithinCutoffWithOneCancellationReason() {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 AppointmentsSlotsExample.getGenericExample(
                         arrayListOf(AppointmentsSlotsExample.appointmentSessionWithinCutoffTime)),
                 2)
@@ -132,8 +170,8 @@ class MyAppointmentsStepDefinitions {
 
     @Given("^I have upcoming appointments within cutoff time for VISION without cancellation reasons$")
     fun iHaveUpcomingAppointmentsWithinCutoffWithoutCancellationReasons() {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 AppointmentsSlotsExample.getGenericExample(
                         arrayListOf(AppointmentsSlotsExample.appointmentSessionWithinCutoffTime)),
                 0)
@@ -141,82 +179,84 @@ class MyAppointmentsStepDefinitions {
 
     @Given("^I have upcoming appointments before and within cutoff time for VISION with cancellation reasons$")
     fun iHaveUpcomingAppointmentsBeforeAndWithinCutoffWithOneCancellationReason() {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
                 AppointmentsSlotsExample.getExampleWithAppointmentWithinCutoffTime(),
                 2)
     }
 
     @Given("^a booked appointment cannot be cancelled$")
     fun aBookedAppointmentCannotBeCancelled() {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier("VISION")
-        viewAppointmentFactory.createSuccessfulEmptyUpcomingAppointmentResponse(emptyList())
-        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponseOnceBooked(numberOfCancellationReasons = 0)
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
+        viewAppointmentFactory.createSuccessfulEmptyMyAppointmentResponse(emptyList())
+        viewAppointmentFactory.createSuccessfulMyAppointmentsResponseOnceBooked(numberOfCancellationReasons = 0)
     }
 
     @Given("^(.*) does not offer online booking to my patient$")
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider: String) {
-        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
-        currentViewAppointmentFactory.createUpcomingAppointments {
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.createMyAppointments {
             respondWithGPErrorWhenNotEnabled()
         }
     }
 
     @Given("^(.*) returns corrupted response for my appointments")
     fun corruptedResponseFromMyAppointments(provider: String) {
-        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
-        currentViewAppointmentFactory.createUpcomingAppointments {
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.createMyAppointments {
             respondWithCorrupted()
         }
     }
 
     @Given("^(.*) will time out when trying to retrieve my appointments")
     fun timeoutResponseFromMyAppointments(provider: String) {
-        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
-        currentViewAppointmentFactory.createTimeoutUpcomingAppointmentsResponse()
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.createTimeoutMyAppointmentsResponse()
     }
 
     @Given("^an unknown exception occurs when I want to view my (\\w+) appointments$")
     fun anUnknownExceptionOccursWhenIWantToViewMyEMISAppointments(gpService: String) {
-        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
-        viewAppointmentFactory.createUpcomingAppointments {
+        val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createMyAppointments {
             respondWithUnknownException()
         }
     }
 
     @When("^I select \"([^\"]*)\" button$")
     fun whenISelectButton(buttonText: String) {
-        myAppointmentsSteps.myAppointmentsPage.waitForNativeStepToComplete()
-        myAppointmentsSteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
+        myAppointmentsUISteps.myAppointmentsPage.waitForNativeStepToComplete()
+        myAppointmentsUISteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
     }
 
     @Then("^I am given the list of upcoming appointments$")
     fun thenIAmGivenTheListOfUpcomingAppointments() {
-        myAppointmentsSteps.checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated()
+        myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
+        myAppointmentsUISteps.checkIfUpcomingSlotsAreInCorrectOrder()
     }
 
-    @Then("^appointments are in chronological order$")
-    fun thenAppointmentsAreInChronologicalOrder() {
-        myAppointmentsSteps.checkIfSlotsAreInCorrectOrder()
+    @Then("^I am given the list of historical appointments$")
+    fun thenIAmGivenTheListOfHistoricalAppointments() {
+        myAppointmentsUISteps.checkHistoricalAppointmentsAreCorrectlyPopulated()
+        myAppointmentsUISteps.checkIfHistoricalSlotsAreInCorrectOrder()
     }
 
     @Then("^each appointment can be cancelled$")
     fun eachAppointmentCanBeCancelled() {
         Assert.assertEquals(
                 "Missing at least one cancel link. ",
-                myAppointmentsSteps.myAppointmentsPage.getWebAppointmentSlotDivs().size,
-                myAppointmentsSteps.myAppointmentsPage.getNumberOfCancelLinks()
+                myAppointmentsUISteps.myAppointmentsPage.getWebAppointmentSlotDivs().size,
+                myAppointmentsUISteps.myAppointmentsPage.getNumberOfCancelLinks()
         )
     }
 
     @Then("^no appointment can be cancelled$")
     fun noAppointmentCanBeCancelled() {
-        myAppointmentsSteps.verifyThatThereAreNoCancelLinks()
+        myAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
     }
 
     @When("^the upcoming appointments are requested$")
     fun whenTheAPIRetrievesUpcomingAppointments() {
-        myAppointmentsSteps.createSerenityMyAppointmentSessionVariable()
+        myAppointmentsBackendSteps.createSerenityMyAppointmentSessionVariable()
     }
 
     @When("^the \"([^\"]*)\" API call fails with csrf token of \"([^\"]*)\"$")
@@ -236,44 +276,63 @@ class MyAppointmentsStepDefinitions {
 
     @Then("^I will only receive upcoming appointments$")
     fun iWillOnlyReceiveUpcomingAppointments() {
-        myAppointmentsSteps.checkMyAppointments()
+        myAppointmentsBackendSteps.checkUpcomingAppointments()
+        myAppointmentsBackendSteps.checkHistoricalAppointments(false)
+    }
+
+    @Then("^I will only receive historical appointments$")
+    fun iWillOnlyReceiveHistoricalAppointments() {
+        myAppointmentsBackendSteps.checkUpcomingAppointments(false)
+        myAppointmentsBackendSteps.checkHistoricalAppointments()
+    }
+
+    @Then("^I will receive both historical and upcoming appointments$")
+    fun iWillReceiveBothHistoricalAndUpcomingAppointments() {
+        myAppointmentsBackendSteps.checkUpcomingAppointments()
+        myAppointmentsBackendSteps.checkHistoricalAppointments()
+    }
+
+    @Then("^I will receive no appointments$")
+    fun iReceiveNoAppointments() {
+        myAppointmentsBackendSteps.checkUpcomingAppointments(false)
+        myAppointmentsBackendSteps.checkHistoricalAppointments(false)
     }
 
     @Then("^I will receive upcoming appointments with appointments in the past$")
     fun iWillReceiveUpcomingAppointmentsInThePast() {
-        myAppointmentsSteps.checkMyAppointments()
+        myAppointmentsBackendSteps.checkUpcomingAppointments()
     }
 
     @Then("^a list of cancellation reasons if the GP Service provides the list$")
     fun thenAListOfCancellationReasons() {
-        myAppointmentsSteps.checkCancellationReasonExistForApplicableGPService()
+        myAppointmentsBackendSteps.checkCancellationReasonExistForApplicableGPService()
     }
 
     @When("^I select a \"Cancel appointment\" link$")
     fun iSelectACancelLink() {
-        myAppointmentsSteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
+        myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
     @Then("^a \"Cancellation confirmed\" message is displayed$")
     fun cancellationConfirmationMessage() {
-        myAppointmentsSteps.verifyCancellationConfirmationMessage()
+        myAppointmentsUISteps.verifyCancellationConfirmationMessage()
     }
 
     @Given("^the (.*) GP appointment system is unavailable$")
     fun theAppointmentSystemIsUnavailable(gpSystem: String) {
-        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
-        currentViewAppointmentFactory.createUpcomingAppointments {
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
+        currentViewAppointmentFactory.createMyAppointments {
             respondWithGPServiceUnavailableException()
         }
     }
 
     @Then("^I see page header indicating there is an appointment data error$")
     fun iSeePageHeaderIndicatingAppointmentDataError() {
-        myAppointmentsSteps.headerNative.waitForPageHeaderText("Appointment data error")
+        myAppointmentsUISteps.headerNative.waitForPageHeaderText("Appointment data error")
     }
 
     @Then("^I see the appropriate error messages for the appointment data error$")
     fun iSeeTheAppropriateErrorMessagesForTheAppointmentDataError() {
-        myAppointmentsSteps.checkAppointmentDataErrorMessagesAreCorrect()
+        myAppointmentsUISteps.checkAppointmentDataErrorMessagesAreCorrect()
     }
 }

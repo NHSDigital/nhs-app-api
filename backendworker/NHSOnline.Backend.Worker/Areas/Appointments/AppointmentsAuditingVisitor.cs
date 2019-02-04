@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
         public object Visit(AppointmentsResult.SuccessfullyRetrieved result)
         {
-            var appointmentCount = result.Response?.Appointments?.Count() ?? 0;
+            var appointmentCount = result.Response?.UpcomingAppointments?.Count() ?? 0;
             
             _auditor.Audit(AuditType, $"Booked appointments successfully viewed - { appointmentCount } appointments");
 

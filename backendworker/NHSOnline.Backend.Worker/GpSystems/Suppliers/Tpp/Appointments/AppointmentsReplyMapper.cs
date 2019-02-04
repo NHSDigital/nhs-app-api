@@ -19,7 +19,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         public AppointmentsResponse Map(ViewAppointmentsReply viewAppointmentsReply)
         {
             var appointments = _mapper.Map(viewAppointmentsReply?.Appointments);
-            var response = new AppointmentsResponse { Appointments = appointments };
+            var response = new AppointmentsResponse { 
+                UpcomingAppointments = appointments,
+                PastAppointmentsEnabled = false };
 
             return response;
         }
