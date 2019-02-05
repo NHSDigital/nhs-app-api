@@ -1,5 +1,5 @@
 <template>
-  <p :class="[$style.msgText, extendedStyle]">
+  <p :class="[$style.msgText, extendedStyle, isDesktopWeb && $style.desktopWeb]">
     <slot/>
   </p>
 </template>
@@ -17,6 +17,11 @@ export default {
       default: 'none',
       validator: value => ['none', 'plain'].indexOf(value) !== -1,
     },
+  },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios'),
+    };
   },
   computed: {
     extendedStyle() {
@@ -46,5 +51,9 @@ export default {
     @include default_label;
     font-size: 1.125em;
     }
+  &.desktopWeb {
+    padding: 1em;
+    margin-bottom: 1em;
+  }
 }
 </style>
