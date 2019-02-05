@@ -1,31 +1,28 @@
 <template>
   <div data-purpose="repeat-prescription">
-    <generic-checkbox :checkbox-id="prescriptionDetails.id"
-                      :selected="selected"
-                      v-model="selected"
-                      name="prescription"
-                      @click="check">
-
-      <label :for="'prescription-' + prescriptionDetails.id">
-        <span data-label="prescription-name">
-          {{ prescriptionDetails.name }}
-        </span>
-        <p :class="$style.prescriptionDescription" data-label="prescription-description">
-          {{ prescriptionDetails.details }}
-        </p>
-      </label>
-
-    </generic-checkbox>
+    <input :value="JSON.stringify(nojsData)" :name="prescriptionDetails.id" type="hidden">
+    <generic-checkbox-no-js :checkbox-id="prescriptionDetails.id"
+                            :selected="selected"
+                            v-model="selected"
+                            name="prescription"
+                            @click="check">
+      <span data-label="prescription-name">
+        {{ prescriptionDetails.name }}
+      </span>
+      <p :class="$style.prescriptionDescription" data-label="prescription-description">
+        {{ prescriptionDetails.details }}
+      </p>
+    </generic-checkbox-no-js>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import GenericCheckbox from '@/components/widgets/GenericCheckbox';
+import GenericCheckboxNoJs from '@/components/widgets/GenericCheckboxNoJs';
 
-export default{
+export default {
   name: 'RepeatPrescription',
   components: {
-    GenericCheckbox,
+    GenericCheckboxNoJs,
   },
   props: {
     prescriptionDetails: {
@@ -44,6 +41,12 @@ export default{
       set() {
         // not needed, computed value is for hidden input
       },
+    },
+    nojsData() {
+      return {
+        name: this.prescriptionDetails.name,
+        details: this.prescriptionDetails.details,
+      };
     },
   },
   methods: {

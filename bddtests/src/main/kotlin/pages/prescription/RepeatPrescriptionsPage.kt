@@ -127,7 +127,7 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         repeatPrescriptionContainers.forEach { el ->
             val nameOnScreen = el.findElement(prescriptionNameLocator)
             val instructionsOnScreen = el.findElement(prescriptionInstructionsLocator)
-            val inputElement = el.findElement(By.tagName("input"))
+            val inputElement = el.findElement(By.cssSelector("input[type=checkbox]"))
 
             if (medicationCourse.name == nameOnScreen.text
                     && medicationCourse.getInstructionsText() == instructionsOnScreen.text

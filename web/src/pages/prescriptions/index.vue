@@ -12,26 +12,23 @@
       </p>
     </div>
     <div v-if="showPrescriptions" data-purpose="prescriptions">
-      <div
-        v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
-        :key="key">
+      <div v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
+           :key="key">
         <div v-if="getMedicationCourseStatus(key) != null">
           <h2>{{ getMedicationCourseStatus(key) }}</h2>
         </div>
-        <div
-          v-for="(prescriptionCourse, key) in statusGroup"
-          :key="key"
-          data-label="historic-prescription">
+        <div v-for="(prescriptionCourse, key) in statusGroup"
+             :key="key"
+             data-label="historic-prescription">
           <historic-prescription :prescription-course="prescriptionCourse" />
         </div>
       </div>
     </div>
 
-    <form method="get" action="/prescriptions/repeat-courses">
-      <floating-button-bottom
-        v-if="hasLoaded"
-        id="order-prescription-button"
-        @click="onRepeatPrescriptionButtonClicked">
+    <form :action="repeatCoursesPath" method="get">
+      <floating-button-bottom v-if="hasLoaded"
+                              id="order-prescription-button"
+                              @click="onRepeatPrescriptionButtonClicked">
         {{ $t('rp01.orderPrescriptionButton') }}
       </floating-button-bottom>
     </form>
@@ -67,6 +64,9 @@ export default {
     };
   },
   computed: {
+    repeatCoursesPath() {
+      return PRESCRIPTION_REPEAT_COURSES.path;
+    },
     showNoPrescriptions() {
       const {
         hasLoaded,

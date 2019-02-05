@@ -77,3 +77,61 @@
 .radio-adjusted {
 	margin-left: 2.5em;
 }
+
+// generic checkbox supports no js
+.checkbox {
+	position: relative;
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+
+	input[type="checkbox"] {
+		opacity: 0;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+
+		+ label::after {
+			content: none;
+		}
+
+		&:checked + label::after {
+			content: "";
+		}
+
+		&:focus + label {
+			outline: $focus_highlight auto 5px;
+		}
+	}
+
+	label {
+		position: relative;
+		display: inline-block;
+		padding-left: 2.5em;
+
+		&::before {
+			height: 1.5em;
+			width: 1.5em;
+			border: 1px $light_grey solid;
+			border-radius: 0.313em;
+			left: 0px;
+			top: 0px;
+		}
+
+		&::after {
+			height: 0.375em;
+			width: 0.813em;
+			border-left: 2px $checkbox_tick solid;
+			border-bottom: 2px $checkbox_tick solid;
+			transform: rotate(-45deg);
+			left: 0.375em;
+			top: 0.438em;
+		}
+
+		&::before,
+		&::after {
+			position: absolute;
+			content: "";
+			display: inline-block;
+		}
+	}
+}
