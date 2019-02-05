@@ -1,42 +1,46 @@
 package com.nhs.online.nhsonline
 
-import com.nhaarman.mockito_kotlin.spy
+import android.webkit.WebView
+import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
-import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
+import com.nhs.online.nhsonline.webinterfaces.WebJavascript
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class AppWebInterfaceTest {
-
-    private val mainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()
-    private val spyActivity = spy(mainActivity)
-    private val appWebInterface = AppWebInterface(spyActivity)
+    private val webviewMock: WebView = mock()
 
     @Test
     fun loadSPATest() {
-        appWebInterface.loadSpaPage("testpath", "http://test.com")
-        verify(spyActivity).evaluateWebviewJavascript("window.\$nuxt.\$router.push('/testpath')")
+        val webJavascript = WebJavascript(webviewMock)
+        webJavascript.loadSpaPath("testpath")
+        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$router.push('testpath')", null)
     }
 
     @Test
     fun loadDispatchEventTest() {
+        val appWebInterface = AppWebInterface(webviewMock)
         appWebInterface.loadDispatchEvent("auth/logout")
-        verify(spyActivity).evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('auth/logout')")
+        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('auth/logout')",
+            null)
     }
 
     @Test
     fun logoutTest() {
+        val appWebInterface = AppWebInterface(webviewMock)
         appWebInterface.logout()
-        verify(spyActivity).evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('auth/logout')")
+        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('auth/logout')",
+            null)
     }
 
     @Test
     fun extendSessionTest() {
+        val appWebInterface = AppWebInterface(webviewMock)
         appWebInterface.extendSession()
-        verify(spyActivity).evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('session/extend')")
+        verify(webviewMock).evaluateJavascript("window.\$nuxt.\$store.dispatch('session/extend')",
+            null)
     }
 }

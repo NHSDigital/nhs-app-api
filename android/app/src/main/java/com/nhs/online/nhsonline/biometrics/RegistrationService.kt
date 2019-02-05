@@ -133,9 +133,9 @@ class RegistrationService(
         val registerResponseHandler = Registration(fidoEndpointConfig)
 
         val appId = registerResponseHandler.retrieveApplicationIdFrom(inMsg)
-        preferencesService.storeInSharedPref(BiometricConstants.APP_ID, appId)
+        preferencesService.storeString(BiometricConstants.APP_ID, appId)
         val keyId = Fido.generateFidoKeyId()
-        preferencesService.storeInSharedPref(BiometricConstants.KEY_ID, keyId)
+        preferencesService.storeString(BiometricConstants.KEY_ID, keyId)
 
         val publicKey = fidoKeystore.getPublicKey(preferencesService.getFidoUsername())
         val assertionBuilder = RegAssertionBuilder(publicKey, signature, keyId)

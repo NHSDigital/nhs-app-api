@@ -1,48 +1,27 @@
 package com.nhs.online.nhsonline.webinterfaces
 
 import android.util.Log
-import com.nhs.online.nhsonline.Application
-import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.activities.MainActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import android.webkit.WebView
 
-class AppWebInterface(private val context: MainActivity) {
+private val TAG = AppWebInterface::class.java.simpleName
+
+class AppWebInterface(private val webview: WebView) {
     private val validateSessionString: String = "window.validateSession();"
 
-    fun validateSession() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering validateSession")
-        context.webview.evaluateJavascript(validateSessionString) {
-            context.hideBlankScreen()
+    fun validateSession(callback: () -> Unit) {
+        Log.d(TAG, "${this::class.java.simpleName}: Entering validateSession")
+        webview.evaluateJavascript(validateSessionString) {
+            callback.invoke()
         }
     }
 
-    fun isRecoveringFromDroppedConnection(path: String, baseUrl: String): Boolean {
-        val reloadUrl = createReloadUrl(path, baseUrl)
-        return (context.getReloadUrl() == reloadUrl)
-    }
-
-    private fun createReloadUrl(path: String, baseUrl: String): String {
-        var reloadUrl = baseUrl + path
-        if (path.indexOf(baseUrl) > -1) {
-            reloadUrl = path
-        }
-        return reloadUrl
-    }
-
-    fun loadSpaPage(path: String, baseUrl: String) {
-        var spaPath = generateSpaPathAndReloadUrl(path, baseUrl)
-        context.evaluateWebviewJavascript("window.\$nuxt.\$router.push('$spaPath')")
-    }
-
-    fun resetGPFinderFlow() {
-        var spaPath =
-            generateSpaPathAndReloadUrl(context.resources.getString(R.string.gpFinderPath),
-                context.resources.getString(R.string.baseURL))
-        context.evaluateWebviewJavascript("window.\$nuxt.\$router.push({path:'$spaPath', query: { reset: true } })")
+    fun resetGPFinderFlow(gpFinderPath: String) {
+        val spaPath = if (gpFinderPath.startsWith("/")) gpFinderPath else "/$gpFinderPath"
+        evaluateWebviewJavascript("window.\$nuxt.\$router.push({path:'$spaPath', query: { reset: true } })")
     }
 
     fun loadDispatchEvent(event: String) {
-        context.evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event')")
+        evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event')")
     }
 
     fun logout() {
@@ -53,18 +32,7 @@ class AppWebInterface(private val context: MainActivity) {
         loadDispatchEvent("session/extend")
     }
 
-    private fun generateSpaPathAndReloadUrl(path: String, baseUrl: String): String {
-        var spaPath = path.replace(baseUrl, "/")
-
-        if (!spaPath.startsWith("/")) {
-            spaPath = "/$spaPath"
-        }
-
-        val reloadUrl = createReloadUrl(path, baseUrl)
-
-        context.setReloadUrl(reloadUrl)
-
-        return spaPath
+    private fun evaluateWebviewJavascript(javascriptText: String) {
+        webview.evaluateJavascript(javascriptText, null)
     }
-
 }

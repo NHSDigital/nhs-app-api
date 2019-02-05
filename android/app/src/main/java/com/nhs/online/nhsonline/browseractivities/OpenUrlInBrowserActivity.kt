@@ -13,7 +13,7 @@ import com.nhs.online.nhsonline.services.KnownServices
 
 private const val CHROME_PACKAGE_NAME = "com.android.chrome"
 
-class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInterface {
+class OpenUrlInBrowserActivity(private val nativeAppHosts: Array<String>) : ActivityInterface {
 
     override fun canStart(context: Context, url: String): Boolean {
         val knownServices = KnownServices(context)

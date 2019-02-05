@@ -4,25 +4,28 @@ import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
-import com.nhs.online.nhsonline.webclients.WebClientInterceptor
-import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
+import com.nhaarman.mockito_kotlin.whenever
+import com.nhs.online.nhsonline.webinterfaces.WebJavascript
+import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.util.ReflectionHelpers
 
 
 @RunWith(RobolectricTestRunner::class)
 class UrlLoaderTests {
 
-    private val baseUrl = "https://unit-tests.com"
-    private val appPageUrl = "$baseUrl/page-one"
+    private val baseUrl = "https://unit-tests.com/"
+    private val path = "page-one"
+    private val appPageUrl = baseUrl + path
 
     private lateinit var urlLoader: UrlLoader
-    private lateinit var appWebInterfaceMock: AppWebInterface
     private lateinit var webviewMock: WebView
+    private lateinit var knownServicesMock: KnownServices
+    private lateinit var webJavascriptMock: WebJavascript
 
     @Before
     fun setUp() {
@@ -30,51 +33,80 @@ class UrlLoaderTests {
             on { url } doReturn baseUrl
         }
 
-        appWebInterfaceMock = mock(AppWebInterface::class.java)
-
-        val webClientMock: WebClientInterceptor = mock {
-            on { isConnectedToInternet() } doReturn true
-        }
-
-        val knownServicesMock: KnownServices = mock {
+        knownServicesMock = mock {
             on { findKnownServiceAndAddMissingQueryFor(appPageUrl) } doReturn appPageUrl
         }
+        webJavascriptMock = mock()
 
-        this.urlLoader = UrlLoader(webviewMock,
-            webClientMock,
-            appWebInterfaceMock,
-            knownServicesMock,
-            baseUrl)
+        this.urlLoader = UrlLoader(webviewMock, knownServicesMock, baseUrl)
+        ReflectionHelpers.setField(urlLoader, "webJavascript", webJavascriptMock)
     }
 
     @Test
-    fun testInternalLinkLoadsInSpaWhenLoggedIn() {
+    fun testInternalPathLinkLoadsInSpa_When_UsingAbsoluteUri_SetTo_False() {
+        urlLoader.usingAbsoluteUri = false
 
-        login()
+        urlLoader.loadUrl(path)
 
-        val spaPagePath = "/page-one"
-
-        urlLoader.loadUrl(spaPagePath)
-
-        verify(appWebInterfaceMock).loadSpaPage("/page-one", baseUrl)
+        verify(webJavascriptMock).loadSpaPath("/$path")
     }
 
     @Test
-    fun testInternalLinkLoadsInBrowserWhenNotLoggedIn() {
-
-        logout()
+    fun testInternalFullUrlLinkLoadsInSpa_When_UsingAbsoluteUri_SetTo_False() {
+        urlLoader.usingAbsoluteUri = false
 
         urlLoader.loadUrl(appPageUrl)
 
-        verify(appWebInterfaceMock, never()).loadSpaPage(appPageUrl, baseUrl)
+        verify(webJavascriptMock).loadSpaPath("/$path")
+    }
+
+    @Test
+    fun testInternalFullUrlLinkLoads_FullUrl_And_DoestNotLoadSpaPath_When_UsingAbsoluteUri_SetTo_True() {
+        urlLoader.usingAbsoluteUri = true
+        urlLoader.loadUrl(appPageUrl)
+
+        verify(webJavascriptMock, never()).loadSpaPath("/$path")
         verify(webviewMock).loadUrl(appPageUrl)
     }
 
-    private fun login() {
-        urlLoader.usingAbsoluteUri = false
+    @Test
+    fun testInternalSpaPathLinkLoads_FullUrl_And_DoestNotLoadSpaPath_When_UsingAbsoluteUri_SetTo_True() {
+        urlLoader.usingAbsoluteUri = true
+        urlLoader.loadUrl(path)
+
+        verify(webJavascriptMock, never()).loadSpaPath("/$path")
+        verify(webviewMock).loadUrl(appPageUrl)
     }
 
-    private fun logout() {
-        urlLoader.usingAbsoluteUri = true
+    @Test
+    fun testExternalLinkLoads_FullUrl_And_DoestNotLoadSpaPath_OnEither_UsingAbsoluteUri_TrueOrFalse() {
+        val externalUrl = "https://some-random-link.com/"
+        val externalPath = "random-path"
+        val fullExternalUrl = externalUrl + externalPath
+        whenever(knownServicesMock.findKnownServiceAndAddMissingQueryFor(fullExternalUrl)).thenReturn(
+            fullExternalUrl)
+        booleanArrayOf(true, false).forEach { absoluteUri ->
+            urlLoader.usingAbsoluteUri = absoluteUri
+            urlLoader.loadUrl(fullExternalUrl)
+
+            verify(webJavascriptMock, never()).loadSpaPath("/$externalPath")
+            verify(webviewMock).loadUrl(fullExternalUrl)
+        }
+    }
+
+    @Test
+    fun testProduceValidUrl_ForExternalUrl_Or_FullNhsUrl_Returns_AsHowTheUrlIs() {
+        val externalUrl = "https://some-random-link.com/path"
+        arrayOf(externalUrl, appPageUrl).forEach { url ->
+            val validUrl = urlLoader.produceValidUrl(url)
+            Assert.assertEquals(url, validUrl)
+        }
+    }
+
+    @Test
+    fun testProduceValidUrl_ForAPath_Returns_BaseUrlWithSuffixedPath() {
+        val path = "random-path"
+        val validUrl = urlLoader.produceValidUrl(path)
+        Assert.assertEquals(validUrl, baseUrl + path)
     }
 }

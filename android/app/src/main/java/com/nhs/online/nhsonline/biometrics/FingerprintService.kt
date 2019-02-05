@@ -12,68 +12,65 @@ import com.nhs.online.nhsonline.fido.uaf.util.FidoEndpointConfig
 
 @TargetApi(Build.VERSION_CODES.M)
 class FingerprintService(
-        biometricsInteractor: IBiometricsInteractor,
-        fidoKeystore: FidoKeystoreAndroidM,
-        fingerprintSystemChecker: FingerprintSystemChecker,
-        preferencesService: FingerprintSharedPreferences,
-        fidoEndpointConfig: FidoEndpointConfig,
-        uafAuthenticator: Authentication
+    biometricsInteractor: IBiometricsInteractor,
+    fidoKeystore: FidoKeystoreAndroidM,
+    fingerprintSystemChecker: FingerprintSystemChecker,
+    preferencesService: FingerprintSharedPreferences,
+    fidoEndpointConfig: FidoEndpointConfig,
+    uafAuthenticator: Authentication
 ) {
 
     private val authenticationService: AuthenticationService
     private val deRegistrationService: DeRegistrationService
     private val registrationService: RegistrationService
     val biometricState: BiometricState = BiometricState(preferencesService,
-            fidoKeystore,
-            fingerprintSystemChecker)
-    private val biometricAsyncHandler : BiometricAsyncHandler
+        fidoKeystore,
+        fingerprintSystemChecker)
+    private val biometricAsyncHandler: BiometricAsyncHandler
 
     init {
 
         val fidoDataHelper = BiometricCleanupHelper(biometricsInteractor,
-                biometricState,
-                fidoKeystore,
-                preferencesService)
+            biometricState,
+            fidoKeystore,
+            preferencesService)
 
         biometricAsyncHandler = BiometricAsyncHandler(fidoEndpointConfig)
 
-        val signingHelper = SigningHelper(fidoKeystore,
-                preferencesService)
+        val signingHelper = SigningHelper(fidoKeystore, preferencesService)
 
         val activity: FragmentActivity = biometricsInteractor.getActivity()
 
-        val fingerprintDialog = FingerprintDialog(activity,
-                biometricState,
-                signingHelper)
+        val fingerprintDialog = FingerprintDialog(activity, biometricState, signingHelper)
 
         deRegistrationService = DeRegistrationService(biometricsInteractor,
-                fidoDataHelper,
-                preferencesService,
-                biometricState,
-                biometricAsyncHandler
+            fidoDataHelper,
+            preferencesService,
+            biometricState,
+            biometricAsyncHandler
         )
 
         registrationService = RegistrationService(activity,
-                biometricAsyncHandler,
-                biometricsInteractor,
-                FingerprintCookieService(activity),
-                fidoDataHelper,
-                fidoEndpointConfig,
-                fidoKeystore,
-                fingerprintDialog,
-                fingerprintSystemChecker,
-                preferencesService,
-                biometricState)
+            biometricAsyncHandler,
+            biometricsInteractor,
+            FingerprintCookieService(activity),
+            fidoDataHelper,
+            fidoEndpointConfig,
+            fidoKeystore,
+            fingerprintDialog,
+            fingerprintSystemChecker,
+            preferencesService,
+            biometricState)
 
         authenticationService = AuthenticationService(activity,
-                biometricAsyncHandler,
-                biometricsInteractor,
-                biometricState,
-                fidoDataHelper,
-                fingerprintDialog,
-                fingerprintSystemChecker,
-                preferencesService,
-                uafAuthenticator)
+            biometricAsyncHandler,
+            biometricsInteractor,
+            biometricState,
+            fidoDataHelper,
+            fingerprintDialog,
+            fingerprintSystemChecker,
+            preferencesService,
+            uafAuthenticator)
 
     }
 
@@ -116,11 +113,11 @@ class FingerprintService(
 
 
             return FingerprintService(biometricsInteractor,
-                    fidoKeystore,
-                    fingerprintSystemChecker,
-                    preferencesService,
-                    fidoEndpointConfig,
-                    uafAuthenticator)
+                fidoKeystore,
+                fingerprintSystemChecker,
+                preferencesService,
+                fidoEndpointConfig,
+                uafAuthenticator)
         }
     }
 }

@@ -7,11 +7,11 @@ import android.util.Log
 import android.webkit.*
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.web.NhsWeb
 import java.io.InputStream
 import java.net.URL
 import java.util.logging.Logger
@@ -22,9 +22,9 @@ private const val WOFF2 = "woff2"
 
 class WebClientInterceptor(
     private val uiInteractor: IInteractor,
-    private val knownServices: KnownServices,
-    private val activities: List<ActivityInterface>,
-    private val context: Context
+    private val nhsWeb: NhsWeb,
+    private val context: Context,
+    private val knownServices: KnownServices
 ) : WebViewClient() {
 
     companion object {
@@ -40,26 +40,24 @@ class WebClientInterceptor(
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering shouldOverrideUrlLoading")
         if (URL(url).host?.equals(URL(context.getString(R.string.dataPreferencesBaseUrl)).host)!!) {
             view.loadUrl(url)
-            return false
+            return true
         }
 
         if (url == context.getString(R.string.organDonation)) {
             view.loadUrl(context.getString(R.string.organDonationNative))
-            return false
+            return true
         }
 
-        activities.forEach { activity ->
-            if (activity.canStart(view.context, url)) {
-                activity.start(view.context, url)
-                return true
-            }
-        }
+        val openedInChromeTab = nhsWeb.openInChromeTabIfApplicable(url)
+        if (openedInChromeTab)
+            return true
+
         return false
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageStarted > url $url")
-        uiInteractor.setReloadUrl(url)
+        nhsWeb.setReloadUrl(url)
         cancelTrackingWebRequestResponse()
 
         if (!isConnectedToInternet()) {

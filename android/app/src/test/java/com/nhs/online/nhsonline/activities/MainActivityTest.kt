@@ -7,10 +7,10 @@ import org.robolectric.RobolectricTestRunner
 import android.app.onResume
 import android.support.v7.app.AlertDialog
 import android.widget.TextView
-import com.nhaarman.mockito_kotlin.spy
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.support.AppDialogs
+import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import org.junit.Assert
 import org.junit.Before
@@ -82,7 +82,7 @@ class MainActivityTest {
                 getStringById(R.string.gpFinderPath) + "/otherPath")
         spyActivity.isSuccessfulConfigCheck = true
 
-        val appWebInterface = AppWebInterface(spyActivity)
+        val appWebInterface = AppWebInterface(spyActivity.webview)
         val spyAppWebInterface = spy(appWebInterface)
 
         FieldSetter.setField(spyActivity,
@@ -94,10 +94,8 @@ class MainActivityTest {
         } catch (e: Exception) {
             assert(false)
         }
-
-        verify(spyAppWebInterface, times(1)).resetGPFinderFlow()
+        verify(spyAppWebInterface, times(1)).resetGPFinderFlow(any())
     }
-
 
     @Test
     fun onBackButtonPressed_IsLoggedIn_ShowAlertDialog() {
@@ -105,9 +103,12 @@ class MainActivityTest {
                 getStringById(R.string.gpFinderPath) + "/otherPath")
         spyActivity.isSuccessfulConfigCheck = true
 
+        val nhsWebMock: NhsWeb = mock {
+            on { isUserLoggedIn }.thenReturn(true)
+        }
         FieldSetter.setField(spyActivity,
-            spyActivity::class.java.getDeclaredField("isLoggedIn"),
-            true)
+            spyActivity::class.java.getDeclaredField("nhsWeb"),
+            nhsWebMock)
 
         try {
             spyActivity.onBackPressed()
@@ -127,7 +128,8 @@ class MainActivityTest {
     @Test
     fun showVersionUpgradeDialog_CheckUpdateUrl_NotInitialised_ShowAlertDialog() {
         try {
-            spyActivity.showVersionUpgradeDialog()
+            val appDialogs = AppDialogs(spyActivity)
+            appDialogs.showVersionUpgradeDialog()
         } catch (e: Exception) {
             assert(false)
         }
@@ -140,76 +142,13 @@ class MainActivityTest {
         Assert.assertNotNull(messageTextView)
         messageTextView?.apply { Assert.assertTrue(text.contains("Click here to update")) }
 
-        var dialogUrls = messageTextView?.urls
-        val updateUrl = dialogUrls!![0].url
+        val dialogUrls = messageTextView?.urls
+        val updateUrl = dialogUrls?.firstOrNull()?.url
 
-        messageTextView?.apply {
+        messageTextView.apply {
             Assert.assertEquals("market://details?id=com.nhs.online.nhsonline",
                 updateUrl)
         }
     }
-
-    @Test
-    fun showVersionUpgradeDialog_IsInitialised_AndNotCurrentlyShowing_ShowAlertDialog() {
-        lateinit var upgradeDialog: AlertDialog
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(spyActivity)
-            .setTitle("Test Header")
-
-        builder.setCancelable(false)
-        upgradeDialog = builder.create()
-        upgradeDialog.setCanceledOnTouchOutside(false)
-        upgradeDialog.setCancelable(false)
-
-        FieldSetter.setField(spyActivity,
-            spyActivity::class.java.getDeclaredField("upgradeDialog"),
-            upgradeDialog)
-
-        try {
-            spyActivity.showVersionUpgradeDialog()
-        } catch (e: Exception) {
-            assert(false)
-        }
-
-        val updateAlertDialog = ShadowDialog.getLatestDialog() as AlertDialog
-        Assert.assertNotNull(updateAlertDialog)
-        Assert.assertTrue(updateAlertDialog.isShowing)
-
-        val messageTextView = updateAlertDialog.findViewById<TextView>(android.R.id.message)
-        Assert.assertNotNull(messageTextView)
-        messageTextView?.apply { Assert.assertTrue(text.contains("Click here to update")) }
-    }
-
-
-    @Test
-    fun showVersionUpgradeDialog_IsInitialised_CurrentlyShowing_CurrentAlertShouldntBeOverridden() {
-        lateinit var upgradeDialog: AlertDialog
-
-        val builder: AlertDialog.Builder = AlertDialog.Builder(spyActivity)
-            .setMessage("Test Message")
-
-        builder.setCancelable(false)
-        upgradeDialog = builder.create()
-        upgradeDialog.setCanceledOnTouchOutside(false)
-        upgradeDialog.setCancelable(false)
-        upgradeDialog.show()
-
-        FieldSetter.setField(spyActivity,
-            spyActivity::class.java.getDeclaredField("upgradeDialog"),
-            upgradeDialog)
-        try {
-            spyActivity.showVersionUpgradeDialog()
-        } catch (e: Exception) {
-            assert(false)
-        }
-
-        val updateAlertDialog = ShadowDialog.getLatestDialog() as AlertDialog
-        Assert.assertNotNull(updateAlertDialog)
-        Assert.assertTrue(updateAlertDialog.isShowing)
-        val messageTextView = updateAlertDialog.findViewById<TextView>(android.R.id.message)
-        Assert.assertNotNull(messageTextView)
-        messageTextView?.apply { Assert.assertTrue(text.contains("Test Message")) }
-    }
-
     private fun getStringById(resId: Int): String = mainActivity.resources.getString(resId)
 }

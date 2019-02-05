@@ -1,15 +1,13 @@
 package com.nhs.online.nhsonline.services
 
+import android.content.Context
 import android.util.Log
-import com.android.volley.NoConnectionError
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.TimeoutError
+import com.android.volley.*
 import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
 import org.json.JSONException
@@ -21,9 +19,13 @@ class ConfigurationResponse {
     var fidoServerUrl: String = ""
 }
 
-class ConfigurationService(private val context: MainActivity) {
+class ConfigurationService(private val context: Context) {
+    private val mRequestQueue: RequestQueue = Volley.newRequestQueue(context)
+    var isInProgress = false
 
     fun getConfiguration(callback: IVolleyCallback) {
+        isInProgress = true
+
         val configurationUrl = String.format(
             context.resources.getString(R.string.baseApiURL)
                     + context.resources.getString(R.string.configurationApiPath),
@@ -33,6 +35,7 @@ class ConfigurationService(private val context: MainActivity) {
         val stringReq = StringRequest(Request.Method.GET, configurationUrl,
             Response.Listener<String> { response ->
                 handleGetConfigurationResponse(response, callback)
+                isInProgress = false
             },
             Response.ErrorListener { error ->
                 Log.d(Application.TAG,
@@ -42,8 +45,9 @@ class ConfigurationService(private val context: MainActivity) {
                 } else {
                     callback.onError(serverErrorMessage)
                 }
+                isInProgress = false
             })
-        context.getRequestQueue().add(stringReq)
+        mRequestQueue.add(stringReq)
     }
 
     fun handleGetConfigurationResponse(response: String, callback: IVolleyCallback) {

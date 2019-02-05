@@ -11,30 +11,37 @@ import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.services.ConfigurationResponse
+import com.nhs.online.nhsonline.web.NhsWeb
 import com.scottyab.rootbeer.RootBeer
 
 
 class LifeCycleObserver(
-    private var context: MainActivity,
-    private var appWebInterface: AppWebInterface,
-    private var knownServices: KnownServices,
-    private var configurationService: ConfigurationService,
-    private var rootBeerService: RootBeer
+    private val context: MainActivity,
+    private val appWebInterface: AppWebInterface,
+    private val nhsWeb: NhsWeb,
+    private val rootBeerService: RootBeer,
+    private val appDialogs: AppDialogs
 ) {
-
-    private val isRootCheckEnabled = context.resources.getString(R.string.isRootCheckEnabled).toBoolean()
+    private val knownServices = KnownServices(context)
+    private val configurationService = ConfigurationService(context)
+    private val isRootCheckEnabled =
+        context.resources.getString(R.string.isRootCheckEnabled).toBoolean()
 
     fun onMoveToForeground() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onMoveToForeground")
 
         val isDeviceRooted = checkForRooting()
         if (isDeviceRooted) {
-            context.showRootedDeviceDialog()
+            appDialogs.showRootedDeviceDialog()
             return
         }
 
-        updateUI()
-        checkAndHandleConfiguration()
+        val validating = validateUserSession()
+        if (!validating && !isCurrentWebViewUrlFromCID())
+            context.hideBlankScreen()
+
+        if (!context.isSuccessfulConfigCheck)
+            checkAndHandleConfiguration()
     }
 
     fun onMoveToBackground() {
@@ -55,50 +62,62 @@ class LifeCycleObserver(
         return false
     }
 
-    private fun updateUI() {
+    private fun validateUserSession(): Boolean {
         val currentUrl: String? = context.webview.url
         currentUrl?.let {
-            if (currentUrl.contains(context.getString(R.string.authRedirectPath)) || currentUrl.contains(
-                    context.getString(R.string.fidoAuthQueryKey))) return
-
             val knownServiceInfo = knownServices.findMatchingServiceInfo(it)
 
             if (knownServiceInfo != null && knownServiceInfo.shouldValidateSession) {
                 Log.d(Application.TAG,
                     "${this::class.java.simpleName}: Entering onMoveToForeground > isKnownService > ${knownServiceInfo.baseUrl} and shouldValidateSession")
-                appWebInterface.validateSession()
-            } else {
-                context.hideBlankScreen()
+                appWebInterface.validateSession { context.hideBlankScreen() }
+                return true
             }
         }
+        return false
     }
 
-    private fun checkAndHandleConfiguration() {
+    private fun isCurrentWebViewUrlFromCID(): Boolean {
+        context.webview.url?.let { url: String ->
+            if (url.contains(context.getString(R.string.authRedirectPath)) || url.contains(
+                    context.getString(R.string.fidoAuthQueryKey))) return true
+        }
+        return false
+    }
+
+    fun checkAndHandleConfiguration() {
+        if (configurationService.isInProgress) return
+
+        if (appDialogs.isUpgradeDialogActive()) return
+
+        context.showProgressDialog()
         configurationService.getConfiguration(object : IVolleyCallback {
             override fun onSuccess(configurationResponse: ConfigurationResponse) {
+                context.dismissProgressDialog()
 
-                if (!context.isSuccessfulConfigCheck) {
-                    context.isSuccessfulConfigCheck = true
-
-                    context.configBiometricSetup(configurationResponse.fidoServerUrl)
-
-                    if (configurationResponse.isThrottlingEnabled) {
-                        context.loadThrottlingCarousel()
-                    } else {
-                        context.loadAuthReturnOrWelcomePage()
-                    }
+                context.isSuccessfulConfigCheck = true
+                if (!configurationResponse.isValidConfiguration) {
+                    appDialogs.showVersionUpgradeDialog()
                 }
 
-                if (!configurationResponse.isValidConfiguration) {
-                    context.showVersionUpgradeDialog()
+                context.configBiometricSetup(configurationResponse.fidoServerUrl)
+
+                val throttlingPageLoaded = PersistData(context)
+                    .readBoolean(context.getString(R.string.haveShownThrottlingCarouselBefore))
+
+                if (configurationResponse.isThrottlingEnabled && !throttlingPageLoaded) {
+                    nhsWeb.loadThrottlingCarousel()
                 } else {
-                    context.hideVersionUpgradeDialog()
+                    nhsWeb.loadWelcomePage()
                 }
             }
 
             override fun onError(errorMessage: ErrorMessage) {
+                context.dismissProgressDialog()
+
                 context.isSuccessfulConfigCheck = false
                 context.showUnavailabilityError(errorMessage)
+
             }
         })
     }

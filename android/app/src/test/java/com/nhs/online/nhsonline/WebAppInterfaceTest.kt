@@ -1,10 +1,12 @@
 package com.nhs.online.nhsonline
 
-import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
+import android.content.SharedPreferences
+import android.content.res.Resources
+import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.activities.MainActivity
+import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
+import junit.framework.Assert
 import org.junit.Test
 
 import org.junit.Before
@@ -13,14 +15,23 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class WebAppInterfaceTest {
-
     private lateinit var contextMock: MainActivity
     private lateinit var webAppInterface: WebAppInterface
+    private lateinit var nhsWebMock: NhsWeb
 
     @Before
     fun setUp() {
-        contextMock = mock()
-        webAppInterface = WebAppInterface(contextMock)
+        val resourcesMock: Resources = mock {
+            on { getString(any()) }.thenReturn("text")
+        }
+        val sharedPref: SharedPreferences = mock()
+        contextMock = mock {
+            on { resources }.thenReturn(resourcesMock)
+            on { getString(any()) }.thenReturn("text")
+            on { getSharedPreferences(any(), any()) }.thenReturn(sharedPref)
+        }
+        nhsWebMock = mock()
+        webAppInterface = WebAppInterface(contextMock, contextMock, nhsWebMock)
     }
 
     @Test
@@ -29,7 +40,7 @@ class WebAppInterfaceTest {
         webAppInterface.onLogin()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).loggedIn()
+        verify(nhsWebMock).onWebLoggedIn()
     }
 
     @Test
@@ -39,7 +50,7 @@ class WebAppInterfaceTest {
         webAppInterface.onLogout()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).loggedOut()
+        verify(nhsWebMock).onWebLoggedOut()
     }
 
     @Test
@@ -53,7 +64,7 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun clearMenuBar(){
+    fun clearMenuBar() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.clearMenuBarItem()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
@@ -62,7 +73,7 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun checkSymptomsTest(){
+    fun checkSymptomsTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.checkSymptoms()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
@@ -71,7 +82,7 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun hideHeaderTest(){
+    fun hideHeaderTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.hideHeader()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
@@ -80,7 +91,16 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun showHeaderTest(){
+    fun setMenuBarItemTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.setMenuBarItem(0)
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).setMenuBarItem(0)
+    }
+
+    @Test
+    fun showHeaderTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.showHeader()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
@@ -89,7 +109,7 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun hideMenuBarTest(){
+    fun hideMenuBarTest() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.hideMenuBar()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
@@ -98,16 +118,16 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun pageFocus(){
+    fun pageFocus() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.resetPageFocus()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).resetFocusToNhsLogoForA11y()
+        verify(contextMock).resetFocusToNhsLogoForAccessibility()
     }
 
     @Test
-    fun whiteScreen(){
+    fun whiteScreen() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.hideWhiteScreen()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
@@ -116,23 +136,45 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun biometrics(){
+    fun biometrics() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
         webAppInterface.goToLoginOptions()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).goToNativeBiometricPage()
+        verify(contextMock).showNativeBiometricOptions()
     }
 
     @Test
-    fun appIntro(){
+    fun appIntro() {
         val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterface.hideWhiteScreen()
+        webAppInterface.completeAppIntro()
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).hideBlankScreen()
+        verify(nhsWebMock).onThrottlingCarouselComplete()
     }
 
+    @Test
+    fun storeBetaCookie() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.storeBetaCookie()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(nhsWebMock).onBetaCookieStoreRequest()
+    }
 
+    @Test
+    fun onSessionExpiringTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.onSessionExpiring(10)
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).showExtendSessionDialogue(10)
+    }
 
+    @Test
+    fun fetchNativeAppVersionTest() {
+        val version = webAppInterface.fetchNativeAppVersion()
+        Assert.assertNotNull(version)
+        Assert.assertEquals(version, BuildConfig.VERSION_NAME)
+    }
 }

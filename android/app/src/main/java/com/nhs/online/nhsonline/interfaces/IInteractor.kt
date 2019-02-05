@@ -5,13 +5,17 @@ import com.nhs.online.nhsonline.data.ErrorMessage
 
 interface IInteractor {
 
-    fun loadThrottlingCarousel()
-
     fun loadPage(url: String)
 
     fun showProgressDialog()
 
     fun dismissProgressDialog()
+
+    fun showBlankScreen()
+
+    fun hideBlankScreen()
+
+    fun dismissSessionExtensionDialog()
 
     fun selectNavigationMenuActive(navigationMenuId: Int)
 
@@ -20,6 +24,8 @@ interface IInteractor {
     fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage)
 
     fun showWebviewScreen()
+
+    fun setWebViewVisible()
 
     fun setHeaderText(text: String, description: String? = null)
 
@@ -35,11 +41,13 @@ interface IInteractor {
 
     fun hideMenuBar()
 
-    fun setReloadUrl(url: String?)
-
     fun announcePageTitle(title: String?)
 
     fun showExtendSessionDialogue(sessionDuration: Int)
 
     fun showBiometricLoginIfEnabled(): Boolean
+
+    fun showNativeBiometricOptions()
+
+    fun resetFocusToNhsLogoForAccessibility()
 }
