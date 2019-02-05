@@ -24,7 +24,6 @@ class ConfigurationResponse {
 class ConfigurationService(private val context: MainActivity) {
 
     fun getConfiguration(callback: IVolleyCallback) {
-
         val configurationUrl = String.format(
             context.resources.getString(R.string.baseApiURL)
                     + context.resources.getString(R.string.configurationApiPath),
@@ -33,29 +32,7 @@ class ConfigurationService(private val context: MainActivity) {
         // Request a string response from the provided URL.
         val stringReq = StringRequest(Request.Method.GET, configurationUrl,
             Response.Listener<String> { response ->
-
-                try {
-                    val isValidConfiguration = parseBoolean(response, R.string.isSupportedVersion)
-                    val isThrottlingEnabled = parseBoolean(response, R.string.isThrottlingEnabled)
-                    val fidoServerUrl = parseString(response, R.string.fidoServerUrlConfigurationKey)
-
-                    val configurationResponse = ConfigurationResponse()
-                    configurationResponse.isThrottlingEnabled = isThrottlingEnabled
-                    configurationResponse.isValidConfiguration = isValidConfiguration
-                    configurationResponse.fidoServerUrl = fidoServerUrl
-
-                    Log.d(Application.TAG,
-                        "${this::class.java.simpleName}: Configuration success: isValidConfiguration $isValidConfiguration. Throttling enabled: $isThrottlingEnabled.")
-                    callback.onSuccess(configurationResponse)
-                } catch (e: ClassCastException) {
-                    Log.d(Application.TAG,
-                        "${this::class.java.simpleName}: Configuration success: failed to parse response")
-                    callback.onError(serverErrorMessage)
-                } catch (e: JSONException) {
-                    Log.d(Application.TAG,
-                        "${this::class.java.simpleName}: Configuration success: failed to parse response")
-                    callback.onError(serverErrorMessage)
-                }
+                handleGetConfigurationResponse(response, callback)
             },
             Response.ErrorListener { error ->
                 Log.d(Application.TAG,
@@ -67,6 +44,36 @@ class ConfigurationService(private val context: MainActivity) {
                 }
             })
         context.getRequestQueue().add(stringReq)
+    }
+
+    fun handleGetConfigurationResponse(response: String, callback: IVolleyCallback) {
+        try {
+            val isValidConfiguration = parseBoolean(response, R.string.isSupportedVersion)
+            val isThrottlingEnabled = parseBoolean(response, R.string.isThrottlingEnabled)
+            val fidoServerUrl = parseString(response, R.string.fidoServerUrlConfigurationKey)
+
+            val configurationResponse = ConfigurationResponse()
+            configurationResponse.isThrottlingEnabled = isThrottlingEnabled
+            configurationResponse.isValidConfiguration = isValidConfiguration
+            configurationResponse.fidoServerUrl = fidoServerUrl
+
+            Log.d(Application.TAG,
+                "${this::class.java.simpleName}: Configuration success: isValidConfiguration " +
+                        "${configurationResponse.isValidConfiguration}. " +
+                        "Throttling enabled: ${configurationResponse.isThrottlingEnabled}.")
+
+            callback.onSuccess(configurationResponse)
+        } catch (error: ClassCastException) {
+            Log.d(Application.TAG,
+                "${this::class.java.simpleName}: Configuration error: failed to parse response")
+
+            callback.onError(serverErrorMessage)
+        } catch (error: JSONException) {
+            Log.d(Application.TAG,
+                "${this::class.java.simpleName}: Configuration error: failed to parse response")
+
+            callback.onError(serverErrorMessage)
+        }
     }
 
     private val connectionErrorMessage =

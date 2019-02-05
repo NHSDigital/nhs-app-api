@@ -180,8 +180,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
                     showVersionUpgradeDialog()
                 }
 
-                if (!isLoggedIn && configurationResponse.isThrottlingEnabled) {
-                    loadThrottlingCarousel()
+                if (!isLoggedIn) {
+                    if (configurationResponse.isThrottlingEnabled) {
+                        loadThrottlingCarousel()
+                    } else {
+                        loadAuthReturnOrWelcomePage()
+                    }
                 }
 
                 if (fingerprintService == null) {

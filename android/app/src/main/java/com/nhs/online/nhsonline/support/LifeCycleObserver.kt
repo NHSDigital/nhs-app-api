@@ -97,7 +97,6 @@ class LifeCycleObserver(
             }
 
             override fun onError(errorMessage: ErrorMessage) {
-                context.loadAuthReturnOrWelcomePage()
                 context.isSuccessfulConfigCheck = false
                 context.showUnavailabilityError(errorMessage)
             }

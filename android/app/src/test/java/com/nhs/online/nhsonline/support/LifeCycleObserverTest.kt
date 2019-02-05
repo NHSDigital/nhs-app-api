@@ -70,7 +70,6 @@ class LifeCycleObserverTest {
 
         verify(rootBeerServiceMock, times(2)).setLogging(true)
         verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
-        verify(contextSpy, times(1)).loadAuthReturnOrWelcomePage()
         verify(contextSpy, times(1)).showUnavailabilityError(em)
         assertEquals(false, contextSpy.isSuccessfulConfigCheck)
     }
@@ -112,7 +111,6 @@ class LifeCycleObserverTest {
 
         verify(rootBeerServiceMock, times(2)).setLogging(true)
         verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
-        verify(contextSpy, times(1)).loadAuthReturnOrWelcomePage()
         verify(contextSpy, times(1)).showUnavailabilityError(em)
         assertEquals(false, contextSpy.isSuccessfulConfigCheck)
     }
@@ -140,7 +138,6 @@ class LifeCycleObserverTest {
         verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(appWebInterfaceMock, times(1)).validateSession()
-        verify(contextSpy, times(1)).loadAuthReturnOrWelcomePage()
         verify(contextSpy, times(1)).showUnavailabilityError(em)
         assertEquals(false, contextSpy.isSuccessfulConfigCheck)
     }
@@ -168,7 +165,6 @@ class LifeCycleObserverTest {
         verify(rootBeerServiceMock, times(1)).isRootedWithoutBusyBoxCheck
         verify(knownServicesMock, times(1)).findMatchingServiceInfo(url)
         verify(contextSpy, times(2)).hideBlankScreen()
-        verify(contextSpy, times(1)).loadAuthReturnOrWelcomePage()
         verify(contextSpy, times(1)).showUnavailabilityError(em)
         assertEquals(false, contextSpy.isSuccessfulConfigCheck)
     }
