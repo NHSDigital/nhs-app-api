@@ -1,8 +1,8 @@
-namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
+namespace NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models
 {
-    public class Examinations : IVisionPatientDataModel
+    public class Procedures : IVisionPatientDataModel
     {
-        public Examinations()
+        public Procedures()
         {
             HasAccess = true;
             HasErrored = false;

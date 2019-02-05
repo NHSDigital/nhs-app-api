@@ -1,4 +1,4 @@
-﻿using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
+﻿using NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {

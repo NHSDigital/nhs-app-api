@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 

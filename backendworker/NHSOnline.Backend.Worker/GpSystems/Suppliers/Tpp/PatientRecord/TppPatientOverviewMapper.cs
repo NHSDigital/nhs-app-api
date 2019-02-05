@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
-using Allergies = NHSOnline.Backend.Worker.Areas.MyRecord.Models.Allergies;
+using Allergies = NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models.Allergies;
 using NHSOnline.Backend.Worker.Support.Logging;
 using Microsoft.Extensions.Logging;
 

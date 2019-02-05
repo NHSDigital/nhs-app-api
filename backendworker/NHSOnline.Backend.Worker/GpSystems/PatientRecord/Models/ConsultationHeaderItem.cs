@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
+namespace NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models
 {
     public class ConsultationHeaderItem
     {
