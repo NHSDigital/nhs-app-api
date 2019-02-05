@@ -1,51 +1,82 @@
+using System;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics
 {
-    public class DemographicsAuditingVisitor : IDemographicsResultVisitor<object>
+    public class DemographicsAuditingVisitor : IDemographicsResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
+        private readonly ILogger<DemographicsController> _logger;
         private const string AuditType = Constants.AuditingTitles.GetDemographicsAuditTypeResponse;
 
-        public DemographicsAuditingVisitor(IAuditor auditor)
+        public DemographicsAuditingVisitor(IAuditor auditor, ILogger<DemographicsController> logger)
         {
             _auditor = auditor;
+            _logger = logger;
         }
         
-        public object Visit(DemographicsResult.UserHasNoAccess result)
+        public async Task Visit(DemographicsResult.UserHasNoAccess result)
         {
-            _auditor.Audit(AuditType, "Error viewing Demographics: patient does not have access to data");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error viewing Demographics: patient does not have access to data");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.UserHasNoAccess)}");
+            }
         }
 
-        public object Visit(DemographicsResult.SuccessfullyRetrieved result)
+        public async Task Visit(DemographicsResult.SuccessfullyRetrieved result)
         {
-            _auditor.Audit(AuditType, "Demographics successfully viewed");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Demographics successfully viewed");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.SuccessfullyRetrieved)}");
+            }
         }
 
-        public object Visit(DemographicsResult.SupplierSystemUnavailable supplierSystemUnavailable)
+        public async Task Visit(DemographicsResult.SupplierSystemUnavailable supplierSystemUnavailable)
         {
-            _auditor.Audit(AuditType, "Error viewing Demographics: supplier system unavailable");
+            try
+            {
+                await _auditor.Audit(AuditType, "Error viewing Demographics: supplier system unavailable");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.SupplierSystemUnavailable)}");
+            }
 
-            return null;
         }
 
-        public object Visit(DemographicsResult.Unsuccessful result)
+        public async Task Visit(DemographicsResult.Unsuccessful result)
         {
-            _auditor.Audit(AuditType, "Error viewing Demographics: unsuccessful");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error viewing Demographics: unsuccessful");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.Unsuccessful)}");
+            }
         }
 
-        public object Visit(DemographicsResult.InternalServerError result)
+        public async Task Visit(DemographicsResult.InternalServerError result)
         {
-            _auditor.Audit(AuditType, "Error viewing Demographics: internal server error");
-            
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error viewing Demographics: internal server error");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.InternalServerError)}");
+            }
         }
     }
 }

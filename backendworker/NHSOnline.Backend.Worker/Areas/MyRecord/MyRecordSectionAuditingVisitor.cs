@@ -1,68 +1,121 @@
+using System;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
-    public class MyRecordSectionAuditingVisitor : IMyRecordSectionResultVisitor<object>
+    public class MyRecordSectionAuditingVisitor : IMyRecordSectionResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
+        private readonly ILogger<MyRecordSectionController> _logger;
+        
         private const string AuditType = Constants.AuditingTitles.ViewPatientRecordSectionAuditTypeResponse;
 
-        public MyRecordSectionAuditingVisitor(IAuditor auditor)
+        public MyRecordSectionAuditingVisitor(IAuditor auditor, ILogger<MyRecordSectionController> logger)
         {
             _auditor = auditor;
+            _logger = logger;
         }
 
-        public object Visit(GetMyRecordSectionResult.SuccessfullyRetrieved result)
+        public async Task Visit(GetMyRecordSectionResult.SuccessfullyRetrieved result)
         {
-            var section = result.Response.SectionName;
+            try
+            {
+                var section = result.Response.SectionName;
 
-            _auditor.Audit(AuditType,
-                $"Patient record {section} successfully retrieved.");
-
-            return null;
+                await _auditor.Audit(AuditType,
+                    $"Patient record {section} successfully retrieved.");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.SuccessfullyRetrieved)}");
+            }
         }
 
-        public object Visit(GetMyRecordSectionResult.SupplierBadData result)
+        public async Task Visit(GetMyRecordSectionResult.SupplierBadData result)
         {
-            _auditor.Audit(AuditType, "Error: Supplier - bad data");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Supplier - bad data");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.SupplierBadData)}");
+            }
         }
 
-        public object Visit(GetMyRecordSectionResult.Unsuccessful result)
+        public async Task Visit(GetMyRecordSectionResult.Unsuccessful result)
         {
-            _auditor.Audit(AuditType, "Error: Unsuccessful");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Unsuccessful");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.Unsuccessful)}");
+            }
         }
 
-        public object Visit(GetMyRecordSectionResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
+        public async Task Visit(GetMyRecordSectionResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
         {
-            _auditor.Audit(AuditType, "Error: Error processing security header");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Error processing security header");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.ErrorProcessingSecurityHeader)}");
+            }
         }
 
-        public object Visit(GetMyRecordSectionResult.InvalidUserCredentials invalidUserCredentials)
+        public async Task Visit(GetMyRecordSectionResult.InvalidUserCredentials invalidUserCredentials)
         {
-            _auditor.Audit(AuditType, "Error: Invalid user credentials");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Invalid user credentials");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.InvalidUserCredentials)}");
+            }
         }
 
-        public object Visit(GetMyRecordSectionResult.InvalidRequest invalidRequest)
+        public async Task Visit(GetMyRecordSectionResult.InvalidRequest invalidRequest)
         {
-            _auditor.Audit(AuditType, "Error: Invalid request");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Invalid request");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.InvalidRequest)}");
+            }
         }
 
-        public object Visit(GetMyRecordSectionResult.UnknownError unknownError)
+        public async Task Visit(GetMyRecordSectionResult.UnknownError unknownError)
         {
-            _auditor.Audit(AuditType, "Error: Unknown error");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Unknown error");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.UnknownError)}");
+            }
         }
 
-        public object Visit(GetMyRecordSectionResult.InternalServerError internalServerError)
+        public async Task Visit(GetMyRecordSectionResult.InternalServerError internalServerError)
         {
-            _auditor.Audit(AuditType, "Error: Internal server error");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Internal server error");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.InternalServerError)}");
+            }
         }
     }
 }

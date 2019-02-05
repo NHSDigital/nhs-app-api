@@ -1,70 +1,123 @@
-﻿using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
+﻿using System;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
-    public class MyRecordAuditingVisitor : IMyRecordResultVisitor<object>
+    public class MyRecordAuditingVisitor : IMyRecordResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
+        private readonly ILogger<MyRecordController> _logger;
+        
         private const string AuditType = Constants.AuditingTitles.ViewPatientRecordAuditTypeResponse;
 
-        public MyRecordAuditingVisitor(IAuditor auditor)
+        public MyRecordAuditingVisitor(IAuditor auditor, ILogger<MyRecordController> logger)
         {
             _auditor = auditor;
+            _logger = logger;
         }
         
-        public object Visit(GetMyRecordResult.SuccessfullyRetrieved result)
+        public async Task Visit(GetMyRecordResult.SuccessfullyRetrieved result)
         {
-            var hasSummaryRecordAccess = result.Response.HasSummaryRecordAccess;
-            var hasDetailedRecordAccess = result.Response.HasDetailedRecordAccess;
+            try
+            {
+                var hasSummaryRecordAccess = result.Response.HasSummaryRecordAccess;
+                var hasDetailedRecordAccess = result.Response.HasDetailedRecordAccess;
             
-            _auditor.Audit(AuditType, 
-                $"Patient record successfully retrieved. {nameof(hasSummaryRecordAccess)}={hasSummaryRecordAccess}," +
-                $" {nameof(hasDetailedRecordAccess)}={hasDetailedRecordAccess}");
-            
-            return null;
+                await _auditor.Audit(AuditType, 
+                    $"Patient record successfully retrieved. {nameof(hasSummaryRecordAccess)}={hasSummaryRecordAccess}," +
+                    $" {nameof(hasDetailedRecordAccess)}={hasDetailedRecordAccess}");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordResult.SuccessfullyRetrieved)}");
+            }
         }
 
-        public object Visit(GetMyRecordResult.SupplierBadData result)
+        public async Task Visit(GetMyRecordResult.SupplierBadData result)
         {
-            _auditor.Audit(AuditType, "Error: Supplier - bad data");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Supplier - bad data");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordResult.SupplierBadData)}");
+            }
         }
 
-        public object Visit(GetMyRecordResult.Unsuccessful result)
+        public async Task Visit(GetMyRecordResult.Unsuccessful result)
         {
-            _auditor.Audit(AuditType, "Error: Unsuccessful");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Unsuccessful");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordResult.Unsuccessful)}");
+            }
         }
 
-        public object Visit(GetMyRecordResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
+        public async Task Visit(GetMyRecordResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
         {
-            _auditor.Audit(AuditType, "Error: Error processing security header");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Error processing security header");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordResult.ErrorProcessingSecurityHeader)}");
+            }
         }
 
-        public object Visit(GetMyRecordResult.InvalidUserCredentials invalidUserCredentials)
+        public async Task Visit(GetMyRecordResult.InvalidUserCredentials invalidUserCredentials)
         {
-            _auditor.Audit(AuditType, "Error: Invalid user credentials");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Invalid user credentials");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordResult.InvalidUserCredentials)}");
+            }
         }
 
-        public object Visit(GetMyRecordResult.InvalidRequest invalidRequest)
+        public async Task Visit(GetMyRecordResult.InvalidRequest invalidRequest)
         {
-            _auditor.Audit(AuditType, "Error: Invalid request");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Invalid request");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordResult.InvalidRequest)}");
+            }
         }
 
-        public object Visit(GetMyRecordResult.UnknownError unknownError)
+        public async Task Visit(GetMyRecordResult.UnknownError unknownError)
         {
-            _auditor.Audit(AuditType, "Error: Unknown error");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Unknown error");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordResult.UnknownError)}");
+            }
         }
 
-        public object Visit(GetMyRecordResult.InternalServerError internalServerError)
+        public async Task Visit(GetMyRecordResult.InternalServerError internalServerError)
         {
-            _auditor.Audit(AuditType, "Error: Internal server error");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Internal server error");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordResult.InternalServerError)}");
+            }
         }
     }
 }

@@ -1,69 +1,103 @@
 ﻿using System;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    public class AppointmentBookAuditingVisitor : IAppointmentBookResultVisitor<object>
+    public class AppointmentBookAuditingVisitor : IAppointmentBookResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
+        private readonly ILogger<AppointmentsController> _logger;
         private readonly string _slotId;
         private readonly DateTimeOffset? _slotStartTime;
         private const string AuditType = Constants.AuditingTitles.BookAppointmentAuditTypeResponse;
 
-        public AppointmentBookAuditingVisitor(IAuditor auditor, string slotId, DateTimeOffset? slotStartTime)
+        public AppointmentBookAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, string slotId, DateTimeOffset? slotStartTime)
         {
             _auditor = auditor;
+            _logger = logger;
             _slotId = slotId;
             _slotStartTime = slotStartTime;
         }
 
-        public object Visit(AppointmentBookResult.SuccessfullyBooked successfullyBooked)
+        public async Task Visit(AppointmentBookResult.SuccessfullyBooked successfullyBooked)
         {
-            _auditor.Audit(AuditType, "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
+            try
+            {
+                await _auditor.Audit(AuditType, "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
                     _slotId, _slotStartTime);
-
-            return null;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.SuccessfullyBooked)}");
+            }
         }
 
-        public object Visit(AppointmentBookResult.InsufficientPermissions insufficientPermissions)
+        public async Task Visit(AppointmentBookResult.InsufficientPermissions insufficientPermissions)
         {
-            _auditor.Audit(AuditType, "Unable to book appointment due to insufficent permissions for appointment " +
-                                      "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Unable to book appointment due to insufficent permissions for appointment " +
+                                          "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.InsufficientPermissions)}");
+            }
         }
 
-        public object Visit(AppointmentBookResult.SlotNotAvailable slotNotAvailable)
+        public async Task Visit(AppointmentBookResult.SlotNotAvailable slotNotAvailable)
         {
-            _auditor.Audit(AuditType, "Unable to book appointment due to appointment being unavailable for appointment with " +
-                              "id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Unable to book appointment due to appointment being unavailable for appointment with " +
+                                          "id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.SlotNotAvailable)}");
+            }
         }
 
-        public object Visit(AppointmentBookResult.SupplierSystemUnavailable supplierSystemUnavailable)
+        public async Task Visit(AppointmentBookResult.SupplierSystemUnavailable supplierSystemUnavailable)
         {
-            _auditor.Audit(AuditType, "Unable to book appointment due to unavailable supplier for appointment with " +
-                                      "id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Unable to book appointment due to unavailable supplier for appointment with " +
+                                          "id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.SupplierSystemUnavailable)}");
+            }
         }
 
-        public object Visit(AppointmentBookResult.BadRequest badRequest)
+        public async Task Visit(AppointmentBookResult.BadRequest badRequest)
         {
-            _auditor.Audit(AuditType, "Unable to book appointment due to bad request for appointment with id: {0}" +
-                              "and startDateTime: {1:O}", _slotId, _slotStartTime);
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Unable to book appointment due to bad request for appointment with id: {0}" +
+                                          "and startDateTime: {1:O}", _slotId, _slotStartTime);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.BadRequest)}");
+            }
         }
 
-        public object Visit(AppointmentBookResult.AppointmentLimitReached appointmentLimitReached)
+        public async Task Visit(AppointmentBookResult.AppointmentLimitReached appointmentLimitReached)
         {
-            _auditor.Audit(AuditType, "Unable to book appointment due appointment limit reached for appointment " +
-                                      "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Unable to book appointment due appointment limit reached for appointment " +
+                                          "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.AppointmentLimitReached)}");
+            }
         }
     }
 }

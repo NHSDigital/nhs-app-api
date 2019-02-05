@@ -1,42 +1,71 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
-    public class CourseResultAuditingVisitor : ICourseResultVisitor<object>
+    public class CourseResultAuditingVisitor : ICourseResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
+        private readonly ILogger<CoursesController> _logger;
         
-        public CourseResultAuditingVisitor(IAuditor auditor)
+        public CourseResultAuditingVisitor(IAuditor auditor, ILogger<CoursesController> logger)
         {
             _auditor = auditor;
+            _logger = logger;
         }
 
         private const string AuditType = Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsResponse;
         
-        public object Visit(GetCoursesResult.SuccessfullyRetrieved result)
+        public async Task Visit(GetCoursesResult.SuccessfullyRetrieved result)
         {
-            _auditor.Audit(AuditType, $"Courses successfully retrieved - { result.Response?.Courses?.Count() } courses");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, $"Courses successfully retrieved - { result.Response?.Courses?.Count() } courses");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.SuccessfullyRetrieved)}");
+            }
         }
 
-        public object Visit(GetCoursesResult.SupplierSystemUnavailable result)
+        public async Task Visit(GetCoursesResult.SupplierSystemUnavailable result)
         {
-            _auditor.Audit(AuditType, "Error retrieving courses: Supplier Unavailable");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error retrieving courses: Supplier Unavailable");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.SupplierSystemUnavailable)}");
+            }
         }
 
-        public object Visit(GetCoursesResult.InternalServerError result)
+        public async Task Visit(GetCoursesResult.InternalServerError result)
         {
-            _auditor.Audit(AuditType, "Error retrieving courses: Internal Server Error");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error retrieving courses: Internal Server Error");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.InternalServerError)}");
+            }
         }
 
-        public object Visit(GetCoursesResult.SupplierNotEnabled result)
+        public async Task Visit(GetCoursesResult.SupplierNotEnabled result)
         {
-            _auditor.Audit(AuditType, "Error retrieving courses: Supplier Not Enabled");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error retrieving courses: Supplier Not Enabled");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.SupplierNotEnabled)}");
+            }
         }
     }
 }

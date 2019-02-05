@@ -1,65 +1,83 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 {
-    public class Im1ConnectionVerifyAuditingVisitor : IIm1ConnectionVerifyResultVisitor<object>
+    /// <summary>
+    /// The Im1 Registration endpoint deliberately doesn’t audit anything in the case of failures as it doesn’t have an NHS number against which to log the audit entry.
+    /// </summary>
+    public class Im1ConnectionVerifyAuditingVisitor : IIm1ConnectionVerifyResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
+        private readonly ILogger<Im1ConnectionController> _logger;
         private readonly Supplier _supplier;
 
-        public Im1ConnectionVerifyAuditingVisitor(IAuditor auditor, Supplier supplier)
+        private const string AuditType = Constants.AuditingTitles.Im1ConnectionVerifyResponse;
+
+        public Im1ConnectionVerifyAuditingVisitor(IAuditor auditor, ILogger<Im1ConnectionController> logger,
+            Supplier supplier)
         {
             _auditor = auditor;
+            _logger = logger;
             _supplier = supplier;
         }
 
-        public object Visit(Im1ConnectionVerifyResult.SuccessfullyVerified result)
+        public async Task Visit(Im1ConnectionVerifyResult.SuccessfullyVerified result)
         {
-            if (!string.IsNullOrEmpty(result.Response.NhsNumbers?.FirstOrDefault()?.NhsNumber))
+            try
             {
-                _auditor.AuditWithExplicitNhsNumber(
-                    result.Response.NhsNumbers.First().NhsNumber, _supplier,
-                    Constants.AuditingTitles.Im1ConnectionVerifyResponse, "IM1 connection successfully verified with GP system.");
+                if (!string.IsNullOrEmpty(result.Response.NhsNumbers?.FirstOrDefault()?.NhsNumber))
+                {
+                    await _auditor.AuditWithExplicitNhsNumber(
+                        result.Response.NhsNumbers.First().NhsNumber, _supplier,
+                        Constants.AuditingTitles.Im1ConnectionVerifyResponse,
+                        "IM1 connection successfully verified with GP system.");
+                }
             }
-
-            return null;
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionVerifyResult.SuccessfullyVerified)}");
+            }
         }
 
-        public object Visit(Im1ConnectionVerifyResult.InsufficientPermissions result)
+        public Task Visit(Im1ConnectionVerifyResult.InsufficientPermissions result)
         {
-            return null;
+            return Task.FromResult<object>(null);
         }
 
-        public object Visit(Im1ConnectionVerifyResult.NotFound result)
+        public Task Visit(Im1ConnectionVerifyResult.NotFound result)
         {
-            return null;
+            return Task.FromResult<object>(null);
         }
 
-        public object Visit(Im1ConnectionVerifyResult.SupplierSystemUnavailable result)
+        public Task Visit(Im1ConnectionVerifyResult.SupplierSystemUnavailable result)
         {
-            return null;
+            return Task.FromResult<object>(null);
         }
 
-        public object Visit(Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
+        public Task Visit(Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
         {
-            return null;
+            return Task.FromResult<object>(null);
         }
 
-        public object Visit(Im1ConnectionVerifyResult.InvalidUserCredentials invalidUserCredentials)
+        public Task Visit(Im1ConnectionVerifyResult.InvalidUserCredentials invalidUserCredentials)
         {
-            return null;
+            return Task.FromResult<object>(null);
         }
 
-        public object Visit(Im1ConnectionVerifyResult.InvalidRequest invalidRequest)
+        public Task Visit(Im1ConnectionVerifyResult.InvalidRequest invalidRequest)
         {
-            return null;
+            return Task.FromResult<object>(null);
         }
 
-        public object Visit(Im1ConnectionVerifyResult.UnknownError unknownError)
+        public Task Visit(Im1ConnectionVerifyResult.UnknownError unknownError)
         {
-            return null;
+            return Task.FromResult<object>(null);
         }
     }
 }

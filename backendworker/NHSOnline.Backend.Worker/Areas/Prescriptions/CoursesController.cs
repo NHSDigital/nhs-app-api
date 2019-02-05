@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
             var result = await courseService.GetCourses(userSession);
             
-            result.Accept(new CourseResultAuditingVisitor(_auditor));
+            await result.Accept(new CourseResultAuditingVisitor(_auditor, _logger));
             return result.Accept(new CourseResultVisitor());
         }
     }

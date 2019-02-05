@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
+using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    public class AppointmentsAuditingVisitor : IAppointmentsResultVisitor<object>
+    public class AppointmentsAuditingVisitor : IAppointmentsResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<AppointmentsController> _logger;
@@ -23,50 +25,75 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             _userSession = userSession;
         }
 
-        public object Visit(AppointmentsResult.SuccessfullyRetrieved result)
+        public async Task Visit(AppointmentsResult.SuccessfullyRetrieved result)
         {
-            var appointmentCount = result.Response?.UpcomingAppointments?.Count() ?? 0;
-            
-            _auditor.Audit(AuditType, $"Booked appointments successfully viewed - { appointmentCount } appointments");
-
-            var kvp = new Dictionary<string, string>
+            try
             {
-                { "Supplier", _userSession.GpUserSession.Supplier.ToString() },
-                { "OdsCode", _userSession.GpUserSession.OdsCode },
-                { "Count", appointmentCount.ToString(CultureInfo.InvariantCulture) }
-            };
-
-            _logger.LogInformationKeyValuePairs("Appointment Count", kvp);
+                var appointmentCount = result.Response?.UpcomingAppointments?.Count() ?? 0;
             
-            return null;
+                await _auditor.Audit(AuditType, $"Booked appointments successfully viewed - { appointmentCount } appointments");
+
+                var kvp = new Dictionary<string, string>
+                {
+                    { "Supplier", _userSession.GpUserSession.Supplier.ToString() },
+                    { "OdsCode", _userSession.GpUserSession.OdsCode },
+                    { "Count", appointmentCount.ToString(CultureInfo.InvariantCulture) }
+                };
+
+                _logger.LogInformationKeyValuePairs("Appointment Count", kvp);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.SuccessfullyRetrieved)}");
+            }
         }
 
-        public object Visit(AppointmentsResult.BadRequest result)
+        public async Task Visit(AppointmentsResult.BadRequest result)
         {
-            _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to bad request");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to bad request");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.BadRequest)}");
+            }
         }
 
-        public object Visit(AppointmentsResult.SupplierSystemUnavailable result)
+        public async Task Visit(AppointmentsResult.SupplierSystemUnavailable result)
         {
-            _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to supplier being unavailable");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to supplier being unavailable");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.SupplierSystemUnavailable)}");
+            }
         }
 
-        public object Visit(AppointmentsResult.InternalServerError result)
+        public async Task Visit(AppointmentsResult.InternalServerError result)
         {
-            _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to internal server error");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to internal server error");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.InternalServerError)}");
+            }
         }
 
-        public object Visit(AppointmentsResult.CannotViewAppointments result)
+        public async Task Visit(AppointmentsResult.CannotViewAppointments result)
         {
-            _auditor.Audit(AuditType, "Booked appointments view unsuccessful");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.CannotViewAppointments)}");
+            }
         }
     }
 }

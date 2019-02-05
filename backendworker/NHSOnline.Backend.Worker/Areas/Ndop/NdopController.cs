@@ -36,8 +36,8 @@ namespace NHSOnline.Backend.Worker.Areas.Ndop
                 await _auditor.Audit(Constants.AuditingTitles.GetNdopTokenAuditTypeRequest, "Getting Ndop JWT Token");
 
                 var result = _ndopService.GetJwtToken(userSession.GpUserSession.NhsNumber);
-                result.Accept(new NdopAuditingVisitor(_auditor));
-
+                
+                await result.Accept(new NdopAuditingVisitor(_auditor, _logger));
                 return result.Accept(new NdopResultVisitor());
             }
             finally
