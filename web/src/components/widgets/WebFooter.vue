@@ -5,16 +5,16 @@
         <li :class="$style.nhsLogo">
           <HomeLink ref="headerHomeLink" :index-path="indexPath"/>
         </li>
-        <li><a href="https://www.nhs.uk/Pages/nhs-sites.aspx">NHS sites</a></li>
-        <li><a href="https://www.nhs.uk/Pages/about-us.aspx">About us</a></li>
-        <li><a href="https://www.nhs.uk/Pages/contact-us.aspx">Contact us</a></li>
+        <li><a href="https://www.nhs.uk/Pages/nhs-sites.aspx" target="_blank">NHS sites</a></li>
+        <li><a href="https://www.nhs.uk/Pages/about-us.aspx" target="_blank">About us</a></li>
+        <li><a href="https://www.nhs.uk/Pages/contact-us.aspx" target="_blank">Contact us</a></li>
       </ul>
       <ul>
-        <li><a href="https://www.nhs.uk/choices/pages/sitemap.aspx">Sitemap</a></li>
+        <li><a href="https://www.nhs.uk/choices/pages/sitemap.aspx" target="_blank">Sitemap</a></li>
         <li>
-          <a href="https://www.nhs.uk/aboutnhschoices/aboutnhschoices/accessibility/pages/accessibilitystatement.aspx">Accessibility</a>
+          <a href="https://www.nhs.uk/aboutnhschoices/aboutnhschoices/accessibility/pages/accessibilitystatement.aspx" target="_blank">Accessibility</a>
         </li>
-        <li><a href="https://www.nhs.uk/Pages/site-policies.aspx">Our policies</a></li>
+        <li><a href="https://www.nhs.uk/Pages/site-policies.aspx" target="_blank">Our policies</a></li>
         <li>© Crown Copyright</li>
       </ul>
     </div>
