@@ -9,9 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import pages.LoginPage
 import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
-import webdrivers.options.device.DeviceNativeWebAndroid
-import webdrivers.options.device.DeviceNativeWebIOS
-import webdrivers.options.device.DeviceWebMobile
+import webdrivers.options.nojs.NoJsOption
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.Duration
@@ -27,22 +25,16 @@ open class BrowserSteps {
 
     @Step
     open fun goToApp() {
-        if (!loginPage.onMobile()) {
+        if (!loginPage.onMobile() && OptionManager.instance().isEnabled(NoJsOption::class)) {
+            loginPage.open()
             val optionManager = OptionManager.instance()
-
-            when {
-                optionManager.isEnabled(DeviceNativeWebAndroid::class) -> loginPage.open(arrayOf("android"))
-                optionManager.isEnabled(DeviceNativeWebIOS::class) -> loginPage.open(arrayOf("ios"))
-                else -> loginPage.open()
-            }
-
-            // *FIX*ME: Remove when tested
-            optionManager.registerOption(DeviceWebMobile())
-
             optionManager.getOptions().forEach {
                 ChromeOptionManager.instance.configureOption(it)
             }
         }
+        else {
+                loginPage.open()
+            }
     }
 
     @Step

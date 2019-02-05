@@ -29,7 +29,8 @@ class IPhoneXDriver : DriverSource {
         fun caps(): DesiredCapabilities {
             val caps = DesiredCapabilities()
             //connect to browser stack on cloud
-            caps.setCapability(MobileCapabilityType.DEVICE_NAME, "iPhone X")
+            caps.setCapability(MobileCapabilityType.DEVICE_NAME, "iPhone 8")
+            caps.setCapability("os_version", "12.1")
             caps.setCapability(IOSMobileCapabilityType.ACCEPT_SSL_CERTS, true)
             caps.setCapability("browserstack.local", "true")
             caps.setCapability("autoWebview","true")

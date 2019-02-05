@@ -24,8 +24,6 @@ import pages.navigation.NavBarNative
 import utils.SerenityHelpers
 import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.options.OptionManager
-import webdrivers.options.device.DeviceNativeWebAndroid
-import webdrivers.options.device.DeviceNativeWebIOS
 import webdrivers.options.device.DeviceWebDesktop
 import webdrivers.options.device.DeviceWebMobile
 import webdrivers.options.nojs.NoJsOption
@@ -101,8 +99,6 @@ open class SharedStepDefinitions {
     fun iAmUsingAMobileDesktopDevice(device: String) {
         val optionManager = OptionManager.instance()
         when(device) {
-            "native ios" -> optionManager.registerOption(DeviceNativeWebIOS())
-            "native android" -> optionManager.registerOption(DeviceNativeWebAndroid())
             "mobile" -> optionManager.registerOption(DeviceWebMobile())
             "desktop" -> optionManager.registerOption(DeviceWebDesktop())
         }

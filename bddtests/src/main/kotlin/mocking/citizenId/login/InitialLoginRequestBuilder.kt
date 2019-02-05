@@ -6,8 +6,6 @@ import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
 import webdrivers.options.OptionManager
-import webdrivers.options.device.DeviceNativeWebAndroid
-import webdrivers.options.device.DeviceNativeWebIOS
 import webdrivers.options.nojs.NoJsOption
 
 class InitialLoginRequestBuilder(
@@ -19,15 +17,7 @@ class InitialLoginRequestBuilder(
 
     init {
         val matcherString = matcherToUse ?: "equalTo"
-        val optionManager = OptionManager.instance()
-
-        when {
-            optionManager.isEnabled(DeviceNativeWebAndroid::class) ->
-                requestBuilder.andQueryParameter("source", "android", matcherString)
-            optionManager.isEnabled(DeviceNativeWebIOS::class) ->
-                requestBuilder.andQueryParameter("source", "ios", matcherString)
-            else -> requestBuilder
-        }
+        requestBuilder
                 .andQueryParameter("redirect_uri", redirectUri, matcherString)
                 .andQueryParameter("client_id", clientId)
                 .andQueryParameter("response_type", "code")

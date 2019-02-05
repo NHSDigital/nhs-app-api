@@ -5,7 +5,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 
-@DefaultUrl("http://web.local.bitraft.io:3000/login?source={1}")
+@DefaultUrl("http://web.local.bitraft.io:3000/login")
 class LoginPage : HybridPageObject() {
 
     val symptomsButtonHeading = HybridPageElement(

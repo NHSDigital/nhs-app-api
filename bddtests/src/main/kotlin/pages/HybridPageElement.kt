@@ -121,12 +121,13 @@ open class HybridPageElement(
             LOCATOR_STRATEGY_ANDROID
         } else if (page.driver.isIOS() && iOSLocator != null) {
             LOCATOR_STRATEGY_IOS
-        } else {
-            val optionManager = OptionManager.instance()
-            return when {
-                optionManager.isEnabled(DeviceWebMobile::class) -> LOCATOR_STRATEGY_BROWSER_MOBILE
-                else -> LOCATOR_STRATEGY_BROWSER_DESKTOP
+        } else if (!page.driver.isIOS() &&
+                !page.driver.isAndroid() &&
+               OptionManager.instance().isEnabled(DeviceWebMobile::class)){
+               LOCATOR_STRATEGY_BROWSER_MOBILE
             }
+        else {
+            LOCATOR_STRATEGY_BROWSER_DESKTOP
         }
     }
 

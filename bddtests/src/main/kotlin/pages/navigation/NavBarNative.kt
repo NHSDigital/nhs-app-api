@@ -77,11 +77,9 @@ open class NavBarNative : NativePageObject() {
     }
 
     fun initailiseMenu() {
-
-        val optionManager = OptionManager.instance()
         return when {
-            optionManager.isEnabled(DeviceWebMobile::class)
-                    && !optionManager.isEnabled(NoJsOption::class) ->
+            OptionManager.instance().isEnabled(DeviceWebMobile::class)
+                    && !OptionManager.instance().isEnabled(NoJsOption::class) ->
                 this.findByXpath("//a[@data-sid='mini-menu']").click()
             else -> {
             }
