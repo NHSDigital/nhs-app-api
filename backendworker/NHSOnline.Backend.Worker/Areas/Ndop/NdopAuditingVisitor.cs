@@ -1,29 +1,46 @@
-﻿using NHSOnline.Backend.Worker.Ndop;
+﻿using System;
+using NHSOnline.Backend.Worker.Ndop;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Ndop
 {
-    public class NdopAuditingVisitor : INdopResultVisitor<object>
+    public class NdopAuditingVisitor : INdopResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
+        private readonly ILogger<NdopController> _logger;
+        
         private const string AuditType = Constants.AuditingTitles.ViewPatientRecordAuditTypeResponse;
 
-        public NdopAuditingVisitor(IAuditor auditor)
+        public NdopAuditingVisitor(IAuditor auditor, ILogger<NdopController> logger)
         {
             _auditor = auditor;
+            _logger = logger;
         }
         
-        public object Visit(GetNdopResult.SuccessfullyRetrieved result)
+        public async Task Visit(GetNdopResult.SuccessfullyRetrieved result)
         {
-            _auditor.Audit(AuditType, "Ndop Token successfully retrieved");
-            
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Ndop Token successfully retrieved");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNdopResult.SuccessfullyRetrieved)}");
+            }
         }
 
-        public object Visit(GetNdopResult.Unsuccessful result)
+        public async Task Visit(GetNdopResult.Unsuccessful result)
         {
-            _auditor.Audit(AuditType, "Error: Unsuccessful");
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Error: Unsuccessful");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNdopResult.Unsuccessful)}");
+            }
         }
     }
 }

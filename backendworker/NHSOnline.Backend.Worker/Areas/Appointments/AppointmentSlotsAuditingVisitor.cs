@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.Support.Auditing;
@@ -8,7 +10,7 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    public class AppointmentSlotsAuditingVisitor : IAppointmentSlotsResultVisitor<object>
+    public class AppointmentSlotsAuditingVisitor : IAppointmentSlotsResultVisitor<Task>
     {
         private readonly ILogger<AppointmentSlotsController> _logger;
         private readonly IAuditor _auditor;
@@ -23,12 +25,19 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             _userSession = userSession;
         }
 
-        public object Visit(AppointmentSlotsResult.SuccessfullyRetrieved result)
+        public async Task Visit(AppointmentSlotsResult.SuccessfullyRetrieved result)
         {
             var slotCount = result.Response?.Slots?.Count() ?? 0;
-            
-            _auditor.Audit(AuditType, $"Available appointment slots successfully viewed - { slotCount } slots");
 
+            try
+            {
+                await _auditor.Audit(AuditType, $"Available appointment slots successfully viewed - { slotCount } slots");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.SuccessfullyRetrieved)}");
+            }
+            
             var kvp = new Dictionary<string, string>
             {
                 { "Supplier", _userSession.GpUserSession.Supplier.ToString() },
@@ -36,31 +45,44 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 { "Count", slotCount.ToString(CultureInfo.InvariantCulture) }
             };
 
-            _logger.LogInformationKeyValuePairs("Appointment Slot Count", kvp);
-            
-            return null;
+            _logger.LogInformationKeyValuePairs("Appointment Slot Count", kvp);   
         }
 
-        public object Visit(AppointmentSlotsResult.SupplierSystemUnavailable result)
+        public async Task Visit(AppointmentSlotsResult.SupplierSystemUnavailable result)
         {
-            _auditor.Audit(AuditType, "Available appointment slots view unsuccessful due to supplier unavailable");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Available appointment slots view unsuccessful due to supplier unavailable");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.SupplierSystemUnavailable)}");
+            }
         }
 
-        public object Visit(AppointmentSlotsResult.InternalServerError result)
+        public async Task Visit(AppointmentSlotsResult.InternalServerError result)
         {
-            _auditor.Audit(AuditType, "Available appointment slots view unsuccessful due to internal server error");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType, "Available appointment slots view unsuccessful due to internal server error");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.InternalServerError)}");
+            }
         }
 
-        public object Visit(AppointmentSlotsResult.CannotBookAppointments result)
+        public async Task Visit(AppointmentSlotsResult.CannotBookAppointments result)
         {
-            _auditor.Audit(AuditType,  "Available appointment slots view unsuccessful due to not having permissions " +
-                                       "to book appointments");
-
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType,  "Available appointment slots view unsuccessful due to not having permissions " +
+                                                 "to book appointments");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.CannotBookAppointments)}");
+            }
         }
     }
 }
