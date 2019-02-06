@@ -28,15 +28,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                 _logger.LogEnter();
 
                 var tppUserSession = (TppUserSession)userSession;
-                var request = new ViewAppointments(tppUserSession);
+                var requestPast = new ViewAppointments(tppUserSession, false);
+                var requestUpcoming = new ViewAppointments(tppUserSession, true);
 
-                var viewAppointmentsTask = _tppClient.ViewAppointmentsPost(request, tppUserSession.Suid);
-                await Task.WhenAll(viewAppointmentsTask);
-
-                var result = _appointmentResultBuilder.Build(viewAppointmentsTask);
-
-                return result.ValueOrFailure();
-
+                var viewPastAppointmentsTask = _tppClient.ViewAppointmentsPost(requestPast, tppUserSession.Suid);
+                await viewPastAppointmentsTask;
+                
+                var viewUpcomingAppointmentsTask = _tppClient.ViewAppointmentsPost(requestUpcoming, tppUserSession.Suid);
+                await viewUpcomingAppointmentsTask;
+                
+                var viewPastAppointments = _appointmentResultBuilder.Build(viewPastAppointmentsTask, viewUpcomingAppointmentsTask);
+                return viewPastAppointments.ValueOrFailure();
             }
             catch (HttpRequestException e)
             {

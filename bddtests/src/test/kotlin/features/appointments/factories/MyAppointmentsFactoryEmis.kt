@@ -1,17 +1,15 @@
 package features.appointments.factories
 
-import features.appointments.factories.helpers.MyAppointmentsFactoryHelper.Companion.gpDateTimeFormat
-import features.appointments.factories.helpers.MyAppointmentsFactoryHelper.Companion.slotDateFormat
-import features.appointments.factories.helpers.MyAppointmentsFactoryHelper.Companion.slotTimeFormat
 import mocking.emis.models.AppointmentCancellationReason
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
+import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper.Companion.historicalAppointmentsFromSessions
+import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper.Companion.upcomingAppointmentsFromSessions
 import models.Slot
 import net.serenitybdd.core.Serenity
 import worker.models.appointments.AppointmentResponseObject
 import worker.models.appointments.MyAppointmentsResponse
-import java.time.ZonedDateTime
 
 class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
 
@@ -27,19 +25,10 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
         return reasons
     }
 
-    override fun filterUpcomingAppointmentsWhenAppropriate(
-            facade: ArrayList<AppointmentSessionFacade>
-    ): ArrayList<AppointmentSessionFacade> {
-        // Don't need to filter for Emis
-        return facade
-    }
-
     override fun getExpectedApiResponse(facade: MyAppointmentsFacade): MyAppointmentsResponse {
-        val filteredAppointments = filterUpcomingAppointmentsWhenAppropriate(
-                facade.myAppointments!!.sessions
-        )
-        val pastAppointments = historicalAppointmentsFromSessions(filteredAppointments)
-        val upcomingAppointments = upcomingAppointmentsFromSessions(filteredAppointments)
+        val sessions = facade.myAppointments!!.sessions
+        val pastAppointments = historicalAppointmentsFromSessions(sessions)
+        val upcomingAppointments = upcomingAppointmentsFromSessions(sessions)
         return MyAppointmentsResponse(
                 upcomingAppointments.flatMap { session ->
                     session.slots.map { slot ->
@@ -113,25 +102,4 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
                 id = slot.slotId
         )
     }
-
-    private fun historicalAppointmentsFromSessions(
-            sessions: List<AppointmentSessionFacade>
-    ): List<AppointmentSessionFacade> {
-        return sessions.filter { session ->
-            session.slots.filter { slot ->
-                ZonedDateTime.parse(slot.startTime).isBefore(ZonedDateTime.now())
-            }.isNotEmpty()
-        }
-    }
-
-    private fun upcomingAppointmentsFromSessions(
-            sessions: List<AppointmentSessionFacade>
-    ): List<AppointmentSessionFacade> {
-        return sessions.filter { session ->
-            session.slots.filter { slot ->
-                ZonedDateTime.parse(slot.startTime).isAfter(ZonedDateTime.now())
-            }.isNotEmpty()
-        }
-    }
-
 }

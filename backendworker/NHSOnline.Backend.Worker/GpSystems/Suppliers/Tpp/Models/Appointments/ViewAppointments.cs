@@ -8,12 +8,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
     {
         private ViewAppointments() { }
 
-        public ViewAppointments(ITppUserSession tppUserSession)
+        public ViewAppointments(ITppUserSession tppUserSession, bool futureAppointments)
         {
             UnitId = tppUserSession.UnitId;
             PatientId = tppUserSession.PatientId;
             OnlineUserId = tppUserSession.OnlineUserId;
-            FutureAppointments = "Y";
+            FutureAppointments = futureAppointments ? "Y" : "N";
         }
 
         [XmlAttribute("patientId")]

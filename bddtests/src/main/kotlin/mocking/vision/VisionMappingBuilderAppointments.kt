@@ -18,7 +18,7 @@ import java.time.ZonedDateTime
 open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBuilder(method, "/vision/pfs/"),
         IAppointmentMappingBuilder {
 
-    override fun viewMyAppointmentsRequest(patient: Patient):
+    override fun viewMyAppointmentsRequest(patient: Patient, appointmentType: IMyAppointmentsBuilder.AppointmentType):
             IMyAppointmentsBuilder = MyAppointmentsBuilderVision(patient)
 
     override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade):

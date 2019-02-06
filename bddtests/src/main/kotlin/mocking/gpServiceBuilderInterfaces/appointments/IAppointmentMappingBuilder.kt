@@ -6,7 +6,10 @@ import models.Patient
 import java.time.ZonedDateTime
 
 interface IAppointmentMappingBuilder {
-    fun viewMyAppointmentsRequest(patient: Patient): IMyAppointmentsBuilder
+    fun viewMyAppointmentsRequest(
+            patient: Patient,
+            appointmentType: IMyAppointmentsBuilder.AppointmentType = IMyAppointmentsBuilder.AppointmentType.BOTH
+    ): IMyAppointmentsBuilder
 
     fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder
 

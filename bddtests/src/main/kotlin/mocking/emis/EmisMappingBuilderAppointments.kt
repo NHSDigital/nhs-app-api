@@ -14,7 +14,7 @@ import java.time.ZonedDateTime
 
 class EmisMappingBuilderAppointments(private var configuration: EmisConfiguration?) : IAppointmentMappingBuilder {
 
-    override fun viewMyAppointmentsRequest(patient: Patient):
+    override fun viewMyAppointmentsRequest(patient: Patient, appointmentType: IMyAppointmentsBuilder.AppointmentType):
             IMyAppointmentsBuilder = GetAppointmentBuilderEmis(configuration, patient)
 
     override fun appointmentSlotsRequest(patient: Patient,

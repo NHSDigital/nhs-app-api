@@ -1,11 +1,12 @@
-﻿using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+﻿using System.Linq;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 {
     public interface IAppointmentsReplyMapper
     {
-        AppointmentsResponse Map(ViewAppointmentsReply viewAppointmentsReply);
+        AppointmentsResponse Map(ViewAppointmentsReply viewPastAppointmentsReply, ViewAppointmentsReply viewUpcomingAppointmentsReply);
     }
     public class AppointmentsReplyMapper : IAppointmentsReplyMapper
     {
@@ -16,12 +17,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _mapper = mapper;
         }
         
-        public AppointmentsResponse Map(ViewAppointmentsReply viewAppointmentsReply)
+        public AppointmentsResponse Map(ViewAppointmentsReply viewPastAppointmentsReply, ViewAppointmentsReply viewUpcomingAppointmentsReply)
         {
-            var appointments = _mapper.Map(viewAppointmentsReply?.Appointments);
+            var tppPastAppointments = _mapper.Map(viewPastAppointmentsReply?.Appointments);
+            var tppUpcomingAppointments = _mapper.Map(viewUpcomingAppointmentsReply?.Appointments);
+            var combinedAppointments = tppPastAppointments.Concat(tppUpcomingAppointments).ToList();
+            
+            var pastAppointments = combinedAppointments
+                .Where(x => x is PastAppointment).Cast<PastAppointment>();
+            var upcomingAppointments = combinedAppointments
+                .Where(x => x is UpcomingAppointment).Cast<UpcomingAppointment>();
+            
             var response = new AppointmentsResponse { 
-                UpcomingAppointments = appointments,
-                PastAppointmentsEnabled = false };
+                PastAppointments = pastAppointments,
+                UpcomingAppointments = upcomingAppointments,
+                PastAppointmentsEnabled = true };
 
             return response;
         }

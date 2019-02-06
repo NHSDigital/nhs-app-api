@@ -27,10 +27,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         public void Map_ResponseIncludesNoCancellationReasons()
         {
             // Arrange
-            var emisResponse = _fixture.Create<ViewAppointmentsReply>();
+            var tppPastAppointmentsResponse = _fixture.Create<ViewAppointmentsReply>();
+            var tppUpcomingAppointmentsResponse = _fixture.Create<ViewAppointmentsReply>();
 
             // Act
-            var response = _systemUnderTest.Map(emisResponse);
+            var response = _systemUnderTest.Map(tppPastAppointmentsResponse, tppUpcomingAppointmentsResponse);
 
             // Assert
             var expectedCancellationReasons = new List<CancellationReason>();

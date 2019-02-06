@@ -1,4 +1,5 @@
-﻿using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+﻿using System;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using System.Collections.Generic;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
@@ -6,7 +7,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 {
     public interface IAppointmentMapper
     {
-        IEnumerable<UpcomingAppointment> Map(List<Models.Appointments.Appointment> appointments);
+        IEnumerable<Appointment> Map(List<Models.Appointments.Appointment> sourceAppointments);
     }
     public class AppointmentMapper : IAppointmentMapper
     {
@@ -17,33 +18,36 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }
 
-        public IEnumerable<UpcomingAppointment> Map(List<Models.Appointments.Appointment> appointments)
+        public IEnumerable<Appointment> Map(List<Models.Appointments.Appointment> sourceAppointments)
         {
-            if (appointments == null)
+            if (sourceAppointments == null)
             {
                 yield break;
             }
-
+            
             var now = _dateTimeOffsetProvider.CreateDateTimeOffset();
 
-            foreach (var appointment in appointments)
+            foreach (var sourceAppointment in sourceAppointments)
             {
-                var startTimeSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(appointment.StartDate?.TrimEnd('Z'),
+                var startTimeSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(sourceAppointment.StartDate?.TrimEnd('Z'),
                     out var startTime);
 
-                if (!startTimeSuccess || now > startTime)
+                if (!startTimeSuccess)
                     continue;
 
-                _dateTimeOffsetProvider.TryCreateDateTimeOffset(appointment.EndDate?.TrimEnd('Z'), out var endTime);
+                _dateTimeOffsetProvider.TryCreateDateTimeOffset(sourceAppointment.EndDate?.TrimEnd('Z'), out var endTime);
 
-                yield return new UpcomingAppointment
-                {
-                    Id = appointment.ApptId,
-                    StartTime = startTime.GetValueOrDefault(),
-                    EndTime = endTime,
-                    Location = appointment.SiteName,
-                    Type = appointment.Details
-                };
+                var appointment = now >= startTime
+                    ? (Appointment) new PastAppointment()
+                    : new UpcomingAppointment();
+
+                appointment.Id = sourceAppointment.ApptId;
+                appointment.StartTime = startTime.GetValueOrDefault();
+                appointment.EndTime = endTime;
+                appointment.Location = sourceAppointment.SiteName;
+                appointment.Type = sourceAppointment.Details;
+
+                yield return appointment;
             }
         }
     }

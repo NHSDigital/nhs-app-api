@@ -3,13 +3,16 @@ using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.Support;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 {
     public interface IAppointmentsResultBuilder
     {
-        Option<AppointmentsResult> Build(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> appointmentTask);
+        Option<AppointmentsResult> Build(
+            Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask,
+            Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask);
     }
     public class TppAppointmentsResultBuilder : IAppointmentsResultBuilder
     {
@@ -23,20 +26,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _logger = logger;
         }
 
-        public Option<AppointmentsResult> Build(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> appointmentTask)
+        public Option<AppointmentsResult> Build(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask, Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask)
         {
-            return GetTaskCompletedUnsuccessfullyCase(appointmentTask)
-               .IfNone(() => GetResponseHasNoSuccessStatusCodeCase(appointmentTask.Result))
-               .IfNone(() => BuildSuccessfulAppointmentsResult(appointmentTask));
+            return GetTaskCompletedUnsuccessfullyCase(viewPastAppointmentsTask)
+                .IfNone(() => GetTaskCompletedUnsuccessfullyCase(viewUpcomingAppointmentsTask))
+                .IfNone(() => GetResponseHasNoSuccessStatusCodeCase(viewPastAppointmentsTask.Result))
+                .IfNone(() => GetResponseHasNoSuccessStatusCodeCase(viewUpcomingAppointmentsTask.Result))
+                .IfNone(() => BuildSuccessfulAppointmentsResult(viewPastAppointmentsTask, viewUpcomingAppointmentsTask));
         }
 
-        private Option<AppointmentsResult> BuildSuccessfulAppointmentsResult(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> appointmentTask)
+        private Option<AppointmentsResult> BuildSuccessfulAppointmentsResult(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask, Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask)
         {
             try
             {
-                var result =
-                    new AppointmentsResult.SuccessfullyRetrieved(
-                        _appointmentsReplyMapper.Map(appointmentTask.Result.Body));
+                var appointmentsResponse = _appointmentsReplyMapper.Map(viewPastAppointmentsTask.Result.Body, viewUpcomingAppointmentsTask.Result.Body);
+                var result = new AppointmentsResult.SuccessfullyRetrieved(appointmentsResponse);
                 return Option.Some<AppointmentsResult>(result);
             }
             catch (Exception e)

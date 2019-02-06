@@ -9,6 +9,7 @@ import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.Appointment
 import mocking.tpp.models.ViewAppointmentsReply
 import mockingFacade.appointments.MyAppointmentsFacade
+import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper
 import models.Patient
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -16,16 +17,28 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 
-class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyAppointmentsBuilder {
+class MyAppointmentsBuilderTpp(
+        val patient: Patient,
+        appointmentType: IMyAppointmentsBuilder.AppointmentType
+) : TppMappingBuilder(), IMyAppointmentsBuilder {
+
+    private val tppAppointmentType: AppointmentType
 
     init {
+        tppAppointmentType = when (appointmentType) {
+            IMyAppointmentsBuilder.AppointmentType.UPCOMING_ONLY -> AppointmentType.FUTURE_APPOINTMENTS
+            IMyAppointmentsBuilder.AppointmentType.PAST_ONLY -> AppointmentType.PAST_APPOINTMENTS
+            else -> throw NullPointerException("Appointment Type incorrectly set for TPP. Need to specify " +
+                    "either Upcoming or Past (not both). ")
+        }
         requestBuilder.andHeader(HEADER_TYPE, "ViewAppointments")
                 .andBodyMatchingXpath(
                         xpath = "//ViewAppointments[" +
                                 "@apiVersion='${TppConfig.apiVersion}' and " +
                                 "@unitId='${TppMockDefaults.DEFAULT_ODS_CODE_TPP}' and " +
                                 "@patientId='${patient.patientId}' and " +
-                                "@onlineUserId='${patient.onlineUserId}']")
+                                "@onlineUserId='${patient.onlineUserId}' and " +
+                                "@futureAppointments='${tppAppointmentType.isFuture}']")
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
@@ -56,7 +69,13 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
     }
 
     private fun extractAppointmentsFromFacade(facade: MyAppointmentsFacade): List<Appointment> {
-        return facade.myAppointments?.sessions?.flatMap { session ->
+        val requiredAppointments = when (tppAppointmentType) {
+            AppointmentType.FUTURE_APPOINTMENTS ->
+                MyAppointmentFacadeHelper.upcomingAppointmentsFromSessions(facade.myAppointments!!.sessions)
+            AppointmentType.PAST_APPOINTMENTS ->
+                MyAppointmentFacadeHelper.historicalAppointmentsFromSessions(facade.myAppointments!!.sessions)
+        }
+        return requiredAppointments.flatMap { session ->
             session.slots.map { slot ->
                 Appointment(
                         slot.slotId!!.toString(),
@@ -66,7 +85,7 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
                         session.location!!
                 )
             }
-        } ?: emptyList()
+        }
     }
 
     private fun convertDateToTppTime(time: String): String {
@@ -85,5 +104,10 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
 
     override fun respondWithGPServiceUnavailableException(): Mapping {
         return respondWithServiceUnavailable()
+    }
+
+    enum class AppointmentType(val isFuture: Char) {
+        FUTURE_APPOINTMENTS('Y'),
+        PAST_APPOINTMENTS('N')
     }
 }

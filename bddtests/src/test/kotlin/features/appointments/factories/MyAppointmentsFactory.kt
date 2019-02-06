@@ -17,7 +17,6 @@ import utils.SerenityHelpers
 import worker.models.appointments.MyAppointmentsResponse
 import java.time.Duration
 import java.util.*
-import kotlin.collections.ArrayList
 
 private const val DELAY_IN_SECONDS = 90L
 
@@ -101,7 +100,7 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
     }
 
     fun createMyAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
-        mockMyAppointments(mapping)
+        mockMyAppointments(mapping = mapping)
         generateDefaultUserData()
     }
 
@@ -109,7 +108,12 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
         return MyAppointmentsFacade(facade)
     }
 
-    private fun mockMyAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
+    open fun mockMyAppointments(
+            appointmentType:
+            IMyAppointmentsBuilder.AppointmentType = IMyAppointmentsBuilder.AppointmentType.BOTH,
+            mapping: (IMyAppointmentsBuilder.() -> Mapping)
+
+    ) {
         appointmentMapper.requestMapping { mapping(viewMyAppointmentsRequest(patient)) }
     }
 
@@ -126,9 +130,6 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
     abstract fun getExpectedUiRepresentationOfUpcomingSlots(facade: MyAppointmentsFacade): List<Slot>
 
     abstract fun getExpectedUiRepresentationOfHistoricalSlots(facade: MyAppointmentsFacade): List<Slot>
-
-    abstract fun filterUpcomingAppointmentsWhenAppropriate(facade: ArrayList<AppointmentSessionFacade>):
-            List<AppointmentSessionFacade>
 
     abstract fun getDefaultCancellationReasons(): List<AppointmentCancellationReason>
 

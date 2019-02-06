@@ -19,30 +19,31 @@ Feature: My appointments UI with Javascript
       | EMIS      |
 
 
-  Scenario: An EMIS user sees appropriate messages when they have no upcoming or historical appointments
-    Given I have no booked appointments for EMIS
-    And I am logged in
-    When I am on the My Appointments page
-    Then the page title is "My appointments"
-    And I am informed I have no upcoming appointments
-    And I am informed I have no historical appointments
-    And I can book an appointment
-
   Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming or historical appointments
     Given I have no booked appointments for <GP System>
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am informed I have no upcoming appointments
-    And I am not informed I have no historical appointments
+    And I am informed I have no historical appointments
     And I can book an appointment
     Examples:
       | GP System |
+      | EMIS      |
       | TPP       |
-      | VISION    |
 
-  Scenario: An EMIS user can see their upcoming appointments and a message if there are no historical appointments
-    Given I have upcoming appointments before cutoff time for EMIS
+  Scenario: A VISION user sees appropriate messages when they have no upcoming or historical appointments
+    Given I have no booked appointments for VISION
+    And I am logged in
+    When I am on the My Appointments page
+    Then the page title is "My appointments"
+    And I am informed I have no upcoming appointments
+    And I am not informed I have no historical appointments
+    And I can book an appointment
+
+  Scenario Outline: A <GP System> user can see their upcoming appointments and a message if there are no historical
+  appointments
+    Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
@@ -50,20 +51,29 @@ Feature: My appointments UI with Javascript
     And each appointment can be cancelled
     And I am informed I have no historical appointments
     And I can book an appointment
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
-  Scenario: An EMIS user sees their historical appointments and a message if they have no upcoming appointments
-    Given I have historical appointments for EMIS
+  Scenario Outline: A <GP System> user sees their historical appointments and a message if they have no upcoming
+  appointments
+    Given I have historical appointments for <GP System>
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am informed I have no upcoming appointments
     And I am given the list of historical appointments
     And I can book an appointment
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   @smoketest
   @native-smoketest
-  Scenario: An EMIS user sees both their upcoming and historical appointments
-    Given I have historical and upcoming appointments for EMIS
+  Scenario Outline: A <GP System> user sees both their upcoming and historical appointments
+    Given I have historical and upcoming appointments for <GP System>
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
@@ -71,10 +81,14 @@ Feature: My appointments UI with Javascript
     And each appointment can be cancelled
     And I am given the list of historical appointments
     And I can book an appointment
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   @smoketest
-  Scenario Outline: A <GP System> user can see their upcoming appointments
-    Given I have upcoming appointments before cutoff time for <GP System>
+  Scenario: A VISION user can see their upcoming appointments
+    Given I have upcoming appointments before cutoff time for VISION
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
@@ -82,10 +96,6 @@ Feature: My appointments UI with Javascript
     And each appointment can be cancelled
     And I am not informed I have no historical appointments
     And I can book an appointment
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
 
 
   Scenario: A user sees appropriate information message when appointments are disabled on VISION

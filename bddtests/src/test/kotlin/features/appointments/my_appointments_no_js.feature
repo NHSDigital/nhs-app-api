@@ -6,7 +6,8 @@ Feature: My appointments UI without Javascript
   Background:
     Given I have disabled javascript
 
-#    Only testing for 1 GP System for no JS
+#    Only testing each Scenario for 1 GP System, for no JS
+
   @bug  @NHSO-4129
   Scenario: An EMIS user sees Service currently unavailable message when GP system is unavailable
     Given the EMIS GP appointment system is unavailable
@@ -26,10 +27,9 @@ Feature: My appointments UI without Javascript
     And I can book an appointment
 
 
-#  Only testing for 1 GP System for no JS
 #  This Scenario can be removed once implemented for ALL GP Systems
-  Scenario: A TPP user sees appropriate messages when they have no upcoming or historical appointments
-    Given I have no booked appointments for TPP
+  Scenario: A VISION user sees appropriate messages when they have no upcoming or historical appointments
+    Given I have no booked appointments for VISION
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
@@ -68,10 +68,9 @@ Feature: My appointments UI without Javascript
     And I can book an appointment
 
 
-#  Only testing for 1 GP System for no JS
 #  This Scenario can be removed once implemented for ALL GP Systems
-  Scenario: A TPP user can see their upcoming appointments
-    Given I have upcoming appointments before cutoff time for TPP
+  Scenario: A VISION user can see their upcoming appointments
+    Given I have upcoming appointments before cutoff time for VISION
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
@@ -80,8 +79,9 @@ Feature: My appointments UI without Javascript
     And I am not informed I have no historical appointments
     And I can book an appointment
 
+# VISION Specific tests
+
   Scenario: A user sees appropriate information message when appointments are disabled on VISION
-      # VISION Specific test
     Given Appointments are disabled for VISION at a GP Practice level
     And I am logged in
     When I am on the My Appointments page

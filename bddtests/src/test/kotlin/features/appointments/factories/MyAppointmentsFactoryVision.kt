@@ -1,7 +1,6 @@
 package features.appointments.factories
 
 import mocking.emis.models.AppointmentCancellationReason
-import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
@@ -21,17 +20,10 @@ class MyAppointmentsFactoryVision : MyAppointmentsFactory("VISION") {
         return reasons
     }
 
-    override fun filterUpcomingAppointmentsWhenAppropriate(
-            facade: ArrayList<AppointmentSessionFacade>
-    ): ArrayList<AppointmentSessionFacade> {
-        // Don't need to filter for Vision
-        return facade
-    }
-
     override fun getExpectedApiResponse(facade: MyAppointmentsFacade): MyAppointmentsResponse {
-        val filteredFacade = filterUpcomingAppointmentsWhenAppropriate(facade.myAppointments!!.sessions)
+        val sessions = facade.myAppointments!!.sessions
         return MyAppointmentsResponse(
-                filteredFacade.flatMap { session ->
+                sessions.flatMap { session ->
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),

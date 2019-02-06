@@ -132,9 +132,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         }
 
         [TestMethod]
-        public void Map_ReturnsOnlyAppointmentsThatHaveNotYetStarted()
+        public void Map_AppointmentsAreAppropriateConcreteTypeBasedOnStartTime()
         {
-            var appt1 = new AppointmentTime(DateTime.UtcNow.AddMinutes(-5));
+            var appt1 = new AppointmentTime(_dateTimeOffsetProvider.CreateDateTimeOffset().SetTimeToMidnight().AddDays(-1));
             var appt2 = new AppointmentTime(Tomorrow().At("14:20"));
 
             var appointment1 =
@@ -149,8 +149,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var actualResponse = _systemUnderTest.Map(appointments);
 
             // Assert
-            var expectedResponse = new[]
+            var expectedResponse = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment[]
             {
+                new NHSOnline.Backend.Worker.Areas.Appointments.Models.PastAppointment
+                {
+                    Id = "0547d0000",
+                    Type =  "Clinician: Dr House",
+                    Location = "The Frankenstein Place",
+                    StartTime = appt1.Start,
+                    EndTime = appt1.End
+                },
                 new NHSOnline.Backend.Worker.Areas.Appointments.Models.UpcomingAppointment
                 {
                     Id = "0647d0000",

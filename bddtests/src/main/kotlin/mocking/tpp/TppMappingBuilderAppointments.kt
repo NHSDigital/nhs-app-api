@@ -19,8 +19,8 @@ class TppMappingBuilderAppointments: IAppointmentMappingBuilder {
     override fun appointmentSlotsRequest(patient: Patient, fromDateTime: ZonedDateTime?, toDateTime: ZonedDateTime?):
             IAppointmentSlotsBuilder = AppointmentSlotsBuilderTpp(patient.tppUserSession!!, fromDateTime, toDateTime)
 
-    override fun viewMyAppointmentsRequest(patient: Patient):
-            IMyAppointmentsBuilder = MyAppointmentsBuilderTpp(patient)
+    override fun viewMyAppointmentsRequest(patient: Patient, appointmentType: IMyAppointmentsBuilder.AppointmentType):
+            IMyAppointmentsBuilder = MyAppointmentsBuilderTpp(patient, appointmentType)
 
     override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade):
             IBookAppointmentsBuilder = BookAppointmentsBuilderTpp(patient, request)

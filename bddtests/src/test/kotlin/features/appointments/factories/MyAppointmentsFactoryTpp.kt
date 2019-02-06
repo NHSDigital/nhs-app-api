@@ -1,11 +1,13 @@
 package features.appointments.factories
 
-import features.appointments.factories.helpers.MyAppointmentsFactoryHelper.Companion.gpDateTimeFormat
-import features.appointments.factories.helpers.MyAppointmentsFactoryHelper.Companion.slotDateFormat
-import features.appointments.factories.helpers.MyAppointmentsFactoryHelper.Companion.slotTimeFormat
 import mocking.emis.models.AppointmentCancellationReason
+import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
+import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSessionFacade
+import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
+import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper.Companion.historicalAppointmentsFromSessions
+import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper.Companion.upcomingAppointmentsFromSessions
 import models.Slot
 import net.serenitybdd.core.Serenity
 import worker.models.appointments.AppointmentResponseObject
@@ -20,19 +22,12 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
         return reasons
     }
 
-    override fun filterUpcomingAppointmentsWhenAppropriate(
-            facade: ArrayList<AppointmentSessionFacade>
-    ): List<AppointmentSessionFacade> {
-        // Need to filter out any appointments that are no longer "upcoming"
-        return facade.filter { session ->
-            session.slots.any { slot -> !slot.slotInThePast!! }
-        }
-    }
-
     override fun getExpectedApiResponse(facade: MyAppointmentsFacade): MyAppointmentsResponse {
-        val filteredFacade = filterUpcomingAppointmentsWhenAppropriate(facade.myAppointments!!.sessions)
+        val sessions = facade.myAppointments!!.sessions
+        val pastAppointments = historicalAppointmentsFromSessions(sessions)
+        val upcomingAppointments = upcomingAppointmentsFromSessions(sessions)
         return MyAppointmentsResponse(
-                filteredFacade.flatMap { session ->
+                upcomingAppointments.flatMap { session ->
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
@@ -42,30 +37,80 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
                                 session.location!!
                         )
                     }
+                },
+                pastAppointments.flatMap { session ->
+                    session.slots.map { slot ->
+                        AppointmentResponseObject(
+                                slot.slotId.toString(),
+                                session.sessionDetails!!,
+                                slot.startTime!!,
+                                slot.endTime!!,
+                                session.location!!,
+                                disableCancellation = null
+                        )
+                    }
                 }
         )
     }
 
     override fun getExpectedUiRepresentationOfUpcomingSlots(facade: MyAppointmentsFacade): List<Slot> {
-        return facade.myAppointments?.sessions?.flatMap { session ->
+        val upcomingAppointments = upcomingAppointmentsFromSessions(facade.myAppointments!!.sessions)
+        return upcomingAppointments.flatMap { session ->
             session.slots.map { slot ->
-                val startDate = gpDateTimeFormat.parse(slot.startTime)
-                val date = slotDateFormat(startDate)
-                val time = slotTimeFormat(startDate)
-                val sessionDetails = session.sessionDetails
-                val location = session.location
-                Slot(
-                        date = date,
-                        time = time,
-                        session = sessionDetails!!,
-                        location = location!!,
-                        id = slot.slotId
-                )
+                getExpectedUiRepresentationOfSlot(slot, session)
             }
-        } ?: emptyList()
+        }
     }
 
     override fun getExpectedUiRepresentationOfHistoricalSlots(facade: MyAppointmentsFacade): List<Slot> {
-        return emptyList()  // Not yet implemented for TPP
+        val historicalAppointments = historicalAppointmentsFromSessions(facade.myAppointments!!.sessions)
+        return historicalAppointments.flatMap { session ->
+            session.slots.map { slot ->
+                getExpectedUiRepresentationOfSlot(slot, session)
+            }
+        }
+    }
+
+    override fun getExpectedUiRepresentationOfSlot(
+            slot: AppointmentSlotFacade, session: AppointmentSessionFacade
+    ): Slot {
+        val startDate = gpDateTimeFormat.parse(slot.startTime)
+        val date = slotDateFormat(startDate)
+        val time = slotTimeFormat(startDate)
+        val sessionDetails = session.sessionDetails
+        val location = session.location
+        return Slot(
+                date = date,
+                time = time,
+                session = sessionDetails!!,
+                location = location!!,
+                id = slot.slotId
+        )
+    }
+
+    override fun mockMyAppointments(
+            appointmentType: IMyAppointmentsBuilder.AppointmentType,
+            mapping:
+            (IMyAppointmentsBuilder.() -> Mapping)
+    ) {
+        if (appointmentType == IMyAppointmentsBuilder.AppointmentType.BOTH ||
+                appointmentType == IMyAppointmentsBuilder.AppointmentType.PAST_ONLY) {
+            appointmentMapper.requestMapping {
+                mapping(viewMyAppointmentsRequest(
+                        patient,
+                        appointmentType = IMyAppointmentsBuilder.AppointmentType.PAST_ONLY
+                ))
+            }
+        }
+        if (appointmentType == IMyAppointmentsBuilder.AppointmentType.BOTH ||
+                appointmentType == IMyAppointmentsBuilder.AppointmentType.UPCOMING_ONLY) {
+            appointmentMapper.requestMapping {
+                mapping(viewMyAppointmentsRequest(
+                        patient,
+                        appointmentType =
+                        IMyAppointmentsBuilder.AppointmentType.UPCOMING_ONLY
+                ))
+            }
+        }
     }
 }
