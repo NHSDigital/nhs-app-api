@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
 
         public static string DateTimeToJson(DateTime dateTime)
         {
-            return dateTime.ToString("yyyy-MM-ddTH:mm:ss", CultureInfo.InvariantCulture);
+            return dateTime.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
         }
     }
 }
