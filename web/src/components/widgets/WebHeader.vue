@@ -98,7 +98,7 @@ export default {
     },
     showBookAppointmentButton() {
       return (
-        this.$store.state.myAppointments.hasLoaded
+        this.$store.state.myAppointments.hasLoaded && !this.$store.getters['errors/showApiError']
       );
     },
   },
