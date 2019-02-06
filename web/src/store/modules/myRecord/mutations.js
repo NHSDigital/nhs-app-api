@@ -1,4 +1,6 @@
+import mapKeys from 'lodash/fp/mapKeys';
 import {
+  INIT,
   ACCEPT_TERMS,
   LOADED,
   LOADED_TEST_RESULTS,
@@ -8,9 +10,17 @@ import {
   LOADED_DETAILED_TEST_RESULT,
   RESET_TERMS,
   TOGGLE_PATIENT_DETAIL,
+  SET_MEDICAL_RECORD_TYPE,
+  initialState,
 } from './mutation-types';
 
 export default {
+  [INIT](state) {
+    const blank = initialState();
+    return mapKeys((key) => {
+      state[key] = blank[key];
+    })(state);
+  },
   [ACCEPT_TERMS](state) {
     state.hasAcceptedTerms = true;
   },
@@ -40,5 +50,8 @@ export default {
   },
   [TOGGLE_PATIENT_DETAIL](state) {
     state.isPatientDetailsCollapsed = !state.isPatientDetailsCollapsed;
+  },
+  [SET_MEDICAL_RECORD_TYPE](state, { medicalRecordType }) {
+    state.medicalRecordType = medicalRecordType;
   },
 };

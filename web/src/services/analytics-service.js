@@ -53,6 +53,7 @@ export default function (app, store, route) {
         userType: '',
         user: {
           gpOdsCode: store.state.session.gpOdsCode,
+          medicalRecordType: store.state.myRecord.medicalRecordType,
         },
       };
       try {

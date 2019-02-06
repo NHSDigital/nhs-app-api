@@ -38,6 +38,11 @@ export default {
       this.dispatch('analytics/satelliteTrack', 'click_link');
     }
   },
+  trackUserProperty(_, { key, value }) {
+    if (process.client && window.digitalData && window.digitalData.user) {
+      window.digitalData.user[key] = value;
+    }
+  },
   satelliteTrack(_, nameOfCall) {
     // Put track call in try-catch, as it likely called under error, so no internet connection.
     if (process.client) {
