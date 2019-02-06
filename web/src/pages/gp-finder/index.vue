@@ -31,6 +31,7 @@
       </error-message>
       <form @submit.prevent="searchFormSubmitted">
         <generic-text-input id="searchTextInput"
+                            :class="$style.inputSpacing"
                             v-model="searchQuery"
                             type="text"
                             a-labelled-by="search-label"
@@ -255,4 +256,8 @@ export default {
 @import '../../style/buttons';
 @import '../../style/throttling/throttling';
 @import '../../style/throttling/gpfindersearch';
+
+.inputSpacing{
+ margin-bottom: 1em;
+}
 </style>
