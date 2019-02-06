@@ -1,21 +1,24 @@
 <template>
-  <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content',
-                                    isDesktopWeb ? $style.mainContent : undefined]">
-    <div :class="$style['banner-container']">
-      <beta-banner data-sid="beta-flag"/>
-    </div>
+  <div :class="isDesktopWeb && $style.mainContentContainer">
+    <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content',
+                                      isDesktopWeb && $style.mainContent]">
+      <div :class="$style['banner-container']">
+        <beta-banner data-sid="beta-flag"/>
+      </div>
 
-    <hr :class="$style.rule" aria-hidden="true">
-    <h2 :class="$style.header" data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
-    <welcome-section :date-of-birth="$store.state.session.dateOfBirth"
-                     :nhs-number="$store.state.session.nhsNumber" />
-    <div :class="[isDesktopWeb ? $style.navigationList : undefined]">
-      <navigation-list-menu
-        nhs-number="nhsNumber"
-        dob="dob"
-      />
+      <hr :class="$style.rule" aria-hidden="true">
+      <h2 :class="$style.header" data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
+      <welcome-section :date-of-birth="$store.state.session.dateOfBirth"
+                       :nhs-number="$store.state.session.nhsNumber" />
+      <div :class="isDesktopWeb && $style.navigationList">
+        <navigation-list-menu
+          nhs-number="nhsNumber"
+          dob="dob"
+        />
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -66,6 +69,11 @@ export default {
   @import "../style/textstyles";
   @import '../style/screensizes';
 
+  .mainContentContainer {
+    max-width: 960px;
+    margin: 0 1em;
+  }
+
   .webStyledSpacing {
     height: 0.063em;
     border: none;
@@ -100,11 +108,7 @@ export default {
   }
 
   @media (min-width: 1024px) {
-    .header {
-      margin: 0 auto;
-    }
-
-    .navigationList {
+    .header, .navigationList, .mainContentContainer {
       margin: 0 auto;
     }
   }

@@ -71,4 +71,8 @@ export default {
       outline-offset: -5px;
     }
   }
+
+  .anchor-icon {
+    width: 110px;
+  }
 </style>

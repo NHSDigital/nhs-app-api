@@ -4,6 +4,7 @@
        :id="id"
        :class="getStyleClasses"
        :viewBox="viewBox"
+       :preserveAspectRatio="preserveAspectRatio"
        xmlns="http://www.w3.org/2000/svg"
        tabindex="-1">
     <slot/>
@@ -31,6 +32,10 @@ export default {
     viewBox: {
       type: String,
       default: '0 0 0 0',
+    },
+    preserveAspectRatio: {
+      type: String,
+      default: 'none',
     },
   },
   created() {
