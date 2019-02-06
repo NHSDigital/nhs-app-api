@@ -29,7 +29,9 @@ export default {
         key: 'nhso.session',
         value: session,
         cookies: this.app.$cookies,
-        isSecure: this.app.$env.SECURE_COOKIES,
+        options: {
+          secure: this.app.$env.SECURE_COOKIES,
+        },
       });
     }
 
@@ -54,7 +56,9 @@ export default {
       key: 'nhso.session',
       value,
       cookies: this.app.$cookies,
-      isSecure: this.app.$env.SECURE_COOKIES,
+      options: {
+        secure: this.app.$env.SECURE_COOKIES,
+      },
     });
 
     commit(SET_INFO, info);
