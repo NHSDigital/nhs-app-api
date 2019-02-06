@@ -40,6 +40,9 @@ a.button:focus {
     }
     &.desktopWebConfirmButton{
       @include webButton;
+      margin-top: 2em;
+    }
+    &.web {
       margin-top: 1em;
     }
 
