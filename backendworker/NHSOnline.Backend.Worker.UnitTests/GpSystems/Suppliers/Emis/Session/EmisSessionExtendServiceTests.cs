@@ -7,6 +7,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
@@ -18,20 +19,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
     public class EmisSessionExtendServiceTests
     {
         private IFixture _fixture;
-        private UserSession _userSession;
         private EmisSessionExtendService _systemUnderTest;
         private Mock<IEmisClient> _mockEmisClient;
+        private GpUserSession _gpUserSession;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-
-            _userSession = _fixture.Create<UserSession>();
-
+            _gpUserSession = _fixture.Create<EmisUserSession>();
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 
             _systemUnderTest = _fixture.Create<EmisSessionExtendService>();
@@ -48,7 +44,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_userSession);
+            var result = await _systemUnderTest.Extend(_gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.SuccessfullyExtended>();
@@ -66,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_userSession);
+            var result = await _systemUnderTest.Extend(_gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
@@ -82,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_userSession);
+            var result = await _systemUnderTest.Extend(_gpUserSession);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();

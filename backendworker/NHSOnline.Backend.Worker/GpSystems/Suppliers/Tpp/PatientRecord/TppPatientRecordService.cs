@@ -37,11 +37,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             _logger = logger;
         }
         
-        public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
+        public async Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession)
         {
             _logger.LogEnter();
             
-            var tppUserSession = (TppUserSession) userSession.GpUserSession;
+            var tppUserSession = (TppUserSession)gpUserSession;
 
             try
             {
@@ -82,11 +82,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
-        public async Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
+        public async Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             _logger.LogEnter();
             
-            var tppUserSession = (TppUserSession) userSession.GpUserSession;
+            var tppUserSession = (TppUserSession)gpUserSession;
 
             try
             {           

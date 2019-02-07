@@ -32,10 +32,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
             _tppPrescriptionMapper = tppPrescriptionMapper;
         }
 
-        public async Task<PrescriptionResult> GetPrescriptions(UserSession userSession, DateTimeOffset? fromDate = null,
+        public async Task<PrescriptionResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate = null,
             DateTimeOffset? toDate = null)
         {
-            var tppUserSession = (TppUserSession) userSession.GpUserSession;
+            var tppUserSession = (TppUserSession) gpUserSession;
 
             try
             {
@@ -77,11 +77,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
         }
 
-        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<PrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             _logger.LogEnter();
 
-            var tppUserSession = (TppUserSession) userSession.GpUserSession;
+            var tppUserSession = (TppUserSession) gpUserSession;
 
             var postRequest = new RequestMedication
             {

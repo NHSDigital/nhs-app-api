@@ -1,10 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Session;
-using System;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments
 {
@@ -25,14 +24,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(
-            UserSession userSession, 
+            GpUserSession gpUserSession, 
             AppointmentSlotsDateRange dateRange)
         {
             try
             {
                 _logger.LogEnter();
 
-                var microtestUserSession = (MicrotestUserSession) userSession.GpUserSession;
+                var microtestUserSession = (MicrotestUserSession) gpUserSession;
                 
                 _logger.LogInformation("Appointment slots request starting");
 

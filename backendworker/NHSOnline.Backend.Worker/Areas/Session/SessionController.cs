@@ -247,7 +247,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             UserSession userSession)
         {
             var sessionService = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier).GetSessionService();
-            var sessionLogoffResult = await sessionService.Logoff(userSession);
+            var sessionLogoffResult = await sessionService.Logoff(userSession.GpUserSession);
 
             return sessionLogoffResult.Accept(new SessionLogoffResultVisitor());
         }

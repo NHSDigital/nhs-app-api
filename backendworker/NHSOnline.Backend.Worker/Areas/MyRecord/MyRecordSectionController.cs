@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
 
             _logger.LogInformation($"Fetching patient record {section} section");
 
-            var result = await patientRecordService.GetSection(userSession, section);
+            var result = await patientRecordService.GetSection(userSession.GpUserSession, section);
 
             // Audit result of attempt to view patient record    
             await result.Accept(new MyRecordSectionAuditingVisitor(_auditor, _logger));

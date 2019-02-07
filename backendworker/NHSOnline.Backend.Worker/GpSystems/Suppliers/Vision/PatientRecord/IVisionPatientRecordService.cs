@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 {
     public interface IVisionPatientRecordService : IPatientRecordService
     {
-        Task<GetMyRecordSectionResult> GetSection(UserSession userSession, VisionMapperType section);
+        Task<GetMyRecordSectionResult> GetSection(GpUserSession gpUserSession, VisionMapperType section);
     }
 }

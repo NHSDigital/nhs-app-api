@@ -55,10 +55,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             _proceduresMapper = proceduresMapper;
         }
 
-        public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
+        public async Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession)
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
+            var visionUserSession = (VisionUserSession)gpUserSession;
 
             try
             {
@@ -107,73 +107,74 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             }
         }
 
-        public async Task<GetMyRecordSectionResult> GetSection(UserSession userSession, VisionMapperType section)
+        public async Task<GetMyRecordSectionResult> GetSection(GpUserSession gpUserSession, VisionMapperType section)
         {
+            var visionUserSession = (VisionUserSession)gpUserSession;
+
             if (section == VisionMapperType.TestResults)
             {
-                return await GetTestResults(userSession);
+                return await GetTestResults(visionUserSession);
             }
             if (section == VisionMapperType.Diagnosis)
             {
-                return await GetDiagnosisResults(userSession);
+                return await GetDiagnosisResults(visionUserSession);
             }
             if (section == VisionMapperType.Examinations)
             {
-                return await GetExaminationResults(userSession);
+                return await GetExaminationResults(visionUserSession);
             }
             if (section == VisionMapperType.Procedures)
             {
-                return await GetProcedureResults(userSession);
+                return await GetProcedureResults(visionUserSession);
             }
             
             return new GetMyRecordSectionResult.InvalidRequest();
         }
 
-        private async Task<GetMyRecordSectionResult> GetTestResults(UserSession userSession)
+        private async Task<GetMyRecordSectionResult> GetTestResults(VisionUserSession visionUserSession)
         {
             return await GetMyRecordSection(
-                userSession,
+                visionUserSession,
                 _testResultsMapper,
                 VisionMapperType.TestResults,
                 Views.TEST_RESULTS,
                 ResponseFormats.HTML);
         }
 
-        private async Task<GetMyRecordSectionResult> GetDiagnosisResults(UserSession userSession)
+        private async Task<GetMyRecordSectionResult> GetDiagnosisResults(VisionUserSession visionUserSession)
         {
             return await GetMyRecordSection(
-                userSession,
+                visionUserSession,
                 _diagnosisMapper,
                 VisionMapperType.Diagnosis,
                 Views.DIAGNOSIS,
                 ResponseFormats.HTML);
         }
         
-        private async Task<GetMyRecordSectionResult> GetExaminationResults(UserSession userSession)
+        private async Task<GetMyRecordSectionResult> GetExaminationResults(VisionUserSession visionUserSession)
         {
             return await GetMyRecordSection(
-                userSession,
+                visionUserSession,
                 _examinationsMapper,
                 VisionMapperType.Examinations,
                 Views.EXAM_FINDINGS,
                 ResponseFormats.HTML);
         }
         
-        private async Task<GetMyRecordSectionResult> GetProcedureResults(UserSession userSession)
+        private async Task<GetMyRecordSectionResult> GetProcedureResults(VisionUserSession visionUserSession)
         {
             return await GetMyRecordSection(
-                userSession,
+                visionUserSession,
                 _proceduresMapper,
                 VisionMapperType.Procedures,
                 Views.PROCEDURES,
                 ResponseFormats.HTML);
         }
         
-        private async Task<GetMyRecordSectionResult> GetMyRecordSection<T>(UserSession userSession, IVisionMapper<T> mapper, VisionMapperType visionMapperType, string viewName, string responseFormat) 
+        private async Task<GetMyRecordSectionResult> GetMyRecordSection<T>(VisionUserSession visionUserSession, IVisionMapper<T> mapper, VisionMapperType visionMapperType, string viewName, string responseFormat) 
             where T : IVisionPatientDataModel, new()
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
 
             try
             {
@@ -229,7 +230,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             };
         }
 
-        public Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
+        public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             throw new NotImplementedException();
         }

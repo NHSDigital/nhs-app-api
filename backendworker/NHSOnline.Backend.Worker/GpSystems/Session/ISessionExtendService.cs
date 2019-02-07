@@ -4,6 +4,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Session
 {
     public interface ISessionExtendService
     {
-        Task<SessionExtendResult> Extend(UserSession userSession);
+        Task<SessionExtendResult> Extend(GpUserSession gpUserSession);
     }
 }

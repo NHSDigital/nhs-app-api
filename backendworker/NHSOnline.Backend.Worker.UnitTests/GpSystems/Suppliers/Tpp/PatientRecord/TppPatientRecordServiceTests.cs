@@ -13,6 +13,7 @@ using Moq;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientRecord
 {
@@ -21,7 +22,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
     {
         private TppPatientRecordService _systemUnderTest;
         private Mock<ITppClient> _tppClient;
-        private UserSession _userSession;
+        private GpUserSession _gpUserSession;
         private IFixture _fixture;
         private Mock<IGetPatientDcrEventsTaskChecker> _patientDcrEventsChecker;
         private Mock<IGetPatientOverviewTaskChecker> _patientOverviewTaskChecker;
@@ -31,12 +32,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<TppUserSession>()));
+
+            _gpUserSession = _fixture.Create<TppUserSession>();
             
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
-            _userSession = _fixture.Create<UserSession>();
             
             _patientDcrEventsChecker = _fixture.Freeze<Mock<IGetPatientDcrEventsTaskChecker>>();
             _patientOverviewTaskChecker = _fixture.Freeze<Mock<IGetPatientOverviewTaskChecker>>();
@@ -118,8 +117,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                 .Returns(Mock.Of<TestResults>())
                 .Verifiable();
             
-           // Act
-            var result = await _systemUnderTest.GetMyRecord(_userSession);
+            // Act
+            var result = await _systemUnderTest.GetMyRecord(_gpUserSession);
 
             // Assert
             _tppClient.Verify(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()));

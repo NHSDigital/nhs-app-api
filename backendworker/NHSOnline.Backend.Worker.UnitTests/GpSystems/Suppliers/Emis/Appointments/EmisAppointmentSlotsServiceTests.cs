@@ -25,7 +25,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
     {    
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
-        private UserSession _userSession;
         private EmisUserSession _emisUserSession;
         private AppointmentSlotsDateRange _dateRange;
         private DateTimeOffset _fromDateTimeOffset;
@@ -49,9 +48,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockResponseMapper = _fixture.Freeze<Mock<IAppointmentSlotsResponseMapper>>();
 
             _emisUserSession = _fixture.Create<EmisUserSession>();
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _emisUserSession));
-            _userSession = _fixture.Create<UserSession>();
                 
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
@@ -85,7 +81,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -114,7 +110,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -133,7 +129,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -161,7 +157,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
             
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -183,7 +179,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -207,7 +203,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -233,7 +229,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -262,7 +258,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -291,7 +287,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -320,7 +316,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -349,7 +345,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK));
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -388,7 +384,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 .Throws<Exception>();
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();
@@ -428,7 +424,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 .Returns(expectedResponse);
 
             // Act
-            var result = await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await _systemUnderTest.GetSlots(_emisUserSession, _dateRange);
 
             // Assert
             _mockEmisClient.Verify();

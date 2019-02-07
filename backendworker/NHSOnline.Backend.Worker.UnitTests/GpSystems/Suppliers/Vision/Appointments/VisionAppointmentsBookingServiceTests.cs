@@ -15,7 +15,6 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 
-
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointments
 {
     [TestClass]
@@ -26,7 +25,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         private IAppointmentsService _systemUnderTest;
         private AppointmentBookRequest _request;
         private VisionUserSession _visionUserSession;
-        private UserSession _userSession;
         private VisionResponse<BookAppointmentResponse> _visionClientGetResponse;
         
         [TestInitialize]
@@ -37,12 +35,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsAppointmentsEnabled = true;
             _visionUserSession.AppointmentBookingReasonNecessity = Necessity.Optional;
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _visionUserSession));
-            
-            _userSession = _fixture.Create<UserSession>();
-            
+                        
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<BookAppointmentResponse>>();
 
@@ -69,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             MockVisionClientAppointmentPostMethod(response);
             
             // Act            
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
 
             // Assert
             _mockVisionClient.Verify();
@@ -83,7 +76,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _visionUserSession.IsAppointmentsEnabled = false;
             
             // Act            
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
@@ -102,7 +95,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 .Verifiable();
             
             // Act
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
 
             // Assert
             _mockVisionClient.Verify();
@@ -118,7 +111,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             MockVisionClientAppointmentPostMethod(response);
             
             // Act
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
             
             // Assert
             _mockVisionClient.Verify();
@@ -134,7 +127,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             MockVisionClientAppointmentPostMethod(response);
             
             // Act
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
             
             // Assert
             _mockVisionClient.Verify();
@@ -150,7 +143,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             MockVisionClientAppointmentPostMethod(response);
             
             // Act
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
             
             // Assert
             _mockVisionClient.Verify();
@@ -166,7 +159,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             MockVisionClientAppointmentPostMethod(response);
             
             // Act
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
             
             // Assert
             _mockVisionClient.Verify();
@@ -183,7 +176,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             MockVisionClientAppointmentPostMethod(response);
             
             // Act
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
             
             // Assert
             _mockVisionClient.Verify();
@@ -197,7 +190,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             _visionUserSession.AppointmentBookingReasonNecessity = Necessity.NotAllowed;
 
             // Act
-            var result = await _systemUnderTest.Book(_userSession, _request);
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();

@@ -15,7 +15,6 @@ using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Models.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Session;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Microtest.Appointments
@@ -25,7 +24,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Microtest.Appoi
     {   
         private IFixture _fixture;
         private Mock<IMicrotestClient> _mockMicrotestClient;
-        private UserSession _userSession;
         private MicrotestUserSession _microtestUserSession;
         private AppointmentSlotsDateRange _dateRange;
         private DateTimeOffset _fromDateTimeOffset;
@@ -50,11 +48,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Microtest.Appoi
                 OdsCode = "TestOdsCode",
                 NhsNumber = "TestNhsNumber",
             };
-
-            _userSession = _fixture.Create<UserSession>();
-            _userSession.GpUserSession = _microtestUserSession;
-                
-
+            
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
 
@@ -167,7 +161,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Microtest.Appoi
         
         private async Task<AppointmentSlotsResult> GetAppointmentSlotsResult()
         {
-            return await _systemUnderTest.GetSlots(_userSession, _dateRange);
+            return await _systemUnderTest.GetSlots(_microtestUserSession, _dateRange);
         }
     }
 }

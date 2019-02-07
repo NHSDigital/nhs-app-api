@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
                 var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider);
             
-                var result = await appointmentService.GetSlots(userSession, dateRange);
+                var result = await appointmentService.GetSlots(userSession.GpUserSession, dateRange);
 
                 try
                 {

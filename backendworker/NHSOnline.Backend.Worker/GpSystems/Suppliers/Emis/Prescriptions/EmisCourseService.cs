@@ -27,9 +27,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             _emisPrescriptionMapper = emisPrescriptionMapper;
         }
 
-        public async Task<GetCoursesResult> GetCourses(UserSession userSession)
+        public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
         {
-            var emisUserSession = (EmisUserSession) userSession.GpUserSession;
+            var emisUserSession = (EmisUserSession)gpUserSession;
             
             try
             {

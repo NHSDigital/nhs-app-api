@@ -21,13 +21,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             _logger = logger;
         }
 
-        public async Task<SessionExtendResult> Extend(UserSession userSession)
+        public async Task<SessionExtendResult> Extend(GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
 
-                var emisUserSession = (EmisUserSession) userSession.GpUserSession;
+                var emisUserSession = (EmisUserSession)gpUserSession;
                 var response = await _emisClient.DemographicsGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId);
                 if (response.HasSuccessResponse)

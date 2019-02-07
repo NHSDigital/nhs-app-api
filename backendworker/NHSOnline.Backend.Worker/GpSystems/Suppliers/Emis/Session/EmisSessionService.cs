@@ -182,9 +182,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         }
 
         // Emis does not have a logoff endpoint, returning successfully deleted
-        public Task<SessionLogoffResult> Logoff(UserSession userSession)
+        public Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)
         {
-            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
+            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(gpUserSession));
         }
 
         private bool IsSessionsPostResponseValid(SessionsPostResponse sessionsPostResponse)

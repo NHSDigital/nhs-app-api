@@ -32,13 +32,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
         }
 
         public async Task<PrescriptionResult> GetPrescriptions(
-            UserSession userSession,
+            GpUserSession gpUserSession,
             DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
             _logger.LogEnter();
 
-            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
+            var visionUserSession = (VisionUserSession)gpUserSession;
 
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {
@@ -106,9 +106,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             }
         }
 
-        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<PrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
+            var visionUserSession = (VisionUserSession) gpUserSession;
 
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {

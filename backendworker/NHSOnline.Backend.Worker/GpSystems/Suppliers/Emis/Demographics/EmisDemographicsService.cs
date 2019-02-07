@@ -22,11 +22,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
             _emisDemographicsMapper = emisDemographicsMapper;
         }
 
-        public async Task<DemographicsResult> GetDemographics(UserSession userSession)
+        public async Task<DemographicsResult> GetDemographics(GpUserSession gpUserSession)
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession) userSession.GpUserSession;
+            var emisUserSession = (EmisUserSession) gpUserSession;
 
             try
             {

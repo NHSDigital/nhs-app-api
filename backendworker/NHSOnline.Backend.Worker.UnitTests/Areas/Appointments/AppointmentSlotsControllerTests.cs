@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var successResponse = new AppointmentSlotsResult.SuccessfullyRetrieved(appointmentSlotsServicesGetResponse);
 
             appointmentSlotsService
-                .Setup(x => x.GetSlots(_userSession, It.IsAny<AppointmentSlotsDateRange>()))
+                .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
                 .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
 
             // Act
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
-            appointmentSlotsService.Verify(x => x.GetSlots(_userSession,
+            appointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
                 It.IsAny<AppointmentSlotsDateRange>()));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             okObjectResult.Value.Should().BeAssignableTo(typeof(AppointmentSlotsResponse));
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             gpSystem.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
-            appointmentSlotsService.Setup(x => x.GetSlots(_userSession, It.IsAny<AppointmentSlotsDateRange>()))
+            appointmentSlotsService.Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
                 .Returns(Task.FromResult((AppointmentSlotsResult) getAppointmentSlotsServiceResult));
 
             // Act
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
-            appointmentSlotsService.Verify(x => x.GetSlots(_userSession,
+            appointmentSlotsService.Verify(x => x.GetSlots(_userSession.GpUserSession,
                 It.IsAny<AppointmentSlotsDateRange>()));
             result.Should().BeAssignableTo(typeof(StatusCodeResult));
 

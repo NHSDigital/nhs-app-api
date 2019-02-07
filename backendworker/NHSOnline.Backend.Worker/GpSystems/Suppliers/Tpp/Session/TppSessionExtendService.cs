@@ -22,13 +22,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             _logger = logger;
         }
 
-        public async Task<SessionExtendResult> Extend(UserSession userSession)
+        public async Task<SessionExtendResult> Extend(GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
 
-                var tppUserSession = (TppUserSession) userSession.GpUserSession;
+                var tppUserSession = (TppUserSession)gpUserSession;
                 var patientSelectedResponse = await _tppClient.PatientSelectedPost(tppUserSession);
 
                 if (patientSelectedResponse.HasSuccessResponse)

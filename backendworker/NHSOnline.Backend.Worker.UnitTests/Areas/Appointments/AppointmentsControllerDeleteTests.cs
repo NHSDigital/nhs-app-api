@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
+            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult) new AppointmentCancelResult.SuccessfullyCancelled()));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var serviceResult = new AppointmentCancelResult.InsufficientPermissions();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
+            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult)serviceResult));
 
             // Act
@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var badResult = new AppointmentCancelResult.AppointmentNotCancellable();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
+            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult)badResult));
 
 
@@ -136,7 +136,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var badResult = new AppointmentCancelResult.TooLateToCancel();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
+            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult)badResult));
 
             // Act
@@ -158,7 +158,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var badResult = new AppointmentCancelResult.BadRequest();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
+            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult)badResult));
 
             // Act
@@ -179,7 +179,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var badResult = new AppointmentCancelResult.SupplierSystemUnavailable();
-            _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
+            _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult)badResult));
 
             // Act

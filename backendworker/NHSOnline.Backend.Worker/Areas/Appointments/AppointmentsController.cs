@@ -16,16 +16,19 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         private readonly ILogger<AppointmentsController> _logger;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IAuditor _auditor;
+        private readonly ISessionCacheService _sessionCacheService;
 
         public AppointmentsController(
             ILogger<AppointmentsController> logger,
             IGpSystemFactory gpSystemFactory,
-            IAuditor auditor
+            IAuditor auditor,
+            ISessionCacheService sessionCacheService
             )
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;
+            _sessionCacheService = sessionCacheService;
         }
 
         [HttpDelete]
@@ -42,7 +45,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
                 var appointmentsService = GetAppointmentsService(userSession);
 
-                var cancelResult = await appointmentsService.Cancel(userSession, model);
+                var cancelResult = await appointmentsService.Cancel(userSession.GpUserSession, model);
 
                 await cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, model.AppointmentId));
                 return cancelResult.Accept(new AppointmentCancelResultVisitor());
@@ -66,12 +69,11 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
                 var appointmentsService = GetAppointmentsService(userSession);
 
-                var result =
-                    await appointmentsService.GetAppointments(userSession);
+                var result = await appointmentsService.GetAppointments(userSession.GpUserSession);
 
                 await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));
 
-                return result.Accept(new AppointmentsResultVisitor());
+                return await result.Accept(new AppointmentsResultVisitor(_sessionCacheService, userSession));
             }
             finally
             {
@@ -94,7 +96,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
                 var appointmentsService = GetAppointmentsService(userSession);
 
-                var bookResult = await appointmentsService.Book(userSession, model);
+                var bookResult = await appointmentsService.Book(userSession.GpUserSession, model);
 
                 await bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, model.SlotId, model.StartTime));
                 return bookResult.Accept(new AppointmentBookResultVisitor());

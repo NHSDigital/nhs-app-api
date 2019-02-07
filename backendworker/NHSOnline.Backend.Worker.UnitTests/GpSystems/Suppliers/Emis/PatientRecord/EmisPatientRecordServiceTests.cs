@@ -17,7 +17,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
     {
         private EmisPatientRecordService _systemUnderTest;
         private Mock<IEmisClient> _emisClient;
-        private UserSession _userSession;
         private EmisUserSession _emisUserSession;
         private IFixture _fixture;
 
@@ -25,14 +24,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
             _emisUserSession = _fixture.Create<EmisUserSession>();
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _emisUserSession));
-            
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
-            _userSession = _fixture.Freeze<UserSession>();
             
             _systemUnderTest = _fixture.Create<EmisPatientRecordService>();
         }
@@ -102,7 +95,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetMyRecord(_userSession);
+            var result = await _systemUnderTest.GetMyRecord(_emisUserSession);
 
             // Assert
             _emisClient.Verify(x => x.MedicalRecordGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId, _emisUserSession.EndUserSessionId, RecordType.Allergies));

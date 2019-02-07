@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             var testResultResponse = _fixture.Create<TestResultResponse>();
             var testResult = new GetDetailedTestResult.SuccessfullyRetrieved(testResultResponse);
             
-            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession, TestResultId))
+            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession.GpUserSession, TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             // Arrange
             var testResult = new GetDetailedTestResult.SupplierBadData();
 
-            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession, TestResultId))
+            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession.GpUserSession, TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             // Arrange
             var testResult = new GetDetailedTestResult.Unsuccessful();
 
-            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession, TestResultId))
+            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession.GpUserSession, TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
 
             // Act

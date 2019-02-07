@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
                 .GetPatientRecordService();
 
             _logger.LogInformation("Fetching patient record");
-            var result = await patientRecordService.GetMyRecord(userSession);
+            var result = await patientRecordService.GetMyRecord(userSession.GpUserSession);
             
             // Audit result of attempt to view patient record    
             await result.Accept(new MyRecordAuditingVisitor(_auditor, _logger));

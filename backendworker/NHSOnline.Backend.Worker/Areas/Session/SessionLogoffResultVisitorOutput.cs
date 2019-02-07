@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.Worker.Areas.Session
     {
         public bool SessionWasDeleted { get; set; }
         public int StatusCode { get; set; }
-        public UserSession UserSession { get; set; }
+        public GpUserSession GpUserSession { get; set; }
     }
 }

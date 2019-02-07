@@ -15,6 +15,7 @@ using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 {
@@ -36,7 +37,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         private const string GetResponseAuditType = "RepeatPrescriptions_ViewHistory_Response";         
         
         private const string PostRequestAuditType = "RepeatPrescriptions_OrderRepeatMedications_Request";
-        private const string PostResponseAuditType = "RepeatPrescriptions_OrderRepeatMedications_Response";         
+        private const string PostResponseAuditType = "RepeatPrescriptions_OrderRepeatMedications_Response";
         
         [TestInitialize]
         public void TestInitialize()
@@ -44,6 +45,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
+
+            _fixture.Customize<UserSession>(c => c
+                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
+
+            _userSession = _fixture.Create<UserSession>();
 
             _prescriptionsDefaultLastNumberMonthsToDisplay = _fixture.Create<int>();
 
@@ -56,7 +62,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _prescriptionRequestValidationService = _fixture.Freeze<Mock<IPrescriptionRequestValidationService>>();
 
-            _userSession = _fixture.Create<UserSession>();
             var httpContextItems = new Dictionary<object, object>
             {
                 { Constants.HttpContextItems.UserSession, _userSession }
@@ -116,7 +121,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
-            prescriptionService.Setup(x => x.GetPrescriptions(_userSession, date, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((PrescriptionResult)getPrescriptionsResult));
+            prescriptionService.Setup(x => x.GetPrescriptions(_userSession.GpUserSession, date, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((PrescriptionResult)getPrescriptionsResult));
 
             _prescriptionRequestValidationService
                 .Setup(x => x.IsValidFromDate(date, It.IsAny<DateTimeOffset>()))
@@ -128,7 +133,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
-            prescriptionService.Verify(x => x.GetPrescriptions(_userSession, date, It.IsAny<DateTimeOffset>()));
+            prescriptionService.Verify(x => x.GetPrescriptions(_userSession.GpUserSession, date, It.IsAny<DateTimeOffset>()));
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
 
@@ -177,9 +182,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
                 .Returns(prescriptionService.Object);
 
             DateTimeOffset? fromDateGenerated = null;
-            prescriptionService.Setup(x => x.GetPrescriptions(_userSession, It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
+            prescriptionService.Setup(x => x.GetPrescriptions(_userSession.GpUserSession, It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
                 .Returns(Task.FromResult((PrescriptionResult)getPrescriptionsResult))
-                .Callback((UserSession s, DateTimeOffset? fd, DateTimeOffset? td) => fromDateGenerated = fd);
+                .Callback((GpUserSession s, DateTimeOffset? fd, DateTimeOffset? td) => fromDateGenerated = fd);
 
             _prescriptionRequestValidationService
                 .Setup(x => x.IsValidFromDate(It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset>()))
@@ -191,7 +196,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
-            prescriptionService.Verify(x => x.GetPrescriptions(_userSession, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()));
+            prescriptionService.Verify(x => x.GetPrescriptions(_userSession.GpUserSession, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()));
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
             Assert.IsNotNull(value);
@@ -232,7 +237,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
-            prescriptionService.Setup(x => x.OrderPrescription(_userSession, It.IsAny<RepeatPrescriptionRequest>()))
+            prescriptionService.Setup(x => x.OrderPrescription(_userSession.GpUserSession, It.IsAny<RepeatPrescriptionRequest>()))
                 .Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
             
             _prescriptionRequestValidationService
@@ -245,7 +250,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
-            prescriptionService.Verify(x => x.OrderPrescription(_userSession, It.IsAny<RepeatPrescriptionRequest>()));
+            prescriptionService.Verify(x => x.OrderPrescription(_userSession.GpUserSession, It.IsAny<RepeatPrescriptionRequest>()));
             result.Should().BeAssignableTo<CreatedResult>();
             
             _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, "Attempting to create a prescription request with course ids: {0}", courseId));
@@ -282,7 +287,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
-            prescriptionService.Setup(x => x.OrderPrescription(_userSession, It.IsAny<RepeatPrescriptionRequest>())).Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
+            prescriptionService.Setup(x => x.OrderPrescription(_userSession.GpUserSession, It.IsAny<RepeatPrescriptionRequest>())).Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
             
             _prescriptionRequestValidationService
                 .Setup(x => x.IsValidRepeatPrescriptionRequest(It.IsAny<RepeatPrescriptionRequest>()))

@@ -11,17 +11,19 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
     {
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<CoursesController> _logger;
-
         private readonly IAuditor _auditor;
-        
+        private readonly ISessionCacheService _sessionCacheService;
+
         public CoursesController(
             ILogger<CoursesController> logger,
             IGpSystemFactory gpSystemFactory,
-            IAuditor auditor)
+            IAuditor auditor,
+            ISessionCacheService sessionCacheService)
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;
+            _sessionCacheService = sessionCacheService;
         }
 
         [HttpGet]
@@ -36,10 +38,10 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
                 .CreateGpSystem(userSession.GpUserSession.Supplier)
                 .GetCourseService();
 
-            var result = await courseService.GetCourses(userSession);
+            var result = await courseService.GetCourses(userSession.GpUserSession);
             
             await result.Accept(new CourseResultAuditingVisitor(_auditor, _logger));
-            return result.Accept(new CourseResultVisitor());
+            return await result.Accept(new CourseResultVisitor(_sessionCacheService, userSession));
         }
     }
 }

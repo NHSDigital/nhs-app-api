@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
 
             _logger.LogInformation($"Calling prescription service to get prescriptions");
-            var result = await prescriptionService.GetPrescriptions(userSession, fromDate, DateTimeOffset.Now);
+            var result = await prescriptionService.GetPrescriptions(userSession.GpUserSession, fromDate, DateTimeOffset.Now);
             
             await result.Accept(new GetPrescriptionResultAuditingVisitor(_auditor, _logger));
             return result.Accept(new PrescriptionResultVisitor());
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
                 var prescriptionService = gpSystem.GetPrescriptionService();
 
                 _logger.LogInformation($"Calling prescription service to order prescriptions");
-                result = await prescriptionService.OrderPrescription(userSession, repeatPrescriptionRequest);      
+                result = await prescriptionService.OrderPrescription(userSession.GpUserSession, repeatPrescriptionRequest);      
             }
 
             await result.Accept(new CreatePrescriptionResultAuditingVisitor(_auditor, _logger, courseIds));

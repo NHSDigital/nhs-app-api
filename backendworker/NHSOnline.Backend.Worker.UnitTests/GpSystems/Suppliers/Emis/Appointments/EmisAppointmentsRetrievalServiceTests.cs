@@ -21,7 +21,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
     {
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
-        private UserSession _userSession;
         private EmisUserSession _emisUserSession;
         private EmisAppointmentsService _systemUnderTest;
         private AppointmentsGetResponse _emisClientGetResponse;
@@ -33,12 +32,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-            
-            _userSession = _fixture.Create<UserSession>();
-            _emisUserSession = (EmisUserSession) _userSession.GpUserSession;
-
+            _emisUserSession = _fixture.Create<EmisUserSession>();
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisClientGetResponse = _fixture.Create<AppointmentsGetResponse>();
             var response = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.OK)
@@ -62,7 +56,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             // Arrange
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
@@ -86,7 +80,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
@@ -100,7 +94,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 .Throws<Exception>();
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.InternalServerError>();
@@ -114,7 +108,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
@@ -133,7 +127,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
@@ -155,7 +149,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
@@ -176,7 +170,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();

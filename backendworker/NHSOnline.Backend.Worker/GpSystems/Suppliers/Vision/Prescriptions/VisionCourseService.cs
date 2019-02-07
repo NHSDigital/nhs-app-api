@@ -19,26 +19,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
         private readonly ConfigurationSettings _settings;
         private readonly IVisionClient _visionClient;
         private readonly IVisionPrescriptionMapper _visionPrescriptionMapper;
-        private readonly ISessionCacheService _sessionCacheService;
 
         public VisionCourseService(
             ILogger<VisionCourseService> logger,
             IOptions<ConfigurationSettings> settings,
             IVisionClient visionClient,
-            IVisionPrescriptionMapper visionPrescriptionMapper,
-            ISessionCacheService sessionCacheService)
+            IVisionPrescriptionMapper visionPrescriptionMapper)
         {
             _logger = logger;
             _settings = settings.Value;
             _visionClient = visionClient;
             _visionPrescriptionMapper = visionPrescriptionMapper;
-            _sessionCacheService = sessionCacheService;
         }
 
-        public async Task<GetCoursesResult> GetCourses(UserSession userSession)
+        public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
         {
             _logger.LogEnter();
-            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
+            var visionUserSession = (VisionUserSession)gpUserSession;
             
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {
@@ -78,10 +75,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                         var courseListResponse = _visionPrescriptionMapper.Map(coursesResponse.Body.EligibleRepeats);
 
                         visionUserSession.AllowFreeTextPrescriptions = coursesResponse.Body.EligibleRepeats.Settings.AllowFreeText;
-                        userSession.GpUserSession = visionUserSession;
-                        await _sessionCacheService.UpdateUserSession(userSession);
 
-                        return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse);
+                        return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse, visionUserSession.AllowFreeTextPrescriptions);
                     }
                     catch (Exception e)
                     {

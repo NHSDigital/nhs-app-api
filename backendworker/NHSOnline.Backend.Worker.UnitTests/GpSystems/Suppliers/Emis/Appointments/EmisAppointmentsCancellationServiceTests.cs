@@ -21,7 +21,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
     public class EmisAppointmentsCancellationServiceTests
     {
         private IFixture _fixture;
-        private UserSession _userSession;
         private EmisUserSession _emisUserSession;
         private Mock<IEmisClient> _mockEmisClient;
         private EmisAppointmentsService _systemUnderTest;
@@ -32,12 +31,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<EmisUserSession>()));
-            
-            _userSession = _fixture.Create<UserSession>();
-            _emisUserSession = (EmisUserSession) _userSession.GpUserSession;
+
+            _emisUserSession = _fixture.Create<EmisUserSession>();
 
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 
@@ -66,7 +61,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -83,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 .Verifiable();
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -100,7 +95,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -121,7 +116,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -143,7 +138,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -164,7 +159,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -181,7 +176,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -201,7 +196,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -222,7 +217,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             MockEmisClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
@@ -239,7 +234,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _request.CancellationReasonId = cancellationReasonId;
 
             // Act
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentCancelResult.BadRequest>();
@@ -252,7 +247,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _request.CancellationReasonId = _fixture.Create<string>();
 
             // Act
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentCancelResult.BadRequest>();
@@ -270,7 +265,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _request.AppointmentId = appointmentId;
 
             // Act
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_emisUserSession, _request);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentCancelResult.BadRequest>();

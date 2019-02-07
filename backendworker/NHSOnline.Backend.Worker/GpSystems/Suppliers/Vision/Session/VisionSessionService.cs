@@ -75,11 +75,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                 : new List<string>();
 
         // Vision does not have a logoff endpoint, returning successfully deleted
-        public Task<SessionLogoffResult> Logoff(UserSession userSession)
+        public Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)
         {
             _logger.LogEnter();
             _logger.LogDebug("Vision user successfully deleted");
-            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
+            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(gpUserSession));
         }
 
         private GpSessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)

@@ -111,10 +111,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         public async Task Delete_DeletingSessionSucceeds_Returns204NoContent()
         {
             // Arrange            
-            var sessionLogoffResult = new SessionLogoffResult.SuccessfullyDeleted(_userSession);
+            var sessionLogoffResult = new SessionLogoffResult.SuccessfullyDeleted(_userSession.GpUserSession);
 
             _mockSessionService
-                .Setup(x => x.Logoff(_userSession))
+                .Setup(x => x.Logoff(_userSession.GpUserSession))
                 .ReturnsAsync(sessionLogoffResult)
                 .Verifiable();
 
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockSessionService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
-            _mockSessionService.Verify(x => x.Logoff(_userSession));
+            _mockSessionService.Verify(x => x.Logoff(_userSession.GpUserSession));
             _mockSessionCacheService.Verify(x => x.DeleteUserSession(_userSession.Key));
             _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), DeleteResponseAuditType, It.IsAny<string>()));
@@ -138,7 +138,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var sessionLogoffResult = new SessionLogoffResult.SupplierSystemUnavailable();
 
             _mockSessionService
-                .Setup(x => x.Logoff(_userSession))
+                .Setup(x => x.Logoff(_userSession.GpUserSession))
                 .ReturnsAsync(sessionLogoffResult)
                 .Verifiable();
 
@@ -149,7 +149,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockSessionService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
-            _mockSessionService.Verify(x => x.Logoff(_userSession));
+            _mockSessionService.Verify(x => x.Logoff(_userSession.GpUserSession));
             _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), DeleteResponseAuditType, It.IsAny<string>()));
         }

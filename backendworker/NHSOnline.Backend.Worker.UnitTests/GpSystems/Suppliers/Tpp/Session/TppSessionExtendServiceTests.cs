@@ -20,8 +20,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
 
         private IFixture _fixture;
         private TppUserSession _tppUserSession;
-        private UserSession _userSession;
-        
         private TppSessionExtendService _systemUnderTest;
         private Mock<ITppClient> _mockTppClient;
 
@@ -29,14 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
             _tppUserSession = _fixture.Create<TppUserSession>();
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _tppUserSession));
-
-            _userSession = _fixture.Create<UserSession>();
-
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
 
             _systemUnderTest = _fixture.Create<TppSessionExtendService>();
@@ -53,7 +44,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_userSession);
+            var result = await _systemUnderTest.Extend(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.SuccessfullyExtended>();
@@ -71,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_userSession);
+            var result = await _systemUnderTest.Extend(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
@@ -87,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Extend(_userSession);
+            var result = await _systemUnderTest.Extend(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();

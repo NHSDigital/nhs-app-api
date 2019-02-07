@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             var demographicsResponse = _fixture.Create<DemographicsResponse>();
             var demographicsResult = new DemographicsResult.SuccessfullyRetrieved(demographicsResponse);
 
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession))
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             // Arrange
             var demographicsResult = new DemographicsResult.UserHasNoAccess();
 
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
         {
             // Arrange
             var demographicsResult = new DemographicsResult.SupplierSystemUnavailable();
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             // Arrange
             var demographicsResult = new DemographicsResult.InternalServerError();
 
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             // Arrange
             var demographicsResult = new DemographicsResult.Unsuccessful();
 
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
             var result = await _systemUnderTest.Get();

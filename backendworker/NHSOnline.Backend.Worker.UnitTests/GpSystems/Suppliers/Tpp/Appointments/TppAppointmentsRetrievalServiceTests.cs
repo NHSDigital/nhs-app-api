@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         private IFixture _fixture;
         private TppAppointmentsService _systemUnderTest;
         private TppUserSession _tppUserSession;
-        private UserSession _userSession;
         private Mock<ITppClient> _mockTppClient;
         private Mock<IAppointmentsReplyMapper> _mockResponseMapper;
         private AppointmentsResponse _mappedResponse;
@@ -41,12 +40,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _tppUserSession));
-            
-            _userSession = _fixture.Create<UserSession>();
-            
+                        
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
             
             _tppViewPastAppointmentsReply = new ViewAppointmentsReply()
@@ -158,7 +152,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             // Arrange
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
@@ -181,7 +175,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
@@ -195,7 +189,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 .Throws<Exception>();
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.InternalServerError>();
@@ -210,7 +204,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentsGetMethod(tppResponse, true);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
@@ -232,7 +226,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentsGetMethod(tppResponse, true);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
@@ -247,7 +241,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentsGetMethod(_tppErrorResponse, true);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
@@ -260,7 +254,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentsGetMethod(_tppErrorResponse, true);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
@@ -273,7 +267,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentsGetMethod(_tppErrorResponse, true);
 
             // Act
-            var result = await _systemUnderTest.GetAppointments(_userSession);
+            var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();

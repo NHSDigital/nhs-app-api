@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         private IFixture _fixture;
         private Mock<IVisionClient> _mockVisionClient;
         private VisionUserSession _visionUserSession;
-        private UserSession _userSession;
         private VisionResponse<AvailableAppointmentsResponse> _visionClientSlotsResponse;
         private VisionResponse<PatientConfigurationResponse> _visionClientConfigResponse;
         private AppointmentSlotsDateRange _dateRange;
@@ -46,12 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsAppointmentsEnabled = true;
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _visionUserSession));
-            
-            _userSession = _fixture.Create<UserSession>();
-            
+                        
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientSlotsResponse = _fixture.Create<VisionResponse<AvailableAppointmentsResponse>>();
             
@@ -103,7 +97,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var systemUnderTest = BuildSystemUnderTest();
 
             // Act
-            var result = await systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
 
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>().Subject.Response;
@@ -124,7 +118,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var systemUnderTest = BuildSystemUnderTest();
             
             // Act
-            var result = await systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
             
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>().Subject.Response;
@@ -141,7 +135,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var systemUnderTest = BuildSystemUnderTest();
             
             // Act
-            var result = await systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
             
             // Assert
             var response = result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>().Subject.Response;
@@ -159,7 +153,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var systemUnderTest = BuildSystemUnderTest();
             
             // Act
-            var result = await systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
             
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
@@ -175,7 +169,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var systemUnderTest = BuildSystemUnderTest();
 
             // Act
-            var result = await systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
 
             // Assert
             _mockVisionClient.Verify();
@@ -195,7 +189,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var systemUnderTest = BuildSystemUnderTest();
 
             // Act
-            var result = await systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
@@ -212,7 +206,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var systemUnderTest = BuildSystemUnderTest();
 
             // Act
-            var result = await systemUnderTest.GetSlots(_userSession, _dateRange);
+            var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
 
             // Assert
             result.Should().BeAssignableTo<AppointmentSlotsResult.InternalServerError>();

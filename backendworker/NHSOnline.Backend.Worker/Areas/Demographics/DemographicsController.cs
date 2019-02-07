@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
                     .GetDemographicsService();
 
                 _logger.LogDebug("Fetching Demographics");
-                var result = await demographicsService.GetDemographics(userSession);
+                var result = await demographicsService.GetDemographics(userSession.GpUserSession);
 
                 await result.Accept(new DemographicsAuditingVisitor(_auditor, _logger));
                 

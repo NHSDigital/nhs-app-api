@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
                     .GetDemographicsService();
 
                 _logger.LogDebug("Fetching Demographics");
-                var myRecordGetResult = await demographicsService.GetDemographics(userSession);
+                var myRecordGetResult = await demographicsService.GetDemographics(userSession.GpUserSession);
 
                 var result = await _organDonationService.GetOrganDonation(myRecordGetResult, userSession);
 

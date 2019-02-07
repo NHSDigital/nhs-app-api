@@ -73,13 +73,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             }
         }
 
-        public async Task<SessionLogoffResult> Logoff(UserSession userSession)
+        public async Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
             
-                var tppUserSession = (TppUserSession) userSession.GpUserSession;
+                var tppUserSession = (TppUserSession)gpUserSession;
                 var logoffReply = await _client.LogoffPost(tppUserSession);
 
                 if (!logoffReply.HasSuccessResponse) 
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                 }
 
                 _logger.LogDebug($"TPP user session successfully deleted");
-                return new SessionLogoffResult.SuccessfullyDeleted(userSession);
+                return new SessionLogoffResult.SuccessfullyDeleted(gpUserSession);
 
             }
             catch (HttpRequestException e)

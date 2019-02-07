@@ -6,6 +6,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Session
     {
         Task<GpSessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber);
 
-        Task<SessionLogoffResult> Logoff(UserSession userSession);
+        Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession);
     }
 }

@@ -28,9 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         private Mock<IVisionClient> _visionClient;
         private Mock<IVisionPrescriptionMapper> _visionMapper;
         private IOptions<ConfigurationSettings> _options;
-        private Mock<ISessionCacheService> _sessionCacheService;
         private VisionUserSession _visionUserSession;
-        private UserSession _userSession;
         private IFixture _fixture;
         private VisionResponseEnvelope<EligibleRepeatsResponse> _eligibleRepeatsResponse;
 
@@ -43,16 +41,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             
             _visionUserSession = _fixture.Create<VisionUserSession>();
             _visionUserSession.IsRepeatPrescriptionsEnabled = true;
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _visionUserSession));
-            
-            _userSession = _fixture.Create<UserSession>();
 
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
             
             _visionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
-            _sessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _options = Options.Create(new ConfigurationSettings
             {
                 CoursesMaxCoursesLimit = CoursesMaxCoursesLimit
@@ -106,7 +98,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 .Returns(mappedResponse);
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
@@ -134,13 +126,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 .Returns(mappedResponse);
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
             Assert.IsTrue(_visionUserSession.AllowFreeTextPrescriptions); // should be updated
-            _sessionCacheService.Verify(x => x.UpdateUserSession(It.Is<UserSession>(vus => ((VisionUserSession)vus.GpUserSession).AllowFreeTextPrescriptions)));
-            _sessionCacheService.Verify(x => x.UpdateUserSession(_userSession));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
 
             ((GetCoursesResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
@@ -153,7 +143,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             _visionUserSession.IsRepeatPrescriptionsEnabled = false;
             
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
@@ -196,7 +186,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 .Callback<EligibleRepeats>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
@@ -221,7 +211,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                             }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
@@ -236,7 +226,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
@@ -261,7 +251,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));

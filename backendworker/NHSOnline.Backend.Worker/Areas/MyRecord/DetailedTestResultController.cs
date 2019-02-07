@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
                     .GetPatientRecordService();
 
                 _logger.LogInformation("Fetching detailed test result");
-                var result = await patientRecordService.GetDetailedTestResult(userSession, testResultId);
+                var result = await patientRecordService.GetDetailedTestResult(userSession.GpUserSession, testResultId);
 
                 await result.Accept(new DetailedTestResultAuditingVisitor(_auditor, _logger));
                 return result.Accept(new DetailedTestResultVisitor());

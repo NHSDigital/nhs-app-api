@@ -1,7 +1,6 @@
-﻿using System;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
+﻿using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
@@ -22,19 +21,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             _canceller = canceller;
         }
         
-        public async Task<AppointmentBookResult> Book(UserSession userSession, AppointmentBookRequest request)
+        public async Task<AppointmentBookResult> Book(GpUserSession gpUserSession, AppointmentBookRequest request)
         {
-            return await _booker.Book((VisionUserSession) userSession.GpUserSession, request);
+            return await _booker.Book((VisionUserSession)gpUserSession, request);
         }
 
-        public async Task<AppointmentCancelResult> Cancel(UserSession userSession, AppointmentCancelRequest request)
+        public async Task<AppointmentCancelResult> Cancel(GpUserSession gpUserSession, AppointmentCancelRequest request)
         {
-            return await _canceller.Cancel((VisionUserSession) userSession.GpUserSession, request);
+            return await _canceller.Cancel((VisionUserSession)gpUserSession, request);
         }
 
-        public async Task<AppointmentsResult> GetAppointments(UserSession userSession)
+        public async Task<AppointmentsResult> GetAppointments(GpUserSession gpUserSession)
         {
-            return await _getter.GetAppointments(userSession);
+            return await _getter.GetAppointments(gpUserSession);
         }
     }
 }

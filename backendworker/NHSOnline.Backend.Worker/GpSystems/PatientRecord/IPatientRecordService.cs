@@ -4,8 +4,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.PatientRecord
 {
     public interface IPatientRecordService
     {
-        Task<GetMyRecordResult> GetMyRecord(UserSession userSession);  
+        Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession);  
         
-        Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId);
+        Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId);
     }
 }

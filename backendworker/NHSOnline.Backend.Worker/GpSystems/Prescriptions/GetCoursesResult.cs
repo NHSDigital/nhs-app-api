@@ -9,10 +9,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
         public class SuccessfullyRetrieved : GetCoursesResult
         {
             public CourseListResponse Response { get; }
+            public bool? AllowFreeTextPrescriptions { get; }
 
-            public SuccessfullyRetrieved(CourseListResponse response)
+            public SuccessfullyRetrieved(CourseListResponse response, bool? allowFreeTextPrescriptions = null)
             {
                 Response = response;
+                AllowFreeTextPrescriptions = allowFreeTextPrescriptions;
             }
 
             public override T Accept<T>(ICourseResultVisitor<T> visitor)

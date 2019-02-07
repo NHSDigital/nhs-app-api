@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var extendedResult = (SessionExtendResult)new SessionExtendResult.SuccessfullyExtended();
 
             _mockSessionExtendService
-                .Setup(x => x.Extend(_userSession))
+                .Setup(x => x.Extend(_userSession.GpUserSession))
                 .Returns(Task.FromResult(extendedResult))
                 .Verifiable();
 
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var extendedResult = (SessionExtendResult)new SessionExtendResult.SupplierSystemUnavailable();
 
             _mockSessionExtendService
-                .Setup(x => x.Extend(_userSession))
+                .Setup(x => x.Extend(_userSession.GpUserSession))
                 .Returns(Task.FromResult(extendedResult))
                 .Verifiable();
 

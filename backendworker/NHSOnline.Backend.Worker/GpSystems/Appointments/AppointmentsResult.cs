@@ -1,4 +1,5 @@
-﻿using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.SharedModels;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Appointments
 {
@@ -14,9 +15,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Appointments
         {
             public AppointmentsResponse Response { get; }
 
-            public SuccessfullyRetrieved(AppointmentsResponse response)
+            public Necessity? BookingReasonNecessity { get; }
+
+            public SuccessfullyRetrieved(AppointmentsResponse response, Necessity? bookingReasonNecessity = null)
             {
                 Response = response;
+                BookingReasonNecessity = bookingReasonNecessity;
             }
 
             public override T Accept<T>(IAppointmentsResultVisitor<T> visitor)

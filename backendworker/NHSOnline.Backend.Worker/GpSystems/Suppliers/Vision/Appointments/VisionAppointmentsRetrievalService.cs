@@ -30,13 +30,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             _sessionCacheService = sessionCacheService;
         }
         
-        public async Task<AppointmentsResult> GetAppointments(UserSession userSession)
+        public async Task<AppointmentsResult> GetAppointments(GpUserSession gpUserSession)
         {
             try
             {
                 _logger.LogEnter();
             
-                var visionUserSession = (VisionUserSession) userSession.GpUserSession;
+                var visionUserSession = (VisionUserSession)gpUserSession;
 
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 var response = await _visionClient.GetExistingAppointments(
                     visionUserSession
                     );
-                return await InterpretAppointmentsGetResponse(response, userSession);
+                return InterpretAppointmentsGetResponse(response, gpUserSession);
             }
             catch (HttpRequestException exception)
             {
@@ -60,9 +60,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
         }
 
-        private async Task<AppointmentsResult> InterpretAppointmentsGetResponse(
+        private AppointmentsResult InterpretAppointmentsGetResponse(
             VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> response,
-            UserSession userSession)
+            GpUserSession gpUserSession)
         {
             if (response.IsAccessDeniedError)
             {
@@ -78,11 +78,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             
             try
             {
-                var updateUserSessionTask = UpdateUserSessionBookingReasonNecessity(userSession, response);
+                var visionUserSession = (VisionUserSession)gpUserSession;
+                UpdateUserSessionBookingReasonNecessity(visionUserSession, response);
 
-                var result = new AppointmentsResult.SuccessfullyRetrieved(_responseMapper.Map(response.Body));
+                var result = new AppointmentsResult.SuccessfullyRetrieved(_responseMapper.Map(response.Body), visionUserSession.AppointmentBookingReasonNecessity);
 
-                await updateUserSessionTask;
                 return result;
             }
             catch (Exception e)
@@ -92,16 +92,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
         }
 
-        private async Task UpdateUserSessionBookingReasonNecessity(UserSession userSession,
+        private static void UpdateUserSessionBookingReasonNecessity(VisionUserSession visionUserSession,
             VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {
-            var visionUserSession = (VisionUserSession) userSession.GpUserSession;
             visionUserSession.AppointmentBookingReasonNecessity = response.Body.Appointments.Settings.BookingReason.Add
                 ? Necessity.Optional
                 : Necessity.NotAllowed;
-
-            userSession.GpUserSession = visionUserSession;
-            await _sessionCacheService.UpdateUserSession(userSession);
         }
     }
 }

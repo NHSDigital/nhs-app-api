@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var demographicsResult = new DemographicsResult.SuccessfullyRetrieved(new DemographicsResponse());
 
             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession))
+            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();

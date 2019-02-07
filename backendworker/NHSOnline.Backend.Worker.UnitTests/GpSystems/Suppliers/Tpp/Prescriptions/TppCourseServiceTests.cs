@@ -28,7 +28,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
         private Mock<ITppCourseMapper> _tppCourseMapper;
         private IOptions<ConfigurationSettings> _options;
         private TppUserSession _tppUserSession;
-        private UserSession _userSession;
         private IFixture _fixture;
 
         private const int CoursesMaxCoursesLimit = 100;
@@ -39,13 +38,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _tppUserSession));
 
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
-            
-            _userSession = _fixture.Create<UserSession>();
             
             _tppCourseMapper = _fixture.Freeze<Mock<ITppCourseMapper>>();
             _options = Options.Create(new ConfigurationSettings
@@ -73,7 +67,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
@@ -97,7 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
@@ -121,7 +115,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
@@ -169,7 +163,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                 .Callback<List<Medication>>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
@@ -195,7 +189,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                                 ErrorResponse = _fixture.Create<Error>()
                             }));
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
@@ -210,7 +204,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
@@ -263,7 +257,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                 .Callback<List<Medication>>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
@@ -290,7 +284,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                                 ErrorResponse = expectedError
                             }));
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();

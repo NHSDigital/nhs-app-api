@@ -29,7 +29,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
         private Mock<ITppPrescriptionMapper> _tppPrescriptionMapper;
         private IOptions<ConfigurationSettings> _options;
         private TppUserSession _tppUserSession;
-        private UserSession _userSession;
         private IFixture _fixture;
 
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
@@ -40,15 +39,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _tppUserSession = _fixture.Create<TppUserSession>();
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _tppUserSession));
 
             _tppClient = _fixture.Freeze<Mock<ITppClient>>();
             _tppPrescriptionMapper = _fixture.Freeze<Mock<ITppPrescriptionMapper>>();
-            
-            _userSession = _fixture.Create<UserSession>();
-            
+                        
             _options = Options.Create(new ConfigurationSettings
             {
                 PrescriptionsMaxCoursesSoftLimit = PrescriptionsMaxCoursesSoftLimit
@@ -73,7 +67,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_userSession);
+            var result = await _systemUnderTest.GetPrescriptions(_tppUserSession);
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
@@ -121,7 +115,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                 .Callback<List<Medication>>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_userSession);
+            var result = await _systemUnderTest.GetPrescriptions(_tppUserSession);
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
@@ -147,7 +141,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                                 ErrorResponse = _fixture.Create<Error>()
                             }));
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_userSession);
+            var result = await _systemUnderTest.GetPrescriptions(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
@@ -162,7 +156,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_userSession);
+            var result = await _systemUnderTest.GetPrescriptions(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
@@ -187,7 +181,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                                 ErrorResponse = expectedError
                             }));
             // Act
-            var result = await _systemUnderTest.GetPrescriptions(_userSession);
+            var result = await _systemUnderTest.GetPrescriptions(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
@@ -214,7 +208,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_tppUserSession, request);
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
@@ -238,7 +232,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_tppUserSession, request);
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
@@ -266,7 +260,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_tppUserSession, request);
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
@@ -290,7 +284,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_tppUserSession, request);
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
@@ -324,7 +318,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     });
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_tppUserSession, request);
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
@@ -352,7 +346,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
                     }));
 
             // Act
-            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+            var result = await _systemUnderTest.OrderPrescription(_tppUserSession, request);
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));

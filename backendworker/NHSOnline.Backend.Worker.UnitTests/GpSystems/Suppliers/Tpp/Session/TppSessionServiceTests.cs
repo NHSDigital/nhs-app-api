@@ -16,6 +16,7 @@ using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Http;
+using NHSOnline.Backend.Worker.GpSystems;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
 {
@@ -28,7 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         private Mock<ITppSessionMapper> _mockTppSessionMapper;
         private TppSessionService _systemUnderTest;
         private Authenticate _actual;
-        private UserSession _userSession;
+        private GpUserSession _tppUserSession;
         private int _sessionTimeoutMinutes;
         private string _nhsNumber;
         private const string ResponseSuidHeader = "suid";
@@ -38,9 +39,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _fixture.Create<TppUserSession>()));
+
+            _tppUserSession = _fixture.Create<TppUserSession>();
             
             _actual = null;
             _authenticatePostResult = null;
@@ -61,8 +61,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _nhsNumber = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
             
-            _userSession = _fixture.Create<UserSession>();
-
             _mockConfigurationSettings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
             _mockConfigurationSettings
                 .Setup(x => x.Value)
@@ -279,7 +277,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
         
             // Act
-            var result = await _systemUnderTest.Logoff(_userSession);
+            var result = await _systemUnderTest.Logoff(_tppUserSession);
         
             // Assert
             result.Should().BeOfType<SessionLogoffResult.SuccessfullyDeleted>();
@@ -299,7 +297,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act 
-            var result = await _systemUnderTest.Logoff(_userSession);
+            var result = await _systemUnderTest.Logoff(_tppUserSession);
             
             // Assert 
             result.Should().BeAssignableTo<SessionLogoffResult.SupplierSystemUnavailable>();
@@ -320,7 +318,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
-            var result = await _systemUnderTest.Logoff(_userSession);
+            var result = await _systemUnderTest.Logoff(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<SessionLogoffResult.SupplierSystemUnavailable>();
@@ -341,7 +339,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
 
             // Act
-            var result = await _systemUnderTest.Logoff(_userSession);
+            var result = await _systemUnderTest.Logoff(_tppUserSession);
 
             // Assert
             result.Should().BeAssignableTo<SessionLogoffResult.NotAuthenticated>();

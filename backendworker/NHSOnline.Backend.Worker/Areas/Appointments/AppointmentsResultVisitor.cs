@@ -1,34 +1,49 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    public class AppointmentsResultVisitor : IAppointmentsResultVisitor<IActionResult>
+    public class AppointmentsResultVisitor : IAppointmentsResultVisitor<Task<IActionResult>>
     {
-        public IActionResult Visit(AppointmentsResult.SuccessfullyRetrieved result)
+        readonly ISessionCacheService _sessionCacheService;
+        readonly UserSession _userSession;
+
+        public AppointmentsResultVisitor(ISessionCacheService sessionCacheService, UserSession userSession)
         {
+            _sessionCacheService = sessionCacheService;
+            _userSession = userSession;
+        }
+
+        public async Task<IActionResult> Visit(AppointmentsResult.SuccessfullyRetrieved result)
+        {
+            if (result.BookingReasonNecessity != null)
+            {
+                await _sessionCacheService.UpdateUserSession(_userSession);
+            }
+            
             return new OkObjectResult(result.Response);
         }
 
-        public IActionResult Visit(AppointmentsResult.BadRequest result)
+        public async Task<IActionResult> Visit(AppointmentsResult.BadRequest result)
         {
-            return new BadRequestResult();
+            return await Task.FromResult(new BadRequestResult());
         }
 
-        public IActionResult Visit(AppointmentsResult.SupplierSystemUnavailable result)
+        public async Task<IActionResult> Visit(AppointmentsResult.SupplierSystemUnavailable result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status502BadGateway));
         }
 
-        public IActionResult Visit(AppointmentsResult.InternalServerError result)
+        public async Task<IActionResult> Visit(AppointmentsResult.InternalServerError result)
         {
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status500InternalServerError));
         }
 
-        public IActionResult Visit(AppointmentsResult.CannotViewAppointments result)
+        public async Task<IActionResult> Visit(AppointmentsResult.CannotViewAppointments result)
         {
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+            return await Task.FromResult(new StatusCodeResult(StatusCodes.Status403Forbidden));
         }
     }
 }

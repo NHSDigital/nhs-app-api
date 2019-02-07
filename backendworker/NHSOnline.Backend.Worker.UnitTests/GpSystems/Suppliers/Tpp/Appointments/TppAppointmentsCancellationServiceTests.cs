@@ -21,7 +21,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
     {
         private IFixture _fixture;
         private TppUserSession _tppUserSession;
-        private UserSession _userSession;
         private Mock<ITppClient> _mockTppClient;
         private TppAppointmentsService _systemUnderTest;
         private AppointmentCancelRequest _request;
@@ -31,11 +30,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _tppUserSession = _fixture.Create<TppUserSession>();
-            
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _tppUserSession));
-            
-            _userSession = _fixture.Create<UserSession>();
 
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
 
@@ -61,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentCancelMethod(response);
 
             // Act
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_tppUserSession, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -78,7 +72,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 .Verifiable();
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_tppUserSession, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -99,7 +93,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_tppUserSession, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -120,7 +114,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_tppUserSession, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -141,7 +135,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_tppUserSession, _request);
 
             // Assert
             _mockTppClient.Verify();
@@ -163,7 +157,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             MockTppClientAppointmentCancelMethod(response);
 
             // Act            
-            var result = await _systemUnderTest.Cancel(_userSession, _request);
+            var result = await _systemUnderTest.Cancel(_tppUserSession, _request);
 
             // Assert
             _mockTppClient.Verify();

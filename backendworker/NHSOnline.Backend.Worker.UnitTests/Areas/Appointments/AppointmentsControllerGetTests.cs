@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _appointmentsResponse = _fixture.Create<AppointmentsResponse>();
             var result = new AppointmentsResult.SuccessfullyRetrieved(_appointmentsResponse);
 
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
                 .Returns(Task.FromResult((AppointmentsResult)result));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var appointmentsResponse = _fixture.Create<AppointmentsResponse>();
             var successResponse = new AppointmentsResult.SuccessfullyRetrieved(appointmentsResponse);
 
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
                 .Returns(Task.FromResult((AppointmentsResult) successResponse));
 
             // Act
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Get_ReturnsBadGateway_WhenServiceReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
                 .Returns(Task.FromResult((AppointmentsResult) new AppointmentsResult.SupplierSystemUnavailable()));
 
             // Act
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var badResult = new AppointmentsResult.BadRequest();
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
                 .Returns(Task.FromResult((AppointmentsResult)badResult));
 
             // Act
@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var badResult = new AppointmentsResult.InternalServerError();
-            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession))
+            _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
                 .Returns(Task.FromResult((AppointmentsResult)badResult));
 
             // Act

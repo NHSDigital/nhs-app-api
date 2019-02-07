@@ -21,13 +21,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _logger = logger;
             _slotResultBuilder = appointmentSlotResultBuilder;
         }
-        public async Task<AppointmentSlotsResult> GetSlots(UserSession userSession, AppointmentSlotsDateRange dateRange)
+        public async Task<AppointmentSlotsResult> GetSlots(GpUserSession gpUserSession, AppointmentSlotsDateRange dateRange)
         {
             try
             {
                 _logger.LogEnter();
             
-                var tppUserSession = (TppUserSession) userSession.GpUserSession;
+                var tppUserSession = (TppUserSession) gpUserSession;
                 var request = new ListSlots(tppUserSession, dateRange);
                 var listSlotsTask = _tppClient.ListSlotsPost(request, tppUserSession.Suid);
                 await Task.WhenAll(listSlotsTask);

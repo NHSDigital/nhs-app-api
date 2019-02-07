@@ -25,14 +25,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         }
 
         public async Task<AppointmentSlotsResult> GetSlots(
-            UserSession userSession, 
+            GpUserSession gpUserSession, 
             AppointmentSlotsDateRange dateRange)
         {
             try
             {
                 _logger.LogEnter();
             
-                var emisUserSession = (EmisUserSession) userSession.GpUserSession;
+                var emisUserSession = (EmisUserSession) gpUserSession;
                 var patientLinkToken = emisUserSession.UserPatientLinkToken;
                 var metaParams = new SlotsMetadataGetQueryParameters(dateRange.FromDate, dateRange.ToDate,
                     patientLinkToken);

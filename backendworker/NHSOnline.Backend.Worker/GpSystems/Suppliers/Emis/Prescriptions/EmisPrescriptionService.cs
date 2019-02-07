@@ -32,10 +32,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             _emisPrescriptionMapper = emisPrescriptionMapper;
         }
 
-        public async Task<PrescriptionResult> GetPrescriptions(UserSession userSession, DateTimeOffset? fromDate,
+        public async Task<PrescriptionResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
-            var emisUserSession = (EmisUserSession) userSession.GpUserSession;
+            var emisUserSession = (EmisUserSession) gpUserSession;
 
             try
             {
@@ -146,9 +146,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             return prescriptionListResponseFiltered;
         }
 
-        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<PrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            var emisUserSession = (EmisUserSession) userSession.GpUserSession;
+            var emisUserSession = (EmisUserSession) gpUserSession;
 
             var postRequest = new PrescriptionRequestsPost
             {

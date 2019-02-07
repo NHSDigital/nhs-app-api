@@ -10,12 +10,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Session
 
         public class SuccessfullyDeleted : SessionLogoffResult
         {
-            public UserSession UserSession { get; }
+            public GpUserSession GpUserSession { get; }
 
             public SuccessfullyDeleted(
-                UserSession userSession)
+                GpUserSession gpUserSession)
             {
-                UserSession = userSession;
+                GpUserSession = gpUserSession;
             }
 
             public override T Accept<T>(ISessionLogoffResultVisitor<T> visitor)

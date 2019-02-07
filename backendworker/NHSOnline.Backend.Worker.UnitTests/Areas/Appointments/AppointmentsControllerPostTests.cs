@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
-            _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
+            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SuccessfullyBooked()));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Post_AppointmentsServiceBookReturnsInsufficientPermissions_ReturnsForbidden()
         {
             // Arrange
-            _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
+            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.InsufficientPermissions()));
 
             // Act
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Post_AppointmentsServiceBookReturnsLimitReached_ReturnsLimitReachedStatus()
         {
             // Arrange
-            _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
+            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.AppointmentLimitReached()));
 
             // Act
@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Post_AppointmentsServiceBookReturnsSlotNotAvailable_ReturnsConflict()
         {
             // Arrange
-            _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
+            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SlotNotAvailable()));
 
             // Act
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Post_AppointmentsServiceBookReturnsSupplierSystemUnavailable_ReturnsBadGateway()
         {
             // Arrange
-            _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
+            _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SupplierSystemUnavailable()));
 
             // Act

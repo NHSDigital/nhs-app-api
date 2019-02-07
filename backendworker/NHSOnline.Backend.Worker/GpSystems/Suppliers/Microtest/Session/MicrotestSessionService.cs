@@ -26,9 +26,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Microtest.Session
             return new GpSessionCreateResult.SuccessfullyCreated("Microtest user", session);
         }
 
-        public Task<SessionLogoffResult> Logoff(UserSession userSession)
+        public Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)
         {
-            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
+            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(gpUserSession));
         }
     }
 }

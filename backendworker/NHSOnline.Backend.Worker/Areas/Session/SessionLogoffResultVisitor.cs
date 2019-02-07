@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             return new SessionLogoffResultVisitorOutput
             {
                 SessionWasDeleted = true,
-                UserSession = successfullyDeleted.UserSession,
+                GpUserSession = successfullyDeleted.GpUserSession,
             };
         } 
 

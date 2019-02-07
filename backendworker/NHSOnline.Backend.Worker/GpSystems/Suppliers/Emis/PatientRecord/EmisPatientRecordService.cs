@@ -44,11 +44,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             _consultationsTaskChecker = consultationsTaskChecker;
         }
 
-        public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
+        public async Task<GetMyRecordResult> GetMyRecord(GpUserSession gpUserSession)
         {
             _logger.LogEnter();
 
-            var emisUserSession = (EmisUserSession)userSession.GpUserSession;
+            var emisUserSession = (EmisUserSession)gpUserSession;
 
             try
             {
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             }
         }
 
-        public Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
+        public Task<GetDetailedTestResult> GetDetailedTestResult(GpUserSession gpUserSession, string testResultId)
         {
             throw new NotImplementedException();
         }

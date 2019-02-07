@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
         private Mock<IEmisClient> _emisClient;
         private Mock<IEmisPrescriptionMapper> _emisPrescriptionMapper;
         private IOptions<ConfigurationSettings> _options;
-        private UserSession _userSession;
         private EmisUserSession _emisUserSession;
         private IFixture _fixture;
         private ILogger<EmisCourseService> _logger;        
@@ -40,14 +39,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _emisUserSession = _fixture.Create<EmisUserSession>();
-            _fixture.Customize<UserSession>(c => c
-                .With(u => u.GpUserSession, _emisUserSession));
             
             _logger = Mock.Of<ILogger<EmisCourseService>>();
 
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
-            
-            _userSession = _fixture.Create<UserSession>();
             
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
             _options = Options.Create(new ConfigurationSettings
@@ -76,7 +71,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
@@ -138,7 +133,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
@@ -196,7 +191,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
@@ -264,7 +259,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
@@ -297,7 +292,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
@@ -317,7 +312,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
@@ -339,7 +334,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
@@ -360,7 +355,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                         { ExceptionErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.GetCourses(_userSession);
+            var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();

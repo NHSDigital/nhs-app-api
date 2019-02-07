@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             _logger.LogDebug($"Fetch session extend Service for GP System: '{userSession.GpUserSession.Supplier}'.");
             var gpSystem = _gpSystemFactory.CreateGpSystem(userSession.GpUserSession.Supplier);
             var sessionService = gpSystem.GetSessionExtendService();
-            var extendResult = await sessionService.Extend(userSession);
+            var extendResult = await sessionService.Extend(userSession.GpUserSession);
             return extendResult.Accept(new SessionExtendResultVisitor());
         }
     }
