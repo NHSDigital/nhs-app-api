@@ -1,5 +1,6 @@
 package features.myrecord.stepDefinitions
 
+import config.Config
 import cucumber.api.java.en.And
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
@@ -7,8 +8,10 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.TestResultsFactory
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import features.sharedSteps.BrowserSteps
 import mocking.data.myrecord.TestResultsData
 import net.serenitybdd.core.Serenity
+import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
@@ -26,6 +29,8 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
     lateinit var errorPage: ErrorPage
     lateinit var myRecordInfoPage: MyRecordInfoPage
+    @Steps
+    lateinit var browser: BrowserSteps
 
     @Given("^an error occurs retrieving the test result detail$")
     fun givenAnErrorOccursGettingTestResultDetailForTpp() {
@@ -328,6 +333,12 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("I see the my record page scrolled to the test result section")
     fun thenISeeMyRecordPageScrolledToTestResultSection() {
         Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
+    }
+
+    @When("^I enter url address for test results detail directly into the url$")
+    fun whenIEnterUrlAddressForTestResultsDetailDirectlyIntoTheUrl() {
+        val fullUrl = Config.instance.url + "/my-record/test-results-detail"
+        browser.browseTo(fullUrl)
     }
 }
 

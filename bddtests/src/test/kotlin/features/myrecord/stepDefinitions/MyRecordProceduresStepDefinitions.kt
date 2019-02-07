@@ -1,9 +1,13 @@
 package features.myrecord.stepDefinitions
 
+import config.Config
 import cucumber.api.java.en.And
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.ProceduresFactoryVision
+import features.sharedSteps.BrowserSteps
+import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.assertSingleElementPresent
@@ -13,6 +17,8 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
     lateinit var  proceduresFactoryVision: ProceduresFactoryVision
+    @Steps
+    lateinit var browser: BrowserSteps
 
     @Then("^I see the procedures heading$" )
     fun thenISeeTheProceduresHeading() {
@@ -63,4 +69,9 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
         Assert.assertTrue(myRecordInfoPage.isVisionSectionPageVisible(sectionName, sectionName))
     }
 
+    @When("^I enter url address for procedures detail directly into the url$")
+    fun whenIEnterUrlAddressForProceduresDetailDirectlyIntoTheUrl() {
+        val fullUrl = Config.instance.url + "/my-record/procedures-detail"
+        browser.browseTo(fullUrl)
+    }
 }
