@@ -5,14 +5,14 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.Support;
-using Name = NHSOnline.Backend.Worker.OrganDonation.Models.Name;
+using Name = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Name;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 {
     [TestClass]
     public class OrganDonationNameMapperTests
     {
-        private IMapper<string, NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name, Name>
+        private IMapper<string, NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Name, Name>
             _organDonationNameMapper;
 
         [TestInitialize]
@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Act 
             var result = _organDonationNameMapper.Map("MR John Smith",
-                new NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name
+                new NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Name
                 {
                     GivenName = "Joanne",
                     Surname = "Beanstalk",
@@ -195,7 +195,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Act 
             var result = _organDonationNameMapper.Map(null,
-                new NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name
+                new NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Name
                 {
                     GivenName = "Joanne",
                     Surname = "Beanstalk",
@@ -214,7 +214,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Act 
             var result = _organDonationNameMapper.Map(null,
-                new NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name
+                new NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Name
                 {
                     GivenName = "Joanne",
                     Surname = "Beanstalk",
@@ -233,7 +233,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Act 
             var result = _organDonationNameMapper.Map(null,
-                new NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name
+                new NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Name
                 {
                     GivenName = null,
                     Surname = "Beanstalk",
@@ -252,7 +252,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Act 
             var result = _organDonationNameMapper.Map(null,
-                new NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name
+                new NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Name
                 {
                     GivenName = "Joanne",
                     Surname = null,

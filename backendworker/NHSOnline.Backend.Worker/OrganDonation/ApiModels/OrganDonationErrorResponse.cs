@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.OrganDonation.Models
+﻿namespace NHSOnline.Backend.Worker.OrganDonation.ApiModels
 {
     public class OrganDonationErrorResponse
     {

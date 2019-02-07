@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace NHSOnline.Backend.Worker.OrganDonation.Models
+namespace NHSOnline.Backend.Worker.OrganDonation.ApiModels
 {
     internal class RegistrationRequest : RegistrationBase
     {

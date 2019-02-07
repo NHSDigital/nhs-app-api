@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace NHSOnline.Backend.Worker.Areas.OrganDonation.Models
+namespace NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models
 {
     public class OrganDonationRegistration
     {

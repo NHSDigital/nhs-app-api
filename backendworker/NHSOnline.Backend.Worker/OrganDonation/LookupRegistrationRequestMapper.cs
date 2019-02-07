@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
+using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.Support;
 using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
 using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;

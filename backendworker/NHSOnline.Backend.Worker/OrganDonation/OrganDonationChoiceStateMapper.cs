@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
+using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support;
 using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;
 

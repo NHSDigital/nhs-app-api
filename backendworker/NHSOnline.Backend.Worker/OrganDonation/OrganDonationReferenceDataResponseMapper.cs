@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
+using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation

@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.OrganDonation;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using RichardSzalay.MockHttp;
 

@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
+using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation

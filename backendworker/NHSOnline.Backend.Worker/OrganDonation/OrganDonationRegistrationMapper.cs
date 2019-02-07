@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
+using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.Support;
 using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;
 using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
-using Address = NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Address;
-using Name = NHSOnline.Backend.Worker.Areas.OrganDonation.Models.Name;
+using Address = NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Address;
+using Name = NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Name;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

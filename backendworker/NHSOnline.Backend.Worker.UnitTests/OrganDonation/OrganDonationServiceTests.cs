@@ -8,10 +8,10 @@ using FluentAssertions;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.OrganDonation.Models;
+using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation

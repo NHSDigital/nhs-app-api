@@ -1,4 +1,4 @@
-namespace NHSOnline.Backend.Worker.Areas.OrganDonation.Models
+namespace NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models
 {
     public class AdditionalDetails
     {

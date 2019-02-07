@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Worker.OrganDonation.Models
+namespace NHSOnline.Backend.Worker.OrganDonation.ApiModels
 {
     public class CodeableConcept
     {

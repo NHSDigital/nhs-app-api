@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace NHSOnline.Backend.Worker.OrganDonation.Models
+namespace NHSOnline.Backend.Worker.OrganDonation.ApiModels
 {
     public class LookupRegistrationRequest
     {
