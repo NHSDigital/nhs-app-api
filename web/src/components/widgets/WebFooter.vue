@@ -113,7 +113,7 @@ export default {
       }
     }
 
-    @media (min-width: 48.0625em) {
+    @media (min-width: 40.0625em) {
       .footer-content {
         margin-left: 32px;
       }
