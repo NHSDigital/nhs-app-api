@@ -44,12 +44,13 @@ $survey_closed: 1.5em;
 
 main.content {
   max-width: 960px;
-  margin: 0 1em;
+  margin-right: 1em;
   box-sizing: border-box;
   width: auto;
   &.desktopWeb {
     min-width: 300px;
   }
+
   &.web {
     min-height: calc(75vh );
   }
@@ -88,10 +89,16 @@ main.content {
 
 @media (min-width: 48.0625em) {
 	main.content {
-		margin: 0 32px;
+		margin-left: 1em;
 	}
 
 	main.content > div {
 		padding: 0 16px;
+	}
+}
+
+@media (min-width: 1024px) {
+	main.content {
+		margin: 0 auto;
 	}
 }

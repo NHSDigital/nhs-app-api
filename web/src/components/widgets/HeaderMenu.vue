@@ -1,9 +1,16 @@
 <template>
-  <nav :class="[$style.menu, shouldShowMiniMenu ? $style.expanded : $style.collapsed]">
+  <nav :class="[$style.menu, $style['explanded-nojs'],
+                miniMenuExpanded ? $style.expanded : $style.collapsed,
+                'nojs-mini-menu-explanded']">
     <hr aria-hidden="true">
-    <a :class="$style['mini-menu-close-button']" role="button" tabindex="0"
-       @click.prevent="toggleMiniMenu"
-       @keyup.enter="toggleMiniMenu">Menu</a>
+    <a v-if="miniMenuExpanded" :class="$style['mini-menu-close-button']"
+       role="button" tabindex="0"
+       @click.prevent="closeMiniMenu"
+       @keyup.enter="closeMiniMenu">Menu</a>
+
+    <noscript inline-template>
+      <div :class="$style['menu-nojs-caption']">Menu</div>
+    </noscript>
     <ul>
       <li>
         <a :class="$style['navMenuItem']" :href="symptomsPath"
@@ -68,6 +75,24 @@ export default {
       default: false,
     },
   },
+  head() {
+    return {
+      noscript: [
+        {
+          innerHTML: `
+            <style type="text/css">
+              @media (max-width: 767px) {
+                .nojs-mini-menu-explanded {
+                  display: block !important;
+                }
+              }
+            </style>`,
+          body: false,
+        },
+      ],
+      __dangerouslyDisableSanitizers: ['noscript'],
+    };
+  },
   data() {
     return {
       symptomsPath: SYMPTOMS.path,
@@ -80,6 +105,11 @@ export default {
       logoutPath: LOGOUT.path,
     };
   },
+  computed: {
+    miniMenuExpanded() {
+      return this.$store.state.header.miniMenuExpanded;
+    },
+  },
   methods: {
     isMenuItemSelected(menuItemIndex) {
       return this.$store.state.navigation.menuItemStatusAt[menuItemIndex];
@@ -90,12 +120,11 @@ export default {
       if (a.target === '_blank') {
         window.open(a.href, '_blank');
       } else {
-        this.shouldShowMiniMenu = !this.shouldShowMiniMenu;
         this.$router.push(a.pathname);
       }
     },
-    toggleMiniMenu() {
-      this.shouldShowMiniMenu = !this.shouldShowMiniMenu;
+    closeMiniMenu() {
+      this.$store.dispatch('header/closeMiniMenu');
     },
   },
 };
@@ -106,6 +135,18 @@ export default {
   @import '../../style/screensizes';
   @import '../../style/textstyles';
   @import "../../style/fonts";
+
+  @mixin mini-menu-option {
+    padding: 1em 0.8em 1em 1em;
+    display: block;
+    font-size: 1em;
+    line-height: 1.5em;
+    font-family: $frutiger-bold;
+    border-bottom: 1px $background solid;
+    color: $black;
+    font-weight: 400;
+    cursor: pointer;
+  }
 
   nav.menu {
     overflow: hidden;
@@ -126,6 +167,10 @@ export default {
      }
     }
 
+    .menu-nojs-caption {
+      display: none;
+    }
+
     a.mini-menu-close-button {
       display: none;
       :focus {
@@ -135,7 +180,7 @@ export default {
       }
     }
 
-    &>ul {
+    & > ul {
       display: flex;
       flex-wrap: wrap;
 
@@ -191,21 +236,17 @@ export default {
       $parent-left-right-padding: 16px;
 
       background: $white;
-      margin: 0em (-1 * $parent-left-right-padding);
+      margin: 0 (-1 * $parent-left-right-padding);
+
+      div.menu-nojs-caption {
+        @include mini-menu-option;
+        cursor: default;
+      }
 
       a.mini-menu-close-button {
-        padding: 1em 0.8em 1em 1em;
-        display: block;
-        font-size: 1em;
-        line-height: 1.5em;
-        font-family: $frutiger-bold;
-        font-weight: 700;
+        @include mini-menu-option;
         background: $white url('~/assets/close-menu.svg') no-repeat center right;
         background-position: right 1em center;
-        border-bottom: 1px $background solid;
-        color: $black;
-        font-weight: 400;
-        cursor: pointer;
 
         &:visited,
         &:active {
@@ -221,7 +262,7 @@ export default {
         }
       }
 
-      &>ul {
+      & > ul {
         display: block;
         border-bottom: 3px $background solid;
 
@@ -231,6 +272,7 @@ export default {
           color: $black;
           border-bottom: 1px $background solid;
           text-align: center;
+
           :focus {
             outline-color: $focus_highlight;
             box-shadow: inset 0 0 0 4px $focus_highlight;
@@ -252,11 +294,10 @@ export default {
 
             &:hover {
               box-shadow: none;
-             background: $nhs_blue;
+              background: $nhs_blue;
               color: $white;
               text-decoration: underline;
               background-repeat: no-repeat;
-              background-position: center right;
               background-image: url('~/assets/icon_arrow_white_left.svg');
               background-position: right 1em center;
             }

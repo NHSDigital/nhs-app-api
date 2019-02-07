@@ -10,7 +10,7 @@
       Menu
     </a>
     <header-links :anchor-links="links"/>
-    <header-menu v-if="showMenu" ref="menu"/>
+    <header-menu v-if="showMenu" />
   </span>
 </template>
 <script>
@@ -62,14 +62,11 @@ export default {
     },
   },
   mounted() {
-    if (process.client) {
-      this.$refs.menu.toggleMiniMenu();
-      this.showMenuButton = !this.showMenuButton;
-    }
+    this.showMenuButton = process.client;
   },
   methods: {
     toggleMiniMenu() {
-      this.$refs.menu.toggleMiniMenu();
+      this.$store.dispatch('header/toggleMiniMenu');
     },
     resetFocusToNhsLogo() {
       const headerHomeLinkCompt = this.$refs.headerHomeLink;

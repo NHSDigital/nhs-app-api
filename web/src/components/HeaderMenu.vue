@@ -3,12 +3,12 @@
     <nuxt-link ref="homeLogoEl" :class="$style['anchor-icon']" :to="indexPath" tabindex="-1">
       <home-icon/>
     </nuxt-link>
-    <a id="help_icon" :class="$style['anchor-icon', 'fixed-right']"
+    <a id="help_icon" :class="[$style['anchor-icon'], $style['fixed-right']]"
        :href="helpAndSupportURL" target="_blank"
        tabindex="-1">
       <help-icon/>
     </a>
-    <nuxt-link v-if="showAccountIcon" :class="$style['anchor-icon', 'fixed-right']"
+    <nuxt-link v-if="showAccountIcon" :class="[$style['anchor-icon'], $style['fixed-right']]"
                :to="accountPath" tabindex="-1">
       <account-icon/>
     </nuxt-link>
@@ -73,11 +73,11 @@ export default {
   background: $nhs_blue;
   color: $white;
   position: fixed;
-  top: 0em;
-  left: 0em;
-  right: 0em;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 6.250em;
-  box-shadow: 0em 0em 0.313em rgba(0, 0, 0, .5);
+  box-shadow: 0 0 0.313em rgba(0, 0, 0, .5);
   z-index: 4;
   box-sizing: border-box;
   a {
@@ -86,8 +86,8 @@ export default {
    }
    &.fixed-right {
      position: fixed;
-     top: 0em;
-     right: 0em;
+     top: 0;
+     right: 0;
      &:nth-of-type(2) {
        right: 2.4em;
      }

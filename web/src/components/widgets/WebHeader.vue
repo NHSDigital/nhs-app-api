@@ -15,7 +15,7 @@
           Menu
         </a>
         <header-links v-if="showLinks" :anchor-links="links"/>
-        <header-menu v-if="showMenu" ref="menu"/>
+        <header-menu v-if="showMenu" />
       </span>
     </header>
     <div :class="$style.headerLowerSection">
@@ -107,16 +107,21 @@ export default {
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
     },
+    miniMenuExpanded() {
+      return this.$store.state.header.miniMenuExpanded;
+    },
+  },
+  created() {
+    if (this.showMenu) {
+      this.$store.dispatch('header/toggleMiniMenu');
+    }
   },
   mounted() {
-    if (process.client && this.showMenu) {
-      this.$refs.menu.toggleMiniMenu();
-      this.showMenuButton = !this.showMenuButton;
-    }
+    this.showMenuButton = process.client && this.showMenu;
   },
   methods: {
     toggleMiniMenu() {
-      this.$refs.menu.toggleMiniMenu();
+      this.$store.dispatch('header/toggleMiniMenu');
     },
     resetFocusToNhsLogo() {
       const headerHomeLinkCompt = this.$refs.headerHomeLink;
