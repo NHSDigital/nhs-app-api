@@ -173,3 +173,12 @@ Feature: View My Medical Record Information - Test Results
     Examples:
       | Service |
       | TPP     |
+
+  Scenario: A VISION user navigates directly to the test results details page
+    Given the my record wiremocks are initialised for VISION
+    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has test result details
+    And I am on my record information page
+    When I enter url address for test results detail directly into the url
+    Then I am redirected to the my record page
+    And I see the my record warning page
