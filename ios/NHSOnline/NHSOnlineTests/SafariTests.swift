@@ -19,6 +19,13 @@ class NHSOnlineTests: XCTestCase {
         super.tearDown()
     }
     
+    func test_When_UrlIsForSignIn_Then_PageShouldBeOpenedInWebView() {
+        let webViewUrl = URL(string: "https://ext." + config().CidUrlSuffix + "/")
+        let displayedInWebView = webViewDelegate?.shouldOpenInSafari(url: webViewUrl!)
+
+        XCTAssertFalse(displayedInWebView!)
+    }
+    
     func test_When_HostIsKnown_Then_PageShouldBeOpenedInWebView() {
         let webViewUrl = URL(string: config().Nhs111Url);
         let displayedInWebView = webViewDelegate?.shouldOpenInSafari(url: webViewUrl!)

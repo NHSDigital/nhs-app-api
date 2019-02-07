@@ -226,7 +226,7 @@ class HomeViewController : UIViewController {
     }
     
     func setupBackArrow() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.checkSymptomsBack))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.checkSymptomsAndCIDBack))
         self.headerBarSlim.backButtonArrow.isUserInteractionEnabled = true
         self.headerBarSlim.backButtonArrow.addGestureRecognizer(tapGesture)
     }
@@ -416,14 +416,14 @@ class HomeViewController : UIViewController {
         v.tag = 2
         self.view.addSubview(v)
     }
-    @objc func checkSymptomsBack() {
+    @objc func checkSymptomsAndCIDBack() {
         let baseUrl = URL(string: config().HomeUrl)
         if let webview = self.webViewController?.webView {
-            if(webview.url?.host == baseUrl?.host && webview.url?.path == config().CheckSymptomsUrlPath) {
+            if((webview.url?.host == baseUrl?.host && webview.url?.path == config().CheckSymptomsUrlPath)
+                || webview.url!.absoluteString.contains(config().CidUrlSuffix)){
                 self.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)
-                
             } else {
                 if(webview.canGoBack) {
                     webview.goBack()

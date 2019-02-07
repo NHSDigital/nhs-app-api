@@ -19,7 +19,14 @@ class WebViewUrlTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
     }
-    
+
+    func test_When_NhsAppSchemeUrlIsLoaded_Then_ItIsCorrectedToHttps() {
+        let urlString = URL(string: config().AppScheme + "://test.com/test")
+        let validatedUrl = webViewDelegate?.ensureSupportedScheme(urlString!);
+
+         XCTAssertTrue(validatedUrl!.scheme=="https")
+    }
+
     func test_When_KnownServiceIsMissingQueryString_Then_ItsCorrectlyAdded() {
         let urlString = config().HomeUrl
         let webViewUrl = URL(string: urlString);

@@ -31,7 +31,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         shouldHandleErrors = false
         
-        if let url = navigationAction.request.url {
+        if let initialUrl = navigationAction.request.url {
+            
+            let url = ensureSupportedScheme(initialUrl)
             
             guard navigationAction.targetFrame?.isMainFrame != false else {
                 decisionHandler(.allow)
@@ -103,6 +105,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             self.viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: false)
         }
         
+        if(webView.url!.absoluteString.contains(config().CidUrlSuffix)) {
+            viewController.updateHeaderText(headerText: "Log in to the NHS App", accessibilityLabel: "Login using Patient ID")
+            viewController.setVisibilityOfHeaderAndMenuBars(visible: true, isSlim: true)
+        }
+        
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
         
         if !self.knownServices.isSameHostAsHomeUrl(url: webView.url) && !self.viewController.headerBar.isHidden {
@@ -150,15 +157,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func shouldOpenInSafari(url: URL) -> Bool {
-        if(url.absoluteString.contains(config().IntroCarouselFileName)) {
-            return false
-        }
         
-        if(url.absoluteString.contains(config().ThrottlingCarouselFileName)) {
-            return false
-        }
-        
-        if(url.absoluteString.contains("login")) {
+        let nativeWebViewUrlParts = [ config().IntroCarouselFileName,
+                          config().ThrottlingCarouselFileName,
+                          "login",
+                          config().CidUrlSuffix]
+
+        if(url.absoluteString.containsAnyOf(nativeWebViewUrlParts)) {
             return false
         }
         
@@ -291,6 +296,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
     }
     
+    func ensureSupportedScheme(_ url: URL) -> URL {
+        if(url.scheme==config().AppScheme) {
+            self.viewController.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
+            return URL(string: url.absoluteString.replacingOccurrences(of: config().AppScheme + ":", with: "https:"))!
+        }
+        return url
+    }
+    
     func clearMenuBarItem() {
         self.viewController.tabBar.selectedItem = nil
     }
@@ -309,6 +322,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func updateHeaderAndNavigationMenu(url: URL?) {
+        
         if let tabBarDelegate = self.viewController.tabBarDelegate {
             guard let serviceInfo = knownServices.findMatchingKnownServiceInfo(url: url) else {
                 return

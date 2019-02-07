@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>So you can record you security response</string>
+	<key>CidUrlSuffix</key>
+	<string>signin.nhs.uk</string>
+	<key>NSCameraUsageDescription</key>
+	<string>So you can take a photo of your I.D.</string>
 	<key>BiometricsAssertionScheme</key>
 	<string>UAFV1TLV</string>
 	<key>BiometricsDeregistrationRequestEndpoint</key>
