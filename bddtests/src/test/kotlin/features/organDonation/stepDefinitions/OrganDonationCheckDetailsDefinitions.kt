@@ -4,6 +4,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import models.KeyValuePair
 import net.serenitybdd.core.Serenity
+import pages.assertIsVisible
 import pages.organDonation.OrganDonationCheckDetailsPage
 import utils.SerenityHelpers
 

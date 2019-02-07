@@ -11,6 +11,7 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import pages.assertIsVisible
 import pages.myrecord.MyRecordInfoPage
 import worker.models.myrecord.MyRecordResponse
 

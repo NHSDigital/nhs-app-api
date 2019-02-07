@@ -5,6 +5,8 @@ import org.junit.Assert
 import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertElementNotPresent
+import pages.assertIsVisible
 
 class DropdownElement(val label:String, val helpfulName:String, pageObject: HybridPageObject) {
 

@@ -30,7 +30,8 @@ class BookAppointmentsBuilderTpp(patient: Patient, request: BookAppointmentSlotF
         requestBuilder.andHeader(HEADER_TYPE, "BookAppointment")
         requestBuilder.andBodyMatchingXpath("//BookAppointment[" +
                 "@patientId='${patient.patientId}' and " +
-                "@sessionId='${request.slotId}']")
+                "@sessionId='${request.slotId}' and " +
+                "@notes='${request.bookingReason}']")
     }
 
     override fun withDelay(delayMilliseconds: Duration): BookAppointmentsBuilderTpp {

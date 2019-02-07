@@ -2,6 +2,7 @@ package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
+import pages.assertSingleElementPresent
 import pages.sharedElements.RadioButtons
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")

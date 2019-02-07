@@ -37,9 +37,14 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
             page = this
     )
 
-    val backButton = HybridPageElement(
+    private val backButton = HybridPageElement(
             webDesktopLocator = "//button[contains(text(),'Back')]",
             androidLocator = null,
+            page = this
+    )
+
+    private val specialRequestTextArea = HybridPageElement(
+            webDesktopLocator = specialRequestTextAreaXpath,
             page = this
     )
 
@@ -85,12 +90,12 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
 
     fun selectXPrescriptionsToOrder(numberOfSubscriptionsToSelect: Int) {
         var repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
-        if(repeatPrescriptionContainers.isEmpty() && onMobile()){
+        if (repeatPrescriptionContainers.isEmpty() && onMobile()) {
             waitForNativeStepToComplete()
             repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
         }
-        for (i in 0..(numberOfSubscriptionsToSelect-1)) {
-            val label = repeatPrescriptionContainers[i].findElement(By.tagName( "label"))
+        for (i in 0..(numberOfSubscriptionsToSelect - 1)) {
+            val label = repeatPrescriptionContainers[i].findElement(By.tagName("label"))
             label.click()
         }
     }
@@ -111,11 +116,11 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
         verifyPrescriptionIsSelected(courseToSelect)
     }
 
-    private fun getRepeatPrescription(courseToSelect: MedicationCourse):HybridPageElement {
+    private fun getRepeatPrescription(courseToSelect: MedicationCourse): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = "//label[contains(.," +
-                                 "'${courseToSelect.getInstructionsText()}') " +
-                                 "and contains(.,'${courseToSelect.name}')]",
+                        "'${courseToSelect.getInstructionsText()}') " +
+                        "and contains(.,'${courseToSelect.name}')]",
                 androidLocator = null,
                 page = this
         )
@@ -134,37 +139,25 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
                     && medicationCourse.medicationCourseGuid == inputElement.getAttribute("value")
             ) {
                 Assert.assertTrue("${medicationCourse.name}-" +
-                                  "${medicationCourse.getInstructionsText()} is not " +
-                                  "selected and should be",inputElement.isSelected())
+                        "${medicationCourse.getInstructionsText()} is not " +
+                        "selected and should be", inputElement.isSelected)
                 return
             }
         }
 
         Assert.fail("Didn't find medication course with: \nname: ${medicationCourse.name} " +
-                    "\ndosage: ${medicationCourse.getInstructionsText()}")
+                "\ndosage: ${medicationCourse.getInstructionsText()}")
     }
 
     fun clickBackButton() {
         backButton.click()
     }
 
-    fun typeTextIntoSpecialRequestTextArea(text: String) : String {
-        val element = findByXpath(specialRequestTextAreaXpath)
-        //Each letter sent individually
-        //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
-        //Keys can sometimes go missing; so we return the actual text that got typed and assert that something went in
-        text.toCharArray().forEach { letter ->
-            element.sendKeys(letter.toString())
-        }
-
-        Assert.assertTrue("Expected some text to be output to the text area",element.value.isNotEmpty())
-
-        return element.value
+    fun typeTextIntoSpecialRequestTextArea(text: String): String {
+        return specialRequestTextArea.typeTextIntoTextArea(text)
     }
 
-    fun isSpecialRequestTextAreaVisible() : Boolean {
-        return findByXpath(specialRequestTextAreaXpath).isVisible
+    fun isSpecialRequestTextAreaVisible(): Boolean {
+        return specialRequestTextArea.elements.isNotEmpty() && specialRequestTextArea.element.isVisible
     }
-
 }
-

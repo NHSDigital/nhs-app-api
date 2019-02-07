@@ -5,6 +5,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
+import pages.assertIsVisible
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/confirmation")
 open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
@@ -14,13 +15,6 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     private val inputTypeRadioXpathPrefix = "$inputXpathPrefix[$typeRadioXpathPart"
     private val telephoneNumberRadioButtonByValueXpath = "$inputTypeRadioXpathPrefix and @value='%s']"
     private val alternateNumberRadioButtonXpath = "$inputTypeRadioXpathPrefix and @id='otherPhoneNumberRadioInput']"
-
-    val confirmAndBookAppointmentButton = HybridPageElement(
-            webDesktopLocator = "//*[@id='btn_book_appointment']",
-            webMobileLocator = "//*[@id='btn_book_appointment']",
-            androidLocator = null,
-            page = this
-    )
 
     val reasonFormField = HybridPageElement(
             webDesktopLocator = "//textarea[@id='reasonText']",
@@ -36,12 +30,6 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    val backToMyAppointmentsButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(),'Back to my appointments')]",
-            webMobileLocator = "//button[contains(text(),'Back to my appointments')]",
-            androidLocator = null,
-            page = this
-    )
     private fun telephoneNumberRadioButton(telephoneNumber: String): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = String.format(telephoneNumberRadioButtonByValueXpath, telephoneNumber),
@@ -63,13 +51,6 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     private val alternateTelephoneNumberRadioButton = HybridPageElement(
             webDesktopLocator = alternateNumberRadioButtonXpath,
             webMobileLocator = alternateNumberRadioButtonXpath,
-            androidLocator = null,
-            page = this
-    )
-
-    val symptomsFormDiv = HybridPageElement(
-            webDesktopLocator = "//*[@id='reasonText']",
-            webMobileLocator = "//*[@id='reasonText']",
             androidLocator = null,
             page = this
     )
@@ -103,9 +84,7 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     }
 
     fun describeSymptoms(symptoms: String) {
-        symptoms.toCharArray().map { a ->
-            reasonFormField.element.sendKeys("$a")
-        }
+        reasonFormField.typeTextIntoTextArea(symptoms)
         hideKeyboardIfOnMobile()
     }
 

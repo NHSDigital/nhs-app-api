@@ -4,6 +4,7 @@ import cucumber.api.java.en.Then
 import models.KeyValuePair
 import net.serenitybdd.core.Serenity
 import cucumber.api.java.en.When
+import pages.assertIsVisible
 import pages.organDonation.OrganDonationConfirmationPage
 
 open class OrganDonationConfirmationStepDefinitions {

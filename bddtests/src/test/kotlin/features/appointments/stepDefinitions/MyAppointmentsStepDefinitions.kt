@@ -7,6 +7,8 @@ import features.appointments.steps.MyAppointmentsUISteps
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.assertIsVisible
+import pages.assertSingleElementPresent
 import pages.navigation.HeaderNative
 
 class MyAppointmentsStepDefinitions {

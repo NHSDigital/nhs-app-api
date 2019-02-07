@@ -20,7 +20,7 @@ open class ErrorPage : HybridPageObject() {
 
     val errorText1 = findElementByLocator(messageTextLocator)
 
-    val errorText2 = findElementByLocator(extraMessageTextLocator)
+    private val errorText2 = findElementByLocator(extraMessageTextLocator)
 
     val button = findElementByLocator(backButtonLocator)
 

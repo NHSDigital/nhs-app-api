@@ -15,6 +15,9 @@ import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.assertDoesElementHaveFocus
+import pages.assertElementNotPresent
+import pages.assertSingleElementPresent
 import utils.SerenityHelpers
 
 class AppointmentsConfirmationStepDefinitions {
@@ -77,7 +80,7 @@ class AppointmentsConfirmationStepDefinitions {
 
     @When("^I enter symptoms of (\\d+) characters$")
     fun whenIEnterSymptomsOfCharacter(length: Int) {
-        val symptoms: String = getSymptomsOfLength(length)
+        val symptoms: String = appointmentsConfirmationSteps.getSymptomsOfLength(length)
         appointmentsConfirmationSteps.appointmentsConfirmation.describeSymptoms(symptoms)
     }
 
@@ -90,7 +93,7 @@ class AppointmentsConfirmationStepDefinitions {
 
     @When("^I paste symptoms of (\\d+) characters$")
     fun whenIPasteSymptomsOfCharacters(length: Int) {
-        val symptoms: String = getSymptomsOfLength(length)
+        val symptoms: String = appointmentsConfirmationSteps.getSymptomsOfLength(length)
         appointmentsConfirmationSteps.appointmentsConfirmation.pasteSymptoms(symptoms)
     }
 
@@ -242,12 +245,5 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^none of available phone numbers are selected$")
     fun noneOfAvailablePhoneNumbersAreSelected() {
         appointmentsConfirmationSteps.checkNoPhoneNumberRadioButtonsAreSelected()
-    }
-
-    private fun getSymptomsOfLength(length: Int): String {
-        val symptoms = Serenity.sessionVariableCalled<String>(symptomsToEnter)
-        Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
-        Assert.assertEquals("Expected number of characters in symptoms, incorrect test setup", length, symptoms.length)
-        return symptoms
     }
 }

@@ -28,7 +28,7 @@ open class HybridPageElement(
         open val page: HybridPageObject,
         helpfulName: String? = null
 ) {
-    private val helpfulNameToUse = helpfulName ?: webDesktopLocator
+    val helpfulNameToUse = helpfulName ?: webDesktopLocator
     val element: WebElementFacade
         get() {
             return when (locatorStrategy()) {
@@ -59,11 +59,11 @@ open class HybridPageElement(
         this.element.click()
     }
 
-    fun WebElementFacade.scroll() {
+    private fun WebElementFacade.scroll() {
         scrollTo(this)
     }
 
-    fun scrollTo(elem: Any) {
+    protected fun scrollTo(elem: Any) {
         val jsExecutor = page.driver as JavascriptExecutor
         try {
             jsExecutor.executeScript("arguments[0].scrollIntoView({block: \"center\"});", elem)
@@ -85,35 +85,6 @@ open class HybridPageElement(
                 else -> throw IllegalArgumentException("Unknown element locator strategy.")
             }
         }
-
-    fun assertSingleElementPresent(): HybridPageElement {
-
-        Assert.assertEquals(
-                "Expected only one matching element for $helpfulNameToUse, with xpath $webDesktopLocator",
-                1,
-                elements.count())
-        return this
-    }
-
-    fun assertIsVisible(): HybridPageElement {
-        Assert.assertTrue("Expected $helpfulNameToUse to be visible", element.isVisible)
-        return this
-    }
-
-    fun assertDoesElementHaveFocus(): HybridPageElement {
-        Assert.assertTrue("Expected $helpfulNameToUse to be visible", element.hasFocus())
-        return this
-    }
-
-    fun assertIsNotVisible(): HybridPageElement {
-        Assert.assertFalse("Expected $helpfulNameToUse to not be visible", element.isVisible)
-        return this
-    }
-
-    fun assertElementNotPresent(): HybridPageElement {
-        Assert.assertEquals("Expected no matching elements for $helpfulNameToUse", 0, elements.count())
-        return this
-    }
 
     fun locatorStrategy(): String {
         return if (page.driver.isAndroid() && androidLocator != null) {
@@ -188,5 +159,18 @@ open class HybridPageElement(
         //because it can vanish and comeback
         Thread.sleep(milliseconds)
         return this.element
+    }
+
+    fun typeTextIntoTextArea(text: String): String {
+        //Each letter sent individually
+        //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
+        //Keys can sometimes go missing; so we return the actual text that got typed and assert that something went in
+        text.toCharArray().map { letter ->
+            this.element.sendKeys(letter.toString())
+        }
+
+        Assert.assertTrue("Expected some text to be output to the text area", this.element.value.isNotEmpty())
+
+        return this.element.value
     }
 }

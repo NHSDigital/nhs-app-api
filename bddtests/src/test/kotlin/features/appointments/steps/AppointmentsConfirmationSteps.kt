@@ -10,6 +10,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.appointments.AppointmentsConfirmationPage
+import pages.assertElementNotPresent
 
 open class AppointmentsConfirmationSteps {
 
@@ -41,7 +42,19 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkSymptomsLength(expectedLength: Int) {
-        assertTrue(appointmentsConfirmation.getSymptoms().length == expectedLength)
+        val expectedSymptoms = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.symptomsToEnter)
+                .slice(0 until expectedLength)
+        assertEquals(
+                "Displayed symptoms of unexpected length. ",
+                appointmentsConfirmation.getSymptoms().length,
+                expectedLength
+        )
+        assertEquals(
+                "Symptoms displayed incorrectly. ",
+                expectedSymptoms,
+                appointmentsConfirmation
+                        .getSymptoms()
+        )
     }
 
     @Step
@@ -91,6 +104,14 @@ open class AppointmentsConfirmationSteps {
     @Step
     fun checkOnlyOnePhoneNumberRadioButtonIsSelected() {
         checkNumberOfPhoneNumberRadioButtonsSelected(1)
+    }
+
+    @Step
+    fun getSymptomsOfLength(length: Int): String {
+        val symptoms = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.symptomsToEnter)
+        Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
+        Assert.assertEquals("Expected number of characters in symptoms, incorrect test setup", length, symptoms.length)
+        return symptoms
     }
 
     private fun checkNumberOfPhoneNumberRadioButtonsSelected(expectedNumberOfRadioButtonsSelected: Int) {

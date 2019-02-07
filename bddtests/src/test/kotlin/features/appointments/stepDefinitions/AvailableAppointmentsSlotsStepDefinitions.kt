@@ -29,6 +29,8 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import pages.assertElementNotPresent
+import pages.assertIsVisible
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.models.appointments.AppointmentSlotsResponse

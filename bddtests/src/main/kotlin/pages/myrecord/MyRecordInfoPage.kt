@@ -5,6 +5,8 @@ import org.junit.Assert
 import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertIsVisible
+import pages.assertSingleElementPresent
 
 const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
 

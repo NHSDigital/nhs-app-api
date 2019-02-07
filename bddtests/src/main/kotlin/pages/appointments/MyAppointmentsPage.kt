@@ -4,6 +4,7 @@ import models.Slot
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
+import pages.assertElementNotPresent
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments")
 class MyAppointmentsPage : AppointmentSharedElementsPage() {

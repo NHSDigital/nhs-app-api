@@ -15,6 +15,7 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
 import java.net.URL
 

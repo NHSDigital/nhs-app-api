@@ -3,6 +3,7 @@ package pages.organDonation
 import org.openqa.selenium.StaleElementReferenceException
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertIsVisible
 
 private const val WAIT_FOR_PAGE = 1000L
 abstract class OrganDonationBasePage: HybridPageObject() {

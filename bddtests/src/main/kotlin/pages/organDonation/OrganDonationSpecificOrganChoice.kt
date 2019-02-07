@@ -2,6 +2,7 @@ package pages.organDonation
 
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertSingleElementPresent
 import pages.sharedElements.RadioButtons
 
 class OrganDonationSpecificOrganChoice(val title:String, page: HybridPageObject) {

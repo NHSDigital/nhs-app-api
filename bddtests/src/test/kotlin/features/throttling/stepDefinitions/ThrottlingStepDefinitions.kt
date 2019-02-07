@@ -27,6 +27,7 @@ import pages.throttling.GPFinderPage
 import pages.throttling.GPParticipationPage
 import pages.throttling.GPSearchResultsPage
 import pages.LoginPage
+import pages.assertIsVisible
 import pages.throttling.SendingEmailPage
 import pages.throttling.WaitingListJoinedPage
 

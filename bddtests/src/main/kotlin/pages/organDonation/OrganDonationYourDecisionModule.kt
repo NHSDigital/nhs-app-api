@@ -4,6 +4,8 @@ import models.KeyValuePair
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertIsVisible
+import pages.assertSingleElementPresent
 
 class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
 

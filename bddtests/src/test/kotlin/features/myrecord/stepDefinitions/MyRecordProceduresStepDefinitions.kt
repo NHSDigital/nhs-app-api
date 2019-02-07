@@ -6,6 +6,7 @@ import cucumber.api.java.en.When
 import features.myrecord.factories.ProceduresFactoryVision
 import org.junit.Assert
 import org.junit.Assert.assertEquals
+import pages.assertSingleElementPresent
 import pages.myrecord.MyRecordInfoPage
 
 class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() {

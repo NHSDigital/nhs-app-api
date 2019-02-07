@@ -172,3 +172,4 @@ open class HybridPageObject : PageObject() {
                         "'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
     }
 }
+

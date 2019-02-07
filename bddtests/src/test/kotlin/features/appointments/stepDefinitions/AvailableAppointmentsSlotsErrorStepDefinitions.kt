@@ -1,14 +1,13 @@
 package features.appointments.stepDefinitions
 
 import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
 import mocking.MockingClient
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
 import pages.appointments.AvailableAppointmentsPage
+import pages.assertElementNotPresent
 
 private const val TIME_TO_WAIT_FOR_SPINNER = 70L
-private const val TIMEOUT_PLUS_ONE_SECOND = 11L
 
 class AvailableAppointmentsSlotsErrorStepDefinitions {
 
@@ -16,12 +15,6 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
     lateinit var errorPage: ErrorPage
 
     val mockingClient = MockingClient.instance
-
-    @When("^I click try again button on appointment page$")
-    fun whenIClickTryAgainButtonOnAppointmentPage() {
-        errorPage.waitForSpinnerToDisappear(TIMEOUT_PLUS_ONE_SECOND) // 1 second more than timeout
-        errorPage.clickOnButtonContainingText("Try again")
-    }
 
     @Then("^I see appropriate information message for time-outs$")
     fun iSeeAppropriateInformationMessageAfterSecondsWhenItTimesOut() {

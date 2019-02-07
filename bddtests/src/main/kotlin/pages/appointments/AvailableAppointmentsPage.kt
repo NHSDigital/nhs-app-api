@@ -3,6 +3,8 @@ package pages.appointments
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertTrue
 import pages.HybridPageElement
+import pages.assertIsVisible
+import pages.assertSingleElementPresent
 import pages.sharedElements.BannerObject
 import pages.sharedElements.DropdownElement
 

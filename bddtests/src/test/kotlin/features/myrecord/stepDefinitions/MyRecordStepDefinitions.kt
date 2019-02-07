@@ -18,6 +18,8 @@ import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import pages.assertIsVisible
+import pages.assertSingleElementPresent
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative

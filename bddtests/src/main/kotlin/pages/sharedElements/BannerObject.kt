@@ -4,6 +4,8 @@ import org.junit.Assert
 import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertIsVisible
+import pages.assertSingleElementPresent
 
 class BannerObject private constructor(page : HybridPageObject,
                                        private val title: String,

@@ -5,6 +5,7 @@ import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 import pages.MorePage
+import pages.assertIsVisible
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.organDonation.OrganDonationChoicePage

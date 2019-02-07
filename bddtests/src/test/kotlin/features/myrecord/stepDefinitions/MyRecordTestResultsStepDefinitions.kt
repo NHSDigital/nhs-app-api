@@ -12,6 +12,8 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
+import pages.assertIsVisible
+import pages.assertSingleElementPresent
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import worker.NhsoHttpException
