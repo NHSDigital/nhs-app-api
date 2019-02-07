@@ -1,4 +1,4 @@
-﻿using NHSOnline.Backend.Worker.Areas.Ndop.Models;
+﻿using NHSOnline.Backend.Worker.Ndop.Models;
 
 namespace NHSOnline.Backend.Worker.Ndop
 {

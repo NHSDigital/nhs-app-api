@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Areas.Ndop.Models
+﻿namespace NHSOnline.Backend.Worker.Ndop.Models
 {
     public class NdopResponse
     {

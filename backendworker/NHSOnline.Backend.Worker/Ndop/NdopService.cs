@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Ndop.Models;
+using NHSOnline.Backend.Worker.Ndop.Models;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.Ndop
