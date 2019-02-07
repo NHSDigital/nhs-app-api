@@ -18,8 +18,6 @@
 
     <hot-jar v-if="isAnalyticsCookieAccepted()"/>
 
-    <a11y-title-announcer v-if="!$store.state.device.isNativeApp" ref="a11yAnnouncer"/>
-
     <div v-if="!$store.state.device.isNativeApp" :class="$style['footer-container-desktop']">
       <web-footer/>
     </div>
