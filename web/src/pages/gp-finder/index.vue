@@ -237,6 +237,7 @@ export default {
         },
         options: {
           maxAge: moment.duration(1, 'y').asSeconds(),
+          secure: this.$store.app.$env.SECURE_COOKIES,
         },
       });
 

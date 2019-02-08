@@ -194,6 +194,7 @@ export default {
         value: {},
         options: {
           maxAge: -1,
+          secure: this.$store.app.$env.SECURE_COOKIES,
         },
       });
       this.goToUrl(GP_FINDER.path);
