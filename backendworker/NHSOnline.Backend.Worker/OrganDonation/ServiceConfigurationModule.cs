@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.Support;
@@ -60,9 +60,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                     OrganDonationReferenceDataResponseMapper>();
             
             services
-                .AddSingleton<IMapper<string, GpSystems.OrganDonation.Models.Address, Address>, OrganDonationAddressMapper>();
+                .AddSingleton<IMapper<string, OrganDonation.Models.Address, Address>, OrganDonationAddressMapper>();
             
-            services.AddSingleton<IMapper<string, GpSystems.OrganDonation.Models.Name, Name>, OrganDonationNameMapper>();
+            services.AddSingleton<IMapper<string, OrganDonation.Models.Name, Name>, OrganDonationNameMapper>();
             services
                 .AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, RegistrationRequestMapper>();
             

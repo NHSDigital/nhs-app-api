@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.OrganDonation;
-using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.Support.Auditing;
 

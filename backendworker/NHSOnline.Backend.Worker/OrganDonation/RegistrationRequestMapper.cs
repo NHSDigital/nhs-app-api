@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using Name = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Name;
@@ -15,8 +15,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
     {
         private readonly IEnumMapper<string, FaithDeclaration> _faithDeclarationMapper;
         private readonly IEnumMapper<string, Decision> _decisionMapper;
-        private readonly IMapper<string, GpSystems.OrganDonation.Models.Name, Name> _nameMapper;
-        private readonly IMapper<string, GpSystems.OrganDonation.Models.Address, Address> _addressMapper;
+        private readonly IMapper<string, OrganDonation.Models.Name, Name> _nameMapper;
+        private readonly IMapper<string, OrganDonation.Models.Address, Address> _addressMapper;
         private readonly IOrganDonationDonationWishesMapper _donationWishesMapper;
         private readonly IOrganDonationGenderMapper _genderMapper;
         private readonly ILogger<RegistrationRequestMapper> _logger;
@@ -24,8 +24,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public RegistrationRequestMapper(
             IEnumMapper<string, FaithDeclaration> faithDeclarationMapper,
             IEnumMapper<string, Decision> decisionMapper,
-            IMapper<string, GpSystems.OrganDonation.Models.Name, Name> nameMapper,
-            IMapper<string, GpSystems.OrganDonation.Models.Address, Address> addressMapper,
+            IMapper<string, OrganDonation.Models.Name, Name> nameMapper,
+            IMapper<string, OrganDonation.Models.Address, Address> addressMapper,
             IOrganDonationDonationWishesMapper donationWishesMapper,
             IOrganDonationGenderMapper genderMapper,
             ILogger<RegistrationRequestMapper> logger)

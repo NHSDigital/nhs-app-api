@@ -5,7 +5,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.Support;
@@ -22,8 +22,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
         private Mock<IEnumMapper<string, Decision>> _decisionMapperMock;
         private Mock<IEnumMapper<string, FaithDeclaration>> _faithDeclarationMapperMock;
-        private Mock<IMapper<string, Worker.GpSystems.OrganDonation.Models.Name, Name>> _nameMapperMock;
-        private Mock<IMapper<string, Worker.GpSystems.OrganDonation.Models.Address, Address>> _addressMapperMock;
+        private Mock<IMapper<string, Worker.OrganDonation.Models.Name, Name>> _nameMapperMock;
+        private Mock<IMapper<string, Worker.OrganDonation.Models.Address, Address>> _addressMapperMock;
         private Mock<IOrganDonationDonationWishesMapper> _donationWishesMapperMock;
         private Mock<IOrganDonationGenderMapper> _genderMapperMock;
 
@@ -35,9 +35,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
             _decisionMapperMock = _fixture.Freeze<Mock<IEnumMapper<string, Decision>>>();
             _faithDeclarationMapperMock = _fixture.Freeze<Mock<IEnumMapper<string, FaithDeclaration>>>();
-            _nameMapperMock = _fixture.Freeze<Mock<IMapper<string, Worker.GpSystems.OrganDonation.Models.Name, Name>>>();
+            _nameMapperMock = _fixture.Freeze<Mock<IMapper<string, Worker.OrganDonation.Models.Name, Name>>>();
             _addressMapperMock =
-                _fixture.Freeze<Mock<IMapper<string, Worker.GpSystems.OrganDonation.Models.Address, Address>>>();
+                _fixture.Freeze<Mock<IMapper<string, Worker.OrganDonation.Models.Address, Address>>>();
             _donationWishesMapperMock = _fixture.Freeze<Mock<IOrganDonationDonationWishesMapper>>();
             _genderMapperMock = _fixture.Freeze<Mock<IOrganDonationGenderMapper>>();
 
@@ -157,10 +157,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _decisionMapperMock.Setup(x => x.From(It.IsAny<Decision>())).Returns("opt-in");
             _donationWishesMapperMock.Setup(x => x.Map(It.IsAny<DecisionDetails>())).Returns(donationWishes);
             _faithDeclarationMapperMock.Setup(x => x.From(It.IsAny<FaithDeclaration>())).Returns("yes");
-            _nameMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.GpSystems.OrganDonation.Models.Name>()))
+            _nameMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.OrganDonation.Models.Name>()))
                 .Returns(name);
             _addressMapperMock
-                .Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.GpSystems.OrganDonation.Models.Address>()))
+                .Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.OrganDonation.Models.Address>()))
                 .Returns(address);
             _genderMapperMock.Setup(x => x.Map(It.IsAny<string>())).Returns("male");
 
@@ -171,9 +171,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _decisionMapperMock.Verify(x => x.From(It.IsAny<Decision>()));
             _donationWishesMapperMock.Verify(x => x.Map(It.IsAny<DecisionDetails>()));
             _faithDeclarationMapperMock.Verify(x => x.From(It.IsAny<FaithDeclaration>()));
-            _nameMapperMock.Verify(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.GpSystems.OrganDonation.Models.Name>()));
+            _nameMapperMock.Verify(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.OrganDonation.Models.Name>()));
             _addressMapperMock.Verify(x =>
-                x.Map(It.IsAny<string>(), It.IsAny<Worker.GpSystems.OrganDonation.Models.Address>()));
+                x.Map(It.IsAny<string>(), It.IsAny<Worker.OrganDonation.Models.Address>()));
             _genderMapperMock.Verify(x => x.Map(It.IsAny<string>()));
 
             result.Should().NotBeNull();
@@ -232,10 +232,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _decisionMapperMock.Setup(x => x.From(It.IsAny<Decision>())).Returns("opt-out");
             _donationWishesMapperMock.Setup(x => x.Map(It.IsAny<DecisionDetails>())).Returns(donationWishes);
             _faithDeclarationMapperMock.Setup(x => x.From(It.IsAny<FaithDeclaration>())).Returns("yes");
-            _nameMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.GpSystems.OrganDonation.Models.Name>()))
+            _nameMapperMock.Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.OrganDonation.Models.Name>()))
                 .Returns(name);
             _addressMapperMock
-                .Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.GpSystems.OrganDonation.Models.Address>()))
+                .Setup(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.OrganDonation.Models.Address>()))
                 .Returns(address);
             _genderMapperMock.Setup(x => x.Map(It.IsAny<string>())).Returns("male");
 
@@ -246,9 +246,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _decisionMapperMock.Verify(x => x.From(It.IsAny<Decision>()));
             _donationWishesMapperMock.VerifyNoOtherCalls();
             _faithDeclarationMapperMock.VerifyNoOtherCalls();
-            _nameMapperMock.Verify(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.GpSystems.OrganDonation.Models.Name>()));
+            _nameMapperMock.Verify(x => x.Map(It.IsAny<string>(), It.IsAny<Worker.OrganDonation.Models.Name>()));
             _addressMapperMock.Verify(x =>
-                x.Map(It.IsAny<string>(), It.IsAny<Worker.GpSystems.OrganDonation.Models.Address>()));
+                x.Map(It.IsAny<string>(), It.IsAny<Worker.OrganDonation.Models.Address>()));
             _genderMapperMock.Verify(x => x.Map(It.IsAny<string>()));
 
             result.Should().NotBeNull();

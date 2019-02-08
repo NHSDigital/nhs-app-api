@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models
+namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
     public class DecisionDetails
     {

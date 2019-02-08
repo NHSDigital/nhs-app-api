@@ -6,7 +6,7 @@ using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    internal class OrganDonationNameMapper : IMapper<string, GpSystems.OrganDonation.Models.Name, Name>
+    internal class OrganDonationNameMapper : IMapper<string, OrganDonation.Models.Name, Name>
     {
         private const char SpaceChar = ' ';
 
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             { "DAME", "DAME" }
         };
 
-        public Name Map(string firstSource, GpSystems.OrganDonation.Models.Name secondSource)
+        public Name Map(string firstSource, OrganDonation.Models.Name secondSource)
         {
             if (string.IsNullOrWhiteSpace(firstSource) && secondSource == null)
             {
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             return Map(secondSource) ?? Map(firstSource);
         }
 
-        private Name Map(GpSystems.OrganDonation.Models.Name name)
+        private Name Map(OrganDonation.Models.Name name)
         {
             return name != null
                 ? new Name

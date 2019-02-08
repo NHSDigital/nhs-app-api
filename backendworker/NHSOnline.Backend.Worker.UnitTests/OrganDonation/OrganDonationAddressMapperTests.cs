@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
     {
 
         private IFixture _fixture;
-        private IMapper<string, NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Address, Address>
+        private IMapper<string, NHSOnline.Backend.Worker.OrganDonation.Models.Address, Address>
             _organDonationAddressMapper;
 
         [TestInitialize]
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         public void MapToOrganDonationAddress_WhenPassingBothAddresss_UseSplitAddress()
         {
             // Arrange
-            var address = _fixture.Create<NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Address>();
+            var address = _fixture.Create<NHSOnline.Backend.Worker.OrganDonation.Models.Address>();
             
             // Act 
             var result = _organDonationAddressMapper.Map("15 Street, Town, EC1A 1BB", address);
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Act 
             var result = _organDonationAddressMapper.Map(null,
-                new NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models.Address
+                new NHSOnline.Backend.Worker.OrganDonation.Models.Address
                 {
                     Text = text,
                     PostCode = postcode

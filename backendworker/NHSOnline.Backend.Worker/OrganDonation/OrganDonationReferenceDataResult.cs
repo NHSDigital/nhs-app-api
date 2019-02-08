@@ -1,4 +1,4 @@
-using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

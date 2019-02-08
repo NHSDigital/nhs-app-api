@@ -7,12 +7,12 @@ using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    internal class OrganDonationAddressMapper : IMapper<string, GpSystems.OrganDonation.Models.Address, Address>
+    internal class OrganDonationAddressMapper : IMapper<string, OrganDonation.Models.Address, Address>
     {
         private static readonly Regex PostCodeRegex =
             new Regex(@"([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})");
 
-        public Address Map(string firstSource, GpSystems.OrganDonation.Models.Address secondSource)
+        public Address Map(string firstSource, OrganDonation.Models.Address secondSource)
         {
             if (string.IsNullOrWhiteSpace(firstSource) && secondSource == null)
             {
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             };
         }
 
-        private Address Map(GpSystems.OrganDonation.Models.Address address) => address != null
+        private Address Map(OrganDonation.Models.Address address) => address != null
             ? new Address
             {
                 PostalCode = address.PostCode,

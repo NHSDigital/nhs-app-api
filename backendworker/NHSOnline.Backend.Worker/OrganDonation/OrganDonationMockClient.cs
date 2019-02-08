@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.GpSystems.OrganDonation.Models;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
