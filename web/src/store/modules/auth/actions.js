@@ -92,7 +92,11 @@ export default {
     this.dispatch('auth/logout', { expired: true });
   },
   logoutNoJs() {
-    this.app.$cookies.removeAll();
+    const self = this;
+    removeCookies({
+      cookies: self.app.$cookies,
+      key: ['nhso.terms', 'nhso.session'],
+    });
   },
   logout({ commit }, { expired } = {}) {
     logoutCleanUp({ self: this });
