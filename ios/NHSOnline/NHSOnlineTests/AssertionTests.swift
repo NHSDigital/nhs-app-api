@@ -52,18 +52,25 @@ class AssertionTests: XCTestCase {
     }
     
     func test_getUVMData(){
-        let uvmData = ExtensionAssertionBuilder().getUVMData()
-        XCTAssert([3,0,0,0,10,0,4,0] == uvmData)
+        let uvmData = MockAssertionBuilder().getUVMData()
+        XCTAssert([1,0,0,0,10,0,4,0] == uvmData)
     }
     
     func test_getExtensions(){
-        let extensions = ExtensionAssertionBuilder().getExtensionData()
-        XCTAssert([19,46,12,0,102,105,100,111,46,117,97,102,46,117,118,109,20,46,8,0,3,0,0,0,10,0,4,0] == extensions)
+        let extensions = MockAssertionBuilder().getExtensionData()
+        XCTAssert([19,46,12,0,102,105,100,111,46,117,97,102,46,117,118,109,20,46,8,0,1,0,0,0,10,0,4,0] == extensions)
     }
     
     func test_encodeInt(){
         let encodedInt = EncodingHelper.encodeInt(1)
         XCTAssert([1,0] == encodedInt)
+    }
+    
+    class MockAssertionBuilder: ExtensionAssertionBuilder {
+        
+        override func biometricType() -> Int32 {
+            return UserVerification.USER_VERIFY_PRESENCE.rawValue
+        }
     }
     
 }

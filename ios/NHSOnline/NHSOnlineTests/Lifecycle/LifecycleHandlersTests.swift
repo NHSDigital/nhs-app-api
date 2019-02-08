@@ -21,7 +21,8 @@ class LifecycleHandlersTests: XCTestCase {
         
         mockConfigurationService = MockConfigurationService()
         
-        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, homeViewController: homeController!, configurationService: mockConfigurationService! as ConfigurationServiceProtocol)
+        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices!, webViewController: webViewController!, homeViewController: homeController!)
+        lifecycleHandlers?.configurationService = mockConfigurationService
     }
     
     override func tearDown() {
@@ -47,7 +48,6 @@ class LifecycleHandlersTests: XCTestCase {
     }
     
     class MockConfigurationService: ConfigurationServiceProtocol {
-        
         var isValidConfiguration = false
         
         func isUserDeviceAllowed(homeViewController: HomeViewController, completionHandler: @escaping (ConfigurationResponse?) -> Void) {

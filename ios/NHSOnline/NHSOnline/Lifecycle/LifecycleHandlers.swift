@@ -7,14 +7,13 @@ class LifecycleHandlers: NSObject {
     var webViewController: WebViewController?
     var hasCheckedAppVersionSinceAppOpened = false
     var homeViewController: HomeViewController
-    var configurationService: ConfigurationServiceProtocol
+    var configurationService: ConfigurationServiceProtocol?
     let validateSessionString: String = "window.validateSession()"
     
-    init(knownServices: KnownServices, webViewController: WebViewController, homeViewController: HomeViewController, configurationService: ConfigurationServiceProtocol) {
+    init(knownServices: KnownServices, webViewController: WebViewController, homeViewController: HomeViewController) {
         self.knownServices = knownServices
         self.webViewController = webViewController
         self.homeViewController = homeViewController
-        self.configurationService = configurationService
         super.init()
         createLifecycleObservers()
     }
@@ -29,13 +28,20 @@ class LifecycleHandlers: NSObject {
         NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.performAppVersionCheck), name: CustomNotifications.pageUnavailabilityOnReloadWebView, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showAPIUnavailableError), name: CustomNotifications.apiLoadFailure, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.apiCallSuccessful), name: CustomNotifications.apiLoadSuccess, object: nil)
+
+        self.configurationService = ConfigurationService.shared()
+    
     }
     
     @objc
     func performAppVersionCheck(onQueue queue: DispatchQueue = DispatchQueue.main) {
         if (hasCheckedAppVersionSinceAppOpened == false) {
             
-            configurationService.isUserDeviceAllowed(homeViewController: homeViewController) { (response) in
+            configurationService!.isUserDeviceAllowed(homeViewController: homeViewController) { (response) in
                 if let result = response {
                     if (result.isValidConfiguration == false) {
                         queue.async {
@@ -45,6 +51,14 @@ class LifecycleHandlers: NSObject {
                 }
             }
         }
+    }
+    
+    @objc func showAPIUnavailableError(){
+        self.homeViewController.apiCallFailure()
+    }
+    
+    @objc func apiCallSuccessful(){
+        self.homeViewController.apiConfigCallError = false
     }
     
     @objc

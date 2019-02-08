@@ -27,12 +27,14 @@ class HomeViewController : UIViewController {
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().HomeUrl
     var appVersionCheckError: Bool = false
+    var apiConfigCallError: Bool = false
     var appWebInterface: AppWebInterface?
     var webAppInterface: WebAppInterface?
     var extendSessionOverdue: Bool = false
     var currentSessionDuration: Int?
     var isPresented: Bool = false
     var biometricService: BiometricService?
+    var configurationService: ConfigurationService?
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
@@ -54,7 +56,7 @@ class HomeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupNhsLogo()
         setupBackArrow()
         setupMyAccountIcon()
@@ -70,14 +72,30 @@ class HomeViewController : UIViewController {
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
         
-        
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices,
                                               webViewController: webViewController!,
-                                              homeViewController: self,
-                                              configurationService: ConfigurationService.shared())
+                                              homeViewController: self)
         appWebInterface = AppWebInterface(webView: webViewController?.webView)
         
-        self.webViewController?.loadPage(url: pageUrl)
+    
+        guard apiConfigCallError else {
+            self.webViewController?.loadPage(url: pageUrl)
+            return
+        }
+        
+    }
+    
+    func apiCallFailure() {
+        guard isOffline() else {
+            apiConfigCallError = true
+            let nhsOnlineErrorTitle = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
+            let nhsOnlineErrorMessage = NSLocalizedString("APIUnavailableErrorMessage", comment: "")
+            let accessibleNhsOnlineErrorMessage = NSLocalizedString("AccessibilityAPIUnavailableErrorMessage", comment: "")
+            
+            let error = ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage)
+            
+            return showNativeViewContainer(errorMessage: error)
+        }
     }
     
     func delayedBiometricsStart(_ timer: Double) {
@@ -318,7 +336,7 @@ class HomeViewController : UIViewController {
     }
     
     func showBiometricViewContainer() {
-        guard checkOffline() else {
+        guard isOffline() else {
             biometricViewController?.homeViewController = self
             cycleFromViewController(oldViewController: webViewController!, toViewController: biometricViewController!)
             currentNativeViewController = biometricViewController
@@ -329,7 +347,7 @@ class HomeViewController : UIViewController {
     }
     
     func showBiometricResultsContainer(registration: Bool) {
-        guard checkOffline() else {
+        guard isOffline() else {
             if registration {
                 biometricResultController?.registration = true
             } else {
@@ -350,13 +368,14 @@ class HomeViewController : UIViewController {
         }
     }
     
-    func checkOffline() -> Bool {
+    func isOffline() -> Bool {
         guard Reachability.isConnectedToNetwork() else {
             self.webViewDelegate?.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
             return true
         }
         return false
     }
+    
     func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {
         oldViewController.willMove(toParentViewController: nil)
         self.addChildViewController(newViewController)

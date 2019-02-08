@@ -9,7 +9,7 @@ class   ConfigurationService : ConfigurationServiceProtocol {
     private var configurationResponse = ConfigurationResponse()
     
     private init() {
-        makeConfigCall()
+        doConfigurationCallAndValidateResponse()
     }
     
     private func makeConfigCall() {
@@ -28,6 +28,14 @@ class   ConfigurationService : ConfigurationServiceProtocol {
         }
     }
     
+    private func checkConfigResponse(){
+        if isValidConfigResponse() {
+            NotificationCenter.default.post(name: CustomNotifications.apiLoadSuccess, object: nil)
+        } else {
+            NotificationCenter.default.post(name: CustomNotifications.apiLoadFailure, object: nil)
+        }
+    }
+    
     private func getConfigurationResponse(completion: @escaping(Configuration?) -> ()) {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         
@@ -43,8 +51,7 @@ class   ConfigurationService : ConfigurationServiceProtocol {
                 do {
                     let appConfig = try decoder.decode(Configuration.self, from: usableData)
                     completion(appConfig)
-                }
-                catch {
+                } catch {
                     if #available(iOS 10.0, *) {
                         os_log("Failure doing native app version http check: %@", log: OSLog.default, type: .error, "\(error)")
                     } else {
@@ -76,7 +83,7 @@ class   ConfigurationService : ConfigurationServiceProtocol {
             
             completionHandler(configurationResponse)
         } else {
-            retryConfigurationCall()
+            doConfigurationCallAndValidateResponse()
             completionHandler(nil)
         }
     }
@@ -85,8 +92,9 @@ class   ConfigurationService : ConfigurationServiceProtocol {
         return !configurationResponse.callFailed
     }
     
-    func retryConfigurationCall() {
+    func doConfigurationCallAndValidateResponse() {
         makeConfigCall()
+        checkConfigResponse()
     }
     
     public func FidoServerUrl() -> String {

@@ -74,8 +74,12 @@ class BiometricService: BiometricProtocol {
             os_log("A parsing error occured", log: OSLog.default, type: OSLogType.error)
         case .encryptionError:
             os_log("An encryption error occured", log: OSLog.default, type: OSLogType.error)
-        default:
-            os_log("An unknown error occured", log: OSLog.default, type: OSLogType.error)
+        case .networkRequestError:
+            os_log("A network error occured", log: OSLog.default, type: OSLogType.error)
+        case .accessTokenError:
+            os_log("An access token error occured", log: OSLog.default, type: OSLogType.error)
+        case .genericError:
+            os_log("A generic error occured", log: OSLog.default, type: OSLogType.error)
         }
     }
 }
