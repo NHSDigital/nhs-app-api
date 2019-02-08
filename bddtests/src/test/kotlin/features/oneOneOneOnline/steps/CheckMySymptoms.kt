@@ -2,12 +2,12 @@ package features.oneOneOneOnline.steps
 
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
-import pages.CheckMySymtomsPage
+import pages.CheckMySymptomsPage
 
 
 open class CheckMySymptoms {
 
-    lateinit var checkMySymptoms: CheckMySymtomsPage
+    lateinit var checkMySymptoms: CheckMySymptomsPage
 
 
     @Step

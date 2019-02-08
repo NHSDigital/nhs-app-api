@@ -1,19 +1,24 @@
 package features.sharedSteps
 
+import config.Config
 import net.thucydides.core.annotations.Step
+import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 
 open class NavigationSteps {
 
+    @Steps
+    lateinit var browser: BrowserSteps
+
     lateinit var navBarNative: NavBarNative
     lateinit var headerNative: HeaderNative
 
     @Step
-    fun assertSelectedTab(tab:NavBarNative.NavBarType){
-        Assert.assertTrue("Expected tab '${tab.name}' to be selected, but no tabs selected" , hasAnyTabSelected())
-        Assert.assertTrue("Expected tab '${tab.name}' to be selected." , hasSelectedTab(tab))
+    fun assertSelectedTab(tab: NavBarNative.NavBarType) {
+        Assert.assertTrue("Expected tab '${tab.name}' to be selected, but no tabs selected", hasAnyTabSelected())
+        Assert.assertTrue("Expected tab '${tab.name}' to be selected.", hasSelectedTab(tab))
     }
 
     @Step
@@ -27,7 +32,7 @@ open class NavigationSteps {
     }
 
     @Step
-    fun hasAnyTabSelected() : Boolean {
+    fun hasAnyTabSelected(): Boolean {
         return navBarNative.hasSingleSelection()
     }
 
@@ -53,5 +58,12 @@ open class NavigationSteps {
         for (tab in NavBarNative.NavBarType.values()) {
             Assert.assertTrue("$tab not visible", hasVisible(tab))
         }
+    }
+
+    @Step
+    fun browseToPage(url: String): String {
+        val fullUrl = Config.instance.url + url
+        browser.browseTo(fullUrl)
+        return fullUrl
     }
 }

@@ -1,14 +1,16 @@
-package pages
+package pages.loggedOut
 
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import pages.HybridPageElement
+import pages.HybridPageObject
 
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
 class LoginPage : HybridPageObject() {
 
-    val symptomsButtonHeading = HybridPageElement(
+    private val symptomsButtonHeading = HybridPageElement(
             webDesktopLocator = "//h2[contains(text(), 'How are you feeling today?')]",
             webMobileLocator = "//h2[contains(text(), 'How are you feeling today?')]",
             androidLocator = null,
@@ -22,7 +24,7 @@ class LoginPage : HybridPageObject() {
             page = this
     )
 
-    val loginOrCreateAccountButtonHeading = HybridPageElement(
+    private val loginOrCreateAccountButtonHeading = HybridPageElement(
             webDesktopLocator = "//h2[contains(text(), 'To access your NHS services')]",
             webMobileLocator = "//h2[contains(text(), 'To access your NHS services')]",
             androidLocator = null,
@@ -43,17 +45,17 @@ class LoginPage : HybridPageObject() {
             page = this
     )
 
-    val helpIcon = HybridPageElement(
+    private val helpIcon = HybridPageElement(
             webDesktopLocator = "//a[@id='help_icon']/*[name()='svg']",
             androidLocator = null,
             page = this
     )
 
-    lateinit var accountCreationPage: CIDAccountCreationPage
+    private lateinit var accountCreationPage: CIDAccountCreationPage
 
     private val timeoutBanner = HybridPageElement(
             webDesktopLocator = "//*[@data-purpose='session-timeout'][contains(text(), " +
-                             "'For your security, you need to log in again')]",
+                    "'For your security, you need to log in again')]",
             androidLocator = null,
             page = this
     )

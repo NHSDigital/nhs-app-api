@@ -3,8 +3,8 @@ package features.authentication.steps
 import config.Config
 import models.Patient
 import net.thucydides.core.annotations.Step
-import pages.LoginPage
-import pages.LoginStubPage
+import pages.loggedOut.LoginPage
+import pages.loggedOut.LoginStubPage
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
 

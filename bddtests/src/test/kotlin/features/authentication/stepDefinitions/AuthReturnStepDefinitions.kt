@@ -8,7 +8,7 @@ import features.sharedSteps.BrowserSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import models.Patient
 import net.thucydides.core.annotations.Steps
-import pages.AuthReturnPage
+import pages.loggedOut.AuthReturnPage
 import pages.ErrorPage
 
 class AuthReturnStepDefinitions : AbstractSteps() {

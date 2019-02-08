@@ -6,7 +6,7 @@ import net.serenitybdd.core.exceptions.SerenityManagedException
 import net.thucydides.core.annotations.Step
 import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
-import pages.LoginPage
+import pages.loggedOut.LoginPage
 import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -16,7 +16,7 @@ import java.time.Duration
 import java.util.*
 
 private const val SIGN_OUT_WAIT_TIME = 1000L
-private const val LOAD_URL_WAIT_TIME = 180L
+private const val LOAD_URL_WAIT_TIME = 30L
 private const val POLLING_DURATION = 100L
 
 open class BrowserSteps {
@@ -61,7 +61,7 @@ open class BrowserSteps {
                 }
     }
 
-    @Step()
+    @Step
     fun checkLoginDetailsAreReset() {
         assertNull(fetchCookie("nhso.session"))
     }
@@ -70,7 +70,8 @@ open class BrowserSteps {
         return loginPage.driver.manage().cookies.firstOrNull { x -> x.name == cookieName }
     }
 
-    private fun cookieExists(cookieName: String): Boolean {
+    @Step
+    fun cookieExists(cookieName: String): Boolean {
         val driver = loginPage.driver
         return driver.manage().cookies.any { x -> x.name == cookieName }
     }

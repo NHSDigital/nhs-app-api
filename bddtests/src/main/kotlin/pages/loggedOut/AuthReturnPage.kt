@@ -1,6 +1,7 @@
-package pages
+package pages.loggedOut
 
 import org.junit.Assert.assertTrue
+import pages.HybridPageObject
 
 class AuthReturnPage : HybridPageObject() {
     val errorPageTitle = "Session error"

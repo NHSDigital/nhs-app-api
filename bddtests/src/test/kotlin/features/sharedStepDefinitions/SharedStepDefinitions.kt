@@ -150,7 +150,6 @@ open class SharedStepDefinitions {
 
     }
 
-
     @Then("^I am redirected to '(.*)'$")
     fun iAmRedirectedTo(url: String) {
         browser.shouldHaveUrl(url)

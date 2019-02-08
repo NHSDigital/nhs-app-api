@@ -1,7 +1,9 @@
-package pages
+package pages.loggedOut
 
 import config.Config
 import models.Patient
+import pages.HybridPageObject
+import pages.HybridPageElement
 
 open class CIDAccountCreationPage : HybridPageObject() {
     val mockPatientInput = HybridPageElement(

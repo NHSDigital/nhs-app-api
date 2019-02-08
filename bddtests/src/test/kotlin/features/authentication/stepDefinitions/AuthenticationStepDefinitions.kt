@@ -550,9 +550,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @When("^I browse to the page at (.*)$")
     fun iBrowseToPageAt(url: String) {
-        val fullUrl = Config.instance.url + url
-        browser.browseTo(fullUrl)
-        this.currentUrl = fullUrl
+        this.currentUrl = nav.browseToPage(url)
     }
 
     @When("^I browse to the pages at the following urls I see the (.*) page$")

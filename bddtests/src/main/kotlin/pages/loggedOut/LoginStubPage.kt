@@ -1,7 +1,8 @@
-package pages
+package pages.loggedOut
 
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
+import pages.HybridPageObject
 
 @DefaultUrl("http://stubs.local.bitraft.io:8080/citizenid/authorize")
 
