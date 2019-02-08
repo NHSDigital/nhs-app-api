@@ -42,7 +42,6 @@ const config = {
       'urlResolution',
       'auth',
       'meta',
-      'analytics',
       'termsAndConditions',
       'myRecordAcceptance',
       'urlResolution',

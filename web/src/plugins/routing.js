@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 import get from 'lodash/fp/get';
+import configureAnalytics from '../services/analytics-service';
 
-export default ({ app }) => {
+export default ({ app, store, route }) => {
   let navigatingBack = false;
 
   app.router.previousPaths = [];
@@ -23,5 +24,6 @@ export default ({ app }) => {
       }
       app.router.previousPaths.push(get('path')(from));
     }
+    configureAnalytics(app, store, route);
   });
 };

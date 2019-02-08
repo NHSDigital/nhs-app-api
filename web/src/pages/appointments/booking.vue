@@ -223,8 +223,26 @@ export default {
         this.numberOfAvailableAppointments,
         { appointmentsCount: this.numberOfAvailableAppointments },
       );
-
+      this.trackDropDown(this.numberOfAvailableAppointments);
       this.availableAppointmentsScreenReaderMessage.push(screenReaderMessage);
+    },
+    trackDropDown(numberOfAvailableAppointments) {
+
+      let trackEvent;
+      if(this.numberOfAvailableAppointments === 0) {
+        trackEvent = 'appointmentError';
+      } else {
+        trackEvent = 'appointmentSuccess';
+      }
+
+      var objectToTrack = {
+        appointmentType: this.selectedOptions.type,
+        location: this.selectedOptions.location,
+        practiceMember: this.selectedOptions.clinician,
+        filterByDate: this.selectedOptions.date
+      };
+
+      this.$store.dispatch('analytics/satelliteTrack', trackEvent, objectToTrack);
     },
     goBack() {
       this.$router.push(APPOINTMENTS.path);

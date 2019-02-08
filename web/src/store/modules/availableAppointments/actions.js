@@ -18,6 +18,7 @@ export default {
     commit(CLEAR);
   },
   setSelectedFilters({ commit }, selectedOptions) {
+    this.dispatch('analytics/trackUserProperty', { key: 'dropDownValue', value: selectedOptions.date });
     commit(SET_SELECTED_OPTIONS, selectedOptions);
   },
   load({ commit }) {

@@ -54,6 +54,7 @@ export default function (app, store, route) {
         user: {
           gpOdsCode: store.state.session.gpOdsCode,
           medicalRecordType: store.state.myRecord.medicalRecordType,
+          dropDownValue: store.state.availableAppointments.selectedOptions.date
         },
       };
       try {
