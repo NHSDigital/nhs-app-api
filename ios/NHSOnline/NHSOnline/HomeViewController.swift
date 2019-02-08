@@ -8,7 +8,7 @@ class HomeViewController : UIViewController {
     
     @IBOutlet weak var headerBar: HeaderBar!
     @IBOutlet weak var headerBarSlim: HeaderBarSlim!
-
+    
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var containerView: UIView!
     
@@ -54,12 +54,12 @@ class HomeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupNhsLogo()
         setupBackArrow()
         setupMyAccountIcon()
         setupHelpIcon()
-
+        
         webAppInterface = WebAppInterface(controller: self)
         webViewDelegate = WebViewDelegate(controller: self, knownServices: knownServices, webAppInterface: webAppInterface!)
         tabBarDelegate = TabBarDelegate(controller: self)
@@ -98,7 +98,7 @@ class HomeViewController : UIViewController {
     @objc @available(iOS 10.0, *)
     public func attemptBiometricLogin() {
         do {
-
+            
             if(UserDefaultsManager.getBiometricAvailability() == BiometricState.Registered) {
                 biometricService?.authenticate()
             } else if (UserDefaultsManager.getBiometricAvailability() == BiometricState.Invalidated) {
@@ -127,7 +127,7 @@ class HomeViewController : UIViewController {
         webViewController?.loadViewIfNeeded()
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         webViewController?.view.translatesAutoresizingMaskIntoConstraints = false
-            
+        
         errorViewController = self.storyboard?.instantiateViewController(withIdentifier: "PageUnavailabilityViewController") as? PageUnavailabilityViewController
         errorViewController?.view.translatesAutoresizingMaskIntoConstraints = false
         errorViewController?.loadViewIfNeeded()
@@ -152,16 +152,16 @@ class HomeViewController : UIViewController {
         let directory = config().CarouselDirectory
         
         if let path = Bundle.main.url(forResource: fileName, withExtension: type, subdirectory: directory) {
-
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                 self.webViewController?.webView.loadFileURL(path, allowingReadAccessTo: path)
                 self.webViewController?.webView.becomeFirstResponder()
-
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
                     self.executeJavascript(scriptToExecute: "var isIos = true; removeAttrs(); var result = jQuery('#nhso_logo_one').focus();")
                 })
             })
-
+            
         } else {
             if #available(iOS 10.0, *) {
                 os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
@@ -228,17 +228,17 @@ class HomeViewController : UIViewController {
     func setupAppVersion() {
         let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         let updateNativeVersionJavascriptCommand = "var result = window.$nuxt.$store.dispatch('appVersion/updateNativeVersion', '\(versionNumber)');"
-
+        
         executeJavascript(scriptToExecute: updateNativeVersionJavascriptCommand)
     }
-
+    
     func executeJavascript(scriptToExecute: String) {
         let completionHandler: (Any?, Error?) -> Void = {
             (data, error) in
             if(error != nil) {
                 let description = error.debugDescription
                 print(description)
-
+                
                 if #available(iOS 10.0, *) {
                     os_log("An error occured setting the app version number.", log: OSLog.default, type: .error)
                 } else {
@@ -270,7 +270,7 @@ class HomeViewController : UIViewController {
                 self.tabBar.isHidden = !visible
             }
         })
-
+        
     }
     
     func getBiometricRegistrationErrorStrings() -> BiometricErrorStrings{
@@ -287,7 +287,9 @@ class HomeViewController : UIViewController {
         let biometricRegistrationError = ErrorMessage(title: "Something went wrong", message: getBiometricRegistrationErrorStrings().BiometricRegistrationErrorMessage, accessibleMessage: getBiometricRegistrationErrorStrings().BiometricRegistrationErrorMessage)
         self.errorViewController?.setUnavailabilityError(errorMessage: biometricRegistrationError)
         self.updateHeaderText(headerText: getBiometricRegistrationErrorStrings().BiometricRegistrationPageHeader)
-        showErrorViewContainer() 
+        cycleFromViewController(oldViewController: biometricViewController!, toViewController: errorViewController!)
+        currentNativeViewController = errorViewController
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, errorViewController?.errorTextView)
     }
     
     func showNativeViewContainer(errorMessage: ErrorMessage) {
@@ -300,7 +302,7 @@ class HomeViewController : UIViewController {
         self.webViewDelegate?.failedUrl = URL(string: config().HomeUrl + "login")
         let biometricLoginSessionError = ErrorMessage(title: NSLocalizedString("BiometricSessionTimeoutHeader", comment: ""),
                                                       message: NSLocalizedString("BiometricSessionTimeoutMessage", comment: ""),
-                                                      accessibleMessage: NSLocalizedString("BiometricSessionTimeoutButtonText", comment: ""))
+                                                      accessibleMessage: NSLocalizedString("AccessibilityBiometricsTimeoutMessage", comment: ""))
         self.errorViewController?.setUnavailabilityError(errorMessage: biometricLoginSessionError)
         self.errorViewController?.hideTryAgainLabel()
         self.errorViewController?.setTryAgainButtonText(text: NSLocalizedString("BiometricSessionTimeoutButtonText", comment: ""))
@@ -334,7 +336,7 @@ class HomeViewController : UIViewController {
                 biometricResultController?.registration = false
             }
             biometricResultController?.viewController = self
-            cycleFromViewController(oldViewController: webViewController!, toViewController: biometricResultController!)
+            cycleFromViewController(oldViewController: biometricViewController!, toViewController: biometricResultController!)
             currentNativeViewController = biometricResultController
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, biometricResultController?.BoxText)
             return
