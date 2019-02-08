@@ -694,6 +694,8 @@ export default {
     myRecordLabel: 'My medical record',
     prescriptionsLabel: 'Repeat prescriptions',
     symptomsLabel: 'Symptoms',
+    accountLabel: 'Account',
+    logoutLabel: 'Log out',
   },
   navigationMenuList: {
     symptoms: 'Check my symptoms',

@@ -47,6 +47,9 @@ main.content {
   margin: 0 1em;
   box-sizing: border-box;
   width: auto;
+  &.desktopWeb {
+    min-width: 300px;
+  }
   &.web {
     min-height: calc(75vh );
   }

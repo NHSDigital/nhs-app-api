@@ -27,6 +27,7 @@ export default {
   @import "../../style/colours";
   @import "../../style/textstyles";
   @import "../../style/fonts";
+  @import "../../style/screensizes";
 
   .header-links {
     font-family: $default-web;
@@ -72,6 +73,10 @@ export default {
         color: $white;
       }
     }
+
+   @include phone-and-below {
+    display: none;
+   }
   }
 
 </style>

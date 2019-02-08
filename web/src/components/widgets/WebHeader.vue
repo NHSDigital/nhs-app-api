@@ -143,6 +143,7 @@ div {
   right: 0;
   z-index: 4;
   box-sizing: border-box;
+  min-width: 300px;
 
   .header-content {
    max-width: 960px;

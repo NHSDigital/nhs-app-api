@@ -40,12 +40,26 @@
           {{ $t('navigationMenu.moreLabel') }}
         </a>
       </li>
+      <li :class="$style.additionalMenuItem">
+        <a :class="$style['navMenuItem']" :href="accountPath"
+           data-sid="account-menu-item"
+           @click.prevent="setMenuitemState($event)">
+          {{ $t('navigationMenu.accountLabel') }}
+        </a>
+      </li>
+      <li :class="$style.additionalMenuItem">
+        <a :class="$style['navMenuItem']" :href="logoutPath"
+           data-sid="logout-menu-item"
+           @click.prevent="setMenuitemState($event)">
+          {{ $t('navigationMenu.logoutLabel') }}
+        </a>
+      </li>
     </ul>
   </nav>
 </template>
 
 <script>
-import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORD, MORE } from '@/lib/routes';
+import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORD, MORE, ACCOUNT, LOGOUT } from '@/lib/routes';
 
 export default {
   props: {
@@ -62,6 +76,8 @@ export default {
       recordPath: MYRECORD.path,
       morePath: MORE.path,
       shouldShowMiniMenu: true,
+      accountPath: ACCOUNT.path,
+      logoutPath: LOGOUT.path,
     };
   },
   methods: {
@@ -104,6 +120,10 @@ export default {
       & {
         display: block;
       }
+
+     .additionalMenuItem{
+      display: none;
+     }
     }
 
     a.mini-menu-close-button {
