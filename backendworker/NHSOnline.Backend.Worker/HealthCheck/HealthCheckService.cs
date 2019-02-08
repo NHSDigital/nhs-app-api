@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.HealthCheck.Models;
+using NHSOnline.Backend.Worker.HealthCheck.Models;
 
 namespace NHSOnline.Backend.Worker.HealthCheck
 {

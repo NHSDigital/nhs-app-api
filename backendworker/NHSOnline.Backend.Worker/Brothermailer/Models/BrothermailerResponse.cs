@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Areas.Brothermailer.Models
+﻿namespace NHSOnline.Backend.Worker.Brothermailer.Models
 {
     public class BrothermailerResponse
     {

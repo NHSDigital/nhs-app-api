@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models
+namespace NHSOnline.Backend.Worker.TermsAndConditions.Models
 {
     public class ConsentRequest
     {

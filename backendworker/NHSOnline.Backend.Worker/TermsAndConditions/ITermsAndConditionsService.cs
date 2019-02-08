@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
+using NHSOnline.Backend.Worker.TermsAndConditions.Models;
 
 namespace NHSOnline.Backend.Worker.TermsAndConditions
 {

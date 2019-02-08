@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Areas.HealthCheck.Models
+﻿namespace NHSOnline.Backend.Worker.HealthCheck.Models
 {
     public class HealthCheckItem
     {

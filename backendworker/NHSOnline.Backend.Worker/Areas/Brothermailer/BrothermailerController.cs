@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Brothermailer.Models;
+using NHSOnline.Backend.Worker.Brothermailer.Models;
 using NHSOnline.Backend.Worker.Brothermailer;
 using NHSOnline.Backend.Worker.Support.Logging;
 

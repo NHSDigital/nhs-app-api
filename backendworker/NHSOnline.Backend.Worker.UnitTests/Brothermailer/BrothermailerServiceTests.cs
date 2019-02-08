@@ -6,9 +6,8 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Brothermailer.Models;
-using NHSOnline.Backend.Worker.Brothermailer;
 using NHSOnline.Backend.Worker.Brothermailer.Models;
+using NHSOnline.Backend.Worker.Brothermailer;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Brothermailer
 {

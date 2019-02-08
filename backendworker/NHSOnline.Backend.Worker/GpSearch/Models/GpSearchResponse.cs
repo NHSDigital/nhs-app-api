@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using NHSOnline.Backend.Worker.GpSearch.Models;
 
-namespace NHSOnline.Backend.Worker.Areas.GpSearch.Models
+namespace NHSOnline.Backend.Worker.GpSearch.Models
 {
     public class GpSearchResponse
     {

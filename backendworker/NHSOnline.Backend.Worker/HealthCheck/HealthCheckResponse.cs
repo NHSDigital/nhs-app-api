@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Worker.Areas.HealthCheck.Models
+namespace NHSOnline.Backend.Worker.HealthCheck.Models
 {
     public class HealthCheckResponse
     {

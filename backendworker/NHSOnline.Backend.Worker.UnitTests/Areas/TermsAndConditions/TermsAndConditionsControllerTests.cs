@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.TermsAndConditions;
-using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
+using NHSOnline.Backend.Worker.TermsAndConditions.Models;
 using NHSOnline.Backend.Worker.TermsAndConditions;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions

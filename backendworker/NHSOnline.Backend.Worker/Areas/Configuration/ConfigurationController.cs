@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.Configuration.Models;
 using NHSOnline.Backend.Worker.Support.Devices;
 
 namespace NHSOnline.Backend.Worker.Areas.Configuration
