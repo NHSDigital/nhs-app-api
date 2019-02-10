@@ -7,9 +7,12 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
     public class OrganDonationRegistrationVisitor : IOrganDonationRegistrationResultVisitor<IActionResult>
     {
         
-        public IActionResult Visit(OrganDonationRegistrationResult.SuccessfullyRegistered  result)
+        public IActionResult Visit(OrganDonationRegistrationResult.SuccessfullyRegistered result)
         {
-            return new OkObjectResult(result.Response);
+            return new ObjectResult(result.Response)
+            {
+                StatusCode = StatusCodes.Status201Created
+            };
         }
         
         public IActionResult Visit(OrganDonationRegistrationResult.SystemError result)

@@ -30,9 +30,9 @@ import GenericButton from '@/components/widgets/GenericButton';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
-  DECISION_NOT_FOUND,
-  DECISION_OPT_OUT,
   DECISION_OPT_IN,
+  DECISION_OPT_OUT,
+  DECISION_UNKNOWN,
 } from '@/store/modules/organDonation/mutation-types';
 
 export default {
@@ -56,7 +56,7 @@ export default {
       return this.$store.state.organDonation.originalRegistration.decisionDetails;
     },
     hasExistingDecision() {
-      return this.$store.state.organDonation.originalRegistration.decision !== DECISION_NOT_FOUND;
+      return this.$store.state.organDonation.originalRegistration.decision !== DECISION_UNKNOWN;
     },
     hasAllOrgans() {
       return !!(

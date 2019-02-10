@@ -63,7 +63,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var result = await _systemUnderTest.Post(new OrganDonationRegistrationRequest());
 
             // Assert
-            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            var subject = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            subject.StatusCode.Should().Be(StatusCodes.Status201Created);
+
+            var value = subject.Value;
             value.Should().BeEquivalentTo(organDonationRegistrationResponse);
             _mockOrganDonationService.Verify(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));

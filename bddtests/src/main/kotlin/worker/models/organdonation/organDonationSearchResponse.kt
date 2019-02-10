@@ -13,7 +13,8 @@ data class OrganDonationSearchResponse(
         var emailAddress: String,
         var decision: String,
         var decisionDetails: DecisionDetails,
-        var faithDeclaration: String
+        var faithDeclaration: String,
+        var state: String
 )
 
 data class Name(var title: String,

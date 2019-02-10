@@ -12,6 +12,7 @@ import {
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
   SET_SOME_ORGANS,
+  SET_STATE,
   UPDATE_ORIGINAL_REGISTRATION,
   initialState,
 } from './mutation-types';
@@ -56,6 +57,9 @@ export default {
           choices: initialState().registration.decisionDetails.choices,
         },
       };
+  },
+  [SET_STATE](state, responseState) {
+    state.registration.state = responseState;
   },
   [SET_FAITH_DECLARATION](state, faithDeclaration) {
     state.registration.faithDeclaration = faithDeclaration;

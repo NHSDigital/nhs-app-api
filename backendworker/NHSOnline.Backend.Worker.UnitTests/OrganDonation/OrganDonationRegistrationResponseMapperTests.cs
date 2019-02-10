@@ -68,6 +68,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             // Assert
             result.Should().NotBeNull();
             result.Identifier.Should().Be(response.Body.Id);
+            result.State.Should().Be(State.Ok);
         }
     }
 }

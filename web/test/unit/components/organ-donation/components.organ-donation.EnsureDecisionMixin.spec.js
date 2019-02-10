@@ -2,7 +2,7 @@ import EnsureDecisionMixin, { EnsureOptInDecision } from '@/components/organ-don
 import { ORGAN_DONATION } from '@/lib/routes';
 import {
   initialState,
-  DECISION_NOT_FOUND,
+  DECISION_UNKNOWN,
   DECISION_OPT_IN,
   DECISION_OPT_OUT,
 } from '@/store/modules/organDonation/mutation-types';
@@ -22,7 +22,7 @@ describe('ensure decision mixin', () => {
 
   describe('decision not made', () => {
     beforeEach(() => {
-      store.state.organDonation.registration.decision = DECISION_NOT_FOUND;
+      store.state.organDonation.registration.decision = DECISION_UNKNOWN;
     });
 
     describe('fetch', () => {
@@ -84,7 +84,7 @@ describe('ensure opt in decision mixin', () => {
 
   describe('decision not made', () => {
     beforeEach(() => {
-      store.state.organDonation.registration.decision = DECISION_NOT_FOUND;
+      store.state.organDonation.registration.decision = DECISION_UNKNOWN;
     });
 
     describe('fetch', () => {

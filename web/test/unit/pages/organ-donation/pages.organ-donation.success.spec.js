@@ -1,7 +1,7 @@
 import ViewDecision from '@/pages/organ-donation/view-decision';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import { initialState, DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
+import { DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
 describe('view decision', () => {

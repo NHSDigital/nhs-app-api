@@ -2,7 +2,7 @@ import find from 'lodash/fp/find';
 import AdditionalDetails from '@/pages/organ-donation/additional-details';
 import BackButton from '@/components/BackButton';
 import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
-import { DECISION_NOT_FOUND, DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
+import { DECISION_OPT_IN, DECISION_UNKNOWN, initialState } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
 describe('additional-details', () => {
@@ -34,7 +34,7 @@ describe('additional-details', () => {
 
   describe('no decision set', () => {
     beforeEach(() => {
-      state.organDonation.registration.decision = DECISION_NOT_FOUND;
+      state.organDonation.registration.decision = DECISION_UNKNOWN;
       $store = createStore({ state });
       wrapper = mountWrapper({ });
     });
@@ -44,12 +44,6 @@ describe('additional-details', () => {
         const redirect = jest.fn();
         wrapper.vm.$options.fetch({ redirect, store: $store });
         expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
-      });
-    });
-
-    describe('mounted', () => {
-      it('will push the organ donation index to the router', () => {
-        expect($router).toContain(ORGAN_DONATION.path);
       });
     });
   });

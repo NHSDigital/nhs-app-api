@@ -71,7 +71,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 DateOfBirth = firstSource.DateOfBirth,
                 Decision = _organDonationDecisionMapper.To(existingRegistration.OrganDonationDecision),
                 Identifier = existingRegistration.Identifier.FirstOrDefault()?.Value,
-                FaithDeclaration = _organDonationFaithDeclarationMapper.To(existingRegistration.FaithDeclaration)
+                FaithDeclaration = _organDonationFaithDeclarationMapper.To(existingRegistration.FaithDeclaration),
+                State = State.Ok
             };
 
             if (result.Decision == Decision.OptIn)

@@ -74,7 +74,7 @@ class OrganDonationStepDefinitionsBackend {
                 .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
 
         Assert.assertNotEquals("Organ donation decision incorrect",
-                "NotFound",
+                "Unknown",
                 organDonationResponse.decision)
         Assert.assertNotNull("Organ donation identifier was not found", organDonationResponse.identifier)
     }
@@ -85,7 +85,7 @@ class OrganDonationStepDefinitionsBackend {
                 .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
 
         Assert.assertEquals("Organ donation decision incorrect",
-                "NotFound",
+                "Unknown",
                 organDonationResponse.decision)
         Assert.assertNull("Organ donation identifier should be null",
                 organDonationResponse.identifier)

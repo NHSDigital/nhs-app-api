@@ -3,15 +3,15 @@ import OrganDonation from '@/pages/organ-donation';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
-  DECISION_NOT_FOUND,
   DECISION_OPT_IN,
   DECISION_OPT_OUT,
+  DECISION_UNKNOWN,
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
 
 const createState =
-  ({ decision = DECISION_NOT_FOUND, originalDecision = decision, originalChoices } = {}) => {
+  ({ decision = DECISION_UNKNOWN, originalDecision = decision, originalChoices } = {}) => {
     const state = {
       organDonation: initialState(),
     };

@@ -54,11 +54,7 @@ import BackButton from '@/components/BackButton';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import GenericButton from '@/components/widgets/GenericButton';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import {
-  ORGAN_DONATION,
-  ORGAN_DONATION_REVIEW_YOUR_DECISION,
-} from '@/lib/routes';
-import { DECISION_NOT_FOUND } from '@/store/modules/organDonation/mutation-types';
+import { ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 
 const mapAdditionalDetails = self => ({
   ethnicityId: self.ethnicityId,
@@ -94,11 +90,6 @@ export default {
   },
   asyncData({ store }) {
     return store.dispatch('organDonation/getReferenceData');
-  },
-  mounted() {
-    if (this.$store.state.organDonation.registration.decision === DECISION_NOT_FOUND) {
-      this.$router.push(ORGAN_DONATION.path);
-    }
   },
   methods: {
     continueClicked() {

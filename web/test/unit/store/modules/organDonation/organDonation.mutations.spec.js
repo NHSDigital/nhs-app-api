@@ -11,6 +11,9 @@ import {
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
+  SET_STATE,
+  STATE_OK,
+  STATE_CONFLICTED,
   UPDATE_ORIGINAL_REGISTRATION,
 } from '@/store/modules/organDonation/mutation-types';
 
@@ -132,6 +135,18 @@ describe('organ donation record mutations', () => {
       mutations[UPDATE_ORIGINAL_REGISTRATION](state);
       expect(state.originalRegistration.address.text).toEqual(state.registration.address.text);
       expect(state.originalRegistration.address).not.toBe(state.registration.address);
+    });
+  });
+
+  describe('SET_STATE', () => {
+    it('will set registration state to "Ok" if not conflicted', () => {
+      mutations[SET_STATE](state, STATE_OK);
+      expect(state.registration.state).toEqual(STATE_OK);
+    });
+
+    it('will set registration state to "Conflicted" if conflicted', () => {
+      mutations[SET_STATE](state, STATE_CONFLICTED);
+      expect(state.registration.state).toEqual(STATE_CONFLICTED);
     });
   });
 });

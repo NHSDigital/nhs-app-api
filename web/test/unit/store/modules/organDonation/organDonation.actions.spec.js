@@ -9,10 +9,17 @@ import {
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
+  SET_STATE,
+  STATE_OK,
   UPDATE_ORIGINAL_REGISTRATION,
 } from '@/store/modules/organDonation/mutation-types';
 
-const createHttp = ({ result = {}, referenceData = {}, identifier = 'boo' } = {}) => ({
+const createHttp = ({
+  result = {},
+  referenceData = {},
+  identifier = 'boo',
+  state = STATE_OK,
+} = {}) => ({
   getV1PatientOrgandonation: jest.fn().mockImplementation(() => Promise.resolve(result)),
   getV1PatientOrgandonationReferencedata:
     jest
@@ -21,7 +28,7 @@ const createHttp = ({ result = {}, referenceData = {}, identifier = 'boo' } = {}
   postV1PatientOrgandonation:
     jest
       .fn()
-      .mockImplementation(() => Promise.resolve({ identifier })),
+      .mockImplementation(() => Promise.resolve({ identifier, state })),
 });
 
 describe('organ donation actions', () => {
@@ -127,10 +134,18 @@ describe('organ donation actions', () => {
   describe('postRegistration', () => {
     let state;
     let expectedIdentifier;
+    let expectedState;
 
     beforeEach(async () => {
       expectedIdentifier = '999';
-      $http = createHttp({ result, referenceData, identifier: expectedIdentifier });
+      expectedState = STATE_OK;
+      $http = createHttp({
+        result,
+        referenceData,
+        identifier: expectedIdentifier,
+        state: expectedState,
+      });
+
       state = {
         additionalDetails: 'additional details',
         registration: { nhsNumber: '12345' },
@@ -146,6 +161,10 @@ describe('organ donation actions', () => {
           registration: state.registration,
         },
       });
+    });
+
+    it('will commit the returned state using the SET_STATE mutation type', () => {
+      expect(commit).toHaveBeenCalledWith(SET_STATE, expectedState);
     });
 
     it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {

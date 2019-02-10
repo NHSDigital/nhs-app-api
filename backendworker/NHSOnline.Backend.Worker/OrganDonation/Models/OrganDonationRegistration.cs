@@ -31,5 +31,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation.Models
 
         [JsonConverter(typeof(StringEnumConverter), false)]
         public FaithDeclaration? FaithDeclaration { get; set; }
+        
+        [JsonConverter(typeof(StringEnumConverter), false)]
+        public State State { get; set; }
     }
 }

@@ -271,6 +271,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             result.DecisionDetails.Choices.Should().Contain("heart", ChoiceState.NotStated);
             result.DecisionDetails.Choices.Should().Contain("tissue", ChoiceState.Yes);
             result.FaithDeclaration.Should().Be(FaithDeclaration.No);
+            result.State.Should().Be(State.Ok);
         }
         
         [TestMethod]

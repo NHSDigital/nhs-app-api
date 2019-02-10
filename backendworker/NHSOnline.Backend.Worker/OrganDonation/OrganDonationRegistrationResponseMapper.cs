@@ -25,7 +25,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
             return new OrganDonationRegistrationResponse
             {
-                Identifier = source.Body.Id
+                Identifier = source.Body.Id,
+                State = State.Ok
             };
         }
     }

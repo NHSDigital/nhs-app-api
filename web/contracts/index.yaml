@@ -827,86 +827,105 @@
         tags: 
           - "organDonation"
         summary: "Get the existing organ donation and user demographic information."
-        description: "Returns the users organ donation record."
+        description: "Returns the user's organ donation record."
         consumes: 
           - "application/json"
         responses: 
           200: 
-            description: "Successfully retrieved the users organ donation record."
+            description: "Successfully retrieved the user's organ donation record."
             schema: 
               type: "object"
               properties: 
                 identifier: 
                   type: "string"
-                  description: "Users organ donation identifier."
+                  description: "User's organ donation identifier."
                 nhsNumber: 
                   type: "string"
-                  description: "Users nhs number from the gp system."
+                  description: "User's nhs number from the GP System."
                 nameFull: 
                   type: "string"
-                  description: "Users full name."
+                  description: "User's full name."
                 name: 
                   type: "object"
-                  description: "Users name object."
+                  description: "User's name object."
                   properties: 
                     title: 
                       type: "string"
-                      description: "Users title from the gp system."
+                      description: "User's title from the GP System."
                     givenName: 
                       type: "string"
-                      description: "Users given name from the gp system."
+                      description: "User's given name from the GP System."
                     surname: 
                       type: "string"
-                      description: "Users surname from the gp system."
+                      description: "User's surname from the GP System."
                 gender: 
                   type: "string"
-                  description: "Users gender from the gp system."
+                  description: "User's gender from the GP System."
                 dateOfBirth: 
                   type: "string"
                   format: "date"
-                  description: "Users date of birth from the gp system."
+                  description: "User's date of birth from the GP System."
                 addressFull: 
                   type: "string"
-                  description: "Users full address."
+                  description: "User's full address."
                 address: 
                   type: "object"
-                  description: "Users address from the gp system."
+                  description: "User's address from the GP System."
                   properties: 
                     text: 
                       type: "string"
-                      description: "Users address from the gp system."
+                      description: "User's address from the GP System."
                     postcode: 
                       type: "string"
-                      description: "Users postcode from the gp system."
+                      description: "User's postcode from the GP System."
                 emailAddress: 
                   type: "string"
-                  description: "Users email address from nhs login."
+                  description: "User's email address from nhs login."
                 decision: 
                   type: "string"
-                  description: "Users organ donation decision - OptIn, OptOut or NotFound."
+                  enum: 
+                    - "Unknown"
+                    - "OptIn"
+                    - "OptOut"
+                  description: "User's organ donation decision."
                 decisionDetails: 
                   type: "object"
-                  description: "Users organ donation decision."
+                  description: "User's organ donation decision."
                   properties: 
                     all: 
                       type: "boolean"
-                      description: "Users agreed to donate all organs."
+                      description: "User's agreed to donate all organs."
                     choices: 
-                      description: "Users individual organ donation choices."
+                      description: "User's individual organ donation choices."
                       additionalProperties: 
                         type: "string"
-                        description: "Value of the choice - Yes, No, NotStated."
+                        enum: 
+                          - "NotStated"
+                          - "Yes"
+                          - "No"
+                        description: "Value of the choice."
                       example: 
                         heart: "Yes"
                         lungs: "NotStated"
                         kidney: "No"
                 faithDeclaration: 
                   type: "string"
-                  description: "Users faith decision - Yes, No, NotStated."
+                  enum: 
+                    - "NotStated"
+                    - "Yes"
+                    - "No"
+                  description: "User's faith decision."
+                state: 
+                  type: "string"
+                  enum: 
+                    - "NotFound"
+                    - "Ok"
+                    - "Conflicted"
+                  description: "User's organ donation record state"
           401: 
             description: "User session missing or expired."
           403: 
-            description: "User forbidden access to gp system demographics."
+            description: "User forbidden access to GP System demographics."
           409: 
             description: "Conflicts on organ donation record."
           500: 
@@ -918,8 +937,8 @@
       post: 
         tags: 
           - "organDonation"
-        summary: "Creates a users organ donation record"
-        description: "Creates the users organ donation record and returns the record identifier."
+        summary: "Creates a user's organ donation record"
+        description: "Creates the user's organ donation record and returns the record identifier."
         consumes: 
           - "application/json"
         parameters: 
@@ -951,7 +970,14 @@
               properties: 
                 identifier: 
                   type: "string"
-                  description: "Users organ donation identifier."
+                  description: "User's organ donation identifier."
+                state: 
+                  type: "string"
+                  enum: 
+                    - "NotFound"
+                    - "Ok"
+                    - "Conflicted"
+                  description: "User's organ donation record state"
           400: 
             description: "Bad request. Supplied request is incomplete or invalid."
           401: 
