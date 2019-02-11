@@ -39,29 +39,69 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             }
         }
 
-        public Task Visit(Im1ConnectionRegisterResult.BadRequest result)
+        public async Task Visit(Im1ConnectionRegisterResult.BadRequest result)
         {
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType,"IM1 Bad Request");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionRegisterResult.BadRequest)}");
+            }
         }
 
-        public Task Visit(Im1ConnectionRegisterResult.InsufficientPermissions result)
+        public async Task Visit(Im1ConnectionRegisterResult.InsufficientPermissions result)
         {
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType,"IM1 Insufficient Permissions");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionRegisterResult.InsufficientPermissions)}");
+            }
         }
 
-        public Task Visit(Im1ConnectionRegisterResult.NotFound result)
+        public async Task Visit(Im1ConnectionRegisterResult.NotFound result)
         {
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType,"IM1 Not Found");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionRegisterResult.NotFound)}");
+            }
         }
 
-        public Task Visit(Im1ConnectionRegisterResult.AccountAlreadyExists result)
+        public async Task Visit(Im1ConnectionRegisterResult.AccountAlreadyExists result)
         {
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType,"IM1 Account Already Exists");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionRegisterResult.AccountAlreadyExists)}");
+            }
         }
 
-        public Task Visit(Im1ConnectionRegisterResult.SupplierSystemUnavailable result)
+        public async Task Visit(Im1ConnectionRegisterResult.SupplierSystemUnavailable result)
         {
-            return null;
+            try
+            {
+                await _auditor.Audit(AuditType,"IM1 Supplier System Unavailable");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionRegisterResult.SupplierSystemUnavailable)}");
+            }
         }
     }
 }
