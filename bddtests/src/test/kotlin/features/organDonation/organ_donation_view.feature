@@ -39,3 +39,9 @@ Feature: Organ Donation
       | EMIS      |
       | TPP       |
       | VISION    |
+
+  Scenario: A user is informed when existing registration is in conflicted state
+    Given I am a EMIS user registered with organ donation but existing registration is in conflicted state
+    And I am logged in
+    And I navigate to the internal Organ Donation Page
+    Then the organ donation decision has been found and is to be processed

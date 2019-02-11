@@ -6,6 +6,7 @@ import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.protocol.HttpContext
+import utils.SerenityHelpers
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -36,6 +37,7 @@ class WorkerClientSender{
         }
 
         val response = if (context != null) _client.execute(request, context) else _client.execute(request)
+        SerenityHelpers.setHttpResponse(response)
 
         if (response.statusLine.statusCode != HttpStatus.SC_OK &&
                 response.statusLine.statusCode != HttpStatus.SC_CREATED &&

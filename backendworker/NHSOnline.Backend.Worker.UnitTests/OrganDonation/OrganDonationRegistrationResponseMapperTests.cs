@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -24,7 +25,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            ;
 
             _registrationResponseMapper = _fixture.Create<OrganDonationRegistrationResponseMapper>();
         }
@@ -51,7 +51,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 
             act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("Body");
         }
-        
 
         [TestMethod]
         public void MapOrganDonationResponse_WithAllValues_MapsTheIdentifier()
@@ -69,6 +68,40 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             result.Should().NotBeNull();
             result.Identifier.Should().Be(response.Body.Id);
             result.State.Should().Be(State.Ok);
+        }
+
+        [TestMethod]
+        [DataRow("10001")]
+        [DataRow("10002")]
+        public void MapOrganDonationResponse_WithConflictErrorCode_SetsIsConflictedFlag(string code)
+        {
+            var body = _fixture.Create<RegistrationResponse>();
+            body.Issue = CreateIssueWithErrorCode(code);
+
+            // Arrange
+            var response = new OrganDonationResponse<RegistrationResponse>(HttpStatusCode.OK)
+            {
+                Body = body
+            };
+
+            // Act
+            var result = _registrationResponseMapper.Map(response);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Identifier.Should().Be(response.Body.Id);
+            result.State.Should().Be(State.Conflicted);
+        }
+
+        private static Issue CreateIssueWithErrorCode(string errorCode)
+        {
+            return new Issue
+            {
+                Details = new CodeableConcept
+                {
+                    Coding = new List<Coding> { new Coding { Code = errorCode } }
+                }
+            };
         }
     }
 }

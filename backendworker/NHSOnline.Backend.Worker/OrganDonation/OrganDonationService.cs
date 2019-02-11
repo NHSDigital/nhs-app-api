@@ -4,29 +4,30 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
     internal class OrganDonationService : IOrganDonationService
     {
+        
         private const string ReferenceDataCacheKey = "_organDonationReferenceData";
         private readonly ILogger<OrganDonationService> _logger;
         private readonly IMapper<DemographicsResponse, OrganDonationRegistration> _demographicsRegistrationMapper;
-        private readonly IMapper<OrganDonationRegistration, LookupRegistrationRequest> _lookupRegistrationRequestMapper;
+        private readonly IMapper<OrganDonationRegistration, RegistrationLookupRequest> _lookupRegistrationRequestMapper;
 
         private readonly IMapper<OrganDonationRegistration, RegistrationLookupResponse,
             OrganDonationRegistration> _registrationMapper;
 
         private readonly IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>
             _organDonationReferenceDataMapper;
-        
+
         private readonly IMapper<OrganDonationRegistrationRequest, RegistrationRequest>
             _registrationRequestMapper;
-        
+
         private readonly IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>
             _registrationResponseMapper;
 
@@ -37,12 +38,14 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public OrganDonationService(
             ILoggerFactory loggerFactory,
             IMapper<DemographicsResponse, OrganDonationRegistration> demographicsRegistrationMapper,
-            IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration> registrationMapper,
-            IMapper<OrganDonationRegistration, LookupRegistrationRequest> lookupRegistrationRequestMapper,
+            IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
+                registrationMapper,
+            IMapper<OrganDonationRegistration, RegistrationLookupRequest> lookupRegistrationRequestMapper,
             IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>
                 organDonationReferenceDataMapper,
             IMapper<OrganDonationRegistrationRequest, RegistrationRequest> registrationRequestMapper,
-            IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse> registrationResponseMapper,
+            IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>
+                registrationResponseMapper,
             IOrganDonationClient organDonationClient,
             IMemoryCache memoryCache,
             IOrganDonationConfig config)
@@ -82,15 +85,16 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
                     return new OrganDonationResult.ExistingRegistration(response);
                 }
-
+                
                 switch (existingRegistrationRecord.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
                         _logger.LogDebug("Could not find an existing record");
                         break;
                     case HttpStatusCode.Conflict:
-                        _logger.LogDebug("Conflict, there is more than one record");
-                        return new OrganDonationResult.DuplicateRecord();
+                        _logger.LogDebug($"Registration conflicted. {existingRegistrationRecord.ErrorForLogging}");
+                        response.State = State.Conflicted;
+                        return new OrganDonationResult.ExistingRegistration(response);
                     case HttpStatusCode.BadRequest:
                         _logger.LogDebug("The organ donation request is invalid");
                         return new OrganDonationResult.BadSearchRequest();
@@ -138,7 +142,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             try
             {
                 var registrationRequest = _registrationRequestMapper.Map(request);
-                
+
                 _logger.LogDebug("Attempting to register organ donation decision");
                 var clientResponse = await _organDonationClient.PostRegistration(registrationRequest, userSession);
 
@@ -149,20 +153,26 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                     return new OrganDonationRegistrationResult.SuccessfullyRegistered(response);
                 }
 
-                switch (clientResponse.StatusCode)
-                {
-                    case HttpStatusCode.RequestTimeout:
-                        _logger.LogDebug("The organ donation registration timed-out");
-                        return new OrganDonationRegistrationResult.Timeout();
-                    default:
-                        _logger.LogDebug("Something went wrong when registering organ donation decision");
-                        return new OrganDonationRegistrationResult.UpstreamError();
-                }
+                return HandleErrorCases(clientResponse);
             }
-            catch(HttpRequestException e)
+            catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request to register organ donation decision");
                 return new OrganDonationRegistrationResult.SystemError();
+            }
+        }
+
+        private OrganDonationRegistrationResult HandleErrorCases(
+            OrganDonationResponse<RegistrationResponse> clientResponse)
+        {
+            switch (clientResponse.StatusCode)
+            {
+                case HttpStatusCode.RequestTimeout:
+                    _logger.LogDebug("The organ donation registration timed-out");
+                    return new OrganDonationRegistrationResult.Timeout();
+                default:
+                    _logger.LogDebug("Something went wrong when registering organ donation decision");
+                    return new OrganDonationRegistrationResult.UpstreamError();
             }
         }
 

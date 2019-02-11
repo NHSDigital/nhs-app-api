@@ -6,6 +6,7 @@ import {
   DECISION_OPT_IN,
   DECISION_OPT_OUT,
   DECISION_UNKNOWN,
+  STATE_CONFLICTED,
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
 import { $t, createStore, mount } from '../../helpers';
@@ -14,6 +15,9 @@ const createState =
   ({ decision = DECISION_UNKNOWN, originalDecision = decision, originalChoices } = {}) => {
     const state = {
       organDonation: initialState(),
+      device: {
+        source: 'web',
+      },
     };
 
     state.organDonation.registration.decision = decision;
@@ -114,6 +118,30 @@ describe('organ donation index page', () => {
         const { decision } = organDonationYesButton.props();
         expect(decision).toEqual(DECISION_OPT_IN);
       });
+    });
+  });
+  describe('Decision found conflicted state', () => {
+    beforeEach(() => {
+      $store = createStore({
+        state: createState({
+          originalDecision: DECISION_UNKNOWN,
+        }),
+      });
+      $store.state.organDonation.originalRegistration.decision = DECISION_UNKNOWN;
+      $store.state.organDonation.originalRegistration.decisionDetails.all = false;
+      $store.state.organDonation.originalRegistration.state = STATE_CONFLICTED;
+      $store.state.organDonation.originalRegistration.identifier = '';
+      wrapper = mountOrganDonation();
+    });
+
+    it('will show the Decision found dialog text', () => {
+      expect(wrapper.text())
+        .toContain('translate_organDonation.viewDecision.conflictedState.dialogText');
+    });
+
+    it('will show the Decision found message text', () => {
+      expect(wrapper.text())
+        .toContain('translate_organDonation.viewDecision.conflictedState.messageText');
     });
   });
 

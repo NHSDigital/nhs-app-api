@@ -3,5 +3,6 @@
     internal class RegistrationResponse
     {
         public string Id { get; set; }
+        public Issue Issue { get; set; }
     }
 }

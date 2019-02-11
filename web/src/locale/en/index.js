@@ -852,6 +852,23 @@ export default {
       },
     },
     viewDecision: {
+      conflictedState: {
+        messageText: 'Your registration is currently being processed.',
+        dialogText: 'Decision found',
+        registrationHeader: 'We are still processing your registration',
+        registrationText: 'Please check back in 2 days. You’ll then be able to view and amend your ' +
+          'decision via the NHS App. Remember to let your family know your decision about organ donation.',
+      },
+      decisionSubmitted: {
+        messageText: 'We have successfully received your organ donation decision.',
+        dialogText: 'Decision submitted',
+        registrationHeader: 'What happens next',
+        registrationText: 'We will process your decision and you will then be able to view and ' +
+          'amend this via the NHS App. This may take up to 4 days. Remember to let ' +
+          'your family know your decision about organ donation.',
+      },
+      successMessageText: 'We have updated your decision',
+      successMessageDialogText: 'Success',
       otherThings: {
         subheader: 'Other things you can do',
         bloodDonation: {

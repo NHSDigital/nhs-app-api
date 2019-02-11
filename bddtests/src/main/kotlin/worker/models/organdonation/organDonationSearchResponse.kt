@@ -14,7 +14,7 @@ data class OrganDonationSearchResponse(
         var decision: String,
         var decisionDetails: DecisionDetails,
         var faithDeclaration: String,
-        var state: String
+        var state: OrganDonationState
 )
 
 data class Name(var title: String,
@@ -26,3 +26,9 @@ data class Address(var text: String,
 
 data class DecisionDetails(var all: Boolean,
                            var choices: HashMap<String, String>)
+
+enum class OrganDonationState{
+    NotFound,
+    Ok,
+    Conflicted
+}

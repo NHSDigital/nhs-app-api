@@ -36,11 +36,6 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
 
-        public IActionResult Visit(OrganDonationResult.DuplicateRecord result)
-        {
-            return new StatusCodeResult(StatusCodes.Status409Conflict);
-        }
-
         public IActionResult Visit(OrganDonationResult.SearchSystemUnavailable result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);

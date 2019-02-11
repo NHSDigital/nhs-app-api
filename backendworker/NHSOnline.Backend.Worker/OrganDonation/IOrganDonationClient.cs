@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
     internal interface IOrganDonationClient
     {
         Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
-                LookupRegistrationRequest request,
+                RegistrationLookupRequest request,
                 UserSession userSession);
         
         Task<OrganDonationResponse<RegistrationResponse>> PostRegistration(

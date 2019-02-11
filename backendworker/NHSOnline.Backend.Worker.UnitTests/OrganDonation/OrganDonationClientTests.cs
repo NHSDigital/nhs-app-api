@@ -10,6 +10,7 @@ using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using RichardSzalay.MockHttp;
 
@@ -64,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 .WhenOrganDonation(HttpMethod.Post, SearchPath)
                 .Respond(System.Net.Mime.MediaTypeNames.Application.Json, JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _systemUnderTest.PostLookup(new LookupRegistrationRequest(), _userSession);
+            var response = await _systemUnderTest.PostLookup(new RegistrationLookupRequest(), _userSession);
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -82,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 .Respond(errorCode, System.Net.Mime.MediaTypeNames.Application.Json,
                     JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _systemUnderTest.PostLookup(new LookupRegistrationRequest(), _userSession);
+            var response = await _systemUnderTest.PostLookup(new RegistrationLookupRequest(), _userSession);
 
             response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(errorCode);

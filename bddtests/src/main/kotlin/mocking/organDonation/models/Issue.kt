@@ -1,6 +1,6 @@
 package mocking.organDonation.models
 
-data class OrganDonationErrorResponse(
+data class Issue(
         var code: String,
         var details: CodeableConcept,
         var diagnostics: String

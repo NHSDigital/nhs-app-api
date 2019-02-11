@@ -51,11 +51,6 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        public class DuplicateRecord : OrganDonationResult
-        {
-            public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
-        }
-
         public class SearchSystemUnavailable : OrganDonationResult
         {
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);

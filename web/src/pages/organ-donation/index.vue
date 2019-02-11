@@ -1,23 +1,35 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <div v-if="hasExistingDecision">
-      <your-decision :decision="decision"
-                     :decision-details="decisionDetails"
-                     header-key="organDonation.registered.yourDecision.subheader"/>
-      <div v-if="hasExistingOptIn">
-        <decision-details
-          v-if="hasSomeOrgans"
-          :choices="choices"/>
-      </div>
+    <div v-if="showConflictedDecisionFound">
+      <message-dialog :icon-text="$t('organDonation.viewDecision.conflictedState.dialogText')"
+                      message-id="success-dialog" message-type="success">
+        <message-text>
+          {{ $t('organDonation.viewDecision.conflictedState.messageText') }}</message-text>
+      </message-dialog>
+      <strong>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</strong>
+      <p :class="$style.messageText">
+        {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
     </div>
     <div v-else>
-      <div :class="$style.info">
-        <h2>{{ $t('organDonation.register.subheader') }}</h2>
+      <div v-if="hasExistingDecision">
+        <your-decision :decision="decision"
+                       :decision-details="decisionDetails"
+                       header-key="organDonation.registered.yourDecision.subheader"/>
+        <div v-if="hasExistingOptIn">
+          <decision-details
+            v-if="hasSomeOrgans"
+            :choices="choices"/>
+        </div>
       </div>
-      <div :class="$style['flexbox-container']">
-        <organ-donation-button id="yes-button" :decision="noDecision"/>
-        <div :class="$style['divider']"/>
-        <organ-donation-button id="no-button" :decision="yesDecision"/>
+      <div v-else>
+        <div :class="$style.info">
+          <h2>{{ $t('organDonation.register.subheader') }}</h2>
+        </div>
+        <div :class="$style['flexbox-container']">
+          <organ-donation-button id="yes-button" :decision="noDecision"/>
+          <div :class="$style['divider']"/>
+          <organ-donation-button id="no-button" :decision="yesDecision"/>
+        </div>
       </div>
     </div>
   </div>
@@ -27,18 +39,23 @@
 import get from 'lodash/fp/get';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import GenericButton from '@/components/widgets/GenericButton';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
   DECISION_OPT_IN,
   DECISION_OPT_OUT,
   DECISION_UNKNOWN,
+  STATE_CONFLICTED,
 } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   components: {
     DecisionDetails,
     GenericButton,
+    MessageText,
+    MessageDialog,
     OrganDonationButton,
     YourDecision,
   },
@@ -75,6 +92,12 @@ export default {
     },
     noDecision() {
       return DECISION_OPT_OUT;
+    },
+    showConflictedDecisionFound() {
+      return this.state === STATE_CONFLICTED && this.decision === DECISION_UNKNOWN;
+    },
+    state() {
+      return this.$store.state.organDonation.originalRegistration.state;
     },
     yesDecision() {
       return DECISION_OPT_IN;

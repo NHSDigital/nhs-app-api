@@ -1,3 +1,5 @@
 package mocking.organDonation
 
-data class OrganDonationRegistrationResponse(var id: String)
+import mocking.organDonation.models.Issue
+
+data class OrganDonationRegistrationResponse(var id: String, var issue: Issue? = null)

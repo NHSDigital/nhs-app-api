@@ -43,8 +43,8 @@ class BannerObject private constructor(page : HybridPageObject,
 
     companion object {
 
-        fun success(page: HybridPageObject): BannerObject {
-            return BannerObject(page, "Success", "success")
+        fun success(page: HybridPageObject, title: String? = null): BannerObject {
+            return BannerObject(page, title ?: "Success", "success")
         }
 
         fun error(page: HybridPageObject): BannerObject {

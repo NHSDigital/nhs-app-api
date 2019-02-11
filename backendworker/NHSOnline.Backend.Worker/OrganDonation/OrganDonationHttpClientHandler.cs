@@ -18,9 +18,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
             }
 
-            var path = configuration.GetOrWarn("ORGANDONATION_CERT_PATH", logger);
-            var password = configuration.GetOrWarn("ORGANDONATION_CERT_PASSPHRASE", logger);
-            logger.LogInformation($"ORGANDONATION_CERT_PATH: {path}");
+            var path = configuration.GetOrWarn("ORGAN_DONATION_CERT_PATH", logger);
+            var password = configuration.GetOrWarn("ORGAN_DONATION_CERT_PASSPHRASE", logger);
+            logger.LogInformation($"ORGAN_DONATION_CERT_PATH: {path}");
 
             var certificate = certificateService.GetCertificate(path, password);
 

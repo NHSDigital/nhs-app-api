@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         private Mock<IEnumMapper<string, FaithDeclaration>> _faithDeclarationMapper;
         private Mock<IEnumMapper<string, ChoiceState>> _choiceStateMapper;
 
-
         [TestInitialize]
         public void TestInitialize()
         {

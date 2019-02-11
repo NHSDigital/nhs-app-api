@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.ResponseParsers;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
@@ -40,9 +41,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         }
 
         public async Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
-            LookupRegistrationRequest request, UserSession userSession)
+            RegistrationLookupRequest request, UserSession userSession)
         {
-            return await Post<LookupRegistrationRequest, RegistrationLookupResponse>
+            return await Post<RegistrationLookupRequest, RegistrationLookupResponse>
                 (request, userSession, LookupPath);
         }
 

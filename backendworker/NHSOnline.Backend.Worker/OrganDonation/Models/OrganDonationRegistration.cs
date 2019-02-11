@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 
 namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {

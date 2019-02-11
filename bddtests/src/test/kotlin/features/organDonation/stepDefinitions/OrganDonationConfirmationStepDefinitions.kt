@@ -23,19 +23,19 @@ open class OrganDonationConfirmationStepDefinitions {
 
     @Then("^the decision to opt out of organ donation has been successfully created$")
     fun theDecisionToOptOutOfOrganDonationHasBeenSuccessfullyCreated(){
-        organDonationConfirmationPage.assertSuccessBanner()
+        organDonationConfirmationPage.assertCreatedBanner()
         organDonationConfirmationPage.decisionModule.assertDecisionIsNo()
     }
 
     @Then("^the decision to opt in to organ donation has been successfully created$")
     fun theDecisionToOptInToOrganDonationHasBeenSuccessfullyCreated(){
-        organDonationConfirmationPage.assertSuccessBanner()
+        organDonationConfirmationPage.assertCreatedBanner()
         organDonationConfirmationPage.decisionModule.assertDecisionIsYes()
     }
 
     @Then("^the decision to opt in to organ donation with some organs has been successfully created$")
     fun theDecisionToOptInToOrganDonationWithSomeOrgansHasBeenSuccessfullyCreated(){
-        organDonationConfirmationPage.assertSuccessBanner()
+        organDonationConfirmationPage.assertCreatedBanner()
         val organsToDonate = Serenity.sessionVariableCalled<ArrayList<KeyValuePair<String, Boolean>>>(
                 ORGAN_DONATION_DECISION_SOME_ORGANS)
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(organsToDonate)
@@ -56,5 +56,15 @@ open class OrganDonationConfirmationStepDefinitions {
         val organsToDonate = Serenity.sessionVariableCalled<ArrayList<KeyValuePair<String, Boolean>>>(
                 ORGAN_DONATION_DECISION_SOME_ORGANS)
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(organsToDonate)
+    }
+
+    @Then("the organ donation decision has been submitted and is to be processed")
+    fun theOrganDonationDecisionHasBeenSubmittedAndIsToBeProcessed(){
+        organDonationConfirmationPage.assertDecisionSubmitted()
+    }
+
+    @Then("the organ donation decision has been found and is to be processed")
+    fun theOrganDonationDecisionHasBeenFoundAndIsToBeProcessed(){
+        organDonationConfirmationPage.assertDecisionFound()
     }
 }

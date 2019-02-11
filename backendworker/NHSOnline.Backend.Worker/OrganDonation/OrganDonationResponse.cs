@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -30,10 +31,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 : ParseResponse(responseParser, logger, stringResponse, responseMessage);
         }
 
-        public override string ErrorForLogging => $"Status Code: '{StatusCode}'. " +
-                                                  $"Error Code: '{ErrorResponse?.Issue?.Code}'. " +
-                                                  $"Details:'{ErrorResponse?.Issue?.Details}'. " +
-                                                  $"Diagnostics:'{ErrorResponse?.Issue?.Diagnostics}'.";
+        public override string ErrorForLogging => $"Status Code: '{StatusCode}'. {ErrorResponse?.Issue}";
 
         private OrganDonationResponse<TBody> ParseResponse(
             IResponseParser responseParser,

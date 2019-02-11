@@ -1,6 +1,9 @@
 package mocking.organDonation
 
 import mocking.models.Mapping
+import mocking.organDonation.models.CodeableConcept
+import mocking.organDonation.models.Coding
+import mocking.organDonation.models.Issue
 import mocking.organDonation.models.OrganDonationRegistrationDecision
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import org.apache.http.HttpStatus
@@ -27,6 +30,20 @@ class OrganDonationSubmitDecisionBuilder(registration: OrganDonationRegistration
 
     fun respondWithSuccess(id :String): Mapping {
         val responseBody = OrganDonationRegistrationResponse(id = id)
+        return respondWith(HttpStatus.SC_OK) {
+            andJsonBody(responseBody).build()
+        }
+    }
+
+    fun respondWithConflict(id :String) : Mapping {
+        val responseBody = OrganDonationRegistrationResponse(id = id,
+                issue = Issue(code = "",
+                        diagnostics = "conflict",
+                        details =
+                        CodeableConcept(
+                                arrayListOf(
+                                        Coding(code = ORGAN_DONATION_ERROR_CODE_CONFLICT.toString(),
+                                                display = "conflict")))))
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(responseBody).build()
         }

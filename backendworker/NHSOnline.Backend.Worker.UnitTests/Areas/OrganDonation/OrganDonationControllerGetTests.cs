@@ -136,27 +136,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
         }
 
         [TestMethod]
-        public async Task Get_ReturnsConflict_WhenServiceReturnDuplicateRecordResult()
-        {
-            // Arrange
-            var newResult = new OrganDonationResult.DuplicateRecord();
-
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
-                .Returns(Task.FromResult((OrganDonationResult) newResult));
-
-            // Act
-            var result = await _systemUnderTest.Get();
-
-            // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status409Conflict);
-
-            _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Duplicate organ donation record error"));
-        }
-
-        [TestMethod]
         public async Task Get_ReturnsInternalServerError_WhenServiceReturnBadSearchRequestResult()
         {
             // Arrange
@@ -226,7 +205,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var newResult = new OrganDonationResult.DemographicsInternalServerError();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
-                .Returns(Task.FromResult((OrganDonationResult)newResult));
+                .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -271,7 +250,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var newResult = new OrganDonationResult.DemographicsForbidden();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
-                .Returns(Task.FromResult((OrganDonationResult)newResult));
+                .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -293,7 +272,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var newResult = new OrganDonationResult.DemographicsBadGateway();
 
             _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
-                .Returns(Task.FromResult((OrganDonationResult)newResult));
+                .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
             var result = await _systemUnderTest.Get();

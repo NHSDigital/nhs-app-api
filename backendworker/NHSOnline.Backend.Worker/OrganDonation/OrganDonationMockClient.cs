@@ -1,15 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
     internal class OrganDonationMockClient : IOrganDonationClient
     {
+        private const string AaronDonorNhsNumber = "7883642723";
+        private const string WilliamRaymondNhsNumber = "9458248744";
+        private const string PaulSmithNhsNumber = "8434446473";
+        private const string MaryDaviesNhsNumber = "9987574309";
+        private const string BobDonorNhsNumber = "0538236728";
+        private const string CatherineDonorNhsNumber = "6151552431";
+
         public Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
-            LookupRegistrationRequest request,
+            RegistrationLookupRequest request,
             UserSession userSession)
         {
             OrganDonationResponse<RegistrationLookupResponse> response;
@@ -17,7 +26,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             switch (request.NhsNumber)
             {
                 // William Raymond
-                case ("9458248744"):
+                case (WilliamRaymondNhsNumber):
                     var builder1 = new RegistrationLookupResponseBuilder();
                     response = builder1
                         .AddIdentifier(request.NhsNumber)
@@ -26,7 +35,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                         .Build();
                     break;
                 //Paul Smith
-                case ("8434446473"):
+                case (PaulSmithNhsNumber):
                     var builder2 = new RegistrationLookupResponseBuilder();
                     response = builder2
                         .AddIdentifier(request.NhsNumber)
@@ -35,13 +44,17 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                         .Build();
                     break;
                 //Mary Davies
-                case ("9987574309"):
+                case (MaryDaviesNhsNumber):
                     var builder3 = new RegistrationLookupResponseBuilder();
                     response = builder3
                         .AddIdentifier(request.NhsNumber)
                         .AddOptInAllOrgansDecision()
                         .AddFaithDeclaration(FaithDeclaration.No)
                         .Build();
+                    break;
+                //Aaron Donor
+                case (AaronDonorNhsNumber):
+                    response = new OrganDonationResponse<RegistrationLookupResponse>(HttpStatusCode.Conflict);
                     break;
                 default:
                     response = new OrganDonationResponse<RegistrationLookupResponse>(HttpStatusCode.NotFound);
@@ -60,9 +73,35 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             {
                 Body = new RegistrationResponse
                 {
-                    Id = Guid.NewGuid().ToString()
+                    Id = Guid.NewGuid().ToString(),
+                    Issue = GetIssue(request)
                 }
             });
+        }
+
+        private Issue GetIssue(RegistrationRequest request)
+        {
+            if (string.Equals(request.Identifier.FirstOrDefault()?.Value.RemoveWhiteSpace(), BobDonorNhsNumber, StringComparison.OrdinalIgnoreCase))
+            {
+                return new Issue
+                {
+                    Details = new CodeableConcept
+                    {
+                        Coding = new List<Coding> { new Coding { Code = "10001" } }
+                    }
+                };
+            }
+            if (string.Equals(request.Identifier.FirstOrDefault()?.Value.RemoveWhiteSpace(), CatherineDonorNhsNumber, StringComparison.OrdinalIgnoreCase))
+            {
+                return new Issue
+                {
+                    Details = new CodeableConcept
+                    {
+                        Coding = new List<Coding> { new Coding { Code = "10002" } }
+                    }
+                };
+            }
+            return null;
         }
 
         public Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData()

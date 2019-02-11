@@ -76,6 +76,21 @@ open class OrganDonationStepDefinitions {
         factory.some { registration -> registration.respondWithSuccess("test") }
     }
 
+    @Given("I am a (\\w+) user not registered with organ donation, who wishes to opt out but will cause a conflict")
+    fun iAmAUserNotRegisteredWithOrganDonationButRegistrationWillCauseConflict(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
+        factory.optOut { registration -> registration.respondWithConflict("test") }
+    }
+
+    @Given("I am a (\\w+) user registered with organ donation but existing registration is in conflicted state")
+    fun iAmAUserRegisteredWithOrganDonationButExistingRegistrationIsInConflictedState(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithConflictError() }
+    }
+
     @Given("^the organ donation toggle is set to target the internal page$")
     fun toggleOrganDonationSiteLink() {
         organDonationChoicePage.waitForSpinnerToDisappear()

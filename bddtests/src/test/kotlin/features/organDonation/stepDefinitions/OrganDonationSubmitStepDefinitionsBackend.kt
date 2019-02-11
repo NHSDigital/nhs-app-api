@@ -51,6 +51,14 @@ class OrganDonationSubmitStepDefinitionsBackend {
         factory.optOut { registration -> registration.respondWithInternalError() }
     }
 
+    @Given("I am a (\\w+) api user who wants to opt-in to organ donation but will cause a conflict")
+    fun iAmAApiUserWhoWantsToOptInToOrganDonationButWillCauseAConflict(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        val registrationId = "NewOrganDonationId"
+        Serenity.setSessionVariable("ExpectedOrganDonationRegistrationId").to(registrationId)
+        factory.optIn { registration -> registration.respondWithConflict(registrationId) }
+    }
+
     @When("^I submit my decision to organ donation$")
     fun iSubmitMyDecisionToOrganDonation() {
         val registration = Serenity.sessionVariableCalled<OrganDonationRegistrationRequest>(

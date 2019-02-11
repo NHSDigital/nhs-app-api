@@ -13,6 +13,7 @@ import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.organdonation.OrganDonationSearchResponse
+import worker.models.organdonation.OrganDonationState
 import java.time.Duration
 
 class OrganDonationStepDefinitionsBackend {
@@ -30,7 +31,7 @@ class OrganDonationStepDefinitionsBackend {
         OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics { a->a.respondWithNotFoundError()}
     }
 
-    @Given("^I am a (.*) user registered with organ donation, but organ donation will conflict$")
+    @Given("^I am a (\\w+) api user registered with organ donation, but organ donation will conflict$")
     fun iAmRegisteredWithOrganDonationButOrganDonationWillConflict(gpSystem: String) {
         OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithConflictError()}
     }
@@ -77,6 +78,9 @@ class OrganDonationStepDefinitionsBackend {
                 "Unknown",
                 organDonationResponse.decision)
         Assert.assertNotNull("Organ donation identifier was not found", organDonationResponse.identifier)
+        Assert.assertEquals("State",
+                OrganDonationState.Ok,
+                organDonationResponse.state)
     }
 
     @Then("^I receive no organ donation details$")
@@ -89,6 +93,9 @@ class OrganDonationStepDefinitionsBackend {
                 organDonationResponse.decision)
         Assert.assertNull("Organ donation identifier should be null",
                 organDonationResponse.identifier)
+        Assert.assertEquals("State",
+                OrganDonationState.NotFound,
+                organDonationResponse.state)
     }
 
     @Then("^I receive the users demographics details$")
@@ -104,5 +111,15 @@ class OrganDonationStepDefinitionsBackend {
         Assert.assertEquals("Patient name in the response does not match patient",
                 patient.formattedFullName(),
                 organDonationResponse.nameFull)
+    }
+
+    @Then("^I receive an organ donation response with state value of 'conflicted'")
+    fun iReceiveAnOrganDonationResponseWithStateValueOfConflicted(){
+        val organDonationResponse = Serenity
+                .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
+        Assert.assertEquals("State",
+                OrganDonationState.Conflicted,
+                organDonationResponse.state)
+
     }
 }

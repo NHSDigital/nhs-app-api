@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace NHSOnline.Backend.Worker.OrganDonation.ApiModels
+namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
-    public class LookupRegistrationRequest
+    public class RegistrationLookupRequest
     {
         [IgnoreDataMember]
         [Required]

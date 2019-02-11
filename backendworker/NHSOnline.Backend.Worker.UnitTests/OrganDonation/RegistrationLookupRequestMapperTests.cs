@@ -1,26 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation;
-using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 {
     [TestClass]
-    public class LookupRegistrationRequestMapperTests
+    public class RegistrationLookupRequestMapperTests
     {
         private IFixture _fixture;
-        private IMapper<OrganDonationRegistration, LookupRegistrationRequest> _registrationToLookupRequestMapper;
+        private IMapper<OrganDonationRegistration, RegistrationLookupRequest> _registrationToLookupRequestMapper;
 
 
         [TestInitialize]
@@ -29,7 +22,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
 
-            _registrationToLookupRequestMapper = _fixture.Create<LookupRegistrationRequestMapper>();
+            _registrationToLookupRequestMapper = _fixture.Create<RegistrationLookupRequestMapper>();
         }
 
         [TestMethod]

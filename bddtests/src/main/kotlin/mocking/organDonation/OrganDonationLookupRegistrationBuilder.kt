@@ -4,7 +4,7 @@ import mocking.models.Mapping
 import mocking.organDonation.models.CodeableConcept
 import mocking.organDonation.models.Coding
 import mocking.organDonation.models.Entry
-import mocking.organDonation.models.OrganDonationErrorResponse
+import mocking.organDonation.models.Issue
 import mocking.organDonation.models.OrganDonationSuccessResponse
 import mocking.organDonation.models.Resource
 import models.Patient
@@ -34,7 +34,7 @@ class OrganDonationLookupRegistrationBuilder(patient: Patient)
     }
 
     fun respondWithNotFoundError() : Mapping {
-        val responseBody = OrganDonationErrorResponse(
+        val responseBody = Issue(
                 "not-found",
                 CodeableConcept(
                         listOf(Coding(
@@ -47,7 +47,7 @@ class OrganDonationLookupRegistrationBuilder(patient: Patient)
     }
 
     fun respondWithConflictError() : Mapping {
-        val responseBody = OrganDonationErrorResponse(
+        val responseBody = Issue(
                 "duplicate",
                 CodeableConcept(
                         listOf(Coding(

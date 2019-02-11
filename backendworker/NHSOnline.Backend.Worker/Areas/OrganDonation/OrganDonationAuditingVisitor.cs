@@ -55,13 +55,6 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
             return null;
         }
 
-        public object Visit(OrganDonationResult.DuplicateRecord result)
-        {
-            _auditor.Audit(AuditType, "Duplicate organ donation record error");
-
-            return null;
-        }
-
         public object Visit(OrganDonationResult.SearchSystemUnavailable result)
         {
             _auditor.Audit(AuditType, "The organ donation system is unavailable");

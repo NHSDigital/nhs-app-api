@@ -5,7 +5,7 @@ import mocking.MappingBuilder
 import mocking.models.Mapping
 import mocking.organDonation.models.CodeableConcept
 import mocking.organDonation.models.Coding
-import mocking.organDonation.models.OrganDonationErrorResponse
+import mocking.organDonation.models.Issue
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import models.Patient
 import org.apache.http.HttpStatus
@@ -18,7 +18,7 @@ const val HEADER_CLIENT_ID_VALUE = "ODR-26-NHSAP"
 
 const val ORGAN_DONATION_ERROR_CODE_NOT_FOUND = 20010
 const val ORGAN_DONATION_ERROR_CODE_GATEWAY_TIMEOUT = 20022
-const val ORGAN_DONATION_ERROR_CODE_CONFLICT = 10112
+const val ORGAN_DONATION_ERROR_CODE_CONFLICT = 10001
 const val ORGAN_DONATION_ERROR_CODE_INTERNAL_SERVER_ERROR = 20120
 
 open class OrganDonationMappingBuilder(method: String, relativePath: String = "")
@@ -35,7 +35,7 @@ open class OrganDonationMappingBuilder(method: String, relativePath: String = ""
             OrganDonationSubmitDecisionBuilder(registration)
 
     fun respondWithTimeOutError() : Mapping {
-        val responseBody = OrganDonationErrorResponse(
+        val responseBody = Issue(
                 "transient",
                 CodeableConcept(
                         listOf(Coding(
@@ -48,7 +48,7 @@ open class OrganDonationMappingBuilder(method: String, relativePath: String = ""
     }
 
     fun respondWithInternalError() : Mapping {
-        val responseBody = OrganDonationErrorResponse(
+        val responseBody = Issue(
                 "internal server error",
                 CodeableConcept(
                         listOf(Coding(

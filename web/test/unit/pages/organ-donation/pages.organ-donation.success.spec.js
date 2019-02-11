@@ -1,8 +1,13 @@
 import ViewDecision from '@/pages/organ-donation/view-decision';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import { DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
-import { $t, createStore, mount } from '../../helpers';
+import {
+  DECISION_OPT_IN,
+  initialState,
+  STATE_OK,
+  STATE_CONFLICTED,
+} from '@/store/modules/organDonation/mutation-types';
+import { createStore, mount } from '../../helpers';
 
 describe('view decision', () => {
   let $store;
@@ -16,20 +21,20 @@ describe('view decision', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(ViewDecision, { $store, $style, $t });
-
   const mountWrapper = () => {
     const store = $store || createStore({ state });
     return mount(ViewDecision, { $store: store, $style });
   };
 
-  beforeEach(() => {
-    $store = createStore({ state: createState() });
-    $style = {};
-    wrapper = mountPage();
-  });
-
   describe('YourDecision', () => {
+    beforeEach(() => {
+      const state = createState();
+      state.organDonation.registration.decision = DECISION_OPT_IN;
+      state.organDonation.registration.decisionDetails.all = true;
+      state.organDonation.registration.state = STATE_OK;
+      $store = createStore({ state });
+      wrapper = mountWrapper();
+    });
     it('will exist', () => {
       expect(wrapper.find(YourDecision).exists()).toBe(true);
     });
@@ -41,6 +46,7 @@ describe('view decision', () => {
         const state = createState();
         state.organDonation.registration.decision = DECISION_OPT_IN;
         state.organDonation.registration.decisionDetails.all = true;
+        state.organDonation.registration.state = STATE_OK;
         $store = createStore({ state });
         wrapper = mountWrapper();
       });
@@ -61,6 +67,7 @@ describe('view decision', () => {
         const state = createState();
         state.organDonation.registration.decision = DECISION_OPT_IN;
         state.organDonation.registration.decisionDetails.all = false;
+        state.organDonation.registration.state = STATE_OK;
         $store = createStore({ state });
         wrapper = mountWrapper();
       });
@@ -73,6 +80,27 @@ describe('view decision', () => {
 
       it('will show the decision details', () => {
         expect(wrapper.find(DecisionDetails).exists()).toEqual(true);
+      });
+    });
+    describe('Decision submitted conflicted state', () => {
+      beforeEach(() => {
+        const state = createState();
+        state.organDonation.registration.decision = DECISION_OPT_IN;
+        state.organDonation.registration.decisionDetails.all = false;
+        state.organDonation.registration.state = STATE_CONFLICTED;
+        state.organDonation.registration.identifier = '12345';
+        $store = createStore({ state });
+        wrapper = mountWrapper();
+      });
+
+      it('will show the Decision submitted dialog text', () => {
+        expect(wrapper.text())
+          .toContain('translate_organDonation.viewDecision.decisionSubmitted.dialogText');
+      });
+
+      it('will show the Decision submitted message text', () => {
+        expect(wrapper.text())
+          .toContain('translate_organDonation.viewDecision.decisionSubmitted.messageText');
       });
     });
   });

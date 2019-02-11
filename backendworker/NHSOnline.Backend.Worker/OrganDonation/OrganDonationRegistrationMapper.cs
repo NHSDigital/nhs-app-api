@@ -13,8 +13,7 @@ using Name = NHSOnline.Backend.Worker.OrganDonation.Models.Name;
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
     internal class OrganDonationRegistrationMapper : IMapper<DemographicsResponse, OrganDonationRegistration>,
-        IMapper<OrganDonationRegistration, RegistrationLookupResponse,
-            OrganDonationRegistration>
+        IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
     {
         private readonly IEnumMapper<string, Decision> _organDonationDecisionMapper;
         private readonly IEnumMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;

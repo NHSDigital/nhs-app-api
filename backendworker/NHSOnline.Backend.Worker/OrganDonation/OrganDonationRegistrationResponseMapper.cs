@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
@@ -10,6 +11,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         OrganDonationRegistrationResponse>
     {
         private readonly ILogger<OrganDonationRegistrationResponseMapper> _logger;
+        private readonly string[] _inProgressSubmitErrorCodes = { "10001", "10002" };
 
         public OrganDonationRegistrationResponseMapper(ILogger<OrganDonationRegistrationResponseMapper> logger)
         {
@@ -23,10 +25,18 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 .IsNotNull(source?.Body, nameof(source.Body), ThrowError)
                 .IsValid();
 
+            var errorCode = source.Body?.Issue?.Details?.Coding?.FirstOrDefault()?.Code;
+
+            var isConflicted = _inProgressSubmitErrorCodes.Contains(errorCode);
+            if (isConflicted)
+            {
+                _logger.LogInformation($"Registration in conflict. {source.Body?.Issue} ");
+            }
+
             return new OrganDonationRegistrationResponse
             {
                 Identifier = source.Body.Id,
-                State = State.Ok
+                State = isConflicted ? State.Conflicted : State.Ok
             };
         }
     }

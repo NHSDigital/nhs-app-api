@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public class SuccessfullyRegistered : OrganDonationRegistrationResult
         {
             public OrganDonationRegistrationResponse Response { get; }
-            
+
             public SuccessfullyRegistered(OrganDonationRegistrationResponse response)
             {
                 Response = response;
