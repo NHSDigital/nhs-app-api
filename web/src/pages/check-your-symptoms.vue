@@ -1,15 +1,11 @@
 <template>
-  <div>
-    <div :class="[getHeaderState(), 'pull-content']">
-      <header-slim v-if="this.$store.state.device.isNativeApp">
-        {{ $t('sy01.pageHeader') }}
-      </header-slim>
-      <body>
-        <div>
-          <symptoms-check/>
-        </div>
-      </body>
-    </div>
+  <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
+    <header-slim v-if="$store.state.device.isNativeApp"> {{ $t('sy01.pageHeader') }}</header-slim>
+    <body>
+      <div>
+        <symptoms-check/>
+      </div>
+    </body>
   </div>
 </template>
 <script>
@@ -27,6 +23,8 @@ export default {
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.showHeaderSlim();
       NativeCallbacks.hideWhiteScreen();
+    } else {
+      window.scrollTo(0, 0);
     }
   },
   methods: {
@@ -40,7 +38,9 @@ export default {
 
 <style module lang="scss" scoped>
   .webHeader {
-   // margin-top: -3.625em;
+   &.web {
+    margin-top: -3.625em;
+   }
   }
 
   .nativeHeader {

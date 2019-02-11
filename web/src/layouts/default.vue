@@ -1,9 +1,11 @@
 <template>
   <div id="app" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
+    <div v-if="shouldShowFullDesktopHeader" :class="$style['header-container-desktop']">
       <web-header ref="headerMenu"/>
     </div>
-
+    <div v-else-if="shouldShowSlimDesktopHeader" :class="$style['header-container-desktop']">
+      <web-header :show-menu="false" :show-links="false"/>
+    </div>
     <div :class="[mainClass, $style['main-container-desktop']]">
       <main :class="mainClass">
         <spinner />
@@ -115,11 +117,17 @@ export default {
         this.$route.name !== 'Login'
       );
     },
-    shouldShowDesktopVersion() {
+    shouldShowFullDesktopHeader() {
       return (
         !this.$store.state.device.isNativeApp &&
         this.loggedIn &&
         this.$route.name !== 'Login'
+      );
+    },
+    shouldShowSlimDesktopHeader() {
+      return (
+        !this.$store.state.device.isNativeApp &&
+        !this.loggedIn
       );
     },
     showSurvey() {

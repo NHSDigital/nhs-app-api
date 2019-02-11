@@ -1,6 +1,7 @@
 <template>
   <div v-if="showTemplate" :class="$style['no-padding']" data-purpose="">
-    <ul :class="$style['list-menu']" role="list">
+    <ul :class="[$style['list-menu'], !$store.state.device.isNativeApp && $style.desktopWeb]"
+        role="list">
       <li role="link">
         <analytics-tracked-tag
           id="btn_choices" :href="conditionsCheckerUrl"
@@ -9,7 +10,8 @@
           :aria-label="`${$t('sy01.a_z.subheaderAriaLabel')}. ${$t('sy01.a_z.body')}`"
           tag="a" target="_blank">
           <h2 :aria-label="$t('sy01.a_z.subheaderAriaLabel')">{{ $t('sy01.a_z.subheader') }}</h2>
-          <p>{{ $t('sy01.a_z.body') }}</p>
+          <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+            {{ $t('sy01.a_z.body') }}</p>
         </analytics-tracked-tag>
       </li>
       <li role="link">
@@ -19,7 +21,8 @@
                                :aria-label="`${$t('sy01.111.subheader')}. ${$t('sy01.111.body')}`"
                                tag="a" target="_blank">
           <h2>{{ $t('sy01.111.subheader') }}</h2>
-          <p>{{ $t('sy01.111.body') }}</p>
+          <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+            {{ $t('sy01.111.body') }}</p>
         </analytics-tracked-tag>
       </li>
     </ul>

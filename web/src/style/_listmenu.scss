@@ -1,12 +1,21 @@
 @import './colours';
 @import './textstyles';
+@import './fonts';
 
 .list-menu {
 	font-size: 1em;
 	margin-bottom: 1em;
+  &.desktopWeb {
+    margin-top: 2em;
+    max-width: 540px
+  }
 	p {
 		padding-bottom: 0.5em;
 		padding-top: 0.250em;
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: 300;
+      }
 	}
 	li {
     :focus {

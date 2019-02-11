@@ -143,5 +143,4 @@ export default {
 .welcomeSectionContainer{
  margin-left: 1em;
 }
-
 </style>

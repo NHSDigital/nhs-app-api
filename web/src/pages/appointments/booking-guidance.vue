@@ -36,7 +36,6 @@
         {{ $t('appointments.guidance.symptomButttonText') }}
       </generic-button>
     </analytics-tracked-tag>
-
     <no-js-form :action="appointmentBookingPath" :value="formData">
       <generic-button
         id="btn_appointment"
