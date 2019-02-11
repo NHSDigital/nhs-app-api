@@ -30,6 +30,10 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
         assertText("Yes, I do want to donate my organs")
     }
 
+    fun assertDecisionIsAppointedRepresentative() {
+        assertText("I have appointed a representative")
+    }
+
     private fun assertText(expectedText: String) {
         HybridPageElement(
                 "$containerXPath//span",

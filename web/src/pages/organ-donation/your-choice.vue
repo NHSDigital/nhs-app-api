@@ -52,6 +52,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
+import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import {
   ORGAN_DONATION_FAITH,
   ORGAN_DONATION_SOME_ORGANS,
@@ -67,6 +68,7 @@ export default {
     MessageList,
     MessageText,
   },
+  mixins: [EnsureOptInDecision],
   data() {
     return {
       setAllOrgansAction: 'organDonation/setAllOrgans',

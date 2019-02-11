@@ -2,8 +2,6 @@ import BackButton from '@/components/BackButton';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
 import { ORGAN_DONATION_FAITH } from '@/lib/routes';
-
-
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { $t, createRouter, createStore, mount } from '../../helpers';
 

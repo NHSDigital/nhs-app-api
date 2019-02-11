@@ -11,10 +11,10 @@ export const SET_REGISTRATION_ID = 'SET_REGISTRATION_ID';
 export const SET_SOME_ORGANS = 'SET_SOME_ORGANS';
 export const SET_STATE = 'SET_STATE';
 export const UPDATE_ORIGINAL_REGISTRATION = 'UPDATE_ORIGINAL_REGISTRATION';
-
-export const DECISION_UNKNOWN = 'Unknown';
+export const DECISION_APPOINTED_REP = 'AppRep';
 export const DECISION_OPT_IN = 'OptIn';
 export const DECISION_OPT_OUT = 'OptOut';
+export const DECISION_UNKNOWN = 'Unknown';
 export const STATE_CONFLICTED = 'Conflicted';
 export const STATE_NOT_FOUND = 'NotFound';
 export const STATE_OK = 'Ok';

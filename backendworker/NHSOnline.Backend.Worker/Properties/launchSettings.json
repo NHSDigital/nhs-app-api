@@ -73,6 +73,7 @@
         "NDOP_CERTIFICATE_PATH": "",
         "ORGAN_DONATION_BASE_URL": "https://mocksvc-proxy.anypoint.mulesoft.com/exchange/127af7bb-99cb-4a70-8590-28234d029279/odr-fhir-experience-api/1.0.5/xapi/odr/v1/",
         "ORGAN_DONATION_CLIENT_ID": "ODR-26-NHSAP",
+        "ORGAN_DONATION_INTEGRATION_ENABLED": "false",
         "ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY": "781859de3cce4bc48a715dfc8f36dc6f",
         "ORGAN_DONATION_REFERENCE_DATA_EXPIRY_HOURS": "24",
         "REDIS_ODSLOOKUP_CONFIG": "api.local.bitraft.io:6379",
@@ -106,7 +107,6 @@
         "CookieDomain": ".bitraft.io",
         "runMode": "dev",
         "ConfigurationSettings__CookieDomain": ".bitraft.io",
-        "ORGAN_DONATION_INTEGRATION_ENABLED": "false"
         "POSTCODE_LOOKUP_SEARCH_RADIUS_KM": "",
         "GP_LOOKUP_API_RESULTS_LIMIT": "",
         "GP_LOOKUP_API_KEY": "",

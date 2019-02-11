@@ -92,7 +92,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
                 result.telephoneNumbers.size
         )
 
-        val actualTelephoneNumbers = ArrayList<String>()
+        val actualTelephoneNumbers = ArrayList<String?>()
         for (telephoneNumber in result.telephoneNumbers) {
             actualTelephoneNumbers.add(telephoneNumber.telephoneNumber)
         }

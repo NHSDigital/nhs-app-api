@@ -11,7 +11,8 @@
 <script>
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
-import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
+import AppointedRepIcon from '@/components/icons/organ-donation/AppointedRepIcon';
+import { DECISION_APPOINTED_REP, DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
 import get from 'lodash/fp/get';
 
 export default {
@@ -19,6 +20,7 @@ export default {
   components: {
     NoIcon,
     YesIcon,
+    AppointedRepIcon,
   },
   props: {
     decision: {
@@ -36,12 +38,25 @@ export default {
   },
   data() {
     const isOptOut = this.decision === DECISION_OPT_OUT;
-    const allOrgans = !!get('all')(this.decisionDetails);
-    const key = isOptOut ? 'optout' : 'optin';
-    const organsKey = isOptOut || allOrgans ? '' : 'Some';
+    const isAppointedRep = this.decision === DECISION_APPOINTED_REP;
+    let key;
+    let icon;
+
+    if (isOptOut) {
+      key = 'optout';
+      icon = NoIcon;
+    } else if (isAppointedRep) {
+      key = 'appointedrep';
+      icon = AppointedRepIcon;
+    } else {
+      key = 'optin';
+      icon = YesIcon;
+    }
+
+    const organsKey = isOptOut || isAppointedRep || !!get('all')(this.decisionDetails) ? '' : 'Some';
     return {
       decisionTextKey: `organDonation.reviewYourDecision.yourDecision.${key}${organsKey}DecisionText`,
-      icon: isOptOut ? NoIcon : YesIcon,
+      icon,
       style: this.$style[`${key}-label`],
     };
   },
@@ -73,5 +88,8 @@ export default {
 }
 .optin-label {
     color: $light_green;
+}
+.appointedrep-label {
+    color: $nhs_blue;
 }
 </style>

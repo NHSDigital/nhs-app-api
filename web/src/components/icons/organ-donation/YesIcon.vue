@@ -46,7 +46,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'YesIcon',
+};
 </script>
 
 <style module lang="scss" scoped>

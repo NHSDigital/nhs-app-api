@@ -4,6 +4,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation.Models
     {
         Unknown = 0,
         OptIn,
-        OptOut
+        OptOut,
+        AppRep
     }
 }

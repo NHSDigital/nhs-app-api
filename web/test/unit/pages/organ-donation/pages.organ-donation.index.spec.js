@@ -3,6 +3,7 @@ import OrganDonation from '@/pages/organ-donation';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
+  DECISION_APPOINTED_REP,
   DECISION_OPT_IN,
   DECISION_OPT_OUT,
   DECISION_UNKNOWN,
@@ -33,6 +34,7 @@ const createState =
 const createStyle = () => ({
   button: 'button',
   grey: 'grey',
+  appointedRep: 'appointedRep',
 });
 
 describe('organ donation index page', () => {
@@ -190,6 +192,18 @@ describe('organ donation index page', () => {
         });
       });
 
+      describe('appointed representative section', () => {
+        let appointedRepSection;
+
+        beforeEach(() => {
+          appointedRepSection = wrapper.find('.appointedRep');
+        });
+
+        it('will not exist', () => {
+          expect(appointedRepSection.exists()).toBe(false);
+        });
+      });
+
       describe('computed', () => {
         describe('hasAllOrgans', () => {
           it('will be false as no organs are selected', () => {
@@ -241,6 +255,18 @@ describe('organ donation index page', () => {
         it('will have the header key set to `organDonation.registered.yourDecision.subheader`', () => {
           expect(wrapper.find(YourDecision).props().headerKey)
             .toEqual('organDonation.registered.yourDecision.subheader');
+        });
+      });
+
+      describe('appointed representative section', () => {
+        let appointedRepSection;
+
+        beforeEach(() => {
+          appointedRepSection = wrapper.find('.appointedRep');
+        });
+
+        it('will not exist', () => {
+          expect(appointedRepSection.exists()).toBe(false);
         });
       });
 
@@ -305,6 +331,18 @@ describe('organ donation index page', () => {
         });
       });
 
+      describe('appointed representative section', () => {
+        let appointedRepSection;
+
+        beforeEach(() => {
+          appointedRepSection = wrapper.find('.appointedRep');
+        });
+
+        it('will not exist', () => {
+          expect(appointedRepSection.exists()).toBe(false);
+        });
+      });
+
       describe('computed', () => {
         describe('hasAllOrgans', () => {
           it('will be false as only some organs are selected', () => {
@@ -321,6 +359,70 @@ describe('organ donation index page', () => {
         describe('hasSomeOrgans', () => {
           it('will be true as only some organs are selected', () => {
             expect(wrapper.vm.hasSomeOrgans).toEqual(true);
+          });
+        });
+      });
+    });
+
+    describe('app-rep', () => {
+      beforeEach(() => {
+        $store.state.organDonation.originalRegistration.decision = DECISION_APPOINTED_REP;
+        wrapper = mountOrganDonation();
+      });
+
+      describe('DecisionDetails component', () => {
+        it('will not exist', () => {
+          expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+        });
+      });
+
+      describe('YourDecision component', () => {
+        it('will exist', () => {
+          expect(wrapper.find(YourDecision).exists()).toEqual(true);
+        });
+
+        it('will have the decision set to app-rep', () => {
+          expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_APPOINTED_REP);
+        });
+
+        it('will have the header key set to `organDonation.registered.yourDecision.subheader`', () => {
+          expect(wrapper.find(YourDecision).props().headerKey)
+            .toEqual('organDonation.registered.yourDecision.subheader');
+        });
+      });
+
+      describe('appointed representative section', () => {
+        let appointedRepSection;
+
+        beforeEach(() => {
+          appointedRepSection = wrapper.find('.appointedRep');
+        });
+
+        it('will exist', () => {
+          expect(appointedRepSection.exists()).toBe(true);
+        });
+
+        it('will translate the phone label', () => {
+          expect($t).toHaveBeenCalledWith('organDonation.registered.appointedRep.phoneLabel');
+        });
+      });
+
+      describe('computed', () => {
+        describe('hasAllOrgans', () => {
+          it('will be false because the user appointed a representative', () => {
+            expect(wrapper.vm.hasAllOrgans).toEqual(false);
+          });
+        });
+
+        describe('hasExistingDecision', () => {
+          it('will be true as the original decision is appointed representative', () => {
+            expect(wrapper.vm.hasExistingDecision).toEqual(true);
+          });
+        });
+
+        describe('hasSomeOrgans', () => {
+          it('will be false because the user appointed a representative', () => {
+            expect(wrapper.vm.hasSomeOrgans).toEqual(false);
           });
         });
       });

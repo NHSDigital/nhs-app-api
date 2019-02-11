@@ -16,13 +16,14 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         private const string MaryDaviesNhsNumber = "9987574309";
         private const string BobDonorNhsNumber = "0538236728";
         private const string CatherineDonorNhsNumber = "6151552431";
+        private const string KevinBarryNhsNumber = "5785445875";
 
         public Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
             RegistrationLookupRequest request,
             UserSession userSession)
         {
             OrganDonationResponse<RegistrationLookupResponse> response;
-
+            
             switch (request.NhsNumber)
             {
                 // William Raymond
@@ -52,6 +53,15 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                         .AddFaithDeclaration(FaithDeclaration.No)
                         .Build();
                     break;
+                // Kevin Barry
+                case(KevinBarryNhsNumber):
+                    var builder4 = new RegistrationLookupResponseBuilder();
+                    response = builder4
+                        .AddIdentifier(request.NhsNumber)
+                        .AddAppRepDecision()
+                        .AddFaithDeclaration(FaithDeclaration.No)
+                        .Build();
+                    break;
                 //Aaron Donor
                 case (AaronDonorNhsNumber):
                     response = new OrganDonationResponse<RegistrationLookupResponse>(HttpStatusCode.Conflict);
@@ -61,8 +71,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                     break;
             }
 
-            return Task.FromResult(
-                response);
+            return Task.FromResult(response);
         }
 
         public Task<OrganDonationResponse<RegistrationResponse>> PostRegistration(

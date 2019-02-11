@@ -4,7 +4,7 @@ Feature: Organ Donation Register Backend
 
   Scenario Outline: A <GP System> user chooses to donate their organs and submits their Faiths And Beliefs and a POST
       request is made containing user's choices
-      Given I am a <GP System> user who wants to opt-in to organ donation
+      Given I am a <GP System> api user who wants to opt-in to organ donation
       And I have logged in and have a valid session cookie
       When I submit a request to set my organ donation preferences with all organs and my faiths and beliefs decision
       Then I receive my registration id from organ donation
@@ -16,7 +16,7 @@ Feature: Organ Donation Register Backend
 
   Scenario Outline: When submitting an organ donation opt out decision, an unregistered <GP System> user receives
   a 201 response and a registration id
-    Given I am a <GP System> user who wants to opt-out of organ donation
+    Given I am a <GP System> api user who wants to opt-out of organ donation
     And I have logged in and have a valid session cookie
     When I submit my decision to organ donation
     Then I receive a "Created" success code
@@ -29,7 +29,7 @@ Feature: Organ Donation Register Backend
 
   Scenario Outline: When submitting an organ donation opt in decision, an unregistered <GP System> user receives
   a 201 response and a registration id
-    Given I am a <GP System> user who wants to opt-in to organ donation
+    Given I am a <GP System> api user who wants to opt-in to organ donation
     And I have logged in and have a valid session cookie
     When I submit my decision to organ donation
     Then I receive a "Created" success code
@@ -42,7 +42,7 @@ Feature: Organ Donation Register Backend
 
   Scenario Outline: When submitting an organ donation some organs decision, an unregistered <GP System> user receives
   a 201 response and a registration id
-    Given I am a <GP System> user who wants to donate some but not all organs
+    Given I am a <GP System> api user who wants to donate some but not all organs
     And I have logged in and have a valid session cookie
     When I submit my decision to organ donation
     Then I receive a "Created" success code
@@ -55,7 +55,7 @@ Feature: Organ Donation Register Backend
 
   Scenario Outline: When submitting an organ donation decision but the system times out, the <GP System>
   user receives a 504 response
-    Given I am a <GP System> user who wants to opt-out of organ donation, but OD will time out
+    Given I am a <GP System> api user who wants to opt-out of organ donation, but OD will time out
     And I have logged in and have a valid session cookie
     When I submit my decision to organ donation
     Then I receive a "gateway timeout" error
@@ -67,7 +67,7 @@ Feature: Organ Donation Register Backend
 
   Scenario Outline: When submitting an organ donation decision but the system returns internal error, the <GP System>
   user receives a 502 response
-    Given I am a <GP System> user who wants to opt-out of organ donation, but OD will return an internal error
+    Given I am a <GP System> api user who wants to opt-out of organ donation, but OD will return an internal error
     And I have logged in and have a valid session cookie
     When I submit my decision to organ donation
     Then I receive a "bad gateway" error

@@ -50,6 +50,14 @@ class OrganDonationFactory(val gpSystem: String) {
         DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
     }
 
+    fun existingAppointedRepresentative() {
+        val registration = OrganDonationRegistrationDataBuilder.appointRepresentative(patient)
+        mockingClient.forOrganDonation {
+            lookupOrganDonationRegistration(patient).respondWithSuccess(registration)
+        }
+        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
+    }
+
     fun existingOptInSome() {
         val registration = OrganDonationRegistrationDataBuilder.optInSome(patient, someOrgans())
         mockingClient.forOrganDonation {

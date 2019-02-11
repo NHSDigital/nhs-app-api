@@ -43,6 +43,12 @@ object OrganDonationRegistrationDataBuilder {
         return resource
     }
 
+    fun appointRepresentative(patient: Patient): Resource {
+        val resource = build(patient)
+        resource.organDonationDecision = "app-rep"
+        return resource
+    }
+
     private val mapUiLabelToMock = hashMapOf("Small bowel" to "smallBowel")
 
     private fun map(input:String):String{

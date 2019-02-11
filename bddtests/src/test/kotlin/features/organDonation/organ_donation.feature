@@ -333,16 +333,3 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Specific Organ Choice page is displayed
     And a validation message is shown if a user attempts to continue with all specific organ options set to no
-
-  Scenario: A user is informed when a new registration is in conflicted state
-    Given I am a EMIS user not registered with organ donation, who wishes to opt out but will cause a conflict
-    And I am logged in
-    And I navigate to the internal Organ Donation Choice Page
-    When I choose to not donate my organs
-    Then the Organ Donation Decision Additional Details page is displayed
-    And I click the 'Continue' button
-    Then the Organ Donation Check Details page is displayed
-    And my religion is recorded as not chosen on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
-    Then the organ donation decision has been submitted and is to be processed

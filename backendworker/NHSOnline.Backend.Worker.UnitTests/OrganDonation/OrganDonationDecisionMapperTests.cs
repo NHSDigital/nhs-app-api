@@ -26,7 +26,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         [TestMethod]
         [DataRow(null)]
         [DataRow("_invalid_")]
-        [DataRow("app-rep")]
         public void MapStringToOrganDonationDecision_WhenPassingInvalidValue_MapsToDefault(string value)
         {
             // Act and Assert
@@ -39,6 +38,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         [TestMethod]
         [DataRow("opt-in", Decision.OptIn)]
         [DataRow("opt-out", Decision.OptOut)]
+        [DataRow("app-rep", Decision.AppRep)]
         public void MapStringToOrganDonationDecision_WhenPassingMappedValue_MapsCorrectly(string value,
             Decision expected)
         {

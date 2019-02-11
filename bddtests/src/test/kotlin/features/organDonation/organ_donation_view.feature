@@ -45,3 +45,17 @@ Feature: Organ Donation
     And I am logged in
     And I navigate to the internal Organ Donation Page
     Then the organ donation decision has been found and is to be processed
+    
+  Scenario Outline: A <GP System> user registered with organ donation can view their decision of appointed representative
+    Given I am a <GP System> user registered with organ donation with an appointed representative
+    And I am logged in
+    And I navigate to the internal Organ Donation Page
+    Then the Organ Donation Confirmation page is displayed
+    And the choice of an organ donation appointed representative is displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
+    #Depending on timeline, either add an 'Amend' test here, or add 'App Rep' test into 'Amend'

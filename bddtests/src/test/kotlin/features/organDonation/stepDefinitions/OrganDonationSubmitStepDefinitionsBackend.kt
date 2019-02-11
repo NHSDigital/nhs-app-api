@@ -15,7 +15,7 @@ import worker.models.organdonation.OrganDonationRegistrationResponse
 
 class OrganDonationSubmitStepDefinitionsBackend {
 
-    @Given("^I am a (.*) user who wants to opt-out of organ donation$")
+    @Given("^I am a (\\w+) api user who wants to opt-out of organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         val registrationId = "NewOrganDonationId"
@@ -23,7 +23,7 @@ class OrganDonationSubmitStepDefinitionsBackend {
         factory.optOut { registration -> registration.respondWithSuccess(registrationId) }
     }
 
-    @Given("^I am a (.*) user who wants to opt-in to organ donation$")
+    @Given("^I am a (\\w+) api user who wants to opt-in to organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptIn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         val registrationId = "NewOrganDonationId"
@@ -31,7 +31,7 @@ class OrganDonationSubmitStepDefinitionsBackend {
         factory.optIn { registration -> registration.respondWithSuccess(registrationId) }
     }
 
-    @Given("^I am a (.*) user who wants to donate some but not all organs$")
+    @Given("^I am a (\\w+) api user who wants to donate some but not all organs$")
     fun iAmAUserWhoWantsToDonateSomeButNotAllOrgans(gpSystem: String){
         val factory = OrganDonationFactory(gpSystem)
         val registrationId = "NewOrganDonationId"
@@ -39,13 +39,13 @@ class OrganDonationSubmitStepDefinitionsBackend {
         factory.some { registration -> registration.respondWithSuccess(registrationId) }
     }
 
-    @Given("^I am a (.*) user who wants to opt-out of organ donation, but OD will time out$")
+    @Given("^I am a (\\w+) api user who wants to opt-out of organ donation, but OD will time out$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOutButOrganDonationWillTimeOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.optOut { registration -> registration.respondWithTimeOutError() }
     }
 
-    @Given("^I am a (.*) user who wants to opt-out of organ donation, but OD will return an internal error$")
+    @Given("^I am a (\\w+) api user who wants to opt-out of organ donation, but OD will return an internal error$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOutButOrganDonationWillReturnInternalError(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.optOut { registration -> registration.respondWithInternalError() }

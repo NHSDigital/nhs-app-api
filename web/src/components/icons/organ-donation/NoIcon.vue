@@ -16,10 +16,9 @@
 </template>
 
 <script>
-
 export default {
+  name: 'NoIcon',
 };
-
 </script>
 
 <style module lang="scss" scoped>

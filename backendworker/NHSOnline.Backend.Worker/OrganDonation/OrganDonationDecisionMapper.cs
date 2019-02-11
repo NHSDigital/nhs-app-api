@@ -14,7 +14,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         protected override Dictionary<string, Decision> MappingTable => new Dictionary<string, Decision>
         {
             { "opt-in", Decision.OptIn },
-            { "opt-out", Decision.OptOut }
+            { "opt-out", Decision.OptOut },
+            { "app-rep", Decision.AppRep }
         };
     }
 }

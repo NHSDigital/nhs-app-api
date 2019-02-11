@@ -24,35 +24,42 @@ open class OrganDonationStepDefinitions {
 
     lateinit var organDonationChoicePage: OrganDonationChoicePage
 
-    @Given("I am a (.*) user registered with organ donation to not donate my organs")
+    @Given("I am a (\\w+) user registered with organ donation to not donate my organs")
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.existingOptOut()
     }
 
-    @Given("I am a (.*) user registered with organ donation to donate all organs")
+    @Given("I am a (\\w+) user registered with organ donation to donate all organs")
     fun iAmRegisteredWithOrganDonationToDonateAllOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.existingOptIn()
     }
 
-    @Given("I am a (.*) user registered with organ donation to donate some organs")
+    @Given("I am a (\\w+) user registered with organ donation with an appointed representative")
+    fun iAmRegisteredWithOrganDonationWithAnAppointedRepresentative(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existingAppointedRepresentative()
+    }
+
+    @Given("I am a (\\w+) user registered with organ donation to donate some organs")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.existingOptInSome()
     }
 
-    @Given("^I am a (.*) user not registered with organ donation, who wishes to register$")
+    @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register$")
     fun iAmNotRegisteredWithOrganDonationWishToRegister(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
     }
 
-    @Given("^I am a (.*) user not registered with organ donation, who wishes to register and opt out$")
+    @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and opt out$")
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
@@ -60,7 +67,7 @@ open class OrganDonationStepDefinitions {
         factory.optOut { registration -> registration.respondWithSuccess("test") }
     }
 
-    @Given("^I am a (.*) user not registered with organ donation, who wishes to register and opt in$")
+    @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and opt in$")
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptIn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
@@ -68,7 +75,7 @@ open class OrganDonationStepDefinitions {
         factory.optIn { registration -> registration.respondWithSuccess("test") }
     }
 
-    @Given("^I am a (.*) user not registered with organ donation, who wishes to register and donate some organs$")
+    @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and donate some organs$")
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndDonateSomeOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()

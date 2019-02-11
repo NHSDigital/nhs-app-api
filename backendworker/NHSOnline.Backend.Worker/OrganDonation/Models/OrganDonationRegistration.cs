@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.ValidationAttributes;
 
 namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
@@ -26,6 +26,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation.Models
         public string EmailAddress { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter), false)]
+        [Accepts(Decision.OptIn, Decision.OptOut)]
         public Decision Decision { get; set; }
 
         public DecisionDetails DecisionDetails { get; set; }

@@ -72,6 +72,12 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             };
             return this;
         }
+        
+        public RegistrationLookupResponseBuilder AddAppRepDecision()
+        {
+            _registration.OrganDonationDecision = "app-rep";
+            return this;
+        }
 
         public RegistrationLookupResponseBuilder AddOptInSomeOrgansDecision()
         {

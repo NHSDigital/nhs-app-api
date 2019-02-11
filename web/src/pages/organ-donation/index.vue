@@ -32,6 +32,10 @@
         </div>
       </div>
     </div>
+    <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep]">
+      <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
+      <span>0300 123 2323</span>
+    </div>
   </div>
 </template>
 
@@ -44,6 +48,7 @@ import MessageText from '@/components/widgets/MessageText';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
+  DECISION_APPOINTED_REP,
   DECISION_OPT_IN,
   DECISION_OPT_OUT,
   DECISION_UNKNOWN,
@@ -72,17 +77,20 @@ export default {
     decisionDetails() {
       return this.$store.state.organDonation.originalRegistration.decisionDetails;
     },
-    hasExistingDecision() {
-      return this.$store.state.organDonation.originalRegistration.decision !== DECISION_UNKNOWN;
-    },
     hasAllOrgans() {
       return !!(
         this.hasExistingDecision &&
         get('$store.state.organDonation.originalRegistration.decisionDetails.all')(this)
       );
     },
+    hasAppointedRep() {
+      return this.decision === DECISION_APPOINTED_REP;
+    },
+    hasExistingDecision() {
+      return this.decision !== DECISION_UNKNOWN;
+    },
     hasExistingOptIn() {
-      return this.$store.state.organDonation.originalRegistration.decision === DECISION_OPT_IN;
+      return this.decision === this.yesDecision;
     },
     hasSomeOrgans() {
       return !!(
@@ -115,9 +123,10 @@ export default {
 @import "../../style/info";
 
 .info {
-  p {
-    color: $dark_grey;
-    font-weight: bold;
+  &.appointedRep {
+    p {
+      padding-bottom: 0;
+    }
   }
 }
 

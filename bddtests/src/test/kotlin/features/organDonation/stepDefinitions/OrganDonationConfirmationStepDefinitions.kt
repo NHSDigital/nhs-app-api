@@ -58,6 +58,11 @@ open class OrganDonationConfirmationStepDefinitions {
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(organsToDonate)
     }
 
+    @Then("^the choice of an organ donation appointed representative is displayed$")
+    fun theChoiceOfAnOrganDonationAppointedRepresentativeIsDisplayed() {
+        organDonationConfirmationPage.decisionModule.assertDecisionIsAppointedRepresentative()
+    }
+
     @Then("the organ donation decision has been submitted and is to be processed")
     fun theOrganDonationDecisionHasBeenSubmittedAndIsToBeProcessed(){
         organDonationConfirmationPage.assertDecisionSubmitted()

@@ -773,6 +773,9 @@ export default {
       decisionDetails: {
         all: 'I want to donate all my organs and tissue.',
       },
+      appointedRep: {
+        phoneLabel: 'To view, or change, your appointed representative call the organ donation line:',
+      },
     },
     yourChoice: {
       subheader: 'Your choice',
@@ -835,6 +838,7 @@ export default {
       },
       yourDecision: {
         subheader: 'Your decision',
+        appointedrepDecisionText: 'I have appointed a representative',
         optoutDecisionText: 'No, I do not want to donate my organs',
         optinDecisionText: 'Yes, I do want to donate my organs',
         optinSomeDecisionText: 'Specific organs and tissue',
@@ -944,6 +948,10 @@ export default {
       title: 'NHS app',
     },
     organDonation: {
+      appointedRepIcon: {
+        title: 'Appointed Representative',
+        description: 'Indicates that you have appointed a representative',
+      },
       noIcon: {
         title: 'No',
         description: 'Indicates not to donate organs',
