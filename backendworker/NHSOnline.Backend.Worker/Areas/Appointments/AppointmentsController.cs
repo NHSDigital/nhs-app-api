@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
                 var cancelResult = await appointmentsService.Cancel(userSession, model);
 
-                await cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, _logger, model.AppointmentId));
+                cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, model.AppointmentId));
                 return cancelResult.Accept(new AppointmentCancelResultVisitor());
             }
             finally
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 var result =
                     await appointmentsService.GetAppointments(userSession);
 
-                await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));
+                result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));
 
                 return result.Accept(new AppointmentsResultVisitor());
             }
@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
                 var bookResult = await appointmentsService.Book(userSession, model);
 
-                await bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, _logger, model.SlotId, model.StartTime));
+                bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, model.SlotId, model.StartTime));
                 return bookResult.Accept(new AppointmentBookResultVisitor());
             }
             finally

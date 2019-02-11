@@ -52,7 +52,8 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
 
                 var result = await _organDonationService.GetOrganDonation(myRecordGetResult, userSession);
 
-                await result.Accept(new OrganDonationAuditingVisitor(_auditor, _logger));
+                result.Accept(new OrganDonationAuditingVisitor(_auditor));
+
                 return result.Accept(new OrganDonationResultVisitor());
             }
             finally
@@ -75,7 +76,8 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
 
                 var result = await _organDonationService.Register(model, userSession);
 
-                await result.Accept(new OrganDonationRegistrationAuditingVisitor(_auditor, _logger));
+                result.Accept(new OrganDonationRegistrationAuditingVisitor(_auditor));
+
                 return result.Accept(new OrganDonationRegistrationVisitor());
             }
             finally

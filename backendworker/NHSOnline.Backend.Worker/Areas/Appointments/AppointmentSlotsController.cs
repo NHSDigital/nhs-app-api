@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                                         "Catching exception to prevent inability to create appointment");
                 }
 
-                await result.Accept(new AppointmentSlotsAuditingVisitor(_auditor, _logger, userSession));
+                result.Accept(new AppointmentSlotsAuditingVisitor(_auditor, _logger, userSession));
                 return result.Accept(new AppointmentSlotsResultVisitor());
             }
             finally

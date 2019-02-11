@@ -104,8 +104,8 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                     ((LinkageResult.SuccessfullyRetrieved) result).Response.OdsCode = cidOdsCode;
                 }
 
-                return await result.Accept(new LinkageResultAuditingVisitor(
-                    _auditor, _logger, gpSystem.Supplier, nhsNumber,
+                return result.Accept(new LinkageResultAuditingVisitor(
+                    _auditor, gpSystem.Supplier, nhsNumber,
                     Constants.AuditingTitles.GetLinkageDetailsAuditTypeResponse));
             }
             finally
@@ -149,9 +149,9 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                 {
                     _logger.LogWarning("Linkage details request unsuccessful - patient non competent or under 16.");
 
-                    return await new LinkageResult.PatientNonCompetentOrUnderMinimumAge().Accept(
+                    return new LinkageResult.PatientNonCompetentOrUnderMinimumAge().Accept(
                         new LinkageResultAuditingVisitor(
-                            _auditor, _logger, gpSystem.Supplier, createLinkageRequest.NhsNumber,
+                            _auditor, gpSystem.Supplier, createLinkageRequest.NhsNumber,
                             Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
                 }
 
@@ -167,8 +167,8 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                     ((LinkageResult.SuccessfullyCreated) result).Response.OdsCode = cidOdsCode;
                 }
 
-                return await result.Accept(new LinkageResultAuditingVisitor(
-                    _auditor, _logger, gpSystem.Supplier, createLinkageRequest.NhsNumber,
+                return result.Accept(new LinkageResultAuditingVisitor(
+                    _auditor, gpSystem.Supplier, createLinkageRequest.NhsNumber,
                     Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
             }
             finally

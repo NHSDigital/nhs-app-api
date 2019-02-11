@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
                 _logger.LogInformation("Fetching detailed test result");
                 var result = await patientRecordService.GetDetailedTestResult(userSession, testResultId);
 
-                await result.Accept(new DetailedTestResultAuditingVisitor(_auditor, _logger));
+                result.Accept(new DetailedTestResultAuditingVisitor(_auditor));
                 return result.Accept(new DetailedTestResultVisitor());
             }
             finally

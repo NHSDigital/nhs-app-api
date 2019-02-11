@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 
                 _logger.LogDebug($"{nameof(gpSystem.GetIm1ConnectionService)} completed");
 
-                await verifyResult.Accept(new Im1ConnectionVerifyAuditingVisitor(_auditor, _logger, gpSystem.Supplier));
+                verifyResult.Accept(new Im1ConnectionVerifyAuditingVisitor(_auditor, gpSystem.Supplier));
                 return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
             }
             finally
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 var im1ConnectionService = gpSystem.GetIm1ConnectionService();
                 var registerResult = await im1ConnectionService.Register(model);
 
-                await registerResult.Accept(new Im1ConnectionRegisterAuditingVisitor(_auditor, _logger, gpSystem.Supplier));
+                registerResult.Accept(new Im1ConnectionRegisterAuditingVisitor(_auditor, gpSystem.Supplier));
                 return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
             }
             finally

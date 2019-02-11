@@ -1,101 +1,66 @@
-﻿using System;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
+﻿using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    public class AppointmentCancelAuditingVisitor : IAppointmentCancelResultVisitor<Task>
+    public class AppointmentCancelAuditingVisitor : IAppointmentCancelResultVisitor<object>
     {
         private readonly IAuditor _auditor;
-        private readonly ILogger<AppointmentsController> _logger;
         private readonly string _appointmentId;
         private const string AuditType = Constants.AuditingTitles.CancelAppointmentAuditTypeResponse;
 
-        public AppointmentCancelAuditingVisitor(IAuditor auditor, ILogger<AppointmentsController> logger, string appointmentId)
+        public AppointmentCancelAuditingVisitor(IAuditor auditor, string appointmentId)
         {
             _auditor = auditor;
-            _logger = logger;
             _appointmentId = appointmentId;
         }
 
-        public async Task Visit(AppointmentCancelResult.SuccessfullyCancelled successfullyCancelled)
+        public object Visit(AppointmentCancelResult.SuccessfullyCancelled successfullyCancelled)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Appointment successfully cancelled for appointment with id: {0}",
+            _auditor.Audit(AuditType, "Appointment successfully cancelled for appointment with id: {0}",
+                _appointmentId);
+
+            return null;
+        }
+
+        public object Visit(AppointmentCancelResult.BadRequest badRequest)
+        {
+            _auditor.Audit(AuditType, "Unable to cancel appointment due to a bad request for appointment with id: {0}",
                     _appointmentId);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.SuccessfullyCancelled)}");
-            }
+
+            return null;
         }
 
-        public async Task Visit(AppointmentCancelResult.BadRequest badRequest)
+        public object Visit(AppointmentCancelResult.AppointmentNotCancellable appointmentNotCancellable)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to a bad request for appointment with id: {0}",
-                    _appointmentId);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.BadRequest)}");
-            }
+            _auditor.Audit(AuditType, "Unable to cancel appointment due to it not being cancellable appointment " +
+                                      "with id: {0}", _appointmentId);
+
+            return null;
         }
 
-        public async Task Visit(AppointmentCancelResult.AppointmentNotCancellable appointmentNotCancellable)
+        public object Visit(AppointmentCancelResult.TooLateToCancel tooLateToCancel)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to it not being cancellable appointment " +
-                                          "with id: {0}", _appointmentId);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.AppointmentNotCancellable)}");
-            }
+            _auditor.Audit(AuditType, "Unable to cancel appointment due to it being too late to cancel with id: {0}",
+                _appointmentId);
+
+            return null;
         }
 
-        public async Task Visit(AppointmentCancelResult.TooLateToCancel tooLateToCancel)
+        public object Visit(AppointmentCancelResult.InsufficientPermissions insufficientPermissions)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to it being too late to cancel with id: {0}",
-                    _appointmentId);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.TooLateToCancel)}");
-            }
+            _auditor.Audit(AuditType, "Unable to cancel appointment due to insufficent permissions for appointment " +
+                                      "with id: {0}", _appointmentId);
+
+            return null;
         }
 
-        public async Task Visit(AppointmentCancelResult.InsufficientPermissions insufficientPermissions)
+        public object Visit(AppointmentCancelResult.SupplierSystemUnavailable supplierSystemUnavailable)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to insufficent permissions for appointment " +
-                                          "with id: {0}", _appointmentId);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.InsufficientPermissions)}");
-            }
-        }
+            _auditor.Audit(AuditType, "Unable to cancel appointment due to unavailable supplier for appointment " +
+                                      "with id: {0}", _appointmentId);
 
-        public async Task Visit(AppointmentCancelResult.SupplierSystemUnavailable supplierSystemUnavailable)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to unavailable supplier for appointment " +
-                                          "with id: {0}", _appointmentId);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.SupplierSystemUnavailable)}");
-            }
+            return null;
         }
     }
 }

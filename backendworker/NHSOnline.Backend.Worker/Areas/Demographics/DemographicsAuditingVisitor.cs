@@ -1,82 +1,51 @@
-using System;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics
 {
-    public class DemographicsAuditingVisitor : IDemographicsResultVisitor<Task>
+    public class DemographicsAuditingVisitor : IDemographicsResultVisitor<object>
     {
         private readonly IAuditor _auditor;
-        private readonly ILogger<DemographicsController> _logger;
         private const string AuditType = Constants.AuditingTitles.GetDemographicsAuditTypeResponse;
 
-        public DemographicsAuditingVisitor(IAuditor auditor, ILogger<DemographicsController> logger)
+        public DemographicsAuditingVisitor(IAuditor auditor)
         {
             _auditor = auditor;
-            _logger = logger;
         }
         
-        public async Task Visit(DemographicsResult.UserHasNoAccess result)
+        public object Visit(DemographicsResult.UserHasNoAccess result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: patient does not have access to data");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.UserHasNoAccess)}");
-            }
+            _auditor.Audit(AuditType, "Error viewing Demographics: patient does not have access to data");
+
+            return null;
         }
 
-        public async Task Visit(DemographicsResult.SuccessfullyRetrieved result)
+        public object Visit(DemographicsResult.SuccessfullyRetrieved result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Demographics successfully viewed");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.SuccessfullyRetrieved)}");
-            }
+            _auditor.Audit(AuditType, "Demographics successfully viewed");
+
+            return null;
         }
 
-        public async Task Visit(DemographicsResult.SupplierSystemUnavailable supplierSystemUnavailable)
+        public object Visit(DemographicsResult.SupplierSystemUnavailable supplierSystemUnavailable)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: supplier system unavailable");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.SupplierSystemUnavailable)}");
-            }
+            _auditor.Audit(AuditType, "Error viewing Demographics: supplier system unavailable");
 
+            return null;
         }
 
-        public async Task Visit(DemographicsResult.Unsuccessful result)
+        public object Visit(DemographicsResult.Unsuccessful result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: unsuccessful");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.Unsuccessful)}");
-            }
+            _auditor.Audit(AuditType, "Error viewing Demographics: unsuccessful");
+
+            return null;
         }
 
-        public async Task Visit(DemographicsResult.InternalServerError result)
+        public object Visit(DemographicsResult.InternalServerError result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: internal server error");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.InternalServerError)}");
-            }
+            _auditor.Audit(AuditType, "Error viewing Demographics: internal server error");
+            
+            return null;
         }
     }
 }

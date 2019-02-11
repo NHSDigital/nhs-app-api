@@ -1,121 +1,68 @@
-using System;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
-    public class MyRecordSectionAuditingVisitor : IMyRecordSectionResultVisitor<Task>
+    public class MyRecordSectionAuditingVisitor : IMyRecordSectionResultVisitor<object>
     {
         private readonly IAuditor _auditor;
-        private readonly ILogger<MyRecordSectionController> _logger;
-        
         private const string AuditType = Constants.AuditingTitles.ViewPatientRecordSectionAuditTypeResponse;
 
-        public MyRecordSectionAuditingVisitor(IAuditor auditor, ILogger<MyRecordSectionController> logger)
+        public MyRecordSectionAuditingVisitor(IAuditor auditor)
         {
             _auditor = auditor;
-            _logger = logger;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.SuccessfullyRetrieved result)
+        public object Visit(GetMyRecordSectionResult.SuccessfullyRetrieved result)
         {
-            try
-            {
-                var section = result.Response.SectionName;
+            var section = result.Response.SectionName;
 
-                await _auditor.Audit(AuditType,
-                    $"Patient record {section} successfully retrieved.");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.SuccessfullyRetrieved)}");
-            }
+            _auditor.Audit(AuditType,
+                $"Patient record {section} successfully retrieved.");
+
+            return null;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.SupplierBadData result)
+        public object Visit(GetMyRecordSectionResult.SupplierBadData result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Supplier - bad data");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.SupplierBadData)}");
-            }
+            _auditor.Audit(AuditType, "Error: Supplier - bad data");
+            return null;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.Unsuccessful result)
+        public object Visit(GetMyRecordSectionResult.Unsuccessful result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Unsuccessful");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.Unsuccessful)}");
-            }
+            _auditor.Audit(AuditType, "Error: Unsuccessful");
+            return null;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
+        public object Visit(GetMyRecordSectionResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Error processing security header");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.ErrorProcessingSecurityHeader)}");
-            }
+            _auditor.Audit(AuditType, "Error: Error processing security header");
+            return null;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.InvalidUserCredentials invalidUserCredentials)
+        public object Visit(GetMyRecordSectionResult.InvalidUserCredentials invalidUserCredentials)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Invalid user credentials");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.InvalidUserCredentials)}");
-            }
+            _auditor.Audit(AuditType, "Error: Invalid user credentials");
+            return null;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.InvalidRequest invalidRequest)
+        public object Visit(GetMyRecordSectionResult.InvalidRequest invalidRequest)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Invalid request");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.InvalidRequest)}");
-            }
+            _auditor.Audit(AuditType, "Error: Invalid request");
+            return null;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.UnknownError unknownError)
+        public object Visit(GetMyRecordSectionResult.UnknownError unknownError)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Unknown error");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.UnknownError)}");
-            }
+            _auditor.Audit(AuditType, "Error: Unknown error");
+            return null;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.InternalServerError internalServerError)
+        public object Visit(GetMyRecordSectionResult.InternalServerError internalServerError)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Internal server error");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.InternalServerError)}");
-            }
+            _auditor.Audit(AuditType, "Error: Internal server error");
+            return null;
         }
     }
 }

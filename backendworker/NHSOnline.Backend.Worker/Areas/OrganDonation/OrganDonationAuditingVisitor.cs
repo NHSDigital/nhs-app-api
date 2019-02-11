@@ -1,155 +1,93 @@
-﻿using System;
-using NHSOnline.Backend.Worker.OrganDonation;
+﻿using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.OrganDonation
 {
-    public class OrganDonationAuditingVisitor : IOrganDonationResultVisitor<Task>
+    public class OrganDonationAuditingVisitor : IOrganDonationResultVisitor<object>
     {
         private readonly IAuditor _auditor;
-        private readonly ILogger<OrganDonationController> _logger;
-        
         private const string AuditType = Constants.AuditingTitles.GetOrganDonationAuditTypeResponse;
 
-        public OrganDonationAuditingVisitor(IAuditor auditor, ILogger<OrganDonationController> logger)
+        public OrganDonationAuditingVisitor(IAuditor auditor)
         {
             _auditor = auditor;
-            _logger = logger;
         }
 
-        public async Task Visit(OrganDonationResult.NewRegistration result)
+        public object Visit(OrganDonationResult.NewRegistration result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "A default organ donation registration has been generated");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.NewRegistration)}");
-            }
+            _auditor.Audit(AuditType, "A default organ donation registration has been generated");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.ExistingRegistration result)
+        public object Visit(OrganDonationResult.ExistingRegistration result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "An existing organ donation registration been found");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.ExistingRegistration)}");
-            }
+            _auditor.Audit(AuditType, "An existing organ donation registration been found");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.DemographicsRetrievalFailed result)
+        public object Visit(OrganDonationResult.DemographicsRetrievalFailed result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "There was an issue retrieving the demographics record");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.DemographicsRetrievalFailed)}");
-            }
+            _auditor.Audit(AuditType, "There was an issue retrieving the demographics record");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.DemographicsForbidden result)
+        public object Visit(OrganDonationResult.DemographicsForbidden result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Access to demographics was forbidden");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.DemographicsForbidden)}");
-            }
+            _auditor.Audit(AuditType, "Access to demographics was forbidden");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.DemographicsInternalServerError result)
+        public object Visit(OrganDonationResult.DemographicsInternalServerError result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error received from demographics");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.DemographicsInternalServerError)}");
-            }
+            _auditor.Audit(AuditType, "Error received from demographics");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.DemographicsBadGateway result)
+        public object Visit(OrganDonationResult.DemographicsBadGateway result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "There was an issue retrieving the demographics record");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.DemographicsBadGateway)}");
-            }
+            _auditor.Audit(AuditType, "There was an issue retrieving the demographics record");
 
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.DuplicateRecord result)
+        public object Visit(OrganDonationResult.DuplicateRecord result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "Duplicate organ donation record error");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.DuplicateRecord)}");
-            }
+            _auditor.Audit(AuditType, "Duplicate organ donation record error");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.SearchSystemUnavailable result)
+        public object Visit(OrganDonationResult.SearchSystemUnavailable result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "The organ donation system is unavailable");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.SearchSystemUnavailable)}");
-            }
+            _auditor.Audit(AuditType, "The organ donation system is unavailable");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.BadSearchRequest result)
+        public object Visit(OrganDonationResult.BadSearchRequest result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "The search request is invalid");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.BadSearchRequest)}");
-            }
+            _auditor.Audit(AuditType, "The search request is invalid");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.SearchTimeout result)
+        public object Visit(OrganDonationResult.SearchTimeout result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "The organ donation system took too long to respond");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.SearchTimeout)}");
-            }
+            _auditor.Audit(AuditType, "The organ donation system took too long to respond");
+
+            return null;
         }
 
-        public async Task Visit(OrganDonationResult.SearchError result)
+        public object Visit(OrganDonationResult.SearchError result)
         {
-            try
-            {
-                await _auditor.Audit(AuditType, "There was an issue searching for an organ donation record");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.SearchError)}");
-            }
+            _auditor.Audit(AuditType, "There was an issue searching for an organ donation record");
+
+            return null;
         }
     }
 }

@@ -38,7 +38,8 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
                 _logger.LogDebug("Fetching organ donation reference data");
                 var result = await _organDonationService.GetReferenceData();
 
-                await result.Accept(new OrganDonationReferenceDataAuditingVisitor(_auditor, _logger));
+                result.Accept(new OrganDonationReferenceDataAuditingVisitor(_auditor));
+
                 return result.Accept(new OrganDonationReferenceDataResultVisitor());
             }
             finally
