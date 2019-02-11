@@ -1,9 +1,11 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
   <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
     <h2>{{ $t('myAccount.detailsHeading') }}</h2>
-    <welcome-section :name="$store.state.session.user"
-                     :date-of-birth="$store.state.session.dateOfBirth"
-                     :nhs-number="$store.state.session.nhsNumber" />
+    <div :class="$style.welcomeSectionContainer">
+      <welcome-section :name="$store.state.session.user"
+                       :date-of-birth="$store.state.session.dateOfBirth"
+                       :nhs-number="$store.state.session.nhsNumber" />
+    </div>
     <div v-if="shouldShowBiometrics">
       <h2>{{ $t('myAccount.accountSettingsHeading') }}</h2>
       <ul :class="$style['list-menu']">
@@ -136,4 +138,9 @@ export default {
     margin-top: 0.5em;
   }
 }
+
+.welcomeSectionContainer{
+ margin-left: 1em;
+}
+
 </style>
