@@ -43,16 +43,11 @@ export default {
       window.digitalData.user[key] = value;
     }
   },
-  satelliteTrack(_, nameOfCall, objectToTrack) {
+  satelliteTrack(_, nameOfCall, objectToTrack = {}) {
     // Put track call in try-catch, as it likely called under error, so no internet connection.
     if (process.client) {
       /* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
       // eslint-disable-next-line no-underscore-dangle
-
-      if(!objectToTrack) {
-        objectToTrack = {};
-      }
-
       try { window._satellite.track(nameOfCall, objectToTrack); } catch (exception) { }
     }
   },

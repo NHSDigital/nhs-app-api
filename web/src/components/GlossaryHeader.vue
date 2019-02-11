@@ -1,8 +1,10 @@
 <template>
   <div :class="$style.info">
     <p>{{ $t('rp01.glossary.headerText') }}</p>
-    <analytics-tracked-tag :href="glossaryLinkURL" :text="$t('rp01.glossary.linkText')"
-                           tag="a" target="_blank">
+    <analytics-tracked-tag :href="glossaryLinkURL"
+                           :text="$t('rp01.glossary.linkText')"
+                           tag="a"
+                           target="_blank">
       <abbreviations-arrow-right-icon />
       {{ $t('rp01.glossary.linkText') }}
     </analytics-tracked-tag>

@@ -24,12 +24,18 @@
         {{ $t('appointments.guidance.li3.text') }}</p>
     </div>
 
-    <generic-button id="btn_check_symptoms"
-                    :class="[$style.button, isDesktopWeb ? $style.desktopWeb : $style.web]"
-                    tabindex="0"
-                    @click="onCheckSymptomClicked">
-      {{ $t('appointments.guidance.symptomButttonText') }}
-    </generic-button>
+    <analytics-tracked-tag :text="$t('appointments.guidance.symptomButttonText')"
+                           :destination="symptomsPath"
+                           data-purpose="generic-button"
+                           tag="generic-button">
+      <generic-button id="btn_check_symptoms"
+                      :class="[$style.button, isDesktopWeb ? $style.desktopWeb : $style.web]"
+                      tabindex="0"
+                      @click="onCheckSymptomClicked">
+        {{ $t('appointments.guidance.symptomButttonText') }}
+      </generic-button>
+    </analytics-tracked-tag>
+
     <no-js-form :action="appointmentBookingPath" :value="formData">
       <generic-button
         id="btn_appointment"
@@ -58,6 +64,7 @@ export default {
     return {
       isDesktopWeb: (this.$store.state.device.source !== 'android'
         && this.$store.state.device.source !== 'ios'),
+      symptomsPath: SYMPTOMS.path,
     };
   },
   computed: {

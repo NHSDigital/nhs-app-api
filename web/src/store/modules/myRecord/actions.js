@@ -24,18 +24,16 @@ export default {
     const { response: patientDetails } = await this.app.$http.getV1PatientDemographics({}) || {};
     const { response: record } = await this.app.$http.getV1PatientMyRecord({}) || {};
     commit(LOADED, { record, patientDetails });
-    let medicalRecordType = AnalyticsValues.NoMedicalRecordAccesas;
-    if (record) {
-      if (record.hasSummaryRecordAccess) {
-        if (record.hasDetailedRecordAccess) {
-          medicalRecordType = AnalyticsValues.SCRAndDCRAccess;
-        } else {
-          medicalRecordType = AnalyticsValues.SCRAccess;
-        }
-      }
+    let medicalRecordType = AnalyticsValues.NoMedicalRecordAccess;
+    if (record && record.hasSummaryRecordAccess) {
+      medicalRecordType = record.hasDetailedRecordAccess ?
+        AnalyticsValues.SCRAndDCRAccess :
+        AnalyticsValues.SCRAccess;
     }
     commit(SET_MEDICAL_RECORD_TYPE, { medicalRecordType });
-    this.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
+    if (process.client) {
+      this.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
+    }
   },
   async loadTestResults({ commit }) {
     const section = 'TestResults';
@@ -71,8 +69,5 @@ export default {
   },
   togglePatientDetail({ commit }) {
     commit(TOGGLE_PATIENT_DETAIL);
-  },
-  setMedicalRecordType({ commit }, value) {
-    commit(SET_MEDICAL_RECORD_TYPE, { value });
   },
 };

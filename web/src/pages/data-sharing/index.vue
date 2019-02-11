@@ -16,11 +16,17 @@
     </div>
     <form id="ndop-token-form" :action="dataPreferencesUrl" :target="formTarget" method="POST"
           name="ndopTokenForm">
-      <generic-button v-if="pageId === 'p3'" id="start-now-button"
-                      :class="[$style.button, $style.green]"
-                      @click="startNowClicked($event)">
-        {{ $t('ds01.startNowButton') }}
-      </generic-button>
+      <analytics-tracked-tag v-if="pageId === 'p3'"
+                             id="start-now-button"
+                             :text="$t('ds01.startNowButton')"
+                             :destination="dataPreferencesUrl"
+                             data-purpose="generic-button"
+                             tag="generic-button"
+                             @click="startNowClicked($event)">
+        <button :class="[$style.button, $style.green]">
+          {{ $t('ds01.startNowButton') }}
+        </button>
+      </analytics-tracked-tag>
     </form>
     <BottomNav :class="$style['bottom-nav']" :current-page="pageId"
                @next-page="changePage(++pageIndex)" @previous-page="changePage(--pageIndex)"/>

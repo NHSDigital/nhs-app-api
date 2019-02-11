@@ -73,7 +73,8 @@
     <p v-if="this.$store.app.$env.CE_MARK_ENABLED">
       <ce-mark-icon/>
     </p>
-    <analytics-tracked-tag :text="$t('signOutButton.signOut')" data-purpose="button">
+    <analytics-tracked-tag :text="$t('signOutButton.signOut')"
+                           data-purpose="button">
       <form action="account/signout" method="post">
         <floating-button-bottom id="signout-button" :button-classes="[$style.grey]" type="submit"
                                 @click="signout">

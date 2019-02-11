@@ -227,19 +227,18 @@ export default {
       this.availableAppointmentsScreenReaderMessage.push(screenReaderMessage);
     },
     trackDropDown(numberOfAvailableAppointments) {
-
       let trackEvent;
-      if(this.numberOfAvailableAppointments === 0) {
+      if (numberOfAvailableAppointments === 0) {
         trackEvent = 'appointmentError';
       } else {
         trackEvent = 'appointmentSuccess';
       }
 
-      var objectToTrack = {
+      const objectToTrack = {
         appointmentType: this.selectedOptions.type,
         location: this.selectedOptions.location,
         practiceMember: this.selectedOptions.clinician,
-        filterByDate: this.selectedOptions.date
+        filterByDate: this.selectedOptions.date,
       };
 
       this.$store.dispatch('analytics/satelliteTrack', trackEvent, objectToTrack);

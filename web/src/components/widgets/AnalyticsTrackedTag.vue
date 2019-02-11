@@ -32,6 +32,10 @@ export default {
       type: String,
       default: undefined,
     },
+    destination: {
+      type: String,
+      default: undefined,
+    },
   },
   methods: {
     trackClick(evt) {
@@ -41,7 +45,23 @@ export default {
         const { pageName } = window.digitalData.page.pageInfo;
         const type = (el.hasAttribute('data-purpose')) ? el.getAttribute('data-purpose')
           : this.getType(el.tagName);
-        const navigation = `${pageName}|${type}|${text}`;
+
+        let linkDestination = '';
+
+        if (this.destination) {
+          linkDestination = this.destination;
+        } else if (this.href) {
+          linkDestination = this.href;
+        }
+
+        const navigation = {
+          linkText: text,
+          linkName: pageName,
+          linkParent: this.$parent.$vnode.tag,
+          linkTargetType: type,
+          linkDestination,
+          linkElement: this.tag,
+        };
         this.$store.dispatch('analytics/trackLink', navigation);
 
         if (this.clickFunc) {
