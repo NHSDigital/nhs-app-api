@@ -81,4 +81,8 @@ export default {
 @import "../../style/forms";
 @import "../../style/select";
 @import "../../style/errorvalidation";
+
+ select::-ms-expand {
+  display: none;
+ }
 </style>
