@@ -111,11 +111,6 @@ export default {
       return this.$store.state.header.miniMenuExpanded;
     },
   },
-  created() {
-    if (this.showMenu) {
-      this.$store.dispatch('header/toggleMiniMenu');
-    }
-  },
   mounted() {
     this.showMenuButton = process.client && this.showMenu;
   },

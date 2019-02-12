@@ -1,7 +1,6 @@
 <template>
-  <nav :class="[$style.menu, $style['explanded-nojs'],
-                miniMenuExpanded ? $style.expanded : $style.collapsed,
-                'nojs-mini-menu-explanded']">
+  <nav :class="[$style.menu, miniMenuExpanded ? $style.expanded : $style.collapsed,
+                'nojs-mini-menu-expanded']">
     <hr aria-hidden="true">
     <a v-if="miniMenuExpanded" :class="$style['mini-menu-close-button']"
        role="button" tabindex="0"
@@ -82,7 +81,7 @@ export default {
           innerHTML: `
             <style type="text/css">
               @media (max-width: 767px) {
-                .nojs-mini-menu-explanded {
+                .nojs-mini-menu-expanded {
                   display: block !important;
                 }
               }
@@ -238,7 +237,7 @@ export default {
       background: $white;
       margin: 0 (-1 * $parent-left-right-padding);
 
-      div.menu-nojs-caption {
+      .menu-nojs-caption {
         @include mini-menu-option;
         cursor: default;
       }
