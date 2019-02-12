@@ -46,6 +46,13 @@ class Config private constructor() {
     val mongoDbHost: String
     val mongoDbPort: Long
 
+    val nhsSites: String
+    val aboutUs: String
+    val contactUs: String
+    val siteMap: String
+    val accessibilityInformation: String
+    val policies: String
+
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         val uri = URI(url)
@@ -93,6 +100,13 @@ class Config private constructor() {
 
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
         postcodeLookupSearchRadiusKm = envOrDefault("POSTCODE_LOOKUP_SEARCH_RADIUS_KM", "10");
+
+        nhsSites = envOrDefault("NHS_SITES_URL", "https://www.nhs.uk/nhs-sites/")
+        aboutUs = envOrDefault("ABOUT_US_URL", "https://www.nhs.uk/about-us/")
+        contactUs = envOrDefault("CONTACT_US_URL", "https://www.nhs.uk/contact-us/")
+        siteMap = envOrDefault("SITE_MAP_URL", "https://www.nhs.uk/about-us/sitemap/")
+        accessibilityInformation = envOrDefault("ACCESSIBILITY_URL", "https://www.nhs.uk/accessibility/")
+        policies = envOrDefault("POLICIES_URL", "https://www.nhs.uk/our-policies/")
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {

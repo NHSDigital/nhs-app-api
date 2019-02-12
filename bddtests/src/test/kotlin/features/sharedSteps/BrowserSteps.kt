@@ -15,6 +15,8 @@ import java.net.URL
 import java.time.Duration
 import java.util.*
 
+
+
 private const val SIGN_OUT_WAIT_TIME = 1000L
 private const val LOAD_URL_WAIT_TIME = 30L
 private const val POLLING_DURATION = 100L
@@ -85,7 +87,7 @@ open class BrowserSteps {
         for (window in loginPage.driver.windowHandles) {
             driver.switchTo().window(window)
             allWindows.add(0, driver.currentUrl)
-            if (url.host == URL(driver.currentUrl).host) {
+            if ((url == URL(driver.currentUrl)) || ("$url/" == URL(driver.currentUrl).toString())) {
                 return
             }
         }
@@ -94,7 +96,7 @@ open class BrowserSteps {
     }
 
     @Step
-    fun changeTabToApp() {
+    fun changeTabToHome() {
         val baseUrl: String = Config.instance.url
         try {
             changeTab(URL(baseUrl))
