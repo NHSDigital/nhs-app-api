@@ -1,12 +1,9 @@
 package features.myrecord.stepDefinitions
 
-import config.Config
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.ExaminationsFactoryVision
-import features.sharedSteps.BrowserSteps
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.myrecord.MyRecordInfoPage
 
@@ -14,8 +11,6 @@ open class MyRecordExaminationsStepDefinitions : AbstractDemographicsStepDefinit
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
     lateinit var examinationsFactoryVision: ExaminationsFactoryVision
-    @Steps
-    lateinit var browser: BrowserSteps
 
     @Then("^I see the examinations heading$")
     fun thenISeeTheExaminationsHeading() {
@@ -58,11 +53,5 @@ open class MyRecordExaminationsStepDefinitions : AbstractDemographicsStepDefinit
         setPatientToDefaultFor("VISION")
         examinationsFactoryVision = ExaminationsFactoryVision()
         examinationsFactoryVision.errorRetrieving(patient)
-    }
-
-    @When("^I enter url address for examinations detail directly into the url$")
-    fun whenIEnterUrlAddressForExaminationsDetailDirectlyIntoTheUrl() {
-        val fullUrl = Config.instance.url + "/my-record/examinations-detail"
-        browser.browseTo(fullUrl)
     }
 }

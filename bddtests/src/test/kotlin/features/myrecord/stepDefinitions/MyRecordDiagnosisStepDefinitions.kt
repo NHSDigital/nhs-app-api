@@ -1,12 +1,9 @@
 package features.myrecord.stepDefinitions
 
-import config.Config
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.DiagnosisFactoryVision
-import features.sharedSteps.BrowserSteps
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.myrecord.MyRecordInfoPage
 
@@ -14,8 +11,6 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
     lateinit var diagnosisFactoryVision: DiagnosisFactoryVision
-    @Steps
-    lateinit var browser: BrowserSteps
 
 
     @Then("^I see the diagnosis heading$" )
@@ -59,11 +54,5 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
         setPatientToDefaultFor("VISION")
         diagnosisFactoryVision = DiagnosisFactoryVision()
         diagnosisFactoryVision.errorRetrieving(patient)
-    }
-
-    @When("^I enter url address for diagnosis detail directly into the url$")
-    fun whenIEnterUrlAddressForDiagnosisDetailDirectlyIntoTheUrl() {
-        val fullUrl = Config.instance.url + "/my-record/diagnosis-detail"
-        browser.browseTo(fullUrl)
     }
 }

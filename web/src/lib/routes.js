@@ -112,7 +112,7 @@ const routes = {
   },
   MY_RECORD_VISION_DIAGNOSIS_DETAIL: {
     name: 'my-record-diagnosis-detail',
-    path: '/my-record/diagnosis-detail',
+    path: 'my-record/diagnosis-detail',
   },
   MY_RECORD_VISION_EXAMINATIONS_DETAIL: {
     name: 'my-record-examinations-detail',

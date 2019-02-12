@@ -273,10 +273,4 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(supplier, result.response.supplier)
     }
-
-    @Then("^I am redirected to the my record page$")
-    fun thenIAmRedirectedToTheMyRecordPage() {
-        val redirectUrl = Config.instance.url + "/my-record"
-        browser.shouldHaveUrl(redirectUrl)
-    }
 }

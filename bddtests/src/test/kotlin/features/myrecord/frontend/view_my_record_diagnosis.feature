@@ -37,16 +37,3 @@ Feature: View My Medical Record Information - Diagnosis
     Examples:
       | Service |
       | VISION  |
-
-  Scenario Outline: A <Service> user navigates directly to the diagnosis details page
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality for <Service>
-    And the GP Practice has multiple diagnosis
-    And I am on my record information page
-    When I enter url address for diagnosis detail directly into the url
-    Then I am redirected to the my record page
-    And I see the my record warning page
-
-    Examples:
-      | Service |
-      | VISION  |
