@@ -8,7 +8,7 @@
       <div :class="dynamicStyle('login-app-header-flex-container')">
         <home-header v-if="this.$store.state.device.isNativeApp"/>
         <div v-else :class="$style['header-container-desktop']">
-          <web-header :show-menu="false" :show-links="false"/>
+          <web-header :show-menu="false" :show-links="false" :show-header-buttons="false"/>
         </div>
         <session-expired-banner v-if="showSessionExpiredBanner"/>
         <div v-if="this.$store.state.device.isNativeApp">

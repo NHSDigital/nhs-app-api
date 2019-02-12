@@ -65,6 +65,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    showHeaderButtons: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -102,6 +106,7 @@ export default {
     showBookAppointmentButton() {
       return (
         this.$store.state.myAppointments.hasLoaded && !this.$store.getters['errors/showApiError']
+        && this.showHeaderButtons
       );
     },
     loggedIn() {
