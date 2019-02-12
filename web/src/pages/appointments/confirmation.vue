@@ -34,7 +34,7 @@
         <div v-if="showPhoneNumber()" :class="[$style.form, $style.phoneNumberForm]"
              role="form" data-purpose="phone-number">
           <fieldset :class="$style.fieldsetTelephoneNumberRadio">
-            <legend :class="$style.textPhoneNumberLabel">
+            <legend id="telephone-input-label" :class="$style.textPhoneNumberLabel">
               {{ $t('appointments.confirmation.telephoneNumberLabel') }}
             </legend>
             <error-message v-if="showTelephoneError"
@@ -43,44 +43,37 @@
             </error-message>
             <div v-if="isJavascriptOn">
               <div v-for="(patientTelephoneNumber, index) in patientTelephoneNumbers"
-                   :key="index">
-                <label :id="patientTelephoneNumber.telephoneNumber"
-                       :class="$style.telephoneNumberContainer"
-                       @keypress="onKeyDown" @click="selected">
-                  <input v-model="telephoneNumber"
-                         :id="'telephoneNumber' + index"
-                         :value="patientTelephoneNumber.telephoneNumber"
-                         :class="$style.customRadio"
-                         type="radio"
-                         name="radio"
-                         @change="selected;hidePhoneNumberTextBox();">
-                  <span :class="$style.radioButton"
-                        :selected="isSelected"
-                        :id="patientTelephoneNumber.telephoneNumber"/>
-                  <span :class="$style.patientTelephoneNumberLabel">
-                    {{ patientTelephoneNumber.telephoneNumber }}</span>
-                </label>
-              </div>
-              <label v-if="patientTelephoneNumbers.length > 0"
-                     id="otherPhoneNumberRadio"
-                     :class="$style.telephoneNumberContainer"
-                     @keypress="onKeyDown">
-                <input id="otherPhoneNumberRadioInput"
-                       :checked="model === 'otherPhoneNumber'"
+                   :key="index" :class="$style.customRadioItem">
+                <input v-model="telephoneNumber"
+                       :id="patientTelephoneNumber.telephoneNumber"
+                       :value="patientTelephoneNumber.telephoneNumber"
                        :class="$style.customRadio"
                        type="radio"
                        name="radio"
-                       @change="otherPhoneNumberSelected()">
-                <span id="otherPhoneNumberRadioButton"
-                      :class="$style.radioButton"
-                      :selected="isSelected"/>
-                <span :class="$style.patientTelephoneNumberLabel">
-                  Use other phone number</span>
-              </label>
+                       @change="selected">
+                <label :for="patientTelephoneNumber.telephoneNumber"
+                       :class="$style.customRadioLabel"
+                       @keypress="onKeyDown" @click="selected">
+                  {{ patientTelephoneNumber.telephoneNumber }}
+                </label>
+              </div >
+              <div v-if="patientTelephoneNumbers.length > 0" :class="$style.customRadioItem">
+                <input :id="'otherPhoneNumberRadioInput'"
+                       :class="$style.customRadio"
+                       type="radio"
+                       name="radio"
+                       @change="selected">
+                <label :for="'otherPhoneNumberRadioInput'"
+                       :class="$style.customRadioLabel"
+                       @keypress="onKeyDown" @click="selected">
+                  Use other phone number
+                </label>
+              </div>
             </div>
             <div v-if="showPhoneNumberTextBox">
               <generic-text-input id="telephoneNumberText"
                                   ref="telephone"
+                                  :a-labelled-by="telephoneNumberTextAriaLabelledBy"
                                   :text-area-classes="defaultClasses"
                                   :required="true"
                                   :initial-contents="otherTelephoneNumber"
@@ -89,7 +82,7 @@
                                   name="telephoneNumberField"
                                   pattern=".*[^ ].*"
                                   type="tel"/>
-              <p>
+              <p id="telephone-number-desc">
                 {{ $t('appointments.confirmation.telephoneNumberDescription') }}
               </p>
             </div>
@@ -182,12 +175,6 @@ export default {
     GenericButton,
     FormPost,
   },
-  props: {
-    model: {
-      type: String,
-      default: undefined,
-    },
-  },
   data() {
     return {
       symptoms: '',
@@ -211,6 +198,9 @@ export default {
     },
     reasonBoxAriaLabelledBy() {
       return this.showError ? 'error-label max-reason-desc' : 'max-reason-desc';
+    },
+    telephoneNumberTextAriaLabelledBy() {
+      return this.showTelephoneError ? 'telephone-error-label telephone-number-desc' : 'telephone-number-desc';
     },
     defaultClasses() {
       return this.showError ? [this.$style.error] : undefined;
@@ -243,9 +233,6 @@ export default {
     slotStartTime() {
       if (!this.slot) return undefined;
       return this.slot.startTime;
-    },
-    isSelected() {
-      return this.model === this.telephoneNumber;
     },
     formData() {
       return {
@@ -290,17 +277,15 @@ export default {
     },
     otherPhoneNumberSelected() {
       this.telephoneNumber = '';
-      this.model = 'otherPhoneNumber';
       this.showPhoneNumberTextBox = true;
     },
     hidePhoneNumberTextBox() {
       this.showPhoneNumberTextBox = false;
     },
     selected(event) {
-      if (event.currentTarget.id === 'otherPhoneNumberRadio') {
+      if (event.currentTarget.id === 'otherPhoneNumberRadioInput') {
         this.otherPhoneNumberSelected();
       } else {
-        this.model = '';
         this.telephoneNumber = event.currentTarget.id;
         this.hidePhoneNumberTextBox();
       }
@@ -402,9 +387,8 @@ export default {
 .textPhoneNumberLabel {
   padding-top: 8px;
   font-weight: bold;
-  padding-bottom: 1em;
+  padding: 1em 0 0.5em 0;
   margin-top: 1em;
-
 }
 
 .patientPhoneNumberRadioButton {
@@ -418,7 +402,7 @@ export default {
 .patientTelephoneNumberLabel {
   margin-left: 0.5em;
 }
-/* The telephoneNumberContainer */
+
 .telephoneNumberContainer {
   display: block;
   position: relative;
@@ -433,70 +417,71 @@ export default {
   margin-bottom: 12px;
 }
 
-/* Hide the browser's default radio button */
-.telephoneNumberContainer input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-/* Create a custom radio button */
-.radioButton {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 2.063em;;
-  width: 2.063em;;
-  background-color: $white;
-  border-radius: 50%;
-  border-color: black;
-  border-style: solid;
-  border-width: 2px;
-}
-
-/* On mouse-over, add a white background color */
-.telephoneNumberContainer:hover input ~ .radioButton {
-  background-color: white;
-}
-
-/* When the radio button is checked, add a white background */
-.telephoneNumberContainer input:checked ~ .radioButton {
-  background-color: white;
-}
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.radioButton:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the indicator (dot/circle) when checked */
-.telephoneNumberContainer input:checked ~ .radioButton:after {
-  display: block;
-}
-
-/* Style the indicator (dot/circle) */
-.telephoneNumberContainer .radioButton:after {
-  top: 0.3em;
-  left: 0.3em;
-  width: 1.2em;
-  height: 1.2em;
-  border-radius: 50%;
-  background: black;
-}
 .fieldsetTelephoneNumberRadio {
   border: 0;
 }
 
-.customRadio:focus + .radioButton {
-  box-shadow: 0 0 4px 1px #ffb81c;
-  border-color: white;
+.customRadio {
+    cursor: pointer;
+    height: 32px;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 32px;
+    z-index: 1;
 }
 
-.telephoneNumberContainer .customRadio:focus {
-  box-shadow: none;
-  border-color: black;
+.customRadioLabel {
+    -ms-touch-action: manipulation;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 0;
+    padding: 8px 12px 4px;
+    touch-action: manipulation;
+}
+.customRadio + .customRadioLabel::before {
+    background: $white;
+    border: 2px #425563 solid;
+    border-radius: 50%;
+    box-sizing: border-box;
+    content: '';
+    height: 32px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 32px;
+}
+.customRadio + .customRadioLabel::after {
+    background: black;
+    border: 8px solid #212b32;
+    border-radius: 50%;
+    content: '';
+    height: 0;
+    left: 8px;
+    opacity: 0;
+    position: absolute;
+    top: 8px;
+    width: 0;
+}
+.customRadio:checked + .customRadioLabel::after {
+    opacity: 1;
+}
+
+.customRadio:focus + .customRadioLabel::before {
+  box-shadow: 0 0 0 4px #ffb81C;
+  outline: 4px solid transparent;
+  outline-offset: 4px;
+}
+
+.customRadioItem {
+    display: block;
+    position: relative;
+    min-height: 32px;
+    margin-bottom: 8px;
+    padding: 0 0 0 32px;
+    clear: left;
 }
 
 .button:focus{
