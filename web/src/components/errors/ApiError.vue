@@ -8,7 +8,7 @@
         <message-text v-if="subheader!==''" data-purpose="msg-subheader">
           {{ subheader }}
         </message-text>
-        <message-text data-purpose="msg-text">
+        <message-text :is-before-footer="true" data-purpose="msg-text">
           {{ message }}
         </message-text>
         <message-text v-if="hasAdditionalInfo" :aria-label="additionalInfoLabel"

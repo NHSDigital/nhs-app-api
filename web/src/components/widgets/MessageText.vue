@@ -17,6 +17,10 @@ export default {
       default: 'none',
       validator: value => ['none', 'plain'].indexOf(value) !== -1,
     },
+    isBeforeFooter: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -31,6 +35,9 @@ export default {
       }
       if (this.isHeader && this.overrideStyle === 'plain') {
         style = this.$style.plainHeader;
+      }
+      if (this.isBeforeFooter) {
+        style = this.$style.footerMargin;
       }
       return style;
     },
@@ -51,9 +58,8 @@ export default {
     @include default_label;
     font-size: 1.125em;
     }
-  &.desktopWeb {
-    padding: 1em;
-    margin-bottom: 1em;
+  &.footerMargin {
+   margin-bottom: 1em;
   }
 }
 </style>
