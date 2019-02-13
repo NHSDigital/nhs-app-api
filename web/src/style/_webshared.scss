@@ -46,12 +46,12 @@
 
 .header-container-desktop, .footer-container-desktop {
   order: 0;
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   align-self: stretch;
 }
 
 .main-container-desktop {
   order: 0;
-  flex: 1 1 auto;
+  flex: 1 0 auto;
   align-self: stretch;
 }
