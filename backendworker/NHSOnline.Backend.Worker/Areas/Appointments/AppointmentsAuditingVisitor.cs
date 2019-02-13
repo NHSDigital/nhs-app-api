@@ -31,15 +31,24 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             try
             {
-                var appointmentCount = result.Response?.UpcomingAppointments?.Count() ?? 0;
-            
-                await _auditor.Audit(AuditType, $"Booked appointments successfully viewed - { appointmentCount } appointments");
+                var upcomingAppointmentsCount = result.Response?.UpcomingAppointments?.Count() ?? 0;
+                var pastAppointmentsCount = result.Response?.PastAppointments?.Count() ?? 0;
+
+                const string messageFormat = "Booked appointments successfully viewed - {0} upcoming appointments" + 
+                                             " and {1} historical appointments";
+
+                var auditMessage = string.Format(CultureInfo.InvariantCulture, messageFormat, 
+                    upcomingAppointmentsCount, pastAppointmentsCount);
+                
+                await _auditor.Audit(AuditType, auditMessage);
 
                 var kvp = new Dictionary<string, string>
                 {
                     { "Supplier", _userSession.GpUserSession.Supplier.ToString() },
                     { "OdsCode", _userSession.GpUserSession.OdsCode },
-                    { "Count", appointmentCount.ToString(CultureInfo.InvariantCulture) }
+                    { "Count", (upcomingAppointmentsCount+pastAppointmentsCount).ToString(CultureInfo.InvariantCulture) },
+                    { "UpcomingCount", upcomingAppointmentsCount.ToString(CultureInfo.InvariantCulture) },
+                    { "HistoricalCount", pastAppointmentsCount.ToString(CultureInfo.InvariantCulture)}
                 };
 
                 _logger.LogInformationKeyValuePairs("Appointment Count", kvp);

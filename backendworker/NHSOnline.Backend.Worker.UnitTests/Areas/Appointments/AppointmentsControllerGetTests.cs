@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -34,7 +35,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private const string ResponseAuditType = "Appointments_ViewBooked_Response";
 
         private const string RequestAuditMessage = "Attempting to view booked appointments";
-
+        private const string ResponseAuditMessageFormat = "Booked appointments successfully viewed - {0} upcoming appointments" + 
+                                                          " and {1} historical appointments";
         [TestInitialize]
         public void TestInitialize()
         {
@@ -96,7 +98,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             value.Should().BeEquivalentTo(appointmentsResponse);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Booked appointments successfully viewed - {appointmentsResponse.UpcomingAppointments.Count()} appointments"));
+            var expectedResponseAuditMessage = string.Format(CultureInfo.InvariantCulture, ResponseAuditMessageFormat,
+                appointmentsResponse.UpcomingAppointments.Count(),
+                appointmentsResponse.PastAppointments.Count());
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedResponseAuditMessage));
         }
 
         [TestMethod]
@@ -170,7 +175,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockGpSystemFactory.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, $"Booked appointments successfully viewed - {_appointmentsResponse.UpcomingAppointments.Count()} appointments"));
+            
+            var expectedResponseAuditMessage = string.Format(CultureInfo.InvariantCulture, ResponseAuditMessageFormat,
+                _appointmentsResponse.UpcomingAppointments.Count(),
+                _appointmentsResponse.PastAppointments.Count());
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, expectedResponseAuditMessage));
         }
     }
 }
