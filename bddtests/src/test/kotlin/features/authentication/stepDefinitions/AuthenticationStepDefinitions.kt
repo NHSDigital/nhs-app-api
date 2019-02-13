@@ -41,6 +41,7 @@ import org.joda.time.DateTime
 import org.junit.Assert
 import pages.MyAccountPage
 import pages.ServiceUnavailablePage
+import pages.navigation.WebHeader
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.WorkerPaths
@@ -53,6 +54,7 @@ import java.net.URI
 import java.util.*
 
 const val INVALID_VALUE = "xxx-wrong-format-xxx"
+private const val PAGE_LOAD_SLEEP = 1000L
 
 @Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
         "if possible, break down steps into functional areas")
@@ -68,6 +70,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var navHeader: NavHeaderSteps
+    @Steps
+    lateinit var webHeader: WebHeader
     @Steps
     lateinit var accountCreation: CIDAccountCreationSteps
 
@@ -446,6 +450,29 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         myAccount.signOutButton.click()
     }
 
+    @When("I use the header link to log out of the website")
+    fun iLogOutUsingHeaderLink(){
+        webHeader.clickLogout()
+    }
+
+    @Then("I can cycle through the header links")
+    fun iLCycleTheHeaderLinks(){
+        val linksToFollow = arrayListOf(
+                { followSymptomsHeaderLink()},
+                { followAppointmentHeaderLink() },
+                { followPrescriptionsHeaderLink() },
+                { followMedicalRecordHeaderLink()},
+                { followMoreHeaderLink() },
+                { followAccountHeaderLink() }
+        )
+
+        linksToFollow.forEachIndexed { index, link ->
+            if (index != linksToFollow.size)
+            link.invoke()
+        }
+
+    }
+
     @Given("^I am logged in as a (.*) user$")
     fun iAmLoggedInTo(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
@@ -778,4 +805,35 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         this.errorResponse = errorResponse
         setSessionVariable("HttpException").to(errorResponse)
     }
+
+    private fun followAppointmentHeaderLink() {
+        webHeader.clickAppointmentsPageLink()
+        webHeader.isPageTitleCorrect("Appointments")
+    }
+
+    private fun followSymptomsHeaderLink() {
+        webHeader.clickSymptomsPageLink()
+        webHeader.isPageTitleCorrect("Symptoms")
+    }
+
+    private fun followPrescriptionsHeaderLink() {
+        webHeader.clickPrescriptionsPageLink()
+        webHeader.isPageTitleCorrect("Repeat prescriptions")
+    }
+
+    private fun followMedicalRecordHeaderLink() {
+        webHeader.clickMyRecordPageLink()
+        webHeader.isPageTitleCorrect("My medical record")
+    }
+
+    private fun followMoreHeaderLink() {
+        webHeader.clickMorePageLink()
+        webHeader.isPageTitleCorrect("More")
+    }
+
+    private fun followAccountHeaderLink() {
+        webHeader.clickAccount()
+        webHeader.isPageTitleCorrect("Account")
+    }
+
 }

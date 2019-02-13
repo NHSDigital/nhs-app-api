@@ -26,7 +26,6 @@ Feature: Login
       | GP System |
       | EMIS      |
 
-  @smoketest
   Scenario: A EMIS user clicks the home link in the footer from another page
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in
@@ -34,37 +33,31 @@ Feature: Login
     When I click the home link in the footer
     Then I see the home page
 
-  @smoketest
   Scenario: A EMIS user sees the home page after logging in and tries to access the NHS sites footer link
     Given I am logged in as a EMIS user
     When I see the home page
     Then I click the NHS sites link in the footer
 
-  @smoketest
   Scenario: A EMIS user sees the home page after logging in and tries to access the about us footer link
     Given I am logged in as a EMIS user
     When I see the home page
     Then I click the about us link in the footer
 
-  @smoketest
   Scenario: A EMIS user sees the home page after logging in and tries to access the contact us footer link
     Given I am logged in as a EMIS user
     When I see the home page
     Then I click the contact us link in the footer
 
-  @smoketest
   Scenario: A EMIS user sees the home page after logging in and tries to access the site map footer link
     Given I am logged in as a EMIS user
     When I see the home page
     Then I click the site map link in the footer
 
-  @smoketest
   Scenario: A EMIS user sees the home page after logging in and tries to access the accessibility footer link
     Given I am logged in as a EMIS user
     When I see the home page
     Then I click the accessibility link in the footer
-
-  @smoketest
+    
   Scenario: A EMIS user sees the home page after logging in and tries to access the policies footer link
     Given I am logged in as a EMIS user
     When I see the home page
@@ -120,6 +113,18 @@ Feature: Login
       | GP System |
       | EMIS      |
 
+  Scenario: A EMIS user can log out using the header link
+    Given I am logged in as a EMIS user
+    Then I see the home page
+    When I use the header link to log out of the website
+    Then I see the login page
+    
+  Scenario: A EMIS user can cycle the header links
+    Given I am logged in as a EMIS user
+    And I have no booked appointments for EMIS
+    And I have no repeat prescriptions for EMIS
+    When I see the home page
+    Then I can cycle through the header links
 
   Scenario: A user can log in, and when they receive a 401 are redirected to the login page
     Given I am logged in as a EMIS user
