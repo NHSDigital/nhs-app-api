@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>So you can record you security response</string>
+	<string>So you can record your video</string>
 	<key>CidUrlSuffix</key>
 	<string>signin.nhs.uk</string>
 	<key>NSCameraUsageDescription</key>
