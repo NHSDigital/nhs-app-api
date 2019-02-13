@@ -40,12 +40,12 @@ class CookieBannerStepDefinitions {
 
     @When("^I select the information link$")
     fun iSelectTheInformationLink() {
-        cookieBanner.cookiesInformationLink.element.click()
+        cookieBanner.cookiesInformationLink.click()
     }
 
     @When("^I close the cookie banner$")
     fun iCloseTheCookieBanner() {
-        cookieBanner.cookieBannerClose.element.click()
+        cookieBanner.cookieBannerClose.click()
     }
 
     @Then("^I ($DO_NOT_SEE|$DO_SEE) the cookie banner$")
