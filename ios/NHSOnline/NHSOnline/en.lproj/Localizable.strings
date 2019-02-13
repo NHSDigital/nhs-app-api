@@ -77,6 +77,8 @@
 "TouchIdTurnedOff" = "Touch ID is now turned off";
 "TouchIdTurnedOnHeader" = "Turned on Touch ID";
 "TouchIdTurnedOffHeader" = "Turned off Touch ID";
+"TouchIdLockedOutTitle" = "Touch ID attempts exceeded";
+"TouchIdLockedOutMessage" = "Unable to use Touch ID. Your passcode is required to enable Touch ID.";
 "TouchIdInvalidatedTitle" = "You need to turn on Touch ID again";
 "TouchIdInvalidatedMessage" = "We have turned it off as something has changed. \nYou can log in using your password and security code, then turn on Touch ID in the NHS App.";
 "TouchIdRegistrationErrorMessage" = "We have been unable to turn on Touch ID.\nIt wasn't your fault.";
@@ -95,6 +97,8 @@
 "FaceIdTurnedOff" = "Face ID is now turned off";
 "FaceIdTurnedOnHeader" = "Turned on Face ID";
 "FaceIdTurnedOffHeader" = "Turned off Face ID";
+"FaceIdLockedOutTitle" = "Face ID attempts exceeded";
+"FaceIdLockedOutMessage" = "Unable to use Face ID. Your passcode is required to enable Face ID.";
 "FaceIdInvalidatedTitle" = "You need to turn on Face ID again";
 "FaceIdInvalidatedMessage" = "We have turned it off as something has changed. \nYou can log in using your password and security code, then turn on Face ID in the NHS App.";
 "FaceIdRegistrationErrorMessage" = "We have been unable to turn on Face ID.\nIt wasn't your fault.";

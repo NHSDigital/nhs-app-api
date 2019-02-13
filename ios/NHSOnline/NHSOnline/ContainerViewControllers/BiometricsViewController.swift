@@ -15,11 +15,13 @@ class BiometricsViewController: UIViewController {
     let laContext: LAContext = LAContext()
     var biometricService: BiometricService?
     
-    @IBAction func biometricToggleChanged(_ sender: Any) {
-        if(biometricToggle.isOn) {
-            biometricToggle.setOn(false, animated: false)
-            attemptRegistration()
-        } else if(!biometricToggle.isOn) {
+    @IBAction func biometricToggleChanged(_ sender: UISwitch) {
+        if(sender.isOn) {
+            DispatchQueue.main.async {
+                sender.setOn(false, animated: false)
+            }
+            return attemptRegistration()
+        } else if(!sender.isOn) {
             attemptDeregistration()
         }
     }
@@ -37,6 +39,7 @@ class BiometricsViewController: UIViewController {
         BiometricLabel.text = stringsObject.BiometricLabelText
         ContentTextView.layer.addTopBorder(color: UIColor(red: 255, green: 237, blue: 0, alpha: 1), thickness: 3)
         ContentTextView.resizeErrorTextView()
+        biometricToggle.isUserInteractionEnabled = true
         biometricToggle.setOn(UserDefaultsManager.getBiometricAvailability() == BiometricState.Registered, animated: false)
     }
 
@@ -52,6 +55,9 @@ class BiometricsViewController: UIViewController {
                 return
             }  else if authError?.code == LAError.touchIDNotEnrolled.rawValue { //same raw value as LAError.BiometryNotEnrolled
                 showAlert(alertType: .NoBiometrics)
+                return
+            } else if authError?.code == LAError.touchIDLockout.rawValue {
+                showAlert(alertType: .BiometricLockout)
                 return
             }
         } else {

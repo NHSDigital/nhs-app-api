@@ -3,4 +3,5 @@ enum BiometricAlertType {
     case OSNotSupported
     case NoBiometrics
     case BiometricsInvalidated
+    case BiometricLockout
 }

@@ -16,11 +16,15 @@ struct BiometricAlert {
                         self.message = NSLocalizedString("OSNotSupportedMessage", comment: "")
                     case .NoBiometrics:
                         self.title = NSLocalizedString("NoFaceIdTitle", comment: "")
-                        self.message = NSLocalizedString("NoFaceIdMsg", comment: "")
+                        self.message = NSLocalizedString("NoFaceIdMessage", comment: "")
                     case .BiometricsInvalidated:
                         self.title = NSLocalizedString("FaceIdInvalidatedTitle", comment: "")
                         self.message = NSLocalizedString("FaceIdInvalidatedMessage", comment: "")
-                }
+                    case .BiometricLockout:
+                        self.title = NSLocalizedString("FaceIdLockedOutTitle", comment: "")
+                        self.message = NSLocalizedString("FaceIdLockedOutMessage", comment: "")
+                    
+            }
             case .touchID:
                 switch alertType.type {
                     case .NotSupported:
@@ -35,7 +39,10 @@ struct BiometricAlert {
                     case .BiometricsInvalidated:
                         self.title = NSLocalizedString("TouchIdInvalidatedTitle", comment: "")
                         self.message = NSLocalizedString("TouchIdInvalidatedMessage", comment: "")
-                }
+                    case .BiometricLockout:
+                        self.title = NSLocalizedString("TouchIdLockedOutTitle", comment: "")
+                        self.message = NSLocalizedString("TouchIdLockedOutMessage", comment: "")
+            }
         }
     }
 }
