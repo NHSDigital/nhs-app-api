@@ -46,9 +46,14 @@ main.content {
   max-width: 960px;
   margin-right: 1em;
   box-sizing: border-box;
-  width: auto;
+
+  &.web {
+	  width:  auto;
+	  margin: 1em;
+  }
   &.desktopWeb {
-    min-width: 300px;
+	  width:  100%;
+	  min-width: 300px;
   }
 
   &.web {
