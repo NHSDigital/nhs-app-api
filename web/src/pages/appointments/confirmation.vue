@@ -141,14 +141,16 @@
         </generic-button>
       </form-post>
 
-      <no-js-form :action="cancelBookingPath" :value="formData">
-        <generic-button id="btn_cancel_appointment"
-                        :class="isDesktopWeb ? $style.desktopBackButton : [$style.button ,
-                                                                           $style.grey]"
-                        @click.stop.prevent="onCancelButtonClicked">
-          {{ $t(getBackButtonText) }}
-        </generic-button>
-      </no-js-form>
+      <generic-button v-if="$store.state.device.isNativeApp" id="btn_cancel_appointment"
+                      :class="[$style.button , $style.grey]"
+                      @click.stop.prevent="onCancelButtonClicked">
+        {{ $t('appointments.confirmation.changeButtonText') }}
+      </generic-button>
+
+      <desktopGenericBackLink
+        v-if="!$store.state.device.isNativeApp"
+        :path="appointmentBookingPath"
+        :button-text="'appointments.confirmation.backButtonText'"/>
     </div>
   </div>
 </template>
@@ -164,14 +166,15 @@ import MessageList from '@/components/widgets/MessageList';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
-import { APPOINTMENTS, APPOINTMENT_BOOKING, APPOINTMENT_BOOK_NOJS } from '@/lib/routes';
+import { APPOINTMENT_BOOK_NOJS, APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
 import Necessity from '@/lib/necessity';
 import FormPost from '@/components/FormPost';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import channel from '@/lib/channel';
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
   components: {
+    DesktopGenericBackLink,
     GenericTextInput,
     MessageDialog,
     MessageText,
@@ -181,7 +184,6 @@ export default {
     GenericTextArea,
     GenericButton,
     FormPost,
-    NoJsForm,
   },
   props: {
     model: {
@@ -202,6 +204,7 @@ export default {
       isJavascriptOn: false,
       isDesktopWeb: (this.$store.state.device.source !== 'android'
         && this.$store.state.device.source !== 'ios'),
+      appointmentBookingPath: APPOINTMENT_BOOKING.path,
     };
   },
   computed: {
@@ -255,11 +258,6 @@ export default {
           disableCancellation: this.$store.state.myAppointments.disableCancellation,
         },
       };
-    },
-    getBackButtonText() {
-      return (this.$store.state.device.source !== 'android'
-        && this.$store.state.device.source !== 'ios') ? 'appointments.confirmation.backButtonText'
-        : 'appointments.confirmation.changeButtonText';
     },
   },
   watch: {
@@ -532,37 +530,6 @@ export default {
  box-shadow: inset 0 0 0 4px $focus_highlight;
 }
 
-.desktopBackButton {
- font-family: $default-web;
- color: $nhs_blue;
- font-size: 1.125em;
- line-height: 1.125em;
- font-weight: normal;
- vertical-align: middle;
- cursor: pointer;
- display: inline-block;
- border: none;
- background: none;
- outline: none;
- text-decoration: underline;
- margin-top: 1em;
- margin-bottom: 2em;
-}
-
-.desktopBackButton:focus{
- box-sizing: content-box;
- outline-color: $focus_highlight;
- box-shadow: 0 0 0 4px $focus_highlight;
- outline-width: 2em;
-}
-.desktopBackButton:hover{
- background: #ffcd60;
- //box-shadow: 0 0 0 4px #ffcd60;
- outline: none;
- box-sizing: border-box;
- text-decoration: underline;
- background-clip: content-box;
-}
 
  .desktopWebError{
   font-family: $default-web;

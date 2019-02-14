@@ -166,6 +166,15 @@ open class HybridPageObject : PageObject() {
                 .withText(text, false).assertIsVisible().click()
     }
 
+    fun clickOnLinkContainingText(text: String) {
+        HybridPageElement(
+                webDesktopLocator = "//a",
+                androidLocator = null,
+                page = this
+        )
+                .withText(text, false).assertIsVisible().click()
+    }
+
     fun isButtonVisible(button: String): Boolean {
         return findBy<WebElementFacade>(
                 "//button[contains(text()," +
