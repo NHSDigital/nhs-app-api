@@ -256,7 +256,7 @@ Feature: Book an available appointment slot UI with Javascript
     And I am on the Available Appointments page
     And I have selected an appointment slot to book
     Then the Appointment Slot page is displayed
-    When I click the 'Back' button
+    When I click the 'Back' link
     Then there is a filter for the appointment types
     And there is a filter for the appointment locations
     And there is a filter for the appointment doctors/nurses

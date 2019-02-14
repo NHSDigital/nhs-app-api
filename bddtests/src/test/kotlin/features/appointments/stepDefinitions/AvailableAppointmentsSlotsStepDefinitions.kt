@@ -239,12 +239,12 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @When("^I acknowledge that there are no appointments and go back to my appointments$")
     fun iAcknowledgeThatThereAreNoAppointmentsAndGoBackToMyAppointments() {
-        availableAppointments.clickOnBackButton()
+        availableAppointments.clickOnBackLink()
     }
 
     @When("^I decide I don't want to select an appointment and go back$")
     fun iDecideIDoNotWantToSelectAnAppointmentAndGoBack() {
-        availableAppointments.clickOnBackButton()
+        availableAppointments.clickOnBackLink()
     }
 
     @When("^I expand the appointment slot guidance$")
