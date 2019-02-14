@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
+using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
+using NHSOnline.Backend.GpSystems.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {

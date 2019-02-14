@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.OrganDonation;
-using NHSOnline.Backend.Worker.Support.Certificate;
+using NHSOnline.Backend.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 {

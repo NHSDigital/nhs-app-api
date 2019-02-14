@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {

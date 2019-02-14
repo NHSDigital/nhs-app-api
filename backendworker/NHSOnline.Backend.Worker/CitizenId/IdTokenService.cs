@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Worker.CitizenId.Models;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {

@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
-using NHSOnline.Backend.Worker.Support;
-using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;
-using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
+using NHSOnline.Backend.Support;
+using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
+using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 using Address = NHSOnline.Backend.Worker.OrganDonation.Models.Address;
 using Name = NHSOnline.Backend.Worker.OrganDonation.Models.Name;
 

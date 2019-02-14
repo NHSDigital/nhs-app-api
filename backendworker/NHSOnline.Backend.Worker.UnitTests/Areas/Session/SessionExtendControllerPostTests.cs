@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Session;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Worker.Areas.Session;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Session;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {

@@ -1,0 +1,10 @@
+﻿namespace NHSOnline.Backend.GpSystems.Appointments
+{
+    public interface IAppointmentSlotsResultVisitor<out T>
+    {
+        T Visit(AppointmentSlotsResult.SuccessfullyRetrieved result);
+        T Visit(AppointmentSlotsResult.SupplierSystemUnavailable result);
+        T Visit(AppointmentSlotsResult.InternalServerError result);
+        T Visit(AppointmentSlotsResult.CannotBookAppointments result);
+    }
+}

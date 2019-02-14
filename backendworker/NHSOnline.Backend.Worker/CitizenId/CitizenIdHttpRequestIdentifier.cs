@@ -1,5 +1,5 @@
 using System.Net.Http;
-using NHSOnline.Backend.Worker.Support.Http;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {

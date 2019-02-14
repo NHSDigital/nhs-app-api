@@ -12,11 +12,11 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {

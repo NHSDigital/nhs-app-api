@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Ndop.Models;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.Ndop
 {

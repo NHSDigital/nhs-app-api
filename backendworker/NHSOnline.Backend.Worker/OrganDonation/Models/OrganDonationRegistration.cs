@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using NHSOnline.Backend.Worker.ValidationAttributes;
+using NHSOnline.Backend.Support.ValidationAttributes;
 
 namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {

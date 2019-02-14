@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace NHSOnline.Backend.Worker.GpSearch
 {
-    public class ServiceConfigurationModule: NHSOnline.Backend.Worker.Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule: NHSOnline.Backend.Support.DependencyInjection.ServiceConfigurationModule
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {

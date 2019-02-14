@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSearch.Models;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.Support.ResponseParsers;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.GpSearch
 {

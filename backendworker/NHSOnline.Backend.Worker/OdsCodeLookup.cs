@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker

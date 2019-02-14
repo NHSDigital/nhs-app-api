@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.ResponseParsers;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

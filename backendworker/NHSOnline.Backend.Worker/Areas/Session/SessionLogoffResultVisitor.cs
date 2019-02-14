@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Http;
-using NHSOnline.Backend.Worker.GpSystems.Session;
+using NHSOnline.Backend.GpSystems.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {

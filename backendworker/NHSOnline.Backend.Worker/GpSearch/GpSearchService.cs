@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.GpSearch.Models;
 using NHSOnline.Backend.Worker.GpSearch.Models;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSearch
 {

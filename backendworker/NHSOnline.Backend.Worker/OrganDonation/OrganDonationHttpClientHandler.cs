@@ -2,7 +2,8 @@ using System;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Support.Certificate;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.Support.Auditing;
 using System;
 
 namespace NHSOnline.Backend.Worker.Filters

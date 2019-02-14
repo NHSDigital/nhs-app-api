@@ -114,9 +114,9 @@ EXPOSE $PORT
 COPY --from=publish /app .
 
 # Setup trusts for self-signed certificates
-COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Tpp/PublicKeys/TppDev.crt /usr/local/share/ca-certificates/TppDev.crt
-COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Tpp/PublicKeys/TppProd.crt /usr/local/share/ca-certificates/TppProd.crt
-COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/vision-test-env.crt /usr/local/share/ca-certificates/vision-test-env.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppDev.crt /usr/local/share/ca-certificates/TppDev.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Tpp/PublicKeys/TppProd.crt /usr/local/share/ca-certificates/TppProd.crt
+COPY NHSOnline.Backend.GpSystems/Suppliers/Vision/PublicKeys/vision-test-env.crt /usr/local/share/ca-certificates/vision-test-env.crt
 RUN chmod 644 /usr/local/share/ca-certificates/*
 RUN update-ca-certificates
 

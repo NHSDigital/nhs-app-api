@@ -2,8 +2,8 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
-using NHSOnline.Backend.Worker.Support;
-using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
+using NHSOnline.Backend.Support;
+using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

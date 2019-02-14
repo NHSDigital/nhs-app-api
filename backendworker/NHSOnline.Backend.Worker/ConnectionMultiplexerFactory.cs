@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using StackExchange.Redis;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker
 {

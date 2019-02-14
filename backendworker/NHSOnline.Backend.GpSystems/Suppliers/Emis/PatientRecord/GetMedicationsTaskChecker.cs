@@ -1,0 +1,64 @@
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Support.Logging;
+
+namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
+{
+    public class GetMedicationsTaskChecker
+    {
+        private readonly ILogger<GetMedicationsTaskChecker> _logger;
+        private readonly IEmisMedicationMapper _mapper;
+        
+        public GetMedicationsTaskChecker(ILogger<GetMedicationsTaskChecker> logger, IEmisMedicationMapper mapper)
+        {
+            _logger = logger;
+            _mapper = mapper;
+        }
+        
+        public Medications Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
+        {
+            _logger.LogEnter();
+            
+            Medications medications = null;
+            
+            if (!task.IsCompletedSuccessfully)
+            {
+                _logger.LogError("Retrieving medications task completed unsuccessfully");
+                medications = new Medications
+                {
+                    HasErrored = true
+                };
+            }
+            
+            var medicationsResponse = task.Result;
+            
+            if (!medicationsResponse.HasSuccessResponse)
+            {
+                // User does not have access
+                if (medicationsResponse.HasForbiddenResponse() ||
+                    medicationsResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
+                {
+                    _logger.LogWarning("User does not have access to their patient record");
+                    medications = new Medications
+                    {
+                        HasAccess = false
+                    };
+                }
+                else
+                {
+                    _logger.LogError(
+                        $"Unsuccessful request retrieving medications list for patient. Status code: {(int) medicationsResponse.StatusCode}");
+                    medications = new Medications
+                    {
+                        HasErrored = true
+                    };
+                }
+            }
+
+            _logger.LogExit();
+            return medications ?? _mapper.Map(medicationsResponse.Body);
+        }
+    }
+}

@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NHSOnline.Backend.Worker.GpSystems.Linkage.Models;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Linkage;
-using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Logging;
-using NHSOnline.Backend.Worker.Support.Temporal;
+using NHSOnline.Backend.GpSystems.Linkage.Models;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.Areas.Linkage
 {

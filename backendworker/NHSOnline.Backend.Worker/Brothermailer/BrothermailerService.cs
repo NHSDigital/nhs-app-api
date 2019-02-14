@@ -2,8 +2,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Brothermailer.Models;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Brothermailer
 {

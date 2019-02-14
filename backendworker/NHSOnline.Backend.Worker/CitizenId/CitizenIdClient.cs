@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Worker.CitizenId.Models;
-using NHSOnline.Backend.Worker.ResponseParsers;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Support.ResponseParsers;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {

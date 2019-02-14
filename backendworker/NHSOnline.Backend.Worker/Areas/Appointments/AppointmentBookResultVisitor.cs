@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using static NHSOnline.Backend.Worker.Constants;
+using NHSOnline.Backend.GpSystems.Appointments;
+using static NHSOnline.Backend.Support.Constants;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {

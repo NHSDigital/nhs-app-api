@@ -13,14 +13,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Support.DependencyInjection;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Support.DependencyInjection;
+using NHSOnline.Backend.Support.Logging;
 using StackExchange.Redis;
-using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.Support.Http;
+using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.Worker.DependencyInjection;
 
 namespace NHSOnline.Backend.Worker
 {

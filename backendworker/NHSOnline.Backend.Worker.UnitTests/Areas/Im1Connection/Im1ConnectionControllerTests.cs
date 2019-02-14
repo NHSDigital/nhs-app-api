@@ -10,11 +10,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection;
-using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.GpSystems.Im1Connection.Models;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Im1Connection;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 {

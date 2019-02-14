@@ -1,0 +1,66 @@
+﻿using System;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
+using Allergies = NHSOnline.Backend.GpSystems.PatientRecord.Models.Allergies;
+
+namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
+{
+    public interface IGetPatientOverviewTaskChecker
+    {
+        Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse);
+    }
+    
+    public class GetPatientOverviewTaskChecker : IGetPatientOverviewTaskChecker
+    {
+        private readonly ILogger<GetPatientOverviewTaskChecker> _logger;
+        private readonly TppPatientOverviewMapper _tppPatientOverviewMapper;
+        
+        public GetPatientOverviewTaskChecker(ILogger<GetPatientOverviewTaskChecker> logger, TppPatientOverviewMapper tppPatientOverviewMapper)
+        {
+            _logger = logger;
+            _tppPatientOverviewMapper = tppPatientOverviewMapper;
+        }
+
+        public Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse)
+        {
+            _logger.LogEnter();
+            
+            var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
+            var hasErrored = false;
+            var hasAccess = true;
+            
+            if (!taskResponse.HasSuccessResponse)
+            {
+                // User does not have access
+                if (taskResponse.HasForbiddenResponse)
+                {
+                    _logger.LogWarning("User does not have access to their patient record for Tpp");
+                    hasAccess = false;
+                }
+                else
+                {
+                    _logger.LogError($"Unsuccessful request retrieving patient selected information for Tpp. Status code: {(int)taskResponse.StatusCode}");
+                    hasErrored = true;
+                }
+            }
+
+            if (hasErrored || !hasAccess)
+            {
+                result.Item1.HasErrored = hasErrored;
+                result.Item1.HasAccess = hasAccess;
+                result.Item2.HasErrored = hasErrored;
+                result.Item2.HasAccess = hasAccess;
+            }
+            else
+            {
+                _logger.LogDebug("Mapping TPP response to allergies and medications");
+                result = _tppPatientOverviewMapper.Map(taskResponse.Body);
+            }
+
+            _logger.LogExit();
+            return result;
+        }
+    }
+}

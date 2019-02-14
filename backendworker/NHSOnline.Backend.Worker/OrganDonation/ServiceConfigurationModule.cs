@@ -2,17 +2,17 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Http;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Http;
 using Address = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Address;
 using Name = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Name;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : Backend.Support.DependencyInjection.ServiceConfigurationModule
     {
         private readonly ILogger<ServiceConfigurationModule> _logger;
 

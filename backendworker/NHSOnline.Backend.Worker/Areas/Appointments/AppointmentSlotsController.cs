@@ -2,11 +2,12 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Support.Logging;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Temporal;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.Temporal;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {

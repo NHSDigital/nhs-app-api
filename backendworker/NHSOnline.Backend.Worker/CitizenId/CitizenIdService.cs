@@ -3,8 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.CitizenId.Models;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {

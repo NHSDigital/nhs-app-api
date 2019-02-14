@@ -12,7 +12,7 @@ using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.CitizenId.Models;
-using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 
 namespace NHSOnline.Backend.Worker.UnitTests.CitizenId

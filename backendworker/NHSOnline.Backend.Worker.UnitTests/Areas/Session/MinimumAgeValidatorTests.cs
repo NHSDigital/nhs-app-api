@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Support.Temporal;
+using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {

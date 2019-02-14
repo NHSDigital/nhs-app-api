@@ -2,7 +2,8 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {

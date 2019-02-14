@@ -9,10 +9,11 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 {
@@ -26,9 +27,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         private Mock<IMemoryCache> _mockMemoryCache;
         private Mock<IOrganDonationClient> _mockOrganDonationClient;
         private Mock<IOrganDonationConfig> _mockOrganDonationConfig;
-        private Mock<IMapper<OrganDonationRegistration, RegistrationLookupRequest>>
-            _mockRegistrationLookupRequestMapper;
-        private Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>
+        private Mock<Backend.Support.IMapper<OrganDonationRegistration, RegistrationLookupRequest>>
+            _mockLookupRegistrationRequestMapper;
+        private Mock<Backend.Support.IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>
             _mockRegistrationRequestMapper;
         
         // needed for Callback
@@ -42,11 +43,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _mockMemoryCache = fixture.Freeze<Mock<IMemoryCache>>();
             _mockOrganDonationClient = fixture.Freeze<Mock<IOrganDonationClient>>();
             _mockOrganDonationConfig = fixture.Freeze<Mock<IOrganDonationConfig>>();
-            _mockRegistrationLookupRequestMapper =
-                fixture.Freeze<Mock<IMapper<OrganDonationRegistration, RegistrationLookupRequest>>>();
+            _mockLookupRegistrationRequestMapper =
+                fixture.Freeze<Mock<Backend.Support.IMapper<OrganDonationRegistration, RegistrationLookupRequest>>>();
             
             _mockRegistrationRequestMapper =
-                fixture.Freeze<Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>>();
+                fixture.Freeze<Mock<Backend.Support.IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>>();
 
             _userSession = fixture.Create<UserSession>();
             _organDonationService = fixture.Create<OrganDonationService>();
@@ -406,7 +407,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             HttpStatusCode httpStatus = HttpStatusCode.OK
         )
         {
-            return new GetOrganDonationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus, _mockRegistrationLookupRequestMapper);
+            return new GetOrganDonationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus, _mockLookupRegistrationRequestMapper);
         }
         
         private RegistrationTestContext SetupRegistrationTest(
@@ -424,8 +425,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 UserSession userSession, 
                 bool throwException, 
                 HttpStatusCode httpStatus,
-                Mock<IMapper<OrganDonationRegistration, 
-                    RegistrationLookupRequest>> mockRegistrationLookupRequestMapper
+                Mock<Backend.Support.IMapper<OrganDonationRegistration, RegistrationLookupRequest>> mockLookupRegistrationRequestMapper
             )
             {
                 var demographicsResponse = new DemographicsResponse();
@@ -442,9 +442,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 {
                     mockClient.Setup(x => x.PostLookup(It.IsAny<RegistrationLookupRequest>(), userSession))
                         .Returns(Task.FromResult(organDonationResponse));    
-                }              
-                
-                mockRegistrationLookupRequestMapper
+                }
+
+                mockLookupRegistrationRequestMapper
                     .Setup(x => x.Map(It.IsAny<OrganDonationRegistration>()))
                     .Returns(new RegistrationLookupRequest());
             }
@@ -459,8 +459,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 UserSession userSession,
                 bool throwException,
                 HttpStatusCode httpStatus,
-                Mock<IMapper<OrganDonationRegistrationRequest,
-                RegistrationRequest>> mockRegistrationRequestMapper
+                Mock<Backend.Support.IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
             )
             {
                 RegistrationRequest = new OrganDonationRegistrationRequest();

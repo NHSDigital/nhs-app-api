@@ -2,9 +2,10 @@ using System;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.Support;
-using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
-using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Support;
+using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
+using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

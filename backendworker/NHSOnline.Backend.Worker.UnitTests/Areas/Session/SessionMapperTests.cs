@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Session;
-using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {

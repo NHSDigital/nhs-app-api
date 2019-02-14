@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.MyRecord;
-using NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
-using GetMyRecordResult = NHSOnline.Backend.Worker.GpSystems.PatientRecord.GetMyRecordResult;
+using NHSOnline.Backend.GpSystems.PatientRecord.Models;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.PatientRecord;
+using GetMyRecordResult = NHSOnline.Backend.GpSystems.PatientRecord.GetMyRecordResult;
+using NHSOnline.Backend.Support;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
 {

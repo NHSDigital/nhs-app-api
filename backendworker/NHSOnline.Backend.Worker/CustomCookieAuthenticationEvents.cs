@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker
 {

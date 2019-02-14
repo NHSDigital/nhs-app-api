@@ -8,12 +8,11 @@ using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.CitizenId.Models;
-using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Temporal;
+using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 {
@@ -35,7 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         private string _formattedNhsNumber = "012 345 6789";
         private string _odsCode;
         
-        private string _dateFormat = "yyyy-MM-dd";
+        private const string _dateFormat = "yyyy-MM-dd";
         
         [TestInitialize]
         public void TestInitialize()

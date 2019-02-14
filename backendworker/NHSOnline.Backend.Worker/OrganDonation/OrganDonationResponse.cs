@@ -3,9 +3,10 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
-using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Support.ResponseParsers;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

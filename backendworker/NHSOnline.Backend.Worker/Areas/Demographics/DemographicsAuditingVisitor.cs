@@ -1,6 +1,7 @@
 using System;
-using NHSOnline.Backend.Worker.GpSystems.Demographics;
-using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Auditing;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Support.Http;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Filters
 {

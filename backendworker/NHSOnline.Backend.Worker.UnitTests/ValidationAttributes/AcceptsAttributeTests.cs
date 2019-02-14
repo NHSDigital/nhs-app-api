@@ -6,8 +6,10 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Support.ValidationAttributes;
 using NHSOnline.Backend.Worker.UnitTests.Areas;
-using NHSOnline.Backend.Worker.ValidationAttributes;
+//using NHSOnline.Backend.Worker.ValidationAttributes;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Worker.UnitTests.ValidationAttributes
 {

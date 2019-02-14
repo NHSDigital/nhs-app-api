@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Session;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Session;
-using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Session;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {

@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Auditing;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.Linkage;
-using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Linkage
 {

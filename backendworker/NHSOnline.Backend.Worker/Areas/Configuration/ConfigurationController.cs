@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Configuration.Models;
-using NHSOnline.Backend.Worker.Support.Devices;
+using NHSOnline.Backend.Worker.Devices;
 
 namespace NHSOnline.Backend.Worker.Areas.Configuration
 {

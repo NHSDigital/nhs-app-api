@@ -1,0 +1,93 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Suppliers\TestData\HtmlDataToSanitize.html" />
+    <None Remove="Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
+    <None Remove="Suppliers\Vision\PatientRecord\TestData\Diagnosis\CleanedDiagnosis.html" />
+    <None Remove="Suppliers\Vision\PatientRecord\TestData\Diagnosis\VariousDiagnosis.html" />
+    <None Remove="Suppliers\Vision\PatientRecord\TestData\Examinations\CleanedExaminations.html" />
+    <None Remove="Suppliers\Vision\PatientRecord\TestData\Examinations\VariousExaminations.html" />
+    <None Remove="Suppliers\Vision\PatientRecord\TestData\Procedures\CleanedProcedures.html" />
+    <None Remove="Suppliers\Vision\PatientRecord\TestData\Procedures\VariousProcedures.html" />
+    <None Remove="Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html" />
+    <None Remove="Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html" />
+    <None Remove="Suppliers\Vision\Resources\mycert.pfx" />
+    <None Remove="Suppliers\Vision\TestData\invalidSecurityHeaderResponse.xml" />
+    <None Remove="Suppliers\Vision\TestData\invalidUserCredentialsResponse.xml" />
+    <None Remove="Suppliers\Vision\TestData\requestWasInvalidResponse.xml" />
+    <None Remove="Suppliers\Vision\TestData\unknownErrorResponse.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Suppliers\Vision\Resources\mycert.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Suppliers\Vision\TestData\invalidSecurityHeaderResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Suppliers\Vision\TestData\invalidUserCredentialsResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Suppliers\Vision\TestData\requestWasInvalidResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Suppliers\Vision\TestData\unknownErrorResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Suppliers\TestData\HtmlDataToSanitize.html" />
+    <EmbeddedResource Include="Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
+    <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\Diagnosis\CleanedDiagnosis.html" />
+    <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\Diagnosis\VariousDiagnosis.html" />
+    <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\Examinations\CleanedExaminations.html" />
+    <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\Examinations\VariousExaminations.html" />
+    <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\Procedures\CleanedProcedures.html" />
+    <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\Procedures\VariousProcedures.html" />
+    <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html" />
+    <EmbeddedResource Include="Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.1.0" />
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.1.0" />
+    <PackageReference Include="coverlet.msbuild" Version="2.3.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="5.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
+    <PackageReference Include="ReportGenerator" Version="4.0.2" />
+    <PackageReference Include="RichardSzalay.MockHttp" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
+    <ProjectReference Include="..\UnitTestHelper\UnitTestHelper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Suppliers\Emis\Resources\EMISTestCert.cer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

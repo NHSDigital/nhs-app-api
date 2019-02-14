@@ -4,9 +4,10 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support.Logging;
-using NHSOnline.Backend.Worker.Support.Temporal;
+using NHSOnline.Backend.Support.Settings;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Temporal;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {

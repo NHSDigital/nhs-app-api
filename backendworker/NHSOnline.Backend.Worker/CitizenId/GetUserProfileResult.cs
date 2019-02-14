@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using NHSOnline.Backend.Worker.CitizenId.Models;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {

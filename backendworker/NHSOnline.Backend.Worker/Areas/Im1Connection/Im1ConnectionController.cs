@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.Im1Connection.Models;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.GpSystems.Im1Connection.Models;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 {

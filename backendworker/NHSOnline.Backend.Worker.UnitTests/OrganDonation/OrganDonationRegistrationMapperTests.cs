@@ -7,10 +7,10 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.Demographics;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 {

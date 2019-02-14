@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
-using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;
+using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

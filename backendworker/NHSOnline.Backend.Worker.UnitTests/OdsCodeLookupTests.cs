@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.Support;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.UnitTests

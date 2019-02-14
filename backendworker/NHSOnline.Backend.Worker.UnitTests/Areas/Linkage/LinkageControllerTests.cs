@@ -10,13 +10,13 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Linkage;
-using NHSOnline.Backend.Worker.GpSystems.Linkage.Models;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Linkage;
-using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Temporal;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.Temporal;
+using NHSOnline.Backend.GpSystems.Linkage;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Linkage.Models;
+using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
 {

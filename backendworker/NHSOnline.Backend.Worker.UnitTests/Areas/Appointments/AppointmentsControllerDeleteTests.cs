@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Appointments.Models;
-using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {

@@ -1,9 +1,0 @@
-﻿using NHSOnline.Backend.Worker.GpSystems.PatientRecord.Models;
-
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
-{
-    public interface IEmisMyRecordMapper
-    {
-        MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, TestResults testResults, Problems problems, Consultations consultations);        
-    }
-}

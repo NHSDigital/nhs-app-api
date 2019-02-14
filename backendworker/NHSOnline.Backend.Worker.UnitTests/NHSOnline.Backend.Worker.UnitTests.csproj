@@ -28,7 +28,10 @@
     <PackageReference Include="RichardSzalay.MockHttp" Version="3.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Worker\NHSOnline.Backend.Worker.csproj" />
+    <ProjectReference Include="..\UnitTestHelper\UnitTestHelper.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions">
@@ -49,74 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Bridges\**" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis\CleanedDiagnosis.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis\CleanedDiagnosis.html" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis\VariousDiagnosis.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis\VariousDiagnosis.html" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\CleanedTestResults.html" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\NoTestResults.html" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\TestResults\VariousTestResults.html" />
-    <None Remove="GpSystems\Suppliers\TestData\HtmlDataToSanitize.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\TestData\HtmlDataToSanitize.html" />
-    <None Remove="GpSystems\Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Tpp\PatientRecord\TestData\TppTestResultData.html" />
-    <None Remove="GpSystems\Suppliers\TestData\VisionDataSample.html" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations\VariousExaminations.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations\VariousExaminations.html" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures\VariousProcedures.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures\VariousProcedures.html" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations\CleanedExaminations.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations\CleanedExaminations.html" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures\CleanedProcedures.html" />
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures\CleanedProcedures.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="GpSystems\Suppliers\Emis\Resources\EMISTestCert.cer">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidAllergyResponseContent.xml" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoAllergiesAllergyResponseContent.xml" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidAllergyResponseContent.xml" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidImmunisationResponseContent.xml" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoImmunisationResponseContent.xml" />
-    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidImmunisationsResponseContent.xml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="OrganDonation\Resources\mycert.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Remove="GpSystems\Suppliers\Vision\Resources\mycert.pfx" />
-    <None Remove="GpSystems\Suppliers\Vision\TestData\invalidSecurityHeaderResponse.xml" />
-    <None Remove="GpSystems\Suppliers\Vision\TestData\invalidUserCredentialsResponse.xml" />
-    <None Remove="GpSystems\Suppliers\Vision\TestData\requestWasInvalidResponse.xml" />
-    <None Remove="GpSystems\Suppliers\Vision\TestData\unknownErrorResponse.xml" />
-    <Content Include="GpSystems\Suppliers\Vision\Resources\mycert.pfx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GpSystems\Suppliers\Vision\TestData\unknownErrorResponse.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="GpSystems\Suppliers\Vision\TestData\requestWasInvalidResponse.xml" />
-    <Content Include="GpSystems\Suppliers\Vision\TestData\invalidUserCredentialsResponse.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GpSystems\Suppliers\Vision\TestData\invalidSecurityHeaderResponse.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="GpSystems\Suppliers\Vision\TestData\requestWasInvalidResponse.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GpSystems\Im1Connection" />
-    <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Diagnosis" />
-    <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Examinations" />
-    <Folder Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\Procedures" />
   </ItemGroup>
 </Project>

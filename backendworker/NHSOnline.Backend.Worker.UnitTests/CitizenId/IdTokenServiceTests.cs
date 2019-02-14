@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.CitizenId;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 {

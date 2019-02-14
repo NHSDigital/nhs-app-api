@@ -8,8 +8,9 @@ using Microsoft.Azure.Documents.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.TermsAndConditions.Models;
-using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.TermsAndConditions
 {

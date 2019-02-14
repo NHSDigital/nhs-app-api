@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.GpSystems.Demographics.Models;
-using NHSOnline.Backend.Worker.GpSystems.Demographics;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.GpSystems.Demographics.Models;
+using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics
 {

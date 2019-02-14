@@ -4,7 +4,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.Support.Http;
+using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 {

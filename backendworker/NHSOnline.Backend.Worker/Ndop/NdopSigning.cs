@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using NHSOnline.Backend.Worker.Support.Certificate;
+using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.Ndop
 {

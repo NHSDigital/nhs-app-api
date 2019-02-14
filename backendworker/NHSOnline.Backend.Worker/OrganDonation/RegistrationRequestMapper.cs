@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using Name = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Name;
 using Address = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Address;
-using static NHSOnline.Backend.Worker.Support.ValidateAndLog.ValidationOptions;
-using static NHSOnline.Backend.Worker.Constants.OrganDonationConstants;
+using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
+using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
@@ -15,8 +15,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
     {
         private readonly IEnumMapper<string, FaithDeclaration> _faithDeclarationMapper;
         private readonly IEnumMapper<string, Decision> _decisionMapper;
-        private readonly IMapper<string, OrganDonation.Models.Name, Name> _nameMapper;
-        private readonly IMapper<string, OrganDonation.Models.Address, Address> _addressMapper;
+        private readonly IMapper<string, Models.Name, Name> _nameMapper;
+        private readonly IMapper<string, Models.Address, Address> _addressMapper;
         private readonly IOrganDonationDonationWishesMapper _donationWishesMapper;
         private readonly IOrganDonationGenderMapper _genderMapper;
         private readonly ILogger<RegistrationRequestMapper> _logger;
