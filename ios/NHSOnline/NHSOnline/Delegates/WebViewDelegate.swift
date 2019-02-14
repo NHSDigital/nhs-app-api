@@ -35,6 +35,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             let url = ensureSupportedScheme(initialUrl)
             
+            if(url.absoluteString == config().HomeUrl + config().FidoLoginErrorPath) {
+                viewController.showBiometricSessionError()
+                self.activityIndicator.stopAnimating()
+                decisionHandler(.cancel)
+                return
+            }
+            
             guard navigationAction.targetFrame?.isMainFrame != false else {
                 decisionHandler(.allow)
                 return

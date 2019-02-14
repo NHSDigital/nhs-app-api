@@ -60,7 +60,7 @@
 
 /*BiometricLoginTimeout*/
 "BiometricSessionTimeoutHeader" = "Something went wrong";
-"BiometricSessionTimeoutMessage" = "It was not your fault. Try Logging in again.";
+"BiometricSessionTimeoutMessage" = "It was not your fault. Try logging in again.";
 "BiometricSessionTimeoutButtonText" = "Return to login screen";
 
 /*TouchID String*/
