@@ -31,7 +31,10 @@ namespace NHSOnline.Backend.Worker.CitizenId
                 _logger.LogEnter();
 
                 var response = await _citizenIdClient.GetSigningKeys();
-                if (response.HasSuccessStatusCode) return Option.Some(response.Body);
+                if (response.HasSuccessStatusCode)
+                {
+                    return Option.Some(response.Body);
+                }
                 
                 _logger.LogError($"Retrieving citizen id signingKeys failed with status code {response.StatusCode}");
                 return Option.None<JsonWebKeySet>();

@@ -41,7 +41,9 @@ namespace NHSOnline.Backend.Worker
         private bool ValidSecurityMode(RunMode actionSecurityMode)
         {
             if (actionSecurityMode == RunMode.None)
+            {
                 return false;
+            }
 
             return actionSecurityMode == _runMode || _runMode == RunMode.Dev || actionSecurityMode == RunMode.All;
         }

@@ -97,9 +97,12 @@ namespace NHSOnline.Backend.Worker.CitizenId
             var stringResponse = responseMessage.Content != null
                 ? await responseMessage.Content.ReadAsStringAsync()
                 : null;
-            
-            if (string.IsNullOrEmpty(stringResponse)) return response;
-            
+
+            if (string.IsNullOrEmpty(stringResponse))
+            {
+                return response;
+            }
+
             response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
             response.ErrorResponse = _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage);
 

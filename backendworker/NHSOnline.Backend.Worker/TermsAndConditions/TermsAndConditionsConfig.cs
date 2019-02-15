@@ -17,7 +17,11 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
         {
             Stubbed = bool.TryParse(configuration.GetOrWarn("STUB_TERMS_AND_CONDITIONS", logger), out bool stubbed) && stubbed;
 
-            if (Stubbed) return;
+            if (Stubbed)
+            {
+                return;
+            }
+            
             var uriString = configuration.GetOrWarn("TERMS_CONDITIONS_COSMOS_ENDPOINT_URI", logger);
             EndpointUri = new Uri(uriString, UriKind.Absolute);
             AuthKey = configuration.GetOrWarn("TERMS_CONDITIONS_COSMOS_AUTH_KEY", logger);

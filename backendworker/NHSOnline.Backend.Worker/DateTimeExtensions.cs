@@ -7,7 +7,10 @@ namespace NHSOnline.Backend.Worker
     {
         public static string FormatToYYYYMMDD(this DateTime? dateTimeValue)
         {
-            if (dateTimeValue == null) return null;
+            if (dateTimeValue == null)
+            {
+                return null;
+            }
 
             return dateTimeValue.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         }

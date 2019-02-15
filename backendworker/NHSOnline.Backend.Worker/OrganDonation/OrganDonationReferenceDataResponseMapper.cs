@@ -13,7 +13,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public OrganDonationReferenceDataResponse Map(OrganDonationResponse<ReferenceDataResponse> source)
         {
             if (source?.Body?.Entry == null)
+            {
                 throw new ArgumentNullException(nameof(source));
+            }
 
             var entries = source.Body.Entry.ToDictionary(k => k.Resource.Id, v => v.Resource);
 

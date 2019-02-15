@@ -40,7 +40,11 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
 
             _logger.LogDebug("Effective date {0}", _latestEffectiveDate.ToString(DateFormat, CultureInfo.InvariantCulture));
 
-            if (_termsConfig.Stubbed) return;
+            if (_termsConfig.Stubbed)
+            {
+                return;
+            }
+            
             _client = new DocumentClient(_termsConfig.EndpointUri, _termsConfig.AuthKey);
             _collectionUri = UriFactory.CreateDocumentCollectionUri(_termsConfig.DatabaseId, _termsConfig.CollectionName);
         }

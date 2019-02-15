@@ -75,7 +75,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             };
 
             if (result.Decision == Decision.OptIn)
+            {
                 result.DecisionDetails = MapDecisionDetails(existingRegistration);
+            }
 
             return result;
         }

@@ -24,9 +24,12 @@ namespace NHSOnline.Backend.Worker
         public IConnectionMultiplexer GetMultiplexer(ConnectionMultiplexerName name)
         {
             if (!_multiplexers.TryGetValue(name, out var multiplexer))
+            {
                 throw new ArgumentOutOfRangeException(nameof(name),
-                    string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConnectionMultiplexerFactoryUnknownMultiplexerName, name));
-
+                    string.Format(CultureInfo.InvariantCulture,
+                ExceptionMessages.ConnectionMultiplexerFactoryUnknownMultiplexerName, name));
+            }
+            
             return multiplexer;
         }
     }

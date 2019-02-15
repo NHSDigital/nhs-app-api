@@ -47,7 +47,6 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                     odsCode = OdsCodeMassager.CheckOdsCode(odsCode, _logger);
                 }
 
-
                 var argumentValidator = new ValidateAndLog(_logger)
                     .IsNotNullOrWhitespace(connectionToken, Constants.HttpHeaders.ConnectionToken)
                     .IsNotNullOrWhitespace(odsCode, Constants.HttpHeaders.OdsCode);

@@ -217,7 +217,10 @@ namespace NHSOnline.Backend.Worker
             string webAppVersion = context.Request.Headers[Constants.HttpHeaders.WebAppVersion];
             string nativeAppVersion = context.Request.Headers[Constants.HttpHeaders.NativeAppVersion];
 
-            if (string.IsNullOrEmpty(webAppVersion)) return;
+            if (string.IsNullOrEmpty(webAppVersion))
+            {
+                return;
+            }
             
             var logMessageStringBuilder = new StringBuilder();
                     
