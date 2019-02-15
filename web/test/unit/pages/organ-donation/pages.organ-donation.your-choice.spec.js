@@ -21,11 +21,11 @@ const createState = (choice = '') => {
 };
 
 describe('organ donation your choice page', () => {
-  let state;
-  let $store;
-  let wrapper;
-  let $style;
   let $router;
+  let $store;
+  let $style;
+  let state;
+  let wrapper;
 
   const mountWrapper = () => mount(YourChoice, {
     $router,

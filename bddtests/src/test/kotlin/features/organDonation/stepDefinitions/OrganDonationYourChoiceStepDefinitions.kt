@@ -31,4 +31,14 @@ open class OrganDonationYourChoiceStepDefinitions {
         organDonationYourChoicePage.validationBanner.assertVisible(arrayListOf("There's a problem",
                 "Make a decision to continue"))
     }
+
+    @Then("^the all organs option is selected")
+    fun theAllOrgansOptionIsSelected() {
+        organDonationYourChoicePage.radioButtons.button(organDonationYourChoicePage.allOfMyOrgans).assertSelected()
+    }
+
+    @Then("^the some organs option is selected")
+    fun theSomeOrgansOptionIsSelected() {
+        organDonationYourChoicePage.radioButtons.button(organDonationYourChoicePage.someOfMyOrgans).assertSelected()
+    }
 }

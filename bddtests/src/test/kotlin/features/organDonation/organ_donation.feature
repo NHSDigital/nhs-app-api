@@ -251,7 +251,7 @@ Feature: Organ Donation
     Then the Organ Donation Your Choice page is displayed
     When I click the 'Back' button
     Then the internal Organ Donation Choice Page is displayed
-    
+
   Scenario: A user can navigate back through the opt in with some organs journey
     Given I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
     And I am logged in

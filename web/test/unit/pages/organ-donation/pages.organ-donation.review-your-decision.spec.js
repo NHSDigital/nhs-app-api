@@ -1,9 +1,9 @@
 import BackButton from '@/components/BackButton';
-import ReviewYourDecision from '@/pages/organ-donation/review-your-decision';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import ReviewYourDecision from '@/pages/organ-donation/review-your-decision';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import { initialState, DECISION_OPT_OUT, DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
-import { $t, createStore, mount } from '../../helpers';
+import { $t, createStore, mount, initFilters } from '../../helpers';
 
 describe('review your decision', () => {
   let $store;
@@ -20,6 +20,7 @@ describe('review your decision', () => {
   const mountPage = () => mount(ReviewYourDecision, { $store, $style, $t });
 
   beforeEach(() => {
+    initFilters();
     $store = createStore({ state: createState() });
     $style = {
       button: 'button',
@@ -185,9 +186,26 @@ describe('review your decision', () => {
         $store.state.organDonation.isPrivacyAccepted = true;
       });
 
-      it('it will call organDonation/postRegistration', () => {
-        submitButton.trigger('click');
-        expect($store.dispatch).toHaveBeenCalledWith('organDonation/postRegistration');
+      describe('is not amending', () => {
+        beforeEach(() => {
+          $store.state.organDonation.isAmending = false;
+        });
+
+        it('it will call organDonation/postRegistration', async () => {
+          await submitButton.trigger('click');
+          expect($store.dispatch).toHaveBeenCalledWith('organDonation/postRegistration');
+        });
+      });
+
+      describe('is amending', () => {
+        beforeEach(() => {
+          $store.state.organDonation.isAmending = true;
+        });
+
+        it('it will call organDonation/putRegistration', async () => {
+          await submitButton.trigger('click');
+          expect($store.dispatch).toHaveBeenCalledWith('organDonation/putRegistration');
+        });
       });
     });
   });

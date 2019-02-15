@@ -143,5 +143,3 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
-
-

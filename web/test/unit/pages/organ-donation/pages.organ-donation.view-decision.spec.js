@@ -1,0 +1,155 @@
+import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
+import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
+import ViewDecision from '@/pages/organ-donation/view-decision';
+import YourDecision from '@/components/organ-donation/YourDecision';
+import {
+  DECISION_OPT_IN,
+  DECISION_OPT_OUT,
+  initialState,
+  STATE_OK,
+  STATE_CONFLICTED,
+} from '@/store/modules/organDonation/mutation-types';
+import { createStore, mount } from '../../helpers';
+
+describe('view decision', () => {
+  let $store;
+  let $style;
+  let wrapper;
+
+  const createState = () => ({
+    organDonation: initialState(),
+    device: {
+      source: 'web',
+    },
+  });
+
+  const mountWrapper = () => {
+    const store = $store || createStore({ state });
+    return mount(ViewDecision, { $store: store, $style });
+  };
+
+  beforeEach(() => {
+    const state = createState();
+    state.organDonation.registration.decision = DECISION_OPT_IN;
+    state.organDonation.registration.identifier = '12345';
+    state.organDonation.registration.state = STATE_OK;
+    $store = createStore({ state });
+    wrapper = mountWrapper();
+  });
+
+  it('will show other things to do', () => {
+    expect(wrapper.find(OtherThingsToDo).exists()).toBe(true);
+  });
+
+  describe('not conflicted', () => {
+    let state;
+
+    beforeEach(() => {
+      state = createState();
+      state.organDonation.registration.decision = DECISION_OPT_IN;
+      state.organDonation.registration.identifier = '12345';
+      state.organDonation.registration.state = STATE_OK;
+      $store = createStore({ state });
+      wrapper = mountWrapper();
+    });
+
+    it('will show your decision', () => {
+      expect(wrapper.find(YourDecision).exists()).toBe(true);
+    });
+
+    it('will show the amend decision link', () => {
+      expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
+    });
+
+    it('will show the success message text', () => {
+      expect(wrapper.text())
+        .toContain('translate_organDonation.viewDecision.successMessageText');
+    });
+
+    it('will not show the Decision submitted dialog text', () => {
+      expect(wrapper.text())
+        .not.toContain('translate_organDonation.viewDecision.decisionSubmitted.dialogText');
+    });
+
+    it('will not show the Decision submitted message text', () => {
+      expect(wrapper.text())
+        .not.toContain('translate_organDonation.viewDecision.decisionSubmitted.messageText');
+    });
+
+    describe('selected all organs', () => {
+      beforeEach(() => {
+        state.organDonation.registration.decision = DECISION_OPT_IN;
+        state.organDonation.registration.decisionDetails.all = true;
+        wrapper = mountWrapper();
+      });
+
+      it('will not show the decision details', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+      });
+    });
+
+    describe('selected some organs', () => {
+      beforeEach(() => {
+        state.organDonation.registration.decision = DECISION_OPT_IN;
+        state.organDonation.registration.decisionDetails.all = false;
+        wrapper = mountWrapper();
+      });
+
+      it('will show the decision details', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(true);
+      });
+    });
+
+    describe('opt out', () => {
+      beforeEach(() => {
+        state.organDonation.registration.decision = DECISION_OPT_OUT;
+        state.organDonation.registration.decisionDetails.all = false;
+        wrapper = mountWrapper();
+      });
+
+      it('will not show the decision details', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+      });
+    });
+  });
+
+  describe('conflicted', () => {
+    beforeEach(() => {
+      const state = createState();
+      state.organDonation.registration.decision = DECISION_OPT_IN;
+      state.organDonation.registration.decisionDetails.all = false;
+      state.organDonation.registration.state = STATE_CONFLICTED;
+      state.organDonation.registration.identifier = '12345';
+      $store = createStore({ state });
+      wrapper = mountWrapper();
+    });
+
+    it('will show the Decision submitted dialog text', () => {
+      expect(wrapper.text())
+        .toContain('translate_organDonation.viewDecision.decisionSubmitted.dialogText');
+    });
+
+    it('will show the Decision submitted message text', () => {
+      expect(wrapper.text())
+        .toContain('translate_organDonation.viewDecision.decisionSubmitted.messageText');
+    });
+
+    it('will not show the success message text', () => {
+      expect(wrapper.text())
+        .not.toContain('translate_organDonation.viewDecision.successMessageText');
+    });
+
+    it('will not show your decision', () => {
+      expect(wrapper.find(YourDecision).exists()).toBe(false);
+    });
+
+    it('will not show the decision details', () => {
+      expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+    });
+
+    it('will not show the amend decision link', () => {
+      expect(wrapper.find(AmendDecisionLink).exists()).toEqual(false);
+    });
+  });
+});

@@ -69,8 +69,7 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
             {
                 _logger.LogEnter();
 
-                await _auditor.Audit(Constants.AuditingTitles.OrganDonationRegistrationAuditTypeRequest,
-                    "Attempting to register organ donation decision");
+                await _auditor.Audit(Constants.AuditingTitles.OrganDonationRegistrationAuditTypeRequest, "Attempting to register organ donation decision");
                 
                 var userSession = HttpContext.GetUserSession();
 
@@ -78,6 +77,29 @@ namespace NHSOnline.Backend.Worker.Areas.OrganDonation
 
                 await result.Accept(new OrganDonationRegistrationAuditingVisitor(_auditor, _logger));
                 return result.Accept(new OrganDonationRegistrationVisitor());
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] OrganDonationRegistrationRequest model)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                await _auditor.Audit(Constants.AuditingTitles.OrganDonationUpdateAuditTypeRequest, "Attempting to update organ donation decision");
+                
+                var userSession = HttpContext.GetUserSession();
+
+                var result = await _organDonationService.Update(model, userSession);
+
+                result.Accept(new OrganDonationRegistrationUpdateAuditingVisitor(_auditor));
+
+                return result.Accept(new OrganDonationUpdatedVisitor());
             }
             finally
             {

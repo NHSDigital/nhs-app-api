@@ -724,6 +724,9 @@ export default {
       },
       subheader: 'Additional details',
     },
+    amendDecision: {
+      linkText: 'Amend your decision',
+    },
     faith: {
       subheader: 'Faith / beliefs',
       continueButtonText: 'Continue',

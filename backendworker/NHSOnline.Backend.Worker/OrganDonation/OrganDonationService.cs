@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                     return new OrganDonationRegistrationResult.SuccessfullyRegistered(response);
                 }
 
-                return HandleErrorCases(clientResponse);
+                return HandleRegistrationErrorCodes(clientResponse.StatusCode);
             }
             catch (HttpRequestException e)
             {
@@ -162,10 +162,36 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             }
         }
 
-        private OrganDonationRegistrationResult HandleErrorCases(
-            OrganDonationResponse<RegistrationResponse> clientResponse)
+        public async Task<OrganDonationRegistrationResult> Update(
+            OrganDonationRegistrationRequest request,
+            UserSession userSession)
         {
-            switch (clientResponse.StatusCode)
+            try
+            {
+                var registrationRequest = _registrationRequestMapper.Map(request);
+
+                _logger.LogDebug("Attempting to update organ donation decision");
+                var clientResponse = await _organDonationClient.PutUpdate(registrationRequest, userSession);
+
+                if (clientResponse.HasSuccessResponse)
+                {
+                    _logger.LogDebug("Update successful");
+                    var response = _registrationResponseMapper.Map(clientResponse);
+                    return new OrganDonationRegistrationResult.SuccessfullyRegistered(response);
+                }
+
+                return HandleRegistrationErrorCodes(clientResponse.StatusCode);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request to register an update to organ donation decision");
+                return new OrganDonationRegistrationResult.SystemError();
+            }
+        }
+
+        private OrganDonationRegistrationResult HandleRegistrationErrorCodes(HttpStatusCode statusCode)
+        {
+            switch (statusCode)
             {
                 case HttpStatusCode.RequestTimeout:
                     _logger.LogDebug("The organ donation registration timed-out");

@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.impl.client.HttpClientBuilder
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.protocol.HttpContext
+import utils.SerenityHelpers.Companion.setHttpResponse
 import utils.SerenityHelpers
 import java.io.BufferedReader
 import java.io.InputStreamReader

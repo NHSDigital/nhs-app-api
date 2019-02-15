@@ -58,7 +58,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var organDonationRegistrationResponse = _fixture.Create<OrganDonationRegistrationResponse>();
             var newResult = new OrganDonationRegistrationResult.SuccessfullyRegistered(organDonationRegistrationResponse);
             
-            _mockOrganDonationService.Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) newResult));
 
             // Act
@@ -82,7 +83,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var timeoutResult = new OrganDonationRegistrationResult.Timeout();
 
-            _mockOrganDonationService.Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) timeoutResult));
 
             // Act
@@ -103,7 +105,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var upstreamErrorResult = new OrganDonationRegistrationResult.UpstreamError();
 
-            _mockOrganDonationService.Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) upstreamErrorResult));
 
             // Act
@@ -125,7 +128,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var systemErrorResult = new OrganDonationRegistrationResult.SystemError();
 
-            _mockOrganDonationService.Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.Register(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationRegistrationResult) systemErrorResult));
 
             // Act

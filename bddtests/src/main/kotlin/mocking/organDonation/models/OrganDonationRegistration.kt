@@ -17,9 +17,12 @@ data class OrganDonationRegistration(
 ) {
     companion object {
 
-        fun optOut(patient: Patient): OrganDonationRegistration {
+        fun optOut(patient: Patient,
+                   organDonationDemographics: OrganDonationDemographics? = null): OrganDonationRegistration {
+            val demographics = organDonationDemographics ?: OrganDonationDemographics()
+
             return OrganDonationRegistration(
-                    identifier = "123",
+                    identifier = patient.nhsNumbers.first(),
                     nhsNumber = patient.formattedNHSNumber(),
                     nameFull = patient.formattedFullName(),
                     name = mocking.data.organDonation.OrganDonationRegistrationDataBuilder.getName(patient),
@@ -29,12 +32,13 @@ data class OrganDonationRegistration(
                     emailAddresss = patient.contactDetails.emailAddress ?: "",
                     decision = OrganDonationRegistrationDecision.OptOut,
                     decisionDetails = null,
-                    faithDeclaration = patient.organDonationDemographics.faithDeclaration.toString()
+                    faithDeclaration = demographics.faithDeclaration.toString()
             )
         }
 
-        fun optIn(patient: Patient): OrganDonationRegistration {
-            val registration = optOut(patient)
+        fun optIn(patient: Patient,
+                  organDonationDemographics: OrganDonationDemographics? = null): OrganDonationRegistration {
+            val registration = optOut(patient, organDonationDemographics)
             registration.decision = OrganDonationRegistrationDecision.OptIn
             registration.decisionDetails = DecisionDetails(true,
                     hashMapOf("heart" to "NotStated",
@@ -44,8 +48,9 @@ data class OrganDonationRegistration(
             return registration
         }
 
-        fun some(patient: Patient, organsToDonate: HashMap<String, String>): OrganDonationRegistration {
-            val registration = optIn(patient)
+        fun some(patient: Patient, organsToDonate: HashMap<String, String>,
+                 organDonationDemographics: OrganDonationDemographics? = null): OrganDonationRegistration {
+            val registration = optIn(patient, organDonationDemographics)
             registration.decisionDetails = DecisionDetails(false, organsToDonate)
             return registration
         }

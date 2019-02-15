@@ -1,13 +1,17 @@
+import cloneDeep from 'lodash/fp/cloneDeep';
 import mutations from '@/store/modules/organDonation/mutations';
 import {
   initialState,
+  CLONE_FROM_ORIGINAL,
   INIT,
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
+  RESET_REGISTRATION,
   SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
+  SET_AMENDING,
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
@@ -22,6 +26,48 @@ describe('organ donation record mutations', () => {
 
   beforeEach(() => {
     state = initialState();
+  });
+
+  describe('CLONE_FROM_ORIGINAL', () => {
+    it('will clone the values at the received path into the registration', () => {
+      state.originalRegistration.decisionDetails.all = 'boo';
+      state.originalRegistration.decisionDetails.choices.heart = 'foo';
+
+      const path = 'decisionDetails';
+      mutations[CLONE_FROM_ORIGINAL](state, path);
+
+      expect(state.registration.decisionDetails.all)
+        .toEqual(state.originalRegistration.decisionDetails.all);
+      expect(state.registration.decisionDetails.choices.heart)
+        .toEqual(state.originalRegistration.decisionDetails.choices.heart);
+      expect(state.registration.decisionDetails)
+        .not.toBe(state.originalRegistration.decisionDetails);
+      expect(state.registration.decisionDetails.choices)
+        .not.toBe(state.originalRegistration.decisionDetails.choices);
+    });
+
+    it('will clone the values from multiple paths into the registration', () => {
+      state.originalRegistration.identifier = '1234';
+      state.originalRegistration.nhsNumber = '5678';
+      state.originalRegistration.nameFull = 'Peter Pan';
+      mutations[CLONE_FROM_ORIGINAL](state, [
+        'identifier',
+        'nhsNumber',
+        'nameFull',
+      ]);
+
+      expect(state.registration.identifier).toEqual('1234');
+      expect(state.registration.nhsNumber).toEqual('5678');
+      expect(state.registration.nameFull).toEqual('Peter Pan');
+    });
+
+    it('will use the default value when the original value is undefined', () => {
+      const defaultState = initialState();
+      state.originalRegistration.decisionDetails.choices = undefined;
+      mutations[CLONE_FROM_ORIGINAL](state, 'decisionDetails.choices');
+      expect(state.registration.decisionDetails.choices)
+        .toEqual(defaultState.registration.decisionDetails.choices);
+    });
   });
 
   describe('INIT', () => {
@@ -107,6 +153,13 @@ describe('organ donation record mutations', () => {
     });
   });
 
+  describe('SET_AMENDING', () => {
+    it('will set the isAmending property on the state', () => {
+      mutations[SET_AMENDING](state, true);
+      expect(state.isAmending).toEqual(true);
+    });
+  });
+
   describe('SET_FAITH_DECLARATION', () => {
     it('will set the organ donation registration "faith declaration" state to the received value', () => {
       mutations[SET_FAITH_DECLARATION](state, 'foo');
@@ -125,6 +178,31 @@ describe('organ donation record mutations', () => {
     it('will set the organ donation registration identifier state to the received value', () => {
       mutations[SET_REGISTRATION_ID](state, 'identity');
       expect(state.registration.identifier).toEqual('identity');
+    });
+  });
+
+  describe('RESET_REGISTRATION', () => {
+    let originalRegistration;
+
+    beforeEach(() => {
+      // eslint-disable-next-line
+      originalRegistration = initialState().originalRegistration;
+      originalRegistration.identifier = '123';
+
+      state = {
+        originalRegistration,
+        registration: cloneDeep(originalRegistration),
+      };
+
+      mutations[RESET_REGISTRATION](state);
+    });
+
+    it('will set the registration to the default', () => {
+      expect(state.registration.identifier).toEqual('');
+    });
+
+    it('will not touch the original registration', () => {
+      expect(state.originalRegistration).toBe(originalRegistration);
     });
   });
 

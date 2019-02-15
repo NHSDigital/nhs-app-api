@@ -59,6 +59,14 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             return await Get<ReferenceDataResponse>(AllReferencePath);
         }
 
+        public async Task<OrganDonationResponse<RegistrationResponse>> PutUpdate(
+            RegistrationRequest request, UserSession userSession)
+        {
+            return await Put<RegistrationRequest, RegistrationResponse>(
+                request, 
+                userSession, 
+                $"{CreatePath}/{request.Id}");
+        }
         private async Task<OrganDonationResponse<TResponse>> Get<TResponse>(string path)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, path);
@@ -68,20 +76,28 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         private async Task<OrganDonationResponse<TResponse>> Post<TRequest, TResponse>(
             TRequest model, UserSession userSession, string path)
         {
-            var request = BuildRegistrationRequest(HttpMethod.Post, userSession, path);
-
-            var body = JsonConvert.SerializeObject(model, _serializerSettings);
-            request.Content = new StringContent(body);
-            request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(System.Net.Mime.MediaTypeNames.Application.Json);
+            var request = BuildRegistrationRequest(HttpMethod.Post, userSession, path, model);
 
             return await SendRequestAndParseResponse<TResponse>(request);
         }
 
-        private static HttpRequestMessage BuildRegistrationRequest(HttpMethod httpMethod, UserSession userSession, string path)
+        private async Task<OrganDonationResponse<TResponse>> Put<TRequest, TResponse>(
+            TRequest model, UserSession userSession, string path)
+        {
+            var request = BuildRegistrationRequest(HttpMethod.Put, userSession, path, model);
+
+            return await SendRequestAndParseResponse<TResponse>(request);
+        }
+
+        private HttpRequestMessage BuildRegistrationRequest<TRequest>(HttpMethod httpMethod, UserSession userSession, string path, TRequest model)
         {
             var request = new HttpRequestMessage(httpMethod, path);
             request.Headers.Add(SessionIdHeaderKey, userSession.OrganDonationSessionId.ToString());
             request.Headers.Add(SequenceIdHeaderKey, Guid.NewGuid().ToString());
+
+            var body = JsonConvert.SerializeObject(model, _serializerSettings);
+            request.Content = new StringContent(body);
+            request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(System.Net.Mime.MediaTypeNames.Application.Json);
             return request;
         }
 

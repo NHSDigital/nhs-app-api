@@ -3,16 +3,18 @@ package mocking.data.organDonation
 import mocking.organDonation.models.Address
 import mocking.organDonation.models.CodeableConcept
 import mocking.organDonation.models.Coding
+import mocking.organDonation.models.FaithDeclaration
 import mocking.organDonation.models.Identifier
 import mocking.organDonation.models.Name
 import mocking.organDonation.models.Resource
-import models.KeyValuePair
+import mocking.organDonation.models.KeyValuePair
+import mocking.organDonation.models.OrganDonationDemographics
 import models.Patient
 
 object OrganDonationRegistrationDataBuilder {
 
-    fun optIn(patient: Patient): Resource {
-        val resource = build(patient)
+    fun optIn(patient: Patient, organDonationDemographics: OrganDonationDemographics? = null): Resource {
+        val resource = build(patient, organDonationDemographics)
         resource.organDonationDecision = "opt-in"
         resource.donationWishes = hashMapOf(
                 "all" to "yes",
@@ -27,17 +29,18 @@ object OrganDonationRegistrationDataBuilder {
         return resource
     }
 
-    fun optOut(patient: Patient): Resource {
-        val resource = build(patient)
+    fun optOut(patient: Patient, organDonationDemographics: OrganDonationDemographics? = null): Resource {
+        val resource = build(patient, organDonationDemographics)
         resource.organDonationDecision = "opt-out"
         return resource
     }
 
-    fun optInSome(patient: Patient, someOrgans: HashMap<String, String>): Resource {
-        val resource = build(patient)
+    fun optInSome(patient: Patient, organDonationDemographics: OrganDonationDemographics? = null): Resource {
+        val resource = build(patient, organDonationDemographics)
         resource.organDonationDecision = "opt-in"
         val donationWishes = hashMapOf<String, String>()
-        someOrgans.forEach{organChoice -> donationWishes.put(map(organChoice.key), organChoice.value)}
+        someOrgansExistingListNotUpdated()
+                .forEach { organChoice -> donationWishes.put(map(organChoice.key), organChoice.value) }
         donationWishes["all"] = "no"
         resource.donationWishes = donationWishes
         return resource
@@ -49,17 +52,50 @@ object OrganDonationRegistrationDataBuilder {
         return resource
     }
 
+    private fun someOrgansExistingListNotUpdated(): HashMap<String, String> {
+        val organsToDonate = arrayListOf(
+                KeyValuePair("Heart", true),
+                KeyValuePair("Lungs", false),
+                KeyValuePair("Kidney", true),
+                KeyValuePair("Liver", true),
+                KeyValuePair("Corneas", false),
+                KeyValuePair("Pancreas", true),
+                KeyValuePair("Tissue", false))
+        OrganDonationSerenityHelpers.setOrganDonationDecisionSomeOrgansExisting(organsToDonate)
+        val decision = hashMapOf<String, String>()
+        organsToDonate.forEach { organ -> decision.put(organ.key, if (organ.value) "yes" else "no") }
+        return decision
+    }
+
+    fun someOrgansListUpdated(): HashMap<String, String> {
+        val organsToDonate = arrayListOf(
+                KeyValuePair("Heart", true),
+                KeyValuePair("Lungs", false),
+                KeyValuePair("Kidney", true),
+                KeyValuePair("Liver", true),
+                KeyValuePair("Corneas", false),
+                KeyValuePair("Pancreas", true),
+                KeyValuePair("Tissue", false),
+                KeyValuePair("Small bowel", false))
+        OrganDonationSerenityHelpers.setOrganDonationDecisionSomeOrgansUpdated(organsToDonate)
+        val decision = hashMapOf<String, String>()
+        organsToDonate.forEach { organ -> decision.put(organ.key, if (organ.value) "yes" else "no") }
+        return decision
+    }
+
     private val mapUiLabelToMock = hashMapOf("Small bowel" to "smallBowel")
 
-    private fun map(input:String):String{
-        if(mapUiLabelToMock.containsKey(input))
-        {
+    private fun map(input: String): String {
+        if (mapUiLabelToMock.containsKey(input)) {
             return mapUiLabelToMock[input]!!
         }
         return input
     }
 
-    private fun build(patient:Patient): Resource{
+    private fun build(patient: Patient, organDonationDemographics: OrganDonationDemographics? = null): Resource {
+        val demographics = organDonationDemographics ?: OrganDonationDemographics()
+        OrganDonationSerenityHelpers.setOrganDonationDemographics(demographics)
+
         return Resource(
                 id = "AD02745157",
                 resourceType = "Registration",
@@ -70,16 +106,15 @@ object OrganDonationRegistrationDataBuilder {
                 nameFull = patient.formattedFullName(),
                 gender = patient.sex.toString(),
                 birthdate = patient.dateOfBirth,
-                ethnicCategory = getCodeableConcept(patient.organDonationDemographics.ethnicity),
-                religiousAffiliation = getCodeableConcept(patient.organDonationDemographics.religion),
+                ethnicCategory = getCodeableConcept(demographics.ethnicity),
+                religiousAffiliation = getCodeableConcept(demographics.religion),
                 address = listOf(getAddress(patient)),
                 addressFull = patient.address.full(),
                 telecom = listOf(Identifier(
                         system = "phone",
                         value = patient.contactDetails.telephoneNumber!!)),
-                organDonationDecision = patient.organDonationDecision,
-                faithDeclaration = patient.organDonationDemographics.faithDeclaration.toString()
-        )
+                organDonationDecision = "opt-out",
+                faithDeclaration = getFaithDeclaration(demographics.faithDeclaration))
     }
 
     fun getName(patient: Patient): Name {
@@ -87,7 +122,6 @@ object OrganDonationRegistrationDataBuilder {
                 prefix = listOf(patient.title),
                 given = listOf(patient.firstName),
                 family = patient.surname)
-
     }
 
     fun getAddress(patient: Patient): Address {
@@ -96,6 +130,14 @@ object OrganDonationRegistrationDataBuilder {
                         patient.address.houseNameFlatNumber!!,
                         patient.address.numberStreet!!),
                 postalCode = patient.address.postcode!!)
+    }
+
+    private fun getFaithDeclaration(faithDeclaration: FaithDeclaration): String {
+        return when (faithDeclaration) {
+            FaithDeclaration.No -> "no"
+            FaithDeclaration.Yes -> "yes"
+            FaithDeclaration.NotStated -> "not-stated"
+        }
     }
 
     private fun getCodeableConcept(pair: KeyValuePair<String, String>): CodeableConcept {

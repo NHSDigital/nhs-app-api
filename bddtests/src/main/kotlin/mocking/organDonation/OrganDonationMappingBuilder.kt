@@ -18,7 +18,8 @@ const val HEADER_CLIENT_ID_VALUE = "ODR-26-NHSAP"
 
 const val ORGAN_DONATION_ERROR_CODE_NOT_FOUND = 20010
 const val ORGAN_DONATION_ERROR_CODE_GATEWAY_TIMEOUT = 20022
-const val ORGAN_DONATION_ERROR_CODE_CONFLICT = 10001
+const val ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT = 10001
+const val ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT = 10201
 const val ORGAN_DONATION_ERROR_CODE_INTERNAL_SERVER_ERROR = 20120
 
 open class OrganDonationMappingBuilder(method: String, relativePath: String = "")
@@ -32,7 +33,11 @@ open class OrganDonationMappingBuilder(method: String, relativePath: String = ""
     fun referenceData() = OrganDonationReferenceDataBuilder()
 
     fun submitDecision(registration: OrganDonationRegistrationRequest) =
-            OrganDonationSubmitDecisionBuilder(registration)
+            OrganDonationSubmitDecisionBuilder(registration, "POST", "/Registration")
+
+    fun amendDecision(registration: OrganDonationRegistrationRequest) =
+            OrganDonationSubmitDecisionBuilder(registration, "PUT", "/Registration/"
+                    + registration.registration.identifier)
 
     fun respondWithTimeOutError() : Mapping {
         val responseBody = Issue(

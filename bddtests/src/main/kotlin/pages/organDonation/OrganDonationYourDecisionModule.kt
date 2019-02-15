@@ -1,6 +1,6 @@
 package pages.organDonation
 
-import models.KeyValuePair
+import mocking.organDonation.models.KeyValuePair
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject

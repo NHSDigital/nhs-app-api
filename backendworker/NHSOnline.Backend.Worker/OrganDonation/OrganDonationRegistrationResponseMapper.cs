@@ -11,7 +11,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         OrganDonationRegistrationResponse>
     {
         private readonly ILogger<OrganDonationRegistrationResponseMapper> _logger;
-        private readonly string[] _inProgressSubmitErrorCodes = { "10001", "10002" };
+        private readonly string[] _registerConflictErrorCodes = { "10001", "10002" };
+        private readonly string[] _updateConflictErrorCodes = { "10201", "10202" };
 
         public OrganDonationRegistrationResponseMapper(ILogger<OrganDonationRegistrationResponseMapper> logger)
         {
@@ -27,7 +28,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
             var errorCode = source.Body?.Issue?.Details?.Coding?.FirstOrDefault()?.Code;
 
-            var isConflicted = _inProgressSubmitErrorCodes.Contains(errorCode);
+            var isConflicted = _registerConflictErrorCodes.Contains(errorCode) || _updateConflictErrorCodes.Contains(errorCode);
             if (isConflicted)
             {
                 _logger.LogInformation($"Registration in conflict. {source.Body?.Issue} ");

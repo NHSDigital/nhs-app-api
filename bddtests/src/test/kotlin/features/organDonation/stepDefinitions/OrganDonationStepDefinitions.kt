@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT
 import net.thucydides.core.annotations.Steps
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
@@ -64,7 +65,7 @@ open class OrganDonationStepDefinitions {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
-        factory.optOut { registration -> registration.respondWithSuccess("test") }
+        factory.create { registration -> registration.optOut { request -> request.respondWithSuccess("test") } }
     }
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and opt in$")
@@ -72,7 +73,7 @@ open class OrganDonationStepDefinitions {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
-        factory.optIn { registration -> registration.respondWithSuccess("test") }
+        factory.create { registration -> registration.optIn { request -> request.respondWithSuccess("test") } }
     }
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and donate some organs$")
@@ -80,7 +81,7 @@ open class OrganDonationStepDefinitions {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
-        factory.some { registration -> registration.respondWithSuccess("test") }
+        factory.create { registration -> registration.some { request -> request.respondWithSuccess("test") } }
     }
 
     @Given("I am a (\\w+) user not registered with organ donation, who wishes to opt out but will cause a conflict")
@@ -88,7 +89,8 @@ open class OrganDonationStepDefinitions {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
-        factory.optOut { registration -> registration.respondWithConflict("test") }
+        factory.create { registration -> registration.optOut { request-> request.respondWithConflict("test",
+                ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT.toString()) }}
     }
 
     @Given("I am a (\\w+) user registered with organ donation but existing registration is in conflicted state")
@@ -111,6 +113,13 @@ open class OrganDonationStepDefinitions {
         } else {
             aNewTabOpens(Config.instance.organDonation)
         }
+    }
+
+    @Given("I am a (.*) user registered as opt-in with organ donation, who wishes to amend$")
+    fun iAmEMISUserRegisteredWithOrganDonationWhoWishesToAmend(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existingOptIn()
     }
 
     fun iAmOnTheOrganDonationPage() {

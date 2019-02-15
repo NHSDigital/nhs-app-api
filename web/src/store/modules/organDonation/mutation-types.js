@@ -1,9 +1,12 @@
+export const CLONE_FROM_ORIGINAL = 'CLONE_FROM_ORIGINAL';
 export const INIT = 'INIT';
 export const LOADED = 'LOADED';
 export const LOADED_REFERENCE_DATA = 'LOADED_REFERENCE_DATA';
 export const MAKE_DECISION = 'MAKE_DECISION';
+export const RESET_REGISTRATION = 'RESET_REGISTRATION';
 export const SET_ADDITIONAL_DETAILS = 'SET_ADDITIONAL_DETAILS';
 export const SET_ACCURACY_ACCEPTANCE = 'SET_ACCURACY_ACCEPTANCE';
+export const SET_AMENDING = 'SET_AMENDING';
 export const SET_ALL_ORGANS = 'SET_ALL_ORGANS';
 export const SET_FAITH_DECLARATION = 'SET_FAITH_DECLARATION';
 export const SET_PRIVACY_ACCEPTANCE = 'SET_PRIVACY_ACCEPTANCE';
@@ -71,5 +74,6 @@ export const initialState = () => ({
   },
   registration: createRegistration(),
   isAccuracyAccepted: false,
+  isAmending: false,
   isPrivacyAccepted: false,
 });

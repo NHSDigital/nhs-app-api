@@ -18,10 +18,8 @@
       :value="true"
       :model="currentChoice"
       @select="isSelected">
-      <div>
-        <b>{{ $t('organDonation.yourChoice.choices.all.title') }}</b>
-        <p>{{ $t('organDonation.yourChoice.choices.all.description') }}</p>
-      </div>
+      <b>{{ $t('organDonation.yourChoice.choices.all.title') }}</b>
+      <p>{{ $t('organDonation.yourChoice.choices.all.description') }}</p>
     </generic-radio-button>
     <generic-radio-button
       :class="$style['radio-button']"
@@ -29,10 +27,8 @@
       :value="false"
       :model="currentChoice"
       @select="isSelected">
-      <div>
-        <b>{{ $t('organDonation.yourChoice.choices.some.title') }}</b>
-        <p>{{ $t('organDonation.yourChoice.choices.some.description') }}</p>
-      </div>
+      <b>{{ $t('organDonation.yourChoice.choices.some.title') }}</b>
+      <p>{{ $t('organDonation.yourChoice.choices.some.description') }}</p>
     </generic-radio-button>
     <generic-button id="continue-button"
                     :class="[$style.button, $style.green]"
@@ -44,6 +40,7 @@
 </template>
 <script>
 import get from 'lodash/fp/get';
+import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import isNil from 'lodash/fp/isNil';
 import BackButton from '@/components/BackButton';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
@@ -75,6 +72,17 @@ export default {
       hasTriedToContinue: false,
       allOrgansName: 'AllOrgans',
     };
+  },
+  asyncData({ store }) {
+    if (
+      store.state.organDonation.isAmending &&
+      isDefault({
+        path: 'registration.decisionDetails.all',
+        state: store.state.organDonation,
+      })
+    ) {
+      store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.all');
+    }
   },
   computed: {
     currentChoice() {

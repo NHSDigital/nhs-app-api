@@ -1,6 +1,7 @@
+import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import MakeDecision from '@/components/organ-donation/MakeDecision';
 import OrganDonation from '@/pages/organ-donation';
-import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
   DECISION_APPOINTED_REP,
@@ -44,6 +45,26 @@ describe('organ donation index page', () => {
 
   const mountOrganDonation = () => mount(OrganDonation, { $store, $style, $t });
 
+  describe('created', () => {
+    beforeEach(() => {
+      $store = createStore({ state: createState() });
+      wrapper = mountOrganDonation();
+    });
+
+    it('will dispach the "organDonation/amendCancel" action', () => {
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendCancel');
+    });
+
+    it('will dispach the "organDonation/setAdditionalDetails" action with empty values', () => {
+      const value = { ethnicityId: '', religionId: '' };
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/setAdditionalDetails', value);
+    });
+
+    it('will dispach the "organDonation/resetAcceptanceChecks" action', () => {
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/resetAcceptanceChecks');
+    });
+  });
+
   describe('new registration (original decision is not found)', () => {
     beforeEach(() => {
       $store = createStore({ state: createState() });
@@ -51,8 +72,24 @@ describe('organ donation index page', () => {
       wrapper = mountOrganDonation();
     });
 
-    it('will translate the register subheader', () => {
-      expect($t).toHaveBeenCalledWith('organDonation.register.subheader');
+    it('will show the "MakeDecision" component', () => {
+      expect(wrapper.find(MakeDecision).exists()).toEqual(true);
+    });
+
+    it('will not have a "YourDecision" component', () => {
+      expect(wrapper.find(YourDecision).exists()).toEqual(false);
+    });
+
+    it('will not have a "DecisionDetails" component', () => {
+      expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+    });
+
+    it('will not show a GenericButton', () => {
+      expect(wrapper.find('#back-button').exists()).toEqual(false);
+    });
+
+    it('will not show a AmendDecisionLink', () => {
+      expect(wrapper.find(AmendDecisionLink).exists()).toEqual(false);
     });
 
     it('will not have a "YourDecision" component', () => {
@@ -71,54 +108,10 @@ describe('organ donation index page', () => {
     });
 
     describe('computed', () => {
-      describe('noDecision', () => {
-        it('will equal DECISION_OPT_OUT', () => {
-          expect(wrapper.vm.noDecision).toEqual(DECISION_OPT_OUT);
-        });
-      });
-
       describe('hasExistingDecision', () => {
         it('will be false as the original decision was not found', () => {
           expect(wrapper.vm.hasExistingDecision).toEqual(false);
         });
-      });
-    });
-
-    describe('organ donation "no" button', () => {
-      let organDonationNoButton;
-
-      beforeEach(() => {
-        organDonationNoButton = wrapper.findAll(OrganDonationButton).at(0);
-      });
-
-      it('will translate the register subheader', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.register.subheader');
-      });
-
-      it('will exist', () => {
-        expect(organDonationNoButton.exists()).toBe(true);
-      });
-
-      it('will have a value that sets the decision to "OptOut"', () => {
-        const { decision } = organDonationNoButton.props();
-        expect(decision).toEqual(DECISION_OPT_OUT);
-      });
-    });
-
-    describe('organ donation "yes" button', () => {
-      let organDonationYesButton;
-
-      beforeEach(() => {
-        organDonationYesButton = wrapper.findAll(OrganDonationButton).at(1);
-      });
-
-      it('will exist', () => {
-        expect(organDonationYesButton.exists()).toBe(true);
-      });
-
-      it('will have a value that sets the decision to "OptIn"', () => {
-        const { decision } = organDonationYesButton.props();
-        expect(decision).toEqual(DECISION_OPT_IN);
       });
     });
   });
@@ -145,6 +138,10 @@ describe('organ donation index page', () => {
       expect(wrapper.text())
         .toContain('translate_organDonation.viewDecision.conflictedState.messageText');
     });
+
+    it('will not show the "MakeDecision" component', () => {
+      expect(wrapper.find(MakeDecision).exists()).toEqual(false);
+    });
   });
 
   describe('loaded registration (original decision is found)', () => {
@@ -158,12 +155,22 @@ describe('organ donation index page', () => {
       wrapper = mountOrganDonation();
     });
 
+    it('will not show the "MakeDecision" component', () => {
+      expect(wrapper.find(MakeDecision).exists()).toEqual(false);
+    });
+
     describe('opt-out', () => {
       beforeEach(() => {
         $store.state.organDonation.originalRegistration.decision = DECISION_OPT_OUT;
         $store.state.organDonation.originalRegistration.decisionDetails.all = undefined;
         $store.state.organDonation.originalRegistration.decisionDetails.choices = undefined;
         wrapper = mountOrganDonation();
+      });
+
+      describe('Amend decision link', () => {
+        it('will exist', () => {
+          expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
+        });
       });
 
       describe('DecisionDetails component', () => {
@@ -230,6 +237,12 @@ describe('organ donation index page', () => {
         $store.state.organDonation.originalRegistration.decision = DECISION_OPT_IN;
         $store.state.organDonation.originalRegistration.decisionDetails.all = true;
         wrapper = mountOrganDonation();
+      });
+
+      describe('Amend decision link', () => {
+        it('will exist', () => {
+          expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
+        });
       });
 
       describe('DecisionDetails component', () => {
@@ -299,6 +312,12 @@ describe('organ donation index page', () => {
         $store.state.organDonation.originalRegistration.decisionDetails.all = false;
         $store.state.organDonation.originalRegistration.decisionDetails.choices = choices;
         wrapper = mountOrganDonation();
+      });
+
+      describe('Amend decision link', () => {
+        it('will exist', () => {
+          expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
+        });
       });
 
       describe('DecisionDetails component', () => {
@@ -429,3 +448,4 @@ describe('organ donation index page', () => {
     });
   });
 });
+

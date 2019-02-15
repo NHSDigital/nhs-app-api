@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         private const string BobDonorNhsNumber = "0538236728";
         private const string CatherineDonorNhsNumber = "6151552431";
         private const string KevinBarryNhsNumber = "5785445875";
+        private const string ZacharyDonorNhsNumber = "3915168874";
 
         public Task<OrganDonationResponse<RegistrationLookupResponse>> PostLookup(
             RegistrationLookupRequest request,
@@ -42,7 +43,6 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                     response = builder2
                         .AddIdentifier(request.NhsNumber)
                         .AddOptOutDecision()
-                        .AddFaithDeclaration(FaithDeclaration.Yes)
                         .Build();
                     break;
                 //Mary Davies
@@ -88,30 +88,44 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 }
             });
         }
+        public Task<OrganDonationResponse<RegistrationResponse>> PutUpdate(RegistrationRequest request, UserSession userSession)
+        {
+            return Task.FromResult(new OrganDonationResponse<RegistrationResponse>(HttpStatusCode.OK)
+            {
+                Body = new RegistrationResponse
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Issue = GetIssue(request)
+                }
+            });
+        }
 
         private Issue GetIssue(RegistrationRequest request)
         {
             if (string.Equals(request.Identifier.FirstOrDefault()?.Value.RemoveWhiteSpace(), BobDonorNhsNumber, StringComparison.OrdinalIgnoreCase))
             {
-                return new Issue
-                {
-                    Details = new CodeableConcept
-                    {
-                        Coding = new List<Coding> { new Coding { Code = "10001" } }
-                    }
-                };
+                return GetIssue("10001");
             }
             if (string.Equals(request.Identifier.FirstOrDefault()?.Value.RemoveWhiteSpace(), CatherineDonorNhsNumber, StringComparison.OrdinalIgnoreCase))
             {
-                return new Issue
-                {
-                    Details = new CodeableConcept
-                    {
-                        Coding = new List<Coding> { new Coding { Code = "10002" } }
-                    }
-                };
+                return GetIssue("10002");
+            }
+            if (string.Equals(request.Identifier.FirstOrDefault()?.Value.RemoveWhiteSpace(), ZacharyDonorNhsNumber, StringComparison.OrdinalIgnoreCase))
+            {
+                return GetIssue("10201");
             }
             return null;
+        }
+
+        private Issue GetIssue(string code)
+        {
+            return new Issue
+            {
+                Details = new CodeableConcept
+                {
+                    Coding = new List<Coding> { new Coding { Code = code } }
+                }
+            };
         }
 
         public Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData()

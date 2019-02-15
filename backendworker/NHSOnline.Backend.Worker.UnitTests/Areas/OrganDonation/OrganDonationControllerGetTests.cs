@@ -51,7 +51,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var demographicsResult = new DemographicsResult.SuccessfullyRetrieved(new DemographicsResponse());
 
             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession))
+            _mockDemographicsService
+                .Setup(x => x.GetDemographics(_userSession.GpUserSession))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
@@ -79,7 +80,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.NewRegistration(organDonationRegistration);
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -101,7 +103,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var organDonationRegistration = _fixture.Create<OrganDonationRegistration>();
             var newResult = new OrganDonationResult.ExistingRegistration(organDonationRegistration);
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -121,7 +124,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationResult.SearchError();
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -143,7 +147,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationResult.BadSearchRequest();
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -164,7 +169,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationResult.SearchTimeout();
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -185,7 +191,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationResult.SearchSystemUnavailable();
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -206,7 +213,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationResult.DemographicsInternalServerError();
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -229,7 +237,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationResult.DemographicsRetrievalFailed();
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -251,7 +260,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationResult.DemographicsForbidden();
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act
@@ -273,7 +283,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationResult.DemographicsBadGateway();
 
-            _mockOrganDonationService.Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
                 .Returns(Task.FromResult((OrganDonationResult) newResult));
 
             // Act

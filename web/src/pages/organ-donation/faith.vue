@@ -63,6 +63,7 @@ import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
+import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import { YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
@@ -84,6 +85,17 @@ export default {
       preferNotToSayValue: NOT_STATED,
       hasTriedToContinue: false,
     };
+  },
+  asyncData({ store }) {
+    if (
+      store.state.organDonation.isAmending &&
+      isDefault({
+        path: 'registration.faithDeclaration',
+        state: store.state.organDonation,
+      })
+    ) {
+      store.dispatch('organDonation/cloneFromOriginal', 'faithDeclaration');
+    }
   },
   computed: {
     currentChoice() {

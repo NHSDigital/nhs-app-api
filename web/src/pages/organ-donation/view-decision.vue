@@ -14,11 +14,11 @@
       <message-dialog message-id="success-dialog" message-type="success">
         <message-text>{{ $t('organDonation.viewDecision.successMessageText') }}</message-text>
       </message-dialog>
-
       <your-decision :decision-details="$store.state.organDonation.registration.decisionDetails"
                      :decision="$store.state.organDonation.registration.decision"/>
       <decision-details v-if="isOptInDecision && !allOrgans"
                         :choices="currentChoices"/>
+      <amend-decision-link :class="$style.amendDecision"/>
     </div>
     <other-things-to-do/>
   </div>
@@ -26,6 +26,7 @@
 
 <script>
 import get from 'lodash/fp/get';
+import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -36,6 +37,7 @@ import { DECISION_OPT_IN, STATE_CONFLICTED, STATE_OK } from '@/store/modules/org
 
 export default {
   components: {
+    AmendDecisionLink,
     DecisionDetails,
     MessageText,
     MessageDialog,
@@ -71,10 +73,14 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/info";
+@import "../../style/info";
+@import "../../style/spacings";
+
+.amendDecision {
+  margin-bottom: $three;
+}
 
 .messageText {
   padding-bottom: 1em !important;
 }
-
 </style>

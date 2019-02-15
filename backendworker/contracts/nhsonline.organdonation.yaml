@@ -69,6 +69,43 @@ paths:
           description: Bad response received from upstream system.
         504:
           description: Timeout when calling upstream system.
+    put:
+        tags:
+          - organDonation
+        summary: Amends a user's organ donation record
+        description: Amends the user's organ donation record and returns the record identifier.
+        consumes:
+          - application/json
+        parameters:
+          - in: body
+            required: true
+            name: 'organDonationRegistrationRequest'
+            description: Details of the organ donation registration request.
+            schema:
+              $ref: '#/definitions/organDonationRegistrationRequest'
+        responses:
+          200:
+            description: "Successfully amended the organ donation record and returned the record identifier."
+            schema:
+              type: "object"
+              properties:
+                identifier:
+                  type: "string"
+                  description: "User's organ donation identifier."
+                state:
+                  type: string
+                  enum: [NotFound, Ok, Conflicted]
+                  description: User's organ donation record state
+          400:
+            description: Bad request. Supplied request is incomplete or invalid.
+          401:
+            description: User session missing or expired.
+          500:
+            description: An unexpected error occurred processing the request.
+          502:
+            description: Bad response received from upstream system.
+          504:
+            description: Timeout when calling upstream system.
   /organdonation/referencedata:
     get:
       tags:

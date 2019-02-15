@@ -53,8 +53,8 @@ class RadioButtons private constructor(private val buttons: List<RadioButton>) {
         private fun getElements(page: HybridPageObject, locator: String?):
                 List<WebElementFacade> {
             return HybridPageElement(
-                    locator ?: "//div[input][label]",
-                    locator ?: "//div[input][label]",
+                    locator ?: "//label[input][div]",
+                    locator ?: "//label[input][div]",
                     page = page,
                     helpfulName = "Radio Buttons").elements
         }

@@ -2,6 +2,8 @@ package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.organDonation.models.FaithDeclaration
 import pages.organDonation.OrganDonationFaithAndBeliefsPage
 
 open class OrganDonationFaithAndBeliefsStepDefinitions {
@@ -31,5 +33,18 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
         organDonationFaithAndBeliefsPage.clickContinue()
         organDonationFaithAndBeliefsPage.validationBanner.assertVisible(arrayListOf("There's a problem",
                 "You cannot continue without making a selection"))
+    }
+
+    @Then("^the previous option on the Organ Donation Faith And Beliefs page is selected")
+    fun thePreviousOptionOnTheOrganDonationFaithAndBeliefsPageIsSelected() {
+        val faithDeclaration = OrganDonationSerenityHelpers.getOrganDonationDemographics().faithDeclaration
+        when (faithDeclaration) {
+            FaithDeclaration.No ->
+                organDonationFaithAndBeliefsPage.radioButtons.assertSelected("No")
+            FaithDeclaration.Yes ->
+                organDonationFaithAndBeliefsPage.radioButtons.assertSelected("Yes")
+            FaithDeclaration.NotStated ->
+                organDonationFaithAndBeliefsPage.radioButtons.assertSelected("Prefer not to say")
+        }
     }
 }

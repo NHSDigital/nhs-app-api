@@ -3,6 +3,8 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT
 import mocking.stubs.StubbedEnvironment
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
@@ -70,6 +72,73 @@ class OrganDonationStepDefinitionsBackend {
     @Given("^I am a (\\w+) api user registered with organ donation, but demographics will return an internal error$")
     fun iAmRegisteredWithOrganDonationButDemographicsWillThrowInternalError(gpSystem: String) {
         OrganDonationFactory(gpSystem).demographicsInternalError()
+    }
+
+    @Given("I am a (\\w+) api user registered as opt-out who amends their decision to opt-in")
+    fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToOptIn(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        val existingRegistration = factory.existingOptOut()
+        OrganDonationSerenityHelpers.setRegistrationId(existingRegistration.id)
+
+        factory.amend { registration->registration.optIn {
+            request -> request.respondWithSuccess(existingRegistration.id) }}
+    }
+
+    @Given("I am a (\\w+) api user registered as opt-in who amends their decision to some organs")
+    fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToSomeOrgans(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        val existingRegistration = factory.existingOptIn()
+        OrganDonationSerenityHelpers.setRegistrationId(existingRegistration.id)
+
+        factory.amend { registration->registration.some {
+            request -> request.respondWithSuccess(existingRegistration.id) }}
+    }
+
+    @Given("I am a (\\w+) api user registered as some organs who amend their decision to opt-out")
+    fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToOptOut(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        val existingRegistration = factory.existingOptInSome()
+        OrganDonationSerenityHelpers.setRegistrationId(existingRegistration.id)
+
+        factory.amend { registration ->
+            registration.optOut { request ->
+                request.respondWithSuccess(existingRegistration.id)
+            }
+        }
+    }
+
+    @Given("I am a (\\w+) api user who wants to amend their decision, but system times out")
+    fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButSystemTimesOut(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        OrganDonationSerenityHelpers.setRegistrationId(factory.existingOptInSome().id)
+        factory.amend { registration ->
+            registration.optOut { request ->
+                request.respondWithTimeOutError()
+            }
+        }
+    }
+
+    @Given("I am a (\\w+) api user who wants to amend their decision, but OD will return an internal error")
+    fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButInternalError(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        OrganDonationSerenityHelpers.setRegistrationId(factory.existingOptInSome().id)
+        factory.amend { registration ->
+            registration.optOut { request ->
+                request.respondWithInternalError()
+            }
+        }
+    }
+
+    @Given("I am a (\\w+) api user who wants amend their decision, but will cause a conflict")
+    fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButConflict(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        val id = factory.existingOptInSome().id
+        OrganDonationSerenityHelpers.setRegistrationId(id)
+        factory.amend { registration ->
+            registration.optOut { request ->
+                request.respondWithConflict(id, ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT.toString())
+            }
+        }
     }
 
     @When("^I request my organ donation details$")

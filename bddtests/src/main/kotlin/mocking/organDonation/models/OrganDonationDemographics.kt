@@ -1,6 +1,4 @@
-package models
-
-import mocking.organDonation.models.FaithDeclaration
+package mocking.organDonation.models
 
 class OrganDonationDemographics(
         val faithDeclaration: FaithDeclaration = FaithDeclaration.NotStated,

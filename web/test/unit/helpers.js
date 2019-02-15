@@ -1,4 +1,6 @@
 /* eslint-disable import/prefer-default-export */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Vue from 'vue';
 import Vuex from 'vuex';
 import merge from 'lodash/fp/merge';
 import testUtils from '@vue/test-utils';
@@ -35,6 +37,10 @@ export const createStore = ({ $env = {}, $http = {}, state = {} } = {}) => ({
   },
 });
 
+export const initFilters = () => [
+  'longDate',
+].map(filter => Vue.filter(filter, () => {}));
+
 export const mount = (component, {
   $env = {},
   $router = [],
@@ -67,4 +73,3 @@ export const mount = (component, {
 
 export const shallowMount = (component, options = {}) =>
   mount(component, merge(options, { shallow: true }));
-

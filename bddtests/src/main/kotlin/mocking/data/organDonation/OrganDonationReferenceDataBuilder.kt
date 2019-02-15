@@ -5,10 +5,15 @@ import mocking.organDonation.models.Entry
 import mocking.organDonation.models.OrganDonationSuccessResponse
 import mocking.organDonation.models.ReferenceDataResponse
 import net.serenitybdd.core.Serenity
+import mocking.data.organDonation.OrganDonationSerenityHelpers.Companion.ORGAN_DONATION_REFERENCE_ETHNICITIES
+import mocking.data.organDonation.OrganDonationSerenityHelpers.Companion.ORGAN_DONATION_REFERENCE_RELIGIONS
 
 class OrganDonationReferenceDataBuilder {
 
     companion object {
+
+        val hindhu = Coding(code = "25", display = "Hindhu")
+        val chinese = Coding(code = "15", display = "Chinese")
 
         fun build(): OrganDonationSuccessResponse<ReferenceDataResponse> {
 
@@ -20,7 +25,7 @@ class OrganDonationReferenceDataBuilder {
                             Coding(code = "10", display = "Christian - Catholic"),
                             Coding(code = "19", display = "Christian - other"),
                             Coding(code = "20", display = "Buddhist"),
-                            Coding(code = "25", display = "Hindhu"),
+                            hindhu,
                             Coding(code = "30", display = "Jewish"),
                             Coding(code = "35", display = "Muslim"),
                             Coding(code = "40", display = "Sikh"),
@@ -28,7 +33,7 @@ class OrganDonationReferenceDataBuilder {
                             Coding(code = "88", display = "Not stated")
                     ))
 
-            Serenity.setSessionVariable("ReferenceReligions")
+            Serenity.setSessionVariable(ORGAN_DONATION_REFERENCE_RELIGIONS)
                     .to(religionsResource.concept.map { concept -> concept.display })
 
             val ethnicitiesResource = ReferenceDataResponse(
@@ -48,7 +53,7 @@ class OrganDonationReferenceDataBuilder {
                             Coding(code = "12", display = "Black - Caribbean"),
                             Coding(code = "13", display = "Black - African"),
                             Coding(code = "14", display = "Black - Any Other Black Background"),
-                            Coding(code = "15", display = "Chinese"),
+                            chinese,
                             Coding(code = "16", display = "Other - Any Other Ethnic Category"),
                             Coding(code = "17", display = "Gypsy or Irish Traveller"),
                             Coding(code = "18", display = "Arab"),
@@ -56,7 +61,7 @@ class OrganDonationReferenceDataBuilder {
                             Coding(code = "88", display = "Not Reported"))
             )
 
-            Serenity.setSessionVariable("ReferenceEthnicities")
+            Serenity.setSessionVariable(ORGAN_DONATION_REFERENCE_ETHNICITIES)
                     .to(ethnicitiesResource.concept.map { concept -> concept.display })
 
             return OrganDonationSuccessResponse(

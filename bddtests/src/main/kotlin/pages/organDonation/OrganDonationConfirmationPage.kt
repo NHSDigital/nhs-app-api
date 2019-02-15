@@ -12,6 +12,7 @@ open class OrganDonationConfirmationPage : OrganDonationBasePage() {
     override fun assertDisplayed() {
         waitForSpinnerToDisappear()
         title.assertIsVisible()
+        amendDecisionLink.assertIsVisible()
     }
 
     override val titleText: String = "Your decision"

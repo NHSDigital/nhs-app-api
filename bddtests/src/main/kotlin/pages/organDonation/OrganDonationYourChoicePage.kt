@@ -9,7 +9,7 @@ open class OrganDonationYourChoicePage : OrganDonationBasePage() {
     override val titleText: String = "Your choice"
 
     val radioButtons by lazy {
-        RadioButtons.create(this,  "//div[input][label]")
+        RadioButtons.create(this)
     }
 
     private val expectedOptions by lazy {

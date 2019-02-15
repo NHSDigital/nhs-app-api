@@ -10,28 +10,18 @@
       <p :class="$style.messageText">
         {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
     </div>
-    <div v-else>
-      <div v-if="hasExistingDecision">
-        <your-decision :decision="decision"
-                       :decision-details="decisionDetails"
-                       header-key="organDonation.registered.yourDecision.subheader"/>
-        <div v-if="hasExistingOptIn">
-          <decision-details
-            v-if="hasSomeOrgans"
-            :choices="choices"/>
-        </div>
+    <div v-else-if="hasExistingDecision">
+      <your-decision :decision="decision"
+                     :decision-details="decisionDetails"
+                     header-key="organDonation.registered.yourDecision.subheader"/>
+      <div v-if="hasExistingOptIn">
+        <decision-details
+          v-if="hasSomeOrgans"
+          :choices="choices"/>
       </div>
-      <div v-else>
-        <div :class="$style.info">
-          <h2>{{ $t('organDonation.register.subheader') }}</h2>
-        </div>
-        <div :class="$style['flexbox-container']">
-          <organ-donation-button id="yes-button" :decision="noDecision"/>
-          <div :class="$style['divider']"/>
-          <organ-donation-button id="no-button" :decision="yesDecision"/>
-        </div>
-      </div>
+      <amend-decision-link :class="$style.amendDecision"/>
     </div>
+    <make-decision v-else />
     <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep]">
       <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
       <span>0300 123 2323</span>
@@ -41,27 +31,26 @@
 
 <script>
 import get from 'lodash/fp/get';
+import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
-import GenericButton from '@/components/widgets/GenericButton';
+import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
   DECISION_APPOINTED_REP,
   DECISION_OPT_IN,
-  DECISION_OPT_OUT,
   DECISION_UNKNOWN,
   STATE_CONFLICTED,
 } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   components: {
+    AmendDecisionLink,
     DecisionDetails,
-    GenericButton,
+    MakeDecision,
     MessageText,
     MessageDialog,
-    OrganDonationButton,
     YourDecision,
   },
   async asyncData({ store }) {
@@ -90,7 +79,7 @@ export default {
       return this.decision !== DECISION_UNKNOWN;
     },
     hasExistingOptIn() {
-      return this.decision === this.yesDecision;
+      return this.decision === DECISION_OPT_IN;
     },
     hasSomeOrgans() {
       return !!(
@@ -98,20 +87,15 @@ export default {
         get('$store.state.organDonation.originalRegistration.decisionDetails.all')(this) === false
       );
     },
-    noDecision() {
-      return DECISION_OPT_OUT;
-    },
     showConflictedDecisionFound() {
       return this.state === STATE_CONFLICTED && this.decision === DECISION_UNKNOWN;
     },
     state() {
       return this.$store.state.organDonation.originalRegistration.state;
     },
-    yesDecision() {
-      return DECISION_OPT_IN;
-    },
   },
   created() {
+    this.$store.dispatch('organDonation/amendCancel');
     this.$store.dispatch('organDonation/setAdditionalDetails', { ethnicityId: '', religionId: '' });
     this.$store.dispatch('organDonation/resetAcceptanceChecks');
   },
@@ -119,8 +103,12 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/buttons";
 @import "../../style/info";
+@import "../../style/spacings";
+
+.amendDecision {
+  margin-bottom: $three;
+}
 
 .info {
   &.appointedRep {
@@ -128,13 +116,5 @@ export default {
       padding-bottom: 0;
     }
   }
-}
-
-.flexbox-container {
-  display: flex;
-}
-
-.divider {
-  margin: 5px;
 }
 </style>

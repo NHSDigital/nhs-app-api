@@ -134,6 +134,10 @@ const routes = {
     name: 'organ-donation-additional-details',
     path: '/organ-donation/additional-details',
   },
+  ORGAN_DONATION_AMEND: {
+    name: 'organ-donation-amend',
+    path: '/organ-donation/amend',
+  },
   ORGAN_DONATION_FAITH: {
     name: 'organ-donation-faith',
     path: '/organ-donation/faith',
@@ -223,6 +227,7 @@ export const {
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
+  ORGAN_DONATION_AMEND,
   ORGAN_DONATION_FAITH,
   ORGAN_DONATION_YOUR_CHOICE,
   ORGAN_DONATION_SOME_ORGANS,

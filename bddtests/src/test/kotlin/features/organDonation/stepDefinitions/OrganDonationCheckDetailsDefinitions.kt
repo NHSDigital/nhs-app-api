@@ -2,8 +2,7 @@ package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import models.KeyValuePair
-import net.serenitybdd.core.Serenity
+import mocking.data.organDonation.OrganDonationSerenityHelpers
 import pages.assertIsVisible
 import pages.organDonation.OrganDonationCheckDetailsPage
 import utils.SerenityHelpers
@@ -42,15 +41,15 @@ open class OrganDonationCheckDetailsDefinitions {
 
     @Then("^my specific organ donation choices are displayed on the Organ Donation Check Details page")
     fun mySpecificOrganDonationChoicesAreDisplayedOnTheOrganDonaitonCheckDetailsPage(){
-        val organsToDonate = Serenity.sessionVariableCalled<ArrayList<KeyValuePair<String, Boolean>>>(
-                ORGAN_DONATION_DECISION_SOME_ORGANS)
+        val organsToDonate =
+                OrganDonationSerenityHelpers.getOrganDonationDecisionSomeOrgansUpdated()
         organDonationCheckDetailsPage.yourDecisionModule.assertDecisionIsSome(organsToDonate)
     }
 
     @Then("^my ethnicity is recorded on the Organ Donation Check Details page")
     fun myEthnicityIsRecordedOnTheOrganDonationCheckDetailsPage() {
-        val patient = SerenityHelpers.getPatient()
-        organDonationCheckDetailsPage.assertEthnicity(patient.organDonationDemographics.ethnicity.value)
+        organDonationCheckDetailsPage.assertEthnicity(
+                OrganDonationSerenityHelpers.getOrganDonationDemographics().ethnicity.value)
     }
 
     @Then("^my ethnicity is recorded as not chosen on the Organ Donation Check Details page")
@@ -60,8 +59,8 @@ open class OrganDonationCheckDetailsDefinitions {
 
     @Then("^my religion is recorded on the Organ Donation Check Details page")
     fun myReligionIsRecordedOnTheOrganDonationCheckDetailsPage() {
-        val patient = SerenityHelpers.getPatient()
-        organDonationCheckDetailsPage.assertReligion(patient.organDonationDemographics.religion.value)
+        organDonationCheckDetailsPage.assertReligion(
+                OrganDonationSerenityHelpers.getOrganDonationDemographics().religion.value)
     }
 
     @Then("^my religion is recorded as not chosen on the Organ Donation Check Details page")
@@ -70,7 +69,7 @@ open class OrganDonationCheckDetailsDefinitions {
     }
 
     @Then("^my choice of '(.*)' to share my faith and beliefs is displayed on the Organ Donation Check Details page")
-    fun myChoiceToShareMyFaithAndBeliefsIsDisplayedOnTheOrganDonaitonCheckDetailsPage(option : String){
+    fun myChoiceToShareMyFaithAndBeliefsIsDisplayedOnTheOrganDonationCheckDetailsPage(option : String){
         organDonationCheckDetailsPage.faithAndBeliefsModule.assertChoice(option)
     }
 

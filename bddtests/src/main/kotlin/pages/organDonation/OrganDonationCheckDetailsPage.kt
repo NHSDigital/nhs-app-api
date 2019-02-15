@@ -1,7 +1,7 @@
 package pages.organDonation
 
+import mocking.data.organDonation.OrganDonationSerenityHelpers
 import models.Patient
-import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.sharedElements.CheckBoxElement
@@ -58,7 +58,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
     }
 
     fun clickSubmit() {
-        val optIn = Serenity.sessionVariableCalled<Boolean>("ORGAN_DONATION_DECISION_OPT_IN")
+        val optIn = OrganDonationSerenityHelpers.getIfOrganDonationDecisionIsOptIn()
         clickOnButtonContainingText(if (optIn) "Yes I want to be a donor" else "No I do not want to be a donor")
     }
 }

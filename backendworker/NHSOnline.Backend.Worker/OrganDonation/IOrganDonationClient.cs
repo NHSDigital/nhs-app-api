@@ -16,5 +16,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 UserSession userSession);
 
         Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData();
+
+        Task<OrganDonationResponse<RegistrationResponse>> PutUpdate(
+            RegistrationRequest request,
+            UserSession userSession);
     }
 }

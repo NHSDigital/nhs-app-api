@@ -1,13 +1,20 @@
 import cloneDeep from 'lodash/fp/cloneDeep';
+import get from 'lodash/fp/get';
+import isArray from 'lodash/fp/isArray';
 import mapKeys from 'lodash/fp/mapKeys';
+import set from 'lodash/fp/set';
+
 import {
+  CLONE_FROM_ORIGINAL,
   INIT,
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
+  RESET_REGISTRATION,
   SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
+  SET_AMENDING,
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
@@ -18,6 +25,19 @@ import {
 } from './mutation-types';
 
 export default {
+  [CLONE_FROM_ORIGINAL](state, paths) {
+    const lpaths = isArray(paths) ? paths : [paths];
+    const updated = lpaths.reduce((aggregate, path) => {
+      const original = get(path)(state.originalRegistration);
+      if (original === undefined) {
+        return aggregate;
+      }
+      const cloned = cloneDeep(original);
+      return set(path)(cloned, aggregate);
+    }, state.registration);
+
+    state.registration = updated;
+  },
   [INIT](state) {
     const blank = initialState();
     return mapKeys((key) => {
@@ -34,6 +54,9 @@ export default {
   [MAKE_DECISION](state, decision) {
     state.additionalDetails = initialState().additionalDetails;
     state.registration.decision = decision;
+  },
+  [RESET_REGISTRATION](state) {
+    state.registration = initialState().registration;
   },
   [SET_ALL_ORGANS](state, choice) {
     state.registration.decisionDetails =
@@ -57,6 +80,9 @@ export default {
           choices: initialState().registration.decisionDetails.choices,
         },
       };
+  },
+  [SET_AMENDING](state, value) {
+    state.isAmending = value;
   },
   [SET_STATE](state, responseState) {
     state.registration.state = responseState;

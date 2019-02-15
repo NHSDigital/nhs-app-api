@@ -161,6 +161,51 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             response.Body.Should().BeNull();
         }
 
+        [TestMethod]
+        public async Task PutUpdate_ReturnsValidResponse()
+        {
+            var expectedResponse = _fixture.Create<RegistrationResponse>();
+
+            _mockHttpHandler
+                .WhenOrganDonation(HttpMethod.Put, $"{RegistrationPath}/id")
+                .Respond(System.Net.Mime.MediaTypeNames.Application.Json,
+                    JsonConvert.SerializeObject(expectedResponse));
+
+            var updateRequest = new RegistrationRequest()
+            {
+                Id = "id"
+            };
+
+            var response = await _systemUnderTest.PutUpdate(updateRequest, _userSession);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.NotFound)]
+        public async Task PutUpdate_ReturnsError(HttpStatusCode errorCode)
+        {
+            var expectedResponse = _fixture.Create<OrganDonationErrorResponse>();
+
+            _mockHttpHandler
+                .WhenOrganDonation(HttpMethod.Put, $"{RegistrationPath}/id")
+                .Respond(errorCode, System.Net.Mime.MediaTypeNames.Application.Json,
+                    JsonConvert.SerializeObject(expectedResponse));
+
+            var updateRequest = new RegistrationRequest()
+            {
+                Id = "id"
+            };
+
+            var response = await _systemUnderTest.PutUpdate(updateRequest, _userSession);
+
+            response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(errorCode);
+            response.Body.Should().BeNull();
+        }
+
         public void Dispose()
         {
             _mockHttpHandler.Dispose();

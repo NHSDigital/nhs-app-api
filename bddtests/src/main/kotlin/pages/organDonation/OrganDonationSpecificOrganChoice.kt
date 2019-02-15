@@ -15,7 +15,7 @@ class OrganDonationSpecificOrganChoice(val title:String, page: HybridPageObject)
     }
 
     private val radioButtons by lazy {
-        RadioButtons.create(page, "//div[h3[text()=\"$title\"]]/div/div[input][label]" )}
+        RadioButtons.create(page, "//div[h3[text()=\"$title\"]]/div/label[input][div]" )}
 
     private val expectedOptions by lazy {
         arrayListOf(

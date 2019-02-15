@@ -9,8 +9,8 @@ import mocking.organDonation.models.OrganDonationRegistrationRequest
 import org.apache.http.HttpStatus
 import org.junit.Assert
 
-class OrganDonationSubmitDecisionBuilder(registration: OrganDonationRegistrationRequest)
-    : OrganDonationMappingBuilder("POST", relativePath = "/Registration") {
+class OrganDonationSubmitDecisionBuilder(registration: OrganDonationRegistrationRequest, method: String, path: String)
+    : OrganDonationMappingBuilder(method, relativePath = path) {
 
     init {
 
@@ -21,29 +21,24 @@ class OrganDonationSubmitDecisionBuilder(registration: OrganDonationRegistration
                 .andBody(mapOpt(registration.registration.decision), "contains")
     }
 
-    private fun mapOpt(decision: OrganDonationRegistrationDecision):String{
-        if(decision == OrganDonationRegistrationDecision.OptOut){
+    private fun mapOpt(decision: OrganDonationRegistrationDecision): String {
+        if (decision == OrganDonationRegistrationDecision.OptOut) {
             return "opt-out"
         }
         return "opt-in"
     }
 
-    fun respondWithSuccess(id :String): Mapping {
+    fun respondWithSuccess(id: String): Mapping {
         val responseBody = OrganDonationRegistrationResponse(id = id)
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(responseBody).build()
         }
     }
 
-    fun respondWithConflict(id :String) : Mapping {
-        val responseBody = OrganDonationRegistrationResponse(id = id,
-                issue = Issue(code = "",
-                        diagnostics = "conflict",
-                        details =
-                        CodeableConcept(
-                                arrayListOf(
-                                        Coding(code = ORGAN_DONATION_ERROR_CODE_CONFLICT.toString(),
-                                                display = "conflict")))))
+    fun respondWithConflict(id: String, errorCode: String): Mapping {
+        val responseBody = OrganDonationRegistrationResponse(
+                id = id,
+                issue = Issue(details = CodeableConcept(arrayListOf(Coding( errorCode,errorResponseCodingSystem)))))
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(responseBody).build()
         }

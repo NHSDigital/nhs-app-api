@@ -86,6 +86,8 @@ namespace NHSOnline.Backend.Support
             public const string GetOrganDonationAuditTypeRequest = "OrganDonation_Get_Request";
             public const string OrganDonationRegistrationAuditTypeResponse = "OrganDonation_Registration_Response";
             public const string OrganDonationRegistrationAuditTypeRequest = "OrganDonation_Registration_Request";
+            public const string OrganDonationUpdateAuditTypeResponse = "OrganDonation_Update_Response";
+            public const string OrganDonationUpdateAuditTypeRequest = "OrganDonation_Update_Request";
             public const string GetDemographicsAuditTypeRequest = "Demographics_Get_Request";
             public const string GetDemographicsAuditTypeResponse = "Demographics_Get_Response";
             public const string GetOrganDonationReferenceDataAuditTypeRequest = "OrganDonation_ReferenceData_Request";

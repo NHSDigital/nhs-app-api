@@ -73,6 +73,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         [TestMethod]
         [DataRow("10001")]
         [DataRow("10002")]
+        [DataRow("10201")]
+        [DataRow("10202")]
         public void MapOrganDonationResponse_WithConflictErrorCode_SetsIsConflictedFlag(string code)
         {
             var body = _fixture.Create<RegistrationResponse>();

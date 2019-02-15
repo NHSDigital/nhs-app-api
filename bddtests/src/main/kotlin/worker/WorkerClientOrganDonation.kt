@@ -5,6 +5,7 @@ import config.Config
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
+import org.apache.http.client.methods.HttpPut
 import org.apache.http.entity.StringEntity
 import worker.models.organdonation.OrganDonationRegistrationResponse
 import worker.models.organdonation.OrganDonationSearchResponse
@@ -34,4 +35,20 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
         return gson.fromJson<OrganDonationRegistrationResponse>(response,
          OrganDonationRegistrationResponse::class.java)
     }
+
+    fun putRegistration(registration: OrganDonationRegistrationRequest): OrganDonationRegistrationResponse {
+        val httpPut = HttpPut(config.pfsBackendUrl + WorkerPaths.organDonationConnection)
+
+        val jsonRequest = gson.toJson(registration)
+        val entity = StringEntity(jsonRequest, "UTF-8")
+        entity.setContentType("application/json")
+        httpPut.entity = entity
+
+        val response = sender.sendAsyncAndGetResult(httpPut)
+        httpPut.releaseConnection()
+
+        return gson.fromJson<OrganDonationRegistrationResponse>(response,
+                OrganDonationRegistrationResponse::class.java)
+    }
+
 }

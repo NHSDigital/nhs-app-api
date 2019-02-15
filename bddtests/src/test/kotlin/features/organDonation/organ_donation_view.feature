@@ -1,5 +1,5 @@
 @organ-donation
-Feature: Organ Donation
+Feature: Organ Donation View
 
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to not donate
   their organs
@@ -33,7 +33,7 @@ Feature: Organ Donation
     And I am logged in
     And I navigate to the internal Organ Donation Page
     Then the Organ Donation Confirmation page is displayed
-    And the decision to opt in to organ donation with some organs is displayed
+    And the existing decision to opt in to organ donation with some organs is displayed
     Examples:
       | GP System |
       | EMIS      |
@@ -57,5 +57,3 @@ Feature: Organ Donation
       | EMIS      |
       | TPP       |
       | VISION    |
-
-    #Depending on timeline, either add an 'Amend' test here, or add 'App Rep' test into 'Amend'

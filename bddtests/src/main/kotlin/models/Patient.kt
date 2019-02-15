@@ -47,9 +47,7 @@ data class Patient(
                 redirectUrl = Config.instance.cidRedirectUri),
         val accessToken: String = "access_token",
         val tppUserSession: TppUserSession? = null,
-        val im1ConnectionTokenAsJson: Im1ConnectionToken? = null,
-        val organDonationDecision: String = "",
-        val organDonationDemographics : OrganDonationDemographics = OrganDonationDemographics()
+        val im1ConnectionTokenAsJson: Im1ConnectionToken? = null
 ) {
 
     fun formattedDateOfBirth(): String {
@@ -179,10 +177,7 @@ data class Patient(
                 accountId = "4140044939",
                 linkageKey = "vVGO8bgV6fvPb",
                 userPatientLinkToken = "gpSWtREiH9499bPzix8v5b",
-                im1ConnectionTokenAsJson = montelFryeIm1ConnectionToken,
-                organDonationDecision = "opt-out"
-
-
+                im1ConnectionTokenAsJson = montelFryeIm1ConnectionToken
         )
 
         val picaJones = Patient(
@@ -265,11 +260,11 @@ data class Patient(
                         "84df400000000000",
                         TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                         "84df400000000000"),
-                im1ConnectionTokenAsJson = kevinBarryIm1ConnectionToken,
-                organDonationDecision = "opt-out"
+                im1ConnectionTokenAsJson = kevinBarryIm1ConnectionToken
         )
 
         ////////// VISION PATIENTS /////////////
+
         val adreynCanonIm1ConnectionToken = Im1ConnectionToken(
                 im1CacheKey = "aHQMSopfOJlA5vk4zLJJfKEynO8ApadWcwZExxmhfXll0Eahv" +
                         "bnqSg6GEL6h2vjze3egwyTNIp68Q5GT5o3CAg==",
@@ -304,11 +299,11 @@ data class Patient(
                 patientId = "1017",
                 accountId = "104969",
                 linkageKey = "kWWG9kHfNMSjm",
-                im1ConnectionTokenAsJson = adreynCanonIm1ConnectionToken,
-                organDonationDecision = "opt-out"
+                im1ConnectionTokenAsJson = adreynCanonIm1ConnectionToken
         )
 
         ////////// MICROTEST PATIENTS /////////////
+
         val eldsonBuleck = Patient(
                 title = "Mr",
                 firstName = "Eldson",
@@ -332,10 +327,8 @@ data class Patient(
                 patientId = "",
                 accountId = "MICROTEST_ACCOUNT_ID",
                 linkageKey = "MICROTEST_LINKAGE_KEY",
-                im1ConnectionTokenAsJson = Im1ConnectionToken(),
-                organDonationDecision = "opt-out"
+                im1ConnectionTokenAsJson = Im1ConnectionToken()
         )
-
 
         fun formatNHSNumber(nhsNumber: String): String {
             val number = nhsNumber.trim().replace(" ", "")
@@ -354,6 +347,5 @@ data class Patient(
         private const val firstNHSNumberFormattingBreak = 3
         private const val secondNHSNumberFormattingBreak = 6
         private const val finalNHSNumberBreak = 10
-
     }
 }

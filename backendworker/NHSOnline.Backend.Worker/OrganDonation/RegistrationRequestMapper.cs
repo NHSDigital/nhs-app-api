@@ -49,6 +49,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
             var registrationRequest = new RegistrationRequest
             {
+                Id = source.Registration.Identifier,
                 EthnicCategory = MapConcept(source.AdditionalDetails.EthnicityId),
                 Address = MapList(_addressMapper.Map(source.Registration.AddressFull, source.Registration.Address)),
                 BirthDate = source.Registration.DateOfBirth?.ToString(DateFormat, CultureInfo.InvariantCulture),

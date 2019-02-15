@@ -58,7 +58,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             var organDonationReferenceDataResponse = _fixture.Create<OrganDonationReferenceDataResponse>();
             var newResult = new OrganDonationReferenceDataResult.SuccessfullyRetrieved(organDonationReferenceDataResponse);
             
-            _mockOrganDonationService.Setup(x => x.GetReferenceData())
+            _mockOrganDonationService
+                .Setup(x => x.GetReferenceData())
                 .Returns(Task.FromResult((OrganDonationReferenceDataResult) newResult));
 
             // Act
@@ -78,7 +79,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationReferenceDataResult.Timeout();
 
-            _mockOrganDonationService.Setup(x => x.GetReferenceData())
+            _mockOrganDonationService
+                .Setup(x => x.GetReferenceData())
                 .Returns(Task.FromResult((OrganDonationReferenceDataResult) newResult));
 
             // Act
@@ -99,7 +101,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationReferenceDataResult.UpstreamError();
 
-            _mockOrganDonationService.Setup(x => x.GetReferenceData())
+            _mockOrganDonationService
+                .Setup(x => x.GetReferenceData())
                 .Returns(Task.FromResult((OrganDonationReferenceDataResult) newResult));
 
             // Act
@@ -121,7 +124,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.OrganDonation
             // Arrange
             var newResult = new OrganDonationReferenceDataResult.SystemError();
 
-            _mockOrganDonationService.Setup(x => x.GetReferenceData())
+            _mockOrganDonationService
+                .Setup(x => x.GetReferenceData())
                 .Returns(Task.FromResult((OrganDonationReferenceDataResult) newResult));
 
             // Act

@@ -1,11 +1,14 @@
 import actions from '@/store/modules/organDonation/actions';
 import {
+  CLONE_FROM_ORIGINAL,
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
+  RESET_REGISTRATION,
   SET_ACCURACY_ACCEPTANCE,
   SET_ADDITIONAL_DETAILS,
   SET_ALL_ORGANS,
+  SET_AMENDING,
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
   SET_REGISTRATION_ID,
@@ -29,6 +32,10 @@ const createHttp = ({
     jest
       .fn()
       .mockImplementation(() => Promise.resolve({ identifier, state })),
+  putV1PatientOrgandonation:
+    jest
+      .fn()
+      .mockImplementation(() => Promise.resolve({ identifier, state })),
 });
 
 describe('organ donation actions', () => {
@@ -47,6 +54,57 @@ describe('organ donation actions', () => {
         return $http;
       },
     };
+  });
+
+  describe('amendStart', () => {
+    beforeEach(() => {
+      actions.amendStart({
+        commit,
+        state: {},
+      });
+    });
+
+    it('will commit a value of "true" to "SET_AMENDING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_AMENDING, true);
+    });
+
+    it('will commit "RESET_REGISTRATION"', () => {
+      expect(commit).toHaveBeenCalledWith(RESET_REGISTRATION);
+    });
+
+    it('will update the registration with data from the original registration', () => {
+      expect(commit).toHaveBeenCalledWith(CLONE_FROM_ORIGINAL, [
+        'identifier',
+        'nameFull',
+        'nhsNumber',
+        'name',
+        'gender',
+        'dateOfBirth',
+        'addressFull',
+        'address',
+        'emailAddress',
+      ]);
+    });
+  });
+
+  describe('amendCancel', () => {
+    beforeEach(() => {
+      actions.amendCancel({ commit, state: {} });
+    });
+
+    it('will commit a value of "false" to "SET_AMENDING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_AMENDING, false);
+    });
+  });
+
+  describe('cloneFromOriginal', () => {
+    beforeEach(() => {
+      actions.cloneFromOriginal({ commit }, 'identifier');
+    });
+
+    it('will commit the CLONE_FROM_ORIGINAL mutation passing the received path', () => {
+      expect(commit).toHaveBeenCalledWith(CLONE_FROM_ORIGINAL, 'identifier');
+    });
   });
 
   describe('toggleAccuracyAcceptance', () => {
@@ -169,6 +227,50 @@ describe('organ donation actions', () => {
 
     it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {
       expect(commit).toHaveBeenCalledWith(SET_REGISTRATION_ID, expectedIdentifier);
+    });
+
+    it('will commit the UPDATE_ORIGINAL_REGISTRATION mutation type', () => {
+      expect(commit).toHaveBeenCalledWith(UPDATE_ORIGINAL_REGISTRATION);
+    });
+  });
+
+  describe('putRegistration', () => {
+    let state;
+    let expectedIdentifier;
+    let expectedState;
+
+    beforeEach(async () => {
+      expectedIdentifier = '111';
+      expectedState = STATE_OK;
+      $http = createHttp({
+        result,
+        referenceData,
+        identifier: expectedIdentifier,
+        state: expectedState,
+      });
+      state = {
+        additionalDetails: 'additional details',
+        registration: { nhsNumber: '12345' },
+      };
+
+      await actions.putRegistration({ commit, state });
+    });
+
+    it('will put to the `putV1PatientOrgandonation` endpoint', () => {
+      expect($http.putV1PatientOrgandonation).toHaveBeenCalledWith({
+        organDonationRegistrationRequest: {
+          additionalDetails: state.additionalDetails,
+          registration: state.registration,
+        },
+      });
+    });
+
+    it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {
+      expect(commit).toHaveBeenCalledWith(SET_REGISTRATION_ID, expectedIdentifier);
+    });
+
+    it('will commit the returned state using the SET_STATE mutation type', () => {
+      expect(commit).toHaveBeenCalledWith(SET_STATE, expectedState);
     });
 
     it('will commit the UPDATE_ORIGINAL_REGISTRATION mutation type', () => {

@@ -48,12 +48,10 @@ class OrganDonationLookupRegistrationBuilder(patient: Patient)
 
     fun respondWithConflictError() : Mapping {
         val responseBody = Issue(
-                "duplicate",
-                CodeableConcept(
+                details = CodeableConcept(
                         listOf(Coding(
                                 errorResponseCodingSystem,
-                                ORGAN_DONATION_ERROR_CODE_CONFLICT.toString()))),
-                "Conflict")
+                                ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT.toString()))))
         return respondWith(HttpStatus.SC_CONFLICT) {
             andJsonBody(responseBody).build()
         }

@@ -1,15 +1,14 @@
 <template>
-  <div :class="$style['radio-button-label']" tabindex="0" @keypress="onKeyDown">
+  <label :class="$style['radio-button-label']" :for="name + '-' + value"
+         :aria-labelledby="aLabelledBy" tabindex="0" @keypress="onKeyDown">
     <radio-button-icon :selected="isSelected" :id="value"/>
     <input :id="name + '-' + value" :value="value" :name="name"
            :checked="model === value" tabindex="-1" type="radio" @change="selected">
-    <label :for="name + '-' + value"
-           :aria-labelledby="aLabelledBy"
-           :class="$style['radio-label']">
+    <div>
       <span v-if="label">{{ label }}</span>
       <slot/>
-    </label>
-  </div>
+    </div>
+  </label>
 </template>
 
 <script>
@@ -68,8 +67,7 @@ export default {
 @import '../../style/forms';
 @import '../../style/radiobutton';
 
-.radio-label {
+.radio-button-label {
   font-weight: normal;
-
 }
 </style>

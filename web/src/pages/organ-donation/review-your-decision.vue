@@ -125,17 +125,16 @@ export default {
     this.$store.dispatch('organDonation/resetAcceptanceChecks');
   },
   methods: {
-    clickSubmit() {
+    async clickSubmit() {
       this.submitAttempted = true;
 
       if (this.showErrors) {
         window.scrollTo(0, 0);
         return;
       }
-      this.confirmTheRegistration();
-    },
-    async confirmTheRegistration() {
-      await this.$store.dispatch('organDonation/postRegistration');
+
+      const action = this.$store.state.organDonation.isAmending ? 'put' : 'post';
+      await this.$store.dispatch(`organDonation/${action}Registration`);
       this.$router.push(ORGAN_DONATION_VIEW_DECISION.path);
     },
   },

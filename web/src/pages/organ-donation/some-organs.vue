@@ -43,6 +43,7 @@ import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
 import { ORGAN_DONATION_FAITH } from '@/lib/routes';
+import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import includes from 'lodash/fp/includes';
 
@@ -65,6 +66,17 @@ export default {
       choices: Object.keys(initialState().registration.decisionDetails.choices),
       activeErrorMessage: '',
     };
+  },
+  asyncData({ store }) {
+    if (
+      store.state.organDonation.isAmending &&
+      isDefault({
+        path: 'registration.decisionDetails.choices',
+        state: store.state.organDonation,
+      })
+    ) {
+      store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.choices');
+    }
   },
   computed: {
     areAllSelected() {

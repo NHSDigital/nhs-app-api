@@ -196,12 +196,32 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         [TestMethod]
         public void MapToRegistrationRequest_WithOptOut_MapsCorrectly()
         {
+            SuccessfulOptOutTest();
+        }
+
+        [TestMethod]
+        public void MapToRegistrationRequest_WithId_MapsCorrectly()
+        {
+            var result = SuccessfulOptOutTest("OrganDonationIdentifier");
+            result.Id.Should().Be("OrganDonationIdentifier");
+        }
+
+        [TestMethod]
+        public void MapToRegistrationRequest_WithoutId_MapsCorrectly()
+        {
+            var result = SuccessfulOptOutTest(null);
+            result.Id.Should().BeNullOrEmpty();
+        }
+
+        private RegistrationRequest SuccessfulOptOutTest(string organDonationId = null)
+        {
             // Arrange
             var response = new OrganDonationRegistrationRequest
             {
                 AdditionalDetails = _fixture.Create<AdditionalDetails>(),
                 Registration = new OrganDonationRegistration
                 {
+                    Identifier = organDonationId,
                     Decision = Decision.OptOut,
                     FaithDeclaration = FaithDeclaration.Yes,
                     Gender = "male",
@@ -266,6 +286,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             result.ReligiousAffiliation.Coding.Should().ContainSingle().Which.Code.Should()
                 .Be(response.AdditionalDetails.ReligionId);
             result.Identifier.Should().ContainSingle().Which.Value.Should().Be(response.Registration.NhsNumber);
+
+            return result;
         }
     }
 }
