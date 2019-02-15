@@ -8,23 +8,27 @@
       </span>
     </p>
     <p v-if="dateOfBirth">
-      <strong :class="[isDesktopWeb ? $style.fieldName : undefined]" >Date of birth:</strong>
-      <span :class="[isDesktopWeb ? $style.fieldValue : undefined]" data-sid="user-date-of-birth">
+      <strong :class="[isDesktopWeb && $style.fieldName]" >Date of birth:</strong>
+      <span :class="[isDesktopWeb && $style.fieldValue]" data-sid="user-date-of-birth">
         {{ dateOfBirth | longDate }}
       </span>
     </p>
     <p v-if="nhsNumber">
-      <strong :class="[isDesktopWeb ? $style.fieldName : undefined]">NHS number:</strong>
-      <span :class="[isDesktopWeb ? $style.fieldValue : undefined]" data-sid="user-nhs-number">
-        {{ nhsNumber }}
-      </span>
+      <strong :class="[isDesktopWeb && $style.fieldName]">NHS number:</strong>
+      <generic-voice-over-text-split :class="[!$store.state.device.isNativeApp
+                                     && $style.fieldValue]"
+                                     :text="nhsNumber"
+                                     :data-sid="'user-nhs-number'"/>
     </p>
   </div>
 </template>
 
 <script>
+import GenericVoiceOverTextSplit from './widgets/GenericVoiceOverTextSplit';
+
 export default {
   name: 'WelcomeSection',
+  components: { GenericVoiceOverTextSplit },
   props: {
     name: {
       type: String,
