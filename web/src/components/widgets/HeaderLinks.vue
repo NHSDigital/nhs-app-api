@@ -33,7 +33,7 @@ export default {
     font-family: $default-web;
     font-weight: 100;
     float: right;
-    display: inline-block;
+    display: none;
     margin-top: 1.5em;
     :focus {
       outline-color: $focus_highlight;
@@ -42,7 +42,7 @@ export default {
     }
 
     span {
-      margin: 0em;
+      margin: 0;
 
       a {
         @include account;
@@ -74,8 +74,8 @@ export default {
       }
     }
 
-   @include phone-and-below {
-    display: none;
+   @include tablet-and-above {
+     display: inline-block;
    }
   }
 

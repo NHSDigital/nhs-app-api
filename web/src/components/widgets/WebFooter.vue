@@ -59,12 +59,11 @@ export default {
 
     ul li,
     ol li {
-      /*margin: 0;*/
       vertical-align: middle;
     }
 
     .footer-content {
-      max-width: 960px;
+      @include main-container-width;
       margin: 0 auto;
       padding-left: 1em;
 
@@ -113,9 +112,9 @@ export default {
       }
     }
 
-    @media (min-width: 40.0625em) {
+    @include tablet-and-above {
       .footer-content {
-        margin-left: 32px;
+        margin-left: 2em;
       }
 
       .footer-content ul li {
@@ -125,7 +124,7 @@ export default {
       }
     }
 
-    @media (min-width: 1024px) {
+    @include desktop {
       .footer-content {
         margin: 0 auto;
       }

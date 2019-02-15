@@ -99,7 +99,8 @@ export default {
    }
   }
 
-  @media (min-width: 48.0625em){
+
+  @include tablet-and-above {
    .rule {
     margin-right: 0;
     padding-left: 1em;
@@ -107,10 +108,10 @@ export default {
    }
   }
 
-  @media (min-width: 1024px) {
-   .header, .navigationList, .mainContentContainer {
-    margin: 0 auto;
-   }
+  @include desktop {
+    .header, .navigationList, .mainContentContainer {
+      margin: 0 auto;
+    }
   }
  }
 

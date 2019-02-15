@@ -48,15 +48,6 @@ export default {
         right: 0;
         z-index: 4;
         box-sizing: border-box;
-
-        @include tablet() {
-        }
-
-        @include phone {
-        }
-
-        @include phone-and-below() {
-        }
     }
 
   div {

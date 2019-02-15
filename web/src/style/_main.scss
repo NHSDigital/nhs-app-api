@@ -3,6 +3,8 @@
 @import './textstyles';
 @import './screensizes';
 @import './fonts';
+@import './webshared';
+
 /** APP */
 html {
   font: $apple-system-body;
@@ -43,7 +45,7 @@ $survey_open: 5.5em;
 $survey_closed: 1.5em;
 
 main.content {
-  max-width: 960px;
+  @include main-container-width;
   margin: 0 1em;
   box-sizing: border-box;
   width:  auto;
@@ -92,7 +94,7 @@ main.content {
 }
 
 
-@media (min-width: 48.0625em) {
+@include tablet-and-above {
 	main.content {
 		margin-left: 1em;
 	}
@@ -102,7 +104,7 @@ main.content {
 	}
 }
 
-@media (min-width: 1024px) {
+@include desktop {
 	main.content > div {
 	        padding: 0 1em;
 	}

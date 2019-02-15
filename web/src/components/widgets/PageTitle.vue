@@ -23,7 +23,7 @@ export default {
 
 .pageTitle {
  display: block;
- max-width: 960px;
+ @include main-container-width;
 
  .homePageTitle {
   color: #212B32;

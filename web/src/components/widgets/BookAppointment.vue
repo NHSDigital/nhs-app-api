@@ -49,17 +49,17 @@ export default {
  @import '../../style/screensizes';
  @import '../../style/textstyles';
  @import "../../style/fonts";
+ @import '../../style/desktopcomponentsizes';
 
  .appointmentBooking {
+  @include main-container-width;
   display: block;
   margin: 0 auto;
-  max-width: 960px;
   padding: 1em 16px 16px;
 
   .bookingButton {
    @include button;
    box-sizing: border-box;
-   padding: 0.625em;
    background-color: $nhs_blue;
    border: none;
    border-radius: 0.125em;
@@ -68,8 +68,7 @@ export default {
    cursor: pointer;
    width: auto;
    min-width: 16.875em;
-   padding-left: 2em;
-   padding-right: 2em;
+   padding: 0.625em 2em;
    max-width: 960px;
    display: block;
   }

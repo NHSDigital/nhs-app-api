@@ -52,5 +52,6 @@ export default {
 </script>
 
 <style module scoped lang='scss'>
-@import '../../style/_buttons';
+@import '../../style/buttons';
+@import '../../style/desktopcomponentsizes';
 </style>

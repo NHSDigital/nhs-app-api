@@ -119,4 +119,5 @@ export default {
 @import '../../style/listmenu';
 @import '../../style/buttons';
 @import '../../style/datasharing';
+@import '../../style/desktopcomponentsizes';
 </style>

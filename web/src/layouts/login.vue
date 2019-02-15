@@ -153,21 +153,21 @@ export default {
 }
 
 .banner-container > div {
-  margin: 0 16px;
-  max-width: 960px;
+  margin: 0 1em;
+  @include main-container-width;
 }
 
-@media (min-width: 48.0625em) {
+@include tablet-and-above {
   .banner-container > div {
-    margin: 0 32px;
-    padding: 0 16px;
+    margin: 0 2em;
+    padding: 0 1em;
   }
 }
 
-@media (min-width: 1024px) {
+@include desktop {
   .banner-container > div {
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 0 1em;
   }
 }
 
@@ -238,20 +238,20 @@ export default {
 }
 
 section {
-  max-width: 960px;
+  @include main-container-width;
   display: block;
   margin: 0 auto;
   padding: 0 16px 2.5em;
 }
 
 
-@media (min-width: 48.0625em) {
+@include tablet-and-above {
   section {
     margin: 0 32px;
   }
 }
 
-@media (min-width: 1024px) {
+@include desktop {
   section  {
     margin: 0 auto;
   }

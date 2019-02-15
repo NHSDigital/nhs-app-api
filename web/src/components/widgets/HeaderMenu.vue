@@ -161,16 +161,6 @@ export default {
       box-shadow: inset 0 0 0 4px $focus_highlight;
     }
 
-    @include tablet-and-above() {
-      & {
-        display: block;
-      }
-
-     .additionalMenuItem{
-      display: none;
-     }
-    }
-
     .menu-nojs-caption {
       display: none;
     }
@@ -307,6 +297,16 @@ export default {
             }
           }
         }
+      }
+    }
+
+    @include tablet-and-above() {
+      & {
+        display: block;
+      }
+
+      .additionalMenuItem{
+        display: none;
       }
     }
   }

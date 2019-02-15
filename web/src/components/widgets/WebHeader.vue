@@ -142,6 +142,7 @@ export default {
   @import '../../style/screensizes';
   @import '../../style/textstyles';
   @import "../../style/fonts";
+  @import "../../style/desktopcomponentsizes";
 div {
  header {
   background: $nhs_blue;
@@ -157,7 +158,7 @@ div {
   min-width: 300px;
 
   .header-content {
-   max-width: 960px;
+   @include main-container-width;
    display: block;
    margin: 0 auto;
    padding: 0 16px;
@@ -185,13 +186,13 @@ div {
    }
   }
 
-  @media (min-width: 48.0625em) {
+   @include tablet-and-above {
    .header-content {
     margin-left: 32px;
    }
   }
 
-  @media (min-width: 1024px) {
+  @include desktop {
    .header-content {
     margin: 0 auto;
    }
@@ -234,18 +235,18 @@ div {
 
  .headerLowerSection{
   display: block;
-  max-width: 960px;
+  @include main-container-width;
   width: auto;
   position: relative;
  }
 
- @media (min-width: 48.0625em) {
+  @include tablet-and-above {
   .headerLowerSection{
-   margin-left: 32px;
+   margin-left: 2em;
   }
  }
 
- @media (min-width: 1024px) {
+ @include desktop {
   .headerLowerSection{
    margin: 0 auto;
   }

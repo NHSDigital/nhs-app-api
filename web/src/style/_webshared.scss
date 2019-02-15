@@ -1,5 +1,6 @@
 @import './fonts';
 @import './colours';
+@import './desktopcomponentsizes';
 
 .web-page-title {
   font-family: $frutiger-roman;
@@ -13,8 +14,8 @@
 }
 
 .web-desktop {
-  max-width: 960px;
-  padding: 0 16px;
+  @include main-container-width;
+  padding: 0 1em;
 
   font-family: $default;
   background-color: #f0f4f5;

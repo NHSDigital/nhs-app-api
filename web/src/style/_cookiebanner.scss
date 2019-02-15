@@ -1,5 +1,7 @@
 @import './colours';
 @import './textstyles';
+@import './webshared';
+@import './screensizes';
 
 .cookie-banner {
   background: $nhs_blue_med;
@@ -68,7 +70,7 @@
   }
 
   .cookie-banner-panel {
-    max-width: 960px;
+    @include main-container-width;
     position: relative;
   }
 
@@ -77,13 +79,13 @@
   }
 
 
-  @media (min-width: 48.0625em) {
+  @include tablet-and-above {
     .cookie-banner-panel {
       margin: 0 32px;
     }
   }
 
-  @media (min-width: 1024px) {
+  @include desktop {
     .cookie-banner-panel  {
       margin: 0 auto;
     }

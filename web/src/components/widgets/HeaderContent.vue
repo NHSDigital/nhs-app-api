@@ -96,7 +96,7 @@ export default {
   box-sizing: border-box;
 
   .header-content {
-   max-width: 960px;
+   @include main-container-width;
    display: block;
    margin: 0 auto;
    padding: 0 16px;

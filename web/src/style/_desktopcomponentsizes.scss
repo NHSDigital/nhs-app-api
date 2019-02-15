@@ -1,0 +1,11 @@
+
+$main-container-width: 960px;
+$inner-container-width: 560px;
+
+@mixin main-container-width {
+  max-width: #{$main-container-width}
+}
+
+@mixin inner-container-width {
+  max-width: #{$inner-container-width}
+}
