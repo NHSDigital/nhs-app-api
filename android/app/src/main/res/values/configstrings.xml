@@ -15,7 +15,7 @@
     <string name="fidoPostRegResponsePath">/regResponse</string>
     <string name="morePath">more</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
-    <string name="myRecordPath">my-record-warning</string>
+    <string name="myRecordPath">my-record</string>
     <string name="symptomsPath">symptoms</string>
     <string name="appointmentsPath">appointments</string>
     <string name="prescriptionsPath">prescriptions</string>
