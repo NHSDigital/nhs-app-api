@@ -15,10 +15,13 @@
     </div>
     <no-ssr placeholder="">
       <div :class="$style.throttlingContent">
-        <analytics-tracked-tag v-if="showCheckFeaturesLink && isPracticeParticipating"
-                               :class="$style.checkFeaturesLink"
-                               :text="$t('login.checkWhatFeaturesYouCanUse')"
-                               :click-func="resetAndGoToGPFinder" tag="a">
+        <analytics-tracked-tag
+          v-if="showCheckFeaturesLink && isPracticeParticipating"
+          :class="[$style.checkFeaturesLink, !$store.state.device.isNativeApp && $style.desktopWeb]"
+          :text="$t('login.checkWhatFeaturesYouCanUse')"
+          :click-func="resetAndGoToGPFinder"
+          tag="a"
+          tabindex="0">
           {{ $t('login.checkWhatFeaturesYouCanUse') }}
         </analytics-tracked-tag>
         <div v-if="!isPracticeParticipating && this.$store.state.device.isNativeApp">

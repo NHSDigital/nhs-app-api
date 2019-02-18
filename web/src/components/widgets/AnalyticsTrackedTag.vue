@@ -1,5 +1,6 @@
 <template>
-  <component :id="id" :is="tag" :href="href" @click="trackClick($event);">
+  <component :id="id" :is="tag" :href="href" @click="trackClick($event);"
+             @keypress="onKeyDown($event)">
     <slot/>
   </component>
 </template>
@@ -74,6 +75,11 @@ export default {
         case 'A': return 'text_link'; break;
         case 'H2': return 'accordion'; break;
         default: return `unhandled_tag:${tagName}`; break;
+      }
+    },
+    onKeyDown(e) {
+      if (e.keyCode === 13) {
+        this.trackClick(e);
       }
     },
   },

@@ -123,7 +123,19 @@ header.logged {
     .checkFeaturesLink {
         cursor: pointer;
         text-decoration: underline;
+      &.desktopWeb {
+        display: inline-block;
+        font-family: $default-web;
+        font-weight: lighter;
+      }
     }
+
+  .checkFeaturesLink:focus{
+    outline-color: $focus_highlight;
+    box-shadow: 0 0 0 4px $focus_highlight;
+    box-sizing: content-box;
+    width: auto;
+  }
 }
 
 .loginMain {
