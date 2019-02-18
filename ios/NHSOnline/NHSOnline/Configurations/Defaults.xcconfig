@@ -37,3 +37,4 @@ CONFIGURATION_API_PATH = configuration?deviceName=iOS&nativeAppVersion=%@
 APP_STORE_SCHEME = itms-apps
 APP_STORE_URL = itunes.apple.com/app/
 APP_STORE_ID = id1388411277
+CID_URL_SUFFIX = signin.nhs.uk

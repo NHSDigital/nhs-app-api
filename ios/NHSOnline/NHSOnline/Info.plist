@@ -5,7 +5,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>So you can record your video</string>
 	<key>CidUrlSuffix</key>
-	<string>signin.nhs.uk</string>
+	<string>$(CID_URL_SUFFIX)</string>
 	<key>NSCameraUsageDescription</key>
 	<string>So you can take a photo of your I.D.</string>
 	<key>BiometricsAssertionScheme</key>
