@@ -47,7 +47,7 @@ Feature: Appointment Service with no Javascript
     And I have selected a time when multiple slots are available
     Then the Appointment Slot page is displayed
 
-    When I click the 'Back' link
+    When I click the 'Back' button
     Then the Available Appointments page is displayed
 
     When I have filtered such that there is one time displayed that represents multiple slots

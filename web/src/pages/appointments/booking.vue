@@ -53,17 +53,17 @@
       </div>
     </form>
 
-    <generic-button v-if="loadComplete && $store.state.device.isNativeApp"
-                    id="back-to-appointments"
-                    :class="[$style.button, $style.grey]"
-                    @click.stop.prevent="goBack()">
-      {{ $t('appointments.booking.backButtonText') }}
-    </generic-button>
-
-    <desktopGenericBackLink
-      v-if="loadComplete && !$store.state.device.isNativeApp"
-      :path="appointmentsPath"
-      :button-text="'appointments.booking.desktopBackButtonText'"/>
+    <form :action="appointmentsPath" method="get">
+      <div :class="[isDesktopWeb ? $style.desktopBackButtonPadding : undefined]">
+        <generic-button v-if="loadComplete"
+                        id="back-to-appointments"
+                        :class="[isDesktopWeb ? $style.desktopBackButton
+                        : [$style.button, $style.grey]]"
+                        @click.stop.prevent="goBack()">
+          {{ $t(getBackButtonText) }}
+        </generic-button>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -82,7 +82,6 @@ import SlotList from '@/components/appointments/booking/SlotList';
 import VueScrollTo from 'vue-scrollto';
 import { APPOINTMENTS, APPOINTMENT_BOOKING } from '@/lib/routes';
 import { noJsParameterName } from '@/lib/noJs';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 const FILTER_PARAMETERS = [
   'clinician',
@@ -106,7 +105,6 @@ const hasLoaded = get('state.availableAppointments.hasLoaded');
 
 export default {
   components: {
-    DesktopGenericBackLink,
     MessageDialog,
     MessageText,
     MessageList,
@@ -182,6 +180,11 @@ export default {
     noJsInputName() {
       return noJsParameterName;
     },
+    getBackButtonText() {
+      return (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios') ? 'appointments.booking.desktopBackButtonText'
+        : 'appointments.booking.backButtonText';
+    },
   },
   asyncData({ store, req }) {
     const query = req ? qs.parse(req.url.substr(req.url.indexOf('?') + 1)) : undefined;
@@ -241,5 +244,39 @@ export default {
 
 div:focus {
   outline: none !important;
+}
+desktopBackButtonPadding {
+ padding-left: 1em;
+}
+.desktopBackButton {
+ font-family: $default-web;
+ color: $nhs_blue;
+ font-size: 1.125em;
+ line-height: 1.125em;
+ font-weight: normal;
+ vertical-align: middle;
+ cursor: pointer;
+ display: inline-block;
+ border: none;
+ background: none;
+ outline: none;
+ text-decoration: underline;
+ margin-top: 2em;
+ margin-bottom: 2em;
+}
+
+.desktopBackButton:focus{
+ box-sizing: content-box;
+outline-color: $focus_highlight;
+box-shadow: 0 0 0 4px $focus_highlight;
+ outline-width: 2em;
+}
+.desktopBackButton:hover{
+ background: #ffcd60;
+ //box-shadow: 0 0 0 4px #ffcd60;
+ outline: none;
+ box-sizing: border-box;
+ text-decoration: underline;
+ background-clip: content-box;
 }
 </style>

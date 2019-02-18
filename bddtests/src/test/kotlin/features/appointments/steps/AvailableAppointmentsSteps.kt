@@ -20,7 +20,7 @@ import kotlin.collections.set
 open class AvailableAppointmentsSteps {
 
     private val pageHeader = "Book new appointment"
-    private val backComponentText = "Back"
+    private val backButtonText = "Back"
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
     lateinit var headerNative: HeaderNative
@@ -69,12 +69,7 @@ open class AvailableAppointmentsSteps {
 
     @Step
     fun clickOnBackButton() {
-        availableAppointmentsPage.clickOnButtonContainingText(backComponentText)
-    }
-
-    @Step
-    fun clickOnBackLink() {
-        availableAppointmentsPage.clickOnLinkContainingText(backComponentText)
+        availableAppointmentsPage.clickOnButtonContainingText(backButtonText)
     }
 
     @Step
