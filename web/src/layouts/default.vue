@@ -4,14 +4,16 @@
       <web-header ref="headerMenu"/>
     </div>
 
-    <main :class="[mainClass, isDesktopWeb ? [$style['main-container-desktop'], $style.desktopWeb]
+    <div :class="[isDesktopWeb ? [$style['main-container-desktop'], $style.desktopWeb]
     : $style.web]">
-      <spinner />
-      <connection-error />
-      <api-error />
-      <flash-message />
-      <nuxt/>
-    </main>
+      <main :class="mainClass">
+        <spinner />
+        <connection-error />
+        <api-error />
+        <flash-message />
+        <nuxt/>
+      </main>
+    </div>
 
     <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                 @onBarStatusChanged="setSurveyBarStatus"/>

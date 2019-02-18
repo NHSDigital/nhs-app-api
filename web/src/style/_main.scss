@@ -44,15 +44,15 @@ $survey_closed: 1.5em;
 
 main.content {
   max-width: 960px;
-  margin-right: 1em;
+  margin: 0 1em;
   box-sizing: border-box;
+  width:  auto;
+  display: block;
 
   &.web {
-	  width:  auto;
 	  margin: 1em;
   }
   &.desktopWeb {
-	  width:  100%;
 	  min-width: 300px;
   }
 
@@ -98,11 +98,15 @@ main.content {
 	}
 
 	main.content > div {
-		padding: 0 16px;
+		padding: 0 2em;
 	}
 }
 
 @media (min-width: 1024px) {
+	main.content > div {
+	        padding: 0 1em;
+	}
+
 	main.content {
 		margin: 0 auto;
 	}

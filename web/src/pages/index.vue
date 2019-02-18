@@ -71,7 +71,6 @@ export default {
 
   .mainContentContainer {
     max-width: 960px;
-    margin: 0 1em;
   }
 
   .webStyledSpacing {
