@@ -3,13 +3,16 @@
     <h2 :class="!$store.state.device.isNativeApp && $style.desktopWeb">
       {{ $t('appointments.index.past.header') }}</h2>
 
-    <appointment v-for="appointment in appointments"
-                 :class="[$style.past]"
-                 :key="appointment.id"
-                 :appointment="appointment"
-                 :cancellation-disabled="true"
-                 :show-cancellation-link="false"
-                 data-purpose="past-appointments" />
+    <div role="list">
+      <appointment v-for="appointment in appointments"
+                   :class="$style.past"
+                   :key="appointment.id"
+                   :appointment="appointment"
+                   :cancellation-disabled="true"
+                   :show-cancellation-link="false"
+                   data-purpose="past-appointments"
+                   role="listitem"/>
+    </div>
   </span>
 </template>
 

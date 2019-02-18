@@ -85,7 +85,7 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
         else "$parentToSlotDivRelativePath/"
         slot.time = parentContainer.findByXpath(relativePath + appointmentTimeXpath).text
         slot.session = parentContainer.findByXpath(relativePath + appointmentSessionNameXpath).text
-        slot.date = parentContainer.findByXpath(relativePath + appointmentDateXpath).text
+        slot.date = parentContainer.findByXpath(relativePath + appointmentDateXpath).text.trimEnd()
         slot.location = parentContainer.findByXpath(relativePath + appointmentLocationXpath).text
 
         if (areCliniciansExpected)
@@ -116,7 +116,7 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
     }
 }
 
-fun WebElementFacade.findByXpath( xpath: String): WebElementFacade {
+fun WebElementFacade.findByXpath(xpath: String): WebElementFacade {
     val elements = thenFindAll(xpath)
 
     if (!elements.any()) {

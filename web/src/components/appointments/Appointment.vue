@@ -1,7 +1,13 @@
 <template>
   <div :class="[$style.panel, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <h3 data-label="date">{{ formatDate(appointment.startTime) }}</h3>
-    <h4 data-label="start time">{{ formatTime(appointment.startTime) }}</h4>
+    <h3>
+      <span role="text">
+        <span :class="$style.date"
+              data-label="date">{{ formatDate(appointment.startTime) }}&nbsp;</span>
+        <span :class="$style.time"
+              data-label="start time">{{ formatTime(appointment.startTime) }}</span>
+      </span>
+    </h3>
     <hr aria-hidden="true">
     <p :class="$style.session"
        data-label="session name">
@@ -96,50 +102,71 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/panels";
 
-.cancel {
-  margin-top: 0.5em;
-}
-
- div {
+.panel {
   &.desktopWeb {
-   hr {
-    opacity: unset;
-   }
-
-   h3 {
-    font-family: $default-web;
-    display: block;
-    font-weight: lighter;
-    font-size: 1em;
-    line-height: 1.5em;
-   }
-
-   h4 {
-    font-family: $default-web;
-    font-weight: lighter;
-   }
-
-   p {
-    font-family: $default-web;
-    font-weight: lighter;
-    max-width: 540px;
-   }
-
-   p.person,
-   p.location,
-   p.cancel-disabled {
-     font-family: $default-web;
-     font-weight: lighter;
+    hr {
+      opacity: unset;
     }
 
-   a.cancel-link{
-     font-family: $default-web;
-     font-weight: normal;
+    h3 {
+      font-family: $default-web;
+      font-weight: lighter;
+      display: block;
+      font-size: 1em;
+      line-height: 1.5em;
+      span.time {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
     }
+
+    p {
+      font-family: $default-web;
+      font-weight: lighter;
+      max-width: 540px;
+    }
+
+    p.person,
+    p.location,
+    p.cancel-disabled {
+      font-family: $default-web;
+      font-weight: lighter;
+    }
+
+    a.cancel-link {
+      font-family: $default-web;
+      font-weight: normal;
+    }
+
     :visited {
-     color: #D40003;
-     outline-color: $focus_highlight;
+      color: #D40003;
+      outline-color: $focus_highlight;
     }
   }
- }
+
+  h3 {
+    padding-bottom: 0em;
+    padding-top: 0em;
+
+    span.date {
+      display: block;
+      padding-bottom: 0.5em;
+      padding-top: 0.5em;
+    }
+
+    span.time {
+      @include default_label;
+      letter-spacing: $kernel;
+      color: $light_grey;
+      font-size: 1.250em;
+      padding-bottom: 0.5em;
+      padding-top: 0em;
+    }
+  }
+
+  .cancel {
+    margin-top: 0.5em;
+  }
+}
+
 </style>

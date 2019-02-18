@@ -2,12 +2,15 @@
   <span>
     <h2>{{ $t('appointments.index.upcoming.header') }}</h2>
 
-    <appointment v-for="appointment in appointments"
-                 :class="[$style.upcoming]"
-                 :key="appointment.id"
-                 :appointment="appointment"
-                 :cancellation-disabled="cancellationDisabled"
-                 data-purpose="upcoming-appointments" />
+    <div role="list">
+      <appointment v-for="appointment in appointments"
+                   :class="$style.upcoming"
+                   :key="appointment.id"
+                   :appointment="appointment"
+                   :cancellation-disabled="cancellationDisabled"
+                   data-purpose="upcoming-appointments"
+                   role="listitem"/>
+    </div>
   </span>
 </template>
 
