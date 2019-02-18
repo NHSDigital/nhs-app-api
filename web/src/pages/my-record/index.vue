@@ -118,6 +118,7 @@ export default {
     },
   },
   updated() {
+    window.scrollTo(0, 0);
     if (this.hasAcceptedTerms && !this.hasLoaded) {
       this.$store.dispatch('myRecord/load');
     }

@@ -45,3 +45,18 @@ Feature: View My Medical Record Information - Warning
      Examples:
        |Service|
        |EMIS|
+
+    Scenario: An EMIS user returns to my record and sees the top of the my record page
+      Given the my record wiremocks are initialised for EMIS
+      And the GP Practice has enabled demographics functionality for EMIS
+      And the GP Practice has enabled allergies functionality and has a drug and non drug allergy record for VISION
+      When I am on the record warning page
+      Then I see the my record warning page
+      When I click agree and continue
+      Then I see the my medical record page
+      When I navigate away from the medical record page
+      Then I return to my medical record page
+      Then I see the my record warning page
+      When I click agree and continue
+      Then I see the my medical record page
+      And I see the top of my medical record page

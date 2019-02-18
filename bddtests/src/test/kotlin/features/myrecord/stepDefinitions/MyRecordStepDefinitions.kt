@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -18,6 +19,7 @@ import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.openqa.selenium.JavascriptExecutor
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
 import pages.myrecord.MyRecordInfoPage
@@ -278,5 +280,31 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun thenIAmRedirectedToTheMyRecordPage() {
         val redirectUrl = Config.instance.url + "/my-record"
         browser.shouldHaveUrl(redirectUrl)
+    }
+
+    @And("^I see the top of my medical record page$")
+    fun andISeeTheTopOfMyMedicalRecordPage(){
+        assertEquals(0L, getScrollPositionX())
+        assertEquals(0L, getScrollPositionY())
+    }
+
+    @When("^I navigate away from the medical record page$")
+    fun iNavigateAwayFromTheMedicalRecordPage() {
+        nav.select(NavBarNative.NavBarType.SYMPTOMS)
+    }
+
+    @Then("^I return to my medical record page$")
+    fun thenIReturnToMyMedicalRecordPage() {
+        nav.select(NavBarNative.NavBarType.MY_RECORD)
+    }
+
+    private fun getScrollPositionX(): Any {
+        val jsExecutor = myRecordInfoPage.driver as JavascriptExecutor
+        return jsExecutor.executeScript("return window.scrollX") as Any
+    }
+
+    private fun getScrollPositionY(): Any {
+        val jsExecutor = myRecordInfoPage.driver as JavascriptExecutor
+        return jsExecutor.executeScript("return window.scrollY") as Any
     }
 }
