@@ -34,24 +34,24 @@ class OrganDonationLookupRegistrationBuilder(patient: Patient)
     }
 
     fun respondWithNotFoundError() : Mapping {
-        val responseBody = Issue(
+        val responseBody = listOf(Issue(
                 "not-found",
                 CodeableConcept(
                         listOf(Coding(
                                 errorResponseCodingSystem,
                                 ORGAN_DONATION_ERROR_CODE_NOT_FOUND.toString()))),
-                "No ODR registration found for NHS number.")
+                "No ODR registration found for NHS number."))
         return respondWith(HttpStatus.SC_NOT_FOUND) {
             andJsonBody(responseBody).build()
         }
     }
 
     fun respondWithConflictError() : Mapping {
-        val responseBody = Issue(
+        val responseBody = listOf(Issue(
                 details = CodeableConcept(
                         listOf(Coding(
                                 errorResponseCodingSystem,
-                                ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT.toString()))))
+                                ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT.toString())))))
         return respondWith(HttpStatus.SC_CONFLICT) {
             andJsonBody(responseBody).build()
         }

@@ -47,7 +47,8 @@ data class Patient(
                 redirectUrl = Config.instance.cidRedirectUri),
         val accessToken: String = "access_token",
         val tppUserSession: TppUserSession? = null,
-        val im1ConnectionTokenAsJson: Im1ConnectionToken? = null
+        val im1ConnectionTokenAsJson: Im1ConnectionToken? = null,
+        val organDonationRegistrationId: String = "AD02745157"
 ) {
 
     fun formattedDateOfBirth(): String {

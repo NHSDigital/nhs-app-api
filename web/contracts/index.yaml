@@ -995,7 +995,46 @@
               description: "Details of the organ donation registration request."
               properties: 
                 registration: 
-                  $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/schema"
+                  type: "object"
+                  properties: 
+                    identifier: 
+                      type: "string"
+                      description: "User's organ donation identifier."
+                    nhsNumber: 
+                      type: "string"
+                      description: "User's nhs number from the GP System."
+                    name: 
+                      $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/schema/properties/name"
+                    gender: 
+                      type: "string"
+                      description: "User's gender from the GP System."
+                    dateOfBirth: 
+                      type: "string"
+                      format: "date"
+                      description: "User's date of birth from the GP System."
+                    addressFull: 
+                      type: "string"
+                      description: "User's full address."
+                    address: 
+                      $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/schema/properties/address"
+                    emailAddress: 
+                      type: "string"
+                      description: "User's email address from nhs login."
+                    decision: 
+                      type: "string"
+                      enum: 
+                        - "OptIn"
+                        - "OptOut"
+                      description: "User's organ donation decision."
+                    decisionDetails: 
+                      $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/schema/properties/decisionDetails"
+                    faithDeclaration: 
+                      type: "string"
+                      enum: 
+                        - "NotStated"
+                        - "Yes"
+                        - "No"
+                      description: "User's faith decision."
                 additionalDetails: 
                   type: "object"
                   properties: 

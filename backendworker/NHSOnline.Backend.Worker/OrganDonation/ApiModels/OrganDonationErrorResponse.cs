@@ -1,7 +1,10 @@
-﻿namespace NHSOnline.Backend.Worker.OrganDonation.ApiModels
+﻿using System.Collections.Generic;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+
+namespace NHSOnline.Backend.Worker.OrganDonation.Models
 {
     public class OrganDonationErrorResponse
     {
-        public Issue Issue { get; set; }
+        public List<Issue> Issue { get; set; }
     }
 }

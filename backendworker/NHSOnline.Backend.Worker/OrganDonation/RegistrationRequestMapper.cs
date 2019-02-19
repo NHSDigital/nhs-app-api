@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
     {
         private readonly IEnumMapper<string, FaithDeclaration> _faithDeclarationMapper;
         private readonly IEnumMapper<string, Decision> _decisionMapper;
-        private readonly IMapper<string, Models.Name, Name> _nameMapper;
+        private readonly IMapper<Models.Name, Name> _nameMapper;
         private readonly IMapper<string, Models.Address, Address> _addressMapper;
         private readonly IOrganDonationDonationWishesMapper _donationWishesMapper;
         private readonly IOrganDonationGenderMapper _genderMapper;
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public RegistrationRequestMapper(
             IEnumMapper<string, FaithDeclaration> faithDeclarationMapper,
             IEnumMapper<string, Decision> decisionMapper,
-            IMapper<string, OrganDonation.Models.Name, Name> nameMapper,
+            IMapper<OrganDonation.Models.Name, Name> nameMapper,
             IMapper<string, OrganDonation.Models.Address, Address> addressMapper,
             IOrganDonationDonationWishesMapper donationWishesMapper,
             IOrganDonationGenderMapper genderMapper,
@@ -50,14 +50,18 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             var registrationRequest = new RegistrationRequest
             {
                 Id = source.Registration.Identifier,
-                EthnicCategory = MapConcept(source.AdditionalDetails.EthnicityId),
+                EthnicCategory = string.IsNullOrWhiteSpace(source.AdditionalDetails.EthnicityId) 
+                    ? null 
+                    :  MapConcept(EthnicityCodingSystem ,source.AdditionalDetails.EthnicityId),
                 Address = MapList(_addressMapper.Map(source.Registration.AddressFull, source.Registration.Address)),
                 BirthDate = source.Registration.DateOfBirth?.ToString(DateFormat, CultureInfo.InvariantCulture),
                 Gender = _genderMapper.Map(source.Registration.Gender),
                 OrganDonationDecision = _decisionMapper.From(source.Registration.Decision),
-                ReligiousAffiliation = MapConcept(source.AdditionalDetails.ReligionId),
-                Identifier = MapList(new Identifier { Value = source.Registration.NhsNumber }),
-                Name = MapList(_nameMapper.Map(source.Registration.NameFull, source.Registration.Name))
+                ReligiousAffiliation = string.IsNullOrWhiteSpace(source.AdditionalDetails.EthnicityId) 
+                    ? null 
+                    : MapConcept(ReligiousCodingSystem ,source.AdditionalDetails.ReligionId),
+                Identifier = MapList(new Identifier { System = IdentifierSystem, Value = source.Registration.NhsNumber.RemoveWhiteSpace() }),
+                Name = MapList(_nameMapper.Map(source.Registration.Name))
             };
 
             if (source.Registration.Decision != Decision.OptIn)
@@ -77,13 +81,15 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
         private static List<T> MapList<T>(T entry) => new List<T> { entry };
 
-        private CodeableConcept MapConcept(string code) =>
-            new CodeableConcept
+        private CodeableConcept MapConcept(string system, string code)
+        {
+            return new CodeableConcept
             {
                 Coding = new List<Coding>
                 {
-                    new Coding { Code = code }
+                    new Coding { System = system, Code = code }
                 }
             };
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -36,7 +36,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
             _serializerSettings = new JsonSerializerSettings
             {
-                ContractResolver = new DefaultContractResolver { NamingStrategy = new LowercaseNamingStrategy() }
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
             };
         }
 

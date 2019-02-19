@@ -1,105 +1,51 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
-    internal class OrganDonationNameMapper : IMapper<string, OrganDonation.Models.Name, Name>
+    internal class OrganDonationNameMapper : IMapper<OrganDonation.Models.Name, Name>
     {
+        private readonly ILogger<OrganDonationNameMapper> _logger;
+        private readonly IDictionary<string,string> _titlesMap;
         private const char SpaceChar = ' ';
 
-        private readonly Dictionary<string, string> _titlesMap = new Dictionary<string, string>
+        public OrganDonationNameMapper(IOrganDonationDataMaps dataMaps, ILogger<OrganDonationNameMapper> logger)
         {
-            { "MR", "MR" },
-            { "MRS", "MRS" },
-            { "MISS", "MISS" },
-            { "MS", "MS" },
-            { "MX", "MX" },
-            { "MASTER", "MASTER" },
-            { "DOCTOR", "DR" },
-            { "DR", "DR" },
-            { "CLLR", "CLLR" },
-            { "COUNCILLOR", "CLLR" },
-            { "CAPT", "CAPT" },
-            { "CAPTAIN", "CAPT" },
-            { "COLONEL", "COLONEL" },
-            { "EXORS", "EXORS" },
-            { "EXECUTORS OF", "EXORS" },
-            { "FR", "FR" },
-            { "FATHER", "FR" },
-            { "LADY", "LADY" },
-            { "LORD", "LORD" },
-            { "PROFESSOR", "PROF" },
-            { "REV", "REV" },
-            { "REVEREND", "REV" },
-            { "SIR", "SIR" },
-            { "DAME", "DAME" }
-        };
-
-        public Name Map(string firstSource, OrganDonation.Models.Name secondSource)
-        {
-            if (string.IsNullOrWhiteSpace(firstSource) && secondSource == null)
-            {
-                throw new ArgumentException($"{nameof(firstSource)} and {nameof(secondSource)} are both null/empty");
-            }
-
-            return Map(secondSource) ?? Map(firstSource);
+            _logger = logger;
+            _titlesMap = dataMaps.TitleDataMap;
         }
 
-        private Name Map(OrganDonation.Models.Name name)
+        public Name Map(OrganDonation.Models.Name source)
         {
-            return name != null
-                ? new Name
-                {
-                    Given = MapGiven(name.GivenName),
-                    Family = name.Surname,
-                    Prefix = MapPrefix(name.Title)
-                }
-                : null;
-        }
+            new ValidateAndLog(_logger)
+                .IsNotNull(source, nameof(source), ValidateAndLog.ValidationOptions.ThrowError)
+                .IsValid();
 
-        private Name Map(string fullName)
-        {
-            string surname, firstName = null;
-            
-            var title = _titlesMap.Where(t =>
-                    fullName.StartsWith($"{t.Key}{SpaceChar}", StringComparison.OrdinalIgnoreCase))
-                .Select(t => t.Key)
-                .FirstOrDefault();
-
-            if (title != null)
-                fullName = fullName.Substring(title.Length + 1);
-
-            var nameParts = fullName.Split(SpaceChar, StringSplitOptions.RemoveEmptyEntries);
-
-            switch (nameParts.Length)
-            {
-                case 0:
-                    surname = title;
-                    title = null;
-                    break;
-                case var length when length == 1 && title != null:
-                    firstName = title;
-                    surname = nameParts.First();
-                    title = null;
-                    break;
-                case var length when length >= 2:
-                    surname = nameParts.Last();
-                    firstName = string.Join(SpaceChar, nameParts.SkipLast(1));
-                    break;
-                default:
-                    surname = nameParts.First();
-                    break;
-            }
+            var prefix = MapPrefix(source.Title);
 
             return new Name
+                {
+                    Given = MapGiven(prefix, source),
+                    Family = source.Surname,
+                    Prefix = prefix
+                };
+        }
+
+        private List<string> MapGiven(List<string> prefix, OrganDonation.Models.Name source)
+        {
+            var givenName = source.GivenName;
+            if (prefix == null && !string.IsNullOrWhiteSpace(source.Title))
             {
-                Given = MapGiven(firstName),
-                Family = surname,
-                Prefix = MapPrefix(title)
-            };
+                givenName = string.IsNullOrWhiteSpace(source.GivenName)
+                    ? $"{source.Title}"
+                    : $"{source.Title}{SpaceChar}{source.GivenName}";
+            }
+
+            return string.IsNullOrWhiteSpace(givenName) ? null : new List<string> { givenName };
         }
 
         private List<string> MapPrefix(string title)
@@ -109,8 +55,5 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 ? new List<string> { mappedTitle }
                 : null;
         }
-
-        private static List<string> MapGiven(string firstName) =>
-            firstName != null ? new List<string> { firstName } : null;
     }
 }

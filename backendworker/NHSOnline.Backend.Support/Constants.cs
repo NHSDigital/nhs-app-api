@@ -141,6 +141,9 @@ namespace NHSOnline.Backend.Support
             public const string NoChoiceValue = "no";
             public const string NotStatedChoiceValue = "not-stated";
             public const string DateFormat = "yyyy-MM-dd";
+            public const string IdentifierSystem = "https://fhir.nhs.uk/Id/nhs-number";
+            public const string ReligiousCodingSystem = "http://www.nhsbt.nhs.uk/fhir/religious-affiliations";
+            public const string EthnicityCodingSystem = "http://www.nhsbt.nhs.uk/fhir/ethnic-categories";
         }
     }
 }

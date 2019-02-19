@@ -95,13 +95,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             result.State.Should().Be(State.Conflicted);
         }
 
-        private static Issue CreateIssueWithErrorCode(string errorCode)
+        private static List<Issue> CreateIssueWithErrorCode(string errorCode)
         {
-            return new Issue
+            return new List<Issue>
             {
-                Details = new CodeableConcept
+                new Issue
                 {
-                    Coding = new List<Coding> { new Coding { Code = errorCode } }
+                    Details = new CodeableConcept
+                    {
+                        Coding = new List<Coding> { new Coding { Code = errorCode } }
+                    }
                 }
             };
         }

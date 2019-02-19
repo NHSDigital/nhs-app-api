@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,6 +9,7 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {
@@ -15,6 +18,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public OrganDonationResponse(HttpStatusCode statusCode) : base(statusCode)
         {
         }
+        
+        public DateTimeOffset? Expires { get; set; }
 
         public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
         public OrganDonationErrorResponse ErrorResponse { get; private set; }
@@ -32,7 +37,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 : ParseResponse(responseParser, logger, stringResponse, responseMessage);
         }
 
-        public override string ErrorForLogging => $"Status Code: '{StatusCode}'. {ErrorResponse?.Issue}";
+        public override string ErrorForLogging => $"Status Code: '{StatusCode}'. {ErrorResponse?.Issue?.FirstOrDefault()}";
 
         private OrganDonationResponse<TBody> ParseResponse(
             IResponseParser responseParser,
@@ -46,6 +51,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 logger.LogError($"Server returned with error. {ErrorForLogging}");
                 return this;
             }
+
+            Expires = responseMessage.Content?.Headers?.Expires;
 
             Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
             return this;

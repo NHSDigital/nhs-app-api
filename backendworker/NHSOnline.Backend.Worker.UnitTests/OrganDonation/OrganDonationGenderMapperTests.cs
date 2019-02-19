@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.Worker.OrganDonation;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
@@ -11,12 +13,28 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
     {
 
         private IOrganDonationGenderMapper _organDonationGenderMapper;
+        private Mock<IOrganDonationDataMaps> _dataMaps;
         
         [TestInitialize]
         public void TestInitialize()
         {
             var fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
+
+            _dataMaps = fixture.Freeze<Mock<IOrganDonationDataMaps>>();
+
+            _dataMaps
+                .Setup(x => x.GenderDataMap)
+                .Returns(new Dictionary<string, string>
+                {
+                    { "MALE", "male" },
+                    { "FEMALE", "female" },
+                    { "TRANSGENDER", "other" },
+                    { "NOTKNOWN", "other" },
+                    { "INDETERMINATE", "other" },
+                    { "NOTSPECIFIED", "other" },
+                    { "UNSPECIFIED", "other" }
+                });
 
             _organDonationGenderMapper = fixture.Create<OrganDonationGenderMapper>();
         }

@@ -45,8 +45,13 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
             services.AddSingleton<IOrganDonationService, OrganDonationService>();
 
+            services.AddSingleton<IOrganDonationDataMaps, OrganDonationDataMaps>();
+
             services.AddSingleton<IMapper<DemographicsResponse, OrganDonationRegistration>,
                 OrganDonationRegistrationMapper>();
+
+            services.AddSingleton<IMapper<string, DemographicsName, Models.Name>,
+                OrganDonationDemographicsNameMapper>();
 
             services
                 .AddSingleton<IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>,
@@ -62,7 +67,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             services
                 .AddSingleton<IMapper<string, OrganDonation.Models.Address, Address>, OrganDonationAddressMapper>();
             
-            services.AddSingleton<IMapper<string, OrganDonation.Models.Name, Name>, OrganDonationNameMapper>();
+            services.AddSingleton<IMapper<OrganDonation.Models.Name, Name>, OrganDonationNameMapper>();
             services
                 .AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, RegistrationRequestMapper>();
             

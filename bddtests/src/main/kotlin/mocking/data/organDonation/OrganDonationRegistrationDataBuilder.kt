@@ -97,7 +97,7 @@ object OrganDonationRegistrationDataBuilder {
         OrganDonationSerenityHelpers.setOrganDonationDemographics(demographics)
 
         return Resource(
-                id = "AD02745157",
+                id = patient.organDonationRegistrationId,
                 resourceType = "Registration",
                 identifier = listOf(Identifier(
                         system = "https://fhir.nhs.uk/Id/nhs-number",

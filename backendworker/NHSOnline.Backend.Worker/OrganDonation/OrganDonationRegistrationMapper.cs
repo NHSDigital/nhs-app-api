@@ -18,15 +18,18 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         private readonly IEnumMapper<string, Decision> _organDonationDecisionMapper;
         private readonly IEnumMapper<string, FaithDeclaration> _organDonationFaithDeclarationMapper;
         private readonly IEnumMapper<string, ChoiceState> _organDonationChoiceStateMapper;
+        private readonly IMapper<string, DemographicsName, Name> _demographicsNameMapper;
         private readonly ILogger<OrganDonationRegistrationMapper> _logger;
 
         public OrganDonationRegistrationMapper(IEnumMapper<string, Decision> organDonationDecisionMapper,
             IEnumMapper<string, FaithDeclaration> organDonationFaithDeclarationMapper,
             IEnumMapper<string, ChoiceState> organDonationChoiceStateMapper,
+            IMapper<string, DemographicsName, Name> demographicsNameMapper,
             ILogger<OrganDonationRegistrationMapper> logger)
         {
             _organDonationDecisionMapper = organDonationDecisionMapper;
             _organDonationChoiceStateMapper = organDonationChoiceStateMapper;
+            _demographicsNameMapper = demographicsNameMapper;
             _organDonationFaithDeclarationMapper = organDonationFaithDeclarationMapper;
             _logger = logger;
         }
@@ -69,7 +72,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 NhsNumber = firstSource.NhsNumber,
                 DateOfBirth = firstSource.DateOfBirth,
                 Decision = _organDonationDecisionMapper.To(existingRegistration.OrganDonationDecision),
-                Identifier = existingRegistration.Identifier.FirstOrDefault()?.Value,
+                Identifier = existingRegistration.Id,
                 FaithDeclaration = _organDonationFaithDeclarationMapper.To(existingRegistration.FaithDeclaration),
                 State = State.Ok
             };
@@ -122,18 +125,9 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             return name;
         }
 
-        private static Name MapName(DemographicsResponse demographicsResponse)
+        private Name MapName(DemographicsResponse demographicsResponse)
         {
-            var name = demographicsResponse.NameParts != null
-                ? new Name
-                {
-                    Title = demographicsResponse.NameParts.Title,
-                    GivenName = demographicsResponse.NameParts.Given,
-                    Surname = demographicsResponse.NameParts.Surname
-                }
-                : null;
-
-            return name;
+            return _demographicsNameMapper.Map(demographicsResponse.PatientName, demographicsResponse.NameParts);
         }
 
         private DecisionDetails MapDecisionDetails(Registration existingRegistration)

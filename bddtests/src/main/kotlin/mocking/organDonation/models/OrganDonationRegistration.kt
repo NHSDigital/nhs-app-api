@@ -22,7 +22,7 @@ data class OrganDonationRegistration(
             val demographics = organDonationDemographics ?: OrganDonationDemographics()
 
             return OrganDonationRegistration(
-                    identifier = patient.nhsNumbers.first(),
+                    identifier = patient.organDonationRegistrationId,
                     nhsNumber = patient.formattedNHSNumber(),
                     nameFull = patient.formattedFullName(),
                     name = mocking.data.organDonation.OrganDonationRegistrationDataBuilder.getName(patient),

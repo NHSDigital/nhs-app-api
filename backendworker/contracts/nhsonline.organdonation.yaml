@@ -203,6 +203,42 @@ definitions:
         type: string
         enum: [NotFound, Ok, Conflicted]
         description: User's organ donation record state
+  organDonationStoreRegistration:
+    type: object
+    properties:
+      identifier:
+        type: string
+        description: User's organ donation identifier.
+      nhsNumber:
+        type: string
+        description: User's nhs number from the GP System.
+      name:
+        $ref: '#/definitions/usersName'
+      gender:
+        type: string
+        description: User's gender from the GP System.
+      dateOfBirth:
+        type: string
+        format: date
+        description: User's date of birth from the GP System.
+      addressFull:
+        type: string
+        description: User's full address.
+      address:
+        $ref: '#/definitions/usersAddress'
+      emailAddress:
+        type: string
+        description: User's email address from nhs login.
+      decision:
+        type: string
+        enum: [OptIn, OptOut]
+        description: User's organ donation decision.
+      decisionDetails:
+        $ref: '#/definitions/decisionDetails'
+      faithDeclaration:
+        type: string
+        enum: [NotStated, Yes, No]
+        description: User's faith decision.
   selectOption:
     type: object
     description: Contains data for a select box option
@@ -258,6 +294,6 @@ definitions:
     description: Details of the organ donation registration request.
     properties:
       registration:
-        $ref: '#/definitions/organDonationRegistration'
+        $ref: '#/definitions/organDonationStoreRegistration'
       additionalDetails:
         $ref: '#/definitions/additionalDetails'

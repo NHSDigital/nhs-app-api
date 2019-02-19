@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
                 .IsNotNull(source?.Body, nameof(source.Body), ThrowError)
                 .IsValid();
 
-            var errorCode = source.Body?.Issue?.Details?.Coding?.FirstOrDefault()?.Code;
+            var errorCode = source.Body?.Issue?.FirstOrDefault().Details?.Coding?.FirstOrDefault()?.Code;
 
             var isConflicted = _registerConflictErrorCodes.Contains(errorCode) || _updateConflictErrorCodes.Contains(errorCode);
             if (isConflicted)

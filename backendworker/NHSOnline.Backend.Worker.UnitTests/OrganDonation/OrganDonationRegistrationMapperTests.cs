@@ -6,11 +6,12 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
+using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
+using Name = NHSOnline.Backend.Worker.OrganDonation.Models.Name;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 {
@@ -26,16 +27,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         private Mock<IEnumMapper<string, Decision>> _decisionMapper;
         private Mock<IEnumMapper<string, FaithDeclaration>> _faithDeclarationMapper;
         private Mock<IEnumMapper<string, ChoiceState>> _choiceStateMapper;
+        private Mock<IMapper<string, DemographicsName, Name>> _demographicsNameMapper;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-
+            
             _decisionMapper = _fixture.Freeze<Mock<IEnumMapper<string, Decision>>>();
             _faithDeclarationMapper = _fixture.Freeze<Mock<IEnumMapper<string, FaithDeclaration>>>();
             _choiceStateMapper = _fixture.Freeze<Mock<IEnumMapper<string, ChoiceState>>>();
+            _demographicsNameMapper = _fixture.Freeze<Mock<IMapper<string, DemographicsName, Name>>>();
 
             _demographicsToRegistrationMapper = _fixture.Create<OrganDonationRegistrationMapper>();
             _lookupToRegistrationMapper = _fixture.Create<OrganDonationRegistrationMapper>();
@@ -56,40 +59,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
         {
             // Arrange
             var response = _fixture.Create<DemographicsResponse>();
+            _demographicsNameMapper
+                .Setup(x => x.Map(response.PatientName, response.NameParts))
+                .Returns(new Name
+                {
+                    GivenName = response.NameParts.Given,
+                    Surname = response.NameParts.Surname,
+                    Title = response.NameParts.Title
+                })
+                .Verifiable();
 
             // Act
             var result = _demographicsToRegistrationMapper.Map(response);
 
             // Assert
+            _demographicsNameMapper.Verify();
             result.Should().NotBeNull();
             result.NameFull.Should().Be(response.PatientName);
             result.Name.Should().NotBeNull();
             result.Name.GivenName.Should().Be(response.NameParts.Given);
             result.Name.Surname.Should().Be(response.NameParts.Surname);
             result.Name.Title.Should().Be(response.NameParts.Title);
-            result.AddressFull.Should().Be(response.Address);
-            result.Address.Should().NotBeNull();
-            result.Address.Text.Should().Be(response.AddressParts.Text);
-            result.Address.PostCode.Should().Be(response.AddressParts.Postcode);
-            result.DateOfBirth.Should().Be(response.DateOfBirth);
-            result.NhsNumber.Should().Be(response.NhsNumber);
-            result.Gender.Should().Be(response.Sex);
-        }
-
-        [TestMethod]
-        public void MapDemographicsResponseToOrganDonationRegistration_WithNoNameParts_MapsCorrectly()
-        {
-            // Arrange
-            var response = _fixture.Create<DemographicsResponse>();
-            response.NameParts = null;
-
-            // Act
-            var result = _demographicsToRegistrationMapper.Map(response);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.NameFull.Should().Be(response.PatientName);
-            result.Name.Should().BeNull();
             result.AddressFull.Should().Be(response.Address);
             result.Address.Should().NotBeNull();
             result.Address.Text.Should().Be(response.AddressParts.Text);
@@ -105,39 +95,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             // Arrange
             var response = _fixture.Create<DemographicsResponse>();
             response.AddressParts = null;
+            _demographicsNameMapper
+                .Setup(x => x.Map(response.PatientName, response.NameParts))
+                .Returns(new Name
+                {
+                    GivenName = response.NameParts.Given,
+                    Surname = response.NameParts.Surname,
+                    Title = response.NameParts.Title
+                })
+                .Verifiable();
 
             // Act
             var result = _demographicsToRegistrationMapper.Map(response);
 
             // Assert
+            _demographicsNameMapper.Verify();
             result.Should().NotBeNull();
             result.NameFull.Should().Be(response.PatientName);
             result.Name.Should().NotBeNull();
             result.Name.GivenName.Should().Be(response.NameParts.Given);
             result.Name.Surname.Should().Be(response.NameParts.Surname);
             result.Name.Title.Should().Be(response.NameParts.Title);
-            result.AddressFull.Should().Be(response.Address);
-            result.Address.Should().BeNull();
-            result.DateOfBirth.Should().Be(response.DateOfBirth);
-            result.NhsNumber.Should().Be(response.NhsNumber);
-            result.Gender.Should().Be(response.Sex);
-        }
-
-        [TestMethod]
-        public void MapDemographicsResponseToOrganDonationRegistration_WithNoAddressAndNameParts_MapsCorrectly()
-        {
-            // Arrange
-            var response = _fixture.Create<DemographicsResponse>();
-            response.AddressParts = null;
-            response.NameParts = null;
-
-            // Act
-            var result = _demographicsToRegistrationMapper.Map(response);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.NameFull.Should().Be(response.PatientName);
-            result.Name.Should().BeNull();
             result.AddressFull.Should().Be(response.Address);
             result.Address.Should().BeNull();
             result.DateOfBirth.Should().Be(response.DateOfBirth);
@@ -220,7 +198,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 { "all", "yes" },
                 { "pancreas", "no" },
                 { "heart", "not-stated" },
-                { "tissue", "yes" },
+                { "tissue", "yes" }
             };
 
             var registration = _fixture.Create<OrganDonationRegistration>();
@@ -261,7 +239,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
             _choiceStateMapper.Verify(x => x.To(resource.DonationWishes.ElementAt(3).Value));
             _choiceStateMapper.VerifyNoOtherCalls();
 
-            result.Identifier.Should().Be(resource.Identifier.First().Value);
+            result.Identifier.Should().Be(resource.Id);
             result.Decision.Should().Be(Decision.OptIn);
             result.DecisionDetails.Should().NotBeNull();
             result.DecisionDetails.All.Should().Be(true);
@@ -285,7 +263,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 { "all", "yes" },
                 { "pancreas", "no" },
                 { "heart", "not-stated" },
-                { "tissue", "yes" },
+                { "tissue", "yes" }
             };
             
             var registration = _fixture.Create<OrganDonationRegistration>();
@@ -311,7 +289,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
                 { "all", "yes" },
                 { "pancreas", "no" },
                 { "heart", "not-stated" },
-                { "tissue", "yes" },
+                { "tissue", "yes" }
             };
             
             var registration = _fixture.Create<OrganDonationRegistration>();

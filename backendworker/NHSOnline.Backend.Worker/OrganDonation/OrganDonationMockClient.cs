@@ -100,21 +100,22 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             });
         }
 
-        private Issue GetIssue(RegistrationRequest request)
+        private List<Issue> GetIssue(RegistrationRequest request)
         {
+            List<Issue> issue = null;
             if (string.Equals(request.Identifier.FirstOrDefault()?.Value.RemoveWhiteSpace(), BobDonorNhsNumber, StringComparison.OrdinalIgnoreCase))
             {
-                return GetIssue("10001");
+                issue = new List<Issue>() { GetIssue("10001") };
             }
             if (string.Equals(request.Identifier.FirstOrDefault()?.Value.RemoveWhiteSpace(), CatherineDonorNhsNumber, StringComparison.OrdinalIgnoreCase))
             {
-                return GetIssue("10002");
+                issue = new List<Issue>() { GetIssue("10002") };
             }
             if (string.Equals(request.Identifier.FirstOrDefault()?.Value.RemoveWhiteSpace(), ZacharyDonorNhsNumber, StringComparison.OrdinalIgnoreCase))
             {
-                return GetIssue("10201");
+                issue = new List<Issue>() { GetIssue("10201") };
             }
-            return null;
+            return issue;
         }
 
         private Issue GetIssue(string code)

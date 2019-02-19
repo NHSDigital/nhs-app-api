@@ -224,7 +224,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             if (referenceData.HasSuccessResponse)
             {
                 _logger.LogDebug("Successfully retrieved organ donation reference data");
-                entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddHours(_config.ReferenceDataExpiryHours);
+                entry.AbsoluteExpiration = referenceData.Expires ?? DateTimeOffset.UtcNow.AddHours(_config.ReferenceDataExpiryHours);
                 var response = _organDonationReferenceDataMapper.Map(referenceData);
                 return new OrganDonationReferenceDataResult.SuccessfullyRetrieved(response);
             }
@@ -234,7 +234,6 @@ namespace NHSOnline.Backend.Worker.OrganDonation
 
             switch (referenceData.StatusCode)
             {
-
                 case HttpStatusCode.RequestTimeout:
                     _logger.LogDebug("The organ donation reference data retrieval timed-out");
                     return new OrganDonationReferenceDataResult.Timeout();

@@ -38,7 +38,9 @@ class OrganDonationSubmitDecisionBuilder(registration: OrganDonationRegistration
     fun respondWithConflict(id: String, errorCode: String): Mapping {
         val responseBody = OrganDonationRegistrationResponse(
                 id = id,
-                issue = Issue(details = CodeableConcept(arrayListOf(Coding( errorCode,errorResponseCodingSystem)))))
+                issue = listOf(Issue(
+                        details = CodeableConcept(
+                                arrayListOf(Coding( errorCode,errorResponseCodingSystem))))))
         return respondWith(HttpStatus.SC_OK) {
             andJsonBody(responseBody).build()
         }

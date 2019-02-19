@@ -40,26 +40,26 @@ open class OrganDonationMappingBuilder(method: String, relativePath: String = ""
                     + registration.registration.identifier)
 
     fun respondWithTimeOutError() : Mapping {
-        val responseBody = Issue(
+        val responseBody = listOf(Issue(
                 "transient",
                 CodeableConcept(
                         listOf(Coding(
                                 errorResponseCodingSystem,
                                 ORGAN_DONATION_ERROR_CODE_GATEWAY_TIMEOUT.toString()))),
-                "Any further internal debug details i.e. stack trace details etc.")
+                "Any further internal debug details i.e. stack trace details etc."))
         return respondWith(HttpStatus.SC_REQUEST_TIMEOUT) {
             andJsonBody(responseBody).build()
         }
     }
 
     fun respondWithInternalError() : Mapping {
-        val responseBody = Issue(
+        val responseBody = listOf(Issue(
                 "internal server error",
                 CodeableConcept(
                         listOf(Coding(
                                 errorResponseCodingSystem,
                                 ORGAN_DONATION_ERROR_CODE_INTERNAL_SERVER_ERROR.toString()))),
-                "Internal Server Error")
+                "Internal Server Error"))
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(responseBody).build()
         }
