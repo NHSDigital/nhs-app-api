@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Demographics;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 
-namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
+namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation.Mappers
 {
     [TestClass]
     public class OrganDonationDemographicsMapperTests

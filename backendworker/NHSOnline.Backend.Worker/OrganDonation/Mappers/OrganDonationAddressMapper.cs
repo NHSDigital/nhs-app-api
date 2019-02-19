@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 
-namespace NHSOnline.Backend.Worker.OrganDonation
+namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
 {
     internal class OrganDonationAddressMapper : IMapper<string, OrganDonation.Models.Address, Address>
     {

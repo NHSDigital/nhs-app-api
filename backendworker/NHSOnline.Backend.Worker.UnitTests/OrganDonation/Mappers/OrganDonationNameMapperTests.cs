@@ -5,11 +5,12 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.OrganDonation;
+using NHSOnline.Backend.Worker.OrganDonation.Mappers;
 using Name = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Name;
 
-namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
+namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation.Mappers
 {
     [TestClass]
     public class OrganDonationNameMapperTests

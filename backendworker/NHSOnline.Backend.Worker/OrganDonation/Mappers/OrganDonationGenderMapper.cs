@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Worker.OrganDonation
+namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
 {
     internal class OrganDonationGenderMapper : IOrganDonationGenderMapper
     {

@@ -1,11 +1,11 @@
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
-using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 
-namespace NHSOnline.Backend.Worker.OrganDonation
+namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
 {
     internal class OrganDonationRegistrationResponseMapper : IMapper<OrganDonationResponse<RegistrationResponse>,
         OrganDonationRegistrationResponse>

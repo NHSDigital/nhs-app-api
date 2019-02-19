@@ -8,7 +8,7 @@ using NHSOnline.Backend.Support;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 
-namespace NHSOnline.Backend.Worker.OrganDonation
+namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
 {
     internal class RegistrationLookupRequestMapper : IMapper<OrganDonationRegistration, RegistrationLookupRequest>
     {

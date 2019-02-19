@@ -1,16 +1,16 @@
 using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.GpSystems.Demographics;
-using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 using Address = NHSOnline.Backend.Worker.OrganDonation.Models.Address;
 using Name = NHSOnline.Backend.Worker.OrganDonation.Models.Name;
 
-namespace NHSOnline.Backend.Worker.OrganDonation
+namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
 {
     internal class OrganDonationRegistrationMapper : IMapper<DemographicsResponse, OrganDonationRegistration>,
         IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>

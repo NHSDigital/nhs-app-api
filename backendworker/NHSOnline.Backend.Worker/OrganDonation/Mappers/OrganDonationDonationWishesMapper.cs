@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
-using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
-namespace NHSOnline.Backend.Worker.OrganDonation
+namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
 {
     internal class OrganDonationDonationWishesMapper : IOrganDonationDonationWishesMapper
     {
@@ -23,8 +22,8 @@ namespace NHSOnline.Backend.Worker.OrganDonation
         public Dictionary<string, string> Map(DecisionDetails source)
         {
             new ValidateAndLog(_logger)
-                .IsNotNull(source, nameof(source), ThrowError)
-                .IsNotNull(source?.Choices, nameof(source.Choices), ThrowError)
+                .IsNotNull(source, nameof(source), ValidateAndLog.ValidationOptions.ThrowError)
+                .IsNotNull(source?.Choices, nameof(source.Choices), ValidateAndLog.ValidationOptions.ThrowError)
                 .IsValid();
                 
             var donationWishes = new Dictionary<string, string>

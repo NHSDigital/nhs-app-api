@@ -3,11 +3,11 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.OrganDonation;
-using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Mappers;
 
-namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
+namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation.Mappers
 {
     [TestClass]
     public class OrganDonationAddressMapperTests

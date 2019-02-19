@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.OrganDonation.Mappers;
 
 namespace NHSOnline.Backend.Worker.OrganDonation
 {

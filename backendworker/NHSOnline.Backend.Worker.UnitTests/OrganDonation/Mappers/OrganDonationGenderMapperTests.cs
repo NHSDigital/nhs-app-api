@@ -5,8 +5,9 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.OrganDonation;
+using NHSOnline.Backend.Worker.OrganDonation.Mappers;
 
-namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
+namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation.Mappers
 {
     [TestClass]
     public class OrganDonationGenderMapperTests

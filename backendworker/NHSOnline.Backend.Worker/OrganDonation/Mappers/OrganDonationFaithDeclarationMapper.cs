@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.OrganDonation.Models;
 using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 
-namespace NHSOnline.Backend.Worker.OrganDonation
+namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
 {
     internal class OrganDonationFaithDeclarationMapper : OneToOneEnumMapper<FaithDeclaration>
     {

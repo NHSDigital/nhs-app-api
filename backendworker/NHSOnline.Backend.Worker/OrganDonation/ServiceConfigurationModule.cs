@@ -7,6 +7,7 @@ using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
+using NHSOnline.Backend.Worker.OrganDonation.Mappers;
 using Address = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Address;
 using Name = NHSOnline.Backend.Worker.OrganDonation.ApiModels.Name;
 
@@ -44,6 +45,10 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             }
 
             services.AddSingleton<IOrganDonationService, OrganDonationService>();
+            services.AddSingleton<OrganDonationLookupService>();
+            services.AddSingleton<OrganDonationReferenceDataService>();
+            services.AddSingleton<OrganDonationRegistrationService>();
+            services.AddSingleton<OrganDonationUpdateService>();
 
             services.AddSingleton<IOrganDonationDataMaps, OrganDonationDataMaps>();
 
@@ -63,14 +68,15 @@ namespace NHSOnline.Backend.Worker.OrganDonation
             services
                 .AddSingleton<IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>,
                     OrganDonationReferenceDataResponseMapper>();
-            
+
             services
                 .AddSingleton<IMapper<string, OrganDonation.Models.Address, Address>, OrganDonationAddressMapper>();
             
             services.AddSingleton<IMapper<OrganDonation.Models.Name, Name>, OrganDonationNameMapper>();
             services
-                .AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, RegistrationRequestMapper>();
-            
+                .AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, RegistrationRequestMapper
+                >();
+
             services
                 .AddSingleton<IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>,
                     OrganDonationRegistrationResponseMapper>();

@@ -8,12 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
+using NHSOnline.Backend.Worker.OrganDonation.Mappers;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using Name = NHSOnline.Backend.Worker.OrganDonation.Models.Name;
 
-namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
+namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation.Mappers
 {
     [TestClass]
     public class OrganDonationRegistrationMapperTests

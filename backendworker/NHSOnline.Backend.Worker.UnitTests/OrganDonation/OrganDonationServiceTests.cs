@@ -14,7 +14,6 @@ using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.OrganDonation;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments;
 
 namespace NHSOnline.Backend.Worker.UnitTests.OrganDonation
 {

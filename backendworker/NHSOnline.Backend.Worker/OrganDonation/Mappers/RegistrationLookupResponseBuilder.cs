@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Net;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Worker.OrganDonation.ApiModels;
 using NHSOnline.Backend.Worker.OrganDonation.Models;
 using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
 
-namespace NHSOnline.Backend.Worker.OrganDonation
+
+namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
 {
     internal class RegistrationLookupResponseBuilder
     {
