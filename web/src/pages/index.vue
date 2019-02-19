@@ -1,7 +1,7 @@
 <template>
-  <div :class="isDesktopWeb && $style.mainContentContainer">
+  <div :class="!$store.state.device.isNativeApp && $style.mainContentContainer">
     <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content',
-                                      isDesktopWeb && $style.mainContent]">
+                                      $style.mainContent]">
       <div :class="$style['banner-container']">
         <beta-banner data-sid="beta-flag"/>
       </div>
@@ -10,7 +10,7 @@
       <h2 :class="$style.header" data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
       <welcome-section :date-of-birth="$store.state.session.dateOfBirth"
                        :nhs-number="$store.state.session.nhsNumber" />
-      <div :class="isDesktopWeb && $style.navigationList">
+      <div :class="$style.navigationList">
         <navigation-list-menu
           nhs-number="nhsNumber"
           dob="dob"
@@ -33,11 +33,6 @@ export default {
     BetaBanner,
     WelcomeSection,
     NavigationListMenu,
-  },
-  data() {
-    return {
-      isDesktopWeb: (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios'),
-    };
   },
   computed: {
     greetingMessage() {
@@ -69,10 +64,6 @@ export default {
   @import "../style/textstyles";
   @import '../style/screensizes';
 
-  .mainContentContainer {
-    max-width: 960px;
-  }
-
   .webStyledSpacing {
     height: 0.063em;
     border: none;
@@ -87,7 +78,17 @@ export default {
     border-top: 1px grey solid;
   }
 
-  .mainContent {
+  .banner-container {
+    padding: 1em 1em 0.7em;
+  }
+
+ div {
+  &.mainContentContainer {
+   max-width: 960px;
+   margin: 0 1em;
+
+
+   .mainContent {
     display: block;
     max-width: 540px;
     width: auto;
@@ -95,25 +96,22 @@ export default {
     transition: opacity 0.2s;
     user-select: none;
     padding-bottom: 2.5em !important;
+   }
   }
-
 
   @media (min-width: 48.0625em){
    .rule {
-     margin-right: 0;
-     padding-left: 1em;
+    margin-right: 0;
+    padding-left: 1em;
 
    }
   }
 
   @media (min-width: 1024px) {
-    .header, .navigationList, .mainContentContainer {
-      margin: 0 auto;
-    }
+   .header, .navigationList, .mainContentContainer {
+    margin: 0 auto;
+   }
   }
-
-  .banner-container {
-    padding: 1em 1em 0.7em;
-  }
+ }
 
 </style>

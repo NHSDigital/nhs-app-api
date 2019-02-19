@@ -1,5 +1,5 @@
 <template>
-  <div :class="[mType, isDesktopWeb ? $style.desktopWeb : undefined]">
+  <div :class="[mType, !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div v-if="showIcon" :class="$style.icon">
       {{ iText }}
     </div>
@@ -40,8 +40,6 @@ export default {
         warning: 'Warning',
         error: 'Error',
       },
-      isDesktopWeb: (this.$store.state.device.source !== 'android'
-        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {
@@ -60,5 +58,13 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/messages";
+
+div {
+ &.desktopWeb {
+  .msg {
+   max-width: 540px;
+  }
+ }
+}
 
 </style>

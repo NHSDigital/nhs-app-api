@@ -134,7 +134,7 @@ export default {
     const betaCookie = this.$cookies.get('BetaCookie');
     const throttlingEnabled = this.$env.THROTTLING_ENABLED === true || this.$env.THROTTLING_ENABLED === 'true';
 
-    if (throttlingEnabled && !betaCookie && !this.isDesktopWeb) {
+    if (throttlingEnabled && !betaCookie && this.$store.state.device.isNativeApp) {
       this.goToUrl(GP_FINDER.path);
       return;
     }

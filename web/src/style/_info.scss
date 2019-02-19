@@ -5,11 +5,6 @@
     font-size: 1em;
 	margin-bottom: 1em;
 	p {
-      &.desktopWeb {
-        font-family: $default-web;
-        font-weight: lighter;
-        max-width: 540px;
-      }
 		padding-bottom: 0.5em;
 		padding-top: 0.5em;
 	}
@@ -42,10 +37,5 @@
 
     strong {
       @include default_label;
-      &.desktopWeb {
-        font-family: $default-web;
-        font-weight: normal;
-        max-width: 540px;
-      }
     }
 }

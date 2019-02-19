@@ -1,11 +1,11 @@
 <template>
-  <div v-if="showFlashMessage" :class="[isDesktopWeb ? $style.flashMessage : undefined]">
+  <div v-if="showFlashMessage" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <message-dialog v-if="isWarning()" message-type="warning" >
       <message-text>{{ message }}</message-text>
     </message-dialog>
     <message-dialog v-else message-id="success-dialog"
                     message-type="success">
-      <message-text :class="[isDesktopWeb ? $style.messageText : undefined]">{{ message }}
+      <message-text :class="$style.messageText">{{ message }}
       </message-text>
     </message-dialog>
   </div>
@@ -20,11 +20,6 @@ export default {
   components: {
     MessageDialog,
     MessageText,
-  },
-  data() {
-    return {
-      isDesktopWeb: (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios'),
-    };
   },
   computed: {
     showFlashMessage() {
@@ -61,14 +56,15 @@ export default {
  @import '../../style/textstyles';
  @import "../../style/fonts";
 
- .flashMessage{
-  font-family: $default-web;
-  max-width: 540px;
- }
-
- .messageText{
-  font-family: $default-web;
-  font-weight: lighter;
+ div {
+  &.desktopWeb {
+   font-family: $default-web;
+   max-width: 540px;
+   .messageText{
+    font-family: $default-web;
+    font-weight: lighter;
+   }
+  }
  }
 
 </style>

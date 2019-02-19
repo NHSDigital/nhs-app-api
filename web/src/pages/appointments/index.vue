@@ -1,14 +1,14 @@
 <template>
   <div v-if="showTemplate" :class="[$style.content, 'pull-content',
-                                    isDesktopWeb ? $style.desktopWeb : $style.web]">
+                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div v-if="showNoUpcomingAppointments" data-purpose="upcoming-info">
       <h2>{{ $t('appointments.index.empty.header') }}</h2>
-      <div :class="isDesktopWeb && $style.upComingAppointments">
-        <p :class="isDesktopWeb && $style.upComingAppointments">
+      <div :class="$style.upComingAppointments">
+        <p :class="$style.upComingAppointments">
           {{ $t('appointments.index.empty.text1') }}</p>
-        <p :class="isDesktopWeb && $style.upComingAppointments">
+        <p :class="$style.upComingAppointments">
           {{ $t('appointments.index.empty.text2') }} </p>
-        <p :class="isDesktopWeb && $style.upComingAppointments">
+        <p :class="$style.upComingAppointments">
           {{ $t('appointments.index.empty.text3') }} </p>
       </div>
     </div>
@@ -51,11 +51,6 @@ export default {
     PastAppointments,
     UpcomingAppointments,
     NoJsForm,
-  },
-  data() {
-    return {
-      isDesktopWeb: (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios'),
-    };
   },
   computed: {
     showNoUpcomingAppointments() {
@@ -134,9 +129,19 @@ export default {
 
 .content {
   padding-bottom : 5em;
+}
+
+div {
  &.desktopWeb {
-  max-width: 540px;
-  font-family: $default-web;
+  .content {
+   max-width: 540px;
+   font-family: $default-web;
+  }
+  p {
+   font-family: $default-web;
+   font-weight: lighter;
+   max-width: 540px;
+  }
  }
 }
 

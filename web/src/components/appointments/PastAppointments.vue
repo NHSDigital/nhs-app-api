@@ -1,6 +1,6 @@
 <template>
   <span>
-    <h2 :class="[isDesktopWeb ? $style.desktopWeb : undefined]">
+    <h2 :class="!$store.state.device.isNativeApp && $style.desktopWeb">
       {{ $t('appointments.index.past.header') }}</h2>
 
     <appointment v-for="appointment in appointments"
@@ -29,12 +29,6 @@ export default {
       type: Array,
       default: () => [],
     },
-  },
-  data() {
-    return {
-      isDesktopWeb: (this.$store.state.device.source !== 'android'
-        && this.$store.state.device.source !== 'ios'),
-    };
   },
 };
 </script>

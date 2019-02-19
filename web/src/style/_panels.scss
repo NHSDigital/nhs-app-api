@@ -67,10 +67,6 @@
 	.rejected {
 		p {
 			padding-top: 0em;
-          &.desktopWeb {
-            font-family: $default-web;
-            font-weight: lighter;
-          }
 		}
 		svg {
 			vertical-align: middle;
@@ -120,19 +116,11 @@
 	p.session {
 		padding-top: 0.750em;
 		padding-bottom: 0.750em;
-      &.desktopWeb {
-        font-family: $default-web;
-        font-weight: lighter;
-      }
 	}
 	p.person,
 	p.location,
 	p.cancel-disabled {
 		padding-top: 0.5em;
 		padding-bottom: 0em;
-      &.desktopWeb {
-        font-family: $default-web;
-        font-weight: lighter;
-      }
 	}
 }
