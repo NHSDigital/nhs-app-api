@@ -1,11 +1,9 @@
 <template>
-  <div id="app" :class="isDesktopWeb && $style['app-container-desktop']">
+  <div id="app" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
       <web-header ref="headerMenu"/>
     </div>
-
-    <main :class="[mainClass, isDesktopWeb ? [$style['main-container-desktop'], $style.desktopWeb]
-    : $style.web]">
+    <main :class="[mainClass, $style['main-container-desktop']]">
       <spinner />
       <connection-error />
       <api-error />
@@ -104,8 +102,6 @@ export default {
       surveyBarOpen: true,
       pathChanged: false,
       resetTimeoutId: undefined,
-      isDesktopWeb: (this.$store.state.device.source !== 'android'
-        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {
@@ -242,4 +238,32 @@ export default {
 <style module lang="scss" scoped>
 @import "../style/home";
 @import "../style/webshared";
+
+div {
+ &.desktopWeb {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: stretch;
+  align-items: flex-start;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+
+  .header-container-desktop, .footer-container-desktop {
+   order: 0;
+   flex: 0 0 auto;
+   align-self: stretch;
+  }
+
+  .main-container-desktop {
+   order: 0;
+   flex: 1 0 auto;
+   align-self: stretch;
+  }
+ }
+}
 </style>
