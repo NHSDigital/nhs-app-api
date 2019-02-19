@@ -334,6 +334,14 @@ Feature: Organ Donation
     Then the Organ Donation Specific Organ Choice page is displayed
     And a validation message is shown if a user attempts to continue with all specific organ options set to no
 
+  Scenario: When a user has no organ donation registration, they may follow a link to check their registration
+    Given I am a EMIS user not registered with organ donation, who wishes to register
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    When I select the Think You're Already Registered Organ Donation link
+    Then a new tab opens https://www.organdonation.nhs.uk/register-to-donate/check-registration/
+
+
   Scenario: A user can find out more about organ donation when registering
     Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in

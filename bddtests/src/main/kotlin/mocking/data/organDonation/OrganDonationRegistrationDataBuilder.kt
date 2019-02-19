@@ -61,7 +61,7 @@ object OrganDonationRegistrationDataBuilder {
                 KeyValuePair("Corneas", false),
                 KeyValuePair("Pancreas", true),
                 KeyValuePair("Tissue", false))
-        OrganDonationSerenityHelpers.setOrganDonationDecisionSomeOrgansExisting(organsToDonate)
+        OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING.set(organsToDonate)
         val decision = hashMapOf<String, String>()
         organsToDonate.forEach { organ -> decision.put(organ.key, if (organ.value) "yes" else "no") }
         return decision
@@ -77,7 +77,7 @@ object OrganDonationRegistrationDataBuilder {
                 KeyValuePair("Pancreas", true),
                 KeyValuePair("Tissue", false),
                 KeyValuePair("Small bowel", false))
-        OrganDonationSerenityHelpers.setOrganDonationDecisionSomeOrgansUpdated(organsToDonate)
+        OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED.set(organsToDonate)
         val decision = hashMapOf<String, String>()
         organsToDonate.forEach { organ -> decision.put(organ.key, if (organ.value) "yes" else "no") }
         return decision
@@ -94,7 +94,7 @@ object OrganDonationRegistrationDataBuilder {
 
     private fun build(patient: Patient, organDonationDemographics: OrganDonationDemographics? = null): Resource {
         val demographics = organDonationDemographics ?: OrganDonationDemographics()
-        OrganDonationSerenityHelpers.setOrganDonationDemographics(demographics)
+        OrganDonationSerenityHelpers.DEMOGRAPHICS.set(demographics)
 
         return Resource(
                 id = patient.organDonationRegistrationId,

@@ -2,8 +2,11 @@ package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import pages.assertIsVisible
 import mocking.data.organDonation.OrganDonationSerenityHelpers
+import pages.assertIsVisible
+import mocking.data.organDonation.getOrFail
+import mocking.data.organDonation.set
+import mocking.organDonation.models.KeyValuePair
 import pages.organDonation.OrganDonationConfirmationPage
 
 open class OrganDonationConfirmationStepDefinitions {
@@ -17,6 +20,7 @@ open class OrganDonationConfirmationStepDefinitions {
 
     @When("^I choose to amend my Organ Donation decision")
     fun iChooseToAmendMyDecision() {
+        OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.set(true)
         organDonationConfirmationPage.amendDecisionLink.click()
     }
 
@@ -41,7 +45,8 @@ open class OrganDonationConfirmationStepDefinitions {
     fun theDecisionToOptInToOrganDonationWithSomeOrgansHasBeenSuccessfullyCreated(){
         organDonationConfirmationPage.assertCreatedBanner()
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(
-                OrganDonationSerenityHelpers.getOrganDonationDecisionSomeOrgansUpdated()
+                OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
+                        .getOrFail()
         )
     }
 
@@ -58,14 +63,16 @@ open class OrganDonationConfirmationStepDefinitions {
     @Then("^the decision to opt in to organ donation with some organs is displayed$")
     fun theDecisionToOptInToSomeOrganDonationIsDisplayed() {
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(
-                OrganDonationSerenityHelpers.getOrganDonationDecisionSomeOrgansUpdated()
+                OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
+                        .getOrFail()
         )
     }
 
     @Then("^the existing decision to opt in to organ donation with some organs is displayed$")
     fun theExistingDecisionToOptInToSomeOrganDonationIsDisplayed() {
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(
-                OrganDonationSerenityHelpers.getOrganDonationDecisionSomeOrgansExisting()
+                OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING
+                        .getOrFail()
         )
     }
 
@@ -100,7 +107,8 @@ open class OrganDonationConfirmationStepDefinitions {
     fun theOrganDonationPageIsDisplayedWithMyExistingDecisionOfSome() {
         organDonationConfirmationPage.assertDisplayed()
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(
-                OrganDonationSerenityHelpers.getOrganDonationDecisionSomeOrgansExisting())
+                OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING
+                        .getOrFail())
     }
 
     @Then("^the decision to opt out of organ donation has been successfully updated$")
@@ -118,6 +126,7 @@ open class OrganDonationConfirmationStepDefinitions {
     @Then("^the decision to opt in to organ donation with some organs has been successfully updated$")
     fun theDecisionToOptInToOrganDonationWithSomeOrgansHasBeenSuccessfullyUpdated(){
         organDonationConfirmationPage.assertCreatedBanner()
-        val organsToDonate = OrganDonationSerenityHelpers.getOrganDonationDecisionSomeOrgansUpdated()
+        val organsToDonate = OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
+                .getOrFail<ArrayList<KeyValuePair<String, Boolean>>>()
         organDonationConfirmationPage.decisionModule.assertDecisionIsSome(organsToDonate)
     }}

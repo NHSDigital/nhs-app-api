@@ -1,6 +1,7 @@
 package pages.organDonation
 
 import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.data.organDonation.getOrFail
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
@@ -58,7 +59,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
     }
 
     fun clickSubmit() {
-        val optIn = OrganDonationSerenityHelpers.getIfOrganDonationDecisionIsOptIn()
+        val optIn = OrganDonationSerenityHelpers.IS_OPT_IN.getOrFail<Boolean>()
         clickOnButtonContainingText(if (optIn) "Yes I want to be a donor" else "No I do not want to be a donor")
     }
 }

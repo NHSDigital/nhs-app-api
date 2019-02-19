@@ -756,6 +756,7 @@ export default {
       },
     },
     links: {
+      alreadyRegisteredText: 'Think you have registered already?',
       amendText: 'Amend your decision',
       findOutMoreText: 'Find out more about organ donation',
     },

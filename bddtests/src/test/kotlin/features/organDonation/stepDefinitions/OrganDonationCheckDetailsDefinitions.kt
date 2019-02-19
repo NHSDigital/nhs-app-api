@@ -3,6 +3,9 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.data.organDonation.getOrFail
+import mocking.organDonation.models.KeyValuePair
+import mocking.organDonation.models.OrganDonationDemographics
 import pages.assertIsVisible
 import pages.organDonation.OrganDonationCheckDetailsPage
 import utils.SerenityHelpers
@@ -42,14 +45,15 @@ open class OrganDonationCheckDetailsDefinitions {
     @Then("^my specific organ donation choices are displayed on the Organ Donation Check Details page")
     fun mySpecificOrganDonationChoicesAreDisplayedOnTheOrganDonaitonCheckDetailsPage(){
         val organsToDonate =
-                OrganDonationSerenityHelpers.getOrganDonationDecisionSomeOrgansUpdated()
+                OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
+                        .getOrFail<ArrayList<KeyValuePair<String, Boolean>>>()
         organDonationCheckDetailsPage.yourDecisionModule.assertDecisionIsSome(organsToDonate)
     }
 
     @Then("^my ethnicity is recorded on the Organ Donation Check Details page")
     fun myEthnicityIsRecordedOnTheOrganDonationCheckDetailsPage() {
         organDonationCheckDetailsPage.assertEthnicity(
-                OrganDonationSerenityHelpers.getOrganDonationDemographics().ethnicity.value)
+                OrganDonationSerenityHelpers.DEMOGRAPHICS.getOrFail<OrganDonationDemographics>().ethnicity.value)
     }
 
     @Then("^my ethnicity is recorded as not chosen on the Organ Donation Check Details page")
@@ -60,7 +64,7 @@ open class OrganDonationCheckDetailsDefinitions {
     @Then("^my religion is recorded on the Organ Donation Check Details page")
     fun myReligionIsRecordedOnTheOrganDonationCheckDetailsPage() {
         organDonationCheckDetailsPage.assertReligion(
-                OrganDonationSerenityHelpers.getOrganDonationDemographics().religion.value)
+                OrganDonationSerenityHelpers.DEMOGRAPHICS.getOrFail<OrganDonationDemographics>().religion.value)
     }
 
     @Then("^my religion is recorded as not chosen on the Organ Donation Check Details page")

@@ -4,6 +4,7 @@ import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import OrganDonation from '@/pages/organ-donation';
 import YourDecision from '@/components/organ-donation/YourDecision';
+import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import {
   DECISION_APPOINTED_REP,
   DECISION_OPT_IN,
@@ -55,7 +56,6 @@ describe('organ donation index page', () => {
     it('will dispach the "organDonation/amendCancel" action', () => {
       expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendCancel');
     });
-
     it('will dispach the "organDonation/setAdditionalDetails" action with empty values', () => {
       const value = { ethnicityId: '', religionId: '' };
       expect($store.dispatch).toHaveBeenCalledWith('organDonation/setAdditionalDetails', value);
@@ -105,6 +105,10 @@ describe('organ donation index page', () => {
       expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
     });
 
+    it('will show the already registered link', () => {
+      expect(wrapper.find(AlreadyRegisteredLink).exists()).toEqual(true);
+    });
+
     describe('async data', () => {
       it('will dispatch the "organDonation/getRegistration" action', () => {
         wrapper.vm.$options.asyncData({ store: $store });
@@ -149,6 +153,10 @@ describe('organ donation index page', () => {
       expect(wrapper.find(MakeDecision).exists()).toEqual(false);
     });
 
+    it('will not show the already registered link', () => {
+      expect(wrapper.find(AlreadyRegisteredLink).exists()).toEqual(false);
+    });
+
     it('will not show the find out more link', () => {
       expect(wrapper.find(FindOutMoreLink).exists()).toEqual(false);
     });
@@ -171,6 +179,10 @@ describe('organ donation index page', () => {
 
     it('will not show the "MakeDecision" component', () => {
       expect(wrapper.find(MakeDecision).exists()).toEqual(false);
+    });
+
+    it('will not show the already registered link', () => {
+      expect(wrapper.find(AlreadyRegisteredLink).exists()).toEqual(false);
     });
 
     it('will not show the find out more link', () => {

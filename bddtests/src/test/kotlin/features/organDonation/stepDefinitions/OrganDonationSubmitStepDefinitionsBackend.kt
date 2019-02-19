@@ -3,8 +3,11 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.data.organDonation.set
 import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT
+import mocking.organDonation.models.OrganDonationRegistrationRequest
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -19,7 +22,7 @@ class OrganDonationSubmitStepDefinitionsBackend {
     @Given("^I am a (\\w+) api user who wants to opt-out of organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
-        OrganDonationSerenityHelpers.setRegistrationId("NewOrganDonationId")
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         factory.create { registration->registration.optOut {
             request -> request.respondWithSuccess("NewOrganDonationId") }}
     }
@@ -27,7 +30,7 @@ class OrganDonationSubmitStepDefinitionsBackend {
     @Given("^I am a (\\w+) api user who wants to opt-in to organ donation$")
     fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptIn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
-        OrganDonationSerenityHelpers.setRegistrationId("NewOrganDonationId")
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         factory.create { registration->registration.optIn {
             request -> request.respondWithSuccess("NewOrganDonationId") }}
     }
@@ -35,7 +38,7 @@ class OrganDonationSubmitStepDefinitionsBackend {
     @Given("^I am a (\\w+) api user who wants to donate some but not all organs$")
     fun iAmAUserWhoWantsToDonateSomeButNotAllOrgans(gpSystem: String){
         val factory = OrganDonationFactory(gpSystem)
-        OrganDonationSerenityHelpers.setRegistrationId("NewOrganDonationId")
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         factory.create { registration->registration.some {
             request -> request.respondWithSuccess("NewOrganDonationId") }}
     }
@@ -58,14 +61,15 @@ class OrganDonationSubmitStepDefinitionsBackend {
     fun iAmAApiUserWhoWantsToOptInToOrganDonationButWillCauseAConflict(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         val registrationId = "NewOrganDonationId"
-        OrganDonationSerenityHelpers.setRegistrationId(registrationId)
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(registrationId)
         factory.create { registration -> registration.optIn { request-> request.respondWithConflict(registrationId,
                 ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT.toString()) }}
     }
 
     @When("^I submit my decision to organ donation$")
     fun iSubmitMyDecisionToOrganDonation() {
-        val registration = OrganDonationSerenityHelpers.getOrganDonationDecision()
+        val registration = OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION
+                .getOrFail<OrganDonationRegistrationRequest>()
         try {
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .organDonation
@@ -78,7 +82,8 @@ class OrganDonationSubmitStepDefinitionsBackend {
 
     @When("^I submit my updated decision to organ donation$")
     fun iSubmitMyUpdatedDecisionToOrganDonation() {
-        val registration = OrganDonationSerenityHelpers.getOrganDonationDecision()
+        val registration = OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION
+                .getOrFail<OrganDonationRegistrationRequest>()
         try {
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .organDonation
@@ -91,7 +96,8 @@ class OrganDonationSubmitStepDefinitionsBackend {
 
     @When("^I submit a request to set my organ donation preferences with all organs and my faiths and beliefs decision")
     fun iSubmitARequestToSetMyOrganDonationPreferencesWithAllOrgansAndMyFaithsAndBeliefsDecision() {
-        val registration = OrganDonationSerenityHelpers.getOrganDonationDecision()
+        val registration = OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION
+                .getOrFail<OrganDonationRegistrationRequest>()
         registration.registration.faithDeclaration = "Yes"
         try {
             val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
@@ -107,7 +113,7 @@ class OrganDonationSubmitStepDefinitionsBackend {
     fun iReceiveMyRegistrationIdFromOrganDonation() {
         val organDonationResponse = Serenity
                 .sessionVariableCalled<OrganDonationRegistrationResponse>(OrganDonationRegistrationResponse::class)
-        val expected = OrganDonationSerenityHelpers.getRegistrationID()
+        val expected = OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.getOrFail<String>()
         Assert.assertEquals("Expected Organ Donation Registration Id",
                 expected,
                 organDonationResponse.identifier)

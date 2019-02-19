@@ -3,7 +3,9 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.data.organDonation.getOrFail
 import mocking.organDonation.models.FaithDeclaration
+import mocking.organDonation.models.OrganDonationDemographics
 import pages.organDonation.OrganDonationFaithAndBeliefsPage
 
 open class OrganDonationFaithAndBeliefsStepDefinitions {
@@ -37,7 +39,8 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
 
     @Then("^the previous option on the Organ Donation Faith And Beliefs page is selected")
     fun thePreviousOptionOnTheOrganDonationFaithAndBeliefsPageIsSelected() {
-        val faithDeclaration = OrganDonationSerenityHelpers.getOrganDonationDemographics().faithDeclaration
+        val faithDeclaration = OrganDonationSerenityHelpers.DEMOGRAPHICS
+                .getOrFail<OrganDonationDemographics>().faithDeclaration
         when (faithDeclaration) {
             FaithDeclaration.No ->
                 organDonationFaithAndBeliefsPage.radioButtons.assertSelected("No")

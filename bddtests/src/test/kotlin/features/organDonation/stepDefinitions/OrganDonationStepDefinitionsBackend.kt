@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.data.organDonation.set
 import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT
 import mocking.stubs.StubbedEnvironment
 import net.serenitybdd.core.Serenity
@@ -78,7 +79,7 @@ class OrganDonationStepDefinitionsBackend {
     fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToOptIn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         val existingRegistration = factory.existingOptOut()
-        OrganDonationSerenityHelpers.setRegistrationId(existingRegistration.id)
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.amend { registration->registration.optIn {
             request -> request.respondWithSuccess(existingRegistration.id) }}
@@ -88,7 +89,7 @@ class OrganDonationStepDefinitionsBackend {
     fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToSomeOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         val existingRegistration = factory.existingOptIn()
-        OrganDonationSerenityHelpers.setRegistrationId(existingRegistration.id)
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.amend { registration->registration.some {
             request -> request.respondWithSuccess(existingRegistration.id) }}
@@ -98,7 +99,7 @@ class OrganDonationStepDefinitionsBackend {
     fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToOptOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         val existingRegistration = factory.existingOptInSome()
-        OrganDonationSerenityHelpers.setRegistrationId(existingRegistration.id)
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.amend { registration ->
             registration.optOut { request ->
@@ -110,7 +111,7 @@ class OrganDonationStepDefinitionsBackend {
     @Given("I am a (\\w+) api user who wants to amend their decision, but system times out")
     fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButSystemTimesOut(gpSystem: String){
         val factory = OrganDonationFactory(gpSystem)
-        OrganDonationSerenityHelpers.setRegistrationId(factory.existingOptInSome().id)
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(factory.existingOptInSome().id)
         factory.amend { registration ->
             registration.optOut { request ->
                 request.respondWithTimeOutError()
@@ -121,7 +122,7 @@ class OrganDonationStepDefinitionsBackend {
     @Given("I am a (\\w+) api user who wants to amend their decision, but OD will return an internal error")
     fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButInternalError(gpSystem: String){
         val factory = OrganDonationFactory(gpSystem)
-        OrganDonationSerenityHelpers.setRegistrationId(factory.existingOptInSome().id)
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(factory.existingOptInSome().id)
         factory.amend { registration ->
             registration.optOut { request ->
                 request.respondWithInternalError()
@@ -133,7 +134,7 @@ class OrganDonationStepDefinitionsBackend {
     fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButConflict(gpSystem: String){
         val factory = OrganDonationFactory(gpSystem)
         val id = factory.existingOptInSome().id
-        OrganDonationSerenityHelpers.setRegistrationId(id)
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(id)
         factory.amend { registration ->
             registration.optOut { request ->
                 request.respondWithConflict(id, ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT.toString())

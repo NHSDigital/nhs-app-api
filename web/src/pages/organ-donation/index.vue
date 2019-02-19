@@ -25,6 +25,9 @@
       <make-decision/>
       <ul :class="$style['list-menu']">
         <li>
+          <already-registered-link/>
+        </li>
+        <li>
           <find-out-more-link/>
         </li>
       </ul>
@@ -40,6 +43,7 @@
 import get from 'lodash/fp/get';
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -56,6 +60,7 @@ export default {
   components: {
     AmendDecisionLink,
     DecisionDetails,
+    AlreadyRegisteredLink,
     FindOutMoreLink,
     MakeDecision,
     MessageText,

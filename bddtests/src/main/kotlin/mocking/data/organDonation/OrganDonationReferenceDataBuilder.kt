@@ -4,9 +4,6 @@ import mocking.organDonation.models.Coding
 import mocking.organDonation.models.Entry
 import mocking.organDonation.models.OrganDonationSuccessResponse
 import mocking.organDonation.models.ReferenceDataResponse
-import net.serenitybdd.core.Serenity
-import mocking.data.organDonation.OrganDonationSerenityHelpers.Companion.ORGAN_DONATION_REFERENCE_ETHNICITIES
-import mocking.data.organDonation.OrganDonationSerenityHelpers.Companion.ORGAN_DONATION_REFERENCE_RELIGIONS
 
 class OrganDonationReferenceDataBuilder {
 
@@ -33,8 +30,8 @@ class OrganDonationReferenceDataBuilder {
                             Coding(code = "88", display = "Not stated")
                     ))
 
-            Serenity.setSessionVariable(ORGAN_DONATION_REFERENCE_RELIGIONS)
-                    .to(religionsResource.concept.map { concept -> concept.display })
+            OrganDonationSerenityHelpers.REFERENCE_RELIGIONS
+                    .set(religionsResource.concept.map { concept -> concept.display })
 
             val ethnicitiesResource = ReferenceDataResponse(
                     "ethnicities",
@@ -61,8 +58,8 @@ class OrganDonationReferenceDataBuilder {
                             Coding(code = "88", display = "Not Reported"))
             )
 
-            Serenity.setSessionVariable(ORGAN_DONATION_REFERENCE_ETHNICITIES)
-                    .to(ethnicitiesResource.concept.map { concept -> concept.display })
+            OrganDonationSerenityHelpers.REFERENCE_ETHNICITIES
+                    .set(ethnicitiesResource.concept.map { concept -> concept.display })
 
             return OrganDonationSuccessResponse(
                     listOf(Entry(religionsResource), Entry(ethnicitiesResource)))

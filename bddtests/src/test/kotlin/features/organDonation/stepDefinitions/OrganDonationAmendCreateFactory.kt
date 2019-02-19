@@ -1,8 +1,9 @@
 package features.organDonation.stepDefinitions
 
-import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.MockingClient
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
+import mocking.data.organDonation.OrganDonationSerenityHelpers
+import mocking.data.organDonation.set
 import mocking.models.Mapping
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.organDonation.OrganDonationSubmitDecisionBuilder
@@ -19,9 +20,9 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     val mockingClient = MockingClient.instance
 
     fun optOut(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        OrganDonationSerenityHelpers.setIfOrganDonationDecisionIsOptIn(false)
+        OrganDonationSerenityHelpers.IS_OPT_IN.set(false)
         val organDonationDemographics = OrganDonationDemographics()
-        OrganDonationSerenityHelpers.setOrganDonationDemographics(organDonationDemographics)
+        OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.optOut(patient,organDonationDemographics),
                 OrganDonationAdditionalDetails.getAdditionalDetails(organDonationDemographics))
@@ -29,9 +30,9 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     }
 
     fun optIn(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        OrganDonationSerenityHelpers.setIfOrganDonationDecisionIsOptIn(true)
+        OrganDonationSerenityHelpers.IS_OPT_IN.set(true)
         val organDonationDemographics = OrganDonationDemographics()
-        OrganDonationSerenityHelpers.setOrganDonationDemographics(organDonationDemographics)
+        OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.optIn(patient,organDonationDemographics),
                 OrganDonationAdditionalDetails.getAdditionalDetails(organDonationDemographics))
@@ -40,7 +41,7 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
 
     fun some(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
         val organDonationDemographics = OrganDonationDemographics()
-        OrganDonationSerenityHelpers.setOrganDonationDemographics(organDonationDemographics)
+        OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.some(patient, OrganDonationRegistrationDataBuilder.someOrgansListUpdated(),
                         organDonationDemographics),
@@ -50,7 +51,7 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
 
     fun registrationSetup(registration: OrganDonationRegistrationRequest,
                                   action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        OrganDonationSerenityHelpers.setOrganDonationDecision(registration)
+        OrganDonationSerenityHelpers.ORGAN_DONATION_DECISION.set(registration)
         mockingClient.forOrganDonation { action(decisionBuilder(registration)) }
     }
 }

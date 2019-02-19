@@ -73,6 +73,7 @@ const config = {
     ORGAN_DONATION_FIND_OUT_MORE_URL: 'https://www.organdonation.nhs.uk/faq/',
     ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',
     BLOOD_DONATION_URL: 'https://my.blood.co.uk/preregister',
+    ORGAN_DONATION_ALREADY_REGISTERED_URL: ' https://www.organdonation.nhs.uk/register-to-donate/check-registration/',
     // Data Opt-Out
     DATA_SHARING_URL: 'https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/',
     DATA_PREFERENCES_URL: 'https://ndopapp-int1.thunderbird.service.nhs.uk/createsession',
