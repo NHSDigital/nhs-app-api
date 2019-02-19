@@ -4,7 +4,7 @@
       <div :class="$style['cookie-caption']">
         <p><span>{{ $t('cookieBanner.caption.line1') }}</span>
           &nbsp;
-          <a :href="cookieBannerUrl" tabindex="-2" target="_blank">
+          <a :href="cookieBannerUrl" target="_blank">
             {{ $t('cookieBanner.caption.linkText') }}
           </a>
         </p>
