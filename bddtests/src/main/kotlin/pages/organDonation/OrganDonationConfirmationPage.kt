@@ -24,6 +24,8 @@ open class OrganDonationConfirmationPage : OrganDonationBasePage() {
             page = this,
             helpfulName = "link").withText("Register to be a blood donor")
 
+    val amendDecisionLink = getLink("Amend your decision")
+
     fun assertCreatedBanner() {
         BannerObject.success(this).assertVisible("We have updated your decision")
     }

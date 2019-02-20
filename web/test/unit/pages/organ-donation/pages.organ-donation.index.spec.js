@@ -1,5 +1,6 @@
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import OrganDonation from '@/pages/organ-donation';
 import YourDecision from '@/components/organ-donation/YourDecision';
@@ -76,6 +77,10 @@ describe('organ donation index page', () => {
       expect(wrapper.find(MakeDecision).exists()).toEqual(true);
     });
 
+    it('will show the find out more link', () => {
+      expect(wrapper.find(FindOutMoreLink).exists()).toEqual(true);
+    });
+
     it('will not have a "YourDecision" component', () => {
       expect(wrapper.find(YourDecision).exists()).toEqual(false);
     });
@@ -115,6 +120,7 @@ describe('organ donation index page', () => {
       });
     });
   });
+
   describe('Decision found conflicted state', () => {
     beforeEach(() => {
       $store = createStore({
@@ -142,6 +148,14 @@ describe('organ donation index page', () => {
     it('will not show the "MakeDecision" component', () => {
       expect(wrapper.find(MakeDecision).exists()).toEqual(false);
     });
+
+    it('will not show the find out more link', () => {
+      expect(wrapper.find(FindOutMoreLink).exists()).toEqual(false);
+    });
+
+    it('will not show a AmendDecisionLink', () => {
+      expect(wrapper.find(AmendDecisionLink).exists()).toEqual(false);
+    });
   });
 
   describe('loaded registration (original decision is found)', () => {
@@ -157,6 +171,10 @@ describe('organ donation index page', () => {
 
     it('will not show the "MakeDecision" component', () => {
       expect(wrapper.find(MakeDecision).exists()).toEqual(false);
+    });
+
+    it('will not show the find out more link', () => {
+      expect(wrapper.find(FindOutMoreLink).exists()).toEqual(false);
     });
 
     describe('opt-out', () => {

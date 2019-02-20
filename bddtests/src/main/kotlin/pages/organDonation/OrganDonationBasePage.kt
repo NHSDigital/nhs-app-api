@@ -24,11 +24,6 @@ abstract class OrganDonationBasePage: HybridPageObject() {
         clickOnButtonContainingText("Continue")
     }
 
-    val amendDecisionLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'Amend your decision')]",
-            page = this
-    )
-
     abstract fun assertDisplayed()
 
     protected fun assertPageFullyLoaded() {
@@ -60,5 +55,11 @@ abstract class OrganDonationBasePage: HybridPageObject() {
                 null,
                 this
         ).withText(text, false).assertIsVisible()
+    }
+
+    protected fun getLink(text: String): HybridPageElement {
+        return HybridPageElement(
+                "//a[normalize-space() = '$text']",
+                page = this)
     }
 }

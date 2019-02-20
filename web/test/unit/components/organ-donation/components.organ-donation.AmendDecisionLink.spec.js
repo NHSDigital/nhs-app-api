@@ -12,8 +12,8 @@ describe('amend decision link', () => {
     wrapper = mountAmendDecisionLink();
   });
 
-  it('will display text from organDonation.amendDecision.linkText', () => {
-    expect(wrapper.text()).toEqual('translate_organDonation.amendDecision.linkText');
+  it('will display text from organDonation.links.amendText', () => {
+    expect(wrapper.text()).toEqual('translate_organDonation.links.amendText');
   });
 
   it('will dispatch the "organDonation/amendDecision" action when clicked', () => {

@@ -333,3 +333,10 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Specific Organ Choice page is displayed
     And a validation message is shown if a user attempts to continue with all specific organ options set to no
+
+  Scenario: A user can find out more about organ donation when registering
+    Given I am a EMIS user not registered with organ donation, who wishes to register
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    When I select the Find Out More About Organ Donation link
+    Then a new tab opens https://www.organdonation.nhs.uk/faq/

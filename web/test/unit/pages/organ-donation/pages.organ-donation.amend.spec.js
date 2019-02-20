@@ -1,4 +1,5 @@
 import Amend from '@/pages/organ-donation/amend';
+import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION } from '@/lib/routes';
@@ -52,6 +53,10 @@ describe('organ donation amend page', () => {
 
     it('will show the "MakeDecision" component', () => {
       expect(wrapper.find(MakeDecision).exists()).toEqual(true);
+    });
+
+    it('will show the find out more link', () => {
+      expect(wrapper.find(FindOutMoreLink).exists()).toEqual(true);
     });
 
     describe('back button', () => {

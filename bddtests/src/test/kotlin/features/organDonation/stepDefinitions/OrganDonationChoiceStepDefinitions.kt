@@ -45,13 +45,13 @@ open class OrganDonationChoiceStepDefinitions {
         button.click()
     }
 
-    @When("^I choose to amend my Organ Donation decision")
-    fun iChooseToAmendMyDecision() {
-        organDonationChoicePage.amendDecisionLink.click()
-    }
-
     @Then("^the internal Organ Donation Choice Page is displayed")
     fun theInternalOrganDonationChoicePageIsDisplayed() {
         organDonationChoicePage.assertDisplayed()
+    }
+
+    @When("^I select the Find Out More About Organ Donation link")
+    fun iSelectTheFindOutMoreLink() {
+        organDonationChoicePage.findOutMoreLink.assertIsVisible().click()
     }
 }

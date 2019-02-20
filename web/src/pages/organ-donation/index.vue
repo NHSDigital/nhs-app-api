@@ -21,7 +21,14 @@
       </div>
       <amend-decision-link :class="$style.amendDecision"/>
     </div>
-    <make-decision v-else />
+    <div v-else>
+      <make-decision/>
+      <ul :class="$style['list-menu']">
+        <li>
+          <find-out-more-link/>
+        </li>
+      </ul>
+    </div>
     <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep]">
       <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
       <span>0300 123 2323</span>
@@ -33,6 +40,7 @@
 import get from 'lodash/fp/get';
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
@@ -48,6 +56,7 @@ export default {
   components: {
     AmendDecisionLink,
     DecisionDetails,
+    FindOutMoreLink,
     MakeDecision,
     MessageText,
     MessageDialog,
@@ -104,6 +113,7 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/info";
+@import "../../style/listmenu";
 @import "../../style/spacings";
 
 .amendDecision {
@@ -116,5 +126,9 @@ export default {
       padding-bottom: 0;
     }
   }
+}
+
+.list-menu {
+  margin-bottom: $three;
 }
 </style>

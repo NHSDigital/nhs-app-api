@@ -1,6 +1,6 @@
 <template>
   <a href="#"
-     @click.stop.prevent="amendDecision">{{ $t('organDonation.amendDecision.linkText') }}</a>
+     @click.stop.prevent="amendDecision">{{ $t('organDonation.links.amendText') }}</a>
 </template>
 
 <script>

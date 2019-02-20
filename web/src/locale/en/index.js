@@ -724,9 +724,6 @@ export default {
       },
       subheader: 'Additional details',
     },
-    amendDecision: {
-      linkText: 'Amend your decision',
-    },
     faith: {
       subheader: 'Faith / beliefs',
       continueButtonText: 'Continue',
@@ -757,6 +754,10 @@ export default {
           title: 'Prefer not to say',
         },
       },
+    },
+    links: {
+      amendText: 'Amend your decision',
+      findOutMoreText: 'Find out more about organ donation',
     },
     register: {
       subheader: 'Register your organ donation decision',

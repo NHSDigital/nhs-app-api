@@ -15,6 +15,11 @@ open class OrganDonationConfirmationStepDefinitions {
         organDonationConfirmationPage.registerBloodDonorLink.assertIsVisible().click()
     }
 
+    @When("^I choose to amend my Organ Donation decision")
+    fun iChooseToAmendMyDecision() {
+        organDonationConfirmationPage.amendDecisionLink.click()
+    }
+
     @Then("^the Organ Donation Confirmation page is displayed$")
     fun theOrganDonationConfirmationPageIsDisplayed(){
         organDonationConfirmationPage.assertDisplayed()

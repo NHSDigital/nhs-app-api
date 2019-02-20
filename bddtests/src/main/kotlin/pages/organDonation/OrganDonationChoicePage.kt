@@ -13,6 +13,8 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
 
     val yesButton = button("YES")
 
+    val findOutMoreLink = getLink("Find out more about organ donation")
+
     private fun button(option: String): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = "//button[descendant::*[contains(text(),\"$option\")]]",

@@ -252,3 +252,12 @@ Feature: Organ Donation - Amend
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'No I do not want to be a donor' button
     Then the organ donation decision has been submitted and is to be processed
+
+  Scenario: A user can find out more about organ donation when amending their decision
+    Given I am a EMIS user registered as opt-in with organ donation, who wishes to amend
+    And I am logged in
+    Then I navigate to the internal Organ Donation Page
+    When I choose to amend my Organ Donation decision
+    Then the internal Organ Donation Choice Page is displayed
+    When I select the Find Out More About Organ Donation link
+    Then a new tab opens https://www.organdonation.nhs.uk/faq/
