@@ -4,7 +4,7 @@
       <connection-error/>
       <api-error/>
     </div>
-    <div v-else id="app" :class="$style['login-app-header']">
+    <div v-else id="app">
       <div :class="dynamicStyle('login-app-header-flex-container')">
         <home-header v-if="this.$store.state.device.isNativeApp"/>
         <div v-else :class="$style['header-container-desktop']">
@@ -171,13 +171,6 @@ export default {
   }
 }
 
-.login-app-header {
-  position: absolute;
-  left:0;
-  top:0;
-  right:0;
-  bottom:0;
-}
 
 .login-app-header-flex-container {
   display:flex;
@@ -192,14 +185,10 @@ export default {
   justify-content: flex-start;
   align-content: stretch;
   align-items: flex-start;
-  position: absolute;
   margin: 0 auto;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
   background: #f0f4f5;
-  width: 100%;
+  width: auto;
+  min-height: 100vh;
 }
 
 .error-container {

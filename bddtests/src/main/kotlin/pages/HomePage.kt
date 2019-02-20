@@ -18,8 +18,8 @@ open class HomePage : HybridPageObject() {
     )
 
     private val betaBanner = HybridPageElement(
-            webDesktopLocator = "//div[span[@data-purpose = 'beta-banner']]//div[contains(text(), " +
-                    "'BETA')]/following-sibling::p[contains(text(),'This is a new service')]",
+            webDesktopLocator = "//div[span[@data-purpose = 'beta-banner']]//span[contains(text(), " +
+                    "'BETA')]/following-sibling::span[contains(text(),'This is a new service')]",
             androidLocator = null,
             page = this,
             helpfulName = "Beta Banner"

@@ -13,16 +13,16 @@
     p {
       color: #fff;
       padding: 1.2em 0 0 20px;
-      font-size: 13px;
+      font-size: 0.813em;
       font-weight: 600;
       text-align: left;
-      font-family: "Frutiger W01", Arial, sans-serif;
+      font-family: $default;
     }
     a {
       color: #fff;
       display: inline-block;
       text-decoration: underline;
-
+      word-wrap: break-word;
       &:hover {
         background: #ffcd60;
         box-shadow: 0 0 0 4px #ffcd60;
@@ -42,7 +42,8 @@
     display: inline-block;
     button {
       position: absolute;
-      top: 20px;
+      padding: 20px;
+      top: 0;
       right: 20px;
       cursor: pointer;
       background: $nhs_blue_med url(~/assets/icon-close-das.gif) center no-repeat;
@@ -81,7 +82,7 @@
 
   @include tablet-and-above {
     .cookie-banner-panel {
-      margin: 0 32px;
+      margin: 0 2em;
     }
   }
 

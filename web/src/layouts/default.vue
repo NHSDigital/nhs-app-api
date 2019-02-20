@@ -258,11 +258,7 @@ div {
   justify-content: flex-start;
   align-content: stretch;
   align-items: flex-start;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
+  min-height: 100vh;
 
   .header-container-desktop, .footer-container-desktop {
    order: 0;

@@ -1,8 +1,8 @@
 <template>
   <div :class="bannerClass">
     <span data-purpose="beta-banner">
-      <div :class="dynamicStyle('betaLabel')">BETA</div>
-      <p :class="$style.betaLine">This is a new service.</p>
+      <span :class="dynamicStyle('betaLabel')">{{ $t('betaBanner.label') }}</span>
+      <span>{{ $t('betaBanner.caption') }}</span>
     </span>
   </div>
 </template>
@@ -36,7 +36,6 @@ export default {
     font-weight: 700;
     font-size: 1em;
     line-height: 1.5em;
-    display: inline-block;
     margin-right: 0.6em;
     margin-top: -0.3em;
     padding: 0.3em 0.6em;
@@ -50,9 +49,5 @@ export default {
   .betaLabel-desktop {
     @include betaLabel-core;
     margin-left: 0;
-  }
-
-  .betaLine {
-    display: inline-block;
   }
 </style>
