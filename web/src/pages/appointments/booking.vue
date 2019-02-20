@@ -120,6 +120,8 @@ export default {
     return {
       availableAppointmentsScreenReaderMessage: [],
       filtered: false,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {

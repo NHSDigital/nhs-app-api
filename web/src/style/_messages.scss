@@ -12,6 +12,10 @@
 	margin-top: 2.125em;
 	padding-bottom: 0.850em;
 
+  &.desktopWeb{
+    max-width: 540px;
+  }
+
 
 	.msg-content {
 		padding-top: 1.125em;

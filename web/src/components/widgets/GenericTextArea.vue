@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.form, !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <div :class="[$style.form, isDesktopWeb ? $style.desktopWeb : $style.web]">
     <textarea v-tabbing="textAreaClasses"
               ref="textArea"
               :class="getStyleClasses"
@@ -58,6 +58,8 @@ export default {
   data() {
     return {
       model: undefined,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {
@@ -84,11 +86,4 @@ export default {
 </script>
 <style module lang="scss" scoped>
 @import '../../style/forms';
-div {
- &.desktopWeb {
-  .form {
-   max-width: 540px;
-  }
- }
-}
 </style>

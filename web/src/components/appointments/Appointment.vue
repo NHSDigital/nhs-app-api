@@ -1,21 +1,23 @@
 <template>
-  <div :class="[$style.panel, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <h3 data-label="date">{{ formatDate(appointment.startTime) }}</h3>
-    <h4 data-label="start time">{{ formatTime(appointment.startTime) }}</h4>
-    <hr aria-hidden="true">
-    <p :class="$style.session"
+  <div :class="[$style.panel, isDesktopWeb ? $style.desktopWeb : $style.web]">
+    <h3 :class="[isDesktopWeb ? $style.desktopWeb : $style.web]"
+        data-label="date">{{ formatDate(appointment.startTime) }}</h3>
+    <h4 :class="[isDesktopWeb ? $style.desktopWeb : $style.web]"
+        data-label="start time">{{ formatTime(appointment.startTime) }}</h4>
+    <hr :class="[isDesktopWeb ? $style.desktopWeb : $style.web]" aria-hidden="true">
+    <p :class="[$style.session, isDesktopWeb ? $style.desktopWeb : $style.web]"
        data-label="session name">
       {{ appointment.type }}
     </p>
-    <hr aria-hidden="true">
+    <hr :class="[isDesktopWeb ? $style.desktopWeb : $style.web]" aria-hidden="true">
 
-    <p :class="$style.location">
+    <p :class="[$style.location, isDesktopWeb ? $style.desktopWeb : $style.web]">
       <location-icon/>&nbsp;
       <span data-label="location">{{ appointment.location }}</span>
     </p>
 
     <p v-for="(clinician, index) in appointment.clinicians" :key="clinician"
-       :class="$style.person">
+       :class="[$style.person, isDesktopWeb ? $style.desktopWeb : $style.web]">
       <clinician-icon/>&nbsp;
       <span :data-label="'clinician ' + (index +1)">
         {{ clinician }}
@@ -23,10 +25,10 @@
     </p>
 
     <span v-if="showCancellationLink && !cancellationDisabled && !appointment.disableCancellation">
-      <hr :class="$style.cancel"
+      <hr :class="[$style.cancel, isDesktopWeb ? $style.desktopWeb : $style.web]"
           aria-hidden="true">
       <p>
-        <a :class="$style['cancel-link']"
+        <a :class="[$style['cancel-link'], isDesktopWeb ? $style.desktopWeb : $style.web]"
            :href="appointmentCancellingPath"
            @click.stop.prevent="onCancel">
           {{ this.$t('appointments.index.cancelButtonText') }}
@@ -34,7 +36,7 @@
       </p>
     </span>
     <span v-if="showCancellationLink && (cancellationDisabled || appointment.disableCancellation)">
-      <hr :class="$style.cancel"
+      <hr :class="[$style.cancel, isDesktopWeb ? $style.desktopWeb : $style.web]"
           aria-hidden="true">
       <p :class="$style['cancel-disabled']">
         {{ this.$t('appointments.index.cancellationDisabledText') }}
@@ -69,6 +71,12 @@ export default {
       type: Boolean,
     },
   },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
+  },
   computed: {
     appointmentCancellingPath() {
       const noJsData = {
@@ -100,46 +108,11 @@ export default {
   margin-top: 0.5em;
 }
 
- div {
-  &.desktopWeb {
-   hr {
+ div{
+  hr {
+   &.desktopWeb{
     opacity: unset;
    }
-
-   h3 {
-    font-family: $default-web;
-    display: block;
-    font-weight: lighter;
-    font-size: 1em;
-    line-height: 1.5em;
-   }
-
-   h4 {
-    font-family: $default-web;
-    font-weight: lighter;
-   }
-
-   p {
-    font-family: $default-web;
-    font-weight: lighter;
-    max-width: 540px;
-   }
-
-   p.person,
-   p.location,
-   p.cancel-disabled {
-     font-family: $default-web;
-     font-weight: lighter;
-    }
-
-   a.cancel-link{
-     font-family: $default-web;
-     font-weight: normal;
-    }
-    :visited {
-     color: #D40003;
-     outline-color: $focus_highlight;
-    }
   }
  }
 </style>

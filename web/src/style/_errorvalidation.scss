@@ -26,7 +26,14 @@
 }
 .validation-text {
 	padding-bottom: 0em !important;
+    &.desktopWeb{
+      font-family: $default-web;
+      font-weight: normal;
+      color: red;
+      margin-bottom: 1em;
+    }
+    &.web{
       font-weight: 700 !important;
       color: $error_dark !important;
-
+    }
 }

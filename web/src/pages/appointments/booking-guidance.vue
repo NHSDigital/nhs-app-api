@@ -1,27 +1,26 @@
 <template>
 
-  <div v-if="showTemplate" :class="[$style['pull-content'],
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <h2 id="guidance_sub_header">
+  <div v-if="showTemplate" class="pull-content">
+    <h2 id="guidance_sub_header" :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
       {{ $t('appointments.guidance.header') }}</h2>
-    <div :class="$style.info"
+    <div :class="[$style.info, isDesktopWeb ? $style.desktopWeb : $style.web]"
          data-purpose="info">
-      <p>
+      <p :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
         {{ $t('appointments.guidance.text') }}</p>
 
-      <strong>
+      <strong :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
         1. {{ $t('appointments.guidance.li1.header') }}</strong>
-      <p>
+      <p :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
         {{ $t('appointments.guidance.li1.text') }}</p>
 
-      <strong>
+      <strong :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
         2. {{ $t('appointments.guidance.li2.header') }}</strong>
-      <p>
+      <p :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
         {{ $t('appointments.guidance.li2.text') }}</p>
 
-      <strong>
+      <strong :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
         3. {{ $t('appointments.guidance.li3.header') }}</strong>
-      <p>
+      <p :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
         {{ $t('appointments.guidance.li3.text') }}</p>
     </div>
 
@@ -30,7 +29,7 @@
                            data-purpose="generic-button"
                            tag="generic-button">
       <generic-button id="btn_check_symptoms"
-                      :class="$style.button"
+                      :class="[$style.button, isDesktopWeb ? $style.desktopWeb : $style.web]"
                       tabindex="0"
                       @click="onCheckSymptomClicked">
         {{ $t('appointments.guidance.symptomButttonText') }}
@@ -40,7 +39,8 @@
     <no-js-form :action="appointmentBookingPath" :value="formData">
       <generic-button
         id="btn_appointment"
-        :class="[$style.button, $style.green]"
+        :class="[$style.button, $style.green,
+                 isDesktopWeb ? $style.desktopWeb : $style.web]"
         tabindex="0"
         @click.stop.prevent="onBookButtonClicked">
         {{ $t('appointments.guidance.bookButtonText') }}
@@ -62,6 +62,8 @@ export default {
   },
   data() {
     return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
       symptomsPath: SYMPTOMS.path,
     };
   },
@@ -92,67 +94,6 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/buttons";
 @import "../../style/info";
-@import "../../style/textstyles";
-div {
- &.desktopWeb {
-  h2 {
-   font-family: $default-web;
-   font-weight: bold;
-  }
-
-  .info {
-   font-size: 1em;
-   margin-bottom: 1em;
-
-   p {
-    font-family: $default-web;
-    font-weight: lighter;
-    max-width: 540px;
-   }
-
-   strong {
-    font-family: $default-web;
-    font-weight: normal;
-    max-width: 540px;
-   }
-  }
-
-  .button {
-   @include button;
-   box-sizing: border-box;
-   padding: 0.625em;
-   background-color: $nhs_blue;
-   border: none;
-   border-radius: 0.125em;
-   outline: none;
-   transition: all ease 0.5s;
-   cursor: pointer;
-   width: auto;
-   min-width: 16.875em;
-   padding-left: 2em;
-   padding-right: 2em;
-   max-width: 960px;
-   display: block;
-   width: auto;
-
-   :focus {
-    outline-color: $focus_highlight;
-    box-shadow: inset 0 0 0 4px $focus_highlight;
-    outline-offset: -5px;
-   }
-  }
-  .green {
-   background-color: $light_green;
-   box-shadow: 0 0.125em 0 0 $dark_green;
-   :focus {
-    outline-color: $focus_highlight;
-    box-shadow: inset 0 0 0 4px $focus_highlight;
-    outline-offset: -5px;
-   }
-  }
-
- }
-}
 
 .button:focus{
  outline-color: $focus_highlight;

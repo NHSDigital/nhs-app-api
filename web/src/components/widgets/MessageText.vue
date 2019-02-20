@@ -1,7 +1,5 @@
 <template>
-  <p :class="[$style.msgText,
-              extendedStyle,
-              !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <p :class="[$style.msgText, extendedStyle, isDesktopWeb && $style.desktopWeb]">
     <slot/>
   </p>
 </template>
@@ -23,6 +21,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios'),
+    };
   },
   computed: {
     extendedStyle() {

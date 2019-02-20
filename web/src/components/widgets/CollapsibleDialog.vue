@@ -1,6 +1,5 @@
 <template>
-  <div :class="[$style['info-message'], !$store.state.device.isNativeApp && $style.desktopWeb]"
-       data-purpose="info-msg">
+  <div :class="$style['info-message']" data-purpose="info-msg">
     <div :class="$style['info-header']"
          :aria-expanded="showContent ? 'true' : 'false'"
          role="button"
@@ -8,7 +7,7 @@
          @click="toggle"
          @keypress="keyPress($event)">
       <plus-minus-icon :icon-plus="!showContent" />
-      <h2 :class="$style['info-message-title']">
+      <h2 :class="[$style['info-message-title'], ...(isDesktopWeb ? [$style.desktopWeb] : [])]">
         <slot name="header" />
       </h2>
     </div>
@@ -32,6 +31,8 @@ export default {
   data() {
     return {
       showContent: true,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   mounted() {
@@ -55,15 +56,4 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/collapsibledialog";
-
-div.info-message {
- &.desktopWeb {
-  .info-header {
-   h2 {
-    font-family: $default-web;
-    font-weight: normal;
-   }
-  }
-  }
-}
 </style>

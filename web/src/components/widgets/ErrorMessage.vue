@@ -1,5 +1,5 @@
 <template>
-  <p :class="[$style['validation-text'], !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <p :class="[$style['validation-text'], isDesktopWeb ? $style.desktopWeb : $style.web]">
     <error-marker-icon/>
     <span data-purpose="error">
       <slot/>
@@ -15,18 +15,15 @@ export default {
   components: {
     ErrorMarkerIcon,
   },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
+  },
 };
 </script>
 
 <style module lang="scss" scoped>
   @import "../../style/errorvalidation";
-
-  .validation-text {
-   &.desktopWeb{
-    font-family: $default-web;
-    font-weight: normal;
-    color: red;
-    margin-bottom: 1em;
-   }
-  }
 </style>

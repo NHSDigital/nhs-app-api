@@ -7,7 +7,19 @@
 .panel,
 .form {
 	font-size: 1em;
+    &.desktopWebFilters{
+      max-width: 560px;
+      padding-right: 1em;
+      display: block;
+      width: auto;
+      position: relative;
+    }
 	p {
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: lighter;
+        max-width: 540px;
+      }
 		padding-bottom: 0.5em;
 		padding-top: 0.250em;
 		b {
@@ -24,6 +36,10 @@
 		font-size: 1.250em;
 		padding-bottom: 0.5em;
 		padding-top: 0em;
+      &.desktopWeb {
+        font-family: $default-web;
+        font-weight: lighter;
+      }
 	}
 
 	.checkbox {

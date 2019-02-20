@@ -34,14 +34,29 @@ a {
 }
 p {
 	@include default_text;
+  &.desktopWeb {
+    font-family: $default-web;
+    font-weight: lighter;
+    max-width: 540px;
+  }
 }
 b,
 strong,
 label{
 	@include default_label;
+  &.desktopWeb {
+    font-family: $default-web;
+    font-weight: normal;
+    max-width: 540px;
+  }
 }
 strong {
 	display: inline-block;
+  &.desktopWeb {
+    font-family: $default-web;
+    font-weight: normal;
+    max-width: 540px;
+  }
 }
 hr {
 	height: 0.063em;

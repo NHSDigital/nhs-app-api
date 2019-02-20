@@ -1,6 +1,5 @@
 <template>
-  <div v-if="showTemplate" :class="[$style['pull-content'],
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <div v-if="showTemplate" class="pull-content">
     <div>
       <form-post :action="confirmBookingPath">
         <input :value="confirmationMessageKey" type="hidden" name="successMessageKey">
@@ -23,9 +22,9 @@
           </div>
         </message-dialog>
 
-        <div :class="$style.info"
+        <div :class="[$style.info, isDesktopWeb ? $style.desktopWeb : $style.web]"
              data-purpose="info">
-          <p>
+          <p :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
             {{ $t('appointments.confirmation.info') }}</p>
         </div>
 
@@ -38,14 +37,16 @@
               {{ $t('appointments.confirmation.telephoneNumberLabel') }}
             </legend>
             <error-message v-if="showTelephoneError"
-                           id="telephone-error-label">
+                           id="telephone-error-label"
+                           :class="isDesktopWeb ? $style.desktopWebError : undefined">
               {{ $t('appointments.confirmation.noPhoneNumberError') }}
             </error-message>
             <div v-if="isJavascriptOn">
               <div v-for="(patientTelephoneNumber, index) in patientTelephoneNumbers"
                    :key="index">
                 <label :id="patientTelephoneNumber.telephoneNumber"
-                       :class="$style.telephoneNumberContainer"
+                       :class="[$style.telephoneNumberContainer,
+                                isDesktopWeb ? $style.desktopWeb : $style.web]"
                        @keypress="onKeyDown" @click="selected">
                   <input v-model="telephoneNumber"
                          :id="'telephoneNumber' + index"
@@ -57,13 +58,15 @@
                   <span :class="$style.radioButton"
                         :selected="isSelected"
                         :id="patientTelephoneNumber.telephoneNumber"/>
-                  <span :class="$style.patientTelephoneNumberLabel">
+                  <span :class="[$style.patientTelephoneNumberLabel,
+                                 isDesktopWeb ? $style.desktopWeb : $style.web]">
                     {{ patientTelephoneNumber.telephoneNumber }}</span>
                 </label>
               </div>
               <label v-if="patientTelephoneNumbers.length > 0"
                      id="otherPhoneNumberRadio"
-                     :class="$style.telephoneNumberContainer"
+                     :class="[$style.telephoneNumberContainer,
+                              isDesktopWeb ? $style.desktopWeb : $style.web]"
                      @keypress="onKeyDown">
                 <input id="otherPhoneNumberRadioInput"
                        :checked="model === 'otherPhoneNumber'"
@@ -74,7 +77,8 @@
                 <span id="otherPhoneNumberRadioButton"
                       :class="$style.radioButton"
                       :selected="isSelected"/>
-                <span :class="$style.patientTelephoneNumberLabel">
+                <span :class="[$style.patientTelephoneNumberLabel,
+                               isDesktopWeb ? $style.desktopWeb : $style.web]">
                   Use other phone number</span>
               </label>
             </div>
@@ -84,12 +88,13 @@
                                   :text-area-classes="defaultClasses"
                                   :required="true"
                                   :initial-contents="otherTelephoneNumber"
-                                  :class="showReasonError && $style.desktopWebErrorBorder"
+                                  :class="showReasonError ?
+                                  $style.desktopWebErrorBorder : undefined"
                                   v-model="otherTelephoneNumber"
                                   name="telephoneNumberField"
                                   pattern=".*[^ ].*"
                                   type="tel"/>
-              <p>
+              <p :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
                 {{ $t('appointments.confirmation.telephoneNumberDescription') }}
               </p>
             </div>
@@ -97,7 +102,7 @@
         </div>
         <div v-if="showBookingReason()" :class="[$style.form, $style.reasonForm]"
              role="form" data-purpose="booking-reason">
-          <label :class="$style.textReasonLabel"
+          <label :class="[$style.textReasonLabel, isDesktopWeb ? $style.desktopWeb : $style.web]"
                  for="reasonText">
             {{ $t('appointments.confirmation.headerLabel') }}
             {{ bookingReasonOptional() ? $t('appointments.confirmation.headerLabelSuffix') : '' }}
@@ -112,28 +117,28 @@
                              :initial-contents="symptoms"
                              :text-area-classes="defaultClasses"
                              :required="true"
-                             :class="showReasonError && $style.desktopWebErrorBorder"
+                             :class="showReasonError ? $style.desktopWebErrorBorder : undefined"
                              v-model="symptoms"
                              name="bookingReason"
                              maxlength="150"/>
 
           <p id="max-reason-desc"
-             :class="$style.char">
+             :class="[$style.char, isDesktopWeb ? $style.desktopWeb : $style.web]">
             {{ $t('appointments.confirmation.reasonDesc.line1') }}
           </p>
-          <p>
+          <p :class="[isDesktopWeb ? $style.desktopWeb : $style.web]">
             {{ $t('appointments.confirmation.reasonDesc.line2') }}
             <br >
             {{ $t('appointments.confirmation.reasonDesc.line3') }}
           </p>
         </div>
-        <div :class="$style.confirmButton">
-          <generic-button id="btn_book_appointment"
-                          :class="[$style.button, $style.green, $style.desktopWebConfirmButton]"
-                          @click.prevent="onConfirmButtonClicked">
-            {{ $t('appointments.confirmation.confirmButtonText') }}
-          </generic-button>
-        </div>
+
+        <generic-button id="btn_book_appointment"
+                        :class="[$style.button, $style.green,
+                                 isDesktopWeb ? $style.desktopWebConfirmButton : $style.web]"
+                        @click.prevent="onConfirmButtonClicked">
+          {{ $t('appointments.confirmation.confirmButtonText') }}
+        </generic-button>
       </form-post>
 
       <generic-button v-if="$store.state.device.isNativeApp" id="btn_cancel_appointment"
@@ -197,6 +202,8 @@ export default {
       patientTelephoneNumbers: get('availableAppointments.patientTelephoneNumbers')(this.$store.state),
       showPhoneNumberTextBox: true,
       isJavascriptOn: false,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
       appointmentBookingPath: APPOINTMENT_BOOKING.path,
     };
   },
@@ -386,19 +393,33 @@ export default {
 }
 
 .textReasonLabel {
+ padding-top: 1em;
+
+ &.desktopWeb {
+  font-family: $default-web;
+  font-weight: lighter;
+  margin-top: 1em;
+ }
+ &.web{
   padding-top: 8px;
   font-weight: bold;
   padding-bottom: 1em;
-  margin-top: 1em;
-
+ }
 }
 
 .textPhoneNumberLabel {
+ padding-top: 2em;
+
+ &.desktopWeb {
+  font-family: $default-web;
+  font-weight: lighter;
+ }
+
+ &.web {
   padding-top: 8px;
   font-weight: bold;
   padding-bottom: 1em;
-  margin-top: 1em;
-
+ }
 }
 
 .patientPhoneNumberRadioButton {
@@ -411,6 +432,10 @@ export default {
 
 .patientTelephoneNumberLabel {
   margin-left: 0.5em;
+ &.desktopWeb{
+  font-family: $default-web;
+  font-weight: lighter;
+ }
 }
 /* The telephoneNumberContainer */
 .telephoneNumberContainer {
@@ -424,7 +449,9 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+ &.web {
   margin-bottom: 12px;
+ }
 }
 
 /* Hide the browser's default radio button */
@@ -503,6 +530,16 @@ export default {
  box-shadow: inset 0 0 0 4px $focus_highlight;
 }
 
+
+ .desktopWebError{
+  font-family: $default-web;
+  font-weight: normal;
+ }
+.desktopWebError{
+ font-family: $default-web;
+ font-weight: normal;
+}
+
  .desktopWebErrorBorder{
   box-sizing: content-box;
   outline-color: red;
@@ -510,78 +547,6 @@ export default {
   border-radius: 0.313em;
   outline-width: thick;
  }
-
- .confirmButton {
-  margin-top: 1em;
- }
-
-div {
- &.desktopWeb {
-  p {
-   font-family: $default-web;
-   font-weight: lighter;
-   max-width: 540px;
-  }
-  .info {
-   font-size: 1em;
-   margin-bottom: 1em;
-  }
-  .telephoneNumberContainer {
-   margin-bottom: 0px;
-  }
-  .patientTelephoneNumberLabel {
-    font-family: $default-web;
-    font-weight: lighter;
-  }
-  .textReasonLabel {
-   padding-top: 1em;
-    font-family: $default-web;
-    font-weight: lighter;
-    margin-top: 1em;
-  }
-
-  .button {
-   @include button;
-   box-sizing: border-box;
-   padding: 0.625em;
-   background-color: $nhs_blue;
-   border: none;
-   border-radius: 0.125em;
-   outline: none;
-   transition: all ease 0.5s;
-   cursor: pointer;
-   width: auto;
-   min-width: 16.875em;
-   padding-left: 2em;
-   padding-right: 2em;
-   max-width: 960px;
-   display: block;
-   width: auto;
-
-   :focus {
-    outline-color: $focus_highlight;
-    box-shadow: inset 0 0 0 4px $focus_highlight;
-    outline-offset: -5px;
-   }
-
-   &.desktopWebConfirmButton {
-    @include webButton;
-    margin-top: 1em;
-   }
-
-   &.green {
-    background-color: $light_green;
-    box-shadow: 0 0.125em 0 0 $dark_green;
-
-    :focus {
-     outline-color: $focus_highlight;
-     box-shadow: inset 0 0 0 4px $focus_highlight;
-     outline-offset: -5px;
-    }
-   }
-  }
- }
-}
 
 </style>
 

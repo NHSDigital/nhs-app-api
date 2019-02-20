@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.welcomeInfo, !$store.state.device.isNativeApp && $style.desktopWeb]"
+  <div :class="[$style.welcomeInfo, isDesktopWeb ? $style.desktopWeb : $style.web]"
        data-sid="welcome-info">
     <p v-if="name">
       <strong>Name:</strong>
@@ -8,14 +8,15 @@
       </span>
     </p>
     <p v-if="dateOfBirth">
-      <strong :class="$style.fieldName" >Date of birth:</strong>
-      <span :class="$style.fieldValue" data-sid="user-date-of-birth">
+      <strong :class="[isDesktopWeb && $style.fieldName]" >Date of birth:</strong>
+      <span :class="[isDesktopWeb && $style.fieldValue]" data-sid="user-date-of-birth">
         {{ dateOfBirth | longDate }}
       </span>
     </p>
     <p v-if="nhsNumber">
-      <strong :class="$style.fieldName">NHS number:</strong>
-      <generic-voice-over-text-split :class="$style.fieldValue"
+      <strong :class="[isDesktopWeb && $style.fieldName]">NHS number:</strong>
+      <generic-voice-over-text-split :class="[!$store.state.device.isNativeApp
+                                     && $style.fieldValue]"
                                      :text="nhsNumber"
                                      :data-sid="'user-nhs-number'"/>
     </p>
@@ -42,36 +43,31 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
+    };
+  },
 };
 </script>
 
 <style module lang="scss">
   @import "../style/fonts";
+  .fieldName{
+    font-family: $default-web;
+    font-weight: 500;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #425563;
+  }
 
-  div {
-   &.desktopWeb {
-    .fieldName {
-     font-family: $default-web;
-     font-weight: 500;
-     font-size: 1em;
-     line-height: 1.5em;
-     color: #425563;
-    }
-
-    .fieldValue {
-     font-family: $default-web;
-     font-weight: lighter;
-     font-size: 1em;
-     line-height: 1.5em;
-     color: #425563;
-    }
-   }
-
-   .fieldName {
-   }
-
-   .fieldValue {
-   }
+  .fieldValue{
+    font-family: $default-web;
+    font-weight: lighter;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #425563;
   }
 
  .welcomeInfo {

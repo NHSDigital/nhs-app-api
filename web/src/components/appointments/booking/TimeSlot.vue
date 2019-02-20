@@ -4,7 +4,7 @@
     :class="getStyleClasses"
     :aria-label="isSelected?'selected-slot':undefined" tabindex="-1"
     @keypress="onKeyDown">
-    <a :class="!$store.state.device.isNativeApp && $style.desktopWeb"
+    <a :class="[isDesktopWeb ? $style.desktopWeb : undefined]"
        :href="createLink()" @click.prevent="select">
       {{ formatTime(timeSlot.startTime) }}
     </a>
@@ -33,6 +33,8 @@ export default {
   data() {
     return {
       isSelected: false,
+      isDesktopWeb: (this.$store.state.device.source !== 'android'
+        && this.$store.state.device.source !== 'ios'),
     };
   },
   computed: {
