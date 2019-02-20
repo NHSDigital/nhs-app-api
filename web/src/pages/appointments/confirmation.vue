@@ -133,7 +133,8 @@
                           @click.prevent="onConfirmButtonClicked">
             {{ $t('appointments.confirmation.confirmButtonText') }}
           </generic-button>
-        </div></form-post>
+        </div>
+      </form-post>
 
       <generic-button v-if="$store.state.device.isNativeApp" id="btn_cancel_appointment"
                       :class="[$style.button , $style.grey]"
