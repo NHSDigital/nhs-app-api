@@ -1,5 +1,8 @@
 <template>
-  <tab-focused-icon :icon-classes="[$style['nhs_logo']]" view-box="0 0 79 32" preserve-aspect-ratio="xMinYMid meet" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <tab-focused-icon :icon-classes="$style['nhs_logo']" :disable-tab-focus="true"
+                    view-box="0 0 79 32" preserve-aspect-ratio="xMinYMid meet"
+                    role="img" aria-hidden="true"
+                    version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>{{ $t('icons.homeIcon.title') }}</title>
     <defs>NHS Logo</defs>
     <g id="nhs_logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

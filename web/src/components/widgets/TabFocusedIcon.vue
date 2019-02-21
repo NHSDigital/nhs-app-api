@@ -5,8 +5,8 @@
        :class="getStyleClasses"
        :viewBox="viewBox"
        :preserveAspectRatio="preserveAspectRatio"
-       xmlns="http://www.w3.org/2000/svg"
-       tabindex="-1">
+       :tabindex="disableTabFocus ? undefined : '-1'"
+       xmlns="http://www.w3.org/2000/svg">
     <slot/>
   </svg>
 </template>
@@ -36,6 +36,10 @@ export default {
     preserveAspectRatio: {
       type: String,
       default: 'none',
+    },
+    disableTabFocus: {
+      type: Boolean,
+      default: false,
     },
   },
   created() {

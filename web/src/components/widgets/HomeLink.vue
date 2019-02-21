@@ -1,12 +1,10 @@
 <template>
-  <div tabindex="-1">
-    <nuxt-link ref="homeLogoEl"
-               :class="$style['anchor-icon']"
-               :to="indexPath"
-               :title=" $t(getTitle())">
-      <home-icon tabindex="-1"/>
-    </nuxt-link>
-  </div>
+  <nuxt-link ref="homeLogoEl"
+             :class="$style['anchor-icon']"
+             :to="indexPath"
+             :title=" $t(getTitle())">
+    <home-icon/>
+  </nuxt-link>
 </template>
 <script>
 import HomeIcon from '@/components/icons/HomeIcon';
