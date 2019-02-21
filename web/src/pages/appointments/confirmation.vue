@@ -154,6 +154,7 @@
 <script>
 import { redirectTo } from '@/lib/utils';
 import { APPOINTMENT_BOOK_NOJS, APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
+import moment from 'moment';
 import get from 'lodash/fp/get';
 import AppointmentSlot from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
@@ -355,6 +356,9 @@ export default {
       };
       this.$store.dispatch('availableAppointments/book', bookingData)
         .then(() => {
+          if (process.client) {
+            this.$store.dispatch('analytics/trackUserProperty', { key: 'gpBookingSlot', value: moment(slot.startTime).format('dddd | HH:mm:ss') });
+          }
           this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
           redirectTo(this, APPOINTMENTS.path, null);
         });

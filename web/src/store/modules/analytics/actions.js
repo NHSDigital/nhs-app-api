@@ -45,10 +45,13 @@ export default {
   },
   satelliteTrack(_, nameOfCall, objectToTrack = {}) {
     // Put track call in try-catch, as it likely called under error, so no internet connection.
-    if (process.client) {
+    // eslint-disable-next-line no-underscore-dangle
+    if (process.client && window._satellite) {
       /* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
-      // eslint-disable-next-line no-underscore-dangle
-      try { window._satellite.track(nameOfCall, objectToTrack); } catch (exception) { }
+      try {
+        // eslint-disable-next-line no-underscore-dangle
+        window._satellite.track(nameOfCall, objectToTrack);
+      } catch (error) { }
     }
   },
 };

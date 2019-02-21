@@ -43,7 +43,6 @@ export default {
       if (window.digitalData) {
         const el = evt.currentTarget;
         const text = this.text.trim();
-        const { pageName } = window.digitalData.page.pageInfo;
         const type = (el.hasAttribute('data-purpose')) ? el.getAttribute('data-purpose')
           : this.getType(el.tagName);
 
@@ -55,13 +54,15 @@ export default {
           linkDestination = this.href;
         }
 
+        const linkParent = this.$parent.$vnode.tag.replace('vue-component-', '');
+        const linkElement = this.tag.replace('a', 'hyperlink');
+
         const navigation = {
-          linkText: text,
-          linkName: pageName,
-          linkParent: this.$parent.$vnode.tag,
+          linkName: text,
+          linkParent,
           linkTargetType: type,
           linkDestination,
-          linkElement: this.tag,
+          linkElement,
         };
         this.$store.dispatch('analytics/trackLink', navigation);
 

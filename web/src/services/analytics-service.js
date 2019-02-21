@@ -1,5 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { isEmpty } from 'lodash/fp';
+import moment from 'moment';
+
+import { APPOINTMENTS } from '@/lib/routes';
 
 const APP_ID = 'nhs:app';
 const pageNamePrefix = `${APP_ID}`;
@@ -21,7 +24,6 @@ export default function (app, store, route) {
       const subCategory2 = fields[2] || '';
       const subCategory3 = fields[3] || '';
       const unqPageIdentifier = subCategory3 || subCategory2 || subCategory1 || primaryCategory;
-
 
       if (isEmpty(fields) || isEmpty(fields[0])) fields[0] = 'home';
       const pageName = fields.reduce((combined, field) => `${combined}:${field}`, pageNamePrefix);
@@ -56,11 +58,29 @@ export default function (app, store, route) {
           medicalRecordType: store.state.myRecord.medicalRecordType,
           appointmentDateFilterDropdownValue:
             store.state.availableAppointments.selectedOptions.date,
+          gpOnlineProduct: '',
+          gpBookingSlot: '',
         },
       };
+
+      if (!routePath.includes(APPOINTMENTS.path)) {
+        window.digitalData.user.appointmentDateFilterDropdownValue = '';
+      }
+
+      if (store.state.availableAppointments.selectedSlot &&
+          store.state.availableAppointments.selectedSlot.startTime) {
+        window.digitalData.user.gpBookingSlot = moment(store.state.availableAppointments.selectedSlot.startTime).format('dddd | HH:mm:ss');
+      }
+
+      if (store.state.myRecord.record && store.state.myRecord.record.supplier) {
+        window.digitalData.user.gpOnlineProduct = store.state.myRecord.record.supplier;
+      }
+
       try {
         // eslint-disable-next-line no-underscore-dangle
-        window._satellite.track('page_view');
+        if (window._satellite) {
+          window._satellite.track('page_view');
+        }
       } catch (ex) {
         // Put track call in try-catch, as it likely called under error, so no internet connection.
         // eslint-disable-next-line no-empty

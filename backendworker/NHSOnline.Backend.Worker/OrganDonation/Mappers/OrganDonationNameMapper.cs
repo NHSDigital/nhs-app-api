@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.OrganDonation.Mappers
                 };
         }
 
-        private List<string> MapGiven(List<string> prefix, OrganDonation.Models.Name source)
+        private static List<string> MapGiven(List<string> prefix, OrganDonation.Models.Name source)
         {
             var givenName = source.GivenName;
             if (prefix == null && !string.IsNullOrWhiteSpace(source.Title))

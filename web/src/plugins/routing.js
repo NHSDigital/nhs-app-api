@@ -1,8 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import Vue from 'vue';
 /* eslint-disable no-param-reassign */
 import get from 'lodash/fp/get';
 import configureAnalytics from '../services/analytics-service';
 
-export default ({ app, store, route }) => {
+export default ({ app, store }) => {
   let navigatingBack = false;
 
   app.router.previousPaths = [];
@@ -24,6 +26,9 @@ export default ({ app, store, route }) => {
       }
       app.router.previousPaths.push(get('path')(from));
     }
-    configureAnalytics(app, store, route);
+
+    Vue.nextTick(() => {
+      configureAnalytics(app, store, _);
+    });
   });
 };

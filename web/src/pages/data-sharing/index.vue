@@ -14,18 +14,29 @@
       <WhereConfidentialPatientInformationIsUsed v-if="pageId === 'p2'"/>
       <WhereYourChoiceDoesNotApply v-if="pageId === 'p3'"/>
     </div>
-    <form id="ndop-token-form" :action="dataPreferencesUrl" :target="formTarget" method="POST"
+
+    <analytics-tracked-tag v-if="pageId === 'p3' && device === 'ios'"
+                           id="start-now-button"
+                           :class="[$style.button, $style.green]"
+                           :text="$t('ds01.startNowButton')"
+                           :destination="dataPreferencesUrl"
+                           data-purpose="button"
+                           tag="button"
+                           @click="startNowClickedIos()">
+      {{ $t('ds01.startNowButton') }}
+    </analytics-tracked-tag>
+
+    <form v-if="pageId === 'p3' && device !== 'ios'" id="ndop-token-form"
+          :action="dataPreferencesUrl" :target="formTarget" method="POST"
           name="ndopTokenForm">
-      <analytics-tracked-tag v-if="pageId === 'p3'"
-                             id="start-now-button"
+      <input v-model="ndopToken" type="hidden" name="token">
+      <analytics-tracked-tag id="start-now-button"
+                             :class="[$style.button, $style.green]"
                              :text="$t('ds01.startNowButton')"
                              :destination="dataPreferencesUrl"
-                             data-purpose="generic-button"
-                             tag="generic-button"
-                             @click="startNowClicked($event)">
-        <button :class="[$style.button, $style.green]">
-          {{ $t('ds01.startNowButton') }}
-        </button>
+                             data-purpose="button"
+                             tag="button">
+        {{ $t('ds01.startNowButton') }}
       </analytics-tracked-tag>
     </form>
     <BottomNav :class="$style['bottom-nav']" :current-page="pageId"
@@ -42,6 +53,7 @@ import Benefits from '@/components/data-sharing/Benefits';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
 import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoiceDoesNotApply';
 import GenericButton from '@/components/widgets/GenericButton';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 import _ from 'lodash';
 
@@ -53,17 +65,22 @@ export default {
     Benefits,
     WhereConfidentialPatientInformationIsUsed,
     WhereYourChoiceDoesNotApply,
+    AnalyticsTrackedTag,
   },
   data() {
     return {
       pageIds: _.keys(this.$t('ds01.titles')),
       pageIndex: 0,
       dataPreferencesUrl: this.$store.app.$env.DATA_PREFERENCES_URL,
+      ndopToken: undefined,
     };
   },
   computed: {
     pageId() {
       return this.pageIds[this.pageIndex];
+    },
+    device() {
+      return this.$store.state.device.source;
     },
     formTarget() {
       return !this.$store.state.device.isNativeApp ? '_self' : '_blank';
@@ -75,32 +92,16 @@ export default {
     }
   },
   methods: {
-    changePage(index) {
+    async changePage(index) {
       window.scrollTo(0, 0);
       this.pageIndex = index;
+      await this.getNdopToken();
     },
     goToPage(pageId) {
       this.changePage(_.indexOf(this.pageIds, pageId));
     },
-    startNowClicked(event) {
-      event.preventDefault();
-      this.$store.app.$http.getV1PatientNdop({}).then((p) => {
-        if (this.$store.state.device.source === 'ios') {
-          NativeCallbacks.postNdopToken(p.response.token);
-        } else {
-          const ndopTokenForm = document.getElementById('ndop-token-form');
-          const startNowButton = document.getElementById('start-now-button');
-
-          const tokenInput = document.createElement('input');
-          tokenInput.setAttribute('type', 'hidden');
-          tokenInput.setAttribute('name', 'token');
-          tokenInput.setAttribute('value', p.response.token);
-
-          ndopTokenForm.insertBefore(tokenInput, startNowButton);
-          ndopTokenForm.submit();
-          ndopTokenForm.removeChild(tokenInput);
-        }
-      });
+    startNowClickedIos() {
+      NativeCallbacks.postNdopToken(this.ndopToken);
     },
     isLinkActive(pageId) {
       return pageId === this.pageIds[this.pageIndex] ? this.$style.active : undefined;
@@ -109,6 +110,16 @@ export default {
       if (event.key === 'Enter') {
         event.preventDefault();
         this.goToPage(pageId);
+      }
+    },
+    async getNdopToken() {
+      const scope = this;
+      if (!scope.ndopToken && scope.pageId === 'p3') {
+        await scope.$store.app.$http
+          .getV1PatientNdop({})
+          .then((p) => {
+            scope.ndopToken = p.response.token;
+          });
       }
     },
   },

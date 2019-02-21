@@ -33,6 +33,7 @@ export default {
     commit(SET_MEDICAL_RECORD_TYPE, { medicalRecordType });
     if (process.client) {
       this.dispatch('analytics/trackUserProperty', { key: 'medicalRecordType', value: medicalRecordType });
+      this.dispatch('analytics/trackUserProperty', { key: 'gpOnlineProduct', value: record.supplier });
     }
   },
   async loadTestResults({ commit }) {

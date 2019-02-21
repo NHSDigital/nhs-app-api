@@ -54,11 +54,13 @@ import { APPOINTMENT_BOOKING, SYMPTOMS } from '@/lib/routes';
 import GenericButton from '@/components/widgets/GenericButton';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { redirectTo } from '@/lib/utils';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
   components: {
     GenericButton,
     NoJsForm,
+    AnalyticsTrackedTag,
   },
   data() {
     return {

@@ -87,7 +87,7 @@ export default {
   },
   async asyncData({ store }) {
     if (store.state.myRecord.hasAcceptedTerms) {
-      store.dispatch('myRecord/acceptTerms');
+      await store.dispatch('myRecord/acceptTerms');
       await store.dispatch('myRecord/load');
     }
   },
