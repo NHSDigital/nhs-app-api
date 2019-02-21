@@ -6,6 +6,7 @@ import features.loggedOut.steps.CookieBannerSteps
 import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.CheckMySymptomsPage
 import pages.loggedOut.CookieBanner
 import pages.loggedOut.LoginPage
 
@@ -25,6 +26,7 @@ class CookieBannerStepDefinitions {
     lateinit var cookieBannerSteps: CookieBannerSteps
 
     private lateinit var loginPage: LoginPage
+    private lateinit var checkMySymptomsPage: CheckMySymptomsPage
     private lateinit var cookieBanner: CookieBanner
 
     @When("^I am on the ($LOGIN_PAGE|$CHECK_YOUR_SYMPTOMS_PAGE) logged-out page$")
@@ -34,6 +36,8 @@ class CookieBannerStepDefinitions {
             CHECK_YOUR_SYMPTOMS_PAGE -> {
                 browserSteps.goToApp()
                 loginPage.symptomsButton.click()
+                checkMySymptomsPage.isConditionsHeaderVisible()
+                checkMySymptomsPage.isNhs111HeaderVisible()
             }
         }
     }
