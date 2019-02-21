@@ -171,7 +171,7 @@ describe('Filters.vue', () => {
 
     const component = createFiltersComponent($store, props);
 
-    expect(component.find('#type').find('option:selected').attributes().value).toEqual('2');
+    expect(component.find('#type').findAll('option').at(1).attributes().value).toEqual('2');
   });
 
   it('will select correct option for location drop-down', () => {
@@ -197,7 +197,7 @@ describe('Filters.vue', () => {
 
     const component = createFiltersComponent($store, props);
 
-    expect(component.find('#location').find('option:selected').attributes().value).toEqual('2');
+    expect(component.find('#location').findAll('option').at(1).attributes().value).toEqual('2');
   });
 
   it('will select correct option for clinician drop-down', () => {
@@ -223,7 +223,7 @@ describe('Filters.vue', () => {
 
     const component = createFiltersComponent($store, props);
 
-    expect(component.find('#clinician').find('option:selected').attributes().value).toEqual('2');
+    expect(component.find('#clinician').findAll('option').at(1).attributes().value).toEqual('2');
   });
 
   it('will select correct option for date drop-down', () => {
@@ -249,6 +249,6 @@ describe('Filters.vue', () => {
 
     const component = createFiltersComponent($store, props);
 
-    expect(component.find('#time-period').find('option:selected').attributes().value).toEqual('2');
+    expect(component.find('#time-period').findAll('option').at(1).attributes().value).toEqual('2');
   });
 });

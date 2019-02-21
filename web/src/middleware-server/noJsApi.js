@@ -6,9 +6,9 @@ import {
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_YOUR_CHOICE,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
-} from '@/lib/routes';
-import appointments from '@/middleware-server/routes/appointments';
-import organDonation from '@/middleware-server/routes/organ-donation';
+} from '../lib/routes';
+import appointments from './routes/appointments';
+import organDonation from './routes/organ-donation';
 
 
 const postEndpoints = [

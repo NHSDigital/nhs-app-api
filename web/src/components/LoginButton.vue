@@ -1,9 +1,8 @@
 <template>
   <generic-button
     :class="[...dynamicStyle('button', 'login-button'), $style.green, buttonStateStyle]"
-    :disabled="isButtonDisabled"
-    data-id="login-button"
-    @click="loginClicked">
+    type="submit"
+    data-id="login-button">
     {{ $t('loginButton.login') }}
   </generic-button>
 </template>
@@ -11,17 +10,11 @@
 <script>
 
 import GenericButton from '@/components/widgets/GenericButton';
-import Sources from '@/lib/sources';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 
 export default {
   components: {
     GenericButton,
-  },
-  data() {
-    return {
-      isButtonDisabled: false,
-    };
   },
   computed: {
     buttonStateStyle() {
@@ -29,17 +22,6 @@ export default {
     },
   },
   methods: {
-    async loginClicked() {
-      if (process.client) {
-        if (this.$store.state.device.source === Sources.Android) {
-          // (Android only)
-          // Disable login button on click.
-          // Page should be refreshed onResume.
-          this.isButtonDisabled = true;
-        }
-        this.$store.dispatch('analytics/satelliteTrack', 'login');
-      }
-    },
     dynamicStyle(...args) {
       return getDynamicStyle(this, args);
     },

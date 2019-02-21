@@ -121,7 +121,7 @@ export default {
     box-sizing: border-box;
     background-repeat: no-repeat;
     background-position: right 1em center;
-    background-image: url('~/assets/icon_arrow_left.svg');
+    background-image: url('~assets/icon_arrow_left.svg');
     background-color: #f0f4f5;
     position: relative;
     margin-bottom: 0;

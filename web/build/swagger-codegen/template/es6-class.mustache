@@ -10,7 +10,7 @@ import $q from 'q';
 import axios from 'axios'
 import isEmpty from 'lodash/fp/isEmpty'
 import get from 'lodash/fp/get'
-import { resolveApiClient } from '@/middleware/urlResolution'
+import { resolveApiClient } from '../middleware/urlResolution'
 
 const getWebVersion = get('store.state.appVersion.webVersion');
 const getNativeVersion = get('store.state.appVersion.nativeVersion');

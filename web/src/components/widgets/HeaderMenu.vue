@@ -240,7 +240,7 @@ export default {
 
       a.mini-menu-close-button {
         @include mini-menu-option;
-        background: $white url('~/assets/close-menu.svg') no-repeat center right;
+        background: $white url('~assets/close-menu.svg') no-repeat center right;
         background-position: right 1em center;
 
         &:visited,
@@ -249,7 +249,7 @@ export default {
         }
 
         &:hover {
-          background: $white url('~/assets/close-menu-hover.svg') no-repeat center right;
+          background: $white url('~assets/close-menu-hover.svg') no-repeat center right;
           background-position: right 1em center;
           box-shadow: none;
           color: $black;
@@ -279,7 +279,7 @@ export default {
             font-family: $default-web;
             color: $nhs_blue;
             padding: 1em;
-            background: $white url('~/assets/icon_arrow_left.svg') no-repeat center right;
+            background: $white url('~assets/icon_arrow_left.svg') no-repeat center right;
             background-position: right 1em center;
 
             &:visited,
@@ -293,7 +293,7 @@ export default {
               color: $white;
               text-decoration: underline;
               background-repeat: no-repeat;
-              background-image: url('~/assets/icon_arrow_white_left.svg');
+              background-image: url('~assets/icon_arrow_white_left.svg');
               background-position: right 1em center;
             }
           }

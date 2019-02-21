@@ -1,7 +1,7 @@
 import isArray from 'lodash/fp/isArray';
 import isString from 'lodash/fp/isString';
-import { initialState as repeatCoursesInitialState } from '@/store/modules/repeatPrescriptionCourses/mutation-types';
-import { PRESCRIPTION_REPEAT_COURSES, INDEX } from '@/lib/routes';
+import { initialState as repeatCoursesInitialState } from '../store/modules/repeatPrescriptionCourses/mutation-types';
+import { PRESCRIPTION_REPEAT_COURSES, INDEX } from '../lib/routes';
 
 export const noJsParameterName = 'nojs';
 

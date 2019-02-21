@@ -17,7 +17,7 @@
   &::after {
     /*  Custom dropdown arrow */
     /*content: "\25BC";*/
-    content: url(/assets/icon_arrow_down.svg);
+    content: url(~assets/icon_arrow_down.svg);
     height: 1em;
     font-size: .625em;
     line-height: 1;

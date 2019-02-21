@@ -7,6 +7,8 @@ export const redirectTo = (self, path, query) => {
     } else {
       self.$store.app.context.redirect(302, path, query);
     }
+  } else if (self.$router.currentRoute && self.$router.currentRoute.path === path) {
+    self.$router.go();
   } else if (query == null) {
     self.$router.push(path);
   } else {

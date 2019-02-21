@@ -2,7 +2,7 @@
   <div :class="dynamicStyle('loginMain')">
     <div v-if="isPracticeParticipating">
       <h2>{{ $t('login.desc') }}</h2>
-      <form :action="authoriseUrl" method="get">
+      <form :action="authoriseUrl" method="get" @submit="formSubmitted">
         <input :value="scope" type="hidden" name="scope">
         <input v-model="clientId" type="hidden" name="client_id">
         <input :value="codeChallenge" type="hidden" name="code_challenge">
@@ -10,7 +10,7 @@
         <input :value="redirectUri" type="hidden" name="redirect_uri">
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
-        <LoginButton />
+        <LoginButton :disabled="isButtonDisabled" />
       </form>
     </div>
     <no-ssr placeholder="">
@@ -46,6 +46,7 @@
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import LoginButton from '@/components/LoginButton';
+import Sources from '@/lib/sources';
 import { setCookie } from '@/lib/cookie-manager';
 import { BEGINLOGIN, GP_FINDER } from '@/lib/routes';
 import AuthorisationService from '@/services/authorisation-service';
@@ -74,6 +75,7 @@ export default {
       practiceParticipating: true,
       practiceName: undefined,
       practiceAddress: undefined,
+      isButtonDisabled: false,
     };
   },
   asyncData(context) {
@@ -172,6 +174,18 @@ export default {
     }
   },
   methods: {
+    async formSubmitted() {
+      if (process.client) {
+        if (this.$store.state.device.source === Sources.Android) {
+          // (Android only)
+          // Disable login button on click.
+          // Page should be refreshed onResume.
+          this.isButtonDisabled = true;
+        }
+        this.$store.dispatch('analytics/satelliteTrack', 'login');
+      }
+      return true;
+    },
     generateFidoUrl() {
       const originalData = this.$data;
       const newData = {};

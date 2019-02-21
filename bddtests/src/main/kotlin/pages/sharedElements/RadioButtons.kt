@@ -81,8 +81,8 @@ class RadioButton(private val element : WebElementFacade) {
     private val allTextElements = element.findElements(
             By.xpath("./descendant::*[text()]")).map{e->e.text}
 
-    val title: String = allTextElements.first()
-    val description: String by lazy { allTextElements[1] }
+    val title: String by lazy { allTextElements[1] }
+    val description: String by lazy { allTextElements[2] }
 
     fun select() {
         element.click()

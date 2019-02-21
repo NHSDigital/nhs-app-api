@@ -6,7 +6,7 @@
            :name="name"
            :aria-labelledby="aLabelledBy"
            type="checkbox"
-           @click.prevent="clicked">
+           @click="clicked">
     <label :for="name + '-' + checkboxId" :id="labelId">
       <slot/>
     </label>

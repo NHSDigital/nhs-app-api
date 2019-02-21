@@ -42,4 +42,4 @@ COPY --chown=nodejs:nodejs --from=build /opt/app/src ./src
 COPY --chown=nodejs:nodejs --from=build /opt/app/nuxt.config.js ./nuxt.config.js
 
 EXPOSE $PORT
-CMD sudo update-ca-certificates && exec ./node_modules/nuxt/bin/nuxt start
+CMD sudo update-ca-certificates && exec node ./node_modules/nuxt/bin/nuxt start
