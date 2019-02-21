@@ -29,8 +29,7 @@ export default {
   /* eslint-disable no-unused-vars */
   [LOADED](state, data) {
     mapKeys((key) => {
-      const stateKey = key === 'appointments' ? 'upcomingAppointments' : key;
-      state[stateKey] = data[key];
+      state[key] = data[key];
     })(data);
 
     state.upcomingAppointments = sortSlots(state.upcomingAppointments);

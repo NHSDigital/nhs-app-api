@@ -26,18 +26,6 @@ describe('LOADED', () => {
     expect(state.upcomingAppointments).toEqual(receivedData.upcomingAppointments);
   });
 
-  it('will set the upcoming appointments on the state from the received appointments data', () => {
-    const state = {};
-    const receivedData = {
-      appointments: ['appointment'],
-    };
-
-    LOADED(state, receivedData);
-
-    expect(state.upcomingAppointments).toEqual(receivedData.appointments);
-    expect(state.appointments).toBeUndefined();
-  });
-
   it('will order the upcoming appointments by start time ascending', () => {
     const ascending = [
       { startTime: '2018-04-21T17:11:59.084865+01:00' },

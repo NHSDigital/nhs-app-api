@@ -1,7 +1,7 @@
 package worker.models.appointments
 
 data class MyAppointmentsResponse(
-        var appointments: List<AppointmentResponseObject> = arrayListOf(),
+        var upcomingAppointments: List<AppointmentResponseObject> = arrayListOf(),
         var pastAppointments: List<AppointmentResponseObject> = arrayListOf(),
         var cancellationReasons: List<GenericResponseObject> = arrayListOf()
 )

@@ -45,19 +45,19 @@ open class MyAppointmentsBackendSteps {
         val expectedUpcomingAppointments = if (presence) {
             Serenity.sessionVariableCalled<MyAppointmentsResponse>(
                     MyAppointmentsFactory.Expectations.EXPECTED_API_RESPONSE_OF_MY_APPOINTMENTS
-            ).appointments
+            ).upcomingAppointments
         } else {
             arrayListOf()
         }
         assertEquals(
                 "Incorrect number of appointments returned. ",
                 expectedUpcomingAppointments.count(),
-                myAppointmentsResponse.appointments.size
+                myAppointmentsResponse.upcomingAppointments.size
         )
         assertArrayEquals(
                 "List of appointments returned is incorrect. ",
                 expectedUpcomingAppointments.toTypedArray(),
-                myAppointmentsResponse.appointments.toTypedArray()
+                myAppointmentsResponse.upcomingAppointments.toTypedArray()
         )
     }
 

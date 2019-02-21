@@ -136,7 +136,7 @@
             schema: 
               type: "object"
               properties: 
-                appointments: 
+                upcomingAppointments: 
                   type: "array"
                   description: "Array of booked upcoming Appointments."
                   items: 
