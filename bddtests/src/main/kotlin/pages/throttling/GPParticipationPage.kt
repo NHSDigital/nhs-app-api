@@ -69,8 +69,8 @@ class GPParticipationPage : HybridPageObject() {
     )
 
     val ctaNotParticipatingContinueButton = HybridPageElement(
-            webDesktopLocator = "//[contains(text(), 'Continue')]",
-            webMobileLocator = "//[contains(text(), 'Continue')]",
+            webDesktopLocator = "//button[contains(text(), 'Continue')]",
+            webMobileLocator = "//button[contains(text(), 'Continue')]",
             androidLocator = null,
             page = this
     )
