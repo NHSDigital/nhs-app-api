@@ -69,7 +69,7 @@ then
     --rm \
     --cpus $TC_CPUS \
     --memory $TC_RAM \
-    -v $workingDir/../..
+    -v $workingDir/../.. \
     --env-file vars_stubbed.env \
     -v $workingDir/../:/repo \
     $DOCKER_IMAGE bash -c " \
