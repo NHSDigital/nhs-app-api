@@ -9,7 +9,7 @@ import pages.HybridPageObject
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject() {
 
-    private val mainXPath = "//*[@id='app']/main"
+    private val mainXPath = "//*[@id='app']/div/main"
 
     val checkSymptomsButton = HybridPageElement(
             webDesktopLocator = "//*[@id='btn_check_symptoms']",

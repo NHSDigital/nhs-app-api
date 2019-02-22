@@ -3,13 +3,16 @@
     <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
       <web-header ref="headerMenu"/>
     </div>
-    <main :class="[mainClass, $style['main-container-desktop']]">
-      <spinner />
-      <connection-error />
-      <api-error />
-      <flash-message />
-      <nuxt/>
-    </main>
+
+    <div :class="[mainClass, $style['main-container-desktop']]">
+      <main :class="mainClass">
+        <spinner />
+        <connection-error />
+        <api-error />
+        <flash-message />
+        <nuxt/>
+      </main>
+    </div>
 
     <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                 @onBarStatusChanged="setSurveyBarStatus"/>
