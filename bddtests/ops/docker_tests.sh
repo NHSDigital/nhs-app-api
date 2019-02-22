@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# set -x
 function die () {
     echo >&2 "===]> Error: $@ "
     exit 1
@@ -13,32 +14,26 @@ info "Output currently executing docker containers to aid debug"
 docker ps
 
 info "Cleaning up hanging containers"
-docker kill $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}')
+docker kill $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}') 2>/dev/null
 
 # Check if DOCKER_TAG exists in envvar
 [ -z $APP_DOCKER_TAG ] && die "APP_DOCKER_TAG is not specified, it should be so we can pin builds to a specific version rather than latest"
 
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
-# set -x
-if [ -z "${DOCKER_REGISTRY}" ];
-then
-  DOCKER_REGISTRY=nhsapp.azurecr.io
-fi
+
+DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
+BROWSER=${BROWSER:-chromeheadless}
+PARALLEL=${PARALLEL:-1}
+MODE=${MODE:-local}
+TC_CPUS=${TC_CPUS:-3}
+TC_RAM=${TC_RAM:-3g}
+
 DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
 DOCKER_IMAGE_BROWSERSTACK=$DOCKER_REGISTRY/browserstack:latest
 
 #### 3. Change browser variable to one webdriver mentioned in ./serenity.properties
-if [ -z $BROWSER ]
-then
-  BROWSER=chromeheadless
-fi
-
-if [ -z $PARALLEL ]
-then
-  PARALLEL=1
-fi
 
 # create run time version of docker-compose and environment variables so we can amend values for throttling/cosmos tests
 cp docker-compose_ci.yml docker-compose_ci_run.yml
@@ -130,16 +125,28 @@ fi
 info $workingDir
 
 # Prepare for Run
+if [ $MODE == "teamcity" ]
+then
 docker run \
---rm \
--v $workingDir/../:/repo \
-$DOCKER_IMAGE bash -c " \
-  cd /repo ; \
-  ./gradlew clean prepare"
+  --cpus $TC_CPUS \
+  --memory $TC_RAM \
+  --rm \
+  -v $workingDir/../:/repo \
+  $DOCKER_IMAGE bash -c " \
+    cd /repo ; \
+    ./gradlew clean prepare"
+else
+docker run \
+  --rm \
+  -v $workingDir/../:/repo \
+  $DOCKER_IMAGE bash -c " \
+    cd /repo ; \
+    ./gradlew clean prepare"
+fi
 
 test_exit_code=$?
 
-if [ $test_exit_code != 0 ] 
+if [ $test_exit_code != 0 ]
 then
   exit $test_exit_code
 fi
@@ -154,7 +161,7 @@ done
 docker-compose -f docker-compose_ci_run.yml config | grep image
 
 #pre-cleanup
-rm -r $workingDir/../../testRunFolder/*
+rm -rf $workingDir/../../testRunFolder/*
 
 for TAG in ${TAGS[*]}; do
   info "Creating test folder for $TAG"
@@ -168,7 +175,7 @@ PIDS=()
 for TAG in ${TAGS[*]}; do
 
 info "Running $TAG tests"
-  
+
   if [ $TAG == "throttling" ]
   then
     sed -i '' -e 's/THROTTLING\_ENABLED\=false/THROTTLING\_ENABLED\=true/g' vars_ci_run.env
@@ -187,7 +194,7 @@ info "Running $TAG tests"
   if [ $TAG == "specific" ]
   then
     BDD_CUCUMBER_OPTIONS=$BDD_CUCUMBER_OPTIONS_PREFIX
-  else 
+  else
     if [ $TAG == "other" ]
       then
         BDD_CUCUMBER_OPTIONS="--strict $BDD_CUCUMBER_OPTIONS_PREFIX"
@@ -198,7 +205,7 @@ info "Running $TAG tests"
           fi
         done
         BDD_CUCUMBER_OPTIONS+="'"
-    else 
+    else
       if [ $TAG == "throttling" ]
       then
         BDD_CUCUMBER_OPTIONS="--strict --tags @$TAG"
@@ -215,25 +222,47 @@ info "Running $TAG tests"
       BROWSERSTACK_LOCAL_STRING="(BrowserStackLocal --key $BROWSERSTACK_ACCESSKEY --force-local --local-identifier $NETWORK &) ;"
   fi
 
-  docker run \
-  --name $TAG \
-  --rm \
-  --network $NETWORK \
-  --env-file vars_ci_run.env \
-  -v $workingDir/../../testRunFolder/$TAG/:/repo \
-  $DOCKER_IMAGE bash -c " \
-    cd /repo ; \
-    $BROWSERSTACK_LOCAL_STRING \
-    BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
-    APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $APPSCHEME $AUTOLOGIN \
-    ./gradlew test --stacktrace \
-      -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
-      -Dwebdriver.provided.type=$BROWSER \
-      $APPIUM_TYPE \
-      -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')" &
-  
+  if [ $MODE == "teamcity" ]
+  then
+    docker run \
+      --name $TAG \
+      --rm \
+      --network $NETWORK \
+      --env-file vars_ci_run.env \
+      --cpus $TC_CPUS \
+      --memory $TC_RAM \
+      -v $workingDir/../../testRunFolder/$TAG/:/repo \
+      $DOCKER_IMAGE bash -c " \
+        cd /repo ; \
+        $BROWSERSTACK_LOCAL_STRING \
+        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
+        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $APPSCHEME $AUTOLOGIN \
+        ./gradlew test --stacktrace \
+          -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
+          -Dwebdriver.provided.type=$BROWSER \
+          $APPIUM_TYPE \
+          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')" &
+  else
+    docker run \
+      --name $TAG \
+      --rm \
+      --network $NETWORK \
+      --env-file vars_ci_run.env \
+      -v $workingDir/../../testRunFolder/$TAG/:/repo \
+      $DOCKER_IMAGE bash -c " \
+        cd /repo ; \
+        $BROWSERSTACK_LOCAL_STRING \
+        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
+        APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $APPSCHEME $AUTOLOGIN \
+        ./gradlew test --stacktrace \
+          -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
+          -Dwebdriver.provided.type=$BROWSER \
+          $APPIUM_TYPE \
+          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')" &
+  fi
+
   PID=$!
-  
+
   if [ $PARALLEL == 0 ]
   then
     wait $PID
@@ -246,10 +275,10 @@ done
 # Wait for all test runners
 for PID in ${PIDS[*]}; do
     wait $PID
-    
+
     test_exit_code=$?
 
-    if [ $test_exit_code != 0 ] 
+    if [ $test_exit_code != 0 ]
     then
       exit "$test_exit_code"
     fi
@@ -262,19 +291,31 @@ for TAG in ${TAGS[*]}; do
   cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
 done
 
+if [ $MODE == "teamcity" ]
+then
 docker run \
---rm \
--v $workingDir/../:/repo \
-$DOCKER_IMAGE bash -c " \
-  cd /repo ; \
-  ./gradlew aggregate"
+  --cpus $TC_CPUS \
+  --memory $TC_RAM \
+  --rm \
+  -v $workingDir/../:/repo \
+  $DOCKER_IMAGE bash -c " \
+    cd /repo ; \
+    ./gradlew aggregate"
+else
+docker run \
+  --rm \
+  -v $workingDir/../:/repo \
+  $DOCKER_IMAGE bash -c " \
+    cd /repo ; \
+    ./gradlew aggregate"
+fi
 
 test_exit_code=$?
 
 mkdir -p logs
 
 for TAG in ${TAGS[*]}; do
-  
+
   for container in $(docker-compose -p ${TAG} -f docker-compose_ci_run.yml ps | tail -n +3 | awk '{print $1}' ); do
     docker logs $container >& ./logs/$container.log
   done
@@ -284,11 +325,10 @@ for TAG in ${TAGS[*]}; do
 done
 
 #cleanup
-rm -r $workingDir/../../testRunFolder/*
-rm -f docker-compose_ci_run.yml
-rm -f vars_ci_run.env
+rm -rf $workingDir/../../testRunFolder/*
+rm -rf docker-compose_ci_run.yml
+rm -rf fars_ci_run.env
 
 docker rm -f $(docker ps -aq)
 
 exit "$test_exit_code"
-

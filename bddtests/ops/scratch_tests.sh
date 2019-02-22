@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# set -x
 function die () {
     echo >&2 "===]> Error: $@ "
     exit 1
@@ -11,11 +12,14 @@ function info () {
 
 #### 1. Login to Azure docker registry (run docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
-# set -x
-if [ -z "${DOCKER_REGISTRY}" ];
-then
-  DOCKER_REGISTRY=nhsapp.azurecr.io
-fi
+
+DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
+BROWSER=${BROWSER:-chromeheadless}
+PARALLEL=${PARALLEL:-1}
+MODE=${MODE:-local}
+TC_CPUS=${TC_CPUS:-3}
+TC_RAM=${TC_RAM:-3g}
+
 DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
 
@@ -59,17 +63,35 @@ fi
 
 info $workingDir
 
-docker run \
---rm \
---env-file vars_stubbed.env \
--v $workingDir/../:/repo \
-$DOCKER_IMAGE bash -c " \
-  cd /repo ; \
-  ./gradlew clean test aggregate --stacktrace\
-    -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
-    -Dwebdriver.provided.type=$BROWSER \
-    -Dwebdriver.base.url=$(cat vars_stubbed.env | grep url | cut -f2 -d'=') \
-;"
+if [ $MODE == "teamcity" ]
+then
+  docker run \
+    --rm \
+    --cpus $TC_CPUS \
+    --memory $TC_RAM \
+    -v $workingDir/../..
+    --env-file vars_stubbed.env \
+    -v $workingDir/../:/repo \
+    $DOCKER_IMAGE bash -c " \
+      cd /repo ; \
+      ./gradlew clean test aggregate --stacktrace\
+        -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
+        -Dwebdriver.provided.type=$BROWSER \
+        -Dwebdriver.base.url=$(cat vars_stubbed.env | grep url | cut -f2 -d'=') \
+    ;"
+else
+  docker run \
+    --rm \
+    --env-file vars_stubbed.env \
+    -v $workingDir/../:/repo \
+    $DOCKER_IMAGE bash -c " \
+      cd /repo ; \
+      ./gradlew clean test aggregate --stacktrace\
+        -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
+        -Dwebdriver.provided.type=$BROWSER \
+        -Dwebdriver.base.url=$(cat vars_stubbed.env | grep url | cut -f2 -d'=') \
+    ;"
+fi
 
 test_exit_code=$?
 
