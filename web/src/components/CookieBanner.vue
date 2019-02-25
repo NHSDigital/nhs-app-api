@@ -11,7 +11,8 @@
       </div>
       <div :class="$style['cookie-close']">
         <no-js-form :value="formData">
-          <generic-button @click.prevent="onCookieBannerClicked">
+          <generic-button aria-label="Close"
+                          @click.prevent="onCookieBannerClicked">
             <span :class="$style['close-caption']">Close</span>
           </generic-button>
         </no-js-form>
