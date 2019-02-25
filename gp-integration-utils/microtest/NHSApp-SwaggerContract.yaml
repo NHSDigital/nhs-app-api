@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 20190215
+  version: 20190225
   title: NHS App API
   description: This is the API for the NHS App. - updated version supplied 15/02/2019.
 schemes:
@@ -60,9 +60,6 @@ paths:
                     type:
                       type: string
                       description: Type of appointment slot, e.g. "Baby Clinics".
-                    sessionName:
-                      type: string
-                      description: Appointment session name, e.g. "Dr Julia Smith Morning Appts".
                     startTime:
                       type: string
                       format: date-time
@@ -84,7 +81,7 @@ paths:
                         type: string
                     channel:
                       type: string
-                      enum: [Unknown, Telephone]
+                      enum: [Surgery, Visit, Telephone, Other]
                       description: Indicates slot channel type supplied by GP practice.
         '400':
           description: Bad request. A querystring parameter is not in the expected format.
@@ -136,8 +133,6 @@ paths:
           description: >-
             The specified appointment does not exist or is not in a suitable
             state to be cancelled.
-        '461':
-          description: It is too late to cancel this appointment.
         '500':
           description: An unexpected error occurred during the processing of the request.
     get:
@@ -179,9 +174,6 @@ paths:
                     type:
                       type: string
                       description: Type of appointment slot, e.g. "Baby Clinics".
-                    sessionName:
-                      type: string
-                      description: Appointment session name, e.g. "Dr Julia Smith Morning Appts".
                     startTime:
                       type: string
                       format: date-time
@@ -268,10 +260,6 @@ paths:
             system.
         '409':
           description: Conflict. The chosen appointment slot is not available for booking.
-        '460':
-          description: >-
-            The patient has reached the limit of pending appointments that may
-            be booked.
         '500':
           description: An unexpected error occurred processing the request.
   /v1/patient/demographics:
@@ -685,6 +673,10 @@ paths:
                                     description: An array of associated texts.
                                     items:
                                       type: string
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
         '500':
           description: An unexpected error occurred processing the request.
   /v1/patient/prescriptions:
