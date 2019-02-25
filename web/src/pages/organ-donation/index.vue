@@ -20,6 +20,8 @@
           :choices="choices"/>
       </div>
       <amend-decision-link :class="$style.amendDecision"/>
+      <next-steps v-if="hasExistingOptIn || hasExistingOptOut"
+                  :is-opt-in-decision="hasExistingOptIn"/>
     </div>
     <div v-else>
       <make-decision/>
@@ -48,10 +50,12 @@ import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import NextSteps from '@/components/organ-donation/NextSteps';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
   DECISION_APPOINTED_REP,
   DECISION_OPT_IN,
+  DECISION_OPT_OUT,
   DECISION_UNKNOWN,
   STATE_CONFLICTED,
 } from '@/store/modules/organDonation/mutation-types';
@@ -65,6 +69,7 @@ export default {
     MakeDecision,
     MessageText,
     MessageDialog,
+    NextSteps,
     YourDecision,
   },
   async asyncData({ store }) {
@@ -94,6 +99,9 @@ export default {
     },
     hasExistingOptIn() {
       return this.decision === DECISION_OPT_IN;
+    },
+    hasExistingOptOut() {
+      return this.decision === DECISION_OPT_OUT;
     },
     hasSomeOrgans() {
       return !!(

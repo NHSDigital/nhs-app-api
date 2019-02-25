@@ -1,10 +1,11 @@
+import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
+import NextSteps from '@/components/organ-donation/NextSteps';
 import OrganDonation from '@/pages/organ-donation';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import {
   DECISION_APPOINTED_REP,
   DECISION_OPT_IN,
@@ -105,6 +106,10 @@ describe('organ donation index page', () => {
       expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
     });
 
+    it('will not have a "NextSteps" component', () => {
+      expect(wrapper.find(NextSteps).exists()).toEqual(false);
+    });
+
     it('will show the already registered link', () => {
       expect(wrapper.find(AlreadyRegisteredLink).exists()).toEqual(true);
     });
@@ -164,6 +169,10 @@ describe('organ donation index page', () => {
     it('will not show a AmendDecisionLink', () => {
       expect(wrapper.find(AmendDecisionLink).exists()).toEqual(false);
     });
+
+    it('will not have a "NextSteps" component', () => {
+      expect(wrapper.find(NextSteps).exists()).toEqual(false);
+    });
   });
 
   describe('loaded registration (original decision is found)', () => {
@@ -197,16 +206,16 @@ describe('organ donation index page', () => {
         wrapper = mountOrganDonation();
       });
 
-      describe('Amend decision link', () => {
-        it('will exist', () => {
-          expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
-        });
+      it('Amend decision link will exist', () => {
+        expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
       });
 
-      describe('DecisionDetails component', () => {
-        it('will not exist', () => {
-          expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
-        });
+      it('Next Steps component will exist', () => {
+        expect(wrapper.find(NextSteps).exists()).toEqual(true);
+      });
+
+      it('DecisionDetails component will not exist', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
       });
 
       describe('YourDecision component', () => {
@@ -269,16 +278,16 @@ describe('organ donation index page', () => {
         wrapper = mountOrganDonation();
       });
 
-      describe('Amend decision link', () => {
-        it('will exist', () => {
-          expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
-        });
+      it('Amend decision link will exist', () => {
+        expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
       });
 
-      describe('DecisionDetails component', () => {
-        it('will not exist', () => {
-          expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
-        });
+      it('Next Steps component will exist', () => {
+        expect(wrapper.find(NextSteps).exists()).toEqual(true);
+      });
+
+      it('DecisionDetails component will not exist', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
       });
 
       describe('YourDecision component', () => {
@@ -344,10 +353,12 @@ describe('organ donation index page', () => {
         wrapper = mountOrganDonation();
       });
 
-      describe('Amend decision link', () => {
-        it('will exist', () => {
-          expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
-        });
+      it('Amend decision link will exist', () => {
+        expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
+      });
+
+      it('Next Steps component will exist', () => {
+        expect(wrapper.find(NextSteps).exists()).toEqual(true);
       });
 
       describe('DecisionDetails component', () => {
@@ -419,10 +430,12 @@ describe('organ donation index page', () => {
         wrapper = mountOrganDonation();
       });
 
-      describe('DecisionDetails component', () => {
-        it('will not exist', () => {
-          expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
-        });
+      it('DecisionDetails component will not exist', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+      });
+
+      it('Next Steps component will exist', () => {
+        expect(wrapper.find(NextSteps).exists()).toEqual(false);
       });
 
       describe('YourDecision component', () => {

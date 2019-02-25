@@ -889,6 +889,18 @@ export default {
           body: 'If you want to give more, why not sign up to give blood? You can easily book an appointment and find your local centre via the app.',
         },
       },
+      nextSteps: {
+        subheader: 'Next steps',
+        shareDecision: {
+          subheader: 'Share that you are a donor',
+          body: 'Help promote organ donation on social media by telling people you are a donor.',
+        },
+        tellFamily: {
+          subheader: 'Tell your family',
+          body: 'Use our message templates and conversation guides to tell your family and friends you are a donor.',
+        },
+        optOutText: 'Please inform your family about your decision.',
+      },
     },
     someOrgans: {
       subheader: 'Your choice',

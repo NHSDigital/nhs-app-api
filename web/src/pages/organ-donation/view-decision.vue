@@ -19,6 +19,7 @@
       <decision-details v-if="isOptInDecision && !allOrgans"
                         :choices="currentChoices"/>
       <amend-decision-link :class="$style.amendDecision"/>
+      <next-steps :is-opt-in-decision="isOptInDecision"/>
     </div>
     <other-things-to-do/>
   </div>
@@ -31,6 +32,7 @@ import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import { DECISION_OPT_IN, STATE_CONFLICTED, STATE_OK } from '@/store/modules/organDonation/mutation-types';
@@ -41,6 +43,7 @@ export default {
     DecisionDetails,
     MessageText,
     MessageDialog,
+    NextSteps,
     OtherThingsToDo,
     YourDecision,
   },

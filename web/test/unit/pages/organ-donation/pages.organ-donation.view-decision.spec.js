@@ -1,5 +1,6 @@
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 import ViewDecision from '@/pages/organ-donation/view-decision';
 import YourDecision from '@/components/organ-donation/YourDecision';
@@ -40,6 +41,10 @@ describe('view decision', () => {
 
   it('will show other things to do', () => {
     expect(wrapper.find(OtherThingsToDo).exists()).toBe(true);
+  });
+
+  it('will show next steps', () => {
+    expect(wrapper.find(NextSteps).exists()).toBe(true);
   });
 
   describe('not conflicted', () => {
