@@ -67,5 +67,8 @@ export default {
 
   .anchor-icon {
     width: 110px;
+     @include tablet-and-above {
+      width: 6.875em;
+    }
   }
 </style>

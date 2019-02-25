@@ -119,8 +119,8 @@ export default {
 
       .footer-content ul li {
         display: inline-block;
-        font-size: 17px;
-        padding-right: 25px;
+        font-size: 1.0625em;
+        padding-right: 1.5em;
       }
     }
 
