@@ -46,13 +46,13 @@ class WaitingListJoinedPage : HybridPageObject() {
 
     val whatNextJoinedParagraph = HybridPageElement(
             webDesktopLocator = "//p[contains(text(), \"We've just sent you an email. " +
-                    "You need to confirm you want to " +
-                    "be updated by us about your GP surgery. You do this by following a " +
-                    "link in that email. It may be  in your junk folder.\")]",
+                    "You need to confirm you want " +
+                    "to be updated by us about your GP surgery. You do this by following a " +
+                    "link in that email. It may be in your junk folder.\")]",
             webMobileLocator = "//p[contains(text(), \"We've just sent you an email. " +
-                    "You need to confirm you want to " +
-                    "be updated by us about your GP surgery. You do this by following a " +
-                    "link in that email. It may be  in your junk folder.\")]",
+                    "You need to confirm you want " +
+                    "to be updated by us about your GP surgery. You do this by following a " +
+                    "link in that email. It may be in your junk folder.\")]",
             androidLocator = null,
             page = this
     )

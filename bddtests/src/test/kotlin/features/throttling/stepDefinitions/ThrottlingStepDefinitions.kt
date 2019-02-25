@@ -212,6 +212,11 @@ open class ThrottlingStepDefinitions {
         gpFinderPage.clickSkipThrottlingLink()
     }
 
+    @When("^I click the go to home screen button$")
+    fun iClickTheGoToHomeScreenButton() {
+        waitingListJoinedPage.homeButton.click()
+    }
+
     @When("^I click the Continue button on the Practice Participating page$")
     fun whenIClickTheContinueButtonOnThePracticeParticipatingPage() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.jackJackson)
@@ -309,7 +314,7 @@ open class ThrottlingStepDefinitions {
         sendingEmailPage.isInvalidEmailVisible()
     }
 
-    @Then("^I can see the login page$")
+    @Then("^I see the login page for practice not participating$")
     fun iCanSeeTheLoginPage() {
         login.throttlingNotParticipatingHeader.assertIsVisible()
     }

@@ -7,6 +7,7 @@ import net.thucydides.core.webdriver.SerenityWebdriverManager
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
+import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.support.ui.FluentWait
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
@@ -153,7 +154,11 @@ open class HybridPageObject : PageObject() {
 
     fun hideKeyboardIfOnMobile(){
         if (onMobile()) {
-            driver.getMobileDriver().hideKeyboard()
+            try {
+                driver.getMobileDriver().hideKeyboard()
+            } catch (e: WebDriverException) {
+                println("An exception was thrown hiding the device keyboard. This is not critical.")
+            }
         }
     }
 

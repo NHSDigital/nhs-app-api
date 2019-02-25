@@ -94,6 +94,8 @@ Feature: Throttling
     When I choose to sign up to brothermailer
     And I enter a valid email and submit
     Then I see the Waiting List Joined page
+    And I click the go to home screen button
+    And I see the login page for practice not participating
 
   Scenario: A user chooses not to register their email with brothermailer and sees the Waiting list not joined page
     Given The brothermailer service will return a successful response

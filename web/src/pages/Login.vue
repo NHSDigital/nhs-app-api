@@ -93,7 +93,7 @@ export default {
           value: betaCookie,
           options: {
             maxAge: moment.duration(1, 'y').asSeconds(),
-            secure: this.$store.app.$env.SECURE_COOKIES,
+            secure: store.app.$env.SECURE_COOKIES,
           },
         });
 
