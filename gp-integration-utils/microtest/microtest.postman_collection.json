@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "83c4be27-d00a-4731-9257-ae0acc01c531",
+		"_postman_id": "8b72db04-6287-480e-829f-a8833f724976",
 		"name": "Microtest",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -15,12 +15,12 @@
 						"header": [
 							{
 								"key": "NHSO-ODS-Code",
-								"value": "A21410",
+								"value": "{{OdsCode}}",
 								"equals": true
 							},
 							{
 								"key": "NHSO-Nhs-Number",
-								"value": "9435624219",
+								"value": "{{NhsNumber}}",
 								"type": "text"
 							}
 						],
@@ -29,29 +29,95 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://nhsapp.microtest.co.uk/v1/patient/appointments/?include_last_appointments=A21410&past_appointments_from_date=2014-01-01",
-							"protocol": "https",
+							"raw": "{{BaseUrl}}patient/appointments/?pastAppointmentsFromDate=2019-02-10",
 							"host": [
-								"nhsapp",
-								"microtest",
-								"co",
-								"uk"
+								"{{BaseUrl}}patient"
 							],
 							"path": [
-								"v1",
-								"patient",
 								"appointments",
 								""
 							],
 							"query": [
 								{
-									"key": "include_last_appointments",
-									"value": "A21410"
-								},
-								{
-									"key": "past_appointments_from_date",
-									"value": "2014-01-01"
+									"key": "pastAppointmentsFromDate",
+									"value": "2019-02-10"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patient/appointments",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "NHSO-Nhs-Number",
+								"type": "text",
+								"value": "{{NhsNumber}}"
+							},
+							{
+								"key": "NHSO-ODS-Code",
+								"value": "{{OdsCode}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"slotId\": \"48878\",\n  \"bookingReason\": \"My elbow hurts\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}patient/appointments",
+							"host": [
+								"{{BaseUrl}}patient"
+							],
+							"path": [
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patient/appointments",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "NHSO-Nhs-Number",
+								"type": "text",
+								"value": "{{NhsNumber}}"
+							},
+							{
+								"key": "NHSO-ODS-Code",
+								"value": "{{OdsCode}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"appointmentId\": \"48878\",\n  \"cancelReason\": \"It got better\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}patient/appointments",
+							"host": [
+								"{{BaseUrl}}patient"
+							],
+							"path": [
+								"appointments"
 							]
 						}
 					},
@@ -65,12 +131,12 @@
 							{
 								"equals": true,
 								"key": "NHSO-ODS-Code",
-								"value": "A21410"
+								"value": "{{OdsCode}}"
 							},
 							{
 								"key": "NHSO-Nhs-Number",
 								"type": "text",
-								"value": "9435624219"
+								"value": "{{NhsNumber}}"
 							}
 						],
 						"body": {
@@ -78,28 +144,21 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://nhsapp.microtest.co.uk/v1/patient/appointment-slots/?fromDate=2018-01-01&toDate=2018-03-31",
-							"protocol": "https",
+							"raw": "{{BaseUrl}}patient/appointment-slots?fromDate=2019-02-21&toDate=2019-02-23",
 							"host": [
-								"nhsapp",
-								"microtest",
-								"co",
-								"uk"
+								"{{BaseUrl}}patient"
 							],
 							"path": [
-								"v1",
-								"patient",
-								"appointment-slots",
-								""
+								"appointment-slots"
 							],
 							"query": [
 								{
 									"key": "fromDate",
-									"value": "2018-01-01"
+									"value": "2019-02-21"
 								},
 								{
 									"key": "toDate",
-									"value": "2018-03-31"
+									"value": "2019-02-23"
 								}
 							]
 						}
@@ -119,12 +178,12 @@
 							{
 								"equals": true,
 								"key": "NHSO-ODS-Code",
-								"value": "A21410"
+								"value": "{{OdsCode}}"
 							},
 							{
 								"key": "NHSO-Nhs-Number",
 								"type": "text",
-								"value": "9435624219"
+								"value": "{{NhsNumber}}"
 							}
 						],
 						"body": {
@@ -132,17 +191,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://nhsapp.microtest.co.uk/v1/patient/demographics",
-							"protocol": "https",
+							"raw": "{{BaseUrl}}patient/demographics",
 							"host": [
-								"nhsapp",
-								"microtest",
-								"co",
-								"uk"
+								"{{BaseUrl}}patient"
 							],
 							"path": [
-								"v1",
-								"patient",
 								"demographics"
 							]
 						}
@@ -161,12 +214,12 @@
 						"header": [
 							{
 								"key": "NHSO-ODS-Code",
-								"value": "A21410",
+								"value": "{{OdsCode}}",
 								"type": "text"
 							},
 							{
 								"key": "NHSO-Nhs-Number",
-								"value": "9435628702",
+								"value": "{{NhsNumber}}",
 								"type": "text"
 							}
 						],
@@ -175,17 +228,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://nhsapp.microtest.co.uk/v1/patient/courses",
-							"protocol": "https",
+							"raw": "{{BaseUrl}}patient/courses",
 							"host": [
-								"nhsapp",
-								"microtest",
-								"co",
-								"uk"
+								"{{BaseUrl}}patient"
 							],
 							"path": [
-								"v1",
-								"patient",
 								"courses"
 							]
 						}
@@ -200,12 +247,12 @@
 							{
 								"key": "NHSO-ODS-Code",
 								"type": "text",
-								"value": "A21410"
+								"value": "{{OdsCode}}"
 							},
 							{
 								"key": "NHSO-Nhs-Number",
 								"type": "text",
-								"value": "9435628702"
+								"value": "{{NhsNumber}}"
 							}
 						],
 						"body": {
@@ -213,22 +260,16 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://nhsapp.microtest.co.uk/v1/patient/prescriptions?from_date=2018-01-01",
-							"protocol": "https",
+							"raw": "{{BaseUrl}}patient/prescriptions?fromDate=2018-01-01",
 							"host": [
-								"nhsapp",
-								"microtest",
-								"co",
-								"uk"
+								"{{BaseUrl}}patient"
 							],
 							"path": [
-								"v1",
-								"patient",
 								"prescriptions"
 							],
 							"query": [
 								{
-									"key": "from_date",
+									"key": "fromDate",
 									"value": "2018-01-01"
 								}
 							]
@@ -243,31 +284,30 @@
 						"header": [
 							{
 								"key": "NHSO-ODS-Code",
-								"value": "A21410",
+								"value": "{{OdsCode}}",
 								"type": "text"
 							},
 							{
 								"key": "NHSO-Nhs-Number",
-								"value": "9435628702",
+								"value": "{{NhsNumber}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"courseIds\": [\n    \t\"185165\"\n\t],\n\t\"specialRequest\": \"Ran out, please can I have some more.\"\n}"
 						},
 						"url": {
-							"raw": "https://nhsapp.microtest.co.uk/v1/patient/prescriptions",
-							"protocol": "https",
+							"raw": "{{BaseUrl}}patient/prescriptions",
 							"host": [
-								"nhsapp",
-								"microtest",
-								"co",
-								"uk"
+								"{{BaseUrl}}patient"
 							],
 							"path": [
-								"v1",
-								"patient",
 								"prescriptions"
 							]
 						}
@@ -287,12 +327,12 @@
 							{
 								"key": "NHSO-ODS-Code",
 								"type": "text",
-								"value": "A21410"
+								"value": "{{OdsCode}}"
 							},
 							{
 								"key": "NHSO-Nhs-Number",
 								"type": "text",
-								"value": "9435628702"
+								"value": "{{NhsNumber}}"
 							}
 						],
 						"body": {
@@ -300,18 +340,12 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://nhsapp.microtest.co.uk/v1/patient/myrecord",
-							"protocol": "https",
+							"raw": "{{BaseUrl}}patient/my-record",
 							"host": [
-								"nhsapp",
-								"microtest",
-								"co",
-								"uk"
+								"{{BaseUrl}}patient"
 							],
 							"path": [
-								"v1",
-								"patient",
-								"myrecord"
+								"my-record"
 							]
 						}
 					},

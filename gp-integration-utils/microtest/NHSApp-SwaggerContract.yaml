@@ -1,0 +1,850 @@
+swagger: '2.0'
+info:
+  version: 20190215
+  title: NHS App API
+  description: This is the API for the NHS App. - updated version supplied 15/02/2019.
+schemes:
+  - https
+paths:
+  /v1/patient/appointment-slots:
+    get:
+      tags:
+        - appointment-slots
+      summary: Gets a list of available appointments for the user in context.
+      description: >-
+        For a given date range, returns lists of clinicians, appointment
+        sessions, locations and available appointment slots.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: fromDate
+          type: string
+          format: date-time
+          required: false
+          description: >-
+            Appointment search from date. If not supplied and no toDate
+            supplied, defaults to current datetime. If not supplied but toDate
+            supplied, defaults to start of the day two weeks before toDate.
+        - in: query
+          name: toDate
+          type: string
+          format: date-time
+          required: false
+          description: >-
+            Appointment search to date. If not supplied and no fromDate
+            supplied, defaults to end of the day two weeks after current
+            datetime. If not supplied but fromDate supplied, defaults to end of
+            the day two weeks after fromDate.
+      responses:
+        '200':
+          description: >-
+            Returns list of available slots and associated meta data. Returns
+            empty collection of slots if GP system does not return a list of
+            available slots.
+          schema:
+            type: object
+            properties:
+              guidanceMessage:
+                type: string
+                description: Guidance message from GP practice explaining which appointment slot to book.
+              slots:
+                type: array
+                description: Available Appointment Slots.
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Slot Identifier.
+                    type:
+                      type: string
+                      description: Type of appointment slot, e.g. "Baby Clinics".
+                    sessionName:
+                      type: string
+                      description: Appointment session name, e.g. "Dr Julia Smith Morning Appts".
+                    startTime:
+                      type: string
+                      format: date-time
+                      description: Appointment Slot Start Date Time.
+                    endTime:
+                      type: string
+                      format: date-time
+                      description: Appointment Slot End Date Time.
+                    location:
+                      type: string
+                      description: Location of the appointment slot
+                    duration:
+                      type: string
+                      description: Human readable duration of appointment slot.
+                    clinicians:
+                      type: array
+                      description: 'Array of Clinicians, accounts for joint sessions.'
+                      items:
+                        type: string
+                    channel:
+                      type: string
+                      enum: [Unknown, Telephone]
+                      description: Indicates slot channel type supplied by GP practice.
+        '400':
+          description: Bad request. A querystring parameter is not in the expected format.
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
+        '500':
+          description: An unexpected error occurred processing the request.
+  /v1/patient/appointments:
+    delete:
+      tags:
+        - appointments
+      summary: Cancels an upcoming appointment for the user in context.
+      description: >-
+        Cancels a specified appointment for the user in context.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: AppointmentCancelRequest
+          required: true
+          description: >-
+            Details of the appointment to be cancelled, with an optional cancellation reason.
+          schema:
+            type: object
+            required:
+              - appointmentId
+            properties:
+              appointmentId:
+                type: number
+                description: Identifier of the appointment to be cancelled.
+                minLength: 1
+              cancelReason:
+                type: string
+                description: Freetext reason the appointment is being cancelled
+                minLength: 1
+                maxLength: 200
+      responses:
+        '204':
+          description: Successfully cancelled the specified appointment.
+        '400':
+          description: Bad request. Supplied request is incomplete or invalid.
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
+        '409':
+          description: >-
+            The specified appointment does not exist or is not in a suitable
+            state to be cancelled.
+        '461':
+          description: It is too late to cancel this appointment.
+        '500':
+          description: An unexpected error occurred during the processing of the request.
+    get:
+      tags:
+        - appointments
+      summary: Gets a list of existing appointments for the user in context.
+      description: >-
+        Returns list of booked appointments for the user in context, and
+        associated metadata that can be used to cancel upcoming appointments.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: pastAppointmentsFromDate
+          type: string
+          format: date-time
+          required: false
+          description: >-
+            Earliest date for which to return historical appointments,
+            defaults to 'today' if not set
+      responses:
+        '200':
+          description: >-
+            Returns list of booked appointments and associated meta data.
+            Returns empty collection of appointments if GP system does not
+            return a list of appointmetns.
+          schema:
+            type: object
+            properties:
+              appointments:
+                type: array
+                description: Array of booked Appointments.
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Appointment Identifier.
+                    type:
+                      type: string
+                      description: Type of appointment slot, e.g. "Baby Clinics".
+                    sessionName:
+                      type: string
+                      description: Appointment session name, e.g. "Dr Julia Smith Morning Appts".
+                    startTime:
+                      type: string
+                      format: date-time
+                      description: Appointment Start Date Time.
+                    duration:
+                      type: string
+                      description: Duration of appointment in minutes
+                    endTime:
+                      type: string
+                      format: date-time
+                      description: Appointment End Date Time.
+                    location:
+                      type: string
+                      description: Physical location of the appointment.
+                    clinicians:
+                      type: array
+                      description: 'Array of Clinicians, accounts for joint sessions.'
+                      items:
+                        type: string
+        '400':
+          description: Bad request. A querystring parameter is not in the expected format.
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
+        '500':
+          description: An unexpected error occurred processing the request.
+    post:
+      tags:
+        - appointments
+      summary: Creates a GP Appointment for the user in context.
+      description: >-
+        Books an appointment slot for the user in context, given a slot
+        identifier. Identifiers of available slots can be obtained using the
+        appointment-slots endpoint.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: AppointmentBookRequest
+          required: true
+          description: >-
+            Details of the appointment slot to be booked, along with reasons for
+            the booking being made.
+          schema:
+            type: object
+            required:
+              - slotId
+              - bookingReason
+            properties:
+              slotId:
+                type: string
+                description: Identifier of appointment slot to be booked.
+                minLength: 1
+              bookingReason:
+                type: string
+                description: >-
+                  Reason for booking appointment. e.g. symptoms being
+                  experienced by the patient.
+                minLength: 1
+                maxLength: 150
+              telephoneNumber:
+                type: string
+                description: Patient's phone number for telephone appointment.
+                maxLength: 15
+
+# Removed as not required, the slotId already knows this.
+              # startTime:
+              #   type: string
+              #   format: date-time
+              #   description: Appointment Start Date Time.
+              # endTime:
+              #   type: string
+              #   format: date-time
+              #   description: Appointment End Date Time.
+      responses:
+        '201':
+          description: Appointment successfully created.
+        '400':
+          description: Bad request. Supplied request is incomplete or invalid.
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
+        '409':
+          description: Conflict. The chosen appointment slot is not available for booking.
+        '460':
+          description: >-
+            The patient has reached the limit of pending appointments that may
+            be booked.
+        '500':
+          description: An unexpected error occurred processing the request.
+  /v1/patient/demographics:
+    get:
+      tags:
+        - demographics
+      summary: Gets demographic information for the user in context.
+      description: >-
+        Returns users personal details and address details for the logged in
+        user.
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Returns demographic data for the logged in user.
+          schema:
+            type: object
+            properties:
+              patient_recno:
+                type: string
+                description: The external Microtest patient Identifier
+              title:
+                type: string
+                description: The patients title
+              surname:
+                type: string
+                description: The patients surname
+              forenames1:
+                type: string
+                description: The patients first forenames
+              forenames2:
+                type: string
+                description: The patients second forenames
+              dob:
+                type: string
+                description: The patients date of birth
+              sex:
+                type: string
+                description: The patients sex
+              nhs:
+                type: string
+                description: The patients NHS number
+              housename:
+                type: string
+                description: The patients house name
+              roadname:
+                type: string
+                description: The patients road name
+              locality:
+                type: string
+                description: The patients locality
+              post_town:
+                type: string
+                description: The patients post town
+              county:
+                type: string
+                description: The patients county
+              postcode:
+                type: string
+                description: The patients postcode
+              email:
+                type: string
+                description: The patients email
+              telephone1:
+                type: string
+                description: The patients telephone 1
+              telephone1_type:
+                type: string
+                description: The patients telephone 1 type
+              telephone2:
+                type: string
+                description: The patients telephone 2
+              telephone2_type:
+                type: string
+                description: The patients telephone 2 type
+              nominated_pharmacy:
+                type: string
+                description: The patients nominated pharmacy
+              nominated_pharmacy_name:
+                type: string
+                description: The patients nominated pharmacy_name
+              appliance_contractor:
+                type: string
+                description: The patients appliance contractor
+              appliance_contractor_name:
+                type: string
+                description: The patients appliance contractor name
+              assigned_gp:
+                type: string
+                description: The patients assigned GP
+              usual_gp:
+                type: string
+                description: The patients usual GP
+              notes_location_name:
+                type: string
+                description: The patients notes location name
+
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
+        '500':
+          description: An unexpected error occurred processing the request.
+  /v1/patient/my-record:
+    get:
+      tags:
+        - myrecord
+      summary: Gets the record for the user in context.
+      description: >-
+        Returns the users medical record for the logged in user.
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Returns myrecord data for the logged in user.
+          schema:
+            type: object
+            properties:
+              hasSummaryRecordAccess:
+                type: boolean
+                description: Shows if the patient has access to their summary record.
+              hasDetailedRecordAccess:
+                type: boolean
+                description: Shows if the patient has access to their detailed record.
+              supplier:
+                type: string
+                description: supplier.
+                enum:
+                  - UNKNOWN
+                  - EMIS
+                  - TPP
+              allergies:
+                type: object
+                description: An object containing all allergy details.
+                properties:
+                  hasAccess:
+                    type: boolean
+                    description: Does the patient have access to this data.
+                  hasErrored:
+                    type: boolean
+                    description: >-
+                      Some error occurred when attempting to retrieve this
+                      error.
+                  data:
+                    type: array
+                    description: An array of allergy information objects.
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The name of the allergy.
+                        date:
+                          type: object
+                          properties:
+                            value:
+                              type: string
+                              format: date-time
+                              description: date/time value.
+                            datePart:
+                              type: string
+                              description: date part to display.
+                              enum:
+                                - Unknown
+                                - Year
+                                - YearMonth
+                                - YearMonthDay
+                                - YearMonthDayTime
+              medications:
+                type: object
+                description: An object containing all medication details.
+                properties:
+                  hasAccess:
+                    type: boolean
+                    description: Does the patient have access to this data.
+                  hasErrored:
+                    type: boolean
+                    description: >-
+                      Some error occurred when attempting to retrieve this
+                      error.
+                  data:
+                    type: object
+                    properties:
+                      acuteMedications:
+                        type: array
+                        description: Array of acuteMedications
+                        items:
+                          type: object
+                          properties:
+                            date:
+                              type: string
+                              format: date-time
+                              description: The date/time of the item.
+                            lineItems:
+                              type: array
+                              description: An array of line items.
+                              items:
+                                $ref: >-
+                                  #/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items
+                      currentRepeatMedications:
+                        type: array
+                        description: Array of acuteMedications
+                        items:
+                          $ref: >-
+                            #/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items
+                      discontinuedRepeatMedications:
+                        type: array
+                        description: Array of acuteMedications
+                        items:
+                          $ref: >-
+                            #/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items
+              immunisations:
+                type: object
+                description: An object containing all immunisation details.
+                properties:
+                  hasAccess:
+                    type: boolean
+                    description: Does the patient have access to this data.
+                  hasErrored:
+                    type: boolean
+                    description: >-
+                      Some error occurred when attempting to retrieve this
+                      error.
+                  data:
+                    type: object
+                    properties:
+                      immunisations:
+                        type: array
+                        description: Array of immunisations.
+                        items:
+                          type: object
+                          properties:
+                            effectiveDate:
+                              $ref: >-
+                                #/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date
+                            term:
+                              type: string
+                              description: The name of the immunisation.
+              testResults:
+                type: object
+                description: An object containing all test result details.
+                properties:
+                  hasAccess:
+                    type: boolean
+                    description: Does the patient have access to this data.
+                  hasErrored:
+                    type: boolean
+                    description: >-
+                      Some error occurred when attempting to retrieve this
+                      error.
+                  data:
+                    type: object
+                    properties:
+                      testResults:
+                        type: array
+                        description: Array of test results
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: Id of the test result
+                            date:
+                              $ref: >-
+                                #/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date
+                            description:
+                              type: string
+                              description: The name of the test result.
+                            associatedTexts:
+                              type: array
+                              description: Array of associated texts.
+                              items:
+                                type: string
+                            testResultChildItems:
+                              type: array
+                              description: Array of test result child line items.
+                              items:
+                                type: object
+                                properties:
+                                  description:
+                                    type: string
+                                    description: The name of the test result.
+                                  associatedTexts:
+                                    type: array
+                                    description: Array of associated texts.
+                                    items:
+                                      type: string
+              problems:
+                type: object
+                description: An object containing all problems details.
+                properties:
+                  hasAccess:
+                    type: boolean
+                    description: Does the patient have access to this data.
+                  hasErrored:
+                    type: boolean
+                    description: >-
+                      Some error occurred when attempting to retrieve this
+                      error.
+                  data:
+                    type: object
+                    properties:
+                      problems:
+                        type: array
+                        description: Array of problems
+                        items:
+                          type: object
+                          properties:
+                            effectiveDate:
+                              $ref: >-
+                                #/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date
+                            lineItems:
+                              type: array
+                              description: An array of line items.
+                              items:
+                                type: object
+                                properties:
+                                  text:
+                                    type: string
+                                    description: When the record was entered.
+                                  lineItems:
+                                    type: array
+                                    description: An array of line items
+                                    items:
+                                      type: string
+              tppDcrEvents:
+                type: object
+                description: An object containing all tpp dcr event details.
+                properties:
+                  hasAccess:
+                    type: boolean
+                    description: Does the patient have access to this data.
+                  hasErrored:
+                    type: boolean
+                    description: >-
+                      Some error occurred when attempting to retrieve this
+                      error.
+                  data:
+                    type: object
+                    properties:
+                      problems:
+                        type: array
+                        description: Array of problems
+                        items:
+                          type: object
+                          properties:
+                            effectiveDate:
+                              type: string
+                              format: date-time
+                              description: date/time value.
+                            eventLocationAndDoneBy:
+                              type: string
+                              description: Event location and done by
+                            eventItems:
+                              type: array
+                              description: Array of event items
+                              items:
+                                type: string
+              consultations:
+                type: object
+                description: An object containing all consultation details.
+                properties:
+                  hasAccess:
+                    type: boolean
+                    description: Does the patient have access to this data.
+                  hasErrored:
+                    type: boolean
+                    description: >-
+                      Some error occurred when attempting to retrieve this
+                      error.
+                  data:
+                    type: object
+                    properties:
+                      problems:
+                        type: array
+                        description: Array of problems
+                        items:
+                          type: object
+                          properties:
+                            effectiveDate:
+                              $ref: >-
+                                #/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date
+                            consultantLocation:
+                              type: string
+                              description: Consultant Location and Name
+                            consultationHeaders:
+                              type: array
+                              description: An array of consultationHeader.
+                              items:
+                                type: object
+                                properties:
+                                  header:
+                                    type: string
+                                    description: Consultation Header
+                                  observationsWithTerm:
+                                    type: array
+                                    description: An array of observations.
+                                    items:
+                                      type: object
+                                      properties:
+                                        term:
+                                          type: string
+                                          description: Observation Term
+                                        associatedTexts:
+                                          type: array
+                                          description: An array of associated texts.
+                                          items:
+                                            type: string
+                                  associatedTexts:
+                                    type: array
+                                    description: An array of associated texts.
+                                    items:
+                                      type: string
+        '500':
+          description: An unexpected error occurred processing the request.
+  /v1/patient/prescriptions:
+    post:
+      tags:
+        - prescriptions
+      summary: Creates a repeat prescription request for the logged in user
+      description: >-
+        For the given user in context, will request a repeat prescription for the prescription course specified.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: RepeatPrescriptionRequest
+          required: true
+          description: Repeat prescription request details to be created.
+          schema:
+            type: object
+            required:
+              - courseIds
+            properties:
+              courseIds:
+                type: array
+                description: Single course identifier to create the prescription for.
+                items:
+                  type: string
+              specialRequest:
+                type: string
+                description: >-
+                  Optional free text that a user may supply in order to add a
+                  special request for the given prescription
+      responses:
+        '201':
+          description: Successful operation. Repeat Prescription Created.
+        '400':
+          description: >-
+            Bad request. Supplied connection details or request data is
+            incomplete or invalid.
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
+        '409':
+          description: >-
+            Conflict. A repeat prescription for the given course already exists
+            preventing a new one to be created.
+        '500':
+          description: An unexpected error occurred processing the request.
+    get:
+      tags:
+        - prescriptions
+      summary: Gets a list of requested repeat prescriptions for the user in context.
+      description: >-
+        For a given date range, returns a list of courses and repeat
+        prescriptions for the logged in user.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: fromDate
+          type: string
+          format: date-time
+          required: false
+          description: >-
+            Repeat Prescription from date. Will default to 6 months ago if no
+            value is supplied
+      responses:
+        '200':
+          description: >-
+            Returns list of requested repeat prescriptions and associated meta
+            data. Returns empty collection of repeat prescriptions if GP system
+            does not return a list of prescriptions.
+          schema:
+            type: object
+            properties:
+              prescriptions:
+                type: array
+                description: Array of repeat prescriptions.
+                items:
+                  type: object
+                  properties:
+                    courses:
+                      type: array
+                      description: Array of prescription courses.
+                      items:
+                        type: object
+                        properties:
+                          courseId:
+                            type: string
+                            description: Course identifier.
+                    orderDate:
+                      type: string
+                      format: date
+                      description: The date on which the repeat prescription was ordered.
+                    status:
+                      type: string
+                      enum:
+                        - Unknown
+                        - Rejected
+                        - Requested
+                        - Approved
+              courses:
+                type: array
+                description: Array of prescription courses.
+                items:
+                  $ref: >-
+                    #/paths/~1v1~1patient~1courses/get/responses/200/schema/properties/courses/items
+        '400':
+          description: Bad request. All headers must be provided.
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
+        '500':
+          description: An unexpected error occurred processing the request.
+  /v1/patient/courses:
+    get:
+      tags:
+        - courses
+      summary: Gets a list of prescriptions courses for the given patient.
+      description: >-
+        Returns a list of prescriptions courses for the logged in user.
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: >-
+            Returns list of courses and associated meta data. Returns empty
+            collection of courses if GP system does not return a list of
+            courses.
+          schema:
+            type: object
+            properties:
+              courses:
+                type: array
+                description: An array of prescription courses
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: The drug ID of the drug
+                    name:
+                      type: string
+                      description: The name of the drug
+                    quantity:
+                      type: string
+                      description: The quantity of course
+                    dosage:
+                      type: string
+                      description: The dosage description of the course
+                    status:
+                      type: string
+                      description: The status of the course
+                    dosenumber:
+                      type: string
+                      description: The dosage identifier 
+        '403':
+          description: >-
+            The patient does not have the necessary permissions within the GP
+            system.
+        '500':
+          description: An unexpected error occurred processing the request.
