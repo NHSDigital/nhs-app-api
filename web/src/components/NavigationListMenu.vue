@@ -39,7 +39,7 @@
     </li>
     <li :class="$style.listMenuItem">
       <organ-donation-link id="organ-donation-link"
-                           :class-name="$style.listMenuAnchor"
+                           :class-name="[$style.listMenuAnchor]"
                            data-sid="organ-donation-menu-item"
                            tag="a">
         {{ $t('navigationMenuList.organDonation') }}
