@@ -1,11 +1,9 @@
 @more
 @native
-@native-smoketest
 Feature: Display More Menu
   In order to access functionality that is not available on the standard app menu bar
   including Organ Donation and Data Sharing preferences
 
-  @android
   Scenario: A logged in user can navigate to the more screen
     Given I am a EMIS patient
     And I am logged in
@@ -14,6 +12,7 @@ Feature: Display More Menu
     Then I see more button on the nav bar is highlighted
     And I see and can follow links within the more page body
 
+  @nativesmoketest
   Scenario: A user can navigate to the 'Find out why your data matters' page
     Given I am a EMIS patient
     And I am logged in

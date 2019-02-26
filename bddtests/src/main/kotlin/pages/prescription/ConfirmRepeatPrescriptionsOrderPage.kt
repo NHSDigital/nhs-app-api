@@ -7,6 +7,7 @@ import org.junit.Assert
 import org.openqa.selenium.Keys
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.asciiText
 import pages.navigation.HeaderNative
 import pages.sendKeys
 
@@ -53,10 +54,10 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
             val nameOnScreen = currentCourseOnScreen.findBy<WebElementFacade>(
                     "[data-purpose='prescription-name']")
             val instructionsOnScreen = currentCourseOnScreen.findBy<WebElementFacade>(
-                    "[data-purpose='prescription-description']")
+                    "[data-purpose='prescription-description']").asciiText
 
             Assert.assertEquals(expectedCourse.name, nameOnScreen.text)
-            Assert.assertEquals(expectedCourse.getInstructionsText(), instructionsOnScreen.text)
+            Assert.assertEquals(expectedCourse.getInstructionsText(), instructionsOnScreen)
         }
     }
 

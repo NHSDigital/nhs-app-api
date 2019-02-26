@@ -4,7 +4,7 @@ Feature: Ability to cancel an appointment
 
   #HAPPY PATH JOURNIES
 
-  @native-smoketest
+  @nativesmoketest
   Scenario Outline: <GP System> user is presented with the cancel appointment screen with a drop-down
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
@@ -27,6 +27,7 @@ Feature: Ability to cancel an appointment
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
     And there is a cancellation reasons drop-down
+  @nativesmoketest
     Examples:
       | GP System |
       | VISION    |
@@ -82,7 +83,6 @@ Feature: Ability to cancel an appointment
     Then the My Appointments page is displayed
     And a "Cancellation confirmed" message is displayed
   @smoketest
-  @native-smoketest
     Examples:
       | Reason             | GP System |
       | No longer required | EMIS      |
@@ -122,15 +122,14 @@ Feature: Ability to cancel an appointment
     And I am logged in
     When I retrieve the 'My Appointments' page directly
     And I select a "Cancel appointment" link
-    When I select a "Back" link
+    When I select a "Back" button
     Then the My Appointments page is displayed
     Examples:
       | GP System |
       | TPP       |
       | VISION    |
       | MICROTEST |
-
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |

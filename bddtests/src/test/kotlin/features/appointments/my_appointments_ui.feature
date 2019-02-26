@@ -16,7 +16,7 @@ Feature: My appointments UI with Javascript
       | TPP       |
       | VISION    |
 
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -80,7 +80,7 @@ Feature: My appointments UI with Javascript
       | TPP       |
 
   @smoketest
-  @native-smoketest
+  @nativesmoketest
   Scenario Outline: A <GP System> user sees both their upcoming and historical appointments
     Given I have historical and upcoming appointments for <GP System>
     And I am logged in

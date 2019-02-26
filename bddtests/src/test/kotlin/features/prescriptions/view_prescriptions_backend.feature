@@ -70,6 +70,7 @@ Feature: View prescriptions backend
     When I request prescriptions for the last 6 months with an invalid cookie
     Then I receive a "Unauthorized" error
 
+
   Scenario Outline: <GP System> patient requesting prescriptions with when their session has expired
     Given I have logged into <GP System> and have a valid session cookie
     But I allow my session to expire

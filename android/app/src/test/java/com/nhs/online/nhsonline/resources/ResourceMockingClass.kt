@@ -58,6 +58,7 @@ open class ResourceMockingClass {
             on { getString(R.string.myAccountPath) } doReturn "/account"
             on { getString(R.string.morePath) } doReturn "/more"
             on { getString(R.string.organDonationPath) } doReturn "/organ-donation"
+            on { getString(R.string.dataSharingPath) } doReturn "/data-sharing"
             on { getString(R.string.checkYourSymptoms) } doReturn "check-your-symptoms"
 
             on { getString(R.string.my_account_header) } doReturn "My account"

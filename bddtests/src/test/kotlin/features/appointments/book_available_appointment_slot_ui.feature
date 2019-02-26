@@ -17,7 +17,6 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
 
   #FEATURE JOURNIES
-
   Scenario Outline: Only one appointment slot time is displayed when multiple are available for <GP System>
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
@@ -99,7 +98,7 @@ Feature: Book an available appointment slot UI with Javascript
       | VISION    |
       | MICROTEST |
 
-  @nativepending @NHSO-2974
+
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
     And I am logged in
@@ -131,7 +130,7 @@ Feature: Book an available appointment slot UI with Javascript
       | TPP       |
       | VISION    |
 
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -150,7 +149,7 @@ Feature: Book an available appointment slot UI with Javascript
       | TPP       |
       | VISION    |
 
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -170,7 +169,7 @@ Feature: Book an available appointment slot UI with Javascript
       | TPP       |
       | VISION    |
 
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -189,7 +188,7 @@ Feature: Book an available appointment slot UI with Javascript
       | TPP       |
       | VISION    |
 
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -211,10 +210,6 @@ Feature: Book an available appointment slot UI with Javascript
       | TPP       |
       | VISION    |
       | MICROTEST |
-
-  @native-smoketest
-    Examples:
-      | GP System |
       | EMIS      |
 
 
@@ -611,7 +606,7 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | VISION    |
 
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |

@@ -20,7 +20,7 @@ Feature: Cookie Banner
       | gp finder           | disabled    |
 
   @native
-  @native-smoketest
+  @nativesmoketest
   Scenario Outline: Cookie banner doesn't appear on the "non logged in" <target page> page, on the native app
     When I am on the <target page> logged-out page
     Then I do not see the cookie banner

@@ -115,7 +115,7 @@ Feature: View My Medical Record Information - Test Results
       | Count |
       | 6     |
 
-  Scenario Outline: An exception occurs retrieving test result detail
+  Scenario: An exception occurs retrieving test result detail
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
     And the GP Practice has six test results
@@ -124,6 +124,7 @@ Feature: View My Medical Record Information - Test Results
     When I click the test result section
     And I click a test result
 
+  @tech-debt @NHSO-5552
   Scenario Outline: An user navigates back to my record page from test result detail
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality
@@ -135,8 +136,6 @@ Feature: View My Medical Record Information - Test Results
     And I click the test result detail back
     Then I see the my record page scrolled to the test result section
 
-  @android
-  @native-smoketest
   Scenario: A TPP user has multiple test results navigation
     Given the my record wiremocks are initialised for TPP
     And the GP Practice has enabled demographics functionality

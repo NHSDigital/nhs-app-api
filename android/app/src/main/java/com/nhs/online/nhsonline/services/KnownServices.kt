@@ -130,8 +130,11 @@ class KnownServices(private val context: Context) {
             true,
             fetchStringResource(R.string.my_account_header))
         internalService.addPathInfo(fetchStringResource(R.string.organDonationPath),
-        true,
-        fetchStringResource(R.string.organ_donation_header))
+            true,
+            fetchStringResource(R.string.organ_donation_header))
+        internalService.addPathInfo(fetchStringResource(R.string.dataSharingPath),
+            true,
+            fetchStringResource(R.string.data_sharing_header))
         return internalService
     }
 

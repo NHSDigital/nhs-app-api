@@ -4,6 +4,7 @@ import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
+import pages.asciiText
 import pages.navigation.HeaderNative
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions")
@@ -55,15 +56,15 @@ open class PrescriptionsPage : HybridPageObject() {
 
             if (allFieldsProvided) {
                 p = HistoricPrescription(
-                        name = el.findElement(By.xpath(courseNameXpath)).text,
-                        dosage = el.findElement(By.xpath(dosageXpath)).text)
+                        name = el.findElement(By.xpath(courseNameXpath)).asciiText,
+                        dosage = el.findElement(By.xpath(dosageXpath)).asciiText)
 
-                p.orderDate = el.findElement(By.xpath(orderDateXpath)).text
-                p.status = el.findElement(By.xpath(statusXpath)).text
+                p.orderDate = el.findElement(By.xpath(orderDateXpath)).asciiText
+                p.status = el.findElement(By.xpath(statusXpath)).asciiText
             } else {
                 p = HistoricPrescription(
-                        name = el.findElement(By.xpath(courseNameXpath)).text,
-                        dosage = el.findElement(By.xpath(dosageXpath)).text)
+                        name = el.findElement(By.xpath(courseNameXpath)).asciiText,
+                        dosage = el.findElement(By.xpath(dosageXpath)).asciiText)
             }
 
             historicPrescriptions.add(p)

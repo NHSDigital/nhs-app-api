@@ -12,7 +12,15 @@ data class MedicationCourse(
         var canBeRequested: Boolean? = null)
 
 {
+    fun getInstructions() : ArrayList<String> {
+        val instrictionsList = pages.prescription.resolveDetailsField(dosage, quantityRepresentation)
+        return when (instrictionsList.size != 0){
+            true -> instrictionsList
+            false -> arrayListOf("")
+        }
+    }
+
     fun getInstructionsText() : String {
-        return pages.prescription.resolveDetailsField(dosage, quantityRepresentation)
+        return getInstructions().joinToString(" - ")
     }
 }

@@ -6,17 +6,17 @@ Feature: View My Account Page
     And I am logged in
     And I click the my account icon
 
-  @native-smoketest
+  @nativesmoketest
   Scenario: A patient can navigate to My account page
     Given I am on the My Account page
     And none of the menu buttons are highlighted
 
-  @native-smoketest
+  @nativesmoketest
   Scenario: My details are shown on the My Account page
     Given I am on the My Account page
     Then I see my personal details
 
-  @native-smoketest
+  @nativesmoketest
   Scenario: The app version is on the My Account Page
     Given I am on the My Account page
     Then I see the current app version

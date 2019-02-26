@@ -4,7 +4,7 @@ Feature: View prescriptions
 
   #HAPPY PATH JOURNIES
 
-  @native-smoketest
+  @nativesmoketest
   Scenario Outline: <GP System> patient selects the prescriptions menu button
     Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
@@ -19,7 +19,7 @@ Feature: View prescriptions
 
   #FEATURE PATH JOURNIES
 
-  @native-smoketest
+  @nativesmoketest
   Scenario Outline: <GP System> patient with no past repeat prescriptions
     Given I am patient using the <GP System> GP System
     And I have 0 past repeat prescriptions
@@ -44,6 +44,7 @@ Feature: View prescriptions
       | EMIS      |
 
   @smoketest
+  @nativesmoketest
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
     Given I am patient using the <GP System> GP System
     And I have 3 past repeat prescriptions
@@ -85,7 +86,7 @@ Feature: View prescriptions
     When I retrieve the 'My Prescriptions' page directly
     Then I see 2 prescriptions
 
-  @native-smoketest
+  @nativesmoketest
   Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
     Given I am patient using the <GP System> GP System
     Given prescriptions is disabled at a GP Practice level

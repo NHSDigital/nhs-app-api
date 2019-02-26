@@ -22,6 +22,7 @@ Feature: Organ Donation
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
     @smoketest
+    @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |

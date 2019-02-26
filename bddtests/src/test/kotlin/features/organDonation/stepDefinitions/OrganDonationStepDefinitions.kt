@@ -133,16 +133,12 @@ open class OrganDonationStepDefinitions {
 
     @Then("^the external Organ Donation page is displayed$")
     fun iAmOnTheExternalOrganDonationPage() {
-        if (header.onMobile()) {
-            pageOpensWithinNativeApp()
-        } else {
             aNewTabOpens(Config.instance.organDonation)
-        }
     }
 
     private fun pageOpensWithinNativeApp() {
         header.locatorMethods.waitForNativeStepToComplete()
-        header.waitForPageHeaderText("Organ donation register")
+        organDonationChoicePage.assertDisplayed()
         navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 
@@ -158,6 +154,9 @@ open class OrganDonationStepDefinitions {
     }
 
     fun iAmOnTheOrganDonationPage() {
-        iAmOnTheExternalOrganDonationPage()
+        when(header.onMobile()){
+            true -> pageOpensWithinNativeApp()
+            false -> iAmOnTheExternalOrganDonationPage()
+        }
     }
 }

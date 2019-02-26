@@ -111,9 +111,9 @@ else
           
         elif [ "$RUN_NATIVE" == 1 ]
         then
-          TAGS=(native-smoketest)
+          TAGS=(nativesmoketest)
         else
-          TAGS=specific
+          TAGS=(specific)
           BDD_CUCUMBER_OPTIONS_PREFIX=$BDD_CUCUMBER_OPTIONS_PREFIX"'"
         fi
     elif [ "$ENABLE_COSMOS_TESTS" == 1 ]
@@ -128,7 +128,7 @@ else
         info "MR Tranche - BDD Smoketest Run Configured"
         BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and
         not @long-running and not @throttling and not @cosmos and not @accessibility $SPECIFIC_TEST_TAGS"
-        TAGS=smoketest
+        TAGS=(smoketest)
     fi
 fi
 
@@ -163,7 +163,7 @@ then
         DEVICENAME="BROWSERSTACK_DEVICE_NAME=$DEVICE"
         OSVERSION="BROWSERSTACK_OS_VERSION=$OS"
     else
-        DEVICENAME="BROWSERSTACK_DEVICE_NAME=iPhone\ 8"
+        DEVICENAME="BROWSERSTACK_DEVICE_NAME=\"iPhone 8\""
         OSVERSION="BROWSERSTACK_OS_VERSION=12.1"
     fi
   fi
@@ -246,6 +246,11 @@ info "Running $TAG tests"
     sed -i '' -e 's/THROTTLING\_ENABLED\=true/THROTTLING\_ENABLED\=false/g' vars_ci_run.env
   fi
 
+  if [ $TAG == "nativesmoketest" ]
+  then
+    sed -i '' -e 's/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=3/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=10/g' vars_ci_run.env
+  fi
+
   # Run docker tests per tag
   docker-compose -p $TAG -f docker-compose_ci_run.yml up -d --build || die "Docker compose failure"
 
@@ -260,7 +265,7 @@ info "Running $TAG tests"
   else
     if [ $TAG == "other" ]
       then
-        BDD_CUCUMBER_OPTIONS="--strict $BDD_CUCUMBER_OPTIONS_PREFIX"
+        BDD_CUCUMBER_OPTIONS="$BDD_CUCUMBER_OPTIONS_PREFIX"
         for TESTTAG in ${TAGS[*]}; do
           if [ $TESTTAG != "other" ]
           then
@@ -273,7 +278,7 @@ info "Running $TAG tests"
       then
         BDD_CUCUMBER_OPTIONS="--strict --tags '@$TAG and not @native'"
       else
-        BDD_CUCUMBER_OPTIONS="--strict $BDD_CUCUMBER_OPTIONS_PREFIX and @$TAG'"
+        BDD_CUCUMBER_OPTIONS="$BDD_CUCUMBER_OPTIONS_PREFIX and @$TAG'"
       fi
     fi
   fi
@@ -351,6 +356,7 @@ info "Running $TAG tests"
     done
   else  
     wait $PID
+    info "$(PID) is finished"
   fi
 
   PIDS+=($PID)
@@ -365,7 +371,9 @@ done
 
 # Aggregate test results
 info "Aggregating test results"
+info "Collecting reports"
 for TAG in ${TAGS[*]}; do
+  info "Collecting serenity reports for $TAG"
   cp -r $workingDir/../../testRunFolder/$TAG/target/site/serenity $workingDir/../target/site/.
   cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
   cp -r $workingDir/../../testRunFolder/$TAG/$ACCESSIBILITY_OUTPUT $workingDir/../.

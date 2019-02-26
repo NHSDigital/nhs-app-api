@@ -19,22 +19,22 @@ open class NavBarNative : NativePageObject() {
         SYMPTOMS(
                 "symptoms-menu-item",
                 "symptoms-menu-item",
-                "symptoms",
+                "id/symptoms",
                 "Symptoms"),
         APPOINTMENTS(
                 "appointments-menu-item",
                 "appointments-menu-item",
-                "appointments",
+                "id/appointments",
                 "Appointments"),
         PRESCRIPTIONS(
                 "prescriptions-menu-item",
                 "prescriptions-menu-item",
-                "prescriptions",
+                "id/prescriptions",
                 "Prescriptions"),
         MY_RECORD(
                 "myrecord-menu-item",
                 "myrecord-menu-item",
-                "myRecord",
+                "id/myRecord",
                 "My record"),
         MORE(
                 "more-menu-item",
@@ -57,7 +57,9 @@ open class NavBarNative : NativePageObject() {
     }
 
     private fun getNativeElement(element: NavBarType): MobileElement {
-        return getNativePageElement(element).nativeElement
+        var webElement: MobileElement? = null
+        getNativePageElement(element).actOnTheNativeElement { webElement = it }
+        return webElement!!
     }
 
     private fun getElement(element: NavBarType): WebElementFacade {

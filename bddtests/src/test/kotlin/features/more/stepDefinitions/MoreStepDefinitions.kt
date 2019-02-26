@@ -50,7 +50,7 @@ class MoreStepDefinitions {
             postTokenToNdop()
                     .respondWithNdopMockPage()
         }
-        val urlForPage = pageUrl.getPage("data sharing")
+        val urlForPage = pageUrl.getPage("data sharing",morePage.onMobile())
         browser.browseTo(urlForPage)
     }
 
@@ -69,7 +69,7 @@ class MoreStepDefinitions {
     @Then("^I see the more page header$")
     fun pageHeaderVisible() {
         if (morePage.onMobile()) {
-            headerNative.getPageTitle("More").nativeElement.isDisplayed
+            headerNative.getPageTitle("More").isDisplayed()
         }
         headerNative.assertIsVisible("More")
     }

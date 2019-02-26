@@ -39,7 +39,7 @@ object VisionPrescriptionMapper {
             for (course in repeatPrescription.repeat) {
                 val historicPrescription = HistoricPrescription(
                         course.drug ?: "",
-                        pages.prescription.resolveDetailsField(course.dosage, course.quantity)
+                        pages.prescription.resolveDetailsField(course.dosage, course.quantity).joinToString(" - ")
                 )
                 if (repeatPrescription.status != null) {
                     val status = repeatPrescription.status!!

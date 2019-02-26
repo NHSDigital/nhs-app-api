@@ -3,8 +3,10 @@ package pages
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.Dimension
+import org.openqa.selenium.WebElement
 
 const val WAIT_FOR_NON_STALE_ELEMENT = 500L
+const val UNICODE_HYPHEN = 8208.toChar().toString()
 
 val HybridPageElement.isDisplayed: Boolean
   get() {
@@ -91,6 +93,19 @@ fun HybridPageElement.waitForElementToBecomeVisible() : HybridPageElement {
     return this
 }
 
+fun NativePageElement.waitForNativeElementToBecomeVisible() : NativePageElement {
+    actOnTheNativeElement {
+        while (true) {
+            val wrappedElement = it
+            if (wrappedElement.size != null || it.isDisplayed)
+                break
+            Thread.sleep(WAIT_FOR_NON_STALE_ELEMENT)
+        }
+    }
+
+    return this
+}
+
 fun HybridPageElement.waitUntilPresent() {
     actOnTheElement { it.waitUntilPresent<WebElementFacade>() }
 }
@@ -111,4 +126,9 @@ fun HybridPageElement.typeTextIntoTextArea(text: String): String {
     Assert.assertTrue("Expected some text to be output to the text area", returnedText.isNotEmpty())
 
     return returnedText
+}
+
+val WebElement.asciiText :String
+    get() {
+        return text.replace(UNICODE_HYPHEN,"-")
 }

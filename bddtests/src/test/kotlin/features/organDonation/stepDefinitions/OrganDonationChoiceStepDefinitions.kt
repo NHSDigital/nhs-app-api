@@ -20,7 +20,7 @@ open class OrganDonationChoiceStepDefinitions {
 
     @When("^I navigate to the internal Organ Donation Page")
     fun iNavigateToTheInternalOrganDonationPage() {
-        val url = PageUrl().getPage("more")
+        val url = PageUrl().getPage("more", morePage.onMobile())
         browser.browseTo(url)
         morePage.btnOrganDonation.click()
     }

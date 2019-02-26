@@ -59,6 +59,7 @@
 		1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702521F5D334003E3EAB /* String_Extensions.swift */; };
 		1417702821F5D34D003E3EAB /* Data_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417702721F5D34D003E3EAB /* Data_Extensions.swift */; };
 		14865E7E220AE7B300E72948 /* RegistrationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14865E7D220AE7B300E72948 /* RegistrationRequest.swift */; };
+		14B849322226E95F002E6851 /* BrowserstackTC.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */; };
 		14D4D20521E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */; };
 		14D4D20B21E8AD25008A65E0 /* EncodingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */; };
 		14D4D20D21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */; };
@@ -188,6 +189,7 @@
 		1417702521F5D334003E3EAB /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
 		1417702721F5D34D003E3EAB /* Data_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data_Extensions.swift; sourceTree = "<group>"; };
 		14865E7D220AE7B300E72948 /* RegistrationRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationRequest.swift; sourceTree = "<group>"; };
+		14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BrowserstackTC.xcconfig; sourceTree = "<group>"; };
 		14D4D20421E8AB44008A65E0 /* AuthenticationAssertionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationAssertionBuilder.swift; sourceTree = "<group>"; };
 		14D4D20A21E8AD25008A65E0 /* EncodingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodingHelper.swift; sourceTree = "<group>"; };
 		14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionAssertationBuilder.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				105BB9A42186FA3E00571671 /* Defaults.xcconfig */,
 				5598FF712189C27100767CAC /* BrowserstackLocal.xcconfig */,
 				4703497921945F5C00F72D05 /* Preview.xcconfig */,
+				14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */,
 			);
 			path = Configurations;
 			sourceTree = "<group>";
@@ -733,6 +736,7 @@
 				F057336920A72F040059032D /* HeaderBar.xib in Resources */,
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
 				105BB9922179C0B100571671 /* Scratch9.xcconfig in Resources */,
+				14B849322226E95F002E6851 /* BrowserstackTC.xcconfig in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
 				105BB98C2179C08300571671 /* Scratch6.xcconfig in Resources */,
 				105BB9872179B67400571671 /* Scratch5.xcconfig in Resources */,
@@ -2052,6 +2056,110 @@
 			};
 			name = Scratch12;
 		};
+		14B849332226E9F9002E6851 /* BrowserstackTC */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_DISPLAY_NAME = Browserstack;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstack;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = BrowserstackTC;
+		};
+		14B849342226E9F9002E6851 /* BrowserstackTC */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 14B849312226E95F002E6851 /* BrowserstackTC.xcconfig */;
+			buildSettings = {
+				APP_DISPLAY_NAME = BrowserstackLocal;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = NHSOnline/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.dev.browserstacklocal;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "NHS App Dev Browserstack";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = YES;
+			};
+			name = BrowserstackTC;
+		};
+		14B849352226E9F9002E6851 /* BrowserstackTC */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				INFOPLIST_FILE = NHSOnlineTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = online.nhs.com.NHSOnlineTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
+			};
+			name = BrowserstackTC;
+		};
 		4703497A21945FB300F72D05 /* Preview */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4703497921945F5C00F72D05 /* Preview.xcconfig */;
@@ -3080,6 +3188,7 @@
 			buildConfigurations = (
 				C20578252028B94800CDBDC5 /* Development */,
 				5598FF722189C32700767CAC /* BrowserstackLocal */,
+				14B849332226E9F9002E6851 /* BrowserstackTC */,
 				105BB97A2179B49900571671 /* Scratch1 */,
 				105BB97D2179B4A700571671 /* Scratch2 */,
 				105BB9802179B4B700571671 /* Scratch3 */,
@@ -3108,6 +3217,7 @@
 			buildConfigurations = (
 				C20578282028B94800CDBDC5 /* Development */,
 				5598FF732189C32700767CAC /* BrowserstackLocal */,
+				14B849342226E9F9002E6851 /* BrowserstackTC */,
 				105BB97B2179B49900571671 /* Scratch1 */,
 				105BB97E2179B4A700571671 /* Scratch2 */,
 				105BB9812179B4B700571671 /* Scratch3 */,
@@ -3136,6 +3246,7 @@
 			buildConfigurations = (
 				C205782B2028B94800CDBDC5 /* Development */,
 				5598FF742189C32700767CAC /* BrowserstackLocal */,
+				14B849352226E9F9002E6851 /* BrowserstackTC */,
 				105BB97C2179B49900571671 /* Scratch1 */,
 				105BB97F2179B4A700571671 /* Scratch2 */,
 				105BB9822179B4B700571671 /* Scratch3 */,

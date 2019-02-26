@@ -4,15 +4,16 @@ import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
-import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.HybridPageElement
+import pages.asciiText
+import pages.typeTextIntoTextArea
 import pages.isVisible
 import pages.navigation.HeaderNative
-import pages.typeTextIntoTextArea
 
 const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
 
-fun resolveDetailsField(dosage: String?, quantity: String?): String {
+fun resolveDetailsField(dosage: String?, quantity: String?): ArrayList<String> {
     val values = arrayListOf<String>()
     if (dosage != null) {
         values.add(dosage)
@@ -21,7 +22,7 @@ fun resolveDetailsField(dosage: String?, quantity: String?): String {
         values.add(quantity.replace("  ", " "))
     }
 
-    return values.joinToString(" ‐ ")
+    return values
 }
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/repeat-courses")
@@ -81,10 +82,12 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
 
         for (i in coursesData.indices) {
             val name = coursesData[i].name
-            val instructions = resolveDetailsField(coursesData[i].dosage, coursesData[i].quantityRepresentation)
+            val instructions =
+                    resolveDetailsField(coursesData[i].dosage, coursesData[i].quantityRepresentation)
+                            .joinToString(" - ")
 
             val nameAtIndex = namesListed[i].text
-            val instructionAtIndex = instructionsListed[i].text
+            val instructionAtIndex = instructionsListed[i].asciiText
 
             Assert.assertEquals("Unexpected medication name at index $i", name, nameAtIndex)
             Assert.assertEquals("Unexpected instructions at index $i", instructions, instructionAtIndex)
@@ -120,10 +123,15 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     }
 
     private fun getRepeatPrescription(courseToSelect: MedicationCourse): HybridPageElement {
+        val instructions = courseToSelect.getInstructions()
         return HybridPageElement(
                 webDesktopLocator = "//label[contains(.," +
-                        "'${courseToSelect.getInstructionsText()}') " +
-                        "and contains(.,'${courseToSelect.name}')]",
+                        "'${instructions[0]}') " +
+                        when(instructions.size) {
+                           2 -> " and contains(.,'${instructions[1]}')"
+                           else -> ""
+                        } +
+                        " and contains(.,'${courseToSelect.name}')]",
                 androidLocator = null,
                 page = this
         )
@@ -132,13 +140,15 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     fun verifyPrescriptionIsSelected(medicationCourse: MedicationCourse) {
         val repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
 
+        val testedCourses = arrayListOf<String>()
+
         repeatPrescriptionContainers.forEach { el ->
             val nameOnScreen = el.findElement(prescriptionNameLocator)
             val instructionsOnScreen = el.findElement(prescriptionInstructionsLocator)
             val inputElement = el.findElement(By.cssSelector("input[type=checkbox]"))
 
             if (medicationCourse.name == nameOnScreen.text
-                    && medicationCourse.getInstructionsText() == instructionsOnScreen.text
+                    && medicationCourse.getInstructionsText() == instructionsOnScreen.asciiText
                     && medicationCourse.medicationCourseGuid == inputElement.getAttribute("value")
             ) {
                 Assert.assertTrue("${medicationCourse.name}-" +
@@ -146,10 +156,15 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
                         "selected and should be", inputElement.isSelected)
                 return
             }
+            else {
+                testedCourses.add(nameOnScreen.text + " : "
+                        + instructionsOnScreen.text)
+            }
         }
 
         Assert.fail("Didn't find medication course with: \nname: ${medicationCourse.name} " +
-                "\ndosage: ${medicationCourse.getInstructionsText()}")
+                "\ndosage: ${medicationCourse.getInstructionsText()}" +
+                "\nBut these were available: ${testedCourses.joinToString(";")}")
     }
 
     fun typeTextIntoSpecialRequestTextArea(text: String): String {

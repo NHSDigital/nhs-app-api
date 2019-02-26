@@ -38,7 +38,7 @@ class GenericPageStepDefinitions {
 
     @When("^I retrieve the '(.*)' page directly$")
     fun iretrieveThePageDirectly(pageName:String) {
-        val urlForPage = pageUrl.getPage(pageName)
+        val urlForPage = pageUrl.getPage(pageName,genericPage.onMobile())
         browser.browseTo(urlForPage)
     }
 

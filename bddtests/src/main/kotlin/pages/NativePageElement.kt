@@ -2,7 +2,11 @@ package pages
 
 import io.appium.java_client.MobileElement
 import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.NoSuchElementException
+import org.openqa.selenium.StaleElementReferenceException
+import org.openqa.selenium.WebElement
 import webdrivers.isIOS
+import java.lang.AssertionError
 
 class NativePageElement(
         webDesktopLocator: String,
@@ -21,12 +25,17 @@ class NativePageElement(
         helpfulName
 ) {
 
-    val nativeElement: MobileElement
-        get() {
+    private fun selectNativeElement() : MobileElement {
             return when (nativeLocatorStrategy()) {
-                LOCATOR_STRATEGY_IOS -> page.findNativeByXpath(iOSLocator!!)
-                LOCATOR_STRATEGY_IOS_ACCESSIBILITY -> page.findByAccessibilityId(iOSAccessID!!)
-                LOCATOR_STRATEGY_ANDROID -> page.findNativeByXpath(androidLocator!!)
+                LOCATOR_STRATEGY_IOS -> page.findNativeByXpath(iOSLocator!!).also {
+                    it.getWrappedElementWithRetry()
+                }
+                LOCATOR_STRATEGY_IOS_ACCESSIBILITY -> page.findByAccessibilityId(iOSAccessID!!).also {
+                    it.getWrappedElementWithRetry()
+                }
+                LOCATOR_STRATEGY_ANDROID -> page.findNativeByXpath(androidLocator!!).also {
+                    it.getWrappedElementWithRetry()
+                }
                 LOCATOR_STRATEGY_WEBVIEW,
                 LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findNativeByXpath(webMobileLocator).also {
                     if ((!it.isDisplayed).or(it.isUnderneathFixedElements())) {
@@ -73,30 +82,76 @@ class NativePageElement(
 
     override fun click() {
         if(page.onMobile()) {
-            this.nativeElement.click()
+            waitForNativeElementToBecomeVisible().actOnTheNativeElement {
+                it.click()
+            }
         }
         else
             super.click()
+    }
 
+    fun actOnTheNativeElement(actionOn: (elem: MobileElement) -> Unit) {
+        var retryAssertionsOnce = 2
+        while(retryAssertionsOnce>0) {
+            try {
+                actionOn(selectNativeElement())
+                break
+            }
+            catch(e: StaleElementReferenceException){
+                Thread.sleep(MILLISECONDS_IN_A_SECOND)
+            }
+            catch(e: AssertionError) {
+                retryAssertionsOnce--
+                Thread.sleep(MILLISECONDS_IN_A_SECOND)
+            }
+        }
     }
 
     val text : String
         get() {
-        if(page.onMobile())
-            return this.nativeElement.text
-
-        return super.textValue
+            return when (page.onMobile()){
+            true -> {
+                var text = ""
+                actOnTheNativeElement { text = it.text }
+                text
+                }
+            false -> {
+               super.textValue
+            }
+        }
     }
 
 
     fun isDisplayed(): Boolean {
         return when(page.onMobile()) {
-                true -> {this.nativeElement.isDisplayed }
+                true -> {this.selectNativeElement().isDisplayed }
                 false -> {this.isDisplayed }
             }
     }
 
     private fun MobileElement.scroll() {
         scrollTo(this)
+    }
+
+    private fun MobileElement.getWrappedElementWithRetry() : WebElement {
+        var retryCount = (timeToWaitForElement / ELEMENT_RETRY_TIME).toInt()
+
+        var wrappedElement: WebElement? = null
+
+        while(retryCount>=0) {
+            try {
+                wrappedElement = this
+                break
+            } catch (exception: NoSuchElementException) {
+                when(retryCount) {
+                    0 -> throw exception
+                    else -> {
+                        retryCount--
+                        Thread.sleep((ELEMENT_RETRY_TIME * MILLISECONDS_IN_A_SECOND).toLong())
+                    }
+                }
+            }
+        }
+        return wrappedElement!!
     }
 }

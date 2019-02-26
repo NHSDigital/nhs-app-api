@@ -17,8 +17,6 @@ Feature: Login
       | GP System |
       | TPP       |
       | VISION    |
-
-  @native-smoketest
   @android
   @smoketest
     Examples:
@@ -54,13 +52,13 @@ Feature: Login
       | GP System |
       | TPP       |
 
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |
 
   @pending
-  @native-smoketest
+  @nativesmoketest
   Scenario: Any user sees the current app version on the login page
     Given I am at the login page
     And I see the login page
@@ -81,7 +79,7 @@ Feature: Login
       | GP System |
       | TPP       |
 
-  @native-smoketest
+  @nativesmoketest
     Examples:
       | GP System |
       | EMIS      |

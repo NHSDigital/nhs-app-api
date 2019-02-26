@@ -3,7 +3,6 @@ import XCTest
 @testable import NHSOnline
 
 class SchemeHandlersTests: XCTestCase {
-    
     func handle_ReturnsTrue_WhenUrlIsHandled() {
         let url: URL = URL(string: "mailto:someonesomewhere")!
         

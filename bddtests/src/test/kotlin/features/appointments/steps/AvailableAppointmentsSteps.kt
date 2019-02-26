@@ -82,7 +82,10 @@ open class AvailableAppointmentsSteps {
 
     @Step
     fun clickOnBackLink() {
-        availableAppointmentsPage.clickDesktopBackButton()
+        if (availableAppointmentsPage.onMobile())
+            availableAppointmentsPage.clickOnButtonContainingText(backComponentText)
+        else
+            availableAppointmentsPage.clickDesktopBackButton()
     }
 
     @Step

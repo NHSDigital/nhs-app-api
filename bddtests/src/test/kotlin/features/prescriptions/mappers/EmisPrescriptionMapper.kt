@@ -63,7 +63,8 @@ object EmisPrescriptionMapper {
 
                 val historicPrescription = HistoricPrescription(
                         name = course.name,
-                        dosage = pages.prescription.resolveDetailsField(course.dosage, course.quantityRepresentation)
+                        dosage = pages.prescription.resolveDetailsField(course.dosage,
+                                course.quantityRepresentation).joinToString(" - ")
                 )
                 historicPrescription.orderDate = datetime
                 historicPrescription.status =

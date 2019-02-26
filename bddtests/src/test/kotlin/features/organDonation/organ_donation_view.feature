@@ -1,7 +1,6 @@
 @organ-donation
 Feature: Organ Donation View
-  
-  @nativepending @NHSO-2972
+
   Scenario: A user can navigate to the external version of 'Manage organ donation decision' when toggle is set as so
     Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in

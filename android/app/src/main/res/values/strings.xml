@@ -8,7 +8,7 @@
 
     <string name="my_account_header">My account</string>
     <string name="organ_donation_header">My organ donation decision</string>
-    <string name="data_sharing_header">Sharing health data preferences</string>
+    <string name="data_sharing_header">Find out why your data matters</string>
     <string name="data_preferences_header">Sharing health data preferences</string>
     <string name="nhs_111_header">111 Online</string>
     <string name="nhs_111_header_description">one one one Online</string>

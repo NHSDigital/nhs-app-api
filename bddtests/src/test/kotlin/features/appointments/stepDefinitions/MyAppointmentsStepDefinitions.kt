@@ -33,9 +33,9 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
-    @When("^I select a \"Back\" link$")
-    fun iSelectABackLink() {
-        myAppointmentsUISteps.myAppointmentsPage.clickDesktopBackButton()
+    @When("^I select a \"Back\" button$")
+    fun iSelectABackButton() {
+        myAppointmentsUISteps.myAppointmentsPage.clickBackButton()
     }
 
     @Then("^the Appointment Slot page is displayed$")

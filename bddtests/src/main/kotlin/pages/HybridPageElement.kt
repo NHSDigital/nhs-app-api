@@ -139,7 +139,7 @@ open class HybridPageElement(
                 actionOn(selectElement())
                 break
             }
-            catch(e: org.openqa.selenium.StaleElementReferenceException){
+            catch(e: StaleElementReferenceException){
                 Thread.sleep(MILLISECONDS_IN_A_SECOND)
             }
             catch(e: AssertionError) {
@@ -225,7 +225,7 @@ open class HybridPageElement(
             try {
                 wrappedElement = this.wrappedElement
                 break
-            } catch (exception: org.openqa.selenium.NoSuchElementException) {
+            } catch (exception: NoSuchElementException) {
                 when(retryCount) {
                     0 -> throw exception
                     else -> {

@@ -16,7 +16,7 @@ private fun HybridPageObject.getActionPageElement(actionText: String): HybridPag
             androidLocator = nativeLocator,
             page = this,
             timeToWaitForElement = 30
-    ).withText(actionText, false)
+    )
 }
 
 fun HybridPageObject.isActionVisible(actionText: String): Boolean {
