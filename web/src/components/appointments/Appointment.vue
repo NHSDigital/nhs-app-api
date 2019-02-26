@@ -55,6 +55,7 @@ import LocationIcon from '@/components/icons/LocationIcon';
 import ClinicianIcon from '@/components/icons/ClinicianIcon';
 import { APPOINTMENT_CANCELLING } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -93,7 +94,7 @@ export default {
       if (this.showCancellationLink) {
         this.$store.dispatch('myAppointments/select', this.appointment);
       }
-      this.$router.push(APPOINTMENT_CANCELLING.path);
+      redirectTo(this, APPOINTMENT_CANCELLING.path, null);
     },
   },
 };

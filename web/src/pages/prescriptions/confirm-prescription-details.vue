@@ -33,7 +33,7 @@
 
     <generic-button id="back-to-prescriptions"
                     :class="[$style.button, $style.grey]"
-                    @click="$router.push(prescriptionRepeatCoursesPath)">
+                    @click="backToPrescriptionsClicked">
       {{ $t('rp04.backButton') }}
     </generic-button>
   </div>
@@ -43,6 +43,7 @@
 /* eslint-disable import/extensions */
 import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 import GenericButton from '@/components/widgets/GenericButton';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -65,7 +66,7 @@ export default {
   },
   created() {
     if (this.selectedPrescriptions === null || this.selectedPrescriptions.length === 0) {
-      this.$router.push(PRESCRIPTIONS.path);
+      redirectTo(this, PRESCRIPTIONS.path, null);
     }
   },
   methods: {
@@ -77,8 +78,11 @@ export default {
       this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder)
         .then(() => {
           this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
-          this.$router.push(PRESCRIPTIONS.path);
+          redirectTo(this, PRESCRIPTIONS.path, null);
         });
+    },
+    backToPrescriptionsClicked() {
+      redirectTo(this, this.prescriptionRepeatCoursesPath, null);
     },
   },
 };

@@ -44,6 +44,7 @@ import UpcomingAppointments from '@/components/appointments/UpcomingAppointments
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -117,7 +118,7 @@ export default {
   methods: {
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.guidancePath, true);
-      this.$router.push(this.guidancePath);
+      redirectTo(this, this.guidancePath, null);
     },
   },
 };

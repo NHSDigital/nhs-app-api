@@ -46,6 +46,7 @@ import { ORGAN_DONATION_FAITH } from '@/lib/routes';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
 import includes from 'lodash/fp/includes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   scrollToTop: true,
@@ -96,7 +97,7 @@ export default {
     continueClicked() {
       this.hasTriedToContinue = true;
       if (this.hasMadeChoices) {
-        this.$router.push(ORGAN_DONATION_FAITH.path);
+        redirectTo(this, ORGAN_DONATION_FAITH.path, null);
         return;
       }
       window.scrollTo(0, 0);

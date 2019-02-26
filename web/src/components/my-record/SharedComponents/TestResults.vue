@@ -56,6 +56,7 @@
 import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 import { MY_RECORD_VISION_TEST_RESULTS_DETAIL } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -97,11 +98,11 @@ export default {
   methods: {
     activateTestResult(testResultId, event) {
       event.preventDefault();
-      this.$router.push(this.getTestResultPath(testResultId));
+      redirectTo(this, this.getTestResultPath(testResultId));
     },
     viewVisionTestResults(event) {
       event.preventDefault();
-      this.$router.push(MY_RECORD_VISION_TEST_RESULTS_DETAIL.path);
+      redirectTo(this, MY_RECORD_VISION_TEST_RESULTS_DETAIL.path, null);
     },
     getTestResultPath(testResultId) {
       return `/my-record/testresultdetail/${testResultId}`;

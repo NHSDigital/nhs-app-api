@@ -17,6 +17,7 @@
 <script>
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 import { MY_RECORD_VISION_DIAGNOSIS_DETAIL } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -55,7 +56,7 @@ export default {
   methods: {
     viewDiagnosis(event) {
       event.preventDefault();
-      this.$router.push(MY_RECORD_VISION_DIAGNOSIS_DETAIL.path);
+      redirectTo(this, MY_RECORD_VISION_DIAGNOSIS_DETAIL.path, null);
     },
   },
 };

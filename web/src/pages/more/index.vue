@@ -28,6 +28,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
 import { DATA_SHARING_PREFERENCES } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -41,7 +42,7 @@ export default {
   },
   methods: {
     navigate(event) {
-      this.$router.push(event.currentTarget.pathname);
+      redirectTo(this, event.currentTarget.pathname, null);
       event.preventDefault();
     },
   },

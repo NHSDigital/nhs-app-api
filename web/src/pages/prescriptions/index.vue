@@ -45,6 +45,7 @@ import keys from 'lodash/fp/keys';
 import each from 'lodash/fp/each';
 import sortBy from 'lodash/fp/sortBy';
 import isEmpty from 'lodash/fp/isEmpty';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -101,7 +102,7 @@ export default {
   },
   methods: {
     onRepeatPrescriptionButtonClicked(e) {
-      this.$router.push(PRESCRIPTION_REPEAT_COURSES.path);
+      redirectTo(this, PRESCRIPTION_REPEAT_COURSES.path, null);
       e.preventDefault();
     },
   },

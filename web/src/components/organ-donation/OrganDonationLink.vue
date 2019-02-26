@@ -19,7 +19,7 @@ import flow from 'lodash/fp/flow';
 // eslint-disable-next-line import/extensions
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag.vue';
 import { ORGAN_DONATION } from '@/lib/routes';
-import { isTruthy } from '@/lib/utils';
+import { isTruthy, redirectTo } from '@/lib/utils';
 
 const getIsNativeApp = get('$store.state.device.isNativeApp');
 const getOrganDonationUrl = get('$store.app.$env.ORGAN_DONATION_URL');
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     navigate(event) {
-      this.$router.push(event.currentTarget.pathname);
+      redirectTo(this, event.currentTarget.pathname, null);
       event.preventDefault();
     },
 

@@ -3,6 +3,8 @@ import Vue from 'vue';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import { LOGIN, ACCOUNT_SIGNOUT } from '@/lib/routes';
 import Sources from '@/lib/sources';
+import { redirectTo } from '@/lib/utils'
+
 
 Vue.mixin({
   computed: {
@@ -35,15 +37,12 @@ Vue.mixin({
       if (url === LOGIN.path) {
         const sourceDevice = this.$store.state.device.source;
         if (Sources.isNative(sourceDevice)) {
-          this.$router.push({
-            path: url,
-            query: { source: sourceDevice }
-          });
+          redirectTo(this, url, { source: sourceDevice });
           return;
         }
       }
 
-      this.$router.push(url);
+      redirectTo(this, url, null);
     },
     correctUrl(url) {
       if (url === LOGIN.path && this.$store.getters['session/isLoggedIn']()) {

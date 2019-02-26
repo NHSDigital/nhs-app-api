@@ -14,6 +14,7 @@
 /* eslint-disable no-unused-vars */
 import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
 import NoJsForm from '@/components/no-js/NoJsForm';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -39,7 +40,7 @@ export default {
   methods: {
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.guidancePath, true);
-      this.$router.push(this.guidancePath);
+      redirectTo(this, this.guidancePath, null);
     },
   },
 };

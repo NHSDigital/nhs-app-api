@@ -53,6 +53,7 @@
 import { APPOINTMENT_BOOKING, SYMPTOMS } from '@/lib/routes';
 import GenericButton from '@/components/widgets/GenericButton';
 import NoJsForm from '@/components/no-js/NoJsForm';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -78,10 +79,10 @@ export default {
   },
   methods: {
     onCheckSymptomClicked() {
-      this.$router.push(SYMPTOMS.path);
+      redirectTo(this, SYMPTOMS.path, null);
     },
     onBookButtonClicked() {
-      this.$router.push(APPOINTMENT_BOOKING.path);
+      redirectTo(this, APPOINTMENT_BOOKING.path, null);
     },
   },
 };

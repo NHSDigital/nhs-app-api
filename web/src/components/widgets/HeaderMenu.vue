@@ -71,6 +71,7 @@
 
 <script>
 import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORD, MORE, ACCOUNT, LOGOUT } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   props: {
@@ -124,7 +125,7 @@ export default {
       if (a.target === '_blank') {
         window.open(a.href, '_blank');
       } else {
-        this.$router.push(a.pathname);
+        redirectTo(this, a.pathname, null);
       }
     },
     closeMiniMenu() {

@@ -19,6 +19,7 @@ import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import GenericButton from '@/components/widgets/GenericButton';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import { ORGAN_DONATION } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -34,7 +35,7 @@ export default {
   methods: {
     goBack() {
       this.$store.dispatch('organDonation/amendCancel');
-      this.$router.push(ORGAN_DONATION.path);
+      redirectTo(this, ORGAN_DONATION.path);
     },
   },
 };

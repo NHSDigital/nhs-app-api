@@ -5,13 +5,14 @@
 
 <script>
 import { ORGAN_DONATION_AMEND } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'AmendDecisionLink',
   methods: {
     amendDecision() {
       this.$store.dispatch('organDonation/amendStart');
-      this.$router.push(ORGAN_DONATION_AMEND.path);
+      redirectTo(this, ORGAN_DONATION_AMEND.path, null);
     },
   },
 };

@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 import NativeCallbacks from '@/services/native-app';
 import { CHECKYOURSYMPTOMS } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE, GO_TO_CHECK_SYMPTOMS, initialState } from './mutation-types';
 
 export default {
@@ -13,13 +14,10 @@ export default {
     if (window.nativeApp) {
       if (!NativeCallbacks.checkSymptoms()) {
         const sourceValue = this.app.store.state.device.source;
-        this.$router.push({
-          path: '/check-your-symptoms',
-          query: { source: sourceValue },
-        });
+        redirectTo(this, '/check-your-symptoms', { source: sourceValue });
       }
     } else {
-      this.$router.push(CHECKYOURSYMPTOMS.path);
+      redirectTo(this, CHECKYOURSYMPTOMS.path, null);
     }
   },
   [SET_SOURCE_DEVICE](state, source) {

@@ -33,10 +33,7 @@ export default {
       this.$store.dispatch('device/goToCheckSymptoms');
       // this method will be refactored to the following:
       // const sourceValue = this.$store.state.device.source;
-      // this.$router.push({
-      //   path: '/check-your-symptoms',
-      //   query: { source: sourceValue },
-      // });
+      // redirectTo('this, /check-your-symptoms', { source: sourceValue })
     },
     dynamicStyle(...args) {
       return getDynamicStyle(this, args, exchangeStyle({ button: 'btn_home_symptoms-desktop' }));

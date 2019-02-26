@@ -69,6 +69,9 @@
 
 <script>
 /* eslint-disable import/extensions */
+import { APPOINTMENTS, APPOINTMENT_BOOKING } from '@/lib/routes';
+import { noJsParameterName } from '@/lib/noJs';
+import { redirectTo } from '@/lib/utils';
 import get from 'lodash/fp/get';
 import isEmpty from 'lodash/fp/isEmpty';
 import qs from 'qs';
@@ -80,8 +83,6 @@ import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
 import VueScrollTo from 'vue-scrollto';
-import { APPOINTMENTS, APPOINTMENT_BOOKING } from '@/lib/routes';
-import { noJsParameterName } from '@/lib/noJs';
 import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 const FILTER_PARAMETERS = [
@@ -242,7 +243,7 @@ export default {
       this.$store.dispatch('analytics/satelliteTrack', trackEvent, objectToTrack);
     },
     goBack() {
-      this.$router.push(APPOINTMENTS.path);
+      redirectTo(this, APPOINTMENTS.path, null);
     },
   },
 };

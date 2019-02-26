@@ -72,6 +72,7 @@ import PrescriptionsIcon from '@/components/icons/PrescriptionsIcon';
 import RecordIcon from '@/components/icons/MyRecordIcon';
 import MoreIcon from '@/components/icons/MoreIcon';
 import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORD, MORE } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -100,7 +101,7 @@ export default {
       if (a.target === '_blank') {
         window.open(a.href, '_blank');
       } else {
-        this.$router.push(a.pathname);
+        redirectTo(this, a.pathname, null);
       }
     },
   },

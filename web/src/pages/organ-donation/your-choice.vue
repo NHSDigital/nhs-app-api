@@ -54,6 +54,7 @@ import {
   ORGAN_DONATION_FAITH,
   ORGAN_DONATION_SOME_ORGANS,
 } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -104,11 +105,11 @@ export default {
     continueClicked() {
       this.hasTriedToContinue = true;
       if (this.hasMadeDecision && this.currentChoice === false) {
-        this.$router.push(ORGAN_DONATION_SOME_ORGANS.path);
+        redirectTo(this, ORGAN_DONATION_SOME_ORGANS.path, null);
         return;
       }
       if (this.hasMadeDecision && this.currentChoice === true) {
-        this.$router.push(ORGAN_DONATION_FAITH.path);
+        redirectTo(this, ORGAN_DONATION_FAITH.path, null);
         return;
       }
 

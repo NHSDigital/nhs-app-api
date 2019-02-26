@@ -24,6 +24,7 @@
 import TimeSlot from '@/components/appointments/booking/TimeSlot';
 import DateProvider from '@/services/DateProvider';
 import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -39,7 +40,7 @@ export default {
     formatDate: dateTime => DateProvider.create(dateTime).format('dddd D MMMM YYYY'),
     select(ref) {
       this.$refs[ref][0].select();
-      this.$router.push(APPOINTMENT_CONFIRMATIONS.path);
+      redirectTo(this, APPOINTMENT_CONFIRMATIONS.path, null);
     },
     hasAppointments(daySlots) {
       return daySlots[1].length > 0;

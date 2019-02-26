@@ -61,6 +61,7 @@ import SelectDropdown from '@/components/widgets/SelectDropdown';
 import GenericButton from '@/components/widgets/GenericButton';
 import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS } from '@/lib/routes';
 import FormPost from '@/components/FormPost';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -100,7 +101,7 @@ export default {
     this.isReasonRequired = this.cancellationReasons.length > 0;
 
     if (!this.appointment) {
-      this.$router.push(this.appointmentPath);
+      redirectTo(this, this.appointmentPath, null);
     }
   },
   beforeDestroy() {
@@ -120,7 +121,7 @@ export default {
         this.$store.dispatch('myAppointments/cancel', data)
           .then(() => {
             this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancelling.successText'));
-            this.$router.push(APPOINTMENTS.path);
+            redirectTo(this, APPOINTMENTS.path, null);
           });
       } else {
         this.submissionError = true;
@@ -130,7 +131,7 @@ export default {
       }
     },
     onBackButtonClicked() {
-      this.$router.push(this.appointmentPath);
+      redirectTo(this, this.appointmentPath, null);
     },
   },
 };

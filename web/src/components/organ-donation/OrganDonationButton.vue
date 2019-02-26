@@ -15,6 +15,7 @@ import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
 import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'OrganDonationButton',
@@ -44,7 +45,7 @@ export default {
   methods: {
     chooseDecision() {
       this.$store.dispatch('organDonation/makeDecision', this.decision);
-      this.$router.push(this.nextRoute);
+      redirectTo(this, this.nextRoute, null);
     },
   },
 };

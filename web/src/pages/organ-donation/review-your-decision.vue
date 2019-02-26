@@ -56,8 +56,9 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import { ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
 import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
+import { ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -135,7 +136,7 @@ export default {
 
       const action = this.$store.state.organDonation.isAmending ? 'put' : 'post';
       await this.$store.dispatch(`organDonation/${action}Registration`);
-      this.$router.push(ORGAN_DONATION_VIEW_DECISION.path);
+      redirectTo(this, ORGAN_DONATION_VIEW_DECISION.path, null);
     },
   },
 };

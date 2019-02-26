@@ -152,6 +152,8 @@
 
 
 <script>
+import { redirectTo } from '@/lib/utils';
+import { APPOINTMENT_BOOK_NOJS, APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
 import get from 'lodash/fp/get';
 import AppointmentSlot from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
@@ -161,7 +163,6 @@ import MessageList from '@/components/widgets/MessageList';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
-import { APPOINTMENT_BOOK_NOJS, APPOINTMENT_BOOKING, APPOINTMENTS } from '@/lib/routes';
 import Necessity from '@/lib/necessity';
 import FormPost from '@/components/FormPost';
 import channel from '@/lib/channel';
@@ -262,7 +263,7 @@ export default {
   },
   mounted() {
     if (!this.slot) {
-      this.$router.push(APPOINTMENT_BOOKING.path);
+      redirectTo(this, APPOINTMENT_BOOKING.path, null);
     }
 
     if (process.client) {
@@ -355,11 +356,11 @@ export default {
       this.$store.dispatch('availableAppointments/book', bookingData)
         .then(() => {
           this.$store.dispatch('flashMessage/addSuccess', this.confirmationMessage);
-          this.$router.push(APPOINTMENTS.path);
+          redirectTo(this, APPOINTMENTS.path, null);
         });
     },
     onCancelButtonClicked() {
-      this.$router.push(this.cancelBookingPath);
+      redirectTo(this, this.cancelBookingPath, null);
     },
   },
 };
@@ -584,4 +585,3 @@ div {
 }
 
 </style>
-

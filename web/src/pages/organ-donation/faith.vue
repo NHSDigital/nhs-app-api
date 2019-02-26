@@ -67,6 +67,7 @@ import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import { YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -117,7 +118,7 @@ export default {
       if (this.showError) {
         window.scrollTo(0, 0);
       } else {
-        this.$router.push(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
+        redirectTo(this, ORGAN_DONATION_ADDITIONAL_DETAILS.path, null);
       }
     },
   },

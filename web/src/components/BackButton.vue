@@ -6,6 +6,7 @@
 </template>
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'BackButton',
@@ -29,7 +30,7 @@ export default {
   },
   methods: {
     goBack() {
-      if (this.gotoPath) this.$router.push(this.gotoPath);
+      if (this.gotoPath) redirectTo(this, this.gotoPath, null);
       else this.$router.goBack();
     },
   },

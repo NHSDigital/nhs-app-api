@@ -28,6 +28,7 @@
 <script>
 /* eslint-disable no-unused-vars */
 import { ACCOUNT, APPOINTMENT_BOOKING_GUIDANCE, INDEX, LOGIN, LOGOUT } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 import HeaderLinks from '@/components/widgets/HeaderLinks';
 import HeaderMenu from '@/components/widgets/HeaderMenu';
 import HomeLink from './HomeLink';
@@ -131,7 +132,7 @@ export default {
     },
     onBookButtonClicked() {
       this.$store.app.$analytics.trackButtonClick(this.guidancePath, true);
-      this.$router.push(this.guidancePath);
+      redirectTo(this, this.guidancePath, null);
     },
   },
 };

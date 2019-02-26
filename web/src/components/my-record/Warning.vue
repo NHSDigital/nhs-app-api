@@ -42,6 +42,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import { INDEX, MYRECORD } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   name: 'Warning',
@@ -63,7 +64,7 @@ export default {
     },
     onBackButtonClicked(event) {
       event.preventDefault();
-      this.$router.push(this.indexPath);
+      redirectTo(this, this.indexPath, null);
     },
   },
 };

@@ -29,6 +29,7 @@
 <script>
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import { MYRECORD } from '@/lib/routes';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -46,7 +47,7 @@ export default {
   methods: {
     onBackButtonClicked(event) {
       event.preventDefault();
-      this.$router.push(this.myRecordReturnPath);
+      redirectTo(this, this.myRecordReturnPath, null);
     },
   },
 };
