@@ -6,7 +6,14 @@
     @keypress="onKeyDown">
     <a :class="!$store.state.device.isNativeApp && $style.desktopWeb"
        :href="createLink()" @click.prevent="select">
-      {{ formatTime(timeSlot.startTime) }}
+      <span role="text">
+        <span :class="$style.strong" data-label="start time">
+          {{ formatTime(timeSlot.startTime) }}
+        </span>
+        <p v-if="timeSlot.sessionName" data-label="session name">
+          {{ timeSlot.sessionName }}
+        </p>
+      </span>
     </a>
   </li>
 </template>
@@ -94,7 +101,10 @@ export default {
  a:focus {
   outline-color: $focus_highlight;
  }
+
+ .strong {
+   font-weight: 700;
+ }
 }
-
-
 </style>
+

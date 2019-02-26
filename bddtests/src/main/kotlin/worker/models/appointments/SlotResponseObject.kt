@@ -4,6 +4,7 @@ package worker.models.appointments
 data class SlotResponseObject(
         var id: String,
         var type: String,
+        var sessionName: String,
         var startTime: String,
         var endTime: String,
         var location: String,

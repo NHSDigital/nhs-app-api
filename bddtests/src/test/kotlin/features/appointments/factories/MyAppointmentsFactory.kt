@@ -44,7 +44,7 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
 
     fun createSuccessfulMyAppointmentsResponse(
             appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
-            = AppointmentsSlotsExample.getGenericExample(),
+            = AppointmentsSlotsExample().getGenericExample(),
             numberOfCancellationReasons: Int = getDefaultCancellationReasons().size
     ) {
         appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons().subList(
@@ -88,7 +88,7 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
     }
 
     fun createTimeoutMyAppointmentsResponse(
-            appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade = AppointmentsSlotsExample
+            appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade = AppointmentsSlotsExample()
                     .getGenericExample()
     ) {
         appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons()

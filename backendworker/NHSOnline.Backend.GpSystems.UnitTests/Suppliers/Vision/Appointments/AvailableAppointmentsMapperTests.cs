@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -19,23 +21,28 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
     [TestClass]
     public class AvailableAppointmentsMapperTests
     {
+        private IFixture _fixture;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         private AvailableAppointmentsMapper _systemUnderTest;
+        private Mock<ILogger<AvailableAppointmentsMapper>> _mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
-            _systemUnderTest = new AvailableAppointmentsMapper(_dateTimeOffsetProvider);
+            _mockLogger = _fixture.Freeze<Mock<ILogger<AvailableAppointmentsMapper>>>();
+            _systemUnderTest = new AvailableAppointmentsMapper(_dateTimeOffsetProvider, _mockLogger.Object);
         }
 
         [TestMethod]
         public void Map_HappyPath_ReturnsAnArrayOfAppointments()
         {
+            // Arrange
             var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
             var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
 
@@ -55,6 +62,127 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             {
                 Id = "SESSX01",
                 Description = "General Session",
+                Location = leeds.Id
+            };
+            
+            var emptySession = new SlotSession
+            {
+                Id = "SESSX02",
+                Description = "",
+                Location = leeds.Id
+            };
+
+            var generalType = new SlotType
+            {
+                Id = "TYPEX01",
+                Description = "General Type"
+            };
+
+            var owner1 = new Owner
+            {
+                Id = "OWN01",
+                Name = "Owner1"
+            };
+
+            var owner2 = new Owner
+            {
+                Id = "OWN02",
+                Name = "Owner2"
+            };
+
+            var slot1 = new FreeSlot
+            {
+                DateTime = slotTime1.Start.ToVisionDateTimeString(),
+                Id = "SLOTX01",
+                Location = leeds.Id,
+                Session = generalSession.Id,
+                Type = generalType.Id, 
+                Owner = owner1.Id,
+                Duration = slotTime1.Duration
+            };
+            
+            var slot2 = new FreeSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX02",
+                Location = london.Id,
+                Session = emptySession.Id,
+                Type = generalType.Id, 
+                Owner = owner2.Id,
+                Duration = slotTime2.Duration
+            };
+
+            var slots = new[] { slot1, slot2 }.ToList();
+            var locations = new[] { leeds, london }.ToList();
+            var sessions = new[] { generalSession, emptySession }.ToList();
+            var slotTypes = new[] { generalType }.ToList();
+            var owners = new[] { owner1, owner2 }.ToList();
+
+            var availableAppointmentsResponse =
+                CreateAvailableAppointmentsResponse(slots, locations, sessions, slotTypes, owners);
+            
+            // Act
+            var actualResponse = _systemUnderTest.Map(availableAppointmentsResponse.Appointments);
+            
+            // Assert
+            var expectedResponse = new[] 
+            {
+                new Slot
+                {
+                    Id = "SLOTX01",
+                    Type =  "General Type",
+                    Location = "Leeds",
+                    StartTime = slotTime1.Start, 
+                    EndTime = slotTime1.End,
+                    Clinicians = new []{ "Owner1" },
+                    Channel = Channel.Unknown,
+                    SessionName = "General Session"
+                },
+                new Slot
+                {
+                    Id = "SLOTX02",
+                    Type =  "General Type",
+                    Location = "London",
+                    StartTime = slotTime2.Start,
+                    EndTime = slotTime2.End,
+                    Clinicians = new []{ "Owner2" },
+                    Channel = Channel.Unknown,
+                    SessionName = ""
+                }
+            };
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+        
+        [TestMethod]
+        public void Map_ReturnsResponseWithoutSlot_WhenSlotTypeIsMissing()
+        {
+            // Arrange
+            var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
+
+            var leeds = new Location
+            {
+                Id = "LOCX01",
+                Name = "Leeds"
+            };
+            
+            var london = new Location
+            {
+                Id = "LOCX02",
+                Name = "London"
+            };
+
+            var generalSession = new SlotSession
+            {
+                Id = "SESSX01",
+                Description = "General Session",
+                Location = leeds.Id
+            };
+            
+            var emptySession = new SlotSession
+            {
+                Id = "SESSX02",
+                Description = "",
                 Location = leeds.Id
             };
 
@@ -103,43 +231,69 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 Owner = owner2.Id,
                 Duration = slotTime2.Duration
             };
+            
+            var slot3 = new FreeSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX03",
+                Location = london.Id,
+                Session = emptySession.Id,
+                Type = emptyType.Id,
+                Owner = owner2.Id,
+                Duration = slotTime2.Duration
+            };
+            
+            var slot4 = new FreeSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX04",
+                Location = leeds.Id,
+                Session = emptySession.Id,
+                Type = generalType.Id, 
+                Owner = owner2.Id,
+                Duration = slotTime2.Duration
+            };
 
-            var slots = new[] { slot1, slot2 }.ToList();
+            var slots = new[] { slot1, slot2, slot3, slot4 }.ToList();
             var locations = new[] { leeds, london }.ToList();
-            var sessions = new[] { generalSession }.ToList();
+            var sessions = new[] { generalSession, emptySession }.ToList();
             var slotTypes = new[] { generalType, emptyType }.ToList();
             var owners = new[] { owner1, owner2 }.ToList();
 
             var availableAppointmentsResponse =
                 CreateAvailableAppointmentsResponse(slots, locations, sessions, slotTypes, owners);
             
+            // Act
             var actualResponse = _systemUnderTest.Map(availableAppointmentsResponse.Appointments);
             
+            // Assert
             var expectedResponse = new[] 
             {
                 new Slot
                 {
                     Id = "SLOTX01",
-                    Type =  "General Session - General Type",
+                    Type =  "General Type",
                     Location = "Leeds",
                     StartTime = slotTime1.Start, 
                     EndTime = slotTime1.End,
                     Clinicians = new []{ "Owner1" },
-                    Channel = Channel.Unknown
+                    Channel = Channel.Unknown,
+                    SessionName = "General Session"
                 },
                 new Slot
                 {
-                    Id = "SLOTX02",
-                    Type =  "General Session",
-                    Location = "London",
+                    Id = "SLOTX04",
+                    Type =  "General Type",
+                    Location = "Leeds",
                     StartTime = slotTime2.Start,
                     EndTime = slotTime2.End,
                     Clinicians = new []{ "Owner2" },
-                    Channel = Channel.Unknown
+                    Channel = Channel.Unknown,
+                    SessionName = ""
                 }
             };
-
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse Vision Appointment Slot - slot type name null or empty", null, Times.Exactly(2));
         }
         
         [TestMethod]
@@ -203,12 +357,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 Id = "TYPEX01",
                 Description = "General Type"
             };
-            
-            var emptyType = new SlotType
-            {
-                Id = "TYPEX02",
-                Description = ""
-            };
 
             var owner1 = new Owner
             {
@@ -238,7 +386,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 Id = "SLOTX02",
                 Location = london.Id,
                 Session = generalSession.Id,
-                Type = emptyType.Id,
+                Type = generalType.Id,
                 Owner = owner2.Id,
                 Duration = slotTime2.Duration
             };
@@ -246,12 +394,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var slots = new[] { slot1, slot2 }.ToList();
             var locations = new[] { leeds, london }.ToList();
             var sessions = new[] { generalSession }.ToList();
-            var slotTypes = new[] { generalType, emptyType }.ToList();
+            var slotTypes = new[] { generalType }.ToList();
             var owners = new[] { owner1, owner2 }.ToList();
 
             var availableAppointmentsResponse =
                 CreateAvailableAppointmentsResponse(slots, locations, sessions, slotTypes, owners);
             
+            _mockLogger.SetupLogger(LogLevel.Warning, $"Unable to parse Vision appointment slot start time of '{invalidStartTime}", null).Verifiable();
             // Act
             var actualResponse = _systemUnderTest.Map(availableAppointmentsResponse.Appointments);
 
@@ -261,15 +410,17 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 new Slot
                 {
                     Id = "SLOTX02",
-                    Type =  "General Session",
+                    Type =  generalType.Description,
                     Location = "London",
                     StartTime = slotTime2.Start,
                     EndTime = slotTime2.End,
-                    Clinicians = new[] { "Owner2" }
+                    Clinicians = new[] { "Owner2" },
+                    SessionName = generalSession.Description
                 }
             };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+            _mockLogger.Verify();
         }
         
         private DateTimeOffset Tomorrow()
@@ -309,7 +460,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                     Slots = slots,
                     References = references
                 }
-                
             };
         }
 

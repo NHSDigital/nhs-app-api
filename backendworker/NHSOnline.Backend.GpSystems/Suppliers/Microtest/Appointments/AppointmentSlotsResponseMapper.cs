@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                     Clinicians = sourceSlot.Clinicians,
                     Location = sourceSlot.Location,
                     Type = sourceSlot.Type,
+                    SessionName = string.Empty,
                 };
 
                 slots.Add(resultSlot);

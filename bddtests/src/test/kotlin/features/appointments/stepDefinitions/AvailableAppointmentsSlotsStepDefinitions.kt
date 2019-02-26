@@ -4,8 +4,6 @@ import com.github.tomakehurst.wiremock.stubbing.Scenario
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentDateKey
-import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentTimeKey
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentFilterSteps
 import features.appointments.steps.AvailableAppointmentFilterSteps.Companion.TODAY_OPTION
@@ -17,6 +15,7 @@ import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
+import mocking.data.appointments.FilterSlotDetails
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -139,7 +138,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
             withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
-                    .respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+                    .respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
         }
     }
 
@@ -149,7 +148,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
         // stub to generate timeout for 1st attempt
         factory.generateExample {
             withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
-                    .respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+                    .respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
                     .inScenario(timeoutScenario)
                     .whenScenarioStateIs(Scenario.STARTED)
                     .willSetStateTo(willSucceed)
@@ -163,7 +162,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         // stub to generate success on 2nd attempt
         factory.generateExample {
-            respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+            respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
                     .inScenario(timeoutScenario)
                     .whenScenarioStateIs(willSucceed)
         }
@@ -174,7 +173,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun slightDelayForRetrievingAvailableAppointmentSlots() {
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
         factory.generateExample {
-            respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+            respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
                     .delayedBy(Duration.ofSeconds(1))
         }
     }
@@ -223,13 +222,25 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^I have selected a time when multiple slots are available$")
     fun iSelectATimeWhenMultipleSlotsAreAvailable() {
-        val date = sessionVariableCalled<String>(TargetAppointmentDateKey)
-        val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
-        availableAppointments.availableAppointmentsPage.assertDateHeadingPresent(date)
-        availableAppointments.availableAppointmentsPage.timeSlotForDateAndTime(date, time)
-                .assertIsVisible()
-        availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
-        availableAppointments.availableAppointmentsPage.selectSlot(date, time)
+        val targetSlotDetails = sessionVariableCalled<FilterSlotDetails>(
+                AppointmentSessionVariableKeys.APPOINTMENT_TO_SELECT
+        )
+        availableAppointments.availableAppointmentsPage.assertDateHeadingPresent(targetSlotDetails.dateAsUIString)
+        availableAppointments.availableAppointmentsPage.timeSlotForDateTimeSession(
+                targetSlotDetails.dateAsUIString,
+                targetSlotDetails.timeAsUIString,
+                targetSlotDetails.sessionName
+        ).assertIsVisible()
+        availableAppointments.assertOnlyOneTimeSlotPresent(
+                targetSlotDetails.dateAsUIString,
+                targetSlotDetails.timeAsUIString,
+                targetSlotDetails.sessionName
+        )
+        availableAppointments.availableAppointmentsPage.selectSlot(
+                targetSlotDetails.dateAsUIString,
+                targetSlotDetails.timeAsUIString,
+                targetSlotDetails.sessionName
+        )
     }
 
     @When("^the available appointment slots are retrieved$")
@@ -423,16 +434,20 @@ class AvailableAppointmentsSlotsStepDefinitions {
     }
 
     private fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
-        val expectedDatesAndTimes = sessionVariableCalled<AppointmentFilterFacade>(
+        val expectedSlots = sessionVariableCalled<AppointmentFilterFacade>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
         ).filteredSlots
-        assertTrue("Invalid test as there are no expected slots stored. ", expectedDatesAndTimes.isNotEmpty())
-        val expectedNumberOfSlots = expectedDatesAndTimes.flatMap { it.value.toList() }.size
-        for (date in expectedDatesAndTimes.keys) {
-            for (time in expectedDatesAndTimes[date].orEmpty()) {
-                availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
+        assertTrue("Invalid test as there are no expected slots stored. ", expectedSlots.isNotEmpty())
+        val expectedNumberOfSlots = expectedSlots.flatMap { it.value.toList() }.size
+        for (date in expectedSlots.keys) {
+            for (slotDetails in expectedSlots[date].orEmpty()) {
+                availableAppointments.assertOnlyOneTimeSlotPresent(
+                        slotDetails.dateAsUIString,
+                        slotDetails.timeAsUIString,
+                        slotDetails.sessionName
+                )
             }
         }
         availableAppointments.assertNumberOfSlotsPresent(expectedNumberOfSlots)

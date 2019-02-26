@@ -46,12 +46,12 @@ abstract class AppointmentsFactory(gpSupplier: String) {
         val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
-        val sessionDetails = "${session.sessionType} - ${slot.slotTypeName}"
         val location = session.location
         return Slot(
                 date = date,
                 time = time,
-                session = sessionDetails,
+                sessionName = session.sessionType!!,
+                slotType = slot.slotTypeName!!,
                 location = location!!,
                 clinicians = setOf(session.staffDetails.first().staffName!!),
                 id = slot.slotId
@@ -74,10 +74,5 @@ abstract class AppointmentsFactory(gpSupplier: String) {
         val sdf = SimpleDateFormat(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
         sdf.timeZone = timeZone
         return sdf
-    }
-
-    companion object {
-        const val TargetAppointmentDateKey = "TargetAppointmentDateKey"
-        const val TargetAppointmentTimeKey = "TargetAppointmentTimeKey"
     }
 }

@@ -13,6 +13,55 @@ import java.time.LocalDateTime
 
 class AppointmentsSlotsExample {
 
+    private val filter =
+            AppointmentFilterFacade(
+                    type = clinicSlotType,
+                    doctor = staffDrWho.value,
+                    location = locationLeeds.value,
+                    filteredSlots = generateMapOfAppointmentDatesAndTimes(
+                            arrayListOf(
+                                    startDateAppointment1.sessionName(clinicSessionType),
+                                    startDateAppointment2.sessionName(clinicSessionType)
+                            )
+                    )
+            )
+
+    fun getExampleWithAppointmentWithinCutoffTime(): AppointmentSlotsResponseFacade {
+        return getGenericExample(
+                arrayListOf(appointmentSessionWithinCutoffTime).plus(appointmentSessions)
+                        as java.util.ArrayList<AppointmentSessionFacade>
+        )
+    }
+
+    fun getExampleWithPastAppointment(): AppointmentSlotsResponseFacade {
+        return getGenericExample(
+                arrayListOf(pastAppointmentSession).plus(appointmentSessions)
+                        as java.util.ArrayList<AppointmentSessionFacade>
+        )
+    }
+
+    fun getGenericExample(): AppointmentSlotsResponseFacade {
+        return getGenericExampleBuilder()
+                .build()
+    }
+
+    fun getGenericExample(appointmentSessionFacade: ArrayList<AppointmentSessionFacade>):
+            AppointmentSlotsResponseFacade {
+        return getGenericExampleBuilder()
+                .appointmentSessions(appointmentSessionFacade)
+                .build()
+    }
+
+    private fun getGenericExampleBuilder(): AppointmentsSlotsExampleBuilder {
+        return AppointmentsSlotsExampleBuilderWithExpectations()
+                .appointmentSessions(appointmentSessions)
+                .filterValues(filter)
+                .appointmentTypesList(arrayListOf(clinicSlotType))
+                .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
+                .locationsList(arrayListOf(locationLeeds.value, locationSheffield.value))
+                .expectedResponseSlots(expectedResponseSlots)
+    }
+
     companion object {
         private const val slot1ID = 301
         private const val slot2ID = 302
@@ -38,9 +87,9 @@ class AppointmentsSlotsExample {
         private val tomorrowDate = LocalDateTime.now().plusDays(1)
 
         private const val clinicSessionType = "Clinic"
-        private const val clinicSlot = "Clinic - Slot"
-        private const val telephoneAppointmentType = "Telephone"
-        private const val telephoneSlot = "Telephone - Slot"
+        private const val clinicSlotType = "Slot"
+        private const val telephoneSessionType = "Telephone"
+        private const val telephoneSlotType = "Slot"
 
         private val locationLeeds = IdValue(1, "Leeds")
         private val locationSheffield = IdValue(2, "Sheffield")
@@ -49,14 +98,14 @@ class AppointmentsSlotsExample {
         private val channelTelephone: Channel = Channel.Telephone
         private val channelUnknown: Channel = Channel.Unknown
 
-        private val startDateTimeForPastAppointment = DateTimeWrapper(currentTime.minusMinutes(10))
-        private val endDateTimeForPastAppointment = DateTimeWrapper(currentTime)
+        private val startDateTimeForPastAppointment = FilterSlotDetails(currentTime.minusMinutes(10))
+        private val endDateTimeForPastAppointment = FilterSlotDetails(currentTime)
 
-        private val startDateAppointment1 = DateTimeWrapper(tomorrowDate, 14, 0)
-        private val endDateAppointment1 = DateTimeWrapper(tomorrowDate, 14, 10)
+        private val startDateAppointment1 = FilterSlotDetails(tomorrowDate, 14, 0)
+        private val endDateAppointment1 = FilterSlotDetails(tomorrowDate, 14, 10)
 
-        private val startDateAppointment2 = DateTimeWrapper(tomorrowDate, 15, 20)
-        private val endDateAppointment2 = DateTimeWrapper(tomorrowDate, 15, 30)
+        private val startDateAppointment2 = FilterSlotDetails(tomorrowDate, 15, 20)
+        private val endDateAppointment2 = FilterSlotDetails(tomorrowDate, 15, 30)
 
         private val appointmentSessions = arrayListOf(
                 AppointmentSessionFacadeBuilder()
@@ -109,13 +158,6 @@ class AppointmentsSlotsExample {
                     }
                 }.build()
 
-        fun getExampleWithPastAppointment(): AppointmentSlotsResponseFacade {
-            return getGenericExample(
-                    arrayListOf(pastAppointmentSession).plus(appointmentSessions)
-                            as java.util.ArrayList<AppointmentSessionFacade>
-            )
-        }
-
         val appointmentSessionWithinCutoffTime = AppointmentSessionFacadeBuilder()
                 .sessionId(slot1ID)
                 .sessionType(clinicSessionType)
@@ -124,10 +166,10 @@ class AppointmentsSlotsExample {
                 .slots {
                     addAppointment {
                         slotId(slot1ID)
-                                .startDate(DateTimeWrapper(
+                                .startDate(FilterSlotDetails(
                                         LocalDateTime.now()
                                                 .plusMinutes(cancellationCutOff)).dateTimeAsBackendString)
-                                .endDate(DateTimeWrapper(
+                                .endDate(FilterSlotDetails(
                                         LocalDateTime.now()
                                                 .plusMinutes(cancellationCutOff + duration))
                                         .dateTimeAsBackendString)
@@ -143,11 +185,11 @@ class AppointmentsSlotsExample {
                 .slots {
                     addAppointment {
                         slotId(slot2ID)
-                                .startDate(DateTimeWrapper(
+                                .startDate(FilterSlotDetails(
                                         LocalDateTime.now().minusMonths(6)).dateTimeAsBackendString
                                 )
                                 .endDate(
-                                        DateTimeWrapper(
+                                        FilterSlotDetails(
                                                 LocalDateTime.now()
                                                         .minusMonths(6)
                                                         .plusMinutes(duration.toLong())
@@ -158,18 +200,11 @@ class AppointmentsSlotsExample {
                     }
                 }.build()
 
-        fun getExampleWithAppointmentWithinCutoffTime(): AppointmentSlotsResponseFacade {
-            return getGenericExample(
-                    arrayListOf(appointmentSessionWithinCutoffTime).plus(appointmentSessions)
-                            as java.util.ArrayList<AppointmentSessionFacade>
-            )
-        }
-
         fun slotExampleIncludingTelephoneAppointments(): AppointmentSlotsResponseFacade {
             return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(slot1ID)
-                            .sessionType(telephoneAppointmentType)
+                            .sessionType(telephoneSessionType)
                             .staffDetails(arrayListOf(staffDrWho))
                             .location(locationLeeds)
                             .slots {
@@ -182,7 +217,7 @@ class AppointmentsSlotsExample {
                             }.build(),
                             AppointmentSessionFacadeBuilder()
                                     .sessionId(slot2ID)
-                                    .sessionType(telephoneAppointmentType)
+                                    .sessionType(telephoneSessionType)
                                     .staffDetails(arrayListOf(staffDrScott))
                                     .location(locationLeeds)
                                     .slots {
@@ -207,20 +242,21 @@ class AppointmentsSlotsExample {
                                         }
                                     }.build()))
                     .filterValues(AppointmentFilterFacade(
-                            type = telephoneSlot,
+                            type = telephoneSlotType,
                             doctor = staffDrWho.value,
                             location = locationLeeds.value,
                             filteredSlots = generateMapOfAppointmentDatesAndTimes(
-                                    arrayListOf(startDateAppointment1)
+                                    arrayListOf(startDateAppointment1.sessionName(telephoneSessionType))
                             )
                     ))
-                    .appointmentTypesList(arrayListOf(telephoneSlot))
+                    .appointmentTypesList(arrayListOf(telephoneSlotType))
                     .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
                     .locationsList(arrayListOf(locationLeeds.value))
                     .expectedResponseSlots(
                             arrayListOf(SlotResponseObject(
                                     id = slot1ID.toString(),
-                                    type = telephoneSlot,
+                                    type = telephoneSlotType,
+                                    sessionName = telephoneSessionType,
                                     startTime = startDateAppointment1.dateTimeAsBackendString,
                                     endTime = endDateAppointment1.dateTimeAsBackendString,
                                     location = locationLeeds.value,
@@ -228,7 +264,8 @@ class AppointmentsSlotsExample {
                                     channel = 1
                             ), SlotResponseObject(
                                     id = slot2ID.toString(),
-                                    type = telephoneSlot,
+                                    type = telephoneSlotType,
+                                    sessionName = telephoneSessionType,
                                     startTime = startDateAppointment2.dateTimeAsBackendString,
                                     endTime = endDateAppointment2.dateTimeAsBackendString,
                                     location = locationLeeds.value,
@@ -238,20 +275,13 @@ class AppointmentsSlotsExample {
                     .build()
         }
 
-        private val filter =
-                AppointmentFilterFacade(
-                        type = clinicSlot,
-                        doctor = staffDrWho.value,
-                        location = locationLeeds.value,
-                        filteredSlots = generateMapOfAppointmentDatesAndTimes(
-                                arrayListOf(startDateAppointment1, startDateAppointment2)
-                        )
-                )
+
 
         private val expectedResponseSlots = arrayListOf(
                 SlotResponseObject(
                         id = "301",
-                        type = clinicSlot,
+                        type = clinicSlotType,
+                        sessionName = clinicSessionType,
                         startTime = startDateAppointment1.dateTimeAsBackendString,
                         endTime = endDateAppointment1.dateTimeAsBackendString,
                         location = locationLeeds.value,
@@ -259,7 +289,8 @@ class AppointmentsSlotsExample {
                 ),
                 SlotResponseObject(
                         id = "302",
-                        type = clinicSlot,
+                        type = clinicSlotType,
+                        sessionName = clinicSessionType,
                         startTime = startDateAppointment2.dateTimeAsBackendString,
                         endTime = endDateAppointment2.dateTimeAsBackendString,
                         location = locationLeeds.value,
@@ -267,7 +298,8 @@ class AppointmentsSlotsExample {
                 ),
                 SlotResponseObject(
                         id = "401",
-                        type = clinicSlot,
+                        type = clinicSlotType,
+                        sessionName = clinicSessionType,
                         startTime = startDateAppointment1.dateTimeAsBackendString,
                         endTime = endDateAppointment1.dateTimeAsBackendString,
                         location = locationSheffield.value,
@@ -275,7 +307,8 @@ class AppointmentsSlotsExample {
                 ),
                 SlotResponseObject(
                         id = "402",
-                        type = clinicSlot,
+                        type = clinicSlotType,
+                        sessionName = clinicSessionType,
                         startTime = startDateAppointment2.dateTimeAsBackendString,
                         endTime = endDateAppointment2.dateTimeAsBackendString,
                         location = locationSheffield.value,
@@ -283,30 +316,8 @@ class AppointmentsSlotsExample {
                 )
         )
 
-        fun getGenericExample(): AppointmentSlotsResponseFacade {
-            return getGenericExampleBuilder()
-                    .build()
-        }
-
-        fun getGenericExample(appointmentSessionFacade: ArrayList<AppointmentSessionFacade>):
-                AppointmentSlotsResponseFacade {
-            return getGenericExampleBuilder()
-                    .appointmentSessions(appointmentSessionFacade)
-                    .build()
-        }
-
-        private fun getGenericExampleBuilder(): AppointmentsSlotsExampleBuilder {
-            return AppointmentsSlotsExampleBuilderWithExpectations()
-                    .appointmentSessions(appointmentSessions)
-                    .filterValues(filter)
-                    .appointmentTypesList(arrayListOf(clinicSlot))
-                    .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
-                    .locationsList(arrayListOf(locationLeeds.value, locationSheffield.value))
-                    .expectedResponseSlots(expectedResponseSlots)
-        }
-
-        fun singleSlotExample(startDate: DateTimeWrapper = startDateAppointment1,
-                              endDate: DateTimeWrapper = endDateAppointment1)
+        fun singleSlotExample(startDate: FilterSlotDetails = startDateAppointment1,
+                              endDate: FilterSlotDetails = endDateAppointment1)
                 : AppointmentSlotsResponseFacade {
             return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
@@ -323,20 +334,21 @@ class AppointmentsSlotsExample {
                             }
                             .build()))
                     .filterValues(AppointmentFilterFacade(
-                            type = clinicSlot,
+                            type = clinicSlotType,
                             doctor = staffDrWho.value,
                             location = locationLeeds.value,
                             filteredSlots = generateMapOfAppointmentDatesAndTimes(
-                                    arrayListOf(startDate)
+                                    arrayListOf(startDate.sessionName(clinicSessionType))
                             )
                     ))
-                    .appointmentTypesList(arrayListOf(clinicSlot))
+                    .appointmentTypesList(arrayListOf(clinicSlotType))
                     .cliniciansList(arrayListOf(staffDrWho.value))
                     .locationsList(arrayListOf(locationLeeds.value))
                     .expectedResponseSlots(
                             arrayListOf(SlotResponseObject(
                                     id = slot1ID.toString(),
-                                    type = clinicSlot,
+                                    type = clinicSlotType,
+                                    sessionName = clinicSessionType,
                                     startTime = startDate.dateTimeAsBackendString,
                                     endTime = endDate.dateTimeAsBackendString,
                                     location = locationLeeds.value,
@@ -372,27 +384,29 @@ class AppointmentsSlotsExample {
                                         }
                                     }.build()))
                     .filterValues(AppointmentFilterFacade(
-                            type = clinicSlot,
+                            type = clinicSlotType,
                             doctor = staffDrWho.value,
                             location = locationLeeds.value,
                             filteredSlots = generateMapOfAppointmentDatesAndTimes(
-                                    arrayListOf(startDateAppointment1)
+                                    arrayListOf(startDateAppointment1.sessionName(clinicSessionType))
                             )
                     ))
-                    .appointmentTypesList(arrayListOf(clinicSlot))
+                    .appointmentTypesList(arrayListOf(clinicSlotType))
                     .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
                     .locationsList(arrayListOf(locationLeeds.value))
                     .expectedResponseSlots(
                             arrayListOf(SlotResponseObject(
                                     id = slot1ID.toString(),
-                                    type = clinicSlot,
+                                    type = clinicSlotType,
+                                    sessionName = clinicSessionType,
                                     startTime = startDateAppointment1.dateTimeAsBackendString,
                                     endTime = endDateAppointment1.dateTimeAsBackendString,
                                     location = locationLeeds.value,
                                     clinicians = arrayOf(staffDrWho.value)
                             ), SlotResponseObject(
                                     id = slot2ID.toString(),
-                                    type = clinicSlot,
+                                    type = clinicSlotType,
+                                    sessionName = clinicSessionType,
                                     startTime = startDateAppointment2.dateTimeAsBackendString,
                                     endTime = endDateAppointment2.dateTimeAsBackendString,
                                     location = locationLeeds.value,
@@ -428,19 +442,20 @@ class AppointmentsSlotsExample {
                                         }
                                     }.build()))
                     .filterValues(AppointmentFilterFacade(
-                            type = clinicSlot,
+                            type = clinicSlotType,
                             filteredSlots = generateMapOfAppointmentDatesAndTimes(
-                                    arrayListOf(startDateAppointment1)
+                                    arrayListOf(startDateAppointment1.sessionName(clinicSessionType))
                             )
                     ))
-                    .appointmentTypesList(arrayListOf(clinicSlot))
+                    .appointmentTypesList(arrayListOf(clinicSlotType))
                     .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
                     .locationsList(arrayListOf(locationLeeds.value))
                     .expectedResponseSlots(
                             arrayListOf(
                                     SlotResponseObject(
                                             id = slot1ID.toString(),
-                                            type = clinicSlot,
+                                            type = clinicSlotType,
+                                            sessionName = clinicSessionType,
                                             startTime = startDateAppointment1.dateTimeAsBackendString,
                                             endTime = endDateAppointment1.dateTimeAsBackendString,
                                             location = locationLeeds.value,
@@ -448,7 +463,8 @@ class AppointmentsSlotsExample {
                                     ),
                                     SlotResponseObject(
                                             id = slot2ID.toString(),
-                                            type = clinicSlot,
+                                            type = clinicSlotType,
+                                            sessionName = clinicSessionType,
                                             startTime = startDateAppointment1.dateTimeAsBackendString,
                                             endTime = endDateAppointment1.dateTimeAsBackendString,
                                             location = locationLeeds.value,
@@ -460,38 +476,41 @@ class AppointmentsSlotsExample {
 
         fun slotForDayAfterTomorrow(): AppointmentSlotsResponseFacade {
             val dayAfterTomorrow = LocalDateTime.now().plusDays(dayAfterTomorrow)
-            val startDate = DateTimeWrapper(dayAfterTomorrow, appointmentTimeHour, appointmentTimeMin)
-            val endDate = DateTimeWrapper(dayAfterTomorrow, appointmentTimeHour, duration)
+            val startDate = FilterSlotDetails(dayAfterTomorrow, appointmentTimeHour, appointmentTimeMin)
+            val endDate = FilterSlotDetails(dayAfterTomorrow, appointmentTimeHour, duration)
             return singleSlotExample(startDate, endDate)
         }
 
         fun slotForEndOfToday(): AppointmentSlotsResponseFacade {
-            val startDate = DateTimeWrapper(LocalDateTime.now(), endOfDayTimeHour, endOfDayTimeMin)
-            val endDate = DateTimeWrapper(LocalDateTime.now().plusDays(tomorrow), defaultStartValue, defaultStartValue)
+            val startDate = FilterSlotDetails(LocalDateTime.now(), endOfDayTimeHour, endOfDayTimeMin)
+            val endDate = FilterSlotDetails(
+                    LocalDateTime.now().plusDays(tomorrow),
+                    defaultStartValue,
+                    defaultStartValue
+            )
             return singleSlotExample(startDate, endDate)
         }
 
         fun slotForThisTimeNextWeek(): AppointmentSlotsResponseFacade {
             val aWeekToday = LocalDateTime.now().plusDays(daysInWeek)
-            val startDate = DateTimeWrapper(aWeekToday, appointmentTimeHour, appointmentTimeMin)
-            val endDate = DateTimeWrapper(aWeekToday, appointmentTimeHour, duration)
+            val startDate = FilterSlotDetails(aWeekToday, appointmentTimeHour, appointmentTimeMin)
+            val endDate = FilterSlotDetails(aWeekToday, appointmentTimeHour, duration)
             return singleSlotExample(startDate, endDate)
         }
 
-        private fun generateMapOfAppointmentDatesAndTimes(arrayOfDateTimes: ArrayList<DateTimeWrapper>)
-                : Map<String, Set<String>> {
-            var result = mapOf<String, Set<String>>()
-            for (dateTime in arrayOfDateTimes) {
-                val date = dateTime.dateAsUIString
-                val time = dateTime.timeAsUIString
-                val currentSetOfTimes = result[date] ?: setOf()
-                result = result.plus(Pair(date, currentSetOfTimes.plus(time)))
+        private fun generateMapOfAppointmentDatesAndTimes(arrayOfFilteredSlots: ArrayList<FilterSlotDetails>)
+                : Map<String, Set<FilterSlotDetails>> {
+            var result = mapOf<String, Set<FilterSlotDetails>>()
+            for (slotDetails in arrayOfFilteredSlots) {
+                val date = slotDetails.dateAsUIString
+                val currentSetOfSlots = result[date] ?: setOf()
+                result = result.plus(Pair(date, currentSetOfSlots.plus(slotDetails)))
             }
             return result
         }
 
         private fun setWeek(currentArray: ArrayList<String> = arrayListOf()): ArrayList<String> {
-            val timeOfDay = DateTimeWrapper(currentDateToAdd)
+            val timeOfDay = FilterSlotDetails(currentDateToAdd)
             currentArray.add(timeOfDay.dateAsUIString)
             currentDateToAdd = currentDateToAdd.plusDays(1)
             return if (currentDateToAdd.dayOfWeek != MONDAY) {

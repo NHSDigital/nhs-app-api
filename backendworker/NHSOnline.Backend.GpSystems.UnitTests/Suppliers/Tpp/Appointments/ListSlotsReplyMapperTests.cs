@@ -89,7 +89,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Location = "Leeds",
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                Type = "General Session Appointment - Emergency"
+                Type = "Emergency",
+                SessionName = "General Session Appointment"
             };
 
             var expectedResponse = new AppointmentSlotsResponse
@@ -125,7 +126,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Location = "",
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                Type = "General Session Appointment - Emergency"
+                Type = "Emergency", 
+                SessionName = "General Session Appointment"
             };
 
             var expectedResponse = new AppointmentSlotsResponse

@@ -9,9 +9,14 @@
       </span>
     </h3>
     <hr aria-hidden="true">
-    <p :class="$style.session"
-       data-label="session name">
+    <p :class="[$style.session, appointment.sessionName && $style.reducedPadding]"
+       data-label="slot type">
       {{ appointment.type }}
+    </p>
+    <p v-if="appointment.sessionName"
+       :class="$style.sessionName"
+       data-label="session name">
+      {{ appointment.sessionName }}
     </p>
     <hr aria-hidden="true">
 
@@ -143,6 +148,17 @@ export default {
       color: #D40003;
       outline-color: $focus_highlight;
     }
+  }
+
+  p.sessionName {
+    font-weight: lighter;
+    font-size: 0.875em;
+    padding-top: 0.25em;
+    padding-bottom: 0.75em;
+  }
+
+  p.reducedPadding {
+    padding-bottom: 0 !important;
   }
 
   h3 {

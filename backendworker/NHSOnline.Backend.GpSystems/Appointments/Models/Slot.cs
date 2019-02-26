@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Appointments.Models
         public string Location { get; set; }
         public IEnumerable<string> Clinicians { get; set; }
         public string Type { get; set; }
+        public string SessionName { get; set; }
         public Channel Channel { get; set; } = Channel.Unknown;
     }
 }

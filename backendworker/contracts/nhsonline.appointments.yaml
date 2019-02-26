@@ -279,7 +279,10 @@ definitions:
         description: Slot Identifier.
       type: 
         type: string
-        description: Type of appointment slot, e.g. "Baby immunisations".
+        description: Type of appointment slot, e.g. "Baby Clinics".
+      sessionName:
+        type: string
+        description: Appointment session name, e.g. "Dr Julia Godis Morning Appts".
       startTime:
         type: string
         format: date-time

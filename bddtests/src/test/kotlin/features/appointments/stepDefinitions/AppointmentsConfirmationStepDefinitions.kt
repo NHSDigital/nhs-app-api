@@ -6,11 +6,11 @@ import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsBookingFactory.Companion.symptomsToEnter
 import features.appointments.factories.AppointmentsBookingFactory.Companion.telephoneNumberToEnter
 import features.appointments.factories.AppointmentsBookingFactory
-import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentDateKey
-import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentTimeKey
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AvailableAppointmentFilterSteps
 import features.appointments.steps.AvailableAppointmentsSteps
+import mocking.data.appointments.AppointmentSessionVariableKeys
+import mocking.data.appointments.FilterSlotDetails
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
@@ -32,9 +32,14 @@ class AppointmentsConfirmationStepDefinitions {
     @Given("^I have selected an appointment slot to book$")
     fun givenIHaveSelectedAnAppointmentSlotToBook() {
         availableAppointmentsFilterSteps.selectOptionsToRevealSlots()
-        val date = sessionVariableCalled<String>(TargetAppointmentDateKey)
-        val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
-        availableAppointmentsSteps.availableAppointmentsPage.selectSlot(date, time)
+        val targetSlotDetails = sessionVariableCalled<FilterSlotDetails>(
+                AppointmentSessionVariableKeys.APPOINTMENT_TO_SELECT
+        )
+        availableAppointmentsSteps.availableAppointmentsPage.selectSlot(
+                targetSlotDetails.dateAsUIString,
+                targetSlotDetails.timeAsUIString,
+                targetSlotDetails.sessionName
+        )
     }
 
     @Given("^I wish to book a telephone appointment using my (\\w+) phone number$")

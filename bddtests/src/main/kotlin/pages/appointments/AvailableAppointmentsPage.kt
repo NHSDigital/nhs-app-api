@@ -13,11 +13,16 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private val dateHeadingXpath = "//*[@data-purpose='appointment-day-heading']"
     private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
-    private val timeSlotXpathFormat = "//form//h2%s/following-sibling::ul/li/a%s"
-    private val timeSlotByDateAndTimeXpath = String.format(timeSlotXpathFormat,
+    private val timeSlotXpathFormat = "$dateHeadingXpath%s/following-sibling::ul/li/a" +
+            "//*$appointmentTimeXpath%s/ancestor::a" +
+            "//*$appointmentSessionNameXpath%s/ancestor::a"
+    private val timeSlotByDateAndTimeXpath = String.format(
+            timeSlotXpathFormat,
             containsTextXpathSubstring,
-            containsTextXpathSubstring)
-    private val timeSlotsXpath = String.format(timeSlotXpathFormat, "", "")
+            containsTextXpathSubstring,
+            containsTextXpathSubstring
+    )
+    private val timeSlotsXpath = String.format(timeSlotXpathFormat, "", "", "")
     private val noAppointmentsAvailableForDateTextByDateXpathFormat =
             "$dateHeadingByTextXpathFormat/following-sibling::p"
 
@@ -51,11 +56,11 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return  BannerObject.warning(this, title = title)
     }
 
-    fun timeSlotForDateAndTime(date: String, time: String) = HybridPageElement(
-            webDesktopLocator = String.format(timeSlotByDateAndTimeXpath, date, time),
+    fun timeSlotForDateTimeSession(date: String, time: String, sessionName: String) = HybridPageElement(
+            webDesktopLocator = String.format(timeSlotByDateAndTimeXpath, date, time, sessionName),
             androidLocator = null,
             page = this,
-            helpfulName = "Time slot by date and time. "
+            helpfulName = "Time slot by date, time and session name. "
     )
 
     private val timeSlots = HybridPageElement(
@@ -92,8 +97,8 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    fun selectSlot(date: String, time: String) {
-        val slot = timeSlotForDateAndTime(date, time)
+    fun selectSlot(date: String, time: String, sessionName: String) {
+        val slot = timeSlotForDateTimeSession(date, time, sessionName)
                 .assertSingleElementPresent()
                 .assertIsVisible()
                 .scrollToElement()

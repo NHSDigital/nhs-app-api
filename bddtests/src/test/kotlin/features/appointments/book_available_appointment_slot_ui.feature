@@ -10,7 +10,7 @@ Feature: Book an available appointment slot UI with Javascript
     And I am logged in
     And I am on the Available Appointments page
     And I have filtered such that there is one time displayed that represents multiple slots
-    And I have selected a time when multiple slots are available
+    When I have selected a time when multiple slots are available
     Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button

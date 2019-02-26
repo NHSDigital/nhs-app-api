@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         private AppointmentSlotsMapper _systemUnderTest;
         private Mock<IEmisEnumMapper> _mockEmisEnumMapper;
+        private Mock<ILogger<AppointmentSlotsMapper>> _mockLogger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -36,10 +37,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             
             _mockEmisEnumMapper = _fixture.Freeze<Mock<IEmisEnumMapper>>();
-            
-            var logger = _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentSlotsMapper>();            
-
-            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProvider, logger,_mockEmisEnumMapper.Object);            
+         
+            _mockLogger = _fixture.Freeze<Mock<ILogger<AppointmentSlotsMapper>>>();
+            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProvider, _mockLogger.Object,_mockEmisEnumMapper.Object);            
         }
 
         [TestMethod]
@@ -131,7 +131,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T11:14:19"),
                 Location = "",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                SessionName = "TestSessionName"
             };
             var expectedResponse = new[] { expectedSlot };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -168,7 +169,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 EndTime = null,
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                SessionName = "TestSessionName"
             };
             var expectedResponse = new[] { expectedSlot };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -198,6 +200,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var sessionHolders = new[] { sessionHolder };
             var sessions = new[] { session, sessionWithInvalidStartTime };
             
+            _mockLogger.SetupLogger(LogLevel.Warning, $"Unable to parse EMIS Appointment Slot Start Time of '{invalidStartTime}", null).Verifiable();
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
 
@@ -209,11 +212,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                SessionName = "TestSessionName"
             };
             var expectedResponse = new[]{ slot };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+            _mockLogger.Verify();
         }
         
         [TestMethod]
@@ -227,7 +232,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
 
             var appointmentSlotSession3 =
-                CreateAppointmentsSlotSession(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null,"Unknown");
+                CreateAppointmentsSlotSession(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Unknown","Unknown");
 
             var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2, appointmentSlotSession3 };
             
@@ -252,6 +257,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Type = "Emergency",
+                SessionName = "TestSessionName",
                 Channel = Channel.Unknown
             };
             
@@ -263,23 +269,83 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
                 Type = "Emergency",
+                SessionName = "TestSessionName",
                 Channel = Channel.Unknown
             };
-
+            
             var slot3 = new Slot
             {
                 Id = "102",
-                Clinicians = new[] { "Dr House" },
+                Clinicians = new[]{ "Dr House" },
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = string.Empty,
+                Type = "Unknown",
+                SessionName = "TestSessionName",
                 Channel = Channel.Unknown
             };
 
             var expectedResponse = new[]{ slot1, slot2, slot3 };
             
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+        
+        [TestMethod]
+        public void Map_ReturnsResponseWithoutSlot_WhenSlotTypeIsMissing()
+        {
+            // Arrange
+            var appointmentSlotSession1 =
+                CreateAppointmentsSlotSession(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
+            
+            var appointmentSlotSession2=
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
+
+            var appointmentSlotSessionNullSlotType =
+                CreateAppointmentsSlotSession(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null,"Unknown");
+
+            var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2, appointmentSlotSessionNullSlotType };
+            
+            var location = CreateLocation(23, "Leeds");
+            var sessionHolder = CreateSessionHolder(55, "Dr House");
+            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "Untimed");
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, "Unknown");
+
+            var locations = new[] { location };
+            var sessionHolders = new[] { sessionHolder };
+            var sessions = new[] { session, sessionWithInvalidStartTime };
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
+
+            // Assert
+            var slot1 = new Slot
+            {
+                Id = "901",
+                Clinicians = new[]{ "Dr House" },
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                Location = "Leeds",
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                Type = "Emergency",
+                SessionName = "TestSessionName",
+                Channel = Channel.Unknown
+            };
+            
+            var slot2 = new Slot
+            {
+                Id = "101",
+                Clinicians = new[]{ "Dr House" },
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                Location = "Leeds",
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                Type = "Emergency",
+                SessionName = "TestSessionName",
+                Channel = Channel.Unknown
+            };
+
+            var expectedResponse = new[]{ slot1, slot2 };
+            
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse EMIS Appointment Slot - slot type name null or empty", null, Times.Exactly(1));
         }
 
         [TestMethod]
@@ -292,10 +358,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var appointmentSlotSession2 =
                 CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
 
-            var appointmentSlotSession3 =
+            var appointmentSlotSessionNullSlotType =
                 CreateAppointmentsSlotSession(102, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null,"Unknown");
 
-            var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2, appointmentSlotSession3 };
+            var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2, appointmentSlotSessionNullSlotType };
 
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
@@ -317,7 +383,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = "GP Session - Emergency"
+                Type = "Emergency",
+                SessionName = "GP Session",
             };
 
             var slot2 = new Slot
@@ -327,22 +394,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                SessionName = "TestSessionName",
             };
-
-            var slot3 = new Slot
-            {
-                Id = "102",
-                Clinicians = new[] { "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = "GP Session"
-            };
-
-            var expectedResponse = new[] { slot1, slot2, slot3 };
+            
+            var expectedResponse = new[] { slot1, slot2 };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse EMIS Appointment Slot - slot type name null or empty", null, Times.Exactly(1));
         }
         
         [TestMethod]
@@ -399,7 +458,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = "Emergency"
+                Type = "Emergency",
+                SessionName = "TestSessionName",
             };
 
             var expectedResponse = new[] { slot };
@@ -416,7 +476,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 CreateAppointmentsSlotSession(900, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
 
             var appointmentSlotSession2 =
-                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null,"Unknown");
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency","Unknown");
 
             var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2 };
 
@@ -437,9 +497,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = "GP Session - Emergency"
+                Type = "Emergency",
+                SessionName = "GP Session"
             };
-
+            
             var slot2 = new Slot
             {
                 Id = "901",
@@ -447,10 +508,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
                 Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
-                Type = "GP Session"
+                Type = "Emergency",
+                SessionName = "GP Session"
             };
 
-            var expectedResponse = new[] { slot1, slot2};
+            var expectedResponse = new[] { slot1, slot2 };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }      
@@ -495,7 +557,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
         private static Backend.GpSystems.Suppliers.Emis.Models.Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType)
         {
-            return CreateSession(clinicianIds, locationId, sessionId, sessionType, string.Empty);
+            return CreateSession(clinicianIds, locationId, sessionId, sessionType, "TestSessionName");
         }
 
         private static Backend.GpSystems.Suppliers.Emis.Models.Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType, string sessionName)

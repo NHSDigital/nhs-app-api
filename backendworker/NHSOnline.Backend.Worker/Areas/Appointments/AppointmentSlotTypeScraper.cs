@@ -19,13 +19,15 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         
         private class AppointmentSlotsInformation
         {
-            public string[] SlotTypes {get;}
-            public string Supplier {get;}
-            public string OdsCode {get;}
+            public string[] SlotTypes { get; }
+            public string[] SessionNames { get; }
+            public string Supplier { get; }
+            public string OdsCode { get; }
 
-            public AppointmentSlotsInformation(string[] slotTypes, string supplier, string odsCode)
+            public AppointmentSlotsInformation(string[] slotTypes, string[] sessionNames, string supplier, string odsCode)
             {
                 SlotTypes = slotTypes;
+                SessionNames = sessionNames;
                 Supplier = supplier;
                 OdsCode = odsCode;
             }
@@ -61,7 +63,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             }
             
             var slotTypes = successfulResult.Response.Slots.Select(x => x.Type).Distinct().ToArray();
-            var appointmentSlotsInformation = new AppointmentSlotsInformation(slotTypes,
+            var sessionNames = successfulResult.Response.Slots.Select(x => x.SessionName).Distinct().ToArray();
+            var appointmentSlotsInformation = new AppointmentSlotsInformation(slotTypes, sessionNames,
                 userSession.GpUserSession.Supplier.ToString(), userSession.GpUserSession.OdsCode);
             
             if (!ShouldBeLogged(appointmentSlotsInformation))

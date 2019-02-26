@@ -1,9 +1,11 @@
 package mockingFacade.appointments
 
+import mocking.data.appointments.FilterSlotDetails
+
 data class AppointmentFilterFacade(
         val type: String? = null,
-        var location: String? = null,
-        var doctor: String? = null,
-        var date: String? = null,
-        var filteredSlots: Map<String, Set<String>> = mapOf()
+        val location: String? = null,
+        val doctor: String? = null,
+        val date: String? = null,
+        val filteredSlots: Map<String, Set<FilterSlotDetails>> = mapOf()
 )

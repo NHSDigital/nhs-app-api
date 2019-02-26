@@ -1,6 +1,8 @@
 package features.appointments.factories
 
 import mocking.emis.models.AppointmentCancellationReason
+import mockingFacade.appointments.AppointmentSessionFacade
+import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
@@ -47,6 +49,28 @@ class MyAppointmentsFactoryVision : MyAppointmentsFactory("VISION") {
                 getExpectedUiRepresentationOfSlot(slot, session)
             }
         } ?: emptyList()
+    }
+
+    override fun getExpectedUiRepresentationOfSlot(
+            slot: AppointmentSlotFacade, session: AppointmentSessionFacade
+    ): Slot {
+        val startDate = gpDateTimeFormat.parse(slot.startTime)
+        val date = slotDateFormat(startDate)
+        val time = slotTimeFormat(startDate)
+        val slotDetails = "${session.sessionType} - ${slot.slotTypeName}"
+        val location = session.location
+        val cliniciansNames: ArrayList<String> = ArrayList()
+        session.staffDetails.forEach { staff ->
+            cliniciansNames.add(staff.staffName!!)
+        }
+        return Slot(
+                date = date,
+                time = time,
+                slotType = slotDetails,
+                location = location!!,
+                clinicians = setOf(session.staffDetails.first().staffName!!),
+                id = slot.slotId
+        )
     }
 
     override fun getExpectedUiRepresentationOfHistoricalSlots(facade: MyAppointmentsFacade): List<Slot> {

@@ -37,7 +37,7 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveHistoricalAppointments(gpService: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample.getGenericExample(
+                AppointmentsSlotsExample().getGenericExample(
                         arrayListOf(AppointmentsSlotsExample.historicalAppointmentSession)
                 )
         )
@@ -47,7 +47,7 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveHistoricalAndUpcomingAppointments(gpService: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample.getGenericExample(
+                AppointmentsSlotsExample().getGenericExample(
                         arrayListOf(
                                 AppointmentsSlotsExample.historicalAppointmentSession,
                                 AppointmentsSlotsExample.appointmentSessionWithinCutoffTime
@@ -60,7 +60,7 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointmentsAndOneInThePast(gpService: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample.getExampleWithPastAppointment()
+                AppointmentsSlotsExample().getExampleWithPastAppointment()
         )
     }
 
@@ -80,7 +80,7 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointmentsWithinCutoffWithOneCancellationReason() {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample.getGenericExample(
+                AppointmentsSlotsExample().getGenericExample(
                         arrayListOf(AppointmentsSlotsExample.appointmentSessionWithinCutoffTime)),
                 2)
     }
@@ -89,7 +89,7 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointmentsWithinCutoffWithoutCancellationReasons() {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample.getGenericExample(
+                AppointmentsSlotsExample().getGenericExample(
                         arrayListOf(AppointmentsSlotsExample.appointmentSessionWithinCutoffTime)),
                 0)
     }
@@ -98,7 +98,7 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointmentsBeforeAndWithinCutoffWithOneCancellationReason() {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample.getExampleWithAppointmentWithinCutoffTime(),
+                AppointmentsSlotsExample().getExampleWithAppointmentWithinCutoffTime(),
                 2)
     }
 
@@ -143,7 +143,7 @@ class MyAppointmentsStepDefinitionsBackend {
     fun tppIsUnavailableForAppointments(appointmentType: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("TPP")
         val example = MyAppointmentsFacade(
-                AppointmentsSlotsExample.getGenericExample(
+                AppointmentsSlotsExample().getGenericExample(
                         arrayListOf(
                                 AppointmentsSlotsExample.historicalAppointmentSession,
                                 AppointmentsSlotsExample.appointmentSessionWithinCutoffTime

@@ -107,6 +107,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 EndTime = new DateTime(2000, 1, 2),
                 Type = "Emergency",
                 Location = "Room 1",
+                SessionName = ""
             };
             var expectedResponse = new AppointmentSlotsResponse
             {

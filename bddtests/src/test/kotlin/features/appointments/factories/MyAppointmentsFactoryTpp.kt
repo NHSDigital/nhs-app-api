@@ -82,7 +82,7 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
         return Slot(
                 date = date,
                 time = time,
-                session = sessionDetails!!,
+                slotType = sessionDetails!!,
                 location = location!!,
                 id = slot.slotId
         )

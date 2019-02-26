@@ -87,7 +87,7 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
         val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
-        val sessionDetails = "${session.sessionType} - ${slot.slotTypeName}"
+        val slotDetails = "${session.sessionType} - ${slot.slotTypeName}"
         val location = session.location
         val cliniciansNames: ArrayList<String> = ArrayList()
         session.staffDetails.forEach { staff ->
@@ -96,7 +96,7 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
         return Slot(
                 date = date,
                 time = time,
-                session = sessionDetails,
+                slotType = slotDetails,
                 location = location!!,
                 clinicians = HashSet(cliniciansNames),
                 id = slot.slotId

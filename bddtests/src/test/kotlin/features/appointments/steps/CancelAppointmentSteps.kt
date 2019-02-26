@@ -45,8 +45,8 @@ open class CancelAppointmentSteps {
         val expectedSlot = retrieveSlotOfAppointmentToCancel()
         assertEquals("Date", expectedSlot.date, cancelAppointmentPage.selectedAppointmentDate.element.text.trimEnd())
         assertEquals("Time", expectedSlot.time, cancelAppointmentPage.selectedAppointmentTime.element.text)
-        assertEquals("Session Name", expectedSlot.session,
-                cancelAppointmentPage.selectedAppointmentSessionName.element.text)
+        assertEquals("Slot Name", expectedSlot.slotType,
+                cancelAppointmentPage.selectedAppointmentSlotName.element.text)
         assertEquals("location", expectedSlot.location,
                 cancelAppointmentPage.selectedAppointmentLocation.element.text)
         assertEquals(expectedSlot.clinicians, cancelAppointmentPage.getSelectedAppointmentClinicianText())

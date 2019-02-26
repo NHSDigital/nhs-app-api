@@ -1,5 +1,4 @@
-﻿using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -16,7 +15,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<SessionMapper> _logger;
-        private const string SessionTypeSeparator = " - ";
 
         public SessionMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<SessionMapper> logger)
         {
@@ -31,21 +29,27 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 
             foreach (var session in sessions.Where(s => s.Slots != null))
             {
-                foreach (var slot in session.Slots)
+                foreach (var sourceSlot in session.Slots)
                 {
-                    var startDateSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(slot.StartDate?.TrimEnd('Z'),
+                    if (string.IsNullOrWhiteSpace(sourceSlot.Type))
+                    {
+                        _logger.LogWarning("Unable to parse TPP Appointment Slot - slot type name null or empty");
+                        continue;
+                    }
+                    var startDateSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(sourceSlot.StartDate?.TrimEnd('Z'),
                         out var startDate);
                     if (!startDateSuccess)
                     {
+                        _logger.LogWarning($"Unable to parse TPP Appointment Slot - wrong start date: {sourceSlot.StartDate}");
                         continue;
                     }
 
-                    var endDateSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(slot.EndDate?.TrimEnd('Z'),
+                    var endDateSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(sourceSlot.EndDate?.TrimEnd('Z'),
                         out var endDate);
 
                     if (!endDateSuccess)
                     {
-                        _logger.LogWarning($"Unable to create {nameof(DateTimeOffset)} from slot {nameof(slot.EndDate)} '{slot.EndDate}'.");
+                        _logger.LogWarning($"Unable to create {nameof(DateTimeOffset)} from slot {nameof(sourceSlot.EndDate)} '{sourceSlot.EndDate}'.");
                     }
 
                     yield return new GpSystems.Appointments.Models.Slot
@@ -55,7 +59,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                         Id = session.SessionId,
                         Location = session.Location,
                         StartTime = startDate.GetValueOrDefault(),
-                        Type = CreateTypeFromSlotAndSession(slot, session)
+                        Type = sourceSlot.Type.Trim(),
+                        SessionName = 
+                            string.IsNullOrWhiteSpace(session.Type) ? string.Empty : session.Type.Trim(),
                     };
                 }
             }
@@ -64,12 +70,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
         private static string[] GetCliniciansForSession(Models.Appointments.Session session)
         {
             return string.IsNullOrEmpty(session.StaffDetails) ? Array.Empty<string>() : new[] { session.StaffDetails };
-        }
-
-        private static string CreateTypeFromSlotAndSession(Slot slot, Models.Appointments.Session session)
-        {
-            var hasOnlySlotTypeOrSessionName = string.IsNullOrEmpty(slot.Type) || string.IsNullOrEmpty(session?.Type);
-            return $"{session?.Type}{(hasOnlySlotTypeOrSessionName ? string.Empty : SessionTypeSeparator)}{slot.Type}";
         }
     }
 }

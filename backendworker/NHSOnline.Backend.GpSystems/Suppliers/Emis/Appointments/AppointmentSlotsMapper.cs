@@ -19,7 +19,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentSlotsMapper> _logger;
-        private const string SessionTypeSeparator = " - ";
         private readonly IEmisEnumMapper _emisEnumMapper;
         
         public AppointmentSlotsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<AppointmentSlotsMapper> logger, IEmisEnumMapper emisEnumMapper)
@@ -51,6 +50,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             {
                 foreach (var sourceSlot in sourceSlotSession.Slots)
                 {
+                    if (string.IsNullOrWhiteSpace(sourceSlot.SlotTypeName))
+                    {
+                        _logger.LogWarning("Unable to parse EMIS Appointment Slot - slot type name null or empty");
+                        continue;
+                    }
                     var startTime = ParseSlotTime(sourceSlot.StartTime, "Start");
                     if (startTime == null)
                     {
@@ -59,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                     var endTime = ParseSlotTime(sourceSlot.EndTime, "End");
                     
                     var sessionId = sourceSlotSession.SessionId;
-                    
+                    var session = FindSession(sessionId, keyedSessions);
                     var slot = new Slot
                     {
                         Id = sourceSlot.SlotId.ToString(CultureInfo.InvariantCulture),
@@ -67,19 +71,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                         EndTime = endTime,
                         Clinicians = FindCliniciansForSession(sessionId, keyedSessions, sessionHolders),
                         Location = FindLocationForSession(sessionId, keyedSessions, locations),
-                        Type = CreateTypeFromSlotAndSession(sourceSlot, FindSession(sessionId, keyedSessions)), 
+                        Type = sourceSlot.SlotTypeName.Trim(), 
+                        SessionName = 
+                            string.IsNullOrWhiteSpace(session?.SessionName) ? string.Empty : session.SessionName,
                         Channel = _emisEnumMapper.MapSlotTypeStatus(sourceSlot.SlotTypeStatus, Channel.Unknown)             
                     };
 
                     yield return slot;
                 }
             }
-        }
-
-        private static string CreateTypeFromSlotAndSession(AppointmentSlot sourceSlot, Models.Session session)
-        {
-            var hasOnlySlotTypeOrSessionName = string.IsNullOrEmpty(sourceSlot.SlotTypeName) || string.IsNullOrEmpty(session?.SessionName);
-            return $"{session?.SessionName}{(hasOnlySlotTypeOrSessionName ? string.Empty : SessionTypeSeparator)}{sourceSlot.SlotTypeName}";
         }
 
         private static IEnumerable<string> FindCliniciansForSession(
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             var success = _dateTimeOffsetProvider.TryCreateDateTimeOffset(time, out var parsedTime);
             if (!success)
             {
-                _logger.LogError($"Unable to parse EMIS Appointment Slot {usage} Time of '{time}'");
+                _logger.LogWarning($"Unable to parse EMIS Appointment Slot {usage} Time of '{time}'");
             }
             return parsedTime;
         }

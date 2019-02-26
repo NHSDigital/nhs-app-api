@@ -39,11 +39,19 @@ open class AvailableAppointmentsSteps {
     }
 
     @Step
-    fun assertOnlyOneTimeSlotPresent(expectedDateHeading: String, expectedTimeSlot: String) {
+    fun assertOnlyOneTimeSlotPresent(
+            expectedDateHeading: String,
+            expectedTimeSlot: String,
+            expectedSessionName: String
+    ) {
         assertEquals(
                 "Incorrect number of time-slots present",
                 1,
-                availableAppointmentsPage.timeSlotForDateAndTime(expectedDateHeading, expectedTimeSlot).elements.count()
+                availableAppointmentsPage.timeSlotForDateTimeSession(
+                        expectedDateHeading,
+                        expectedTimeSlot,
+                        expectedSessionName
+                ).elements.count()
         )
     }
 
@@ -127,6 +135,7 @@ open class AvailableAppointmentsSteps {
 
     private fun assertSlotsAreEqual(expectedSlot: SlotResponseObject, actualSlot: SlotResponseObject) {
         assertEquals("Slot type", expectedSlot.type, actualSlot.type)
+        assertEquals("Session type", expectedSlot.sessionName, actualSlot.sessionName)
         assertEquals("Slot start time", expectedSlot.startTime, actualSlot.startTime)
         assertEquals("Slot end time", expectedSlot.endTime, actualSlot.endTime)
         assertEquals("Slot location", expectedSlot.location, actualSlot.location)

@@ -1,6 +1,7 @@
 package features.appointments.factories
 
 import features.sharedSteps.SupplierSpecificFactory
+import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mocking.emis.practices.NecessityOption
@@ -50,7 +51,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     fun generateMultipleAvailableAppointmentSlotsForTheSameTime() {
         val example = AppointmentsSlotsExample.multipleSlotsOneTime()
-        storeUIDateAndTimeOfSlotToSelect()
+        storeUIDetailsOfSlotToSelect()
         generateExample(example)
     }
 
@@ -87,14 +88,14 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     }
 
     private fun retrieveSlotsExample(): AppointmentSlotsResponseFacade {
-        val example = AppointmentsSlotsExample.getGenericExample()
-        storeUIDateAndTimeOfSlotToSelect()
+        val example = AppointmentsSlotsExample().getGenericExample()
+        storeUIDetailsOfSlotToSelect()
         return example
     }
 
     private fun retrieveSlotsExampleIncludingTelephoneAppointments(): AppointmentSlotsResponseFacade {
         val example = AppointmentsSlotsExample.slotExampleIncludingTelephoneAppointments()
-        storeUIDateAndTimeOfSlotToSelect()
+        storeUIDetailsOfSlotToSelect()
         return example
     }
 
@@ -130,7 +131,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
                 .plusDays(DEFAULT_NUMBER_OF_DAYS_IN_RANGE)
     }
 
-    private fun storeUIDateAndTimeOfSlotToSelect() {
+    private fun storeUIDetailsOfSlotToSelect() {
         val expectedFilteredSlots = sessionVariableCalled<AppointmentFilterFacade>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
@@ -138,8 +139,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         ).filteredSlots
         val dateToSelect = expectedFilteredSlots.keys.first()
         val timeToSelect = expectedFilteredSlots[dateToSelect]!!.first()
-        setSessionVariable(TargetAppointmentDateKey).to(dateToSelect)
-        setSessionVariable(TargetAppointmentTimeKey).to(timeToSelect)
+        setSessionVariable(AppointmentSessionVariableKeys.APPOINTMENT_TO_SELECT).to(timeToSelect)
     }
 
     abstract fun generateAppointmentSlotResponse(startDate: ZonedDateTime,

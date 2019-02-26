@@ -33,7 +33,7 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
     override val dateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
     override val defaultPatient = Patient.getDefault("EMIS")
 
-    private val expectedMyAppointment = Slot(session = SessionType.Timed.toString())
+    private val expectedMyAppointment = Slot(slotType = SessionType.Timed.toString())
 
     val locations = arrayListOf(
             Location(locationId = LOCATION_ID_SURGERY, locationName = "Main Surgery"),

@@ -30,7 +30,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
     fun appointmentSlotsTimesOut(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
-            respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+            respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
                     .delayedBy(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
         }
     }

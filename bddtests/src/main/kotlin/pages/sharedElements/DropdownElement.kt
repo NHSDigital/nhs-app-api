@@ -8,14 +8,12 @@ import pages.HybridPageObject
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 
-class DropdownElement(val label:String, val helpfulName:String, pageObject: HybridPageObject) {
+class DropdownElement(val label: String, val helpfulName: String, pageObject: HybridPageObject) {
 
     private val byIdXpathFormat = "//label[contains(text(),'%s')]/following-sibling::span/select"
 
     private val dropDown = HybridPageElement(
             webDesktopLocator = String.format(byIdXpathFormat, label),
-            webMobileLocator = String.format(byIdXpathFormat, label),
-            androidLocator = null,
             page = pageObject,
             helpfulName = helpfulName
     )
