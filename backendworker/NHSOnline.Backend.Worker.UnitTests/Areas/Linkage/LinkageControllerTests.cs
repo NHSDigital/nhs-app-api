@@ -34,6 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         private IFixture _fixture;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
         private Mock<IOptions<ConfigurationSettings>> _settings;
+        private Mock<IOdsCodeMassager> _odsCodeMassager;
         private const int MinimumLinkageAge = 16;
         
         private const string GetRequestAuditType = "Linkage_GetDetails_Request";
@@ -57,6 +58,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
                 });
             _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
             _mockMinimumAgeValidator.Setup(x => x.IsValid(It.IsAny<DateTime>(), It.IsAny<int>())).Returns(true);
+            _odsCodeMassager = _fixture.Freeze<Mock<IOdsCodeMassager>>();
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(DefaultOdsCode)).Returns(DefaultOdsCode);
         }
         
         [TestMethod]
@@ -386,7 +389,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
                                   MockGpSystemFactory();
             var logger = _fixture.Create<Mock<ILogger<LinkageController>>>();
 
-            return new LinkageController(logger.Object, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object, _mockMinimumAgeValidator.Object, _settings.Object);
+            return new LinkageController(logger.Object, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object, _mockMinimumAgeValidator.Object, _settings.Object, _odsCodeMassager.Object);
         }
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(

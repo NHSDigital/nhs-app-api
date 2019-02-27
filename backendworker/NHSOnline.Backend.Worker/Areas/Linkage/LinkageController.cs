@@ -25,6 +25,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
         private readonly IAuditor _auditor;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
         private readonly IOptions<ConfigurationSettings> _settings;
+        private readonly IOdsCodeMassager _odsCodeMassager;
 
         public LinkageController(
             ILogger<LinkageController> logger,
@@ -32,7 +33,8 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             IOdsCodeLookup odsCodeLookup,
             IAuditor auditor,
             IMinimumAgeValidator minimumAgeValidator,
-            IOptions<ConfigurationSettings> settings)
+            IOptions<ConfigurationSettings> settings,
+            IOdsCodeMassager odsCodeMassager)
         {
             _logger = logger;
             _odsCodeLookup = odsCodeLookup;
@@ -40,6 +42,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             _auditor = auditor;
             _minimumAgeValidator = minimumAgeValidator;
             _settings = settings;
+            _odsCodeMassager = odsCodeMassager;
         }
 
         [HttpGet, AllowAnonymous]
@@ -64,7 +67,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                     return BadRequest();
                 }
                 var cidOdsCode = odsCode;
-                odsCode = OdsCodeMassager.CheckOdsCode(odsCode, _logger);
+                odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
 
                 var getLinkageRequest = new GetLinkageRequest()
                 {
@@ -99,7 +102,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
 
                 var result = await linkageService.GetLinkageKey(getLinkageRequest);
 
-                if (OdsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyRetrieved)
+                if (_odsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyRetrieved)
                 {
                     ((LinkageResult.SuccessfullyRetrieved) result).Response.OdsCode = cidOdsCode;
                 }
@@ -126,7 +129,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                     return BadRequest();
                 }
                 var cidOdsCode = createLinkageRequest.OdsCode;
-                createLinkageRequest.OdsCode = OdsCodeMassager.CheckOdsCode(createLinkageRequest.OdsCode, _logger);
+                createLinkageRequest.OdsCode = _odsCodeMassager.CheckOdsCode(createLinkageRequest.OdsCode);
 
                 var gpSystemOption = await GetGpSystem(createLinkageRequest.OdsCode);
                 if (!gpSystemOption.HasValue)
@@ -162,7 +165,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
 
                 var result = await linkageService.CreateLinkageKey(createLinkageRequest);
 
-                if (OdsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyCreated)
+                if (_odsCodeMassager.IsEnabled && result is LinkageResult.SuccessfullyCreated)
                 {
                     ((LinkageResult.SuccessfullyCreated) result).Response.OdsCode = cidOdsCode;
                 }

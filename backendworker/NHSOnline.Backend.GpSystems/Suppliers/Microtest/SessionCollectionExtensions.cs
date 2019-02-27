@@ -1,0 +1,48 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session;
+using NHSOnline.Backend.Support.Http;
+
+namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection RegisterMicrotestServices(this IServiceCollection services)
+        {
+            services.RegisterMicrotestBaseServices();
+            services.RegisterMicrotestAppointmentsServices();
+            services.RegisterMicrotestSessionServices();
+
+            services.RegisterMicrotestCidServices();
+
+            return services;
+        }
+
+        private static IServiceCollection RegisterMicrotestCidServices(this IServiceCollection services)
+        {
+            services.RegisterMicrotestIm1ConnectionServices();
+            services.RegisterMicrotestLinkageServices();
+
+            return services;
+        }
+
+        private static IServiceCollection RegisterMicrotestBaseServices(this IServiceCollection services)
+        {
+            services.AddSingleton<MicrotestHttpClientHandler>();
+
+            services.AddHttpClient<MicrotestHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler<MicrotestHttpClientHandler>()
+                .AddHttpMessageHandler<HttpTimeoutHandler<MicrotestHttpRequestIdentifier>>()
+                .AddHttpMessageHandler<HttpRequestIdentificationHandler<MicrotestHttpRequestIdentifier>>();
+
+            services.AddSingleton<IGpSystem, MicrotestGpSystem>();
+            services.AddSingleton<IMicrotestClient, MicrotestClient>();
+            services.AddSingleton<IMicrotestConfig, MicrotestConfig>();
+            services.AddTransient<MicrotestTokenValidationService>();
+
+            return services;
+        }
+    }
+}

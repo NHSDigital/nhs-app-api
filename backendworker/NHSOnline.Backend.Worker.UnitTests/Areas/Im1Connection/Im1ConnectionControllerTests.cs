@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         private Mock<ILogger<Im1ConnectionController>> _logger;
         private Mock<IAuditor> _auditor;
         private Mock<ITokenValidationService> _tokenValidationService;
+        private Mock<IOdsCodeMassager> _odsCodeMassager;
         private IFixture _fixture;
 
         [TestInitialize]
@@ -43,6 +44,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             _tokenValidationService = new Mock<ITokenValidationService>();
             _tokenValidationService.Setup(x => x.IsValidConnectionTokenFormat(It.IsAny<string>())).Returns(true);
 
+            _odsCodeMassager = new Mock<IOdsCodeMassager>();
+
             _im1ConnectionController = CreateIm1ConnectionController();
         }
 
@@ -51,7 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         {
             var gpSystemFactory = MockGpSystemFactory();
 
-            Action act = () => new Im1ConnectionController(null, gpSystemFactory.Object, _logger.Object, _auditor.Object);
+            Action act = () => new Im1ConnectionController(null, gpSystemFactory.Object, _logger.Object, _auditor.Object, _odsCodeMassager.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("odsCodeLookup");
         }
@@ -61,7 +64,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         {
             var odsCodeLookup = MockOdsCodeLookup();
 
-            Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null, _logger.Object, _auditor.Object);
+            Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null, _logger.Object, _auditor.Object, _odsCodeMassager.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("gpSystemFactory");
         }
@@ -109,6 +112,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             const Supplier supplier = DefaultSupplier;
             const string patientIdentifier = DefaultConnectionToken;
 
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
+
             var expectedNhsNumbers = new[]
             {
                 new PatientNhsNumber { NhsNumber = "123ABC" },
@@ -147,6 +152,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
                 .Returns(Task.FromResult(Option.None<Supplier>()));
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(DefaultOdsCode)).Returns(DefaultOdsCode);
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
 
@@ -184,6 +190,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         [TestMethod]
         public async Task Post_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
+            // Arrange
             const string odsCode = DefaultOdsCode;
             const Supplier supplier = DefaultSupplier;
             const string patientIdentifier = DefaultConnectionToken;
@@ -202,6 +209,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
                 NhsNumbers = expectedNhsNumbers
             };
 
+            _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
+
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
                 new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
             var gpSystemMock = MockGpSystem(im1ConnectionService);
@@ -210,8 +219,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
                 .ReturnsAsync(new Im1ConnectionRegisterResult.SuccessfullyRegistered(expectedResponse));
             _im1ConnectionController = CreateIm1ConnectionController(gpSystemFactoryMock: gpSystemFactoryMock);
 
+            // Act
             var result = await _im1ConnectionController.Post(model);
 
+            // Assert
             var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -237,7 +248,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
                 new ControllerActionDescriptor()));
 
             return new Im1ConnectionController(odsCodeLookupMock.Object,
-                gpSystemFactoryMock.Object, _logger.Object, _auditor.Object)
+                gpSystemFactoryMock.Object, _logger.Object, _auditor.Object, _odsCodeMassager.Object)
             {
                 ControllerContext = dummyControllerContext
             };

@@ -32,6 +32,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         private readonly IAuditor _auditor;
         private readonly IIm1CacheService _im1CacheService;
         private readonly ISessionMapper _sessionMapper;
+        private readonly IOdsCodeMassager _odsCodeMassager;
 
         public SessionController(
             ICitizenIdSessionService citizenIdSessionService,
@@ -42,7 +43,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             ILogger<SessionController> logger,
             IAuditor auditor,
             IIm1CacheService im1CacheService,
-            ISessionMapper sessionMapper
+            ISessionMapper sessionMapper,
+            IOdsCodeMassager odsCodeMassager
         )
         {
             _citizenIdSessionService = citizenIdSessionService;
@@ -54,6 +56,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             _auditor = auditor;
             _im1CacheService = im1CacheService;
             _sessionMapper = sessionMapper;
+            _odsCodeMassager = odsCodeMassager;
         }
 
         [HttpPost, AllowAnonymous]
@@ -70,7 +73,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 {
                     return new StatusCodeResult(citizenIdSessionResult.StatusCode);
                 }
-                citizenIdSessionResult.OdsCode = OdsCodeMassager.CheckOdsCode(citizenIdSessionResult.OdsCode, _logger);
+                citizenIdSessionResult.OdsCode = _odsCodeMassager.CheckOdsCode(citizenIdSessionResult.OdsCode);
 
                 _logger.LogInformation($"NhsNumber={citizenIdSessionResult.NhsNumber.RemoveWhiteSpace()}");
 

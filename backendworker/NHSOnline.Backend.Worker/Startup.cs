@@ -13,13 +13,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Logging;
 using StackExchange.Redis;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.Support;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Microsoft.AspNetCore.Mvc;
+using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Worker.DependencyInjection;
 
@@ -35,6 +35,7 @@ namespace NHSOnline.Backend.Worker
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
+        private readonly SupplierStartup _supplierStartup;
 
         private readonly string _apiAppVersion;
 
@@ -53,6 +54,7 @@ namespace NHSOnline.Backend.Worker
             _apiAppVersion = GetApiAppVersion();
 
             _modularStartup = new ModularStartup(configuration, loggerFactory);
+            _supplierStartup = new SupplierStartup(configuration, loggerFactory, new GpSystemRegistrationService());
         }
 
         private string GetApiAppVersion()
@@ -102,6 +104,7 @@ namespace NHSOnline.Backend.Worker
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
+            services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
@@ -114,6 +117,7 @@ namespace NHSOnline.Backend.Worker
             // Add functionality to inject IOptions<T>
             services.AddOptions();
 
+            _supplierStartup.ConfigureServices(services);
             _modularStartup.ConfigureServices(services);
         }
 

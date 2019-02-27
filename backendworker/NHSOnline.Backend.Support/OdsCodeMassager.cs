@@ -1,21 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Support
 {
-    public static class OdsCodeMassager
+    public class OdsCodeMassager : IOdsCodeMassager
     {
-		private readonly static List<string> VisionCIDOdsCodes = new List<string> { "G85075", "G85672" };
-        private const string VisionTestODSCode = "X00100";
-        public static bool IsEnabled { get; set; } = false;
+		private static readonly List<string> VisionCIDOdsCodes = new List<string> { "G85075", "G85672" };
 
-        public static string CheckOdsCode(string odsCode, ILogger logger)
+        private const string VisionTestODSCode = "X00100";
+
+        public bool IsEnabled { get; }
+
+        ILogger<OdsCodeMassager> _logger;
+
+        public OdsCodeMassager(IConfiguration configuration, ILogger<OdsCodeMassager> logger)
+        {
+            _logger = logger;
+
+            IsEnabled = bool.TrueString.Equals(
+                configuration.GetOrWarn("VISION_ODS_REMAP_ENABLED", _logger),
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+        public string CheckOdsCode(string odsCode)
         {
             if (IsEnabled && VisionCIDOdsCodes.Contains(odsCode.ToUpper(CultureInfo.InvariantCulture)))
             {
-                logger.LogInformation($"Before we do the OdsCodeMassage, code is {odsCode}");
+                _logger.LogInformation($"Before we do the OdsCodeMassage, code is {odsCode}");
                 return VisionTestODSCode;
             }
             return odsCode;

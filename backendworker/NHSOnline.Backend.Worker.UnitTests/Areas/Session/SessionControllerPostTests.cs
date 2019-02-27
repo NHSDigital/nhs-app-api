@@ -47,6 +47,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IIm1CacheService> _mockIm1CacheService;
         private Mock<ISessionMapper> _mockSessionMapper;
         private Mock<ILogger<SessionController>> _mockLogger;
+        private Mock<IOdsCodeMassager> _mockOdsCodeMassager;
         
         private const string DateFormat = "yyyy-MM-dd";
 
@@ -185,6 +186,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _mockLogger = _fixture.Freeze<Mock<ILogger<SessionController>>>();
             _mockLogger.SetupLogger(LogLevel.Information, $"NhsNumber={_userProfile.NhsNumber}", null);
+
+            _mockOdsCodeMassager = _fixture.Freeze<Mock<IOdsCodeMassager>>();
+            _mockOdsCodeMassager.Setup(x => x.CheckOdsCode(_userProfile.OdsCode)).Returns(_userProfile.OdsCode);
 
             _systemUnderTest = _fixture.Create<SessionController>();
 

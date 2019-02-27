@@ -1,0 +1,13 @@
+﻿namespace NHSOnline.Backend.GpSystems
+{
+    public class EnableGpSupplierConfiguration
+    {
+        public bool EnableEmis { get; set; }
+
+        public bool EnableTpp { get; set; }
+
+        public bool EnableVision { get; set; }
+
+        public bool EnableMicrotest { get; set; }
+    }
+}

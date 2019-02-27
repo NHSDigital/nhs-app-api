@@ -19,18 +19,21 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<Im1ConnectionController> _logger;
         private readonly IAuditor _auditor;
+        private readonly IOdsCodeMassager _odsCodeMassager;
 
         public Im1ConnectionController(
             IOdsCodeLookup odsCodeLookup, 
             IGpSystemFactory gpSystemFactory,
             ILogger<Im1ConnectionController> logger,
-            IAuditor auditor)
+            IAuditor auditor,
+            IOdsCodeMassager odsCodeMassager)
         {
             _odsCodeLookup = odsCodeLookup ?? throw new ArgumentNullException(nameof(odsCodeLookup));
             _gpSystemFactory =
                 gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
             _logger = logger;
             _auditor = auditor;
+            _odsCodeMassager = odsCodeMassager;
         }
 
         [HttpGet, AllowAnonymous]
@@ -44,7 +47,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 _logger.LogEnter();
                 if (odsCode != null)
                 {
-                    odsCode = OdsCodeMassager.CheckOdsCode(odsCode, _logger);
+                    odsCode = _odsCodeMassager.CheckOdsCode(odsCode);
                 }
 
                 var argumentValidator = new ValidateAndLog(_logger)
@@ -94,7 +97,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             try
             {
                 _logger.LogEnter();
-                model.OdsCode = OdsCodeMassager.CheckOdsCode(model.OdsCode, _logger);
+                model.OdsCode = _odsCodeMassager.CheckOdsCode(model.OdsCode);
 
                 var gpSystemOption = await GetGpSystem(model.OdsCode);
                 if (!gpSystemOption.HasValue)

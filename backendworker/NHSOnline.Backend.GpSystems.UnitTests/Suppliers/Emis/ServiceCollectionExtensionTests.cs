@@ -1,0 +1,57 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+
+using NHSOnline.Backend.GpSystems.Suppliers.Emis;
+
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
+{
+    [TestClass]
+    public class ServiceCollectionExtensionsTests
+    {
+        [TestMethod]
+        public void CheckEmisServiceCollectionExtensions()
+        {
+            var services = new ServiceCollection();
+
+            services.RegisterEmisServices();
+            CheckEmisBaseServices(services);
+            CheckAllEmisRegisteredServices(services);
+        }
+
+        private void CheckEmisBaseServices(ServiceCollection services)
+        {
+            var registeredServices = services.ToList();
+
+            var dependencies = new List<ServiceDescriptor>
+            {
+                new ServiceDescriptor(typeof(EmisHttpClientHandler), typeof(EmisHttpClientHandler), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(EmisHttpRequestIdentifier), typeof(EmisHttpRequestIdentifier), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(IGpSystem), typeof(EmisGpSystem), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(IEmisClient), typeof(EmisClient), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(IEmisConfig), typeof(EmisConfig), ServiceLifetime.Singleton),
+                new ServiceDescriptor(typeof(IEmisEnumMapper), typeof(EmisEnumMapper), ServiceLifetime.Transient),
+                new ServiceDescriptor(typeof(EmisTokenValidationService), typeof(EmisTokenValidationService), ServiceLifetime.Transient)
+            };
+
+            foreach (var dependency in dependencies)
+            {
+                registeredServices.Should().ContainEquivalentOf(dependency);
+            }
+            
+            registeredServices.Should().Contain(x => x.ServiceType == typeof(EmisHttpClient) && x.Lifetime == ServiceLifetime.Transient);
+        }
+
+        public static void CheckAllEmisRegisteredServices(ServiceCollection services)
+        {
+            Prescriptions.ServiceCollectionExtensionsTests.CheckRegisteredEmisPrescriptionServices(services);
+            Appointments.ServiceCollectionExtensionTests.CheckRegisteredEmisAppointmentServices(services);
+            Demographics.ServiceCollectionExtensionTests.CheckRegisteredEmisDemographicsService(services);
+            Linkage.ServiceCollectionExtensionTests.CheckRegisteredEmisLinkageService(services);
+            Im1Connection.ServiceCollectionExtensionTests.CheckRegisteredEmisIm1ConnectionService(services);
+            PatientRecord.ServiceCollectionExtensionTests.CheckRegisteredPatienRecordService(services);
+        }
+    }
+}
