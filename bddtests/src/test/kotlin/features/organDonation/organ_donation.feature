@@ -1,22 +1,6 @@
 @organ-donation
 Feature: Organ Donation
 
-  @nativepending @NHSO-2972
-  Scenario: A user can navigate to the external version of 'Set organ donation preferences' when toggle is set as so
-    Given I am a EMIS user not registered with organ donation, who wishes to register
-    And I am logged in
-    And I navigate to More
-    When I choose to set my organ donation preferences
-    Then the external Organ Donation page is displayed
-
-  Scenario: A user can navigate to the native version of 'Set organ donation preferences' when toggle is set as so
-    Given I am a EMIS user not registered with organ donation, who wishes to register
-    And I am logged in
-    And I navigate to more
-    And the organ donation toggle is set to target the internal page
-    When I choose to set my organ donation preferences
-    Then the internal Organ Donation page is displayed
-
   Scenario Outline: A <GP System> user can opt to donate all their organs
     Given I am a <GP System> user not registered with organ donation, who wishes to register and opt in
     And I am logged in
@@ -210,7 +194,7 @@ Feature: Organ Donation
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'No I do not want to be a donor' button
     Then the Organ Donation Confirmation page is displayed
-    When I select the register to be a blood donor link on the Organ Donation Confirmation page
+    When I select the 'Register to be a blood donor' link on the Organ Donation View Registration page
     Then a new tab opens https://my.blood.co.uk/preregister
 
   Scenario: A user can navigate back through the opt out journey

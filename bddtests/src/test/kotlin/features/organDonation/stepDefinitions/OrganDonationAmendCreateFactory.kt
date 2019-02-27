@@ -40,6 +40,7 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     }
 
     fun some(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
+        OrganDonationSerenityHelpers.IS_OPT_IN.set(true)
         val organDonationDemographics = OrganDonationDemographics()
         OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(

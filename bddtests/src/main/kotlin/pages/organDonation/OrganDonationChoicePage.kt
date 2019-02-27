@@ -1,7 +1,7 @@
 package pages.organDonation
 
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.getOrNull
+import mocking.data.organDonation.isTrueOrFalse
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
@@ -38,7 +38,7 @@ class OrganDonationChoicePage : OrganDonationBasePage() {
         noButton.assertIsVisible()
         yesButton.assertIsVisible()
 
-        val expectedLinks = if (OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.getOrNull<Boolean>() == true)
+        val expectedLinks = if (OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.isTrueOrFalse())
             expectedLinksInAmendJourney else expectedLinksInNewJourney
 
         Assert.assertArrayEquals("expectedLinks", expectedLinks, getAllLinks())

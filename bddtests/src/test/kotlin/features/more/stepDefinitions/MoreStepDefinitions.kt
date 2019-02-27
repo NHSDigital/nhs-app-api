@@ -60,7 +60,7 @@ class MoreStepDefinitions {
 
     @Then("^I see the more page header$")
     fun pageHeaderVisible() {
-        if(morePage.onMobile()){
+        if (morePage.onMobile()) {
             headerNative.getPageTitle("More").nativeElement.isDisplayed
         }
         headerNative.assertIsVisible("More")
@@ -76,7 +76,7 @@ class MoreStepDefinitions {
 
         Assert.assertEquals("Test Setup Incorrect. Expected Number of links does not match those to follow. " +
                 "This test must be updated if a link is added or removed.",
-                morePage.expectedLinks.count(),
+                morePage.links.count(),
                 linksToFollow.count())
 
         linksToFollow.forEachIndexed { index, link ->
