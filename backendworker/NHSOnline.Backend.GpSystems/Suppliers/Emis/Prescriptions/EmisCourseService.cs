@@ -95,8 +95,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         {  
             if (response.HasForbiddenResponse())
             {
-                _logger.LogError("The emis prescriptions service is not enabled");
-                _logger.LogEmisErrorResponse(response);
+                _logger.LogWarning("The emis prescriptions service is not enabled");
+                _logger.LogEmisWarningResponse(response);
                 return new GetCoursesResult.SupplierNotEnabled();
             }
             

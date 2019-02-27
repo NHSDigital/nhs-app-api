@@ -190,8 +190,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
         {
             if (HasAlreadyBeenOrderedLast30Days(response))
             {
-                _logger.LogError("The prescription request is invalid as the prescription has already been ordered in the last 30 days");
-                _logger.LogEmisErrorResponse(response);
+                _logger.LogWarning("The prescription request is invalid as the prescription has already been ordered in the last 30 days");
+                _logger.LogEmisWarningResponse(response);
                 return new PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days();
             }
 

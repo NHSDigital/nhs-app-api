@@ -197,8 +197,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge))
                 {
-                    _logger.LogError($"Linkage get request unsuccessful - patient non competent or under minimum age. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge}");
-                    _logger.LogEmisErrorResponse(response);
+                    _logger.LogWarning($"Linkage get request unsuccessful - patient non competent or under minimum age. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge}");
+                    _logger.LogEmisLogWarningResponse(response);
                     return new LinkageResult.PatientNonCompetentOrUnderMinimumAge();
                 }
 
@@ -281,8 +281,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge))
                 {
-                    _logger.LogError($"Linkage create request unsuccessful - patient non competent or under minimum age. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge}");
-                    _logger.LogEmisErrorResponse(response);
+                    _logger.LogWarning($"Linkage create request unsuccessful - patient non competent or under minimum age. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnderMinimumAge}");
+                    _logger.LogEmisWarningResponse(response);
                     return new LinkageResult.PatientNonCompetentOrUnderMinimumAge();
                 }
                 

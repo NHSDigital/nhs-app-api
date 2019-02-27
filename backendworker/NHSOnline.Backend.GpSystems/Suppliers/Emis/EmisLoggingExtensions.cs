@@ -43,7 +43,42 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 logger.LogError(e.StackTrace);
             }
         }
-
+        public static void LogEmisWarningResponse(this ILogger logger, EmisClient.EmisApiResponse response)
+        {
+            if (IsResponseNull(logger, response)) return;
+            try
+            {
+                var initialResponse = CensorResponse(response);
+                if (initialResponse != null)
+                {
+                    logger.LogWarning("EMIS Response: " + initialResponse.SerializeJson());
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError("Unable to serialize and log EMIS response");
+                logger.LogError(e.StackTrace);
+            }
+        }    
+        
+        public static void LogEmisLogWarningResponse(this ILogger logger, EmisClient.EmisApiResponse response)
+        {
+            if (IsResponseNull(logger, response)) return;
+            try
+            {
+                var initialResponse = CensorResponse(response);
+                if (initialResponse != null)
+                {
+                    logger.LogWarning("EMIS Response: " + initialResponse.SerializeJson());
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError("Unable to serialize and log EMIS response");
+                logger.LogError(e.StackTrace);
+            }
+        }
+        
         private static bool IsResponseNull(ILogger logger, EmisClient.EmisApiResponse response)
         {
             if (null != response) return false;

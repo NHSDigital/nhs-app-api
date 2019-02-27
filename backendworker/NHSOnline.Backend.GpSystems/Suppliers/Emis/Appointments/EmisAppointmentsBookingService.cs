@@ -104,8 +104,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             var check = response.StatusCode == HttpStatusCode.Conflict;
             if (check)
             {
-                _logger.LogError("Slot is not available for booking.");
-                _logger.LogEmisErrorResponse(response);
+                _logger.LogWarning("Slot is not available for booking.");
+                _logger.LogEmisLogWarningResponse(response);
             }
             return check;
         }
@@ -129,8 +129,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                         || response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsPost_InThePast);
             if (check)
             {
-                _logger.LogError("Slot is in the past.");
-                _logger.LogEmisErrorResponse(response);
+                _logger.LogWarning("Slot is in the past.");
+                _logger.LogEmisLogWarningResponse(response);
             }
             return check;
         }
@@ -144,8 +144,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 
             if (check)
             {
-                _logger.LogError("Slot is in the past.");
-                _logger.LogEmisErrorResponse(response);
+                _logger.LogWarning("Slot is in the past.");
+                _logger.LogEmisWarningResponse(response);
             }
             return check;
         }
