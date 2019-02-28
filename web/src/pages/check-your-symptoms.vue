@@ -1,11 +1,9 @@
 <template>
   <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
     <header-slim v-if="$store.state.device.isNativeApp"> {{ $t('sy01.pageHeader') }}</header-slim>
-    <body>
-      <div>
-        <symptoms-check/>
-      </div>
-    </body>
+    <div>
+      <symptoms-check/>
+    </div>
   </div>
 </template>
 <script>
