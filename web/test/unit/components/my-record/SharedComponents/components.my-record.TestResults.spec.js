@@ -2,7 +2,8 @@
 import Vue from 'vue';
 import TestResults from '@/components/my-record/SharedComponents/TestResults';
 import DCRErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
-import { shallowMount } from '../../../helpers';
+import { initialState } from '@/store/modules/myRecord/mutation-types';
+import { createStore, shallowMount } from '../../../helpers';
 
 Vue.filter('datePart', x => x.toString());
 
@@ -15,6 +16,7 @@ const createData = () => ([{
 const createPropData = ({
   hasErrored = false,
   hasAccess = true,
+  isCollapsed = false,
   supplier = 'EMIS',
   data = createData(),
 } = {}) => ({
@@ -24,18 +26,28 @@ const createPropData = ({
     hasErrored,
   },
   supplier,
+  isCollapsed,
 });
 
-describe('TestResults', () => {
-  let component;
-  let propsData;
+const createState = () => ({
+  myRecord: initialState(),
+  device: {
+    isNativeApp: false,
+  },
+});
 
+const createComponent = ({ $store = createStore({ state: createState() }), propsData } = {}) =>
+  shallowMount(TestResults, { $store, propsData });
+
+describe('TestResults', () => {
   describe('success', () => {
+    let $store;
+    let component;
+    let propsData;
     beforeEach(() => {
       propsData = createPropData();
-      component = shallowMount(TestResults, {
-        propsData,
-      });
+      $store = createStore({ state: createState() });
+      component = createComponent({ $store, propsData });
     });
 
     it('will not show the DCR error no access', () => {
@@ -54,11 +66,13 @@ describe('TestResults', () => {
   });
 
   describe('has errored', () => {
+    let propsData;
+    let $store;
+    let component;
     beforeEach(() => {
       propsData = createPropData({ hasErrored: true });
-      component = shallowMount(TestResults, {
-        propsData,
-      });
+      $store = createStore({ state: createState() });
+      component = createComponent({ $store, propsData });
     });
 
     it('will show the DCR error no access', () => {
@@ -67,11 +81,13 @@ describe('TestResults', () => {
   });
 
   describe('no data', () => {
+    let propsData;
+    let $store;
+    let component;
     beforeEach(() => {
       propsData = createPropData({ data: [] });
-      component = shallowMount(TestResults, {
-        propsData,
-      });
+      $store = createStore({ state: createState() });
+      component = createComponent({ $store, propsData });
     });
 
     it('will show the DCR error no access', () => {
@@ -80,11 +96,13 @@ describe('TestResults', () => {
   });
 
   describe('no access', () => {
+    let propsData;
+    let $store;
+    let component;
     beforeEach(() => {
       propsData = createPropData({ hasAccess: false });
-      component = shallowMount(TestResults, {
-        propsData,
-      });
+      $store = createStore({ state: createState() });
+      component = createComponent({ $store, propsData });
     });
 
     it('will show the DCR error no access', () => {

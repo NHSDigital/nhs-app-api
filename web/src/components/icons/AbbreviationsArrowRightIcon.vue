@@ -13,13 +13,14 @@ export default {};
 </script>
 
 <style module lang="scss" scoped>
-    .nhsukiconarrowrightcircle {
-        display: inline-block;
-        vertical-align: middle;
-        fill: #007f3b;
-        height: 1.2em;
-        left: -3px;
-        top: -6px;
-        width: 1.2em;
-    }
+  .nhsukiconarrowrightcircle {
+    display: inline-block;
+    vertical-align: middle;
+    fill: #007f3b;
+    height: 1.2em;
+    left: -3px;
+    top: -6px;
+    width: 1.2em;
+    margin-bottom: 2px;
+  }
 </style>

@@ -1,8 +1,11 @@
 <template>
   <scr-error-no-access v-if="showError"
-                       :data="medications" :class="[$style['record-content'], getCollapseState]"
+                       :data="medications"
+                       :class="[$style['record-content'],
+                                getCollapseState]"
                        :aria-hidden="isCollapsed"/>
-  <div v-else :class="[$style['record-content'], getCollapseState]"
+  <div v-else-if="!isCollapsed" :class="[$style['record-content'], getCollapseState,
+                                         !$store.state.device.isNativeApp && $style.desktopWeb]"
        :aria-hidden="isCollapsed">
     <div v-for="(medication, medIndex) in orderedMedications"
          :key="`medication-${medIndex}`" :class="$style['record-item']"
@@ -73,6 +76,22 @@ export default {
   color: #425563;
   font-size: 0.813em;
   font-weight: 700;
+}
+
+div {
+ &.desktopWeb {
+  max-width: 540px;
+  cursor: default;
+
+  span {
+   font-family: $default_web;
+   font-weight: normal;
+  }
+  p {
+   font-family: $default_web;
+   font-weight: normal;
+  }
+ }
 }
 
 </style>

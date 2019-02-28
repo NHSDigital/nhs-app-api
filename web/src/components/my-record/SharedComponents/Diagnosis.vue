@@ -4,10 +4,15 @@
                        :has-errored="results.hasErrored"
                        :class="[$style['record-content'], getCollapseState]"
                        :aria-hidden="isCollapsed"/>
-  <div v-else :class="[$style['record-content'], getCollapseState]"
+  <div v-else-if="!isCollapsed" :class="[$style['record-content'],
+                                         getCollapseState,
+                                         !$store.state.device.isNativeApp && $style.desktopWeb]"
        :aria-hidden="isCollapsed">
     <div v-if="supplier === 'VISION'">
-      <a :class="$style.viewDiagnosis" @click="viewDiagnosis($event)">
+      <a :class="$style.viewDiagnosis"
+         tabindex="0"
+         @click="viewDiagnosis($event)"
+         @keypress="onKeyDown($event)">
         {{ $t('my_record.diagnosis.visionDetailsLink') }}
       </a>
     </div>
@@ -58,6 +63,11 @@ export default {
       event.preventDefault();
       redirectTo(this, MY_RECORD_VISION_DIAGNOSIS_DETAIL.path, null);
     },
+    onKeyDown(e) {
+      if (e.keyCode === 13) {
+        this.viewDiagnosis(e);
+      }
+    },
   },
 };
 
@@ -66,10 +76,22 @@ export default {
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
   @import '../../../style/medrecordtitle';
+  @import '../../../style/desktopWeb/accessibility';
 
   .viewDiagnosis {
     padding: 1em;
     font-size: 0.875em;
+  }
+
+  div {
+   &.desktopWeb {
+    a {
+     cursor: pointer;
+     &:focus {
+      @include outlineStyle
+     }
+    }
+   }
   }
 
 </style>

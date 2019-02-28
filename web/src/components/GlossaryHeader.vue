@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.info">
+  <div :class="[$style.info, !$store.state.device.isNativeApp && $style.desktopWeb]">
     <p>{{ $t('rp01.glossary.headerText') }}</p>
     <analytics-tracked-tag :href="glossaryLinkURL"
                            :text="$t('rp01.glossary.linkText')"
@@ -32,6 +32,9 @@ export default {
 
 <style module scoped lang="scss">
 @import '../style/colours';
+@import '../style/textstyles';
+@import '../style/fonts';
+@import '../style/desktopWeb/accessibility';
 
 .info {
   margin-bottom: 0.5em;
@@ -44,5 +47,32 @@ export default {
     padding-bottom: 0.5em;
     padding-top: 0.5em;
   }
+}
+
+div {
+ &.desktopWeb {
+
+  a {
+   margin-bottom: 1em;
+   &:focus {
+    @include outlineStyle
+   }
+   &:hover{
+    background: #ffcd60;
+    outline: none;
+    box-sizing: border-box;
+    background-clip: content-box;
+   }
+  }
+  p {
+   font-family: $default_web;
+   font-weight: normal;
+   cursor: default;
+  }
+
+  hr {
+   opacity: unset;
+  }
+ }
 }
 </style>

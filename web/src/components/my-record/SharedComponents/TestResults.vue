@@ -2,9 +2,12 @@
   <dcr-error-no-access v-if="showError"
                        :has-access="results.hasAccess"
                        :has-errored="results.hasErrored"
-                       :class="[$style['record-content'], getCollapseState]"
+                       :class="[$style['record-content'],
+                                getCollapseState]"
                        :aria-hidden="isCollapsed"/>
-  <div v-else :class="[$style['record-content'], getCollapseState]"
+  <div v-else-if="!isCollapsed" :class="[$style['record-content'],
+                                         getCollapseState,
+                                         !$store.state.device.isNativeApp && $style.desktopWeb]"
        :aria-hidden="isCollapsed">
     <div v-if="supplier === 'TPP' || supplier === 'EMIS'">
       <div v-for="(testResult, testIndex) in orderedTestResults"
@@ -14,10 +17,11 @@
           {{ testResult.date.value | datePart(testResult.date.datePart) }}
         </span>
         <p v-if="supplier === 'TPP'">
-          <a
-            :href="getTestResultPath(testResult.id)"
-            :class="$style.viewTestResult"
-            @click="activateTestResult(testResult.id, $event)">{{ testResult.description }}
+          <a :href="getTestResultPath(testResult.id)"
+             :class="$style.viewTestResult"
+             tabindex="0"
+             @click="activateTestResult(testResult.id, $event)"
+             @keypress="onKeyDown(testResult.id, $event)">{{ testResult.description }}
           </a>
         </p>
         <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
@@ -45,7 +49,10 @@
       </div>
     </div>
     <div v-else-if="supplier === 'VISION'">
-      <a :class="$style.viewTestResult" @click="viewVisionTestResults($event)">
+      <a :class="$style.viewTestResult"
+         tabindex="0"
+         @click="viewVisionTestResults($event)"
+         @keypress="onKeyDownVision($event)">
         {{ $t('my_record.testResults.visionDetailsLink') }}
       </a>
     </div>
@@ -107,6 +114,16 @@ export default {
     getTestResultPath(testResultId) {
       return `/my-record/testresultdetail/${testResultId}`;
     },
+    onKeyDownVision(e) {
+      if (e.keyCode === 13) {
+        this.viewVisionTestResults(e);
+      }
+    },
+    onKeyDown(testResultId, e) {
+      if (e.keyCode === 13) {
+        this.activateTestResult(testResultId, e);
+      }
+    },
   },
 };
 
@@ -115,6 +132,7 @@ export default {
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
   @import '../../../style/medrecordtitle';
+  @import '../../../style/desktopWeb/accessibility';
 
   .viewTestResult {
     padding: 1em;
@@ -128,6 +146,25 @@ export default {
     color: #425563;
     font-size: 0.813em;
     font-weight: 700;
+  }
+
+  div {
+   &.desktopWeb {
+    a {
+     cursor: pointer;
+     &:focus {
+      @include outlineStyle
+     }
+    }
+    span {
+     font-family: $default_web;
+     font-weight: normal;
+    }
+    p {
+     font-family: $default_web;
+     font-weight: normal;
+    }
+   }
   }
 
 </style>

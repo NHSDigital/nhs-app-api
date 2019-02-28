@@ -17,14 +17,14 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
                     androidLocator = null,
                     page = this)
 
-    val backButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(),'Back')]",
-            androidLocator = null,
+    val back = HybridPageElement(
+            webDesktopLocator = "//a[contains(text(),'Back')]",
+            androidLocator = "//button[contains(text(),'Back')]",
             page = this
     )
 
-    fun clickBackToMyRecordButton() {
-        backButton.click()
+    fun clickBackToMyRecord() {
+        back.click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 }

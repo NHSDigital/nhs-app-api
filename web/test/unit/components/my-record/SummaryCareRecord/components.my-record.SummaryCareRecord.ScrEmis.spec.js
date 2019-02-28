@@ -1,5 +1,6 @@
 import ScrEmis from '@/components/my-record/SummaryCareRecord/ScrEMIS';
-import { shallowMount } from '../../../helpers';
+import { initialState } from '@/store/modules/myRecord/mutation-types';
+import { createStore, shallowMount } from '../../../helpers';
 
 const createPropsData = () => ({
   record: {
@@ -9,13 +10,25 @@ const createPropsData = () => ({
   },
 });
 
+const createState = () => ({
+  myRecord: initialState(),
+  device: {
+    isNativeApp: true,
+  },
+});
+
+const createComponent = ({ $store = createStore({ state: createState() }) } = {}) =>
+  shallowMount(ScrEmis, { $store, propsData: createPropsData() });
+
 describe('ScrEmis', () => {
   describe('running on server', () => {
+    let $store;
     let component;
 
     beforeEach(() => {
       process.client = false;
-      component = shallowMount(ScrEmis, { propsData: createPropsData() });
+      $store = createStore({ state: createState() });
+      component = createComponent({ $store });
     });
 
     it('will have an isAllergiesAndAdverseReactionsCollapsed value of false', () => {
@@ -36,10 +49,12 @@ describe('ScrEmis', () => {
 
   describe('running on client', () => {
     let component;
+    let $store;
 
     beforeEach(() => {
       process.client = true;
-      component = shallowMount(ScrEmis, { propsData: createPropsData() });
+      $store = createStore({ state: createState() });
+      component = createComponent({ $store });
     });
 
     it('will have an isAllergiesAndAdverseReactionsCollapsed value of true', () =>
