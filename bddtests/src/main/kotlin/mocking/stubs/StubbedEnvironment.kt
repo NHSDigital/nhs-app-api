@@ -17,6 +17,7 @@ import mocking.stubs.myMedicalRecord.TestResultsStubs
 import mocking.stubs.prescriptions.OrderRepeatPrescriptionsStubs
 import mocking.stubs.prescriptions.ViewCoursesStubs
 import mocking.stubs.prescriptions.ViewPrescriptionsStubs
+import mocking.stubs.pds.ViewSpinePdsStubs
 
 class StubbedEnvironment(private val mockingClient: MockingClient) {
     companion object {
@@ -30,6 +31,7 @@ class StubbedEnvironment(private val mockingClient: MockingClient) {
         generateAppointmentStubs()
         generateMyMedicalRecordsStubs()
         generatePrescriptionStubs()
+        generateSpineStubs()
     }
 
     private fun generatePatientData() {
@@ -66,5 +68,10 @@ class StubbedEnvironment(private val mockingClient: MockingClient) {
         uuids.add(courseListForOrderingPrescription)
 
         OrderRepeatPrescriptionsStubs(goodPatientEMIS, uuids, mockingClient).generateEMISStubs()
+    }
+
+    private fun generateSpineStubs() {
+        ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
+        ViewSpinePdsStubs(mockingClient).generateSpineStubs()
     }
 }

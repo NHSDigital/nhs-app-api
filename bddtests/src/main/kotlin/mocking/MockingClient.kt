@@ -11,6 +11,7 @@ import mocking.ndop.NdopMappingBuilder
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationMappingBuilder
 import mocking.nhsAzureSearchService.NhsAzureSearchPostcodesAndPlacesMappingBuilder
 import mocking.organDonation.OrganDonationMappingBuilder
+import mocking.spine.SpineMappingBuilder
 import mocking.throttling.BrotherMailerMappingBuilder
 import mocking.tpp.TppMappingBuilder
 import mocking.vision.VisionMappingBuilder
@@ -26,6 +27,13 @@ class MockingClient(configuration: MockingConfiguration): WiremockHelper(configu
 
     fun forEmis(method: String = "GET", resolver: EmisMappingBuilder.() -> Mapping) {
         val mappingBuilder = EmisMappingBuilder(configuration.emisConfiguration, method)
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forSpine(method: String = "GET", resolver: SpineMappingBuilder.() -> Mapping) {
+        val mappingBuilder = SpineMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)
