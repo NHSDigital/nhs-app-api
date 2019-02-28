@@ -46,6 +46,7 @@ export default class FilterDataProvider {
       startTime: today.toISOString(),
       endTime: today.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House'],
     };
 
@@ -56,6 +57,7 @@ export default class FilterDataProvider {
       startTime: today.toISOString(),
       endTime: today.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House', 'Dr Drake Ramoray'],
     };
 
@@ -66,6 +68,7 @@ export default class FilterDataProvider {
       startTime: startOfTomorrow.toISOString(),
       endTime: startOfTomorrow.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House', 'Dr Drake Ramoray'],
     };
 
@@ -76,6 +79,7 @@ export default class FilterDataProvider {
       startTime: endOfTomorrow.toISOString(),
       endTime: endOfTomorrow.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House', 'Dr Drake Ramoray'],
     };
 
@@ -86,6 +90,7 @@ export default class FilterDataProvider {
       startTime: startOfNextWeek.toISOString(),
       endTime: startOfNextWeek.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House'],
     };
 
@@ -96,6 +101,7 @@ export default class FilterDataProvider {
       startTime: endOfNextWeek.toISOString(),
       endTime: endOfNextWeek.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House'],
     };
 
@@ -106,6 +112,7 @@ export default class FilterDataProvider {
       startTime: today.toISOString(),
       endTime: today.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House'],
     };
 
@@ -116,6 +123,7 @@ export default class FilterDataProvider {
       startTime: today.toISOString(),
       endTime: today.toISOString(),
       location: 'London',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House'],
     };
 
@@ -126,6 +134,7 @@ export default class FilterDataProvider {
       startTime: today.toISOString(),
       endTime: today.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr Who'],
     };
 
@@ -136,6 +145,7 @@ export default class FilterDataProvider {
       startTime: startOfNext2Week.toISOString(),
       endTime: startOfNext2Week.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House'],
     };
 
@@ -146,6 +156,7 @@ export default class FilterDataProvider {
       startTime: endOfThisWeek.toISOString(),
       endTime: endOfThisWeek.toISOString(),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr House'],
     };
 
@@ -156,6 +167,7 @@ export default class FilterDataProvider {
       startTime: today.clone().subtract(15, 'minutes').toISOString(),
       endTime: today.clone().subtract(15, 'minutes'),
       location: 'Leeds',
+      sessionName: 'General Appointment',
       clinicians: ['Dr Drake Ramoray'],
     };
 

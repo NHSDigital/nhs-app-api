@@ -95,7 +95,8 @@ export default class FilterMutation {
       if (filteredSlots.has(day)) {
         const slotCollection = filteredSlots.get(day);
         const lastSlot = slotCollection[slotCollection.length -1];
-        if (selectedOptions.clinician === ''
+        if (lastSlot.sessionName.toLowerCase() === slot.sessionName.toLowerCase()
+          && selectedOptions.clinician === ''
           && this.dateProvider.create(lastSlot.startTime).isSame(this.dateProvider.create(slot.startTime), 'minute')) {
           return;
         }

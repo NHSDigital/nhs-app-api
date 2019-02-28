@@ -1,7 +1,7 @@
 @my-record
 @smoketest
-Feature: View My Medical Record Information - Combined
-  I see the my record warning page Outline: A <Service> user can view allergies, consultations, demographics and test results
+Feature: View My Medical Record Information - Combined I see the my record warning page
+  Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled allergies functionality and the patient has "2" allergies for <Service>

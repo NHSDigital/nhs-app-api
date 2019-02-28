@@ -111,6 +111,58 @@ describe('FilterMutation [Weekday]', () => {
     expect(actualSlots).toEqual(expectedSlots);
   });
 
+  describe('FilterMutation De-dupe appointment slot by session name', () => {
+    let slotA;
+    let slotB;
+
+    beforeEach(() => {
+      const today = new Date();
+      const now = today.toISOString();
+
+      slotA = {
+        id: 1,
+        ref: 'slot_A',
+        type: 'Emergency',
+        startTime: now,
+        endTime: now,
+        location: 'Manchester',
+        sessionName: 'Emergency Appointment',
+        clinicians: ['Dr Dre'],
+      };
+
+      slotB = {
+        id: 2,
+        ref: 'slot_B',
+        type: 'Emergency',
+        startTime: now,
+        endTime: now,
+        location: 'Manchester',
+        sessionName: 'Another Appointment',
+        clinicians: ['Dr Martin'],
+      };
+    });
+
+    const selectedOptions = {
+      type: 'Emergency',
+      location: 'Manchester',
+      clinician: '',
+      date: DateFilterValues.ALL,
+    };
+
+    it('with multiple slots where the session name differs', () => {
+      const actualSlots = filterMutation.execute([slotA, slotB], selectedOptions);
+
+      expect(actualSlots[0][1]).toEqual([slotA, slotB]);
+    });
+
+    it('with multiple slots where the session name is the same', () => {
+      slotB.sessionName = 'Emergency Appointment';
+      const actualSlots = filterMutation.execute([slotA, slotB], selectedOptions);
+
+      expect(actualSlots[0][1]).toEqual([slotA]);
+    });
+  });
+
   each([
     [
       {
