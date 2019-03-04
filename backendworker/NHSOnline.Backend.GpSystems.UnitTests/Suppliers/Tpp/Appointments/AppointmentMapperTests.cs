@@ -19,6 +19,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
     {
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
+        private ICurrentDateTimeProvider _currentTimeProvider;
         private AppointmentMapper _systemUnderTest;
 
         [TestInitialize]
@@ -27,7 +28,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform() )});
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
+            _currentTimeProvider = new CurrentDateTimeProvider(_timeZoneInfoProvider);
+            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _currentTimeProvider);
             _systemUnderTest = new AppointmentMapper(_dateTimeOffsetProvider);
         }
 

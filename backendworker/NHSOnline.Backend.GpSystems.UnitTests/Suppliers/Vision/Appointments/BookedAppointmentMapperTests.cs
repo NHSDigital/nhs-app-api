@@ -36,11 +36,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private Owner _owner1;
         private Owner _owner2;
         private List<Owner> _owners;
+        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(DateTime.UtcNow);
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
 
@@ -51,7 +56,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             });
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object,
                 configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
+            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
 
             _location1 = _fixture.Create<Location>();
             _location2 = _fixture.Create<Location>();

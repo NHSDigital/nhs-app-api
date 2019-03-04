@@ -35,16 +35,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private Mock<IAppointmentSlotsResponseMapper> _mockResponseMapper;
         
         private EmisAppointmentSlotsService _systemUnderTest;
+        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(DateTime.UtcNow);
+            
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
-
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _mockResponseMapper = _fixture.Freeze<Mock<IAppointmentSlotsResponseMapper>>();
 

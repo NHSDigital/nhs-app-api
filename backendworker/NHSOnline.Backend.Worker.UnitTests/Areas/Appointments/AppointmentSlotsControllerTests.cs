@@ -18,6 +18,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Worker.Filters;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
@@ -30,6 +31,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private Mock<IGpSystemFactory> _gpSystemFactory;
         private UserSession _userSession;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
+        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private Mock<IAuditor> _mockAuditor;
 
         private const string RequestAuditType = "Appointments_GetSlots_Request";
@@ -55,11 +57,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
 
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            
+            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(DateTime.UtcNow);
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
+            _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
 
             _fixture.Inject(_dateTimeOffsetProvider);
             _systemUnderTest = _fixture.Create<AppointmentSlotsController>();

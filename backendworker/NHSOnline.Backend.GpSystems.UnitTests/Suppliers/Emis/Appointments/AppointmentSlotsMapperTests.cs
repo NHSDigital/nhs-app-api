@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -20,6 +21,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
     public class AppointmentSlotsMapperTests
     {
         private IFixture _fixture;
+        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         private AppointmentSlotsMapper _systemUnderTest;
@@ -31,10 +33,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
+            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(DateTime.UtcNow);
+            
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
+            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
             
             _mockEmisEnumMapper = _fixture.Freeze<Mock<IEmisEnumMapper>>();
          

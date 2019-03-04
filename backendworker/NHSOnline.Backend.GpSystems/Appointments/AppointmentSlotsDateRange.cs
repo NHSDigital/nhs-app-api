@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.GpSystems.Appointments
         {
             var nowDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             FromDate = nowDateTimeOffset;
-            ToDate = nowDateTimeOffset.AddDays(DayRange).SetTimeToMidnight();  
+            ToDate = dateTimeOffsetProvider.CreateDateTimeOffset(nowDateTimeOffset.DateTime.AddDays(DayRange)).SetTimeToMidnight();
         }
     }
 }

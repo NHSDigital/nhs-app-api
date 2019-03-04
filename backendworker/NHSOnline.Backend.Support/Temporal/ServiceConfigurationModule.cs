@@ -7,8 +7,9 @@ namespace NHSOnline.Backend.Support.Temporal
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<TimeZoneInfoProvider>();
+            services.AddSingleton<ITimeZoneInfoProvider, TimeZoneInfoProvider>();
             services.AddSingleton<TimeZoneConverter>();
+            services.AddSingleton<ICurrentDateTimeProvider, CurrentDateTimeProvider>();
             services.AddSingleton<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
             services.AddTransient<IMinimumAgeValidator, MinimumAgeValidator>();
 

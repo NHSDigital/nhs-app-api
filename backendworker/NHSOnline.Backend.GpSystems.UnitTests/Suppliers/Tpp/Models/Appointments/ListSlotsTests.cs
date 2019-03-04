@@ -35,7 +35,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models.Appointment
             var configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
+            var currentDateTimeProvider = new CurrentDateTimeProvider(timeZoneInfoProvider);
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, currentDateTimeProvider);
 
             var fromDateTime = DateTime.Parse(FromDate, CultureInfo.InvariantCulture);
             var toDateTime = DateTime.Parse(ToDate, CultureInfo.InvariantCulture);

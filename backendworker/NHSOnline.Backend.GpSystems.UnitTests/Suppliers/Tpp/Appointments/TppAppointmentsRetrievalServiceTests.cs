@@ -34,11 +34,16 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         private ViewAppointmentsReply _tppViewPastAppointmentsReply;
         private ViewAppointmentsReply _tppViewUpcomingAppointmentsReply;
         private TppClient.TppApiObjectResponse<ViewAppointmentsReply> _tppErrorResponse;
+        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(DateTime.UtcNow);
 
             _tppUserSession = _fixture.Create<TppUserSession>();
                         
@@ -135,7 +140,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 _fixture.Create<ILogger<TppAppointmentsService>>(),
                 _mockResponseMapper.Object
             );
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
 
             _systemUnderTest = new TppAppointmentsService(
                 new TppAppointmentsRetrievalService(Mock.Of<ILogger<TppAppointmentsRetrievalService>>(),

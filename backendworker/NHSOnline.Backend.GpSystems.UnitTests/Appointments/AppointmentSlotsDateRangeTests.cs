@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -15,41 +17,124 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Appointments
     public class AppointmentSlotsDateRangeTests
     {
         private TimeZoneInfoProvider _timeZoneInfoProvider;
-        private DateTimeOffsetProvider _dateTimeOffsetProvider;
+        private IFixture _fixture;
+        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
+            
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
+            
         }
         
         [TestMethod]
-        public void SetsDefaultRange()
+        public void SetsDefaultRangeAllBST()
         {
-            const string todayDateString = "2018-05-12T00:00:00";
-
-            DateTimeOffset? todayDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(todayDateString).SetTimeToMidnight();
-            var expectedFromDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-12T14:15:31");
-            var expectedToDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-06-10T00:00:00").SetTimeToMidnight();
-
-            var mockDateTimeOffsetProvider = new Mock<IDateTimeOffsetProvider>();
-            mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(expectedFromDate);
-            mockDateTimeOffsetProvider.Setup(x => x.TryCreateDateTimeOffset(todayDateString, out todayDate)).Returns(true);
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(new DateTime(2019,9,20,12,1,0,0, DateTimeKind.Utc));
             
-            var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object);
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            
+            var expectedFromDate = new DateTimeOffset(2019,9,20,13,1,0, new TimeSpan(1,0,0));
+            var expectedToDate = new DateTimeOffset(2019,10,19,0,0,0, new TimeSpan(1,0,0));
+
+            var dateRange = new AppointmentSlotsDateRange(dateTimeOffsetProvider);
 
             dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromDate.DateTime);
             dateRange.FromDate.Should().HaveHour(expectedFromDate.Hour);
             dateRange.FromDate.Should().HaveMinute(expectedFromDate.Minute);
             dateRange.FromDate.Should().HaveSecond(expectedFromDate.Second);
+            dateRange.FromDate.Offset.Should().Be(expectedFromDate.Offset);
             
             dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedToDate.DateTime);
             dateRange.ToDate.Should().HaveHour(expectedToDate.Hour);
             dateRange.ToDate.Should().HaveMinute(expectedToDate.Minute);
             dateRange.ToDate.Should().HaveSecond(expectedToDate.Second);
+            dateRange.ToDate.Offset.Should().Be(expectedToDate.Offset);
+        }
+        
+        [TestMethod]
+        public void SetsDefaultRangeAllUTC()
+        {
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(new DateTime(2019,1,4,12,1,0,0, DateTimeKind.Utc));
+            
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            
+            var expectedFromDate = new DateTimeOffset(2019,1,4,12,1,0, new TimeSpan(0));
+            var expectedToDate = new DateTimeOffset(2019,2,2,0,0,0,new TimeSpan(0));
+
+            var dateRange = new AppointmentSlotsDateRange(dateTimeOffsetProvider);
+
+            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromDate.DateTime);
+            dateRange.FromDate.Should().HaveHour(expectedFromDate.Hour);
+            dateRange.FromDate.Should().HaveMinute(expectedFromDate.Minute);
+            dateRange.FromDate.Should().HaveSecond(expectedFromDate.Second);
+            dateRange.FromDate.Offset.Should().Be(expectedFromDate.Offset);
+            
+            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedToDate.DateTime);
+            dateRange.ToDate.Should().HaveHour(expectedToDate.Hour);
+            dateRange.ToDate.Should().HaveMinute(expectedToDate.Minute);
+            dateRange.ToDate.Should().HaveSecond(expectedToDate.Second);
+            dateRange.ToDate.Offset.Should().Be(expectedToDate.Offset);
+        }
+        
+        [TestMethod]
+        public void SetsDefaultStartDateBSTEndDateUTC()
+        {
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(new DateTime(2019,10,20,12,1,0,0, DateTimeKind.Utc));
+            
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            
+            var expectedFromDate = new DateTimeOffset(2019,10,20,13,1,0, new TimeSpan(1,0,0));
+            var expectedToDate = new DateTimeOffset(2019,11,18,0,0,0, new TimeSpan(0));
+
+            var dateRange = new AppointmentSlotsDateRange(dateTimeOffsetProvider);
+
+            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromDate.DateTime);
+            dateRange.FromDate.Should().HaveHour(expectedFromDate.Hour);
+            dateRange.FromDate.Should().HaveMinute(expectedFromDate.Minute);
+            dateRange.FromDate.Should().HaveSecond(expectedFromDate.Second);
+            dateRange.FromDate.Offset.Should().Be(expectedFromDate.Offset);
+            
+            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedToDate.DateTime);
+            dateRange.ToDate.Should().HaveHour(expectedToDate.Hour);
+            dateRange.ToDate.Should().HaveMinute(expectedToDate.Minute);
+            dateRange.ToDate.Should().HaveSecond(expectedToDate.Second);
+            dateRange.ToDate.Offset.Should().Be(expectedToDate.Offset);
+        }
+        
+        [TestMethod]
+        public void SetsDefaultRangeStartDateUTCEndDateBST()
+        {
+            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
+                .Returns(new DateTime(2019,3,3,0,0,0,0, DateTimeKind.Utc));
+            
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            
+            var expectedFromDate = new DateTimeOffset(2019,3,3,0,0,0, new TimeSpan(0));
+            var expectedToDate = new DateTimeOffset(2019,4,1,0,0,0,new TimeSpan(1,0,0));
+
+            var dateRange = new AppointmentSlotsDateRange(dateTimeOffsetProvider);
+
+            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromDate.DateTime);
+            dateRange.FromDate.Should().HaveHour(expectedFromDate.Hour);
+            dateRange.FromDate.Should().HaveMinute(expectedFromDate.Minute);
+            dateRange.FromDate.Should().HaveSecond(expectedFromDate.Second);
+            dateRange.FromDate.Offset.Should().Be(expectedFromDate.Offset);
+            
+            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedToDate.DateTime);
+            dateRange.ToDate.Should().HaveHour(expectedToDate.Hour);
+            dateRange.ToDate.Should().HaveMinute(expectedToDate.Minute);
+            dateRange.ToDate.Should().HaveSecond(expectedToDate.Second);
+            dateRange.ToDate.Offset.Should().Be(expectedToDate.Offset);
         }
     }
 }

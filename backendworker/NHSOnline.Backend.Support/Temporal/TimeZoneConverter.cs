@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Support.Temporal
     {
         private readonly TimeZoneInfo _localTimeZone;
 
-        public TimeZoneConverter(TimeZoneInfoProvider localTimeZoneProvider)
+        public TimeZoneConverter(ITimeZoneInfoProvider localTimeZoneProvider)
         {
             _localTimeZone = localTimeZoneProvider.TimeZone;
         }

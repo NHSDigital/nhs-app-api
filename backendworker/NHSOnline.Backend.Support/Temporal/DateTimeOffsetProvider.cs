@@ -6,16 +6,19 @@ namespace NHSOnline.Backend.Support.Temporal
     public interface IDateTimeOffsetProvider
     {
         DateTimeOffset CreateDateTimeOffset();
+        DateTimeOffset CreateDateTimeOffset(DateTime dateTime);
         DateTimeOffset ConvertToLocalTime(DateTimeOffset dateTimeOffset);
         bool TryCreateDateTimeOffset(string dateTime, out DateTimeOffset? dateTimeOffset);
     }
 
     public class DateTimeOffsetProvider : IDateTimeOffsetProvider
     {
+        private readonly ICurrentDateTimeProvider _currentTimeProvider;
         private readonly TimeZoneInfo _localTimeZone;
 
-        public DateTimeOffsetProvider(TimeZoneInfoProvider timeZoneInfoProvider)
+        public DateTimeOffsetProvider(ITimeZoneInfoProvider timeZoneInfoProvider, ICurrentDateTimeProvider currentTimeProvider)
         {
+            _currentTimeProvider = currentTimeProvider;
             _localTimeZone = timeZoneInfoProvider.TimeZone;
         }
 
@@ -35,9 +38,15 @@ namespace NHSOnline.Backend.Support.Temporal
 
         public DateTimeOffset CreateDateTimeOffset()
         {
-            var dateTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, _localTimeZone);
+            var dateTime = TimeZoneInfo.ConvertTime(_currentTimeProvider.UtcNow, _localTimeZone);
             var offSet = _localTimeZone.GetUtcOffset(dateTime);
             return new DateTimeOffset(dateTime, offSet);
+        }
+        
+        public DateTimeOffset CreateDateTimeOffset(DateTime date)
+        {
+            var offSet = _localTimeZone.GetUtcOffset(date);
+            return new DateTimeOffset(date, offSet);
         }
 
         public DateTimeOffset ConvertToLocalTime(DateTimeOffset dateTimeOffset)
