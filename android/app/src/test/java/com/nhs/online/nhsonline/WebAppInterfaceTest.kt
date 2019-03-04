@@ -1,9 +1,13 @@
 package com.nhs.online.nhsonline
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.activities.MainActivity
+import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import junit.framework.Assert
@@ -11,6 +15,7 @@ import org.junit.Test
 
 import org.junit.Before
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -26,9 +31,18 @@ class WebAppInterfaceTest {
         }
         val sharedPref: SharedPreferences = mock()
         contextMock = mock {
+            val connectivityManager = Mockito.mock(ConnectivityManager::class.java)
+            val networkInfo = Mockito.mock( NetworkInfo::class.java )
+
+            Mockito.`when`( connectivityManager.activeNetworkInfo ).thenReturn(networkInfo)
+            Mockito.`when`( networkInfo.isConnected).thenReturn( true )
+            Mockito.`when`(networkInfo.isAvailable).thenReturn(true)
+            Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(true)
+
             on { resources }.thenReturn(resourcesMock)
             on { getString(any()) }.thenReturn("text")
             on { getSharedPreferences(any(), any()) }.thenReturn(sharedPref)
+            on {getSystemService(Context.CONNECTIVITY_SERVICE) } doReturn connectivityManager
         }
         nhsWebMock = mock()
         webAppInterface = WebAppInterface(contextMock, contextMock, nhsWebMock)

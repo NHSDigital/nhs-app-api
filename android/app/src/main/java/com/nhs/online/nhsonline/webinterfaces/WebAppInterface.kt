@@ -6,8 +6,8 @@ import android.webkit.JavascriptInterface
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.interfaces.IInteractor
+import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.web.NhsWeb
-
 
 class WebAppInterface(
     private val activity: Activity,
@@ -32,7 +32,13 @@ class WebAppInterface(
     @JavascriptInterface
     fun updateHeaderText(text: String) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateHeaderText")
-        activity.runOnUiThread { uiInteractor.setHeaderText(text) }
+        activity.runOnUiThread {
+            if (!Reachability.isConnectedToNetwork(activity)) {
+                nhsWeb.showConnectionError(null)
+            } else {
+                uiInteractor.setHeaderText(text)
+            }
+        }
     }
 
     @JavascriptInterface

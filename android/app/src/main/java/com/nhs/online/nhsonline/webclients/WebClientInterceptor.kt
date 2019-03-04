@@ -162,6 +162,9 @@ class WebClientInterceptor(
 
         view?.isFocusable = true
         view?.requestFocus()
+        if(!shouldShowErrorPage) {
+            uiInteractor.showWebviewScreen()
+        }
 
         super.onPageFinished(view, url)
     }
@@ -184,7 +187,6 @@ class WebClientInterceptor(
                 uiInteractor.showMenuBar()
             }
 
-            uiInteractor.showWebviewScreen()
             if (!knownServices.isUrlHostSameAsHomeUrlHost(url))
                 uiInteractor.announcePageTitle(view?.title)
         }

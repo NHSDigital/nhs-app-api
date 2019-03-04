@@ -21,11 +21,9 @@ class UrlLoader(
         if (usingAbsoluteUri || knownServices.isCIDRedirectUrl(uriToUse)) {
             loadPage(uriToUse)
         } else if (webView.url != null && (webView.url.contains(baseURL))) {
-            val url = produceValidUrl(pageEndPoint)
-            if (url == reloadUrl) {
+            if (uriToUse == reloadUrl) {
                 loadPage(uriToUse)
             } else {
-                reloadUrl = url
                 val path = getPath(pageEndPoint)
                 webJavascript.loadSpaPath(path)
             }
@@ -61,7 +59,6 @@ class UrlLoader(
     private fun loadPage(url: String) {
         val urlWithMissingQueryStrings =
             knownServices.findKnownServiceAndAddMissingQueryFor(url)
-
         webView.loadUrl(urlWithMissingQueryStrings)
     }
 

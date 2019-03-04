@@ -6,6 +6,7 @@ import android.webkit.CookieManager
 import android.webkit.WebView
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
+import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.services.KnownService
@@ -60,6 +61,7 @@ class NhsWeb(
         if (knownService == null) {
             knownService = knownServices.findMatchingServiceInfo(path)
         }
+        urlLoader.reloadUrl = urlLoader.produceValidUrl(path)
         if (!Reachability.isConnectedToNetwork(activity)) {
             handleConnectionError(path, knownService)
             return
@@ -67,7 +69,6 @@ class NhsWeb(
         knownService?.header?.let { nativeHeader ->
             uiInteractor.setHeaderText(nativeHeader)
         }
-        uiInteractor.setWebViewVisible()
         urlLoader.loadUrl(path)
     }
 
@@ -156,14 +157,18 @@ class NhsWeb(
     fun announceForAccessibility(text: String) = webView.announceForAccessibility(text)
 
     private fun handleConnectionError(path: String, knownService: KnownService.Info?) {
-        urlLoader.reloadUrl = urlLoader.produceValidUrl(path)
-        val errorMessage =
-            knownService?.errorMessage ?: knownServices.getServiceUnavailabilityError()
+        showConnectionError(knownService?.errorMessage)
+        Log.d(TAG, "Failing Url: ${urlLoader.reloadUrl}")
+    }
+
+    fun showConnectionError(errorMessage: ErrorMessage?) {
+        var errorMsg = errorMessage
+        if(errorMsg == null) {
+            errorMsg = knownServices.getServiceUnavailabilityError()
+        }
         webView.stopLoading()
         uiInteractor.setHeaderText(readResourceString(R.string.connection_error_header))
-        uiInteractor.showUnavailabilityError(errorMessage)
-
-        Log.d(TAG, "Failing Url: ${urlLoader.reloadUrl}")
+        uiInteractor.showUnavailabilityError(errorMsg)
         return
     }
 
