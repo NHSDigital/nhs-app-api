@@ -13,5 +13,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         
         Task<GpLookupClient.NhsSearchApiObjectResponse<NhsPostcodeSearchResponse>> 
             PostcodeSearch(PostcodeSearchData searchData);
+
+        Task<GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>>
+            PharmacySearch(OrganisationSearchData searchData);
     }
 }

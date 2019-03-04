@@ -4,7 +4,21 @@
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content' ,
                                     !$store.state.device.isNativeApp && $style.desktopWeb]" >
     <glossary-header v-if="hasLoaded"/>
-
+    <ul :class="$style['list-menu-white']" role="list">
+      <li role="link">
+        <analytics-tracked-tag
+          id="btn_choices" :href="nominatedPharmacyUrl"
+          :class="$style['no-decoration']"
+          :text="$t('rp01.nominatedPharmacy')"
+          :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('sy01.a_z.body')}`"
+          tag="a" target="_blank">
+          <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
+          <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+            {{ nominatedPharmacyName }}
+          </p>
+        </analytics-tracked-tag>
+      </li>
+    </ul>
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
       <h2>{{ $t('rp01.empty.subHeader') }}</h2>
       <p>
@@ -52,6 +66,7 @@ import sortBy from 'lodash/fp/sortBy';
 import isEmpty from 'lodash/fp/isEmpty';
 import { redirectTo } from '@/lib/utils';
 import NoJsForm from '@/components/no-js/NoJsForm';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
   components: {
@@ -59,6 +74,22 @@ export default {
     HistoricPrescription,
     GlossaryHeader,
     NoJsForm,
+    AnalyticsTrackedTag,
+  },
+  async asyncData({ store }) {
+    await store.dispatch('prescriptions/clear');
+    await store.dispatch('nominatedPharmacy/clear');
+    await store.dispatch('prescriptions/load');
+    await store.dispatch('nominatedPharmacy/load');
+    return {
+      statusDisplayPriority: {
+        [MedicationCourseStatus.Rejected]: 1,
+        [MedicationCourseStatus.Requested]: 2,
+        [MedicationCourseStatus.Approved]: 3,
+      },
+      nominatedPharmacyUrl: '.',
+      nominatedPharmacyName: store.state.nominatedPharmacy.pharmacy.pharmacyName,
+    };
   },
   computed: {
     repeatCoursesPath() {
@@ -94,17 +125,6 @@ export default {
       return this.$store.state.prescriptions.hasLoaded;
     },
   },
-  async asyncData({ store }) {
-    await store.dispatch('prescriptions/clear');
-    await store.dispatch('prescriptions/load');
-    return {
-      statusDisplayPriority: {
-        [MedicationCourseStatus.Rejected]: 1,
-        [MedicationCourseStatus.Requested]: 2,
-        [MedicationCourseStatus.Approved]: 3,
-      },
-    };
-  },
   created() {
   },
   methods: {
@@ -117,6 +137,7 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/spacings";
+@import '../../style/listmenu';
 @import "../../style/fonts";
 
 .desktopWeb {

@@ -1,0 +1,72 @@
+swagger: "2.0"
+
+info:
+  version: 0.0.1
+  title: NHS App Sub-API - Nominated Pharmacy
+  description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require NHSO-Session-Id cookie in header from session endpoint.
+
+paths:
+  /pharmacy/nominated:
+    get:
+      tags:
+        - pharmacy
+      summary: Gets the nominated pharmacy detail for a given patient.
+      description: Returns the nominated pharmacy detail for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns a pharmacy object with its associated meta data. Returns an empty pharmacy if no nominated pharmacy was found.
+          schema:
+            $ref: "#/definitions/NominatedPharmacyResponse"
+        401:
+          description: User session missing or expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: Bad response received from upstream system.
+        504:
+          description: Timeout when calling upstream system.
+
+definitions:
+  NominatedPharmacyResponse:
+    type: object
+    properties:
+      pharmacyName:
+        type: string
+        description: Name of the nominated pharmacy.
+      addressLine1:
+        type: string
+        description: First line of address.
+      addressLine2:
+        type: string
+        description: Second line of address.
+      addressLine3:
+        type: string
+        description: Third line of address.
+      city:
+        type: string
+        description: Name of the city.
+      county:
+        type: string
+        description: Name of the county.
+      postcode:
+        type: string
+        description: Postcode.
+      telephoneNumber:
+        type: string
+        description: Telephone number of the nominated pharmacy.
+      openingTimes:
+        type: array
+        description: An array of opening times.
+        items:
+          $ref: '#/definitions/OpeningTime'
+  OpeningTime:
+    type: object
+    properties:
+      day:
+        type: string
+        description: Day of the week.
+      time:
+        type: string
+        description: Opening and closing time.

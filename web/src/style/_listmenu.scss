@@ -52,7 +52,7 @@
 	}
 }
 
-ul.list-menu {
+@mixin ul-list-menu {
 	border-top: 1px $border_grey solid;
 	list-style: none;
 	li {
@@ -75,5 +75,17 @@ ul.list-menu {
 		p {
 			margin-bottom: 0;
 		}
+	}
+}
+
+ul.list-menu {
+	@include ul-list-menu;
+}
+
+ul.list-menu-white {
+	@include ul-list-menu;
+	li {
+		background: $white url(/assets/icon_arrow_left.svg) no-repeat center right 12px;
+		padding: 0.50em 1em 0.50em 1em;
 	}
 }

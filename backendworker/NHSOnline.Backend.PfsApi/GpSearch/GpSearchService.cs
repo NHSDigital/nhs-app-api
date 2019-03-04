@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 try
                 {
                     var postcodeSearchResult = await _gpLookupClient.PostcodeSearch(postcodeSearchData);
-                    
+
                     _logger.LogEnter();
 
                     if (!postcodeSearchResult.HasSuccessResponse)

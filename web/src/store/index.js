@@ -1,4 +1,5 @@
 import biometricBanner from './modules/biometricBanner';
+import nominatedPharmacy from './modules/nominatedPharmacy';
 import cookieBanner from './modules/cookieBanner';
 import header from './modules/header';
 import pageTitle from './modules/pageTitle';
@@ -36,6 +37,7 @@ export const modules = {
   myAppointments,
   myRecord,
   navigation,
+  nominatedPharmacy,
   organDonation,
   pageTitle,
   prescriptions,

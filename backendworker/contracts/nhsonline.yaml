@@ -1,7 +1,7 @@
 swagger: '2.0'
 
 info:
-  version: 0.0.6
+  version: 0.0.7
   title: NHS App API
   description: This is the API for the NHS App.
 
@@ -46,3 +46,5 @@ paths:
     $ref: './nhsonline.usersession.yaml#/paths/~1session'
   /v1/session/extend:
     $ref: './nhsonline.usersession.yaml#/paths/~1session~1extend'
+  /v1/pharmacy/nominated:
+    $ref: './nhsonline.nominatedpharmacy.yaml#/paths/~1pharmacy~1nominated'

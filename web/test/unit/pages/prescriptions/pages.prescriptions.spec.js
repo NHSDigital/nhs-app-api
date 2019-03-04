@@ -4,8 +4,8 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
-jest.mock('@/components/HistoricPrescription', () => {});
-jest.mock('@/components/GlossaryHeader', () => {});
+jest.mock('@/components/HistoricPrescription', () => { });
+jest.mock('@/components/GlossaryHeader', () => { });
 import PrescriptionsPage from '@/pages/prescriptions/index';
 
 const $t = key => `translate_${key}`;
@@ -68,6 +68,9 @@ const createStore = hasLoaded => ({
       hasLoaded,
       prescriptionCourses: {},
     },
+    nominatedPharmacy: {
+      pharmacy: {},
+    },
   },
 });
 
@@ -82,52 +85,68 @@ describe('prescriptions/index.vue -', () => {
       await page.vm.$options.asyncData({ store: $store });
 
       expect($store.dispatch).toHaveBeenCalledWith('prescriptions/clear');
-      expect($store.dispatch).toHaveBeenLastCalledWith('prescriptions/load');
+      expect($store.dispatch).toHaveBeenCalledWith('prescriptions/load');
     });
   });
 
-  describe('showNoPrescriptions', () => {
-    it('will show the no prescriptions banner after data loading is complete.', () => {
-      const $store = createStore(true);
-      const page = createPrescriptionsPage($store);
-      expect(page.vm.showNoPrescriptions).toBe(true);
+  describe('prescriptions/index.vue -', () => {
+    describe('asyncData', () => {
+      it('will clear and load the nominated pharmacy', async () => {
+        const $store = createStore(true);
+
+        jest.spyOn($store, 'dispatch');
+
+        const page = createPrescriptionsPage($store);
+        await page.vm.$options.asyncData({ store: $store });
+
+        expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/clear');
+        expect($store.dispatch).toHaveBeenCalledWith('nominatedPharmacy/load');
+      });
     });
 
-    it('will not show the no prescriptions and yield true as data not loaded yet.', () => {
-      const $store = createStore(false);
-      const page = createPrescriptionsPage($store);
-      expect(page.vm.showNoPrescriptions).toBe(false);
+    describe('showNoPrescriptions', () => {
+      it('will show the no prescriptions banner after data loading is complete.', () => {
+        const $store = createStore(true);
+        const page = createPrescriptionsPage($store);
+        expect(page.vm.showNoPrescriptions).toBe(true);
+      });
+
+      it('will not show the no prescriptions and yield true as data not loaded yet.', () => {
+        const $store = createStore(false);
+        const page = createPrescriptionsPage($store);
+        expect(page.vm.showNoPrescriptions).toBe(false);
+      });
+
+      it('will show prescriptions after loading as there is data to show.', () => {
+        const $store = createStore(true);
+        $store.state.prescriptions.prescriptionCourses.Approved = {};
+        const page = createPrescriptionsPage($store);
+        expect(page.vm.showNoPrescriptions).toBe(false);
+      });
     });
 
-    it('will show prescriptions after loading as there is data to show.', () => {
-      const $store = createStore(true);
-      $store.state.prescriptions.prescriptionCourses.Approved = {};
-      const page = createPrescriptionsPage($store);
-      expect(page.vm.showNoPrescriptions).toBe(false);
-    });
-  });
+    describe('showPrescriptions', () => {
+      it('will show prescriptions after data loading is complete.', () => {
+        const $store = createStore(true);
+        $store.state.prescriptions.prescriptionCourses.Approved = {};
 
-  describe('showPrescriptions', () => {
-    it('will show prescriptions after data loading is complete.', () => {
-      const $store = createStore(true);
-      $store.state.prescriptions.prescriptionCourses.Approved = {};
+        const page = createPrescriptionsPage($store);
+        expect(page.vm.showPrescriptions).toBe(true);
+      });
 
-      const page = createPrescriptionsPage($store);
-      expect(page.vm.showPrescriptions).toBe(true);
-    });
+      it('will not show prescriptions as the prescriptions have not been loaded yet.', () => {
+        const $store = createStore(false);
+        $store.state.prescriptions.prescriptionCourses.Approved = {};
 
-    it('will not show prescriptions as the prescriptions have not been loaded yet.', () => {
-      const $store = createStore(false);
-      $store.state.prescriptions.prescriptionCourses.Approved = {};
+        const page = createPrescriptionsPage($store);
+        expect(page.vm.showPrescriptions).toBe(false);
+      });
 
-      const page = createPrescriptionsPage($store);
-      expect(page.vm.showPrescriptions).toBe(false);
-    });
-
-    it('will not show prescriptions as there is no data to show.', () => {
-      const $store = createStore(true);
-      const page = createPrescriptionsPage($store);
-      expect(page.vm.showPrescriptions).toBe(false);
+      it('will not show prescriptions as there is no data to show.', () => {
+        const $store = createStore(true);
+        const page = createPrescriptionsPage($store);
+        expect(page.vm.showPrescriptions).toBe(false);
+      });
     });
   });
 });

@@ -8,6 +8,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
 {
@@ -45,9 +46,15 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             return await Post<PostcodeSearchData, NhsPostcodeSearchResponse>(searchData,
                 PostcodeSearchPath);            
         }
-        
-        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> 
-            GpPostcodeSearch(OrganisationPostcodeSearchData searchData)
+
+        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> PharmacySearch(OrganisationSearchData searchData)
+        {
+            _logger.LogEnter();
+            return await Post<OrganisationSearchData, NhsOrganisationSearchResponse>(searchData,
+                OrganisationSearchPath);
+        }
+
+        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> GpPostcodeSearch(OrganisationPostcodeSearchData searchData)
         {
             return await Post<OrganisationPostcodeSearchData, NhsOrganisationSearchResponse>(searchData,
                 OrganisationSearchPath);   
