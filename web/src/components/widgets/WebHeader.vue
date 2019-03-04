@@ -19,8 +19,9 @@
       </span>
     </header>
     <div :class="$style.headerLowerSection">
-      <page-title v-if="!isLoginPage" :should-show-desktop-version="shouldShowDesktopVersion"/>
-      <book-appointment v-if="showBookAppointmentButton"/>
+      <page-title v-if="!isLoginPage"
+                  :should-show-desktop-version="!$store.state.device.isNativeApp"/>
+      <header-companion-button/>
     </div>
   </div>
 </template>
@@ -31,19 +32,19 @@ import { ACCOUNT, APPOINTMENT_BOOKING_GUIDANCE, INDEX, LOGIN, LOGOUT } from '@/l
 import { redirectTo } from '@/lib/utils';
 import HeaderLinks from '@/components/widgets/HeaderLinks';
 import HeaderMenu from '@/components/widgets/HeaderMenu';
+import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
 import HomeLink from './HomeLink';
 import PageTitle from './PageTitle';
-import BookAppointment from './BookAppointment';
 import CookieBanner from '../CookieBanner';
 
 export default {
   components: {
-    BookAppointment,
     HomeLink,
     HeaderLinks,
     HeaderMenu,
     PageTitle,
     CookieBanner,
+    HeaderCompanionButton,
   },
   head() {
     return {
@@ -91,30 +92,8 @@ export default {
     indexPath() {
       return INDEX.path;
     },
-    shouldShowDesktopVersion() {
-      return (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios');
-    },
-    guidancePath() {
-      return APPOINTMENT_BOOKING_GUIDANCE.path;
-    },
-    formData() {
-      return {
-        myAppointments: {
-          disableCancellation: this.$store.state.myAppointments.disableCancellation,
-        },
-      };
-    },
-    showBookAppointmentButton() {
-      return (
-        this.$store.state.myAppointments.hasLoaded && !this.$store.getters['errors/showApiError']
-        && this.showHeaderButtons
-      );
-    },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
-    },
-    miniMenuExpanded() {
-      return this.$store.state.header.miniMenuExpanded;
     },
   },
   mounted() {
@@ -129,10 +108,6 @@ export default {
       if (headerHomeLinkCompt) {
         headerHomeLinkCompt.resetFocusToNhsLogo();
       }
-    },
-    onBookButtonClicked() {
-      this.$store.app.$analytics.trackButtonClick(this.guidancePath, true);
-      redirectTo(this, this.guidancePath, null);
     },
   },
 };

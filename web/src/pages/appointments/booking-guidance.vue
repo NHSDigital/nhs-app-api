@@ -27,8 +27,7 @@
 
     <analytics-tracked-tag :text="$t('appointments.guidance.symptomButttonText')"
                            :destination="symptomsPath"
-                           data-purpose="generic-button"
-                           tag="generic-button">
+                           data-purpose="generic-button">
       <generic-button id="btn_check_symptoms"
                       :class="$style.button"
                       tabindex="0"
@@ -51,16 +50,16 @@
 <script>
 /* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, SYMPTOMS } from '@/lib/routes';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { redirectTo } from '@/lib/utils';
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
   components: {
+    AnalyticsTrackedTag,
     GenericButton,
     NoJsForm,
-    AnalyticsTrackedTag,
   },
   data() {
     return {

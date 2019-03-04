@@ -1,5 +1,6 @@
 <template>
-  <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content']" >
+  <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content' ,
+                                    !$store.state.device.isNativeApp && $style.desktopWeb]" >
     <glossary-header v-if="hasLoaded"/>
 
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
@@ -25,7 +26,7 @@
       </div>
     </div>
 
-    <form :action="repeatCoursesPath" method="get">
+    <form v-if="$store.state.device.isNativeApp" :action="repeatCoursesPath" method="get">
       <floating-button-bottom v-if="hasLoaded"
                               id="order-prescription-button"
                               @click="onRepeatPrescriptionButtonClicked">
@@ -111,7 +112,17 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/spacings";
+@import "../../style/fonts";
 
+.desktopWeb {
+   font-family: $default-web;
+   max-width: 540px + 64px; // 64px (2em) to compasensate padding apply to the div by main.scss
+  p {
+   font-family: $default-web;
+   font-weight: lighter;
+   max-width: 540px;
+  }
+ }
 .above-float-button {
   margin-bottom: $marginBottomFullScreen;
 }

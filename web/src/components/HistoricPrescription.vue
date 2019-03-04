@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.panel">
+  <div :class="[$style.panel, !$store.state.device.isNativeApp && $style.desktopWeb]">
     <p v-if="prescriptionCourse.orderDate != null">
       <b>{{ $t('rp02.orderDate') }}:</b>
       <span data-label="order-date">

@@ -28,7 +28,7 @@
     <past-appointments v-if="showPastAppointments"
                        :appointments = "pastAppointments" />
 
-    <no-js-form v-if="!shouldShowDesktopVersion" :action="guidancePath" :value="formData">
+    <no-js-form v-if="$store.state.device.isNativeApp" :action="guidancePath" :value="formData">
       <floating-button-bottom v-if="showBookAppointmentButton"
                               id="book-appointments-button"
                               @click.stop.prevent="onBookButtonClicked">
@@ -104,13 +104,6 @@ export default {
     guidancePath() {
       return APPOINTMENT_BOOKING_GUIDANCE.path;
     },
-    shouldShowDesktopVersion() {
-      return (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios');
-    },
-  },
-  asyncData({ store }) {
-    store.dispatch('myAppointments/clear');
-    return store.dispatch('myAppointments/load');
   },
   beforeDestroy() {
     this.$store.dispatch('myAppointments/clearAppointments');
@@ -120,6 +113,10 @@ export default {
       this.$store.app.$analytics.trackButtonClick(this.guidancePath, true);
       redirectTo(this, this.guidancePath, null);
     },
+  },
+  asyncData({ store }) {
+    store.dispatch('myAppointments/clear');
+    return store.dispatch('myAppointments/load');
   },
 };
 </script>
@@ -133,10 +130,6 @@ export default {
 
 div {
  &.desktopWeb {
-  .content {
-   max-width: 540px;
-   font-family: $default-web;
-  }
   p {
    font-family: $default-web;
    font-weight: lighter;
