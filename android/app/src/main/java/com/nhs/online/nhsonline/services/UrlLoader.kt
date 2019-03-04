@@ -12,6 +12,7 @@ class UrlLoader(
     private val baseURL: String
 ) {
     private val webJavascript = WebJavascript(webView)
+    var isLoadedPageNhsPage = false
     var reloadUrl: String? = null
     var usingAbsoluteUri: Boolean = true
 
@@ -21,7 +22,7 @@ class UrlLoader(
         if (usingAbsoluteUri || knownServices.isCIDRedirectUrl(uriToUse)) {
             loadPage(uriToUse)
         } else if (webView.url != null && (webView.url.contains(baseURL))) {
-            if (uriToUse == reloadUrl) {
+            if (!isLoadedPageNhsPage) {
                 loadPage(uriToUse)
             } else {
                 val path = getPath(pageEndPoint)

@@ -187,6 +187,9 @@ class WebClientInterceptor(
                 uiInteractor.showMenuBar()
             }
 
+
+            nhsWeb.isLoadedPageNhsPage = knownServices.isUrlHostSameAsHomeUrlHost(url)
+            uiInteractor.showWebviewScreen()
             if (!knownServices.isUrlHostSameAsHomeUrlHost(url))
                 uiInteractor.announcePageTitle(view?.title)
         }
@@ -301,4 +304,5 @@ class WebClientInterceptor(
         val serviceInfo = knownServices.findMatchingServiceInfo(failingUrl.toString())
         return serviceInfo?.errorMessage ?: knownServices.getServiceUnavailabilityError()
     }
+
 }

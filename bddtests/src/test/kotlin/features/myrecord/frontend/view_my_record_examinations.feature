@@ -34,3 +34,14 @@ Feature: View My Medical Record Information - Examinations
     When I enter url address for examinations detail directly into the url
     Then I am redirected to the my record page
     And I see the my record warning page
+
+  @native
+  Scenario: A VISION user navigates to the my examinations page and selects my record in the navigation bar
+    Given the my record wiremocks are initialised for VISION
+    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has multiple examinations
+    And I am on my record information page
+    When I click the examinations section
+    Then I see examinations information
+    When I return to my medical record page
+    Then I see the my medical record page
