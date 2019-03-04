@@ -36,5 +36,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
+
+        public IActionResult Visit(AppointmentCancelResult.InternalServerError internalServerError)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
     }
 }

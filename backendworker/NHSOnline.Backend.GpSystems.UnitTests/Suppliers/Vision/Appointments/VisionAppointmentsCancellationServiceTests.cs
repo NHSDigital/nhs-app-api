@@ -166,6 +166,31 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
         }
+
+        [TestMethod]
+        public async Task Cancel_VisionClientReturnsUnparsableMessage_ReturnsInternalServerError_ReturnsInternalServerError()
+        {
+            // Arrange
+            var response = new VisionPFSClient.VisionApiObjectResponse<CancelledAppointmentResponse>(HttpStatusCode.OK)
+            {
+                RawResponse = new VisionResponseEnvelope<CancelledAppointmentResponse>
+                {
+                    Body = new VisionResponseBody<CancelledAppointmentResponse>
+                    {
+                        VisionResponse = _fixture.Create<VisionResponse<CancelledAppointmentResponse>>()
+                    }
+                },
+                UnparsableResultMessage = "Could not parse"
+            };
+            MockVisionClientCancelAppointmentMethod(response);
+
+            // Act
+            var result = await _systemUnderTest.Cancel(_userSession, _request);
+
+            // Assert
+            _mockVisionClient.Verify();
+            result.Should().BeAssignableTo<AppointmentCancelResult.InternalServerError>();
+        }
         
         private void MockVisionClientCancelAppointmentMethod(
             VisionPFSClient.VisionApiObjectResponse<CancelledAppointmentResponse> response)

@@ -8,5 +8,6 @@
         T Visit(AppointmentBookResult.SupplierSystemUnavailable supplierSystemUnavailable);
         T Visit(AppointmentBookResult.BadRequest badRequest);
         T Visit(AppointmentBookResult.AppointmentLimitReached appointmentLimitReached);
+        T Visit(AppointmentBookResult.InternalServerError internalServerError);
     }
 }

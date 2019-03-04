@@ -86,6 +86,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         {
             if (slotsResponse.IsAccessDeniedError)
             {
+                _logger.LogError("Vision appointments disabled");
+                _logger.LogVisionErrorResponse(slotsResponse);
                 return new AppointmentSlotsResult.CannotBookAppointments();
             }
             
@@ -93,6 +95,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             {
                 _logger.LogError($"Call to VISION ({nameof(VisionAppointmentSlotsService)}) returned an unanticipated " +
                                  $"error with status code: '{slotsResponse.StatusCode}'. \n{slotsResponse.ErrorForLogging}");
+                _logger.LogVisionErrorResponse(slotsResponse);
                 return new AppointmentSlotsResult.SupplierSystemUnavailable();
             }
             

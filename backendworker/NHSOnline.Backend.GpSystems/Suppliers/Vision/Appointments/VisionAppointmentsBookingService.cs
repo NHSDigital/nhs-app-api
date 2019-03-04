@@ -75,8 +75,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             {
                 return new AppointmentBookResult.AppointmentLimitReached();
             }
+
+            if (response.UnparsableResultMessage != null)
+            {
+                return new AppointmentBookResult.InternalServerError();
+            }
             
             _logger.LogError($"Call to VISION book appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
+            _logger.LogVisionErrorResponse(response);
 
             return new AppointmentBookResult.SupplierSystemUnavailable();
         }

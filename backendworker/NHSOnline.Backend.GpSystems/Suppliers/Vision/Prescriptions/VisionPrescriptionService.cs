@@ -94,6 +94,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 }
                 
                 _logger.LogError($"Vision system encountered an error: { prescriptionsResponse.ErrorForLogging }");
+                _logger.LogVisionErrorResponse(prescriptionsResponse);
                 return new PrescriptionResult.SupplierSystemUnavailable();
             }
             catch (HttpRequestException e)
@@ -152,6 +153,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                         $"Vision response service content, " +
                         $"expected: { OrderNewPrescriptionResponse.OkResponseText }, " +
                         $"actual: { response.RawResponse.Body.VisionResponse.ServiceContent.Result }");
+                    _logger.LogVisionErrorResponse(response);
                     return new PrescriptionResult.SupplierSystemUnavailable();
                 }
                 

@@ -36,5 +36,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         {
             return new StatusCodeResult(CustomHttpStatusCodes.Status460LimitReached);
         }
+
+        public IActionResult Visit(AppointmentBookResult.InternalServerError internalServerError)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
     }
 }

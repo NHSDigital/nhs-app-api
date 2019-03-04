@@ -100,6 +100,32 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _mockVisionClient.Verify();
             result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
         }
+
+        [TestMethod]
+        public async Task GetAppointments_VisionClientReturnsUnparsableMessage_ReturnsInternalServerError()
+        {
+            // Arrange
+            var visionResponse = new VisionPFSClient.VisionApiObjectResponse<BookedAppointmentsResponse>(HttpStatusCode.OK)
+            {
+                RawResponse = new VisionResponseEnvelope<BookedAppointmentsResponse>
+                {
+                    Body = new VisionResponseBody<BookedAppointmentsResponse>
+                    {
+                        VisionResponse = _visionClientGetResponse
+                    }
+                },
+                UnparsableResultMessage = "Could not parse"
+            };
+
+            MockVisionClientAppointmentsGetMethod(visionResponse);
+
+            // Act
+            var result = await _systemUnderTest.GetAppointments(_visionUserSession);
+
+            // Assert
+            _mockVisionClient.Verify();
+            result.Should().BeAssignableTo<AppointmentsResult.InternalServerError>();
+        }
         
         [TestMethod]
         public async Task GetAppointments_VisionClientThrows_ReturnsSupplierSystemUnavailable()

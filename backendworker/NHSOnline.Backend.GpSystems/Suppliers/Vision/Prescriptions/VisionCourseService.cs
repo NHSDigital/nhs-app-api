@@ -87,6 +87,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 }
                 
                 _logger.LogError($"Vision system encountered an error: { coursesResponse.ErrorForLogging }");
+                _logger.LogVisionErrorResponse(coursesResponse);
 
                 return new GetCoursesResult.SupplierSystemUnavailable();
             }

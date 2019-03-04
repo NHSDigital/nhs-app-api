@@ -124,6 +124,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                     _logger.LogError("Error occurred when trying to obtain nhs number from get configuration. " +
                              $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " +
                              $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
+                    _logger.LogVisionErrorResponse(configResponse);
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
@@ -154,27 +155,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             if (response.IsInvalidRequestError)
             {
                 LogError<T>("Invalid Request");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionVerifyResult.InvalidRequest();
             }
 
             if (response.IsInvalidUserCredentialsError)
             {
                 LogError<T>("Invalid User Credentials");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionVerifyResult.InvalidUserCredentials();
             }
 
             if (response.IsInvalidSecurityHeaderError)
             {
                 LogError<T>("Invalid Security Error");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader();
             }
 
             if (response.IsUnknownError)
             {
                 LogError<T>("Unknown Error");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionVerifyResult.UnknownError();
             }
             LogError<T>("Other Error");
+            _logger.LogVisionErrorResponse(response);
             return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
         }
         
@@ -183,34 +189,40 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             if (response.IsAccountLockedError)
             {
                 LogError<T>("User account locked");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
             }
             
             if (response.IsAlreadyRegisteredError)
             {
                 LogError<T>("User already registered");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionRegisterResult.AccountAlreadyExists();
             }
             
             if (response.IsInvalidDetailsError)
             {
                 LogError<T>("Invalid supplied details");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionRegisterResult.NotFound();
             }
             
             if (response.IsInvalidParameterError)
             {
                 LogError<T>("Invalid supplied details");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionRegisterResult.BadRequest();
             }
 
             if (response.IsUnknownError)
             {
                 LogError<T>("Unknown error");
+                _logger.LogVisionErrorResponse(response);
                 return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
             }
 
             LogError<T>("Other Error");
+            _logger.LogVisionErrorResponse(response);
             return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
        }
         

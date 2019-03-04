@@ -100,5 +100,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.AppointmentLimitReached)}");
             }
         }
+
+        public async Task Visit(AppointmentBookResult.InternalServerError internalServerError)
+        {
+            try
+            {
+                await _auditor.Audit(AuditType, "Unable to book appointment due appointment limit reached for appointment " +
+                                                "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.InternalServerError)}");
+            }
+        }
     }
 }

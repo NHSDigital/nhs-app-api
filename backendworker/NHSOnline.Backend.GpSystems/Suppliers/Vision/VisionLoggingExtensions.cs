@@ -9,12 +9,25 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
     public static class VisionLoggingExtensions
     {
-        public static void LogVisionErrorResponse<T>(this ILogger logger, T response)
+        public static void LogVisionErrorResponse<T>(this ILogger logger, VisionPFSClient.VisionApiObjectResponse<T> response)
         {
-            if (IsResponseNull(logger, response)) return;
+            if (response == null)
+            {
+                logger.LogError("Vision Error Response: Null");
+                return;
+            }
+
             try
             {
-                logger.LogError("Vision Error Response: " + response.SerializeJson());
+                if (response.RawResponse != null)
+                {
+                    var censoredResponse = CensorResponse(response);
+                    logger.LogError("Vision Error Response: " + censoredResponse);
+                }
+                else
+                {
+                    logger.LogError("Vision Error Response: " + response.UnparsableResultMessage);
+                }
             }
             catch (Exception e)
             {
@@ -23,11 +36,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             }
         }
 
-        private static bool IsResponseNull<T>(ILogger logger, T response)
+        public static JObject CensorResponse<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
         {
-            if (null != response) return false;
-            logger.LogError("Call to Vision returned a null response");
-            return true;
+            var initialResponse = JObject.Parse(response.RawResponse.SerializeJson());
+            var properties = initialResponse.Descendants()
+                .OfType<JProperty>()
+                .ToList();
+
+            properties.ForEach(ReplaceGuid);
+
+            return initialResponse;
+        }
+
+        private static void ReplaceGuid(JProperty attribute)
+        {
+            attribute.Value = Regex.Replace(attribute.Value.ToString(), Constants.Regex.GuidRegex, "xxxxxx",
+                RegexOptions.IgnoreCase);
         }
     }
 }

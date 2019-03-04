@@ -50,6 +50,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
 
                         _logger.LogError(
                             $"Unsuccessful request retrieving demographics information for Vision. Status code: {(int) demographicsResponse.StatusCode}");
+                        _logger.LogVisionErrorResponse(demographicsResponse);
                         return new DemographicsResult.Unsuccessful();  
                     }
 

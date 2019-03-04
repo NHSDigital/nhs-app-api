@@ -98,5 +98,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.SupplierSystemUnavailable)}");
             }
         }
+
+        public async Task Visit(AppointmentCancelResult.InternalServerError internalServerError)
+        {
+            try
+            {
+                await _auditor.Audit(AuditType, "Unable to cancel appointment due to unavailable supplier for appointment " +
+                                                "with id: {0}", _appointmentId);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.InternalServerError)}");
+            }
+        }
     }
 }

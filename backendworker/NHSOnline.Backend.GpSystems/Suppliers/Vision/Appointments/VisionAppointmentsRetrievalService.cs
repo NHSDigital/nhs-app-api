@@ -67,13 +67,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         {
             if (response.IsAccessDeniedError)
             {
+                _logger.LogError("Vision appointments not enabled");
+                _logger.LogVisionErrorResponse(response);
                 return new AppointmentsResult.CannotViewAppointments();
+            }
+
+            if (response.UnparsableResultMessage != null)
+            {
+                return new AppointmentsResult.InternalServerError();
             }
             
             if (!response.HasSuccessResponse)
             {
                 _logger.LogError($"Call to VISION ({nameof(VisionAppointmentsRetrievalService)}) returned an unanticipated error " +
                                  $"with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
+                _logger.LogVisionErrorResponse(response);
                 return new AppointmentsResult.SupplierSystemUnavailable();
             }
             

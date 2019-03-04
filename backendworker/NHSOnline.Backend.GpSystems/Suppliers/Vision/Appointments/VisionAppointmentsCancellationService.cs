@@ -6,6 +6,7 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
+using Appointment = NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Appointment;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 {
@@ -70,9 +71,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             {
                 return new AppointmentCancelResult.AppointmentNotCancellable();
             }
+
+            if (response.UnparsableResultMessage != null)
+            {
+                return new AppointmentCancelResult.InternalServerError();
+            }
             
             _logger.LogError($"Call to VISION cancel appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
-            
+            _logger.LogVisionErrorResponse(response);
+
             return new AppointmentCancelResult.SupplierSystemUnavailable();
         }
     }

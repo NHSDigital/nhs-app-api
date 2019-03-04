@@ -311,11 +311,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 
             public VisionResponseEnvelope<TBody> RawResponse { get; set; }
 
+            public string UnparsableResultMessage { get; set; }
+
             public TBody Body => RawResponse.Body.VisionResponse.ServiceContent;
 
             public bool HasErrorResponse => !StatusCode.IsSuccessStatusCode()
                                             || FaultExists
-                                            || OutcomeUnsuccessful;
+                                            || OutcomeUnsuccessful
+                                            || UnparsableResultMessage != null;
 
             private Fault Fault => RawResponse?.Body?.Fault;
             private Outcome Outcome => RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome;
@@ -332,7 +335,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             public override string ErrorForLogging => $"fault: {JsonConvert.SerializeObject(Fault)}, " +
                                              $"error: {JsonConvert.SerializeObject(Outcome?.Error)}";
 
-            protected override bool FormatResponseIfUnsuccessful => false;
+            protected override bool FormatResponseIfUnsuccessful => true;
 
             public bool IsInvalidRequestError =>
                 (Fault?.Detail?.VisionFault?.Error?.Category ?? "").Contains("INVALID_REQUEST",
@@ -381,8 +384,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             {
                 try
                 {
-                    var responseObject = responseParser.ParseBody<VisionResponseEnvelope<TBody>>(stringResponse, responseMessage);
+                    var responseObject =
+                        responseParser.ParseBody<VisionResponseEnvelope<TBody>>(stringResponse, responseMessage);
                     RawResponse = responseObject;
+
+                    if (responseObject == null)
+                    {
+                        UnparsableResultMessage = stringResponse;
+                    }
+                }
+                catch (InvalidOperationException e)
+                {
+                    logger.LogError(e, $"Vision Error Response could not be parsed: : {stringResponse}" );
+                    UnparsableResultMessage = stringResponse;
                 }
                 catch (FormatException e)
                 {

@@ -51,5 +51,13 @@
                 return visitor.Visit(this);
             }
         }
+
+        public class InternalServerError : AppointmentCancelResult
+        {
+            public override T Accept<T>(IAppointmentCancelResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

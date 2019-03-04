@@ -184,6 +184,31 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
 
         [TestMethod]
+        public async Task Book_VisionClientReturnsUnparsableMessage_ReturnsInternalServerError()
+        {
+            // Arrange
+            var response = new VisionPFSClient.VisionApiObjectResponse<BookAppointmentResponse>(HttpStatusCode.OK)
+            {
+                RawResponse = new VisionResponseEnvelope<BookAppointmentResponse>
+                {
+                    Body = new VisionResponseBody<BookAppointmentResponse>
+                    {
+                        VisionResponse = _visionClientGetResponse
+                    }
+                },
+                UnparsableResultMessage = "Could not parse"
+            };
+            MockVisionClientAppointmentPostMethod(response);
+
+            // Act
+            var result = await _systemUnderTest.Book(_visionUserSession, _request);
+
+            // Assert
+            _mockVisionClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.InternalServerError>();
+        }
+
+        [TestMethod]
         public async Task Book_BookingReasonNotAllowed_ReturnsBadRequest()
         {
             // Arrange

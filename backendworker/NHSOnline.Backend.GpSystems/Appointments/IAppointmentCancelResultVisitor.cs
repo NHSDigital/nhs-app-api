@@ -8,5 +8,6 @@
         T Visit(AppointmentCancelResult.TooLateToCancel tooLateToCancel);
         T Visit(AppointmentCancelResult.InsufficientPermissions insufficientPermissions);
         T Visit(AppointmentCancelResult.SupplierSystemUnavailable supplierSystemUnavailable);
+        T Visit(AppointmentCancelResult.InternalServerError internalServerError);
     }
 }
