@@ -121,6 +121,7 @@ main.onboard .nhso_logo {
   margin-top: 6em;
   margin-bottom: 4em;
   box-sizing: border-box;
+  outline: none;
 }
 
 main.onboard .nhso_logo svg {

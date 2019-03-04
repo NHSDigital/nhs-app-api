@@ -68,6 +68,7 @@
 	.checkbox {
 		margin-right: 1em;
 		flex: 0 0 1.5em;
+    -webkit-appearance: none;
 	}
 	label {
 		padding-top: 0.125em;
@@ -96,10 +97,6 @@
 
 		&:checked + label::after {
 			content: "";
-		}
-
-		&:focus + label {
-			outline: $focus_highlight auto 5px;
 		}
 	}
 

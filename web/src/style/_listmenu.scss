@@ -19,7 +19,7 @@
 	}
 	li {
     :focus {
-      outline-color: $focus_highlight;
+      outline: none;
     }
 		p {
 			padding-bottom: 0.5em;
@@ -44,6 +44,7 @@
 			font-style: normal;
 		}
 		a.active {
+			outline: none;
 			text-decoration: underline;
 		}
 	}
