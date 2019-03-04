@@ -14,7 +14,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
     
     public class BookedAppointmentMapper: IBookedAppointmentMapper
     {
-        private const string SessionTypeSeparator = " - ";
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
         public BookedAppointmentMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
@@ -37,7 +36,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             
             foreach (var slot in bookedAppointments.Slots)
             {
-
                 if (!_dateTimeOffsetProvider.TryCreateDateTimeOffset(slot.DateTime, out var startTime))
                 {
                     continue;
@@ -53,15 +51,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                     StartTime = startTime.GetValueOrDefault(),
                     EndTime = GetEndTime(startTime, slot),
                     Location = location,
-                    Type = CreateTypeFromAppointmentAndSession(slotType, session),
                     Clinicians = GetClinician(slot.Owner, bookedAppointments.References?.Owners),
-                    DisableCancellation = CutOffBreached(currentTime, startTime, cancellationCutOffMinutes)
+                    DisableCancellation = CutOffBreached(currentTime, startTime, cancellationCutOffMinutes),
+                    Type = string.IsNullOrWhiteSpace(slotType) 
+                        ? string.Empty : slotType,
+                    SessionName = string.IsNullOrWhiteSpace(session) 
+                        ? string.Empty : session
                 });
             }
 
             return mappedAppointments;
         }
-
+        
         private static Dictionary<string, string> SetUpLocations(IEnumerable<Location> locations)
         {
             return locations == null
@@ -82,14 +83,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 ? new Dictionary<string, string>()
                 : sessions.ToDictionary(session => session.Id, session => session.Description);
         }
-        
-        private static string CreateTypeFromAppointmentAndSession(string slotType, string session)
-        {
-            var hasOnlyAppointmentSlotTypeOrSessionName =
-                string.IsNullOrEmpty(slotType) || string.IsNullOrEmpty(session);
-            return
-                $"{session}{(hasOnlyAppointmentSlotTypeOrSessionName ? string.Empty : SessionTypeSeparator)}{slotType}";
-        }
 
         private static IEnumerable<string> GetClinician(string ownerId, IEnumerable<Owner> owners)
         {
@@ -101,8 +94,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 
         private static DateTimeOffset? GetEndTime(DateTimeOffset? startTime, BookedSlot slot)
         {
-            return startTime.HasValue && int.TryParse(slot.Duration, out var mins)
-                ? (DateTimeOffset?)startTime.Value.AddMinutes(mins)
+            return startTime.HasValue && int.TryParse(slot.Duration, out var minutes)
+                ? (DateTimeOffset?)startTime.Value.AddMinutes(minutes)
                 : null;
         }
 

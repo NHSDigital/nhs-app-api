@@ -32,6 +32,7 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
                                 session.sessionDetails!!,
+                                "",
                                 slot.startTime!!,
                                 slot.endTime!!,
                                 session.location!!
@@ -43,6 +44,7 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
                                 session.sessionDetails!!,
+                                "",
                                 slot.startTime!!,
                                 slot.endTime!!,
                                 session.location!!,

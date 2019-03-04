@@ -1,1532 +1,1538 @@
 ---
   swagger: "2.0"
-  info: 
+  info:
     version: "0.0.6"
     title: "NHS App API"
     description: "This is the API for the NHS App."
-  schemes: 
+  schemes:
     - "https"
-  paths: 
-    /v1/configuration: 
-      get: 
-        tags: 
+  paths:
+    /v1/configuration:
+      get:
+        tags:
           - "configuration"
         summary: "Gets a collection of configuration values."
         description: "Gets a collection of configuration values."
-        produces: 
+        produces:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "query"
             name: "deviceName"
             type: "string"
             format: "string"
             required: true
             description: "name of the device (android or ios)"
-          - 
+          -
             in: "query"
             name: "nativeAppVersion"
             type: "string"
             format: "string"
             required: true
             description: "version number of the NHS App installed on the device"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns configuration for the app."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                isDeviceSupported: 
+              properties:
+                isDeviceSupported:
                   type: "boolean"
                   description: "Returns true if the version of NHS App installed on device is supported, otherwise false."
-                isThrottlingEnabled: 
+                isThrottlingEnabled:
                   type: "boolean"
                   description: "Returns true if throttling is enabled on the environment, otherwise false."
-                fidoServerUrl: 
+                fidoServerUrl:
                   type: "string"
                   description: "Returns the URL of the FIDO server for the given environemnt."
-          400: 
+          400:
             description: "Either the device name was not provided or the device version number was not in the correct format."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-    /v1/odscodelookup: 
-      get: 
-        tags: 
+    /v1/odscodelookup:
+      get:
+        tags:
           - "odscodelookup"
         summary: "Gets a boolean value to indicate if gp practice is participating in public beta"
         description: "Gets a boolean value to indicate if gp practice is participating in public beta"
-        produces: 
+        produces:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "query"
             name: "odsCode"
             type: "string"
             format: "string"
             required: true
             description: "ods code of gp practice"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns ods code lookup result for the practice"
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                isGPPracticeSupported: 
+              properties:
+                isGPPracticeSupported:
                   type: "boolean"
                   description: "Returns true if the GP Practice is participating"
-          400: 
+          400:
             description: "the ods code was not provided"
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-    /v1/patient/appointments: 
-      delete: 
-        tags: 
+    /v1/patient/appointments:
+      delete:
+        tags:
           - "appointments"
         summary: "Cancels an upcoming appointment for the logged on user."
         description: "Cancels a specified appointment for the logged on user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "AppointmentCancelRequest"
             required: true
             description: "Details of the appointment to be cancelled, along with reason for the booking being cancelled."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "appointmentId"
-              properties: 
-                appointmentId: 
+              properties:
+                appointmentId:
                   type: "string"
                   description: "Identifier of the appointment to be cancelled."
                   minLength: 1
-                cancellationReasonId: 
+                cancellationReasonId:
                   type: "string"
                   description: "Identifier of the reason for the appointment being cancelled. Array of valid cancellation reasons is returned when requesting a user's current appointments."
-        responses: 
-          204: 
+        responses:
+          204:
             description: "Successfully cancelled the specified appointment."
-          400: 
+          400:
             description: "Bad request. Supplied request is incomplete or invalid."
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          409: 
+          409:
             description: "The specified appointment does not exist or is not in a suitable state to be cancelled."
-          461: 
+          461:
             description: "It is too late to cancel this appointment."
-          500: 
+          500:
             description: "An unexpected error occurred during the processing of the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-      get: 
-        tags: 
+      get:
+        tags:
           - "appointments"
         summary: "Gets a list of existing appointments for the logged on user."
         description: "Returns list of booked appointments for the logged on user, and associated metadata including list of cancellation reasons that can be used to cancel upcoming appointments. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns list of booked appointments and associated meta data. Returns empty collection of appointments if GP system does not return a list of appointmetns."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                upcomingAppointments: 
+              properties:
+                upcomingAppointments:
                   type: "array"
                   description: "Array of booked upcoming Appointments."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Appointment Identifier."
-                      type: 
+                      type:
                         type: "string"
-                        description: "Type of appointment slot, e.g. \"Baby immunisations\"."
-                      startTime: 
+                        description: "Type of appointment slot, e.g. \"Baby Clinics\"."
+                      sessionName:
+                        type: "string"
+                        description: "Appointment session name, e.g. \"Dr Julia Godis Morning Appts\"."
+                      startTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment Start Date Time."
-                      endTime: 
+                      endTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment End Date Time."
-                      location: 
+                      location:
                         type: "string"
                         description: "Physical location of the appointment."
-                      clinicians: 
+                      clinicians:
                         type: "array"
                         description: "Array of Clinicians, accounts for joint sessions."
-                        items: 
+                        items:
                           type: "string"
-                      disableCancellation: 
+                      disableCancellation:
                         type: "boolean"
                         description: "Indicates the appointment cannot be cancelled."
-                pastAppointments: 
+                pastAppointments:
                   type: "array"
                   description: "Array of past Appointments."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Appointment Identifier."
-                      type: 
+                      type:
                         type: "string"
-                        description: "Type of appointment slot, e.g. \"Baby immunisations\"."
-                      startTime: 
+                        description: "Type of appointment slot, e.g. \"Baby Clinics\"."
+                      sessionName:
+                        type: "string"
+                        description: "Appointment session name, e.g. \"Dr Julia Godis Morning Appts\"."
+                      startTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment Start Date Time."
-                      endTime: 
+                      endTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment End Date Time."
-                      location: 
+                      location:
                         type: "string"
                         description: "Physical location of the appointment."
-                      clinicians: 
+                      clinicians:
                         type: "array"
                         description: "Array of Clinicians, accounts for joint sessions."
-                        items: 
+                        items:
                           type: "string"
-                cancellationReasons: 
+                cancellationReasons:
                   type: "array"
                   description: "Array of Cancellation Reasons."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Cancellation Reason Identifier."
-                      displayName: 
+                      displayName:
                         type: "string"
                         description: "Cancellation Reason Description."
-                disableCancellation: 
+                disableCancellation:
                   type: "boolean"
                   description: "Indicates whether appointment cancellation is disabled."
-                pastAppointmentsEnabled: 
+                pastAppointmentsEnabled:
                   type: "boolean"
                   description: "Indicates whether past appointments are enabled."
-          400: 
+          400:
             description: "Bad request. A querystring parameter is not in the expected format."
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-      post: 
-        tags: 
+      post:
+        tags:
           - "appointments"
         summary: "Creates a GP Appointment for the logged on user."
         description: "Books an appointment slot for the logged on user, given a slot identifier. Identifiers of available slots can be obtained using the appointment-slots endpoint. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "AppointmentBookRequest"
             required: true
             description: "Details of the appointment slot to be booked, along with reasons for the booking being made."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "slotId"
                 - "bookingReason"
-              properties: 
-                slotId: 
+              properties:
+                slotId:
                   type: "string"
                   description: "Identifier of appointment slot to be booked."
                   minLength: 1
-                bookingReason: 
+                bookingReason:
                   type: "string"
                   description: "Reason for booking appointment. e.g. symptoms being experienced by the patient."
                   minLength: 1
                   maxLength: 150
-                startTime: 
+                startTime:
                   type: "string"
                   format: "date-time"
                   description: "Appointment Start Date Time."
-                endTime: 
+                endTime:
                   type: "string"
                   format: "date-time"
                   description: "Appointment End Date Time."
-                telephoneNumber: 
+                telephoneNumber:
                   type: "string"
                   description: "Patient's phone number for telephone appointment."
-        responses: 
-          201: 
+        responses:
+          201:
             description: "Appointment successfully created."
-          400: 
+          400:
             description: "Bad request. Supplied request is incomplete or invalid."
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          409: 
+          409:
             description: "Conflict. The chosen appointment slot is not available for booking."
-          460: 
+          460:
             description: "The patient has reached the limit of pending appointments that may be booked."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-    /v1/patient/appointment-slots: 
-      get: 
-        tags: 
+    /v1/patient/appointment-slots:
+      get:
+        tags:
           - "appointment-slots"
         summary: "Gets a list of available appointments for the logged on user."
         description: "Returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                telephoneNumbers: 
+              properties:
+                telephoneNumbers:
                   type: "array"
                   description: "Patient's telephone numbers."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      telephoneNumber: 
+                    properties:
+                      telephoneNumber:
                         type: "string"
                         description: "Patient's telephone number."
-                guidanceMessage: 
+                guidanceMessage:
                   type: "string"
                   description: "Guidance message from GP practice explaining which appointment slot to book."
-                bookingReasonNecessity: 
+                bookingReasonNecessity:
                   type: "string"
-                  enum: 
+                  enum:
                     - "NotAllowed"
                     - "Optional"
                     - "Mandatory"
                   description: "Indicates whether the patient can supply a booking reason when making an appointment."
-                slots: 
+                slots:
                   type: "array"
                   description: "Available Appointment Slots."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Slot Identifier."
-                      type: 
+                      type:
                         type: "string"
                         description: "Type of appointment slot, e.g. \"Baby Clinics\"."
-                      sessionName: 
+                      sessionName:
                         type: "string"
                         description: "Appointment session name, e.g. \"Dr Julia Godis Morning Appts\"."
-                      startTime: 
+                      startTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment Slot Start Date Time."
-                      endTime: 
+                      endTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment Slot End Date Time."
-                      location: 
+                      location:
                         type: "string"
                         description: "Location of the appointment slot"
-                      clinicians: 
+                      clinicians:
                         type: "array"
                         description: "Array of Clinicians, accounts for joint sessions."
-                        items: 
+                        items:
                           type: "string"
-                      channel: 
+                      channel:
                         type: "string"
-                        enum: 
+                        enum:
                           - "Unknown"
                           - "Telephone"
                         description: "Indicates slot channel type supplied by GP practice"
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-    /v1/patient/courses: 
-      get: 
-        tags: 
+    /v1/patient/courses:
+      get:
+        tags:
           - "courses"
         summary: "Gets a list of prescriptions courses for the given patient."
         description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns list of courses and associated meta data. Returns empty collection of courses if GP system does not return a list of courses."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                courses: 
+              properties:
+                courses:
                   type: "array"
                   description: "An array of prescription courses"
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Course identifier."
-                      name: 
+                      name:
                         type: "string"
                         description: "Course name."
-                      details: 
+                      details:
                         type: "string"
                         description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
-                specialRequestNecessity: 
+                specialRequestNecessity:
                   type: "string"
-                  enum: 
+                  enum:
                     - "notAllowed"
                     - "optional"
                     - "mandatory"
                   description: "Indicates whether the patient can supply a special request when ordering a prescription."
-          401: 
+          401:
             description: "User session missing or expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-    /v1/patient/demographics: 
-      get: 
-        tags: 
+    /v1/patient/demographics:
+      get:
+        tags:
           - "demographics"
         summary: "Gets demographic information for the logged on user."
         description: "Returns personal details and address details for the logged-in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns demographic data for the logged in user."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                nhsNumber: 
+              properties:
+                nhsNumber:
                   type: "string"
                   description: "The patient's NHS number."
-                patientName: 
+                patientName:
                   type: "string"
                   description: "The patient's name."
-                dateOfBirth: 
+                dateOfBirth:
                   type: "string"
                   format: "date-time"
                   description: "The patient's date of birth."
-                sex: 
+                sex:
                   type: "string"
                   description: "The patient's sex."
-                address: 
+                address:
                   type: "string"
                   description: "The patient's address."
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-    /v1/patient/my-record: 
-      get: 
-        tags: 
+    /v1/patient/my-record:
+      get:
+        tags:
           - "myrecord"
         summary: "Gets the record for the logged on user."
         description: "Returns the users medical record for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns myrecord data for the logged in user."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                hasSummaryRecordAccess: 
+              properties:
+                hasSummaryRecordAccess:
                   type: "boolean"
                   description: "Shows if the patient has access to their summary record."
-                hasDetailedRecordAccess: 
+                hasDetailedRecordAccess:
                   type: "boolean"
                   description: "Shows if the patient has access to their detailed record."
-                supplier: 
+                supplier:
                   type: "string"
                   description: "supplier."
-                  enum: 
+                  enum:
                     - "UNKNOWN"
                     - "EMIS"
                     - "TPP"
                     - "VISION"
-                allergies: 
+                allergies:
                   type: "object"
                   description: "An object containing all allergy details."
-                  properties: 
-                    hasAccess: 
+                  properties:
+                    hasAccess:
                       type: "boolean"
                       description: "Does the patient have access to this data."
-                    hasErrored: 
+                    hasErrored:
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
-                    data: 
+                    data:
                       type: "array"
                       description: "An array of allergy information objects."
-                      items: 
+                      items:
                         type: "object"
-                        properties: 
-                          name: 
+                        properties:
+                          name:
                             type: "string"
                             description: "The name of the allergy."
-                          date: 
+                          date:
                             type: "object"
-                            properties: 
-                              value: 
+                            properties:
+                              value:
                                 type: "string"
                                 format: "date-time"
                                 description: "date/time value."
-                              datePart: 
+                              datePart:
                                 type: "string"
                                 description: "date part to display."
-                                enum: 
+                                enum:
                                   - "Unknown"
                                   - "Year"
                                   - "YearMonth"
                                   - "YearMonthDay"
                                   - "YearMonthDayTime"
-                          drug: 
+                          drug:
                             type: "string"
                             description: "The name of the drug responsible for the allergy."
-                          reaction: 
+                          reaction:
                             type: "string"
                             description: "The allergic reaction."
-                medications: 
+                medications:
                   type: "object"
                   description: "An object containing all medication details."
-                  properties: 
-                    hasAccess: 
+                  properties:
+                    hasAccess:
                       type: "boolean"
                       description: "Does the patient have access to this data."
-                    hasErrored: 
+                    hasErrored:
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
-                    data: 
+                    data:
                       type: "object"
-                      properties: 
-                        acuteMedications: 
+                      properties:
+                        acuteMedications:
                           type: "array"
                           description: "Array of acuteMedications"
-                          items: 
+                          items:
                             type: "object"
-                            properties: 
-                              date: 
+                            properties:
+                              date:
                                 type: "string"
                                 format: "date-time"
                                 description: "The date/time of the item."
-                              lineItems: 
+                              lineItems:
                                 type: "array"
                                 description: "An array of line items."
-                                items: 
+                                items:
                                   $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items"
-                        currentRepeatMedications: 
+                        currentRepeatMedications:
                           type: "array"
                           description: "Array of acuteMedications"
-                          items: 
+                          items:
                             $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
-                        discontinuedRepeatMedications: 
+                        discontinuedRepeatMedications:
                           type: "array"
                           description: "Array of acuteMedications"
-                          items: 
+                          items:
                             $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
-                immunisations: 
+                immunisations:
                   type: "object"
                   description: "An object containing all immunisation details."
-                  properties: 
-                    hasAccess: 
+                  properties:
+                    hasAccess:
                       type: "boolean"
                       description: "Does the patient have access to this data."
-                    hasErrored: 
+                    hasErrored:
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
-                    data: 
+                    data:
                       type: "object"
-                      properties: 
-                        immunisations: 
+                      properties:
+                        immunisations:
                           type: "array"
                           description: "Array of immunisations."
-                          items: 
+                          items:
                             type: "object"
-                            properties: 
-                              effectiveDate: 
+                            properties:
+                              effectiveDate:
                                 $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
-                              term: 
+                              term:
                                 type: "string"
                                 description: "The name of the immunisation."
-                testResults: 
+                testResults:
                   type: "object"
                   description: "An object containing all test result details."
-                  properties: 
-                    hasAccess: 
+                  properties:
+                    hasAccess:
                       type: "boolean"
                       description: "Does the patient have access to this data."
-                    hasErrored: 
+                    hasErrored:
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
-                    rawHtml: 
+                    rawHtml:
                       type: "string"
                       description: "When working with Vision, raw HTML is returned instead of XML data"
-                    data: 
+                    data:
                       type: "object"
-                      properties: 
-                        testResults: 
+                      properties:
+                        testResults:
                           type: "array"
                           description: "Array of test results"
-                          items: 
+                          items:
                             type: "object"
-                            properties: 
-                              id: 
+                            properties:
+                              id:
                                 type: "string"
                                 description: "Id of the test result"
-                              date: 
+                              date:
                                 $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
-                              description: 
+                              description:
                                 type: "string"
                                 description: "The name of the test result."
-                              associatedTexts: 
+                              associatedTexts:
                                 type: "array"
                                 description: "Array of associated texts."
-                                items: 
+                                items:
                                   type: "string"
-                              testResultChildItems: 
+                              testResultChildItems:
                                 type: "array"
                                 description: "Array of test result child line items."
-                                items: 
+                                items:
                                   type: "object"
-                                  properties: 
-                                    description: 
+                                  properties:
+                                    description:
                                       type: "string"
                                       description: "The name of the test result."
-                                    associatedTexts: 
+                                    associatedTexts:
                                       type: "array"
                                       description: "Array of associated texts."
-                                      items: 
+                                      items:
                                         type: "string"
-                diagnosis: 
+                diagnosis:
                   type: "object"
                   description: "Vision Only - An object containing Diagnosis markup to be rendered"
-                  properties: 
-                    hasAccess: 
+                  properties:
+                    hasAccess:
                       type: "boolean"
                       description: "Does the patient have access to this data."
-                    hasErrored: 
+                    hasErrored:
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
-                    rawHtml: 
+                    rawHtml:
                       type: "string"
                       description: "This is for Vision Only, contains Raw HTML to be rendered on the web"
-                problems: 
+                problems:
                   type: "object"
                   description: "An object containing all problems details."
-                  properties: 
-                    hasAccess: 
+                  properties:
+                    hasAccess:
                       type: "boolean"
                       description: "Does the patient have access to this data."
-                    hasErrored: 
+                    hasErrored:
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
-                    data: 
+                    data:
                       type: "object"
-                      properties: 
-                        problems: 
+                      properties:
+                        problems:
                           type: "array"
                           description: "Array of problems"
-                          items: 
+                          items:
                             type: "object"
-                            properties: 
-                              effectiveDate: 
+                            properties:
+                              effectiveDate:
                                 $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
-                              lineItems: 
+                              lineItems:
                                 type: "array"
                                 description: "An array of line items."
-                                items: 
+                                items:
                                   type: "object"
-                                  properties: 
-                                    text: 
+                                  properties:
+                                    text:
                                       type: "string"
                                       description: "When the record was entered."
-                                    lineItems: 
+                                    lineItems:
                                       type: "array"
                                       description: "An array of line items"
-                                      items: 
+                                      items:
                                         type: "string"
-                tppDcrEvents: 
+                tppDcrEvents:
                   type: "object"
                   description: "An object containing all tpp dcr event details."
-                  properties: 
-                    hasAccess: 
+                  properties:
+                    hasAccess:
                       type: "boolean"
                       description: "Does the patient have access to this data."
-                    hasErrored: 
+                    hasErrored:
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
-                    data: 
+                    data:
                       type: "object"
-                      properties: 
-                        problems: 
+                      properties:
+                        problems:
                           type: "array"
                           description: "Array of problems"
-                          items: 
+                          items:
                             type: "object"
-                            properties: 
-                              effectiveDate: 
+                            properties:
+                              effectiveDate:
                                 type: "string"
                                 format: "date-time"
                                 description: "date/time value."
-                              eventLocationAndDoneBy: 
+                              eventLocationAndDoneBy:
                                 type: "string"
                                 description: "Event location and done by"
-                              eventItems: 
+                              eventItems:
                                 type: "array"
                                 description: "Array of event items"
-                                items: 
+                                items:
                                   type: "string"
-                consultations: 
+                consultations:
                   type: "object"
                   description: "An object containing all consultation details."
-                  properties: 
-                    hasAccess: 
+                  properties:
+                    hasAccess:
                       type: "boolean"
                       description: "Does the patient have access to this data."
-                    hasErrored: 
+                    hasErrored:
                       type: "boolean"
                       description: "Some error occurred when attempting to retrieve this error."
-                    data: 
+                    data:
                       type: "object"
-                      properties: 
-                        problems: 
+                      properties:
+                        problems:
                           type: "array"
                           description: "Array of problems"
-                          items: 
+                          items:
                             type: "object"
-                            properties: 
-                              effectiveDate: 
+                            properties:
+                              effectiveDate:
                                 $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
-                              consultantLocation: 
+                              consultantLocation:
                                 type: "string"
                                 description: "Consultant Location and Name"
-                              consultationHeaders: 
+                              consultationHeaders:
                                 type: "array"
                                 description: "An array of consultationHeader."
-                                items: 
+                                items:
                                   type: "object"
-                                  properties: 
-                                    header: 
+                                  properties:
+                                    header:
                                       type: "string"
                                       description: "Consultation Header"
-                                    observationsWithTerm: 
+                                    observationsWithTerm:
                                       type: "array"
                                       description: "An array of observations."
-                                      items: 
+                                      items:
                                         type: "object"
-                                        properties: 
-                                          term: 
+                                        properties:
+                                          term:
                                             type: "string"
                                             description: "Observation Term"
-                                          associatedTexts: 
+                                          associatedTexts:
                                             type: "array"
                                             description: "An array of associated texts."
-                                            items: 
+                                            items:
                                               type: "string"
-                                    associatedTexts: 
+                                    associatedTexts:
                                       type: "array"
                                       description: "An array of associated texts."
-                                      items: 
+                                      items:
                                         type: "string"
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/my-record/section: 
-      get: 
-        tags: 
+    /v1/patient/my-record/section:
+      get:
+        tags:
           - "myrecord section"
         summary: "Gets a specific section from the record for the logged on user."
         description: "Returns only the specified section from the users medical record for the logged in user (Vision only). Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "query"
             name: "section"
             type: "string"
-            enum: 
+            enum:
               - "TestResults"
               - "Diagnosis"
             required: true
             description: "specific section to return"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns specified myrecord section for the logged in user."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                markup: 
+              properties:
+                markup:
                   type: "string"
                   description: "Markup for specified section (will be either HTML or XML)"
-                sectionName: 
+                sectionName:
                   type: "string"
                   description: "Name of section requested"
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/ndop: 
-      get: 
-        tags: 
+    /v1/patient/ndop:
+      get:
+        tags:
           - "ndop"
         summary: "Request Ndop Token"
         description: "Returns a signed Jwt token to be passed to Ndop Web Page"
-        consumes: 
+        consumes:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Token successfully created."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                token: 
+              properties:
+                token:
                   type: "string"
                   description: "signed Jwt Token"
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-    /v1/patient/organdonation: 
-      get: 
-        tags: 
+    /v1/patient/organdonation:
+      get:
+        tags:
           - "organDonation"
         summary: "Get the existing organ donation and user demographic information."
         description: "Returns the user's organ donation record."
-        consumes: 
+        consumes:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Successfully retrieved the user's organ donation record."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                identifier: 
+              properties:
+                identifier:
                   type: "string"
                   description: "User's organ donation identifier."
-                nhsNumber: 
+                nhsNumber:
                   type: "string"
                   description: "User's nhs number from the GP System."
-                nameFull: 
+                nameFull:
                   type: "string"
                   description: "User's full name."
-                name: 
+                name:
                   type: "object"
                   description: "User's name object."
-                  properties: 
-                    title: 
+                  properties:
+                    title:
                       type: "string"
                       description: "User's title from the GP System."
-                    givenName: 
+                    givenName:
                       type: "string"
                       description: "User's given name from the GP System."
-                    surname: 
+                    surname:
                       type: "string"
                       description: "User's surname from the GP System."
-                gender: 
+                gender:
                   type: "string"
                   description: "User's gender from the GP System."
-                dateOfBirth: 
+                dateOfBirth:
                   type: "string"
                   format: "date"
                   description: "User's date of birth from the GP System."
-                addressFull: 
+                addressFull:
                   type: "string"
                   description: "User's full address."
-                address: 
+                address:
                   type: "object"
                   description: "User's address from the GP System."
-                  properties: 
-                    text: 
+                  properties:
+                    text:
                       type: "string"
                       description: "User's address from the GP System."
-                    postcode: 
+                    postcode:
                       type: "string"
                       description: "User's postcode from the GP System."
-                emailAddress: 
+                emailAddress:
                   type: "string"
                   description: "User's email address from nhs login."
-                decision: 
+                decision:
                   type: "string"
-                  enum: 
+                  enum:
                     - "Unknown"
                     - "OptIn"
                     - "OptOut"
                   description: "User's organ donation decision."
-                decisionDetails: 
+                decisionDetails:
                   type: "object"
                   description: "User's organ donation decision."
-                  properties: 
-                    all: 
+                  properties:
+                    all:
                       type: "boolean"
                       description: "User's agreed to donate all organs."
-                    choices: 
+                    choices:
                       description: "User's individual organ donation choices."
-                      additionalProperties: 
+                      additionalProperties:
                         type: "string"
-                        enum: 
+                        enum:
                           - "NotStated"
                           - "Yes"
                           - "No"
                         description: "Value of the choice."
-                      example: 
+                      example:
                         heart: "Yes"
                         lungs: "NotStated"
                         kidney: "No"
-                faithDeclaration: 
+                faithDeclaration:
                   type: "string"
-                  enum: 
+                  enum:
                     - "NotStated"
                     - "Yes"
                     - "No"
                   description: "User's faith decision."
-                state: 
+                state:
                   type: "string"
-                  enum: 
+                  enum:
                     - "NotFound"
                     - "Ok"
                     - "Conflicted"
                   description: "User's organ donation record state"
-          401: 
+          401:
             description: "User session missing or expired."
-          403: 
+          403:
             description: "User forbidden access to GP System demographics."
-          409: 
+          409:
             description: "Conflicts on organ donation record."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-      post: 
-        tags: 
+      post:
+        tags:
           - "organDonation"
         summary: "Creates a user's organ donation record"
         description: "Creates the user's organ donation record and returns the record identifier."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             required: true
             name: "organDonationRegistrationRequest"
             description: "Details of the organ donation registration request."
-            schema: 
+            schema:
               $ref: "#/paths/~1v1~1patient~1organdonation/put/parameters/0/schema"
-        responses: 
-          201: 
+        responses:
+          201:
             description: "Successfully created the organ donation record and returned the record identifier."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                identifier: 
+              properties:
+                identifier:
                   type: "string"
                   description: "User's organ donation identifier."
-                state: 
+                state:
                   type: "string"
-                  enum: 
+                  enum:
                     - "NotFound"
                     - "Ok"
                     - "Conflicted"
                   description: "User's organ donation record state"
-          400: 
+          400:
             description: "Bad request. Supplied request is incomplete or invalid."
-          401: 
+          401:
             description: "User session missing or expired."
-          409: 
+          409:
             description: "Conflicts on organ donation record."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-      put: 
-        tags: 
+      put:
+        tags:
           - "organDonation"
         summary: "Amends a user's organ donation record"
         description: "Amends the user's organ donation record and returns the record identifier."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             required: true
             name: "organDonationRegistrationRequest"
             description: "Details of the organ donation registration request."
-            schema: 
+            schema:
               type: "object"
               description: "Details of the organ donation registration request."
-              properties: 
-                registration: 
+              properties:
+                registration:
                   type: "object"
-                  properties: 
-                    identifier: 
+                  properties:
+                    identifier:
                       type: "string"
                       description: "User's organ donation identifier."
-                    nhsNumber: 
+                    nhsNumber:
                       type: "string"
                       description: "User's nhs number from the GP System."
-                    name: 
+                    name:
                       $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/schema/properties/name"
-                    gender: 
+                    gender:
                       type: "string"
                       description: "User's gender from the GP System."
-                    dateOfBirth: 
+                    dateOfBirth:
                       type: "string"
                       format: "date"
                       description: "User's date of birth from the GP System."
-                    addressFull: 
+                    addressFull:
                       type: "string"
                       description: "User's full address."
-                    address: 
+                    address:
                       $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/schema/properties/address"
-                    emailAddress: 
+                    emailAddress:
                       type: "string"
                       description: "User's email address from nhs login."
-                    decision: 
+                    decision:
                       type: "string"
-                      enum: 
+                      enum:
                         - "OptIn"
                         - "OptOut"
                       description: "User's organ donation decision."
-                    decisionDetails: 
+                    decisionDetails:
                       $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/200/schema/properties/decisionDetails"
-                    faithDeclaration: 
+                    faithDeclaration:
                       type: "string"
-                      enum: 
+                      enum:
                         - "NotStated"
                         - "Yes"
                         - "No"
                       description: "User's faith decision."
-                additionalDetails: 
+                additionalDetails:
                   type: "object"
-                  properties: 
-                    religionId: 
+                  properties:
+                    religionId:
                       type: "string"
                       description: "The identifier for the select religion."
-                    ethnicityId: 
+                    ethnicityId:
                       type: "string"
                       description: "The identifier for the select ethnicity."
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Successfully amended the organ donation record and returned the record identifier."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                identifier: 
+              properties:
+                identifier:
                   type: "string"
                   description: "User's organ donation identifier."
-                state: 
+                state:
                   type: "string"
-                  enum: 
+                  enum:
                     - "NotFound"
                     - "Ok"
                     - "Conflicted"
                   description: "User's organ donation record state"
-          400: 
+          400:
             description: "Bad request. Supplied request is incomplete or invalid."
-          401: 
+          401:
             description: "User session missing or expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-    /v1/patient/organdonation/referencedata: 
-      get: 
-        tags: 
+    /v1/patient/organdonation/referencedata:
+      get:
+        tags:
           - "organDonation"
         summary: "Get the reference data required for registering an organ donation decision."
         description: "Returns the reference data for titles, genders, religions, ethnicities and withdrawal reasons."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Successfully retrieved the organ donation reference data."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                ethnicities: 
+              properties:
+                ethnicities:
                   type: "array"
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/schema/properties/titles/items"
-                genders: 
+                genders:
                   type: "array"
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/schema/properties/titles/items"
-                titles: 
+                titles:
                   type: "array"
-                  items: 
+                  items:
                     type: "object"
                     description: "Contains data for a select box option"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "The identifier for the select option."
-                      displayName: 
+                      displayName:
                         type: "string"
                         description: "The value to be displayed to the user."
-                religions: 
+                religions:
                   type: "array"
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/schema/properties/titles/items"
-                withdrawReasons: 
+                withdrawReasons:
                   type: "array"
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1organdonation~1referencedata/get/responses/200/schema/properties/titles/items"
-          401: 
+          401:
             description: "User session missing or expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-    /v1/patient/prescriptions: 
-      post: 
-        tags: 
+    /v1/patient/prescriptions:
+      post:
+        tags:
           - "prescriptions"
         summary: "Creates a repeat prescription request for the logged in user"
         description: "For the given logged on user, will request a repeat prescription for a list of prescription courses. Requires NHSO-Session-Id cookie in header from session endpoint."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "RepeatPrescriptionRequest"
             required: true
             description: "Repeat prescription request details to be created."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "courseIds"
-              properties: 
-                courseIds: 
+              properties:
+                courseIds:
                   type: "array"
                   description: "Array of course identifiers to create the prescription for."
-                  items: 
+                  items:
                     type: "string"
-                specialRequest: 
+                specialRequest:
                   type: "string"
                   description: "Optional free text that a user may supply in order to add a special request for the given prescription"
-        responses: 
-          201: 
+        responses:
+          201:
             description: "Successful operation. Repeat Prescription Created."
-          400: 
+          400:
             description: "Bad request. Supplied connection details or request data is incomplete or invalid."
-          401: 
+          401:
             description: "User session missing or expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          409: 
+          409:
             description: "Conflict. A repeat prescription for the given course already exists preventing a new one to be created."
-          466: 
+          466:
             description: "The patient is trying to order medication which has already been ordered within the last 30 days."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-      get: 
-        tags: 
+      get:
+        tags:
           - "prescriptions"
         summary: "Gets a list of requested repeat prescriptions for the logged on user."
         description: "For a given date range, returns a list of courses and repeat prescriptions for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
-        produces: 
+        produces:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "query"
             name: "fromDate"
             type: "string"
             format: "date-time"
             required: false
             description: "Repeat Prescription from date. Will default to 6 months ago if no value is supplied"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns list of requested repeat prescriptions and associated meta data. Returns empty collection of repeat prescriptions if GP system does not return a list of prescriptions."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                prescriptions: 
+              properties:
+                prescriptions:
                   type: "array"
                   description: "Array of repeat prescriptions."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      courses: 
+                    properties:
+                      courses:
                         type: "array"
                         description: "Array of prescription courses."
-                        items: 
+                        items:
                           type: "object"
-                          properties: 
-                            courseId: 
+                          properties:
+                            courseId:
                               type: "string"
                               description: "Course identifier."
-                      orderDate: 
+                      orderDate:
                         type: "string"
                         format: "date-time"
                         description: "The date on which the repeat prescription was ordered."
-                      status: 
+                      status:
                         type: "string"
-                        enum: 
+                        enum:
                           - "Unknown"
                           - "Rejected"
                           - "Requested"
                           - "Approved"
-                courses: 
+                courses:
                   type: "array"
                   description: "Array of prescription courses."
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1courses/get/responses/200/schema/properties/courses/items"
-          400: 
+          400:
             description: "Bad request. All headers must be provided."
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-    /v1/patient/terms-and-conditions/consent: 
-      get: 
-        tags: 
+    /v1/patient/terms-and-conditions/consent:
+      get:
+        tags:
           - "termsAndConditions"
         summary: "Gets the patient consent for the logged on user."
         description: "Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns patient consent data for the logged in user."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "consentGiven"
-              properties: 
-                updatedConsentRequired: 
+              properties:
+                updatedConsentRequired:
                   type: "boolean"
                   description: "Flag indicating whether the terms and conditions have changed since last consent"
-                consentGiven: 
+                consentGiven:
                   type: "boolean"
                   description: "Flag indicating whether the user has consented to the terms and conditions"
-                analyticsCookieAccepted: 
+                analyticsCookieAccepted:
                   type: "boolean"
                   description: "Flag indicating whether the user has consented to the use of analytics"
-          463: 
+          463:
             description: "Unable to fetch consent at this time."
-      post: 
-        tags: 
+      post:
+        tags:
           - "termsAndConditions"
         summary: "Records patient consent and date of consent"
         description: "Records whether the logged in user has given their consent to use the app and date and time of consent"
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "ConsentRequest"
             required: true
             description: "Object indicating whether consent has been granted, and the date the request was made."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "consentGiven"
                 - "analyticsCookieAccepted"
-              properties: 
-                consentGiven: 
+              properties:
+                consentGiven:
                   type: "boolean"
                   description: "Flag indicating whether the user has consented to the terms and conditions"
-                analyticsCookieAccepted: 
+                analyticsCookieAccepted:
                   type: "boolean"
                   description: "Flag indicating whether the user has consented to the use of analytics"
-                updatingConsent: 
+                updatingConsent:
                   type: "boolean"
                   description: "Flag indicating whether the user is consenting to updated terms and conditions"
-        responses: 
-          201: 
+        responses:
+          201:
             description: "Appointment successfully created."
-          462: 
+          462:
             description: "Unable to record consent at this time."
-    /v1/patient/test-result: 
-      get: 
-        tags: 
+    /v1/patient/test-result:
+      get:
+        tags:
           - "test result"
         summary: "Returns a string which contains html from TPP for the selected test result."
-        produces: 
+        produces:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "query"
             name: "testResultId"
             type: "string"
             required: true
             description: "id of selected test result"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns html for selected test result from TPP"
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                hasErrored: 
+              properties:
+                hasErrored:
                   type: "boolean"
                   description: "Shows if error occurred getting test result from TPP"
-                testResult: 
+                testResult:
                   type: "string"
                   description: "html represenation of test result data"
-          400: 
+          400:
             description: "Bad request. A querystring parameter is not in the expected format."
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-    /v1/gpsearch: 
-      post: 
-        tags: 
+    /v1/gpsearch:
+      post:
+        tags:
           - "gpsearch"
         summary: "Search for Gp Practices"
         description: "Returns Response object containing list of GP Practices"
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "GpSearchRequest"
             required: true
             description: "Search Term to be used when searching for GP Practices"
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "searchTerm"
-              properties: 
-                searchTerm: 
+              properties:
+                searchTerm:
                   type: "string"
                   description: "Search Term"
                   minLength: 1
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Search Executed Successfully"
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                organisations: 
+              properties:
+                organisations:
                   type: "array"
                   description: "Array of organisations matched in search"
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      organisationName: 
+                    properties:
+                      organisationName:
                         type: "string"
                         description: "Name of practice"
-                      address1: 
+                      address1:
                         type: "string"
                         description: "Address line 1"
-                      address2: 
+                      address2:
                         type: "string"
                         description: "Address line 2"
-                      address3: 
+                      address3:
                         type: "string"
                         description: "Address line 3"
-                      city: 
+                      city:
                         type: "string"
                         description: "City"
-                      county: 
+                      county:
                         type: "string"
                         description: "County"
-                      postcode: 
+                      postcode:
                         type: "string"
                         description: "Postcode"
-                      nacsCode: 
+                      nacsCode:
                         type: "string"
                         description: "ODSCode"
-                organisationQueryCount: 
+                organisationQueryCount:
                   type: "integer"
                   description: "Total count of Gp Practices in query"
-          400: 
+          400:
             description: "Bad request. Supplied request is incomplete or invalid."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-    /v1/brothermailer: 
-      post: 
-        tags: 
+    /v1/brothermailer:
+      post:
+        tags:
           - "brothermailer"
         summary: "Signup to Brothermailer"
         description: "Returns status code indicating if signup to brothermailer was successful"
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "BrothermailerRequest"
             required: true
             description: "Details of OdsCode and Email Address used for signup to Brothermailer"
-            schema: 
+            schema:
               type: "object"
               description: "Brothermailer Request"
-              properties: 
-                emailAddress: 
+              properties:
+                emailAddress:
                   type: "string"
                   description: "Email Address to signup with"
-                odsCode: 
+                odsCode:
                   type: "string"
                   description: "Ods Code of selected GP Practice"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Successfully signed up"
-          400: 
+          400:
             description: "Bad request. Supplied request is incomplete or invalid."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-    /v1/session: 
-      post: 
-        tags: 
+    /v1/session:
+      post:
+        tags:
           - "session"
         summary: "Creates a user session for an authenticated user."
         description: "Given an OAuth authorisation code and PKCE code verifier, creates and returns a user session."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "userSession"
             required: true
             description: "OAuth details for the session to be created."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "authCode"
                 - "codeVerifier"
                 - "redirectUrl"
-              properties: 
-                authCode: 
+              properties:
+                authCode:
                   type: "string"
                   description: "OAuth authorization code."
-                codeVerifier: 
+                codeVerifier:
                   type: "string"
                   description: "PKCE code verifier."
-                redirectUrl: 
+                redirectUrl:
                   type: "string"
                   description: "Redirect url provided when signing in to Citizen ID"
-        responses: 
-          201: 
+        responses:
+          201:
             description: "Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                name: 
+              properties:
+                name:
                   type: "string"
                   description: "User's name"
-                sessionTimeout: 
+                sessionTimeout:
                   type: "integer"
                   description: "User's session timeout period in seconds."
-                odsCode: 
+                odsCode:
                   type: "string"
                   description: "Unique code that identifies a user's GP practice"
-                token: 
+                token:
                   type: "string"
                   description: "User's session CsrfToken"
-                nhsNumber: 
+                nhsNumber:
                   type: "string"
                   description: "User's NHS number"
-                accessToken: 
+                accessToken:
                   type: "string"
                   description: "User's access token which allows NHS Login to identify them"
-          400: 
+          400:
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
-          403: 
+          403:
             description: "Forbidden. Can occur if the IM1 connection token received from Citizen ID does not successfully authenticate with the GP system."
-          464: 
+          464:
             description: "ODS code associated with a user is not supported or no nhs number found."
-          465: 
+          465:
             description: "User did not meet the minimum age requirement."
-          500: 
+          500:
             description: "An unexpected error occurred during the processing of the request."
-          502: 
+          502:
             description: "Bad response received from upstream system."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
-      delete: 
-        tags: 
+      delete:
+        tags:
           - "session"
         summary: "Deletes a user session for an authenticated user."
         description: "Given a valid session cookie deletes the users session and signs the user out. Requires NHSO-Session-Id cookie obtained from post session endpoint."
-        responses: 
-          204: 
+        responses:
+          204:
             description: "Successfully deleted session and user signed out"
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred during the processing of the request."
-          502: 
+          502:
             description: "Session storage is unavailable"
-    /v1/session/extend: 
-      post: 
-        tags: 
+    /v1/session/extend:
+      post:
+        tags:
           - "session"
         summary: "Extends a user session for an authenticated user."
         description: "Extends a user session for an authenticated user, by calling an upstream endpoint. Requires NHSO-Session-Id cookie obtained from post session endpoint."
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Successfully extended."
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred during the processing of the request."
-          502: 
+          502:
             description: "Could not extend service. Can occur if already timed out, or there is a problem with the request."
-          504: 
+          504:
             description: "Timeout when calling upstream system."
 

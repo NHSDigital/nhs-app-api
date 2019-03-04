@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@my
 @backend
 Feature: My appointments backend
   In order control my booked appointments

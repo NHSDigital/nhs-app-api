@@ -1,4 +1,4 @@
-@appointment
+@appointments
 @noJs
 Feature: Appointment Service with no Javascript
 

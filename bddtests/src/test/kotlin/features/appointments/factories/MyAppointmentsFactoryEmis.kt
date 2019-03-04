@@ -34,7 +34,8 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
-                                "${session.sessionType} - ${slot.slotTypeName}",
+                                slot.slotTypeName!!,
+                                session.sessionType!!,
                                 slot.startTime!!,
                                 slot.endTime!!,
                                 session.location!!,
@@ -48,7 +49,8 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
-                                "${session.sessionType} - ${slot.slotTypeName}",
+                                slot.slotTypeName!!,
+                                session.sessionType!!,
                                 slot.startTime!!,
                                 slot.endTime!!,
                                 session.location!!,
@@ -87,7 +89,6 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
         val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
-        val slotDetails = "${session.sessionType} - ${slot.slotTypeName}"
         val location = session.location
         val cliniciansNames: ArrayList<String> = ArrayList()
         session.staffDetails.forEach { staff ->
@@ -96,7 +97,8 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
         return Slot(
                 date = date,
                 time = time,
-                slotType = slotDetails,
+                sessionName = session.sessionType!!,
+                slotType = slot.slotTypeName!!,
                 location = location!!,
                 clinicians = HashSet(cliniciansNames),
                 id = slot.slotId

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support.Temporal;
@@ -45,6 +46,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 appointment.EndTime = endTime;
                 appointment.Location = sourceAppointment.SiteName;
                 appointment.Type = sourceAppointment.Details;
+                appointment.SessionName = string.Empty;
+                appointment.Clinicians = Array.Empty<string>();
 
                 yield return appointment;
             }

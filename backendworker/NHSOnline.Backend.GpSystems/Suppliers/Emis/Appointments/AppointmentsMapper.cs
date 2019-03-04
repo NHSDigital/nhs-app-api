@@ -24,7 +24,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentsMapper> _logger;
-        private const string SessionTypeSeparator = " - ";
 
         public AppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<AppointmentsMapper> logger)
         {
@@ -62,6 +61,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 
                 var endTime = ParseSlotTime(sourceAppointment.EndTime, "End");
                 var sessionId = sourceAppointment.SessionId;
+                var sessionName = FindSession(sessionId, keyedSessions)?.SessionName;
 
                 var appointment = DateTime.Now >= startTime
                     ? (Appointment) new PastAppointment()
@@ -72,19 +72,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 appointment.EndTime = endTime;
                 appointment.Clinicians = FindCliniciansForSession(sessionId, keyedSessions, sessionHolders);
                 appointment.Location = FindLocationForSession(sessionId, keyedSessions, locations);
-                appointment.Type = CreateTypeFromAppointmentAndSession(sourceAppointment,
-                    FindSession(sessionId, keyedSessions));
+                appointment.Type = string.IsNullOrWhiteSpace(sourceAppointment.SlotTypeName)
+                    ? string.Empty : sourceAppointment.SlotTypeName;
+                appointment.SessionName = string.IsNullOrWhiteSpace(sessionName) 
+                    ? string.Empty : sessionName;
 
                 appointments.Add(appointment);
             }
 
             return appointments;
-        }
-
-        private static string CreateTypeFromAppointmentAndSession(Models.Appointment appointment, Models.Session session)
-        {
-            var hasOnlyAppointmentSlotTypeOrSessionName = string.IsNullOrEmpty(appointment.SlotTypeName) || string.IsNullOrEmpty(session?.SessionName);
-            return $"{session?.SessionName}{(hasOnlyAppointmentSlotTypeOrSessionName ? string.Empty : SessionTypeSeparator)}{appointment.SlotTypeName}";
         }
 
         private static IEnumerable<string> FindCliniciansForSession(

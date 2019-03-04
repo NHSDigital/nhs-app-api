@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@book
 @noJs
 Feature: Book an available appointment slot UI without Javascript
   In order to complete a booking appointment

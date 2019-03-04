@@ -36,14 +36,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         [TestMethod]
         public void Map_HappyPath_ReturnsAnArrayOfAppointments()
         {
+            var appointmentTime1 = new AppointmentTime(Tomorrow().At("14:20"));
+            var appointmentTime2 = new AppointmentTime(Tomorrow().At("14:40"));
+            var appointmentTime3 = new AppointmentTime(Tomorrow().At("15:20"));
 
-            var appt1 = new AppointmentTime(Tomorrow().At("14:20"));
-            var appt2 = new AppointmentTime(Tomorrow().At("14:40"));
-            var appt3 = new AppointmentTime(Tomorrow().At("15:20"));
-
-            var appointment1 = CreateAppointment("0547d0000",appt1.Start.AsTppDateTimeString(), appt1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
-            var appointment2 = CreateAppointment("0647d0000", appt2.Start.AsTppDateTimeString(), appt2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
-            var appointment3 = CreateAppointment("0747d0000", appt3.Start.AsTppDateTimeString(), appt3.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+            var appointment1 = CreateAppointment("0547d0000",appointmentTime1.Start.AsTppDateTimeString(), appointmentTime1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+            var appointment2 = CreateAppointment("0647d0000", appointmentTime2.Start.AsTppDateTimeString(), appointmentTime2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+            var appointment3 = CreateAppointment("0747d0000", appointmentTime3.Start.AsTppDateTimeString(), appointmentTime3.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointments = new[] { appointment1, appointment2, appointment3 }.ToList();
 
@@ -55,25 +54,28 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     {
                         Id = "0547d0000",
                         Type =  "Clinician: Dr House",
-                        EndTime = appt1.End,
+                        EndTime = appointmentTime1.End,
                         Location = "The Frankenstein Place",
-                        StartTime = appt1.Start
+                        StartTime = appointmentTime1.Start,
+                        SessionName = string.Empty
                     },
                 new Backend.GpSystems.Appointments.Models.UpcomingAppointment
                     {
                         Id = "0647d0000",
                         Type =  "Clinician: Dr House",
-                        EndTime = appt2.End,
+                        EndTime = appointmentTime2.End,
                         Location = "The Frankenstein Place",
-                        StartTime = appt2.Start
+                        StartTime = appointmentTime2.Start,
+                        SessionName = string.Empty
                     },
                 new Backend.GpSystems.Appointments.Models.UpcomingAppointment
                     {
                         Id = "0747d0000",
                         Type =  "Clinician: Dr House",
-                        EndTime = appt3.End,
+                        EndTime = appointmentTime3.End,
                         Location = "The Frankenstein Place",
-                        StartTime = appt3.Start
+                        StartTime = appointmentTime3.Start,
+                        SessionName = string.Empty
                     }
             };
 
@@ -109,10 +111,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         [DataRow("2018-05-09T9:59:19")]
         public void Map_ReturnsResponseWithoutEndTime_WhenEndTimeInAppointmentIsInInvalidFormat(string invalidEndTime)
         {
-            var apptStart = Tomorrow().At("14:40");
             // Arrange
+            var appointmentStart = Tomorrow().At("14:40");
             var appointment =
-                CreateAppointment("0547d0000", apptStart.AsTppDateTimeString(), invalidEndTime, "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0547d0000", appointmentStart.AsTppDateTimeString(), invalidEndTime, "Clinician: Dr House", "The Frankenstein Place");
 
             var appointments = new[] { appointment }.ToList();
 
@@ -128,7 +130,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     Type =  "Clinician: Dr House",
                     EndTime = null,
                     Location = "The Frankenstein Place",
-                    StartTime = apptStart
+                    StartTime = appointmentStart,
+                    SessionName = string.Empty
                 }
             };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -137,14 +140,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         [TestMethod]
         public void Map_AppointmentsAreAppropriateConcreteTypeBasedOnStartTime()
         {
-            var appt1 = new AppointmentTime(_dateTimeOffsetProvider.CreateDateTimeOffset().SetTimeToMidnight().AddDays(-1));
-            var appt2 = new AppointmentTime(Tomorrow().At("14:20"));
+            var appointmentTime1 = new AppointmentTime(_dateTimeOffsetProvider.CreateDateTimeOffset().SetTimeToMidnight().AddDays(-1));
+            var appointmentTime2 = new AppointmentTime(Tomorrow().At("14:20"));
 
             var appointment1 =
-                CreateAppointment("0547d0000", appt1.Start.AsTppDateTimeString(), appt1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0547d0000", appointmentTime1.Start.AsTppDateTimeString(), appointmentTime1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointment2 =
-                CreateAppointment("0647d0000", appt2.Start.AsTppDateTimeString(), appt2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0647d0000", appointmentTime2.Start.AsTppDateTimeString(), appointmentTime2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointments = new[] { appointment1, appointment2 }.ToList();
 
@@ -159,16 +162,18 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     Id = "0547d0000",
                     Type =  "Clinician: Dr House",
                     Location = "The Frankenstein Place",
-                    StartTime = appt1.Start,
-                    EndTime = appt1.End
+                    StartTime = appointmentTime1.Start,
+                    EndTime = appointmentTime1.End,
+                    SessionName = string.Empty
                 },
                 new NHSOnline.Backend.GpSystems.Appointments.Models.UpcomingAppointment
                 {
                     Id = "0647d0000",
                     Type =  "Clinician: Dr House",
                     Location = "The Frankenstein Place",
-                    StartTime = appt2.Start,
-                    EndTime = appt2.End
+                    StartTime = appointmentTime2.Start,
+                    EndTime = appointmentTime2.End,
+                    SessionName = string.Empty
                 }
             };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -180,15 +185,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         [DataRow("2018-05-09T9:59:19")]
         public void Map_ReturnsResponseWithoutAppointment_WhenStartTimeInAppointmentIsInInvalidFormat(string invalidStartTime)
         {
-            var appt1 = new AppointmentTime(Tomorrow().At("14:20"));
-            var appt2 = new AppointmentTime(Tomorrow().At("14:40"));
+            var appointmentTime1 = new AppointmentTime(Tomorrow().At("14:20"));
+            var appointmentTime2 = new AppointmentTime(Tomorrow().At("14:40"));
 
             // Arrange
             var appointment1 =
-                CreateAppointment("0547d0000", invalidStartTime, appt1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0547d0000", invalidStartTime, appointmentTime1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointment2 =
-                CreateAppointment("0647d0000", appt2.Start.AsTppDateTimeString(), appt2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0647d0000", appointmentTime2.Start.AsTppDateTimeString(), appointmentTime2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointments = new[] { appointment1, appointment2 }.ToList();
 
@@ -203,8 +208,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     Id = "0647d0000",
                     Type =  "Clinician: Dr House",
                     Location = "The Frankenstein Place",
-                    StartTime = appt2.Start,
-                    EndTime = appt2.End
+                    StartTime = appointmentTime2.Start,
+                    EndTime = appointmentTime2.End,
+                    SessionName = string.Empty
                 }
             };
             actualResponse.Should().BeEquivalentTo(expectedResponse);

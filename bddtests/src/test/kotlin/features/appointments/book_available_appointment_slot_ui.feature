@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@book
 Feature: Book an available appointment slot UI with Javascript
   In order to complete a booking appointment
   As a logged in user

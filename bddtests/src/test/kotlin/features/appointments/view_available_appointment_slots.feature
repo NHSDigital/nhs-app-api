@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@view
 Feature: View available appointment slots
   Users can view available appointments from the available appointments Page.
 

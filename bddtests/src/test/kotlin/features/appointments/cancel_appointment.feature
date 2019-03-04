@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@cancel
 Feature: Ability to cancel an appointment
 
   Scenario Outline: <GP System> user is presented with the cancel appointment screen with a drop-down

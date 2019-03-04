@@ -116,20 +116,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 new UpcomingAppointment
                 {
                     Id = "SLOTX01",
-                    Type =  $"{_generalSession.Description} - {_slotTypeWithDescription.Description}",
+                    Type =  _slotTypeWithDescription.Description,
                     Location = _location1.Name,
                     StartTime = slotTime1.Start, 
                     EndTime = slotTime1.End,
-                    Clinicians = new []{ _owner1.Name }
+                    Clinicians = new []{ _owner1.Name },
+                    SessionName = _generalSession.Description
                 },
                 new UpcomingAppointment
                 {
                     Id = "SLOTX02",
-                    Type =  $"{_generalSession.Description}",
+                    Type =  string.Empty,
                     Location = _location2.Name,
                     StartTime = slotTime2.Start,
                     EndTime = slotTime2.End,
-                    Clinicians = new []{ _owner2.Name }
+                    Clinicians = new []{ _owner2.Name },
+                    SessionName = _generalSession.Description
                 }
             };
 
@@ -209,11 +211,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 new UpcomingAppointment
                 {
                     Id = "SLOTX02",
-                    Type =  _generalSession.Description,
+                    Type =  _slotTypeWithoutDescription.Description,
                     Location = _location2.Name,
                     StartTime = slotTime2.Start,
                     EndTime = slotTime2.End,
-                    Clinicians = new[] { _owner2.Name }
+                    Clinicians = new[] { _owner2.Name },
+                    SessionName = _generalSession.Description
                 }
             };
 
@@ -279,28 +282,29 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 new UpcomingAppointment
                 {
                     Id = "SLOTX01",
-                    Type = $"{_generalSession.Description} - {_slotTypeWithDescription.Description}",
+                    Type = _slotTypeWithDescription.Description,
                     Location = _location1.Name,
                     StartTime = slotTime1.Start, 
                     EndTime = slotTime1.End,
                     Clinicians = new []{ _owner1.Name },
-                    DisableCancellation = true
+                    DisableCancellation = true,
+                    SessionName = _generalSession.Description
                 },
                 new UpcomingAppointment
                 {
                     Id = "SLOTX02",
-                    Type = $"{_generalSession.Description}",
+                    Type = string.Empty,
                     Location = _location2.Name,
                     StartTime = slotTime2.Start,
                     EndTime = slotTime2.End,
                     Clinicians = new []{ _owner2.Name },
-                    DisableCancellation = false
+                    DisableCancellation = false,
+                    SessionName = _generalSession.Description
                 }
             };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse.ToList());
         }
-
         
         private DateTimeOffset Tomorrow()
         {

@@ -28,7 +28,7 @@ open class CancelAppointmentSteps {
     @Steps
     lateinit var navigation: NavigationSteps
 
-    lateinit var cancelAppointmentPage: CancelAppointmentPage
+    private lateinit var cancelAppointmentPage: CancelAppointmentPage
 
     lateinit var headerNative: HeaderNative
 
@@ -42,14 +42,10 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyTheCorrectAppointmentDetailsAreDisplayed() {
-        val expectedSlot = retrieveSlotOfAppointmentToCancel()
-        assertEquals("Date", expectedSlot.date, cancelAppointmentPage.selectedAppointmentDate.element.text.trimEnd())
-        assertEquals("Time", expectedSlot.time, cancelAppointmentPage.selectedAppointmentTime.element.text)
-        assertEquals("Slot Name", expectedSlot.slotType,
-                cancelAppointmentPage.selectedAppointmentSlotName.element.text)
-        assertEquals("location", expectedSlot.location,
-                cancelAppointmentPage.selectedAppointmentLocation.element.text)
-        assertEquals(expectedSlot.clinicians, cancelAppointmentPage.getSelectedAppointmentClinicianText())
+        val expectedSlot = retrieveSlotOfAppointmentToCancel().copy(id = null)
+        val areCliniciansExpected = expectedSlot.clinicians.isNotEmpty()
+        val actualSlot = cancelAppointmentPage.getAppointmentSlot(areCliniciansExpected)
+        assertEquals("Exact expected Appointment not found. ", expectedSlot, actualSlot)
     }
 
     @Step

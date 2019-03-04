@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@book
 @backend
 Feature: Book appointments API
   In order to visit a clinician

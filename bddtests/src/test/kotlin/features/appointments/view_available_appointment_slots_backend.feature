@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@view
 @backend
 Feature: View available appointment slots backend
   In order book appointment

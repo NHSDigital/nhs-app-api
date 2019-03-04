@@ -1,6 +1,5 @@
 package pages.appointments
 
-import models.Slot
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
@@ -69,8 +68,6 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    private val selectedAppointmentParentXpath = "//div[@aria-label='selected appointment']"
-
     val telephoneError = HybridPageElement(
             webDesktopLocator = "//*[@data-purpose='telephone-error']",
             webMobileLocator = "//*[@data-purpose='telephone-error']",
@@ -100,11 +97,6 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     fun describeTelephoneNumber(telephoneNumber: String) {
         telephoneNumberDiv.element.type<WebElementFacade>(telephoneNumber)
         hideKeyboardIfOnMobile()
-    }
-
-    fun getAppointmentSlot(areCliniciansExpected: Boolean = false): Slot {
-        val slotsArray = getAllSlots(selectedAppointmentParentXpath, areCliniciansExpected)
-        return slotsArray[0]
     }
 
     fun assertRadioButtonDisplayedForPhoneNumber(phoneNumber: String) {

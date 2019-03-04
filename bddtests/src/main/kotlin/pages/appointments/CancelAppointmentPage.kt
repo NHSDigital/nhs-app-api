@@ -7,19 +7,19 @@ import pages.HybridPageElement
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments")
 class CancelAppointmentPage : AppointmentSharedElementsPage() {
 
-    val checkDetailsText = HybridPageElement(
+    private val checkDetailsText = HybridPageElement(
             webDesktopLocator = "//div[@data-purpose='info']/p",
             androidLocator = null,
             page = this
     )
 
-    val dropDownMenuLabel = HybridPageElement(
+    private val dropDownMenuLabel = HybridPageElement(
             webDesktopLocator = "//label[@for='txt_reason']",
             androidLocator = null,
             page = this
     )
 
-    val dropDownMenu = HybridPageElement(
+    private val dropDownMenu = HybridPageElement(
             webDesktopLocator = "//select[@id='txt_reason']",
             androidLocator = null,
             page = this

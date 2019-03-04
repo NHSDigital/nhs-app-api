@@ -13,7 +13,8 @@
     </div>
 
     <div :class="$style.appointmentContainer">
-      <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false" />
+      <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false"
+                   aria-label="selected appointment" />
     </div>
     <form-post :action="appointmentCancelPath">
       <input :value="appointment.id" type="hidden" name="id">

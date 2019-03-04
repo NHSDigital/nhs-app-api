@@ -13,48 +13,21 @@ import java.util.*
 open class AppointmentSharedElementsPage : HybridPageObject() {
     private val xPathRoot = "//*"
     private val relativeToParentXPath = ".//*"
-    private val appointmentDateXpath = "[@data-label='date']"
-    protected val appointmentTimeXpath = "[@data-label='start time']"
-    protected val appointmentSessionNameXpath = "[@data-label='session name']"
-    private val appointmentSlotTypeXpath = "[@data-label='slot type']"
-    private val appointmentLocationXpath = "[@data-label='location']"
-    private val appointmentCliniciansXPath = "[contains(@data-label, 'clinician')]"
+    private val dataLabelXpath = "[@data-label='%s']"
+    private val appointmentDateXpath = String.format(dataLabelXpath, "date")
+    protected val appointmentTimeXpath = String.format(dataLabelXpath, "start time")
+    protected val appointmentSessionNameXpath = String.format(dataLabelXpath, "session name")
+    private val appointmentSlotTypeXpath = String.format(dataLabelXpath, "slot type")
+    private val appointmentLocationXpath = String.format(dataLabelXpath, "location")
+    private val appointmentCliniciansXPath = "[starts-with(@data-label, 'clinician')]"
+
+    private val selectedAppointmentParentXpath = "//div[@aria-label='selected appointment']"
 
     val reasonError = HybridPageElement(
             webDesktopLocator = "//*[@data-purpose='reason-error']",
             androidLocator = null,
             page = this,
             helpfulName = "Reason Error"
-    )
-
-    val selectedAppointmentDate = HybridPageElement(
-            webDesktopLocator = xPathRoot + appointmentDateXpath,
-            androidLocator = null,
-            page = this
-    )
-
-    val selectedAppointmentTime = HybridPageElement(
-            webDesktopLocator = xPathRoot + appointmentTimeXpath,
-            androidLocator = null,
-            page = this
-    )
-
-    val selectedAppointmentSlotName = HybridPageElement(
-            webDesktopLocator = xPathRoot + appointmentSlotTypeXpath,
-            androidLocator = null,
-            page = this
-    )
-
-    val selectedAppointmentSessionName = HybridPageElement(
-            webDesktopLocator = xPathRoot + appointmentSessionNameXpath,
-            androidLocator = null,
-            page = this
-    )
-
-    val selectedAppointmentLocation = HybridPageElement(
-            webDesktopLocator = xPathRoot + appointmentLocationXpath,
-            androidLocator = null,
-            page = this
     )
 
     fun getDateTimestampsOfSlots(appointmentListParentXpath: String): List<Long> {
@@ -79,8 +52,9 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
         return slotList
     }
 
-    fun getSelectedAppointmentClinicianText(): Set<String> {
-        return findAllByXpath(xPathRoot + appointmentCliniciansXPath).map { element -> element.text }.toSet()
+    open fun getAppointmentSlot(areCliniciansExpected: Boolean = false): Slot {
+        val slotsArray = getAllSlots(selectedAppointmentParentXpath, areCliniciansExpected)
+        return slotsArray[0]
     }
 
     private fun convertToSlotObject(parentContainer: WebElementFacade,

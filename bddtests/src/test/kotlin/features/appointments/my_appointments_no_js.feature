@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@my
 @noJs
 Feature: My appointments UI without Javascript
   Users can view their upcoming and past appointments in the My Appointments screen.

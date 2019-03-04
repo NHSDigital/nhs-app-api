@@ -1,4 +1,5 @@
-@appointment
+@appointments
+@cancel
 @backend
 Feature: Ability to cancel an appointment via api
 
