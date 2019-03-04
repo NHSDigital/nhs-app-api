@@ -2,11 +2,11 @@ package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.data.organDonation.OrganDecisions
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import pages.assertIsVisible
 import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.set
-import mocking.organDonation.models.KeyValuePair
+import pages.assertIsVisible
 import pages.organDonation.OrganDonationViewRegistrationPage
 
 open class OrganDonationViewRegistrationStepDefinitions {
@@ -149,7 +149,7 @@ open class OrganDonationViewRegistrationStepDefinitions {
     fun theDecisionToOptInToOrganDonationWithSomeOrgansHasBeenSuccessfullyUpdated() {
         organDonationViewRegistrationPage.assertCreatedBanner()
         val organsToDonate = OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
-                .getOrFail<ArrayList<KeyValuePair<String, Boolean>>>()
+                .getOrFail<OrganDecisions>()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsSome(organsToDonate)
     }
 }

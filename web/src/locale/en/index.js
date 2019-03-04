@@ -873,6 +873,7 @@ export default {
       decisionDetails: {
         chosenHeader: 'You have chosen to donate:',
         notChosenHeader: 'You have chosen not to donate:',
+        notStatedHeader: 'We do not have a decision for:',
         choices: {
           heart: 'Heart',
           lungs: 'Lungs',

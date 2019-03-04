@@ -138,7 +138,34 @@ Feature: Organ Donation - Amend
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
 
-  Scenario: A user who opted to not donate their organs can amend it to donate all
+  Scenario: A user who opted to donate some organs but did not make a decision for all of them can amend their selection
+    Given I am a EMIS user registered to donate some organs, with some undecided, who amends their decision
+    And I am logged in
+    When I navigate to the internal Organ Donation Page
+    Then the Organ Donation View Registration page is displayed with my existing decision of some
+    When I choose to amend my Organ Donation decision
+    Then the internal Organ Donation Choice Page is displayed
+    And I choose to donate my organs
+    Then the Organ Donation Your Choice page is displayed
+    And the some organs option is selected
+    And I click the 'Continue' button
+    Then the Organ Donation Specific Organ Choice page is displayed
+    And my previous decisions are displayed on the Organ Donation Specific Organ Choice page
+    When I choose which organs to donate
+    And I click the 'Continue' button
+    Then the Organ Donation Faith And Beliefs page is displayed
+    And the previous option on the Organ Donation Faith And Beliefs page is selected
+    And I click the 'Continue' button
+    Then the Organ Donation Decision Additional Details page is displayed
+    When I click the 'Continue' button
+    Then the Organ Donation Check Details page is displayed
+    And my specific organ donation choices are displayed on the Organ Donation Check Details page
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'Yes I want to be a donor' button
+    Then the Organ Donation View Registration page is displayed
+    And the decision to opt in to organ donation with some organs has been successfully created
+
+  Scenario: A user opted to not donate their organs can amend it to donate all
     Given I am a EMIS user registered as opt-out who then amends their decision to opt-in
     And I am logged in
     When I navigate to the internal Organ Donation Page

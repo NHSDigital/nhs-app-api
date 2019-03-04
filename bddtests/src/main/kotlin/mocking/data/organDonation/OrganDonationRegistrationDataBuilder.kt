@@ -38,12 +38,34 @@ object OrganDonationRegistrationDataBuilder {
     fun optInSome(patient: Patient, organDonationDemographics: OrganDonationDemographics? = null): Resource {
         val resource = build(patient, organDonationDemographics)
         resource.organDonationDecision = "opt-in"
-        val donationWishes = hashMapOf<String, String>()
-        someOrgansExistingListNotUpdated()
-                .forEach { organChoice -> donationWishes.put(map(organChoice.key), organChoice.value) }
-        donationWishes["all"] = "no"
-        resource.donationWishes = donationWishes
+        val organsToDonate = OrganDecisions(
+                optIn = arrayListOf("Heart", "Kidney", "Liver", "Pancreas", "Small bowel"),
+                optOut = arrayListOf("Lungs", "Corneas", "Tissue"))
+        OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING.set(organsToDonate)
+        resource.donationWishes = createDonationWishes(organsToDonate)
         return resource
+    }
+
+    fun optInSomeNotAllDecided(patient: Patient, organDonationDemographics: OrganDonationDemographics? = null):
+            Resource {
+        val resource = build(patient, organDonationDemographics)
+        resource.organDonationDecision = "opt-in"
+        val organsToDonate = OrganDecisions(
+                optIn = arrayListOf("Heart", "Kidney", "Liver", "Lungs", "Pancreas"),
+                optOut = arrayListOf("Corneas"),
+                notStated = arrayListOf("Tissue", "Small bowel"))
+        OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING.set(organsToDonate)
+        resource.donationWishes = createDonationWishes(organsToDonate)
+        return resource
+    }
+
+    private fun createDonationWishes(organList:OrganDecisions): HashMap<String, String> {
+        val donationWishes = hashMapOf<String, String>()
+        organList.optIn.forEach { organChoice -> donationWishes.put(map(organChoice), "yes") }
+        organList.optOut.forEach { organChoice -> donationWishes.put(map(organChoice), "no") }
+        organList.notStated.forEach { organChoice -> donationWishes.put(map(organChoice), "not-stated") }
+        donationWishes["all"] = "no"
+        return donationWishes
     }
 
     fun appointRepresentative(patient: Patient): Resource {
@@ -52,35 +74,12 @@ object OrganDonationRegistrationDataBuilder {
         return resource
     }
 
-    private fun someOrgansExistingListNotUpdated(): HashMap<String, String> {
-        val organsToDonate = arrayListOf(
-                KeyValuePair("Heart", true),
-                KeyValuePair("Lungs", false),
-                KeyValuePair("Kidney", true),
-                KeyValuePair("Liver", true),
-                KeyValuePair("Corneas", false),
-                KeyValuePair("Pancreas", true),
-                KeyValuePair("Tissue", false))
-        OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING.set(organsToDonate)
-        val decision = hashMapOf<String, String>()
-        organsToDonate.forEach { organ -> decision.put(organ.key, if (organ.value) "yes" else "no") }
-        return decision
-    }
-
-    fun someOrgansListUpdated(): HashMap<String, String> {
-        val organsToDonate = arrayListOf(
-                KeyValuePair("Heart", true),
-                KeyValuePair("Lungs", false),
-                KeyValuePair("Kidney", true),
-                KeyValuePair("Liver", true),
-                KeyValuePair("Corneas", false),
-                KeyValuePair("Pancreas", true),
-                KeyValuePair("Tissue", false),
-                KeyValuePair("Small bowel", false))
+    fun someOrgansListUpdated(): OrganDecisions{
+        val organsToDonate = OrganDecisions(
+                optIn = arrayListOf("Heart", "Kidney", "Liver","Pancreas"),
+                optOut = arrayListOf("Lungs", "Corneas", "Tissue", "Small bowel"))
         OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED.set(organsToDonate)
-        val decision = hashMapOf<String, String>()
-        organsToDonate.forEach { organ -> decision.put(organ.key, if (organ.value) "yes" else "no") }
-        return decision
+        return organsToDonate
     }
 
     private val mapUiLabelToMock = hashMapOf("Small bowel" to "smallBowel")
@@ -144,3 +143,7 @@ object OrganDonationRegistrationDataBuilder {
         return CodeableConcept(listOf(Coding(pair.key, pair.value)))
     }
 }
+
+data class OrganDecisions(var optIn:ArrayList<String>,
+                          var optOut: ArrayList<String>,
+                          var notStated: ArrayList<String> = arrayListOf())

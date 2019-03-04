@@ -37,6 +37,10 @@ class OrganDonationSpecificOrganChoice(val title:String, page: HybridPageObject)
         radioButtons.assertSelected(getLabel(decision))
     }
 
+    fun assertUnselected() {
+        radioButtons.assertAllUnselected()
+    }
+
     private fun getLabel(decision: Boolean): String {
         return if (decision) "Yes" else "No"
     }

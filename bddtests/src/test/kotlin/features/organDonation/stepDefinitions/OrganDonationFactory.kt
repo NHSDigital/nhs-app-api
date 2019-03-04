@@ -61,6 +61,13 @@ class OrganDonationFactory(val gpSystem: String) {
         return registration
     }
 
+    fun existingOptInSomeNotAllDecided(organDonationDemographics: OrganDonationDemographics? = null): Resource {
+        val registration = OrganDonationRegistrationDataBuilder.optInSomeNotAllDecided(patient,
+                organDonationDemographics)
+        existing(registration)
+        return registration
+    }
+
     fun lookUpRegistrationWithSuccessfulDemographics(patient: Patient? = null,
                                                      action: (OrganDonationLookupRegistrationBuilder) -> Mapping) {
         val patientToUse = patient ?: setupPatient()

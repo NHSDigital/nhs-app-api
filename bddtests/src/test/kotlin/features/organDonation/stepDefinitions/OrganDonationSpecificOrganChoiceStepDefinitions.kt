@@ -2,10 +2,10 @@ package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.data.organDonation.OrganDecisions
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.set
-import mocking.organDonation.models.KeyValuePair
 import pages.organDonation.OrganDonationSpecificOrganChoicePage
 
 open class OrganDonationSpecificOrganChoiceStepDefinitions {
@@ -16,9 +16,12 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
     fun iChooseWhichOrgansToDonate() {
         val organsToDonate =
                 OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
-                        .getOrFail<ArrayList<KeyValuePair<String, Boolean>>>()
-        organsToDonate.forEach { organ ->
-            organDonationYourChoicePage.chooseOption(organ.key, organ.value)
+                        .getOrFail<OrganDecisions>()
+        organsToDonate.optIn.forEach { organ ->
+            organDonationYourChoicePage.chooseOption(organ, true)
+        }
+        organsToDonate.optOut.forEach { organ ->
+            organDonationYourChoicePage.chooseOption(organ, false)
         }
         OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING.set(organsToDonate)
     }
@@ -40,9 +43,9 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
 
         val organToDonate =
                 OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
-                        .getOrFail<ArrayList<KeyValuePair<String, Boolean>>>().first()
+                        .getOrFail<OrganDecisions>().optIn.first()
 
-        organDonationYourChoicePage.chooseOption(organToDonate.key, organToDonate.value)
+        organDonationYourChoicePage.chooseOption(organToDonate, true)
         organDonationYourChoicePage.clickContinue()
         organDonationYourChoicePage.validationBanner.assertVisible(errorMessage)
 
@@ -60,9 +63,16 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
     fun myPreviousDecisionsAreDisplayedOnTheOrganDonationSpecificOrganChoicePage() {
         val organsToDonate =
                 OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING
-                        .getOrFail<ArrayList<KeyValuePair<String, Boolean>>>()
-        organsToDonate.forEach { organ ->
-            organDonationYourChoicePage.assertOrganOption(organ.key, organ.value)
+                        .getOrFail<OrganDecisions>()
+
+        organsToDonate.optIn.forEach { organ ->
+            organDonationYourChoicePage.assertOrganOption(organ, true)
+        }
+        organsToDonate.optOut.forEach { organ ->
+            organDonationYourChoicePage.assertOrganOption(organ, false)
+        }
+        organsToDonate.notStated.forEach { organ ->
+            organDonationYourChoicePage.assertOrganOption(organ, null)
         }
     }
 

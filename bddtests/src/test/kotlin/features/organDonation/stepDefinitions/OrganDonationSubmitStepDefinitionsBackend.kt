@@ -3,6 +3,7 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.set
@@ -35,11 +36,13 @@ class OrganDonationSubmitStepDefinitionsBackend {
     }
 
     @Given("^I am a (\\w+) api user who wants to donate some but not all organs$")
-    fun iAmAUserWhoWantsToDonateSomeButNotAllOrgans(gpSystem: String){
+    fun iAmAUserWhoWantsToDonateSomeButNotAllOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
-        factory.create { registration->registration.some {
-            request -> request.respondWithSuccess("NewOrganDonationId") }}
+        factory.create { registration ->
+            registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated())
+            { request -> request.respondWithSuccess("NewOrganDonationId") }
+        }
     }
 
     @When("^I submit my decision to organ donation$")

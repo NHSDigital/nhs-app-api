@@ -4,7 +4,6 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.getOrFail
-import mocking.organDonation.models.KeyValuePair
 import mocking.organDonation.models.OrganDonationDemographics
 import pages.assertIsVisible
 import pages.organDonation.OrganDonationCheckDetailsPage
@@ -43,11 +42,10 @@ open class OrganDonationCheckDetailsDefinitions {
     }
 
     @Then("^my specific organ donation choices are displayed on the Organ Donation Check Details page")
-    fun mySpecificOrganDonationChoicesAreDisplayedOnTheOrganDonaitonCheckDetailsPage(){
-        val organsToDonate =
+    fun mySpecificOrganDonationChoicesAreDisplayedOnTheOrganDonationCheckDetailsPage(){
+        organDonationCheckDetailsPage.yourDecisionModule.assertDecisionIsSome(
                 OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
-                        .getOrFail<ArrayList<KeyValuePair<String, Boolean>>>()
-        organDonationCheckDetailsPage.yourDecisionModule.assertDecisionIsSome(organsToDonate)
+                .getOrFail())
     }
 
     @Then("^my ethnicity is recorded on the Organ Donation Check Details page")

@@ -2,6 +2,7 @@ package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Given
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
+import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.set
 import mocking.organDonation.models.FaithDeclaration
@@ -33,7 +34,7 @@ open class OrganDonationAmendStepDefinitions {
         val existingRegistration = factory.existingOptIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.some {
+        factory.amend { registration->registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
@@ -94,8 +95,22 @@ open class OrganDonationAmendStepDefinitions {
         val existingRegistration = factory.existingOptInSome()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.some {
+        factory.amend { registration->registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
+    }
+
+    @Given("I am a (.*) user registered to donate some organs, with some undecided, who amends their decision")
+    fun iAmRegisteredWithOrganDonationAsSomeButAmendTheSelectedOrgansToDecideUndecided(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val existingRegistration = factory.existingOptInSomeNotAllDecided()
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
+
+        factory.amend { registration ->
+            registration.some(
+                    OrganDonationRegistrationDataBuilder.someOrgansListUpdated())
+            { request -> request.respondWithSuccess(existingRegistration.id) }
+        }
     }
 
     @Given("I am a (.*) user registered as opt-out who then amends their decision to opt-in")
@@ -116,7 +131,7 @@ open class OrganDonationAmendStepDefinitions {
         val existingRegistration = factory.existingOptOut()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.some {
+        factory.amend { registration->registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 

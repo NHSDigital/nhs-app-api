@@ -8,7 +8,7 @@ import { shallowMount } from '../../helpers';
 
 
 const createChoices = () => initialState().registration.decisionDetails.choices;
-const mount = ({ $style = { chosen: 'chosen', notChosen: 'notChosen' }, choices = {} } = {}) =>
+const mount = ({ $style = { chosen: 'chosen', notChosen: 'notChosen', notStated: 'notStated' }, choices = {} } = {}) =>
   shallowMount(DecisionDetails, { $style, propsData: { choices } });
 
 describe('DecisionDetails', () => {
@@ -16,6 +16,7 @@ describe('DecisionDetails', () => {
   let choices;
   let chosenHeader;
   let notChosenHeader;
+  let notStatedHeader;
 
   beforeEach(() => {
     wrapper = mount();
@@ -34,6 +35,7 @@ describe('DecisionDetails', () => {
       wrapper = mount({ choices });
       chosenHeader = wrapper.find('.chosen h4');
       notChosenHeader = wrapper.find('.notChosen h4');
+      notStatedHeader = wrapper.find('.notStated h4');
     });
 
     it('will show the heading for "You have chosen to donate', () => {
@@ -42,6 +44,10 @@ describe('DecisionDetails', () => {
 
     it('will not show the heading for "You have chosen not to donate', () => {
       expect(notChosenHeader.exists()).toEqual(false);
+    });
+
+    it('will not show the heading for "We do not have a decision for', () => {
+      expect(notStatedHeader.exists()).toEqual(false);
     });
   });
 
@@ -53,6 +59,7 @@ describe('DecisionDetails', () => {
       wrapper = mount({ choices });
       chosenHeader = wrapper.find('.chosen > h4');
       notChosenHeader = wrapper.find('.notChosen > h4');
+      notStatedHeader = wrapper.find('.notStated > h4');
     });
 
     it('will show the heading for "You have chosen to donate', () => {
@@ -61,6 +68,10 @@ describe('DecisionDetails', () => {
 
     it('will show the heading for "You have chosen not to donate', () => {
       expect(notChosenHeader.exists()).toEqual(true);
+    });
+
+    it('will not show the heading for "We do not have a decision for', () => {
+      expect(notStatedHeader.exists()).toEqual(false);
     });
 
     it('will have the correct text for the chosen header', () => {
@@ -99,6 +110,73 @@ describe('DecisionDetails', () => {
         expect(text)
           .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
       })(chosen);
+    });
+  });
+
+  describe('some choices selected, with some not stated', () => {
+    beforeEach(() => {
+      choices = mapValues(() => 'No')(createChoices());
+      choices.heart = 'Yes';
+      choices.kidney = 'Yes';
+      choices.tissue = 'NotStated';
+      wrapper = mount({ choices });
+      chosenHeader = wrapper.find('.chosen > h4');
+      notChosenHeader = wrapper.find('.notChosen > h4');
+      notStatedHeader = wrapper.find('.notStated > h4');
+    });
+
+    it('will show the heading for "You have chosen to donate', () => {
+      expect(chosenHeader.exists()).toEqual(true);
+    });
+
+    it('will show the heading for "You have chosen not to donate', () => {
+      expect(notChosenHeader.exists()).toEqual(true);
+    });
+
+    it('will show the heading for "We do not have a decision for', () => {
+      expect(notStatedHeader.exists()).toEqual(true);
+    });
+
+    it('will have a list containing the chosen organs', () => {
+      const list = wrapper.find('.chosen > ul');
+      expect(list.exists()).toEqual(true);
+
+      const text = list.text();
+      const chosen = pickBy(val => val === 'Yes')(choices);
+      expect(isEmpty(chosen)).toEqual(false);
+
+      mapKeys((value) => {
+        expect(text)
+          .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
+      })(chosen);
+    });
+
+    it('will have a list containing the non-chosen organs', () => {
+      const list = wrapper.find('.notChosen > ul');
+      expect(list.exists()).toEqual(true);
+
+      const text = list.text();
+      const chosen = pickBy(val => val === 'No')(choices);
+      expect(isEmpty(chosen)).toEqual(false);
+
+      mapKeys((value) => {
+        expect(text)
+          .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
+      })(chosen);
+    });
+
+    it('will have a list containing the non-stated organs', () => {
+      const list = wrapper.find('.notStated > ul');
+      expect(list.exists()).toEqual(true);
+
+      const text = list.text();
+      const notStated = pickBy(val => val === 'NotStated')(choices);
+      expect(isEmpty(notStated)).toEqual(false);
+
+      mapKeys((value) => {
+        expect(text)
+          .toContain(`translate_organDonation.reviewYourDecision.decisionDetails.choices.${value}`);
+      })(notStated);
     });
   });
 });

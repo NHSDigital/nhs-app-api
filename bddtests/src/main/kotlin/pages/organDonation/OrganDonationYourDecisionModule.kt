@@ -1,9 +1,11 @@
 package pages.organDonation
 
-import mocking.organDonation.models.KeyValuePair
+import mocking.data.organDonation.OrganDecisions
 import org.junit.Assert
+import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
 
@@ -44,31 +46,38 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
                 .assertIsVisible()
     }
 
-    fun assertDecisionIsSome(organsToDonate: ArrayList<KeyValuePair<String, Boolean>>) {
+    fun assertDecisionIsSome(organsToDonate: OrganDecisions) {
+
         assertText("Specific organs and tissue")
 
-        val listOfToDonate = arrayListOf<String>()
-        val listOfNotToDonate = arrayListOf<String>()
-
-        organsToDonate.forEach { organ ->
-            if (organ.value) listOfToDonate.add(organ.key)
-            else listOfNotToDonate.add(organ.key)
-        }
-
-        assertPair("You have chosen to donate:", listOfToDonate)
-        assertPair("You have chosen not to donate:", listOfNotToDonate)
+        assertPair("You have chosen to donate:", organsToDonate.optIn)
+        assertPair("You have chosen not to donate:", organsToDonate.optOut)
+        assertPair("We do not have a decision for:", organsToDonate.notStated)
     }
 
     private fun assertPair(expectedKey: String, expectedValues: ArrayList<String>) {
-        val actualValues = HybridPageElement(
-                "//h4[text()='$expectedKey']/following-sibling::ul/li",
-                page = page,
-                helpfulName = "label '$expectedKey'").elements.map { element -> element.text }
+        val organSection = organSection(expectedKey)
+
+        if (expectedValues.isEmpty()) {
+            organSection.assertElementNotPresent()
+            return
+        }
+        organSection(expectedKey).assertIsVisible()
+        val actualValues = organSection.element
+                .findElements(By.xpath("./following-sibling::ul/li"))
+                .map { element -> element.text }
 
         val message = "Expected list of options. " +
                 "Expected: ${expectedValues.joinToString()}. " +
                 "Actual: ${actualValues.joinToString()}."
         Assert.assertEquals(message, expectedValues.count(), actualValues.count())
         Assert.assertTrue(message, actualValues.containsAll(expectedValues))
+    }
+
+    private fun organSection(expectedKey: String): HybridPageElement {
+        return HybridPageElement(
+                "//h4[text()='$expectedKey']",
+                page = page,
+                helpfulName = "label '$expectedKey'")
     }
 }

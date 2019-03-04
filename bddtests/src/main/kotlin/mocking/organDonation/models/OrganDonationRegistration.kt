@@ -1,5 +1,6 @@
 package mocking.organDonation.models
 
+import mocking.data.organDonation.OrganDecisions
 import models.Patient
 
 data class OrganDonationRegistration(
@@ -48,11 +49,18 @@ data class OrganDonationRegistration(
             return registration
         }
 
-        fun some(patient: Patient, organsToDonate: HashMap<String, String>,
+        fun some(patient: Patient, organsToDonate: OrganDecisions,
                  organDonationDemographics: OrganDonationDemographics? = null): OrganDonationRegistration {
             val registration = optIn(patient, organDonationDemographics)
-            registration.decisionDetails = DecisionDetails(false, organsToDonate)
+            registration.decisionDetails = DecisionDetails(false, createDecisionMap(organsToDonate))
             return registration
+        }
+
+        private fun createDecisionMap(organsToDonate: OrganDecisions): HashMap<String, String> {
+            val decision = hashMapOf<String, String>()
+            organsToDonate.optIn.forEach { organ -> decision[organ] = "yes" }
+            organsToDonate.optOut.forEach { organ -> decision[organ] = "no" }
+            return decision
         }
     }
 }

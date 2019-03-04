@@ -16,6 +16,14 @@
         </li>
       </ul>
     </div>
+    <div v-if="hasNotStated" :class="$style.notStated">
+      <h4>{{ $t('organDonation.reviewYourDecision.decisionDetails.notStatedHeader') }}</h4>
+      <ul>
+        <li v-for="choice in notStated" :key="choice">
+          {{ $t(`organDonation.reviewYourDecision.decisionDetails.choices.${choice}`) }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -27,6 +35,7 @@ import pickBy from 'lodash/fp/pickBy';
 
 const pickChosen = flow(pickBy(val => val === 'Yes'), keys);
 const pickNotChosen = flow(pickBy(val => val === 'No'), keys);
+const pickNotStated = flow(pickBy(val => val === 'NotStated'), keys);
 
 export default {
   name: 'DecisionDetails',
@@ -46,6 +55,12 @@ export default {
     notChosen() {
       return pickNotChosen(this.choices);
     },
+    hasNotStated() {
+      return !isEmpty(this.notStated);
+    },
+    notStated() {
+      return pickNotStated(this.choices);
+    },
   },
 };
 </script>
@@ -53,7 +68,7 @@ export default {
 <style module lang="scss">
   @import "../../style/spacings";
 
-  .chosen, .notChosen {
+  .chosen, .notChosen, .notStated {
     ul {
       margin-bottom: $three;
     }

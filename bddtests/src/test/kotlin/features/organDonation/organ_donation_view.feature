@@ -56,6 +56,13 @@ Feature: Organ Donation View
       | TPP       |
       | VISION    |
 
+  Scenario: A user registered to donate some organs can see which organs they have not yet decided on
+    Given I am a EMIS user registered with organ donation to donate some organs, but not all are decided on
+    And I am logged in
+    And I navigate to the internal Organ Donation Page
+    Then the Organ Donation View Registration page is displayed
+    And the existing decision to opt in to organ donation with some organs is displayed
+
   Scenario: A user is informed when existing registration is in conflicted state
     Given I am a EMIS user registered with organ donation but existing registration is in conflicted state
     And I am logged in

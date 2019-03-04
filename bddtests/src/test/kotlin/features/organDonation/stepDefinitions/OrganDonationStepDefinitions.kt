@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
 import pages.navigation.HeaderNative
@@ -46,11 +47,18 @@ open class OrganDonationStepDefinitions {
         factory.existingAppointedRepresentative()
     }
 
-    @Given("I am a (\\w+) user registered with organ donation to donate some organs")
+    @Given("^I am a (\\w+) user registered with organ donation to donate some organs$")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.existingOptInSome()
+    }
+
+    @Given("I am a (\\w+) user registered with organ donation to donate some organs, but not all are decided on")
+    fun iAmRegisteredWithOrganDonationToDonateSomeOrgansButNotAllDecidedOn(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existingOptInSomeNotAllDecided()
     }
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register$")
@@ -82,7 +90,10 @@ open class OrganDonationStepDefinitions {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
-        factory.create { registration -> registration.some { request -> request.respondWithSuccess("test") } }
+        factory.create { registration ->
+            registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated())
+            { request -> request.respondWithSuccess("test") }
+        }
     }
 
     @Given("^the organ donation toggle is set to target the internal page$")

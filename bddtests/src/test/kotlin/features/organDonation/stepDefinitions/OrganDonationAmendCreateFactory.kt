@@ -1,7 +1,7 @@
 package features.organDonation.stepDefinitions
 
 import mocking.MockingClient
-import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
+import mocking.data.organDonation.OrganDecisions
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.set
 import mocking.models.Mapping
@@ -39,12 +39,12 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
         registrationSetup(registration, action)
     }
 
-    fun some(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
+    fun some(organs : OrganDecisions,action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
         OrganDonationSerenityHelpers.IS_OPT_IN.set(true)
         val organDonationDemographics = OrganDonationDemographics()
         OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
-                OrganDonationRegistration.some(patient, OrganDonationRegistrationDataBuilder.someOrgansListUpdated(),
+                OrganDonationRegistration.some(patient,organs,
                         organDonationDemographics),
                 OrganDonationAdditionalDetails.getAdditionalDetails(organDonationDemographics))
         registrationSetup(registration, action)

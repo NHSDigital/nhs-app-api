@@ -1,6 +1,7 @@
 package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Given
+import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.set
 
@@ -22,7 +23,7 @@ class OrganDonationAmendStepDefinitionsBackend {
         val existingRegistration = factory.existingOptIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.some {
+        factory.amend { registration->registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 

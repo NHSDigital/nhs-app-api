@@ -32,8 +32,13 @@ open class OrganDonationSpecificOrganChoicePage : OrganDonationBasePage() {
         organOptions.forEach { option -> option.assertDisplayed() }
     }
 
-    fun assertOrganOption(organ:String, selected: Boolean){
-        OrganDonationSpecificOrganChoice(organ, this).assertSelection(selected)
+    fun assertOrganOption(organ:String, selected: Boolean?) {
+        val choice = OrganDonationSpecificOrganChoice(organ, this)
+        if (selected == null) {
+            choice.assertUnselected()
+        } else {
+            choice.assertSelection(selected)
+        }
     }
 
     fun assertAllOptionsUnselected(){
