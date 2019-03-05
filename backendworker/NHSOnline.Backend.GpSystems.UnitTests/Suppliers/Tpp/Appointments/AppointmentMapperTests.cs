@@ -57,7 +57,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                         EndTime = appointmentTime1.End,
                         Location = "The Frankenstein Place",
                         StartTime = appointmentTime1.Start,
-                        SessionName = string.Empty
+                        SessionName = string.Empty,
+                        Clinicians = Array.Empty<string>()
                     },
                 new Backend.GpSystems.Appointments.Models.UpcomingAppointment
                     {
@@ -66,7 +67,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                         EndTime = appointmentTime2.End,
                         Location = "The Frankenstein Place",
                         StartTime = appointmentTime2.Start,
-                        SessionName = string.Empty
+                        SessionName = string.Empty,
+                        Clinicians = Array.Empty<string>()
                     },
                 new Backend.GpSystems.Appointments.Models.UpcomingAppointment
                     {
@@ -75,7 +77,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                         EndTime = appointmentTime3.End,
                         Location = "The Frankenstein Place",
                         StartTime = appointmentTime3.Start,
-                        SessionName = string.Empty
+                        SessionName = string.Empty,
+                        Clinicians = Array.Empty<string>()
                     }
             };
 
@@ -131,7 +134,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     EndTime = null,
                     Location = "The Frankenstein Place",
                     StartTime = appointmentStart,
-                    SessionName = string.Empty
+                    SessionName = string.Empty,
+                    Clinicians = Array.Empty<string>()
                 }
             };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -164,7 +168,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     Location = "The Frankenstein Place",
                     StartTime = appointmentTime1.Start,
                     EndTime = appointmentTime1.End,
-                    SessionName = string.Empty
+                    SessionName = string.Empty,
+                    Clinicians = Array.Empty<string>()
                 },
                 new NHSOnline.Backend.GpSystems.Appointments.Models.UpcomingAppointment
                 {
@@ -173,7 +178,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     Location = "The Frankenstein Place",
                     StartTime = appointmentTime2.Start,
                     EndTime = appointmentTime2.End,
-                    SessionName = string.Empty
+                    SessionName = string.Empty,
+                    Clinicians = Array.Empty<string>()
                 }
             };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -210,7 +216,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                     Location = "The Frankenstein Place",
                     StartTime = appointmentTime2.Start,
                     EndTime = appointmentTime2.End,
-                    SessionName = string.Empty
+                    SessionName = string.Empty,
+                    Clinicians = Array.Empty<string>()
                 }
             };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
