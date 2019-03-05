@@ -1,7 +1,6 @@
 <template>
   <div :class="stylingClass">
-    <generic-button :class="[$style.button]"
-                    :button-classes="buttonStylingClasses" :id="id"
+    <generic-button :button-classes="buttonStylingClasses" :id="id"
                     :style="{ 'margin-bottom': 0}"
                     :disabled="isButtonDisabled"
                     @click="$emit('click', $event)">
@@ -44,8 +43,9 @@ export default {
 
     buttonStylingClasses() {
       const classes = this.buttonClasses;
+      classes.push('button');
       if (!this.clickable) {
-        classes.push(this.$style.disabled);
+        classes.push('disabled');
       }
       return classes;
     },
@@ -60,7 +60,6 @@ export default {
 
 <style lang="scss" scoped module>
 @import "../../style/colours";
-@import "../../style/buttons";
 .float-button-container {
   position: fixed;
   bottom: 4.250em;

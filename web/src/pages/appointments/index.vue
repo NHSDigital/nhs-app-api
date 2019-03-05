@@ -125,7 +125,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/buttons";
 @import "../../style/info";
 
 .content {

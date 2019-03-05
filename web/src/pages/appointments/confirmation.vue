@@ -122,7 +122,9 @@
         </div>
         <div :class="$style.confirmButton">
           <generic-button id="btn_book_appointment"
-                          :class="[$style.button, $style.green, $style.desktopWebConfirmButton]"
+                          :button-classes="[$store.state.device.isNativeApp
+                                              ?'button':'button-desktop',
+                                            'green']"
                           @click.prevent="onConfirmButtonClicked">
             {{ $t('appointments.confirmation.confirmButtonText') }}
           </generic-button>
@@ -130,7 +132,7 @@
       </form-post>
 
       <generic-button v-if="$store.state.device.isNativeApp" id="btn_cancel_appointment"
-                      :class="[$style.button , $style.grey]"
+                      :button-classes="['button' , 'grey']"
                       @click.stop.prevent="onCancelButtonClicked">
         {{ $t('appointments.confirmation.changeButtonText') }}
       </generic-button>
@@ -356,7 +358,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/buttons";
 @import "../../style/forms";
 @import "../../style/info";
 @import "../../style/desktopWeb/inputcontrol";
@@ -484,16 +485,6 @@ export default {
     clear: left;
 }
 
-.button:focus{
- outline-color: $focus_highlight;
- box-shadow: inset 0 0 0 4px $focus_highlight;
-}
-
-.button.green:focus{
- outline-color: $focus_highlight;
- box-shadow: inset 0 0 0 4px $focus_highlight;
-}
-
 .confirmButton {
   margin-top: 1em;
  }
@@ -521,47 +512,6 @@ div {
     font-family: $default-web;
     font-weight: lighter;
     margin-top: 1em;
-  }
-
-  .button {
-   @include button;
-   box-sizing: border-box;
-   padding: 0.625em;
-   background-color: $nhs_blue;
-   border: none;
-   border-radius: 0.125em;
-   outline: none;
-   transition: all ease 0.5s;
-   cursor: pointer;
-   width: auto;
-   min-width: 16.875em;
-   padding-left: 2em;
-   padding-right: 2em;
-   max-width: 960px;
-   display: block;
-   width: auto;
-
-   :focus {
-    outline-color: $focus_highlight;
-    box-shadow: inset 0 0 0 4px $focus_highlight;
-    outline-offset: -5px;
-   }
-
-   &.desktopWebConfirmButton {
-    @include webButton;
-    margin-top: 1em;
-   }
-
-   &.green {
-    background-color: $light_green;
-    box-shadow: 0 0.125em 0 0 $dark_green;
-
-    :focus {
-     outline-color: $focus_highlight;
-     box-shadow: inset 0 0 0 4px $focus_highlight;
-     outline-offset: -5px;
-    }
-   }
   }
  }
 }

@@ -110,7 +110,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/buttons";
 @import "../../style/spacings";
 
 .above-float-button {

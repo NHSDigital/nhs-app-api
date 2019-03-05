@@ -1,19 +1,14 @@
 <template>
-  <button v-tabbing="defaultClasses" :id="id"
-          :class="getStyleClasses" :type="type"
+  <button :id="id"
+          :class="defaultClasses" :type="type"
           @click="clicked($event)">
     <slot/>
   </button>
 </template>
 
 <script>
-import TabFocusMixin from './TabFocusMixin';
 
 export default {
-  components: {
-    TabFocusMixin,
-  },
-  mixins: [TabFocusMixin.tabMixin],
   props: {
     buttonClasses: {
       type: Array,

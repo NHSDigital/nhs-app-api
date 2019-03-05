@@ -76,7 +76,7 @@
     <analytics-tracked-tag :text="$t('signOutButton.signOut')"
                            data-purpose="button">
       <form action="account/signout" method="post">
-        <floating-button-bottom id="signout-button" :button-classes="[$style.grey]" type="submit"
+        <floating-button-bottom id="signout-button" type="submit"
                                 @click="signout">
           {{ $t('signOutButton.signOut') }}
         </floating-button-bottom>

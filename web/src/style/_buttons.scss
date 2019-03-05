@@ -23,14 +23,12 @@ a.button:focus {
 	background-color: $nhs_blue;
 	border: none;
 	border-radius: 0.125em;
-	box-shadow: 0 0.125em 0 0 $dark_blue;
 	margin-bottom: 1.250em;
-	outline: none;
 	transition: all ease 0.5s;
 	white-space: normal;
 	cursor: pointer;
   width: 100%;
-    :focus {
+    &:focus {
       outline-color: $focus_highlight;
       box-shadow: inset 0 0 0 4px $focus_highlight;
       outline-offset: -5px;
@@ -49,20 +47,12 @@ a.button:focus {
 
 	&.green {
 		background-color: $light_green;
-		box-shadow: 0 0.125em 0 0 $dark_green;
-      :focus {
-        outline-color: $focus_highlight;
-        box-shadow: inset 0 0 0 4px $focus_highlight;
-        outline-offset: -5px;
-      }
 	}
 	&.grey {
 		background-color: $light_grey;
-		box-shadow: 0 0.125em 0 0 $dark_grey;
 	}
 	&.white {
 		background-color: $white;
-		box-shadow: 0 0.125em 0 0 $light_grey;
 		color: $dark_grey;
 	}
 
@@ -80,18 +70,10 @@ a.button:focus {
 button.button,
 a.button {
 	@include button-core;
-  :focus {
-    outline-color: $focus_highlight;
-    box-shadow: inset 0 0 0 4px $focus_highlight;
-    outline-offset: -5px;
-  }
 }
 
 button.button-desktop,
 a.button-desktop {
 	@include button-core;
 	width: auto;
-	&:focus {
-		box-shadow: inset 0 0 0 4px $focus_highlight;
-	}
 }

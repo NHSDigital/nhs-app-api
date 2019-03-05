@@ -42,7 +42,7 @@
 
         </div>
         <generic-button id="btn_cancel_appointment"
-                        :class="[$style.button, $style.green]"
+                        :button-classes="['button', 'green']"
                         @click.stop.prevent="onCancelButtonClicked($event)">
           {{ $t('appointments.cancelling.cancelButtonText') }}
         </generic-button>
@@ -51,13 +51,12 @@
 
     <generic-button v-if="$store.state.device.isNativeApp"
                     id="btn_back_appointment"
-                    :class="[$style.button, $style.grey]"
+                    :button-classes="['button', 'grey']"
                     @click.stop.prevent="onBackButtonClicked($event)">
       {{ $t('appointments.cancelling.backButtonText') }}
     </generic-button>
     <form v-else :action="appointmentPath">
       <desktopGenericBackLink
-
         :path="appointmentPath"
         :button-text="'appointments.cancelling.backButtonText'"/>
     </form>
@@ -155,7 +154,6 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/buttons";
 @import "../../style/forms";
 @import "../../style/info";
 @import "../../style/desktopWeb/inputcontrol";
@@ -167,11 +165,6 @@ export default {
   .reason {
     margin-bottom: 2em;
   }
-}
-
-.button.green:focus{
-  outline-color: $focus_highlight;
-  box-shadow: inset 0 0 0 4px $focus_highlight;
 }
 
 
