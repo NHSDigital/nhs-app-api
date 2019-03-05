@@ -4,6 +4,10 @@ namespace NHSOnline.Backend.GpSystems
 {
     public interface IGpSystemRegistrationService
     {
-        void RegisterGpSystemsServices(IServiceCollection serviceCollection, EnableGpSupplierConfiguration enableGpSupplierConfiguration);
+        void RegisterPfsServices(IServiceCollection serviceCollection, EnableGpSupplierConfiguration enableGpSupplierConfiguration);
+        
+        void RegisterCidServices(IServiceCollection serviceCollection, EnableGpSupplierConfiguration enableGpSupplierConfiguration);
+
     }
 }
+ 

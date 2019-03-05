@@ -12,16 +12,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterEmisServices(this IServiceCollection services)
+        public static IServiceCollection RegisterEmisPfsServices(this IServiceCollection services)
         {
             services.RegisterEmisBaseServices();
             services.RegisterEmisAppointmentsServices();
             services.RegisterEmisPrescriptionsServices();
             services.RegisterEmisPatientRecordServices();
             services.RegisterEmisDemographicsServices();
-            services.RegisterEmisSessionServices();
-
-            services.RegisterEmisCidServices();
+            services.RegisterEmisPfsSessionServices();
 
             return services;
         }
@@ -47,10 +45,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return services;
         }
 
-        private static IServiceCollection RegisterEmisCidServices(this IServiceCollection services)
+        public static IServiceCollection RegisterEmisCidServices(this IServiceCollection services)
         {
+            services.RegisterEmisBaseServices();
             services.RegisterEmisIm1ConnectionServices();
             services.RegisterEmisLinkageServices();
+            services.RegisterEmisCidSessionServices();
 
             return services;
         }

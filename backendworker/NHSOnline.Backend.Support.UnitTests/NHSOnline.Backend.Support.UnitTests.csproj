@@ -42,8 +42,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.PfsApi\NHSOnline.Backend.PfsApi.csproj" />
     <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
-    <ProjectReference Include="..\NHSOnline.Backend.Worker\NHSOnline.Backend.Worker.csproj" />
     <ProjectReference Include="..\UnitTestHelper\UnitTestHelper.csproj" />
   </ItemGroup>
 

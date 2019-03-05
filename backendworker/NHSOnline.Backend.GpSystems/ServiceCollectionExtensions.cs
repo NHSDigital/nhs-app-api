@@ -11,10 +11,56 @@ namespace NHSOnline.Backend.GpSystems
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterGpSystemsServices(this IServiceCollection services, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
+        public static IServiceCollection RegisterPfsGpSystemsServices(this IServiceCollection services, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
         {
             services.RegisterBaseGpSystemsServices();
-            services.RegisterGpSystems(enableGpSupplierConfiguration);
+            
+            if (enableGpSupplierConfiguration.EnableEmis)
+            {
+                services.RegisterEmisPfsServices();
+            }
+
+            if (enableGpSupplierConfiguration.EnableTpp)
+            {
+                services.RegisterTppPfsServices();
+            }
+
+            if (enableGpSupplierConfiguration.EnableVision)
+            {
+                services.RegisterVisionPfsServices();
+            }
+            
+            if (enableGpSupplierConfiguration.EnableMicrotest)
+            {
+                services.RegisterMicrotestPfsServices();
+            }
+
+            return services;
+        }
+        
+        public static IServiceCollection RegisterCidGpSystemsServices(this IServiceCollection services, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
+        {
+            services.RegisterBaseGpSystemsServices();
+            
+            if (enableGpSupplierConfiguration.EnableEmis)
+            {
+                services.RegisterEmisCidServices();
+            }
+
+            if (enableGpSupplierConfiguration.EnableTpp)
+            {
+                services.RegisterTppCidServices();
+            }
+
+            if (enableGpSupplierConfiguration.EnableVision)
+            {
+                services.RegisterVisionCidServices();
+            }
+            
+            if (enableGpSupplierConfiguration.EnableMicrotest)
+            {
+                services.RegisterMicrotestCidServices();
+            }
 
             return services;
         }
@@ -25,31 +71,6 @@ namespace NHSOnline.Backend.GpSystems
             services.AddSingleton<IGpSystemFactory, GpSystemFactory>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IIm1CacheKeyGenerator, Im1CacheKeyGenerator>();
-
-            return services;
-        }
-
-        private static IServiceCollection RegisterGpSystems(this IServiceCollection services, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
-        {
-            if (enableGpSupplierConfiguration.EnableEmis)
-            {
-                services.RegisterEmisServices();
-            }
-
-            if (enableGpSupplierConfiguration.EnableTpp)
-            {
-                services.RegisterTppServices();
-            }
-
-            if (enableGpSupplierConfiguration.EnableVision)
-            {
-                services.RegisterVisionServices();
-            }
-            
-            if (enableGpSupplierConfiguration.EnableMicrotest)
-            {
-                services.RegisterMicrotestServices();
-            }
 
             return services;
         }

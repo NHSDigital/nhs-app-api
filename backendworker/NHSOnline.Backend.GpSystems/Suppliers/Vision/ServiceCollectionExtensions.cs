@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterVisionServices(this IServiceCollection services)
+        public static IServiceCollection RegisterVisionPfsServices(this IServiceCollection services)
         {
             services.RegisterVisionBaseServices();
             services.RegisterVisionAppointmentsServices();
@@ -23,8 +23,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             services.RegisterVisionSessionServices();
             services.RegisterVisionPrescriptionsServices();
             services.RegisterVisionDemographicsServices();
-
-            services.RegisterVisionCidServices();
 
             return services;
         }
@@ -57,8 +55,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
             return services;
         }
 
-        private static IServiceCollection RegisterVisionCidServices(this IServiceCollection services)
+        public static IServiceCollection RegisterVisionCidServices(this IServiceCollection services)
         {
+            services.RegisterVisionBaseServices();
+            services.RegisterVisionEnvelopeServices();
             services.RegisterVisionLinkageServices();
             services.RegisterVisionIm1ConnectionServices();
 

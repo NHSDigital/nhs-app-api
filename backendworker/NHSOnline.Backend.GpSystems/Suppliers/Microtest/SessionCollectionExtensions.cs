@@ -9,19 +9,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterMicrotestServices(this IServiceCollection services)
+        public static IServiceCollection RegisterMicrotestPfsServices(this IServiceCollection services)
         {
             services.RegisterMicrotestBaseServices();
             services.RegisterMicrotestAppointmentsServices();
             services.RegisterMicrotestSessionServices();
 
-            services.RegisterMicrotestCidServices();
-
             return services;
         }
 
-        private static IServiceCollection RegisterMicrotestCidServices(this IServiceCollection services)
+        public static IServiceCollection RegisterMicrotestCidServices(this IServiceCollection services)
         {
+            services.RegisterMicrotestBaseServices();
             services.RegisterMicrotestIm1ConnectionServices();
             services.RegisterMicrotestLinkageServices();
 

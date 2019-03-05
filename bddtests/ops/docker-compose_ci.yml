@@ -9,7 +9,7 @@ services:
     environment:
       - BIOMETRICS_ENABLED=true
   api.local.bitraft.io:
-    image: nhsapp.azurecr.io/nhsonline-backendworker:${BACKEND_TAG}
+    image: nhsapp.azurecr.io/nhsonline-backendpfsapi:${BACKEND_TAG}
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.redis.session
@@ -34,7 +34,7 @@ services:
     volumes:
       - ../src/main/kotlin/mocking/dummycerts:/app/bddcerts
   cid.local.bitraft.io:
-    image: nhsapp.azurecr.io/nhsonline-backendworker:${BACKEND_TAG}
+    image: nhsapp.azurecr.io/nhsonline-backendcidapi:${BACKEND_TAG}
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.redis.session

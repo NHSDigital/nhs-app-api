@@ -26,6 +26,6 @@ services:
       - THROTTLING_ENABLED=
       - VERSION_TAG=dev_web_docker_https_android
   api.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.pfsapi
     environment:
       - ConfigurationSettings__CookieDomain=.bitraft.io

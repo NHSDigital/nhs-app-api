@@ -17,7 +17,7 @@ services:
       - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/createsession
       - VERSION_TAG=dev_bdd_docker_semi_stubbed
   api.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.pfsapi
     environment:
       - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development
@@ -49,7 +49,7 @@ services:
     volumes:
       - ./src/main/kotlin/mocking/ndop:/app/bddcerts
   cid.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.cidapi
     environment:
       - BACKENDWORKER_RUNMODE=cid
       - ASPNETCORE_ENVIRONMENT=Development

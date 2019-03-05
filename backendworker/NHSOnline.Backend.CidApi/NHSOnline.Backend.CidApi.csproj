@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.Backend.ApiSupport\NHSOnline.Backend.ApiSupport.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.GpSystems\NHSOnline.Backend.GpSystems.csproj" />
+    <ProjectReference Include="..\NHSOnline.Backend.Support\NHSOnline.Backend.Support.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="DevelopmentSessionEncryptionKey.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="certs\vps_nhson001.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

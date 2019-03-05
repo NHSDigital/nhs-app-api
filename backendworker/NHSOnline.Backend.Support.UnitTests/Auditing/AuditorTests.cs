@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support.Auditing;
 using System;
@@ -17,6 +16,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NHSOnline.Backend.ApiSupport.Filters;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests.Auditing

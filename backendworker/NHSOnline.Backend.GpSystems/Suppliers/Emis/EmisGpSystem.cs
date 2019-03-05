@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         public ISessionService GetSessionService()
         {
-            return _serviceProvider.GetService<EmisSessionService>();
+            return (IEmisSessionService) _serviceProvider.GetService(typeof(IEmisSessionService));
         }
 
         public ISessionExtendService GetSessionExtendService()

@@ -4,9 +4,14 @@ namespace NHSOnline.Backend.GpSystems
 {
     public class GpSystemRegistrationService : IGpSystemRegistrationService
     {
-        public void RegisterGpSystemsServices(IServiceCollection serviceCollection, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
+        public void RegisterPfsServices(IServiceCollection serviceCollection, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
         {
-            serviceCollection.RegisterGpSystemsServices(enableGpSupplierConfiguration);
+            serviceCollection.RegisterPfsGpSystemsServices(enableGpSupplierConfiguration);
+        }
+        
+        public void RegisterCidServices(IServiceCollection serviceCollection, EnableGpSupplierConfiguration enableGpSupplierConfiguration)
+        {
+            serviceCollection.RegisterCidGpSystemsServices(enableGpSupplierConfiguration);
         }
     }
 }

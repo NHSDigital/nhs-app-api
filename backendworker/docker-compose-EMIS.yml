@@ -5,10 +5,10 @@ services:
     ports:
     - "27017:27017"
   api.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.pfsapi
     build:
       context: .
-      dockerfile: NHSOnline.Backend.Worker/Dockerfile
+      dockerfile: NHSOnline.Backend.PfsApi/Dockerfile
     depends_on:
       - nhsonline.redis.sds
     ports:

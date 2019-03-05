@@ -23,7 +23,7 @@ services:
       - THROTTLING_ENABLED=false
       - ORGAN_DONATION_INTEGRATION_ENABLED=true
   api.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.pfsapi
     environment:
       - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development
@@ -84,7 +84,7 @@ services:
     volumes:
       - ./src/main/kotlin/mocking/dummycerts:/app/bddcerts
   cid.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.cidapi
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.redis.session

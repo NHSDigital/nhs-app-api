@@ -12,9 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Support.Logging;
 using System.Threading;
+using NHSOnline.Backend.ApiSupport.Filters;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.Support.UnitTests.Logging

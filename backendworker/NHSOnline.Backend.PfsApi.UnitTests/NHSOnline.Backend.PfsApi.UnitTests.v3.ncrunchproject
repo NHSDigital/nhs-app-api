@@ -1,0 +1,12 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <IgnoredTests>
+      <FixtureTestSelector>
+        <FixtureName>NHSOnline.Backend.PfsApi.UnitTests.CitizenId.CitizenIdClientTests</FixtureName>
+      </FixtureTestSelector>
+      <FixtureTestSelector>
+        <FixtureName>NHSOnline.Backend.PfsApi.UnitTests.GpSystems.Suppliers.Emis.EmisClientTests</FixtureName>
+      </FixtureTestSelector>
+    </IgnoredTests>
+  </Settings>
+</ProjectConfiguration>

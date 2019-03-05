@@ -1,0 +1,100 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NHSOnline.Backend.PfsApi.Areas.Prescriptions;
+using NHSOnline.Backend.GpSystems.Prescriptions.Models;
+using NHSOnline.Backend.GpSystems;
+using NHSOnline.Backend.GpSystems.Prescriptions;
+using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.Support;
+using UnitTestHelper;
+
+namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
+{
+    [TestClass]
+    public class CoursesControllerTests
+    {
+        private CoursesController _systemUnderTest;
+        private IFixture _fixture;
+        private Mock<IGpSystemFactory> _mockGpSystemFactory;
+        private UserSession _userSession;
+        
+        private Mock<IAuditor> _mockAuditor;
+
+        private const string RequestAuditType = "RepeatPrescriptions_ViewRepeatMedications_Request";
+        private const string ResponseAuditType = "RepeatPrescriptions_ViewRepeatMedications_Response";
+        
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _fixture = new Fixture()
+                .Customize(new AutoMoqCustomization())
+                .Customize(new ApiControllerAutoFixtureCustomization());
+            
+            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _userSession = _fixture.Create<UserSession>();
+            var httpContextItems = new Dictionary<object, object>
+            {
+                { Constants.HttpContextItems.UserSession, _userSession }
+            };
+
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
+            
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+
+            _systemUnderTest = _fixture.Create<CoursesController>();
+
+            _systemUnderTest.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContextMock.Object
+            };
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
+        {
+            var mockGpSystem = new Mock<IGpSystem>();
+            var courseService = new Mock<ICourseService>();
+
+            var coursesGetResponse = new CourseListResponse
+            {
+                Courses = new List<Course>
+                {
+                    new Course(),
+                    new Course(),
+                }
+            };
+
+            var getCoursesResult = new GetCoursesResult.SuccessfullyRetrieved(coursesGetResponse);
+
+            // Arrange
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
+                .Returns(mockGpSystem.Object);
+
+            mockGpSystem.Setup(x => x.GetCourseService())
+                .Returns(courseService.Object);
+
+            courseService.Setup(x => x.GetCourses(_userSession.GpUserSession)).Returns(Task.FromResult((GetCoursesResult)getCoursesResult));
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier));
+            mockGpSystem.Verify(x => x.GetCourseService());
+            courseService.Verify(x => x.GetCourses(_userSession.GpUserSession));
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            value.Should().BeEquivalentTo(coursesGetResponse);
+            
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, "Attempting to retrieve courses", It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Courses successfully retrieved - 2 courses", It.IsAny<object[]>()));
+        }
+    }
+}

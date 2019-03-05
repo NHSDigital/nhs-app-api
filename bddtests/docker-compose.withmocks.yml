@@ -17,7 +17,7 @@ services:
       - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
       - VERSION_TAG=dev_bdd_docker_withmocks
   api.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.pfsapi
     environment:
       - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development
@@ -51,7 +51,7 @@ services:
     ports:
       - "8082:8082"
   cid.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.cidapi
     environment:
       - BACKENDWORKER_RUNMODE=cid
       - ASPNETCORE_ENVIRONMENT=Development

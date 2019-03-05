@@ -11,18 +11,32 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
     public class ServiceCollectionExtensionTests
     {
         [TestMethod]
-        public void CheckMicrotestServiceCollectionExtensions()
+        public void CheckMicrotestPfsServiceCollectionExtensions()
         {
             var services = new ServiceCollection();
 
-            services.RegisterMicrotestServices();
+            services.RegisterMicrotestPfsServices();
             CheckMicrotestBaseServices(services);
-            CheckAllEmisRegisteredServices(services);
+            CheckAllMicrotestPfsRegisteredServices(services);
         }
         
-        public static void CheckAllEmisRegisteredServices(ServiceCollection services)
+        [TestMethod]
+        public void CheckMicrotestCidServiceCollectionExtensions()
+        {
+            var services = new ServiceCollection();
+
+            services.RegisterMicrotestCidServices();
+            CheckMicrotestBaseServices(services);
+            CheckAllMicrotestCidRegisteredServices(services);
+        }
+        
+        public static void CheckAllMicrotestPfsRegisteredServices(ServiceCollection services)
         {
             Appointments.ServiceCollectionExtensionTests.CheckRegisteredMicrotestAppointmentServices(services);           
+        } 
+        
+        public static void CheckAllMicrotestCidRegisteredServices(ServiceCollection services)
+        {
             Im1Connection.ServiceCollectionExtensionTests.CheckRegisteredMicrotestIm1ConnectionServices(services);
             Linkage.ServiceCollectionExtensionTests.CheckRegisteredMicrotestLinkageServices(services);
         } 

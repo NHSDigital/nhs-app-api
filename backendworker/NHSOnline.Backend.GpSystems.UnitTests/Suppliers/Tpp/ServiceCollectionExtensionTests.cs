@@ -11,23 +11,37 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
     public class ServiceCollectionExtensionTests
     {
         [TestMethod]
-        public void CheckTppServiceCollectionExtensions()
+        public void CheckTppPfsServiceCollectionExtensions()
         {
             var services = new ServiceCollection();
 
-            services.RegisterTppServices();
-            CheckAllTppRegisteredServices(services);
+            services.RegisterTppPfsServices();
+            CheckAllTppPfsRegisteredServices(services);
             CheckTppBaseServices(services);
         }
         
-        public static void CheckAllTppRegisteredServices(ServiceCollection services)
+        [TestMethod]
+        public void CheckTppCidServiceCollectionExtensions()
+        {
+            var services = new ServiceCollection();
+
+            services.RegisterTppCidServices();
+            CheckAllTppCidRegisteredServices(services);
+            CheckTppBaseServices(services);
+        }
+        
+        public static void CheckAllTppPfsRegisteredServices(ServiceCollection services)
         {
             Appointments.ServiceCollectionExtensionTests.CheckRegisteredTppAppointmentServices(services);          
             Demographics.ServiceCollectionExtensionTests.CheckRegisteredTppDemographicServices(services);
-            Im1Connection.ServiceCollectionExtensionTests.CheckRegisteredTppIm1Services(services);
-            Linkage.ServiceCollectionExtensionTests.CheckRegisteredTppLinkageServices(services);
             PatientRecord.ServiceCollectionExtensionTests.CheckRegisteredTppPatientRecordServices(services);
             Prescriptions.ServiceCollectionExtensionTests.CheckRegisteredTppPrescriptionServices(services);           
+        }
+        
+        public static void CheckAllTppCidRegisteredServices(ServiceCollection services)
+        {
+            Im1Connection.ServiceCollectionExtensionTests.CheckRegisteredTppIm1Services(services);
+            Linkage.ServiceCollectionExtensionTests.CheckRegisteredTppLinkageServices(services);
         }
 
         private void CheckTppBaseServices(ServiceCollection services)

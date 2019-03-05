@@ -12,13 +12,23 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
     public class ServiceCollectionExtensionsTests
     {
         [TestMethod]
-        public void CheckEmisServiceCollectionExtensions()
+        public void CheckEmisPfsServiceCollectionExtensions()
         {
             var services = new ServiceCollection();
 
-            services.RegisterEmisServices();
+            services.RegisterEmisPfsServices();
             CheckEmisBaseServices(services);
-            CheckAllEmisRegisteredServices(services);
+            CheckAllEmisPfsRegisteredServices(services);
+        }
+        
+        [TestMethod]
+        public void CheckEmisCidServiceCollectionExtensions()
+        {
+            var services = new ServiceCollection();
+
+            services.RegisterEmisCidServices();
+            CheckEmisBaseServices(services);
+            CheckAllEmisCidRegisteredServices(services);
         }
 
         private void CheckEmisBaseServices(ServiceCollection services)
@@ -44,14 +54,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             registeredServices.Should().Contain(x => x.ServiceType == typeof(EmisHttpClient) && x.Lifetime == ServiceLifetime.Transient);
         }
 
-        public static void CheckAllEmisRegisteredServices(ServiceCollection services)
+        public static void CheckAllEmisPfsRegisteredServices(ServiceCollection services)
         {
             Prescriptions.ServiceCollectionExtensionsTests.CheckRegisteredEmisPrescriptionServices(services);
             Appointments.ServiceCollectionExtensionTests.CheckRegisteredEmisAppointmentServices(services);
             Demographics.ServiceCollectionExtensionTests.CheckRegisteredEmisDemographicsService(services);
+            PatientRecord.ServiceCollectionExtensionTests.CheckRegisteredPatienRecordService(services);
+            Session.ServiceCollectionExtensionTests.CheckRegisteredEmisPfsSessionService(services);
+        }
+        
+        public static void CheckAllEmisCidRegisteredServices(ServiceCollection services)
+        {
             Linkage.ServiceCollectionExtensionTests.CheckRegisteredEmisLinkageService(services);
             Im1Connection.ServiceCollectionExtensionTests.CheckRegisteredEmisIm1ConnectionService(services);
-            PatientRecord.ServiceCollectionExtensionTests.CheckRegisteredPatienRecordService(services);
+            Session.ServiceCollectionExtensionTests.CheckRegisteredEmisCidSessionService(services);
         }
     }
 }

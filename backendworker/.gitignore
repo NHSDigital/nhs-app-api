@@ -1,12 +1,15 @@
-# NHSOnline Specific
-NHSOnline.Backend.Worker/certs
 SwaggerGenerated
 
 # NDepend Outputs
 NDependOut/
 
-# End NHSOnline Specific
+# exclude everything in certs
+certs/*
 
+# exception to the rule > keep this folder
+!certs/.gitkeep 
+
+# End NHSOnline Specific
 
 # Created by https://www.gitignore.io/api/osx,aspnetcore
 
@@ -20,6 +23,7 @@ NDependOut/
 *.userosscache
 *.sln.docstates
 docker-compose.override.yml
+.vs/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

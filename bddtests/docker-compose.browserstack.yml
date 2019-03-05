@@ -12,7 +12,7 @@ services:
       - VERSION_TAG=dev_bdd_docker_browserstack
       - ORGAN_DONATION_INTEGRATION_ENABLED=false
   api.local.bitraft.io:
-    image: nhsonline.backend.worker
+    image: nhsonline.backend.pfsapi
     environment:
       - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development

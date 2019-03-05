@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
     public class ServiceCollectionExtensionTests
     {
         [TestMethod]
-        public void CheckRegisteredServicesForAllSuppliers()
+        public void CheckRegisteredPfsServicesForAllSuppliers()
         {
             // Arrange
             var services = new ServiceCollection();
@@ -25,11 +25,32 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             };
 
             // Act
-            services.RegisterGpSystemsServices(config);
+            services.RegisterPfsGpSystemsServices(config);
 
             // Assert
             CheckBaseRegisteredServices(services);
-            CheckAllRegisteredServices(services);
+            CheckAllPfsRegisteredServices(services);
+        }
+        
+        [TestMethod]
+        public void CheckRegisteredCidServicesForAllSuppliers()
+        {
+            // Arrange
+            var services = new ServiceCollection();
+            var config = new EnableGpSupplierConfiguration
+            {
+                EnableTpp = true,
+                EnableEmis = true,
+                EnableMicrotest = true,
+                EnableVision = true
+            };
+
+            // Act
+            services.RegisterCidGpSystemsServices(config);
+
+            // Assert
+            CheckBaseRegisteredServices(services);
+            CheckAllCidRegisteredServices(services);
         }
 
         [TestMethod]
@@ -46,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             };
 
             // Act
-            services.RegisterGpSystemsServices(config);
+            services.RegisterPfsGpSystemsServices(config);
 
             // Assert
             CheckBaseRegisteredServices(services);
@@ -69,14 +90,24 @@ namespace NHSOnline.Backend.GpSystems.UnitTests
             }
         }
 
-        private static void CheckAllRegisteredServices(ServiceCollection serviceCollection)
+        private static void CheckAllPfsRegisteredServices(ServiceCollection serviceCollection)
         {
             serviceCollection.Should().NotBeNull();
 
-            Suppliers.Emis.ServiceCollectionExtensionsTests.CheckAllEmisRegisteredServices(serviceCollection);
-            Suppliers.Microtest.ServiceCollectionExtensionTests.CheckAllEmisRegisteredServices(serviceCollection);
-            Suppliers.Tpp.ServiceCollectionExtensionTests.CheckAllTppRegisteredServices(serviceCollection);
-            Suppliers.Vision.ServiceCollectionExtensionsTests.CheckAllVisionRegisteredServices(serviceCollection);
+            Suppliers.Emis.ServiceCollectionExtensionsTests.CheckAllEmisPfsRegisteredServices(serviceCollection);
+            Suppliers.Microtest.ServiceCollectionExtensionTests.CheckAllMicrotestPfsRegisteredServices(serviceCollection);
+            Suppliers.Tpp.ServiceCollectionExtensionTests.CheckAllTppPfsRegisteredServices(serviceCollection);
+            Suppliers.Vision.ServiceCollectionExtensionsTests.CheckAllVisionPfsRegisteredServices(serviceCollection);
+        }
+        
+        private static void CheckAllCidRegisteredServices(ServiceCollection serviceCollection)
+        {
+            serviceCollection.Should().NotBeNull();
+
+            Suppliers.Emis.ServiceCollectionExtensionsTests.CheckAllEmisCidRegisteredServices(serviceCollection);
+            Suppliers.Microtest.ServiceCollectionExtensionTests.CheckAllMicrotestCidRegisteredServices(serviceCollection);
+            Suppliers.Tpp.ServiceCollectionExtensionTests.CheckAllTppCidRegisteredServices(serviceCollection);
+            Suppliers.Vision.ServiceCollectionExtensionsTests.CheckAllVisionCidRegisteredServices(serviceCollection);
         }
     }
 }
