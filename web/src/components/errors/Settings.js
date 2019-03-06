@@ -11,6 +11,8 @@ import {
   BEGINLOGIN,
   MYRECORD,
   MYRECORDTESTRESULT,
+  ORGAN_DONATION,
+  ORGAN_DONATION_REVIEW_YOUR_DECISION,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
@@ -18,10 +20,12 @@ import {
 
 export default {
   default: {
+    action: null,
+    additionalInfoComponent: null,
+    errorOverrideStyles: {},
+    ignoredErrors: [],
     redirectUrl: null,
     showApiError: true,
-    ignoredErrors: [],
-    errorOverrideStyles: {},
   },
   pages: [
     {
@@ -74,6 +78,20 @@ export default {
       },
     },
     {
+      route: ORGAN_DONATION.path,
+      redirectUrl: {
+        1: ORGAN_DONATION.path,
+      },
+      additionalInfoComponent: 'ContactOrganDonation',
+    },
+    {
+      route: ORGAN_DONATION_REVIEW_YOUR_DECISION.path,
+      additionalInfoComponent: 'ContactOrganDonation',
+      action: {
+        1: 'organDonation/submitRegistration',
+      },
+    },
+    {
       route: PRESCRIPTIONS.path,
       errorOverrideStyles: { 403: 'plain' },
     },
@@ -91,10 +109,12 @@ export default {
     for (let i = 0, max = this.pages.length; i < max; i += 1) {
       if (this.pages[i].route === routePath) {
         settings = assign({}, this.pages[i]);
+        if (!has('action', settings)) settings.action = this.default.action;
+        if (!has('additionalInfoComponent', settings)) settings.additionalInfoComponent = this.default.additionalInfoComponent;
+        if (!has('errorOverrideStyles', settings)) settings.errorOverrideStyles = this.default.errorOverrideStyles;
+        if (!has('ignoredErrors', settings)) settings.ignoredErrors = this.default.ignoredErrors;
         if (!has('redirectUrl', settings)) settings.redirectUrl = this.default.redirectUrl;
         if (!has('showApiError', settings)) settings.showApiError = this.default.showApiError;
-        if (!has('ignoredErrors', settings)) settings.ignoredErrors = this.default.ignoredErrors;
-        if (!has('errorOverrideStyles', settings)) settings.errorOverrideStyles = this.default.errorOverrideStyles;
         break;
       }
     }

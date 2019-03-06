@@ -67,6 +67,22 @@ describe('organ donation index page', () => {
     });
   });
 
+  describe('asyncData', () => {
+    beforeEach(() => {
+      $store = createStore({ state: createState() });
+      wrapper = mountOrganDonation();
+      wrapper.vm.$options.asyncData({ store: $store });
+    });
+
+    it('will request reference data from the api', async () => {
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/getReferenceData');
+    });
+
+    it('will dispatch the "organDonation/getRegistration" action', async () => {
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/getRegistration');
+    });
+  });
+
   describe('new registration (original decision is not found)', () => {
     beforeEach(() => {
       $store = createStore({ state: createState() });
@@ -112,13 +128,6 @@ describe('organ donation index page', () => {
 
     it('will show the already registered link', () => {
       expect(wrapper.find(AlreadyRegisteredLink).exists()).toEqual(true);
-    });
-
-    describe('async data', () => {
-      it('will dispatch the "organDonation/getRegistration" action', () => {
-        wrapper.vm.$options.asyncData({ store: $store });
-        expect($store.dispatch).toHaveBeenCalledWith('organDonation/getRegistration');
-      });
     });
 
     describe('computed', () => {

@@ -193,6 +193,61 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 .Be(response.AdditionalDetails.ReligionId);
             result.Identifier.Should().ContainSingle().Which.Value.Should().Be(response.Registration.NhsNumber);
         }
+        
+        
+        [TestMethod]
+        public void MapToRegistrationRequest_MapsAdditionalDetails_Correctly()
+        {
+            // Arrange
+            var response = new OrganDonationRegistrationRequest
+            {
+                AdditionalDetails = new AdditionalDetails
+                {
+                    EthnicityId = _fixture.Create<string>(),
+                    ReligionId = _fixture.Create<string>()
+                },
+                
+                Registration = _fixture.Create<OrganDonationStoreRegistration>()
+            };
+
+            // Act
+            var result = _registrationRequestMapper.Map(response);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.EthnicCategory.Should().NotBeNull();
+            result.EthnicCategory.Coding.Should().ContainSingle().Which.Code.Should()
+                .Be(response.AdditionalDetails.EthnicityId);
+            result.ReligiousAffiliation.Should().NotBeNull();
+            result.ReligiousAffiliation.Coding.Should().ContainSingle().Which.Code.Should()
+                .Be(response.AdditionalDetails.ReligionId);
+        }
+        
+        [TestMethod]
+        [DataRow("", "")]
+        [DataRow(null, null)]
+        public void MapToRegistrationRequest_MapsAdditionalDetailsWhenEmpty_ToNull(string ethnicityId, string religionId)
+        {
+            // Arrange
+            var response = new OrganDonationRegistrationRequest
+            {
+                AdditionalDetails = new AdditionalDetails
+                {
+                    EthnicityId = ethnicityId,
+                    ReligionId = religionId
+                },
+                
+                Registration = _fixture.Create<OrganDonationStoreRegistration>()
+            };
+
+            // Act
+            var result = _registrationRequestMapper.Map(response);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.EthnicCategory.Should().BeNull();
+            result.ReligiousAffiliation.Should().BeNull();
+        }
 
         [TestMethod]
         public void MapToRegistrationRequest_WithOptOut_MapsCorrectly()

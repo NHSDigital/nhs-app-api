@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 BirthDate = source.Registration.DateOfBirth?.ToString(DateFormat, CultureInfo.InvariantCulture),
                 Gender = _genderMapper.Map(source.Registration.Gender),
                 OrganDonationDecision = _decisionMapper.From(source.Registration.Decision),
-                ReligiousAffiliation = string.IsNullOrWhiteSpace(source.AdditionalDetails.EthnicityId) 
+                ReligiousAffiliation = string.IsNullOrWhiteSpace(source.AdditionalDetails.ReligionId) 
                     ? null 
                     : MapConcept(ReligiousCodingSystem ,source.AdditionalDetails.ReligionId),
                 Identifier = MapList(new Identifier { System = IdentifierSystem, Value = source.Registration.NhsNumber.RemoveWhiteSpace() }),

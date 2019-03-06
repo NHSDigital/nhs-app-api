@@ -1,5 +1,5 @@
 <template>
-  <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
+  <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <message-dialog v-if="showErrors" id="errors">
       <message-text data-purpose="error-heading">
         {{ $t('organDonation.reviewYourDecision.errorMsgHeader') }}
@@ -134,8 +134,7 @@ export default {
         return;
       }
 
-      const action = this.$store.state.organDonation.isAmending ? 'put' : 'post';
-      await this.$store.dispatch(`organDonation/${action}Registration`);
+      await this.$store.dispatch('organDonation/submitRegistration');
       redirectTo(this, ORGAN_DONATION_VIEW_DECISION.path, null);
     },
   },

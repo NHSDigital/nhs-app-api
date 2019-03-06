@@ -68,6 +68,6 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
 
     @Then("^no options on the Organ Donation Specific Organ Choice page are selected")
     fun noOptionsOnTheOrganDonationSpecificOrganChoicePageAreSelected() {
-        organDonationYourChoicePage.organOptions.forEach { option -> option.assertAllUnselected() }
+        organDonationYourChoicePage.assertAllRadioButtonsUnselected()
     }
 }

@@ -28,13 +28,19 @@ export const createRouter = () => ({
   push: jest.fn(),
 });
 
-export const createStore = ({ $env = {}, $http = {}, state = {} } = {}) => ({
-  dispatch: jest.fn(),
-  state,
+export const createStore = ({
+  $env = {},
+  $http = {},
+  state = {},
+  getters = {},
+} = {}) => ({
   app: {
     $env,
     $http,
   },
+  dispatch: jest.fn(),
+  getters,
+  state,
 });
 
 export const initFilters = () => [

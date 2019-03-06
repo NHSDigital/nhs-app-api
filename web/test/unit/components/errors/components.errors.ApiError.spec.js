@@ -19,6 +19,7 @@ const createApiErrorComponent = ($route, apiError) => {
   localVue.use(Vuex);
 
   const store = createStore();
+  store.app = { $env: {} };
   store.dispatch('errors/setRoutePath', $route);
   store.dispatch('errors/addApiError', apiError);
 
@@ -42,8 +43,8 @@ const assert = (expectedData) => {
     return;
   }
 
-  expect(component.vm.getPageTitle()).toEqual(expectedData.pageTitle);
-  expect(component.vm.getPageHeader()).toEqual(expectedData.pageHeader);
+  expect(component.vm.pageTitle).toEqual(expectedData.pageTitle);
+  expect(component.vm.pageHeader).toEqual(expectedData.pageHeader);
   let paragraphIndex = -1;
   if (expectedData.isInformationError !== true) {
     expect(component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1).text()).toEqual(expectedData.header);
@@ -54,10 +55,16 @@ const assert = (expectedData) => {
     if (expectedData.additionalInfo && expectedData.additionalInfo !== '') {
       expect(component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1).text()).toEqual(expectedData.additionalInfo);
     }
-    expect(component.find(`#${errorId}`).findAll('p').length).toEqual(paragraphIndex + 1);
+
+    if (expectedData.additionalInfoComponent) {
+      expect(component.find({ name: expectedData.additionalInfoComponent }).exists()).toBe(true);
+    } else {
+      expect(component.find(`#${errorId}`).findAll('p').length).toEqual(paragraphIndex + 1);
+    }
+
     if (expectedData.hasRetryButton) {
       expect(component.find(`#${errorId}`).find('.button').text()).toEqual(expectedData.retryButtonText);
-      expect(component.vm.getRedirectUrl()).toEqual(expectedData.redirectUrl);
+      expect(component.vm.retryUrl).toEqual(expectedData.redirectUrl);
     } else {
       expect(component.find(`#${errorId}`).find('button').exists()).toBeFalsy();
     }
@@ -145,6 +152,15 @@ describe('ApiError.vue', () => {
   each(testData[502]).it('page %s will show correct message when the API returns a 502 bad gateway response', (path, expectedData) => {
     const route = { path };
     const apiError = { response: { status: 502 }, message: 'Bad Gateway' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+  each(testData[5021]).it('page %s will show correct message when the API returns a 502 bad gateway response with error code', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 502, data: { errorCode: 1 } }, message: 'Bad Gateway' };
 
     createApiErrorComponent(route, apiError);
 

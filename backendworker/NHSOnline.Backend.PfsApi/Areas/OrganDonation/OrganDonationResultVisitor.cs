@@ -36,12 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
 
-        public IActionResult Visit(OrganDonationResult.SearchSystemUnavailable result)
-        {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
-        }
-
-        public IActionResult Visit(OrganDonationResult.BadSearchRequest result)
+        public IActionResult Visit(OrganDonationResult.SearchError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
@@ -51,9 +46,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             return new StatusCodeResult(StatusCodes.Status504GatewayTimeout);
         }
 
-        public IActionResult Visit(OrganDonationResult.SearchError result)
+        public IActionResult Visit(OrganDonationResult.SearchUpstreamError result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
-        }
+            return new ObjectResult(result.Response)
+            {
+                StatusCode = StatusCodes.Status502BadGateway
+            };
+        } 
     }
 }

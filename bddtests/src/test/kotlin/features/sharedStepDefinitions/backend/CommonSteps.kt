@@ -1,5 +1,6 @@
 package features.sharedStepDefinitions.backend
 
+import com.google.gson.GsonBuilder
 import config.Config
 import cucumber.api.java.Before
 import cucumber.api.java.en.And
@@ -19,9 +20,11 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import worker.NhsoHttpException
+import worker.NhsoHttpExceptionErrorBody
 import worker.WorkerClient
 import java.util.concurrent.TimeUnit
 
@@ -93,6 +96,38 @@ class CommonSteps : AbstractSteps() {
     fun thenIReceiveAStatusCode(expectedStatusCode: Int) {
         val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
         assertEquals(expectedStatusCode, exception.statusCode)
+    }
+
+    @Then("the Bad Gateway error response includes a retry option$")
+    fun theOrganDonationBadGatewayErrorResponseDoesIncludeARetryOption(){
+        val errorResponse = SerenityHelpers.getHttpException()
+        val errorResponseBody = GsonBuilder().create()
+                .fromJson<NhsoHttpExceptionErrorBody>(errorResponse?.body.toString(),
+                        NhsoHttpExceptionErrorBody::class.java)
+
+        Assert.assertNotNull("Expected Response", errorResponse)
+        Assert.assertEquals("Expected errorCode", "1", errorResponseBody.errorCode)
+        Assert.assertEquals("Expected statusCode", HttpStatus.SC_BAD_GATEWAY, errorResponse!!.statusCode)
+    }
+
+    @Then("the Bad Gateway error response does not include a retry option$")
+    fun theOrganDonationBadGatewayErrorResponseDoesNotIncludeARetryOption(){
+        val errorResponse = SerenityHelpers.getHttpException()
+        val errorResponseBody = GsonBuilder().create()
+                .fromJson<NhsoHttpExceptionErrorBody>(errorResponse?.body.toString(),
+                        NhsoHttpExceptionErrorBody::class.java)
+
+        Assert.assertNotNull("Expected Response", errorResponse)
+        Assert.assertEquals("Expected errorCode", "0", errorResponseBody.errorCode)
+        Assert.assertEquals("Expected statusCode", HttpStatus.SC_BAD_GATEWAY, errorResponse!!.statusCode)
+    }
+
+    @Then("the Internal Server Error response does not include a retry option$")
+    fun theOrganDonationInternalServerErrorResponseDoesNotIncludeARetryOption(){
+        val errorResponse = SerenityHelpers.getHttpException()
+        Assert.assertNotNull("Expected Response", errorResponse)
+        Assert.assertEquals("Expected Body", "", errorResponse?.body.toString())
+        Assert.assertEquals("Expected statusCode", HttpStatus.SC_INTERNAL_SERVER_ERROR, errorResponse!!.statusCode)
     }
 
     private val _statusCodeMapping: HashMap<String, Int> = hashMapOf(

@@ -1,6 +1,8 @@
 package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
+import pages.HybridPageElement
+import pages.assertElementNotPresent
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationSpecificOrganChoicePage : OrganDonationBasePage() {
@@ -33,5 +35,13 @@ open class OrganDonationSpecificOrganChoicePage : OrganDonationBasePage() {
 
     fun assertOrganOption(organ:String, selected: Boolean){
         OrganDonationSpecificOrganChoice(organ, this).assertSelection(selected)
+    }
+
+    fun assertAllRadioButtonsUnselected() {
+        HybridPageElement(
+                "//div/label[input][div]/div/div",
+                "//div/label[input][div]/div/div",
+                page = this,
+                helpfulName = "Radio Buttons").assertElementNotPresent()
     }
 }

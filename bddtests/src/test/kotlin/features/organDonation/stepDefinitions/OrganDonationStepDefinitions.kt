@@ -5,8 +5,8 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT
 import net.thucydides.core.annotations.Steps
+import org.apache.http.HttpStatus
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.organDonation.OrganDonationChoicePage
@@ -57,14 +57,15 @@ open class OrganDonationStepDefinitions {
     fun iAmNotRegisteredWithOrganDonationWishToRegister(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
+        factory.lookUpRegistrationWithSuccessfulDemographics { a ->
+            a.respondWithError(HttpStatus.SC_NOT_FOUND) }
     }
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and opt out$")
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
+        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
         factory.create { registration -> registration.optOut { request -> request.respondWithSuccess("test") } }
     }
 
@@ -72,7 +73,7 @@ open class OrganDonationStepDefinitions {
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptIn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
+        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
         factory.create { registration -> registration.optIn { request -> request.respondWithSuccess("test") } }
     }
 
@@ -80,24 +81,8 @@ open class OrganDonationStepDefinitions {
     fun iAmNotRegisteredWithOrganDonationWishToRegisterAndDonateSomeOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
+        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
         factory.create { registration -> registration.some { request -> request.respondWithSuccess("test") } }
-    }
-
-    @Given("I am a (\\w+) user not registered with organ donation, who wishes to opt out but will cause a conflict")
-    fun iAmAUserNotRegisteredWithOrganDonationButRegistrationWillCauseConflict(gpSystem: String){
-        val factory = OrganDonationFactory(gpSystem)
-        factory.setupPatientForAppUse()
-        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithNotFoundError() }
-        factory.create { registration -> registration.optOut { request-> request.respondWithConflict("test",
-                ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT.toString()) }}
-    }
-
-    @Given("I am a (\\w+) user registered with organ donation but existing registration is in conflicted state")
-    fun iAmAUserRegisteredWithOrganDonationButExistingRegistrationIsInConflictedState(gpSystem: String){
-        val factory = OrganDonationFactory(gpSystem)
-        factory.setupPatientForAppUse()
-        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithConflictError() }
     }
 
     @Given("^the organ donation toggle is set to target the internal page$")
@@ -113,13 +98,6 @@ open class OrganDonationStepDefinitions {
         } else {
             aNewTabOpens(Config.instance.organDonation)
         }
-    }
-
-    @Given("I am a (.*) user registered as opt-in with organ donation, who wishes to amend$")
-    fun iAmEMISUserRegisteredWithOrganDonationWhoWishesToAmend(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
-        factory.setupPatientForAppUse()
-        factory.existingOptIn()
     }
 
     fun iAmOnTheOrganDonationPage() {
@@ -142,4 +120,5 @@ open class OrganDonationStepDefinitions {
         header.waitForPageHeaderText("Organ donation register")
         navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
+
 }

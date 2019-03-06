@@ -93,30 +93,6 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
         }
 
-        public async Task Visit(OrganDonationResult.SearchSystemUnavailable result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "The organ donation system is unavailable");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.SearchSystemUnavailable)}");
-            }
-        }
-
-        public async Task Visit(OrganDonationResult.BadSearchRequest result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "The search request is invalid");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.BadSearchRequest)}");
-            }
-        }
-
         public async Task Visit(OrganDonationResult.SearchTimeout result)
         {
             try
@@ -138,6 +114,18 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
             catch (Exception e)
             {
                 _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.SearchError)}");
+            }
+        }
+        
+        public async Task Visit(OrganDonationResult.SearchUpstreamError result)
+        {
+            try
+            {
+                await _auditor.Audit(AuditType, "There was an upstream error when searching for an organ donation record");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrganDonationResult.SearchUpstreamError)}");
             }
         }
     }

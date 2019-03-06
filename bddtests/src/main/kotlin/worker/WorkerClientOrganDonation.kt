@@ -3,6 +3,7 @@ package worker
 import com.google.gson.Gson
 import config.Config
 import mocking.organDonation.models.OrganDonationRegistrationRequest
+import mocking.organDonation.models.ReferenceDataResponse
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpPut
@@ -19,6 +20,15 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
         httpGet.releaseConnection()
 
         return gson.fromJson(result, OrganDonationSearchResponse::class.java)
+    }
+
+    fun getOrganDonationReferenceData(): ReferenceDataResponse {
+        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.organDonationConnection + "/ReferenceData")
+
+        val result = sender.sendAsyncAndGetResult(httpGet)
+        httpGet.releaseConnection()
+
+        return gson.fromJson(result, ReferenceDataResponse::class.java)
     }
 
     fun postRegistration(registration: OrganDonationRegistrationRequest): OrganDonationRegistrationResponse {

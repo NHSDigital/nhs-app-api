@@ -89,9 +89,6 @@ export default {
       ];
     },
   },
-  asyncData({ store }) {
-    return store.dispatch('organDonation/getReferenceData');
-  },
   methods: {
     continueClicked() {
       this.$store.dispatch('organDonation/setAdditionalDetails', mapAdditionalDetails(this));

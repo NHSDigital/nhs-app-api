@@ -17,6 +17,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         private readonly IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>
             _registrationResponseMapper;
+        
+        private readonly IMapper<HttpStatusCode, OrganDonationRegistrationResult> _organDonationRegistrationResultErrorMapper;
 
         private readonly IOrganDonationClient _organDonationClient;
 
@@ -25,12 +27,14 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             IMapper<OrganDonationRegistrationRequest, RegistrationRequest> registrationRequestMapper,
             IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>
                 registrationResponseMapper,
+            IMapper<HttpStatusCode, OrganDonationRegistrationResult> organDonationRegistrationResultErrorMapper,
             IOrganDonationClient organDonationClient)
         {
             _logger = logger;
             _organDonationClient = organDonationClient;
             _registrationRequestMapper = registrationRequestMapper;
             _registrationResponseMapper = registrationResponseMapper;
+            _organDonationRegistrationResultErrorMapper = organDonationRegistrationResultErrorMapper;
         }
 
 
@@ -52,25 +56,12 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
                     return new OrganDonationRegistrationResult.SuccessfullyRegistered(response);
                 }
 
-                return HandleErrorCodes(clientResponse.StatusCode);
+                return _organDonationRegistrationResultErrorMapper.Map(clientResponse.StatusCode);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request to register an update to organ donation decision");
                 return new OrganDonationRegistrationResult.SystemError();
-            }
-        }
-
-        private OrganDonationRegistrationResult HandleErrorCodes(HttpStatusCode statusCode)
-        {
-            switch (statusCode)
-            {
-                case HttpStatusCode.RequestTimeout:
-                    _logger.LogDebug("The organ donation registration timed-out");
-                    return new OrganDonationRegistrationResult.Timeout();
-                default:
-                    _logger.LogDebug("Something went wrong when registering organ donation decision");
-                    return new OrganDonationRegistrationResult.UpstreamError();
             }
         }
     }

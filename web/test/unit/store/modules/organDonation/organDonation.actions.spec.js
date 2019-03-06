@@ -16,6 +16,8 @@ import {
   STATE_OK,
   UPDATE_ORIGINAL_REGISTRATION,
 } from '@/store/modules/organDonation/mutation-types';
+import { ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
+import { createRouter } from '../../../helpers';
 
 const createHttp = ({
   result = {},
@@ -189,95 +191,6 @@ describe('organ donation actions', () => {
     });
   });
 
-  describe('postRegistration', () => {
-    let state;
-    let expectedIdentifier;
-    let expectedState;
-
-    beforeEach(async () => {
-      expectedIdentifier = '999';
-      expectedState = STATE_OK;
-      $http = createHttp({
-        result,
-        referenceData,
-        identifier: expectedIdentifier,
-        state: expectedState,
-      });
-
-      state = {
-        additionalDetails: 'additional details',
-        registration: { nhsNumber: '12345' },
-      };
-
-      await actions.postRegistration({ commit, state });
-    });
-
-    it('will post to the `postV1PatientOrgandonation` endpoint', () => {
-      expect($http.postV1PatientOrgandonation).toHaveBeenCalledWith({
-        organDonationRegistrationRequest: {
-          additionalDetails: state.additionalDetails,
-          registration: state.registration,
-        },
-      });
-    });
-
-    it('will commit the returned state using the SET_STATE mutation type', () => {
-      expect(commit).toHaveBeenCalledWith(SET_STATE, expectedState);
-    });
-
-    it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {
-      expect(commit).toHaveBeenCalledWith(SET_REGISTRATION_ID, expectedIdentifier);
-    });
-
-    it('will commit the UPDATE_ORIGINAL_REGISTRATION mutation type', () => {
-      expect(commit).toHaveBeenCalledWith(UPDATE_ORIGINAL_REGISTRATION);
-    });
-  });
-
-  describe('putRegistration', () => {
-    let state;
-    let expectedIdentifier;
-    let expectedState;
-
-    beforeEach(async () => {
-      expectedIdentifier = '111';
-      expectedState = STATE_OK;
-      $http = createHttp({
-        result,
-        referenceData,
-        identifier: expectedIdentifier,
-        state: expectedState,
-      });
-      state = {
-        additionalDetails: 'additional details',
-        registration: { nhsNumber: '12345' },
-      };
-
-      await actions.putRegistration({ commit, state });
-    });
-
-    it('will put to the `putV1PatientOrgandonation` endpoint', () => {
-      expect($http.putV1PatientOrgandonation).toHaveBeenCalledWith({
-        organDonationRegistrationRequest: {
-          additionalDetails: state.additionalDetails,
-          registration: state.registration,
-        },
-      });
-    });
-
-    it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {
-      expect(commit).toHaveBeenCalledWith(SET_REGISTRATION_ID, expectedIdentifier);
-    });
-
-    it('will commit the returned state using the SET_STATE mutation type', () => {
-      expect(commit).toHaveBeenCalledWith(SET_STATE, expectedState);
-    });
-
-    it('will commit the UPDATE_ORIGINAL_REGISTRATION mutation type', () => {
-      expect(commit).toHaveBeenCalledWith(UPDATE_ORIGINAL_REGISTRATION);
-    });
-  });
-
   describe('setAllOrgans', () => {
     it('will commit the SET_ALL_ORGANS mutation', () => {
       actions.setAllOrgans({ commit }, true);
@@ -301,6 +214,94 @@ describe('organ donation actions', () => {
     it('will commit the faith declaration', () => {
       actions.setFaithDeclaration({ commit }, 'Yes');
       expect(commit).toHaveBeenCalledWith(SET_FAITH_DECLARATION, 'Yes');
+    });
+  });
+
+  describe('submitDecision', () => {
+    let state;
+    let expectedIdentifier;
+    let expectedState;
+
+    beforeEach(() => {
+      expectedIdentifier = '999';
+      expectedState = STATE_OK;
+      $http = createHttp({
+        result,
+        referenceData,
+        identifier: expectedIdentifier,
+        state: expectedState,
+      });
+
+      state = {
+        additionalDetails: 'additional details',
+        registration: { nhsNumber: '12345' },
+      };
+
+      actions.$router = createRouter();
+    });
+
+    describe('is amending', () => {
+      beforeEach(async () => {
+        state.isAmending = true;
+        await actions.submitRegistration({ commit, state });
+      });
+
+      it('will call the `putV1PatientOrgandonation` endpoint', () => {
+        expect($http.putV1PatientOrgandonation).toHaveBeenCalledWith({
+          organDonationRegistrationRequest: {
+            additionalDetails: state.additionalDetails,
+            registration: state.registration,
+          },
+        });
+      });
+
+      it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(SET_REGISTRATION_ID, expectedIdentifier);
+      });
+
+      it('will commit the returned state using the SET_STATE mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(SET_STATE, expectedState);
+      });
+
+      it('will commit the UPDATE_ORIGINAL_REGISTRATION mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(UPDATE_ORIGINAL_REGISTRATION);
+      });
+
+      it('will push organ donation view decision to the router', () => {
+        expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_VIEW_DECISION.path);
+      });
+    });
+
+    describe('new registration', () => {
+      beforeEach(async () => {
+        state.isAmending = false;
+        await actions.submitRegistration({ commit, state });
+      });
+
+      it('will post to the `postV1PatientOrgandonation` endpoint', () => {
+        expect($http.postV1PatientOrgandonation).toHaveBeenCalledWith({
+          organDonationRegistrationRequest: {
+            additionalDetails: state.additionalDetails,
+            registration: state.registration,
+          },
+        });
+      });
+
+      it('will commit the returned state using the SET_STATE mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(SET_STATE, expectedState);
+      });
+
+      it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(SET_REGISTRATION_ID, expectedIdentifier);
+      });
+
+      it('will commit the UPDATE_ORIGINAL_REGISTRATION mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(UPDATE_ORIGINAL_REGISTRATION);
+      });
+
+      it('will push organ donation view decision to the router', () => {
+        expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_VIEW_DECISION.path);
+      });
     });
   });
 });

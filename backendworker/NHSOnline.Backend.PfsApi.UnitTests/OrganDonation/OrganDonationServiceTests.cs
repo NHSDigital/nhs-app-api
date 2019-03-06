@@ -21,17 +21,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
     public class OrganDonationServiceTests
     {
         private const string ReferenceDataCacheKey = "_organDonationReferenceData";
-        private const int ReferenceDataExpiryHours = 6;
+        private const int ReferenceDataExpirySeconds = 21600;
         private OrganDonationService _organDonationService;
         private UserSession _userSession;
         private Mock<IMemoryCache> _mockMemoryCache;
         private Mock<IOrganDonationClient> _mockOrganDonationClient;
         private Mock<IOrganDonationConfig> _mockOrganDonationConfig;
-        private Mock<Support.IMapper<OrganDonationRegistration, RegistrationLookupRequest>>
+        private Mock<IMapper<OrganDonationRegistration, RegistrationLookupRequest>>
             _mockLookupRegistrationRequestMapper;
 
-        private Mock<Support.IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>
+        private Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>
             _mockRegistrationRequestMapper;
+            
+        private Mock<IMapper<HttpStatusCode, OrganDonationResult>> 
+            _mockResultErrorMapper;
+        
+        private Mock<IMapper<HttpStatusCode, OrganDonationRegistrationResult>> 
+            _mockRegistrationResultErrorMapper;
+        
+        private Mock<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>> 
+            _mockReferenceDataResultErrorMapper;
 
         // needed for Callback
         private delegate void TryGetValueCallback(object key, out object value);
@@ -45,12 +54,18 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _mockOrganDonationClient = fixture.Freeze<Mock<IOrganDonationClient>>();
             _mockOrganDonationConfig = fixture.Freeze<Mock<IOrganDonationConfig>>();
             _mockLookupRegistrationRequestMapper =
-                fixture.Freeze<Mock<Support.IMapper<OrganDonationRegistration, RegistrationLookupRequest>>>();
+                fixture.Freeze<Mock<IMapper<OrganDonationRegistration, RegistrationLookupRequest>>>();
 
             _mockRegistrationRequestMapper =
-                fixture.Freeze<Mock<Support.IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>>();
+                fixture.Freeze<Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>>();
 
             _userSession = fixture.Create<UserSession>();
+            _mockResultErrorMapper =
+                fixture.Freeze<Mock<IMapper<HttpStatusCode, OrganDonationResult>>>();
+            _mockRegistrationResultErrorMapper =
+                fixture.Freeze<Mock<IMapper<HttpStatusCode, OrganDonationRegistrationResult>>>();
+            _mockReferenceDataResultErrorMapper =
+                fixture.Freeze<Mock<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>>>();
             _organDonationService = fixture.Create<OrganDonationService>();
         }
 
@@ -104,32 +119,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         }
 
         [TestMethod]
-        public void GetOrganDonation_WhenCalledAndSearchFailsWithException_ReturnsSearchSystemUnavailableResponse()
+        public void GetOrganDonation_WhenCalledAndSearchFailsWithException_ReturnsSearchErrorResponse()
         {
             // Arrange 
             var context = SetupGetOrganDonationTest(true);
-
-            // Act
-            var result = _organDonationService.GetOrganDonation(context.DemographicsResult, _userSession);
-
-            // Assert
-            _mockOrganDonationClient.Verify(x => x.PostLookup(It.IsAny<RegistrationLookupRequest>(), _userSession));
-
-            result.Result.Should().BeOfType<OrganDonationResult.SearchSystemUnavailable>();
-        }
-
-        [TestMethod]
-        [DataRow(HttpStatusCode.InternalServerError)]
-        [DataRow(HttpStatusCode.MethodNotAllowed)]
-        [DataRow(HttpStatusCode.UnsupportedMediaType)]
-        [DataRow(HttpStatusCode.UnprocessableEntity)]
-        [DataRow(HttpStatusCode.TooManyRequests)]
-        [DataRow(HttpStatusCode.ServiceUnavailable)]
-        public void GetOrganDonation_WhenCalledAndSearchFailsWithError_ReturnsSearchErrorResponse(
-            HttpStatusCode httpStatus)
-        {
-            // Arrange 
-            var context = SetupGetOrganDonationTest(httpStatus: httpStatus);
 
             // Act
             var result = _organDonationService.GetOrganDonation(context.DemographicsResult, _userSession);
@@ -141,33 +134,26 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         }
 
         [TestMethod]
-        public void GetOrganDonation_WhenCalledAndSearchFailsWithBadRequest_ReturnsBadSearchRequestResponse()
+        [DataRow(HttpStatusCode.InternalServerError)]
+        [DataRow(HttpStatusCode.MethodNotAllowed)]
+        [DataRow(HttpStatusCode.UnsupportedMediaType)]
+        [DataRow(HttpStatusCode.UnprocessableEntity)]
+        [DataRow(HttpStatusCode.TooManyRequests)]
+        [DataRow(HttpStatusCode.ServiceUnavailable)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.RequestTimeout)]
+        public void GetOrganDonation_WhenCalledAndSearchFailsWithError_MapsSearchErrorResponse(
+            HttpStatusCode httpStatus)
         {
             // Arrange 
-            var context = SetupGetOrganDonationTest(httpStatus: HttpStatusCode.BadRequest);
+            var context = SetupGetOrganDonationTest(httpStatus: httpStatus);
 
             // Act
-            var result = _organDonationService.GetOrganDonation(context.DemographicsResult, _userSession);
+            var _ = _organDonationService.GetOrganDonation(context.DemographicsResult, _userSession);
 
             // Assert
             _mockOrganDonationClient.Verify(x => x.PostLookup(It.IsAny<RegistrationLookupRequest>(), _userSession));
-
-            result.Result.Should().BeOfType<OrganDonationResult.BadSearchRequest>();
-        }
-
-        [TestMethod]
-        public void GetOrganDonation_WhenCalledAndSearchTimeouts_ReturnsSearchTimeoutResponse()
-        {
-            // Arrange 
-            var context = SetupGetOrganDonationTest(httpStatus: HttpStatusCode.RequestTimeout);
-
-            // Act
-            var result = _organDonationService.GetOrganDonation(context.DemographicsResult, _userSession);
-
-            // Assert
-            _mockOrganDonationClient.Verify(x => x.PostLookup(It.IsAny<RegistrationLookupRequest>(), _userSession));
-
-            result.Result.Should().BeOfType<OrganDonationResult.SearchTimeout>();
+            _mockResultErrorMapper.Verify(x => x.Map(httpStatus));
         }
 
         [TestMethod]
@@ -242,7 +228,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             // Assert
             _mockMemoryCache.Verify(x => x.CreateEntry(ReferenceDataCacheKey));
             _mockOrganDonationClient.Verify(x => x.GetAllReferenceData());
-            context.AbsoluteExpiration.Should().BeCloseTo(DateTimeOffset.UtcNow.AddHours(ReferenceDataExpiryHours),
+            context.AbsoluteExpiration.Should().BeCloseTo(DateTimeOffset.UtcNow.AddSeconds(ReferenceDataExpirySeconds),
                 TimeSpan.FromSeconds(1));
             result.Result.Should().BeEquivalentTo(context.Cached);
             result.Result.Should().BeOfType<OrganDonationReferenceDataResult.SuccessfullyRetrieved>();
@@ -276,8 +262,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [DataRow(HttpStatusCode.BadGateway)]
         [DataRow(HttpStatusCode.ServiceUnavailable)]
         [DataRow(HttpStatusCode.GatewayTimeout)]
+        [DataRow(HttpStatusCode.RequestTimeout)]
         public void
-            GetReferenceData_WhenCalledAndRetrievalFailsWithError_ReturnSystemErrorResponse(HttpStatusCode httpStatus)
+            GetReferenceData_WhenCalledAndRetrievalFailsWithError_MapsErrorResponse(HttpStatusCode httpStatus)
         {
             // Arrange
             var context = SetupGetReferenceDataTest(httpStatus: httpStatus);
@@ -287,31 +274,15 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
             // Assert
             _mockOrganDonationClient.Verify(x => x.GetAllReferenceData());
+            _mockReferenceDataResultErrorMapper.Verify(x => x.Map(httpStatus));
+            
             context.AbsoluteExpiration.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
             result.Result.Should().BeEquivalentTo(context.Cached);
-            result.Result.Should().BeOfType<OrganDonationReferenceDataResult.UpstreamError>();
         }
 
         [TestMethod]
         public void
-            GetReferenceData_WhenCalledAndRetrievalFailsWithTimeout_ReturnTimeoutResponse()
-        {
-            // Arrange
-            var context = SetupGetReferenceDataTest(httpStatus: HttpStatusCode.RequestTimeout);
-
-            // Act
-            var result = _organDonationService.GetReferenceData();
-
-            // Assert
-            _mockOrganDonationClient.Verify(x => x.GetAllReferenceData());
-            context.AbsoluteExpiration.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(1));
-            result.Result.Should().BeEquivalentTo(context.Cached);
-            result.Result.Should().BeOfType<OrganDonationReferenceDataResult.Timeout>();
-        }
-
-        [TestMethod]
-        public void
-            GetReferenceData_WhenCalledAndRetrievalFailsWithException_ReturnSystemUnavaivableResponseWithNoCaching()
+            GetReferenceData_WhenCalledAndRetrievalFailsWithException_ReturnSystemErrorResponseWithNoCaching()
         {
             // Arrange
             var context = SetupGetReferenceDataTest(true);
@@ -352,37 +323,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [DataRow(HttpStatusCode.BadGateway)]
         [DataRow(HttpStatusCode.ServiceUnavailable)]
         [DataRow(HttpStatusCode.GatewayTimeout)]
-        public void Register_WhenCalledAndRetrievalFailsWithError_ReturnSystemErrorResponse(HttpStatusCode httpStatus)
+        [DataRow(HttpStatusCode.RequestTimeout)]
+        public void Register_WhenCalledAndRetrievalFailsWithError_MapsErrorResponse(HttpStatusCode httpStatus)
         {
             // Arrange
             var context = SetupRegistrationTest(httpStatus: httpStatus);
 
             // Act
-            var result = _organDonationService.Register(context.Request, _userSession);
+            var _ = _organDonationService.Register(context.Request, _userSession);
 
             // Assert
-            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));
-
-            result.Result.Should().BeOfType<OrganDonationRegistrationResult.UpstreamError>();
+            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));                                  
+            _mockRegistrationResultErrorMapper.Verify(x => x.Map(httpStatus));
         }
 
         [TestMethod]
-        public void Register_WhenCalledAndRetrievalFailsWithTimeout_ReturnTimeoutResponse()
-        {
-            // Arrange
-            var context = SetupRegistrationTest(httpStatus: HttpStatusCode.RequestTimeout);
-
-            // Act
-            var result = _organDonationService.Register(context.Request, _userSession);
-
-            // Assert
-            _mockOrganDonationClient.Verify(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), _userSession));
-
-            result.Result.Should().BeOfType<OrganDonationRegistrationResult.Timeout>();
-        }
-
-        [TestMethod]
-        public void Register_WhenCalledAndRetrievalFailsWithException_ReturnSystemUnavaivableResponseWithNoCaching()
+        public void Register_WhenCalledAndRetrievalFailsWithException_ReturnSystemErrorResponseWithNoCaching()
         {
             // Arrange
             var context = SetupRegistrationTest(true);
@@ -423,37 +379,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [DataRow(HttpStatusCode.BadGateway)]
         [DataRow(HttpStatusCode.ServiceUnavailable)]
         [DataRow(HttpStatusCode.GatewayTimeout)]
-        public void Update_WhenCalledAndRetrievalFailsWithError_ReturnSystemErrorResponse(HttpStatusCode httpStatus)
+        [DataRow(HttpStatusCode.RequestTimeout)]
+        public void Update_WhenCalledAndRetrievalFailsWithError_MapsErrorResponse(HttpStatusCode httpStatus)
         {
             // Arrange
             var context = SetupUpdateTest(httpStatus: httpStatus);
 
             // Act
-            var result = _organDonationService.Update(context.Request, _userSession);
+            var _ = _organDonationService.Update(context.Request, _userSession);
 
             // Assert
             _mockOrganDonationClient.Verify(x => x.PutUpdate(It.IsAny<RegistrationRequest>(), _userSession));
-
-            result.Result.Should().BeOfType<OrganDonationRegistrationResult.UpstreamError>();
+            _mockRegistrationResultErrorMapper.Verify(x => x.Map(httpStatus));
         }
 
         [TestMethod]
-        public void Update_WhenCalledAndRetrievalFailsWithTimeout_ReturnTimeoutResponse()
-        {
-            // Arrange
-            var context = SetupUpdateTest(httpStatus: HttpStatusCode.RequestTimeout);
-
-            // Act
-            var result = _organDonationService.Update(context.Request, _userSession);
-
-            // Assert
-            _mockOrganDonationClient.Verify(x => x.PutUpdate(It.IsAny<RegistrationRequest>(), _userSession));
-
-            result.Result.Should().BeOfType<OrganDonationRegistrationResult.Timeout>();
-        }
-
-        [TestMethod]
-        public void Update_WhenCalledAndRetrievalFailsWithException_ReturnSystemUnavaivableResponseWithNoCaching()
+        public void Update_WhenCalledAndRetrievalFailsWithException_ReturnSystemErrorResponse()
         {
             // Arrange
             var context = SetupUpdateTest(true);
@@ -466,7 +407,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
             result.Result.Should().BeOfType<OrganDonationRegistrationResult.SystemError>();
         }
-
 
         private GetReferenceDataTestContext SetupGetReferenceDataTest(
             bool throwException = false,
@@ -483,7 +423,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             HttpStatusCode httpStatus = HttpStatusCode.OK
         )
         {
-            return new GetOrganDonationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus, _mockLookupRegistrationRequestMapper);
+            return new GetOrganDonationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus, 
+                _mockLookupRegistrationRequestMapper);
         }
 
         private UpdateTestContext SetupUpdateTest(
@@ -492,7 +433,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         )
         {
             return new UpdateTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus,
-                _mockRegistrationRequestMapper);
+                _mockRegistrationRequestMapper );
         }
 
         private RegistrationTestContext SetupRegistrationTest(
@@ -501,7 +442,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         )
         {
             return new RegistrationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus,
-                _mockRegistrationRequestMapper);
+                _mockRegistrationRequestMapper );
         }
 
         private class GetOrganDonationTestContext
@@ -511,8 +452,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 UserSession userSession,
                 bool throwException,
                 HttpStatusCode httpStatus,
-                Mock<Backend.Support.IMapper<OrganDonationRegistration, RegistrationLookupRequest>> mockLookupRegistrationRequestMapper
-            )
+                Mock<IMapper<OrganDonationRegistration, RegistrationLookupRequest>> mockLookupRegistrationRequestMapper)
             {
                 var demographicsResponse = new DemographicsResponse();
                 var organDonationResponse = new OrganDonationResponse<RegistrationLookupResponse>(httpStatus);
@@ -539,7 +479,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 UserSession userSession,
                 bool throwException,
                 HttpStatusCode httpStatus,
-                Mock<Support.IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
+                Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
             ) : base(x => x.PutUpdate(It.IsAny<RegistrationRequest>(), userSession),
                 mockClient, throwException, httpStatus, mockRegistrationRequestMapper)
             {
@@ -553,7 +493,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 UserSession userSession,
                 bool throwException,
                 HttpStatusCode httpStatus,
-                Mock<Support.IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
+                Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
             ) : base(x => x.PostRegistration(It.IsAny<RegistrationRequest>(), userSession),
                 mockClient, throwException, httpStatus, mockRegistrationRequestMapper)
             {
@@ -589,8 +529,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
                 mockCache.Setup(x => x.CreateEntry(ReferenceDataCacheKey))
                     .Returns(mockCacheEntry.Object);
-                mockConfig.Setup(x => x.ReferenceDataExpiryHours)
-                    .Returns(ReferenceDataExpiryHours);
+                mockConfig.Setup(x => x.ReferenceDataExpirySeconds)
+                    .Returns(ReferenceDataExpirySeconds);
 
                 CacheEntry = mockCacheEntry.Object;
             }
@@ -607,17 +547,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 Mock<IOrganDonationClient> mockClient,
                 bool throwException,
                 HttpStatusCode httpStatus,
-                Mock<Support.IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
+                Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>> mockRegistrationRequestMapper
             )
             {
                 Request = new OrganDonationRegistrationRequest();
                 var organDonationResponse = new OrganDonationResponse<RegistrationResponse>(httpStatus);
-
+                
                 SetupMockClient(actionToMock, mockClient, throwException, organDonationResponse);
 
                 mockRegistrationRequestMapper
                     .Setup(x => x.Map(It.IsAny<OrganDonationRegistrationRequest>()))
-                    .Returns(new RegistrationRequest());
+                    .Returns(new RegistrationRequest()); 
             }
 
             public OrganDonationRegistrationRequest Request { get; }

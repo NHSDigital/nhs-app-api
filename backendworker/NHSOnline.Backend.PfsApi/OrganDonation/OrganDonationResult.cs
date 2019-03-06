@@ -1,12 +1,12 @@
 ﻿using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
     public abstract class OrganDonationResult
-    { 
-
+    {
         public abstract T Accept<T>(IOrganDonationResultVisitor<T> visitor);
-        
+
         public class NewRegistration : OrganDonationResult
         {
             public OrganDonationRegistration Registration { get; }
@@ -15,10 +15,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             {
                 Registration = registration;
             }
-        
+
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
         }
-        
+
         public class ExistingRegistration : OrganDonationResult
         {
             public OrganDonationRegistration Registration { get; }
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             {
                 Registration = registration;
             }
-        
+
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
@@ -51,16 +51,6 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
-        public class SearchSystemUnavailable : OrganDonationResult
-        {
-            public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
-        }
-
-        public class BadSearchRequest : OrganDonationResult
-        {
-            public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
-        }
-
         public class SearchTimeout : OrganDonationResult
         {
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
@@ -68,6 +58,18 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public class SearchError : OrganDonationResult
         {
+            public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
+        }
+
+        public class SearchUpstreamError : OrganDonationResult
+        {
+            public ApiErrorResponse Response { get; }
+
+            public SearchUpstreamError(ApiErrorResponse response)
+            {
+                Response = response;
+            }
+
             public override T Accept<T>(IOrganDonationResultVisitor<T> visitor) => visitor.Visit(this);
         }
     }

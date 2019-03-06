@@ -22,7 +22,10 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
         
         public IActionResult Visit(OrganDonationRegistrationResult.UpstreamError result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+            return new ObjectResult(result.Response)
+            {
+                StatusCode = StatusCodes.Status502BadGateway               
+            };
         }
         
         public IActionResult Visit(OrganDonationRegistrationResult.Timeout result)

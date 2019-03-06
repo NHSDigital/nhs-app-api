@@ -1,5 +1,5 @@
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
-
+using NHSOnline.Backend.Support;
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
     public abstract class OrganDonationReferenceDataResult
@@ -8,25 +8,31 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public class SuccessfullyRetrieved : OrganDonationReferenceDataResult
         {
-
             public OrganDonationReferenceDataResponse Response { get; }
-            
+
             public SuccessfullyRetrieved(OrganDonationReferenceDataResponse response)
             {
                 Response = response;
             }
-            
-            public override T Accept<T>(IOrganDonationReferenceDataResultVisitor<T> visitor) => visitor.Visit(this); 
+
+            public override T Accept<T>(IOrganDonationReferenceDataResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
         public class UpstreamError : OrganDonationReferenceDataResult
         {
-            public override T Accept<T>(IOrganDonationReferenceDataResultVisitor<T> visitor) => visitor.Visit(this); 
+            public ApiErrorResponse Response { get; }
+
+            public UpstreamError(ApiErrorResponse response)
+            {
+                Response = response;
+            }
+
+            public override T Accept<T>(IOrganDonationReferenceDataResultVisitor<T> visitor) => visitor.Visit(this);
         }
-        
+
         public class SystemError : OrganDonationReferenceDataResult
         {
-            public override T Accept<T>(IOrganDonationReferenceDataResultVisitor<T> visitor) => visitor.Visit(this); 
+            public override T Accept<T>(IOrganDonationReferenceDataResultVisitor<T> visitor) => visitor.Visit(this);
         }
 
         public class Timeout : OrganDonationReferenceDataResult

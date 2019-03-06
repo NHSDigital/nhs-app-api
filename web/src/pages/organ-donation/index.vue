@@ -1,5 +1,5 @@
 <template>
-  <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
+  <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <div v-if="showConflictedDecisionFound">
       <message-dialog :icon-text="$t('organDonation.viewDecision.conflictedState.dialogText')"
                       message-id="success-dialog" message-type="success">
@@ -73,11 +73,12 @@ export default {
     YourDecision,
   },
   async asyncData({ store }) {
+    await store.dispatch('organDonation/getReferenceData');
     await store.dispatch('organDonation/getRegistration');
   },
   computed: {
     choices() {
-      return get('$store.state.organDonation.originalRegistration.decisionDetails.choices')(this);
+      return get('choices')(this.decisionDetails);
     },
     decision() {
       return this.$store.state.organDonation.originalRegistration.decision;
@@ -88,7 +89,7 @@ export default {
     hasAllOrgans() {
       return !!(
         this.hasExistingDecision &&
-        get('$store.state.organDonation.originalRegistration.decisionDetails.all')(this)
+        get('all')(this.decisionDetails)
       );
     },
     hasAppointedRep() {
@@ -106,7 +107,7 @@ export default {
     hasSomeOrgans() {
       return !!(
         this.hasExistingDecision &&
-        get('$store.state.organDonation.originalRegistration.decisionDetails.all')(this) === false
+        get('all')(this.decisionDetails) === false
       );
     },
     showConflictedDecisionFound() {

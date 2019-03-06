@@ -60,19 +60,6 @@ describe('additional-details', () => {
       expect($t).toHaveBeenCalledWith('organDonation.additionalDetails.subheader');
     });
 
-    describe('asyncData', () => {
-      it('will not redirect back to the organ donation index if the decision is not found', () => {
-        const redirect = jest.fn();
-        wrapper.vm.$options.asyncData({ redirect, store: $store });
-        expect(redirect).not.toHaveBeenCalled();
-      });
-
-      it('will request reference data from the api', () => {
-        wrapper.vm.$options.asyncData({ store: $store });
-        expect($store.dispatch).toHaveBeenCalledWith('organDonation/getReferenceData');
-      });
-    });
-
     describe('dropdowns', () => {
       beforeEach(() => {
         state.organDonation.referenceData = {

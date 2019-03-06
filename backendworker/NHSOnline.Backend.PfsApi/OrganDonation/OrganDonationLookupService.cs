@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         private readonly IMapper<OrganDonationRegistration, RegistrationLookupRequest> _lookupRegistrationRequestMapper;
         private readonly IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
             _registrationMapper;
+        private readonly IMapper<HttpStatusCode, OrganDonationResult> _organDonationResultErrorMapper;
 
         public OrganDonationLookupService(
             ILogger<OrganDonationLookupService> logger,
@@ -25,12 +26,14 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             IMapper<OrganDonationRegistration, RegistrationLookupResponse, OrganDonationRegistration>
                 registrationMapper,
             IMapper<OrganDonationRegistration, RegistrationLookupRequest> lookupRegistrationRequestMapper,
+            IMapper<HttpStatusCode, OrganDonationResult> organDonationResultErrorMapper,
             IOrganDonationClient organDonationClient)
         {
             _logger = logger;
             _demographicsRegistrationMapper = demographicsRegistrationMapper;
             _lookupRegistrationRequestMapper = lookupRegistrationRequestMapper;
             _registrationMapper = registrationMapper;
+            _organDonationResultErrorMapper = organDonationResultErrorMapper;
             _organDonationClient = organDonationClient;
         }
 
@@ -60,42 +63,20 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
                 switch (existingRegistrationRecord.StatusCode)
                 {
+                    case HttpStatusCode.Conflict:
+                        _logger.LogDebug($"Registration conflicted. {existingRegistrationRecord.ErrorForLogging}");
+                        response.State = State.Conflicted;
+                        return new OrganDonationResult.ExistingRegistration(response);
                     case HttpStatusCode.NotFound:
-                        _logger.LogDebug("Could not find an existing record");
-                        break;
+                        return new OrganDonationResult.NewRegistration(response);
                     default:
-                        return GetExistingRecordErrorResult(existingRegistrationRecord, response);
+                        return _organDonationResultErrorMapper.Map(existingRegistrationRecord.StatusCode);
                 }
-
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request to retrieve existing organ donation record");
-                return new OrganDonationResult.SearchSystemUnavailable();
-            }
-
-            return new OrganDonationResult.NewRegistration(response);
-        }
-
-        private OrganDonationResult GetExistingRecordErrorResult(
-            OrganDonationResponse<RegistrationLookupResponse> existingRegistrationRecord,
-            OrganDonationRegistration response)
-        {
-            switch (existingRegistrationRecord.StatusCode)
-            {
-                case HttpStatusCode.Conflict:
-                    _logger.LogDebug($"Registration conflicted. {existingRegistrationRecord.ErrorForLogging}");
-                    response.State = State.Conflicted;
-                    return new OrganDonationResult.ExistingRegistration(response);
-                case HttpStatusCode.BadRequest:
-                    _logger.LogDebug("The organ donation request is invalid");
-                    return new OrganDonationResult.BadSearchRequest();
-                case HttpStatusCode.RequestTimeout:
-                    _logger.LogDebug("The organ donation search timed-out");
-                    return new OrganDonationResult.SearchTimeout();
-                default:
-                    _logger.LogDebug("Something went wrong when retrieving organ donation record");
-                    return new OrganDonationResult.SearchError();
+                return new OrganDonationResult.SearchError();
             }
         }
 

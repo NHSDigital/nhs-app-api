@@ -186,26 +186,9 @@ describe('review your decision', () => {
         $store.state.organDonation.isPrivacyAccepted = true;
       });
 
-      describe('is not amending', () => {
-        beforeEach(() => {
-          $store.state.organDonation.isAmending = false;
-        });
-
-        it('it will call organDonation/postRegistration', async () => {
-          await submitButton.trigger('click');
-          expect($store.dispatch).toHaveBeenCalledWith('organDonation/postRegistration');
-        });
-      });
-
-      describe('is amending', () => {
-        beforeEach(() => {
-          $store.state.organDonation.isAmending = true;
-        });
-
-        it('it will call organDonation/putRegistration', async () => {
-          await submitButton.trigger('click');
-          expect($store.dispatch).toHaveBeenCalledWith('organDonation/putRegistration');
-        });
+      it('it will call organDonation/submitRegistration', async () => {
+        await submitButton.trigger('click');
+        expect($store.dispatch).toHaveBeenCalledWith('organDonation/submitRegistration');
       });
     });
   });

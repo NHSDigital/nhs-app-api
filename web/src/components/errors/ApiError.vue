@@ -12,14 +12,17 @@
           {{ message }}
         </message-text>
         <message-text v-if="hasAdditionalInfo" :aria-label="additionalInfoLabel"
-                      :class="$style['additionalInfomation']"
+                      :class="$style.additionalInfomation"
                       data-purpose="msg-extratext">
           {{ additionalInfo }}
-        </message-text >
+        </message-text>
+        <component v-if="additionalInfoComponentName" :is="additionalInfoComponentName"
+                   :class="$style.additionalInfomation" />
       </message-dialog>
       <form :action="retryUrl" method="get">
         <generic-button v-if="retryButtonText" :class="buttonClasses"
-                        data-purpose="retry-or-back-button" @click="onRetryButtonClicked($event)">
+                        data-purpose="retry-or-back-button"
+                        @click.stop.prevent="onRetryButtonClicked">
           {{ retryButtonText }}
         </generic-button>
       </form>
@@ -35,69 +38,98 @@
 </template>
 <script>
 /* eslint-disable import/extensions */
+import ContactOrganDonation from '@/components/errors/additional-info/ContactOrganDonation';
+import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
+import GenericButton from '@/components/widgets/GenericButton';
+import HeaderSlim from '@/components/HeaderSlim';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import HeaderSlim from '@/components/HeaderSlim';
-import GenericButton from '@/components/widgets/GenericButton';
-import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
+
+const getMappedValue = ({ map, statusCode, errorCode }) => {
+  if (!map) {
+    return '';
+  }
+
+  return (errorCode && map[errorCode])
+    || map[statusCode]
+    || map.default;
+};
 
 export default {
   components: {
+    ContactOrganDonation,
+    GenericButton,
+    HeaderSlim,
     MessageDialog,
     MessageText,
-    HeaderSlim,
-    GenericButton,
   },
   mixins: [ErrorMessageMixin],
   computed: {
-    isVisible() {
-      return this.showError();
+    additionalInfo() {
+      return this.getMessage('additionalInfo');
     },
-    isStandardError() {
-      return this.showStandardErrorView();
+    additionalInfoComponentName() {
+      return this.$store.state.errors.pageSettings.additionalInfoComponent;
+    },
+    additionalInfoLabel() {
+      return this.getMessage('additionalInfoLabel');
+    },
+    buttonClasses() {
+      const clazzes = [this.$style.button];
+      const url = this.retryUrl;
+      if (url && url.length > 0) {
+        clazzes.push(this.$style.grey);
+      }
+      return clazzes;
+    },
+    hasAdditionalInfo() {
+      return this.getMessage('additionalInfo') !== '';
     },
     header() {
       const headerMessage = this.getMessage('header');
       this.trackSystemError(headerMessage);
       return headerMessage;
     },
-    subheader() {
-      return this.getMessage('subheader');
+    isStandardError() {
+      return this.$store.getters['errors/isStandardError'];
+    },
+    isVisible() {
+      return this.showError();
     },
     message() {
       return this.getMessage('message');
     },
-    additionalInfo() {
-      return this.getMessage('additionalInfo');
+    overrideStyle() {
+      return this.$store.state.errors.pageSettings.errorOverrideStyles[this.statusCode];
     },
-    additionalInfoLabel() {
-      return this.getMessage('additionalInfoLabel');
+    pageHeader() {
+      return this.getMessage('pageHeader');
     },
-    hasAdditionalInfo() {
-      return this.getMessage('additionalInfo') !== '';
+    pageTitle() {
+      return this.getMessage('pageTitle') || this.pageHeader;
+    },
+    retryAction() {
+      return getMappedValue({
+        map: this.$store.state.errors.pageSettings.action,
+        errorCode: this.errorCode,
+        statusCode: this.statusCode,
+      });
     },
     retryButtonText() {
-      if (this.hasComponentErrorCodeKey('retryButtonText') || this.hasComponentKey('retryButtonText', 'errors')) {
-        return this.getMessage('retryButtonText');
-      }
-      return '';
+      return this.getComponentErrorCodeKey('retryButtonText')
+        || this.getComponentKey('retryButtonText', 'errors');
     },
     retryUrl() {
-      const url = this.getRedirectUrl();
+      const url = getMappedValue({
+        map: this.$store.state.errors.pageSettings.redirectUrl,
+        errorCode: this.errorCode,
+        statusCode: this.statusCode,
+      });
+
       return this.correctUrl(url);
     },
-    overrideStyle() {
-      const overrideStyles = this.$store.state.errors.pageSettings.errorOverrideStyles;
-      const overrideStyle = overrideStyles[this.getApiErrorResponse().status];
-      return overrideStyle;
-    },
-    buttonClasses() {
-      const clazzes = [this.$style.button];
-      const url = this.getRedirectUrl();
-      if (url && url.length > 0) {
-        clazzes.push(this.$style.grey);
-      }
-      return clazzes;
+    subheader() {
+      return this.getMessage('subheader');
     },
   },
   updated() {
@@ -107,11 +139,15 @@ export default {
     }
   },
   methods: {
-    showError() {
-      return this.hasApiError();
+    onRetryButtonClicked() {
+      if (this.retryAction) {
+        this.$store.dispatch(this.retryAction);
+        return;
+      }
+      this.goToUrl(this.retryUrl);
     },
-    showStandardErrorView() {
-      return this.$store.getters['errors/isStandardError'];
+    showError() {
+      return this.hasApiError;
     },
     trackSystemError(message) {
       const errorMessage = {
@@ -120,39 +156,11 @@ export default {
       };
       this.$store.dispatch('analytics/trackError', errorMessage);
     },
-    onRetryButtonClicked(event) {
-      event.preventDefault();
-      this.goToUrl(this.retryUrl);
-    },
-    getRedirectUrl() {
-      const errorCode = this.getApiErrorResponse().status;
-      const redirectUrlMap = this.$store.state.errors.pageSettings.redirectUrl;
-      if (!redirectUrlMap) {
-        return '';
-      }
-      let redirectUrl = redirectUrlMap[errorCode];
-      if (!redirectUrl) {
-        redirectUrl = redirectUrlMap.default;
-      }
-      return redirectUrl;
-    },
-    getPageHeader() {
-      return this.getMessage('pageHeader');
-    },
-    getPageTitle() {
-      let pageTitle = this.getMessage('pageTitle');
-
-      if (!pageTitle || pageTitle === '') {
-        pageTitle = this.getPageHeader();
-      }
-
-      return pageTitle;
+    updatePageHeader() {
+      this.$store.dispatch('header/updateHeaderText', this.pageHeader);
     },
     updatePageTitle() {
-      this.$store.dispatch('pageTitle/updatePageTitle', this.getPageTitle());
-    },
-    updatePageHeader() {
-      this.$store.dispatch('header/updateHeaderText', this.getPageHeader());
+      this.$store.dispatch('pageTitle/updatePageTitle', this.pageTitle);
     },
   },
 };
@@ -161,12 +169,13 @@ export default {
 <style module lang="scss" scoped>
   @import '../../style/buttons';
 
-  .information-error {
-      p {
-        margin-top: 0.5em
-      }
-  }
-    .additionalInfomation {
+  .additionalInfomation {
      margin-bottom: 1em
+  }
+
+  .information-error {
+    p {
+      margin-top: 0.5em
+    }
   }
 </style>

@@ -176,24 +176,15 @@ Feature: Organ Donation
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
-    When I choose to not donate my organs
-    Then the Organ Donation Decision Additional Details page is displayed
-    And I click the 'Continue' button
-    Then the Organ Donation Check Details page is displayed
-    When I select the privacy statement link on the Organ Donation Check Details page
+    When I follow the opt-out journey to the 'Check Details' page
+    And I select the privacy statement link on the Organ Donation Check Details page
     Then a new tab opens https://www.nhsbt.nhs.uk/privacy/
 
   Scenario: A user can register to be a blood donor on the organ donation Confirmation page
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
-    When I choose to not donate my organs
-    Then the Organ Donation Decision Additional Details page is displayed
-    And I click the 'Continue' button
-    Then the Organ Donation Check Details page is displayed
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
-    Then the Organ Donation Confirmation page is displayed
+    When I follow the opt-out journey to the 'Confirmation' page
     When I select the 'Register to be a blood donor' link on the Organ Donation View Registration page
     Then a new tab opens https://my.blood.co.uk/preregister
 
@@ -270,10 +261,7 @@ Feature: Organ Donation
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
-    When I choose to not donate my organs
-    Then the Organ Donation Decision Additional Details page is displayed
-    When I click the 'Continue' button
-    Then the Organ Donation Check Details page is displayed
+    When I follow the opt-out journey to the 'Check Details' page
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
     Then a validation message is shown if both or either of the required conditions for organ donation are not checked
 
@@ -325,10 +313,37 @@ Feature: Organ Donation
     When I select the Think You're Already Registered Organ Donation link
     Then a new tab opens https://www.organdonation.nhs.uk/register-to-donate/check-registration/
 
-
   Scenario: A user can find out more about organ donation when registering
     Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I select the Find Out More About Organ Donation link
     Then a new tab opens https://www.organdonation.nhs.uk/faq/
+
+  Scenario Outline: A user opting out, where OD returns a <Error Code> recoverable error is shown an error message
+  and can retry
+    Given I am a EMIS user who wishes to register as opt out, but OD returns recoverable <Error Code> error
+    And I am logged in
+    When I navigate to the internal Organ Donation Choice Page
+    When I follow the opt-out journey to the 'Check Details' page
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'No I do not want to be a donor' button
+    And I see an appropriate Organ Donation error message with a retry option
+    When I click the 'Try again' button
+    And the Organ Donation Confirmation page is displayed
+    Examples:
+      | Error Code |
+      | 429        |
+
+  Scenario Outline: An user opting out, where OD returns a <Error Code> non-recoverable error, is shown an error
+  message and can't retry
+    Given I am a EMIS user who wishes to register as opt out, but OD returns non-recoverable <Error Code> error
+    And I am logged in
+    When I navigate to the internal Organ Donation Choice Page
+    When I follow the opt-out journey to the 'Check Details' page
+    When I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'No I do not want to be a donor' button
+    And I see an appropriate Organ Donation error message without a retry option
+    Examples:
+      | Error Code |
+      | 400        |

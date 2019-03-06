@@ -8,35 +8,32 @@ import {
   DISABLE_API_ERROR,
   CLEAR_ALL_API_ERRORS,
   SET_CONNECTION_PROBLEM,
-  ADD_ERROR,
 } from './mutation-types';
 
 export default {
   [ADD_API_ERROR](state, error) {
     let statusCode;
+    let errorCode;
 
     if (error == null) {
       return;
     }
 
     if (error.response) {
-      statusCode = error.response.status;
+      const { status, data } = error.response;
+      statusCode = status;
+      ({ errorCode } = data || {});
     } else {
       statusCode = 500;
       state.hasConnectionProblem = true;
     }
     const apiError = {
       status: statusCode,
+      error: errorCode,
       message: error.message,
     };
 
     state.apiErrors.push(apiError);
-  },
-  [ADD_ERROR](state, error) {
-    if (error === null) {
-      return;
-    }
-    state.errors.push(error);
   },
   [SET_ROUTE_PATH](state, route) {
     const routePath = route.replace(/\/$/, '');

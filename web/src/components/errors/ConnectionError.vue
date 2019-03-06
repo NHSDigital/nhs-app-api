@@ -53,7 +53,7 @@ export default {
       this.$router.go();
     },
     showError() {
-      return this.hasConnectionError();
+      return this.hasConnectionError;
     },
   },
 };

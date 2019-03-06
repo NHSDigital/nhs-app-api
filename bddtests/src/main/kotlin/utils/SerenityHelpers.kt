@@ -59,6 +59,10 @@ class SerenityHelpers {
             Serenity.setSessionVariable("HttpException").to(httpException)
         }
 
+        fun getHttpException(): NhsoHttpException? {
+            return  getValueOrNull("HttpException")
+        }
+
         fun setHttpResponse(response: HttpResponse) {
             Serenity.setSessionVariable("HttpResponse").to(response)
         }

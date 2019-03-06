@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.WebSockets;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -119,33 +120,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadGateway_WhenServiceReturnSearchErrorResult()
+        public async Task Get_ReturnsInternalServerError_WhenServiceReturnSearchErrorResult()
         {
             // Arrange
             var newResult = new OrganDonationResult.SearchError();
-
-            _mockOrganDonationService
-                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
-                .Returns(Task.FromResult((OrganDonationResult) newResult));
-
-            // Act
-            var result = await _systemUnderTest.Get();
-
-            // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-
-            _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x =>
-                x.Audit(ResponseAuditType, "There was an issue searching for an organ donation record"));
-        }
-
-        [TestMethod]
-        public async Task Get_ReturnsInternalServerError_WhenServiceReturnBadSearchRequestResult()
-        {
-            // Arrange
-            var newResult = new OrganDonationResult.BadSearchRequest();
 
             _mockOrganDonationService
                 .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
@@ -160,7 +138,32 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
 
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The search request is invalid"));
+            _mockAuditor.Verify(x =>
+                x.Audit(ResponseAuditType, "There was an issue searching for an organ donation record"));
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsBadGateway_WhenServiceReturnSearchUpstreamErrorResult()
+        {
+            // Arrange
+            var response = _fixture.Create<ApiErrorResponse>();
+            var newResult = new OrganDonationResult.SearchUpstreamError(response);
+
+            _mockOrganDonationService
+                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
+                .Returns(Task.FromResult((OrganDonationResult) newResult));
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            statusCodeResult.Value.Should().Be(response);
+
+            _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "There was an upstream error when searching for an organ donation record"));
         }
 
         [TestMethod]
@@ -183,28 +186,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation system took too long to respond"));
-        }
-
-        [TestMethod]
-        public async Task Get_ReturnsBadGateway_WhenServiceReturnSearchSystemUnavailableResult()
-        {
-            // Arrange
-            var newResult = new OrganDonationResult.SearchSystemUnavailable();
-
-            _mockOrganDonationService
-                .Setup(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession))
-                .Returns(Task.FromResult((OrganDonationResult) newResult));
-
-            // Act
-            var result = await _systemUnderTest.Get();
-
-            // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-
-            _mockOrganDonationService.Verify(x => x.GetOrganDonation(It.IsAny<DemographicsResult>(), _userSession));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "The organ donation system is unavailable"));
         }
 
         [TestMethod]

@@ -6,7 +6,6 @@ import cucumber.api.java.en.When
 import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.set
-import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
@@ -41,29 +40,6 @@ class OrganDonationSubmitStepDefinitionsBackend {
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set("NewOrganDonationId")
         factory.create { registration->registration.some {
             request -> request.respondWithSuccess("NewOrganDonationId") }}
-    }
-
-    @Given("^I am a (\\w+) api user who wants to opt-out of organ donation, but OD will time out$")
-    fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOutButOrganDonationWillTimeOut(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
-        factory.create { registration->registration.optOut {
-            request -> request.respondWithTimeOutError() }}
-    }
-
-    @Given("^I am a (\\w+) api user who wants to opt-out of organ donation, but OD will return an internal error$")
-    fun iAmNotRegisteredWithOrganDonationWhoChoosesToOptOutButOrganDonationWillReturnInternalError(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
-        factory.create { registration->registration.optOut {
-            request -> request.respondWithInternalError() }}
-    }
-
-    @Given("I am a (\\w+) api user who wants to opt-in to organ donation but will cause a conflict")
-    fun iAmAApiUserWhoWantsToOptInToOrganDonationButWillCauseAConflict(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
-        val registrationId = "NewOrganDonationId"
-        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(registrationId)
-        factory.create { registration -> registration.optIn { request-> request.respondWithConflict(registrationId,
-                ORGAN_DONATION_ERROR_CODE_REGISTER_CONFLICT.toString()) }}
     }
 
     @When("^I submit my decision to organ donation$")

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,7 @@ using Name = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Name;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
-    public class ServiceConfigurationModule : Backend.Support.DependencyInjection.ServiceConfigurationModule
+    public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
     {
 private readonly ILogger<ServiceConfigurationModule> _logger;
 
@@ -87,7 +88,11 @@ private readonly ILogger<ServiceConfigurationModule> _logger;
 
             services.AddSingleton<IOrganDonationGenderMapper, OrganDonationGenderMapper>();
             services.AddSingleton<IOrganDonationDonationWishesMapper, OrganDonationDonationWishesMapper>();
-
+            
+            services.AddSingleton<IMapper<HttpStatusCode, OrganDonationResult>, OrganDonationResultErrorMapper>();
+            services.AddSingleton<IMapper<HttpStatusCode, OrganDonationRegistrationResult>, OrganDonationRegistrationResultErrorMapper>();
+            services.AddSingleton<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>, OrganDonationReferenceDataResultErrorMapper>();
+            
             base.ConfigureServices(services, configuration);
         }
 

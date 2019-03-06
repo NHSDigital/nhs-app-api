@@ -86,7 +86,7 @@ export default {
       return nhsApp;
     },
     showError() {
-      return this.hasApiError() || this.hasConnectionError(); // API or connection errors
+      return this.hasApiError || this.hasConnectionError; // API or connection errors
     },
   },
 };

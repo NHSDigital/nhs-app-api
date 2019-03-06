@@ -35,6 +35,14 @@ class OrganDonationSubmitDecisionBuilder(registration: OrganDonationRegistration
         }
     }
 
+    fun respondWithError(id: String, httpStatus: Int): Mapping {
+        val responseBody = OrganDonationRegistrationResponse(
+                id = id)
+        return respondWith(httpStatus) {
+            andJsonBody(responseBody).build()
+        }
+    }
+
     fun respondWithConflict(id: String, errorCode: String): Mapping {
         val responseBody = OrganDonationRegistrationResponse(
                 id = id,

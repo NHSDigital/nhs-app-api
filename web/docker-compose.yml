@@ -53,7 +53,7 @@ services:
       - ORGAN_DONATION_BASE_URL=https://nhsbt-apim-dev01.azure-api.net/uat3/odr/v1/
       - ORGAN_DONATION_CERT_PATH=./certs/OrganDonation.pfx
       - ORGAN_DONATION_INTEGRATION_ENABLED=false
-      - ORGAN_DONATION_REFERENCE_DATA_EXPIRY_HOURS=24
+      - ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS=86400
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - STUB_TERMS_AND_CONDITIONS=true
       - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session

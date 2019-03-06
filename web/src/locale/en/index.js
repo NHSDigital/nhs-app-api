@@ -714,6 +714,45 @@ export default {
     myRecord: 'View my medical record',
     organDonation: 'Set organ donation preferences',
   },
+  organ_donation: {
+    errors: {
+      contact: {
+        email: 'Email',
+        phone: 'Phone number',
+        otherWays: 'For other ways to contact them, visit:',
+      },
+      pageTitle: 'Something went wrong',
+      pageHeader: 'Something went wrong',
+      header: 'Something went wrong',
+      500: {
+        message: 'You need to contact NHS Blood and Transplant to get help with this.',
+      },
+      502: {
+        message: 'You need to contact NHS Blood and Transplant to get help with this.',
+        1: {
+          retryButtonText: 'Try again',
+          message: 'If the problem persists you can contact NHS Blood and Transplant to get help with this.',
+        },
+      },
+    },
+    review_your_decision: {
+      errors: {
+        pageTitle: 'Something went wrong',
+        pageHeader: 'Something went wrong',
+        header: 'Something went wrong',
+        500: {
+          message: 'You need to contact NHS Blood and Transplant to get help with this.',
+        },
+        502: {
+          message: 'You need to contact NHS Blood and Transplant to get help with this.',
+          1: {
+            retryButtonText: 'Try again',
+            message: 'If the problem persists you can contact NHS Blood and Transplant to get help with this.',
+          },
+        },
+      },
+    },
+  },
   organDonation: {
     additionalDetails: {
       continueButton: 'Continue',

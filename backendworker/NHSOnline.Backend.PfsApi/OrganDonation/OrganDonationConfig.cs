@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
     {
         Uri BaseUrl { get; set; }
         string ClientIdHeader { get; set; }
-        int ReferenceDataExpiryHours { get; set; }
+        int ReferenceDataExpirySeconds { get; set; }
         string SubscriptionHeader { get; set; }
     }
 
@@ -21,15 +21,15 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             BaseUrl = new Uri(configuration.GetOrThrow("ORGAN_DONATION_BASE_URL", logger));
             ClientIdHeader = configuration.GetOrThrow("ORGAN_DONATION_CLIENT_ID", logger);
             SubscriptionHeader = configuration.GetOrThrow("ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY", logger);
-            ReferenceDataExpiryHours = int.Parse(
-                configuration.GetOrThrow("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_HOURS", logger), 
+            ReferenceDataExpirySeconds = int.Parse(
+                configuration.GetOrThrow("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", logger), 
                 CultureInfo.InvariantCulture
             );
         }
 
         public Uri BaseUrl { get; set; }
         public string ClientIdHeader { get; set; }
-        public int ReferenceDataExpiryHours { get; set; }
+        public int ReferenceDataExpirySeconds { get; set; }
         public string SubscriptionHeader { get; set; }
     }
 }

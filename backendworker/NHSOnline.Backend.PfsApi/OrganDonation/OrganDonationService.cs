@@ -1,3 +1,6 @@
+using System;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -28,27 +31,19 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         }
 
         public async Task<OrganDonationResult> GetOrganDonation(DemographicsResult myRecord, UserSession userSession)
-        {
-            return await _lookupService.GetOrganDonation(myRecord, userSession);
-        }
+            => await _lookupService.GetOrganDonation(myRecord, userSession);
 
         public async Task<OrganDonationRegistrationResult> Register(
             OrganDonationRegistrationRequest request,
             UserSession userSession)
-        {
-            return await _registrationService.Register(request, userSession);
-        }
+            => await _registrationService.Register(request, userSession);
 
         public async Task<OrganDonationRegistrationResult> Update(
             OrganDonationRegistrationRequest request,
             UserSession userSession)
-        {
-            return await _updateService.Update(request, userSession);
-        }
+            => await _updateService.Update(request, userSession);
 
         public async Task<OrganDonationReferenceDataResult> GetReferenceData()
-        {
-            return await _referenceDataService.GetReferenceData();
-        }
+            => await _referenceDataService.GetReferenceData();
     }
 }

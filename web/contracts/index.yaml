@@ -941,7 +941,9 @@
             description: "An unexpected error occurred processing the request."
           502:
             description: "Bad response received from upstream system."
-          504:
+            schema: 
+              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+          504: 
             description: "Timeout when calling upstream system."
       post:
         tags:
@@ -984,7 +986,9 @@
             description: "An unexpected error occurred processing the request."
           502:
             description: "Bad response received from upstream system."
-          504:
+            schema: 
+              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+          504: 
             description: "Timeout when calling upstream system."
       put:
         tags:
@@ -1077,7 +1081,17 @@
             description: "An unexpected error occurred processing the request."
           502:
             description: "Bad response received from upstream system."
-          504:
+            schema: 
+              type: "object"
+              description: "error response from backend api."
+              properties: 
+                ErrorCode: 
+                  type: "int"
+                  description: "error code."
+                ErrorMessage: 
+                  type: "string"
+                  description: "error message."
+          504: 
             description: "Timeout when calling upstream system."
     /v1/patient/organdonation/referencedata:
       get:
@@ -1127,7 +1141,9 @@
             description: "An unexpected error occurred processing the request."
           502:
             description: "Bad response received from upstream system."
-          504:
+            schema: 
+              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+          504: 
             description: "Timeout when calling upstream system."
     /v1/patient/prescriptions:
       post:

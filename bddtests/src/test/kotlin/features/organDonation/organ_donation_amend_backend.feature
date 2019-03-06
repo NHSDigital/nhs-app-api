@@ -41,30 +41,6 @@ Feature: Organ Donation Amend Backend
       | TPP       |
       | VISION    |
 
-  Scenario Outline: When amending an organ donation decision but the system times out, the <GP System>
-  user receives a 504 response
-    Given I am a <GP System> api user who wants to amend their decision, but system times out
-    And I have logged in and have a valid session cookie
-    When I submit my updated decision to organ donation
-    Then I receive a "gateway timeout" error
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-
-  Scenario Outline: When amending an organ donation decision but the system returns internal error, the <GP System>
-  user receives a 502 response
-    Given I am a <GP System> api user who wants to amend their decision, but OD will return an internal error
-    And I have logged in and have a valid session cookie
-    When I submit my updated decision to organ donation
-    Then I receive a "bad gateway" error
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
-
   Scenario Outline: When amending an organ donation decision which will be conflicted, an unregistered <GP System>
   user receives a 200 response with state value of "conflicted" and a registration id
     Given I am a <GP System> api user who wants amend their decision, but will cause a conflict
@@ -77,3 +53,46 @@ Feature: Organ Donation Amend Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+
+  Scenario Outline: When amending an organ donation decision, an OD response of <Error Code> will prompt a 500
+  response and no retry option
+    Given I am a EMIS api user amending my decision, but OD returns '<Error Code>' error
+    And I have logged in and have a valid session cookie
+    When I submit my updated decision to organ donation
+    Then I receive a "Internal Server Error" error
+    And the Internal Server Error response does not include a retry option
+    Examples:
+      | Error Code |
+      | 400        |
+      | 401        |
+      | 403        |
+      | 405        |
+      | 415        |
+      | 422        |
+
+  Scenario Outline: When amending an organ donation decision, an OD response of <Error Code> will prompt a 502
+  response and a retry option
+    Given I am a EMIS api user amending my decision, but OD returns '<Error Code>' error
+    And I have logged in and have a valid session cookie
+    When I submit my updated decision to organ donation
+    Then I receive a "Bad Gateway" error
+    And the Bad Gateway error response includes a retry option
+    Examples:
+      | Error Code |
+      | 429        |
+      | 503        |
+      | 504        |
+
+  Scenario Outline: When amending an organ donation decision, an OD response of <Error Code> will prompt a 502
+  response and no retry option
+    Given I am a EMIS api user amending my decision, but OD returns '<Error Code>' error
+    And I have logged in and have a valid session cookie
+    When I submit my updated decision to organ donation
+    Then I receive a "Bad Gateway" error
+    And the Bad Gateway error response does not include a retry option
+    Examples:
+      | Error Code |
+      | 404        |
+      | 409        |
+      | 500        |
+      | 502        |

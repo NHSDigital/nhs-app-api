@@ -1,12 +1,13 @@
 using NHSOnline.Backend.PfsApi.Areas.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
     public abstract class OrganDonationRegistrationResult
     {
         public abstract T Accept<T>(IOrganDonationRegistrationResultVisitor<T> visitor);
-        
+
         public class SuccessfullyRegistered : OrganDonationRegistrationResult
         {
             public OrganDonationRegistrationResponse Response { get; }
@@ -15,10 +16,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             {
                 Response = response;
             }
-            
+
             public override T Accept<T>(IOrganDonationRegistrationResultVisitor<T> visitor) => visitor.Visit(this);
         }
-        
+
         public class SystemError : OrganDonationRegistrationResult
         {
             public override T Accept<T>(IOrganDonationRegistrationResultVisitor<T> visitor) => visitor.Visit(this);
@@ -26,6 +27,13 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public class UpstreamError : OrganDonationRegistrationResult
         {
+            public ApiErrorResponse Response { get; }
+            
+            public UpstreamError(ApiErrorResponse response)
+            {
+                Response = response;
+            }
+
             public override T Accept<T>(IOrganDonationRegistrationResultVisitor<T> visitor) => visitor.Visit(this);
         }
 

@@ -15,7 +15,7 @@
 
             return $"Error Code: '{Code}'. " +
                    $"FHIR Code: '{firstDetails?.Code}'. " +
-                   $"FHIR Display: '{firstDetails?.Display}'. ";
+                   $"FHIR Display: '{Diagnostics}'. ";
         }
     }
 }

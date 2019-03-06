@@ -99,7 +99,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
         public async Task Put_ReturnsBadGateway_WhenServiceReturnUpstreamErrorResult()
         {
             // Arrange
-            var upstreamErrorResult = new OrganDonationRegistrationResult.UpstreamError();
+            var response = _fixture.Create<ApiErrorResponse>();
+            var upstreamErrorResult = new OrganDonationRegistrationResult.UpstreamError(response);
 
             _mockOrganDonationService
                 .Setup(x => x.Update(It.IsAny<OrganDonationRegistrationRequest>(), _userSession))
@@ -109,8 +110,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var result = await _systemUnderTest.Put(new OrganDonationRegistrationRequest());
 
             // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            var statusCodeResult = result.Should().BeAssignableTo<ObjectResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            statusCodeResult.Value.Should().Be(response);
 
             _mockOrganDonationService.Verify(x => x.Update(It.IsAny<OrganDonationRegistrationRequest>(), _userSession));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));

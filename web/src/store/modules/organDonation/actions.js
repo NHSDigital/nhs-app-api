@@ -1,5 +1,6 @@
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import cloneDeep from 'lodash/fp/cloneDeep';
+import { ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
 import {
   CLONE_FROM_ORIGINAL,
   INIT,
@@ -33,6 +34,13 @@ const buildRequest = (state) => {
   };
 };
 
+const commitData = ({ commit, data, mutation }) => {
+  /* Need to check if data is set because server side
+     success callback is called even when it fails */
+  if (!data) return;
+  commit(mutation, data);
+};
+
 export default {
   amendCancel({ commit }) {
     commit(SET_AMENDING, false);
@@ -56,10 +64,12 @@ export default {
     commit(CLONE_FROM_ORIGINAL, path);
   },
   async getReferenceData({ commit }) {
-    commit(LOADED_REFERENCE_DATA, await this.app.$http.getV1PatientOrgandonationReferencedata());
+    return this.app.$http.getV1PatientOrgandonationReferencedata()
+      .then(data => commitData({ commit, data, mutation: LOADED_REFERENCE_DATA }));
   },
   async getRegistration({ commit }) {
-    commit(LOADED, await this.app.$http.getV1PatientOrgandonation());
+    return this.app.$http.getV1PatientOrgandonation()
+      .then(data => commitData({ commit, data, mutation: LOADED }));
   },
   init({ commit }) {
     commit(INIT);
@@ -67,19 +77,9 @@ export default {
   makeDecision({ commit }, decision) {
     commit(MAKE_DECISION, decision);
   },
-  async postRegistration({ commit, state }) {
-    const request = buildRequest(state);
-    const response = await this.app.$http.postV1PatientOrgandonation(request);
-    commit(SET_STATE, response.state);
-    commit(SET_REGISTRATION_ID, response.identifier);
-    commit(UPDATE_ORIGINAL_REGISTRATION);
-  },
-  async putRegistration({ commit, state }) {
-    const request = buildRequest(state);
-    const response = await this.app.$http.putV1PatientOrgandonation(request);
-    commit(SET_STATE, response.state);
-    commit(SET_REGISTRATION_ID, response.identifier);
-    commit(UPDATE_ORIGINAL_REGISTRATION);
+  resetAcceptanceChecks({ commit }) {
+    commit(SET_PRIVACY_ACCEPTANCE, false);
+    commit(SET_ACCURACY_ACCEPTANCE, false);
   },
   setAllOrgans({ commit }, choice) {
     commit(SET_ALL_ORGANS, choice);
@@ -93,14 +93,20 @@ export default {
   setSomeOrgans({ commit }, { value, choice }) {
     commit(SET_SOME_ORGANS, { value, choice });
   },
+  async submitRegistration({ commit, state }) {
+    const request = buildRequest(state);
+    const response = await this.app.$http[`${state.isAmending ? 'put' : 'post'}V1PatientOrgandonation`](request);
+
+    commit(SET_STATE, response.state);
+    commit(SET_REGISTRATION_ID, response.identifier);
+    commit(UPDATE_ORIGINAL_REGISTRATION);
+
+    this.$router.push(ORGAN_DONATION_VIEW_DECISION.path);
+  },
   toggleAccuracyAcceptance({ commit, state }) {
     commit(SET_ACCURACY_ACCEPTANCE, !state.isAccuracyAccepted);
   },
   togglePrivacyAcceptance({ commit, state }) {
     commit(SET_PRIVACY_ACCEPTANCE, !state.isPrivacyAccepted);
-  },
-  resetAcceptanceChecks({ commit }) {
-    commit(SET_PRIVACY_ACCEPTANCE, false);
-    commit(SET_ACCURACY_ACCEPTANCE, false);
   },
 };

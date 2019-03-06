@@ -4,13 +4,13 @@ import cucumber.api.java.en.Given
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.set
-import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT
 import mocking.organDonation.models.FaithDeclaration
 import mocking.organDonation.models.KeyValuePair
 import mocking.organDonation.models.OrganDonationAdditionalDetails
 import mocking.organDonation.models.OrganDonationRegistration
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import mocking.organDonation.models.OrganDonationDemographics
+import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT
 import utils.SerenityHelpers
 
 open class OrganDonationAmendStepDefinitions {
@@ -120,9 +120,15 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
+    @Given("I am a (.*) user registered as opt-in with organ donation, who wishes to amend$")
+    fun iAmEMISUserRegisteredWithOrganDonationWhoWishesToAmend(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existingOptIn()
+    }
 
-    @Given("I am a (.*) user registered as opt-in with organ donation, " +
-            "who wishes to opt-out but will cause a conflict")
+    @Given("I am a (.*) user registered as opt-in with organ donation, who wishes to opt-out but will cause " +
+            "a conflict")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendToOutAndCauseConflict(gpSystem: String) {
 
         val factory = OrganDonationFactory(gpSystem)
@@ -133,7 +139,7 @@ open class OrganDonationAmendStepDefinitions {
         factory.amend { registration ->
             registration.optOut { request ->
                 request.respondWithConflict(existingRegistration.id,
-                       ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT.toString())
+                        ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT.toString())
             }
         }
     }

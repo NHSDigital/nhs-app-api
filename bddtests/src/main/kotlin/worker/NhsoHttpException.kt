@@ -2,6 +2,8 @@ package worker
 
 import org.apache.http.HttpRequest
 import org.apache.http.HttpResponse
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 class NhsoHttpException(
         val uri: String,
@@ -12,7 +14,7 @@ class NhsoHttpException(
     constructor(request: HttpRequest, response: HttpResponse) : this(
             request.requestLine.uri,
             response.statusLine.statusCode,
-            response.toString(),
+            parseBody(response),
             request.requestLine.method
     )
 
@@ -24,5 +26,14 @@ class NhsoHttpException(
         builder.append("Status code: $statusCode\r\n")
         builder.append("Body:        $body\r\n")
         return builder.toString()
+    }
+
+    companion object {
+
+        private fun parseBody(response: HttpResponse): String? {
+            val rd = BufferedReader(InputStreamReader(response.entity.content))
+            val result = rd.use { it.readText() }
+            return result
+        }
     }
 }

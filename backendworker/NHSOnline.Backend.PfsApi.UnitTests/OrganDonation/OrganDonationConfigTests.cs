@@ -27,14 +27,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             SetupConfigurationValue("ORGAN_DONATION_BASE_URL", "http://nhs.uk/");
             SetupConfigurationValue("ORGAN_DONATION_CLIENT_ID", "ABCD");
             SetupConfigurationValue("ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY", "1234");
-            SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_HOURS", "24");
+            SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", "86400");
 ;        }
 
         [TestMethod]
-        public void Constructor_WhenConfigurationHasNoValueForReferenceDataExpiryHours_ThrowsAnException()
+        public void Constructor_WhenConfigurationHasNoValueForReferenceDataExpirySeconds_ThrowsAnException()
         {
             // Arrange
-            SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_HOURS", null);
+            SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", null);
             
             // Act
             Action create = () => new OrganDonationConfig(_mockConfiguration.Object, _logger);
@@ -43,14 +43,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             create
                 .Should()
                 .Throw<ConfigurationNotFoundException>()
-                .WithMessage("Configuration value 'ORGAN_DONATION_REFERENCE_DATA_EXPIRY_HOURS' not found");
+                .WithMessage("Configuration value 'ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS' not found");
         }
         
         [TestMethod]
-        public void Constructor_WhenConfigurationValueForReferenceDataExpiryHoursIsNotAnInteger_ThrowsAnException()
+        public void Constructor_WhenConfigurationValueForReferenceDataExpirySecondsIsNotAnInteger_ThrowsAnException()
         {
             // Arrange
-            SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_HOURS", "boo");
+            SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", "boo");
             
             // Act
             Action create = () => new OrganDonationConfig(_mockConfiguration.Object, _logger);

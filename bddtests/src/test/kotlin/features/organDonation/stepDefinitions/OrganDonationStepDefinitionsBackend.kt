@@ -3,20 +3,16 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.set
-import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT
-import mocking.stubs.StubbedEnvironment
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
+import org.apache.http.HttpStatus
 import org.junit.Assert
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.organdonation.OrganDonationSearchResponse
 import worker.models.organdonation.OrganDonationState
-import java.time.Duration
 
 class OrganDonationStepDefinitionsBackend {
 
@@ -46,100 +42,8 @@ class OrganDonationStepDefinitionsBackend {
 
     @Given("^I am a (\\w+) api user not registered with organ donation$")
     fun iAmNotRegisteredWithOrganDonation(gpSystem: String) {
-        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics { a->a.respondWithNotFoundError()}
-    }
-
-    @Given("^I am a (\\w+) api user registered with organ donation, but organ donation will conflict$")
-    fun iAmRegisteredWithOrganDonationButOrganDonationWillConflict(gpSystem: String) {
-        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithConflictError()}
-    }
-
-    @Given("^I am a (\\w+) api user registered with organ donation, but lookup call will time out$")
-    fun iAmRegisteredWithOrganDonationButOrganDonationWillThrowTimeout(gpSystem: String) {
-        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithTimeOutError()
-                .delayedBy(Duration.ofSeconds(StubbedEnvironment.TIMEOUT_DELAY))}
-    }
-
-    @Given("^I am a (\\w+) api user registered with organ donation, but lookup call will return an internal error$")
-    fun iAmRegisteredWithOrganDonationButOrganDonationWillThrowInternalError(gpSystem: String) {
-        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics{ a->a.respondWithInternalError()}
-    }
-
-    @Given("^I am a (\\w+) api user registered with organ donation, but demographics will time out$")
-    fun iAmRegisteredWithOrganDonationButDemographicsWillThrowTimeOutError(gpSystem: String) {
-        OrganDonationFactory(gpSystem).demographicsTimeout()
-    }
-
-    @Given("^I am a (\\w+) api user registered with organ donation, but demographics will return an internal error$")
-    fun iAmRegisteredWithOrganDonationButDemographicsWillThrowInternalError(gpSystem: String) {
-        OrganDonationFactory(gpSystem).demographicsInternalError()
-    }
-
-    @Given("I am a (\\w+) api user registered as opt-out who amends their decision to opt-in")
-    fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToOptIn(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
-        val existingRegistration = factory.existingOptOut()
-        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
-
-        factory.amend { registration->registration.optIn {
-            request -> request.respondWithSuccess(existingRegistration.id) }}
-    }
-
-    @Given("I am a (\\w+) api user registered as opt-in who amends their decision to some organs")
-    fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToSomeOrgans(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
-        val existingRegistration = factory.existingOptIn()
-        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
-
-        factory.amend { registration->registration.some {
-            request -> request.respondWithSuccess(existingRegistration.id) }}
-    }
-
-    @Given("I am a (\\w+) api user registered as some organs who amend their decision to opt-out")
-    fun iAmARegisteredWithOrganDonationButWantToAmendDecisionToOptOut(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
-        val existingRegistration = factory.existingOptInSome()
-        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
-
-        factory.amend { registration ->
-            registration.optOut { request ->
-                request.respondWithSuccess(existingRegistration.id)
-            }
-        }
-    }
-
-    @Given("I am a (\\w+) api user who wants to amend their decision, but system times out")
-    fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButSystemTimesOut(gpSystem: String){
-        val factory = OrganDonationFactory(gpSystem)
-        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(factory.existingOptInSome().id)
-        factory.amend { registration ->
-            registration.optOut { request ->
-                request.respondWithTimeOutError()
-            }
-        }
-    }
-
-    @Given("I am a (\\w+) api user who wants to amend their decision, but OD will return an internal error")
-    fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButInternalError(gpSystem: String){
-        val factory = OrganDonationFactory(gpSystem)
-        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(factory.existingOptInSome().id)
-        factory.amend { registration ->
-            registration.optOut { request ->
-                request.respondWithInternalError()
-            }
-        }
-    }
-
-    @Given("I am a (\\w+) api user who wants amend their decision, but will cause a conflict")
-    fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButConflict(gpSystem: String){
-        val factory = OrganDonationFactory(gpSystem)
-        val id = factory.existingOptInSome().id
-        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(id)
-        factory.amend { registration ->
-            registration.optOut { request ->
-                request.respondWithConflict(id, ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT.toString())
-            }
-        }
+        OrganDonationFactory(gpSystem).lookUpRegistrationWithSuccessfulDemographics { a->
+            a.respondWithError(HttpStatus.SC_NOT_FOUND)}
     }
 
     @When("^I request my organ donation details$")
@@ -202,15 +106,5 @@ class OrganDonationStepDefinitionsBackend {
         Assert.assertEquals("Patient name in the response does not match patient",
                 patient.formattedFullName(),
                 organDonationResponse.nameFull)
-    }
-
-    @Then("^I receive an organ donation response with state value of 'conflicted'")
-    fun iReceiveAnOrganDonationResponseWithStateValueOfConflicted(){
-        val organDonationResponse = Serenity
-                .sessionVariableCalled<OrganDonationSearchResponse>(OrganDonationSearchResponse::class)
-        Assert.assertEquals("State",
-                OrganDonationState.Conflicted,
-                organDonationResponse.state)
-
     }
 }

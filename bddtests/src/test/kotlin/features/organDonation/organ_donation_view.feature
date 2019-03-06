@@ -61,7 +61,7 @@ Feature: Organ Donation View
     And I am logged in
     And I navigate to the internal Organ Donation Page
     Then the organ donation decision has been found and is to be processed
-    
+
   Scenario Outline: A <GP System> user registered with organ donation can view their decision of appointed representative
     Given I am a <GP System> user registered with organ donation with an appointed representative
     And I am logged in
@@ -89,3 +89,47 @@ Feature: Organ Donation View
     Then the Organ Donation Confirmation page is displayed
     When I select the 'Tell your family' link on the Organ Donation View Registration page
     Then a new tab opens https://www.organdonation.nhs.uk/share-my-decision/how-to-discuss-my-decision/
+
+  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when
+  retrieving their registration, is shown an error message and can retry
+    Given I am a EMIS user registered as opt-in, but on lookup OD returns recoverable <Error Code> error
+    And I am logged in
+    And I navigate to the internal Organ Donation Page
+    And I see an appropriate Organ Donation error message with a retry option
+    When I click the 'Try again' button
+    And the decision to opt in to organ donation with all organs is displayed
+    Examples:
+      | Error Code |
+      | 504        |
+
+  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> non-recoverable error when
+  retrieving their registration, is shown an error message and can't retry
+    Given I am a EMIS user registered with OD, but on lookup OD returns non-recoverable <Error Code> error
+    And I am logged in
+    And I navigate to the internal Organ Donation Page
+    And I see an appropriate Organ Donation error message without a retry option
+    Examples:
+      | Error Code |
+      | 403        |
+
+  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when
+  retrieving reference data, is shown an error message and can retry
+    Given I am a EMIS user registered with OD, but the ReferenceData call returns recoverable <Error Code> error
+    And I am logged in
+    And I navigate to the internal Organ Donation Page
+    And I see an appropriate Organ Donation error message with a retry option
+    When I click the 'Try again' button
+    And the decision to opt in to organ donation with all organs is displayed
+    Examples:
+      | Error Code |
+      | 429        |
+
+  Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> non-recoverable error when
+  retrieving reference data, is shown an error message and can't retry
+    Given I am a EMIS user registered with OD, but the ReferenceData call returns non-recoverable <Error Code> error
+    And I am logged in
+    And I navigate to the internal Organ Donation Page
+    And I see an appropriate Organ Donation error message without a retry option
+    Examples:
+      | Error Code |
+      | 405        |

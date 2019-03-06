@@ -23,8 +23,6 @@ open class OrganDonationConfirmationPage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
         waitForSpinnerToDisappear()
-        title.assertIsVisible()
-        amendDecisionLink.assertIsVisible()
     }
 
     override val titleText: String = "Your decision"
@@ -49,6 +47,8 @@ open class OrganDonationConfirmationPage : OrganDonationBasePage() {
 
     fun assertCreatedBanner() {
         BannerObject.success(this).assertVisible("We have updated your decision")
+        title.assertIsVisible()
+        amendDecisionLink.assertIsVisible()
     }
 
     fun assertDecisionSubmitted() {
@@ -61,8 +61,9 @@ open class OrganDonationConfirmationPage : OrganDonationBasePage() {
     }
 
     fun assertDecisionFound() {
-        BannerObject.success(this, "Decision found")
-                .assertVisible("Your registration is currently being processed.")
+        waitForSpinnerToDisappear()
+        waitForElement{BannerObject.success(this, "Decision found")
+                .assertVisible("Your registration is currently being processed.")}
         assertText("We are still processing your registration",
                 "Please check back in 2 days. " +
                         "You’ll then be able to view and amend your decision via the NHS App. " +

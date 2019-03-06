@@ -77,54 +77,56 @@ Feature: Organ Donation Lookup Backend
     And I receive an organ donation response with state value of 'conflicted'
     Examples:
       | GP System |
-      | EMIS      |
-      | TPP       |
       | VISION    |
 
-  Scenario Outline: When looking for an organ donation registration but the call returns internal error, the <GP System>
-  user receives a 502 response
-    Given I am a <GP System> api user registered with organ donation, but lookup call will return an internal error
+  Scenario Outline: When looking for an organ donation registration, an OD response of <Error Code> will prompt a 500
+  response and no retry option
+    Given I am a EMIS api user registered with OD, but lookup returns '<Error Code>' error
     And I have logged in and have a valid session cookie
     When I request my organ donation details
-    Then I receive a "bad gateway" error
+    Then I receive a "Internal Server Error" error
+    And the Internal Server Error response does not include a retry option
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
+      | Error Code |
+      | 400        |
+      | 401        |
+      | 403        |
+      | 405        |
+      | 415        |
+      | 422        |
 
-  Scenario Outline: When looking for an organ donation registration but the call times out, the <GP System> user
-  receives a 504 response
-    Given I am a <GP System> api user registered with organ donation, but lookup call will time out
+  Scenario Outline: When looking for an organ donation registration, an OD response of <Error Code> will prompt a 502
+  response and a retry option
+    Given I am a EMIS api user registered with OD, but lookup returns '<Error Code>' error
     And I have logged in and have a valid session cookie
     When I request my organ donation details
-    Then I receive a "gateway timeout" error
+    Then I receive a "Bad Gateway" error
+    And the Bad Gateway error response includes a retry option
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
+      | Error Code |
+      | 429        |
+      | 503        |
+      | 504        |
 
-  Scenario Outline: When looking for an organ donation registration with an invalid session, the <GP System> user
-  receives a 401 response
-    Given I am a <GP System> api user registered with organ donation to not donate my organs
+  Scenario Outline: When looking for an organ donation registration, an OD response of <Error Code> will prompt a 502
+  response and no retry option
+    Given I am a EMIS api user registered with OD, but lookup returns '<Error Code>' error
     And I have logged in and have a valid session cookie
-    And I am idle long enough for the backend session to expire
     When I request my organ donation details
-    Then I receive a "unauthorized" error
+    Then I receive a "Bad Gateway" error
+    And the Bad Gateway error response does not include a retry option
     Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-      | VISION    |
+      | Error Code |
+      | 500        |
+      | 502        |
 
   Scenario Outline: When looking for an organ donation registration but <GP System> fails to return demographics,
   the user receives a 502 response
       #The OD data needs to be placed after log in, as the demographics timeout will affect creating a session
     Given I have logged into <GP System> and have a valid session cookie
-    Given I am a <GP System> api user registered with organ donation, but demographics will return an internal error
+    And I am a <GP System> api user registered with organ donation, but demographics will return an internal error
     When I request my organ donation details
-    Then I receive a "bad gateway" error
+    Then I receive a "Bad Gateway" error
     Examples:
       | GP System |
       | EMIS      |
@@ -133,11 +135,11 @@ Feature: Organ Donation Lookup Backend
 
   Scenario Outline: When looking for an organ donation registration but <GP System> times out when returning
   demographics, the user receives a 504 response
-      #The OD data needs to be placed after log in, as the demographics timeout will affect creating a session
-      Given I have logged into <GP System> and have a valid session cookie
-      And I am a <GP System> api user registered with organ donation, but demographics will time out
-      When I request my organ donation details
-      Then I receive a "gateway timeout" error
+    #The OD data needs to be placed after log in, as the demographics timeout will affect creating a session
+    Given I have logged into <GP System> and have a valid session cookie
+    And I am a <GP System> api user registered with organ donation, but demographics will time out
+    When I request my organ donation details
+    Then I receive a "Gateway Timeout" error
     Examples:
       | GP System |
       | EMIS      |

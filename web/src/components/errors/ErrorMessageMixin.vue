@@ -1,63 +1,54 @@
 <script>
+import get from 'lodash/fp/get';
+
 export default {
-  methods: {
-    showError() {
-      throw new Error('The method "showError" has not been implemented');
-    },
-    getApiErrorResponse() {
-      return this.$store.state.errors.apiErrors[0];
-    },
-    getDefaultErrorCodeKey(type) {
-      if (!this.showError()) {
-        return '';
-      }
-      return `errors.${this.getApiErrorResponse().status}.${type}`;
-    },
-    hasDefaultErrorCodeKey(type) {
-      return this.$te(this.getDefaultErrorCodeKey(type));
-    },
-    hasComponentKey(type, domain) {
-      return this.$te(this.getComponentKey(type, domain));
-    },
-    getRoutePath() {
+  computed: {
+    component() {
       return this.$store.state.errors.routePath.substring(1).replace(/\//g, '.').replace(/-/g, '_');
     },
-    getComponentKey(type, domain) {
-      if (!this.showError()) {
-        return '';
-      }
-      const component = this.getRoutePath();
-      return `${component}.${domain}.${type}`;
-    },
-    getComponentErrorCodeKey(type) {
-      if (!this.showError()) {
-        return '';
-      }
-      const component = this.getRoutePath();
-      return `${component}.errors.${this.getApiErrorResponse().status}.${type}`;
-    },
-    hasComponentErrorCodeKey(type) {
-      return this.$te(this.getComponentErrorCodeKey(type));
-    },
-    getMessage(type) {
-      const hasApiError = this.hasApiError();
-      const domain = hasApiError ? 'errors' : 'noConnection';
-      if (hasApiError && this.hasComponentErrorCodeKey(type)) {
-        return this.$t(this.getComponentErrorCodeKey(type));
-      } else if (this.hasComponentKey(type, domain)) {
-        return this.$t(this.getComponentKey(type, domain));
-      } else if (hasApiError && this.hasDefaultErrorCodeKey(type)) {
-        return this.$t(this.getDefaultErrorCodeKey(type));
-      } else if (this.$te(`${domain}.${type}`)) {
-        return this.$t(`${domain}.${type}`);
-      }
-      return '';
+    errorCode() {
+      return get('$store.state.errors.apiErrors[0].error')(this);
     },
     hasApiError() {
       return this.$store.getters['errors/showApiError'];
     },
     hasConnectionError() {
       return this.$store.state.errors.hasConnectionProblem;
+    },
+    statusCode() {
+      return get('$store.state.errors.apiErrors[0].status')(this);
+    },
+  },
+  methods: {
+    getComponentErrorCodeKey(type) {
+      if (this.hasApiError) {
+        return (this.errorCode && this.getText(`${this.component}.errors.${this.statusCode}.${this.errorCode}.${type}`))
+          || (this.errorCode && this.getText(`${this.component}.errors.${this.errorCode}.${type}`))
+          || this.getText(`${this.component}.errors.${this.statusCode}.${type}`);
+      }
+
+      return '';
+    },
+    getComponentKey(type, domain) {
+      return this.getText(`${this.component}.${domain}.${type}`);
+    },
+    getMessage(type) {
+      const domain = this.hasApiError ? 'errors' : 'noConnection';
+
+      if (this.showError()) {
+        return this.getComponentErrorCodeKey(type)
+          || this.getText(`${this.component}.${domain}.${type}`)
+          || this.getText(`errors.${this.statusCode}.${type}`)
+          || this.getText(`${domain}.${type}`);
+      }
+
+      return '';
+    },
+    getText(key) {
+      return this.$te(key) ? this.$t(key) : '';
+    },
+    showError() {
+      throw new Error('The method "showError" has not been implemented');
     },
   },
 };

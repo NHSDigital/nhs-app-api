@@ -19,6 +19,9 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         private readonly IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>
             _organDonationReferenceDataMapper;
+        
+        private readonly IMapper<HttpStatusCode, OrganDonationReferenceDataResult>
+            _organDonationReferenceDataResultErrorMapper;
 
         private readonly IOrganDonationClient _organDonationClient;
         private readonly IMemoryCache _memoryCache;
@@ -28,6 +31,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             ILogger<OrganDonationReferenceDataService> logger,
             IMapper<OrganDonationResponse<ReferenceDataResponse>, OrganDonationReferenceDataResponse>
                 organDonationReferenceDataMapper,
+            IMapper<HttpStatusCode, OrganDonationReferenceDataResult> organDonationReferenceDataResultErrorMapper,
             IOrganDonationClient organDonationClient,
             IMemoryCache memoryCache,
             IOrganDonationConfig config)
@@ -35,6 +39,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             _logger = logger;
             _organDonationClient = organDonationClient;
             _organDonationReferenceDataMapper = organDonationReferenceDataMapper;
+            _organDonationReferenceDataResultErrorMapper = organDonationReferenceDataResultErrorMapper;
             _memoryCache = memoryCache;
             _config = config;
         }
@@ -62,7 +67,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             if (referenceData.HasSuccessResponse)
             {
                 _logger.LogDebug("Successfully retrieved organ donation reference data");
-                entry.AbsoluteExpiration = referenceData.Expires ?? DateTimeOffset.UtcNow.AddHours(_config.ReferenceDataExpiryHours);
+                entry.AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(_config.ReferenceDataExpirySeconds);
                 var response = _organDonationReferenceDataMapper.Map(referenceData);
                 return new OrganDonationReferenceDataResult.SuccessfullyRetrieved(response);
             }
@@ -70,15 +75,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             // do not persist it
             entry.AbsoluteExpiration = DateTimeOffset.UtcNow;
 
-            switch (referenceData.StatusCode)
-            {
-                case HttpStatusCode.RequestTimeout:
-                    _logger.LogDebug("The organ donation reference data retrieval timed-out");
-                    return new OrganDonationReferenceDataResult.Timeout();
-                default:
-                    _logger.LogDebug("Something went wrong when retrieving organ donation reference data");
-                    return new OrganDonationReferenceDataResult.UpstreamError();
-            }
+            return _organDonationReferenceDataResultErrorMapper.Map(referenceData.StatusCode);
         }
     }
 }

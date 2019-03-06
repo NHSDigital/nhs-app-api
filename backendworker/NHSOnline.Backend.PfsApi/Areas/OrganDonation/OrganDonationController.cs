@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 
                 result.Accept(new OrganDonationRegistrationUpdateAuditingVisitor(_auditor));
 
-                return result.Accept(new OrganDonationUpdatedVisitor());
+                return result.Accept(new OrganDonationRegistrationUpdateVisitor());
             }
             finally
             {

@@ -244,13 +244,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation page is displayed with my existing decision to opt-in
     When I choose to amend my Organ Donation decision
     Then the internal Organ Donation Choice Page is displayed
-    When I choose to not donate my organs
-    Then the Organ Donation Decision Additional Details page is displayed
-    When I click the 'Continue' button
-    Then the Organ Donation Check Details page is displayed
-    And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    When I follow the opt-out journey to the 'Confirmation' page
     Then the organ donation decision has been submitted and is to be processed
 
   Scenario: A user can find out more about organ donation when amending their decision
@@ -261,3 +255,37 @@ Feature: Organ Donation - Amend
     Then the internal Organ Donation Choice Page is displayed
     When I select the Find Out More About Organ Donation link
     Then a new tab opens https://www.organdonation.nhs.uk/faq/
+
+  Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an
+  error message and can retry
+    Given I am a EMIS user registered as opt-in amends to opt-out, but OD returns recoverable <Error Code> error
+    And I am logged in
+    When I navigate to the internal Organ Donation Page
+    Then the Organ Donation page is displayed with my existing decision to opt-in
+    When I choose to amend my Organ Donation decision
+    Then the internal Organ Donation Choice Page is displayed
+    When I follow the opt-out journey to the 'Check Details' page
+    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'No I do not want to be a donor' button
+    And I see an appropriate Organ Donation error message with a retry option
+    When I click the 'Try again' button
+    And the Organ Donation Confirmation page is displayed
+    Examples:
+      | Error Code |
+      | 503        |
+
+  Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an
+  error message and can't retry
+    Given I am a EMIS user registered as opt-in amends to opt-out, but OD returns non-recoverable <Error Code> error
+    And I am logged in
+    When I navigate to the internal Organ Donation Page
+    Then the Organ Donation page is displayed with my existing decision to opt-in
+    When I choose to amend my Organ Donation decision
+    Then the internal Organ Donation Choice Page is displayed
+    When I follow the opt-out journey to the 'Check Details' page
+    And I confirm that my details are accurate, and accept the privacy statement for organ donation
+    And I click the 'No I do not want to be a donor' button
+    And I see an appropriate Organ Donation error message without a retry option
+    Examples:
+      | Error Code |
+      | 401        |
