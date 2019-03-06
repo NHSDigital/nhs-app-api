@@ -2,7 +2,6 @@
   <li
     v-tabbing="defaultClasses"
     :class="getStyleClasses"
-    :aria-label="isSelected?'selected-slot':undefined" tabindex="-1"
     @keypress="onKeyDown">
     <a :class="!$store.state.device.isNativeApp && $style.desktopWeb"
        :href="createLink()" @click.prevent="select">
