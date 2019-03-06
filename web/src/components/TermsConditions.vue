@@ -1,18 +1,26 @@
 <template>
-  <div v-if="showTemplate">
+  <div v-if="showTemplate" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="hasTriedToContinue && !areTermsAccepted" id="error_msg">
       <message-dialog :class="$style.customErrorBox" message-type="error" icon-text="Error">
         <p :class="$style.customErrorText"> {{ $t('termsAndConditions.errorMsgHeader') }} </p>
         <ul>
-          <li> {{ $t('termsAndConditions.errorMsgText') }} </li>
+          <li> {{ $t('termsAndConditions.errorMsgText') }}</li>
         </ul>
       </message-dialog>
     </div>
     <div id="text_body" :class="$style.info">
       <p> {{ $t('termsAndConditions.body1') }}
-        <a :href="termsAndConditionsURL" target="_blank">{{ $t('termsAndConditions.link1') }}</a>,
-        <a :href="privacyPolicyURL" target="_blank">{{ $t('termsAndConditions.link2') }}</a> and
-        <a :href="cookiesPolicyURL" target="_blank">{{ $t('termsAndConditions.link3') }}</a>.
+        <span>
+          <!-- inline links achieved through span to ensure font boosting is possible -->
+          <a :href="termsAndConditionsURL" target="_blank">{{ $t('termsAndConditions.link1') }}</a>
+        </span>,
+        <span>
+          <a :href="privacyPolicyURL" target="_blank">{{ $t('termsAndConditions.link2') }}</a>
+        </span>
+        and
+        <span>
+          <a :href="cookiesPolicyURL" target="_blank">{{ $t('termsAndConditions.link3') }}</a>
+        </span>.
         {{ $t('termsAndConditions.body2') }} </p>
       <p> {{ $t('termsAndConditions.body3') }} </p>
       <p><strong> {{ $t('termsAndConditions.listTitle') }} </strong></p>
@@ -24,7 +32,9 @@
       <h2>{{ $t('termsAndConditions.cookiesTitle') }}</h2>
       <p>
         {{ $t('termsAndConditions.cookiesText1') }}
-        <a :href="cookiesPolicyURL" target="_blank">{{ $t('termsAndConditions.link4') }}</a>
+        <span>
+          <a :href="cookiesPolicyURL" target="_blank">{{ $t('termsAndConditions.link4') }}</a>
+        </span>
         {{ $t('termsAndConditions.cookiesText2') }}
       </p>
     </div>
@@ -41,33 +51,40 @@
                         checkbox-id="agree_checkbox"
                         name="termsAndConditions"
                         @click="checkTerms">
-        <label id="termsAndConditionsCheckboxLabel" @click="checkTerms">
+        <span :class="$style.termsAndConditionsCaption">
           {{ $t('termsAndConditions.checkBoxText1') }}
-          <a :href="termsAndConditionsURL" style="display: inline-block;"
-             target="_blank" @click="stopProp($event)" >
-            {{ $t('termsAndConditions.link1') }}</a> and
-          <a :href="privacyPolicyURL" style="display: inline-block;"
-             target="_blank" @click="stopProp($event)" >
-            {{ $t('termsAndConditions.link2') }}</a>.
+
+          <span>
+            <!-- opening and closing tag must be on one line to
+            avoid the inline-block white space issue - inline block
+            prevents font boosting - accessibility issue
+            -->
+            <a :href="termsAndConditionsURL" target="_blank"
+               @click="stopProp($event)">{{ $t('termsAndConditions.link1') }}</a>
+          </span>
+          and
+          <span>
+            <a :href="privacyPolicyURL" target="_blank"
+               @click="stopProp($event)">{{ $t('termsAndConditions.link2') }}</a>.
+          </span>
           {{ $t('termsAndConditions.checkBoxText2') }}
-          <a :href="cookiesPolicyURL" style="display: inline-block;"
-             target="_blank" @click="stopProp($event)" >
-            {{ $t('termsAndConditions.link3') }}</a>.
-        </label>
+          <span>
+            <a :href="cookiesPolicyURL" target="_blank"
+               @click="stopProp($event)">{{ $t('termsAndConditions.link3') }}</a>.
+          </span>
+        </span>
       </generic-checkbox>
     </div>
     <generic-checkbox v-model="isAnalyticsCookieAccepted"
                       :selected="isAnalyticsCookieAccepted"
                       :check-box-classes="[$style.hideDefaultCheckbox]"
-                      :a-labelled-by="'analyticsCookieLabel'"
+                      :a-labelled-by="'analyticsCookie-agree_analyticsCookieCheckbox-label'"
                       checkbox-id="agree_analyticsCookieCheckbox"
                       name="analyticsCookie"
                       @click="checkAnalyticsCookieAccepted">
-      <label id="analyticsCookieLabel" @click="checkAnalyticsCookieAccepted">
-        {{ $t('termsAndConditions.analyticsCookieCheckBoxText') }}
-      </label>
+      {{ $t('termsAndConditions.analyticsCookieCheckBoxText') }}
     </generic-checkbox>
-    <generic-button id="btn_accept" :class="[$style.button, $style.green]"
+    <generic-button id="btn_accept" :class="[$style.button, $style.green, $style.acceptButton]"
                     @click="onConfirmButtonClicked">
       {{ $t('termsAndConditions.btnAccept') }}
     </generic-button>
@@ -104,7 +121,8 @@ export default {
   computed: {
     getAcceptTermsCheckboxLabel() {
       return this.hasTriedToContinue && !this.areTermsAccepted ?
-        'error_msg termsAndConditionsCheckboxLabel' : 'termsAndConditionsCheckboxLabel';
+        'error_msg termsAndConditions-agree_checkbox-label'
+        : 'termsAndConditions-agree_checkbox-label';
     },
   },
   methods: {
@@ -145,4 +163,10 @@ export default {
 
 <style module lang="scss" scoped>
   @import "../style/termsConditions";
+
+  .acceptButton {
+    &.desktopWeb {
+      margin: 1em 0;
+    }
+  }
 </style>

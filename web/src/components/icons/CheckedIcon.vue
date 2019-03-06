@@ -1,9 +1,9 @@
 <template>
   <div :class="$style.checkbox" aria-hidden="true">
-    <svg v-if="selected" :class="$style.checked" xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12">
+    <svg v-if="selected" :class="$style.checked" xmlns="http://www.w3.org/2000/svg" width="17" height="12" viewBox="0 0 17 12">
       <defs><style>.efcdf5ce-b03e-4827-8f05-4c309bf09cb0{fill:#0059c1;}</style></defs>
       <title>Checked</title>
-      <!--eslint-disable-next-line -->
+    <!--eslint-disable-next-line -->
       <g id="f7c68065-00a3-4d59-834a-ff2bd7c26316" data-name="Layer 2"><g id="a5d0b063-5411-4fcd-a539-45751e5ffae7" data-name="Layer 1"><path class="efcdf5ce-b03e-4827-8f05-4c309bf09cb0" d="M.18,6.6a.58.58,0,0,1,0-.84l.87-.84a.6.6,0,0,1,.86,0L2,5,5.35,8.52a.3.3,0,0,0,.43,0L14,.18h.06a.6.6,0,0,1,.86,0l.87.84a.58.58,0,0,1,0,.84L6,11.82a.57.57,0,0,1-.43.18.55.55,0,0,1-.43-.18l-4.8-5Z"></path></g></g></svg>
   </div>
 </template>
@@ -43,8 +43,8 @@ export default {
       border-color: $black;
     }
     .checked {
-      margin-left: 0.250em;
-      margin-top: 0.375em;
+      margin-left: 0.20em;
+      margin-top: 0.30em;
     }
   }
   label {

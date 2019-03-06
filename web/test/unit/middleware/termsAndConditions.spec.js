@@ -1,4 +1,4 @@
-import { TERMSANDCONDITIONS } from '@/lib/routes';
+import { TERMSANDCONDITIONS, LOGOUT } from '@/lib/routes';
 import { initialState as sessionState } from '@/store/modules/session/mutation-types';
 import { initialState as termsAndConditionsState } from '@/store/modules/termsAndConditions/mutation-types';
 import getters from '@/store/modules/session/getters';
@@ -58,6 +58,14 @@ describe('middleware/termsAndConditions', () => {
         }));
         await termsAndConditions(app);
         expect(app.redirect).toBeCalledWith('/');
+      });
+
+      it('will allow logout regardless of acceptance of the terms', async () => {
+        app.store.state.termsAndConditions.areAccepted = false;
+
+        app.route = LOGOUT;
+        await termsAndConditions(app);
+        expect(app.redirect).not.toBeCalled();
       });
     });
 

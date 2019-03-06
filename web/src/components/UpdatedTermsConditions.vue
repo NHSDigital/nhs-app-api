@@ -12,12 +12,22 @@
     </div>
     <div id="text_body" :class="$style.info">
       <p> {{ $t('updatedTermsAndConditions.body1') }}
-        <a :href="termsAndConditionsURL" target="_blank">
-          {{ $t('updatedTermsAndConditions.link1') }}</a>,
-        <a :href="privacyPolicyURL" target="_blank">
-          {{ $t('updatedTermsAndConditions.link2') }}</a> and
-        <a :href="cookiesPolicyURL" target="_blank">
-          {{ $t('updatedTermsAndConditions.link3') }}</a>.
+        <span>
+          <!-- opening and closing tag must be on one line to
+          avoid the inline-block white space issue
+          -->
+          <a :href="termsAndConditionsURL"
+             target="_blank">{{ $t('updatedTermsAndConditions.link1') }}</a>
+        </span>,
+        <span>
+          <a :href="privacyPolicyURL"
+             target="_blank">{{ $t('updatedTermsAndConditions.link2') }}</a>
+        </span>
+        and
+        <span>
+          <a :href="cookiesPolicyURL"
+             target="_blank">{{ $t('updatedTermsAndConditions.link3') }}</a>
+        </span>.
       </p>
       <p> {{ $t('updatedTermsAndConditions.body2') }} </p>
     </div>
@@ -34,19 +44,25 @@
                         checkbox-id="agree_checkbox"
                         name="termsAndConditions"
                         @click="check">
-        <label id="termsAndConditionsCheckboxLabel" @click="check">
+        <span :class="$style.termsAndConditionsCaption">
           {{ $t('updatedTermsAndConditions.checkBoxText1') }}
-          <a :href="termsAndConditionsURL" style="display: inline-block;"
-             target="_blank" @click="stopProp($event)" >
-            {{ $t('updatedTermsAndConditions.link1') }}</a> and
-          <a :href="privacyPolicyURL" style="display: inline-block;"
-             target="_blank" @click="stopProp($event)" >
-            {{ $t('updatedTermsAndConditions.link2') }}</a>.
+          <span>
+            <!-- opening and closing tag must be on one line
+            to avoid the inline-block white space issue -->
+            <a :href="termsAndConditionsURL" target="_blank"
+               @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link1') }}</a>
+          </span>
+          and
+          <span>
+            <a :href="privacyPolicyURL" target="_blank"
+               @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link2') }}</a>
+          </span>.
           {{ $t('updatedTermsAndConditions.checkBoxText2') }}
-          <a :href="cookiesPolicyURL" style="display: inline-block;"
-             target="_blank" @click="stopProp($event)" >
-            {{ $t('updatedTermsAndConditions.link3') }}</a>.
-        </label>
+          <span>
+            <a :href="cookiesPolicyURL" target="_blank"
+               @click="stopProp($event)">{{ $t('updatedTermsAndConditions.link3') }}</a>
+          </span>.
+        </span>
       </generic-checkbox>
     </div>
     <generic-button id="btn_accept" :class="[$style.button, $style.green]"
@@ -85,7 +101,8 @@ export default {
   computed: {
     getAriaLabel() {
       return this.hasTriedToContinue && !this.areTermsAccepted ?
-        'error_msg termsAndConditionsCheckboxLabel' : 'termsAndConditionsCheckboxLabel';
+        'error_msg termsAndConditions-agree_checkbox-label'
+        : 'termsAndConditions-agree_checkbox-label';
     },
   },
   methods: {

@@ -1,24 +1,25 @@
 <template>
   <div :class="$style.info">
     <h2>{{ $t('organDonation.reviewYourDecision.confirmation.subheader') }}</h2>
-    <generic-checkbox :selected="isAccuracyAccepted" checkbox-id="accuracy-checkbox"
+    <generic-checkbox :selected="isAccuracyAccepted" :class="$style.checkbox"
+                      checkbox-id="accuracy-checkbox"
                       name="accuracy" @click="toggleAccuracy">
-      <label :class="$style['checkbox-label']" for="accuracy-accuracy-checkbox">
+      <span :class="$style['checkbox-label']">
         {{ $t('organDonation.reviewYourDecision.confirmation.accuracyText') }}
         <span v-if="isAccuracyStarVisible" :class="$style.red">*</span>
-      </label>
+      </span>
     </generic-checkbox>
 
     <generic-checkbox :selected="isPrivacyAccepted" checkbox-id="privacy-checkbox"
                       name="privacy" @click="togglePrivacy">
-      <label :class="$style['checkbox-label']" for="privacy-privacy-checkbox">
+      <span :class="$style['checkbox-label']">
         {{ $t('organDonation.reviewYourDecision.confirmation.privacyText1') }}
         <a :href="privacyUrl" target="_blank">
           {{ $t('organDonation.reviewYourDecision.confirmation.privacyLinkText') }}
         </a>
         {{ $t('organDonation.reviewYourDecision.confirmation.privacyText2') }}
         <span v-if="isPrivacyStarVisible" :class="$style.red">*</span>
-      </label>
+      </span>
     </generic-checkbox>
   </div>
 </template>

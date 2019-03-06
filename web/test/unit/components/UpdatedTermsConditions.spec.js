@@ -1,6 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
 import Vuex from 'vuex';
+import { mount as mountHelper } from '../helpers';
 
 const $t = key => `translate_${key}`;
 
@@ -37,6 +38,34 @@ const createUpdatedTermsConditionsComponent = ($store) => {
     showTemplate: () => true,
   });
 };
+
+describe('UpdatedTermsConditions checkbox rendering', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    const mountUpdatedTermsConditions = ({ state } = {}) =>
+      mountHelper(UpdatedTermsConditions, {
+        state,
+      });
+
+    wrapper = mountUpdatedTermsConditions({
+      state: {
+        device: {
+          isNativeApp: false,
+        },
+      },
+    });
+  });
+
+  it('will verify that the updated tc agreement question checkbox has an associated label', () => {
+    expect(wrapper.find("input[type='checkbox'][id='termsAndConditions-agree_checkbox']")
+      .exists()).toEqual(true);
+
+    expect(wrapper.find("label[for='termsAndConditions-agree_checkbox']")
+      .exists()).toEqual(true);
+  });
+});
+
 
 describe('UpdatedTermsConditions acceptance Process', () => {
   const $store = {

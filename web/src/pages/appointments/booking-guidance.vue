@@ -25,14 +25,14 @@
         {{ $t('appointments.guidance.li3.text') }}</p>
     </div>
 
-    <analytics-tracked-tag :text="$t('appointments.guidance.symptomButttonText')"
+    <analytics-tracked-tag :text="$t('appointments.guidance.symptomButtonText')"
                            :destination="symptomsPath"
                            data-purpose="generic-button">
       <generic-button id="btn_check_symptoms"
                       :class="$style.button"
                       tabindex="0"
                       @click="onCheckSymptomClicked">
-        {{ $t('appointments.guidance.symptomButttonText') }}
+        {{ $t('appointments.guidance.symptomButtonText') }}
       </generic-button>
     </analytics-tracked-tag>
     <no-js-form :action="appointmentBookingPath" :value="formData">

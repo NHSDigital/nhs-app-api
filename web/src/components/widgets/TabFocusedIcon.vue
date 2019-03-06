@@ -1,7 +1,7 @@
 <template>
   <!--eslint-disable-next-line  vue/this-in-template -->
-  <svg :id="id"
-       v-tabbing="iconClasses"
+  <svg v-tabbing="iconClasses"
+       :id="id"
        :class="getStyleClasses"
        :viewBox="viewBox"
        :preserveAspectRatio="preserveAspectRatio"

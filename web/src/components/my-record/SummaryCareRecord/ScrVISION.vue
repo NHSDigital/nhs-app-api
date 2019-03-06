@@ -6,7 +6,7 @@
                            :click-param="ALLERGIESANDADVERSEREACTIONS"
                            :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
                            :aria-expanded="!isAllergiesAndAdverseReactionsCollapsed
-                             ? 'true' : 'false'"
+                           ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
                            tag="a"
@@ -54,7 +54,7 @@
                            :click-param="DISCONTINUEDREPEATMEDICATIONS"
                            :text="$t('my_record.discontinuedRepeatMedications.sectionHeader')"
                            :aria-expanded="!isDiscontinuedRepeatMedicationsCollapsed
-                             ? 'true' : 'false'"
+                           ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
                            tag="a"

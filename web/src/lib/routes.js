@@ -199,7 +199,18 @@ const findByName = name => find(({ name: routeName }) => routeName === name)(rou
 export const isAnonymous = (input) => {
   if (!input) return false;
   const route = input.name ? input : findByName(input);
-  return route ? !!route.isAnonymous : false;
+  return !!(route || {}).isAnonymous;
+};
+
+/**
+ * Used to define mappings for the home navigation
+ * @param currentRouteName current route name
+ * @returns {*|string} the resolved path for the home icon
+ */
+export const executeHomeNavigationRule = (currentRouteName) => {
+  const mapping = {};
+  mapping[routes.TERMSANDCONDITIONS.name] = routes.LOGOUT.path;
+  return mapping[currentRouteName] || routes.INDEX.path;
 };
 
 export const {

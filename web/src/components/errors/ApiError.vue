@@ -16,7 +16,7 @@
                       data-purpose="msg-extratext">
           {{ additionalInfo }}
         </message-text>
-        <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
+        <component v-if="additionalInfoComponentName" :is="additionalInfoComponentName"
                    :class="$style.additionalInfomation" />
       </message-dialog>
       <form :action="retryUrl" method="get">

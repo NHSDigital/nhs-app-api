@@ -24,17 +24,17 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import { INDEX } from '@/lib/routes';
+import { executeHomeNavigationRule } from '@/lib/routes';
 import HomeLink from './HomeLink';
 
 export default {
   components: {
     HomeLink,
   },
-  data() {
-    return {
-      indexPath: INDEX.path,
-    };
+  computed: {
+    indexPath() {
+      return executeHomeNavigationRule(this.$route.name);
+    },
   },
 };
 </script>
@@ -65,7 +65,7 @@ export default {
     .footer-content {
       @include main-container-width;
       margin: 0 auto;
-      padding-left: 1em;
+      padding-left: 0.5em;
 
       .nhsLogo {
         color: $white;

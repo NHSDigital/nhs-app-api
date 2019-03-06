@@ -1,4 +1,4 @@
-import { APPOINTMENTS, LOGIN, BEGINLOGIN, isAnonymous } from '@/lib/routes';
+import { TERMSANDCONDITIONS, APPOINTMENTS, LOGIN, BEGINLOGIN, isAnonymous, executeHomeNavigationRule } from '@/lib/routes';
 
 describe('routes', () => {
   describe('isAnonymous', () => {
@@ -24,6 +24,16 @@ describe('routes', () => {
 
     it('will be false for a non-anonymous route name', () => {
       expect(isAnonymous(APPOINTMENTS.name)).toBe(false);
+    });
+  });
+
+  describe('executeHomeNavigationRule', () => {
+    it('terms and condition header link should resolve to logout', () => {
+      expect(executeHomeNavigationRule(TERMSANDCONDITIONS.name)).toBe('/logout');
+    });
+
+    it('anything route\'s  header link should resolve to index', () => {
+      expect(executeHomeNavigationRule(APPOINTMENTS.name)).toBe('/');
     });
   });
 });

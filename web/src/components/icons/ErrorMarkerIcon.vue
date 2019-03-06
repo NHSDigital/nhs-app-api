@@ -30,6 +30,6 @@ export default {
 }
 
  .desktopErrorIcon{
-  fill: red
+  fill: $error
  }
 </style>

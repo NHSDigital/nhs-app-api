@@ -28,7 +28,7 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import { ACCOUNT, APPOINTMENT_BOOKING_GUIDANCE, INDEX, LOGIN, LOGOUT } from '@/lib/routes';
+import { executeHomeNavigationRule, ACCOUNT, APPOINTMENT_BOOKING_GUIDANCE, INDEX, LOGIN, LOGOUT } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 import HeaderLinks from '@/components/widgets/HeaderLinks';
 import HeaderMenu from '@/components/widgets/HeaderMenu';
@@ -90,7 +90,7 @@ export default {
       return ACCOUNT.path;
     },
     indexPath() {
-      return INDEX.path;
+      return executeHomeNavigationRule(this.$route.name);
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;

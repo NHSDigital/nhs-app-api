@@ -1,17 +1,20 @@
 <template>
   <div :class="getStyleClasses">
-    <div class="clickme" tabindex="-1" @click="check" @keypress="onKeyDown">
+    <div :class="$style.clickme" tabindex="-1" @click="check" @keypress="onKeyDown">
       <checked-icon :id="checkboxId" :selected="selected"/>
     </div>
-    <input :id="name + '-' + checkboxId"
-           v-model="selected"
-           v-tabbing="checkboxPanelStylingClasses"
+    <input v-tabbing="checkboxPanelStylingClasses"
+           :id="`${name}-${checkboxId}`"
+           :checked="selected"
            :class="checkboxStylingClasses"
            :value="checkboxId"
            :aria-labelledby="aLabelledBy"
            type="checkbox"
-           @click.prevent="check">
-    <slot/>
+           @change="check">
+
+    <label :id="`${name}-${checkboxId}-label`" :for="`${name}-${checkboxId}`">
+      <slot/>
+    </label>
   </div>
 </template>
 
@@ -76,4 +79,9 @@ export default {
 <style module lang="scss" scoped>
 @import '../../style/forms';
 @import "../../style/accessibility";
+
+.clickme {
+  outline-style: none;
+  cursor: pointer;
+}
 </style>

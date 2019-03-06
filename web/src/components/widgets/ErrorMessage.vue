@@ -26,7 +26,7 @@ export default {
    &.desktopWeb{
     font-family: $default-web;
     font-weight: normal;
-    color: red;
+    color: $error;
     margin-bottom: 1em;
    }
   }

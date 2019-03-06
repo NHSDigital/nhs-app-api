@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <main :class="this.$style.homeMain">
+    <main :class="[this.$style.homeMain, !$store.state.device.isNativeApp && $style.desktopWeb]">
       <connection-error />
       <api-error />
       <flash-message />
@@ -87,4 +87,12 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../style/home";
+
+.homeMain {
+  &.desktopWeb {
+    padding: 0;
+  }
+}
+
+
 </style>

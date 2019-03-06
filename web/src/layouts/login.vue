@@ -171,7 +171,6 @@ export default {
   }
 }
 
-
 .login-app-header-flex-container {
   display:flex;
   flex-direction:column;

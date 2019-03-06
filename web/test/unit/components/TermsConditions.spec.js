@@ -1,6 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import TermsConditions from '@/components/TermsConditions';
 import Vuex from 'vuex';
+import { mount as mountHelper } from '../helpers';
 
 const $t = key => `translate_${key}`;
 
@@ -37,6 +38,41 @@ const createTermsConditionsComponent = ($store) => {
     showTemplate: () => true,
   });
 };
+
+describe('TermsConditions checkbox rendering', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    const mountTermsConditions = ({ state } = {}) =>
+      mountHelper(TermsConditions, {
+        state,
+      });
+
+    wrapper = mountTermsConditions({
+      state: {
+        device: {
+          isNativeApp: false,
+        },
+      },
+    });
+  });
+
+  it('will verify that the tc agreement question checkbox has an associated label', () => {
+    expect(wrapper.find("input[type='checkbox'][id='termsAndConditions-agree_checkbox']")
+      .exists()).toEqual(true);
+
+    expect(wrapper.find("label[for='termsAndConditions-agree_checkbox']")
+      .exists()).toEqual(true);
+  });
+
+  it('will verify that the cookie consent checkbox has an associated label', () => {
+    expect(wrapper.find("input[type='checkbox'][id='analyticsCookie-agree_analyticsCookieCheckbox']")
+      .exists()).toEqual(true);
+
+    expect(wrapper.find("label[for='analyticsCookie-agree_analyticsCookieCheckbox']")
+      .exists()).toEqual(true);
+  });
+});
 
 describe('TermsConditions acceptance', () => {
   const $store = {

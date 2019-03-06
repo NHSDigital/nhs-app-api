@@ -1,6 +1,7 @@
 @import "./buttons";
 @import "./forms";
 @import "./home";
+@import "./colours";
 
 p {
   padding-bottom: 0.5em;
@@ -16,8 +17,11 @@ a {
   line-height: 1em;
   font-weight: bold;
   text-decoration: none;
-  vertical-align: middle;
+  vertical-align: baseline;
     outline-color: $focus_highlight;
+}
+a:hover {
+  text-decoration: underline;
 }
 strong {
   display: inline-block;
@@ -39,12 +43,18 @@ strong {
     padding-top: 0.5em;
   }
   p a {
-    display: inline-block;
+    display: inherit;
     text-decoration: underline;
   }
   a {
     padding-bottom: 0.5em;
     padding-top: 0.5em;
+  }
+}
+
+.termsAndConditionsCaption {
+  a {
+    display: inherit;
   }
 }
 
@@ -61,7 +71,7 @@ button {
   -webkit-font-smoothing: antialiased;
 }
 .validationBorderLeft {
-  border-left: 4px #DA291C solid !important;
+  border-left: 4px $error solid !important;
   padding-left: 1em !important;
   margin-top: 1em;
   margin-bottom: 0.5em;
@@ -91,7 +101,7 @@ button {
     font-weight: normal;
     font-size: 1.125em;
     line-height: 1.125em;
-    color: #DA291C;
+    color: $error;
 
   }
   ul {
@@ -100,7 +110,7 @@ button {
   }
 }
 .validationText {
-  color: #DA291C !important;
+  color: $error !important;
   font-weight: 700 !important;
   padding-bottom: 0em !important;
 }

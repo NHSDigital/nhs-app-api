@@ -7,9 +7,9 @@
           <analytics-tracked-tag id="btn_shareDecision" :href="shareDecisionUrl"
                                  :class="$style['no-decoration']"
                                  :text="$t(
-                                   'organDonation.viewDecision.nextSteps.shareDecision.subheader')"
+                                 'organDonation.viewDecision.nextSteps.shareDecision.subheader')"
                                  :aria-label="`${$t(
-                                   'organDonation.viewDecision.nextSteps.shareDecision.subheader')}.
+                                 'organDonation.viewDecision.nextSteps.shareDecision.subheader')}.
                                  ${$t('organDonation.viewDecision.nextSteps.shareDecision.body')}`"
                                  tag="a" target="_blank">
             <h2>{{ $t('organDonation.viewDecision.nextSteps.shareDecision.subheader') }}</h2>
@@ -20,9 +20,9 @@
           <analytics-tracked-tag id="btn_tellFamily" :href="tellFamilyUrl"
                                  :class="$style['no-decoration']"
                                  :text="$t(
-                                   'organDonation.viewDecision.nextSteps.tellFamily.subheader')"
+                                 'organDonation.viewDecision.nextSteps.tellFamily.subheader')"
                                  :aria-label="`${$t(
-                                   'organDonation.viewDecision.nextSteps.tellFamily.subheader')}.
+                                 'organDonation.viewDecision.nextSteps.tellFamily.subheader')}.
                                  ${$t('organDonation.viewDecision.nextSteps.tellFamily.body')}`"
                                  tag="a" target="_blank">
             <h2>{{ $t('organDonation.viewDecision.nextSteps.tellFamily.subheader') }}</h2>
