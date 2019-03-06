@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ApiSupport;
+using NHSOnline.Backend.PfsApi.Areas.OdsCode.Models;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 
@@ -36,14 +38,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.OdsCode
             {
                 var isOdsCodeEnrolled = await _odsCodeLookup.LookupSupplier(odsCode);
 
-                return new GetOdsCodeLookupResult.SuccessfullyRetrieved(
-                    isOdsCodeEnrolled.HasValue).Accept(new GetOdsCodeLookupResultVisitor());
+                var response = new GetOdsCodeLookupResponse { IsGpSystemSupported = isOdsCodeEnrolled.HasValue };
+                
+                return new OkObjectResult(response);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed request to get supplier from ods code.");
-                return new
-                    GetOdsCodeLookupResult.ErrorRetrievingOdsCode().Accept(new GetOdsCodeLookupResultVisitor());
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
             finally
             {
