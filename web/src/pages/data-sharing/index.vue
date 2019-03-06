@@ -22,7 +22,7 @@
                            :destination="dataPreferencesUrl"
                            data-purpose="button"
                            tag="button"
-                           @click="startNowClickedIos()">
+                           @click.native="startNowClickedIos">
       {{ $t('ds01.startNowButton') }}
     </analytics-tracked-tag>
 
