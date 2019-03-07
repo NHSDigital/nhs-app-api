@@ -24,10 +24,25 @@ docker kill $(docker ps | grep -v clair | grep -v CONTAINER | awk '{print $1}') 
 
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 BROWSER=${BROWSER:-chromeheadless}
-PARALLEL=${PARALLEL:-1}
+PARALLEL=${PARALLEL:-0}
 MODE=${MODE:-local}
 TC_CPUS=${TC_CPUS:-3}
 TC_RAM=${TC_RAM:-3g}
+MAX_TESTTHREADS=${MAX_TESTTHREADS:-8}
+
+# Free up some docker space if on TC
+
+if [ $MODE == "teamcity" ]
+then
+  info "Cleaning up docker networks"
+  docker network prune -f
+
+  info "Cleaning docker system"
+  docker system prune -f
+
+  info "Cleaning docker volumes"
+  docker volume prune -f
+fi
 
 DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
@@ -75,9 +90,21 @@ else
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
           @tech-debt and not @long-running and not @throttling and not @cosmos $SPECIFIC_TEST_TAGS"
         fi
-        if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ]
+        if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ] &&  [ $MODE == "teamcity" ]
         then
-          TAGS=(appointment authentication throttling other)
+          TAGS=()
+          val=1
+          for filename in $(find .. | grep -F .feature); do
+
+            info "Tagging $filename as tranche$val"
+
+            echo -e "@tranche$val\n$(cat $filename)" > $filename
+
+            TAGS+=(tranche$val)
+
+            let "val +=1"
+          done
+          
         elif [ "$RUN_NATIVE" == 1 ]
         then
           TAGS=(native-smoketest)
@@ -264,6 +291,7 @@ info "Running $TAG tests"
       --memory $TC_RAM \
       -v $workingDir/../../testRunFolder/$TAG/:/repo \
       $DOCKER_IMAGE bash -c " \
+        echo $(DATE) - $TAG Starting
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
         BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
@@ -272,7 +300,7 @@ info "Running $TAG tests"
           -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
           -Dwebdriver.provided.type=$BROWSER \
           $APPIUM_TYPE \
-          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=')" &
+          -Dwebdriver.base.url=$(cat vars_ci_run.env | grep url | cut -f2 -d'=') ; echo $(DATE) - $TAG Completed" &
   else
     docker run \
       --name $TAG \
@@ -294,8 +322,29 @@ info "Running $TAG tests"
 
   PID=$!
 
-  if [ $PARALLEL == 0 ]
+  if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ] &&  [ $MODE == "teamcity" ]
   then
+    while [ $MAX_TESTTHREADS -le $(docker ps | grep -v local.bitraft | grep -v nhsonline | wc -l) ]
+    do
+      echo "Max threads reached - sleeping"
+      sleep 10
+    done
+
+    #clean up any open container groups
+    CONTAINERS=$(docker ps | grep web.local.bitraft.io | awk '{print $1}')
+
+    for CONTAINER in ${CONTAINERS[*]}; do
+      TAG=$(docker ps --format '{{.ID}} {{.Label "com.docker.compose.project"}}' | grep $CONTAINER | awk '{print $2}')
+
+      if [ $(docker ps | grep $TAG | grep -v local.bitraft | grep -v nhsonline | wc -l) == 0 ]
+      then
+        info "Shutting down $TAG"
+        docker-compose -p $TAG -f docker-compose_ci_run.yml stop
+        docker network prune -f
+        docker volume prune -f
+      fi
+    done
+  else  
     wait $PID
   fi
 
@@ -306,13 +355,6 @@ done
 # Wait for all test runners
 for PID in ${PIDS[*]}; do
     wait $PID
-
-    test_exit_code=$?
-
-    if [ $test_exit_code != 0 ]
-    then
-      exit "$test_exit_code"
-    fi
 done
 
 # Aggregate test results

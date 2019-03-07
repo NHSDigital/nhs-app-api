@@ -29,4 +29,3 @@ Feature: Get TPP Dcr Event Data
     Then I receive "0" dcr events as part of the my record object
     And the flag informing that there was an error retrieving the dcr event data is set to "True"
     And the field indicating supplier is set to TPP
-

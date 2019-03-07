@@ -236,6 +236,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @When("^I click the (.*) section on My Record$")
     fun iClickOnTheSection(heading: String) {
+        myRecordInfoPage.waitForSpinnerToDisappear()
         myRecordInfoPage.getSection(heading).toggleShrub()
     }
 

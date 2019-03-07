@@ -24,6 +24,3 @@ Feature: Use the navigation header bar
     When I click the nhs logo
     And I wait 2 seconds
     Then I see the home page
-
-
-

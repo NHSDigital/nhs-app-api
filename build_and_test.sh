@@ -16,21 +16,19 @@ displayUsage () {
                [This option is ignored if -A is specified]
     -L     Force a branch build to run as if it was Develop and execute full BDD suite including long running tests
                 [This option is ignored if -A is specified]
-    -P     Run tests in parallel (WARNING: This can consume a large amount of docker VM memory)
     -h     Display this help message
   "
   exit 1
 }
 
 RUN_SUBSET=1
-PARALLEL=0
 RUN_AS_DEVELOP=0
 ENABLE_LONG_RUNNING=0
 PREFIX="and"
 COSMOS_AUTHKEY=""
 ENABLE_COSMOS_TESTS=0
 
-while getopts "ADCPh" opt; do
+while getopts "ADCh" opt; do
 
   case $opt in
     A)
@@ -46,9 +44,6 @@ while getopts "ADCPh" opt; do
     L)
       RUN_AS_DEVELOP=1
       ENABLE_LONG_RUNNING=1
-      ;;
-    P)
-      PARALLEL=1
       ;;
     h)
       displayUsage
@@ -116,4 +111,4 @@ docker build . -t $DOCKER_REGISTRY/$PFS_BACKEND_NAME:$TAG -f NHSOnline.Backend.P
 docker tag $DOCKER_REGISTRY/$PFS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$PFS_BACKEND_NAME:latest
 
 cd ../bddtests/ops
-PARALLEL=$PARALLEL RUN_AS_DEVELOP=$RUN_AS_DEVELOP RUN_SUBSET=$RUN_SUBSET ENABLE_LONG_RUNNING=$ENABLE_LONG_RUNNING SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ENABLE_COSMOS_TESTS=$ENABLE_COSMOS_TESTS COSMOS_AUTHKEY=$COSMOS_AUTHKEY ./docker_tests.sh
+RUN_AS_DEVELOP=$RUN_AS_DEVELOP RUN_SUBSET=$RUN_SUBSET ENABLE_LONG_RUNNING=$ENABLE_LONG_RUNNING SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ENABLE_COSMOS_TESTS=$ENABLE_COSMOS_TESTS COSMOS_AUTHKEY=$COSMOS_AUTHKEY ./docker_tests.sh

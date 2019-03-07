@@ -26,4 +26,3 @@ Feature: Guidance prior to booking an appointment
     And I am on the My Appointments page
     When I select "Book new appointment" button
     Then I am given guidance as to my options before booking an appointment
-

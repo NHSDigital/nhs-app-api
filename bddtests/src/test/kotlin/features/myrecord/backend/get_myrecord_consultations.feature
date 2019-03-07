@@ -46,5 +46,3 @@ Feature: Get Consultations Data
     Examples:
       |Service|
       |EMIS|
-
-

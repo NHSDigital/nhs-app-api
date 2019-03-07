@@ -7,6 +7,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertElementNotPresent
 import pages.assertIsVisible
+import pages.waitForNonStaleElementToBecomeVisible
 
 class DropdownElement(val label: String, val helpfulName: String, pageObject: HybridPageObject) {
 
@@ -53,8 +54,8 @@ class DropdownElement(val label: String, val helpfulName: String, pageObject: Hy
     }
 
     fun getContents(): ArrayList<String> {
-
-        val optionElements = dropDown.element.findElements(By.xpath("./option"))
+        val optionElements = dropDown.waitForNonStaleElementToBecomeVisible()
+                .element.findElements(By.xpath("./option"))
         val optionsAsStrings = arrayListOf<String>()
         for (option in optionElements) {
             optionsAsStrings.add(option.text.trim())

@@ -29,4 +29,3 @@ Feature: Get Immunisations Data
   |Service|
   |EMIS|
   |VISION|
-
