@@ -103,8 +103,8 @@ class AppointmentSlotFacadeBuilder {
         return this
     }
 
-    fun setSlotInThePast(): AppointmentSlotFacadeBuilder {
-        slotInThePast = true
+    fun setSlotInThePast(value: Boolean): AppointmentSlotFacadeBuilder {
+        slotInThePast = value
         return this
     }
 
@@ -112,6 +112,7 @@ class AppointmentSlotFacadeBuilder {
         channel = value
         return this
     }
+
 
     fun build(): AppointmentSlotFacade {
         return AppointmentSlotFacade(

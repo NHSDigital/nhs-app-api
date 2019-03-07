@@ -136,19 +136,21 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots$")
     fun theGpSystemDoesntRespondInATimelyFashionForAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val genericExample = AppointmentsSlotsExample().getGenericExample()
         factory.generateExample {
             withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
-                    .respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
+                    .respondWithSuccess(genericExample)
         }
     }
 
     @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots, on the first attempt$")
     fun theGpSystemDoesntRespondInATimelyFashionForAvailableAppointmentSlotsOnTheFirstAttempt(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val genericExample = AppointmentsSlotsExample().getGenericExample()
         // stub to generate timeout for 1st attempt
         factory.generateExample {
             withDelay(Duration.ofSeconds(TIMEOUT_IN_SECONDS))
-                    .respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
+                    .respondWithSuccess(genericExample)
                     .inScenario(timeoutScenario)
                     .whenScenarioStateIs(Scenario.STARTED)
                     .willSetStateTo(willSucceed)
@@ -160,9 +162,10 @@ class AvailableAppointmentsSlotsStepDefinitions {
         val gpSystem: String = SerenityHelpers.getValueOrNull(SupplierSpecificFactory.SerenityKey.GP_SYSTEM) ?: ""
         Assert.assertNotEquals("Cannot determine GP system being used. ", "", gpSystem)
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val genericExample = AppointmentsSlotsExample().getGenericExample()
         // stub to generate success on 2nd attempt
         factory.generateExample {
-            respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
+            respondWithSuccess(genericExample)
                     .inScenario(timeoutScenario)
                     .whenScenarioStateIs(willSucceed)
         }
@@ -172,8 +175,9 @@ class AvailableAppointmentsSlotsStepDefinitions {
             "but there is a slight delay in retrieving them$")
     fun slightDelayForRetrievingAvailableAppointmentSlots() {
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        val genericExample = AppointmentsSlotsExample().getGenericExample()
         factory.generateExample {
-            respondWithSuccess(AppointmentsSlotsExample().getGenericExample())
+            respondWithSuccess(genericExample)
                     .delayedBy(Duration.ofSeconds(1))
         }
     }
