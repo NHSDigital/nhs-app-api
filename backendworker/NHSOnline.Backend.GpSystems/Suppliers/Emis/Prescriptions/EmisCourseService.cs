@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Prescriptions;
@@ -15,17 +17,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 {
     public class EmisCourseService : ICourseService
     {
+        private readonly IAuditor _auditor;
         private readonly ILogger<EmisCourseService> _logger;
         private readonly ConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
+        private const string AuditType = Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsResponse;
 
-        public EmisCourseService(ILogger<EmisCourseService> logger, IOptions<ConfigurationSettings> settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
+        public EmisCourseService(IAuditor auditor, ILogger<EmisCourseService> logger, IOptions<ConfigurationSettings> settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _logger = logger;
             _settings = settings.Value;
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
+            _auditor = auditor;
         }
 
         public async Task<GetCoursesResult> GetCourses(GpUserSession gpUserSession)
@@ -46,6 +51,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 {
                     try
                     {
+                        var totalCourses = coursesResponse.Body.Courses.Count();
+
                         _logger
                             .LogDebug("Filtering courses from successful emis response so we are left with only repeat courses which can be requested");
 
@@ -53,7 +60,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                             coursesResponse.Body.Courses
                             .Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested)
                             .OrderBy(x => x.Name);
-                        
+
+                            _logger
+                            .LogDebug($"Filtered courses from successful emis response so we are left with only repeat courses which can be requested");
+
+                        var kvp = new Dictionary<string, string>
+                        {
+                            { "Total courses from response before filtering", totalCourses.ToString() },
+                            { "Total courses after filtering", coursesResponse.Body.Courses.Count().ToString() }
+                        };
+
+                        await _auditor.Audit(AuditType, "Total courses before filtering: {0}, Total courses after filtering: {1}", totalCourses.ToString(), coursesResponse.Body.Courses.Count().ToString());
+
+                        _logger
+                            .LogInformationKeyValuePairs("Filtering counts", kvp);
+
                         if (_settings.CoursesMaxCoursesLimit != null)
                         {
                             coursesResponse.Body.Courses = 
