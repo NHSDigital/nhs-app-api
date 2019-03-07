@@ -18,14 +18,14 @@ services:
       - ASPNETCORE_URLS=http://*:8082
       - PORT=8082
       - CORS_AUTHORITY=*
-      - TPP_CERTIFICATE_PASSWORD
+      - TPP_CERTIFICATE_PASSWORD=
       - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
       - VISION_SENDER_USERNAME=Username123123asdas
       - VISION_SENDER_USERFULLNAME=Name
       - VISION_SENDER_USERIDENTITY=65489761321654
       - VISION_SENDER_USERROLE=ROSU
       - EMIS_CERTIFICATE_PATH=
-      - VISION_CERT_PASSPHRASE
+      - VISION_CERT_PASSPHRASE=
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true
@@ -84,6 +84,23 @@ services:
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
+  servicejourneyrulesapi.local.bitraft.io:
+    image: nhsonline.backend.servicejourneyrulesapi
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.ServiceJourneyRulesApi/Dockerfile
+    ports:
+      - "8086:8086"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8086
+      - PORT=8086
+      - CORS_AUTHORITY=*
+      - VERSION_TAG=servicejourneyrules_docker_main
+      - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
+      - SESSION_MONGO_DATABASE_PORT=27017
+      - SESSION_MONGO_DATABASE_USERNAME=
+      - SESSION_MONGO_DATABASE_PASSWORD=      
   nhsonline.stubs:
     image: rodolpheche/wiremock
     ports:

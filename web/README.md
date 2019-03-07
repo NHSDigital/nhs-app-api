@@ -19,6 +19,8 @@ Before running the web locally, some entries need to be added to your machine's 
 127.0.0.1       web.local.bitraft.io
 127.0.0.1       api.local.bitraft.io
 127.0.0.1       stubs.local.bitraft.io
+127.0.0.1       cid.local.bitraft.io
+127.0.0.1       servicejourneyrulesapi.local.bitraft.io
 ```
 
 ## Run

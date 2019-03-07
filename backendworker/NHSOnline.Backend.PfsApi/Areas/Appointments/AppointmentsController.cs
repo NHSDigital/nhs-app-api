@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems;
@@ -7,6 +9,8 @@ using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
+using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
@@ -17,18 +21,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IAuditor _auditor;
         private readonly ISessionCacheService _sessionCacheService;
+        private readonly IServiceJourneyRulesService _serviceJourneyRulesService;
 
         public AppointmentsController(
             ILogger<AppointmentsController> logger,
             IGpSystemFactory gpSystemFactory,
             IAuditor auditor,
-            ISessionCacheService sessionCacheService
+            ISessionCacheService sessionCacheService,
+            IServiceJourneyRulesService serviceJourneyRulesService
             )
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
             _auditor = auditor;
             _sessionCacheService = sessionCacheService;
+            _serviceJourneyRulesService = serviceJourneyRulesService;
         }
 
         [HttpDelete]
@@ -72,15 +79,26 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogEnter();
                 
                 await _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
-
+                              
                 var userSession = HttpContext.GetUserSession();
+                
+                _logger.LogInformation("Checking Service Journey Rules for Appointments");
+                
+                AppointmentsResult result;
 
-                var appointmentsService = GetAppointmentsService(userSession);
+                var isActive = await _serviceJourneyRulesService.IsJourneyEnabled(userSession.GpUserSession.OdsCode);
 
-                var result = await appointmentsService.GetAppointments(userSession.GpUserSession);
+                if (!isActive)
+                {
+                    result = new AppointmentsResult.CannotViewAppointments();
+                }
+                else
+                {
+                    var appointmentsService = GetAppointmentsService(userSession);
+                    result = await appointmentsService.GetAppointments(userSession.GpUserSession);                    
+                }
 
                 await result.Accept(new AppointmentsAuditingVisitor(_auditor, _logger, userSession));
-
                 return await result.Accept(new AppointmentsResultVisitor(_sessionCacheService, userSession));
             }
             finally
@@ -88,8 +106,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
                 _logger.LogExit();
             }
         }
-
-
+        
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AppointmentBookRequest model)
         {

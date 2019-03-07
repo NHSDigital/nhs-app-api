@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.DependencyInjection;
 
-namespace NHSOnline.Backend.CidApi.DependencyInjection
+namespace NHSOnline.Backend.ApiSupport
 {
     public sealed class ModularStartup
     {

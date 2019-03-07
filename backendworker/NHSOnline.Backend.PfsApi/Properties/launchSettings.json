@@ -115,7 +115,8 @@
         "BROTHER_MAILER_ADDRESSBOOK_ID": "",
         "BROTHER_MAILER_SIG": "",
         "BROTHER_MAILER_USER_ID": "",
-        "VISION_ODS_REMAP_ENABLED": "false"
+        "VISION_ODS_REMAP_ENABLED": "false",
+        "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086"
       }
     },
     "NHSOnline.Backend.PfsApi.Bdd": {
