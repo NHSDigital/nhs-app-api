@@ -9,7 +9,7 @@ import pages.sharedElements.MenuLinksContent
 import pages.sharedElements.MenuLinks
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
-open class OrganDonationConfirmationPage : OrganDonationBasePage() {
+open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
 
     val shareLinkTitle ="Share that you are a donor"
     private val shareLinkDescription ="Help promote organ donation on social media by telling people you are a donor."

@@ -22,7 +22,7 @@ Feature: Organ Donation View
     Given I am a <GP System> user registered with organ donation to not donate my organs
     And I am logged in
     And I navigate to the internal Organ Donation Page
-    Then the Organ Donation Confirmation page is displayed
+    Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation is displayed
     Examples:
       | GP System |
@@ -35,7 +35,7 @@ Feature: Organ Donation View
     Given I am a <GP System> user registered with organ donation to donate all organs
     And I am logged in
     And I navigate to the internal Organ Donation Page
-    Then the Organ Donation Confirmation page is displayed
+    Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with all organs is displayed
     Examples:
       | GP System |
@@ -48,7 +48,7 @@ Feature: Organ Donation View
     Given I am a <GP System> user registered with organ donation to donate some organs
     And I am logged in
     And I navigate to the internal Organ Donation Page
-    Then the Organ Donation Confirmation page is displayed
+    Then the Organ Donation View Registration page is displayed
     And the existing decision to opt in to organ donation with some organs is displayed
     Examples:
       | GP System |
@@ -66,7 +66,7 @@ Feature: Organ Donation View
     Given I am a <GP System> user registered with organ donation with an appointed representative
     And I am logged in
     And I navigate to the internal Organ Donation Page
-    Then the Organ Donation Confirmation page is displayed
+    Then the Organ Donation View Registration page is displayed
     And the choice of an organ donation appointed representative is displayed
     Examples:
       | GP System |
@@ -78,7 +78,7 @@ Feature: Organ Donation View
     Given I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
     And I navigate to the internal Organ Donation Page
-    Then the Organ Donation Confirmation page is displayed
+    Then the Organ Donation View Registration page is displayed
     When I select the 'Share that you are a donor' link on the Organ Donation View Registration page
     Then a new tab opens https://www.organdonation.nhs.uk/share-my-decision
 
@@ -86,7 +86,7 @@ Feature: Organ Donation View
     Given I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
     And I navigate to the internal Organ Donation Page
-    Then the Organ Donation Confirmation page is displayed
+    Then the Organ Donation View Registration page is displayed
     When I select the 'Tell your family' link on the Organ Donation View Registration page
     Then a new tab opens https://www.organdonation.nhs.uk/share-my-decision/how-to-discuss-my-decision/
 

@@ -34,11 +34,11 @@ open class OrganDonationYourChoiceStepDefinitions {
 
     @Then("^the all organs option is selected")
     fun theAllOrgansOptionIsSelected() {
-        organDonationYourChoicePage.radioButtons.button(organDonationYourChoicePage.allOfMyOrgans).assertSelected()
+        organDonationYourChoicePage.radioButtons.assertSelected(organDonationYourChoicePage.allOfMyOrgans)
     }
 
     @Then("^the some organs option is selected")
     fun theSomeOrgansOptionIsSelected() {
-        organDonationYourChoicePage.radioButtons.button(organDonationYourChoicePage.someOfMyOrgans).assertSelected()
+        organDonationYourChoicePage.radioButtons.assertSelected(organDonationYourChoicePage.someOfMyOrgans)
     }
 }

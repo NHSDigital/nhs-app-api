@@ -5,8 +5,8 @@ import pages.assertIsVisible
 import pages.organDonation.OrganDonationAdditionalDetailsPage
 import pages.organDonation.OrganDonationCheckDetailsPage
 import pages.organDonation.OrganDonationChoicePage
-import pages.organDonation.OrganDonationConfirmationPage
 import pages.organDonation.OrganDonationFaithAndBeliefsPage
+import pages.organDonation.OrganDonationViewRegistrationPage
 import pages.organDonation.OrganDonationYourChoicePage
 
 open class OrganDonationJourneyStepDefinitions {
@@ -22,7 +22,7 @@ open class OrganDonationJourneyStepDefinitions {
     lateinit var organDonationFaithAndBeliefsPage: OrganDonationFaithAndBeliefsPage
     lateinit var organDonationAdditionalDetailsPage: OrganDonationAdditionalDetailsPage
     lateinit var organDonationCheckDetailsPage: OrganDonationCheckDetailsPage
-    lateinit var organDonationConfirmationPage: OrganDonationConfirmationPage
+    lateinit var organDonationViewRegistrationPage: OrganDonationViewRegistrationPage
 
     @When("I follow the opt-in journey to the '(.*)' page")
     fun iFollowTheOrganDonationOptInJourney(pageTitle: String) {
@@ -81,7 +81,7 @@ open class OrganDonationJourneyStepDefinitions {
         organDonationCheckDetailsPage.accuracyCheckBox.click()
         organDonationCheckDetailsPage.privacyStatementCheckBox.click()
         organDonationCheckDetailsPage.clickSubmit()
-        organDonationConfirmationPage.assertDisplayed()
+        organDonationViewRegistrationPage.assertDisplayed()
     }
 }
 

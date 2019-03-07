@@ -29,10 +29,6 @@ class OrganDonationSpecificOrganChoice(val title:String, page: HybridPageObject)
         radioButtons.assertAreEqual(expectedOptions)
     }
 
-    fun assertAllUnselected() {
-        radioButtons.assertAllUnselected()
-    }
-
     fun select(decision: Boolean) {
         radioButtons.button(getLabel(decision)).select()
     }

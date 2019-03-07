@@ -34,7 +34,7 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
         val errorMessage = arrayListOf("There's a problem",
                 "Make a decision for all categories to continue")
 
-        organDonationYourChoicePage.organOptions.forEach { option -> option.assertAllUnselected() }
+        organDonationYourChoicePage.assertAllOptionsUnselected()
         organDonationYourChoicePage.clickContinue()
         organDonationYourChoicePage.validationBanner.assertVisible(errorMessage)
 
@@ -68,6 +68,6 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
 
     @Then("^no options on the Organ Donation Specific Organ Choice page are selected")
     fun noOptionsOnTheOrganDonationSpecificOrganChoicePageAreSelected() {
-        organDonationYourChoicePage.assertAllRadioButtonsUnselected()
+        organDonationYourChoicePage.assertAllOptionsUnselected()
     }
 }
