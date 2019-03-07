@@ -65,7 +65,7 @@ export default {
   @include main-container-width;
   display: block;
   margin: 0 auto;
-  padding: 1em 0em;
+  padding: 1em 16px 16px;
 
   .companionButton {
    @include button;

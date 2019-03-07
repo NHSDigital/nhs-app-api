@@ -6,11 +6,11 @@
         {{ prescriptionCourse.orderDate | longDate }}
       </span>
     </p>
-    <hr v-if="prescriptionCourse.orderDate != null">
+    <hr v-if="prescriptionCourse.orderDate != null" aria-hidden="true">
     <b data-label="course-name">{{ prescriptionCourse.name }}</b>
     <p data-label="detail">{{ prescriptionCourse.details }}</p>
     <div v-if="prescriptionCourse.status != null">
-      <hr>
+      <hr aria-hidden="true">
       <div :class="getStatusStyle()">
         <b>
           <component :is="getIcon()" />
@@ -85,4 +85,12 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../style/panels";
+
+.panel {
+  &.desktopWeb {
+    hr {
+      opacity: unset;
+    }
+  }
+}
 </style>
