@@ -29,6 +29,7 @@ MODE=${MODE:-local}
 TC_CPUS=${TC_CPUS:-3}
 TC_RAM=${TC_RAM:-3g}
 MAX_TESTTHREADS=${MAX_TESTTHREADS:-8}
+ACCESSIBILITY_OUTPUT=${ACCESSIBILITY_OUTPUT_FOLDER:-accessibilityoutput}
 
 # Free up some docker space if on TC
 
@@ -72,23 +73,24 @@ else
         then
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
-          @tech-debt and not @throttling and not @cosmos"
+          @tech-debt and not @throttling and not @cosmos and not @accessibility"
         elif [ "$RUN_NATIVE" == 1 ] && [ "$BROWSER" == "browserstack_ios" ]
         then
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @nativepending and not
           @nativebug and not @backend and not @bug and not @pending and not @manual and not @tech-debt and not
-          @throttling and not @cosmos and not @noJs and not @android"
+          @throttling and not @cosmos and not @noJs and not @android and not @accessibility"
         elif [ "$RUN_NATIVE" == 1 ] && [ "$BROWSER" == "browserstack_android" ]
         then
           info "Main Tranche - Full BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @nativepending and not
           @nativebug and not @backend and not @bug and not @pending and not @manual and not @tech-debt and not
-          @throttling and not @cosmos and not @noJs and not @ios"
+          @throttling and not @cosmos and not @noJs and not @ios and not @accessibility"
         else
           info "Main Tranche - Full BDD Test Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not
-          @tech-debt and not @long-running and not @throttling and not @cosmos $SPECIFIC_TEST_TAGS"
+          @tech-debt and not @long-running and not @throttling and not
+          @cosmos and not @accessibility $SPECIFIC_TEST_TAGS"
         fi
         if [ "$PARALLEL" == 1 ] && [ "$RUN_NATIVE" != 1 ] &&  [ $MODE == "teamcity" ]
         then
@@ -123,7 +125,7 @@ else
     else
         info "MR Tranche - BDD Smoketest Run Configured"
         BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and
-        not @long-running and not @throttling and not @cosmos $SPECIFIC_TEST_TAGS"
+        not @long-running and not @throttling and not @cosmos and not @accessibility $SPECIFIC_TEST_TAGS"
         TAGS=smoketest
     fi
 fi
@@ -362,6 +364,7 @@ done
 for TAG in ${TAGS[*]}; do
   cp -r $workingDir/../../testRunFolder/$TAG/target/site/serenity $workingDir/../target/site/.
   cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.
+  cp -r $workingDir/../../testRunFolder/$TAG/$ACCESSIBILITY_OUTPUT $workingDir/../.
 done
 
 if [ $MODE == "teamcity" ]

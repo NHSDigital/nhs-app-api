@@ -101,6 +101,17 @@ task mock(type: JavaExec) {
         args Eval.me(System.getProperty("mockArgs"))
     }
 }
+
+task pally(type: JavaExec) {
+    dependsOn assemble, compileKotlin
+    classpath = jar.outputs.files
+    classpath += sourceSets.main.runtimeClasspath
+    classpath += sourceSets.test.runtimeClasspath
+    systemProperties System.properties
+    main = "accessibility.AccessibilityCheckRunner"
+    args = ['./accessibilityoutput/','pa11y ','./target/site/pa11y/','./pa11yconfig.json']
+}
+
 task frameworkUnitTests(type: Test) {
     test.ignoreFailures = true
     useJUnit {

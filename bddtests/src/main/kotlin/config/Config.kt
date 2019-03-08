@@ -59,6 +59,8 @@ class Config private constructor() {
     val accessibilityInformation: String
     val policies: String
 
+    val accessibilityOutputFolder: String
+
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         val uri = URI(url)
@@ -118,6 +120,8 @@ class Config private constructor() {
         siteMap = envOrDefault("SITE_MAP_URL", "https://www.nhs.uk/about-us/sitemap/")
         accessibilityInformation = envOrDefault("ACCESSIBILITY_URL", "https://www.nhs.uk/accessibility/")
         policies = envOrDefault("POLICIES_URL", "https://www.nhs.uk/our-policies/")
+
+        accessibilityOutputFolder = envOrDefault("ACCESSIBILITY_OUTPUT_FOLDER", "accessibilityoutput")
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {
