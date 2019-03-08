@@ -3,6 +3,7 @@ package pages.myrecord
 import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.NoSuchElementException
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
@@ -82,7 +83,12 @@ class MyRecordInfoPage : HybridPageObject() {
     }
 
     fun isNameVisible(): Boolean {
-        return getValueFromField("Name").element.isCurrentlyVisible
+        return try {
+                getValueFromField("Name").element.isCurrentlyVisible
+            } catch (e: NoSuchElementException) {
+                false
+            }
+
     }
 
     fun clickClinicalAbbreviationsLink() {
