@@ -1,17 +1,52 @@
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
-import { DECISION_OPT_IN, DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
-import { $t, mount } from '../../helpers';
+import { DECISION_OPT_IN, DECISION_OPT_OUT, initialState } from '@/store/modules/organDonation/mutation-types';
+import { $t, createStore, mount } from '../../helpers';
 
 describe('make decision', () => {
   let wrapper;
+  let $store;
+  let state;
 
-  beforeEach(() => {
-    wrapper = mount(MakeDecision, { $t });
+  const createState = () => ({
+    organDonation: initialState(),
+    device: {
+      source: 'web',
+    },
   });
 
-  it('will translate the register subheader', () => {
-    expect($t).toHaveBeenCalledWith('organDonation.register.subheader');
+  const mountWrapper = () => {
+    const store = $store || createStore({ state });
+    return mount(MakeDecision, { $store: store, $t });
+  };
+
+  beforeEach(() => {
+    state = createState();
+    wrapper = mountWrapper(MakeDecision);
+  });
+
+  describe('registration journey subheader', () => {
+    describe('not amending', () => {
+      beforeEach(() => {
+        state.organDonation.isAmending = false;
+        wrapper = mountWrapper();
+      });
+
+      it('will translate the register subheader', () => {
+        expect($t).toHaveBeenCalledWith('organDonation.register.subheaderRegister');
+      });
+    });
+
+    describe('amending', () => {
+      beforeEach(() => {
+        state.organDonation.isAmending = true;
+        wrapper = mountWrapper();
+      });
+
+      it('will translate the amend subheader', () => {
+        expect($t).toHaveBeenCalledWith('organDonation.register.subheaderAmend');
+      });
+    });
   });
 
   describe('organ donation buttons', () => {

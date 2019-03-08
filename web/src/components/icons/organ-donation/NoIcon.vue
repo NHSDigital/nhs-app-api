@@ -1,7 +1,8 @@
 <template>
-  <svg id="noIcon" :class="[$style.no]" view-box="0 0 0 0">
-    <title>{{ $t('icons.organDonation.noIcon.title') }}</title>
-    <desc>{{ $t('icons.organDonation.noIcon') }}</desc>
+  <svg id="noIcon"
+       :class="[$style.no]"
+       :aria-labelledby="titleId"
+       view-box="0 0 0 0" >
     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g transform="translate(-78.000000, -181.000000)" stroke="#D0021B" stroke-width="2">
         <g transform="translate(16.000000, 160.000000)">
@@ -18,6 +19,12 @@
 <script>
 export default {
   name: 'NoIcon',
+  props: {
+    titleId: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 

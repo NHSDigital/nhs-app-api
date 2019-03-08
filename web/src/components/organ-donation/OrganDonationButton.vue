@@ -2,8 +2,8 @@
   <div :class="$style['flex-container']">
     <button :class="[style, $style['decision-button']]" @click.prevent="chooseDecision()">
       <div>
-        <component :is="icon" :class="$style['button-content']"/>
-        <h2>{{ $t(headerKey) }}</h2>
+        <component :is="icon" :class="$style['button-content']" :title-id="headerId" />
+        <h2 :id="headerId" aria-hidden="true">{{ $t(headerKey) }}</h2>
         <p>{{ $t(subHeaderKey) }}</p>
       </div>
     </button>
@@ -40,6 +40,7 @@ export default {
       headerKey: isOptOut ? 'organDonation.register.noButton.header' : 'organDonation.register.yesButton.header',
       subHeaderKey: isOptOut ? 'organDonation.register.noButton.subheader' : 'organDonation.register.yesButton.subheader',
       icon: isOptOut ? NoIcon : YesIcon,
+      headerId: `${isOptOut ? 'no' : 'yes'}-header-id`,
     };
   },
   methods: {

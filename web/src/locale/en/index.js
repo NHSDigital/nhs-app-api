@@ -814,14 +814,15 @@ export default {
       },
     },
     register: {
-      subheader: 'Register your organ donation decision',
+      subheaderRegister: 'Register your organ donation decision',
+      subheaderAmend: 'Change your organ donation decision',
       noButton: {
         header: 'NO',
         subheader: 'I do not want to donate my organs',
       },
       yesButton: {
         header: 'YES',
-        subheader: 'I want to donate my organs',
+        subheader: 'I want to donate all or some of my organs',
       },
     },
     registered: {

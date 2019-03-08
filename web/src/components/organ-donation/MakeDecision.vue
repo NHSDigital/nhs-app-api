@@ -1,12 +1,12 @@
 <template>
-  <div :class="$style.organDonationStart">
+  <div :class="$style['mb-3']">
     <div :class="$style.info">
-      <h2>{{ $t('organDonation.register.subheader') }}</h2>
+      <h2>{{ headerText }}</h2>
     </div>
     <div :class="$style['flexbox-container']">
-      <organ-donation-button id="yes-button" :decision="noDecision"/>
-      <div :class="$style.divider"/>
-      <organ-donation-button id="no-button" :decision="yesDecision"/>
+      <organ-donation-button id="no-button" :decision="noDecision"/>
+      <div :class="$style['m-1']"/>
+      <organ-donation-button id="yes-button" :decision="yesDecision"/>
     </div>
   </div>
 </template>
@@ -20,13 +20,14 @@ export default {
   components: {
     OrganDonationButton,
   },
-  computed: {
-    noDecision() {
-      return DECISION_OPT_OUT;
-    },
-    yesDecision() {
-      return DECISION_OPT_IN;
-    },
+  data() {
+    return {
+      headerText: this.$store.state.organDonation.isAmending
+        ? this.$t('organDonation.register.subheaderAmend')
+        : this.$t('organDonation.register.subheaderRegister'),
+      noDecision: DECISION_OPT_OUT,
+      yesDecision: DECISION_OPT_IN,
+    };
   },
 };
 </script>
@@ -35,14 +36,7 @@ export default {
 @import "../../style/info";
 @import "../../style/spacings";
 
-.divider {
-  margin: $one;
-}
-
 .flexbox-container {
   display: flex;
-}
-.organDonationStart {
-  margin-bottom: $three;
 }
 </style>

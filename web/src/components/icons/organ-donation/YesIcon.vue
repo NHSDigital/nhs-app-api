@@ -1,7 +1,8 @@
 <template>
-  <svg id="yesIcon" :class="[$style.yes]" view-box="0 0 0 0">
-    <title>{{ $t('icons.organDonation.yesIcon.title') }}</title>
-    <desc>{{ $t('icons.organDonation.yesIcon') }}</desc>
+  <svg id="yesIcon"
+       :class="[$style.yes]"
+       :aria-labelledby="titleId"
+       view-box="0 0 0 0">
     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g transform="translate(-23.000000, -256.000000)">
         <g transform="translate(24.000000, 257.000000)">
@@ -48,6 +49,12 @@
 <script>
 export default {
   name: 'YesIcon',
+  props: {
+    titleId: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 
