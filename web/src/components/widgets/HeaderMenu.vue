@@ -127,6 +127,7 @@ export default {
       } else {
         redirectTo(this, a.pathname, null);
       }
+      this.closeMiniMenu();
     },
     closeMiniMenu() {
       this.$store.dispatch('header/closeMiniMenu');
