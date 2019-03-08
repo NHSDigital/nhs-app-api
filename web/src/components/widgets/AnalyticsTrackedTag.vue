@@ -1,5 +1,8 @@
 <template>
-  <component :id="id" :is="tag" :href="href" @click="trackClick($event);"
+  <!-- JAWS screen reader (on IE11) doesn't recognise tag <a> with undefined href attribute value
+    as a link. So role='link' is required to tell it is a link  -->
+  <component :id="id" :is="tag" :href="href" :role="tag==='a' && !href ? 'link': undefined"
+             @click="trackClick($event);"
              @keypress="onKeyDown($event)">
     <slot/>
   </component>
