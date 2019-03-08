@@ -264,12 +264,19 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun showProgressDialog() {
         if (progressBarLayout.visibility == View.GONE)
+        {
             progressBarLayout.visibility = View.VISIBLE
+            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        }
+
     }
 
     override fun dismissProgressDialog() {
-        if (progressBarLayout.visibility == View.VISIBLE)
+        if (progressBarLayout.visibility == View.VISIBLE) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             progressBarLayout.visibility = View.GONE
+        }
     }
 
     override fun selectNavigationMenuActive(navigationMenuId: Int) {

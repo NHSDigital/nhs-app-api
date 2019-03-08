@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -74,13 +75,18 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
     }
 
     override fun showProgressDialog() {
-        if (progressBarLayoutU.visibility == View.GONE)
+        if (progressBarLayoutU.visibility == View.GONE) {
             progressBarLayoutU.visibility = View.VISIBLE
+            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        }
     }
 
     override fun dismissProgressDialog() {
-        if (progressBarLayoutU.visibility == View.VISIBLE)
+        if (progressBarLayoutU.visibility == View.VISIBLE) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             progressBarLayoutU.visibility = View.GONE
+        }
     }
 
     override fun setHeaderText(text: String, description: String?) {

@@ -37,7 +37,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             if(url.absoluteString == config().HomeUrl + config().FidoLoginErrorPath) {
                 viewController.showBiometricSessionError()
-                self.activityIndicator.stopAnimating()
+                stopActivityIndicator()
                 decisionHandler(.cancel)
                 return
             }
@@ -98,11 +98,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         if timer != nil {
             clearTimer()
-            self.activityIndicator.stopAnimating()
+            stopActivityIndicator()
         }
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
-        self.activityIndicator.startAnimating()
+        startActivityIndicator()
         
     }
     
@@ -361,12 +361,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     private func showWebViewContainer() {
         clearTimer()
         self.viewController.showWebViewContainer()
-        self.activityIndicator.stopAnimating()
+        stopActivityIndicator()
     }
     
     func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
         clearTimer()
-        self.activityIndicator.stopAnimating()
+        stopActivityIndicator()
         self.viewController.showNativeViewContainer(errorMessage: errorMessage)
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
     }
@@ -376,5 +376,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             self.timer.invalidate()
             self.timer = nil
         }
+    }
+
+    func startActivityIndicator() {
+        self.activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
+    }
+
+    func stopActivityIndicator() {
+        UIApplication.shared.endIgnoringInteractionEvents()
+        self.activityIndicator.stopAnimating()
     }
 }
