@@ -81,18 +81,12 @@
 			color: $error !important;
 		}
 	}
-  a.cancel-link:hover{
-     background: #ffcd60;
-     box-shadow: 0 0 0 4px #ffcd60;
-     box-sizing: border-box;
-     color: #D40003;
-     text-decoration: none;
-   }
 
   a.cancel-link:focus{
     outline-color: $focus_highlight;
-  box-shadow: 0 0 0 4px $focus_highlight;
+    box-shadow: 0 0 0 4px $focus_highlight;
   }
+
 	a.cancel-link{
       color: #D40003;
       display: inline-block;
