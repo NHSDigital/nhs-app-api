@@ -12,8 +12,7 @@ open class WebHeader : HybridPageObject() {
             Pair("Repeat prescriptions", "My repeat prescriptions"),
             Pair("My medical record", "My medical record"),
             Pair("More", "More"),
-            Pair("Account", "My account"),
-            Pair("Home", "Home")
+            Pair("Account", "My account")
     )
 
     val symptomsPageLink = HybridPageElement(

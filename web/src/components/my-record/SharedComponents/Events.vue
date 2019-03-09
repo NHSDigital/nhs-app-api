@@ -5,7 +5,7 @@
                        :aria-hidden="isCollapsed"
                        :has-access="events.hasAccess"
                        :has-errored="events.hasErrored" />
-  <div v-else-if="!isCollapsed" :class="[$style['record-content'], getCollapseState]"
+  <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
     <div v-for="(event, eventIndex) in orderedEvents" :key="`event-${eventIndex}`"
          :class="$style['record-item']" data-purpose="record-item">

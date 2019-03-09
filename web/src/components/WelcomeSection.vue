@@ -60,7 +60,7 @@ export default {
 
     .fieldValue {
      font-family: $default-web;
-     font-weight: normal;
+     font-weight: lighter;
      font-size: 1em;
      line-height: 1.5em;
      color: #425563;

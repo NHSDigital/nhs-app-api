@@ -1,8 +1,5 @@
 <template>
-  <div v-if="!isCollapsed" :class="[$style['record-content'],
-                                    getCollapseState,
-                                    !$store.state.device.isNativeApp && $style.desktopWeb]"
-       :aria-hidden="isCollapsed">
+  <div :class="[$style['record-content'], getCollapseState]" :aria-hidden="isCollapsed">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelName') }}</span>
     <p v-if="patientDetails" data-hj-suppress>{{ patientDetails.patientName }}</p>
     <hr aria-hidden="true">
@@ -60,21 +57,5 @@ export default {
     font-size: 0.813em;
     font-weight: 700;
   }
-
-div {
- &.desktopWeb {
-  max-width: 540px;
-  cursor: default;
-
-  span {
-   font-family: $default_web;
-   font-weight: normal;
-  }
-  p {
-   font-family: $default_web;
-   font-weight: normal;
-  }
- }
-}
 
 </style>

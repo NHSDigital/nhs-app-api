@@ -17,15 +17,15 @@ class MyRecordWarningPage : HybridPageObject() {
             page = this
     )
 
-    private val backToHome = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'Back to home')]",
-            androidLocator = "//button[contains(text(),'Back to home')]",
+    private val btnBack2Home = HybridPageElement(
+            webDesktopLocator = "//button[contains(text(),'Back to home')]",
+            androidLocator = null,
             page = this
     )
 
 
     fun isBackToHomePresent(): Boolean {
-        return backToHome.element.isVisible
+        return btnBack2Home.element.isVisible
     }
 
     fun isAgreePresent(): Boolean {
@@ -41,7 +41,7 @@ class MyRecordWarningPage : HybridPageObject() {
     }
 
     fun clickBacktoHome() {
-        backToHome.click()
+        btnBack2Home.click()
     }
 
     fun getSensitiveList(): ArrayList<String> {

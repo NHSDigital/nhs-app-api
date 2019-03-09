@@ -26,7 +26,6 @@ import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
-import pages.navigation.WebHeader
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -41,8 +40,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var navHeader: NavHeaderSteps
-    @Steps
-    lateinit var webHeader: WebHeader
 
     lateinit var headerNative: HeaderNative
 
@@ -74,7 +71,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun thenISeeRecordWarningPageOpened() {
         thenISeeHeaderTextIsMyMedicalRecord()
         thenISeeAgreeAndContinueButton()
-        thenISeeBackToHome()
+        thenISeeBackToHomeButton()
     }
 
     @Then("^I see the my record warning page")
@@ -84,7 +81,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         theISeeYourRecordMayContainSensitiveInformationMessage()
         thenISeeListOfSensitiveDataInformation()
         thenISeeAgreeAndContinueButton()
-        thenISeeBackToHome()
+        thenISeeBackToHomeButton()
         thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
 
     }
@@ -124,8 +121,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         Assert.assertTrue("isAgreePresent", myRecordWarningPage.isAgreePresent())
     }
 
-    @Then("^I see back to home$")
-    fun thenISeeBackToHome() {
+    @Then("^I see back to home button$")
+    fun thenISeeBackToHomeButton() {
         Assert.assertTrue("isBackToHomePresent", myRecordWarningPage.isBackToHomePresent())
     }
 
@@ -151,14 +148,14 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
     }
 
-    @When("^I click the back to home$")
-    fun whenIClickTheBackToHome() {
+    @When("^I click the back to home button$")
+    fun whenIClickTheBackToHomeButton() {
         myRecordWarningPage.clickBacktoHome()
     }
 
     @Then("^I will return to the home page$")
     fun thenIWillReturnToTheHomePage() {
-        webHeader.isPageTitleCorrect("Home")
+        navHeader.assertHomePageHeaderVisible()
     }
 
     @Then("^No navigation menu bar item will be selected$")

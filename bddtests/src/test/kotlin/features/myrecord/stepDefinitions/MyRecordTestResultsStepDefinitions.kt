@@ -251,17 +251,12 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("I am on the test result detail page")
     fun thenISeeTheTestResultDetailPage() {
         myRecordDetailedTestResultPage.testResultDetailsHeader.assertSingleElementPresent().assertIsVisible()
-        myRecordDetailedTestResultPage.back.assertIsVisible()
+        myRecordDetailedTestResultPage.backButton.assertIsVisible()
     }
 
     @Then("I click the test result detail back button")
     fun thenIClickTheTestResultDetailBackButton() {
-        myRecordDetailedTestResultPage.clickBackToMyRecord()
-    }
-
-    @Then("I click the test result detail back")
-    fun thenIClickTheTestResultDetailBackLink() {
-        myRecordDetailedTestResultPage.clickBackToMyRecord()
+        myRecordDetailedTestResultPage.clickBackToMyRecordButton()
     }
 
     @When("^I click the test result section$")

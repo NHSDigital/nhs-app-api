@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div v-if="showTemplate" :class="[$style.content,
-                                      'pull-content',
-                                      !$store.state.device.isNativeApp && $style.desktopWeb]">
+    <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
       <div :class="$style['above-float-button']">
         <div :class="$style.info" data-purpose="info">
           <h2>{{ $t('my_record.examinationDetails.examinationTitle') }}</h2>
@@ -17,17 +15,12 @@
             </p>
           </div>
         </div>
-        <form v-if="$store.state.device.isNativeApp" :action="myRecordReturnPath" method="get">
+        <form :action="myRecordReturnPath" method="get">
           <input :value="noJsWarningAcceptance" type="hidden" name="nojs">
           <floating-button-bottom :button-classes="['grey']" @click="onBackButtonClicked">
             {{ $t('my_record.examinationDetails.backButton') }}
           </floating-button-bottom>
         </form>
-        <desktopGenericBackLink
-          v-if="!$store.state.device.isNativeApp"
-          :path="myRecordReturnPath"
-          :button-text="'my_record.diagnosisDetails.backButton'"
-          :state-transfer-required="true"/>
       </div>
     </div>
   </div>
@@ -37,12 +30,10 @@
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import { MYRECORD } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
-import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
 
 export default {
   components: {
     FloatingButtonBottom,
-    DesktopGenericBackLink,
   },
   async asyncData({ store }) {
     await store.dispatch('myRecord/loadExaminations');
@@ -110,39 +101,4 @@ h3 {
     line-height: 1.375em;
 }
 
-div {
- &.desktopWeb {
-  max-width: 540px;
-
-  .info h2 {
-   font-family: $default-web;
-   color: black;
-  }
-
-  p {
-   font-family: $default-web;
-   font-weight: normal;
-  }
-
-  .examination-content {
-   max-width: 540px;
-   overflow: auto;
-   margin-right: 1em;
-   width: 100%;
-  }
-
-  .vision-examination {
-   min-width: unset;
-   max-width: 540px;
-  }
-
-  .vision-examination > > p {
-   max-width: 540px;
-  }
-
-  .content {
-   padding-left: 0;
-  }
- }
-}
 </style>

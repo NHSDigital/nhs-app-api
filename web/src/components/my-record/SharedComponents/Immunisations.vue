@@ -4,9 +4,7 @@
                        :has-errored="immunisations.hasErrored"
                        :class="[$style['record-content'], getCollapseState]"
                        :aria-hidden="isCollapsed"/>
-  <div v-else-if="!isCollapsed" :class="[$style['record-content'],
-                                         getCollapseState,
-                                         !$store.state.device.isNativeApp && $style.desktopWeb]"
+  <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
     <div v-for="(item, index) in orderedImmunisations" :key="`item-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
@@ -66,22 +64,6 @@ export default {
   color: #425563;
   font-size: 0.813em;
   font-weight: 700;
-}
-
-div {
- &.desktopWeb {
-  max-width: 540px;
-  cursor: default;
-
-  span {
-   font-family: $default_web;
-   font-weight: normal;
-  }
-  p {
-   font-family: $default_web;
-   font-weight: normal;
-  }
- }
 }
 
 </style>

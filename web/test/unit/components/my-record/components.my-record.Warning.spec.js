@@ -5,9 +5,6 @@ import { createEvent, createStore, shallowMount } from '../../helpers';
 
 const createState = () => ({
   myRecord: initialState(),
-  device: {
-    isNativeApp: false,
-  },
 });
 
 const createComponent = ({ $store = createStore({ state: createState() }), data = {} } = {}) => {
@@ -42,10 +39,11 @@ describe('Warning', () => {
     expect(form.attributes().method).toEqual('get');
   });
 
-  it('will not have a form that performs a get request to the index path', () => {
+  it('will have a form that performs a get request to the index path', () => {
     const form = component.find(`form[action="${INDEX.path}"]`);
 
-    expect(form.exists()).toBe(false);
+    expect(form.exists()).toBe(true);
+    expect(form.attributes().method).toEqual('get');
   });
 
   describe('onBackButtonClicked', () => {

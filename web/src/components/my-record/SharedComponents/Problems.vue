@@ -2,11 +2,9 @@
   <dcr-error-no-access v-if="showError"
                        :has-errored="problems.hasErrored"
                        :has-access="problems.hasAccess"
-                       :class="[$style['record-content'],
-                                getCollapseState]"
+                       :class="[$style['record-content'], getCollapseState]"
                        :aria-hidden="isCollapsed"/>
-  <div v-else-if="!isCollapsed" :class="[$style['record-content'], getCollapseState,
-                                         !$store.state.device.isNativeApp && $style.desktopWeb]"
+  <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
     <div v-for="(problem, problemIndex) in orderedProblems"
          :key="`problem-${problemIndex}`" :class="$style['record-item']"
@@ -76,22 +74,6 @@ export default {
   color: #425563;
   font-size: 0.813em;
   font-weight: 700;
-}
-
-div {
- &.desktopWeb {
-  max-width: 540px;
-  cursor: default;
-
-  span {
-   font-family: $default_web;
-   font-weight: normal;
-  }
-  p {
-   font-family: $default_web;
-   font-weight: normal;
-  }
- }
 }
 
 </style>

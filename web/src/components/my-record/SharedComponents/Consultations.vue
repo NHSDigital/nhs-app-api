@@ -5,8 +5,7 @@
                        :is-collapsed="isCollapsed"
                        :class="[$style['record-content'], getCollapsedState]"
                        :aria-hidden="isCollapsed"/>
-  <div v-else-if="!isCollapsed" :class="[$style['record-content'], getCollapsedState,
-                                         !$store.state.device.isNativeApp && $style.desktopWeb]"
+  <div v-else :class="[$style['record-content'], getCollapsedState]"
        :aria-hidden="isCollapsed">
     <div v-for="(consultation, consultationIndex) in orderedConsultations"
          :key="`consultation-${consultationIndex}`" :class="$style['record-item']"
@@ -99,18 +98,4 @@ export default {
    font-weight: 700;
  }
 
- div {
-  &.desktopWeb {
-   max-width: 540px;
-
-   span {
-    font-family: $default_web;
-    font-weight: normal;
-   }
-   p {
-    font-family: $default_web;
-    font-weight: normal;
-   }
-  }
- }
 </style>

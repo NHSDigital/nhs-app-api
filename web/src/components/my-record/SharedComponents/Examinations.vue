@@ -4,15 +4,10 @@
                        :has-errored="results.hasErrored"
                        :class="[$style['record-content'], getCollapsedState]"
                        :aria-hidden="isCollapsed"/>
-  <div v-else-if="!isCollapsed" :class="[$style['record-content'],
-                                         getCollapsedState,
-                                         !$store.state.device.isNativeApp && $style.desktopWeb]"
+  <div v-else :class="[$style['record-content'], getCollapsedState]"
        :aria-hidden="isCollapsed">
     <div v-if="supplier === 'VISION'">
-      <a :class="$style.viewExaminations"
-         tabindex="0"
-         @click="viewExaminations($event)"
-         @keypress="onKeyDown($event)">
+      <a :class="$style.viewExaminations" @click="viewExaminations($event)">
         {{ $t('my_record.examinations.visionDetailsLink') }}
       </a>
     </div>
@@ -64,11 +59,6 @@ export default {
       event.preventDefault();
       redirectTo(this, MY_RECORD_VISION_EXAMINATIONS_DETAIL.path, null);
     },
-    onKeyDown(e) {
-      if (e.keyCode === 13) {
-        this.viewExaminations(e);
-      }
-    },
   },
 };
 
@@ -77,22 +67,10 @@ export default {
 <style module lang="scss" scoped>
   @import '../../../style/medrecordcontent';
   @import '../../../style/medrecordtitle';
-  @import '../../../style/desktopWeb/accessibility';
 
   .viewExaminations {
     padding: 1em;
     font-size: 0.875em;
-  }
-
-  div {
-   &.desktopWeb {
-    a {
-     cursor: pointer;
-     &:focus {
-      @include outlineStyle
-     }
-    }
-   }
   }
 
 </style>
