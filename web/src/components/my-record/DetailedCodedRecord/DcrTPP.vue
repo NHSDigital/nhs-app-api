@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isEventsCollapsed)]"
                            :click-func="myRecordSectionClick"
@@ -8,7 +8,8 @@
                            :aria-expanded="!isEventsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a">
+                           tag="a"
+                           tabindex="0">
       {{ $t('my_record.events.sectionHeader') }}
     </analytics-tracked-tag>
     <events :is-collapsed="isEventsCollapsed" :events="record.tppDcrEvents" />
@@ -22,7 +23,8 @@
                            :aria-expanded="!isTestResultsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a">
+                           tag="a"
+                           tabindex="0">
       {{ $t('my_record.testResults.sectionHeader.tpp') }}
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
@@ -93,5 +95,16 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordtitle';
+  @import '../../../style/desktopWeb/accessibility';
 
+  div {
+   &.desktopWeb {
+    .record-title {
+    cursor: pointer;
+    &:focus {
+      @include outlineStyle
+     }
+    }
+   }
+  }
 </style>

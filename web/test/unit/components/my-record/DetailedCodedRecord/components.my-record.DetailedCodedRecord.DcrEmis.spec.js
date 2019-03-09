@@ -1,13 +1,35 @@
 import DcrEmis from '@/components/my-record/DetailedCodedRecord/DcrEMIS';
-import { shallowMount } from '../../../helpers';
+import { initialState } from '@/store/modules/myRecord/mutation-types';
+import { createStore, shallowMount } from '../../../helpers';
+
+const createPropsData = () => ({
+  record: {
+    medications: {
+      data: {},
+    },
+  },
+});
+
+const createState = () => ({
+  myRecord: initialState(),
+  device: {
+    isNativeApp: true,
+  },
+});
+
+const createComponent = ({ $store = createStore({ state: createState() }) } = {}) =>
+  shallowMount(DcrEmis, { $store, propsData: createPropsData() });
+
 
 describe('DcrEmis', () => {
   describe('running on server', () => {
+    let $store;
     let component;
 
     beforeEach(() => {
       process.client = false;
-      component = shallowMount(DcrEmis);
+      $store = createStore({ state: createState() });
+      component = createComponent({ $store });
     });
 
     it('will have an isImmunisationsCollapsed value of false', () =>
@@ -25,10 +47,12 @@ describe('DcrEmis', () => {
 
   describe('running on client', () => {
     let component;
+    let $store;
 
     beforeEach(() => {
       process.client = true;
-      component = shallowMount(DcrEmis);
+      $store = createStore({ state: createState() });
+      component = createComponent({ $store });
     });
 
     it('will have an isImmunisationsCollapsed value of true', () =>

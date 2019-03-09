@@ -1,5 +1,6 @@
 <template>
-  <div v-if="$store.state.myRecord.hasAcceptedTerms">
+  <div v-if="$store.state.myRecord.hasAcceptedTerms"
+       :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
       <glossary-header />
       <analytics-tracked-tag :class="[$style['record-title'],
@@ -9,13 +10,16 @@
                              :text="$t('my_record.patientInfo.sectionHeader')"
                              data-purpose="accordion"
                              role="button"
-                             tag="a">
+                             tag="a"
+                             tabindex="0">
         {{ $t('my_record.patientInfo.sectionHeader') }}
       </analytics-tracked-tag>
-      <patient-details :is-collapsed="isPatientDetailsCollapsed"
-                       :patient-details="$store.state.myRecord.patientDetails"/>
+      <div :class="$style.patientDetailsContainer">
+        <patient-details :is-collapsed="isPatientDetailsCollapsed"
+                         :patient-details="$store.state.myRecord.patientDetails"/>
+      </div>
 
-      <div v-if="hasSummaryRecordAccess">
+      <div v-if="hasSummaryRecordAccess" :class="$style.summaryRecordContainer">
         <scr-emis v-if="supplier === 'EMIS'" :record="$store.state.myRecord.record"/>
 
         <scr-tpp v-if="supplier === 'TPP'" :record="$store.state.myRecord.record"/>
@@ -143,6 +147,7 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../style/medrecordtitle';
+  @import '../../style/desktopWeb/accessibility';
 
   .no-padding {
     margin-left: -1em;
@@ -171,5 +176,42 @@ export default {
     padding-left:1em;
     padding-right:1em;
     padding-top:0.5em;
+  }
+  div {
+   &.desktopWeb {
+    max-width: 540px;
+
+    p {
+     font-family: $default_web;
+     font-weight: lighter;
+    }
+
+    .record-content {
+     margin-left: 1em;
+    }
+
+    .summaryRecordContainer {
+     padding-left: 1em;
+     padding-bottom: 2em;
+     margin-right: 1em;
+    }
+
+    .record-title {
+     padding-left: 1em;
+     margin-left: 1em;
+     margin-right: 1em;
+     cursor: pointer;
+    }
+
+    .record-title:focus {
+     @include outlineStyle
+    }
+
+
+    .patientDetailsContainer {
+     margin-left: 1em;
+     margin-right: 1em;
+    }
+   }
   }
 </style>

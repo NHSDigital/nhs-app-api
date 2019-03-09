@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapsedState(isImmunisationsCollapsed)]"
                            :click-func="myRecordSectionClick"
@@ -8,7 +8,8 @@
                            :aria-expanded="!isImmunisationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a">
+                           tag="a"
+                           tabindex="0">
       {{ $t('my_record.immunisations.sectionHeader') }}
     </analytics-tracked-tag>
     <immunisations :is-collapsed="isImmunisationsCollapsed" :immunisations="record.immunisations" />
@@ -21,7 +22,8 @@
                            :aria-expanded="!isProblemsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a">
+                           tag="a"
+                           tabindex="0">
       {{ $t('my_record.problems.sectionHeader') }}
     </analytics-tracked-tag>
     <problems :is-collapsed="isProblemsCollapsed" :problems="record.problems" />
@@ -34,7 +36,8 @@
                            :aria-expanded="!isConsultationsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a">
+                           tag="a"
+                           tabindex="0">
       {{ $t('my_record.consultations.sectionHeader') }}
     </analytics-tracked-tag>
     <consultations :is-collapsed="isConsultationsCollapsed"
@@ -48,7 +51,8 @@
                            :aria-expanded="!isTestResultsCollapsed ? 'true' : 'false'"
                            data-purpose="accordion"
                            role="button"
-                           tag="a">
+                           tag="a"
+                           tabindex="0">
       {{ $t('my_record.testResults.sectionHeader.default') }}
     </analytics-tracked-tag>
     <test-results :is-collapsed="isTestResultsCollapsed" :results="record.testResults"
@@ -126,5 +130,17 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../../style/medrecordtitle';
+  @import '../../../style/desktopWeb/accessibility';
+
+  div {
+   &.desktopWeb {
+    .record-title {
+     cursor: pointer;
+     &:focus {
+      @include outlineStyle
+     }
+    }
+   }
+  }
 
 </style>

@@ -10,7 +10,7 @@ Feature: View My Medical Record Information - Warning
     And I see your record may contain sensitive information message
     And I see list of sensitive data information
     And I see agree and continue button
-    And I see back to home button
+    And I see back to home
     And I see my record button on the nav bar is highlighted
 
     Examples:
@@ -21,7 +21,7 @@ Feature: View My Medical Record Information - Warning
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on the record warning page
-    When I click the back to home button
+    When I click the back to home
     Then I will return to the home page
     And No navigation menu bar item will be selected
 
@@ -39,7 +39,7 @@ Feature: View My Medical Record Information - Warning
      And I see your record may contain sensitive information message
      And I see list of sensitive data information
      And I see agree and continue button
-     And I see back to home button
+     And I see back to home
      And I see my record button on the nav bar is highlighted
 
      Examples:
