@@ -20,7 +20,6 @@
         </error-message>
         <generic-radio-button :class="$style.choiceRadioButton"
                               :label="$t('th05.yesRadioButtonText')"
-                              :model="choice"
                               value="yes"
                               name="choice"
                               @select="radioButtonSelected"/>
@@ -53,7 +52,6 @@
 
         <generic-radio-button :class="[$style.choiceRadioButton, $style.last]"
                               :label="$t('th05.noRadioButtonText')"
-                              :model="choice"
                               value="no"
                               name="choice"
                               @select="radioButtonSelected"/>

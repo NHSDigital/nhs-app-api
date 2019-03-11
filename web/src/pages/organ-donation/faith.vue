@@ -31,22 +31,19 @@
     </div>
     <generic-radio-button :class="$style.choiceRadioButton"
                           :label="$t('organDonation.faith.choices.yes.title')"
-                          :model="currentChoice"
+                          :checked="currentChoice === yesValue"
                           :value="yesValue"
-                          name="choice"
                           @select="radioButtonSelected"/>
     <generic-radio-button :class="$style.choiceRadioButton"
                           :label="$t('organDonation.faith.choices.no.title')"
-                          :model="currentChoice"
+                          :checked="currentChoice === noValue"
                           :value="noValue"
-                          name="choice"
                           @select="radioButtonSelected"/>
     <generic-radio-button :class="$style.choiceRadioButton"
                           :label="$t('organDonation.faith.choices.preferNotToSay.title')"
-                          :model="currentChoice"
+                          :checked="currentChoice === preferNotToSayValue"
                           :value="preferNotToSayValue"
-                          name="choice"
-                          @select="radioButtonSelected" />
+                          @select="radioButtonSelected"/>
     <generic-button id="continue-to-additional-details"
                     :class="[$style.button, $style.green]"
                     @click.stop.prevent="continueClicked">

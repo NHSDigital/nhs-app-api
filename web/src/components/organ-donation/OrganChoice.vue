@@ -7,8 +7,8 @@
         :name="organName"
         :label="$t('organDonation.someOrgans.choiceYes')"
         :value="'Yes'"
-        :model="currentChoice"
-        @select="isSelected"/>
+        :checked="currentChoice === 'Yes'"
+        @select="selected"/>
     </div>
     <div :class="$style['horizontal-radio']">
       <generic-radio-button
@@ -16,8 +16,8 @@
         :name="organName"
         :label="$t('organDonation.someOrgans.choiceNo')"
         :value="'No'"
-        :model="currentChoice"
-        @select="isSelected"/>
+        :checked="currentChoice === 'No'"
+        @select="selected"/>
     </div>
   </div>
 </template>
@@ -45,7 +45,7 @@ export default {
     },
   },
   methods: {
-    isSelected(value) {
+    selected(value) {
       this.$store.dispatch('organDonation/setSomeOrgans', { value, choice: this.organName });
     },
   },

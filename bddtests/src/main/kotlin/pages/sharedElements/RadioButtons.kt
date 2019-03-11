@@ -8,7 +8,7 @@ import pages.HybridPageObject
 
 class RadioButtons private constructor(private val page: HybridPageObject, private val locator: String) {
 
-    private val buttons by lazy {   getElements(page, locator).map { element -> RadioButton(element)}}
+    private val buttons by lazy {   getButtons(page, locator) }
 
     fun assertAreEqual(expectedOptions: ArrayList<String>) {
         val actualTitles = buttons.map { option -> option.title }
@@ -34,28 +34,18 @@ class RadioButtons private constructor(private val page: HybridPageObject, priva
         }
     }
 
-    private fun getElements(page: HybridPageObject, locator: String):
-            List<WebElementFacade> {
-        return HybridPageElement(
-                locator,
-                locator,
-                page = page,
-                helpfulName = "Radio Buttons").elements
-    }
-
     fun button(title: String): RadioButton {
         return buttons.first { button -> button.title == title }
     }
 
     fun assertSelected(title: String) {
-        val selectedRadioButtons = findAllSelected(page, locator)
+        val selectedRadioButtons = findAllSelected(buttons)
         Assert.assertEquals("Expected Selected Buttons", 1, selectedRadioButtons.count())
-        Assert.assertEquals("Expected Selected Buttons", title,
-                RadioButton(selectedRadioButtons.single()).title)
+        Assert.assertEquals("Expected Selected Buttons", title, selectedRadioButtons.first().title)
     }
 
     fun assertAllUnselected() {
-        val selectedRadioButtons = findAllSelected(page, locator)
+        val selectedRadioButtons = findAllSelected(buttons)
         Assert.assertEquals("Expected Selected Buttons", 0, selectedRadioButtons.count())
     }
 
@@ -65,21 +55,26 @@ class RadioButtons private constructor(private val page: HybridPageObject, priva
         }
 
         fun assertAllOnPageUnselected(page: HybridPageObject) {
-            val selectedRadioButtons = findAllSelected(page, defaultRadioButtonXPath)
+            val buttons = getButtons(page, defaultRadioButtonXPath)
+            val selectedRadioButtons = findAllSelected(buttons)
             Assert.assertEquals("Expected Selected Buttons", 0, selectedRadioButtons.count())
         }
 
-        private fun findAllSelected(page: HybridPageObject, locator: String)
-                : List<WebElementFacade> {
-            return HybridPageElement(
-                    "$locator$selectedIndicatorXPath",
-                    "$locator$selectedIndicatorXPath",
-                    page = page,
-                    helpfulName = "Radio Buttons").elements
+        private fun findAllSelected(buttons: List<RadioButton>)
+                : List<RadioButton> {
+            return buttons.filter { button -> button.isSelected() }
         }
 
-        private const val selectedIndicatorXPath = "[div[div]]"
-        private const val defaultRadioButtonXPath = "//label[input]"
+        private fun getButtons(page: HybridPageObject, locator: String)
+                : List<RadioButton> {
+            return HybridPageElement(
+                    locator,
+                    locator,
+                    page = page,
+                    helpfulName = "Radio Buttons").elements.map { element -> RadioButton(element) }
+        }
+
+        private const val defaultRadioButtonXPath = "//div[input[@type=\"radio\"]]"
     }
 }
 
@@ -87,11 +82,16 @@ class RadioButton(private val element : WebElementFacade) {
 
     private val allTextElements = element.findElements(
             By.xpath("./descendant::*[text()]")).map{e->e.text}
+    private val input = element.findElement(By.tagName("input"))
 
-    val title: String by lazy { allTextElements[1] }
-    val description: String by lazy { allTextElements[2] }
+    val title: String by lazy { allTextElements[0] }
+    val description: String by lazy { allTextElements[1] }
 
     fun select() {
-        element.click()
+        input.click()
+    }
+
+    fun isSelected(): Boolean {
+        return input.isSelected
     }
 }

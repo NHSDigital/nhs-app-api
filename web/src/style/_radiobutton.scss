@@ -1,43 +1,87 @@
-.radio-button-icon {
-  flex: 0 0 1.5em;
-  border: 0.063em $light_grey solid;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: 100%;
-  padding-bottom: 0.5em;
-  margin-right: 1em;
-  &:active {
-    border-color: $black;
-  }
-  .selected {
-    border-radius: 100%;
-    height: 100%;
-    margin: 0.25em;
-    background: black;
-  }
-}
+@import './colours';
+@import './spacings';
 
-.radio-button-label {
-  display: flex;
-  font-weight: normal;
+.radio-item {
+  clear: left;
+  margin-bottom: 0.4em;
+  min-height: 2em;
+  padding: 0 0 0 2em;
   position: relative;
-
-  &.tabFocus {
-    outline-color: $focus_highlight !important;
-    outline-width: 2px !important;
-    outline-style: solid !important;
-    -webkit-filter: brightness(120%);
-    filter: brightness(120%);
-  }
-
-  input[type='radio'] {
+  font-weight: normal;
+  input {
+    cursor: pointer;
+    height: 2em;
+    left: 0;
+    margin: 0;
     opacity: 0;
     position: absolute;
     top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
+    width: 2em;
+    z-index: 1;
+  }
+
+  input {
+    &:focus {
+      + label::before {
+        box-shadow: 0 0 0 0.25em $focus_highlight;
+        outline: 0.2em solid transparent; /* 1 */
+        outline-offset: 0.2em;
+      }
+    }
+    &:checked {
+      + label::after {
+        opacity: 1;
+      }
+    }
+  }
+  label {
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 0;
+    padding: 0.4em 0.6em 0.2em;
+    touch-action: manipulation;
+    &::after, &::before {
+      border-radius: 50%;
+      position: absolute;
+    }
+    &::before{
+      background: $white;
+      border: 0.1em solid $dark_grey;
+      box-sizing: border-box;
+      content: '';
+      height: 2em;
+      left: 0;
+      top: 0;
+      width: 2em;
+    }
+    &::after{
+      background: $dark_grey;
+      border: 0.5em solid $black;
+      content: '';
+      height: 0;
+      left: 0.5em;
+      opacity: 0;
+      top: 0.5em;
+      width: 0;
+    }
+  }
+  span {
+    margin-bottom: 0.4em;
+    display: block;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+  }
+}
+
+.radio-group {
+  &.fieldset{
+    border: 0;
+  }
+  .radio-item {
+    @include space(margin, bottom, $two);
+    &:last-child,
+    &:last-of-type {
+      @include space(margin, bottom, $three);
+    }
   }
 }

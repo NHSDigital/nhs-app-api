@@ -135,7 +135,7 @@ describe('organ donation faith page', () => {
 
     describe('yes', () => {
       beforeEach(() => {
-        radioButton = wrapper.find(`#choice-${YES}`);
+        radioButton = wrapper.find(`#radioButton-${YES}`);
       });
 
       it('will exist', () => {
@@ -155,7 +155,7 @@ describe('organ donation faith page', () => {
 
     describe('no', () => {
       beforeEach(() => {
-        radioButton = wrapper.find(`#choice-${NO}`);
+        radioButton = wrapper.find(`#radioButton-${NO}`);
       });
 
       it('will exist', () => {
@@ -175,7 +175,7 @@ describe('organ donation faith page', () => {
 
     describe('prefer not to say', () => {
       beforeEach(() => {
-        radioButton = wrapper.find(`#choice-${NOT_STATED}`);
+        radioButton = wrapper.find(`#radioButton-${NOT_STATED}`);
       });
 
       it('will exist', () => {

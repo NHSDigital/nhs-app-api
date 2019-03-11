@@ -1,6 +1,6 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <message-dialog v-if="hasTriedToContinue && !hasMadeDecision" message-type="error">
+    <message-dialog v-if="showErrors" message-type="error">
       <message-text data-purpose="error-heading">
         {{ $t('organDonation.yourChoice.errorMessageHeader') }}
       </message-text>
@@ -12,30 +12,21 @@
       <h2>{{ $t('organDonation.yourChoice.subheader') }}</h2>
       <p>{{ $t('organDonation.yourChoice.description') }}</p>
     </div>
-    <generic-radio-button
-      :class="$style['radio-button']"
-      :name="allOrgansName"
-      :value="true"
-      :model="currentChoice"
-      @select="isSelected">
-      <b>{{ $t('organDonation.yourChoice.choices.all.title') }}</b>
-      <p>{{ $t('organDonation.yourChoice.choices.all.description') }}</p>
-    </generic-radio-button>
-    <generic-radio-button
-      :class="$style['radio-button']"
-      :name="allOrgansName"
-      :value="false"
-      :model="currentChoice"
-      @select="isSelected">
-      <b>{{ $t('organDonation.yourChoice.choices.some.title') }}</b>
-      <p>{{ $t('organDonation.yourChoice.choices.some.description') }}</p>
-    </generic-radio-button>
+    <error-group :show-error="showErrors">
+      <error-message v-if="showErrors">
+        {{ $t('organDonation.yourChoice.errorMessageText') }}
+      </error-message>
+      <radio-group :class="$style.radioGroup"
+                   :current-value="currentChoice"
+                   :radios="radioButtons"
+                   @select="selected"/>
+    </error-group>
     <generic-button id="continue-button"
                     :class="[$style.button, $style.green]"
                     @click.prevent="continueClicked">
       {{ $t('organDonation.yourChoice.continueButtonText') }}
     </generic-button>
-    <back-button />
+    <back-button :before="beforeBack" />
   </div>
 </template>
 <script>
@@ -43,35 +34,47 @@ import get from 'lodash/fp/get';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import isNil from 'lodash/fp/isNil';
 import BackButton from '@/components/BackButton';
+import ErrorGroup from '@/components/ErrorGroup';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
+import RadioGroup from '@/components/RadioGroup';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import {
   ORGAN_DONATION_FAITH,
   ORGAN_DONATION_SOME_ORGANS,
 } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
     BackButton,
+    ErrorGroup,
     ErrorMessage,
     GenericButton,
-    GenericRadioButton,
     MessageDialog,
     MessageList,
     MessageText,
+    RadioGroup,
   },
   mixins: [EnsureOptInDecision],
   data() {
     return {
-      setAllOrgansAction: 'organDonation/setAllOrgans',
       hasTriedToContinue: false,
-      allOrgansName: 'AllOrgans',
+      radioButtons: [
+        {
+          hint: this.$t('organDonation.yourChoice.choices.all.description'),
+          label: this.$t('organDonation.yourChoice.choices.all.title'),
+          value: true,
+        },
+        {
+          hint: this.$t('organDonation.yourChoice.choices.some.description'),
+          label: this.$t('organDonation.yourChoice.choices.some.title'),
+          value: false,
+        },
+      ],
+      setAllOrgansAction: 'organDonation/setAllOrgans',
     };
   },
   computed: {
@@ -80,6 +83,9 @@ export default {
     },
     hasMadeDecision() {
       return !(this.currentChoice === '' || this.currentChoice === undefined);
+    },
+    showErrors() {
+      return this.hasTriedToContinue && !this.hasMadeDecision;
     },
   },
   asyncData({ store }) {
@@ -99,21 +105,23 @@ export default {
     }
   },
   methods: {
-    isSelected(value) {
-      this.$store.dispatch(this.setAllOrgansAction, value);
+    beforeBack() {
+      this.hasTriedToContinue = false;
     },
     continueClicked() {
       this.hasTriedToContinue = true;
-      if (this.hasMadeDecision && this.currentChoice === false) {
-        redirectTo(this, ORGAN_DONATION_SOME_ORGANS.path, null);
-        return;
-      }
-      if (this.hasMadeDecision && this.currentChoice === true) {
-        redirectTo(this, ORGAN_DONATION_FAITH.path, null);
+
+      if (this.showErrors) {
+        window.scrollTo(0, 0);
         return;
       }
 
-      window.scrollTo(0, 0);
+      this.$router.push(this.currentChoice ?
+        ORGAN_DONATION_FAITH.path :
+        ORGAN_DONATION_SOME_ORGANS.path);
+    },
+    selected(value) {
+      this.$store.dispatch(this.setAllOrgansAction, value);
     },
   },
 };
@@ -123,8 +131,4 @@ export default {
 @import "../../style/info";
 @import "../../style/buttons";
 @import "../../style/spacings";
-
-.radio-button {
-  margin-bottom: $three;
-}
 </style>

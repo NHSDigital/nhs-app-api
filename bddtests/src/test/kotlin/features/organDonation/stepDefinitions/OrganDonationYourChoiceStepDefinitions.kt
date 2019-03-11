@@ -29,7 +29,7 @@ open class OrganDonationYourChoiceStepDefinitions {
         organDonationYourChoicePage.radioButtons.assertAllUnselected()
         organDonationYourChoicePage.clickContinue()
         organDonationYourChoicePage.validationBanner.assertVisible(arrayListOf("There's a problem",
-                "Make a decision to continue"))
+                "Choose to donate all or some of your organs."))
     }
 
     @Then("^the all organs option is selected")

@@ -846,15 +846,15 @@ export default {
       description: 'You can select to donate some, or all of your organs and tissue.',
       continueButtonText: 'Continue',
       errorMessageHeader: 'There\'s a problem',
-      errorMessageText: 'Make a decision to continue',
+      errorMessageText: 'Choose to donate all or some of your organs.',
       choices: {
         all: {
           title: 'All my organs and tissue',
-          description: 'Help up to nine people through organ donation and even more through tissue',
+          description: 'Help up to nine people through organ donation and even more through tissue donation.',
         },
         some: {
-          title: 'Specific organs and tissue',
-          description: 'Choose which of your organs and tissue to donate',
+          title: 'Some organs and tissue',
+          description: 'Choose which of your organs and tissue to donate.',
         },
       },
     },

@@ -1,28 +1,32 @@
 <template>
-  <label :class="$style['radio-button-label']" :for="name + '-' + value"
-         :aria-labelledby="aLabelledBy" tabindex="0" @keypress="onKeyDown">
-    <radio-button-icon :id="value" :selected="isSelected"/>
-    <input :id="name + '-' + value" :value="value" :name="name"
-           :checked="model === value" tabindex="-1" type="radio" @change="selected">
-    <div>
-      <span v-if="label">{{ label }}</span>
-      <slot/>
-    </div>
-  </label>
+  <div class="radio-item">
+    <input :id="inputId"
+           :value="value"
+           :name="name"
+           :checked="checked"
+           type="radio"
+           :aria-describedby="hintId"
+           @change.stop="selected">
+    <label :for="inputId">{{ label }}</label>
+    <span  v-if="hint" :id="hintId">{{ hint }}</span>
+  </div>
 </template>
 
 <script>
-import RadioButtonIcon from '@/components/icons/RadioButtonIcon';
-
 export default {
   name: 'GenericRadioButton',
-  components: {
-    RadioButtonIcon,
-  },
   props: {
+    hint: {
+      type: String,
+      default: '',
+    },
     id: {
       type: String,
-      default: undefined,
+      default: '',
+    },
+    label: {
+      type: String,
+      default: '',
     },
     name: {
       type: String,
@@ -32,28 +36,27 @@ export default {
     value: {
       default: '',
     },
-    label: {
-      type: String,
-      default: undefined,
-    },
-    aLabelledBy: {
-      type: String,
-      default: undefined,
-    },
-    // eslint-disable-next-line vue/require-prop-types
-    model: {
-      default: '',
+    checked: {
+      type: Boolean,
+      default: false,
     },
   },
+  data() {
+    return {
+      inputId: `${this.name}-${this.value}`,
+    };
+  },
   computed: {
+    hintId() {
+      return this.hint ? `${this.inputId}-hint` : '';
+    },
     isSelected() {
       return this.model === this.value;
     },
   },
   methods: {
-    selected(event) {
+    selected() {
       this.$emit('select', this.value);
-      event.stopPropagation();
     },
     onKeyDown(e) {
       if (e.keyCode === 13) {
@@ -63,11 +66,6 @@ export default {
   },
 };
 </script>
-<style module lang="scss" scoped>
-@import '../../style/forms';
+<style lang="scss" scoped>
 @import '../../style/radiobutton';
-
-.radio-button-label {
-  font-weight: normal;
-}
 </style>

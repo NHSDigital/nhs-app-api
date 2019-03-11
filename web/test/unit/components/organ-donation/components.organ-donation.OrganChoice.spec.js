@@ -33,7 +33,7 @@ describe('organ choice component', () => {
     });
 
     it('will dispatch `setSomeOrgans` when a radio button is selected', () => {
-      wrapper.vm.isSelected('Yes');
+      wrapper.vm.selected('Yes');
       expect($store.dispatch).toHaveBeenCalledWith('organDonation/setSomeOrgans', { choice: 'heart', value: 'Yes' });
     });
 
@@ -68,7 +68,7 @@ describe('organ choice component', () => {
     });
 
     it('will dispatch `setSomeOrgans` when a radio button is selected', () => {
-      wrapper.vm.isSelected('No');
+      wrapper.vm.selected('No');
       expect($store.dispatch).toHaveBeenCalledWith('organDonation/setSomeOrgans', { choice: 'heart', value: 'No' });
     });
 

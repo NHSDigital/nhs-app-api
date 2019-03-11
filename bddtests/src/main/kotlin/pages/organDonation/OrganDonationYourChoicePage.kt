@@ -14,13 +14,14 @@ open class OrganDonationYourChoicePage : OrganDonationBasePage() {
 
     private val expectedOptions by lazy {
         arrayListOf(
-                Pair(allOfMyOrgans, "Help up to nine people through organ donation and even more through tissue"),
-                Pair(someOfMyOrgans, "Choose which of your organs and tissue to donate")
+                Pair(allOfMyOrgans,
+                        "Help up to nine people through organ donation and even more through tissue donation."),
+                Pair(someOfMyOrgans, "Choose which of your organs and tissue to donate.")
         )
     }
 
     val allOfMyOrgans: String = "All my organs and tissue"
-    val someOfMyOrgans: String = "Specific organs and tissue"
+    val someOfMyOrgans: String = "Some organs and tissue"
 
     override fun assertDisplayed() {
         assertPageFullyLoaded()
