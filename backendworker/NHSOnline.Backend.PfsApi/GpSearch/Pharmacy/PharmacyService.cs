@@ -72,7 +72,6 @@ namespace NHSOnline.Backend.Worker.GpSearch.Pharmacy
                 _logger.LogError(ex, $"Error processing odsCode: {odsCode} ");
                 return new PharmacyDetailResponse(HttpStatusCode.InternalServerError);
             }
-
             finally
             {
                 _logger.LogExit();

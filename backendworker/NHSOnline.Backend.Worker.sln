@@ -46,6 +46,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.GpSystems
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestHelper", "UnitTestHelper\UnitTestHelper.csproj", "{7FEB06ED-2F40-4142-988D-BFDC1B0C559B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.NominatedPharmacy", "NHSOnline.Backend.NominatedPharmacy\NHSOnline.Backend.NominatedPharmacy.csproj", "{E548D99F-D3E5-4657-BF1D-5E0E0586AD96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.NominatedPharmacy.UnitTests", "NHSOnline.Backend.NominatedPharmacy.UnitTests\NHSOnline.Backend.NominatedPharmacy.UnitTests.csproj", "{A81F5C0B-10CE-47CD-B01C-FB9F946B5DA2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestHelper", "UnitTestHelper\UnitTestHelper.csproj", "{7FEB06ED-2F40-4142-988D-BFDC1B0C559B}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.CidApi", "NHSOnline.Backend.CidApi\NHSOnline.Backend.CidApi.csproj", "{087E5837-79BC-4B9A-878E-18C9298D8D5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.CidApi.UnitTests", "NHSOnline.Backend.CidApi.UnitTests\NHSOnline.Backend.CidApi.UnitTests.csproj", "{8F641323-98A0-4DC6-A50C-0BEFD770A2E7}"
@@ -96,6 +102,14 @@ Global
 		{7FEB06ED-2F40-4142-988D-BFDC1B0C559B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FEB06ED-2F40-4142-988D-BFDC1B0C559B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FEB06ED-2F40-4142-988D-BFDC1B0C559B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E548D99F-D3E5-4657-BF1D-5E0E0586AD96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E548D99F-D3E5-4657-BF1D-5E0E0586AD96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E548D99F-D3E5-4657-BF1D-5E0E0586AD96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E548D99F-D3E5-4657-BF1D-5E0E0586AD96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A81F5C0B-10CE-47CD-B01C-FB9F946B5DA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A81F5C0B-10CE-47CD-B01C-FB9F946B5DA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A81F5C0B-10CE-47CD-B01C-FB9F946B5DA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A81F5C0B-10CE-47CD-B01C-FB9F946B5DA2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{087E5837-79BC-4B9A-878E-18C9298D8D5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{087E5837-79BC-4B9A-878E-18C9298D8D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{087E5837-79BC-4B9A-878E-18C9298D8D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU

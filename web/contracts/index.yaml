@@ -1623,7 +1623,7 @@
             description: "Could not extend service. Can occur if already timed out, or there is a problem with the request."
           504: 
             description: "Timeout when calling upstream system."
-    /v1/pharmacy/nominated: 
+    /v1/patient/pharmacy/nominated: 
       get: 
         tags: 
           - "pharmacy"

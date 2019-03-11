@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Support.DependencyInjection;
 using NHSOnline.Backend.Support.Logging;
 using StackExchange.Redis;
 using NHSOnline.Backend.Support.Settings;
@@ -32,8 +33,9 @@ using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.PfsApi.DependencyInjection;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
-using NHSOnline.Backend.PfsApi;
 using NHSOnline.Backend.PfsApi.Devices;
+using NHSOnline.Backend.NominatedPharmacy;
+using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
 using NHSOnline.Backend.PfsApi.Filters;
 
 namespace NHSOnline.Backend.PfsApi
@@ -44,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi
         
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<Startup> _logger;
-        
+
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
@@ -131,6 +133,14 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
+
+            // TODO
+            // Configure somewhere better. Need to rebase with API split.
+            services.AddTransient<INominatedPharmacyConfig, NominatedPharmacyConfig>();
+            services.AddHttpClient<NominatedPharmacyHttpClient>();
+            services.AddTransient<INominatedPharmacyService, NominatedPharmacyService>();
+            services.AddSingleton<INominatedPharmacyClient, NominatedPharmacyClient>();
+            services.AddTransient<IEnvelopeService, EnvelopeService>();
 
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,

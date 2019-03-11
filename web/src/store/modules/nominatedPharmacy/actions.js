@@ -3,7 +3,7 @@ import { NOMINATED_PHARMACY_CLEAR, NOMINATED_PHARMACY_LOADED } from './mutation-
 export default {
   load({ commit }) {
     return this.app.$http
-      .getV1PharmacyNominated()
+      .getV1PatientPharmacyNominated()
       .then((data) => {
         commit(NOMINATED_PHARMACY_LOADED, data);
       });

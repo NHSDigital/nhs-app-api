@@ -12,9 +12,8 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
     }
 
     fun generateSpineStubs() {
-
-        val body = """
-            <?xml version='1.0' encoding='UTF-8'?>
+        
+        val p1Response = """<?xml version='1.0' encoding='UTF-8'?>
             <SOAP-ENV:Envelope
 	        xmlns:crs="http://national.carerecords.nhs.uk/schema/crs/"
 	        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
@@ -89,50 +88,21 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
 										<administrativeGenderCode code="1"/>
 										<birthTime value="20110614"/>
 										<playedOtherProviderPatient classCode="PAT">
-											<subjectOf typeCode="SBJ">
-												<patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
-													<code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="1"/>
-													<effectiveTime>
-														<low value="20110709"/>
-													</effectiveTime>
-													<id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="OzAhR"/>
-													<performer typeCode="PRF">
-														<assignedEntity classCode="ASSIGNED">
-															<id root="2.16.840.1.113883.2.1.4.3" extension="H81109"/>
-														</assignedEntity>
-													</performer>
-												</patientCareProvisionEvent>
-											</subjectOf>
-										</playedOtherProviderPatient>
-										<COCT_MT000201UK02.PartOfWhole classCode="PART">
-											<addr use="H">
-												<streetAddressLine/>
-												<streetAddressLine>18 WOODFIELD LANE</streetAddressLine>
-												<streetAddressLine/>
-												<streetAddressLine>ASHTEAD</streetAddressLine>
-												<streetAddressLine>SURREY</streetAddressLine>
-												<postalCode>KT21 2BE</postalCode>
-												<addressKey>7357619</addressKey>
-												<useablePeriod>
-													<low value="20110623"/>
-												</useablePeriod>
-												<id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="eTIuh"/>
-											</addr>
-										</COCT_MT000201UK02.PartOfWhole>
-										<COCT_MT000203UK02.PartOfWhole classCode="PART">
-											<partPerson classCode="PSN" determinerCode="INSTANCE">
-												<name use="L">
-													<prefix>MR</prefix>
-													<given>GORE</given>
-													<given>DEFOREST</given>
-													<family>PHONANAN</family>
-													<validTime>
-														<low value="20110617"/>
-													</validTime>
-													<id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="nqXyl"/>
-												</name>
-											</partPerson>
-										</COCT_MT000203UK02.PartOfWhole>
+                                            <subjectOf typeCode="SBJ">
+                                                <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
+                                                    <code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="P1"/>
+                                                    <effectiveTime>
+                                                        <low value="20170814"/>
+                                                    </effectiveTime>
+                                                    <id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="EA42CF39"/>
+                                                    <performer typeCode="PRF">
+                                                        <assignedEntity classCode="ASSIGNED">
+                                                            <id root="2.16.840.1.113883.2.1.4.3" extension="FAJ15"/>
+                                                        </assignedEntity>
+                                                    </performer>
+                                                </patientCareProvisionEvent>
+                                            </subjectOf>
+                                    </playedOtherProviderPatient>
 									</patientPerson>
 									<subjectOf8 typeCode="SBJ">
 										<previousNhsContact classCode="OBS" moodCode="EVN">
@@ -154,7 +124,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
     </SOAP-ENV:Envelope>
                 """
 
-        mockingClient.forSpine { PdsNominatedPharmacyBuilder().respondWithSuccess(body) }
+        mockingClient.forSpine { PdsNominatedPharmacyBuilder().respondWithSuccess(p1Response) }
 
     }
 }

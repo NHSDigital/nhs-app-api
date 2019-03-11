@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch.Models
@@ -8,10 +9,15 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
         public string OrganisationName { get; set; }
 
         public string Address1 { get; set; }
+
         public string Address2 { get; set; }
+
         public string Address3 { get; set; }
+
         public string City { get; set; }
+
         public string County { get; set; }
+
         public string Postcode { get; set; }
 
         public string NACSCode { get; set; }
@@ -28,14 +34,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
         {
             var listOfOpeningTimes = JsonConvert.DeserializeObject<IEnumerable<OpeningTime>>(OpeningTimes);
 
-            return listOfOpeningTimes;
+            return listOfOpeningTimes ?? Enumerable.Empty<OpeningTime>();
         }
 
         public IEnumerable<ContactInformation> GetContactsArray()
         {
             var listOfContacts = JsonConvert.DeserializeObject<IEnumerable<ContactInformation>>(Contacts);
 
-            return listOfContacts;
+            return listOfContacts ?? Enumerable.Empty<ContactInformation>();
         }
     }
 }

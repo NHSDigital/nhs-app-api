@@ -97,6 +97,7 @@ namespace NHSOnline.Backend.Support
             public const string GetOrganDonationReferenceDataAuditTypeResponse = "OrganDonation_ReferenceData_Response";
             public const string GetTestResultAuditTypeRequest = "TestResult_Get_Request";
             public const string GetTestResultAuditTypeResponse = "TestResult_Get_Response";
+            public const string GetNominatedPharmacy = "NominatedPharmacy_Get_Response";
         }
 
         public static class HttpContextItems

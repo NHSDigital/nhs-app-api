@@ -9,5 +9,7 @@
         public ResponseEnums.OpeningTimeType OpeningTimeType { get; set; }
 
         public bool IsOpen { get; set; }
+
+        public string AdditionalOpeningDate { get; set; }
     }
 }
