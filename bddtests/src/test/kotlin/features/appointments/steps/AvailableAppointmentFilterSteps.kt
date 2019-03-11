@@ -6,9 +6,7 @@ import mockingFacade.appointments.AppointmentFilterFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
-import org.junit.Assert
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import pages.appointments.AvailableAppointmentsPage
 import pages.navigation.HeaderNative
 
@@ -23,24 +21,21 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {
-        val actualAppointmentTypeOptions = availableAppointmentsPage.appointmentTypeFilter.getContents()
-        assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
-
         val expected = Serenity.sessionVariableCalled<List<String>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_TYPE_KEY
         )
 
-        expected.forEach { expectedAppointmentType ->
-            assertOptionExists(expectedAppointmentType, actualAppointmentTypeOptions) }
+        availableAppointmentsPage.appointmentTypeFilter.assertContents(
+                expected.plus(appointmentTypeDefaultOption) as ArrayList<String>
+        )
 
         verifyThatNoAppointmentTypesIsSelected()
     }
 
     @Step
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
-        val actualLocationOptions = availableAppointmentsPage.locationFilter.getContents()
         val expectedLocations =
                 Serenity.sessionVariableCalled<List<String>>(
                         AppointmentsSlotsExampleBuilderWithExpectations
@@ -48,9 +43,9 @@ open class AvailableAppointmentFilterSteps {
                                 .EXPECTED_APPOINTMENT_LOCATIONS_KEY
                 )
 
-        for (expectedLocation in expectedLocations) {
-            assertOptionExists(expectedLocation, actualLocationOptions)
-        }
+        availableAppointmentsPage.locationFilter.assertContents(
+                expectedLocations.plus(locationDefaultOption) as ArrayList<String>
+        )
 
         assertEquals(
                 "Incorrect location option currently selected. ",
@@ -61,9 +56,6 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatCliniciansFilterExistsAndIsCorrectlyPopulated() {
-        val actualClinicianOptions = availableAppointmentsPage.clinicianFilter.getContents()
-        assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
-
         val expectedClinicians =
                 sessionVariableCalled<List<String>>(
                         AppointmentsSlotsExampleBuilderWithExpectations
@@ -71,26 +63,25 @@ open class AvailableAppointmentFilterSteps {
                                 .EXPECTED_APPOINTMENT_CLINICIANS_KEY
                 )
 
-        Assert.assertNotNull(
-                "Expected session variable 'EXPECTED_APPOINTMENT_CLINICIANS_KEY' to have value",
-                expectedClinicians
+        availableAppointmentsPage.clinicianFilter.assertContents(
+                expectedClinicians.plus(clinicianDefaultOption) as ArrayList<String>
         )
 
-        for (expectedClinician in expectedClinicians) {
-            assertOptionExists(expectedClinician, actualClinicianOptions)
-
-        }
         verifyThatNoSpecificClinicianIsSelected()
     }
 
     @Step
     fun verifyThatTimePeriodFilterExistsAndIsCorrectlyPopulated() {
-        val actualTimePeriodOptions = availableAppointmentsPage.timePeriodFilter.getContents()
-        assertOptionExists(TODAY_OPTION, actualTimePeriodOptions)
-        assertOptionExists(TOMORROW_OPTION, actualTimePeriodOptions)
-        assertOptionExists(THIS_WEEK_OPTION, actualTimePeriodOptions)
-        assertOptionExists(NEXT_WEEK_OPTION, actualTimePeriodOptions)
-        assertOptionExists(ALL_OPTION, actualTimePeriodOptions)
+        availableAppointmentsPage.timePeriodFilter.assertContents(
+                arrayListOf(
+                        TODAY_OPTION,
+                        TOMORROW_OPTION,
+                        THIS_WEEK_OPTION,
+                        NEXT_WEEK_OPTION,
+                        ALL_OPTION
+                )
+        )
+
         verifyThatTimePeriodIsSetAsTheDefault()
     }
 
@@ -154,13 +145,6 @@ open class AvailableAppointmentFilterSteps {
             availableAppointmentsPage.locationFilter.selectByText(filterValues.location!!)
         if (!filterValues.doctor.isNullOrEmpty())
             availableAppointmentsPage.clinicianFilter.selectByText(filterValues.doctor!!)
-    }
-
-    private fun assertOptionExists(defaultOption: String, actualOptions: ArrayList<String>, optionType: String = "an") {
-        assertTrue(
-                String.format("%s not present as %s option", defaultOption, optionType),
-                actualOptions.contains(defaultOption)
-        )
     }
 
     fun selectOptionsToRevealSlots() {

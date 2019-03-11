@@ -16,7 +16,7 @@
         {{ displayName(option) }}
       </option>
       <!-- empty optgroup tag forces ios to not cut off text in options -->
-      <optgroup label=""/>
+      <optgroup v-if="this.$store.state.device.source === 'ios'" label=""/>
     </select-dropdown>
 
     <label for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
