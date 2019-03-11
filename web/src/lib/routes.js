@@ -441,6 +441,10 @@ const routes = {
       },
     },
   },
+  NOMINATED_PHARMACY: {
+    name: 'nominated-pharmacy',
+    path: '/nominated-pharmacy',
+  },
 
   // Legacy
   LEGACY_MYRECORDWARNING: {
@@ -547,5 +551,6 @@ export const {
   PRESCRIPTION_CONFIRM_COURSES,
   SYMPTOMS,
   TERMSANDCONDITIONS,
+  NOMINATED_PHARMACY,
 } = routes;
 

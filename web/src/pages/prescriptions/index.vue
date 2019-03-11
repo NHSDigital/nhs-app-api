@@ -7,11 +7,11 @@
     <ul :class="$style['list-menu-white']" role="list">
       <li role="link">
         <analytics-tracked-tag
-          id="btn_choices" :href="nominatedPharmacyUrl"
+          id="btn_choices" :click-func="onNominatedPharmacyDetailClicked"
           :class="$style['no-decoration']"
           :text="$t('rp01.nominatedPharmacy')"
-          :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('sy01.a_z.body')}`"
-          tag="a" target="_blank">
+          :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
+          tag="a">
           <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
           <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
             {{ nominatedPharmacyName }}
@@ -58,7 +58,7 @@
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import GlossaryHeader from '@/components/GlossaryHeader';
-import { PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
+import { PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY } from '@/lib/routes';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import keys from 'lodash/fp/keys';
 import each from 'lodash/fp/each';
@@ -87,7 +87,6 @@ export default {
         [MedicationCourseStatus.Requested]: 2,
         [MedicationCourseStatus.Approved]: 3,
       },
-      nominatedPharmacyUrl: '.',
       nominatedPharmacyName: store.state.nominatedPharmacy.pharmacy.pharmacyName,
     };
   },
@@ -130,6 +129,9 @@ export default {
   methods: {
     onOrderRepeatPrescriptionClicked() {
       redirectTo(this, this.repeatCoursesPath, null);
+    },
+    onNominatedPharmacyDetailClicked() {
+      redirectTo(this, NOMINATED_PHARMACY.path, null);
     },
   },
 };

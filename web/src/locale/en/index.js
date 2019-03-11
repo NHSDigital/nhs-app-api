@@ -146,6 +146,12 @@ export default {
       inline: 'Select a medication',
     },
   },
+  nominatedPharmacy: {
+    pageTitle: 'TBC',
+    line1: 'If you order repeat medication using the NHS App, this pharmacy is where it will be sent.',
+    changePharmacyLink: 'Change my nominated pharmacy',
+    openingTimes: 'Opening times',
+  },
   noConnection: {
     header: 'Connection error',
     subheader: 'There\'s an issue with your internet connection',
@@ -767,6 +773,7 @@ export default {
     more: 'More',
     login: 'Login',
     termsAndConditions: 'Accept conditions of use',
+    nominatedPharmacy: 'My nominated pharmacy',
   },
   pageTitles: {
     home: 'Home',

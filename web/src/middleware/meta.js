@@ -42,6 +42,7 @@ import {
   PRESCRIPTION_REPEAT_COURSES,
   SYMPTOMS,
   TERMSANDCONDITIONS,
+  NOMINATED_PHARMACY,
 } from '@/lib/routes';
 
 function setPageTitle(route, store, app) {
@@ -190,6 +191,11 @@ export default function ({ route, store, app }) {
     case TERMSANDCONDITIONS.name:
       route.meta.headerKey = 'pageHeaders.termsAndConditions';
       route.meta.pageTitleKey = 'pageTitles.termsAndConditions';
+      break;
+    case NOMINATED_PHARMACY.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.nominatedPharmacy';
+      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacy';
       break;
     default:
       route.meta.headerKey = 'errors.404.header';
