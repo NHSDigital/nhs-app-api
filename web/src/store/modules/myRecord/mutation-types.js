@@ -11,6 +11,7 @@ export const TOGGLE_PATIENT_DETAIL = 'TOGGLE_PATIENT_DETAIL';
 export const SET_MEDICAL_RECORD_TYPE = 'SET_MEDICAL_RECORD_TYPE';
 export const initialState = () => ({
   hasAcceptedTerms: false,
+  nojsData: JSON.stringify({ myRecord: { hasAcceptedTerms: false } }),
   hasLoaded: false,
   isPatientDetailsCollapsed: true,
   record: {},

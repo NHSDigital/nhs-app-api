@@ -23,6 +23,7 @@ export default {
   },
   [ACCEPT_TERMS](state) {
     state.hasAcceptedTerms = true;
+    state.nojsData = JSON.stringify({ myRecord: { hasAcceptedTerms: true } });
   },
   [LOADED](state, { record, patientDetails }) {
     state.record = record;
@@ -47,6 +48,7 @@ export default {
   },
   [RESET_TERMS](state) {
     state.hasAcceptedTerms = false;
+    state.nojsData = JSON.stringify({ myRecord: { hasAcceptedTerms: false } });
   },
   [TOGGLE_PATIENT_DETAIL](state) {
     state.isPatientDetailsCollapsed = !state.isPatientDetailsCollapsed;

@@ -10,8 +10,9 @@
        :aria-hidden="isCollapsed">
     <div v-if="supplier === 'VISION'">
       <a :class="$style.viewDiagnosis"
+         :href="diagnosisPath + nojsQuery"
          tabindex="0"
-         @click="viewDiagnosis($event)"
+         @click.prevent="viewDiagnosis"
          @keypress="onKeyDown($event)">
         {{ $t('my_record.diagnosis.visionDetailsLink') }}
       </a>
@@ -42,6 +43,12 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      diagnosisPath: MY_RECORD_VISION_DIAGNOSIS_DETAIL.path,
+      nojsQuery: `?nojs=${encodeURIComponent(this.$store.state.myRecord.nojsData)}`,
+    };
+  },
   computed: {
     getCollapseState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
@@ -59,13 +66,12 @@ export default {
     },
   },
   methods: {
-    viewDiagnosis(event) {
-      event.preventDefault();
-      redirectTo(this, MY_RECORD_VISION_DIAGNOSIS_DETAIL.path, null);
+    viewDiagnosis() {
+      redirectTo(this, this.diagnosisPath, null);
     },
     onKeyDown(e) {
       if (e.keyCode === 13) {
-        this.viewDiagnosis(e);
+        this.viewDiagnosis();
       }
     },
   },

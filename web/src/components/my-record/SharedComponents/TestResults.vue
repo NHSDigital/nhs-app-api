@@ -50,8 +50,9 @@
     </div>
     <div v-else-if="supplier === 'VISION'">
       <a :class="$style.viewTestResult"
+         :href="testResultsPath + nojsQuery"
          tabindex="0"
-         @click="viewVisionTestResults($event)"
+         @click="viewVisionTestResults"
          @keypress="onKeyDownVision($event)">
         {{ $t('my_record.testResults.visionDetailsLink') }}
       </a>
@@ -83,6 +84,12 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      testResultsPath: MY_RECORD_VISION_TEST_RESULTS_DETAIL.path,
+      nojsQuery: `?nojs=${encodeURIComponent(this.$store.state.myRecord.nojsData)}`,
+    };
+  },
   computed: {
     getCollapseState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
@@ -107,16 +114,15 @@ export default {
       event.preventDefault();
       redirectTo(this, this.getTestResultPath(testResultId));
     },
-    viewVisionTestResults(event) {
-      event.preventDefault();
-      redirectTo(this, MY_RECORD_VISION_TEST_RESULTS_DETAIL.path, null);
+    viewVisionTestResults() {
+      redirectTo(this, this.testResultsPath, null);
     },
     getTestResultPath(testResultId) {
       return `/my-record/testresultdetail/${testResultId}`;
     },
     onKeyDownVision(e) {
       if (e.keyCode === 13) {
-        this.viewVisionTestResults(e);
+        this.viewVisionTestResults();
       }
     },
     onKeyDown(testResultId, e) {

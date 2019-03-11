@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       myRecordReturnPath: `${MYRECORD.path}#diagnosisHeader`,
-      noJsWarningAcceptance: JSON.stringify({ myRecord: { hasAcceptedTerms: true } }),
+      noJsWarningAcceptance: this.$store.state.myRecord.nojsData,
     };
   },
   async asyncData({ store }) {
