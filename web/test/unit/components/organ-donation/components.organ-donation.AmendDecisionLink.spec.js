@@ -4,20 +4,32 @@ import { createStore, mount } from '../../helpers';
 describe('amend decision link', () => {
   let wrapper;
   let $store;
+  let $style;
 
-  const mountAmendDecisionLink = () => mount(AmendDecisionLink, { $store });
+  const mountAmendDecision = () => mount(AmendDecisionLink, { $store, $style });
 
   beforeEach(() => {
+    $style = {
+      description: 'desc',
+    };
     $store = createStore();
-    wrapper = mountAmendDecisionLink();
+    wrapper = mountAmendDecision();
   });
 
-  it('will display text from organDonation.links.amendText', () => {
-    expect(wrapper.text()).toEqual('translate_organDonation.links.amendText');
-  });
+  describe('link', () => {
+    let link;
 
-  it('will dispatch the "organDonation/amendDecision" action when clicked', () => {
-    wrapper.trigger('click');
-    expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendStart');
+    beforeEach(() => {
+      link = wrapper.find('a');
+    });
+
+    it('will display text from organDonation.links.amendDecisionText', () => {
+      expect(link.text()).toEqual('translate_organDonation.links.amendDecisionText');
+    });
+
+    it('will dispatch the "organDonation/amendDecision" action when clicked', () => {
+      link.trigger('click');
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendStart');
+    });
   });
 });

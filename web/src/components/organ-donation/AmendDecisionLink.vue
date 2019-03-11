@@ -1,6 +1,10 @@
 <template>
-  <a href="#"
-     @click.stop.prevent="amendDecision">{{ $t('organDonation.links.amendText') }}</a>
+  <a id="amendDecisionLink"
+     :class="$style.amendDecision"
+     href="#"
+     @click.stop.prevent="amendDecision">
+    {{ $t('organDonation.links.amendDecisionText') }}
+  </a>
 </template>
 
 <script>
@@ -18,5 +22,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style module lang="scss" scoped>
+  @import "../../style/accessibility";
+
+  .amendDecision {
+    @extend .focusBorder;
+    padding: 0.5em;
+    margin-left: -0.5em;
+  }
 </style>

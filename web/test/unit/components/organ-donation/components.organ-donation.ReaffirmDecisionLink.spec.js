@@ -1,4 +1,4 @@
-import ReaffirmDecision from '@/components/organ-donation/ReaffirmDecision';
+import ReaffirmDecisionLink from '@/components/organ-donation/ReaffirmDecisionLink';
 import {
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
   ORGAN_DONATION_YOUR_CHOICE,
@@ -7,7 +7,7 @@ import {
 import { createStore, mount } from '../../helpers';
 
 const mountReaffirmDecision = ({ $router, $store, isSomeOrgans = false } = {}) =>
-  mount(ReaffirmDecision, {
+  mount(ReaffirmDecisionLink, {
     $router,
     $store,
     propsData: {
@@ -20,16 +20,6 @@ describe('reaffirm decision', () => {
 
   beforeEach(() => {
     wrapper = mountReaffirmDecision();
-  });
-
-  it('will display the title', () => {
-    expect(wrapper.find('h3').text())
-      .toEqual('translate_organDonation.reaffirmDecision.subheader');
-  });
-
-  it('will display the text', () => {
-    expect(wrapper.find('p').text())
-      .toEqual('translate_organDonation.reaffirmDecision.text');
   });
 
   describe('reaffirm decision link', () => {
@@ -48,7 +38,7 @@ describe('reaffirm decision', () => {
     });
 
     it('will have the correct link text', () => {
-      expect(link.text()).toEqual('translate_organDonation.reaffirmDecision.linkText');
+      expect(link.text()).toEqual('translate_organDonation.links.reaffirmDecisionText');
     });
 
     describe('click', () => {

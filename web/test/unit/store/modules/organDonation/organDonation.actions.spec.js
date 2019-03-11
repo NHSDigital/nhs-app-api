@@ -331,9 +331,7 @@ describe('organ donation actions', () => {
       });
 
       it('will push organ donation view decision to the router', () => {
-        expect(actions.$router.push).toHaveBeenCalledWith(
-          ORGAN_DONATION_VIEW_DECISION.path,
-        );
+        expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_VIEW_DECISION.path);
       });
     });
 

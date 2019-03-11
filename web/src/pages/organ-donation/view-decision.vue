@@ -16,10 +16,11 @@
       </message-dialog>
       <your-decision :decision-details="$store.state.organDonation.registration.decisionDetails"
                      :decision="$store.state.organDonation.registration.decision"/>
-      <decision-details v-if="isSomeOrgans" :choices="currentChoices"/>
+      <decision-details v-if="isOptInDecision && isSomeOrgans"
+                        :choices="currentChoices"/>
       <faith-details-registered v-if="isOptInDecision"
                                 :declaration="faithDeclaration"/>
-      <amend-decision-link :class="$style.amendDecision"/>
+      <still-your-decision :show-amend="true" :show-reaffirm="false" />
       <next-steps :is-opt-in-decision="isOptInDecision"/>
     </div>
     <other-things-to-do :can-withdraw="!isConflicted"/>
@@ -28,7 +29,6 @@
 
 <script>
 import get from 'lodash/fp/get';
-import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
@@ -36,18 +36,19 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
+import StillYourDecision from '@/components/organ-donation/StillYourDecision';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import { DECISION_OPT_IN, STATE_CONFLICTED } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   components: {
-    AmendDecisionLink,
     DecisionDetails,
     FaithDetailsRegistered,
     MessageText,
     MessageDialog,
     NextSteps,
     OtherThingsToDo,
+    StillYourDecision,
     YourDecision,
   },
   mixins: [EnsureDecisionMixin],
@@ -75,11 +76,6 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/info";
-@import "../../style/spacings";
-
-.amendDecision {
-  margin-bottom: $three;
-}
 
 .messageText {
   padding-bottom: 1em !important;

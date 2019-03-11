@@ -1,7 +1,7 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <make-decision/>
-    <ul :class="$style['list-menu']">
+    <ul :class="[$style['list-menu'], $style['mb-3']]">
       <li>
         <find-out-more-link/>
       </li>
@@ -45,8 +45,4 @@ export default {
 @import "../../style/buttons";
 @import "../../style/listmenu";
 @import "../../style/spacings";
-
-.list-menu {
-  margin-bottom: $three;
-}
 </style>

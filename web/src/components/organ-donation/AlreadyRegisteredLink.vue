@@ -1,6 +1,7 @@
 <template>
   <analytics-tracked-tag :href="alreadyRegisteredUrl"
                          :text="$t('organDonation.links.alreadyRegisteredText')"
+                         :class="$style.focusBorder"
                          tag="a" target="_blank">
     {{ $t('organDonation.links.alreadyRegisteredText') }}
   </analytics-tracked-tag>
@@ -23,4 +24,5 @@ export default {
 </script>
 
 <style module lang="scss">
+  @import "../../style/accessibility";
 </style>

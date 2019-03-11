@@ -799,9 +799,10 @@ export default {
       },
     },
     links: {
+      amendDecisionText: 'I want to change my decision',
       alreadyRegisteredText: 'Think you have registered already?',
-      amendText: 'Amend your decision',
       findOutMoreText: 'Find out more about organ donation',
+      reaffirmDecisionText: 'This is still my decision',
     },
     otherThings: {
       subheader: 'Other things you can do',
@@ -858,11 +859,6 @@ export default {
           description: 'Choose which of your organs and tissue to donate.',
         },
       },
-    },
-    reaffirmDecision: {
-      subheader: 'Is this still your decision?',
-      text: 'Keeping your registration up to date will help your family should organ donation be possible.',
-      linkText: 'This is still my decision',
     },
     reviewYourDecision: {
       header: 'Check your details before submitting',
@@ -929,6 +925,10 @@ export default {
         subheader: 'What this means',
         body: 'Your family will be asked to make a decision for you, when you die.',
       },
+    },
+    stillYourDecision: {
+      subheader: 'Is this still your decision?',
+      text: 'Keeping your registration up to date will help your family should organ donation be possible.',
     },
     viewDecision: {
       conflictedState: {

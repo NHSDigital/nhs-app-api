@@ -1,12 +1,8 @@
 <template>
-  <div :class="$style.reaffirmDecision">
-    <h3>{{ $t('organDonation.reaffirmDecision.subheader') }}</h3>
-    <p>{{ $t('organDonation.reaffirmDecision.text') }}</p>
-    <a id="reaffirmDecisionLink" :class="$style['mt-3']" href="#"
-       @click.stop.prevent="setReaffirmDecision">
-      {{ $t('organDonation.reaffirmDecision.linkText') }}
-    </a>
-  </div>
+  <a id="reaffirmDecisionLink" :class="$style.reaffirmDecision" href="#"
+     @click.stop.prevent="setReaffirmDecision">
+    {{ $t('organDonation.links.reaffirmDecisionText') }}
+  </a>
 </template>
 
 <script>
@@ -16,7 +12,7 @@ import {
 } from '@/lib/routes';
 
 export default {
-  name: 'ReaffirmDecision',
+  name: 'ReaffirmDecisionLink',
   props: {
     isSomeOrgans: {
       type: Boolean,
@@ -35,5 +31,11 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/spacings";
+@import "../../style/accessibility";
+
+.reaffirmDecision {
+  @extend .focusBorder;
+  padding: 0.5em;
+  margin-left: -0.5em;
+}
 </style>

@@ -83,6 +83,7 @@ export default {
 </script>
 
 <style module lang="scss">
+@import "../style/accessibility";
 @import "../style/colours";
 @import "../style/fonts";
   .listMenu {
@@ -93,15 +94,11 @@ export default {
 
    &.desktopWeb {
     .listMenuItem {
-     font-family: $default-web;
-     font-weight: lighter;
-     margin: 0;
-     padding: 0.25em 0 0.25em 0;
-
-     :focus {
-      outline-color: $focus_highlight;
-      box-shadow: 0 0 0 4px $focus_highlight;
-     }
+      font-family: $default-web;
+      font-weight: lighter;
+      margin: 0;
+      padding: 0.25em 0 0.25em 0;
+      @extend .focusBorder;
     }
 
     .listMenuAnchor {

@@ -1,6 +1,9 @@
 <template>
-  <analytics-tracked-tag :href="findOutMoreUrl" :text="$t('organDonation.links.findOutMoreText')"
-                         tag="a" target="_blank">
+  <analytics-tracked-tag :href="findOutMoreUrl"
+                         :class="$style.focusBorder"
+                         :text="$t('organDonation.links.findOutMoreText')"
+                         tag="a"
+                         target="_blank">
     {{ $t('organDonation.links.findOutMoreText') }}
   </analytics-tracked-tag>
 </template>
@@ -22,4 +25,5 @@ export default {
 </script>
 
 <style module lang="scss">
+  @import "../../style/accessibility";
 </style>

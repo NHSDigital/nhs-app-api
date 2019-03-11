@@ -7,7 +7,7 @@ import MakeDecision from '@/components/organ-donation/MakeDecision';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OrganDonation from '@/pages/organ-donation';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
-import ReaffirmDecision from '@/components/organ-donation/ReaffirmDecision';
+import ReaffirmDecisionLink from '@/components/organ-donation/ReaffirmDecisionLink';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
   DECISION_APPOINTED_REP,
@@ -53,7 +53,7 @@ const createStyle = () => ({
 
 const verifyComponentExistence = ({
   alreadyRegistered,
-  amendDecision,
+  amendDecisionLink,
   appointedRepresentative,
   decisionDetails,
   faithDetailsRegistered,
@@ -61,7 +61,7 @@ const verifyComponentExistence = ({
   makeDecision,
   nextSteps,
   otherThingsToDo,
-  reaffirmDecision,
+  reaffirmDecisionLink,
   yourDecision,
 }, wrapperFn) => {
   const showOrNot = bool => (bool ? 'show' : 'not show');
@@ -70,8 +70,8 @@ const verifyComponentExistence = ({
     expect(wrapperFn().find(AlreadyRegisteredLink).exists()).toBe(alreadyRegistered);
   });
 
-  it(`will ${showOrNot(amendDecision)} AmendDecisionLink`, () => {
-    expect(wrapperFn().find(AmendDecisionLink).exists()).toBe(amendDecision);
+  it(`will ${showOrNot(amendDecisionLink)} AmendDecisionLink`, () => {
+    expect(wrapperFn().find(AmendDecisionLink).exists()).toEqual(amendDecisionLink);
   });
 
   it(`will ${showOrNot(appointedRepresentative)} appointed representative`, () => {
@@ -102,8 +102,8 @@ const verifyComponentExistence = ({
     expect(wrapperFn().find(OtherThingsToDo).exists()).toBe(otherThingsToDo);
   });
 
-  it(`will ${showOrNot(reaffirmDecision)} ReaffirmDecision`, () => {
-    expect(wrapperFn().find(ReaffirmDecision).exists()).toBe(reaffirmDecision);
+  it(`will ${showOrNot(reaffirmDecisionLink)} ReaffirmDecisionLink`, () => {
+    expect(wrapperFn().find(ReaffirmDecisionLink).exists()).toEqual(reaffirmDecisionLink);
   });
 
   it(`will ${showOrNot(yourDecision)} YourDecision`, () => {
@@ -172,7 +172,7 @@ describe('organ donation index page', () => {
     describe('component existence', () => {
       verifyComponentExistence({
         alreadyRegistered: true,
-        amendDecision: false,
+        amendDecisionLink: false,
         appointedRepresentative: false,
         decisionDetails: false,
         faithDetailsRegistered: false,
@@ -180,7 +180,7 @@ describe('organ donation index page', () => {
         makeDecision: true,
         nextSteps: false,
         otherThingsToDo: false,
-        reaffirmDecision: false,
+        reaffirmDecisionLink: false,
         yourDecision: false,
       }, () => wrapper);
     });
@@ -207,7 +207,7 @@ describe('organ donation index page', () => {
     describe('component existence', () => {
       verifyComponentExistence({
         alreadyRegistered: false,
-        amendDecision: true,
+        amendDecisionLink: true,
         appointedRepresentative: true,
         decisionDetails: false,
         faithDetailsRegistered: false,
@@ -215,7 +215,7 @@ describe('organ donation index page', () => {
         makeDecision: false,
         nextSteps: false,
         otherThingsToDo: true,
-        reaffirmDecision: false,
+        reaffirmDecisionLink: false,
         yourDecision: true,
       }, () => wrapper);
     });
@@ -268,7 +268,7 @@ describe('organ donation index page', () => {
     describe('component existence', () => {
       verifyComponentExistence({
         alreadyRegistered: false,
-        amendDecision: false,
+        amendDecisionLink: false,
         appointedRepresentative: false,
         decisionDetails: false,
         faithDetailsRegistered: false,
@@ -276,7 +276,7 @@ describe('organ donation index page', () => {
         makeDecision: false,
         nextSteps: false,
         otherThingsToDo: true,
-        reaffirmDecision: false,
+        reaffirmDecisionLink: false,
         yourDecision: false,
       }, () => wrapper);
     });
@@ -300,7 +300,7 @@ describe('organ donation index page', () => {
       describe('component existence', () => {
         verifyComponentExistence({
           alreadyRegistered: false,
-          amendDecision: true,
+          amendDecisionLink: true,
           appointedRepresentative: false,
           decisionDetails: false,
           faithDetailsRegistered: false,
@@ -308,7 +308,7 @@ describe('organ donation index page', () => {
           makeDecision: false,
           nextSteps: true,
           otherThingsToDo: true,
-          reaffirmDecision: true,
+          reaffirmDecisionLink: true,
           yourDecision: true,
         }, () => wrapper);
       });
@@ -339,7 +339,7 @@ describe('organ donation index page', () => {
       describe('component existence', () => {
         verifyComponentExistence({
           alreadyRegistered: false,
-          amendDecision: true,
+          amendDecisionLink: true,
           appointedRepresentative: false,
           decisionDetails: false,
           faithDetailsRegistered: true,
@@ -347,20 +347,20 @@ describe('organ donation index page', () => {
           makeDecision: false,
           nextSteps: true,
           otherThingsToDo: true,
-          reaffirmDecision: true,
+          reaffirmDecisionLink: true,
           yourDecision: true,
         }, () => wrapper);
       });
 
-      describe('ReaffirmDecision component', () => {
-        let reaffirmDecision;
+      describe('ReaffirmDecisionLink', () => {
+        let reaffirmDecisionLink;
 
         beforeEach(() => {
-          reaffirmDecision = wrapper.find(ReaffirmDecision);
+          reaffirmDecisionLink = wrapper.find(ReaffirmDecisionLink);
         });
 
         it('will have isSomeOrgans of false', () => {
-          expect(reaffirmDecision.vm.isSomeOrgans).toBe(false);
+          expect(reaffirmDecisionLink.vm.isSomeOrgans).toEqual(false);
         });
       });
 
@@ -393,7 +393,7 @@ describe('organ donation index page', () => {
       describe('component existence', () => {
         verifyComponentExistence({
           alreadyRegistered: false,
-          amendDecision: true,
+          amendDecisionLink: true,
           appointedRepresentative: false,
           decisionDetails: true,
           faithDetailsRegistered: true,
@@ -401,7 +401,7 @@ describe('organ donation index page', () => {
           makeDecision: false,
           nextSteps: true,
           otherThingsToDo: true,
-          reaffirmDecision: true,
+          reaffirmDecisionLink: true,
           yourDecision: true,
         }, () => wrapper);
       });
@@ -412,15 +412,15 @@ describe('organ donation index page', () => {
         });
       });
 
-      describe('ReaffirmDecision component', () => {
-        let reaffirmDecision;
+      describe('ReaffirmDecisionLink component', () => {
+        let reaffirmDecisionLink;
 
         beforeEach(() => {
-          reaffirmDecision = wrapper.find(ReaffirmDecision);
+          reaffirmDecisionLink = wrapper.find(ReaffirmDecisionLink);
         });
 
         it('will have an isSomeOrgans of true', () => {
-          expect(reaffirmDecision.vm.isSomeOrgans).toBe(true);
+          expect(reaffirmDecisionLink.vm.isSomeOrgans).toEqual(true);
         });
       });
 

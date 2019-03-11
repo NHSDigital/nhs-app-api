@@ -18,8 +18,11 @@
           <decision-details v-if="isSomeOrgans" :choices="choices"/>
           <faith-details-registered :declaration="faithDeclaration"/>
         </div>
-        <reaffirm-decision v-if="!hasAppointedRep" :is-some-organs="isSomeOrgans"/>
-        <amend-decision-link :class="$style['mt-3']"/>
+
+        <still-your-decision :is-some-organs="isSomeOrgans"
+                             :show-amend="true"
+                             :show-reaffirm="!hasAppointedRep"/>
+
         <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep, $style['mt-3']]">
           <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
           <span>0300 123 2323</span>
@@ -29,7 +32,7 @@
                   :class="$style['mb-3']" :is-opt-in-decision="hasExistingOptIn"/>
       <other-things-to-do :class="$style['mb-3']" :can-withdraw="!isConflicted"/>
     </div>
-    <div v-else :class="$style['mb-3']">
+    <div v-else :class="$style['mb-6']">
       <make-decision/>
       <ul :class="$style['list-menu']">
         <li>
@@ -46,7 +49,6 @@
 <script>
 import get from 'lodash/fp/get';
 import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
-import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
@@ -55,7 +57,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
-import ReaffirmDecision from '@/components/organ-donation/ReaffirmDecision';
+import StillYourDecision from '@/components/organ-donation/StillYourDecision';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
   DECISION_APPOINTED_REP,
@@ -68,7 +70,6 @@ import {
 export default {
   components: {
     AlreadyRegisteredLink,
-    AmendDecisionLink,
     DecisionDetails,
     FaithDetailsRegistered,
     FindOutMoreLink,
@@ -77,7 +78,7 @@ export default {
     MessageDialog,
     NextSteps,
     OtherThingsToDo,
-    ReaffirmDecision,
+    StillYourDecision,
     YourDecision,
   },
   data() {

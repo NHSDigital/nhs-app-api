@@ -20,7 +20,7 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
 
     val decisionModule by lazy { OrganDonationYourDecisionModule(this) }
 
-    val amendDecisionLink = getLink("Amend your decision")
+    val amendDecisionLink = getLink("I want to change my decision")
 
     val reaffirmDecisionLink = getLink("This is still my decision")
 

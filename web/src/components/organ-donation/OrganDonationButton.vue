@@ -13,9 +13,9 @@
 <script>
 import { ORGAN_DONATION_ADDITIONAL_DETAILS, ORGAN_DONATION_YOUR_CHOICE } from '@/lib/routes';
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
-import YesIcon from '@/components/icons/organ-donation/YesIcon';
 import { DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
 import { redirectTo } from '@/lib/utils';
+import YesIcon from '@/components/icons/organ-donation/YesIcon';
 
 export default {
   name: 'OrganDonationButton',
@@ -53,10 +53,12 @@ export default {
 </script>
 
 <style module lang="scss">
+  @import "../../style/accessibility";
   @import "../../style/colours";
   @import "../../style/spacings";
 
   .decision-button {
+    @extend .focusBorder;
     @include space(padding, top, $three);
     @include space(padding, left, $four);
     @include space(padding, right, $four);

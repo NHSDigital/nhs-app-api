@@ -1,4 +1,4 @@
-import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
+import StillYourDecision from '@/components/organ-donation/StillYourDecision';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import NextSteps from '@/components/organ-donation/NextSteps';
@@ -47,8 +47,21 @@ describe('view decision', () => {
       expect(wrapper.find(YourDecision).exists()).toBe(true);
     });
 
-    it('will show the amend decision link', () => {
-      expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
+    describe('StillYourDecision', () => {
+      let stillYourDecision;
+
+      beforeEach(() => {
+        stillYourDecision = wrapper.find(StillYourDecision);
+      });
+
+      it('will show "StillYourDecision" component', () => {
+        expect(stillYourDecision.exists()).toEqual(true);
+      });
+
+      it('will set the properties on "StillYourDecision" correctly', () => {
+        expect(stillYourDecision.props().showAmend).toEqual(true);
+        expect(stillYourDecision.props().showReaffirm).toEqual(false);
+      });
     });
 
     it('will show next steps', () => {
@@ -166,8 +179,8 @@ describe('view decision', () => {
       expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
     });
 
-    it('will not show the amend decision link', () => {
-      expect(wrapper.find(AmendDecisionLink).exists()).toEqual(false);
+    it('will not show still your decision', () => {
+      expect(wrapper.find(StillYourDecision).exists()).toEqual(false);
     });
 
     it('will show other things to do', () => {

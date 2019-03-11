@@ -88,3 +88,5 @@ export const mount = (component, {
 
 export const shallowMount = (component, options = {}) =>
   mount(component, merge(options, { shallow: true }));
+
+export const toClass = style => `.${style}`;
