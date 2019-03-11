@@ -26,6 +26,7 @@ import {
   MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
+  NOMINATED_PHARMACY_SEARCH,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,
@@ -192,6 +193,11 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.termsAndConditions';
       route.meta.pageTitleKey = 'pageTitles.termsAndConditions';
       break;
+    case NOMINATED_PHARMACY_SEARCH.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.changeNominatedPharmacy';
+      route.meta.pageTitleKey = 'pageTitles.changeNominatedPharmacy';
+      break;
     case NOMINATED_PHARMACY.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.nominatedPharmacy';
@@ -202,7 +208,6 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'errors.404.pageTitle';
       break;
   }
-
   store.dispatch('http/cancelRequests');
   store.dispatch('flashMessage/validate');
   store.dispatch('errors/setRoutePath', route);

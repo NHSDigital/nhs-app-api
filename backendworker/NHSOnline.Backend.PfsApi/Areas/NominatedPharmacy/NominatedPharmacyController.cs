@@ -3,13 +3,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.Worker.GpSearch.Pharmacy;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
+using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 
-namespace NHSOnline.Backend.Worker.Areas.NominatedPharmacy
+namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
     [Route("patient/pharmacy/nominated"), PfsSecurityMode]
     public class NominatedPharmacyController : Controller

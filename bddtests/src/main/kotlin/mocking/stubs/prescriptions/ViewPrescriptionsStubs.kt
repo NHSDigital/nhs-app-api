@@ -1,12 +1,13 @@
+@file:Suppress("WildcardImport")
 package mocking.stubs.prescriptions
 
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
-import mocking.spine.ePS.models.*
 import mocking.spine.ePS.prescriptions.EPS111ItemDetailBuilder
 import mocking.spine.ePS.prescriptions.EPS111ItemSummaryBuilder
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.prescriptions.EmisPrescriptionsBuilder
+import mocking.spine.ePS.models.*
 import mocking.stubs.InputResponse
 import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
 import mocking.stubs.StubsPatientFactory.Companion.goodPatientEMIS
@@ -87,7 +88,11 @@ class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
         }
 
         mapSpinePrescriptionDetailStubs.listResponse().forEach { scenario ->
-            mockingClient.forSpine { scenario.getResponse(itemDescription.prescriptionDetailTrackingRequest(scenario.forMatcher)) }
+            mockingClient.forSpine {
+                scenario.getResponse(
+                        itemDescription
+                                .prescriptionDetailTrackingRequest(scenario.forMatcher))
+            }
         }
     }
 

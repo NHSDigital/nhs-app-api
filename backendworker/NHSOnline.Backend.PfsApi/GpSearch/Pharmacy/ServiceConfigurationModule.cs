@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace NHSOnline.Backend.Worker.GpSearch.Pharmacy
+namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 {
     public class ServiceConfigurationModule: Backend.Support.DependencyInjection.ServiceConfigurationModule
     {

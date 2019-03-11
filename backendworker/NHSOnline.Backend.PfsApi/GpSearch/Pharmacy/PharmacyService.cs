@@ -4,12 +4,14 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.PfsApi.GpSearch;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Worker.GpSearch.Models;
 using NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy;
 
-namespace NHSOnline.Backend.Worker.GpSearch.Pharmacy
+namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 {
     public class PharmacyService : IPharmacyService
     {

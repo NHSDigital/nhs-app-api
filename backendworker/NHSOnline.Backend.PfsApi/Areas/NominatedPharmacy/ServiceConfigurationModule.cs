@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace NHSOnline.Backend.Worker.Areas.NominatedPharmacy
+namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
     public class ServiceConfigurationModule: Support.DependencyInjection.ServiceConfigurationModule
     {

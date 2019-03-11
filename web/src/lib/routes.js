@@ -292,6 +292,10 @@ const routes = {
       },
     },
   },
+  NOMINATED_PHARMACY_SEARCH: {
+    name: 'nominated-pharmacy-search',
+    path: '/nominated-pharmacy/search',
+  },
   ORGAN_DONATION: {
     name: 'organ-donation',
     path: '/organ-donation',
@@ -535,6 +539,8 @@ export const {
   MY_RECORD_VISION_EXAMINATIONS_DETAIL,
   MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
+  NOMINATED_PHARMACY,
+  NOMINATED_PHARMACY_SEARCH,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,
@@ -551,6 +557,5 @@ export const {
   PRESCRIPTION_CONFIRM_COURSES,
   SYMPTOMS,
   TERMSANDCONDITIONS,
-  NOMINATED_PHARMACY,
 } = routes;
 

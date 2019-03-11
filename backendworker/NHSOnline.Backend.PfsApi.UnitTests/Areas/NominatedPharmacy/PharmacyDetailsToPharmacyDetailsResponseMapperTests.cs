@@ -6,11 +6,11 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.NominatedPharmacy;
-using NHSOnline.Backend.Worker.Areas.NominatedPharmacy.Models;
-using NHSOnline.Backend.Worker.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Areas.NominatedPharmacy
+namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 {
     [TestClass]
     public class PharmacyDetailsToPharmacyDetailsResponseMapperTests
@@ -84,34 +84,34 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.NominatedPharmacy
                 County = pharmacy.County,
                 Postcode = pharmacy.Postcode,
                 TelephoneNumber = phone,
-                OpeningTimes = new List<Worker.Areas.NominatedPharmacy.Models.OpeningTime>
+                OpeningTimes = new List<OpeningTime>
                 {
-                    new Worker.Areas.NominatedPharmacy.Models.OpeningTime
+                    new OpeningTime
                     {
                         Day = "Monday",
                         Time = "01:00-18:00",
                     },
-                    new Worker.Areas.NominatedPharmacy.Models.OpeningTime
+                    new OpeningTime
                     {
                         Day = "Tuesday",
                         Time = "02:00-18:00",
                     },
-                    new Worker.Areas.NominatedPharmacy.Models.OpeningTime
+                    new OpeningTime
                     {
                         Day = "Wednesday",
                         Time = "03:00-18:00",
                     },
-                    new Worker.Areas.NominatedPharmacy.Models.OpeningTime
+                    new OpeningTime
                     {
                         Day = "Thursday",
                         Time = "04:00-18:00",
                     },
-                    new Worker.Areas.NominatedPharmacy.Models.OpeningTime
+                    new OpeningTime
                     {
                         Day = "Friday",
                         Time = "05:00-18:00",
                     },
-                    new Worker.Areas.NominatedPharmacy.Models.OpeningTime
+                    new OpeningTime
                     {
                         Day = "Saturday",
                         Time = "06:00-17:00",

@@ -39,7 +39,7 @@
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
-import { PRESCRIPTIONS, NOMINATED_PHARMACY } from '@/lib/routes';
+import { PRESCRIPTIONS, NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -79,7 +79,7 @@ export default {
       ].filter(Boolean).join(', ');
     },
     goToChangeNominatedPharmacySearch() {
-      redirectTo(this, NOMINATED_PHARMACY.path, null);
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
     },
     backButtonClicked() {
       redirectTo(this, PRESCRIPTIONS.path, null);

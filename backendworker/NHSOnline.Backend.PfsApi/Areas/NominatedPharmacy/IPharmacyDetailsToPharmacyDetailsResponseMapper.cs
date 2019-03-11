@@ -1,7 +1,7 @@
-﻿using NHSOnline.Backend.Worker.Areas.NominatedPharmacy.Models;
-using NHSOnline.Backend.Worker.GpSearch.Models;
+﻿using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
-namespace NHSOnline.Backend.Worker.Areas.NominatedPharmacy
+namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
     public interface IPharmacyDetailsToPharmacyDetailsResponseMapper
     {

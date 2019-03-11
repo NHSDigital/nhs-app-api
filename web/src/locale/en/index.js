@@ -766,6 +766,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
+    changeNominatedPharmacy: 'Change my nominated pharmacy',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     /* Data sharing header should be updated in Android, iOS, and Web if changed */
@@ -791,6 +792,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'Sensitive information - My record',
+    changeNominatedPharmacy: 'Change my nominated pharmacy',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     dataSharing: 'Find out why your data matters',
@@ -1222,6 +1224,16 @@ export default {
     organDonation: {
       recordDecision: 'Record my organ donation decision',
     },
+  },
+  searchNominatedPharmacy: {
+    pageTitle: 'Change my nominated pharmacy',
+    line1: 'The pharmacy you choose is where your repeat prescription will be sent.',
+    subHeader: 'Postcode',
+    line2: 'Find pharmacies within 5km of this postcode.',
+    searchButton: 'Search',
+    link1: 'See all internet pharmacies',
+    link2: 'See all dispensing appliance contractors',
+    emptySearchError: 'Enter a postcode',
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',

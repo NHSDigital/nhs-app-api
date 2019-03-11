@@ -27,6 +27,29 @@ paths:
           description: Bad response received from upstream system.
         504:
           description: Timeout when calling upstream system.
+  /pharmacy/search:
+    get:
+      tags:
+        - pharmacy
+      summary: Search for pharmacies.
+      description: Returns Response object containing list of pharmacies matched in search.
+      parameters:
+        - in: body
+          name: Postcode
+          required: true
+          description: Search Term to be used when searching for pharmacies
+          type: string
+      responses:
+        200:
+          description: Search Executed Successfully
+          schema:
+            $ref: "#/definitions/PharmacySearchResponse"
+        400:
+          description: Bad request. Supplied request is invalid.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: Bad response received from upstream system.
 
 definitions:
   NominatedPharmacyResponse:
@@ -70,3 +93,12 @@ definitions:
       time:
         type: string
         description: Opening and closing time.
+  PharmacySearchResponse:
+    type: object
+    properties:
+      pharmacies:
+        type: array
+        description: Array of pharmacies matched in search
+        items:
+          $ref: "#/definitions/NominatedPharmacyResponse"
+

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.NominatedPharmacy.Models;
-using NHSOnline.Backend.Worker.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using static NHSOnline.Backend.Worker.GpSearch.ResponseEnums;
 
-namespace NHSOnline.Backend.Worker.Areas.NominatedPharmacy
+namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
     public class PharmacyDetailsToPharmacyDetailsResponseMapper : IPharmacyDetailsToPharmacyDetailsResponseMapper
     {

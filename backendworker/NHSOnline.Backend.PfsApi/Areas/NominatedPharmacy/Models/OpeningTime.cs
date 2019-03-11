@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Areas.NominatedPharmacy.Models
+﻿namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models
 {
     public class OpeningTime
     {

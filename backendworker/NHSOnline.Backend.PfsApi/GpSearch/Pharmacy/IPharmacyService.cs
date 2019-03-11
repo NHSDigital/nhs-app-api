@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy;
 
-namespace NHSOnline.Backend.Worker.GpSearch.Pharmacy
+namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 {
     public interface IPharmacyService
     {

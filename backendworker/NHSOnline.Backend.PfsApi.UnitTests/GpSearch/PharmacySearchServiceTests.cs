@@ -8,12 +8,12 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.GpSearch;
-using NHSOnline.Backend.Worker.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.GpSearch;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy;
-using NHSOnline.Backend.Worker.GpSearch.Pharmacy;
 
-namespace NHSOnline.Backend.Worker.UnitTests.GpSearch
+namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 {
     [TestClass]
     public class PharmacyServiceTests

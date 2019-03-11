@@ -10,17 +10,17 @@ using Moq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
-using NHSOnline.Backend.Worker.Areas.NominatedPharmacy;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy;
-using NHSOnline.Backend.Worker.GpSearch.Pharmacy;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy;
-using NHSOnline.Backend.Worker.Areas.NominatedPharmacy.Models;
-using NHSOnline.Backend.Worker.GpSearch.Models;
 using System.Net;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Areas.NominatedPharmacy
+namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 {
     [TestClass]
     public class NominatedPharmacyControllerTests

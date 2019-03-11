@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.Worker.GpSearch;
 using NHSOnline.Backend.Worker.GpSearch.Models;
 
