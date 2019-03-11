@@ -53,7 +53,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 m => m.Log(
                     LogLevel.Error,
                     It.IsAny<EventId>(),
-                    It.Is<FormattedLogValues>(v => v.ToString().Contains("Name", StringComparison.InvariantCulture)),
+                    It.Is<FormattedLogValues>(v => v.ToString().Contains("Name", StringComparison.InvariantCulture) &&
+                                                   Regex.Matches(v.ToString(), Environment.NewLine).Count < 2),
                     It.IsAny<Exception>(),
                     It.IsAny<Func<object, Exception, string>>()
                 )

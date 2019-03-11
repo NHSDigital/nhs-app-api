@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision
                 if (response.RawResponse != null)
                 {
                     var censoredResponse = CensorResponse(response);
-                    logger.LogError("Vision Error Response: " + censoredResponse);
+                    logger.LogError("Vision Error Response: " + censoredResponse.SerializeJson());
                 }
                 else
                 {
