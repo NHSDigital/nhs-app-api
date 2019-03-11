@@ -12,7 +12,7 @@ const {
 } = testUtils;
 
 export const $t = jest.fn().mockImplementation(key => `translate_${key}`);
-export const $tc = key => `translate_${key}`;
+export const $tc = $t;
 
 export const mockCookies = () => ({
   get: jest.fn(),

@@ -2,25 +2,29 @@
   <div :class="$style.info">
     <h2>{{ $t(headerKey) }}</h2>
     <p :class="$style['flex-container']">
-      <component :is="icon" v-if="icon" :class="$style.icon" :title-id="`decision-text-id`"/>
-      <span :id="decision-text-id" :class="[style, $style.label]">{{ $t(decisionTextKey) }}</span>
+      <component :is="icon"
+                 v-if="icon"
+                 :class="$style.icon"
+                 title-id="decision-text-id"
+                 aria-hidden="true" />
+      <span id="decision-text-id" :class="[style, $style.label]">{{ $t(decisionTextKey) }}</span>
     </p>
   </div>
 </template>
 
 <script>
+import get from 'lodash/fp/get';
+import AppointedRepIcon from '@/components/icons/organ-donation/AppointedRepIcon';
 import NoIcon from '@/components/icons/organ-donation/NoIcon';
 import YesIcon from '@/components/icons/organ-donation/YesIcon';
-import AppointedRepIcon from '@/components/icons/organ-donation/AppointedRepIcon';
 import { DECISION_APPOINTED_REP, DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
-import get from 'lodash/fp/get';
 
 export default {
   name: 'YourDecision',
   components: {
+    AppointedRepIcon,
     NoIcon,
     YesIcon,
-    AppointedRepIcon,
   },
   props: {
     decision: {

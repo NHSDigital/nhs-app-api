@@ -5,7 +5,7 @@
       <ul :class="$style['list-menu']">
         <li role="link">
           <analytics-tracked-tag id="btn_shareDecision" :href="shareDecisionUrl"
-                                 :class="$style['no-decoration']"
+                                 :class="[$style['no-decoration'], $style.focusBorder]"
                                  :text="$t(
                                    'organDonation.viewDecision.nextSteps.shareDecision.subheader')"
                                  :aria-label="`${$t(
@@ -18,7 +18,7 @@
         </li>
         <li role="link">
           <analytics-tracked-tag id="btn_tellFamily" :href="tellFamilyUrl"
-                                 :class="$style['no-decoration']"
+                                 :class="[$style['no-decoration'], $style.focusBorder]"
                                  :text="$t(
                                    'organDonation.viewDecision.nextSteps.tellFamily.subheader')"
                                  :aria-label="`${$t(
@@ -62,10 +62,10 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/buttons';
+  @import "../../style/accessibility";
   @import '../../style/colours';
-  @import '../../style/textstyles';
   @import "../../style/listmenu";
+  @import '../../style/textstyles';
 
   .no-decoration {
     text-decoration: none;

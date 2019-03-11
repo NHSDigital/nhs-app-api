@@ -8,16 +8,15 @@
             {{ $t('organDonation.viewDecision.conflictedState.messageText') }}</message-text>
         </message-dialog>
         <h2>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</h2>
-        <p :class="$style.messageText">
+        <p>
           {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
       </div>
       <div v-else :class="$style['mb-3']">
-        <your-decision :decision="decision" :decision-details="decisionDetails"
+        <decision-info :decision="decision"
+                       :decision-details="decisionDetails"
                        header-key="organDonation.registered.yourDecision.subheader"/>
-        <div v-if="hasExistingOptIn">
-          <decision-details v-if="isSomeOrgans" :choices="choices"/>
-          <faith-details-registered :declaration="faithDeclaration"/>
-        </div>
+
+        <faith-details-registered v-if="hasExistingOptIn" :declaration="faithDeclaration"/>
 
         <still-your-decision :is-some-organs="isSomeOrgans"
                              :show-amend="true"
@@ -25,7 +24,9 @@
 
         <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep, $style['mt-3']]">
           <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
-          <span>0300 123 2323</span>
+          <span role="text" aria-label="zero three zero zero one two three two three two three">
+            0300 123 2323
+          </span>
         </div>
       </div>
       <next-steps v-if="!hasAppointedRep && (hasExistingOptIn || hasExistingOptOut)"
@@ -45,11 +46,10 @@
     </div>
   </div>
 </template>
-
 <script>
 import get from 'lodash/fp/get';
 import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
-import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import DecisionInfo from '@/components/organ-donation/DecisionInfo';
 import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
@@ -58,7 +58,6 @@ import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 import StillYourDecision from '@/components/organ-donation/StillYourDecision';
-import YourDecision from '@/components/organ-donation/YourDecision';
 import {
   DECISION_APPOINTED_REP,
   DECISION_OPT_IN,
@@ -70,7 +69,7 @@ import {
 export default {
   components: {
     AlreadyRegisteredLink,
-    DecisionDetails,
+    DecisionInfo,
     FaithDetailsRegistered,
     FindOutMoreLink,
     MakeDecision,
@@ -79,7 +78,6 @@ export default {
     NextSteps,
     OtherThingsToDo,
     StillYourDecision,
-    YourDecision,
   },
   data() {
     return {
@@ -123,6 +121,7 @@ export default {
   },
 };
 </script>
+
 
 <style module lang="scss" scoped>
 @import "../../style/info";

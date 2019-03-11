@@ -26,26 +26,15 @@
         :reference-data="$store.state.organDonation.referenceData"/>
       <hr :class="$style.rule" aria-hidden="true">
     </div>
-    <your-decision :decision-details="$store.state.organDonation.registration.decisionDetails"
+
+    <decision-info :decision-details="$store.state.organDonation.registration.decisionDetails"
                    :decision="$store.state.organDonation.registration.decision"
                    :is-withdrawing="isWithdrawing"/>
-    <div v-if="isWithdrawing" :class="$style['mb-3']">
-      <h3>{{ $t('organDonation.reviewYourDecision.withdraw.subheader') }}</h3>
-      <p>
-        {{ $t('organDonation.reviewYourDecision.withdraw.body') }}
-      </p>
+
+    <div v-if="!isWithdrawing && isOptInDecision" id="faithDetails">
+      <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
       <hr :class="$style.rule" aria-hidden="true">
     </div>
-    <div v-else-if="isOptInDecision">
-      <decision-details v-if="isSomeOrgans"
-                        :choices="currentChoices"/>
-      <hr :class="$style.rule" aria-hidden="true">
-      <div id="faithDetails">
-        <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
-        <hr :class="$style.rule" aria-hidden="true">
-      </div>
-    </div>
-    <hr v-else :class="$style.rule" aria-hidden="true">
     <confirmation :submit-attempted="submitAttempted"/>
     <generic-button id="submit-button"
                     :class="[$style.button, $style.green]"
@@ -59,18 +48,17 @@
 <script>
 import isEmpty from 'lodash/fp/isEmpty';
 import get from 'lodash/fp/get';
-import PersonalDetails from '@/components/organ-donation/PersonalDetails';
-import ContactDetails from '@/components/organ-donation/ContactDetails';
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
 import BackButton from '@/components/BackButton';
-import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import ContactDetails from '@/components/organ-donation/ContactDetails';
+import DecisionInfo from '@/components/organ-donation/DecisionInfo';
 import Confirmation from '@/components/organ-donation/Confirmation';
 import FaithDetails from '@/components/organ-donation/FaithDetails';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
-import YourDecision from '@/components/organ-donation/YourDecision';
+import PersonalDetails from '@/components/organ-donation/PersonalDetails';
 import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
 import { EnsureCanSubmit } from '@/components/organ-donation/EnsureDecisionMixin';
 
@@ -80,21 +68,18 @@ export default {
     BackButton,
     Confirmation,
     ContactDetails,
-    DecisionDetails,
+    DecisionInfo,
     FaithDetails,
     GenericButton,
     MessageDialog,
     MessageList,
     MessageText,
     PersonalDetails,
-    YourDecision,
   },
   mixins: [EnsureCanSubmit],
   data() {
     return {
-      currentChoices: get('$store.state.organDonation.registration.decisionDetails.choices')(this) || {},
       isOptInDecision: this.$store.state.organDonation.registration.decision === DECISION_OPT_IN,
-      isSomeOrgans: this.$store.getters['organDonation/isSomeOrgans'],
       isWithdrawing: this.$store.state.organDonation.isWithdrawing,
       submitAttempted: false,
     };
@@ -148,15 +133,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/spacings";
   @import "../../style/buttons";
   @import "../../style/info";
-  @import "../../style/accessibility";
+  @import "../../style/organdonation";
   @import "../../style/textstyles";
-
-  .rule {
-    border-top: solid 1px $mid_grey;
-    margin-top: 1em;
-    margin-bottom: 0.5em;
-  }
 </style>

@@ -265,8 +265,8 @@ describe('review your decision', () => {
           .toContain('translate_organDonation.reviewYourDecision.yourDecision.optinDecisionText');
       });
 
-      it('will not show the decision details', () => {
-        expect(wrapper.find(DecisionDetails).exists()).toBe(false);
+      it('will show the decision details', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toBe(true);
       });
     });
 

@@ -895,6 +895,9 @@ export default {
         },
       },
       decisionDetails: {
+        subheader: 'Decision details',
+        allOrgansText: 'I want to donate all my organs and tissue.',
+        someOrgansText: 'I want to donate some organs and tissue.',
         chosenHeader: 'You have chosen to donate:',
         notChosenHeader: 'You have chosen not to donate:',
         notStatedHeader: 'We do not have a decision for:',
@@ -912,9 +915,9 @@ export default {
       yourDecision: {
         subheader: 'Your decision',
         appointedrepDecisionText: 'I have appointed a representative',
-        optoutDecisionText: 'No, I do not want to donate my organs',
-        optinDecisionText: 'Yes, I do want to donate my organs',
-        optinSomeDecisionText: 'Specific organs and tissue',
+        optoutDecisionText: 'No I do not want to donate my organs',
+        optinDecisionText: 'Yes I want to donate my organs',
+        optinSomeDecisionText: 'Yes I want to donate my organs',
         withdrawDecisionText: 'Withdraw my decision from the register',
       },
       confirmation: {
@@ -952,7 +955,7 @@ export default {
         registrationText: 'We will process your registration and you will then be able to view and ' +
           'amend this via the NHS App. This may take up to 2 working days.',
       },
-      successMessageText: 'We have updated your decision',
+      successMessageText: 'Your decision has been recorded',
       successMessageDialogText: 'Success',
       nextSteps: {
         subheader: 'Next steps',

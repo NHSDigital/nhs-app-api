@@ -341,7 +341,7 @@ describe('organ donation index page', () => {
           alreadyRegistered: false,
           amendDecisionLink: true,
           appointedRepresentative: false,
-          decisionDetails: false,
+          decisionDetails: true,
           faithDetailsRegistered: true,
           findOutMore: false,
           makeDecision: false,

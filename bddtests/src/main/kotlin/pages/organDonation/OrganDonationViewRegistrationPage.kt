@@ -28,7 +28,7 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
     val otherThings = OrganDonationOtherThingsModule(this)
 
     fun assertCreatedBanner() {
-        BannerObject.success(this).assertVisible("We have updated your decision")
+        BannerObject.success(this).assertVisible("Your decision has been recorded")
         title.assertIsVisible()
         amendDecisionLink.assertIsVisible()
     }

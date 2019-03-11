@@ -25,11 +25,11 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
     }
 
     fun assertDecisionIsNo() {
-        assertText("No, I do not want to donate my organs")
+        assertText("No I do not want to donate my organs")
     }
 
     fun assertDecisionIsYes() {
-        assertText("Yes, I do want to donate my organs")
+        assertText("Yes I want to donate my organs")
     }
 
     fun assertDecisionIsAppointedRepresentative() {
@@ -52,7 +52,7 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
 
     fun assertDecisionIsSome(organsToDonate: OrganDecisions) {
 
-        assertText("Specific organs and tissue")
+        assertText("Yes I want to donate my organs")
 
         assertPair("You have chosen to donate:", organsToDonate.optIn)
         assertPair("You have chosen not to donate:", organsToDonate.optOut)

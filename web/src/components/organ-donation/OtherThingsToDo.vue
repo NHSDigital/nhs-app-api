@@ -3,7 +3,7 @@
     <h2>{{ $t('organDonation.otherThings.subheader') }}</h2>
     <ul :class="$style['list-menu']">
       <li v-if="canWithdraw">
-        <a id="btn_withdraw" :class="$style.noDecoration" href="#"
+        <a id="btn_withdraw" :class="[$style.noDecoration, $style.focusBorder]" href="#"
            @click.stop.prevent="withdrawDecision">
           <h3>{{ $t('organDonation.otherThings.withdraw.subheader') }}</h3>
           <p>{{ $t('organDonation.otherThings.withdraw.body') }}</p>
@@ -11,7 +11,7 @@
       </li>
       <li>
         <analytics-tracked-tag id="btn_blood" :href="bloodDonationUrl"
-                               :class="$style.noDecoration"
+                               :class="[$style.noDecoration, $style.focusBorder]"
                                :text="$t('organDonation.otherThings.bloodDonation.subheader')"
                                :aria-label="`${$t(
                                  'organDonation.otherThings.bloodDonation.subheader')}.
@@ -55,9 +55,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/buttons';
-  @import '../../style/colours';
-  @import '../../style/textstyles';
+  @import "../../style/accessibility";
   @import "../../style/listmenu";
 
   .noDecoration {

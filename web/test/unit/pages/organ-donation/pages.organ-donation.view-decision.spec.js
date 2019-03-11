@@ -94,8 +94,8 @@ describe('view decision', () => {
         wrapper = mountWrapper();
       });
 
-      it('will not show the decision details', () => {
-        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+      it('will show the decision details', () => {
+        expect(wrapper.find(DecisionDetails).exists()).toEqual(true);
       });
 
       it('will show the faith details module', () => {
