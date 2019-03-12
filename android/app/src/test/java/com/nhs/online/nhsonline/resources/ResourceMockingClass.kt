@@ -12,7 +12,6 @@ import org.mockito.Mockito
 
 import android.content.pm.PackageManager
 import com.nhaarman.mockito_kotlin.eq
-import com.nhs.online.nhsonline.activities.SymptomsActivity
 import org.mockito.ArgumentMatchers.anyInt
 
 open class ResourceMockingClass {

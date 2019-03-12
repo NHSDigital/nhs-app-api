@@ -89,14 +89,6 @@ class WebAppInterfaceTest {
         verify(contextMock).clearMenuBarItem()
     }
 
-    @Test
-    fun checkSymptomsTest() {
-        val runOnUiArgCaptor = argumentCaptor<Runnable>()
-        webAppInterface.checkSymptoms()
-        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
-        runOnUiArgCaptor.firstValue.run()
-        verify(contextMock).goToCheckSymptoms()
-    }
 
     @Test
     fun hideHeaderTest() {
@@ -105,6 +97,15 @@ class WebAppInterfaceTest {
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).hideHeader()
+    }
+
+    @Test
+    fun hideHeaderSlimTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.hideHeaderSlim()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).hideHeaderSlim()
     }
 
     @Test
@@ -123,6 +124,15 @@ class WebAppInterfaceTest {
         verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
         runOnUiArgCaptor.firstValue.run()
         verify(contextMock).showHeader()
+    }
+
+    @Test
+    fun showHeaderSlimTest() {
+        val runOnUiArgCaptor = argumentCaptor<Runnable>()
+        webAppInterface.showHeaderSlim()
+        verify(contextMock).runOnUiThread(runOnUiArgCaptor.capture())
+        runOnUiArgCaptor.firstValue.run()
+        verify(contextMock).showHeaderSlim()
     }
 
     @Test

@@ -13,7 +13,5 @@ interface UnsecureInteractor {
 
     fun showWebviewScreen()
 
-    fun setReloadUrl(url: String?)
-
     fun setHeaderText(text: String, description: String? = null)
 }

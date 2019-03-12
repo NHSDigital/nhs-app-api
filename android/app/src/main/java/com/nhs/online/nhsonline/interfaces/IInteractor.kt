@@ -19,8 +19,6 @@ interface IInteractor {
 
     fun selectNavigationMenuActive(navigationMenuId: Int)
 
-    fun goToCheckSymptoms()
-
     fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage)
 
     fun showWebviewScreen()
@@ -33,11 +31,15 @@ interface IInteractor {
 
     fun showHeader()
 
+    fun showHeaderSlim()
+
     fun showMenuBar()
 
     fun setMenuBarItem(index: Int)
 
     fun hideHeader()
+
+    fun hideHeaderSlim()
 
     fun hideMenuBar()
 

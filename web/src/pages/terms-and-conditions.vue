@@ -34,7 +34,6 @@
 /* eslint-disable import/extensions */
 import HeaderSlim from '@/components/HeaderSlim';
 import TermsConditions from '@/components/TermsConditions';
-import NativeCallbacks from '@/services/native-app';
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
@@ -74,15 +73,6 @@ export default {
         window.document.title = `${this.$t('updatedTermsAndConditions.title')} - ${this.$t('appTitle')}`;
       }
     }
-    this.version050compatibility();
-  },
-  methods: {
-    version050compatibility() {
-      if (this.$store.state.device.isNativeApp && this.$store.getters['appVersion/isPreForceUpdate']) {
-        NativeCallbacks.hideHeader();
-        NativeCallbacks.hideWhiteScreen();
-      }
-    },
   },
 };
 </script>

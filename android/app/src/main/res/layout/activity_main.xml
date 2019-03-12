@@ -8,17 +8,38 @@
     android:filterTouchesWhenObscured="true"
     tools:context="com.nhs.online.nhsonline.activities.MainActivity">
 
-    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/header"
+    <ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/header_view_switcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#005EB8"
         android:elevation="4dp"
         android:visibility="gone"
+        android:measureAllChildren="false"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/header_layout" />
-    </android.support.v7.widget.Toolbar>
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/logged_in_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#005EB8"
+            android:elevation="4dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                android:id="@+id/large_header"
+                layout="@layout/header_layout"
+                android:visibility="visible"/>
+
+        </android.support.v7.widget.Toolbar>
+
+        <include
+            android:id="@+id/symptoms_header"
+            layout="@layout/check_my_symptoms_banner"
+            android:visibility="visible"/>
+
+    </ViewSwitcher>
 
     <LinearLayout
         android:id="@+id/blankScreen"
@@ -36,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintTop_toBottomOf="@id/header_view_switcher"
         app:layout_constraintVertical_bias="1.0">
 
         <WebView
@@ -63,7 +84,6 @@
             android:id="@+id/biometricContent"
             layout="@layout/biometric_layout_content"
             android:visibility="gone" />
-
     </FrameLayout>
 
     <LinearLayout

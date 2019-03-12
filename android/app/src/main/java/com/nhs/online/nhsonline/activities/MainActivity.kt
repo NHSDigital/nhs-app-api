@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.util.Log
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
@@ -31,6 +32,7 @@ import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.scottyab.rootbeer.RootBeer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.biometric_layout_content.*
+import kotlinx.android.synthetic.main.check_my_symptoms_banner.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import kotlinx.android.synthetic.main.success_layout.*
@@ -52,6 +54,9 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private var lifeCycleObserver: LifeCycleObserver? = null
     private lateinit var activityViewSwitcher: MainActivityViewSwitcher
 
+    private val headerViewSwitcherLoggedInHeaderIndex = 0
+    private val headerViewSwitcherLoggedOutSymptomsHeaderIndex = 1
+
     var isSuccessfulConfigCheck = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +68,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
 
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.header))
+        setSupportActionBar(findViewById(R.id.logged_in_header))
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         activityViewSwitcher = MainActivityViewSwitcher(this)
@@ -177,6 +182,10 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
     }
 
+    override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
+        return nhsWeb.onSlimHeaderBackButtonPressed()
+    }
+
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
         logger.info("Entering onMenuSelected")
         val path: String
@@ -229,8 +238,16 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun setHeaderText(text: String, description: String?) {
         logger.info("Entering setHeaderText")
+
+        // Header text is updated before headers are shown and hidden.
+        // Set both, the correct one will be shown via showHeader or showHeaderSlim.
+
+        symptoms_header_text_view.text = text
+        symptoms_header_text_view.contentDescription = description
+
         header_text_view.text = text
         header_text_view.contentDescription = description
+
         nhsWeb.announceForAccessibility(description ?: text)
     }
 
@@ -241,9 +258,13 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
         when {
             nhsWeb.isUserLoggedIn -> showExitDialog()
-            path == "/" + resources.getString(R.string.gpFinderPath) -> this.finishAndRemoveTask()
-            path.contains(resources.getString(R.string.gpFinderPath),
-                ignoreCase = true) -> appWebInterface.resetGPFinderFlow(getString(R.string.gpFinderPath))
+            path == "/" + resources.getString(R.string.gpFinderPath) ->
+                this.finishAndRemoveTask()
+            path.contains(resources.getString(R.string.gpFinderPath), ignoreCase = true) ->
+                appWebInterface.resetGPFinderFlow(getString(R.string.gpFinderPath))
+            path == "/" + resources.getString(R.string.checkYourSymptoms)
+                    || nhsWeb.isCheckSymptomsUnsecureURL(webview.url) ->
+                nhsWeb.onbackButtonPressedOnCheckSymptomsUnsecurePage()
             else -> this.finishAndRemoveTask()
         }
     }
@@ -374,11 +395,6 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         menuBar.deselectActiveItem()
     }
 
-    override fun goToCheckSymptoms() {
-        val intent = Intent(this, SymptomsActivity::class.java)
-        startActivity(intent)
-    }
-
     override fun showNativeBiometricOptions() {
         activityViewSwitcher.switchTo(ActivityView.FINGERPRINT)
         setHeaderText(resources.getString(R.string.biometric_header))
@@ -395,7 +411,12 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun hideHeader() {
         logger.info("Entering hideHeader")
-        header.visibility = GONE
+        header_view_switcher.visibility = GONE
+    }
+
+    override fun hideHeaderSlim() {
+        logger.info("Entering hideHeaderSlim")
+        header_view_switcher.visibility = GONE
     }
 
     override fun showMenuBar() {
@@ -405,7 +426,17 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun showHeader() {
         logger.info("Entering showHeader")
-        header.visibility = VISIBLE
+        header_view_switcher.visibility = VISIBLE
+        header_view_switcher.displayedChild = headerViewSwitcherLoggedInHeaderIndex
+        setupToolbar(R.id.logged_in_header, false)
+    }
+
+    override fun showHeaderSlim() {
+        logger.info("Entering showHeaderSlim")
+        header_view_switcher.visibility = VISIBLE
+        header_view_switcher.displayedChild = headerViewSwitcherLoggedOutSymptomsHeaderIndex
+
+        setupToolbar(R.id.symptoms_toolbar, true)
     }
 
     override fun showBlankScreen() {
@@ -416,7 +447,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
     override fun resetFocusToNhsLogoForAccessibility() {
         val a11yMng = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-        if (header.visibility == View.VISIBLE && a11yMng.isTouchExplorationEnabled && a11yMng.isEnabled) {
+        if (logged_in_header.visibility == View.VISIBLE && a11yMng.isTouchExplorationEnabled && a11yMng.isEnabled) {
             nhsOnlineLogoIcon.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
         }
     }
@@ -454,5 +485,14 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         }
 
         return path
+    }
+
+    private fun setupToolbar(id: Int, isHomeEnabled: Boolean){
+        setSupportActionBar(findViewById(id))
+        supportActionBar?.apply {
+            title = null
+            setHomeButtonEnabled(isHomeEnabled)
+            setDisplayHomeAsUpEnabled(isHomeEnabled)
+        }
     }
 }

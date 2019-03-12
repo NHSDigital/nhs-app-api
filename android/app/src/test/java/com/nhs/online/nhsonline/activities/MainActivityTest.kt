@@ -129,6 +129,48 @@ class MainActivityTest {
     }
 
     @Test
+    fun onBackButtonPressed_OnCheckYourSystemsScreen_CallsOnbackButtonPressedOnCheckSymptomsUnsecurePage() {
+        val url = getStringById(R.string.baseURL) +
+                getStringById(R.string.checkYourSymptoms)
+        spyActivity.webview.loadUrl(url)
+
+        val nhsWebMock: NhsWeb = mock {
+            on { isUserLoggedIn }.thenReturn(false)
+        }
+        FieldSetter.setField(spyActivity,
+                spyActivity::class.java.getDeclaredField("nhsWeb"),
+                nhsWebMock)
+
+        try {
+            spyActivity.onBackPressed()
+        } catch (e: Exception) {
+            assert(false)
+        }
+        verify(nhsWebMock, times(1)).onbackButtonPressedOnCheckSymptomsUnsecurePage()
+    }
+
+    @Test
+    fun onBackButtonPressed_WhenUrlIsUnsecureSymptomsPage_CallsOnbackButtonPressedOnCheckSymptomsUnsecurePage() {
+        val url = "http://some-nhs-service-when-not-logged-in"
+        spyActivity.webview.loadUrl(url)
+
+        val nhsWebMock: NhsWeb = mock {
+            on { isUserLoggedIn }.thenReturn(false)
+            on { isCheckSymptomsUnsecureURL(url) }.thenReturn(true)
+        }
+        FieldSetter.setField(spyActivity,
+                spyActivity::class.java.getDeclaredField("nhsWeb"),
+                nhsWebMock)
+
+        try {
+            spyActivity.onBackPressed()
+        } catch (e: Exception) {
+            assert(false)
+        }
+        verify(nhsWebMock, times(1)).onbackButtonPressedOnCheckSymptomsUnsecurePage()
+    }
+
+    @Test
     fun onBackButtonPressed_MalFormedUrl_ClosesApp() {
         spyActivity.webview.loadUrl("ghghgh:/&/|sdsdsdiuw")
         spyActivity.isSuccessfulConfigCheck = true

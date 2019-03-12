@@ -48,21 +48,27 @@ class WebAppInterface(
     }
 
     @JavascriptInterface
-    fun checkSymptoms() {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering checkSymptoms")
-        activity.runOnUiThread { uiInteractor.goToCheckSymptoms() }
-    }
-
-    @JavascriptInterface
     fun hideHeader() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeader")
         activity.runOnUiThread { uiInteractor.hideHeader() }
     }
 
     @JavascriptInterface
+    fun hideHeaderSlim() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering hideHeaderSlim")
+        activity.runOnUiThread { uiInteractor.hideHeaderSlim() }
+    }
+
+    @JavascriptInterface
     fun showHeader() {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
         activity.runOnUiThread { uiInteractor.showHeader() }
+    }
+
+    @JavascriptInterface
+    fun showHeaderSlim() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering showHeader")
+        activity.runOnUiThread { uiInteractor.showHeaderSlim() }
     }
 
     @JavascriptInterface

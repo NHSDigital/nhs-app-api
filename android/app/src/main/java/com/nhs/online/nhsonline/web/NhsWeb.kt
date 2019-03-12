@@ -2,6 +2,7 @@ package com.nhs.online.nhsonline.web
 
 import android.app.Activity
 import android.util.Log
+import android.view.MenuItem
 import android.webkit.CookieManager
 import android.webkit.WebView
 import com.nhs.online.nhsonline.R
@@ -80,6 +81,21 @@ class NhsWeb(
         urlLoader.loadUrl(path)
     }
 
+    fun isCheckSymptomsUnsecureURL(url: String?): Boolean {
+        if(url == null) {
+            return false
+        }
+        val unsecuredKnownServiceInfo = knownServices.findMatchingServiceInfo(url)
+        unsecuredKnownServiceInfo?.header?.let { nativeHeader ->
+            return when (nativeHeader) {
+                activity.getString(R.string.nhs_111_header),
+                activity.getString(R.string.conditions_header) -> true
+                else -> false
+            }
+        }
+        return false
+    }
+
     fun reloadLoginUrl() {
         val loginUrl =
             readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)
@@ -92,6 +108,23 @@ class NhsWeb(
             loadUrl(loginUrl)
         } else if (webView.url.toLowerCase().startsWith(loginUrl.toLowerCase())) {
             webView.reload()
+        }
+    }
+
+    fun onSlimHeaderBackButtonPressed(): Boolean {
+        when {
+            webView.canGoBack() -> webView.goBack()
+            isCheckSymptomsUnsecureURL(urlLoader.reloadUrl) ->
+                loadUrl(readResourceString(R.string.checkYourSymptoms))
+            else -> activity.onBackPressed()
+        }
+        return true
+    }
+
+    fun onbackButtonPressedOnCheckSymptomsUnsecurePage() {
+        when {
+            webView.canGoBack() -> webView.goBack()
+            else -> activity.onBackPressed()
         }
     }
 
