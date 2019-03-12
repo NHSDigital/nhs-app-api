@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import Vuex from 'vuex';
 
 import cookieBanner from './modules/cookieBanner';
@@ -45,7 +46,13 @@ const createStore = () => new Vuex.Store({
     throttling,
   },
   actions: {
-    async nuxtServerInit({ dispatch }) {
+    async nuxtServerInit({ dispatch }, { req }) {
+      const authCookie = this.$cookies.get('nhso.auth');
+      if (process.server) {
+        const consola = require('consola');
+        const { redirectUri, codeVerifier } = authCookie || {};
+        consola.info(`Auth Cookie values for request: ${req.url}: redirectUri: ${redirectUri}, codeVerifier: ${codeVerifier}`);
+      }
       await dispatch('auth/updateConfig', this.$cookies.get('nhso.auth'));
       await dispatch('session/setInfo', this.$cookies.get('nhso.session'));
     },

@@ -10,6 +10,7 @@
         <input :value="redirectUri" type="hidden" name="redirect_uri">
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
+        <input :value="source" type="hidden" name="source">
         <LoginButton :disabled="isButtonDisabled" />
       </form>
     </div>
@@ -76,6 +77,7 @@ export default {
       practiceName: undefined,
       practiceAddress: undefined,
       isButtonDisabled: false,
+      source: this.getSource(),
     };
   },
   asyncData(context) {
@@ -213,6 +215,9 @@ export default {
     },
     dynamicStyle(...args) {
       return getDynamicStyle(this, args);
+    },
+    getSource() {
+      return this.$route.query.source;
     },
   },
 };
