@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import NativeCallbacks from '@/services/native-app';
 import Sources from '@/lib/sources';
 import { LOGIN } from '@/lib/routes';
@@ -55,6 +56,11 @@ export default {
      */
 
     const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
+    if (process.server) {
+      const consola = require('consola');
+      consola.info(`handleAuthResponse. codeVerifier: ${codeVerifier}, redirectUrl: ${redirectUrl}`);
+    }
+
     return this.app.$http
       .postV1Session({
         userSession: {
