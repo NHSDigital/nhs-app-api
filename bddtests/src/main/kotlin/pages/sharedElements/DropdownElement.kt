@@ -38,8 +38,8 @@ class DropdownElement(val label: String, val helpfulName: String, pageObject: Hy
         assertSelected(text)
     }
 
-    fun assertContents(expectedContents: ArrayList<String>) {
-        val actualContents = getContents()
+    fun assertContents(expectedContents: List<String>) {
+        val actualContents = dropDown.element.selectOptions.map { value->value.trim() }
         val message = "Expected list of $helpfulName. " +
                 "Expected: ${expectedContents.joinToString()}. " +
                 "Actual: ${actualContents.joinToString()}."
@@ -53,6 +53,7 @@ class DropdownElement(val label: String, val helpfulName: String, pageObject: Hy
     }
 
     fun getContents(): ArrayList<String> {
+
         val optionElements = dropDown.element.findElements(By.xpath("./option"))
         val optionsAsStrings = arrayListOf<String>()
         for (option in optionElements) {

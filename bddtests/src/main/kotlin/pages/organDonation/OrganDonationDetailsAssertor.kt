@@ -1,6 +1,6 @@
 package pages.organDonation
 
-import net.serenitybdd.core.pages.WebElementFacade
+import mocking.organDonation.models.KeyValuePair
 import org.junit.Assert
 import org.openqa.selenium.By
 import pages.HybridPageElement
@@ -24,26 +24,31 @@ class OrganDonationDetailsAssertor private constructor(
         container.assertSingleElementPresent().assertIsVisible()
     }
 
-    fun assertPair(expectedKey: String, expectedValue: String): OrganDonationDetailsAssertor {
-        val field = HybridPageElement(
-                "$containerXPath//h4",
-                page = page,
-                helpfulName = "label '$expectedKey'").withText(expectedKey)
-                .assertSingleElementPresent()
-                .assertIsVisible()
+    fun assertPair(expectedValues: Array<KeyValuePair<String, String>>): OrganDonationDetailsAssertor {
 
-        val actualValue = field.element.find<WebElementFacade>(By.ByXPath("./following-sibling::p")).text
-        Assert.assertEquals("Value for '$expectedKey'", actualValue, expectedValue)
+        val fields = container.element.findElements(By.xpath(".//h4"))
+
+        val actualValues = fields.map { field ->
+            KeyValuePair(field.text,
+                    field!!.findElement(By.ByXPath("./following-sibling::p")).text)
+        }
+
+        Assert.assertEquals("Expected number of pairs. Expected: '${expectedValues.toList()}', Actual: '$actualValues'",
+                expectedValues.count(), actualValues.count())
+
+        expectedValues.forEach { expected ->
+            val foundPair = actualValues.first { value -> value.key == expected.key }
+            Assert.assertEquals("expected value", expected.key, foundPair.key)
+        }
         return this
     }
 
     fun assert(expectedText: Array<String>): OrganDonationDetailsAssertor {
-        val actualText =HybridPageElement(
-                "$containerXPath//p",
-                page = page).elements.map { element -> element.text }.toTypedArray()
+        val actualText = container.element.findElements(By.xpath(".//p"))
+                .map { element -> element.text }.toTypedArray()
 
-        expectedText.forEach { expected->
-            Assert.assertTrue("Expected to contain: '$expected'. Actual: '${actualText.joinToString ()}'",
+        expectedText.forEach { expected ->
+            Assert.assertTrue("Expected to contain: '$expected'. Actual: '${actualText.joinToString()}'",
                     actualText.contains(expected))
         }
         return this

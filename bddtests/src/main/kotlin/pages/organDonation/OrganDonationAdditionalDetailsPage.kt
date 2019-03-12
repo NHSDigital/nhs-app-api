@@ -26,9 +26,7 @@ open class OrganDonationAdditionalDetailsPage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
         assertPageFullyLoaded()
-        ethnicitySelector.assertIsVisible()
         ethnicitySelector.assertSelected(defaultDropDownValue)
-        religionSelector.assertIsVisible()
         ethnicitySelector.assertSelected(defaultDropDownValue)
         optionalInformationText.assertIsVisible()
     }

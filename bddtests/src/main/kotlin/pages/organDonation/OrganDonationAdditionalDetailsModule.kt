@@ -1,5 +1,6 @@
 package pages.organDonation
 
+import mocking.organDonation.models.KeyValuePair
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertElementNotPresent
@@ -19,13 +20,10 @@ class OrganDonationAdditionalDetailsModule(private val page: HybridPageObject) {
         container.assertElementNotPresent()
     }
 
-    fun assertEthnicity(ethnicity: String) {
-        OrganDonationDetailsAssertor.withH3Header(title, page)
-                .assertPair("Ethnicity", ethnicity)
-    }
-
-    fun assertReligion(religion: String) {
-        OrganDonationDetailsAssertor.withH3Header(title, page)
-                .assertPair("Religion", religion)
+    fun assertEthnicityAndReligion(ethnicity: String, religion:String) {
+        OrganDonationDetailsAssertor.withH3Header(title, page).assertPair(
+                arrayOf(
+                        KeyValuePair("Ethnicity", ethnicity),
+                        KeyValuePair("Religion", religion)))
     }
 }

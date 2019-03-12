@@ -28,18 +28,10 @@ open class OrganDonationAdditionalDetailsStepDefinitions {
     @Then("^the Organ Donation Decision Additional Details page is displayed")
     fun theOrganDonationDecisionAdditionalDetailsPageIsDisplayed() {
         organDonationAdditionalDetailsPage.assertDisplayed()
-
-        val expectedReligions =
-                OrganDonationSerenityHelpers.REFERENCE_RELIGIONS.getOrFail<ArrayList<String>>()
-
-        if (!expectedReligions.contains("Please select")) {
-            expectedReligions.add("Please select")
-        }
-        val expectedEthnicities =
-                OrganDonationSerenityHelpers.REFERENCE_ETHNICITIES.getOrFail<ArrayList<String>>()
-        if (!expectedEthnicities.contains("Please select")) {
-            expectedEthnicities.add("Please select")
-        }
+        val expectedReligions = arrayListOf("Please select").plus(
+                OrganDonationSerenityHelpers.REFERENCE_RELIGIONS.getOrFail<ArrayList<String>>())
+        val expectedEthnicities = arrayListOf("Please select").plus(
+                OrganDonationSerenityHelpers.REFERENCE_ETHNICITIES.getOrFail<ArrayList<String>>())
 
         organDonationAdditionalDetailsPage.ethnicitySelector.assertContents(expectedEthnicities)
         organDonationAdditionalDetailsPage.religionSelector.assertContents(expectedReligions)

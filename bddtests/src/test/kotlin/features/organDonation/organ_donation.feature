@@ -112,7 +112,7 @@ Feature: Organ Donation
       | EMIS      |
       | VISION    |
 
-  Scenario: A user can choose to record their ethnicity when opting out of organ donation
+  Scenario: A user can choose to record their ethnicity and religion when opting out of organ donation
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
@@ -122,13 +122,13 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
-    And my ethnicity is recorded on the Organ Donation Check Details page
+    And my ethnicity and religion are recorded on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
 
-  Scenario: A user can choose not to record their ethnicity when opting out of organ donation
+  Scenario: A user can choose not to record their ethnicity or religion when opting out of organ donation
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
@@ -137,36 +137,7 @@ Feature: Organ Donation
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
-    And my ethnicity is recorded as not chosen on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Submit my decision' button
-    Then the Organ Donation View Registration page is displayed
-    And the decision to opt out of organ donation has been successfully created
-
-  Scenario: A user can choose to record their religion when opting out of organ donation
-    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
-    And I am logged in
-    And I navigate to the internal Organ Donation Choice Page
-    When I choose to not donate my organs
-    Then the Organ Donation Decision Additional Details page is displayed
-    When I select a religion to record for organ donation
-    And I click the 'Continue' button
-    Then the Organ Donation Check Details page is displayed
-    And my religion is recorded on the Organ Donation Check Details page
-    When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Submit my decision' button
-    Then the Organ Donation View Registration page is displayed
-    And the decision to opt out of organ donation has been successfully created
-
-  Scenario: A user can choose not to record their religion when opting out of organ donation
-    Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
-    And I am logged in
-    And I navigate to the internal Organ Donation Choice Page
-    When I choose to not donate my organs
-    Then the Organ Donation Decision Additional Details page is displayed
-    And I click the 'Continue' button
-    Then the Organ Donation Check Details page is displayed
-    And my religion is recorded as not chosen on the Organ Donation Check Details page
+    And my ethnicity and religion are recorded as not chosen on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed

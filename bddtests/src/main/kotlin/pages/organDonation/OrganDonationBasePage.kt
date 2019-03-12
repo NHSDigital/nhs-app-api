@@ -5,7 +5,6 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
 
-private const val WAIT_FOR_PAGE = 1000L
 abstract class OrganDonationBasePage: HybridPageObject() {
 
     abstract val titleText: String
@@ -27,19 +26,13 @@ abstract class OrganDonationBasePage: HybridPageObject() {
     abstract fun assertDisplayed()
 
     protected fun assertPageFullyLoaded() {
-        waitForSpinnerToDisappear()
-        title.assertIsVisible()
-        waitForBackButton()
-    }
-
-    private fun waitForBackButton() {
+        waitForElement{title.assertIsVisible()}
         waitForElement{assertBackButton("Back")}
     }
 
     protected fun waitForElement(assertion : () -> Unit) {
         //These pages are throwing stale exceptions when interacting with them
         //By waiting for the back button, we ensure that the page is fully loaded
-        Thread.sleep(WAIT_FOR_PAGE)
         var staleElement = true
         while (staleElement) {
             try {

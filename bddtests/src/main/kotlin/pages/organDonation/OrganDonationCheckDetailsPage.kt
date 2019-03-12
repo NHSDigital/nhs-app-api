@@ -4,6 +4,7 @@ import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.sharedElements.CheckBoxElement
+import mocking.organDonation.models.KeyValuePair
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
@@ -26,10 +27,12 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
         val bodyText = arrayOf("The details above are retrieved from your GP services record, " +
                 "please contact your GP to amend them.")
         OrganDonationDetailsAssertor.withH3Header("About you", this)
-                .assertPair("Name", patient.formattedFullName())
-                .assertPair("Date of birth", patient.formattedDateOfBirth())
-                .assertPair("Gender", patient.sex.toString())
-                .assertPair("NHS number", patient.formattedNHSNumber())
+                .assertPair(arrayOf(
+                        KeyValuePair("Name", patient.formattedFullName()),
+                        KeyValuePair("Date of birth", patient.formattedDateOfBirth()),
+                        KeyValuePair("Gender", patient.sex.toString()),
+                        KeyValuePair("NHS number", patient.formattedNHSNumber()),
+                        KeyValuePair("Address", patient.address.full())))
                 .assert(bodyText)
     }
 
