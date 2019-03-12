@@ -842,6 +842,11 @@ export default {
         },
       },
     },
+    reaffirmDecision: {
+      subheader: 'Is this still your decision?',
+      text: 'Keeping your registration up to date will help your family should organ donation be possible.',
+      linkText: 'This is still my decision',
+    },
     reviewYourDecision: {
       header: 'Check your details before submitting',
       errorMsgHeader: 'There\'s a problem',

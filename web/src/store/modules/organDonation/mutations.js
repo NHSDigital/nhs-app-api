@@ -17,6 +17,7 @@ import {
   SET_AMENDING,
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
+  SET_REAFFIRMING,
   SET_REGISTRATION_ID,
   SET_SOME_ORGANS,
   SET_STATE,
@@ -58,20 +59,12 @@ export default {
   [RESET_REGISTRATION](state) {
     state.registration = initialState().registration;
   },
-  [SET_ALL_ORGANS](state, choice) {
-    state.registration.decisionDetails =
-      { ...state.registration.decisionDetails,
-        ...{ all: choice,
-          choices: initialState().registration.decisionDetails.choices,
-        },
-      };
+  [SET_ACCURACY_ACCEPTANCE](state, value) {
+    state.isAccuracyAccepted = value;
   },
   [SET_ADDITIONAL_DETAILS](state, { ethnicityId, religionId }) {
     state.additionalDetails.ethnicityId = ethnicityId;
     state.additionalDetails.religionId = religionId;
-  },
-  [SET_ACCURACY_ACCEPTANCE](state, value) {
-    state.isAccuracyAccepted = value;
   },
   [SET_ALL_ORGANS](state, choice) {
     state.registration.decisionDetails =
@@ -84,20 +77,23 @@ export default {
   [SET_AMENDING](state, value) {
     state.isAmending = value;
   },
-  [SET_STATE](state, responseState) {
-    state.registration.state = responseState;
-  },
   [SET_FAITH_DECLARATION](state, faithDeclaration) {
     state.registration.faithDeclaration = faithDeclaration;
   },
   [SET_PRIVACY_ACCEPTANCE](state, value) {
     state.isPrivacyAccepted = value;
   },
+  [SET_REAFFIRMING](state, value) {
+    state.isReaffirming = value;
+  },
   [SET_REGISTRATION_ID](state, registrationId) {
     state.registration.identifier = registrationId;
   },
   [SET_SOME_ORGANS](state, { value, choice }) {
     state.registration.decisionDetails.choices[choice] = value;
+  },
+  [SET_STATE](state, responseState) {
+    state.registration.state = responseState;
   },
   [UPDATE_ORIGINAL_REGISTRATION](state) {
     state.originalRegistration = cloneDeep(state.registration);

@@ -50,29 +50,40 @@ open class OrganDonationCheckDetailsDefinitions {
 
     @Then("^my ethnicity is recorded on the Organ Donation Check Details page")
     fun myEthnicityIsRecordedOnTheOrganDonationCheckDetailsPage() {
-        organDonationCheckDetailsPage.assertEthnicity(
+        organDonationCheckDetailsPage.additionalDetailsModule.assertEthnicity(
                 OrganDonationSerenityHelpers.DEMOGRAPHICS.getOrFail<OrganDonationDemographics>().ethnicity.value)
     }
 
     @Then("^my ethnicity is recorded as not chosen on the Organ Donation Check Details page")
     fun myEthnicityIsRecordedAsNotChosenOnTheOrganDonationCheckDetailsPage() {
-        organDonationCheckDetailsPage.assertEthnicity("")
+        organDonationCheckDetailsPage.additionalDetailsModule.assertEthnicity("")
     }
 
     @Then("^my religion is recorded on the Organ Donation Check Details page")
     fun myReligionIsRecordedOnTheOrganDonationCheckDetailsPage() {
-        organDonationCheckDetailsPage.assertReligion(
+        organDonationCheckDetailsPage.additionalDetailsModule.assertReligion(
                 OrganDonationSerenityHelpers.DEMOGRAPHICS.getOrFail<OrganDonationDemographics>().religion.value)
     }
 
     @Then("^my religion is recorded as not chosen on the Organ Donation Check Details page")
     fun myReligionIsRecordedAsNotChosenOnTheOrganDonationCheckDetailsPage() {
-        organDonationCheckDetailsPage.assertReligion("")
+        organDonationCheckDetailsPage.additionalDetailsModule.assertReligion("")
     }
 
     @Then("^my choice of '(.*)' to share my faith and beliefs is displayed on the Organ Donation Check Details page")
     fun myChoiceToShareMyFaithAndBeliefsIsDisplayedOnTheOrganDonationCheckDetailsPage(option : String){
         organDonationCheckDetailsPage.faithAndBeliefsModule.assertChoice(option)
+    }
+
+    @Then("^there is no additional details section displayed on the Organ Donation Check Details page$")
+    fun thereIsNoAdditionalDetailsSectionDisplayedOnTheOrganDonationCheckDetailsPage(){
+        organDonationCheckDetailsPage.additionalDetailsModule.assertNotDisplayed()
+    }
+
+    @Then("^the additional details section is displayed on the Organ Donation Check Details page$")
+    fun theAdditionalDetailsSectionDisplayedOnTheOrganDonationCheckDetailsPage(){
+        myEthnicityIsRecordedOnTheOrganDonationCheckDetailsPage()
+        myReligionIsRecordedOnTheOrganDonationCheckDetailsPage()
     }
 
     @Then("a validation message is shown if both or either of the required conditions for organ donation are not " +

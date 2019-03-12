@@ -38,6 +38,12 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.amendDecisionLink.click()
     }
 
+    @When("^I choose to reaffirm my organ donation decision$")
+    fun iChooseToReaffirmMyOrganDonationDecision(){
+        OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.set(true)
+        organDonationViewRegistrationPage.reaffirmDecisionLink.assertIsVisible().click()
+    }
+
     @Then("^the Organ Donation View Registration page is displayed$")
     fun theOrganDonationViewRegistrationPageIsDisplayed() {
         organDonationViewRegistrationPage.assertDisplayed()

@@ -13,6 +13,7 @@ export const SET_PRIVACY_ACCEPTANCE = 'SET_PRIVACY_ACCEPTANCE';
 export const SET_REGISTRATION_ID = 'SET_REGISTRATION_ID';
 export const SET_SOME_ORGANS = 'SET_SOME_ORGANS';
 export const SET_STATE = 'SET_STATE';
+export const SET_REAFFIRMING = 'SET_REAFFIRMING';
 export const UPDATE_ORIGINAL_REGISTRATION = 'UPDATE_ORIGINAL_REGISTRATION';
 export const DECISION_APPOINTED_REP = 'AppRep';
 export const DECISION_OPT_IN = 'OptIn';
@@ -76,4 +77,5 @@ export const initialState = () => ({
   isAccuracyAccepted: false,
   isAmending: false,
   isPrivacyAccepted: false,
+  isReaffirming: false,
 });

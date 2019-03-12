@@ -19,6 +19,7 @@
           v-if="hasSomeOrgans"
           :choices="choices"/>
       </div>
+      <reaffirm-decision v-if="!hasAppointedRep" :is-some-organs="hasSomeOrgans"/>
       <amend-decision-link :class="$style.amendDecision"/>
       <next-steps v-if="hasExistingOptIn || hasExistingOptOut"
                   :is-opt-in-decision="hasExistingOptIn"/>
@@ -51,6 +52,7 @@ import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
+import ReaffirmDecision from '@/components/organ-donation/ReaffirmDecision';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
   DECISION_APPOINTED_REP,
@@ -70,6 +72,7 @@ export default {
     MessageText,
     MessageDialog,
     NextSteps,
+    ReaffirmDecision,
     YourDecision,
   },
   async asyncData({ store }) {
@@ -121,6 +124,7 @@ export default {
     this.$store.dispatch('organDonation/amendCancel');
     this.$store.dispatch('organDonation/setAdditionalDetails', { ethnicityId: '', religionId: '' });
     this.$store.dispatch('organDonation/resetAcceptanceChecks');
+    this.$store.dispatch('organDonation/reaffirmCancel');
   },
 };
 </script>

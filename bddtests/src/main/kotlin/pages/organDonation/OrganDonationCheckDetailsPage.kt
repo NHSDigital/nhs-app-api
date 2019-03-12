@@ -36,7 +36,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
 
     val yourDecisionModule by lazy { OrganDonationYourDecisionModule(this) }
     val faithAndBeliefsModule by lazy { OrganDonationFaithModule(this) }
-
+    val additionalDetailsModule by lazy { OrganDonationAdditionalDetailsModule(this) }
 
     override fun assertDisplayed() {
         assertPageFullyLoaded()
@@ -48,15 +48,6 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
         privacyStatementCheckBox.assertIsVisible()
     }
 
-    fun assertEthnicity(ethnicity: String) {
-        OrganDonationDetailsAssertor("Additional information", this)
-                .assertPair("Ethnicity", ethnicity)
-    }
-
-    fun assertReligion(religion: String) {
-        OrganDonationDetailsAssertor("Additional information", this)
-                .assertPair("Religion", religion)
-    }
 
     fun clickSubmit() {
         val optIn = OrganDonationSerenityHelpers.IS_OPT_IN.isTrueOrFalse()

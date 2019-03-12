@@ -14,10 +14,11 @@ import {
   SET_AMENDING,
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
+  SET_REAFFIRMING,
   SET_REGISTRATION_ID,
   SET_STATE,
-  STATE_OK,
   STATE_CONFLICTED,
+  STATE_OK,
   UPDATE_ORIGINAL_REGISTRATION,
 } from '@/store/modules/organDonation/mutation-types';
 
@@ -122,65 +123,6 @@ describe('organ donation record mutations', () => {
     });
   });
 
-  describe('SET_ACCURACY_ACCEPTANCE', () => {
-    it('will set the isAccurancyAccepted value to the received value', () => {
-      mutations[SET_ACCURACY_ACCEPTANCE](state, true);
-      expect(state.isAccuracyAccepted).toEqual(true);
-    });
-  });
-
-  describe('SET_ALL_ORGANS', () => {
-    it('will set the organ donation registration decision "all" state to the received value', () => {
-      mutations[SET_ALL_ORGANS](state, false);
-      expect(state.registration.decisionDetails.all).toEqual(false);
-    });
-  });
-
-  describe('SET_ADDITIONAL_DETAILS', () => {
-    beforeEach(() => {
-      mutations[SET_ADDITIONAL_DETAILS](state, {
-        ethnicityId: 'foo',
-        religionId: 'bar',
-      });
-    });
-
-    it('will set the ethnicityId on the state', () => {
-      expect(state.additionalDetails.ethnicityId).toEqual('foo');
-    });
-
-    it('will set the religionId on the state', () => {
-      expect(state.additionalDetails.religionId).toEqual('bar');
-    });
-  });
-
-  describe('SET_AMENDING', () => {
-    it('will set the isAmending property on the state', () => {
-      mutations[SET_AMENDING](state, true);
-      expect(state.isAmending).toEqual(true);
-    });
-  });
-
-  describe('SET_FAITH_DECLARATION', () => {
-    it('will set the organ donation registration "faith declaration" state to the received value', () => {
-      mutations[SET_FAITH_DECLARATION](state, 'foo');
-      expect(state.registration.faithDeclaration).toEqual('foo');
-    });
-  });
-
-  describe('SET_PRIVACY_ACCEPTANCE', () => {
-    it('will set the isPrivacyAccepted value to the received value', () => {
-      mutations[SET_PRIVACY_ACCEPTANCE](state, true);
-      expect(state.isPrivacyAccepted).toEqual(true);
-    });
-  });
-
-  describe('SET_REGISTRATION_ID', () => {
-    it('will set the organ donation registration identifier state to the received value', () => {
-      mutations[SET_REGISTRATION_ID](state, 'identity');
-      expect(state.registration.identifier).toEqual('identity');
-    });
-  });
-
   describe('RESET_REGISTRATION', () => {
     let originalRegistration;
 
@@ -206,13 +148,69 @@ describe('organ donation record mutations', () => {
     });
   });
 
-  describe('UPDATE_ORIGINAL_REGISTRATION', () => {
-    it('will set the originalRegistration to a deep clone of registration', () => {
-      state.registration.address.text = 'changed address';
-      state.originalRegistration.address.text = 'original address';
-      mutations[UPDATE_ORIGINAL_REGISTRATION](state);
-      expect(state.originalRegistration.address.text).toEqual(state.registration.address.text);
-      expect(state.originalRegistration.address).not.toBe(state.registration.address);
+  describe('SET_ACCURACY_ACCEPTANCE', () => {
+    it('will set the isAccurancyAccepted value to the received value', () => {
+      mutations[SET_ACCURACY_ACCEPTANCE](state, true);
+      expect(state.isAccuracyAccepted).toEqual(true);
+    });
+  });
+
+  describe('SET_ADDITIONAL_DETAILS', () => {
+    beforeEach(() => {
+      mutations[SET_ADDITIONAL_DETAILS](state, {
+        ethnicityId: 'foo',
+        religionId: 'bar',
+      });
+    });
+
+    it('will set the ethnicityId on the state', () => {
+      expect(state.additionalDetails.ethnicityId).toEqual('foo');
+    });
+
+    it('will set the religionId on the state', () => {
+      expect(state.additionalDetails.religionId).toEqual('bar');
+    });
+  });
+
+  describe('SET_ALL_ORGANS', () => {
+    it('will set the organ donation registration decision "all" state to the received value', () => {
+      mutations[SET_ALL_ORGANS](state, false);
+      expect(state.registration.decisionDetails.all).toEqual(false);
+    });
+  });
+
+  describe('SET_AMENDING', () => {
+    it('will set the isAmending property on the state', () => {
+      mutations[SET_AMENDING](state, true);
+      expect(state.isAmending).toEqual(true);
+    });
+  });
+
+  describe('SET_FAITH_DECLARATION', () => {
+    it('will set the organ donation registration "faith declaration" state to the received value', () => {
+      mutations[SET_FAITH_DECLARATION](state, 'foo');
+      expect(state.registration.faithDeclaration).toEqual('foo');
+    });
+  });
+
+  describe('SET_PRIVACY_ACCEPTANCE', () => {
+    it('will set the isPrivacyAccepted value to the received value', () => {
+      mutations[SET_PRIVACY_ACCEPTANCE](state, true);
+      expect(state.isPrivacyAccepted).toEqual(true);
+    });
+  });
+
+  describe('SET_REAFFIRMING', () => {
+    it('will set the isReaffirming property on the state', () => {
+      mutations[SET_REAFFIRMING](state, true);
+      expect(state.isReaffirming).toEqual(true);
+    });
+  });
+
+  describe('SET_REGISTRATION_ID', () => {
+    it('will set the organ donation registration identifier state to the received value', () => {
+      mutations[SET_REGISTRATION_ID](state, 'identity');
+      expect(state.registration.identifier).toEqual('identity');
     });
   });
 
@@ -225,6 +223,16 @@ describe('organ donation record mutations', () => {
     it('will set registration state to "Conflicted" if conflicted', () => {
       mutations[SET_STATE](state, STATE_CONFLICTED);
       expect(state.registration.state).toEqual(STATE_CONFLICTED);
+    });
+  });
+
+  describe('UPDATE_ORIGINAL_REGISTRATION', () => {
+    it('will set the originalRegistration to a deep clone of registration', () => {
+      state.registration.address.text = 'changed address';
+      state.originalRegistration.address.text = 'original address';
+      mutations[UPDATE_ORIGINAL_REGISTRATION](state);
+      expect(state.originalRegistration.address.text).toEqual(state.registration.address.text);
+      expect(state.originalRegistration.address).not.toBe(state.registration.address);
     });
   });
 });

@@ -11,6 +11,7 @@ import {
   SET_AMENDING,
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
+  SET_REAFFIRMING,
   SET_REGISTRATION_ID,
   SET_STATE,
   STATE_OK,
@@ -58,6 +59,16 @@ describe('organ donation actions', () => {
     };
   });
 
+  describe('amendCancel', () => {
+    beforeEach(() => {
+      actions.amendCancel({ commit, state: {} });
+    });
+
+    it('will commit a value of "false" to "SET_AMENDING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_AMENDING, false);
+    });
+  });
+
   describe('amendStart', () => {
     beforeEach(() => {
       actions.amendStart({
@@ -89,16 +100,6 @@ describe('organ donation actions', () => {
     });
   });
 
-  describe('amendCancel', () => {
-    beforeEach(() => {
-      actions.amendCancel({ commit, state: {} });
-    });
-
-    it('will commit a value of "false" to "SET_AMENDING"', () => {
-      expect(commit).toHaveBeenCalledWith(SET_AMENDING, false);
-    });
-  });
-
   describe('cloneFromOriginal', () => {
     beforeEach(() => {
       actions.cloneFromOriginal({ commit }, 'identifier');
@@ -109,61 +110,16 @@ describe('organ donation actions', () => {
     });
   });
 
-  describe('toggleAccuracyAcceptance', () => {
-    it(
-      'will commit SET_ACCURACY_ACCEPTANCE with a value of true when `isAccuracyAcceptance` is false',
-      () => {
-        const state = { isAccuracyAccepted: false };
-        actions.toggleAccuracyAcceptance({ commit, state });
-        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, true);
-      },
-    );
 
-    it(
-      'will commit SET_ACCURACY_ACCEPTANCE with a value of false when `isAccuracyAcceptance` is true',
-      () => {
-        const state = { isAccuracyAccepted: true };
-        actions.toggleAccuracyAcceptance({ commit, state });
-        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, false);
-      },
-    );
-  });
+  describe('getReferenceData', () => {
+    it('will request the organ donation reference data', () => {
+      actions.getReferenceData({ commit });
+      expect($http.getV1PatientOrgandonationReferencedata).toHaveBeenCalled();
+    });
 
-  describe('togglePrivacyAcceptance', () => {
-    it(
-      'will commit SET_PRIVACY_ACCEPTANCE with a value of true when `isPrivacyAcceptance` is false',
-      () => {
-        const state = { isPrivacyAccepted: false };
-        actions.togglePrivacyAcceptance({ commit, state });
-        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, true);
-      },
-    );
-
-    it(
-      'will commit SET_PRIVACY_ACCEPTANCE with a value of false when `isPrivacyAcceptance` is true',
-      () => {
-        const state = { isPrivacyAccepted: true };
-        actions.togglePrivacyAcceptance({ commit, state });
-        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, false);
-      },
-    );
-  });
-
-  describe('resetAcceptanceChecks', () => {
-    it(
-      'will commit SET_PRIVACY_ACCEPTANCE and SET_ACCURACY_ACCEPTANCE with a value of false',
-      () => {
-        actions.resetAcceptanceChecks({ commit });
-        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, false);
-        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, false);
-      },
-    );
-  });
-
-  describe('makeDecision', () => {
-    it('will commit the MAKE_DECISION mutation', () => {
-      actions.makeDecision({ commit }, 'foo');
-      expect(commit).toHaveBeenCalledWith(MAKE_DECISION, 'foo');
+    it('will commit the reference data on completion', async () => {
+      await actions.getReferenceData({ commit });
+      expect(commit).toHaveBeenCalledWith(LOADED_REFERENCE_DATA, referenceData);
     });
   });
 
@@ -179,23 +135,22 @@ describe('organ donation actions', () => {
     });
   });
 
-  describe('getReferenceData', () => {
-    it('will request the organ donation reference data', () => {
-      actions.getReferenceData({ commit });
-      expect($http.getV1PatientOrgandonationReferencedata).toHaveBeenCalled();
-    });
-
-    it('will commit the reference data on completion', async () => {
-      await actions.getReferenceData({ commit });
-      expect(commit).toHaveBeenCalledWith(LOADED_REFERENCE_DATA, referenceData);
+  describe('makeDecision', () => {
+    it('will commit the MAKE_DECISION mutation', () => {
+      actions.makeDecision({ commit }, 'foo');
+      expect(commit).toHaveBeenCalledWith(MAKE_DECISION, 'foo');
     });
   });
 
-  describe('setAllOrgans', () => {
-    it('will commit the SET_ALL_ORGANS mutation', () => {
-      actions.setAllOrgans({ commit }, true);
-      expect(commit).toHaveBeenCalledWith(SET_ALL_ORGANS, true);
-    });
+  describe('resetAcceptanceChecks', () => {
+    it(
+      'will commit SET_PRIVACY_ACCEPTANCE and SET_ACCURACY_ACCEPTANCE with a value of false',
+      () => {
+        actions.resetAcceptanceChecks({ commit });
+        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, false);
+        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, false);
+      },
+    );
   });
 
   describe('setAdditionalDetails', () => {
@@ -207,6 +162,13 @@ describe('organ donation actions', () => {
 
       actions.setAdditionalDetails({ commit }, additionalDetails);
       expect(commit).toHaveBeenCalledWith(SET_ADDITIONAL_DETAILS, additionalDetails);
+    });
+  });
+
+  describe('setAllOrgans', () => {
+    it('will commit the SET_ALL_ORGANS mutation', () => {
+      actions.setAllOrgans({ commit }, true);
+      expect(commit).toHaveBeenCalledWith(SET_ALL_ORGANS, true);
     });
   });
 
@@ -303,5 +265,65 @@ describe('organ donation actions', () => {
         expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_VIEW_DECISION.path);
       });
     });
+  });
+
+  describe('reaffirmCancel', () => {
+    beforeEach(() => {
+      actions.reaffirmCancel({ commit, state: {} });
+    });
+
+    it('will commit a value of "false" to "SET_REAFFIRMING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_REAFFIRMING, false);
+    });
+  });
+
+  describe('reaffirmStart', () => {
+    beforeEach(() => {
+      actions.reaffirmStart({ commit, state: {} });
+    });
+
+    it('will commit a value of "true" to "SET_REAFFIRMING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_REAFFIRMING, true);
+    });
+  });
+
+  describe('toggleAccuracyAcceptance', () => {
+    it(
+      'will commit SET_ACCURACY_ACCEPTANCE with a value of true when `isAccuracyAcceptance` is false',
+      () => {
+        const state = { isAccuracyAccepted: false };
+        actions.toggleAccuracyAcceptance({ commit, state });
+        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, true);
+      },
+    );
+
+    it(
+      'will commit SET_ACCURACY_ACCEPTANCE with a value of false when `isAccuracyAcceptance` is true',
+      () => {
+        const state = { isAccuracyAccepted: true };
+        actions.toggleAccuracyAcceptance({ commit, state });
+        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, false);
+      },
+    );
+  });
+
+  describe('togglePrivacyAcceptance', () => {
+    it(
+      'will commit SET_PRIVACY_ACCEPTANCE with a value of true when `isPrivacyAcceptance` is false',
+      () => {
+        const state = { isPrivacyAccepted: false };
+        actions.togglePrivacyAcceptance({ commit, state });
+        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, true);
+      },
+    );
+
+    it(
+      'will commit SET_PRIVACY_ACCEPTANCE with a value of false when `isPrivacyAcceptance` is true',
+      () => {
+        const state = { isPrivacyAccepted: true };
+        actions.togglePrivacyAcceptance({ commit, state });
+        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, false);
+      },
+    );
   });
 });

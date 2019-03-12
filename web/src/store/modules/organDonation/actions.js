@@ -13,6 +13,7 @@ import {
   SET_ALL_ORGANS,
   SET_FAITH_DECLARATION,
   SET_PRIVACY_ACCEPTANCE,
+  SET_REAFFIRMING,
   SET_REGISTRATION_ID,
   SET_SOME_ORGANS,
   SET_STATE,
@@ -76,6 +77,12 @@ export default {
   },
   makeDecision({ commit }, decision) {
     commit(MAKE_DECISION, decision);
+  },
+  reaffirmCancel({ commit }) {
+    commit(SET_REAFFIRMING, false);
+  },
+  reaffirmStart({ commit }) {
+    commit(SET_REAFFIRMING, true);
   },
   resetAcceptanceChecks({ commit }) {
     commit(SET_PRIVACY_ACCEPTANCE, false);

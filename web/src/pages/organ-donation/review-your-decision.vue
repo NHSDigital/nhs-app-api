@@ -17,10 +17,13 @@
                :nhs-number="$store.state.organDonation.registration.nhsNumber"
                :address="$store.state.organDonation.registration.addressFull"/>
     <hr :class="$style.rule" aria-hidden="true">
-    <additional-information :ethnicity-id="$store.state.organDonation.additionalDetails.ethnicityId"
-                            :religion-id="$store.state.organDonation.additionalDetails.religionId"
-                            :reference-data="$store.state.organDonation.referenceData"/>
-    <hr :class="$style.rule" aria-hidden="true">
+    <div v-if="showAdditionalDetails">
+      <additional-information
+        :ethnicity-id="$store.state.organDonation.additionalDetails.ethnicityId"
+        :religion-id="$store.state.organDonation.additionalDetails.religionId"
+        :reference-data="$store.state.organDonation.referenceData"/>
+      <hr :class="$style.rule" aria-hidden="true">
+    </div>
     <your-decision :decision-details="$store.state.organDonation.registration.decisionDetails"
                    :decision="$store.state.organDonation.registration.decision"/>
     <decision-details v-if="isOptInDecision && !allOrgans"
@@ -101,6 +104,10 @@ export default {
     },
     isPrivacyStarVisible() {
       return this.submitAttempted && !this.isPrivacyAccepted;
+    },
+    showAdditionalDetails() {
+      return !(this.$store.state.organDonation.isReaffirming &&
+        !this.$store.getters['organDonation/isSomeOrgans']);
     },
     showErrors() {
       return this.submitAttempted && !isEmpty(this.validationErrors);

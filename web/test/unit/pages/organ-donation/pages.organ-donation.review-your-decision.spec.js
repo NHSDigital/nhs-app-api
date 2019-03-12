@@ -1,3 +1,4 @@
+import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
 import BackButton from '@/components/BackButton';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import ReviewYourDecision from '@/pages/organ-donation/review-your-decision';
@@ -259,6 +260,61 @@ describe('review your decision', () => {
 
       it('will show the faith details', () => {
         expect(faithDetails.exists()).toBe(false);
+      });
+    });
+  });
+
+  describe('additional details', () => {
+    let additionalInformation;
+    beforeEach(() => {
+      additionalInformation = wrapper.find(AdditionalInformation);
+    });
+
+    describe('reaffirming', () => {
+      beforeEach(() => {
+        $store.state.organDonation.isReaffirming = true;
+      });
+
+      describe('donating all organs', () => {
+        beforeEach(() => {
+          $store.state.organDonation.registration.decision = DECISION_OPT_IN;
+          $store.state.organDonation.registration.decisionDetails.all = true;
+          $store.getters['organDonation/isSomeOrgans'] = false;
+          wrapper = mountPage();
+          additionalInformation = wrapper.find(AdditionalInformation);
+        });
+
+        it('will not show additional details', () => {
+          expect(additionalInformation.exists()).toEqual(false);
+        });
+      });
+
+      describe('donating some organs', () => {
+        beforeEach(() => {
+          $store.state.organDonation.registration.decision = DECISION_OPT_IN;
+          $store.state.organDonation.registration.decisionDetails.all = false;
+          $store.getters['organDonation/isSomeOrgans'] = true;
+          wrapper = mountPage();
+          additionalInformation = wrapper.find(AdditionalInformation);
+        });
+
+        it('will show additional details', () => {
+          expect(additionalInformation.exists()).toEqual(true);
+        });
+      });
+
+      describe('not donating organs', () => {
+        beforeEach(() => {
+          $store.state.organDonation.registration.decision = DECISION_OPT_OUT;
+          $store.state.organDonation.registration.decisionDetails.all = '';
+          $store.getters['organDonation/isSomeOrgans'] = false;
+          wrapper = mountPage();
+          additionalInformation = wrapper.find(AdditionalInformation);
+        });
+
+        it('will not show additional details', () => {
+          expect(additionalInformation.exists()).toEqual(false);
+        });
       });
     });
   });

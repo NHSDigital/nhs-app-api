@@ -16,7 +16,7 @@ import utils.SerenityHelpers
 
 open class OrganDonationAmendStepDefinitions {
 
-    @Given("I am a (.*) user registered as opt-in who then amends their decision to opt-out")
+    @Given("I am a (\\w+) user registered as opt-in who then amends their decision to opt-out")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendToOptOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
@@ -27,18 +27,19 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (.*) user registered as opt-in who then amends their decision to some")
+    @Given("I am a (\\w+) user registered as opt-in who then amends their decision to some")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendToSome(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         val existingRegistration = factory.existingOptIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
+        factory.amend { registration->registration.some(
+                OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (.*) user registered as opt-in who then amends their faith and beliefs")
+    @Given("I am a (\\w+) user registered as opt-in who then amends their faith and beliefs")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendMyFaithAndBeliefs(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
@@ -66,7 +67,7 @@ open class OrganDonationAmendStepDefinitions {
         }
     }
 
-    @Given("I am a (.*) user registered as some who then amends their decision to opt-out")
+    @Given("I am a (\\w+) user registered as some who then amends their decision to opt-out")
     fun iAmRegisteredWithOrganDonationAsSomeButAmendToOptOut(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
@@ -77,7 +78,7 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (.*) user registered as some who then amends their decision to opt-in")
+    @Given("I am a (\\w+) user registered as some who then amends their decision to opt-in")
     fun iAmRegisteredWithOrganDonationAsSomeButAmendToOptIn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
@@ -88,14 +89,15 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (.*) user registered as some who then amends their selected organs")
+    @Given("I am a (\\w+) user registered as some who then amends their selected organs")
     fun iAmRegisteredWithOrganDonationAsSomeButAmendTheSelectedOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         val existingRegistration = factory.existingOptInSome()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
+        factory.amend { registration->registration.some(
+                OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
@@ -113,7 +115,7 @@ open class OrganDonationAmendStepDefinitions {
         }
     }
 
-    @Given("I am a (.*) user registered as opt-out who then amends their decision to opt-in")
+    @Given("I am a (\\w+) user registered as opt-out who then amends their decision to opt-in")
     fun iAmRegisteredWithOrganDonationAsOptOutButAmendToOptIn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
@@ -124,26 +126,20 @@ open class OrganDonationAmendStepDefinitions {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (.*) user registered as opt-out who then amends their decision to some")
+    @Given("I am a (\\w+) user registered as opt-out who then amends their decision to some")
     fun iAmRegisteredWithOrganDonationAsOptOutButAmendToSome(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
         val existingRegistration = factory.existingOptOut()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.some(OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
+        factory.amend { registration->registration.some(
+                OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
-    @Given("I am a (.*) user registered as opt-in with organ donation, who wishes to amend$")
-    fun iAmEMISUserRegisteredWithOrganDonationWhoWishesToAmend(gpSystem: String) {
-        val factory = OrganDonationFactory(gpSystem)
-        factory.setupPatientForAppUse()
-        factory.existingOptIn()
-    }
-
-    @Given("I am a (.*) user registered as opt-in with organ donation, who wishes to opt-out but will cause " +
-            "a conflict")
+    @Given("I am a (\\w+) user registered as opt-in with organ donation, " +
+            "who wishes to opt-out but will cause a conflict")
     fun iAmRegisteredWithOrganDonationAsOptInButAmendToOutAndCauseConflict(gpSystem: String) {
 
         val factory = OrganDonationFactory(gpSystem)
@@ -157,5 +153,46 @@ open class OrganDonationAmendStepDefinitions {
                         ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT.toString())
             }
         }
+    }
+
+    @Given("I am a (\\w+) user registered as opt-in with organ donation, who wishes to amend$")
+    fun iAmUserRegisteredWithOrganDonationWhoWishesToAmend(gpSystem: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existingOptIn()
+    }
+
+    @Given("I am a (\\w+) user registered as opt-in who wishes to reaffirm their decision")
+    fun iAmAUserRegisteredAsOptInWhoWishesToReaffirmTheirDecision(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val existingRegistration = factory.existingOptIn()
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
+
+        factory.amend { registration->registration.optIn {
+            request -> request.respondWithSuccess(existingRegistration.id) }}
+    }
+
+    @Given("I am a (\\w+) user registered as opt-out who wishes to reaffirm their decision")
+    fun iAmAUserRegisteredAsOptOutWhoWishesToReaffirmTheirDecision(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val existingRegistration = factory.existingOptOut()
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
+
+        factory.amend { registration->registration.optOut {
+            request -> request.respondWithSuccess(existingRegistration.id) }}
+    }
+
+    @Given("I am a (\\w+) user registered as opt-in with some organs who wishes to reaffirm their decision")
+    fun iAmAUserRegisteredAsOptInWithSomeOrgansWhoWishesToReaffirmTheirDecision(gpSystem: String){
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val existingRegistration = factory.existingOptInSome()
+        OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
+
+        factory.amend { registration->registration.some(
+                OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
+            request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 }

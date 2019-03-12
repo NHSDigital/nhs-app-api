@@ -31,6 +31,9 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
 
     val amendDecisionLink = getLink("Amend your decision")
 
+    val reaffirmDecisionLink = getLink("This is still my decision")
+
+
     private var nextStepsContent = MenuLinksContent(
             title = "Next steps",
             links = arrayOf(Pair(shareLinkTitle, shareLinkDescription),
