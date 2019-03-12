@@ -81,7 +81,6 @@ class WebViewUrlTests: XCTestCase {
         let serviceUrlTitleDictionary = [
             config().HomeUrl : NSLocalizedString("HomeTitle", comment: ""),
             config().Nhs111Url:NSLocalizedString("NHS111Title", comment: ""),
-            config().OrganDonationUrl: NSLocalizedString("OrganDonationTitle", comment: "")
         ]
         for (urlString, title) in serviceUrlTitleDictionary {
             let url = URL(string:urlString)

@@ -20,14 +20,13 @@
     <string name="appointmentsPath">appointments</string>
     <string name="prescriptionsPath">prescriptions</string>
     <string name="myAccountPath">account</string>
+    <string name="organDonationPath">organ-donation</string>
     <string name="fidoAuthQueryKey">fidoAuthResponse</string>
     <string name="fidoLoginPathWithAuthQueryKey">login?fidoAuthResponse</string>
     <string name="nhs111">https://111.nhs.uk/</string>
     <string name="nhsUK">https://www.nhs.uk</string>
     <string name="conditions">https://www.nhs.uk/conditions/</string>
     <string name="nhs111Location">https://111.service.nhs.uk/</string>
-    <string name="organDonation">https://www.organdonation.nhs.uk/</string>
-    <string name="organDonationNative">https://www.organdonation.nhs.uk/app/</string>
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
     <string name="throttleCarouselPath">file:///android_asset/throttling.html</string>
@@ -72,7 +71,6 @@
     <string-array name="nativeAppHosts">
         <item>@string/nhs111</item>
         <item>@string/nhs111Location</item>
-        <item>@string/organDonationNative</item>
         <item>@string/dataSharing</item>
         <item>@string/conditions</item>
         <item>@string/baseURL</item>

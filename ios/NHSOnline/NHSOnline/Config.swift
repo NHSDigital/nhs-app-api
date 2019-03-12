@@ -2,8 +2,8 @@ import Foundation
 
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
-        case HomeUrl, Nhs111Url, Nhs111LocationUrl, OrganDonationUrl, OrganDonationUrlNative, ConditionsUrlPath, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, NativeDonationPath
-        case AppointmentsUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath
+        case HomeUrl, Nhs111Url, Nhs111LocationUrl, ConditionsUrlPath, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL
+        case AppointmentsUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
         case IsFirstTimeOpened, HaveShownThrottlingCarouselBefore, CarouselDirectory, CarouselContentType, IntroCarouselFileName, ThrottlingCarouselFileName
@@ -15,20 +15,18 @@ struct Config: Decodable {
     let HomeUrl: String
     let Nhs111Url: String
     let Nhs111LocationUrl: String
-    let OrganDonationUrl: String
-    let OrganDonationUrlNative: String
     let CheckSymptomsUrlPath: String
     let AppScheme: String
     let BaseScheme: String
     let HotJarLinkUrl: String
     let DataPreferencesURL: String
-    let NativeDonationPath: String
 
     let MyRecordUrlPath: String
     let MoreUrlPath: String
     let ConditionsUrlPath: String
     let AppointmentsUrlPath: String
     let SymptomsUrlPath: String
+    let OrganDonationUrlPath: String
     let PrescriptionsUrlPath: String
     let MyAccountUrlPath: String
     let SessionUrlPath: String

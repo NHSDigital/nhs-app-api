@@ -65,15 +65,15 @@ class KnownServicesTests: XCTestCase {
     }
     
     func test_FindMatchingKnownServiceForHostname_ResolveToKnownServiceWhenHostIsValidValid_ButNilWhenNot() {
-        let nhsOrganDonationHost = URL(string: config().OrganDonationUrl)!.host
+        let nhs111Host = URL(string: config().Nhs111Url)!.host
         let googleHost = URL(string: "https://www.google.co.uk/search")!.host
         let notValidHost = "not a host"
         
-        guard let organDonationKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: nhsOrganDonationHost) else {
-            assertionFailure("Organ donation host should match to the organ donation known service object")
+        guard let nhs111KnownService = knownServices.findMatchingKnownServiceForHostname(hostname: nhs111Host) else {
+            assertionFailure("NHS 111 host should match to the NHS 111 known service object")
             return
         }
-        XCTAssertEqual(nhsOrganDonationHost, organDonationKnownService.url.host)
+        XCTAssertEqual(nhs111Host, nhs111KnownService.url.host)
         let googleService = knownServices.findMatchingKnownServiceForHostname(hostname: googleHost)
         XCTAssertNil(googleService)
         let notValidService = knownServices.findMatchingKnownServiceForHostname(hostname: notValidHost)

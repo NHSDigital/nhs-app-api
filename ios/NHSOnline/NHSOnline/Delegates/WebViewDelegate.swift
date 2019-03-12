@@ -79,10 +79,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                     decisionHandler(.cancel)
                     webView.loadPage(url: urlString)
                     return
-                } else if (url.absoluteString == config().OrganDonationUrl) {
-                    decisionHandler(.cancel)
-                    webView.loadPage(url: config().OrganDonationUrlNative)
-                    return
                 }
             }
                 
@@ -341,6 +337,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break
             case .ORGAN_DONATION:
                 tabBarDelegate.selectMenu(menu: .More)
+                break;
             default : break
             }
             

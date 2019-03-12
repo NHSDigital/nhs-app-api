@@ -8,7 +8,6 @@ class KnownServices {
     private let accessibleNhsOnlineErrorMessage = NSLocalizedString("AccessibilityConnectionErrorMessage", comment: "")
     private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
     private let accessibleNhs111Title = NSLocalizedString("AccessibleNHS111Title", comment: "")
-    private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
     private let conditionsTitle = NSLocalizedString("ConditionsTitle", comment: "")
     private let accessibleConditionsTitle = NSLocalizedString("AccessibleConditionsTitle", comment: "")
     private let symptomsTitle = NSLocalizedString("SymptomsTitle", comment: "")
@@ -17,6 +16,7 @@ class KnownServices {
     private let myRecordTitle = NSLocalizedString("MyRecordTitle", comment: "")
     private let moreTitle = NSLocalizedString("MoreTitle", comment: "")
     private let myAccountTitle = NSLocalizedString("MyAccountTitle", comment: "")
+    private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
     private let dataPreferencesTitle = NSLocalizedString("DataPreferencesTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
     private let hotJarTitle = NSLocalizedString("HotJarTitle", comment: "")
@@ -99,21 +99,13 @@ class KnownServices {
         let conditionService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: true)
         let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111,title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
         let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111,  title: nhs111Title, validateSession: false, allowNativeInteraction: false)
-        let organDonationService = buildDonationService()
         let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
         
         self.serviceList.append(nhsoService)
         self.serviceList.append(conditionService)
         self.serviceList.append(nhs111Service)
         self.serviceList.append(nhs111LocationService)
-        self.serviceList.append(organDonationService)
         self.serviceList.append(dataPrefService)
-    }
-    
-    private func buildDonationService()-> KnownService {
-        let organDonationService = KnownService(serviceUrl: config.OrganDonationUrl, service: .ORGAN_DONATION,  title: organDonationTitle, validateSession: false, allowNativeInteraction: true)
-        organDonationService.addPathInfo(path: config.NativeDonationPath, service: .ORGAN_DONATION, validateSession: false, allowNativeInteraction: true, title: organDonationTitle)
-        return organDonationService
     }
     
     private func buildNhsoService()-> KnownService {
@@ -125,11 +117,12 @@ class KnownServices {
         nhsoService.addPathInfo(path: config.MyRecordUrlPath, service: .MY_RECORD,validateSession: true,  allowNativeInteraction: true, title: myRecordTitle)
         nhsoService.addPathInfo(path: config.MoreUrlPath, service: .MORE, validateSession: true, allowNativeInteraction: true, title: moreTitle)
         nhsoService.addPathInfo(path: config.MyAccountUrlPath, service: .ACCOUNT, validateSession: true, allowNativeInteraction: true, title: myAccountTitle)
+        nhsoService.addPathInfo(path: config.OrganDonationUrlPath, service: .ORGAN_DONATION, validateSession: true, allowNativeInteraction: true, title: organDonationTitle)
         return nhsoService
     }
     
     enum Service {
-        case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT;
+        case NHS_111, CONDITIONS, NHS_ONLINE, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT, ORGAN_DONATION;
     }
 }
 

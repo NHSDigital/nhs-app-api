@@ -51,11 +51,6 @@ class WebClientInterceptor(
             return true
         }
 
-        if (url == context.getString(R.string.organDonation)) {
-            view.loadUrl(context.getString(R.string.organDonationNative))
-            return true
-        }
-
         val openedInChromeTab = nhsWeb.openInChromeTabIfApplicable(url)
         if (openedInChromeTab)
             return true
@@ -244,7 +239,7 @@ class WebClientInterceptor(
                         R.id.prescriptions)
                     context.resources.getString(R.string.my_record_header) -> uiInteractor.selectNavigationMenuActive(
                         R.id.myRecord)
-                    context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectNavigationMenuActive(
+                    context.resources.getString(R.string.organ_donation_header) -> uiInteractor.selectNavigationMenuActive(
                         R.id.more)
                 }
 

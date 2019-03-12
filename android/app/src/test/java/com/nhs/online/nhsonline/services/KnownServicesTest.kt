@@ -178,6 +178,7 @@ class KnownServicesTest : ResourceMockingClass() {
                 getResourceString(R.string.baseURL) + getResourceString(R.string.prescriptionsPath),
                 getResourceString(R.string.baseURL) + getResourceString(R.string.myRecordPath),
                 getResourceString(R.string.baseURL) + getResourceString(R.string.myAccountPath),
+                getResourceString(R.string.baseURL) + getResourceString(R.string.organDonationPath),
                 getResourceString(R.string.baseURL) + getResourceString(R.string.morePath) + "random/path",
                 "${getResourceString(R.string.baseURL)}/${getResourceString(R.string.checkYourSymptoms)}/random-path")
 
@@ -186,6 +187,7 @@ class KnownServicesTest : ResourceMockingClass() {
             getResourceString(R.string.prescriptions_header),
             getResourceString(R.string.my_record_header),
             getResourceString(R.string.my_account_header),
+            getResourceString(R.string.organ_donation_header),
             getResourceString(R.string.more_header),
             getResourceString(R.string.symptoms_header))
         for (i in 0 until nhsAppServices.size) {

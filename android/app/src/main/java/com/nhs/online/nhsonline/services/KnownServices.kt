@@ -75,13 +75,6 @@ class KnownServices(private val context: Context) {
     private fun buildKnownServices(): ArrayList<KnownService> {
         val services = arrayListOf<KnownService>()
         val nhsAppService = buildNHSInternalAppService()
-        val organDonation = KnownService(fetchStringResource(R.string.organDonation),
-            fetchStringResource(R.string.organ_donation_register_header),
-            null,
-            false)
-        organDonation.addPathInfo(URL(fetchStringResource(R.string.organDonationNative)).path,
-            false,
-            fetchStringResource(R.string.organ_donation_register_header))
 
         val nhsUK = KnownService(fetchStringResource(R.string.nhsUK))
         nhsUK.addPathInfo(URL(fetchStringResource(R.string.dataSharing)).path,
@@ -103,7 +96,6 @@ class KnownServices(private val context: Context) {
             false)
 
         services.add(nhsAppService)
-        services.add(organDonation)
         services.add(nhsUK)
         services.add(nhs111)
         services.add(dataPref)
@@ -137,6 +129,9 @@ class KnownServices(private val context: Context) {
         internalService.addPathInfo(fetchStringResource(R.string.myAccountPath),
             true,
             fetchStringResource(R.string.my_account_header))
+        internalService.addPathInfo(fetchStringResource(R.string.organDonationPath),
+        true,
+        fetchStringResource(R.string.organ_donation_header))
         return internalService
     }
 

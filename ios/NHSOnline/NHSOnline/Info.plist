@@ -119,8 +119,8 @@
 	<string>https://$(NHS_111_URL)</string>
 	<key>Nhs111LocationUrl</key>
 	<string>https://$(NHS_111_LOCATION_URL)</string>
-	<key>OrganDonationUrl</key>
-	<string>https://$(ORGAN_DONTAION_URL)</string>
+	<key>OrganDonationUrlPath</key>
+	<string>$(ORGAN_DONATION_URL_PATH)</string>
 	<key>ConditionsUrlPath</key>
 	<string>https://$(CONDITIONS_URL_PATH)</string>
 	<key>MoreUrlPath</key>
@@ -169,10 +169,6 @@
 	<string>$(CONFIGURATION_API_PATH)</string>
 	<key>BaseApiUrl</key>
 	<string>$(BASE_SCHEME)://$(BASE_API_URL)</string>
-	<key>OrganDonationUrlNative</key>
-	<string>https://$(ORGAN_DONATION_URL_NATIVE)</string>
-	<key>NativeDonationPath</key>
-	<string>$(NATIVE_DONATION_PATH)</string>
 	<key>AppStoreUrl</key>
 	<string>$(APP_STORE_SCHEME)://$(APP_STORE_URL)$(APP_STORE_ID)?mt=8</string>
 </dict>
