@@ -41,9 +41,6 @@ class NhsWeb(
         set(value) {
             urlLoader.usingAbsoluteUri = value
         }
-    var isLoadedPageNhsPage
-        get() = urlLoader.isLoadedPageNhsPage
-        set(value) {urlLoader.isLoadedPageNhsPage = value}
 
     init {
         val webInterceptor =
