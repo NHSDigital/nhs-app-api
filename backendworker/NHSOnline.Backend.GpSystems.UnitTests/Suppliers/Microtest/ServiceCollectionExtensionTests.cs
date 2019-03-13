@@ -48,6 +48,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             var dependencies = new List<ServiceDescriptor>
             {
                 new ServiceDescriptor(typeof(MicrotestHttpClientHandler), typeof(MicrotestHttpClientHandler),ServiceLifetime.Singleton),                
+                new ServiceDescriptor(typeof(MicrotestHttpRequestIdentifier), typeof(MicrotestHttpRequestIdentifier),ServiceLifetime.Transient),                
                 new ServiceDescriptor(typeof(IGpSystem), typeof(MicrotestGpSystem),ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IMicrotestClient), typeof(MicrotestClient),ServiceLifetime.Singleton),
                 new ServiceDescriptor(typeof(IMicrotestConfig), typeof(MicrotestConfig), ServiceLifetime.Singleton),

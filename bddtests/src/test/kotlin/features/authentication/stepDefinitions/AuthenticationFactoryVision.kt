@@ -1,6 +1,6 @@
 package features.authentication.stepDefinitions
 
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import models.Patient
 import org.junit.Assert
 import utils.SerenityHelpers

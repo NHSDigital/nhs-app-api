@@ -2,7 +2,7 @@ package mocking.defaults.dataPopulation.journies.prescriptions
 
 import mocking.MockingClient
 import mocking.data.prescriptions.VisionPrescriptionLoader
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import models.Patient
 
 private const val SEVEN_PRESCRIPTIONS = 7

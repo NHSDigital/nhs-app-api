@@ -7,6 +7,8 @@ import mocking.emis.practices.NecessityOption
 import mocking.emis.practices.SettingsResponseModel
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
+import mockingFacade.appointments.AppointmentFilterFacade
+import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertTrue
 import java.time.ZonedDateTime
@@ -49,4 +51,14 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
             mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate))
         }
     }
+
+    override fun getExpectedApiResponseSlots(facade: AppointmentSlotsResponseFacade) =
+            appointmentSlotsFactoryHelper.getExpectedApiResponseSlotsWithSessionNames(
+                    facade, true
+            )
+
+    override fun getExpectedUiRepresentationOfFilteredSlots(facade: AppointmentFilterFacade) =
+            appointmentSlotsFactoryHelper.getExpectedUiRepresentationOfFilteredSlotsWithSessionNames(
+                    facade, true
+            )
 }

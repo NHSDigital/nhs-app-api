@@ -2,7 +2,7 @@ package features.authentication.factories
 
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.IdentifierType
-import mocking.microtest.MicrotestMockDefaults
+import mocking.defaults.MicrotestMockDefaults
 import models.Patient
 import net.serenitybdd.core.Serenity
 

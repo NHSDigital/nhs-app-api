@@ -16,7 +16,7 @@ import mocking.tpp.models.NationalId
 import mocking.tpp.models.Person
 import mocking.tpp.models.PersonName
 import mocking.tpp.models.User
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import mocking.vision.models.Account
 import mocking.vision.models.Configuration
 import mocking.vision.models.PatientNumber

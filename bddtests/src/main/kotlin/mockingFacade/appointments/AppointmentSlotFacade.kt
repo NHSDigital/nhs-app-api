@@ -1,6 +1,6 @@
 package mockingFacade.appointments
 
-import models.Channel
+import mocking.emis.models.SlotTypeStatus
 
 data class AppointmentSlotFacade(
         val slotId: Int? = null,
@@ -10,5 +10,5 @@ data class AppointmentSlotFacade(
         var slotTypeName: String? = "Slot",
         var slotTypeId: Int? = 1,
         var slotInThePast: Boolean? = false,
-        var channel: Channel = Channel.Unknown
+        var channel: SlotTypeStatus = SlotTypeStatus.Unknown
 )

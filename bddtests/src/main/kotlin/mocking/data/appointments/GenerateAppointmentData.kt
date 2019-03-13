@@ -1,5 +1,6 @@
 package mocking.data.appointments
 
+import mocking.emis.models.SlotTypeStatus
 import mocking.stubs.appointments.AppointmentSessionFacadeBuilder
 import mocking.stubs.appointments.AppointmentSlotFacadeArrayBuilder
 import mocking.stubs.appointments.AppointmentSlotFacadeBuilder
@@ -8,8 +9,6 @@ import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.AppointmentDate
-import models.Channel
-import worker.models.appointments.SlotResponseObject
 import java.time.LocalDateTime
 import kotlin.collections.ArrayList
 
@@ -48,7 +47,6 @@ class GenerateAppointmentData {
                 .locationsList(locationNames)
                 .cliniciansList(staffNames)
                 .filterValues(filter)
-                .expectedResponseSlots(generateExpectedResponseSlots(appointmentSessions))
                 .build()
 
     }
@@ -56,7 +54,7 @@ class GenerateAppointmentData {
     fun generateAppointmentSession(sessionType: String,
                                    location: IdValue, staffDetails: IdValue,
                                    dates: ArrayList<AppointmentDate>,
-                                   channel: Channel = Channel.Unknown):
+                                   channel: SlotTypeStatus = SlotTypeStatus.Unknown):
             AppointmentSessionFacade {
 
 
@@ -67,45 +65,6 @@ class GenerateAppointmentData {
                 .staffDetails(staffDetails)
                 .slots { generateSlotsForAppointment(dates, channel) }
                 .build()
-    }
-
-    fun generateExpectedResponseSlots(appointmentSessions: ArrayList<AppointmentSessionFacade>):
-            ArrayList<SlotResponseObject> {
-        val slotResponseArray = ArrayList<SlotResponseObject>()
-
-        for (appointment in appointmentSessions) {
-            var cliniciansList: Array<String?> = arrayOf()
-
-            for (clinician in appointment.staffDetails) {
-                cliniciansList += clinician.staffName
-            }
-
-            for (slot in appointment.slots) {
-
-                val channelId = getChannelId(slot.channel)
-
-                slotResponseArray.add(SlotResponseObject(
-                        id = slot.slotId.toString(),
-                        type = slot.slotTypeName,
-                        startTime = slot.startTime,
-                        endTime = slot.endTime,
-                        location = appointment.location,
-                        clinicians = cliniciansList,
-                        sessionName = appointment.sessionType,
-                        channel = channelId
-                ))
-            }
-        }
-
-        return slotResponseArray
-
-    }
-
-    private fun getChannelId(channel: Channel): Int {
-        return when (channel) {
-            Channel.Unknown -> 0
-            Channel.Telephone -> 1
-        }
     }
 
     private fun generateStaffDetails(staff: ArrayList<String>): ArrayList<IdValue> {
@@ -127,7 +86,7 @@ class GenerateAppointmentData {
     }
 
 
-    private fun generateSlotsForAppointment(dates: ArrayList<AppointmentDate>, channel: Channel):
+    private fun generateSlotsForAppointment(dates: ArrayList<AppointmentDate>, channel: SlotTypeStatus):
             AppointmentSlotFacadeArrayBuilder {
 
         val appointmentSlotFacadeArrayBuilder = AppointmentSlotFacadeArrayBuilder()

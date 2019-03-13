@@ -18,7 +18,8 @@ abstract class MockingClientAppointmentMappingFactory {
             hashMapOf(
                     "EMIS" to { MockingClientAppointmentMappingFactoryEmis() },
                     "TPP" to { MockingClientAppointmentMappingFactoryTpp() },
-                    "VISION" to { MockingClientAppointmentMappingFactoryVision() }
+                    "VISION" to { MockingClientAppointmentMappingFactoryVision() },
+                    "MICROTEST" to { MockingClientAppointmentMappingFactoryMicrotest() }
             )
         }
     }

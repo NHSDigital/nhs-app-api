@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         private static IServiceCollection RegisterMicrotestBaseServices(this IServiceCollection services)
         {
             services.AddSingleton<MicrotestHttpClientHandler>();
+            services.AddTransient<MicrotestHttpRequestIdentifier>();
 
             services.AddHttpClient<MicrotestHttpClient>()
                 .ConfigurePrimaryHttpMessageHandler<MicrotestHttpClientHandler>()
@@ -40,6 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             services.AddSingleton<IMicrotestClient, MicrotestClient>();
             services.AddSingleton<IMicrotestConfig, MicrotestConfig>();
             services.AddTransient<MicrotestTokenValidationService>();
+            services.AddTransient<IMicrotestEnumMapper, MicrotestEnumMapper>();
 
             return services;
         }

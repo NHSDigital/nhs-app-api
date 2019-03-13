@@ -38,7 +38,7 @@ class AppointmentsConfirmationStepDefinitions {
         availableAppointmentsSteps.availableAppointmentsPage.selectSlot(
                 targetSlotDetails.dateAsUIString,
                 targetSlotDetails.timeAsUIString,
-                targetSlotDetails.sessionName
+                targetSlotDetails.sessionName!!
         )
     }
 

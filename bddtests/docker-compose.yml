@@ -35,6 +35,7 @@ services:
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
       - VISION_BASE_URI=http://stubs.local.bitraft.io:8080/vision/
+      - MICROTEST_BASE_URL=http://stubs.local.bitraft.io:8080/microtest/
       - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=10
       - VISION_PFS_PATH=pfs/
       - VISION_LINKAGE_PATH=linkage/
@@ -44,6 +45,8 @@ services:
       - VISION_SENDER_USERFULLNAME=Name
       - VISION_SENDER_USERIDENTITY=65489761321654
       - VISION_SENDER_USERROLE=ROSU
+      - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true
@@ -106,6 +109,8 @@ services:
       - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
       - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
       - VISION_CERT_PASSPHRASE=GnewUt4z3y
+      - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true

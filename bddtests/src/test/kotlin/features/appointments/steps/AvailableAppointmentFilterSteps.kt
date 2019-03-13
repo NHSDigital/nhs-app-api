@@ -1,5 +1,6 @@
 package features.appointments.steps
 
+import features.appointments.factories.AppointmentsSlotsFactory
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mockingFacade.appointments.AppointmentFilterFacade
 import net.serenitybdd.core.Serenity
@@ -145,9 +146,7 @@ open class AvailableAppointmentFilterSteps {
     @Step
     fun selectFilterOptionsToRevealSlots() {
         val filterValues = sessionVariableCalled<AppointmentFilterFacade>(
-                AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotSerenityKeys
-                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+                AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
         )
         if (!filterValues.type.isNullOrEmpty())
             availableAppointmentsPage.appointmentTypeFilter.selectByText(filterValues.type!!)

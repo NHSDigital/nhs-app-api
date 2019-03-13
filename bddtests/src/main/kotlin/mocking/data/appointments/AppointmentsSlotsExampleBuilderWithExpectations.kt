@@ -25,11 +25,10 @@ class AppointmentsSlotsExampleBuilderWithExpectations : AppointmentsSlotsExample
         appointmentSlots.addAll(appointmentSessions.flatMap { session -> session.slots })
         setSessionVariable(AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(appointmentSessions)
 
-        setSessionVariable(AppointmentSlotSerenityKeys.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).to(filter)
+        setSessionVariable(AppointmentSlotSerenityKeys.APPOINTMENT_FILTER_FACADE_KEY).to(filter)
         setSessionVariable(AppointmentSlotSerenityKeys.EXPECTED_APPOINTMENT_TYPE_KEY).to(appointmentTypesList)
         setSessionVariable(AppointmentSlotSerenityKeys.EXPECTED_APPOINTMENT_LOCATIONS_KEY).to(locationsList)
         setSessionVariable(AppointmentSlotSerenityKeys.EXPECTED_APPOINTMENT_CLINICIANS_KEY).to(cliniciansList)
-        setSessionVariable(AppointmentSlotSerenityKeys.EXPECTED_RESPONSE_SLOTS_KEY).to(expectedResponseSlots)
     }
 
     enum class AppointmentSlotSerenityKeys {
@@ -37,7 +36,6 @@ class AppointmentsSlotsExampleBuilderWithExpectations : AppointmentsSlotsExample
         EXPECTED_APPOINTMENT_TYPE_KEY,
         EXPECTED_APPOINTMENT_LOCATIONS_KEY,
         EXPECTED_APPOINTMENT_CLINICIANS_KEY,
-        EXPECTED_APPOINTMENT_FILTER_FACADE_KEY,
-        EXPECTED_RESPONSE_SLOTS_KEY
+        APPOINTMENT_FILTER_FACADE_KEY
     }
 }

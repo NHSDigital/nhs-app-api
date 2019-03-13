@@ -6,7 +6,7 @@ import cucumber.api.java.en.When
 import features.authentication.factories.PatientVerificationFactory
 import features.sharedStepDefinitions.backend.AbstractSteps
 import mocking.emis.demographics.PatientIdentifier
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import mocking.vision.models.VisionUserSession
 import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled

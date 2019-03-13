@@ -14,11 +14,9 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     private val dateHeadingXpath = "//*[@data-purpose='appointment-day-heading']"
     private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
     private val timeSlotXpathFormat = "$dateHeadingXpath%s/following-sibling::ul/li/a" +
-            "//*$appointmentTimeXpath%s/ancestor::a" +
-            "//*$appointmentSessionNameXpath%s/ancestor::a"
+            "//*$appointmentTimeXpath%s/ancestor::a"
     private val timeSlotByDateAndTimeXpath = String.format(
             timeSlotXpathFormat,
-            containsTextXpathSubstring,
             containsTextXpathSubstring,
             containsTextXpathSubstring
     )
@@ -52,16 +50,27 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             this
     )
 
-    fun warning(title:String? = null): BannerObject{
-        return  BannerObject.warning(this, title = title)
+    fun warning(title: String? = null): BannerObject {
+        return BannerObject.warning(this, title = title)
     }
 
-    fun timeSlotForDateTimeSession(date: String, time: String, sessionName: String) = HybridPageElement(
-            webDesktopLocator = String.format(timeSlotByDateAndTimeXpath, date, time, sessionName),
-            androidLocator = null,
-            page = this,
-            helpfulName = "Time slot by date, time and session name. "
-    )
+    fun timeSlotForDateTimeSession(date: String, time: String, sessionName: String?): HybridPageElement {
+        val xPathSuffixWithAppointmentSessionName = if (sessionName == null) {
+            ""
+        } else {
+            String.format("//*$appointmentSessionNameXpath$containsTextXpathSubstring/ancestor::a", sessionName)
+        }
+        return HybridPageElement(
+                webDesktopLocator = String.format(
+                        timeSlotByDateAndTimeXpath,
+                        date,
+                        time
+                ).plus(xPathSuffixWithAppointmentSessionName),
+                androidLocator = null,
+                page = this,
+                helpfulName = "Time slot by date, time and session name. "
+        )
+    }
 
     private val timeSlots = HybridPageElement(
             webDesktopLocator = timeSlotsXpath,

@@ -1,11 +1,14 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.ResponseParsers;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
@@ -18,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         
         private readonly MicrotestHttpClient _httpClient;
         private readonly ILogger<MicrotestClient> _logger;
-        private readonly IResponseParser _responseParser;
+        private readonly IJsonResponseParser _responseParser;
 
         public MicrotestClient(
             MicrotestHttpClient httpClient,
@@ -35,6 +38,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             string nhsNumber,
             AppointmentSlotsDateRange dateRange)
         {
+            _logger.LogEnter();
+
             var fromDateString = dateRange.FromDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             var toDateString = dateRange.ToDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
@@ -47,6 +52,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
                 toDateString);
 
             var response = await Get<AppointmentSlotsGetResponse>(path, odsCode, nhsNumber);
+
+            _logger.LogExit();
             return response;
         }
 
@@ -83,22 +90,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         private async Task<MicrotestApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
-            var methodName = nameof(SendRequestAndParseResponse);
-            _logger.LogDebug("Entered: {0}", methodName);
-
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new MicrotestApiObjectResponse<TResponse>(responseMessage.StatusCode);
-
-            var stringResponse = responseMessage.Content != null
-                ? await responseMessage.Content.ReadAsStringAsync()
-                : null;
-
-            if (string.IsNullOrEmpty(stringResponse)) return response;
-
-            response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
-            
-            _logger.LogDebug("Exiting: {0}", methodName);
-            return response;
+            return await response.Parse(responseMessage, _responseParser, _logger);
         }
 
         public class MicrotestApiResponse : ApiResponse
@@ -116,11 +110,40 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
         public class MicrotestApiObjectResponse<TBody> : MicrotestApiResponse
         {
-            public MicrotestApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
+            public TBody Body { get; set; }
+
+            public MicrotestApiObjectResponse(HttpStatusCode statusCode) : base(statusCode) {}
+
+            public async Task<MicrotestApiObjectResponse<TBody>> Parse(
+                HttpResponseMessage responseMessage,
+                IJsonResponseParser responseParser,
+                ILogger logger)
             {
+                var stringResponse = await GetStringResponse(responseMessage, logger);
+                return string.IsNullOrEmpty(stringResponse)
+                    ? this
+                    : ParseResponse(responseParser,
+                        stringResponse,
+                        responseMessage,
+                        logger);
             }
 
-            public TBody Body { get; set; }
+            private MicrotestApiObjectResponse<TBody> ParseResponse(
+                IResponseParser responseParser,
+                string stringResponse,
+                HttpResponseMessage responseMessage,
+                ILogger logger)
+            {
+
+                Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
+                
+                if (Body == null)
+                { 
+                    logger.LogError($"Response parsing failed. Raw response: {stringResponse}");
+                    return new MicrotestApiObjectResponse<TBody>(HttpStatusCode.InternalServerError);
+                }
+                return this;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.data.prescriptions.courses.VisionCoursesLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.NewPrescriptionRepeat
 import mocking.vision.models.OrderNewPrescriptionRequest

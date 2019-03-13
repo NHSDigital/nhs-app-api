@@ -16,7 +16,7 @@ class FilterSlotDetails(private var dateAsLocalDateTime: LocalDateTime,
 
     val dateAsUIString = convertDateToUIString()
     val timeAsUIString = convertTimeToUIString()
-    lateinit var sessionName: String
+    var sessionName: String? = null
     val dateTimeAsBackendString = convertDateToBackendString()
 
     fun sessionName(sessionName: String): FilterSlotDetails {

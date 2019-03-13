@@ -9,8 +9,8 @@ import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
-import mocking.microtest.MicrotestMockDefaults
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.MicrotestMockDefaults
+import mocking.defaults.VisionMockDefaults
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
 import worker.models.patient.Im1ConnectionToken

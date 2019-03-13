@@ -1,11 +1,11 @@
 package mocking.data.appointments
 
+import mocking.emis.models.SlotTypeStatus
 import mocking.stubs.appointments.AppointmentsSlotsExampleBuilder
 import mocking.stubs.appointments.IdValue
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.AppointmentDate
-import models.Channel
 import java.time.DayOfWeek.MONDAY
 import java.time.LocalDateTime
 
@@ -45,16 +45,12 @@ class AppointmentsSlotsExample {
             appointmentSessions = appointmentSessionFacade
         }
 
-        val expectedResponseSlots = generateAppointmentData.generateExpectedResponseSlots(appointmentSessions)
-
         return AppointmentsSlotsExampleBuilderWithExpectations()
                 .appointmentSessions(appointmentSessions)
                 .filterValues(filter)
                 .appointmentTypesList(arrayListOf(slotType))
                 .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
                 .locationsList(arrayListOf(locationLeeds.value, locationSheffield.value))
-                .expectedResponseSlots(expectedResponseSlots)
-
     }
 
     companion object {
@@ -103,9 +99,6 @@ class AppointmentsSlotsExample {
         private val staffDrWho = IdValue(101, "Dr. Who")
         private val staffDrScott = IdValue(102, "Dr. Scott")
 
-        private val channelTelephone: Channel = Channel.Telephone
-        private val channelUnknown: Channel = Channel.Unknown
-
         private val generateAppointmentData = GenerateAppointmentData()
 
 
@@ -142,18 +135,17 @@ class AppointmentsSlotsExample {
 
             val appointment1 = GenerateAppointmentData().generateAppointmentSession(
                     telephoneSessionType, locationLeeds, staffDrWho,
-                    arrayListOf(telephoneStartDateAppointment1), Channel.Telephone)
+                    arrayListOf(telephoneStartDateAppointment1), SlotTypeStatus.Telephone)
 
             val appointment2 = GenerateAppointmentData().generateAppointmentSession(
                     telephoneSessionType, locationLeeds, staffDrScott,
-                    arrayListOf(telephoneStartDateAppointment2), Channel.Telephone)
+                    arrayListOf(telephoneStartDateAppointment2), SlotTypeStatus.Telephone)
 
 
             val filter = GenerateAppointmentData().generateFilter(slotType, staffDrWho.value,
                     locationLeeds.value, arrayListOf(telephoneStartDateAppointment1))
 
             val appointments = arrayListOf(appointment1, appointment2)
-            val expectedResponseSlots = GenerateAppointmentData().generateExpectedResponseSlots(appointments)
 
             return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(appointments)
@@ -161,7 +153,6 @@ class AppointmentsSlotsExample {
                     .appointmentTypesList(arrayListOf(slotType))
                     .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
                     .locationsList(arrayListOf(locationLeeds.value))
-                    .expectedResponseSlots(expectedResponseSlots)
                     .build()
         }
 

@@ -1,12 +1,11 @@
 package mocking
 
-import com.google.gson.Gson
 import config.Config
-import io.restassured.response.Response
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.defaults.EmisMockDefaults
 import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
+import mocking.microtest.MicrotestMappingBuilder
 import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
 import mocking.nhsAzureSearchService.NhsAzureSearchOrganisationMappingBuilder
@@ -15,16 +14,15 @@ import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.throttling.BrotherMailerMappingBuilder
 import mocking.tpp.TppMappingBuilder
 import mocking.vision.VisionMappingBuilder
-import net.serenitybdd.rest.SerenityRest
-import org.apache.http.HttpStatus
-import org.apache.http.HttpStatus.SC_OK
-import org.apache.http.client.methods.CloseableHttpResponse
-import org.apache.http.client.methods.HttpDelete
-import org.apache.http.impl.client.HttpClients
 
-class MockingClient(private val configuration: MockingConfiguration) {
+class MockingClient(configuration: MockingConfiguration): WiremockHelper(configuration) {
 
-    private val gson = Gson()
+    fun forCitizenId(method: String = "GET", resolver: CitizenIdMappingBuilder.() -> Mapping) {
+        val mappingBuilder = CitizenIdMappingBuilder(method)
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
 
     fun forEmis(method: String = "GET", resolver: EmisMappingBuilder.() -> Mapping) {
         val mappingBuilder = EmisMappingBuilder(configuration.emisConfiguration, method)
@@ -40,15 +38,15 @@ class MockingClient(private val configuration: MockingConfiguration) {
         this.postMapping(mapping)
     }
 
-    fun forCitizenId(method: String = "GET", resolver: CitizenIdMappingBuilder.() -> Mapping) {
-        val mappingBuilder = CitizenIdMappingBuilder(method, "/emis")
+    fun forVision(method: String = "POST", resolver: VisionMappingBuilder.() -> Mapping) {
+        val mappingBuilder = VisionMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)
     }
 
-    fun forVision(method: String = "POST", resolver: VisionMappingBuilder.() -> Mapping) {
-        val mappingBuilder = VisionMappingBuilder(method)
+    fun forMicrotest(method: String = "GET", resolver: MicrotestMappingBuilder.() -> Mapping) {
+        val mappingBuilder = MicrotestMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)
@@ -94,39 +92,6 @@ class MockingClient(private val configuration: MockingConfiguration) {
     }
 
     fun favicon() = this.postMapping(FaviconMappingBuilder().respondWithNotFound())
-
-    private fun postMapping(mapping: Mapping): Response {
-        return SerenityRest.given()
-                .header("Content-Type", "application/json; charset=UTF-8")
-                .and()
-                .body(gson.toJson(mapping))
-                .expect().statusCode(HttpStatus.SC_CREATED)
-                .`when`()
-                .post("${configuration.wiremockAdminUrl}/mappings")
-    }
-
-    fun clearWiremock() {
-        deleteWiremockDetails(endpoint = "mappings")
-        deleteWiremockDetails(endpoint = "requests")
-    }
-
-    private fun deleteWiremockDetails(endpoint: String) {
-        val uri = "${configuration.wiremockAdminUrl}/$endpoint"
-        val httpDelete = HttpDelete(uri)
-        val response = HttpClients.createDefault().execute(httpDelete)
-        if (response.statusLine.statusCode != SC_OK) {
-            reportWiremockError(response)
-            throw IllegalStateException("Failed to delete mappings using URI: $uri")
-        }
-
-        httpDelete.releaseConnection()
-    }
-
-    private fun reportWiremockError(response: CloseableHttpResponse) {
-        println("Call to wiremock failed:")
-        println("  Status code: ${response.statusLine.statusCode}")
-        println("  Reason:      ${response.statusLine.reasonPhrase}")
-    }
 
     companion object {
         val instance: MockingClient by lazy { EmisMockDefaults.createMockingClient(Config.instance) }

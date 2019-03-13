@@ -1,6 +1,7 @@
 package mocking.vision
 
 import mocking.MappingBuilder
+import mocking.defaults.VisionMockDefaults
 import mocking.vision.models.OrderNewPrescriptionRequest
 import mocking.vision.models.VisionUserSession
 

@@ -24,6 +24,8 @@ services:
       - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
       - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
       - VISION_CERT_PASSPHRASE=GnewUt4z3y
+      - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
       - ConfigurationSettings__CookieDomain=.bitraft.io
       - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
       - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=10
@@ -49,6 +51,8 @@ services:
       - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
       - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
       - VISION_CERT_PASSPHRASE=GnewUt4z3y
+      - MICROTEST_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - MICROTEST_CERT_PASSPHRASE=GnewUt4z3y
       - SESSION_MONGO_DATABASE_HOST=nhsonline.mongodb.session
       - SESSION_MONGO_DATABASE_PORT=27017
       - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=15

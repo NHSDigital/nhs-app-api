@@ -7,31 +7,34 @@ import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import java.time.ZonedDateTime
 
-class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {
+class AppointmentsSlotsFactoryMicrotest : AppointmentsSlotsFactory("MICROTEST") {
 
     override fun generateAppointmentSlotResponse(startDate: ZonedDateTime,
                                                  endDate: ZonedDateTime,
                                                  guidanceMessage: String?,
                                                  reasonNecessity: NecessityOption,
                                                  mapping: IAppointmentSlotsBuilder.() -> Mapping) {
-        appointmentMapper.requestMapping {
-            mapping(appointmentSlotsRequest(patient, startDate, endDate))
-        }
+        generateAppointmentSlotResponseWithoutGuidance(startDate, endDate, mapping)
     }
 
     override fun generateAppointmentSlotResponseWithoutGuidance(startDate: ZonedDateTime,
                                                                 endDate: ZonedDateTime,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
-        throw NotImplementedError("Test Setup Incorrect: Practice Settings are not relevant to TPP anyway. ")
+        appointmentMapper.requestMapping {
+            mapping(appointmentSlotsRequest(patient, startDate, endDate))
+        }
+        mockingClient.forMicrotest {
+            mapping(appointments.appointmentSlotsRequest(patient, startDate, endDate))
+        }
     }
 
     override fun getExpectedApiResponseSlots(facade: AppointmentSlotsResponseFacade) =
             appointmentSlotsFactoryHelper.getExpectedApiResponseSlotsWithSessionNames(
-                    facade, true
+                    facade, false
             )
 
     override fun getExpectedUiRepresentationOfFilteredSlots(facade: AppointmentFilterFacade) =
             appointmentSlotsFactoryHelper.getExpectedUiRepresentationOfFilteredSlotsWithSessionNames(
-                    facade, true
+                    facade, false
             )
 }

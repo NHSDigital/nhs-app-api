@@ -13,10 +13,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments
 
         public DateTimeOffset? EndTime { get; set; }
 
-        public string Duration { get; set; }
-
         public string Location { get; set; }
 
         public IEnumerable<string> Clinicians { get; set; } = Array.Empty<string>();
+
+        public string Channel { get; set; }
     }
 }

@@ -6,6 +6,7 @@ Feature: View available appointment slots backend
   As a logged user
   I want to see available appointment slots
 
+  @smoketest
   Scenario Outline: Requesting available <GP System> appointment slots with correct data returns lists of available slots
     Given there are available appointment slots with different criteria for <GP System>
     And I have logged in and have a valid session cookie
@@ -17,6 +18,7 @@ Feature: View available appointment slots backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
 
   Scenario Outline: Requesting available <GP System> appointment slots returns an unknown exception, returns a Bad Gateway error

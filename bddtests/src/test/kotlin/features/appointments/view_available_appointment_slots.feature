@@ -24,17 +24,22 @@ Feature: View available appointment slots
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @native-smoketest
     Examples:
       | GP System |
       | EMIS      |
 
-  Scenario: A user does not see any guidance provided by TPP
-    Given there are available appointment slots with different criteria for TPP
+  Scenario Outline: A user does not see any guidance provided by <GP System>
+    Given there are available appointment slots with different criteria for <GP System>
     And I am logged in
     When I am on the Available Appointments page
     Then I cannot see any appointment slot guidance
+    Examples:
+      | GP System |
+      | TPP       |
+      | MICROTEST |
 
   Scenario Outline: A user can expand, view and collapse guidance provided by <GP System>
     Given there are available appointment slots with different criteria for <GP System> when <Content> appointment slot guidance is provided
@@ -83,6 +88,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user enters the available appointments page, but appointments only available at 1 location
     Given there are available appointment slots for <GP System> for 1 location
@@ -94,6 +100,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user sees appropriate information message when no slots are available at all
     Given there are no available appointment slots for <GP System>
@@ -104,6 +111,7 @@ Feature: View available appointment slots
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @native-smoketest
     Examples:
@@ -120,6 +128,7 @@ Feature: View available appointment slots
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @native-smoketest
     Examples:
@@ -137,7 +146,8 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
-    
+      | MICROTEST |
+
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by tomorrow but no appointments are available
     Given there are appointment slots on some days other than tomorrow, provided by <GP System>
     And I am logged in
@@ -150,6 +160,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user still sees the remainder of the current week, if filtering by this week but no appointments are available for some days
     Given there are appointment slots on some days this week but not others, provided by <GP System>
@@ -163,6 +174,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user still sees the whole of week, if filtering by next week but no appointments are available for some days
     Given there are appointment slots on some days next week but not others, provided by <GP System>
@@ -176,6 +188,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user only sees days with available slots, if filtering by "All available" but no appointments are available for some days
     Given there are appointment slots on some days in the next few weeks but not others, provided by <GP System>
@@ -189,6 +202,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativepending @NHSO-2974
   Scenario Outline: <GP System> user tries again after a timeout and it times-out again
@@ -204,6 +218,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativepending @NHSO-2974
   Scenario Outline: <GP System> user tries again after a timeout and it is now successful
@@ -219,6 +234,7 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: <GP System> user sees appropriate information message when returns corrupt data
     Given <GP System> returns corrupt data for appointment slots

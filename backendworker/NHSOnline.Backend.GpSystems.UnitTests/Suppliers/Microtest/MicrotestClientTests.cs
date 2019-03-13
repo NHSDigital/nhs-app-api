@@ -63,12 +63,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(MicrotestClient.HeaderNhsNumber, nhsNumber),
-                new KeyValuePair<string, string>(MicrotestClient.HeaderOdsCode, odsCode),
+                new KeyValuePair<string, string>(MicrotestClient.HeaderOdsCode, odsCode)
             };
             
             _mockHttpHandler
                 .WhenMicrotest(HttpMethod.Get,
-                    $"patient/appointment-slots?fromDate=2000-01-01&toDate=2000-01-02")
+                    "patient/appointment-slots?fromDate=2000-01-01&toDate=2000-01-02")
                 .WithHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
@@ -82,6 +82,39 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
+        }
+
+        [TestMethod]
+        public async Task AppointmentSlotsGet_ReturnsInternalServerError_WhenResponseIsNotJson()
+        {
+            var odsCode = _fixture.Create<string>();
+            var nhsNumber = _fixture.Create<string>();
+            var fromDate = new DateTime(2000, 1, 1);
+            var toDate = new DateTime(2000, 1, 2);
+
+            var nonJsonResponse = _fixture.Create<string>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(MicrotestClient.HeaderNhsNumber, nhsNumber),
+                new KeyValuePair<string, string>(MicrotestClient.HeaderOdsCode, odsCode)
+            };
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get,
+                    "patient/appointment-slots?fromDate=2000-01-01&toDate=2000-01-02")
+                .WithHeaders(additionalHeaders)
+                .Respond("application/json", nonJsonResponse);
+
+            var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider.Object)
+            {
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+
+            var response = await _sut.AppointmentSlotsGet(odsCode, nhsNumber, dateRange);
+
+            response.StatusCode.Should().Be(500);
         }
 
         public void Dispose()

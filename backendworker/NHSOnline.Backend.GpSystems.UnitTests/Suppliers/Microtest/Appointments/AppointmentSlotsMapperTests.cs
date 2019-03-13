@@ -7,8 +7,10 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using Slot = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Slot;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 {
@@ -17,15 +19,20 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
     {
         private IFixture _fixture;
         private IAppointmentSlotsResponseMapper _systemUnderTest;
+        private IEnumerable<Slot> _microtestSlots;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             
-            var logger = _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentSlotsResponseMapper>();            
+            var mapper = _fixture.Create<IMicrotestEnumMapper>();
 
-            _systemUnderTest = new AppointmentSlotsResponseMapper();            
+            var logger = _fixture.Create<ILogger<AppointmentSlotsResponseMapper>>();
+
+            _systemUnderTest = new AppointmentSlotsResponseMapper(mapper, logger);
+
+            _microtestSlots = _fixture.CreateMany<Slot>();
         }
 
         [TestMethod]
@@ -34,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             // Arrange
             var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
             {
-                Slots = Enumerable.Empty<Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Slot>(),
+                Slots = Enumerable.Empty<Slot>()
             };
 
             // Act
@@ -46,24 +53,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
-        public void Map_DoesntMapAppointmentSlot_WhenStartTimeIsNull()
+        public void Map_ProvidedValidAppointSlots_Maps()
         {
             // Arrange
             var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
             {
-                Slots = new[]
-                {
-                    new Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Slot
-                    {
-                        Id = "242",
-                        Clinicians = new List<string> { "Dr Spears" },
-                        Type = "Emergency",
-                        StartTime = null,
-                        EndTime = new DateTime(2000, 1, 2),
-                        Duration = "15 min",
-                        Location = "Room 1",
-                    },
-                },
+                Slots = _microtestSlots
             };
 
             // Act
@@ -71,49 +66,34 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             // Assert
             actualResponse.Should().NotBeNull();
-            actualResponse.Slots.Should().BeEmpty();
+            foreach (var slot in actualResponse.Slots)
+            {
+                var microtestSlot = _microtestSlots.First(s => s.Id.Equals(slot.Id, StringComparison.Ordinal));
+                slot.Should().BeEquivalentTo(microtestSlot, options => options.Excluding( s => s.Channel));
+                slot.Channel.Should().Be(Channel.Unknown);
+            }
         }
 
         [TestMethod]
-        public void Map_ReturnsEmptyArray_WhenSessionsInAppointmentsSlotsResponseIsNull()
+        public void Map_DoesNotMapAppointmentSlot_WhenStartTimeIsNull()
         {
             // Arrange
+            var invalidSlot = _microtestSlots.First();
+
+            invalidSlot.StartTime = null;
+
             var appointmentSlotsGetResponse = new AppointmentSlotsGetResponse
             {
-                Slots = new List<Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Slot>
-                {
-                    new Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Slot
-                    {
-                        Id = "132",
-                        Clinicians = new List<string> { "Dr Spears" },
-                        Type = "Emergency",
-                        StartTime = new DateTime(2000, 1, 1),
-                        EndTime = new DateTime(2000, 1, 2),
-                        Duration = "15 min",
-                        Location = "Room 1",
-                    }
-                },
+                Slots = _microtestSlots
             };
 
             // Act
             var actualResponse = _systemUnderTest.Map(appointmentSlotsGetResponse);
 
             // Assert
-            var expectedSlot = new Backend.GpSystems.Appointments.Models.Slot
-            {
-                Id = "132",
-                Clinicians = new[] { "Dr Spears" },
-                StartTime = new DateTime(2000, 1, 1),
-                EndTime = new DateTime(2000, 1, 2),
-                Type = "Emergency",
-                Location = "Room 1",
-                SessionName = ""
-            };
-            var expectedResponse = new AppointmentSlotsResponse
-            {
-                Slots = new[] { expectedSlot },
-            };
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            actualResponse.Should().NotBeNull();
+            actualResponse.Slots.Should().NotContain(slot => slot.Id.Equals(invalidSlot.Id, StringComparison.Ordinal));
+            actualResponse.Slots.Count().Should().Be(_microtestSlots.Count() - 1);
         }
     }
 }

@@ -29,7 +29,7 @@ import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.tpp.models.Error
 import mocking.tpp.models.ListRepeatMedicationReply
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import models.prescriptions.HistoricPrescription

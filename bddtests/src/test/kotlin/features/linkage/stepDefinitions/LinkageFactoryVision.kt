@@ -3,7 +3,7 @@ package features.linkage.stepDefinitions
 import constants.DateTimeFormats
 import features.linkage.LinkageResult
 import mocking.models.Mapping
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import mocking.vision.linkage.VisionLinkageGETBuilder
 import mocking.vision.linkage.VisionLinkagePOSTBuilder
 import mocking.vision.models.linkage.LinkageKeyGetResponse

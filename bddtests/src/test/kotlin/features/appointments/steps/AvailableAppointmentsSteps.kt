@@ -1,6 +1,6 @@
 package features.appointments.steps
 
-import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
+import features.appointments.factories.AppointmentsSlotsFactory
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
@@ -42,7 +42,7 @@ open class AvailableAppointmentsSteps {
     fun assertOnlyOneTimeSlotPresent(
             expectedDateHeading: String,
             expectedTimeSlot: String,
-            expectedSessionName: String
+            expectedSessionName: String?
     ) {
         assertEquals(
                 "Incorrect number of time-slots present",
@@ -123,10 +123,8 @@ open class AvailableAppointmentsSteps {
     }
 
     private fun getExpectedResponseSlots(): HashMap<String, SlotResponseObject> {
-        val expectedResponseSlots = sessionVariableCalled<ArrayList<SlotResponseObject>>(
-                AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotSerenityKeys
-                        .EXPECTED_RESPONSE_SLOTS_KEY
+        val expectedResponseSlots = sessionVariableCalled<List<SlotResponseObject>>(
+                AppointmentsSlotsFactory.Expectations.EXPECTED_API_RESPONSE_OF_AVAILABLE_APPOINTMENTS
         )
         val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
         expectedResponseSlots.forEach { slot -> unmatchedExpectedSlots[slot.id] = slot }
@@ -134,21 +132,24 @@ open class AvailableAppointmentsSteps {
     }
 
     private fun assertSlotsAreEqual(expectedSlot: SlotResponseObject, actualSlot: SlotResponseObject) {
-        assertEquals("Slot type", expectedSlot.type, actualSlot.type)
-        assertEquals("Session type", expectedSlot.sessionName, actualSlot.sessionName)
-        assertEquals("Slot start time", expectedSlot.startTime, actualSlot.startTime)
-        assertEquals("Slot end time", expectedSlot.endTime, actualSlot.endTime)
-        assertEquals("Slot location", expectedSlot.location, actualSlot.location)
-        assertEquals("Slot clinicians", expectedSlot.clinicians.toSet(), actualSlot.clinicians.toSet())
+        assertEquals("Incorrect Slot type", expectedSlot.type, actualSlot.type)
+        assertEquals("Incorrect Session type", expectedSlot.sessionName, actualSlot.sessionName)
+        assertEquals("Incorrect Slot start time", expectedSlot.startTime, actualSlot.startTime)
+        assertEquals("Incorrect Slot end time", expectedSlot.endTime, actualSlot.endTime)
+        assertEquals("Incorrect Slot location", expectedSlot.location, actualSlot.location)
+        assertEquals("Incorrect Slot clinicians", expectedSlot.clinicians.toSet(), actualSlot.clinicians.toSet())
+        assertEquals("Incorrect Channel", expectedSlot.channel, actualSlot.channel)
     }
 
     private fun assertSlotIsNotNull(actualSlot: SlotResponseObject) {
         assertNotNull("Null id", actualSlot.id)
-        assertNotNull("Null type", actualSlot.type)
+        assertNotNull("Null slot type", actualSlot.type)
+        assertNotNull("Null session type", actualSlot.sessionName)
         assertNotNull("Null startTime", actualSlot.startTime)
         assertNotNull("Null endTime", actualSlot.endTime)
         assertNotNull("Null location", actualSlot.location)
         assertNotNull("Null clinicians", actualSlot.clinicians)
+        assertNotNull("Null channel", actualSlot.channel)
     }
 
     @Step

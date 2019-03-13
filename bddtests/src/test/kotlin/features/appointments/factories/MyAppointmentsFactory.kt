@@ -139,7 +139,8 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
             hashMapOf(
                     "EMIS" to { MyAppointmentsFactoryEmis() },
                     "TPP" to { MyAppointmentsFactoryTpp() },
-                    "VISION" to { MyAppointmentsFactoryVision() }
+                    "VISION" to { MyAppointmentsFactoryVision() },
+                    "MICROTEST" to { MyAppointmentsFactoryMicrotest() }
             )
         }
     }
@@ -149,5 +150,4 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
         EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS,
         EXPECTED_API_RESPONSE_OF_MY_APPOINTMENTS
     }
-
 }

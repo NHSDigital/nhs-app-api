@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
+using NHSOnline.Backend.GpSystems.SharedModels;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 {
@@ -11,8 +14,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 
     public class AppointmentSlotsResponseMapper : IAppointmentSlotsResponseMapper
     {
+        private readonly IMicrotestEnumMapper _enumMapper;
+        private readonly ILogger<AppointmentSlotsResponseMapper> _logger;
+
+        public AppointmentSlotsResponseMapper(IMicrotestEnumMapper enumMapper, ILogger<AppointmentSlotsResponseMapper> logger)
+        {
+            _enumMapper = enumMapper;
+            _logger = logger;
+        }
+
         public AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse)
         {
+            _logger.LogEnter();
+
             var slots = new List<GpSystems.Appointments.Models.Slot>();
 
             foreach (var sourceSlot in slotsResponse.Slots)
@@ -31,19 +45,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                     Location = sourceSlot.Location,
                     Type = sourceSlot.Type,
                     SessionName = string.Empty,
+                    Channel = _enumMapper.MapChannel(sourceSlot.Channel, Channel.Unknown)
                 };
 
                 slots.Add(resultSlot);
             }
 
-            // TODO
-            // Will Microtest accept booking reason? We should set BookingReasonNecessity in the response here.
-
             var response = new AppointmentSlotsResponse
             {
                 Slots = slots,
+                BookingReasonNecessity = Necessity.Mandatory,
+                BookingGuidance = string.Empty
             };
 
+            _logger.LogExit();
             return response;
         }
     }

@@ -36,18 +36,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 
                 _logger.LogInformation("Appointment slots request starting");
 
-                var appointmentSlotsResponse = await _microtestClient.AppointmentSlotsGet(microtestUserSession.OdsCode, microtestUserSession.NhsNumber, dateRange);
+                var appointmentSlotsResponse = await _microtestClient.AppointmentSlotsGet(microtestUserSession.OdsCode,
+                    microtestUserSession.NhsNumber,
+                    dateRange);
 
                 _logger.LogInformation("Appointment slots request complete");
+
+                if (!appointmentSlotsResponse.HasSuccessResponse)
+                {
+                    _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentSlotsService)}) returned an unanticipated " +
+                                     $"error with status code: '{appointmentSlotsResponse.StatusCode}'.");
+                    return new AppointmentSlotsResult.SupplierSystemUnavailable();
+                }
 
                 try
                 {
                     var result = _appointmentSlotsResponseMapper.Map(appointmentSlotsResponse.Body);
-                    if (!appointmentSlotsResponse.StatusCode.IsSuccessStatusCode())
-                    {
-                        return new AppointmentSlotsResult.SupplierSystemUnavailable();
-                    }
-
                     return new AppointmentSlotsResult.SuccessfullyRetrieved(result);
                 }
                 catch (Exception e)

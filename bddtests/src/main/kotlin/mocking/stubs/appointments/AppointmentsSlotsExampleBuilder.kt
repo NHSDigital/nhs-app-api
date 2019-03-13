@@ -3,14 +3,12 @@ package mocking.stubs.appointments
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
-import worker.models.appointments.SlotResponseObject
 import java.util.*
 
 open class AppointmentsSlotsExampleBuilder {
 
     protected var appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
     protected var filter: AppointmentFilterFacade = AppointmentFilterFacade()
-    protected var expectedResponseSlots: ArrayList<SlotResponseObject> = arrayListOf()
     protected var appointmentTypesList: ArrayList<String> = arrayListOf()
     protected var locationsList: ArrayList<String> = arrayListOf()
     protected var cliniciansList: ArrayList<String> = arrayListOf()
@@ -22,11 +20,6 @@ open class AppointmentsSlotsExampleBuilder {
 
     fun filterValues(value: AppointmentFilterFacade): AppointmentsSlotsExampleBuilder {
         filter = value
-        return this
-    }
-
-    fun expectedResponseSlots(value: ArrayList<SlotResponseObject>): AppointmentsSlotsExampleBuilder {
-        expectedResponseSlots = value
         return this
     }
 

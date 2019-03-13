@@ -2,7 +2,7 @@ package features.myrecord.factories
 
 import features.myrecord.stepDefinitions.HTTP_EXCEPTION
 import mocking.stubs.StubbedEnvironment
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import mocking.vision.models.VisionUserSession
 import models.Patient
 import net.serenitybdd.core.Serenity

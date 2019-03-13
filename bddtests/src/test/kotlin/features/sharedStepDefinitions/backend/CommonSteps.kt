@@ -12,7 +12,7 @@ import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.tpp.models.Authenticate
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.getCurrentSession

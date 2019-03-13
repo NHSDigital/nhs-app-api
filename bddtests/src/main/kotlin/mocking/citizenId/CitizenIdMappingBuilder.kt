@@ -11,7 +11,7 @@ import mocking.citizenId.models.TokenRequest
 import mocking.defaults.EmisMockDefaults
 import models.Patient
 
-open class CitizenIdMappingBuilder(method: String, relativePath: String)
+open class CitizenIdMappingBuilder(method: String, relativePath: String = "")
     : MappingBuilder(method, "/citizenid$relativePath") {
 
     fun initialLoginRequest(patient: Patient,

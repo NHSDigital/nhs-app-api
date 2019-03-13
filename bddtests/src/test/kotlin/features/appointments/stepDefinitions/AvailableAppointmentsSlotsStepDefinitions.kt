@@ -238,12 +238,12 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.assertOnlyOneTimeSlotPresent(
                 targetSlotDetails.dateAsUIString,
                 targetSlotDetails.timeAsUIString,
-                targetSlotDetails.sessionName
+                targetSlotDetails.sessionName!!
         )
         availableAppointments.availableAppointmentsPage.selectSlot(
                 targetSlotDetails.dateAsUIString,
                 targetSlotDetails.timeAsUIString,
-                targetSlotDetails.sessionName
+                targetSlotDetails.sessionName!!
         )
     }
 
@@ -401,9 +401,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun onlyAvailableSlotsAreDisplayed() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
         val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(
-                AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotSerenityKeys
-                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+                AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
         ).filteredSlots.keys
         availableAppointments.assertThatOtherDatesAreNotDisplayed(expectedDates)
     }
@@ -413,9 +411,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun iSeeResultsForEachOfTheRemainingDaysForThisWeek() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
         val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(
-                AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotSerenityKeys
-                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+                AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
         ).filteredSlots.keys
         availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(
                 expectedDates,
@@ -427,9 +423,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun iSeeResultsForEachOfTheRemainingDaysForNextWeek() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
         val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(
-                AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotSerenityKeys
-                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+                AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
         ).filteredSlots.keys
         availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(
                 expectedDates,
@@ -439,9 +433,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     private fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
         val expectedSlots = sessionVariableCalled<AppointmentFilterFacade>(
-                AppointmentsSlotsExampleBuilderWithExpectations
-                        .AppointmentSlotSerenityKeys
-                        .EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
+                AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
         ).filteredSlots
         assertTrue("Invalid test as there are no expected slots stored. ", expectedSlots.isNotEmpty())
         val expectedNumberOfSlots = expectedSlots.flatMap { it.value.toList() }.size

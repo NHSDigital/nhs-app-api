@@ -2,7 +2,7 @@ package mocking.defaults.dataPopulation.journies.session
 
 import mocking.MockingClient
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
-import mocking.vision.VisionMockDefaults
+import mocking.defaults.VisionMockDefaults
 import mocking.vision.appointments.helpers.GeneralAppointmentsHelper
 import mocking.vision.models.appointments.Location
 import mocking.vision.models.appointments.Owner
