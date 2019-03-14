@@ -21,7 +21,6 @@ class GenerateAppointmentData {
         var slotId = 100
     }
 
-
     fun generateAppointments(locationNames: ArrayList<String>,
                              typesArray: ArrayList<String>,
                              staffNames: ArrayList<String>,
@@ -36,34 +35,33 @@ class GenerateAppointmentData {
             for (location in locationDetails) {
                 appointmentSessions.add(
                         generateAppointmentSession(
-                                sessionClinicType, location, staff, dates)
+                                AppointmentSessionFacadeBuilder()
+                                        .sessionType(sessionClinicType)
+                                        .location(location)
+                                        .staffDetails(staff),
+                                typesArray,
+                                dates
+                        )
                 )
             }
         }
 
         return AppointmentsSlotsExampleBuilderWithExpectations()
                 .appointmentSessions(appointmentSessions)
-                .appointmentTypesList(typesArray)
-                .locationsList(locationNames)
-                .cliniciansList(staffNames)
                 .filterValues(filter)
                 .build()
 
     }
 
-    fun generateAppointmentSession(sessionType: String,
-                                   location: IdValue, staffDetails: IdValue,
+    fun generateAppointmentSession(sessionDetails: AppointmentSessionFacadeBuilder,
+                                   slotTypes: ArrayList<String>,
                                    dates: ArrayList<AppointmentDate>,
                                    channel: SlotTypeStatus = SlotTypeStatus.Unknown):
             AppointmentSessionFacade {
 
-
-        return AppointmentSessionFacadeBuilder()
+        return sessionDetails
                 .sessionId(sessionId++)
-                .sessionType(sessionType)
-                .location(location)
-                .staffDetails(staffDetails)
-                .slots { generateSlotsForAppointment(dates, channel) }
+                .slots { generateSlotsForAppointment(dates, slotTypes, channel) }
                 .build()
     }
 
@@ -86,34 +84,30 @@ class GenerateAppointmentData {
     }
 
 
-    private fun generateSlotsForAppointment(dates: ArrayList<AppointmentDate>, channel: SlotTypeStatus):
+    private fun generateSlotsForAppointment(dates: ArrayList<AppointmentDate>, types: ArrayList<String>, channel:
+    SlotTypeStatus):
             AppointmentSlotFacadeArrayBuilder {
 
         val appointmentSlotFacadeArrayBuilder = AppointmentSlotFacadeArrayBuilder()
 
 
         for (date in dates) {
-            var isSlotInPast = false
-            val now = LocalDateTime.now()
-
-            if (date.date < now) {
-                isSlotInPast = true
-            }
+            val isSlotInPast = date.date < LocalDateTime.now()
 
             val startDate = FilterSlotDetails(date.date, date.hour, date.minute)
             val endDate = FilterSlotDetails(date.date, date.hour, date.minute.plus(date.duration))
 
-            val appointment = AppointmentSlotFacadeBuilder()
-                    .slotId(slotId++)
-                    .startDate(startDate.dateTimeAsBackendString)
-                    .endDate(endDate.dateTimeAsBackendString)
-                    .channel(channel)
-                    .setSlotInThePast(isSlotInPast)
+            for (type in types) {
+                val appointment = AppointmentSlotFacadeBuilder()
+                        .slotId(slotId++)
+                        .slotTypeName(type)
+                        .startDate(startDate.dateTimeAsBackendString)
+                        .endDate(endDate.dateTimeAsBackendString)
+                        .channel(channel)
+                        .setSlotInThePast(isSlotInPast)
 
-
-
-            appointmentSlotFacadeArrayBuilder.addAppointment { appointment }
-
+                appointmentSlotFacadeArrayBuilder.addAppointment { appointment }
+            }
         }
 
         return appointmentSlotFacadeArrayBuilder
@@ -129,7 +123,6 @@ class GenerateAppointmentData {
         }
         return result
     }
-
 
     fun generateFilter(type: String? = null, doctor: String? = null, location: String? = null,
                        dateArray: ArrayList<AppointmentDate>): AppointmentFilterFacade {
@@ -148,5 +141,4 @@ class GenerateAppointmentData {
                 filteredSlots = generateMapOfAppointmentDatesAndTimes(dates)
         )
     }
-
 }

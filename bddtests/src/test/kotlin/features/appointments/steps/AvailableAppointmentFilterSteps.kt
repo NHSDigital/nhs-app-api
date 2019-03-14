@@ -26,7 +26,7 @@ open class AvailableAppointmentFilterSteps {
         val actualAppointmentTypeOptions = availableAppointmentsPage.appointmentTypeFilter.getContents()
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
-        val expected = Serenity.sessionVariableCalled<ArrayList<String>>(
+        val expected = Serenity.sessionVariableCalled<List<String>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_TYPE_KEY
@@ -42,7 +42,7 @@ open class AvailableAppointmentFilterSteps {
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
         val actualLocationOptions = availableAppointmentsPage.locationFilter.getContents()
         val expectedLocations =
-                Serenity.sessionVariableCalled<ArrayList<String>>(
+                Serenity.sessionVariableCalled<List<String>>(
                         AppointmentsSlotsExampleBuilderWithExpectations
                                 .AppointmentSlotSerenityKeys
                                 .EXPECTED_APPOINTMENT_LOCATIONS_KEY
@@ -65,7 +65,7 @@ open class AvailableAppointmentFilterSteps {
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
 
         val expectedClinicians =
-                sessionVariableCalled<ArrayList<String>>(
+                sessionVariableCalled<List<String>>(
                         AppointmentsSlotsExampleBuilderWithExpectations
                                 .AppointmentSlotSerenityKeys
                                 .EXPECTED_APPOINTMENT_CLINICIANS_KEY
@@ -112,7 +112,7 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatLocationIsSelected() {
-        val locations = Serenity.sessionVariableCalled<ArrayList<String>>(
+        val locations = Serenity.sessionVariableCalled<List<String>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_LOCATIONS_KEY

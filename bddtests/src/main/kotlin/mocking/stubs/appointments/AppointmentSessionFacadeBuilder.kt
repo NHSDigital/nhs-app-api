@@ -79,7 +79,7 @@ class AppointmentSlotFacadeBuilder {
     private var slotId: Int = 1
     private var startDate: String = ""
     private var endDate: String = ""
-    private var slotTypeName: String = "Slot"
+    private lateinit var slotTypeName: String
     private var slotInThePast: Boolean = false
     private var channel: SlotTypeStatus = SlotTypeStatus.Unknown
 

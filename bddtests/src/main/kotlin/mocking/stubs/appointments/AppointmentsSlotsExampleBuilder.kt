@@ -9,12 +9,15 @@ open class AppointmentsSlotsExampleBuilder {
 
     protected var appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
     protected var filter: AppointmentFilterFacade = AppointmentFilterFacade()
-    protected var appointmentTypesList: ArrayList<String> = arrayListOf()
-    protected var locationsList: ArrayList<String> = arrayListOf()
-    protected var cliniciansList: ArrayList<String> = arrayListOf()
+    protected var appointmentTypesList: List<String> = listOf()
+    protected var locationsList: List<String> = listOf()
+    protected var cliniciansList: List<String> = listOf()
 
     fun appointmentSessions(value: ArrayList<AppointmentSessionFacade>): AppointmentsSlotsExampleBuilder {
         appointmentSessions = value
+        appointmentTypesList = appointmentTypesList(value)
+        locationsList = locationsList(value)
+        cliniciansList = cliniciansList(value)
         return this
     }
 
@@ -23,19 +26,26 @@ open class AppointmentsSlotsExampleBuilder {
         return this
     }
 
-    fun appointmentTypesList(value: ArrayList<String>): AppointmentsSlotsExampleBuilder {
-        appointmentTypesList = value
-        return this
+    private fun appointmentTypesList(value: ArrayList<AppointmentSessionFacade>): List<String> {
+        return value.flatMap { session ->
+            session.slots.map { slot ->
+                slot.slotTypeName!!
+            }
+        }.distinct()
     }
 
-    fun locationsList(value: ArrayList<String>): AppointmentsSlotsExampleBuilder {
-        locationsList = value
-        return this
+    private fun locationsList(value: ArrayList<AppointmentSessionFacade>): List<String> {
+        return value.map { session ->
+            session.location!!
+        }.distinct()
     }
 
-    fun cliniciansList(value: ArrayList<String>): AppointmentsSlotsExampleBuilder {
-        cliniciansList = value
-        return this
+    private fun cliniciansList(value: ArrayList<AppointmentSessionFacade>): List<String> {
+        return value.flatMap { session ->
+            session.staffDetails.map { staff ->
+                staff.staffName!!
+            }
+        }.distinct()
     }
 
     open fun build(): AppointmentSlotsResponseFacade {
