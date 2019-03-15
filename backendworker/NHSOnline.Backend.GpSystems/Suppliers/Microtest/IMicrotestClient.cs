@@ -10,5 +10,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             string odsCode,
             string nhsNumber,
             AppointmentSlotsDateRange dateRange);
+
+        Task<MicrotestClient.MicrotestApiObjectResponse<string>> BookAppointmentSlotPost(
+            BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest,
+            MicrotestUserSession userSession);
     }
 }

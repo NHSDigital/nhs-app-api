@@ -22,6 +22,7 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   # Not applicable for VISION
   Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
@@ -36,6 +37,7 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user can book an appointment describing symptoms at least 1 character
     Given there are <GP System> appointments available to book with a reason of 1 character
@@ -53,6 +55,7 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @smoketest
   @nativepending @NHSO-2974
@@ -71,6 +74,7 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @native-smoketest
     Examples:
@@ -95,6 +99,7 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user cannot paste symptoms with over 150 characters
@@ -110,6 +115,7 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user who books successfully, but only the first 150 characters of the symptoms are sent
@@ -128,6 +134,7 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario: A Vision user gets an alternative success message when booking and there's no ability to cancel
     Given there are VISION appointments available to book
@@ -155,6 +162,7 @@ Feature: Book an available appointment slot UI with Javascript
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
@@ -267,6 +275,7 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @native-smoketest
     Examples:

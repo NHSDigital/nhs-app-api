@@ -155,6 +155,7 @@ Feature: Book an available appointment slot UI without Javascript
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
 
   @bug  @NHSO-3816

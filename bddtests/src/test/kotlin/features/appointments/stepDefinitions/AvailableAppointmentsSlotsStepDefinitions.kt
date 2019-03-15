@@ -238,12 +238,12 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.assertOnlyOneTimeSlotPresent(
                 targetSlotDetails.dateAsUIString,
                 targetSlotDetails.timeAsUIString,
-                targetSlotDetails.sessionName!!
+                targetSlotDetails.sessionName
         )
         availableAppointments.availableAppointmentsPage.selectSlot(
                 targetSlotDetails.dateAsUIString,
                 targetSlotDetails.timeAsUIString,
-                targetSlotDetails.sessionName!!
+                targetSlotDetails.sessionName
         )
     }
 

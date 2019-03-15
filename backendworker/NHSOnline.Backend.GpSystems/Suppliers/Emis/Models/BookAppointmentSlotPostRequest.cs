@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Models
            BookingReason = request.BookingReason;
            SlotId = Convert.ToInt64(request.SlotId, CultureInfo.InvariantCulture);
            
-           if (!String.IsNullOrWhiteSpace(request.TelephoneNumber))
+           if (!string.IsNullOrWhiteSpace(request.TelephoneNumber))
            {
                TelephoneNumber = request.TelephoneNumber;
                TelephoneContactType = "Other";

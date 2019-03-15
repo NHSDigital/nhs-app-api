@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.Support;
@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         public const string HeaderNhsNumber = "NHSO-Nhs-Number";
         public const string HeaderOdsCode = "NHSO-ODS-Code";
         private const string AppointmentSlotsPath = "patient/appointment-slots?fromDate={0}&toDate={1}";
+        private const string AppointmentsPath = "patient/appointments";
         
         private readonly MicrotestHttpClient _httpClient;
         private readonly ILogger<MicrotestClient> _logger;
@@ -56,6 +57,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             _logger.LogExit();
             return response;
         }
+        
+        public async Task<MicrotestApiObjectResponse<string>> BookAppointmentSlotPost(
+            BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest,
+            MicrotestUserSession userSession)
+        {
+            _logger.LogEnter();
+            _logger.LogDebug($"booking slot: { bookAppointmentSlotPostRequest.SlotId }");
+
+            var response = await Post(bookAppointmentSlotPostRequest, AppointmentsPath, userSession.OdsCode, userSession.NhsNumber);
+
+            _logger.LogExit();
+            return response;
+        }
 
         private async Task<MicrotestApiObjectResponse<TResponse>> Get<TResponse>(
             string path,
@@ -64,6 +78,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         {
             var request = BuildRequest(HttpMethod.Get, path, odsCode, nhsNumber);
             return await SendRequestAndParseResponse<TResponse>(request);
+        }
+        
+        private async Task<MicrotestApiObjectResponse<string>> Post<TRequest>(
+            TRequest requestBody,
+            string path,
+            string odsCode = null,
+            string nhsNumber = null)
+        {
+            var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber);
+            var requestBodyJson = JsonConvert.SerializeObject(requestBody);
+            request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
+            
+            return await SendRequestAndGetResponse(request);
         }
 
         private static HttpRequestMessage BuildRequest(
@@ -86,12 +113,30 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
             return request;
         }
+        
+        private async Task<MicrotestApiObjectResponse<string>> SendRequestAndGetResponse(
+            HttpRequestMessage request)
+        {
+            _logger.LogEnter();
+
+            var responseMessage = await _httpClient.Client.SendAsync(request);
+            var response = new MicrotestApiObjectResponse<string>(responseMessage.StatusCode);
+
+            if (!response.HasSuccessResponse)
+            {
+                response.ErrorResponseMessage = await response.GetStringResponse(responseMessage, _logger);
+            }
+
+            _logger.LogExit();
+            return response;
+        }
 
         private async Task<MicrotestApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new MicrotestApiObjectResponse<TResponse>(responseMessage.StatusCode);
+
             return await response.Parse(responseMessage, _responseParser, _logger);
         }
 
@@ -100,19 +145,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             public MicrotestApiResponse(HttpStatusCode statusCode) : base(statusCode)
             {
             }
-
+            public string ErrorResponseMessage { get; set; }
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
-
-            public override string ErrorForLogging => StatusCode.ToString();
+            public override string ErrorForLogging => ErrorResponseMessage;
 
             protected override bool FormatResponseIfUnsuccessful => false;
         }
 
         public class MicrotestApiObjectResponse<TBody> : MicrotestApiResponse
         {
-            public TBody Body { get; set; }
+            public MicrotestApiObjectResponse(HttpStatusCode statusCode) : base(statusCode) { }
 
-            public MicrotestApiObjectResponse(HttpStatusCode statusCode) : base(statusCode) {}
+            public TBody Body { get; set; }
 
             public async Task<MicrotestApiObjectResponse<TBody>> Parse(
                 HttpResponseMessage responseMessage,

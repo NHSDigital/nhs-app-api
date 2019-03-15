@@ -7,9 +7,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 {
     public class MicrotestAppointmentsService : IAppointmentsService
     {
+        private readonly MicrotestAppointmentsBookingService _booker;
+        
+        public MicrotestAppointmentsService(
+            MicrotestAppointmentsBookingService booker)
+        {
+            _booker = booker;
+        }
+        
         public async Task<AppointmentBookResult> Book(GpUserSession gpUserSession, AppointmentBookRequest request)
         {
-            return await Task.FromResult(new AppointmentBookResult.BadRequest());
+            return await _booker.Book((MicrotestUserSession) gpUserSession, request);
         }
 
         public async Task<AppointmentCancelResult> Cancel(GpUserSession gpUserSession, AppointmentCancelRequest request)

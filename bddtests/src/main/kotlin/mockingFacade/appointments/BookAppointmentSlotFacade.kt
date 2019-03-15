@@ -1,6 +1,6 @@
 package mockingFacade.appointments
 
-class BookAppointmentSlotFacade(val userPatientLinkToken: String,
+data class BookAppointmentSlotFacade(val userPatientLinkToken: String? = null,
                                 val slotId: Int,
                                 val bookingReason: String? = null,
                                 val startTime: String? = null,

@@ -143,7 +143,8 @@ abstract class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFact
                     hashMapOf(
                             "EMIS" to { AppointmentsBookingFactoryEmis() },
                             "TPP" to { AppointmentsBookingFactoryTpp() },
-                            "VISION" to { AppointmentsBookingFactoryVision() })
+                            "VISION" to { AppointmentsBookingFactoryVision() },
+                            "MICROTEST" to { AppointmentsBookingFactoryMicrotest()})
                 }
 
 

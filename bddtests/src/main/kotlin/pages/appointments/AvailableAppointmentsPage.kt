@@ -106,7 +106,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    fun selectSlot(date: String, time: String, sessionName: String) {
+    fun selectSlot(date: String, time: String, sessionName: String?) {
         val slot = timeSlotForDateTimeSession(date, time, sessionName)
                 .assertSingleElementPresent()
                 .assertIsVisible()

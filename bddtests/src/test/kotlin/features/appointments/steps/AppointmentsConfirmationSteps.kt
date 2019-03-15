@@ -35,6 +35,7 @@ open class AppointmentsConfirmationSteps {
     fun checkAppointmentDetails() {
         val expectedSlot =  Serenity.sessionVariableCalled<Slot>(AppointmentsBookingFactory.selectedSlot)
                 .copy(id = null)
+
         val areCliniciansExpected = expectedSlot.clinicians.isNotEmpty()
         val actualSlot = appointmentsConfirmation.getAppointmentSlot(areCliniciansExpected)
         assertEquals("Exact expected Appointment not found. ", expectedSlot, actualSlot)

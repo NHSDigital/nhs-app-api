@@ -16,6 +16,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Bad Request" response if no slot identifier is provided
     Given I have logged into <GP System> and have a valid session cookie
