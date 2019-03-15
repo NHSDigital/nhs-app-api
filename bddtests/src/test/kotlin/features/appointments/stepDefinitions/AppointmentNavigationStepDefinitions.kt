@@ -26,18 +26,14 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on the My Appointments page$")
     fun iAmOnMyAppointmentsPage() {
-        navigation.waitForSpinnerToDisappear()
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
-        waitForSpinnerToDisappear()
         myAppointmentsUI.myAppointmentsPage.
                 locatorMethods.assertNativeElementsLoaded(myAppointmentsUI.myAppointmentsPage.bookButton)
     }
 
     @Given("^I am on the My Appointments error page$")
     fun iAmOnMyAppointmentsErrorPage() {
-        navigation.waitForSpinnerToDisappear()
         navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
-        waitForSpinnerToDisappear()
         errorPage.locatorMethods.assertNativeElementsLoaded(errorPage.heading)
     }
 
@@ -45,7 +41,6 @@ class AppointmentNavigationStepDefinitions {
     fun iAmOnTheGuidancePage() {
         iAmOnMyAppointmentsPage()
         myAppointmentsUI.clickOnBookAppointmentButton()
-        waitForSpinnerToDisappear()
         appointmentGuidanceSteps.appointmentGuidancePage.
                 locatorMethods.assertNativeElementsLoaded(appointmentGuidanceSteps.appointmentGuidancePage.bookButton)
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
@@ -54,13 +49,10 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on the Available Appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
-        iAmOnTheGuidancePage()
-        appointmentGuidanceSteps.clickBookAnAppointmentButton()
-        waitForSpinnerToDisappear()
+        iTryToProgressToTheAvailableAppointmentsPage()
         availableAppointments.availableAppointmentsPage.
                 locatorMethods.assertNativeElementsLoaded(
                     availableAppointments.availableAppointmentsPage.backToMyAppointmentsButton)
-        waitForSpinnerToDisappear()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
@@ -68,9 +60,5 @@ class AppointmentNavigationStepDefinitions {
     fun iTryToProgressToTheAvailableAppointmentsPage() {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
-    }
-
-    private fun waitForSpinnerToDisappear() {
-        myAppointmentsUI.myAppointmentsPage.waitForSpinnerToDisappear()
     }
 }

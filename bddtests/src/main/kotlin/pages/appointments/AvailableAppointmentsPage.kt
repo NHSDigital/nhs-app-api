@@ -107,11 +107,11 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     fun selectSlot(date: String, time: String, sessionName: String?) {
-        val slot = timeSlotForDateTimeSession(date, time, sessionName)
+        timeSlotForDateTimeSession(date, time, sessionName)
                 .assertSingleElementPresent()
                 .assertIsVisible()
-                .scrollToElement()
-        slot.click()
+                .click()
+        waitForSpinnerToDisappear()
     }
 
     fun getAreAnySlotsPresent(): Boolean {
