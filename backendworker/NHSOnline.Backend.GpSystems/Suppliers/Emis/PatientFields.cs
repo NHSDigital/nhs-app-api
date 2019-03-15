@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
@@ -9,15 +10,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
 
         static PatientFields()
         {
-            MedicalRecord patient;
             PatientSensitiveFields = new List<string>()
             {
-                { nameof(patient.PatientGuid) },
-                { nameof(patient.Title) },
-                { nameof(patient.Forenames) },
-                { nameof(patient.Surname) },
-                { nameof(patient.Sex) },
-                { nameof(patient.DateOfBirth) }
+                nameof(MedicalRecord.PatientGuid),
+                nameof(MedicalRecord.Title),
+                nameof(MedicalRecord.Forenames),
+                nameof(MedicalRecord.Surname),
+                nameof(MedicalRecord.Sex),
+                nameof(MedicalRecord.DateOfBirth),
+                nameof(ContactDetails.MobileNumber),
+                nameof(ContactDetails.TelephoneNumber),
+                nameof(DemographicsGetResponse.FirstName)
             };
         }
     }

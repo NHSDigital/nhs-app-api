@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.Support;
 
@@ -31,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             if (IsResponseNull(logger, response)) return;
             try
             {
-                var initialResponse = CensorResponse(response);
+                var initialResponse = CensorResponse(logger, response);
                 if (initialResponse != null)
                 {
                     logger.LogError("EMIS Response: " + initialResponse.SerializeJson());
@@ -48,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             if (IsResponseNull(logger, response)) return;
             try
             {
-                var initialResponse = CensorResponse(response);
+                var initialResponse = CensorResponse(logger, response);
                 if (initialResponse != null)
                 {
                     logger.LogWarning("EMIS Response: " + initialResponse.SerializeJson());
@@ -66,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             if (IsResponseNull(logger, response)) return;
             try
             {
-                var initialResponse = CensorResponse(response);
+                var initialResponse = CensorResponse(logger, response);
                 if (initialResponse != null)
                 {
                     logger.LogWarning("EMIS Response: " + initialResponse.SerializeJson());
@@ -86,10 +87,37 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             return true;
         }
 
-        public static JObject CensorResponse(EmisClient.EmisApiResponse response)
+        public static JObject CensorResponse(ILogger logger, EmisClient.EmisApiResponse response)
         {
-            var initialResponse = JObject.Parse(response.SerializeJson());
-            var properties = initialResponse.Descendants()
+            var initialResponse = JObject.Parse(CleanRawResponse(logger, response).SerializeJson());
+
+            initialResponse = CleanObject(initialResponse);
+
+            return initialResponse;
+        }
+
+        private static EmisClient.EmisApiResponse CleanRawResponse(ILogger logger, EmisClient.EmisApiResponse response)
+        {
+            if (string.IsNullOrEmpty(response.RawResponse)) return response;
+
+            try
+            {
+                var rawResponse = JObject.Parse(response.RawResponse);
+
+                response.RawResponse = CleanObject(rawResponse).SerializeJson();
+
+                return response;
+            }
+            catch (JsonReaderException jsonReaderException)
+            {
+                logger.LogDebug(jsonReaderException.Message);
+                return response;
+            }
+        }
+
+        private static JObject CleanObject(JObject response)
+        {
+            var properties = response.Descendants()
                 .OfType<JProperty>()
                 .ToList();
 
@@ -101,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 .ToList()
                 .ForEach(attr => attr.Value = ReplaceGuid(attr.Value.ToString()));
 
-            return initialResponse;
+            return response;
         }
 
         private static bool ContainsGuid(JProperty attribute)

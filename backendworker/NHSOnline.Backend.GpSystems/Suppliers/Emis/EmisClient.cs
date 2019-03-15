@@ -319,7 +319,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
             protected EmisApiResponse(HttpStatusCode statusCode) :base(statusCode)
             {}
 
-            public string RawResponse { get; protected set; }
+            public string RawResponse { get; protected internal set; }
             public StandardErrorResponse StandardErrorResponse { get; set; }
             public ExceptionErrorResponse ExceptionErrorResponse { get; set; }
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }

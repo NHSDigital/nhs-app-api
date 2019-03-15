@@ -4,10 +4,13 @@ using System.Text.RegularExpressions;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Newtonsoft.Json.Linq;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Emis.Session;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
@@ -18,6 +21,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private IFixture _fixture;
         private static Regex _guidRegex;
         private static TestContext _context;
+        private static Mock<ILogger<EmisSessionService>> _logger;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -30,6 +34,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _logger =  _fixture.Freeze<Mock<ILogger<EmisSessionService>>>();
         }
 
         [TestMethod]
@@ -40,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             {
                 Body = demographicsResponse
             };
-            var response = EmisLoggingExtensions.CensorResponse(demoResponse);
+            var response = EmisLoggingExtensions.CensorResponse(_logger.Object, demoResponse);
             var hasSensitiveFields = response
                 .Descendants()
                 .OfType<JProperty>()
@@ -56,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             errorResponse.Exceptions.First().Message = userIdentityGuid;
             var sampleResponse = new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
                         .InternalServerError) {ExceptionErrorResponse = errorResponse};
-            var response = EmisLoggingExtensions.CensorResponse(sampleResponse);
+            var response = EmisLoggingExtensions.CensorResponse(_logger.Object, sampleResponse);
             var hasGuids = response.Descendants()
                 .OfType<JProperty>()
                 .Where(ContainsGuid)
