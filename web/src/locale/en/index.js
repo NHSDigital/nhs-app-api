@@ -756,7 +756,7 @@ export default {
   organDonation: {
     additionalDetails: {
       continueButton: 'Continue',
-      description: 'This optional information is only used by NHSBT for analysis of the NHS Organ Donor Register and is not stored against your registration.',
+      description: 'This optional information is only used by the NHS to understand the make up of the NHS Organ Donor Register and is not stored against your registration.',
       ethnicity: {
         placeholder: 'Please select',
         label: 'Ethnicity (Optional)',
@@ -771,27 +771,26 @@ export default {
       subheader: 'Faith / beliefs',
       continueButtonText: 'Continue',
       errorMsgHeader: 'There\'s a problem',
-      errorMsgText: 'You cannot continue without making a selection',
-      why: {
-        header: 'Why they matter for organ donation',
-        paragraphs: [
-          'When organ donation is a possibility, NHS staff will always speak to a donor\'s family about the donor\'s decision, medical history, and anything else that would be relevant to organ donation.',
-          'We recognise that for some people, this will include their faith or beliefs and they would want organ donation to go ahead in a way that is in line with their beliefs or customs.',
-        ],
+      errorMsgText: 'Respond to the faith/belief declaration. Choose yes, no or prefer not to say.',
+      body: {
+        paragraph1: 'When you die, NHS staff can ask your family (and anyone else appropriate) about your faith and beliefs. This is how NHS staff will find out about any end of life wishes you might have.',
+        paragraph2: 'Record here whether you want our specialist nurses to discuss your faith or beliefs with your family when you die, at the same time they approach them about organ donation.',
       },
-      help: {
-        header: 'What we can do to help',
-        description: 'Let us know if you want your faith and beliefs to be a part of discussions between NHS staff, your family, and anyone suggested by your family, when organ donation is a possibility.',
+      endOfLifeWishes: {
+        header: 'Examples of end of life wishes ',
+        listItems: [
+          'Requesting a faith representative for your family',
+          'When to say prayers',
+          'Rituals or traditions regards washing and dressing',
+          'Being buried within a certain time period'],
       },
       choices: {
-        header: 'Would you like NHS staff to speak to your family (and anyone else appropriate) about how organ donation can go ahead in line with your faith or beliefs?',
+        header: 'I would like NHS staff to speak to my family and anyone else appropriate about how organ donation can go ahead in line with my faith or beliefs.',
         yes: {
-          title: 'Yes',
-          description: 'I want NHS staff to talk to my family (and other relevant people) about how organ donation works with my faith/beliefs.',
+          title: 'Yes - this is applicable to me',
         },
         no: {
-          title: 'No',
-          description: 'I do not want NHS staff to talk to anyone about organ donation and my faith/beliefs.',
+          title: 'No - this is not applicable to me',
         },
         preferNotToSay: {
           title: 'Prefer not to say',

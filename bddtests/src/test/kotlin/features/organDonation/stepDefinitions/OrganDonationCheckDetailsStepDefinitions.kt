@@ -67,7 +67,7 @@ open class OrganDonationCheckDetailsStepDefinitions {
     }
 
     @Then("^my decision to withdraw is recorded on the Organ Donation Check Details page$")
-    fun withdrawDecisionIsrecordedOnTheOrganDonationCheckDetailsPage(){
+    fun withdrawDecisionIsRecordedOnTheOrganDonationCheckDetailsPage(){
         organDonationCheckDetailsPage.yourDecisionModule.assertDecisionIsWithdrawn()
     }
 

@@ -13,7 +13,7 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
     lateinit var organDonationFaithAndBeliefsPage: OrganDonationFaithAndBeliefsPage
 
     @When("^I select the option '(.*)' to share my organ donation faith and beliefs")
-    fun iSelectTheOptionToShareMyOrganDonaitonFaithAndBeliefs(option:String){
+    fun iSelectTheOptionToShareMyOrganDonationFaithAndBeliefs(option:String){
         organDonationFaithAndBeliefsPage.radioButtons.button(option).select()
         organDonationFaithAndBeliefsPage.radioButtons.assertSelected(option)
     }
@@ -21,6 +21,20 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
     @Then("^the Organ Donation Faith And Beliefs page is displayed")
     fun theOrganDonationFaithAndBeliefsPageIsDisplayed() {
         organDonationFaithAndBeliefsPage.assertDisplayed()
+    }
+
+    @Then("^the Organ Donation 'Examples of end of life wishes' is collapsed, and can be expanded")
+    fun theOrganDonationExamplesOfEndOfLifeWishesIsCollapsedAndCanBeExpanded(){
+        organDonationFaithAndBeliefsPage.endOfLifeWishes.assertCollapsed()
+        organDonationFaithAndBeliefsPage.endOfLifeWishes.expand()
+        organDonationFaithAndBeliefsPage.endOfLifeWishes.assertLabel("Examples of end of life wishes")
+        organDonationFaithAndBeliefsPage.endOfLifeWishes.assertContent(
+                "Requesting a faith representative for your family\n" +
+                "When to say prayers\n" +
+                "Rituals or traditions regards washing and dressing\n" +
+                "Being buried within a certain time period")
+        organDonationFaithAndBeliefsPage.endOfLifeWishes.collapse()
+        organDonationFaithAndBeliefsPage.endOfLifeWishes.assertCollapsed()
     }
 
     @Then("^no options on the Organ Donation Faith And Beliefs page are selected")
@@ -34,20 +48,19 @@ open class OrganDonationFaithAndBeliefsStepDefinitions {
         organDonationFaithAndBeliefsPage.radioButtons.assertAllUnselected()
         organDonationFaithAndBeliefsPage.clickContinue()
         organDonationFaithAndBeliefsPage.validationBanner.assertVisible(arrayListOf("There's a problem",
-                "You cannot continue without making a selection"))
+                "Respond to the faith/belief declaration. Choose yes, no or prefer not to say."))
     }
 
     @Then("^the previous option on the Organ Donation Faith And Beliefs page is selected")
     fun thePreviousOptionOnTheOrganDonationFaithAndBeliefsPageIsSelected() {
         val faithDeclaration = OrganDonationSerenityHelpers.DEMOGRAPHICS
                 .getOrFail<OrganDonationDemographics>().faithDeclaration
-        when (faithDeclaration) {
-            FaithDeclaration.No ->
-                organDonationFaithAndBeliefsPage.radioButtons.assertSelected("No")
-            FaithDeclaration.Yes ->
-                organDonationFaithAndBeliefsPage.radioButtons.assertSelected("Yes")
-            FaithDeclaration.NotStated ->
-                organDonationFaithAndBeliefsPage.radioButtons.assertSelected("Prefer not to say")
-        }
+
+        val optionMap = mapOf(
+                FaithDeclaration.No to organDonationFaithAndBeliefsPage.noOption,
+                FaithDeclaration.Yes to organDonationFaithAndBeliefsPage.yesOption,
+                FaithDeclaration.NotStated to organDonationFaithAndBeliefsPage.preferNotToSayOption
+        )
+        organDonationFaithAndBeliefsPage.radioButtons.assertSelected(optionMap[faithDeclaration]!!)
     }
 }

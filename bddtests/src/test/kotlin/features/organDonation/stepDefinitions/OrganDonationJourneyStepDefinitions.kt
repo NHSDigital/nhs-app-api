@@ -51,7 +51,7 @@ open class OrganDonationJourneyStepDefinitions {
     }
 
     private fun navigateToAdditionalDetailsPageForOptInJourney(pageTitle: String) {
-        organDonationFaithAndBeliefsPage.radioButtons.button("No").select()
+        organDonationFaithAndBeliefsPage.radioButtons.button("Prefer not to say").select()
         organDonationFaithAndBeliefsPage.clickContinue()
         organDonationAdditionalDetailsPage.assertDisplayed()
         if(pageTitle == "Additional Details"){

@@ -10,10 +10,10 @@ import pages.assertSingleElementPresent
 
 class OrganDonationDetailsAssertor private constructor(
             title: String,
-            val page: HybridPageObject,
-            val titleStyling : String) {
+            private val page: HybridPageObject,
+            titleStyling : String) {
 
-    val containerXPath = "//div[$titleStyling[text()=\"$title\"]]"
+    private val containerXPath = "//div[$titleStyling[text()=\"$title\"]]"
 
     private val container = HybridPageElement(
             containerXPath,
@@ -41,6 +41,10 @@ class OrganDonationDetailsAssertor private constructor(
             Assert.assertEquals("expected value", expected.key, foundPair.key)
         }
         return this
+    }
+
+    fun assert(expectedText: String): OrganDonationDetailsAssertor {
+        return assert(arrayOf(expectedText))
     }
 
     fun assert(expectedText: Array<String>): OrganDonationDetailsAssertor {

@@ -28,7 +28,6 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import pages.assertElementNotPresent
 import pages.assertIsVisible
 import utils.SerenityHelpers
 import worker.NhsoHttpException
@@ -265,12 +264,8 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @When("^I expand the appointment slot guidance$")
     fun iExpandTheAppointmentSlotGuidance() {
-        availableAppointments.availableAppointmentsPage.guidance.appointmentSlotGuidance.assertIsVisible()
-        availableAppointments.availableAppointmentsPage.guidance.content.assertElementNotPresent()
-        assertEquals("Appointment guidance help text is incorrect. ",
-                "Which type of appointment do I need?",
-                availableAppointments.availableAppointmentsPage.guidance.label.element.text)
-        availableAppointments.availableAppointmentsPage.guidance.expand.element.click()
+        availableAppointments.availableAppointmentsPage.guidance.assertLabel("Which type of appointment do I need?")
+        availableAppointments.availableAppointmentsPage.guidance.expand()
     }
 
     @When("^I select a type and location that have available slots$")
@@ -455,21 +450,18 @@ class AvailableAppointmentsSlotsStepDefinitions {
         val expectedGuidanceContent =
                 sessionVariableCalled<String>(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
 
-        assertEquals("Guidance content not displayed correctly. ",
-                expectedGuidanceContent,
-                availableAppointments.availableAppointmentsPage.guidance.content.element.text)
+        availableAppointments.availableAppointmentsPage.guidance.assertContent(expectedGuidanceContent)
     }
 
     @Then("^the appointment slot guidance is collapsible$")
     fun appointmentSlotGuidanceIsCollapsible() {
-        availableAppointments.availableAppointmentsPage.guidance.collapse.element.click()
+        availableAppointments.availableAppointmentsPage.guidance.collapse()
         iExpandTheAppointmentSlotGuidance()
     }
 
     @Then("^I cannot see any appointment slot guidance$")
     fun iCannotSeeAnyAppointmentSlotGuidance() {
-        availableAppointments.availableAppointmentsPage.guidance.label.assertElementNotPresent()
-        availableAppointments.availableAppointmentsPage.guidance.content.assertElementNotPresent()
+        availableAppointments.availableAppointmentsPage.guidance.assertNotPresent()
     }
 
     companion object {

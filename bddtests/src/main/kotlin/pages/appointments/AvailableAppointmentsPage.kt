@@ -7,6 +7,7 @@ import pages.assertIsVisible
 import pages.assertSingleElementPresent
 import pages.sharedElements.BannerObject
 import pages.sharedElements.DropdownElement
+import pages.sharedElements.ExpandElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
@@ -24,7 +25,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     private val noAppointmentsAvailableForDateTextByDateXpathFormat =
             "$dateHeadingByTextXpathFormat/following-sibling::p"
 
-    val guidance = AppointmentGuidancePageObject(this)
+    val guidance = ExpandElement(this)
 
     val appointmentTypeFilter = DropdownElement(
             "Type of appointment",

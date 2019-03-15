@@ -1,8 +1,6 @@
 package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageElement
-import pages.assertIsVisible
 import pages.sharedElements.DropdownElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
@@ -26,16 +24,11 @@ open class OrganDonationAdditionalDetailsPage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
         assertPageFullyLoaded()
+        OrganDonationDetailsAssertor.withH2Header("Additional details", this)
+                .assert("This optional information is only used by the NHS to understand the make up of the " +
+                        "NHS Organ Donor Register and is not stored against your registration.")
+        ethnicitySelector.assertIsVisible()
         ethnicitySelector.assertSelected(defaultDropDownValue)
         ethnicitySelector.assertSelected(defaultDropDownValue)
-        optionalInformationText.assertIsVisible()
     }
-
-    private val optionalInformationText = HybridPageElement(
-            "//p",
-            page = this,
-            helpfulName = "optional information text")
-            .withText(
-                    "This optional information is only used by NHSBT for analysis of the NHS Organ Donor Register " +
-                            "and is not stored against your registration.")
 }

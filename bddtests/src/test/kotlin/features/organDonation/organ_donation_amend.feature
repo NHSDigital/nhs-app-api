@@ -58,7 +58,7 @@ Feature: Organ Donation - Amend
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     And the previous option on the Organ Donation Faith And Beliefs page is selected
-    When I select the option 'Yes' to share my organ donation faith and beliefs
+    When I select the option 'Yes - this is applicable to me' to share my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button

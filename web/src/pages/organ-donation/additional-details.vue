@@ -2,6 +2,7 @@
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <div :class="$style.info">
       <h2>{{ $t('organDonation.additionalDetails.subheader') }}</h2>
+      <p>{{ $t('organDonation.additionalDetails.description') }}</p>
       <label :class="$style.label" for="ethnicity">
         {{ $t('organDonation.additionalDetails.ethnicity.label') }}
       </label>
@@ -18,7 +19,6 @@
           {{ option.displayName }}
         </option>
       </select-dropdown>
-
       <label :class="$style.label" for="religion">
         {{ $t('organDonation.additionalDetails.religion.label') }}
       </label>
@@ -35,8 +35,6 @@
           {{ option.displayName }}
         </option>
       </select-dropdown>
-      <p>{{ $t('organDonation.additionalDetails.description') }}</p>
-
       <generic-button id="continue-button"
                       :class="[$style.button, $style.green]"
                       @click.prevent="continueClicked">

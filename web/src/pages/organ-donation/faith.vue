@@ -10,36 +10,36 @@
     </message-dialog>
     <h2>{{ $t('organDonation.faith.subheader') }}</h2>
     <div :class="$style.info">
-      <h3>{{ $t('organDonation.faith.why.header') }}</h3>
-      <p v-for="(paragraph, index) in $t('organDonation.faith.why.paragraphs')" :key="index">
-        {{ paragraph }}
-      </p>
+      <p>{{ $t('organDonation.faith.body.paragraph1') }}</p>
     </div>
+    <collapsible-dialog>
+      <template slot="header">
+        {{ $t('organDonation.faith.endOfLifeWishes.header') }}
+      </template>
+      <ul>
+        <li v-for="listItem of $t('organDonation.faith.endOfLifeWishes.listItems')" :key="listItem">
+          {{ listItem }}
+        </li>
+      </ul>
+    </collapsible-dialog>
     <div :class="$style.info">
-      <h3>{{ $t('organDonation.faith.help.header') }}</h3>
-      <p>{{ $t('organDonation.faith.help.description') }}</p>
+      <p>{{ $t('organDonation.faith.body.paragraph2') }}</p>
     </div>
     <div :class="$style.info">
       <p><b>{{ $t('organDonation.faith.choices.header') }}</b></p>
     </div>
     <generic-radio-button :class="$style.choiceRadioButton"
                           :label="$t('organDonation.faith.choices.yes.title')"
-                          :description="$t('organDonation.faith.choices.yes.description')"
                           :model="currentChoice"
                           :value="yesValue"
                           name="choice"
-                          @select="radioButtonSelected">
-      <p>{{ $t('organDonation.faith.choices.yes.description') }}</p>
-    </generic-radio-button>
+                          @select="radioButtonSelected"/>
     <generic-radio-button :class="$style.choiceRadioButton"
                           :label="$t('organDonation.faith.choices.no.title')"
-                          :description="$t('organDonation.faith.choices.no.description')"
                           :model="currentChoice"
                           :value="noValue"
                           name="choice"
-                          @select="radioButtonSelected">
-      <p>{{ $t('organDonation.faith.choices.no.description') }}</p>
-    </generic-radio-button>
+                          @select="radioButtonSelected"/>
     <generic-radio-button :class="$style.choiceRadioButton"
                           :label="$t('organDonation.faith.choices.preferNotToSay.title')"
                           :model="currentChoice"
@@ -58,6 +58,7 @@
 
 <script>
 import BackButton from '@/components/BackButton';
+import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -72,6 +73,7 @@ import { redirectTo } from '@/lib/utils';
 export default {
   components: {
     BackButton,
+    CollapsibleDialog,
     GenericButton,
     GenericRadioButton,
     MessageDialog,
@@ -136,4 +138,16 @@ export default {
     margin-bottom: 1.5em;
   }
 }
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1em;
+  li {
+    margin: 0;
+    padding: 0;
+    line-height:1em;
+  }
+}
+
 </style>

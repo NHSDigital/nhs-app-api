@@ -11,7 +11,7 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     And no options on the Organ Donation Faith And Beliefs page are selected
-    When I select the option 'Yes' to share my organ donation faith and beliefs
+    When I select the option 'Yes - this is applicable to me' to share my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button
@@ -46,16 +46,16 @@ Feature: Organ Donation
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
-    And my choice of '<Option>' to share my faith and beliefs is displayed on the Organ Donation Check Details page
+    And my choice of '<Display>' to share my faith and beliefs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
     Examples:
-      | Option            |
-      | Yes               |
-      | No                |
-      | Prefer not to say |
+      | Option                            | Display           |
+      | Yes - this is applicable to me    | Yes               |
+      | No - this is not applicable to me | No                |
+      | Prefer not to say                 | Prefer not to say |
 
   Scenario Outline: A <GP System> user can opt to not donate their organs
     Given I am a <GP System> user not registered with organ donation, who wishes to register and opt out
@@ -93,7 +93,7 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     And no options on the Organ Donation Faith And Beliefs page are selected
-    When I select the option 'No' to share my organ donation faith and beliefs
+    When I select the option 'No - this is not applicable to me' to share my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button
@@ -183,7 +183,7 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     And no options on the Organ Donation Faith And Beliefs page are selected
-    When I select the option 'Yes' to share my organ donation faith and beliefs
+    When I select the option 'Yes - this is applicable to me' to share my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button
@@ -211,7 +211,7 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     And no options on the Organ Donation Faith And Beliefs page are selected
-    When I select the option 'Yes' to share my organ donation faith and beliefs
+    When I select the option 'Yes - this is applicable to me' to share my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button
@@ -290,6 +290,14 @@ Feature: Organ Donation
     And I navigate to the internal Organ Donation Choice Page
     When I select the Find Out More About Organ Donation link
     Then a new tab opens https://www.organdonation.nhs.uk/faq/
+
+  Scenario: A user can find out more about examples of of end of life wishes
+    Given I am a EMIS user not registered with organ donation, who wishes to register and opt in
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    And I follow the opt-in journey to the 'Faith And Beliefs' page
+    Then the Organ Donation Faith And Beliefs page is displayed
+    And the Organ Donation 'Examples of end of life wishes' is collapsed, and can be expanded
 
   Scenario Outline: A user opting out, where OD returns a <Error Code> recoverable error is shown an error message
   and can retry

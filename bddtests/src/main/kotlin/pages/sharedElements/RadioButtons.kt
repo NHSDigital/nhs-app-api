@@ -10,6 +10,13 @@ class RadioButtons private constructor(private val page: HybridPageObject, priva
 
     private val buttons by lazy {   getElements(page, locator).map { element -> RadioButton(element)}}
 
+    fun assertAreEqual(expectedOptions: ArrayList<String>) {
+        val actualTitles = buttons.map { option -> option.title }
+        Assert.assertArrayEquals("Expected options",
+                expectedOptions.toTypedArray(),
+                actualTitles.toTypedArray())
+    }
+
     fun assertAreEqual(expectedOptions: List<Pair<String, String>>) {
         val expectedTitles = expectedOptions.map { option -> option.first }
         val actualTitles = buttons.map { option -> option.title }
