@@ -1,5 +1,6 @@
 <template>
-  <div :class="[mType, !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <div :class="[mType, ...extraClasses,
+                !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div v-if="showIcon" :class="$style.icon">
       {{ iText }}
     </div>
@@ -26,6 +27,10 @@ export default {
     messageId: {
       type: String,
       default: undefined,
+    },
+    extraClasses: {
+      type: Array,
+      default: () => [],
     },
     overrideStyle: {
       type: String,
@@ -58,13 +63,5 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/messages";
-
-div {
- &.desktopWeb {
-  .msg {
-   max-width: 540px;
-  }
- }
-}
 
 </style>

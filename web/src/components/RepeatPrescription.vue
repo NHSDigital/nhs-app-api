@@ -68,6 +68,10 @@ export default {
   }
 
   label {
+    &>span {
+      font-weight: normal;
+      font-size: 1em;
+    }
     padding-bottom: 0.250em;
   }
 </style>

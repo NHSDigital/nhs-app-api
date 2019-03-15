@@ -1,5 +1,6 @@
 <template>
-  <div :class="[$style.info, !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <div :class="[!$store.state.device.isNativeApp && $style.desktopWeb,
+                $style.info, ...extraClasses]">
     <p>{{ $t('rp01.glossary.headerText') }}</p>
     <analytics-tracked-tag :href="glossaryLinkURL"
                            :text="$t('rp01.glossary.linkText')"
@@ -22,6 +23,12 @@ export default {
     AbbreviationsArrowRightIcon,
     AnalyticsTrackedTag,
   },
+  props: {
+    extraClasses: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
@@ -38,20 +45,7 @@ export default {
 
 .info {
   margin-bottom: 0.5em;
-  padding: 0.5em 1em 0em 1em;
-  :focus {
-    outline-color: $focus_highlight;
-  }
-
-  p, a, analytics-tracked-tag {
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-  }
-}
-
-div {
- &.desktopWeb {
-
+  &.desktopWeb {
   a {
    margin-bottom: 1em;
    &:focus {
@@ -69,10 +63,13 @@ div {
    font-weight: normal;
    cursor: default;
   }
-
-  hr {
+ }
+ hr {
    opacity: unset;
   }
- }
+  p, a, analytics-tracked-tag {
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
 }
 </style>

@@ -38,8 +38,9 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     )
 
     private val backButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(),'Back')]",
-            androidLocator = null,
+            webDesktopLocator = "//a[contains(text(),'Back')]",
+            androidLocator = "//button[contains(text(),'Back')]",
+            iOSLocator = "//button[contains(text(),'Back')]",
             page = this
     )
 

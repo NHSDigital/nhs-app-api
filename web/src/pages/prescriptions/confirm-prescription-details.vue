@@ -1,6 +1,7 @@
 <template>
 
-  <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+  <div v-if="showTemplate" :class="[$style['pull-content'],
+                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
 
     <div :class="$style.info" data-purpose="info">
       <p>
@@ -26,16 +27,22 @@
         </p>
       </div>
     </div>
-    <generic-button id="btn_confirm_and_order_prescription" :class="[$style.button, $style.green]"
+    <generic-button id="btn_confirm_and_order_prescription"
+                    :button-classes="['button' , 'green',
+                                      !$store.state.device.isNativeApp && 'medium']"
                     @click="onConfirmButtonClicked">
       {{ $t('rp04.confirmButton') }}
     </generic-button>
 
-    <generic-button id="back-to-prescriptions"
-                    :class="[$style.button, $style.grey]"
+    <generic-button v-if="$store.state.device.isNativeApp"
+                    id="back-to-prescriptions"
+                    :button-classes="['button' , 'grey']"
                     @click="backToPrescriptionsClicked">
       {{ $t('rp04.backButton') }}
     </generic-button>
+    <desktopGenericBackLink v-else
+                            :path="prescriptionRepeatCoursesPath"
+                            :button-text="'rp04.backButton'"/>
   </div>
 </template>
 
@@ -43,11 +50,13 @@
 /* eslint-disable import/extensions */
 import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 import GenericButton from '@/components/widgets/GenericButton';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
     GenericButton,
+    DesktopGenericBackLink,
   },
   data() {
     return {
@@ -89,12 +98,25 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/buttons";
   @import "../../style/forms";
   @import "../../style/info";
   @import "../../style/panels";
 
-  .keep-line-breaks {
+.pull-content {
+    &.desktopWeb {
+      font-family: $frutiger-light;
+      &>* {
+        max-width: 540px;
+      }
+    }
+    .panel {
+      margin-bottom: 1em;
+    }
+    hr {
+      opacity: unset;
+    }
+    .keep-line-breaks {
     white-space: pre-line;
+  }
   }
 </style>

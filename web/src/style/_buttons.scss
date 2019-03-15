@@ -63,6 +63,10 @@ a.button:focus {
 	&.disabled {
 		opacity: 0.5;
 	}
+	&.medium{
+		width: inherit;
+		min-width: 16.875em;
+	}
 }
 
 

@@ -2,7 +2,7 @@
   <div v-if="$store.state.myRecord.hasAcceptedTerms"
        :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-      <glossary-header />
+      <glossary-header :extra-classes="[$style.glossary]"/>
       <analytics-tracked-tag :class="[$style['record-title'],
                                       getCollapsedState(isPatientDetailsCollapsed)]"
                              :click-func="myRecordSectionClick"
@@ -177,9 +177,14 @@ export default {
     padding-right:1em;
     padding-top:0.5em;
   }
+  .glossary {
+    padding: 0.5em 1em 0em 1em;
+  }
   div {
    &.desktopWeb {
-    max-width: 540px;
+    &>* {
+        max-width: 540px;
+      }
 
     p {
      font-family: $default_web;

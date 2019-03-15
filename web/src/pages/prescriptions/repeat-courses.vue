@@ -1,6 +1,7 @@
 <template>
 
-  <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+  <div v-if="showTemplate" :class="[$style['pull-content'],
+                                    !$store.state.device.isNativeApp && $style.desktopWeb]">
 
     <glossary-header />
 
@@ -66,7 +67,9 @@
             {{ $t('rp03.changePharmacyText') }}
           </p>
         </div>
-        <generic-button id="btn_order_prescription" :class="[$style.button, $style.green]"
+        <generic-button id="btn_order_prescription"
+                        :button-classes="['button' , 'green',
+                                          !$store.state.device.isNativeApp && 'medium']"
                         @click.prevent="validate">
           {{ $t('rp03.continueButton') }}
         </generic-button>
@@ -79,14 +82,17 @@
         {{ $t('rp06.empty.body') }}
       </p>
     </div>
-    <form :action="prescriptionsPath" method="get">
-      <generic-button v-if="hasLoaded"
-                      id="back-to-prescriptions"
-                      :class="[$style.button, $style.grey]"
+    <form v-if="$store.state.device.isNativeApp"
+          :action="prescriptionsPath" method="get">
+      <generic-button id="back-to-prescriptions"
+                      :button-classes="['button' , 'grey']"
                       @click.stop.prevent="backToPrescriptionsClicked">
         {{ $t('rp03.backButton') }}
       </generic-button>
     </form>
+    <desktopGenericBackLink v-else
+                            :path="prescriptionsPath"
+                            :button-text="'rp03.backButton'"/>
   </div>
 </template>
 
@@ -102,6 +108,7 @@ import NoJsForm from '@/components/no-js/NoJsForm';
 import GlossaryHeader from '@/components/GlossaryHeader';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import { PRESCRIPTIONS, PRESCRIPTION_CONFIRM_COURSES } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
@@ -117,6 +124,7 @@ export default {
     ErrorMessage,
     GlossaryHeader,
     GenericTextArea,
+    DesktopGenericBackLink,
   },
   data() {
     return {
@@ -236,5 +244,17 @@ export default {
   @import "../../style/panels";
   @import "../../style/info";
   @import "../../style/errorvalidation";
-  @import "../../style/buttons";
+  .pull-content {
+    &.desktopWeb {
+      font-family: $default-web;
+      &>* {
+        max-width: 540px;
+      }
+    }
+    .form {
+      label {
+        margin-top: 1em;
+      }
+    }
+  }
 </style>

@@ -24,8 +24,9 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     )
 
     val changeThisPrescriptionButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(), 'Change this prescription')]",
-            androidLocator = null,
+            webDesktopLocator = "//a[contains(text(), 'Change this prescription')]",
+            androidLocator = "//button[contains(text(), 'Change this prescription')]",
+            iOSLocator = "//button[contains(text(), 'Change this prescription')]",
             page = this
     )
 

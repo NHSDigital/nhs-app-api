@@ -1,11 +1,13 @@
 <template>
-  <div v-if="showFlashMessage" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-    <message-dialog v-if="isWarning()" message-type="warning" >
+  <div v-if="showFlashMessage">
+    <message-dialog v-if="isWarning()" :extra-classes="[$style['flash-message']]"
+                    message-type="warning" >
       <message-text>{{ message }}</message-text>
     </message-dialog>
-    <message-dialog v-else message-id="success-dialog"
+    <message-dialog v-else :extra-classes="[$style['flash-message']]"
+                    message-id="success-dialog"
                     message-type="success">
-      <message-text :class="$style.messageText">{{ message }}
+      <message-text>{{ message }}
       </message-text>
     </message-dialog>
   </div>
@@ -53,18 +55,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
- @import '../../style/textstyles';
- @import "../../style/fonts";
-
- div {
-  &.desktopWeb {
-   font-family: $default-web;
-   max-width: 540px;
-   .messageText{
-    font-family: $default-web;
-    font-weight: lighter;
-   }
-  }
- }
-
+.flash-message {
+  margin-top: 1.125em;
+}
 </style>
