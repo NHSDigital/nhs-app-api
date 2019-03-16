@@ -64,6 +64,11 @@
 		14D4D20D21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */; };
 		14D4D21521E8BA44008A65E0 /* DeregisterAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */; };
 		14D4D21921E8D711008A65E0 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D4D21821E8D711008A65E0 /* BiometricService.swift */; };
+		2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */; };
+		2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */; };
+		2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */; };
+		2EC6C6CA224312BC00EE49B9 /* MailToSchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */; };
+		2EC6C6CC224312CE00EE49B9 /* SchemeHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */; };
 		3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */; };
 		3E5BD2D5219EE6BD00774F06 /* AppWebInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */; };
 		3E5BD2D721A2F88300774F06 /* WebAppInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */; };
@@ -185,6 +190,11 @@
 		14D4D20C21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionAssertationBuilder.swift; sourceTree = "<group>"; };
 		14D4D21421E8BA44008A65E0 /* DeregisterAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeregisterAuthenticator.swift; sourceTree = "<group>"; };
 		14D4D21821E8D711008A65E0 /* BiometricService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
+		2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlers.swift; sourceTree = "<group>"; };
+		2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSchemeHandlers.swift; sourceTree = "<group>"; };
+		2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandler.swift; sourceTree = "<group>"; };
+		2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailToSchemeHandlerTests.swift; sourceTree = "<group>"; };
+		2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlersTests.swift; sourceTree = "<group>"; };
 		3067F25421E39C1F009734AF /* LifecycleHandlersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlersTests.swift; sourceTree = "<group>"; };
 		3E5BD2D4219EE6BD00774F06 /* AppWebInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWebInterface.swift; sourceTree = "<group>"; };
 		3E5BD2D621A2F88300774F06 /* WebAppInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAppInterface.swift; sourceTree = "<group>"; };
@@ -394,6 +404,15 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		2EC6C6C82243128900EE49B9 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2EC6C6C9224312BC00EE49B9 /* MailToSchemeHandlerTests.swift */,
+				2EC6C6CB224312CE00EE49B9 /* SchemeHandlersTests.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		3067F25321E39BF7009734AF /* Lifecycle */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,6 +497,7 @@
 		C20578162028B94800CDBDC5 /* NHSOnlineTests */ = {
 			isa = PBXGroup;
 			children = (
+				2EC6C6C82243128900EE49B9 /* Utils */,
 				3067F25321E39BF7009734AF /* Lifecycle */,
 				F01745A6207B700700877E4D /* Info.plist */,
 				C20578172028B94800CDBDC5 /* SafariTests.swift */,
@@ -553,9 +573,11 @@
 			children = (
 				135171A621C9EF78001EC74B /* CookieHandler.swift */,
 				F07607F520B465E400069F7F /* FileReader.swift */,
+				2E0CFB1F223DB9CE002ABFA1 /* SchemeHandlers.swift */,
+				2E0CFB23223DC714002ABFA1 /* BaseSchemeHandlers.swift */,
+				2E0CFB25223DC75A002ABFA1 /* MailToSchemeHandler.swift */,
 			);
-			name = Utils;
-			path = "New Group";
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		F0B7D860204E8B8A0078D56E /* ContainerViewControllers */ = {
@@ -737,6 +759,7 @@
 				14D4D20D21E8AD8C008A65E0 /* ExtensionAssertationBuilder.swift in Sources */,
 				1381D46A21BFFF9000B54300 /* AlgAndEncodingEnum.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
+				2E0CFB26223DC75A002ABFA1 /* MailToSchemeHandler.swift in Sources */,
 				4A8D336E21EDF13B00962BBE /* BiometricsStringsHandler.swift in Sources */,
 				1381D48321BFFFD300B54300 /* DisplayPNGCharacteristicsDescriptor.swift in Sources */,
 				1417702621F5D334003E3EAB /* String_Extensions.swift in Sources */,
@@ -760,12 +783,14 @@
 				47D88A4621998CBD004771B5 /* Configuration.swift in Sources */,
 				1381D48E21BFFFD300B54300 /* Policy.swift in Sources */,
 				1381D48C21BFFFD300B54300 /* OperationHeader.swift in Sources */,
+				2E0CFB24223DC714002ABFA1 /* BaseSchemeHandlers.swift in Sources */,
 				139D331621F71B8200E6C92C /* BiometricAlertType.swift in Sources */,
 				1381D48621BFFFD300B54300 /* AAID.swift in Sources */,
 				139AD8CD21E7B21600E580CA /* BiometricsResultViewController.swift in Sources */,
 				13730A22220454FF00437FC1 /* BiometricType.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
+				2E0CFB20223DB9CE002ABFA1 /* SchemeHandlers.swift in Sources */,
 				139D331421F71B6700E6C92C /* BiometricControllerStrings.swift in Sources */,
 				C2142823216512D200F00948 /* KnownServices.swift in Sources */,
 				13730A1B2201C1BA00437FC1 /* FidoEndpointHelper.swift in Sources */,
@@ -804,6 +829,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2357EBC216575460033B98F /* KnownServicesTests.swift in Sources */,
+				2EC6C6CA224312BC00EE49B9 /* MailToSchemeHandlerTests.swift in Sources */,
 				F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */,
 				4A6A1AA421E6189E00795BE2 /* AssertionTests.swift in Sources */,
 				F01745BB207BA39200877E4D /* SafariTests.swift in Sources */,
@@ -812,6 +838,7 @@
 				4A8A3EA421E4E4AA00E49E01 /* ModelTests.swift in Sources */,
 				C2357EBA216574F20033B98F /* KnownServiceTests.swift in Sources */,
 				3067F25521E39C1F009734AF /* LifecycleHandlersTests.swift in Sources */,
+				2EC6C6CC224312CE00EE49B9 /* SchemeHandlersTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

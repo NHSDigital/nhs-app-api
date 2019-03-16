@@ -16,6 +16,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     var startDate: Date!
     var javascript: String!
     var webAppInterface: WebAppInterface
+    var schemeHandlers: SchemeHandlers
     
     init(controller: HomeViewController, knownServices: KnownServices, webAppInterface: WebAppInterface) {
         self.viewController = controller
@@ -23,6 +24,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.activityIndicator.center = viewController.view.center
         self.viewController.view.addSubview(activityIndicator)
         self.webAppInterface = webAppInterface
+        self.schemeHandlers = SchemeHandlers()
+        self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
     }
 
     func webView(_ webView: WKWebView,
@@ -34,6 +37,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         if let initialUrl = navigationAction.request.url {
             
             let url = ensureSupportedScheme(initialUrl)
+            
+            if(schemeHandlers.handleUrl(url: url)) {
+                decisionHandler(.cancel)
+                return
+            }            
             
             if(url.absoluteString == config().HomeUrl + config().FidoLoginErrorPath) {
                 viewController.showBiometricSessionError()

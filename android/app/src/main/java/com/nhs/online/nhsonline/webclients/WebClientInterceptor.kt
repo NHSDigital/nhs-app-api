@@ -15,6 +15,8 @@ import com.nhs.online.nhsonline.web.NhsWeb
 import java.io.InputStream
 import java.net.URL
 import java.util.logging.Logger
+import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
+
 
 private const val DELAY_PROGRESS_SHOW_TIME_MILLISECONDS = 500L
 private const val REQUEST_TIMEOUT_MILLISECONDS = 20 * 1000L
@@ -24,7 +26,8 @@ class WebClientInterceptor(
     private val uiInteractor: IInteractor,
     private val nhsWeb: NhsWeb,
     private val context: Context,
-    private val knownServices: KnownServices
+    private val knownServices: KnownServices,
+    private val schemeHandlers: SchemeHandlers
 ) : WebViewClient() {
 
     companion object {
@@ -38,6 +41,9 @@ class WebClientInterceptor(
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering shouldOverrideUrlLoading")
+        if(schemeHandlers.handleUrl(url))
+            return true
+
         if (URL(url).host?.equals(URL(context.getString(R.string.dataPreferencesBaseUrl)).host)!!) {
             view.loadUrl(url)
             return true

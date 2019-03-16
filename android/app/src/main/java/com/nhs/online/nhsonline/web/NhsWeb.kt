@@ -12,7 +12,9 @@ import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConne
 import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
+import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.support.PersistData
+import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
@@ -43,8 +45,11 @@ class NhsWeb(
         }
 
     init {
+        val schemeHandlers = SchemeHandlers()
+        schemeHandlers.registerHandler(MailToSchemeHandler(activity))
+
         val webInterceptor =
-            WebClientInterceptor(uiInteractor, this, activity, knownServices)
+            WebClientInterceptor(uiInteractor, this, activity, knownServices, schemeHandlers)
         webView.webViewClient = webInterceptor
 
         val webInterface = WebAppInterface(activity, uiInteractor, this)

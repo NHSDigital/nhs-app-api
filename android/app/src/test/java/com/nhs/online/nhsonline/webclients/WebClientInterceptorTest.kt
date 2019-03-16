@@ -14,6 +14,7 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.web.NhsWeb
 import org.junit.Before
 import org.junit.Test
@@ -34,6 +35,7 @@ class WebClientInterceptorTest {
     private lateinit var webViewMock: WebView
     private lateinit var nhsWebMock: NhsWeb
     private lateinit var requestMock: WebResourceRequest
+    private lateinit var schemeHandlersMock: SchemeHandlers
 
     private val resourceMock = ResourceMockingClass()
 
@@ -44,8 +46,9 @@ class WebClientInterceptorTest {
         knownServicesMock = mock()
         contextMock = mock()
         nhsWebMock = mock()
+        schemeHandlersMock = mock { on { handleUrl(any()) } doReturn false }
         webClientInterceptor = WebClientInterceptor(uiInteractorMock,
-            nhsWebMock, contextMock, knownServicesMock)
+            nhsWebMock, contextMock, knownServicesMock, schemeHandlersMock)
 
         webViewMock = mock()
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
@@ -180,7 +183,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockContext(),
-            KnownServices(resourceMock.mockContext())
+            KnownServices(resourceMock.mockContext()),
+            schemeHandlersMock
         )
 
         val tmpWebView = createWebView()
@@ -195,6 +199,29 @@ class WebClientInterceptorTest {
         }
     }
 
+    @Test
+    fun overrideUrlLoad_returnsTrueForHandledScheme() {
+        val url = "handled:"
+        schemeHandlersMock = mock { on { handleUrl(url) } doReturn true }
+        val activity = Robolectric.buildActivity(MainActivity::class.java).get()
+        val nhsWebMock = NhsWeb(activity, activity, mock())
+        val webInterceptor = WebClientInterceptor(
+                uiInteractorMock,
+                nhsWebMock,
+                resourceMock.mockContext(),
+                KnownServices(resourceMock.mockContext()),
+                schemeHandlersMock
+        )
+
+        val tmpWebView = createWebView()
+
+        assert(webInterceptor.shouldOverrideUrlLoading(tmpWebView,
+                url)) {
+            "WebClientInterceptor: Failed to handle url scheme"
+        }
+        verify(schemeHandlersMock, times(1)).handleUrl(url)
+    }
+
 
     @Test
     fun onPageStartedNoConnection() {
@@ -202,7 +229,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockDisconnectedContext(),
-            knownServicesMock
+            knownServicesMock,
+            schemeHandlersMock
         )
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
         webInterceptor.onPageStarted(webViewMock, "https://111.nhs.uk/", null)
@@ -224,7 +252,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockConnectedContext(),
-            KnownServices(tmpContext)
+            KnownServices(tmpContext),
+            schemeHandlersMock
         )
 
         webInterceptor.onPageStarted(
@@ -250,10 +279,10 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockDisconnectedContext(),
-            KnownServices(resourceMock.mockContext()))
+            KnownServices(resourceMock.mockContext()),
+            schemeHandlersMock)
 
         webInterceptor.stopLoadingWebviewAndShowNoConnectionError(webViewMock)
-
 
         val header = resourceMock.mockDisconnectedContext()
             .resources.getString(R.string.connection_error_header)
@@ -268,9 +297,9 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockDisconnectedContext(),
-            KnownServices(resourceMock.mockContext())
+            KnownServices(resourceMock.mockContext()),
+            schemeHandlersMock
         )
-
 
         webInterceptor.onPageFinished(webViewMock, "https://google.com")
         verify(uiInteractorMock, never()).dismissProgressDialog()
@@ -287,7 +316,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockDisconnectedContext(),
-            KnownServices(resourceMock.mockContext())
+            KnownServices(resourceMock.mockContext()),
+            schemeHandlersMock
         )
 
         webInterceptor.onPageFinished(webViewMock, "https://www.nhs.uk")
@@ -302,7 +332,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockDisconnectedContext(),
-            KnownServices(resourceMock.mockContext())
+            KnownServices(resourceMock.mockContext()),
+            schemeHandlersMock
         )
 
         webInterceptor.onReceivedError(webViewMock, 404,
@@ -322,7 +353,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockDisconnectedContext(),
-            KnownServices(resourceMock.mockContext())
+            KnownServices(resourceMock.mockContext()),
+            schemeHandlersMock
         )
 
         webInterceptor.onReceivedError(webViewMock, 404,
@@ -343,7 +375,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockConnectedContext(),
-            knownServicesMock
+            knownServicesMock,
+            schemeHandlersMock
         )
 
         webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
@@ -358,7 +391,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockDisconnectedContext(),
-            knownServicesMock
+            knownServicesMock,
+            schemeHandlersMock
         )
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
         webInterceptor.onLoadResource(webViewMock, "https://111.nhs.uk/")
@@ -372,7 +406,8 @@ class WebClientInterceptorTest {
             uiInteractorMock,
             nhsWebMock,
             resourceMock.mockDisconnectedContext(),
-            knownServicesMock
+            knownServicesMock,
+            schemeHandlersMock
         )
         MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
         webInterceptor.onPageStarted(webViewMock, "https://www.111.nhs.uk", null)

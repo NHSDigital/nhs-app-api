@@ -12,6 +12,8 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
+import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.UnsecureWebClient
@@ -50,8 +52,10 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
         chromeClient = ChromeClientLocationHandler(this)
         symptomsWebview.webChromeClient = chromeClient
 
+        val schemeHandlers = SchemeHandlers()
+        schemeHandlers.registerHandler(MailToSchemeHandler(this))
         knownServices = KnownServices(this)
-        symptomsWebview.webViewClient = UnsecureWebClient(this, knownServices, this)
+        symptomsWebview.webViewClient = UnsecureWebClient(this, knownServices, this, schemeHandlers)
     }
 
     private fun loadPage(url: String) {

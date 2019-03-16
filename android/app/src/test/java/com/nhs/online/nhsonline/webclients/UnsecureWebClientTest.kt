@@ -8,6 +8,8 @@ import org.junit.runner.RunWith
 import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
+import org.junit.Assert
 import org.junit.Before
 import org.robolectric.RobolectricTestRunner
 
@@ -21,6 +23,7 @@ class UnsecureWebClientTest {
     private lateinit var knownServicesMock: KnownServices
     private lateinit var unSecureClientMock: UnsecureWebClient
     private lateinit var unSecureInteractorMock: UnsecureInteractor
+    private lateinit var schemeHandlersMock: SchemeHandlers
 
     private val resourceMock = ResourceMockingClass()
 
@@ -32,6 +35,7 @@ class UnsecureWebClientTest {
         knownServicesMock = mock()
         unSecureClientMock = mock()
         unSecureInteractorMock = mock()
+        schemeHandlersMock = mock()
     }
 
     @Test
@@ -40,7 +44,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 KnownServices(resourceMock.mockContext()),
-                context
+                context,
+                schemeHandlersMock
         )
 
         unSecureClient.onPageStarted(webViewMock, "https://111.nhs.uk/", null )
@@ -56,7 +61,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 KnownServices(resourceMock.mockContext()),
-                context
+                context,
+                schemeHandlersMock
         )
 
         unSecureClient.onPageStarted(webViewMock, "https://111.nhs.uk/", null )
@@ -71,7 +77,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 knownServicesMock,
-                context
+                context,
+                schemeHandlersMock
         )
 
         unSecureClient.onLoadResource(webViewMock, "https://111.nhs.uk/")
@@ -86,7 +93,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 knownServicesMock,
-                context
+                context,
+                schemeHandlersMock
         )
 
         unSecureClient.onLoadResource(webViewMock, "https://111.nhs.uk/")
@@ -104,7 +112,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 knownServicesMock,
-                context
+                context,
+                schemeHandlersMock
         )
 
         // stop loading should be called once to handle no connection
@@ -124,7 +133,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 knownServicesMock,
-                resourceMock.mockDisconnectedContext()
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
         )
 
         unSecureClient.onReceivedError(webViewMock, 404,
@@ -138,7 +148,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 KnownServices(resourceMock.mockContext()),
-                resourceMock.mockDisconnectedContext()
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
         )
 
         unSecureClient.onReceivedError(webViewMock, 404,
@@ -153,7 +164,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 knownServicesMock,
-                resourceMock.mockDisconnectedContext()
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
         )
 
         unSecureClient.onPageFinished(webViewMock, "https://www.google.com")
@@ -166,7 +178,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 KnownServices(resourceMock.mockContext()),
-                resourceMock.mockDisconnectedContext()
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
         )
 
         unSecureClient.onPageFinished(webViewMock, "https://www.nhs.uk")
@@ -178,7 +191,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 KnownServices(resourceMock.mockContext()),
-                resourceMock.mockDisconnectedContext()
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
         )
 
         unSecureClient.onPageFinished(webViewMock, "")
@@ -191,7 +205,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 KnownServices(resourceMock.mockContext()),
-                resourceMock.mockDisconnectedContext()
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
         )
 
         unSecureClient.onPageCommitVisible(webViewMock, "https://www.nhs.uk")
@@ -204,7 +219,8 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 KnownServices(resourceMock.mockContext()),
-                resourceMock.mockDisconnectedContext()
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
         )
 
         unSecureClient.onPageCommitVisible(webViewMock, "https://www.google.com")
@@ -217,12 +233,49 @@ class UnsecureWebClientTest {
         val unSecureClient = UnsecureWebClient(
                 unSecureInteractorMock,
                 KnownServices(resourceMock.mockContext()),
-                resourceMock.mockDisconnectedContext()
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
         )
 
         unSecureClient.onPageCommitVisible(webViewMock, "")
         verify(unSecureInteractorMock, never()).dismissProgressDialog()
         verify(unSecureInteractorMock).showWebviewScreen()
+    }
+
+    @Test
+    fun shouldOverrideUrlLoading_returnsTrueForHandledScheme() {
+
+        val url = "handled:xyz"
+        schemeHandlersMock = mock { on { handleUrl(url) } doReturn true }
+        val unSecureClient = UnsecureWebClient(
+                unSecureInteractorMock,
+                KnownServices(resourceMock.mockContext()),
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
+        )
+
+        val result = unSecureClient.shouldOverrideUrlLoading(webViewMock, url)
+
+        verify(schemeHandlersMock, times(1)).handleUrl(url)
+        Assert.assertTrue(result)
+    }
+
+    @Test
+    fun shouldOverrideUrlLoading_returnsFalseForUnHandledScheme() {
+
+        val url = "handled:xyz"
+        schemeHandlersMock = mock { on { handleUrl(url) } doReturn false }
+        val unSecureClient = UnsecureWebClient(
+                unSecureInteractorMock,
+                KnownServices(resourceMock.mockContext()),
+                resourceMock.mockDisconnectedContext(),
+                schemeHandlersMock
+        )
+
+        val result = unSecureClient.shouldOverrideUrlLoading(webViewMock, url)
+
+        Assert.assertFalse(result)
+        verify(schemeHandlersMock, times(1)).handleUrl(url)
     }
 
 }

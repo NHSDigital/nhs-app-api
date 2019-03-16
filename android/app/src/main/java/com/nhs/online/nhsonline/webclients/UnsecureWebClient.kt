@@ -11,6 +11,7 @@ import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 
 private const val DELAY_PROGRESS_SHOW_TIME = 500L
 private const val REQUEST_TIMEOUT = 10 * 1000L
@@ -18,7 +19,8 @@ private const val REQUEST_TIMEOUT = 10 * 1000L
 class UnsecureWebClient(
     private val uiInteractor: UnsecureInteractor,
     private val knownServices: KnownServices,
-    private val context: Context
+    private val context: Context,
+    private val schemeHandlers: SchemeHandlers
 ) : WebViewClient() {
 
     private val handler = Handler()
@@ -189,6 +191,15 @@ class UnsecureWebClient(
             "${this::class.java.simpleName}: Entering getUnavailabilityErrorMessageForService> failingUrl > $failingUrl")
         val serviceInfo = knownServices.findMatchingServiceInfo(failingUrl.toString())
         return serviceInfo?.errorMessage ?: knownServices.getServiceUnavailabilityError()
+    }
+
+    @Suppress("OverridingDeprecatedMember")
+    override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering shouldOverrideUrlLoading")
+        if(schemeHandlers.handleUrl(url))
+            return true
+
+        return false
     }
 
 }
