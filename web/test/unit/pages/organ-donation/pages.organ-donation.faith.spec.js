@@ -2,7 +2,7 @@ import BackButton from '@/components/BackButton';
 import Faith from '@/pages/organ-donation/faith';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
-import { $t, createRouter, createStore, mount } from '../../helpers';
+import { $t, createRouter, createScrollTo, createStore, mount } from '../../helpers';
 
 describe('organ donation faith page', () => {
   let $store;
@@ -80,7 +80,10 @@ describe('organ donation faith page', () => {
 
       describe('with no selected choice', () => {
         describe('when clicked', () => {
+          let scrollTo;
+
           beforeEach(() => {
+            scrollTo = createScrollTo();
             continueButton.trigger('click');
           });
 
@@ -91,6 +94,10 @@ describe('organ donation faith page', () => {
           it('will not push the organ donation additional details page on the router', () => {
             expect($router.push).not.toHaveBeenCalledWith(ORGAN_DONATION_ADDITIONAL_DETAILS.path);
           });
+
+          it('will scroll to the top', () => {
+            expect(scrollTo).toHaveBeenCalledWith(0, 0);
+          });
         });
       });
 
@@ -100,12 +107,19 @@ describe('organ donation faith page', () => {
         });
 
         describe('when clicked', () => {
+          let scrollTo;
+
           beforeEach(() => {
+            scrollTo = createScrollTo();
             continueButton.trigger('click');
           });
 
           it('will not show an error', () => {
             expect(wrapper.find('.error').exists()).toBe(false);
+          });
+
+          it('will not scroll to', () => {
+            expect(scrollTo).not.toHaveBeenCalled();
           });
 
           it('will push the organ donation additional details page on the router', () => {

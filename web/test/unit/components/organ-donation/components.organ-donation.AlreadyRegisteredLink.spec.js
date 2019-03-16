@@ -1,7 +1,7 @@
 import AreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import { createStore, mount } from '../../helpers';
 
-describe('alread registered link', () => {
+describe('already registered link', () => {
   let wrapper;
   let $store;
 

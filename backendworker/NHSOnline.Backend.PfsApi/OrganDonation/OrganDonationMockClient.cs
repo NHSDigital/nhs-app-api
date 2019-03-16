@@ -76,27 +76,39 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             return Task.FromResult(response);
         }
 
-        public Task<OrganDonationResponse<RegistrationResponse>> PostRegistration(
+        public Task<OrganDonationResponse<OrganDonationBasicResponse>> PostRegistration(
             RegistrationRequest request,
             UserSession userSession)
         {
-            return Task.FromResult(new OrganDonationResponse<RegistrationResponse>(HttpStatusCode.OK)
+            return Task.FromResult(new OrganDonationResponse<OrganDonationBasicResponse>(HttpStatusCode.OK)
             {
-                Body = new RegistrationResponse
+                Body = new OrganDonationBasicResponse
                 {
                     Id = Guid.NewGuid().ToString(),
                     Issue = GetIssue(request)
                 }
             });
         }
-        public Task<OrganDonationResponse<RegistrationResponse>> PutUpdate(RegistrationRequest request, UserSession userSession)
+        public Task<OrganDonationResponse<OrganDonationBasicResponse>> PutUpdate(RegistrationRequest request, UserSession userSession)
         {
-            return Task.FromResult(new OrganDonationResponse<RegistrationResponse>(HttpStatusCode.OK)
+            return Task.FromResult(new OrganDonationResponse<OrganDonationBasicResponse>(HttpStatusCode.OK)
             {
-                Body = new RegistrationResponse
+                Body = new OrganDonationBasicResponse
                 {
                     Id = Guid.NewGuid().ToString(),
                     Issue = GetIssue(request)
+                }
+            });
+        }
+
+        public Task<OrganDonationResponse<OrganDonationBasicResponse>> Delete(WithdrawRequest request, UserSession userSession)
+        {
+            return Task.FromResult(new OrganDonationResponse<OrganDonationBasicResponse>(HttpStatusCode.OK)
+            {
+                Body = new OrganDonationBasicResponse
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Issue = null
                 }
             });
         }

@@ -5,17 +5,25 @@ import YourDecision from '@/components/organ-donation/YourDecision';
 import { DECISION_APPOINTED_REP, DECISION_OPT_IN, DECISION_OPT_OUT } from '@/store/modules/organDonation/mutation-types';
 import { mount } from '../../helpers';
 
-const mountYourDecision = ({ headerKey, decision = DECISION_OPT_IN, all = true }) =>
+const mountYourDecision = ({
+  headerKey,
+  decision = DECISION_OPT_IN,
+  all = true,
+  isWithdrawing = false,
+}) =>
   mount(YourDecision, {
     propsData: {
       decision,
       decisionDetails: { all },
       headerKey,
+      isWithdrawing,
     },
     $style: {
       'appointedrep-label': 'appointedrep-label',
+      icon: 'icon',
       'optin-label': 'optin-label',
       'optout-label': 'optout-label',
+      'withdraw-label': 'withdraw-label',
     },
   });
 
@@ -43,6 +51,32 @@ describe('your decision', () => {
     it('will translate the header using the specified header key', () => {
       expect(wrapper.text())
         .toContain('translate_fruity');
+    });
+  });
+
+  describe('withdrawing', () => {
+    beforeEach(() => {
+      wrapper = mountYourDecision({ decision: DECISION_APPOINTED_REP, isWithdrawing: true });
+    });
+
+    it('will not have an icon', () => {
+      expect(wrapper.find('.icon').exists()).toBe(false);
+    });
+
+    describe('label', () => {
+      let label;
+
+      beforeEach(() => {
+        label = wrapper.find('.withdraw-label');
+      });
+
+      it('will exist', () => {
+        expect(label.exists()).toBe(true);
+      });
+
+      it('will display the withdraw decision text', () => {
+        expect(label.text()).toBe('translate_organDonation.reviewYourDecision.yourDecision.withdrawDecisionText');
+      });
     });
   });
 

@@ -10,10 +10,12 @@ export const SET_AMENDING = 'SET_AMENDING';
 export const SET_ALL_ORGANS = 'SET_ALL_ORGANS';
 export const SET_FAITH_DECLARATION = 'SET_FAITH_DECLARATION';
 export const SET_PRIVACY_ACCEPTANCE = 'SET_PRIVACY_ACCEPTANCE';
+export const SET_REAFFIRMING = 'SET_REAFFIRMING';
 export const SET_REGISTRATION_ID = 'SET_REGISTRATION_ID';
 export const SET_SOME_ORGANS = 'SET_SOME_ORGANS';
 export const SET_STATE = 'SET_STATE';
-export const SET_REAFFIRMING = 'SET_REAFFIRMING';
+export const SET_WITHDRAW_REASON_ID = 'SET_WITHDRAW_REASON_ID';
+export const SET_WITHDRAWING = 'SET_WITHDRAWING';
 export const UPDATE_ORIGINAL_REGISTRATION = 'UPDATE_ORIGINAL_REGISTRATION';
 export const DECISION_APPOINTED_REP = 'AppRep';
 export const DECISION_OPT_IN = 'OptIn';
@@ -72,10 +74,13 @@ export const initialState = () => ({
     genders: [],
     religions: [],
     titles: [],
+    withdrawReasons: [],
   },
   registration: createRegistration(),
   isAccuracyAccepted: false,
   isAmending: false,
   isPrivacyAccepted: false,
   isReaffirming: false,
+  isWithdrawing: false,
+  withdrawReasonId: '',
 });

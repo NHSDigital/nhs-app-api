@@ -1,22 +1,16 @@
 <template>
   <div :class="$style.info">
     <h2>{{ $t('organDonation.reviewYourDecision.confirmation.subheader') }}</h2>
-    <generic-checkbox :selected="$store.state.organDonation.isAccuracyAccepted"
-                      v-model="$store.state.organDonation.isAccuracyAccepted"
-                      checkbox-id="accuracy-checkbox"
-                      name="accuracy"
-                      @click="toggleAccuracy">
+    <generic-checkbox :selected="isAccuracyAccepted" checkbox-id="accuracy-checkbox"
+                      name="accuracy" @click="toggleAccuracy">
       <label :class="$style['checkbox-label']" for="accuracy-accuracy-checkbox">
         {{ $t('organDonation.reviewYourDecision.confirmation.accuracyText') }}
         <span v-if="isAccuracyStarVisible" :class="$style.red">*</span>
       </label>
     </generic-checkbox>
 
-    <generic-checkbox :selected="$store.state.organDonation.isPrivacyAccepted"
-                      v-model="$store.state.organDonation.isPrivacyAccepted"
-                      checkbox-id="privacy-checkbox"
-                      name="privacy"
-                      @click="togglePrivacy">
+    <generic-checkbox :selected="isPrivacyAccepted" checkbox-id="privacy-checkbox"
+                      name="privacy" @click="togglePrivacy">
       <label :class="$style['checkbox-label']" for="privacy-privacy-checkbox">
         {{ $t('organDonation.reviewYourDecision.confirmation.privacyText1') }}
         <a :href="privacyUrl" target="_blank">
@@ -37,19 +31,29 @@ export default {
     GenericCheckbox,
   },
   props: {
-    isAccuracyStarVisible: {
+    submitAttempted: {
       type: Boolean,
-      default: false,
-    },
-    isPrivacyStarVisible: {
-      type: Boolean,
-      default: false,
+      required: true,
     },
   },
   data() {
     return {
       privacyUrl: 'https://www.nhsbt.nhs.uk/privacy/',
     };
+  },
+  computed: {
+    isAccuracyAccepted() {
+      return this.$store.state.organDonation.isAccuracyAccepted;
+    },
+    isAccuracyStarVisible() {
+      return this.submitAttempted && !this.isAccuracyAccepted;
+    },
+    isPrivacyAccepted() {
+      return this.$store.state.organDonation.isPrivacyAccepted;
+    },
+    isPrivacyStarVisible() {
+      return this.submitAttempted && !this.isPrivacyAccepted;
+    },
   },
   methods: {
     toggleAccuracy() {

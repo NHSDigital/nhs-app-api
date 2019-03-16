@@ -1,30 +1,36 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <div v-if="showConflictedDecisionFound">
-      <message-dialog :icon-text="$t('organDonation.viewDecision.conflictedState.dialogText')"
-                      message-id="success-dialog" message-type="success">
-        <message-text>
-          {{ $t('organDonation.viewDecision.conflictedState.messageText') }}</message-text>
-      </message-dialog>
-      <strong>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</strong>
-      <p :class="$style.messageText">
-        {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
-    </div>
-    <div v-else-if="hasExistingDecision">
-      <your-decision :decision="decision"
-                     :decision-details="decisionDetails"
-                     header-key="organDonation.registered.yourDecision.subheader"/>
-      <div v-if="hasExistingOptIn">
-        <decision-details
-          v-if="hasSomeOrgans"
-          :choices="choices"/>
+    <div v-if="isConflicted || hasExistingDecision">
+      <div v-if="isConflicted" :class="$style['mb-3']">
+        <message-dialog :icon-text="$t('organDonation.viewDecision.conflictedState.dialogText')"
+                        message-id="success-dialog" message-type="success">
+          <message-text>
+            {{ $t('organDonation.viewDecision.conflictedState.messageText') }}</message-text>
+        </message-dialog>
+        <strong>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</strong>
+        <p :class="$style.messageText">
+          {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
       </div>
-      <reaffirm-decision v-if="!hasAppointedRep" :is-some-organs="hasSomeOrgans"/>
-      <amend-decision-link :class="$style.amendDecision"/>
-      <next-steps v-if="hasExistingOptIn || hasExistingOptOut"
-                  :is-opt-in-decision="hasExistingOptIn"/>
+      <div v-else :class="$style['mb-3']">
+        <your-decision :decision="decision" :decision-details="decisionDetails"
+                       header-key="organDonation.registered.yourDecision.subheader"/>
+        <div v-if="hasExistingOptIn">
+          <decision-details
+            v-if="hasSomeOrgans"
+            :choices="choices"/>
+        </div>
+        <reaffirm-decision v-if="!hasAppointedRep" :is-some-organs="hasSomeOrgans"/>
+        <amend-decision-link :class="$style['mt-3']"/>
+        <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep, $style['mt-3']]">
+          <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
+          <span>0300 123 2323</span>
+        </div>
+      </div>
+      <next-steps v-if="!hasAppointedRep && (hasExistingOptIn || hasExistingOptOut)"
+                  :class="$style['mb-3']" :is-opt-in-decision="hasExistingOptIn"/>
+      <other-things-to-do :class="$style['mb-3']" :can-withdraw="!isConflicted"/>
     </div>
-    <div v-else>
+    <div v-else :class="$style['mb-3']">
       <make-decision/>
       <ul :class="$style['list-menu']">
         <li>
@@ -34,10 +40,6 @@
           <find-out-more-link/>
         </li>
       </ul>
-    </div>
-    <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep]">
-      <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
-      <span>0300 123 2323</span>
     </div>
   </div>
 </template>
@@ -52,6 +54,7 @@ import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
+import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 import ReaffirmDecision from '@/components/organ-donation/ReaffirmDecision';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
@@ -72,6 +75,7 @@ export default {
     MessageText,
     MessageDialog,
     NextSteps,
+    OtherThingsToDo,
     ReaffirmDecision,
     YourDecision,
   },
@@ -79,21 +83,16 @@ export default {
     await store.dispatch('organDonation/getReferenceData');
     await store.dispatch('organDonation/getRegistration');
   },
+  data() {
+    return {
+      decision: this.$store.state.organDonation.originalRegistration.decision,
+      decisionDetails: this.$store.state.organDonation.originalRegistration.decisionDetails,
+      state: this.$store.state.organDonation.originalRegistration.state,
+    };
+  },
   computed: {
     choices() {
       return get('choices')(this.decisionDetails);
-    },
-    decision() {
-      return this.$store.state.organDonation.originalRegistration.decision;
-    },
-    decisionDetails() {
-      return this.$store.state.organDonation.originalRegistration.decisionDetails;
-    },
-    hasAllOrgans() {
-      return !!(
-        this.hasExistingDecision &&
-        get('all')(this.decisionDetails)
-      );
     },
     hasAppointedRep() {
       return this.decision === DECISION_APPOINTED_REP;
@@ -113,11 +112,8 @@ export default {
         get('all')(this.decisionDetails) === false
       );
     },
-    showConflictedDecisionFound() {
+    isConflicted() {
       return this.state === STATE_CONFLICTED && this.decision === DECISION_UNKNOWN;
-    },
-    state() {
-      return this.$store.state.organDonation.originalRegistration.state;
     },
   },
   created() {
@@ -125,6 +121,7 @@ export default {
     this.$store.dispatch('organDonation/setAdditionalDetails', { ethnicityId: '', religionId: '' });
     this.$store.dispatch('organDonation/resetAcceptanceChecks');
     this.$store.dispatch('organDonation/reaffirmCancel');
+    this.$store.dispatch('organDonation/withdrawCancel');
   },
 };
 </script>
@@ -134,19 +131,11 @@ export default {
 @import "../../style/listmenu";
 @import "../../style/spacings";
 
-.amendDecision {
-  margin-bottom: $three;
-}
-
 .info {
   &.appointedRep {
     p {
       padding-bottom: 0;
     }
   }
-}
-
-.list-menu {
-  margin-bottom: $three;
 }
 </style>

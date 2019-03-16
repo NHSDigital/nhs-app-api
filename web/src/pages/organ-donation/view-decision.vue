@@ -1,6 +1,6 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <div v-if="showDecisionSubmitted">
+    <div v-if="isConflicted">
       <message-dialog :icon-text="$t('organDonation.viewDecision.decisionSubmitted.dialogText')"
                       message-id="success-dialog" message-type="success">
         <message-text>
@@ -10,7 +10,7 @@
       <p :class="$style.messageText">
         {{ $t('organDonation.viewDecision.decisionSubmitted.registrationText') }}</p>
     </div>
-    <div v-if="showYourDecision">
+    <div v-else>
       <message-dialog message-id="success-dialog" message-type="success">
         <message-text>{{ $t('organDonation.viewDecision.successMessageText') }}</message-text>
       </message-dialog>
@@ -21,7 +21,7 @@
       <amend-decision-link :class="$style.amendDecision"/>
       <next-steps :is-opt-in-decision="isOptInDecision"/>
     </div>
-    <other-things-to-do/>
+    <other-things-to-do :can-withdraw="!isConflicted"/>
   </div>
 </template>
 
@@ -35,7 +35,7 @@ import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import { DECISION_OPT_IN, STATE_CONFLICTED, STATE_OK } from '@/store/modules/organDonation/mutation-types';
+import { DECISION_OPT_IN, STATE_CONFLICTED } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   components: {
@@ -50,26 +50,19 @@ export default {
   mixins: [EnsureDecisionMixin],
   data() {
     return {
+      allOrgans: !!get('organDonation.registration.decisionDetails.all')(this.$store.state),
+      currentChoices: get('organDonation.registration.decisionDetails.choices')(this.$store.state) || {},
       decision: get('organDonation.registration.decision')(this.$store.state),
       identifier: get('organDonation.registration.identifier')(this.$store.state),
       state: get('organDonation.registration.state')(this.$store.state),
     };
   },
   computed: {
-    allOrgans() {
-      return !!get('all')(this.$store.state.organDonation.registration.decisionDetails);
-    },
-    currentChoices() {
-      return get('choices')(this.$store.state.organDonation.registration.decisionDetails) || {};
-    },
     isOptInDecision() {
       return this.decision === DECISION_OPT_IN;
     },
-    showDecisionSubmitted() {
-      return this.state === STATE_CONFLICTED && this.identifier;
-    },
-    showYourDecision() {
-      return this.state === STATE_OK;
+    isConflicted() {
+      return this.state === STATE_CONFLICTED && !!this.identifier;
     },
   },
 };

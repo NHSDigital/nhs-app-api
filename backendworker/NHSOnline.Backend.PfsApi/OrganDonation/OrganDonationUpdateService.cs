@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         private readonly IMapper<OrganDonationRegistrationRequest, RegistrationRequest>
             _registrationRequestMapper;
 
-        private readonly IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>
+        private readonly IMapper<OrganDonationResponse<OrganDonationBasicResponse>, OrganDonationRegistrationResponse>
             _registrationResponseMapper;
         
         private readonly IMapper<HttpStatusCode, OrganDonationRegistrationResult> _organDonationRegistrationResultErrorMapper;
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         public OrganDonationUpdateService(
             ILogger<OrganDonationUpdateService> logger,
             IMapper<OrganDonationRegistrationRequest, RegistrationRequest> registrationRequestMapper,
-            IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>
+            IMapper<OrganDonationResponse<OrganDonationBasicResponse>, OrganDonationRegistrationResponse>
                 registrationResponseMapper,
             IMapper<HttpStatusCode, OrganDonationRegistrationResult> organDonationRegistrationResultErrorMapper,
             IOrganDonationClient organDonationClient)

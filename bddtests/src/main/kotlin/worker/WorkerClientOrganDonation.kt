@@ -3,13 +3,16 @@ package worker
 import com.google.gson.Gson
 import config.Config
 import mocking.organDonation.models.OrganDonationRegistrationRequest
+import mocking.organDonation.models.OrganDonationWithdrawRequest
 import mocking.organDonation.models.ReferenceDataResponse
+import org.apache.http.HttpResponse
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpPut
 import org.apache.http.entity.StringEntity
 import worker.models.organdonation.OrganDonationRegistrationResponse
 import worker.models.organdonation.OrganDonationSearchResponse
+import worker.WorkerClient.HttpDeleteWithBody
 
 class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSender, val gson: Gson) {
 
@@ -61,4 +64,14 @@ class WorkerClientOrganDonation(val config: Config, val sender: WorkerClientSend
                 OrganDonationRegistrationResponse::class.java)
     }
 
+    fun deleteRegistration(withdrawalRequestBody: OrganDonationWithdrawRequest): HttpResponse {
+        val httpDelete = HttpDeleteWithBody(config.pfsBackendUrl + WorkerPaths.organDonationConnection)
+        val entity = StringEntity(gson.toJson(withdrawalRequestBody), "UTF-8")
+        entity.setContentType("application/json")
+        httpDelete.entity = entity
+
+        val response = sender.sendAsync(httpDelete)
+        httpDelete.releaseConnection()
+        return response!!
+    }
 }

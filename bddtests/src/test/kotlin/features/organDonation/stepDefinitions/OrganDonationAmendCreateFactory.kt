@@ -20,7 +20,6 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     val mockingClient = MockingClient.instance
 
     fun optOut(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        OrganDonationSerenityHelpers.IS_OPT_IN.set(false)
         val organDonationDemographics = OrganDonationDemographics()
         OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
@@ -30,7 +29,6 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     }
 
     fun optIn(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        OrganDonationSerenityHelpers.IS_OPT_IN.set(true)
         val organDonationDemographics = OrganDonationDemographics()
         OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
@@ -40,7 +38,6 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     }
 
     fun some(organs : OrganDecisions,action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        OrganDonationSerenityHelpers.IS_OPT_IN.set(true)
         val organDonationDemographics = OrganDonationDemographics()
         OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(

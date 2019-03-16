@@ -20,12 +20,12 @@ class OrganDonationAdditionalDetailsModule(private val page: HybridPageObject) {
     }
 
     fun assertEthnicity(ethnicity: String) {
-        OrganDonationDetailsAssertor(title, page)
+        OrganDonationDetailsAssertor.withH3Header(title, page)
                 .assertPair("Ethnicity", ethnicity)
     }
 
     fun assertReligion(religion: String) {
-        OrganDonationDetailsAssertor(title, page)
+        OrganDonationDetailsAssertor.withH3Header(title, page)
                 .assertPair("Religion", religion)
     }
 }

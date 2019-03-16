@@ -14,7 +14,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
 
@@ -41,7 +41,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
 
@@ -66,7 +66,7 @@ Feature: Organ Donation - Amend
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
     And my choice of 'Yes' to share my faith and beliefs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
 
@@ -74,7 +74,7 @@ Feature: Organ Donation - Amend
     Given I am a EMIS user registered as some who then amends their decision to opt-out
     And I am logged in
     When I navigate to the internal Organ Donation Page
-    Then the Organ Donation View Registration page is displayed with my existing decision of some
+    Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
     When I choose to amend my Organ Donation decision
     Then the internal Organ Donation Choice Page is displayed
     When I choose to not donate my organs
@@ -83,7 +83,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
 
@@ -91,7 +91,7 @@ Feature: Organ Donation - Amend
     Given I am a TPP user registered as some who then amends their decision to opt-in
     And I am logged in
     When I navigate to the internal Organ Donation Page
-    Then the Organ Donation View Registration page is displayed with my existing decision of some
+    Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
     When I choose to amend my Organ Donation decision
     Then the internal Organ Donation Choice Page is displayed
     And I choose to donate my organs
@@ -107,7 +107,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
 
@@ -115,7 +115,7 @@ Feature: Organ Donation - Amend
     Given I am a VISION user registered as some who then amends their selected organs
     And I am logged in
     When I navigate to the internal Organ Donation Page
-    Then the Organ Donation View Registration page is displayed with my existing decision of some
+    Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
     When I choose to amend my Organ Donation decision
     Then the internal Organ Donation Choice Page is displayed
     And I choose to donate my organs
@@ -134,7 +134,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
 
@@ -142,7 +142,7 @@ Feature: Organ Donation - Amend
     Given I am a EMIS user registered to donate some organs, with some undecided, who amends their decision
     And I am logged in
     When I navigate to the internal Organ Donation Page
-    Then the Organ Donation View Registration page is displayed with my existing decision of some
+    Then the Organ Donation View Registration page is displayed with my existing decision to opt-in-some
     When I choose to amend my Organ Donation decision
     Then the internal Organ Donation Choice Page is displayed
     And I choose to donate my organs
@@ -161,7 +161,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
 
@@ -184,7 +184,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
 
@@ -210,7 +210,7 @@ Feature: Organ Donation - Amend
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
 
@@ -253,7 +253,7 @@ Feature: Organ Donation - Amend
     Then the internal Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Check Details' page
     And I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     And I see an appropriate Organ Donation error message with a retry option
     When I click the 'Try again' button
     And the Organ Donation View Registration page is displayed
@@ -271,7 +271,7 @@ Feature: Organ Donation - Amend
     Then the internal Organ Donation Choice Page is displayed
     When I follow the opt-out journey to the 'Check Details' page
     And I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     And I see an appropriate Organ Donation error message without a retry option
     Examples:
       | Error Code |

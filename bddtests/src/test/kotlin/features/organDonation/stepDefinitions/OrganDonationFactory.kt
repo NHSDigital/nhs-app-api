@@ -4,12 +4,13 @@ import features.myrecord.factories.DemographicsFactory
 import mocking.MockingClient
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
+import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.models.Mapping
 import mocking.organDonation.OrganDonationLookupRegistrationBuilder
-import mocking.organDonation.models.Resource
-import mocking.organDonation.models.OrganDonationDemographics
+import mocking.organDonation.OrganDonationSubmitWithdrawDecisionBuilder
+import mocking.organDonation.models.OrganDonationWithdrawRequest
 import models.Patient
 import utils.SerenityHelpers
 
@@ -19,6 +20,8 @@ class OrganDonationFactory(val gpSystem: String) {
 
     val patient = setupPatient()
 
+    val existing by lazy{OrganDonationExistingFactory(patient,gpSystem)}
+
     fun setupPatientForAppUse() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
@@ -26,46 +29,6 @@ class OrganDonationFactory(val gpSystem: String) {
         mockingClient.forOrganDonation {
             referenceData().respondWithSuccess(OrganDonationReferenceDataBuilder.build())
         }
-    }
-
-    private fun existing(registration: Resource) {
-        mockingClient.forOrganDonation {
-            lookupOrganDonationRegistration(patient).respondWithSuccess(registration)
-        }
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
-    }
-
-    fun existingOptOut(organDonationDemographics: OrganDonationDemographics? = null): Resource {
-        val registration = OrganDonationRegistrationDataBuilder.optOut(patient, organDonationDemographics)
-        existing(registration)
-        return registration
-    }
-
-    fun existingOptIn(organDonationDemographics: OrganDonationDemographics? = null): Resource {
-        val registration = OrganDonationRegistrationDataBuilder.optIn(patient, organDonationDemographics)
-        existing(registration)
-        return registration
-    }
-
-    fun existingAppointedRepresentative() {
-        val registration = OrganDonationRegistrationDataBuilder.appointRepresentative(patient)
-        mockingClient.forOrganDonation {
-            lookupOrganDonationRegistration(patient).respondWithSuccess(registration)
-        }
-        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
-    }
-
-    fun existingOptInSome(organDonationDemographics: OrganDonationDemographics? = null): Resource {
-        val registration = OrganDonationRegistrationDataBuilder.optInSome(patient, organDonationDemographics)
-        existing(registration)
-        return registration
-    }
-
-    fun existingOptInSomeNotAllDecided(organDonationDemographics: OrganDonationDemographics? = null): Resource {
-        val registration = OrganDonationRegistrationDataBuilder.optInSomeNotAllDecided(patient,
-                organDonationDemographics)
-        existing(registration)
-        return registration
     }
 
     fun lookUpRegistrationWithSuccessfulDemographics(patient: Patient? = null,
@@ -112,5 +75,15 @@ class OrganDonationFactory(val gpSystem: String) {
         val patient = setupPatient()
         DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
         action(OrganDonationAmendCreateFactory(patient) { registration -> submitDecision(registration) })
+    }
+
+    fun withdrawRegistration(action: (OrganDonationSubmitWithdrawDecisionBuilder) -> Mapping) {
+        val patient = setupPatient()
+        DemographicsFactory.getForSupplier(gpSystem).enabled(patient)
+
+        val withdrawRegistration = OrganDonationWithdrawRequest.withdrawDecision(patient)
+        SerenityHelpers.setSerenityVariableIfNotAlreadySet(
+                OrganDonationSerenityHelpers.ORGAN_DONATION_WITHDRAWAL, withdrawRegistration)
+        mockingClient.forOrganDonation { action(withdrawOrganDonationRegistration(withdrawRegistration)) }
     }
 }

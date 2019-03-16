@@ -7,7 +7,7 @@ using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
-    internal class OrganDonationRegistrationResponseMapper : IMapper<OrganDonationResponse<RegistrationResponse>,
+    internal class OrganDonationRegistrationResponseMapper : IMapper<OrganDonationResponse<OrganDonationBasicResponse>,
         OrganDonationRegistrationResponse>
     {
         private readonly ILogger<OrganDonationRegistrationResponseMapper> _logger;
@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             _logger = logger;
         }
 
-        public OrganDonationRegistrationResponse Map(OrganDonationResponse<RegistrationResponse> source)
+        public OrganDonationRegistrationResponse Map(OrganDonationResponse<OrganDonationBasicResponse> source)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(source, nameof(source), ThrowError)

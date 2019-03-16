@@ -34,10 +34,20 @@ class OrganDonationErrorStepDefinitionsBackend {
             request.respondWithError(registrationId, errorCode) }}
     }
 
+    @Given("^I am a (\\w+) user registered with OD, " +
+            "but on attempting to withdraw decision OD returns (.*) error$")
+    fun iAmRegisteredWithODButOnWithdrawalODThrowsRecoverableError(gpSystem: String, errorCode: Int){
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.withdrawRegistration{
+            request ->request.respondWithError(errorCode)
+        }
+    }
+
     @Given("^I am a (\\w+) api user amending my decision, but OD returns '(\\d+)' error$")
     fun iAmAUserWhoWantsToAmendTheirDecisionButOrganDonationThrowsError(gpSystem: String, errorCode: Int){
         val factory = OrganDonationFactory(gpSystem)
-        val id = factory.existingOptInSome().id
+        val id = factory.existing.optInSome().id
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(id)
         factory.amend { registration ->
             registration.optOut { request ->
@@ -64,7 +74,7 @@ class OrganDonationErrorStepDefinitionsBackend {
     @Given("I am a (\\w+) api user who wants amend their decision, but will cause a conflict")
     fun iAmAUserWhoWantsToAmendTheirOrganDonationDecisionButConflict(gpSystem: String){
         val factory = OrganDonationFactory(gpSystem)
-        val id = factory.existingOptInSome().id
+        val id = factory.existing.optInSome().id
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(id)
         factory.amend { registration ->
             registration.optOut { request ->

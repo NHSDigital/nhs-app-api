@@ -19,25 +19,36 @@ class OrganDonationStepDefinitionsBackend {
     @Given("I am a (\\w+) api user registered with organ donation to not donate my organs")
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
-        factory.existingOptOut()
+        factory.existing.optOut()
     }
 
     @Given("I am a (\\w+) api user registered with organ donation to donate all organs")
     fun iAmRegisteredWithOrganDonationToDonateAllOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
-        factory.existingOptIn()
+        factory.existing.optIn()
     }
 
     @Given("I am a (\\w+) api user registered with organ donation with an appointed representative")
     fun iAmRegisteredWithOrganDonationWithAnAppointedRepresentative(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
-        factory.existingAppointedRepresentative()
+        factory.existing.appointedRepresentative()
     }
 
     @Given("I am a (\\w+) api user registered with organ donation to donate some organs")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
-        factory.existingOptInSome()
+        factory.existing.optInSome()
+    }
+
+    @Given("^I am a (\\w+) api user registered with an organ " +
+            "donation decision to (.*) and wish to withdraw my decision$")
+    fun iAmRegisteredWithOrganDonationAndWishToWithdraw(gpSystem: String, decision:String){
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val existing = factory.existing.setUpExistingDecisionForPatient(decision)
+        factory.withdrawRegistration{
+            request ->request.respondWithSuccess(existing.id)
+        }
     }
 
     @Given("^I am a (\\w+) api user not registered with organ donation$")

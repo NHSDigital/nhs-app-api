@@ -36,6 +36,10 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
         assertText("I have appointed a representative")
     }
 
+    fun assertDecisionIsWithdrawn() {
+        assertText("Withdraw my decision from the register")
+    }
+
     private fun assertText(expectedText: String) {
         HybridPageElement(
                 "$containerXPath//span",

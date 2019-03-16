@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>{{ $t('organDonation.viewDecision.nextSteps.subheader') }}</h3>
+    <h2>{{ $t('organDonation.viewDecision.nextSteps.subheader') }}</h2>
     <div v-if="isOptInDecision">
       <ul :class="$style['list-menu']">
         <li role="link">

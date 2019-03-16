@@ -10,13 +10,23 @@ import pages.assertIsVisible
 
 class DropdownElement(val label: String, val helpfulName: String, pageObject: HybridPageObject) {
 
-    private val byIdXpathFormat = "//label[contains(text(),'%s')]/following-sibling::span/select"
+    private val xpathFormat = "//label[contains(text(),'$label')]/following-sibling::span/select"
+    private val xpathFormatForInlineError =
+            "//label[contains(text(),'$label')]/following-sibling::p/span[@data-purpose='error']"
 
     private val dropDown = HybridPageElement(
-            webDesktopLocator = String.format(byIdXpathFormat, label),
+            webDesktopLocator = xpathFormat,
             page = pageObject,
             helpfulName = helpfulName
     )
+
+    private val inlineError by lazy {
+        HybridPageElement(
+                webDesktopLocator = xpathFormatForInlineError,
+                page = pageObject,
+                helpfulName = helpfulName
+        )
+    }
 
     fun assertIsVisible() {
         dropDown.assertIsVisible()
@@ -57,5 +67,21 @@ class DropdownElement(val label: String, val helpfulName: String, pageObject: Hy
 
     fun assertNotPresent() {
         dropDown.assertElementNotPresent()
+    }
+
+    fun assertSortedContent(defaultDropdownValue: String, expectedDropDownContent: ArrayList<String>) {
+        val retrievedDropDownContent = getContents()
+        expectedDropDownContent.sorted()
+        expectedDropDownContent.add(0, defaultDropdownValue)
+        val message = "Expected list of $helpfulName. " +
+                "Expected: ${expectedDropDownContent.joinToString()}. " +
+                "Actual: ${retrievedDropDownContent.joinToString()}."
+        Assert.assertEquals(message, expectedDropDownContent, retrievedDropDownContent)
+    }
+
+    fun assertInlineErrorContent(expectedInlineErrorText: String){
+        val retrievedInlineText = inlineError.element.text
+        val message = "Expected Inline error text $helpfulName."
+        Assert.assertEquals(message, expectedInlineErrorText, retrievedInlineText)
     }
 }

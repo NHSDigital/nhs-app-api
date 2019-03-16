@@ -25,20 +25,30 @@
       <hr :class="$style.rule" aria-hidden="true">
     </div>
     <your-decision :decision-details="$store.state.organDonation.registration.decisionDetails"
-                   :decision="$store.state.organDonation.registration.decision"/>
-    <decision-details v-if="isOptInDecision && !allOrgans"
-                      :choices="currentChoices"/>
-    <hr :class="$style.rule" aria-hidden="true">
-    <div v-if="isOptInDecision" id="faithDetails">
-      <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
+                   :decision="$store.state.organDonation.registration.decision"
+                   :is-withdrawing="isWithdrawing"/>
+    <div v-if="isWithdrawing" :class="$style['mb-3']">
+      <h3>{{ $t('organDonation.reviewYourDecision.withdraw.subheader') }}</h3>
+      <p>
+        {{ $t('organDonation.reviewYourDecision.withdraw.body') }}
+      </p>
       <hr :class="$style.rule" aria-hidden="true">
     </div>
-    <confirmation :is-accuracy-star-visible="isAccuracyStarVisible"
-                  :is-privacy-star-visible="isPrivacyStarVisible" />
+    <div v-else-if="isOptInDecision">
+      <decision-details v-if="!allOrgans"
+                        :choices="currentChoices"/>
+      <hr :class="$style.rule" aria-hidden="true">
+      <div id="faithDetails">
+        <faith-details :declaration="$store.state.organDonation.registration.faithDeclaration"/>
+        <hr :class="$style.rule" aria-hidden="true">
+      </div>
+    </div>
+    <hr v-else :class="$style.rule" aria-hidden="true">
+    <confirmation :submit-attempted="submitAttempted"/>
     <generic-button id="submit-button"
                     :class="[$style.button, $style.green]"
                     @click="clickSubmit">
-      {{ submitButtonText }}
+      {{ $t('organDonation.reviewYourDecision.submitButton') }}
     </generic-button>
     <back-button />
   </div>
@@ -52,7 +62,6 @@ import AdditionalInformation from '@/components/organ-donation/AdditionalInforma
 import BackButton from '@/components/BackButton';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import Confirmation from '@/components/organ-donation/Confirmation';
-import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import FaithDetails from '@/components/organ-donation/FaithDetails';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -60,8 +69,7 @@ import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import { DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
+import { EnsureCanSubmit } from '@/components/organ-donation/EnsureDecisionMixin';
 
 export default {
   components: {
@@ -77,45 +85,29 @@ export default {
     MessageText,
     YourDecision,
   },
-  mixins: [EnsureDecisionMixin],
+  mixins: [EnsureCanSubmit],
   data() {
     return {
+      allOrgans: !!get('all')(this.$store.state.organDonation.registration.decisionDetails),
+      currentChoices: get('choices')(this.$store.state.organDonation.registration.decisionDetails) || {},
+      isOptInDecision: this.$store.state.organDonation.registration.decision === DECISION_OPT_IN,
+      isWithdrawing: this.$store.state.organDonation.isWithdrawing,
       submitAttempted: false,
     };
   },
   computed: {
-    allOrgans() {
-      return !!get('all')(this.$store.state.organDonation.registration.decisionDetails);
-    },
-    currentChoices() {
-      return get('choices')(this.$store.state.organDonation.registration.decisionDetails) || {};
-    },
     isAccuracyAccepted() {
       return this.$store.state.organDonation.isAccuracyAccepted;
-    },
-    isAccuracyStarVisible() {
-      return this.submitAttempted && !this.isAccuracyAccepted;
-    },
-    isOptInDecision() {
-      return this.$store.state.organDonation.registration.decision === DECISION_OPT_IN;
     },
     isPrivacyAccepted() {
       return this.$store.state.organDonation.isPrivacyAccepted;
     },
-    isPrivacyStarVisible() {
-      return this.submitAttempted && !this.isPrivacyAccepted;
-    },
     showAdditionalDetails() {
-      return !(this.$store.state.organDonation.isReaffirming &&
-        !this.$store.getters['organDonation/isSomeOrgans']);
+      return !this.isWithdrawing && (!this.$store.state.organDonation.isReaffirming ||
+        this.$store.getters['organDonation/isSomeOrgans']);
     },
     showErrors() {
       return this.submitAttempted && !isEmpty(this.validationErrors);
-    },
-    submitButtonText() {
-      return this.isOptInDecision
-        ? this.$t('organDonation.reviewYourDecision.submitButton')
-        : this.$t('organDonation.reviewYourDecision.submitNoButton');
     },
     validationErrors() {
       const errors = [];
@@ -133,7 +125,7 @@ export default {
     this.$store.dispatch('organDonation/resetAcceptanceChecks');
   },
   methods: {
-    async clickSubmit() {
+    clickSubmit() {
       this.submitAttempted = true;
 
       if (this.showErrors) {
@@ -141,8 +133,7 @@ export default {
         return;
       }
 
-      await this.$store.dispatch('organDonation/submitRegistration');
-      redirectTo(this, ORGAN_DONATION_VIEW_DECISION.path, null);
+      this.$store.dispatch('organDonation/submitDecision');
     },
   },
 };

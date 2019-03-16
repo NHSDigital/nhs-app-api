@@ -32,15 +32,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
         private Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>
             _mockRegistrationRequestMapper;
-            
+
+        private Mock<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>>
+            _mockRegistrationWithdrawMapper;
+
         private Mock<IMapper<HttpStatusCode, OrganDonationResult>> 
             _mockResultErrorMapper;
         
         private Mock<IMapper<HttpStatusCode, OrganDonationRegistrationResult>> 
             _mockRegistrationResultErrorMapper;
-        
-        private Mock<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>> 
+
+        private Mock<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>>
             _mockReferenceDataResultErrorMapper;
+
+        private Mock<IMapper<HttpStatusCode, OrganDonationWithdrawResult>>
+            _mockWithdrawResultErrorMapper;
+        
 
         // needed for Callback
         private delegate void TryGetValueCallback(object key, out object value);
@@ -59,6 +66,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _mockRegistrationRequestMapper =
                 fixture.Freeze<Mock<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>>>();
 
+            _mockRegistrationWithdrawMapper =
+                fixture.Freeze<Mock<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>>>();
+
             _userSession = fixture.Create<UserSession>();
             _mockResultErrorMapper =
                 fixture.Freeze<Mock<IMapper<HttpStatusCode, OrganDonationResult>>>();
@@ -66,6 +76,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 fixture.Freeze<Mock<IMapper<HttpStatusCode, OrganDonationRegistrationResult>>>();
             _mockReferenceDataResultErrorMapper =
                 fixture.Freeze<Mock<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>>>();
+            _mockWithdrawResultErrorMapper =
+                fixture.Freeze<Mock<IMapper<HttpStatusCode, OrganDonationWithdrawResult>>>();
             _organDonationService = fixture.Create<OrganDonationService>();
         }
 
@@ -408,6 +420,62 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             result.Result.Should().BeOfType<OrganDonationRegistrationResult.SystemError>();
         }
 
+        [TestMethod]
+        public void Withdraw_WhenCalledWithRequest_ReturnsSuccessfullyDeletedResponse()
+        {
+            // Arrange 
+            var context = SetupWithdrawTest();
+
+            // Act
+            var result = _organDonationService.Withdraw(context.Request, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.Verify(x => x.Delete(It.IsAny<WithdrawRequest>(), _userSession));
+
+            result.Result.Should().BeOfType<OrganDonationWithdrawResult.SuccessfullyWithdrawn>();
+        }
+
+        [TestMethod]
+        [DataRow(HttpStatusCode.InternalServerError)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.NotFound)]
+        [DataRow(HttpStatusCode.MethodNotAllowed)]
+        [DataRow(HttpStatusCode.Conflict)]
+        [DataRow(HttpStatusCode.UnsupportedMediaType)]
+        [DataRow(HttpStatusCode.UnprocessableEntity)]
+        [DataRow(HttpStatusCode.TooManyRequests)]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.ServiceUnavailable)]
+        [DataRow(HttpStatusCode.GatewayTimeout)]
+        [DataRow(HttpStatusCode.RequestTimeout)]
+        public void Withdraw_WhenCalledAndRetrievalFailsWithError_MapsErrorResponse(HttpStatusCode httpStatus)
+        {
+            // Arrange
+            var context = SetupWithdrawTest(httpStatus: httpStatus);
+
+            // Act
+            var _ = _organDonationService.Withdraw(context.Request, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.Verify(x => x.Delete(It.IsAny<WithdrawRequest>(), _userSession));
+            _mockWithdrawResultErrorMapper.Verify(x => x.Map(httpStatus));
+        }
+
+        [TestMethod]
+        public void Withdraw_WhenCalledAndRetrievalFailsWithException_ReturnSystemErrorResponse()
+        {
+            // Arrange
+            var context = SetupWithdrawTest(true);
+
+            // Act
+            var result = _organDonationService.Withdraw(context.Request, _userSession);
+
+            // Assert
+            _mockOrganDonationClient.Verify(x => x.Delete(It.IsAny<WithdrawRequest>(), _userSession));
+
+            result.Result.Should().BeOfType<OrganDonationWithdrawResult.SystemError>();
+        }
+
         private GetReferenceDataTestContext SetupGetReferenceDataTest(
             bool throwException = false,
             HttpStatusCode httpStatus = HttpStatusCode.OK,
@@ -443,6 +511,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         {
             return new RegistrationTestContext(_mockOrganDonationClient, _userSession, throwException, httpStatus,
                 _mockRegistrationRequestMapper );
+        }
+
+        private WithdrawContext SetupWithdrawTest(
+            bool throwException = false,
+            HttpStatusCode httpStatus = HttpStatusCode.OK
+        )
+        {
+            return new WithdrawContext(
+                x => x.Delete(It.IsAny<WithdrawRequest>(), _userSession),
+                _mockOrganDonationClient,
+                throwException,
+                httpStatus,
+                _mockRegistrationWithdrawMapper);
         }
 
         private class GetOrganDonationTestContext
@@ -543,7 +624,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         private abstract class UpdateRegisterContext
         {
             protected UpdateRegisterContext(
-                Expression<Func<IOrganDonationClient, Task<OrganDonationResponse<RegistrationResponse>>>> actionToMock,
+                Expression<Func<IOrganDonationClient, Task<OrganDonationResponse<OrganDonationBasicResponse>>>>
+                    actionToMock,
                 Mock<IOrganDonationClient> mockClient,
                 bool throwException,
                 HttpStatusCode httpStatus,
@@ -551,16 +633,38 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             )
             {
                 Request = new OrganDonationRegistrationRequest();
-                var organDonationResponse = new OrganDonationResponse<RegistrationResponse>(httpStatus);
-                
+                var organDonationResponse = new OrganDonationResponse<OrganDonationBasicResponse>(httpStatus);
+
                 SetupMockClient(actionToMock, mockClient, throwException, organDonationResponse);
 
                 mockRegistrationRequestMapper
                     .Setup(x => x.Map(It.IsAny<OrganDonationRegistrationRequest>()))
-                    .Returns(new RegistrationRequest()); 
+                    .Returns(new RegistrationRequest());
             }
-
             public OrganDonationRegistrationRequest Request { get; }
+        }
+
+        internal class WithdrawContext
+            {
+                internal WithdrawContext(
+                    Expression<Func<IOrganDonationClient, Task<OrganDonationResponse<OrganDonationBasicResponse>>>> actionToMock,
+                    Mock<IOrganDonationClient> mockClient,
+                    bool throwException,
+                    HttpStatusCode httpStatus,
+                    Mock<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>> mockRegistrationRequestMapper
+                )
+                {
+                    Request = new OrganDonationWithdrawRequest();
+                    var organDonationResponse = new OrganDonationResponse<OrganDonationBasicResponse>(httpStatus);
+
+                    SetupMockClient(actionToMock, mockClient, throwException, organDonationResponse);
+
+                    mockRegistrationRequestMapper
+                        .Setup(x => x.Map(It.IsAny<OrganDonationWithdrawRequest>()))
+                        .Returns(new WithdrawRequest());
+                }
+
+                public OrganDonationWithdrawRequest Request { get; }
         }
 
         private static void SetupMockClient<TResponse>(

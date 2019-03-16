@@ -5,21 +5,9 @@ import pages.HybridPageElement
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
 import pages.sharedElements.BannerObject
-import pages.sharedElements.MenuLinksContent
-import pages.sharedElements.MenuLinks
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
-
-    val shareLinkTitle ="Share that you are a donor"
-    private val shareLinkDescription ="Help promote organ donation on social media by telling people you are a donor."
-    val tellFamilyLinkTitle ="Tell your family"
-    private val tellFamilyLinkDescription ="Use our message templates and conversation guides to tell your " +
-            "family and friends you are a donor."
-
-    val registerBloodDonorLinkTitle ="Register to be a blood donor"
-    private val registerBloodDonorLinkDescription ="If you want to give more, why not sign up to give blood? " +
-            "You can easily book an appointment and find your local centre via the app."
 
     override fun assertDisplayed() {
         waitForSpinnerToDisappear()
@@ -33,20 +21,9 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
 
     val reaffirmDecisionLink = getLink("This is still my decision")
 
+    val nextSteps =  OrganDonationNextStepsModule(this)
 
-    private var nextStepsContent = MenuLinksContent(
-            title = "Next steps",
-            links = arrayOf(Pair(shareLinkTitle, shareLinkDescription),
-                    Pair(tellFamilyLinkTitle, tellFamilyLinkDescription)),
-            textOverride = "Please inform your family about your decision.")
-
-    val nextSteps =  MenuLinks(this, nextStepsContent)
-
-    private var otherThingsContent = MenuLinksContent(
-            title= "Other things you can do",
-            links =  arrayOf(Pair(registerBloodDonorLinkTitle, registerBloodDonorLinkDescription)))
-
-    val otherThings =  MenuLinks(this, otherThingsContent)
+    val otherThings =  OrganDonationOtherThingsModule(this)
 
     fun assertCreatedBanner() {
         BannerObject.success(this).assertVisible("We have updated your decision")
@@ -77,6 +54,5 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
         HybridPageElement(
                 " //div[strong[contains(text(),'$header')]]/p[contains(text(),'$text')]",
                 page = this).assertSingleElementPresent()
-
     }
 }

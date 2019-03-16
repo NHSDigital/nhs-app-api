@@ -1,6 +1,7 @@
 import actions from '@/store/modules/organDonation/actions';
 import {
   CLONE_FROM_ORIGINAL,
+  INIT,
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
@@ -14,10 +15,12 @@ import {
   SET_REAFFIRMING,
   SET_REGISTRATION_ID,
   SET_STATE,
+  SET_WITHDRAW_REASON_ID,
+  SET_WITHDRAWING,
   STATE_OK,
   UPDATE_ORIGINAL_REGISTRATION,
 } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
+import { ORGAN_DONATION_VIEW_DECISION, ORGAN_DONATION_WITHDRAWN } from '@/lib/routes';
 import { createRouter } from '../../../helpers';
 
 const createHttp = ({
@@ -26,6 +29,7 @@ const createHttp = ({
   identifier = 'boo',
   state = STATE_OK,
 } = {}) => ({
+  deleteV1PatientOrgandonation: jest.fn().mockImplementation(() => Promise.resolve()),
   getV1PatientOrgandonation: jest.fn().mockImplementation(() => Promise.resolve(result)),
   getV1PatientOrgandonationReferencedata:
     jest
@@ -110,6 +114,37 @@ describe('organ donation actions', () => {
     });
   });
 
+  describe('deleteRegistration', () => {
+    let state;
+
+    beforeEach(async () => {
+      $http = createHttp();
+      state = {
+        withdrawReasonId: 'withdraw reason id',
+        originalRegistration: { nhsNumber: '12345' },
+      };
+
+      actions.$router = createRouter();
+      await actions.deleteRegistration({ commit, state });
+    });
+
+    it('will call the `deleteV1PatientOrgandonation` endpoint', () => {
+      expect($http.deleteV1PatientOrgandonation).toHaveBeenCalledWith({
+        organDonationWithdrawRequest: {
+          ...state.originalRegistration,
+          withdrawReasonId: state.withdrawReasonId,
+        },
+      });
+    });
+
+    it('will commit INIT', () => {
+      expect(commit).toHaveBeenCalledWith(INIT);
+    });
+
+    it('will push organ donation withdrawn to the router', () => {
+      expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_WITHDRAWN.path);
+    });
+  });
 
   describe('getReferenceData', () => {
     it('will request the organ donation reference data', () => {
@@ -180,6 +215,37 @@ describe('organ donation actions', () => {
   });
 
   describe('submitDecision', () => {
+    let dispatch;
+    let state;
+
+    beforeEach(async () => {
+      dispatch = jest.fn();
+    });
+
+    describe('withdrawing', () => {
+      beforeEach(async () => {
+        state = { isWithdrawing: true };
+        await actions.submitDecision({ dispatch, state });
+      });
+
+      it('will dispatch "deleteRegistration"', () => {
+        expect(dispatch).toHaveBeenCalledWith('deleteRegistration');
+      });
+    });
+
+    describe('not withdrawing', () => {
+      beforeEach(async () => {
+        state = { isWithdrawing: false };
+        await actions.submitDecision({ dispatch, state });
+      });
+
+      it('will dispatch "submitRegistration"', () => {
+        expect(dispatch).toHaveBeenCalledWith('submitRegistration');
+      });
+    });
+  });
+
+  describe('submitRegistration', () => {
     let state;
     let expectedIdentifier;
     let expectedState;
@@ -287,6 +353,16 @@ describe('organ donation actions', () => {
     });
   });
 
+  describe('setWithdrawReasonId', () => {
+    beforeEach(() => {
+      actions.setWithdrawReasonId({ commit }, 'Other');
+    });
+
+    it('will commit a value of "Other" to "SET_WITHDRAW_REASON_ID"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_WITHDRAW_REASON_ID, 'Other');
+    });
+  });
+
   describe('toggleAccuracyAcceptance', () => {
     it(
       'will commit SET_ACCURACY_ACCEPTANCE with a value of true when `isAccuracyAcceptance` is false',
@@ -325,5 +401,29 @@ describe('organ donation actions', () => {
         expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, false);
       },
     );
+  });
+
+  describe('withdrawCancel', () => {
+    beforeEach(() => {
+      actions.withdrawCancel({ commit, state: {} });
+    });
+
+    it('will commit a value of "false" to "SET_WITHDRAWING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_WITHDRAWING, false);
+    });
+
+    it('will commit a value of "" to "SET_WITHDRAW_REASON_ID"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_WITHDRAW_REASON_ID, '');
+    });
+  });
+
+  describe('withdrawStart', () => {
+    beforeEach(() => {
+      actions.withdrawStart({ commit, state: {} });
+    });
+
+    it('will commit a value of "true" to "SET_WITHDRAWING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_WITHDRAWING, true);
+    });
   });
 });

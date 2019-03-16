@@ -15,27 +15,28 @@ open class OrganDonationViewRegistrationStepDefinitions {
 
     @When("I select the 'Register to be a blood donor' link on the Organ Donation View Registration page$")
     fun iSelectThePrivacyStatementLinkOnTheOrganDonationCheckDetailsPage() {
-        organDonationViewRegistrationPage.otherThings.link(
-                organDonationViewRegistrationPage.registerBloodDonorLinkTitle)
-                .assertIsVisible().click()
+        organDonationViewRegistrationPage.otherThings.registerBloodDonorLinkClick()
     }
 
     @When("^I select the 'Share that you are a donor' link on the Organ Donation View Registration page$")
     fun iSelectTheShareThatYouAreADonorLinkOnTheOrganDonationViewRegistrationPage() {
-        organDonationViewRegistrationPage.nextSteps.link(organDonationViewRegistrationPage.shareLinkTitle)
-                .assertIsVisible().click()
+        organDonationViewRegistrationPage.nextSteps.shareLinkClick()
     }
 
     @When("^I select the 'Tell your family' link on the Organ Donation View Registration page$")
     fun iSelectTheTellYourFamilyLinkOnTheOrganDonationViewRegistrationPage() {
-        organDonationViewRegistrationPage.nextSteps.link(organDonationViewRegistrationPage.tellFamilyLinkTitle)
-                .assertIsVisible().click()
+        organDonationViewRegistrationPage.nextSteps.tellFamilyLinkClick()
     }
 
     @When("^I choose to amend my Organ Donation decision$")
     fun iChooseToAmendMyDecision() {
         OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.set(true)
         organDonationViewRegistrationPage.amendDecisionLink.click()
+    }
+
+    @When("^I choose to withdraw my organ donation decision")
+    fun iChooseToWithdrawMyOrganDonationDecision(){
+        organDonationViewRegistrationPage.otherThings.withdrawDecisionLinkClick()
     }
 
     @When("^I choose to reaffirm my organ donation decision$")
@@ -117,7 +118,7 @@ open class OrganDonationViewRegistrationStepDefinitions {
     @Then("^the Organ Donation View Registration page is displayed with my existing decision to opt-in$")
     fun theOrganDonationPageIsDisplayedWithMyExistingDecisionToOptIn() {
         organDonationViewRegistrationPage.assertDisplayed()
-        organDonationViewRegistrationPage.otherThings.assertNotDisplayed()
+        organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.nextSteps.assertLinksPresent()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsYes()
     }
@@ -125,18 +126,27 @@ open class OrganDonationViewRegistrationStepDefinitions {
     @Then("^the Organ Donation View Registration page is displayed with my existing decision to opt-out$")
     fun theOrganDonationPageIsDisplayedWithMyExistingDecisionToOptOut() {
         organDonationViewRegistrationPage.assertDisplayed()
-        organDonationViewRegistrationPage.otherThings.assertNotDisplayed()
+        organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.nextSteps.assertDisplayedWithText()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsNo()
     }
 
-    @Then("^the Organ Donation View Registration page is displayed with my existing decision of some$")
+    @Then("^the Organ Donation View Registration page is displayed with my existing decision to opt-in-some$")
     fun theOrganDonationPageIsDisplayedWithMyExistingDecisionOfSome() {
         organDonationViewRegistrationPage.assertDisplayed()
-        organDonationViewRegistrationPage.otherThings.assertNotDisplayed()
+        organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.nextSteps.assertLinksPresent()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsSome(
                 OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING.getOrFail())
+    }
+
+    @Then("^the Organ Donation View Registration page is displayed with my existing " +
+            "decision to appoint-a-representative$")
+    fun theOrganDonationViewRegistrationPageIsDisplayedWithMyExistingDecisionToAppointARepresentative() {
+        organDonationViewRegistrationPage.assertDisplayed()
+        organDonationViewRegistrationPage.nextSteps.assertNotDisplayed()
+        organDonationViewRegistrationPage.otherThings.assertLinksPresent()
+        organDonationViewRegistrationPage.decisionModule.assertDecisionIsAppointedRepresentative()
     }
 
     @Then("^the decision to opt out of organ donation has been successfully updated$")

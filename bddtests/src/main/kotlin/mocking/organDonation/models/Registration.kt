@@ -1,5 +1,7 @@
 package mocking.organDonation.models
 
+import models.Patient
+
 data class Resource(
         var id: String,
         var resourceType: String,
@@ -27,9 +29,28 @@ data class Name(
         var prefix: List<String>,
         var given: List<String>,
         var family: String
-)
+) {
+    companion object {
+        fun fromPatient (patient: Patient) :Name{
+           val prefix = listOf(patient.title)
+           val given = listOf(patient.firstName)
+           val  family = patient.surname
+            return Name(prefix,given,family)
+        }
+    }
+}
 
 data class Address(
         var line: List<String>,
         var postalCode: String
-)
+){
+    companion object {
+        fun fromPatient (patient: Patient) :Address{
+            val line = listOf(
+                    patient.address.houseNameFlatNumber!!,
+                    patient.address.numberStreet!!)
+            val postalCode = patient.address.postcode!!
+            return Address(line,postalCode)
+        }
+    }
+}

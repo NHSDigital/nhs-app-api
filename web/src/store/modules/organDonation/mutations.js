@@ -1,8 +1,10 @@
 import cloneDeep from 'lodash/fp/cloneDeep';
+import flow from 'lodash/fp/flow';
 import get from 'lodash/fp/get';
 import isArray from 'lodash/fp/isArray';
 import mapKeys from 'lodash/fp/mapKeys';
 import set from 'lodash/fp/set';
+import sortBy from 'lodash/fp/sortBy';
 
 import {
   CLONE_FROM_ORIGINAL,
@@ -21,6 +23,8 @@ import {
   SET_REGISTRATION_ID,
   SET_SOME_ORGANS,
   SET_STATE,
+  SET_WITHDRAW_REASON_ID,
+  SET_WITHDRAWING,
   UPDATE_ORIGINAL_REGISTRATION,
   initialState,
 } from './mutation-types';
@@ -51,6 +55,9 @@ export default {
   },
   [LOADED_REFERENCE_DATA](state, referenceData) {
     state.referenceData = referenceData;
+    /* Temporary sorting, this should be done above for
+       all entries using lodash mapValues or similar  */
+    state.referenceData.withdrawReasons = flow(get('withdrawReasons'), sortBy('value'))(state.referenceData);
   },
   [MAKE_DECISION](state, decision) {
     state.additionalDetails = initialState().additionalDetails;
@@ -94,6 +101,12 @@ export default {
   },
   [SET_STATE](state, responseState) {
     state.registration.state = responseState;
+  },
+  [SET_WITHDRAW_REASON_ID](state, reasonId) {
+    state.withdrawReasonId = reasonId;
+  },
+  [SET_WITHDRAWING](state, value) {
+    state.isWithdrawing = value;
   },
   [UPDATE_ORIGINAL_REGISTRATION](state) {
     state.originalRegistration = cloneDeep(state.registration);

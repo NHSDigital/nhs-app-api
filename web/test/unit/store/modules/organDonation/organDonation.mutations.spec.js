@@ -17,6 +17,8 @@ import {
   SET_REAFFIRMING,
   SET_REGISTRATION_ID,
   SET_STATE,
+  SET_WITHDRAW_REASON_ID,
+  SET_WITHDRAWING,
   STATE_CONFLICTED,
   STATE_OK,
   UPDATE_ORIGINAL_REGISTRATION,
@@ -100,10 +102,37 @@ describe('organ donation record mutations', () => {
   });
 
   describe('LOADED_REFERENCE_DATA', () => {
-    it('will set the organ donation referenceData state to the received value', () => {
-      const data = { ethnicities: [], genders: [] };
+    let data;
+    let expectedWithdrawReasons;
+
+    beforeEach(() => {
+      data = {
+        ethnicities: [],
+        genders: [],
+        withdrawReasons: [
+          { id: 1, value: 'Z' },
+          { id: 2, value: 'B' },
+          { id: 3, value: 'A' },
+          { id: 4, value: 'W' },
+        ],
+      };
+
+      expectedWithdrawReasons = [
+        { id: 3, value: 'A' },
+        { id: 2, value: 'B' },
+        { id: 4, value: 'W' },
+        { id: 1, value: 'Z' },
+      ];
+
       mutations[LOADED_REFERENCE_DATA](state, data);
+    });
+
+    it('will set the organ donation referenceData state to the received value', () => {
       expect(state.referenceData).toEqual(data);
+    });
+
+    it('will sort "withdrawReasons" in ascending order', () => {
+      expect(state.referenceData.withdrawReasons).toEqual(expectedWithdrawReasons);
     });
   });
 
@@ -223,6 +252,20 @@ describe('organ donation record mutations', () => {
     it('will set registration state to "Conflicted" if conflicted', () => {
       mutations[SET_STATE](state, STATE_CONFLICTED);
       expect(state.registration.state).toEqual(STATE_CONFLICTED);
+    });
+  });
+
+  describe('SET_WITHDRAW_REASON_ID', () => {
+    it('will set the withdrawReasonId property on the state', () => {
+      mutations[SET_WITHDRAW_REASON_ID](state, 'Other');
+      expect(state.withdrawReasonId).toEqual('Other');
+    });
+  });
+
+  describe('SET_WITHDRAWING', () => {
+    it('will set the isWithdrawing property on the state', () => {
+      mutations[SET_WITHDRAWING](state, true);
+      expect(state.isWithdrawing).toEqual(true);
     });
   });
 

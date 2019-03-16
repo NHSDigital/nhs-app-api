@@ -10,9 +10,9 @@ import pages.assertSingleElementPresent
 data class MenuLinksContent(val title:String,
                             val links: Array<Pair<String,String>>,
                             val textOverride:String?=null,
-                            val containerXPath:String ="//div[h3[text()='$title']]")
+                            val containerXPath:String ="//div[h2[text()='$title']]")
 
-class MenuLinks(private val page : HybridPageObject, val content : MenuLinksContent) {
+open class MenuLinks(private val page : HybridPageObject, val content : MenuLinksContent) {
 
     private val sections = "${content.containerXPath}//ul/li//a"
     private fun specificLinkXPath(linkTitle: String) = "$sections[h2[contains(text(),'$linkTitle')]]"
@@ -42,11 +42,15 @@ class MenuLinks(private val page : HybridPageObject, val content : MenuLinksCont
     }
 
     fun assertLinksPresent() {
+        assertPresentWithLinks(content.links)
+    }
+
+    fun assertPresentWithLinks(expectedLinks: Array<Pair<String, String>>) {
         val links = listOfLinks().elements
         Assert.assertEquals("Number of expected Links",
-                content.links.count(),
+                expectedLinks.count(),
                 links.count())
-        content.links.forEach { link ->
+        expectedLinks.forEach { link ->
             link(link.first).assertSingleElementPresent()
             assertDescription(link.first, link.second)
         }

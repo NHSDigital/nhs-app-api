@@ -11,14 +11,18 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
                 RegistrationLookupRequest request,
                 UserSession userSession);
         
-        Task<OrganDonationResponse<RegistrationResponse>> PostRegistration(
+        Task<OrganDonationResponse<OrganDonationBasicResponse>> PostRegistration(
                 RegistrationRequest request,
                 UserSession userSession);
 
         Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData();
 
-        Task<OrganDonationResponse<RegistrationResponse>> PutUpdate(
+        Task<OrganDonationResponse<OrganDonationBasicResponse>> PutUpdate(
             RegistrationRequest request,
+            UserSession userSession);
+
+        Task<OrganDonationResponse<OrganDonationBasicResponse>> Delete(
+            WithdrawRequest request,
             UserSession userSession);
     }
 }

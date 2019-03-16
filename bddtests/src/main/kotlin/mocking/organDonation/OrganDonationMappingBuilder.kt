@@ -3,10 +3,11 @@ package mocking.organDonation
 import config.Config
 import mocking.MappingBuilder
 import mocking.models.Mapping
+import mocking.organDonation.models.OrganDonationRegistrationRequest
+import mocking.organDonation.models.OrganDonationWithdrawRequest
+import mocking.organDonation.models.Issue
 import mocking.organDonation.models.CodeableConcept
 import mocking.organDonation.models.Coding
-import mocking.organDonation.models.Issue
-import mocking.organDonation.models.OrganDonationRegistrationRequest
 import models.Patient
 
 const val HEADER_SUBSCRIPTION_KEY = "Ocp-Apim-Subscription-Key"
@@ -33,6 +34,10 @@ open class OrganDonationMappingBuilder(method: String, relativePath: String = ""
     fun amendDecision(registration: OrganDonationRegistrationRequest) =
             OrganDonationSubmitDecisionBuilder(registration, "PUT", "/Registration/"
                     + registration.registration.identifier)
+
+    fun withdrawOrganDonationRegistration(withdrawRequestBody: OrganDonationWithdrawRequest) =
+            OrganDonationSubmitWithdrawDecisionBuilder(withdrawRequestBody, "DELETE", "/Registration/"
+                    + withdrawRequestBody.identifier)
 
     fun respondWithError(httpStatus: Int) : Mapping {
         val responseBody = listOf(Issue(

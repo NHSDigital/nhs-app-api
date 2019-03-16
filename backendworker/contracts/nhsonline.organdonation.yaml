@@ -74,50 +74,79 @@ paths:
         504:
           description: Timeout when calling upstream system.
     put:
-        tags:
-          - organDonation
-        summary: Amends a user's organ donation record
-        description: Amends the user's organ donation record and returns the record identifier.
-        consumes:
-          - application/json
-        parameters:
-          - in: body
-            required: true
-            name: 'organDonationRegistrationRequest'
-            description: Details of the organ donation registration request.
-            schema:
-              $ref: '#/definitions/organDonationRegistrationRequest'
-        responses:
-          200:
-            description: "Successfully amended the organ donation record and returned the record identifier."
-            schema:
-              type: "object"
-              properties:
-                identifier:
-                  type: "string"
-                  description: "User's organ donation identifier."
-                state:
-                  type: string
-                  enum: [NotFound, Ok, Conflicted]
-                  description: User's organ donation record state
-          400:
-            description: Bad request. Supplied request is incomplete or invalid.
-          401:
-            description: User session missing or expired.
-          500:
-            description: An unexpected error occurred processing the request.
-          502:
-            description: Bad response received from upstream system.
-            schema:
-              $ref: '#/definitions/apiErrorResponse'
-          504:
-            description: Timeout when calling upstream system.
+      tags:
+        - organDonation
+      summary: Amends a user's organ donation record
+      description: Amends the user's organ donation record and returns the record identifier.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          required: true
+          name: 'organDonationRegistrationRequest'
+          description: Details of the organ donation registration request.
+          schema:
+            $ref: '#/definitions/organDonationRegistrationRequest'
+      responses:
+        200:
+          description: "Successfully amended the organ donation record and returned the record identifier."
+          schema:
+            type: "object"
+            properties:
+              identifier:
+                type: "string"
+                description: "User's organ donation identifier."
+              state:
+                type: string
+                enum: [NotFound, Ok, Conflicted]
+                description: User's organ donation record state
+        400:
+          description: Bad request. Supplied request is incomplete or invalid.
+        401:
+          description: User session missing or expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: Bad response received from upstream system.
+          schema:
+            $ref: '#/definitions/apiErrorResponse'
+        504:
+          description: Timeout when calling upstream system.
+    delete:
+      tags:
+        - organDonation
+      summary: Delete a user's organ donation record
+      description: Delete the user's organ donation record.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          required: true
+          name: 'organDonationWithdrawRequest'
+          description: Details of the organ donation registration withdraw request.
+          schema:
+            $ref: '#/definitions/organDonationWithdrawRequest'
+      responses:
+        200:
+          description: "Successfully deleted the organ donation record."
+        400:
+          description: Bad request. Supplied request is incomplete or invalid.
+        401:
+          description: User session missing or expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: Bad response received from upstream system.
+          schema:
+            $ref: '#/definitions/apiErrorResponse'
+        504:
+          description: Timeout when calling upstream system.
   /organdonation/referencedata:
     get:
       tags:
         - organDonation
       summary: Get the reference data required for registering an organ donation decision.
-      description: Returns the reference data for titles, genders, religions, ethnicities and withdrawal reasons.
+      description: Returns the reference data for titles, genders, religions, ethnicities and withdraw reasons.
       produces:
         - application/json
       responses:
@@ -170,6 +199,7 @@ definitions:
         description: The identifier for the select ethnicity.
   organDonationRegistration:
     type: object
+    description: Details of the organ donation registration request.
     properties:
       identifier:
         type: string
@@ -194,9 +224,6 @@ definitions:
         description: User's full address.
       address:
         $ref: '#/definitions/usersAddress'
-      emailAddress:
-        type: string
-        description: User's email address from nhs login.
       decision:
         type: string
         enum: [Unknown, OptIn, OptOut]
@@ -213,6 +240,7 @@ definitions:
         description: User's organ donation record state
   organDonationStoreRegistration:
     type: object
+    description: Details of the organ donation store registration.
     properties:
       identifier:
         type: string
@@ -234,9 +262,6 @@ definitions:
         description: User's full address.
       address:
         $ref: '#/definitions/usersAddress'
-      emailAddress:
-        type: string
-        description: User's email address from nhs login.
       decision:
         type: string
         enum: [OptIn, OptOut]
@@ -305,13 +330,41 @@ definitions:
         $ref: '#/definitions/organDonationStoreRegistration'
       additionalDetails:
         $ref: '#/definitions/additionalDetails'
+  organDonationWithdrawRequest:
+      type: object
+      description: Details of the organ donation registration withdraw request.
+      properties:
+        identifier:
+          type: string
+          description: User's organ donation identifier.
+        nhsNumber:
+          type: string
+          description: User's nhs number from the GP System.
+        name:
+          $ref: '#/definitions/usersName'
+        gender:
+          type: string
+          description: User's gender from the GP System.
+        dateOfBirth:
+          type: string
+          format: date
+          description: User's date of birth from the GP System.
+        addressFull:
+          type: string
+          description: User's full address.
+        address:
+          $ref: '#/definitions/usersAddress'
+        withdrawReasonId:
+          type: string
+          description: withdraw reason code.
+      required: [identifier, nhsNumber, name, gender, dateOfBirth, addressFull, address, withdrawReasonId]
   apiErrorResponse:
     type: object
     description: error response from backend api.
     properties:
-      ErrorCode:
-        type: int
+      errorCode:
+        type: integer
         description: error code.
-      ErrorMessage:
+      errorMessage:
         type: string
         description: error message.

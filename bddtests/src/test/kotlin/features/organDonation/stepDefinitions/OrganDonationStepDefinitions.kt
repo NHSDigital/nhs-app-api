@@ -30,36 +30,47 @@ open class OrganDonationStepDefinitions {
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.existingOptOut()
+        factory.existing.optOut()
     }
 
     @Given("I am a (\\w+) user registered with organ donation to donate all organs")
     fun iAmRegisteredWithOrganDonationToDonateAllOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.existingOptIn()
+        factory.existing.optIn()
     }
 
     @Given("I am a (\\w+) user registered with organ donation with an appointed representative")
     fun iAmRegisteredWithOrganDonationWithAnAppointedRepresentative(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.existingAppointedRepresentative()
+        factory.existing.appointedRepresentative()
     }
 
     @Given("^I am a (\\w+) user registered with organ donation to donate some organs$")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.existingOptInSome()
+        factory.existing.optInSome()
     }
 
     @Given("I am a (\\w+) user registered with organ donation to donate some organs, but not all are decided on")
     fun iAmRegisteredWithOrganDonationToDonateSomeOrgansButNotAllDecidedOn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        factory.existingOptInSomeNotAllDecided()
+        factory.existing.optInSomeNotAllDecided()
     }
+
+    @Given("^I am a (\\w+) user registered with organ donation with a decision to (.*) who wishes to withdraw$")
+    fun iAmRegisteredWithOrganDonationAndWishToWithdraw(gpSystem: String, decision: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val existing = factory.existing.setUpExistingDecisionForPatient(decision)
+        factory.withdrawRegistration { request ->
+            request.respondWithSuccess(existing.id)
+        }
+    }
+
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register$")
     fun iAmNotRegisteredWithOrganDonationWishToRegister(gpSystem: String) {

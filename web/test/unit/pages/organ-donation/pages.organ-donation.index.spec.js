@@ -5,6 +5,7 @@ import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OrganDonation from '@/pages/organ-donation';
+import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 import ReaffirmDecision from '@/components/organ-donation/ReaffirmDecision';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
@@ -49,9 +50,10 @@ const verifyComponentExistence = ({
   decisionDetails,
   findOutMore,
   makeDecision,
+  nextSteps,
+  otherThingsToDo,
   reaffirmDecision,
   yourDecision,
-
 }, wrapperFn) => {
   const showOrNot = bool => (bool ? 'show' : 'not show');
 
@@ -79,6 +81,14 @@ const verifyComponentExistence = ({
     expect(wrapperFn().find(MakeDecision).exists()).toEqual(makeDecision);
   });
 
+  it(`will ${showOrNot(nextSteps)} NextSteps`, () => {
+    expect(wrapperFn().find(NextSteps).exists()).toEqual(nextSteps);
+  });
+
+  it(`will ${showOrNot(otherThingsToDo)} OtherThingsToDo`, () => {
+    expect(wrapperFn().find(OtherThingsToDo).exists()).toEqual(otherThingsToDo);
+  });
+
   it(`will ${showOrNot(reaffirmDecision)} ReaffirmDecision`, () => {
     expect(wrapperFn().find(ReaffirmDecision).exists()).toEqual(reaffirmDecision);
   });
@@ -103,6 +113,10 @@ describe('organ donation index page', () => {
 
     it('will dispatch the "organDonation/amendCancel" action', () => {
       expect($store.dispatch).toHaveBeenCalledWith('organDonation/amendCancel');
+    });
+
+    it('will dispatch the "organDonation/withdrawCancel" action', () => {
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/withdrawCancel');
     });
 
     it('will dispatch the "organDonation/setAdditionalDetails" action with empty values', () => {
@@ -150,33 +164,11 @@ describe('organ donation index page', () => {
         decisionDetails: false,
         findOutMore: true,
         makeDecision: true,
+        nextSteps: false,
+        otherThingsToDo: false,
         reaffirmDecision: false,
         yourDecision: false,
       }, () => wrapper);
-    });
-
-    it('will not show a GenericButton', () => {
-      expect(wrapper.find('#back-button').exists()).toEqual(false);
-    });
-
-    it('will not show a AmendDecisionLink', () => {
-      expect(wrapper.find(AmendDecisionLink).exists()).toEqual(false);
-    });
-
-    it('will not have a "YourDecision" component', () => {
-      expect(wrapper.find(YourDecision).exists()).toEqual(false);
-    });
-
-    it('will not have a "DecisionDetails" component', () => {
-      expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
-    });
-
-    it('will not have a "NextSteps" component', () => {
-      expect(wrapper.find(NextSteps).exists()).toEqual(false);
-    });
-
-    it('will show the already registered link', () => {
-      expect(wrapper.find(AlreadyRegisteredLink).exists()).toEqual(true);
     });
 
     describe('computed', () => {
@@ -204,8 +196,10 @@ describe('organ donation index page', () => {
         amendDecision: true,
         appointedRepresentative: true,
         decisionDetails: false,
-        makeDecision: false,
         findOutMore: false,
+        makeDecision: false,
+        nextSteps: false,
+        otherThingsToDo: true,
         reaffirmDecision: false,
         yourDecision: true,
       }, () => wrapper);
@@ -214,11 +208,6 @@ describe('organ donation index page', () => {
     describe('YourDecision component', () => {
       it('will have the decision set to app-rep', () => {
         expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_APPOINTED_REP);
-      });
-
-      it('will have the header key set to `organDonation.registered.yourDecision.subheader`', () => {
-        expect(wrapper.find(YourDecision).props().headerKey)
-          .toEqual('organDonation.registered.yourDecision.subheader');
       });
     });
 
@@ -229,12 +218,6 @@ describe('organ donation index page', () => {
     });
 
     describe('computed', () => {
-      describe('hasAllOrgans', () => {
-        it('will be false because the user appointed a representative', () => {
-          expect(wrapper.vm.hasAllOrgans).toEqual(false);
-        });
-      });
-
       describe('hasExistingDecision', () => {
         it('will be true as the original decision is appointed representative', () => {
           expect(wrapper.vm.hasExistingDecision).toEqual(true);
@@ -263,19 +246,6 @@ describe('organ donation index page', () => {
       wrapper = mountOrganDonation();
     });
 
-    describe('component existence', () => {
-      verifyComponentExistence({
-        alreadyRegistered: false,
-        amendDecision: false,
-        appointedRepresentative: false,
-        decisionDetails: false,
-        makeDecision: false,
-        findOutMore: false,
-        reaffirmDecision: false,
-        yourDecision: false,
-      }, () => wrapper);
-    });
-
     it('will show the Decision found dialog text', () => {
       expect(wrapper.text())
         .toContain('translate_organDonation.viewDecision.conflictedState.dialogText');
@@ -286,49 +256,27 @@ describe('organ donation index page', () => {
         .toContain('translate_organDonation.viewDecision.conflictedState.messageText');
     });
 
-    it('will not show the "MakeDecision" component', () => {
-      expect(wrapper.find(MakeDecision).exists()).toEqual(false);
-    });
-
-    it('will not show the already registered link', () => {
-      expect(wrapper.find(AlreadyRegisteredLink).exists()).toEqual(false);
-    });
-
-    it('will not show the find out more link', () => {
-      expect(wrapper.find(FindOutMoreLink).exists()).toEqual(false);
-    });
-
-    it('will not show a AmendDecisionLink', () => {
-      expect(wrapper.find(AmendDecisionLink).exists()).toEqual(false);
-    });
-
-    it('will not have a "NextSteps" component', () => {
-      expect(wrapper.find(NextSteps).exists()).toEqual(false);
+    describe('component existence', () => {
+      verifyComponentExistence({
+        alreadyRegistered: false,
+        amendDecision: false,
+        appointedRepresentative: false,
+        decisionDetails: false,
+        findOutMore: false,
+        makeDecision: false,
+        nextSteps: false,
+        otherThingsToDo: true,
+        reaffirmDecision: false,
+        yourDecision: false,
+      }, () => wrapper);
     });
   });
 
   describe('loaded registration (original decision is found)', () => {
     beforeEach(() => {
       $store = createStore({
-        state: createState({
-          originalDecision: DECISION_OPT_IN,
-        }),
+        state: createState(),
       });
-
-      wrapper = mountOrganDonation();
-    });
-
-    describe('component existence', () => {
-      verifyComponentExistence({
-        alreadyRegistered: false,
-        amendDecision: true,
-        appointedRepresentative: false,
-        decisionDetails: false,
-        makeDecision: false,
-        findOutMore: false,
-        reaffirmDecision: true,
-        yourDecision: true,
-      }, () => wrapper);
     });
 
     describe('opt-out', () => {
@@ -339,47 +287,28 @@ describe('organ donation index page', () => {
         wrapper = mountOrganDonation();
       });
 
-      it('Amend decision link will exist', () => {
-        expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
-      });
-
-      it('Next Steps component will exist', () => {
-        expect(wrapper.find(NextSteps).exists()).toEqual(true);
-      });
-
-      it('DecisionDetails component will not exist', () => {
-        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
-      });
-
-      describe('ReaffirmDecision component', () => {
-        it('will exist', () => {
-          expect(wrapper.find(ReaffirmDecision).exists()).toEqual(true);
-        });
+      describe('component existence', () => {
+        verifyComponentExistence({
+          alreadyRegistered: false,
+          amendDecision: true,
+          appointedRepresentative: false,
+          decisionDetails: false,
+          findOutMore: false,
+          makeDecision: false,
+          nextSteps: true,
+          otherThingsToDo: true,
+          reaffirmDecision: true,
+          yourDecision: true,
+        }, () => wrapper);
       });
 
       describe('YourDecision component', () => {
         it('will have the decision set to opt-out', () => {
           expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_OPT_OUT);
         });
-
-        it('will have the decision details set', () => {
-          expect(wrapper.find(YourDecision).props().decisionDetails)
-            .toEqual($store.state.organDonation.originalRegistration.decisionDetails);
-        });
-
-        it('will have the header key set to `organDonation.registered.yourDecision.subheader`', () => {
-          expect(wrapper.find(YourDecision).props().headerKey)
-            .toEqual('organDonation.registered.yourDecision.subheader');
-        });
       });
 
       describe('computed', () => {
-        describe('hasAllOrgans', () => {
-          it('will be false as no organs are selected', () => {
-            expect(wrapper.vm.hasAllOrgans).toEqual(false);
-          });
-        });
-
         describe('hasExistingDecision', () => {
           it('will be true as the original decision is opt-out', () => {
             expect(wrapper.vm.hasExistingDecision).toEqual(true);
@@ -401,16 +330,19 @@ describe('organ donation index page', () => {
         wrapper = mountOrganDonation();
       });
 
-      it('Amend decision link will exist', () => {
-        expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
-      });
-
-      it('Next Steps component will exist', () => {
-        expect(wrapper.find(NextSteps).exists()).toEqual(true);
-      });
-
-      it('DecisionDetails component will not exist', () => {
-        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+      describe('component existence', () => {
+        verifyComponentExistence({
+          alreadyRegistered: false,
+          amendDecision: true,
+          appointedRepresentative: false,
+          decisionDetails: false,
+          findOutMore: false,
+          makeDecision: false,
+          nextSteps: true,
+          otherThingsToDo: true,
+          reaffirmDecision: true,
+          yourDecision: true,
+        }, () => wrapper);
       });
 
       describe('ReaffirmDecision component', () => {
@@ -429,25 +361,9 @@ describe('organ donation index page', () => {
         it('will have the decision set to opt-in', () => {
           expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_OPT_IN);
         });
-
-        it('will have the decision details set', () => {
-          expect(wrapper.find(YourDecision).props().decisionDetails)
-            .toEqual($store.state.organDonation.originalRegistration.decisionDetails);
-        });
-
-        it('will have the header key set to `organDonation.registered.yourDecision.subheader`', () => {
-          expect(wrapper.find(YourDecision).props().headerKey)
-            .toEqual('organDonation.registered.yourDecision.subheader');
-        });
       });
 
       describe('computed', () => {
-        describe('hasAllOrgans', () => {
-          it('will be true as all organs are selected', () => {
-            expect(wrapper.vm.hasAllOrgans).toEqual(true);
-          });
-        });
-
         describe('hasExistingDecision', () => {
           it('will be true as the original decision is opt-in', () => {
             expect(wrapper.vm.hasExistingDecision).toEqual(true);
@@ -472,12 +388,19 @@ describe('organ donation index page', () => {
         wrapper = mountOrganDonation();
       });
 
-      it('Amend decision link will exist', () => {
-        expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
-      });
-
-      it('Next Steps component will exist', () => {
-        expect(wrapper.find(NextSteps).exists()).toEqual(true);
+      describe('component existence', () => {
+        verifyComponentExistence({
+          alreadyRegistered: false,
+          amendDecision: true,
+          appointedRepresentative: false,
+          decisionDetails: true,
+          findOutMore: false,
+          makeDecision: false,
+          nextSteps: true,
+          otherThingsToDo: true,
+          reaffirmDecision: true,
+          yourDecision: true,
+        }, () => wrapper);
       });
 
       describe('DecisionDetails component', () => {
@@ -502,25 +425,9 @@ describe('organ donation index page', () => {
         it('will have the decision set to opt-in', () => {
           expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_OPT_IN);
         });
-
-        it('will have the decision details set', () => {
-          expect(wrapper.find(YourDecision).props().decisionDetails)
-            .toEqual($store.state.organDonation.originalRegistration.decisionDetails);
-        });
-
-        it('will have the header key set to `organDonation.registered.yourDecision.subheader`', () => {
-          expect(wrapper.find(YourDecision).props().headerKey)
-            .toEqual('organDonation.registered.yourDecision.subheader');
-        });
       });
 
       describe('computed', () => {
-        describe('hasAllOrgans', () => {
-          it('will be false as only some organs are selected', () => {
-            expect(wrapper.vm.hasAllOrgans).toEqual(false);
-          });
-        });
-
         describe('hasExistingDecision', () => {
           it('will be true as the original decision is opt-in', () => {
             expect(wrapper.vm.hasExistingDecision).toEqual(true);
@@ -530,72 +437,6 @@ describe('organ donation index page', () => {
         describe('hasSomeOrgans', () => {
           it('will be true as only some organs are selected', () => {
             expect(wrapper.vm.hasSomeOrgans).toEqual(true);
-          });
-        });
-      });
-    });
-
-    describe('app-rep', () => {
-      beforeEach(() => {
-        $store.state.organDonation.originalRegistration.decision = DECISION_APPOINTED_REP;
-        wrapper = mountOrganDonation();
-      });
-
-      it('DecisionDetails component will not exist', () => {
-        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
-      });
-
-      it('Next Steps component will exist', () => {
-        expect(wrapper.find(NextSteps).exists()).toEqual(false);
-      });
-
-      describe('YourDecision component', () => {
-        it('will exist', () => {
-          expect(wrapper.find(YourDecision).exists()).toEqual(true);
-        });
-
-        it('will have the decision set to app-rep', () => {
-          expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_APPOINTED_REP);
-        });
-
-        it('will have the header key set to `organDonation.registered.yourDecision.subheader`', () => {
-          expect(wrapper.find(YourDecision).props().headerKey)
-            .toEqual('organDonation.registered.yourDecision.subheader');
-        });
-      });
-
-      describe('appointed representative section', () => {
-        let appointedRepSection;
-
-        beforeEach(() => {
-          appointedRepSection = wrapper.find('.appointedRep');
-        });
-
-        it('will exist', () => {
-          expect(appointedRepSection.exists()).toBe(true);
-        });
-
-        it('will translate the phone label', () => {
-          expect($t).toHaveBeenCalledWith('organDonation.registered.appointedRep.phoneLabel');
-        });
-      });
-
-      describe('computed', () => {
-        describe('hasAllOrgans', () => {
-          it('will be false because the user appointed a representative', () => {
-            expect(wrapper.vm.hasAllOrgans).toEqual(false);
-          });
-        });
-
-        describe('hasExistingDecision', () => {
-          it('will be true as the original decision is appointed representative', () => {
-            expect(wrapper.vm.hasExistingDecision).toEqual(true);
-          });
-        });
-
-        describe('hasSomeOrgans', () => {
-          it('will be false because the user appointed a representative', () => {
-            expect(wrapper.vm.hasSomeOrgans).toEqual(false);
           });
         });
       });

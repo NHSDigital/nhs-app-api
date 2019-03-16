@@ -7,7 +7,9 @@ import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.set
+import mocking.organDonation.OrganDonationWithdrawalResponse
 import mocking.organDonation.models.OrganDonationRegistrationRequest
+import mocking.organDonation.models.OrganDonationWithdrawRequest
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -96,5 +98,19 @@ class OrganDonationSubmitStepDefinitionsBackend {
         Assert.assertEquals("Expected Organ Donation Registration Id",
                 expected,
                 organDonationResponse.identifier)
+    }
+
+    @When("^I submit my organ donation withdraw decision$")
+    fun iSubmitMyOrganDonationWithdrawDecision() {
+        val withdrawalRequestBody = OrganDonationSerenityHelpers.ORGAN_DONATION_WITHDRAWAL
+                .getOrFail<OrganDonationWithdrawRequest>()
+        try {
+            val response = sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .organDonation
+                    .deleteRegistration(withdrawalRequestBody)
+            setSessionVariable(OrganDonationWithdrawalResponse::class).to(response)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
     }
 }

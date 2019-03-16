@@ -45,11 +45,13 @@ private readonly ILogger<ServiceConfigurationModule> _logger;
                 services.AddSingleton<IOrganDonationClient, OrganDonationMockClient>();
             }
 
+            services.AddSingleton<IOrganDonationValidationService, OrganDonationValidationService>();
             services.AddSingleton<IOrganDonationService, OrganDonationService>();
             services.AddSingleton<OrganDonationLookupService>();
             services.AddSingleton<OrganDonationReferenceDataService>();
             services.AddSingleton<OrganDonationRegistrationService>();
             services.AddSingleton<OrganDonationUpdateService>();
+            services.AddSingleton<OrganDonationWithdrawService>();
 
             services.AddSingleton<IOrganDonationDataMaps, OrganDonationDataMaps>();
 
@@ -71,15 +73,19 @@ private readonly ILogger<ServiceConfigurationModule> _logger;
                     OrganDonationReferenceDataResponseMapper>();
 
             services
-                .AddSingleton<IMapper<string, OrganDonation.Models.Address, Address>, OrganDonationAddressMapper>();
-            
-            services.AddSingleton<IMapper<OrganDonation.Models.Name, Name>, OrganDonationNameMapper>();
+                .AddSingleton<IMapper<string, Models.Address, Address>, OrganDonationAddressMapper>();
+
+            services.AddSingleton<IMapper<Models.Name, Name>, OrganDonationNameMapper>();
             services
                 .AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, RegistrationRequestMapper
                 >();
 
             services
-                .AddSingleton<IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>,
+                .AddSingleton<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>, WithdrawRequestMapper
+                >();
+
+            services
+                .AddSingleton<IMapper<OrganDonationResponse<OrganDonationBasicResponse>, OrganDonationRegistrationResponse>,
                     OrganDonationRegistrationResponseMapper>();
 
             services.AddSingleton<IEnumMapper<string, Decision>, OrganDonationDecisionMapper>();
@@ -88,11 +94,13 @@ private readonly ILogger<ServiceConfigurationModule> _logger;
 
             services.AddSingleton<IOrganDonationGenderMapper, OrganDonationGenderMapper>();
             services.AddSingleton<IOrganDonationDonationWishesMapper, OrganDonationDonationWishesMapper>();
-            
+            services.AddSingleton<IOrganDonationIdentifierMapper, OrganDonationIdentifierMapper>();
+
             services.AddSingleton<IMapper<HttpStatusCode, OrganDonationResult>, OrganDonationResultErrorMapper>();
             services.AddSingleton<IMapper<HttpStatusCode, OrganDonationRegistrationResult>, OrganDonationRegistrationResultErrorMapper>();
             services.AddSingleton<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>, OrganDonationReferenceDataResultErrorMapper>();
-            
+            services.AddSingleton<IMapper<HttpStatusCode, OrganDonationWithdrawResult>, OrganDonationWithdrawResultErrorMapper>();
+
             base.ConfigureServices(services, configuration);
         }
 

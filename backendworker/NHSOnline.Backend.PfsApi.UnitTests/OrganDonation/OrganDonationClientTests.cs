@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [TestMethod]
         public async Task PostRegistration_ReturnsValidResponse()
         {
-            var expectedResponse = _fixture.Create<RegistrationResponse>();
+            var expectedResponse = _fixture.Create<OrganDonationBasicResponse>();
 
             _mockHttpHandler
                 .WhenOrganDonation(HttpMethod.Post, RegistrationPath)
@@ -164,7 +164,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         [TestMethod]
         public async Task PutUpdate_ReturnsValidResponse()
         {
-            var expectedResponse = _fixture.Create<RegistrationResponse>();
+            var expectedResponse = _fixture.Create<OrganDonationBasicResponse>();
 
             _mockHttpHandler
                 .WhenOrganDonation(HttpMethod.Put, $"{RegistrationPath}/id")
@@ -200,6 +200,51 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             };
 
             var response = await _systemUnderTest.PutUpdate(updateRequest, _userSession);
+
+            response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(errorCode);
+            response.Body.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task Delete_ReturnsValidResponse()
+        {
+            var expectedResponse = _fixture.Create<OrganDonationBasicResponse>();
+
+            _mockHttpHandler
+                .WhenOrganDonation(HttpMethod.Delete, $"{RegistrationPath}/id")
+                .Respond(System.Net.Mime.MediaTypeNames.Application.Json,
+                    JsonConvert.SerializeObject(expectedResponse));
+
+            var request = new WithdrawRequest()
+            {
+                Id = "id"
+            };
+
+            var response = await _systemUnderTest.Delete(request, _userSession);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.NotFound)]
+        public async Task Delete_ReturnsError(HttpStatusCode errorCode)
+        {
+            var expectedResponse = _fixture.Create<OrganDonationErrorResponse>();
+
+            _mockHttpHandler
+                .WhenOrganDonation(HttpMethod.Delete, $"{RegistrationPath}/id")
+                .Respond(errorCode, System.Net.Mime.MediaTypeNames.Application.Json,
+                    JsonConvert.SerializeObject(expectedResponse));
+
+            var request = new WithdrawRequest()
+            {
+                Id = "id"
+            };
+
+            var response = await _systemUnderTest.Delete(request, _userSession);
 
             response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(errorCode);

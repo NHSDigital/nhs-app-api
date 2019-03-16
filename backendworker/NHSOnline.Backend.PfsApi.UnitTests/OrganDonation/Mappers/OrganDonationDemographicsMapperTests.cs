@@ -9,6 +9,7 @@ using Moq;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
+using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 {

@@ -46,6 +46,7 @@ describe('TermsConditions acceptance', () => {
         acceptTerms: jest.fn(input => input),
       },
     },
+    dispatch: jest.fn(),
     app,
   };
 
@@ -69,9 +70,13 @@ describe('TermsConditions acceptance', () => {
     expect(wrapper.vm.isAnalyticsCookieAccepted).toBe(true);
   });
 
-  it('progresses when submit button clicked', () => {
-    wrapper.vm.onConfirmButtonClicked().then(() => {
-      expect($store.state.termsAndConditions.acceptTerms).toBeCalled();
+  it('progresses when submit button clicked', async () => {
+    await wrapper.vm.onConfirmButtonClicked();
+    expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
+      consentRequest: {
+        ConsentGiven: true,
+        AnalyticsCookieAccepted: true,
+      },
     });
   });
 });

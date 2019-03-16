@@ -8,9 +8,12 @@ import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
 
-class OrganDonationDetailsAssertor(title: String, val page: HybridPageObject) {
+class OrganDonationDetailsAssertor private constructor(
+            title: String,
+            val page: HybridPageObject,
+            val titleStyling : String) {
 
-    private val containerXPath = "//div[h3[text()=\"$title\"]]"
+    val containerXPath = "//div[$titleStyling[text()=\"$title\"]]"
 
     private val container = HybridPageElement(
             containerXPath,
@@ -34,13 +37,26 @@ class OrganDonationDetailsAssertor(title: String, val page: HybridPageObject) {
         return this
     }
 
-    fun assert(expectedText: String): OrganDonationDetailsAssertor {
-        HybridPageElement(
-                "$containerXPath//p[normalize-space() = \"$expectedText\"]",
-                page = page,
-                helpfulName = "Explanatory text")
-                .assertSingleElementPresent()
-                .assertIsVisible()
+    fun assert(expectedText: Array<String>): OrganDonationDetailsAssertor {
+        val actualText =HybridPageElement(
+                "$containerXPath//p",
+                page = page).elements.map { element -> element.text }.toTypedArray()
+
+        expectedText.forEach { expected->
+            Assert.assertTrue("Expected to contain: '$expected'. Actual: '${actualText.joinToString ()}'",
+                    actualText.contains(expected))
+        }
         return this
+    }
+
+    companion object {
+
+        fun withH2Header(title: String, page: HybridPageObject):OrganDonationDetailsAssertor{
+            return OrganDonationDetailsAssertor(title, page, "h2")
+        }
+
+        fun withH3Header(title: String, page: HybridPageObject):OrganDonationDetailsAssertor{
+            return OrganDonationDetailsAssertor(title, page, "h3")
+        }
     }
 }

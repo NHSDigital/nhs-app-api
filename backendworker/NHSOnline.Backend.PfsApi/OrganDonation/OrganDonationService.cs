@@ -1,12 +1,6 @@
-using System;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.GpSystems.Demographics;
-using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
@@ -17,17 +11,20 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         private readonly OrganDonationUpdateService _updateService;
         private readonly OrganDonationLookupService _lookupService;
         private readonly OrganDonationReferenceDataService _referenceDataService;
+        private readonly OrganDonationWithdrawService _withdrawService;
 
         public OrganDonationService(
             OrganDonationRegistrationService registrationService,
             OrganDonationUpdateService updateService,
             OrganDonationLookupService lookupService,
-            OrganDonationReferenceDataService referenceDataService)
+            OrganDonationReferenceDataService referenceDataService,
+            OrganDonationWithdrawService withdrawService)
         {
             _registrationService = registrationService;
             _updateService = updateService;
             _lookupService = lookupService;
             _referenceDataService = referenceDataService;
+            _withdrawService = withdrawService;
         }
 
         public async Task<OrganDonationResult> GetOrganDonation(DemographicsResult myRecord, UserSession userSession)
@@ -45,5 +42,9 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public async Task<OrganDonationReferenceDataResult> GetReferenceData()
             => await _referenceDataService.GetReferenceData();
+
+        public async Task<OrganDonationWithdrawResult> Withdraw(
+            OrganDonationWithdrawRequest request,
+            UserSession userSession) => await _withdrawService.Withdraw(request, userSession);
     }
 }

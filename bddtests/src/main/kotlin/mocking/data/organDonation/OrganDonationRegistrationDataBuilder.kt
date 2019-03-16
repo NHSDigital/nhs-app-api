@@ -101,34 +101,19 @@ object OrganDonationRegistrationDataBuilder {
                 identifier = listOf(Identifier(
                         system = "https://fhir.nhs.uk/Id/nhs-number",
                         value = patient.nhsNumbers.first())),
-                name = listOf(getName(patient)),
+                name = listOf(Name.fromPatient(patient)),
                 nameFull = patient.formattedFullName(),
                 gender = patient.sex.toString(),
                 birthdate = patient.dateOfBirth,
                 ethnicCategory = getCodeableConcept(demographics.ethnicity),
                 religiousAffiliation = getCodeableConcept(demographics.religion),
-                address = listOf(getAddress(patient)),
+                address = listOf(Address.fromPatient(patient)),
                 addressFull = patient.address.full(),
                 telecom = listOf(Identifier(
                         system = "phone",
                         value = patient.contactDetails.telephoneNumber!!)),
                 organDonationDecision = "opt-out",
                 faithDeclaration = getFaithDeclaration(demographics.faithDeclaration))
-    }
-
-    fun getName(patient: Patient): Name {
-        return Name(
-                prefix = listOf(patient.title),
-                given = listOf(patient.firstName),
-                family = patient.surname)
-    }
-
-    fun getAddress(patient: Patient): Address {
-        return Address(
-                line = listOf(
-                        patient.address.houseNameFlatNumber!!,
-                        patient.address.numberStreet!!),
-                postalCode = patient.address.postcode!!)
     }
 
     private fun getFaithDeclaration(faithDeclaration: FaithDeclaration): String {

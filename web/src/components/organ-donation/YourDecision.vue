@@ -2,7 +2,7 @@
   <div :class="$style.info">
     <h2>{{ $t(headerKey) }}</h2>
     <p :class="$style['flex-container']">
-      <component :class="$style.icon" :is="icon"/>
+      <component v-if="icon" :class="$style.icon" :is="icon"/>
       <span :class="[style, $style.label]">{{ $t(decisionTextKey) }}</span>
     </p>
   </div>
@@ -35,25 +35,38 @@ export default {
       type: String,
       default: 'organDonation.reviewYourDecision.yourDecision.subheader',
     },
+    isWithdrawing: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
-    const isOptOut = this.decision === DECISION_OPT_OUT;
-    const isAppointedRep = this.decision === DECISION_APPOINTED_REP;
-    let key;
     let icon;
+    let key;
+    let organsKey = '';
 
-    if (isOptOut) {
-      key = 'optout';
-      icon = NoIcon;
-    } else if (isAppointedRep) {
-      key = 'appointedrep';
-      icon = AppointedRepIcon;
+    if (this.isWithdrawing) {
+      key = 'withdraw';
     } else {
-      key = 'optin';
-      icon = YesIcon;
+      const isOptOut = this.decision === DECISION_OPT_OUT;
+      const isAppointedRep = this.decision === DECISION_APPOINTED_REP;
+
+      if (isOptOut) {
+        key = 'optout';
+        icon = NoIcon;
+      } else if (isAppointedRep) {
+        key = 'appointedrep';
+        icon = AppointedRepIcon;
+      } else {
+        key = 'optin';
+        icon = YesIcon;
+      }
+
+      if (!isOptOut && !isAppointedRep && !get('all')(this.decisionDetails)) {
+        organsKey = 'Some';
+      }
     }
 
-    const organsKey = isOptOut || isAppointedRep || !!get('all')(this.decisionDetails) ? '' : 'Some';
     return {
       decisionTextKey: `organDonation.reviewYourDecision.yourDecision.${key}${organsKey}DecisionText`,
       icon,
@@ -74,22 +87,25 @@ export default {
 
   .icon {
     flex: 0 0 2.5em;
+    margin-right: $two;
   }
   .label {
     flex: 1 1 auto;
     font-weight: bold;
-    padding-left: $two;
     padding-top: $one;
   }
 }
 
 .optout-label {
-    color: $red;
+  color: $red;
 }
 .optin-label {
-    color: $light_green;
+  color: $light_green;
 }
 .appointedrep-label {
-    color: $nhs_blue;
+  color: $nhs_blue;
+}
+.withdraw-label {
+  color: $purple;
 }
 </style>

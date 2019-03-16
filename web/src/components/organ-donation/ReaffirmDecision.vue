@@ -2,7 +2,8 @@
   <div :class="$style.reaffirmDecision">
     <h3>{{ $t('organDonation.reaffirmDecision.subheader') }}</h3>
     <p>{{ $t('organDonation.reaffirmDecision.text') }}</p>
-    <a id="reaffirmDecisionLink" href="#" @click.stop.prevent="setReaffirmDecision">
+    <a id="reaffirmDecisionLink" :class="$style['mt-3']" href="#"
+       @click.stop.prevent="setReaffirmDecision">
       {{ $t('organDonation.reaffirmDecision.linkText') }}
     </a>
   </div>
@@ -34,11 +35,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/spacings";
-
-  .reaffirmDecision {
-    a, p {
-      margin-bottom: $two;
-    }
-  }
+@import "../../style/spacings";
 </style>

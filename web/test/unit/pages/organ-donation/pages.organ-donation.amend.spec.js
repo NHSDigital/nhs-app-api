@@ -38,9 +38,14 @@ describe('organ donation amend page', () => {
     });
 
     describe('fetch', () => {
-      it('will redirect back to the organ donation page', () => {
-        const redirect = jest.fn();
+      let redirect;
+
+      beforeEach(() => {
+        redirect = jest.fn();
         wrapper.vm.$options.fetch({ redirect, store: $store });
+      });
+
+      it('will redirect back to the organ donation page', () => {
         expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
       });
     });

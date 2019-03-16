@@ -9,7 +9,7 @@ import pages.assertIsVisible
 import pages.organDonation.OrganDonationCheckDetailsPage
 import utils.SerenityHelpers
 
-open class OrganDonationCheckDetailsDefinitions {
+open class OrganDonationCheckDetailsStepDefinitions {
 
     lateinit var organDonationCheckDetailsPage: OrganDonationCheckDetailsPage
 
@@ -73,6 +73,11 @@ open class OrganDonationCheckDetailsDefinitions {
     @Then("^my choice of '(.*)' to share my faith and beliefs is displayed on the Organ Donation Check Details page")
     fun myChoiceToShareMyFaithAndBeliefsIsDisplayedOnTheOrganDonationCheckDetailsPage(option : String){
         organDonationCheckDetailsPage.faithAndBeliefsModule.assertChoice(option)
+    }
+
+    @Then("^my decision to withdraw is recorded on the Organ Donation Check Details page$")
+    fun withdrawDecisionIsrecordedOnTheOrganDonationCheckDetailsPage(){
+        organDonationCheckDetailsPage.yourDecisionModule.assertDecisionIsWithdrawn()
     }
 
     @Then("^there is no additional details section displayed on the Organ Donation Check Details page$")

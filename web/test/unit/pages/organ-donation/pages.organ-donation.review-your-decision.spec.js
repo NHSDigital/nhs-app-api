@@ -3,93 +3,117 @@ import BackButton from '@/components/BackButton';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
 import ReviewYourDecision from '@/pages/organ-donation/review-your-decision';
 import YourDecision from '@/components/organ-donation/YourDecision';
-import { initialState, DECISION_OPT_OUT, DECISION_OPT_IN } from '@/store/modules/organDonation/mutation-types';
-import { $t, createStore, mount, initFilters } from '../../helpers';
+import {
+  initialState,
+  DECISION_OPT_OUT,
+  DECISION_OPT_IN,
+  STATE_OK,
+} from '@/store/modules/organDonation/mutation-types';
+import { $t, createScrollTo, createStore, initFilters, mount } from '../../helpers';
 
-describe('review your decision', () => {
-  let $store;
-  let $style;
-  let wrapper;
+const createState = ({
+  all = false,
+  decision = DECISION_OPT_IN,
+  isAccuracyAccepted = false,
+  isPrivacyAccepted = false,
+  isReaffirming = false,
+  isWithdrawing = false,
+  state = STATE_OK,
+} = {}) => {
+  const organDonation = {
+    ...initialState(),
+    ...{
+      isAccuracyAccepted,
+      isPrivacyAccepted,
+      isReaffirming,
+      isWithdrawing,
+    },
+  };
 
-  const createState = (state = {
-    organDonation: initialState(),
+  organDonation.registration.decision = decision;
+  organDonation.registration.decisionDetails.all = all;
+  organDonation.registration.state = state;
+
+  return {
+    organDonation,
     device: {
       source: 'web',
     },
-  }) => state;
+  };
+};
 
-  const mountPage = () => mount(ReviewYourDecision, { $store, $style, $t });
+describe('review your decision', () => {
+  const $style = {
+    button: 'button',
+    green: 'green',
+  };
+  let $store;
+  let wrapper;
+  let scrollTo;
+
+  const mountPage = ({ state, getters }) => {
+    $store = createStore({ state, getters });
+    return mount(ReviewYourDecision, { $store, $style, $t });
+  };
 
   beforeEach(() => {
     initFilters();
-    $store = createStore({ state: createState() });
-    $style = {
-      button: 'button',
-      green: 'green',
-    };
-    wrapper = mountPage();
+    wrapper = mountPage({ state: createState() });
   });
 
-  describe('showErrors', () => {
-    describe('has validationErrors', () => {
-      beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = false;
-        $store.state.organDonation.isPrivacyAccepted = false;
-        wrapper = mountPage();
-      });
+  it('will show additional information', () => {
+    expect(wrapper.find(AdditionalInformation).exists()).toBe(true);
+  });
 
-      describe('submit button clicked', () => {
-        beforeEach(() => {
-          const submitButton = wrapper.find('#submit-button');
-          submitButton.trigger('click');
-        });
+  it('will show your decision', () => {
+    expect(wrapper.find(YourDecision).exists()).toBe(true);
+  });
 
-        it('will have a "showErrors" value of true', () => {
-          expect(wrapper.vm.showErrors).toEqual(true);
-        });
+  it('will not show withdraw header text', () => {
+    expect($t).not.toHaveBeenCalledWith('organDonation.reviewYourDecision.withdraw.subheader');
+  });
 
-        it('will show the message dialog', () => {
-          const errors = wrapper.find('#errors');
-          expect(errors.exists()).toEqual(true);
-        });
+  it('will not show withdraw body text', () => {
+    expect($t).not.toHaveBeenCalledWith('organDonation.reviewYourDecision.withdraw.body');
+  });
 
-        it('will show a message for each validation error', () => {
-          const errorTexts = wrapper.findAll('#errors li');
-          expect(errorTexts.length).toEqual(wrapper.vm.validationErrors.length);
-          expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.confirmation.errors.accuracy');
-          expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.confirmation.errors.privacy');
-        });
-      });
+  it('will have a back button', () => {
+    expect(wrapper.find(BackButton).exists()).toBe(true);
+  });
 
-      describe('submit button not clicked', () => {
-        it('will have a "showErrors" value of false', () => {
-          expect(wrapper.vm.showErrors).toEqual(false);
-        });
-
-        it('will not show the message dialog', () => {
-          const errors = wrapper.find('#errors');
-          expect(errors.exists()).toEqual(false);
-        });
-      });
+  describe('is withdrawing', () => {
+    beforeEach(() => {
+      wrapper = mountPage({ state: createState({ isWithdrawing: true }) });
     });
 
-    describe('has no validationErrors', () => {
-      beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = true;
-        $store.state.organDonation.isPrivacyAccepted = true;
-        wrapper = mountPage();
-      });
+    it('will not show additional information', () => {
+      expect(wrapper.find(AdditionalInformation).exists()).toBe(false);
+    });
 
-      it('will show the message dialog', () => {
-        expect(wrapper.find('#errors').exists()).toEqual(false);
-      });
+    it('will not show decision details', () => {
+      expect(wrapper.find(DecisionDetails).exists()).toBe(false);
+    });
+
+    it('will not show faith details', () => {
+      expect(wrapper.find('#faithDetails').exists()).toBe(false);
+    });
+
+    it('will show withdraw header text', () => {
+      expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.withdraw.subheader');
+    });
+
+    it('will show withdraw body text', () => {
+      expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.withdraw.body');
     });
   });
 
   describe('submit my decision button', () => {
     let submitButton;
+    let state;
 
     beforeEach(() => {
+      state = createState();
+      wrapper = mountPage({ state });
       submitButton = wrapper.find('#submit-button');
     });
 
@@ -102,94 +126,118 @@ describe('review your decision', () => {
       expect(submitButton.classes()).toContain($style.button);
     });
 
-    describe('when opt out', () => {
+    it('will use "organDonation.reviewYourDecision.submitButton" for text', () => {
+      expect(submitButton.text()).toBe('translate_organDonation.reviewYourDecision.submitButton');
+    });
+
+    describe('when neither T&C have been accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.registration.decision = DECISION_OPT_OUT;
+        state.organDonation.isAccuracyAccepted = false;
+        state.organDonation.isPrivacyAccepted = false;
       });
 
-      it('will use "organDonation.reviewYourDecision.submitNoButton" for text', () => {
-        expect(submitButton.text())
-          .toEqual('translate_organDonation.reviewYourDecision.submitNoButton');
+      describe('click', () => {
+        beforeEach(() => {
+          scrollTo = createScrollTo();
+          submitButton.trigger('click');
+        });
+
+        it('will have a "showErrors" value of true', () => {
+          expect(wrapper.vm.showErrors).toBe(true);
+        });
+
+        it('will show the message dialog', () => {
+          expect(wrapper.find('#errors').exists()).toBe(true);
+        });
+
+        it('will show a message for each validation error', () => {
+          expect(wrapper.vm.validationErrors.length).toBe(2);
+          expect(wrapper.findAll('#errors li').length).toBe(wrapper.vm.validationErrors.length);
+          expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.confirmation.errors.accuracy');
+          expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.confirmation.errors.privacy');
+        });
+
+        it('will scroll to the top', () => {
+          expect(scrollTo).toHaveBeenCalledWith(0, 0);
+        });
       });
-    });
-
-    describe('when opt in', () => {
-      beforeEach(() => {
-        $store.state.organDonation.registration.decision = DECISION_OPT_IN;
-      });
-
-      it('will use "organDonation.reviewYourDecision.submitButton" for text', () => {
-        expect(submitButton.text())
-          .toEqual('translate_organDonation.reviewYourDecision.submitButton');
-      });
-    });
-  });
-
-  describe('back button', () => {
-    let backButton;
-
-    beforeEach(() => {
-      backButton = wrapper.find(BackButton);
-    });
-
-    it('will exist', () => {
-      expect(backButton.exists()).toBe(true);
-    });
-  });
-
-  describe('submit button', () => {
-    let submitButton;
-
-    beforeEach(() => {
-      $store.state.organDonation.isAccuracyAccepted = false;
-      $store.state.organDonation.isPrivacyAccepted = false;
-      wrapper = mountPage();
-      submitButton = wrapper.find('#submit-button');
-    });
-
-    it('will exist', () => {
-      expect(submitButton.exists()).toBe(true);
     });
 
     describe('accuracy not accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.isPrivacyAccepted = true;
+        state.organDonation.isPrivacyAccepted = true;
       });
 
-      it(
-        'will add "organDonation.reviewYourDecision.confirmation.errors.accuracy" to the validation errors when clicked',
-        () => {
+      describe('click', () => {
+        beforeEach(() => {
+          scrollTo = createScrollTo();
           submitButton.trigger('click');
-          expect(wrapper.vm.validationErrors)
-            .toContain('organDonation.reviewYourDecision.confirmation.errors.accuracy');
-        },
-      );
+        });
+
+        it('will have a "showErrors" value of true', () => {
+          expect(wrapper.vm.showErrors).toBe(true);
+        });
+
+        it('will show the message dialog', () => {
+          expect(wrapper.find('#errors').exists()).toBe(true);
+        });
+
+        it('will add "organDonation.reviewYourDecision.confirmation.errors.accuracy" to the validation errors', () => {
+          expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.confirmation.errors.accuracy');
+        });
+
+        it('will scroll to the top', () => {
+          expect(scrollTo).toHaveBeenCalledWith(0, 0);
+        });
+      });
     });
 
     describe('privacy not accepted', () => {
       beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = true;
+        state.organDonation.isAccuracyAccepted = true;
       });
 
-      it(
-        'will add "organDonation.reviewYourDecision.confirmation.errors.privacy" to the validation errors when clicked',
-        () => {
+      describe('click', () => {
+        beforeEach(() => {
+          scrollTo = createScrollTo();
           submitButton.trigger('click');
-          expect(wrapper.vm.validationErrors)
-            .toContain('organDonation.reviewYourDecision.confirmation.errors.privacy');
-        },
-      );
+        });
+
+        it('will have a "showErrors" value of true', () => {
+          expect(wrapper.vm.showErrors).toBe(true);
+        });
+
+        it('will show the message dialog', () => {
+          expect(wrapper.find('#errors').exists()).toBe(true);
+        });
+
+        it('will add "organDonation.reviewYourDecision.confirmation.errors.privacy" to the validation errors', () => {
+          expect(wrapper.vm.validationErrors).toContain('organDonation.reviewYourDecision.confirmation.errors.privacy');
+        });
+
+        it('will scroll to the top', () => {
+          expect(scrollTo).toHaveBeenCalledWith(0, 0);
+        });
+      });
     });
 
-    describe('when clicked', () => {
+    describe('click', () => {
       beforeEach(() => {
-        $store.state.organDonation.isAccuracyAccepted = true;
-        $store.state.organDonation.isPrivacyAccepted = true;
+        state.organDonation.isAccuracyAccepted = true;
+        state.organDonation.isPrivacyAccepted = true;
+        submitButton.trigger('click');
       });
 
-      it('it will call organDonation/submitRegistration', async () => {
-        await submitButton.trigger('click');
-        expect($store.dispatch).toHaveBeenCalledWith('organDonation/submitRegistration');
+      it('will have a "showErrors" value of false', () => {
+        expect(wrapper.vm.showErrors).toBe(false);
+      });
+
+      it('will not show the message dialog', () => {
+        expect(wrapper.find('#errors').exists()).toBe(false);
+      });
+
+      it('it will call organDonation/submitDecision', async () => {
+        expect($store.dispatch).toHaveBeenCalledWith('organDonation/submitDecision');
       });
     });
   });
@@ -197,123 +245,110 @@ describe('review your decision', () => {
   describe('decision details', () => {
     describe('selected all organs', () => {
       beforeEach(() => {
-        const state = createState();
-        state.organDonation.registration.decision = DECISION_OPT_IN;
-        state.organDonation.registration.decisionDetails.all = true;
-        $store = createStore({ state });
-        wrapper = mountPage();
+        const state = createState({ decision: DECISION_OPT_IN, all: true });
+        wrapper = mountPage({ state });
       });
 
       it('will show the opt-in decision text', () => {
-        const yourDecision = wrapper.find(YourDecision);
-        expect(yourDecision.text())
+        expect(wrapper.find(YourDecision).text())
           .toContain('translate_organDonation.reviewYourDecision.yourDecision.optinDecisionText');
       });
 
       it('will not show the decision details', () => {
-        expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+        expect(wrapper.find(DecisionDetails).exists()).toBe(false);
       });
     });
 
     describe('selected some organs', () => {
       beforeEach(() => {
-        const state = createState();
-        state.organDonation.registration.decision = DECISION_OPT_IN;
-        state.organDonation.registration.decisionDetails.all = false;
-        $store = createStore({ state });
-        wrapper = mountPage();
+        const state = createState({ decision: DECISION_OPT_IN, all: false });
+        wrapper = mountPage({ state });
       });
 
       it('will show the opt-in some decision text', () => {
-        const yourDecision = wrapper.find(YourDecision);
-        expect(yourDecision.text())
+        expect(wrapper.find(YourDecision).text())
           .toContain('translate_organDonation.reviewYourDecision.yourDecision.optinSomeDecisionText');
       });
 
       it('will show the decision details', () => {
-        expect(wrapper.find(DecisionDetails).exists()).toEqual(true);
+        expect(wrapper.find(DecisionDetails).exists()).toBe(true);
       });
     });
   });
 
   describe('faith details', () => {
-    let faithDetails;
-
-    beforeEach(() => {
-      faithDetails = wrapper.find('#faithDetails');
-    });
-
     describe('when opt out', () => {
       beforeEach(() => {
-        $store.state.organDonation.registration.decision = DECISION_OPT_OUT;
+        const state = createState({ decision: DECISION_OPT_OUT });
+        wrapper = mountPage({ state });
       });
 
-      it('will not show the faith details', () => {
-        expect(faithDetails.exists()).toBe(false);
+      it('will not show', () => {
+        expect(wrapper.find('#faithDetails').exists()).toBe(false);
       });
     });
 
     describe('when opt in', () => {
       beforeEach(() => {
-        $store.state.organDonation.registration.decision = DECISION_OPT_IN;
+        const state = createState({ decision: DECISION_OPT_IN });
+        wrapper = mountPage({ state });
       });
 
-      it('will show the faith details', () => {
-        expect(faithDetails.exists()).toBe(false);
+      it('will show', () => {
+        expect(wrapper.find('#faithDetails').exists()).toBe(true);
       });
     });
   });
 
   describe('additional details', () => {
     let additionalInformation;
-    beforeEach(() => {
-      additionalInformation = wrapper.find(AdditionalInformation);
-    });
 
     describe('reaffirming', () => {
-      beforeEach(() => {
-        $store.state.organDonation.isReaffirming = true;
-      });
+      const createLocalState = ({ all, decision }) =>
+        createState({ all, decision, isReaffirming: true });
 
       describe('donating all organs', () => {
         beforeEach(() => {
-          $store.state.organDonation.registration.decision = DECISION_OPT_IN;
-          $store.state.organDonation.registration.decisionDetails.all = true;
-          $store.getters['organDonation/isSomeOrgans'] = false;
-          wrapper = mountPage();
+          const state = createLocalState({
+            all: true,
+            decision: DECISION_OPT_IN,
+          });
+          const getters = { 'organDonation/isSomeOrgans': false };
+          wrapper = mountPage({ state, getters });
           additionalInformation = wrapper.find(AdditionalInformation);
         });
 
         it('will not show additional details', () => {
-          expect(additionalInformation.exists()).toEqual(false);
+          expect(additionalInformation.exists()).toBe(false);
         });
       });
 
       describe('donating some organs', () => {
         beforeEach(() => {
-          $store.state.organDonation.registration.decision = DECISION_OPT_IN;
-          $store.state.organDonation.registration.decisionDetails.all = false;
-          $store.getters['organDonation/isSomeOrgans'] = true;
-          wrapper = mountPage();
+          const state = createLocalState({
+            all: false,
+            decision: DECISION_OPT_IN,
+          });
+          const getters = { 'organDonation/isSomeOrgans': true };
+          wrapper = mountPage({ state, getters });
           additionalInformation = wrapper.find(AdditionalInformation);
         });
 
         it('will show additional details', () => {
-          expect(additionalInformation.exists()).toEqual(true);
+          expect(additionalInformation.exists()).toBe(true);
         });
       });
 
       describe('not donating organs', () => {
         beforeEach(() => {
-          $store.state.organDonation.registration.decision = DECISION_OPT_OUT;
-          $store.state.organDonation.registration.decisionDetails.all = '';
-          $store.getters['organDonation/isSomeOrgans'] = false;
-          wrapper = mountPage();
+          const state = createLocalState({ decision: DECISION_OPT_OUT });
+          const getters = { 'organDonation/isSomeOrgans': false };
+          wrapper = mountPage({ state, getters });
           additionalInformation = wrapper.find(AdditionalInformation);
         });
 
         it('will not show additional details', () => {
-          expect(additionalInformation.exists()).toEqual(false);
+          expect(additionalInformation.exists()).toBe(false);
         });
       });
     });

@@ -5,15 +5,14 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.PfsApi.OrganDonation.Models;
-using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
+using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using NHSOnline.Backend.Support;
 using Address = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Address;
 using Name = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Name;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
+namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 {
     [TestClass]
     public class RegistrationRequestMapperTests
@@ -27,6 +26,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         private Mock<IMapper<string, PfsApi.OrganDonation.Models.Address, Address>> _addressMapperMock;
         private Mock<IOrganDonationDonationWishesMapper> _donationWishesMapperMock;
         private Mock<IOrganDonationGenderMapper> _genderMapperMock;
+        private Mock<IOrganDonationIdentifierMapper> _identifierMapperMock;
 
         [TestInitialize]
         public void TestInitialize()
@@ -41,82 +41,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 _fixture.Freeze<Mock<IMapper<string, PfsApi.OrganDonation.Models.Address, Address>>>();
             _donationWishesMapperMock = _fixture.Freeze<Mock<IOrganDonationDonationWishesMapper>>();
             _genderMapperMock = _fixture.Freeze<Mock<IOrganDonationGenderMapper>>();
+            _identifierMapperMock = _fixture.Freeze<Mock<IOrganDonationIdentifierMapper>>();
 
             _registrationRequestMapper = _fixture.Create<RegistrationRequestMapper>();
-        }
-
-        [TestMethod]
-        public void MapToRegistrationRequest_WhenPassingNull_ThrowsAggregateException()
-        {
-            // Act and Assert
-            Action act = () => _registrationRequestMapper.Map(null);
-
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(3)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x => ((ArgumentNullException) x).ParamName.Equals("source", StringComparison.Ordinal))
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("AdditionalDetails", StringComparison.Ordinal))
-                .And.Contain(
-                    x => ((ArgumentNullException) x).ParamName.Equals("Registration", StringComparison.Ordinal));
-        }
-
-        [TestMethod]
-        public void MapToRegistrationRequest_WhenNotPassingRegistrationAndAddtionalDetails_ThrowsAggregateException()
-        {
-            // Act and Assert
-            Action act = () => _registrationRequestMapper.Map(new OrganDonationRegistrationRequest());
-
-            act.Should().Throw<AggregateException>()
-                .And.InnerExceptions.Should().HaveCount(2)
-                .And.AllBeOfType<ArgumentNullException>()
-                .And.Contain(x =>
-                    ((ArgumentNullException) x).ParamName.Equals("AdditionalDetails", StringComparison.Ordinal))
-                .And.Contain(
-                    x => ((ArgumentNullException) x).ParamName.Equals("Registration", StringComparison.Ordinal));
-        }
-
-        [TestMethod]
-        public void MapToRegistrationRequest_WhenNotPassingAdditionalDetails_ThrowsArgumentNullException()
-        {
-            // Act and Assert
-            Action act = () => _registrationRequestMapper.Map(new OrganDonationRegistrationRequest
-            {
-                Registration = new OrganDonationStoreRegistration()
-            });
-
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("AdditionalDetails");
-        }
-
-        [TestMethod]
-        public void MapToRegistrationRequest_WhenNotPassingRegistration_ThrowsArgumentNullException()
-        {
-            // Act and Assert
-            Action act = () => _registrationRequestMapper.Map(new OrganDonationRegistrationRequest
-            {
-                AdditionalDetails = new AdditionalDetails()
-            });
-
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("Registration");
-        }
-
-        [TestMethod]
-        public void
-            MapToRegistrationRequest_WhenPassingOptInRegistrationWithoutFaithDeclaration_ThrowsArgumentNullException()
-        {
-            // Arrange 
-            var registration = _fixture.Create<OrganDonationStoreRegistration>();
-            registration.Decision = Decision.OptIn;
-            registration.FaithDeclaration = null;
-
-            // Act and Assert
-            Action act = () => _registrationRequestMapper.Map(new OrganDonationRegistrationRequest
-            {
-                AdditionalDetails = new AdditionalDetails(),
-                Registration = registration
-            });
-
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("FaithDeclaration");
         }
 
         [TestMethod]
@@ -155,6 +82,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 PostalCode = "Postcode"
             };
 
+            var identifier = new Identifier
+            {
+                System = Constants.OrganDonationConstants.IdentifierSystem,
+                Value = response.Registration.NhsNumber.RemoveWhiteSpace()
+            };
+
             _decisionMapperMock.Setup(x => x.From(It.IsAny<Decision>())).Returns("opt-in");
             _donationWishesMapperMock.Setup(x => x.Map(It.IsAny<DecisionDetails>())).Returns(donationWishes);
             _faithDeclarationMapperMock.Setup(x => x.From(It.IsAny<FaithDeclaration>())).Returns("yes");
@@ -164,6 +97,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 .Setup(x => x.Map(It.IsAny<string>(), It.IsAny<PfsApi.OrganDonation.Models.Address>()))
                 .Returns(address);
             _genderMapperMock.Setup(x => x.Map(It.IsAny<string>())).Returns("male");
+            _identifierMapperMock.Setup(x => x.Map(It.IsAny<string>())).Returns(identifier);
 
             // Act
             var result = _registrationRequestMapper.Map(response);
@@ -176,6 +110,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _addressMapperMock.Verify(x =>
                 x.Map(It.IsAny<string>(), It.IsAny<PfsApi.OrganDonation.Models.Address>()));
             _genderMapperMock.Verify(x => x.Map(It.IsAny<string>()));
+            _identifierMapperMock.Verify(x => x.Map(It.IsAny<string>()));
 
             result.Should().NotBeNull();
             result.OrganDonationDecision.Should().Be("opt-in");
@@ -305,6 +240,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 PostalCode = "Postcode"
             };
 
+            var identifier = new Identifier
+            {
+                System = Constants.OrganDonationConstants.IdentifierSystem,
+                Value = response.Registration.NhsNumber.RemoveWhiteSpace()
+            };
+
             _decisionMapperMock.Setup(x => x.From(It.IsAny<Decision>())).Returns("opt-out");
             _donationWishesMapperMock.Setup(x => x.Map(It.IsAny<DecisionDetails>())).Returns(donationWishes);
             _faithDeclarationMapperMock.Setup(x => x.From(It.IsAny<FaithDeclaration>())).Returns("yes");
@@ -314,6 +255,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 .Setup(x => x.Map(It.IsAny<string>(), It.IsAny<PfsApi.OrganDonation.Models.Address>()))
                 .Returns(address);
             _genderMapperMock.Setup(x => x.Map(It.IsAny<string>())).Returns("male");
+            _identifierMapperMock.Setup(x => x.Map(It.IsAny<string>())).Returns(identifier);
 
             // Act
             var result = _registrationRequestMapper.Map(response);
@@ -326,6 +268,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             _addressMapperMock.Verify(x =>
                 x.Map(It.IsAny<string>(), It.IsAny<PfsApi.OrganDonation.Models.Address>()));
             _genderMapperMock.Verify(x => x.Map(It.IsAny<string>()));
+            _identifierMapperMock.Verify(x => x.Map(It.IsAny<string>()));
 
             result.Should().NotBeNull();
             result.OrganDonationDecision.Should().Be("opt-out");

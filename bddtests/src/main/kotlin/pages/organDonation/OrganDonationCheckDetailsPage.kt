@@ -1,7 +1,5 @@
 package pages.organDonation
 
-import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.isTrueOrFalse
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
@@ -25,13 +23,14 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
                     "accordance with the terms")
 
     fun assertPersonalDetailsSection(patient: Patient) {
-        OrganDonationDetailsAssertor("About you", this)
+        val bodyText = arrayOf("The details above are retrieved from your GP services record, " +
+                "please contact your GP to amend them.")
+        OrganDonationDetailsAssertor.withH3Header("About you", this)
                 .assertPair("Name", patient.formattedFullName())
                 .assertPair("Date of birth", patient.formattedDateOfBirth())
                 .assertPair("Gender", patient.sex.toString())
                 .assertPair("NHS number", patient.formattedNHSNumber())
-                .assert("The details above are retrieved from your GP services record, " +
-                        "please contact your GP to amend them.")
+                .assert(bodyText)
     }
 
     val yourDecisionModule by lazy { OrganDonationYourDecisionModule(this) }
@@ -48,9 +47,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
         privacyStatementCheckBox.assertIsVisible()
     }
 
-
     fun clickSubmit() {
-        val optIn = OrganDonationSerenityHelpers.IS_OPT_IN.isTrueOrFalse()
-        clickOnButtonContainingText(if (optIn) "Yes I want to be a donor" else "No I do not want to be a donor")
+        clickOnButtonContainingText("Submit my decision")
     }
 }

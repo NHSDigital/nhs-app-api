@@ -12,6 +12,7 @@
 import ErrorMarkerIcon from '@/components/icons/ErrorMarkerIcon';
 
 export default {
+  name: 'ErrorMessage',
   components: {
     ErrorMarkerIcon,
   },

@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
     {
         private IFixture _fixture;
 
-        private IMapper<OrganDonationResponse<RegistrationResponse>, OrganDonationRegistrationResponse>
+        private IMapper<OrganDonationResponse<OrganDonationBasicResponse>, OrganDonationRegistrationResponse>
             _registrationResponseMapper;
 
         [TestInitialize]
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         {
             // Act and assert
             Action act = () =>
-                _registrationResponseMapper.Map(new OrganDonationResponse<RegistrationResponse>(HttpStatusCode.OK));
+                _registrationResponseMapper.Map(new OrganDonationResponse<OrganDonationBasicResponse>(HttpStatusCode.OK));
 
             act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("Body");
         }
@@ -57,9 +57,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         public void MapOrganDonationResponse_WithAllValues_MapsTheIdentifier()
         {
             // Arrange
-            var response = new OrganDonationResponse<RegistrationResponse>(HttpStatusCode.OK)
+            var response = new OrganDonationResponse<OrganDonationBasicResponse>(HttpStatusCode.OK)
             {
-                Body = _fixture.Create<RegistrationResponse>()
+                Body = _fixture.Create<OrganDonationBasicResponse>()
             };
             
             // Act
@@ -78,11 +78,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         [DataRow("10202")]
         public void MapOrganDonationResponse_WithConflictErrorCode_SetsIsConflictedFlag(string code)
         {
-            var body = _fixture.Create<RegistrationResponse>();
+            var body = _fixture.Create<OrganDonationBasicResponse>();
             body.Issue = CreateIssueWithErrorCode(code);
 
             // Arrange
-            var response = new OrganDonationResponse<RegistrationResponse>(HttpStatusCode.OK)
+            var response = new OrganDonationResponse<OrganDonationBasicResponse>(HttpStatusCode.OK)
             {
                 Body = body
             };

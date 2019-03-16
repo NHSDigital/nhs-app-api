@@ -18,7 +18,7 @@ Feature: Organ Donation
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
     @smoketest
@@ -48,7 +48,7 @@ Feature: Organ Donation
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
     And my choice of '<Option>' to share my faith and beliefs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
     Examples:
@@ -67,7 +67,7 @@ Feature: Organ Donation
     Then the Organ Donation Check Details page is displayed
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
 
@@ -100,10 +100,10 @@ Feature: Organ Donation
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'Yes I want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
-  @smoketest
+    @smoketest
     Examples:
       | GP System |
       | TPP       |
@@ -124,7 +124,7 @@ Feature: Organ Donation
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
     And my ethnicity is recorded on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
 
@@ -139,7 +139,7 @@ Feature: Organ Donation
     And the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page
     And my ethnicity is recorded as not chosen on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
 
@@ -154,7 +154,7 @@ Feature: Organ Donation
     Then the Organ Donation Check Details page is displayed
     And my religion is recorded on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
 
@@ -168,7 +168,7 @@ Feature: Organ Donation
     Then the Organ Donation Check Details page is displayed
     And my religion is recorded as not chosen on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt out of organ donation has been successfully created
 
@@ -327,7 +327,7 @@ Feature: Organ Donation
     When I navigate to the internal Organ Donation Choice Page
     When I follow the opt-out journey to the 'Check Details' page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     And I see an appropriate Organ Donation error message with a retry option
     When I click the 'Try again' button
     And the Organ Donation View Registration page is displayed
@@ -342,7 +342,7 @@ Feature: Organ Donation
     When I navigate to the internal Organ Donation Choice Page
     When I follow the opt-out journey to the 'Check Details' page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
-    And I click the 'No I do not want to be a donor' button
+    And I click the 'Submit my decision' button
     And I see an appropriate Organ Donation error message without a retry option
     Examples:
       | Error Code |

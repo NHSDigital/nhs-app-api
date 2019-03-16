@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
     internal class OrganDonationClient : IOrganDonationClient
     {
         private const string LookupPath = "Registration/_search";
-        private const string CreatePath = "Registration";
+        private const string RegistrationPath = "Registration";
         private const string AllReferencePath = "ReferenceData";
 
         private const string SessionIdHeaderKey = "X-Session-ID";
@@ -48,11 +48,11 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
                 (request, userSession, LookupPath);
         }
 
-        public async Task<OrganDonationResponse<RegistrationResponse>> PostRegistration(
+        public async Task<OrganDonationResponse<OrganDonationBasicResponse>> PostRegistration(
             RegistrationRequest request, UserSession userSession)
         {
-            return await Post<RegistrationRequest, RegistrationResponse>
-                (request, userSession, CreatePath);
+            return await Post<RegistrationRequest, OrganDonationBasicResponse>
+                (request, userSession, RegistrationPath);
         }
 
         public async Task<OrganDonationResponse<ReferenceDataResponse>> GetAllReferenceData()
@@ -60,13 +60,22 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             return await Get<ReferenceDataResponse>(AllReferencePath);
         }
 
-        public async Task<OrganDonationResponse<RegistrationResponse>> PutUpdate(
+        public async Task<OrganDonationResponse<OrganDonationBasicResponse>> PutUpdate(
             RegistrationRequest request, UserSession userSession)
         {
-            return await Put<RegistrationRequest, RegistrationResponse>(
+            return await Put<RegistrationRequest, OrganDonationBasicResponse>(
                 request,
                 userSession,
-                $"{CreatePath}/{request.Id}");
+                $"{RegistrationPath}/{request.Id}");
+        }
+
+        public async Task<OrganDonationResponse<OrganDonationBasicResponse>> Delete(
+            WithdrawRequest request, UserSession userSession)
+        {
+            return await Delete<WithdrawRequest, OrganDonationBasicResponse>(
+                request,
+                userSession,
+                $"{RegistrationPath}/{request.Id}");
         }
 
         private async Task<OrganDonationResponse<TResponse>> Get<TResponse>(string path)
@@ -91,8 +100,15 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             return await SendRequestAndParseResponse<TResponse>(request);
         }
 
-        private HttpRequestMessage BuildRegistrationRequest<TRequest>(HttpMethod httpMethod, UserSession userSession,
-            string path, TRequest model)
+        private async Task<OrganDonationResponse<TResponse>> Delete<TRequest, TResponse>(
+            TRequest model, UserSession userSession, string path)
+        {
+            var request = BuildRegistrationRequest(HttpMethod.Delete, userSession, path, model);
+
+            return await SendRequestAndParseResponse<TResponse>(request);
+        }
+
+        private HttpRequestMessage BuildRegistrationRequest<TRequest>(HttpMethod httpMethod, UserSession userSession, string path, TRequest model)
         {
             var request = new HttpRequestMessage(httpMethod, path);
             request.Headers.Add(SessionIdHeaderKey, userSession.OrganDonationSessionId.ToString());

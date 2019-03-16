@@ -14,5 +14,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         Task<OrganDonationReferenceDataResult> GetReferenceData();
 
         Task<OrganDonationRegistrationResult> Update(OrganDonationRegistrationRequest request, UserSession userSession);
+
+        Task<OrganDonationWithdrawResult> Withdraw(OrganDonationWithdrawRequest model, UserSession userSession);
     }
 }

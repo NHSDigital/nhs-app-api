@@ -23,8 +23,6 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Models
 
         public Address Address { get; set; }
 
-        public string EmailAddress { get; set; }
-
         [JsonConverter(typeof(StringEnumConverter), false)]
         [Accepts(Decision.OptIn, Decision.OptOut)]
         public Decision Decision { get; set; }

@@ -803,6 +803,17 @@ export default {
       amendText: 'Amend your decision',
       findOutMoreText: 'Find out more about organ donation',
     },
+    otherThings: {
+      subheader: 'Other things you can do',
+      bloodDonation: {
+        subheader: 'Register to be a blood donor',
+        body: 'If you want to give more, why not sign up to give blood? You can easily book an appointment and find your local centre via the app.',
+      },
+      withdraw: {
+        subheader: 'Withdraw your decision',
+        body: 'Remove an existing registration from the Organ Donor Register. There will be no recorded decision for you about organ donation.',
+      },
+    },
     register: {
       subheader: 'Register your organ donation decision',
       noButton: {
@@ -850,8 +861,7 @@ export default {
     reviewYourDecision: {
       header: 'Check your details before submitting',
       errorMsgHeader: 'There\'s a problem',
-      submitButton: 'Yes I want to be a donor',
-      submitNoButton: 'No I do not want to be a donor',
+      submitButton: 'Submit my decision',
       aboutYou: {
         subheader: 'About you',
         nameheader: 'Name',
@@ -896,6 +906,7 @@ export default {
         optoutDecisionText: 'No, I do not want to donate my organs',
         optinDecisionText: 'Yes, I do want to donate my organs',
         optinSomeDecisionText: 'Specific organs and tissue',
+        withdrawDecisionText: 'Withdraw my decision from the register',
       },
       confirmation: {
         subheader: 'Confirmation',
@@ -907,6 +918,10 @@ export default {
           accuracy: 'You must confirm that the information provided is true, complete and accurate.',
           privacy: 'You must confirm that you have read the privacy statement and consent to your information being used accordingly.',
         },
+      },
+      withdraw: {
+        subheader: 'What this means',
+        body: 'Your family will be asked to make a decision for you, when you die.',
       },
     },
     viewDecision: {
@@ -927,13 +942,6 @@ export default {
       },
       successMessageText: 'We have updated your decision',
       successMessageDialogText: 'Success',
-      otherThings: {
-        subheader: 'Other things you can do',
-        bloodDonation: {
-          subheader: 'Register to be a blood donor',
-          body: 'If you want to give more, why not sign up to give blood? You can easily book an appointment and find your local centre via the app.',
-        },
-      },
       nextSteps: {
         subheader: 'Next steps',
         shareDecision: {
@@ -964,6 +972,35 @@ export default {
       pancreasTitle: 'Pancreas',
       tissueTitle: 'Tissue',
       smallBowelTitle: 'Small bowel',
+    },
+    withdrawn: {
+      dialogText: 'Decision withdrawn',
+      messageTextItems: [
+        'You no longer have a decision recorded on the NHS Organ Donor Register.',
+        'You can record a new decision at any time.',
+      ],
+      whatNext: {
+        header: 'What to do next',
+        bodyItems: [
+          'Let your family know that you have withdrawn your details from the register. If you die in circumstances where donation is possible, we will ask your family if you expressed a verbal decision. If you did not express a verbal decision, we will ask your family to make a decision on your behalf.',
+          'Your family won\'t know what you want unless you tell them, so help them now to support your decision at a difficult time.',
+        ],
+      },
+    },
+    withdrawReason: {
+      continueButton: 'Continue',
+      errorMessageHeader: 'There\'s a problem',
+      errorMessageText: 'Give a reason for withdrawing your decision',
+      subheader: 'Withdraw my decision',
+      bodyItems: [
+        'Withdrawing your decision means there will be no recorded decision for you, and without this your family will be asked to decide for you, when you die.',
+        'If you are certain you do not want to donate your organs or tissue, you need to register a \'no\' decision.',
+        'Whatever you decide, please make sure your family know your decision.',
+      ],
+      reason: {
+        label: 'Reason for withdrawing',
+        placeholder: 'Select reason',
+      },
     },
   },
   symptomBanner: {

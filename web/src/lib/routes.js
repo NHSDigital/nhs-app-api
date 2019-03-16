@@ -146,10 +146,6 @@ const routes = {
     name: 'organ-donation-some-organs',
     path: '/organ-donation/some-organs',
   },
-  ORGAN_DONATION_YOUR_CHOICE: {
-    name: 'organ-donation-your-choice',
-    path: '/organ-donation/your-choice',
-  },
   ORGAN_DONATION_REVIEW_YOUR_DECISION: {
     name: 'organ-donation-review-your-decision',
     path: '/organ-donation/review-your-decision',
@@ -157,6 +153,18 @@ const routes = {
   ORGAN_DONATION_VIEW_DECISION: {
     name: 'organ-donation-view-decision',
     path: '/organ-donation/view-decision',
+  },
+  ORGAN_DONATION_WITHDRAW_REASON: {
+    name: 'organ-donation-withdraw-reason',
+    path: '/organ-donation/withdraw-reason',
+  },
+  ORGAN_DONATION_WITHDRAWN: {
+    name: 'organ-donation-withdrawn',
+    path: '/organ-donation/withdrawn',
+  },
+  ORGAN_DONATION_YOUR_CHOICE: {
+    name: 'organ-donation-your-choice',
+    path: '/organ-donation/your-choice',
   },
   PRESCRIPTIONS: {
     name: 'prescriptions',
@@ -229,10 +237,12 @@ export const {
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,
   ORGAN_DONATION_FAITH,
-  ORGAN_DONATION_YOUR_CHOICE,
   ORGAN_DONATION_SOME_ORGANS,
   ORGAN_DONATION_REVIEW_YOUR_DECISION,
   ORGAN_DONATION_VIEW_DECISION,
+  ORGAN_DONATION_WITHDRAW_REASON,
+  ORGAN_DONATION_WITHDRAWN,
+  ORGAN_DONATION_YOUR_CHOICE,
   PRESCRIPTIONS,
   PRESCRIPTION_REPEAT_COURSES,
   PRESCRIPTION_CONFIRM_COURSES,

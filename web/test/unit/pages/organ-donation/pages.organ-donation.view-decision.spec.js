@@ -30,23 +30,6 @@ describe('view decision', () => {
     return mount(ViewDecision, { $store: store, $style });
   };
 
-  beforeEach(() => {
-    const state = createState();
-    state.organDonation.registration.decision = DECISION_OPT_IN;
-    state.organDonation.registration.identifier = '12345';
-    state.organDonation.registration.state = STATE_OK;
-    $store = createStore({ state });
-    wrapper = mountWrapper();
-  });
-
-  it('will show other things to do', () => {
-    expect(wrapper.find(OtherThingsToDo).exists()).toBe(true);
-  });
-
-  it('will show next steps', () => {
-    expect(wrapper.find(NextSteps).exists()).toBe(true);
-  });
-
   describe('not conflicted', () => {
     let state;
 
@@ -67,6 +50,10 @@ describe('view decision', () => {
       expect(wrapper.find(AmendDecisionLink).exists()).toEqual(true);
     });
 
+    it('will show next steps', () => {
+      expect(wrapper.find(NextSteps).exists()).toBe(true);
+    });
+
     it('will show the success message text', () => {
       expect(wrapper.text())
         .toContain('translate_organDonation.viewDecision.successMessageText');
@@ -80,6 +67,10 @@ describe('view decision', () => {
     it('will not show the Decision submitted message text', () => {
       expect(wrapper.text())
         .not.toContain('translate_organDonation.viewDecision.decisionSubmitted.messageText');
+    });
+
+    it('will show other things to do', () => {
+      expect(wrapper.find(OtherThingsToDo).exists()).toBe(true);
     });
 
     describe('selected all organs', () => {
@@ -149,12 +140,20 @@ describe('view decision', () => {
       expect(wrapper.find(YourDecision).exists()).toBe(false);
     });
 
+    it('will not show next steps', () => {
+      expect(wrapper.find(NextSteps).exists()).toBe(false);
+    });
+
     it('will not show the decision details', () => {
       expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
     });
 
     it('will not show the amend decision link', () => {
       expect(wrapper.find(AmendDecisionLink).exists()).toEqual(false);
+    });
+
+    it('will show other things to do', () => {
+      expect(wrapper.find(OtherThingsToDo).exists()).toBe(true);
     });
   });
 });

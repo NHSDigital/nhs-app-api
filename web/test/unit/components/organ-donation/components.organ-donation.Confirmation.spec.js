@@ -12,7 +12,12 @@ describe('confirmation', () => {
       organDonation: initialState(),
     };
     $store = createStore({ state });
-    wrapper = shallowMount(Confirmation, { $store });
+    wrapper = shallowMount(Confirmation, {
+      $store,
+      propsData: {
+        submitAttempted: false,
+      },
+    });
   });
 
   describe('toggleAccuracy', () => {

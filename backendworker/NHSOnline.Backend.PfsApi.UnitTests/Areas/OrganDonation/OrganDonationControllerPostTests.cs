@@ -40,6 +40,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             _mockOrganDonationService = _fixture.Freeze<Mock<IOrganDonationService>>();
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
+            var mockValidator = _fixture.Freeze<Mock<IOrganDonationValidationService>>();
+            mockValidator
+                .Setup(x => x.IsPostValid(It.IsAny<OrganDonationRegistrationRequest>()))
+                .Returns(true);
+
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
 

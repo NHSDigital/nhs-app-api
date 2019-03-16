@@ -88,7 +88,7 @@ export default {
       route: ORGAN_DONATION_REVIEW_YOUR_DECISION.path,
       additionalInfoComponent: 'ContactOrganDonation',
       action: {
-        1: 'organDonation/submitRegistration',
+        1: 'organDonation/submitDecision',
       },
     },
     {

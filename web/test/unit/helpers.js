@@ -43,6 +43,15 @@ export const createStore = ({
   state,
 });
 
+// initialise scrollTo
+global.scrollTo = jest.fn();
+
+export const createScrollTo = () => {
+  const scrollTo = jest.fn();
+  global.scrollTo = scrollTo;
+  return scrollTo;
+};
+
 export const initFilters = () => [
   'longDate',
 ].map(filter => Vue.filter(filter, () => {}));

@@ -1,6 +1,6 @@
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import cloneDeep from 'lodash/fp/cloneDeep';
-import { ORGAN_DONATION_VIEW_DECISION } from '@/lib/routes';
+import { ORGAN_DONATION_VIEW_DECISION, ORGAN_DONATION_WITHDRAWN } from '@/lib/routes';
 import {
   CLONE_FROM_ORIGINAL,
   INIT,
@@ -17,6 +17,8 @@ import {
   SET_REGISTRATION_ID,
   SET_SOME_ORGANS,
   SET_STATE,
+  SET_WITHDRAW_REASON_ID,
+  SET_WITHDRAWING,
   RESET_REGISTRATION,
   UPDATE_ORIGINAL_REGISTRATION,
 } from './mutation-types';
@@ -64,6 +66,19 @@ export default {
   cloneFromOriginal({ commit }, path) {
     commit(CLONE_FROM_ORIGINAL, path);
   },
+  async deleteRegistration({ commit, state }) {
+    const request = {
+      organDonationWithdrawRequest: {
+        ...state.originalRegistration,
+        withdrawReasonId: state.withdrawReasonId,
+      },
+    };
+    await this.app.$http.deleteV1PatientOrgandonation(request);
+
+    commit(INIT);
+
+    this.$router.push(ORGAN_DONATION_WITHDRAWN.path);
+  },
   async getReferenceData({ commit }) {
     return this.app.$http.getV1PatientOrgandonationReferencedata()
       .then(data => commitData({ commit, data, mutation: LOADED_REFERENCE_DATA }));
@@ -100,6 +115,12 @@ export default {
   setSomeOrgans({ commit }, { value, choice }) {
     commit(SET_SOME_ORGANS, { value, choice });
   },
+  setWithdrawReasonId({ commit }, reasonId) {
+    commit(SET_WITHDRAW_REASON_ID, reasonId);
+  },
+  async submitDecision({ dispatch, state }) {
+    return dispatch(`${state.isWithdrawing ? 'delete' : 'submit'}Registration`);
+  },
   async submitRegistration({ commit, state }) {
     const request = buildRequest(state);
     const response = await this.app.$http[`${state.isAmending ? 'put' : 'post'}V1PatientOrgandonation`](request);
@@ -115,5 +136,12 @@ export default {
   },
   togglePrivacyAcceptance({ commit, state }) {
     commit(SET_PRIVACY_ACCEPTANCE, !state.isPrivacyAccepted);
+  },
+  withdrawCancel({ commit }) {
+    commit(SET_WITHDRAWING, false);
+    commit(SET_WITHDRAW_REASON_ID, '');
+  },
+  withdrawStart({ commit }) {
+    commit(SET_WITHDRAWING, true);
   },
 };

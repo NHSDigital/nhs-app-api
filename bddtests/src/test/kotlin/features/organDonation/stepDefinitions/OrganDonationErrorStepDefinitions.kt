@@ -35,8 +35,7 @@ class OrganDonationErrorStepDefinitions {
         val factory = OrganDonationFactory(gpSystem)
         CitizenIdSessionCreateJourney(factory.mockingClient).createFor(factory.patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, factory.mockingClient).createFor(factory.patient)
-        val existingRegistration = factory.existingOptIn()
-
+        val existingRegistration = factory.existing.optIn()
         factory.mockingClient.forOrganDonation {
             referenceData().respondWithError(errorCode)
                     .inScenario(ERROR_SCENARIO)
@@ -65,7 +64,7 @@ class OrganDonationErrorStepDefinitions {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
 
-        val existingRegistration = factory.existingOptIn()
+        val existingRegistration = factory.existing.optIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.lookUpRegistrationWithSuccessfulDemographics { a ->
@@ -78,6 +77,42 @@ class OrganDonationErrorStepDefinitions {
             a.respondWithSuccess(existingRegistration)
                     .inScenario(ERROR_SCENARIO)
                     .whenScenarioStateIs(ERROR_SCENARIO_WILL_SUCCEED)}
+    }
+
+    @Given("^I am a (\\w+) user registered with organ donation with a decision to (.*) " +
+            "who wishes to withdraw but OD returns recoverable (.*) error$")
+    fun iAmRegisteredWithOrganDonationAndWishToWithdrawButSeesAnError(gpSystem: String,
+                                                                      decision: String,
+                                                                      httpStatus: Int) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val existing = factory.existing.setUpExistingDecisionForPatient(decision)
+        factory.withdrawRegistration{
+            request ->request
+                .respondWithError(httpStatus)
+                .inScenario(ERROR_SCENARIO)
+                .whenScenarioStateIs(Scenario.STARTED)
+                .willSetStateTo(ERROR_SCENARIO_WILL_SUCCEED)
+        }
+        factory.withdrawRegistration{
+            request ->request
+                .respondWithSuccess(existing.id)
+                .inScenario(ERROR_SCENARIO)
+                .whenScenarioStateIs(ERROR_SCENARIO_WILL_SUCCEED)
+        }
+    }
+
+    @Given("^I am a (\\w+) user registered with organ donation with a decision to (.*) " +
+            "who wishes to withdraw but OD returns non-recoverable (.*) error$")
+    fun iAmRegisteredWithOrganDonationAndWishToWithdrawButSeesANonRecoverableError(gpSystem: String,
+                                                                                   decision: String,
+                                                                                   httpStatus: Int) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.existing.setUpExistingDecisionForPatient(decision)
+        factory.withdrawRegistration{
+            request ->request.respondWithError(httpStatus)
+        }
     }
 
     @Given("^I am a (\\w+) user who wishes to register as opt out, but OD returns non-recoverable (.*) error$")
@@ -117,7 +152,7 @@ class OrganDonationErrorStepDefinitions {
     fun iAmRegisteredAsOptInAmendingToOptOutButOrganDonationThrowsError(gpSystem: String, errorCode: Int) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        val existingRegistration = factory.existingOptIn()
+        val existingRegistration = factory.existing.optIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.amend { registration ->
@@ -130,7 +165,7 @@ class OrganDonationErrorStepDefinitions {
     fun iAmRegisteredAsOptInAmendingToOptOutButOrganDonationThrowsErrorAndIRetry(gpSystem: String, errorCode: Int) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        val existingRegistration = factory.existingOptIn()
+        val existingRegistration = factory.existing.optIn()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.amend { registration ->
@@ -155,7 +190,6 @@ class OrganDonationErrorStepDefinitions {
         factory.lookUpRegistrationWithSuccessfulDemographics { a ->
             a.respondWithError(HttpStatus.SC_CONFLICT) }
     }
-
 
     @Then("^I see an appropriate Organ Donation error message without a retry option$")
     fun iSeeAnAppropriateOrganDonationErrorMessageWithNoOptionToRetry() {

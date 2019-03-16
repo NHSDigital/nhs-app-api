@@ -61,8 +61,25 @@ class OrganDonationReferenceDataBuilder {
             OrganDonationSerenityHelpers.REFERENCE_ETHNICITIES
                     .set(ethnicitiesResource.concept.map { concept -> concept.display })
 
+            val withdrawalReasonsResource = ReferenceDataResponse(
+                    "withdraw-reasons",
+                    arrayListOf(
+                            Coding(code = "1", display = "Request for Withdrawal"),
+                            Coding(code = "2", display = "Withdrawn As Leaving UK"),
+                            Coding(code = "3", display = "Religious Grounds"),
+                            Coding(code = "4", display = "Medical Condition"),
+                            Coding(code = "5", display = "Registered In Error"),
+                            Coding(code = "6", display = "Change of Mind"),
+                            Coding(code = "7", display = "Family Do Not Agree"),
+                            Coding(code = "8", display = "Other")
+                    )
+            )
+
+            OrganDonationSerenityHelpers.REFERENCE_WITHDRAWAL_REASONS
+                    .set(withdrawalReasonsResource.concept.map { concept -> concept.display })
+
             return OrganDonationSuccessResponse(
-                    listOf(Entry(religionsResource), Entry(ethnicitiesResource)))
+                    listOf(Entry(religionsResource), Entry(ethnicitiesResource), Entry(withdrawalReasonsResource)))
         }
     }
 }
