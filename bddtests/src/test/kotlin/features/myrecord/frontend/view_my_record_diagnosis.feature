@@ -10,6 +10,15 @@ Feature: View My Medical Record Information - Diagnosis
     When I click the diagnosis section
     Then I see diagnosis information
 
+  Scenario: A VISION user can view diagnosis information without Javascript
+    Given I have disabled javascript
+    And the my record wiremocks are initialised for VISION
+    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has multiple diagnosis
+    And I am on my record information page
+    When I click the diagnosis section
+    Then I see diagnosis information
+
   Scenario: A VISION user has no access to diagnosis section
     Given the my record wiremocks are initialised for VISION
     And the GP Practice has enabled demographics functionality for VISION

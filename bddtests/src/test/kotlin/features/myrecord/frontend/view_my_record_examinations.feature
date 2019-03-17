@@ -10,6 +10,15 @@ Feature: View My Medical Record Information - Examinations
     When I click the examinations section
     Then I see examinations information
 
+  Scenario: A VISION user can view examinations information without Javascript
+    Given I have disabled javascript
+    Given the my record wiremocks are initialised for VISION
+    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has multiple examinations
+    And I am on my record information page
+    When I click the examinations section
+    Then I see examinations information
+
   Scenario: A VISION user has no access to examinations section
     Given the my record wiremocks are initialised for VISION
     And the GP Practice has enabled demographics functionality for VISION
