@@ -13,8 +13,8 @@ class GPFinderPage : HybridPageObject() {
     }
 
     private val findYourGPSurgeryHeader = HybridPageElement(
-            webDesktopLocator = "//h4[contains(text(),'Find your GP surgery')]",
-            webMobileLocator = "//h4[contains(text(),'Find your GP surgery')]",
+            webDesktopLocator = "//h2[contains(text(),'Find your GP surgery')]",
+            webMobileLocator = "//h2[contains(text(),'Find your GP surgery')]",
             androidLocator = null,
             page = this
     )

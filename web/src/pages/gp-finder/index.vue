@@ -20,8 +20,8 @@
     </div>
 
     <div :class="$style.throttlingContent">
-      <h3>{{ $t('th02.heading1') }}</h3>
-      <h4>{{ $t('th02.heading2') }}</h4>
+      <h1>{{ $t('th02.heading1') }}</h1>
+      <h2>{{ $t('th02.heading2') }}</h2>
 
       <p id="search-label">{{ $t('th02.hintText') }}</p>
       <error-message v-if="showError"

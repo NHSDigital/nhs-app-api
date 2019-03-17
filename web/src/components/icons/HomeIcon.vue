@@ -1,11 +1,12 @@
 <template>
   <tab-focused-icon :icon-classes="[$style['nhs_logo']]" :disable-tab-focus="true"
                     view-box="0 0 79 32" preserve-aspect-ratio="xMinYMid meet"
-                    role="img" aria-hidden="true"
+                    role="img" aria-labelledby="icon-title"
                     version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>{{ $t('icons.homeIcon.title') }}</title>
+    <title id="icon-title">{{ $t('icons.homeIcon.title') }}</title>
     <defs>NHS Logo</defs>
-    <g id="nhs_logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="nhs_logo" role="presentation" stroke="none"
+       stroke-width="1" fill="none" fill-rule="evenodd">
       <!--eslint-disable-next-line -->
             <polygon id="Fill-1" fill="#FFFFFF" points="0 31.8736173 78.3641739 31.8736173 78.3641739 0 0 0"></polygon>
       <!--eslint-disable-next-line -->

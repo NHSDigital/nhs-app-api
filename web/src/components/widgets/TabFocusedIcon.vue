@@ -1,11 +1,18 @@
 <template>
   <!--eslint-disable-next-line  vue/this-in-template -->
-  <svg :id="id"
+  <svg v-if="disableTabFocus"
+       :class="iconClasses"
+       :viewBox="viewBox"
+       :preserveAspectRatio="preserveAspectRatio"
+       xmlns="http://www.w3.org/2000/svg">
+    <slot/>
+  </svg>
+  <svg v-else
        v-tabbing="iconClasses"
        :class="getStyleClasses"
        :viewBox="viewBox"
        :preserveAspectRatio="preserveAspectRatio"
-       :tabindex="disableTabFocus ? undefined : '-1'"
+       tabindex="-1"
        xmlns="http://www.w3.org/2000/svg">
     <slot/>
   </svg>
@@ -24,10 +31,6 @@ export default {
     iconClasses: {
       type: Array,
       default: () => [],
-    },
-    id: {
-      type: String,
-      default: '',
     },
     viewBox: {
       type: String,

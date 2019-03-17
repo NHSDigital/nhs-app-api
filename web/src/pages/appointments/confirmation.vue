@@ -30,7 +30,8 @@
         </div>
 
         <appointment-slot v-if="slot" :appointment="slot" :show-cancellation-link="false"
-                          aria-label="selected appointment" />
+                          aria-label="selected appointment"
+                          date-time-header="h2" />
         <div v-if="showPhoneNumber()" :class="[$style.form, $style.phoneNumberForm]"
              role="form" data-purpose="phone-number">
           <fieldset :class="$style.fieldsetTelephoneNumberRadio">

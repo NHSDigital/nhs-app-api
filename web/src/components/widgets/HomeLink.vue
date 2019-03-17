@@ -1,8 +1,7 @@
 <template>
   <nuxt-link ref="homeLogoEl"
              :class="$style['anchor-icon']"
-             :to="indexPath"
-             :title=" $t(getTitle())">
+             :to="indexPath">
     <home-icon/>
   </nuxt-link>
 </template>
@@ -24,9 +23,6 @@ export default {
     // No javascript handles the removing of focus fine
     // this line is for javascript side to handle it
       document.activeElement.blur();
-    },
-    getTitle() {
-      return 'icons.homeIcon.title';
     },
   },
 };

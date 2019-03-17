@@ -1,13 +1,13 @@
 <template>
   <div :class="[$style.panel, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <h3>
+    <component :is="dateTimeHeader" :class="$style['date-time-header']">
       <span role="text">
         <span :class="$style.date"
               data-label="date">{{ formatDate(appointment.startTime) }}&nbsp;</span>
         <span :class="$style.time"
               data-label="start time">{{ formatTime(appointment.startTime) }}</span>
       </span>
-    </h3>
+    </component>
     <hr aria-hidden="true">
     <p :class="[$style.session, appointment.sessionName && $style.reducedPadding]"
        data-label="slot type">
@@ -80,6 +80,11 @@ export default {
       default: false,
       type: Boolean,
     },
+    dateTimeHeader: {
+      type: String,
+      default: 'h3',
+      validator: value => ['h2', 'h3'].indexOf(value) !== -1,
+    },
   },
   computed: {
     appointmentCancellingPath() {
@@ -114,7 +119,7 @@ export default {
       opacity: unset;
     }
 
-    h3 {
+    .date-time-header {
       font-family: $default-web;
       font-weight: lighter;
       display: block;

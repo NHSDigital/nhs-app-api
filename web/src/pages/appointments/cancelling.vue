@@ -14,7 +14,8 @@
 
     <div :class="$style.appointmentContainer">
       <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false"
-                   aria-label="selected appointment" />
+                   aria-label="selected appointment"
+                   date-time-header="h2" />
     </div>
     <form-post :action="appointmentCancelPath">
       <input :value="appointment.id" type="hidden" name="id">
