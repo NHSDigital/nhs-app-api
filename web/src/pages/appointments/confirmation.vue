@@ -215,7 +215,7 @@ export default {
       return this.telephoneNumberError && !this.telephoneNumber;
     },
     showError() {
-      return this.reasonError || this.telephoneNumberError;
+      return this.showReasonError || this.showTelephoneError;
     },
     confirmationMessageKey() {
       return this.$store.state.myAppointments.disableCancellation
@@ -309,7 +309,6 @@ export default {
         if ((this.telephoneNumber.length === 0)
           && (this.otherTelephoneNumber.trim().length === 0)) {
           this.telephoneNumberError = true;
-          this.showError = true;
         }
       }
 
@@ -318,7 +317,6 @@ export default {
       this.symptoms = this.symptoms.trim();
       if (this.symptoms.length === 0 && isMandatory) {
         this.reasonError = true;
-        this.showError = true;
       }
 
       if (this.showError) {

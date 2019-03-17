@@ -18,6 +18,7 @@ export default {
   name: 'LocationIcon',
 };
 </script>
+
 <style lang="scss" scoped>
 @import "../../style/icons";
 @import "../../style/colours";

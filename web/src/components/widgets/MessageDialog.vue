@@ -1,9 +1,9 @@
 <template>
-  <div :class="[ mType,
-                 ...extraClasses,
-                 !$store.state.device.isNativeApp && $style.desktopWeb,
-                 plainStyle,
-  ]">
+  <div data-purpose="error-container"
+       :class="[mType,
+                ...extraClasses,
+                {[$style.desktopWeb] : !$store.state.device.isNativeApp},
+                plainStyle]">
     <div v-if="showIcon" :class="$style.icon">
       {{ iText }}
     </div>
