@@ -12,14 +12,15 @@ import models.AppointmentDate
 import java.time.LocalDateTime
 import kotlin.collections.ArrayList
 
+private const val STARTING_SESSION_ID = 0
+private const val STARTING_SLOT_ID = 100
+
 class GenerateAppointmentData {
 
     private var sessionClinicType = "Clinic"
 
-    companion object {
-        var sessionId = 0
-        var slotId = 100
-    }
+    var sessionId = STARTING_SESSION_ID
+    var slotId = STARTING_SLOT_ID
 
     fun generateAppointments(locationNames: ArrayList<String>,
                              typesArray: ArrayList<String>,
@@ -95,7 +96,7 @@ class GenerateAppointmentData {
             val isSlotInPast = date.date < LocalDateTime.now()
 
             val startDate = FilterSlotDetails(date.date, date.hour, date.minute)
-            val endDate = FilterSlotDetails(date.date, date.hour, date.minute.plus(date.duration))
+            val endDate = FilterSlotDetails(date.date, date.hour, date.minute?.plus(date.duration))
 
             for (type in types) {
                 val appointment = AppointmentSlotFacadeBuilder()

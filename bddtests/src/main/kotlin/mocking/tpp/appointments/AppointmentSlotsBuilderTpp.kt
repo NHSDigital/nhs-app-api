@@ -29,6 +29,8 @@ class AppointmentSlotsBuilderTpp(
         endDate: ZonedDateTime?
 ) : TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
 
+    private val appointmentSlotsExample = AppointmentsSlotsExample()
+
     init {
         val typeHeader = "type"
         val typeValue = "ListSlots"
@@ -98,7 +100,7 @@ class AppointmentSlotsBuilderTpp(
     }
 
     override fun respondWithCorrupted(): Mapping {
-        val model = AppointmentsSlotsExample.multipleSlotsOneLocation()
+        val model = appointmentSlotsExample.multipleSlotsOneLocation()
         val response = JSonXmlConverter.toXML(listSlotsReplyConverter(model))
         return respondWithCorruptedContent(response)
     }

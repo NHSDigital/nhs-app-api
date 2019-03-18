@@ -21,6 +21,8 @@ class MyAppointmentsStepDefinitionsBackend {
     @Steps
     lateinit var myAppointmentsBackendSteps: MyAppointmentsBackendSteps
 
+    private val appointmentSlotsExample = AppointmentsSlotsExample()
+
     @Given("^I have no booked appointments for (.*)$")
     fun iHaveNoBookedAppointments(gpService: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
@@ -37,8 +39,8 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveHistoricalAppointments(gpService: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample().getGenericExample(
-                        arrayListOf(AppointmentsSlotsExample.getHistoricalAppointmentSession())
+                appointmentSlotsExample.getGenericExample(
+                        arrayListOf(appointmentSlotsExample.getHistoricalAppointmentSession())
                 )
         )
     }
@@ -47,10 +49,10 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveHistoricalAndUpcomingAppointments(gpService: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample().getGenericExample(
+                appointmentSlotsExample.getGenericExample(
                         arrayListOf(
-                                AppointmentsSlotsExample.getHistoricalAppointmentSession(),
-                                AppointmentsSlotsExample.getExampleWithAppointmentWithinCutoffTime()
+                                appointmentSlotsExample.getHistoricalAppointmentSession(),
+                                appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime()
                         )
                 )
         )
@@ -60,8 +62,8 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointmentsAndOneInThePast(gpService: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample().getGenericExample(arrayListOf(
-                        AppointmentsSlotsExample.getExampleWithPastAppointment()
+                appointmentSlotsExample.getGenericExample(arrayListOf(
+                        appointmentSlotsExample.getExampleWithPastAppointment()
                 ))
         )
     }
@@ -82,8 +84,8 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointmentsWithinCutoffWithOneCancellationReason() {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample().getGenericExample(
-                        arrayListOf(AppointmentsSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
+                appointmentSlotsExample.getGenericExample(
+                        arrayListOf(appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
                 2)
     }
 
@@ -91,8 +93,8 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointmentsWithinCutoffWithoutCancellationReasons() {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample().getGenericExample(
-                        arrayListOf(AppointmentsSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
+                appointmentSlotsExample.getGenericExample(
+                        arrayListOf(appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
                 0)
     }
 
@@ -100,8 +102,8 @@ class MyAppointmentsStepDefinitionsBackend {
     fun iHaveUpcomingAppointmentsBeforeAndWithinCutoffWithOneCancellationReason() {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("VISION")
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                AppointmentsSlotsExample().getGenericExample(
-                        arrayListOf(AppointmentsSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
+                appointmentSlotsExample.getGenericExample(
+                        arrayListOf(appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime())),
                 2)
     }
 
@@ -146,10 +148,10 @@ class MyAppointmentsStepDefinitionsBackend {
     fun tppIsUnavailableForAppointments(appointmentType: String) {
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier("TPP")
         val example = MyAppointmentsFacade(
-                AppointmentsSlotsExample().getGenericExample(
+                appointmentSlotsExample.getGenericExample(
                         arrayListOf(
-                                AppointmentsSlotsExample.getHistoricalAppointmentSession(),
-                                AppointmentsSlotsExample.getExampleWithAppointmentWithinCutoffTime()
+                                appointmentSlotsExample.getHistoricalAppointmentSession(),
+                                appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime()
                         )
                 )
         )

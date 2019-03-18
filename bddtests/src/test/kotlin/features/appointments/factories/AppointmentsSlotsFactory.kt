@@ -19,6 +19,7 @@ private const val APPOINTMENT_SLOT_RESPONSE_VALIDITY_TIME = 10L
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
     protected val appointmentSlotsFactoryHelper = AppointmentSlotsFactoryHelper()
+    private val appointmentSlotsExample = AppointmentsSlotsExample()
 
     fun generateDefaultAvailableAppointmentSlotExample(
             startDate: ZonedDateTime? = null,
@@ -54,7 +55,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     }
 
     fun generateMultipleAvailableAppointmentSlotsForTheSameTime() {
-        val example = AppointmentsSlotsExample.multipleSlotsOneTime()
+        val example = appointmentSlotsExample.multipleSlotsOneTime()
         generateExample(example)
     }
 
@@ -104,9 +105,9 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         createGetEmptyAppointmentList()
     }
 
-    private fun retrieveSlotsExample() = AppointmentsSlotsExample().getGenericExample()
+    private fun retrieveSlotsExample() = appointmentSlotsExample.getGenericExample()
 
-    private fun retrieveSlotsExampleIncludingTelephoneAppointments() = AppointmentsSlotsExample
+    private fun retrieveSlotsExampleIncludingTelephoneAppointments() = appointmentSlotsExample
             .slotExampleIncludingTelephoneAppointments()
 
     fun generateExample(mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {

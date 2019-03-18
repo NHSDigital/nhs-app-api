@@ -13,8 +13,10 @@ import java.time.Duration
 
 class AppointmentSlotsStubs(private val mockingClient: MockingClient) {
 
+    private val appointmentSlotsExample = AppointmentsSlotsExample()
+
     fun generateEMISStubs() {
-        val facade = AppointmentsSlotsExample.multipleSlotsOneLocation()
+        val facade = appointmentSlotsExample.multipleSlotsOneLocation()
         val mapAppointmentSlotsStubs =
                 InputResponse<Patient, IAppointmentSlotsBuilder>()
                         .addResponse(goodPatientEMIS) { builder
