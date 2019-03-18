@@ -16,10 +16,10 @@
                        header-key="organDonation.registered.yourDecision.subheader"/>
         <div v-if="hasExistingOptIn">
           <decision-details
-            v-if="hasSomeOrgans"
+            v-if="isSomeOrgans"
             :choices="choices"/>
         </div>
-        <reaffirm-decision v-if="!hasAppointedRep" :is-some-organs="hasSomeOrgans"/>
+        <reaffirm-decision v-if="!hasAppointedRep" :is-some-organs="isSomeOrgans"/>
         <amend-decision-link :class="$style['mt-3']"/>
         <div v-if="hasAppointedRep" :class="[$style.info, $style.appointedRep, $style['mt-3']]">
           <p>{{ $t('organDonation.registered.appointedRep.phoneLabel') }}</p>
@@ -83,6 +83,7 @@ export default {
     return {
       decision: this.$store.state.organDonation.originalRegistration.decision,
       decisionDetails: this.$store.state.organDonation.originalRegistration.decisionDetails,
+      isSomeOrgans: this.$store.getters['organDonation/isSomeOrgans'],
       state: this.$store.state.organDonation.originalRegistration.state,
     };
   },
@@ -101,12 +102,6 @@ export default {
     },
     hasExistingOptOut() {
       return this.decision === DECISION_OPT_OUT;
-    },
-    hasSomeOrgans() {
-      return !!(
-        this.hasExistingDecision &&
-        get('all')(this.decisionDetails) === false
-      );
     },
     isConflicted() {
       return this.state === STATE_CONFLICTED && this.decision === DECISION_UNKNOWN;

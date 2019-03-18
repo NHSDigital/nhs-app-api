@@ -1,5 +1,6 @@
 package pages.organDonation
 
+import mocking.organDonation.models.FaithDeclaration
 import org.junit.Assert
 import org.openqa.selenium.By
 import pages.HybridPageElement
@@ -13,6 +14,10 @@ class OrganDonationFaithModule(page: HybridPageObject) {
 
     private val containerXPath = "//div[h2[text()=\"$title\"]]"
 
+    private var yesOption ="Yes"
+    private var noOption ="No"
+    private var preferNotToSayOption ="Prefer not to say"
+
     private val container = HybridPageElement(
             containerXPath,
             page = page,
@@ -20,6 +25,15 @@ class OrganDonationFaithModule(page: HybridPageObject) {
 
     init {
         container.assertSingleElementPresent().assertIsVisible()
+    }
+
+    fun assertChoice(faith: FaithDeclaration) {
+        val map = mapOf(
+                FaithDeclaration.Yes to yesOption,
+                FaithDeclaration.No to noOption,
+                FaithDeclaration.NotStated to preferNotToSayOption)
+        Assert.assertTrue("Test setup incorrect, no mapping set for $faith",map.containsKey(faith))
+        assertChoice(map[faith]!!)
     }
 
     fun assertChoice(choice: String) {

@@ -89,6 +89,7 @@ describe('view decision', () => {
       beforeEach(() => {
         state.organDonation.registration.decision = DECISION_OPT_IN;
         state.organDonation.registration.decisionDetails.all = false;
+        $store.getters['organDonation/isSomeOrgans'] = true;
         wrapper = mountWrapper();
       });
 

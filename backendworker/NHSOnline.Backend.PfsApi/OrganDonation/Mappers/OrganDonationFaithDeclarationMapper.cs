@@ -16,7 +16,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
         {
             { YesChoiceValue, FaithDeclaration.Yes },
             { NoChoiceValue, FaithDeclaration.No },
-            { NotStatedChoiceValue, FaithDeclaration.NotStated }
+            { NotStatedChoiceValue, FaithDeclaration.NotStated },
+            { string.Empty, FaithDeclaration.None }
         };
     }
 }

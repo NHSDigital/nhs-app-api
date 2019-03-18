@@ -16,13 +16,15 @@ open class OrganDonationAdditionalDetailsStepDefinitions {
     @When("I select an ethnicity to record for organ donation")
     fun iSelectAnEthnicityToRecordForOrganDonation() {
         organDonationAdditionalDetailsPage.ethnicitySelector.selectByText(
-                OrganDonationSerenityHelpers.DEMOGRAPHICS.getOrFail<OrganDonationDemographics>().ethnicity.value)
+                OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED
+                        .getOrFail<OrganDonationDemographics>().ethnicity.value)
     }
 
     @When("I select a religion to record for organ donation")
     fun iSelectAReligionToRecordForOrganDonation() {
         organDonationAdditionalDetailsPage.religionSelector.selectByText(
-                OrganDonationSerenityHelpers.DEMOGRAPHICS.getOrFail<OrganDonationDemographics>().religion.value)
+                OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED
+                        .getOrFail<OrganDonationDemographics>().religion.value)
     }
 
     @Then("^the Organ Donation Decision Additional Details page is displayed")

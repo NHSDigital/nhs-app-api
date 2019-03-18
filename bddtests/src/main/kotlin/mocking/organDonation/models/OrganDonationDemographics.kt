@@ -1,7 +1,7 @@
 package mocking.organDonation.models
 
 class OrganDonationDemographics(
-        val faithDeclaration: FaithDeclaration = FaithDeclaration.NotStated,
+        val faithDeclaration: FaithDeclaration = FaithDeclaration.None,
         val religion : KeyValuePair<String, String> = KeyValuePair("10", "Christian - Catholic"),
         val ethnicity: KeyValuePair<String, String> = KeyValuePair("1", "White - British")
 )

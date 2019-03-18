@@ -122,8 +122,9 @@ describe('review your decision', () => {
     });
 
     it('will be a green button', () => {
-      expect(submitButton.classes()).toContain($style.green);
-      expect(submitButton.classes()).toContain($style.button);
+      const classes = submitButton.classes();
+      expect(classes).toContain($style.green);
+      expect(classes).toContain($style.button);
     });
 
     it('will use "organDonation.reviewYourDecision.submitButton" for text', () => {
@@ -261,8 +262,12 @@ describe('review your decision', () => {
 
     describe('selected some organs', () => {
       beforeEach(() => {
-        const state = createState({ decision: DECISION_OPT_IN, all: false });
-        wrapper = mountPage({ state });
+        wrapper = mountPage({
+          state: createState({ decision: DECISION_OPT_IN, all: false }),
+          getters: {
+            'organDonation/isSomeOrgans': true,
+          },
+        });
       });
 
       it('will show the opt-in some decision text', () => {
@@ -301,54 +306,70 @@ describe('review your decision', () => {
   });
 
   describe('additional details', () => {
-    let additionalInformation;
-
     describe('reaffirming', () => {
       const createLocalState = ({ all, decision }) =>
         createState({ all, decision, isReaffirming: true });
 
-      describe('donating all organs', () => {
-        beforeEach(() => {
-          const state = createLocalState({
-            all: true,
-            decision: DECISION_OPT_IN,
+      describe('original registration', () => {
+        describe('donating all organs', () => {
+          beforeEach(() => {
+            const state = createLocalState({
+              all: true,
+              decision: DECISION_OPT_IN,
+            });
+            state.organDonation.originalRegistration.decision = DECISION_OPT_IN;
+            state.organDonation.originalRegistration.decisionDetails.all = true;
+            wrapper = mountPage({ state });
           });
-          const getters = { 'organDonation/isSomeOrgans': false };
-          wrapper = mountPage({ state, getters });
-          additionalInformation = wrapper.find(AdditionalInformation);
-        });
 
-        it('will not show additional details', () => {
-          expect(additionalInformation.exists()).toBe(false);
-        });
-      });
-
-      describe('donating some organs', () => {
-        beforeEach(() => {
-          const state = createLocalState({
-            all: false,
-            decision: DECISION_OPT_IN,
+          it('will not show additional details', () => {
+            expect(wrapper.find(AdditionalInformation).exists()).toBe(false);
           });
-          const getters = { 'organDonation/isSomeOrgans': true };
-          wrapper = mountPage({ state, getters });
-          additionalInformation = wrapper.find(AdditionalInformation);
         });
 
-        it('will show additional details', () => {
-          expect(additionalInformation.exists()).toBe(true);
-        });
-      });
+        describe('donating some organs', () => {
+          let state;
 
-      describe('not donating organs', () => {
-        beforeEach(() => {
-          const state = createLocalState({ decision: DECISION_OPT_OUT });
-          const getters = { 'organDonation/isSomeOrgans': false };
-          wrapper = mountPage({ state, getters });
-          additionalInformation = wrapper.find(AdditionalInformation);
+          beforeEach(() => {
+            state = createLocalState({
+              all: false,
+              decision: DECISION_OPT_IN,
+            });
+            state.organDonation.originalRegistration.decision = DECISION_OPT_IN;
+            state.organDonation.originalRegistration.decisionDetails.all = false;
+            wrapper = mountPage({ state });
+          });
+
+          it('will show additional details', () => {
+            expect(wrapper.find(AdditionalInformation).exists()).toBe(true);
+          });
+
+          describe('change to all organs', () => {
+            beforeEach(() => {
+              state.organDonation.registration.decisionDetails.all = true;
+              wrapper = mountPage({ state });
+            });
+
+            it('will show additional details', () => {
+              expect(wrapper.find(AdditionalInformation).exists()).toBe(true);
+            });
+          });
         });
 
-        it('will not show additional details', () => {
-          expect(additionalInformation.exists()).toBe(false);
+        describe('not donating organs', () => {
+          beforeEach(() => {
+            const state = createLocalState({
+              all: false,
+              decision: DECISION_OPT_OUT,
+            });
+            state.organDonation.originalRegistration.decision = DECISION_OPT_OUT;
+            state.organDonation.originalRegistration.decisionDetails.all = false;
+            wrapper = mountPage({ state });
+          });
+
+          it('will not show additional details', () => {
+            expect(wrapper.find(AdditionalInformation).exists()).toBe(false);
+          });
         });
       });
     });

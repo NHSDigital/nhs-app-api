@@ -52,11 +52,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
             if (request.Registration.Decision != Decision.OptIn)
             {
                 return isValid;
-
             }
 
             return isValid && new ValidateAndLog(_logger)
-                       .IsNotNull(request.Registration.FaithDeclaration, nameof(request.Registration.FaithDeclaration),
+                       .HasValue(request.Registration.FaithDeclaration, nameof(request.Registration.FaithDeclaration),
                            ThrowError)
                        .IsValid();
         }

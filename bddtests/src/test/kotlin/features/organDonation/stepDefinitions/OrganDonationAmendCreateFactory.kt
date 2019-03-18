@@ -7,6 +7,7 @@ import mocking.data.organDonation.set
 import mocking.models.Mapping
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.organDonation.OrganDonationSubmitDecisionBuilder
+import mocking.organDonation.models.FaithDeclaration
 import mocking.organDonation.models.OrganDonationAdditionalDetails
 import mocking.organDonation.models.OrganDonationDemographics
 import mocking.organDonation.models.OrganDonationRegistration
@@ -21,7 +22,7 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
 
     fun optOut(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
         val organDonationDemographics = OrganDonationDemographics()
-        OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
+        OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.optOut(patient,organDonationDemographics),
                 OrganDonationAdditionalDetails.getAdditionalDetails(organDonationDemographics))
@@ -29,8 +30,8 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     }
 
     fun optIn(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        val organDonationDemographics = OrganDonationDemographics()
-        OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
+        val organDonationDemographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
+        OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.optIn(patient,organDonationDemographics),
                 OrganDonationAdditionalDetails.getAdditionalDetails(organDonationDemographics))
@@ -38,8 +39,8 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
     }
 
     fun some(organs : OrganDecisions,action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        val organDonationDemographics = OrganDonationDemographics()
-        OrganDonationSerenityHelpers.DEMOGRAPHICS.set(organDonationDemographics)
+        val organDonationDemographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
+        OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
                 OrganDonationRegistration.some(patient,organs,
                         organDonationDemographics),

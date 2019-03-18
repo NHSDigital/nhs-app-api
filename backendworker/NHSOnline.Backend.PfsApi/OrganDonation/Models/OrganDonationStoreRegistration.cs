@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Models
     public DecisionDetails DecisionDetails { get; set; }
 
     [JsonConverter(typeof(StringEnumConverter), false)]
-    public FaithDeclaration? FaithDeclaration { get; set; }
+    public FaithDeclaration FaithDeclaration { get; set; }
         
     [JsonConverter(typeof(StringEnumConverter), false)]
     public State State { get; set; }

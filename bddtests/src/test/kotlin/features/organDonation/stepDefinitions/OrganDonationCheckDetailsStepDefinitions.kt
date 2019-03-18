@@ -50,7 +50,7 @@ open class OrganDonationCheckDetailsStepDefinitions {
 
     @Then("^my ethnicity and religion are recorded on the Organ Donation Check Details page")
     fun myEthnicityAndReligionIsRecordedOnTheOrganDonationCheckDetailsPage() {
-        val demographics = OrganDonationSerenityHelpers.DEMOGRAPHICS
+        val demographics = OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED
                 .getOrFail<OrganDonationDemographics>()
         organDonationCheckDetailsPage.additionalDetailsModule.assertEthnicityAndReligion(demographics.ethnicity
                 .value, demographics.religion.value)
@@ -59,6 +59,13 @@ open class OrganDonationCheckDetailsStepDefinitions {
     @Then("^my ethnicity and religion are recorded as not chosen on the Organ Donation Check Details page")
     fun myEthnicityAndReligionIsRecordedAsNotChosenOnTheOrganDonationCheckDetailsPage() {
         organDonationCheckDetailsPage.additionalDetailsModule.assertEthnicityAndReligion("", "")
+    }
+
+    @Then("^my choice of whether to share my faith and beliefs is displayed on the Organ Donation Check Details page")
+    fun myChoiceOfWhetherToShareMyFaithAndBeliefsIsDisplayedOnTheOrganDonationCheckDetailsPage(){
+        val demographics = OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED
+                .getOrFail<OrganDonationDemographics>()
+        organDonationCheckDetailsPage.faithAndBeliefsModule.assertChoice(demographics.faithDeclaration)
     }
 
     @Then("^my choice of '(.*)' to share my faith and beliefs is displayed on the Organ Donation Check Details page")

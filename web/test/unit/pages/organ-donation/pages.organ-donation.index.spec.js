@@ -223,12 +223,6 @@ describe('organ donation index page', () => {
           expect(wrapper.vm.hasExistingDecision).toEqual(true);
         });
       });
-
-      describe('hasSomeOrgans', () => {
-        it('will be false because the user appointed a representative', () => {
-          expect(wrapper.vm.hasSomeOrgans).toEqual(false);
-        });
-      });
     });
   });
 
@@ -314,17 +308,17 @@ describe('organ donation index page', () => {
             expect(wrapper.vm.hasExistingDecision).toEqual(true);
           });
         });
-
-        describe('hasSomeOrgans', () => {
-          it('will be false as no organs are selected', () => {
-            expect(wrapper.vm.hasSomeOrgans).toEqual(false);
-          });
-        });
       });
     });
 
     describe('opt-in, all organs', () => {
       beforeEach(() => {
+        $store = createStore({
+          state: createState(),
+          getters: {
+            'organDonation/isSomeOrgans': false,
+          },
+        });
         $store.state.organDonation.originalRegistration.decision = DECISION_OPT_IN;
         $store.state.organDonation.originalRegistration.decisionDetails.all = true;
         wrapper = mountOrganDonation();
@@ -369,12 +363,6 @@ describe('organ donation index page', () => {
             expect(wrapper.vm.hasExistingDecision).toEqual(true);
           });
         });
-
-        describe('hasSomeOrgans', () => {
-          it('will be false as all organs are selected', () => {
-            expect(wrapper.vm.hasSomeOrgans).toEqual(false);
-          });
-        });
       });
     });
 
@@ -382,6 +370,12 @@ describe('organ donation index page', () => {
       const choices = { heart: 'Yes' };
 
       beforeEach(() => {
+        $store = createStore({
+          state: createState(),
+          getters: {
+            'organDonation/isSomeOrgans': true,
+          },
+        });
         $store.state.organDonation.originalRegistration.decision = DECISION_OPT_IN;
         $store.state.organDonation.originalRegistration.decisionDetails.all = false;
         $store.state.organDonation.originalRegistration.decisionDetails.choices = choices;
@@ -431,12 +425,6 @@ describe('organ donation index page', () => {
         describe('hasExistingDecision', () => {
           it('will be true as the original decision is opt-in', () => {
             expect(wrapper.vm.hasExistingDecision).toEqual(true);
-          });
-        });
-
-        describe('hasSomeOrgans', () => {
-          it('will be true as only some organs are selected', () => {
-            expect(wrapper.vm.hasSomeOrgans).toEqual(true);
           });
         });
       });

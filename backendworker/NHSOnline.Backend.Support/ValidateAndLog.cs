@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Support
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                HandleMissingValue(name, options);
+                HandleNullError(name, options);
             }
             return this;
         }
@@ -39,12 +39,12 @@ namespace NHSOnline.Backend.Support
         {
             if (value == null)
             {
-                HandleMissingValue(name, options);
+                HandleNullError(name, options);
             }
 
             return this;
         }
-
+        
         public ValidateAndLog IsValidOdsCode(string value, string name, ValidationOptions options = ValidationOptions.None)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.Support
 
             if((options & ValidationOptions.ThrowError) == ValidationOptions.ThrowError)
             {
-                _exceptions.Add(new ArgumentNullException(name));
+                HandleNullError(name, options);
             }
         }
 
@@ -128,7 +128,34 @@ namespace NHSOnline.Backend.Support
 
             if ((options & ValidationOptions.ThrowError) == ValidationOptions.ThrowError)
             {
-                _exceptions.Add(new ArgumentException(name));
+                HandleError(name, options);
+            }
+        }
+
+        public ValidateAndLog HasValue<T>(T value, string name, ValidationOptions options)
+        {
+            if (value.Equals(default(T)))
+            {
+                HandleError(name, options);
+            }
+            
+            return this;
+        }
+
+        private void HandleNullError(string name, ValidationOptions options)
+            => HandleError(name, options, paramName => new ArgumentNullException(paramName));
+        
+        private void HandleError(string name, ValidationOptions options)
+            => HandleError(name, options, paramName => new ArgumentException(paramName, paramName));
+        
+        private void HandleError(string name, ValidationOptions options, Func<string, ArgumentException> createException)
+        {
+            _logger.LogError(string.Format(CultureInfo.InvariantCulture, "The value for '{0}' has not been supplied", name));
+            _argumentsAreValid = false;
+
+            if((options & ValidationOptions.ThrowError) == ValidationOptions.ThrowError)
+            {
+                _exceptions.Add(createException(name));
             }
         }
 

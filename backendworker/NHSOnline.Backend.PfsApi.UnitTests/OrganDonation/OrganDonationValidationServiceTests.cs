@@ -136,16 +136,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         public void IsPostValid_WhenRequestIsOptInAndMissingFaithDeclaration_ReturnsFalse()
         {
             var request = ValidOrganDonationRegistrationRequest();
-            request.Registration.FaithDeclaration = null;
+            request.Registration.FaithDeclaration = FaithDeclaration.None;
             request.Registration.Decision = Decision.OptIn;
 
             Action act = () => _systemUnderTest.IsPostValid(request);
 
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
+                .And.AllBeOfType<ArgumentException>()
                 .And.Contain(
-                    x => ((ArgumentNullException) x).ParamName.Equals("FaithDeclaration", StringComparison.Ordinal));
+                    x => ((ArgumentException) x).ParamName.Equals("FaithDeclaration", StringComparison.Ordinal));
         }
 
 
@@ -278,16 +278,16 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
         public void IsPutValid_WhenRequestIsOptInAndMissingFaithDeclaration_ReturnsFalse()
         {
             var request = ValidOrganDonationRegistrationRequest();
-            request.Registration.FaithDeclaration = null;
+            request.Registration.FaithDeclaration = FaithDeclaration.None;
             request.Registration.Decision = Decision.OptIn;
 
             Action act = () => _systemUnderTest.IsPutValid(request);
 
             act.Should().Throw<AggregateException>()
                 .And.InnerExceptions.Should().HaveCount(1)
-                .And.AllBeOfType<ArgumentNullException>()
+                .And.AllBeOfType<ArgumentException>()
                 .And.Contain(
-                    x => ((ArgumentNullException) x).ParamName.Equals("FaithDeclaration", StringComparison.Ordinal));
+                    x => ((ArgumentException) x).ParamName.Equals("FaithDeclaration", StringComparison.Ordinal));
         }
 
         private OrganDonationRegistrationRequest ValidOrganDonationRegistrationRequest()

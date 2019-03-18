@@ -5,7 +5,8 @@ import org.junit.Assert
 import utils.SerenityHelpers
 
 enum class OrganDonationSerenityHelpers {
-    DEMOGRAPHICS,
+    DEMOGRAPHICS_EXISTING,
+    DEMOGRAPHICS_UPDATED,
     EXPECTED_REGISTRATION_ID,
     IS_AMEND_JOURNEY,
     ORGAN_DONATION_DECISION,

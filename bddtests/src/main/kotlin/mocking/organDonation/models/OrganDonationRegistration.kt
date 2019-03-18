@@ -38,7 +38,7 @@ data class OrganDonationRegistration(
         }
 
         fun optIn(patient: Patient,
-                  organDonationDemographics: OrganDonationDemographics? = null): OrganDonationRegistration {
+                  organDonationDemographics: OrganDonationDemographics): OrganDonationRegistration {
             val registration = optOut(patient, organDonationDemographics)
             registration.decision = OrganDonationRegistrationDecision.OptIn
             registration.decisionDetails = DecisionDetails(true,
@@ -46,11 +46,12 @@ data class OrganDonationRegistration(
                             "lungs" to "NotStated",
                             "fingers" to "NotStated",
                             "toes" to "NotStated"))
+            registration.faithDeclaration  = organDonationDemographics.faithDeclaration.toString()
             return registration
         }
 
         fun some(patient: Patient, organsToDonate: OrganDecisions,
-                 organDonationDemographics: OrganDonationDemographics? = null): OrganDonationRegistration {
+                 organDonationDemographics: OrganDonationDemographics): OrganDonationRegistration {
             val registration = optIn(patient, organDonationDemographics)
             registration.decisionDetails = DecisionDetails(false, createDecisionMap(organsToDonate))
             return registration

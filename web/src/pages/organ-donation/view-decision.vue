@@ -16,8 +16,7 @@
       </message-dialog>
       <your-decision :decision-details="$store.state.organDonation.registration.decisionDetails"
                      :decision="$store.state.organDonation.registration.decision"/>
-      <decision-details v-if="isOptInDecision && !allOrgans"
-                        :choices="currentChoices"/>
+      <decision-details v-if="isSomeOrgans" :choices="currentChoices"/>
       <amend-decision-link :class="$style.amendDecision"/>
       <next-steps :is-opt-in-decision="isOptInDecision"/>
     </div>
@@ -50,20 +49,21 @@ export default {
   mixins: [EnsureDecisionMixin],
   data() {
     return {
-      allOrgans: !!get('organDonation.registration.decisionDetails.all')(this.$store.state),
       currentChoices: get('organDonation.registration.decisionDetails.choices')(this.$store.state) || {},
-      decision: get('organDonation.registration.decision')(this.$store.state),
-      identifier: get('organDonation.registration.identifier')(this.$store.state),
-      state: get('organDonation.registration.state')(this.$store.state),
+      isOptInDecision: get('organDonation.registration.decision')(this.$store.state) === DECISION_OPT_IN,
+      isSomeOrgans: this.$store.getters['organDonation/isSomeOrgans'],
     };
   },
   computed: {
-    isOptInDecision() {
-      return this.decision === DECISION_OPT_IN;
-    },
     isConflicted() {
-      return this.state === STATE_CONFLICTED && !!this.identifier;
+      return this.$store.state.organDonation.registration.state === STATE_CONFLICTED
+        && !!this.$store.state.organDonation.registration.identifier;
     },
+  },
+  created() {
+    this.$store.dispatch('organDonation/amendCancel');
+    this.$store.dispatch('organDonation/reaffirmCancel');
+    this.$store.dispatch('organDonation/setAdditionalDetails', { ethnicityId: '', religionId: '' });
   },
 };
 </script>

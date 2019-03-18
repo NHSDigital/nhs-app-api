@@ -93,7 +93,7 @@ object OrganDonationRegistrationDataBuilder {
 
     private fun build(patient: Patient, organDonationDemographics: OrganDonationDemographics? = null): Resource {
         val demographics = organDonationDemographics ?: OrganDonationDemographics()
-        OrganDonationSerenityHelpers.DEMOGRAPHICS.set(demographics)
+        OrganDonationSerenityHelpers.DEMOGRAPHICS_EXISTING.set(demographics)
 
         return Resource(
                 id = patient.organDonationRegistrationId,
@@ -121,6 +121,7 @@ object OrganDonationRegistrationDataBuilder {
             FaithDeclaration.No -> "no"
             FaithDeclaration.Yes -> "yes"
             FaithDeclaration.NotStated -> "not-stated"
+            FaithDeclaration.None -> ""
         }
     }
 

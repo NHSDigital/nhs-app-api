@@ -84,7 +84,7 @@ export default {
   },
   asyncData({ store }) {
     if (
-      store.state.organDonation.isAmending &&
+      (store.state.organDonation.isAmending || store.state.organDonation.isReaffirming) &&
       isDefault({
         path: 'registration.decisionDetails.choices',
         state: store.state.organDonation,

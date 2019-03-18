@@ -35,7 +35,7 @@
       <hr :class="$style.rule" aria-hidden="true">
     </div>
     <div v-else-if="isOptInDecision">
-      <decision-details v-if="!allOrgans"
+      <decision-details v-if="isSomeOrgans"
                         :choices="currentChoices"/>
       <hr :class="$style.rule" aria-hidden="true">
       <div id="faithDetails">
@@ -88,9 +88,9 @@ export default {
   mixins: [EnsureCanSubmit],
   data() {
     return {
-      allOrgans: !!get('all')(this.$store.state.organDonation.registration.decisionDetails),
-      currentChoices: get('choices')(this.$store.state.organDonation.registration.decisionDetails) || {},
+      currentChoices: get('$store.state.organDonation.registration.decisionDetails.choices')(this) || {},
       isOptInDecision: this.$store.state.organDonation.registration.decision === DECISION_OPT_IN,
+      isSomeOrgans: this.$store.getters['organDonation/isSomeOrgans'],
       isWithdrawing: this.$store.state.organDonation.isWithdrawing,
       submitAttempted: false,
     };
@@ -104,7 +104,7 @@ export default {
     },
     showAdditionalDetails() {
       return !this.isWithdrawing && (!this.$store.state.organDonation.isReaffirming ||
-        this.$store.getters['organDonation/isSomeOrgans']);
+        this.wasSomeOrgans);
     },
     showErrors() {
       return this.submitAttempted && !isEmpty(this.validationErrors);
@@ -119,6 +119,10 @@ export default {
         errors.push('organDonation.reviewYourDecision.confirmation.errors.privacy');
       }
       return errors;
+    },
+    wasSomeOrgans() {
+      return this.$store.state.organDonation.originalRegistration.decision === DECISION_OPT_IN &&
+        get('$store.state.organDonation.originalRegistration.decisionDetails.all')(this) === false;
     },
   },
   created() {

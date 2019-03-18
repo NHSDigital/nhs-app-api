@@ -164,7 +164,7 @@ Feature: Organ Donation - Amend
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with some organs has been successfully created
-
+    
   Scenario: A user opted to not donate their organs can amend it to donate all
     Given I am a EMIS user registered as opt-out who then amends their decision to opt-in
     And I am logged in
@@ -177,12 +177,14 @@ Feature: Organ Donation - Amend
     When I select the option to donate all my organs
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
-    And the previous option on the Organ Donation Faith And Beliefs page is selected
+    And no options on the Organ Donation Faith And Beliefs page are selected
+    When I select an option in sharing my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
+    And my choice of whether to share my faith and beliefs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
@@ -204,11 +206,14 @@ Feature: Organ Donation - Amend
     When I choose which organs to donate
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
+    And no options on the Organ Donation Faith And Beliefs page are selected
+    When I select an option in sharing my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And my specific organ donation choices are displayed on the Organ Donation Check Details page
+    And my choice of whether to share my faith and beliefs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed

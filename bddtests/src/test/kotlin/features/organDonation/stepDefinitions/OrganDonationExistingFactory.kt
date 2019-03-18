@@ -3,6 +3,7 @@ package features.organDonation.stepDefinitions
 import features.authentication.stepDefinitions.AuthenticationFactoryVision.Companion.mockingClient
 import features.myrecord.factories.DemographicsFactory
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
+import mocking.organDonation.models.FaithDeclaration
 import mocking.organDonation.models.OrganDonationDemographics
 import mocking.organDonation.models.Resource
 import models.Patient
@@ -16,7 +17,8 @@ class OrganDonationExistingFactory (var patient: Patient, val gpSystem: String){
     }
 
     fun optIn(organDonationDemographics: OrganDonationDemographics? = null): Resource {
-        val registration = OrganDonationRegistrationDataBuilder.optIn(patient, organDonationDemographics)
+        val registration = OrganDonationRegistrationDataBuilder.optIn(patient,
+                organDonationDemographics ?: OrganDonationDemographics(faithDeclaration = FaithDeclaration.No))
         existing(registration)
         return registration
     }
@@ -31,14 +33,15 @@ class OrganDonationExistingFactory (var patient: Patient, val gpSystem: String){
     }
 
     fun optInSome(organDonationDemographics: OrganDonationDemographics? = null): Resource {
-        val registration = OrganDonationRegistrationDataBuilder.optInSome(patient, organDonationDemographics)
+        val registration = OrganDonationRegistrationDataBuilder.optInSome(patient,
+                organDonationDemographics ?: OrganDonationDemographics(faithDeclaration = FaithDeclaration.No))
         existing(registration)
         return registration
     }
 
     fun optInSomeNotAllDecided(organDonationDemographics: OrganDonationDemographics? = null): Resource {
         val registration = OrganDonationRegistrationDataBuilder.optInSomeNotAllDecided(patient,
-                organDonationDemographics)
+                organDonationDemographics ?:  OrganDonationDemographics(faithDeclaration = FaithDeclaration.No))
         existing(registration)
         return registration
     }

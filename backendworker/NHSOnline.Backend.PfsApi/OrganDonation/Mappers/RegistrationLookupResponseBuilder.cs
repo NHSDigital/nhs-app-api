@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                     _registration.FaithDeclaration = NoChoiceValue;
                     break;
                 default:
-                    _registration.FaithDeclaration = NotStatedChoiceValue;
+                    _registration.FaithDeclaration = string.Empty;
                     break;
             }
 

@@ -63,8 +63,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 return registrationRequest;
 
             registrationRequest.DonationWishes = _donationWishesMapper.Map(source.Registration.DecisionDetails);
-            registrationRequest.FaithDeclaration =
-                _faithDeclarationMapper.From(source.Registration.FaithDeclaration.Value);
+            registrationRequest.FaithDeclaration = _faithDeclarationMapper.From(source.Registration.FaithDeclaration);
 
             return registrationRequest;
         }
