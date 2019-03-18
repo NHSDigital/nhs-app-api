@@ -80,6 +80,26 @@ export default {
       source: this.getSource(),
     };
   },
+  computed: {
+    isPracticeParticipating() {
+      return this.practiceParticipating;
+    },
+    shouldShowBiometrics() {
+      return this.$env.BIOMETRICS_ENABLED && (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios');
+    },
+    notParticipatingSurgeryName() {
+      return this.practiceName;
+    },
+    notParticipatingSurgeryAddress() {
+      return this.practiceAddress;
+    },
+    showCheckFeaturesLink() {
+      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
+      return betaCookie !== undefined && !betaCookie.NeverShowCheckFeatureLink &&
+          (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
+            this.$store.app.$env.THROTTLING_ENABLED === true);
+    },
+  },
   asyncData(context) {
     const { store, app } = context;
     const betaCookie = store.$cookies.get('BetaCookie');
@@ -113,26 +133,6 @@ export default {
       practiceName: undefined,
       practiceAddress: undefined,
     };
-  },
-  computed: {
-    isPracticeParticipating() {
-      return this.practiceParticipating;
-    },
-    shouldShowBiometrics() {
-      return this.$env.BIOMETRICS_ENABLED && (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios');
-    },
-    notParticipatingSurgeryName() {
-      return this.practiceName;
-    },
-    notParticipatingSurgeryAddress() {
-      return this.practiceAddress;
-    },
-    showCheckFeaturesLink() {
-      const betaCookie = this.$store.app.$cookies.get('BetaCookie');
-      return betaCookie !== undefined && !betaCookie.NeverShowCheckFeatureLink &&
-          (this.$store.app.$env.THROTTLING_ENABLED === 'true' ||
-            this.$store.app.$env.THROTTLING_ENABLED === true);
-    },
   },
   mounted() {
     const betaCookie = this.$cookies.get('BetaCookie');

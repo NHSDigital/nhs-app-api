@@ -1,7 +1,7 @@
 <template>
   <label :class="$style['radio-button-label']" :for="name + '-' + value"
          :aria-labelledby="aLabelledBy" tabindex="0" @keypress="onKeyDown">
-    <radio-button-icon :selected="isSelected" :id="value"/>
+    <radio-button-icon :id="value" :selected="isSelected"/>
     <input :id="name + '-' + value" :value="value" :name="name"
            :checked="model === value" tabindex="-1" type="radio" @change="selected">
     <div>

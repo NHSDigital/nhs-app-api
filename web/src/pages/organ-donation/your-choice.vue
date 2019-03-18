@@ -74,6 +74,14 @@ export default {
       allOrgansName: 'AllOrgans',
     };
   },
+  computed: {
+    currentChoice() {
+      return get('$store.state.organDonation.registration.decisionDetails.all')(this);
+    },
+    hasMadeDecision() {
+      return !(this.currentChoice === '' || this.currentChoice === undefined);
+    },
+  },
   asyncData({ store }) {
     if (
       store.state.organDonation.isAmending &&
@@ -84,14 +92,6 @@ export default {
     ) {
       store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.all');
     }
-  },
-  computed: {
-    currentChoice() {
-      return get('$store.state.organDonation.registration.decisionDetails.all')(this);
-    },
-    hasMadeDecision() {
-      return !(this.currentChoice === '' || this.currentChoice === undefined);
-    },
   },
   created() {
     if (isNil(this.$store.state.organDonation.registration.decisionDetails)) {

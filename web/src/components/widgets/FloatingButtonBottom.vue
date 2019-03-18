@@ -1,6 +1,6 @@
 <template>
   <div :class="stylingClass">
-    <generic-button :button-classes="buttonStylingClasses" :id="id"
+    <generic-button :id="id" :button-classes="buttonStylingClasses"
                     :style="{ 'margin-bottom': 0}"
                     :disabled="isButtonDisabled"
                     @click="$emit('click', $event)">

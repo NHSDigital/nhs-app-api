@@ -7,7 +7,7 @@
            :aria-labelledby="aLabelledBy"
            type="checkbox"
            @click="clicked">
-    <label :for="name + '-' + checkboxId" :id="labelId">
+    <label :id="labelId" :for="name + '-' + checkboxId" >
       <slot/>
     </label>
   </div>
@@ -52,4 +52,3 @@ export default {
 <style module lang="scss" scoped>
 @import '../../style/forms';
 </style>
-

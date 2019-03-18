@@ -1,9 +1,9 @@
 <template>
   <div data-purpose="repeat-prescription">
     <input :value="JSON.stringify(nojsData)" :name="prescriptionDetails.id" type="hidden">
-    <generic-checkbox-no-js :checkbox-id="prescriptionDetails.id"
+    <generic-checkbox-no-js v-model="selected"
+                            :checkbox-id="prescriptionDetails.id"
                             :selected="selected"
-                            v-model="selected"
                             name="prescription"
                             @click="check">
       <span data-label="prescription-name">

@@ -5,8 +5,8 @@
 
     <div role="list">
       <appointment v-for="appointment in appointments"
-                   :class="$style.past"
                    :key="appointment.id"
+                   :class="$style.past"
                    :appointment="appointment"
                    :cancellation-disabled="true"
                    :show-cancellation-link="false"

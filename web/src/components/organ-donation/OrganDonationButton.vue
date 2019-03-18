@@ -2,7 +2,7 @@
   <div :class="$style['flex-container']">
     <button :class="[style, $style['decision-button']]" @click.prevent="chooseDecision()">
       <div>
-        <component :class="$style['button-content']" :is="icon"/>
+        <component :is="icon" :class="$style['button-content']"/>
         <h2>{{ $t(headerKey) }}</h2>
         <p>{{ $t(subHeaderKey) }}</p>
       </div>

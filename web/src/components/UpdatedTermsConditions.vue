@@ -13,11 +13,11 @@
     <div id="text_body" :class="$style.info">
       <p> {{ $t('updatedTermsAndConditions.body1') }}
         <a :href="termsAndConditionsURL" target="_blank">
-        {{ $t('updatedTermsAndConditions.link1') }}</a>,
+          {{ $t('updatedTermsAndConditions.link1') }}</a>,
         <a :href="privacyPolicyURL" target="_blank">
-        {{ $t('updatedTermsAndConditions.link2') }}</a> and
+          {{ $t('updatedTermsAndConditions.link2') }}</a> and
         <a :href="cookiesPolicyURL" target="_blank">
-        {{ $t('updatedTermsAndConditions.link3') }}</a>.
+          {{ $t('updatedTermsAndConditions.link3') }}</a>.
       </p>
       <p> {{ $t('updatedTermsAndConditions.body2') }} </p>
     </div>
@@ -27,9 +27,9 @@
                      :class="$style.validationText">
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
-      <generic-checkbox :selected="areTermsAccepted"
+      <generic-checkbox v-model="areTermsAccepted"
+                        :selected="areTermsAccepted"
                         :check-box-classes="[$style.hideDefaultCheckbox]"
-                        v-model="areTermsAccepted"
                         :a-labelled-by="getAriaLabel"
                         checkbox-id="agree_checkbox"
                         name="termsAndConditions"
@@ -38,14 +38,14 @@
           {{ $t('updatedTermsAndConditions.checkBoxText1') }}
           <a :href="termsAndConditionsURL" style="display: inline-block;"
              target="_blank" @click="stopProp($event)" >
-          {{ $t('updatedTermsAndConditions.link1') }}</a> and
+            {{ $t('updatedTermsAndConditions.link1') }}</a> and
           <a :href="privacyPolicyURL" style="display: inline-block;"
              target="_blank" @click="stopProp($event)" >
-          {{ $t('updatedTermsAndConditions.link2') }}</a>.
+            {{ $t('updatedTermsAndConditions.link2') }}</a>.
           {{ $t('updatedTermsAndConditions.checkBoxText2') }}
           <a :href="cookiesPolicyURL" style="display: inline-block;"
              target="_blank" @click="stopProp($event)" >
-          {{ $t('updatedTermsAndConditions.link3') }}</a>.
+            {{ $t('updatedTermsAndConditions.link3') }}</a>.
         </label>
       </generic-checkbox>
     </div>
@@ -67,9 +67,9 @@ import { INDEX } from '@/lib/routes';
 
 export default {
   components: {
+    CheckedIcon,
     GenericButton,
     ErrorMessage,
-    CheckedIcon,
     MessageDialog,
     GenericCheckbox,
   },

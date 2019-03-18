@@ -38,7 +38,7 @@
             {{ lineItem.description }}
             <ul :class="$style.testResultChildAssociatedText">
               <li v-for="(lineItemAssociatedText, lineItemAssociatedTextIndex)
-                  in lineItem.associatedTexts"
+                    in lineItem.associatedTexts"
                   :key="`lineAssociatedText-${lineItemAssociatedTextIndex}`">
                 {{ lineItemAssociatedText }}
               </li>

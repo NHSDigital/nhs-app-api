@@ -13,7 +13,7 @@ module.exports = {
     // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
     // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
     "plugin:vue/recommended",
-    "airbnb-base"
+    "airbnb-base",
   ],
   // required to lint *.vue files
   plugins: [
@@ -24,6 +24,15 @@ module.exports = {
     // don't require .vue extension when importing
     'import/extensions': ['error', 'never', ],
     'import/no-unresolved': 0,
+    //don't require linebreak before/after opening/closing tags on single or multiline elements
+    'vue/singleline-html-element-content-newline': 'off',
+    'vue/multiline-html-element-content-newline': 'off',
+    'vue/no-unused-components': 'off',
+    //don't require new line after closing bracket
+    'vue/html-closing-bracket-newline': 'off',
+    //don't require space before closing bracket
+    'vue/html-closing-bracket-spacing': 'off',
+
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions
     'no-param-reassign': ['error', {

@@ -1,14 +1,14 @@
 <template>
   <div :class="getStyleClasses">
     <div class="clickme" tabindex="-1" @click="check" @keypress="onKeyDown">
-      <checked-icon :selected="selected" :id="checkboxId" />
+      <checked-icon :id="checkboxId" :selected="selected"/>
     </div>
-    <input v-tabbing="checkboxPanelStylingClasses"
+    <input :id="name + '-' + checkboxId"
+           v-model="selected"
+           v-tabbing="checkboxPanelStylingClasses"
            :class="checkboxStylingClasses"
            :value="checkboxId"
-           :id="name + '-' + checkboxId"
            :aria-labelledby="aLabelledBy"
-           v-model="selected"
            type="checkbox"
            @click.prevent="check">
     <slot/>

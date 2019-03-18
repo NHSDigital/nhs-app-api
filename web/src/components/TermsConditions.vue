@@ -34,10 +34,10 @@
                      :class="$style.validationText">
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
-      <generic-checkbox :selected="areTermsAccepted"
+      <generic-checkbox v-model="areTermsAccepted"
+                        :selected="areTermsAccepted"
                         :check-box-classes="[$style.hideDefaultCheckbox]"
                         :a-labelled-by="getAcceptTermsCheckboxLabel"
-                        v-model="areTermsAccepted"
                         checkbox-id="agree_checkbox"
                         name="termsAndConditions"
                         @click="checkTerms">
@@ -45,21 +45,21 @@
           {{ $t('termsAndConditions.checkBoxText1') }}
           <a :href="termsAndConditionsURL" style="display: inline-block;"
              target="_blank" @click="stopProp($event)" >
-          {{ $t('termsAndConditions.link1') }}</a> and
+            {{ $t('termsAndConditions.link1') }}</a> and
           <a :href="privacyPolicyURL" style="display: inline-block;"
              target="_blank" @click="stopProp($event)" >
-          {{ $t('termsAndConditions.link2') }}</a>.
+            {{ $t('termsAndConditions.link2') }}</a>.
           {{ $t('termsAndConditions.checkBoxText2') }}
           <a :href="cookiesPolicyURL" style="display: inline-block;"
              target="_blank" @click="stopProp($event)" >
-          {{ $t('termsAndConditions.link3') }}</a>.
+            {{ $t('termsAndConditions.link3') }}</a>.
         </label>
       </generic-checkbox>
     </div>
-    <generic-checkbox :selected="isAnalyticsCookieAccepted"
+    <generic-checkbox v-model="isAnalyticsCookieAccepted"
+                      :selected="isAnalyticsCookieAccepted"
                       :check-box-classes="[$style.hideDefaultCheckbox]"
                       :a-labelled-by="'analyticsCookieLabel'"
-                      v-model="isAnalyticsCookieAccepted"
                       checkbox-id="agree_analyticsCookieCheckbox"
                       name="analyticsCookie"
                       @click="checkAnalyticsCookieAccepted">
@@ -85,9 +85,9 @@ import { INDEX } from '@/lib/routes';
 
 export default {
   components: {
+    CheckedIcon,
     GenericButton,
     ErrorMessage,
-    CheckedIcon,
     MessageDialog,
     GenericCheckbox,
   },

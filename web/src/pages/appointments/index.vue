@@ -14,8 +14,8 @@
     </div>
 
     <upcoming-appointments v-if="showUpcomingAppointments"
-                           :appointments = "upcomingAppointments"
-                           :cancellation-disabled = "cancellationDisabled"
+                           :appointments="upcomingAppointments"
+                           :cancellation-disabled="cancellationDisabled"
                            :class="$style.upcomingAppointmentContainer"/>
 
     <div v-if="showNoPastAppointments" data-purpose="past-info">
@@ -26,7 +26,7 @@
     </div>
 
     <past-appointments v-if="showPastAppointments"
-                       :appointments = "pastAppointments" />
+                       :appointments="pastAppointments" />
 
     <no-js-form v-if="$store.state.device.isNativeApp" :action="guidancePath" :value="formData">
       <floating-button-bottom v-if="showBookAppointmentButton"
@@ -105,6 +105,10 @@ export default {
       return APPOINTMENT_BOOKING_GUIDANCE.path;
     },
   },
+  asyncData({ store }) {
+    store.dispatch('myAppointments/clear');
+    return store.dispatch('myAppointments/load');
+  },
   beforeDestroy() {
     this.$store.dispatch('myAppointments/clearAppointments');
   },
@@ -113,10 +117,6 @@ export default {
       this.$store.app.$analytics.trackButtonClick(this.guidancePath, true);
       redirectTo(this, this.guidancePath, null);
     },
-  },
-  asyncData({ store }) {
-    store.dispatch('myAppointments/clear');
-    return store.dispatch('myAppointments/load');
   },
 };
 </script>

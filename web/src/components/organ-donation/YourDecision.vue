@@ -2,7 +2,7 @@
   <div :class="$style.info">
     <h2>{{ $t(headerKey) }}</h2>
     <p :class="$style['flex-container']">
-      <component v-if="icon" :class="$style.icon" :is="icon"/>
+      <component :is="icon" v-if="icon" :class="$style.icon"/>
       <span :class="[style, $style.label]">{{ $t(decisionTextKey) }}</span>
     </p>
   </div>

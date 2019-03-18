@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
     <div v-if="showTemplate" :class="[$style.content,
@@ -44,14 +45,14 @@ export default {
     FloatingButtonBottom,
     DesktopGenericBackLink,
   },
-  async asyncData({ store }) {
-    await store.dispatch('myRecord/loadProcedures');
-  },
   data() {
     return {
       myRecordReturnPath: `${MYRECORD.path}#proceduresHeader`,
       noJsWarningAcceptance: JSON.stringify({ myRecord: { hasAcceptedTerms: true } }),
     };
+  },
+  async asyncData({ store }) {
+    await store.dispatch('myRecord/loadProcedures');
   },
   methods: {
     onBackButtonClicked(event) {

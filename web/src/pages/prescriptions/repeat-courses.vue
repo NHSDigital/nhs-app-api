@@ -123,18 +123,6 @@ export default {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest ? this.$store.state.repeatPrescriptionCourses.specialRequest : '',
     };
   },
-  async asyncData({ store, route }) {
-    const hasQueryError = route.query.noneSelected || route.query.missingSpecialRequest;
-
-    if (!store.state.repeatPrescriptionCourses.hasLoaded) {
-      await store.dispatch('repeatPrescriptionCourses/load');
-    }
-    if (store.state.repeatPrescriptionCourses.validated || hasQueryError) {
-      await store.dispatch('repeatPrescriptionCourses/validate', {
-        submitted: store.state.repeatPrescriptionCourses.validated ? false : hasQueryError,
-      });
-    }
-  },
   computed: {
     error() {
       const { validated } = this.$store.state.repeatPrescriptionCourses;
@@ -202,6 +190,18 @@ export default {
     confirmCoursesPath() {
       return PRESCRIPTION_CONFIRM_COURSES.path;
     },
+  },
+  async asyncData({ store, route }) {
+    const hasQueryError = route.query.noneSelected || route.query.missingSpecialRequest;
+
+    if (!store.state.repeatPrescriptionCourses.hasLoaded) {
+      await store.dispatch('repeatPrescriptionCourses/load');
+    }
+    if (store.state.repeatPrescriptionCourses.validated || hasQueryError) {
+      await store.dispatch('repeatPrescriptionCourses/validate', {
+        submitted: store.state.repeatPrescriptionCourses.validated ? false : hasQueryError,
+      });
+    }
   },
   methods: {
     validate() {

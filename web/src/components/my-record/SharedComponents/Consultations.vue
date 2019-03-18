@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <dcr-error-no-access v-if="showError"
                        :has-access="consultations.hasAccess"
@@ -19,18 +20,18 @@
 
       <ul>
         <li v-for="(consultationHeader, consultationHeaderIndex)
-            in consultation.consultationHeaders"
+              in consultation.consultationHeaders"
             :key="`line-${consultationHeaderIndex}`" :class="$style.consultationHeader">
           <strong> {{ consultationHeader.header }} </strong>
 
           <ul :class="$style.consultationTerm">
             <li v-for="(obsWithTerm, obsWithTermIndex)
-                in consultationHeader.observationsWithTerm"
+                  in consultationHeader.observationsWithTerm"
                 :key="`line-${obsWithTermIndex}`">
               {{ obsWithTerm.term }}
               <ul :class="$style.observationText">
                 <li v-for="(obsWithTermText, obsWithTermTextIndex)
-                    in obsWithTerm.associatedTexts"
+                      in obsWithTerm.associatedTexts"
                     :key="`line-${obsWithTermTextIndex}`" v-html="obsWithTermText"/>
               </ul>
             </li>
@@ -38,7 +39,7 @@
 
           <ul :class="$style.consultationTerm">
             <li v-for="(associatedText, associatedTextIndex)
-                in consultationHeader.associatedTexts"
+                  in consultationHeader.associatedTexts"
                 :key="`line-${associatedTextIndex}`">
               {{ associatedText }}
             </li>
@@ -51,7 +52,6 @@
 </template>
 
 <script>
-
 import _ from 'lodash';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 

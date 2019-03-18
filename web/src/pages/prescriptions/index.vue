@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/no-v-html -->
+<!-- eslint-disable vue/no-template-shadow -->
 <template>
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content' ,
                                     !$store.state.device.isNativeApp && $style.desktopWeb]" >
@@ -54,17 +56,6 @@ export default {
     HistoricPrescription,
     GlossaryHeader,
   },
-  async asyncData({ store }) {
-    await store.dispatch('prescriptions/clear');
-    await store.dispatch('prescriptions/load');
-    return {
-      statusDisplayPriority: {
-        [MedicationCourseStatus.Rejected]: 1,
-        [MedicationCourseStatus.Requested]: 2,
-        [MedicationCourseStatus.Approved]: 3,
-      },
-    };
-  },
   computed: {
     repeatCoursesPath() {
       return PRESCRIPTION_REPEAT_COURSES.path;
@@ -98,6 +89,17 @@ export default {
     hasLoaded() {
       return this.$store.state.prescriptions.hasLoaded;
     },
+  },
+  async asyncData({ store }) {
+    await store.dispatch('prescriptions/clear');
+    await store.dispatch('prescriptions/load');
+    return {
+      statusDisplayPriority: {
+        [MedicationCourseStatus.Rejected]: 1,
+        [MedicationCourseStatus.Requested]: 2,
+        [MedicationCourseStatus.Approved]: 3,
+      },
+    };
   },
   created() {
   },

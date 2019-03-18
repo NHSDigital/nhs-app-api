@@ -87,17 +87,6 @@ export default {
       hasTriedToContinue: false,
     };
   },
-  asyncData({ store }) {
-    if (
-      store.state.organDonation.isAmending &&
-      isDefault({
-        path: 'registration.faithDeclaration',
-        state: store.state.organDonation,
-      })
-    ) {
-      store.dispatch('organDonation/cloneFromOriginal', 'faithDeclaration');
-    }
-  },
   computed: {
     currentChoice() {
       return this.$store.state.organDonation.registration.faithDeclaration;
@@ -108,6 +97,17 @@ export default {
     showError() {
       return this.hasTriedToContinue && !this.hasMadeDecision;
     },
+  },
+  asyncData({ store }) {
+    if (
+      store.state.organDonation.isAmending &&
+      isDefault({
+        path: 'registration.faithDeclaration',
+        state: store.state.organDonation,
+      })
+    ) {
+      store.dispatch('organDonation/cloneFromOriginal', 'faithDeclaration');
+    }
   },
   methods: {
     radioButtonSelected(value) {

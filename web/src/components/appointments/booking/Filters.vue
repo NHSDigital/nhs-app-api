@@ -33,7 +33,7 @@
     <select-dropdown
       v-model="clinician"
       :required="false"
-      select-id = "clinician"
+      select-id="clinician"
       select-name="clinician">
       <option v-for="option in options.clinicians" :key="option.value" :value="option.value">
         {{ displayName(option) }}

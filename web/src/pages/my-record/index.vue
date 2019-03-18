@@ -89,12 +89,6 @@ export default {
     ScrVision,
     Warning,
   },
-  async asyncData({ store }) {
-    if (store.state.myRecord.hasAcceptedTerms) {
-      await store.dispatch('myRecord/acceptTerms');
-      await store.dispatch('myRecord/load');
-    }
-  },
   data() {
     return {
       PATIENTDETAILS,
@@ -120,6 +114,12 @@ export default {
     isPatientDetailsCollapsed() {
       return get('$store.state.myRecord.isPatientDetailsCollapsed')(this);
     },
+  },
+  async asyncData({ store }) {
+    if (store.state.myRecord.hasAcceptedTerms) {
+      await store.dispatch('myRecord/acceptTerms');
+      await store.dispatch('myRecord/load');
+    }
   },
   updated() {
     window.scrollTo(0, 0);

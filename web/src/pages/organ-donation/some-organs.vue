@@ -68,17 +68,6 @@ export default {
       activeErrorMessage: '',
     };
   },
-  asyncData({ store }) {
-    if (
-      store.state.organDonation.isAmending &&
-      isDefault({
-        path: 'registration.decisionDetails.choices',
-        state: store.state.organDonation,
-      })
-    ) {
-      store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.choices');
-    }
-  },
   computed: {
     areAllSelected() {
       return !includes('NotStated')(this.currentChoices);
@@ -92,6 +81,17 @@ export default {
     currentChoices() {
       return this.$store.state.organDonation.registration.decisionDetails.choices;
     },
+  },
+  asyncData({ store }) {
+    if (
+      store.state.organDonation.isAmending &&
+      isDefault({
+        path: 'registration.decisionDetails.choices',
+        state: store.state.organDonation,
+      })
+    ) {
+      store.dispatch('organDonation/cloneFromOriginal', 'decisionDetails.choices');
+    }
   },
   methods: {
     continueClicked() {

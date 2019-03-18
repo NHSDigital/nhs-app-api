@@ -1,14 +1,14 @@
 <template>
   <div :class="[$style.form, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <input v-tabbing="textInputClasses"
+    <input :id="id"
            ref="textInput"
+           v-model="textValue"
+           v-tabbing="textInputClasses"
            :class="getStyleClasses"
-           :id="id"
            :aria-labelledby="aLabelledBy"
            :maxlength="maxlength"
            :required="required"
            :name="name"
-           v-model="textValue"
            :type="type"
            :pattern="pattern"
            autocomplete="off"

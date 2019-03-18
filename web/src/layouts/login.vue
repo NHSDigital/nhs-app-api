@@ -51,12 +51,12 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 import Sources from '@/lib/sources';
-import HomeHeader from '@/components/HomeHeader';
-import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import SessionExpiredBanner from '@/components/SessionExpiredBanner';
+import HomeHeader from '@/components/HomeHeader';
+import Spinner from '@/components/widgets/Spinner';
 import NativeCallbacks from '@/services/native-app';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import WebHeader from '@/components/widgets/WebHeader';
@@ -68,16 +68,16 @@ import CookieBanner from '../components/CookieBanner';
 
 export default {
   components: {
+    HomeHeader,
     CookieBanner,
+    Spinner,
     BetaBanner,
     SymptomBanner,
     WebHeader,
     WebFooter,
-    Spinner,
     ApiError,
     ConnectionError,
     FlashMessage,
-    HomeHeader,
     SessionExpiredBanner,
   },
   computed: {

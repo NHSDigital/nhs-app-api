@@ -101,16 +101,6 @@ export default {
       clientId: '',
     };
   },
-  asyncData({ store }) {
-    if (get('PracticeParticipating')(store.state.throttling.selectedGpPractice)) {
-      const authorisationService = new AuthorisationService(store.app.$env);
-      return authorisationService.generateLoginValues(
-        store.state.device.source,
-        store.$cookies,
-      );
-    }
-    return {};
-  },
   computed: {
     getHeaderText() {
       return this.$store.state.header.headerText;
@@ -128,6 +118,16 @@ export default {
     practiceName() {
       return get('PracticeName')(this.$store.state.throttling.selectedGpPractice);
     },
+  },
+  asyncData({ store }) {
+    if (get('PracticeParticipating')(store.state.throttling.selectedGpPractice)) {
+      const authorisationService = new AuthorisationService(store.app.$env);
+      return authorisationService.generateLoginValues(
+        store.state.device.source,
+        store.$cookies,
+      );
+    }
+    return {};
   },
   mounted() {
     if (!this.$store.state.throttling.selectedGpPractice) {

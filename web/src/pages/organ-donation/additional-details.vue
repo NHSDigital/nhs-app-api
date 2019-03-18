@@ -5,9 +5,9 @@
       <label :class="$style.label" for="ethnicity">
         {{ $t('organDonation.additionalDetails.ethnicity.label') }}
       </label>
-      <select-dropdown :class="$style.select"
+      <select-dropdown v-model="ethnicityId"
+                       :class="$style.select"
                        :required="false"
-                       v-model="ethnicityId"
                        select-id="ethnicity"
                        select-name="nojs.organDonation.additionalDetails.ethnicityId">
         <option v-for="option in ethnicities"
@@ -22,9 +22,9 @@
       <label :class="$style.label" for="religion">
         {{ $t('organDonation.additionalDetails.religion.label') }}
       </label>
-      <select-dropdown :class="$style.select"
+      <select-dropdown v-model="religionId"
+                       :class="$style.select"
                        :required="false"
-                       v-model="religionId"
                        select-id="religion"
                        select-name="nojs.organDonation.additionalDetails.religionId">
         <option v-for="option in religions"

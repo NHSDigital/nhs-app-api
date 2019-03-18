@@ -4,8 +4,8 @@
 
     <div role="list">
       <appointment v-for="appointment in appointments"
-                   :class="$style.upcoming"
                    :key="appointment.id"
+                   :class="$style.upcoming"
                    :appointment="appointment"
                    :cancellation-disabled="cancellationDisabled"
                    data-purpose="upcoming-appointments"

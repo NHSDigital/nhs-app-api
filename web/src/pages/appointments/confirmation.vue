@@ -44,8 +44,8 @@
             <div v-if="isJavascriptOn">
               <div v-for="(patientTelephoneNumber, index) in patientTelephoneNumbers"
                    :key="index" :class="$style.customRadioItem">
-                <input v-model="telephoneNumber"
-                       :id="patientTelephoneNumber.telephoneNumber"
+                <input :id="patientTelephoneNumber.telephoneNumber"
+                       v-model="telephoneNumber"
                        :value="patientTelephoneNumber.telephoneNumber"
                        :class="$style.customRadio"
                        type="radio"
@@ -73,12 +73,12 @@
             <div v-if="showPhoneNumberTextBox">
               <generic-text-input id="telephoneNumberText"
                                   ref="telephone"
+                                  v-model="otherTelephoneNumber"
                                   :a-labelled-by="telephoneNumberTextAriaLabelledBy"
                                   :text-area-classes="defaultClasses"
                                   :required="true"
                                   :initial-contents="otherTelephoneNumber"
                                   :class="showReasonError && $style.desktopWebErrorBorder"
-                                  v-model="otherTelephoneNumber"
                                   name="telephoneNumberField"
                                   pattern=".*[^ ].*"
                                   type="tel"/>
@@ -101,12 +101,12 @@
           </error-message>
           <generic-text-area id="reasonText"
                              ref="reason"
+                             v-model="symptoms"
                              :a-labelled-by="reasonBoxAriaLabelledBy"
                              :initial-contents="symptoms"
                              :text-area-classes="defaultClasses"
                              :required="true"
                              :class="showReasonError && $style.errorBorder"
-                             v-model="symptoms"
                              name="bookingReason"
                              maxlength="150"/>
 

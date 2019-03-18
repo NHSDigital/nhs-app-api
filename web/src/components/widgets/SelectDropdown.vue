@@ -1,8 +1,8 @@
 <template>
   <span :class="getStyleClasses">
-    <select v-tabbing="defaultClasses"
+    <select :id="selectId"
             v-model="selectedValue"
-            :id="selectId"
+            v-tabbing="defaultClasses"
             :name="selectName"
             :aria-labelledby="aLabelledBy"
             :class="[

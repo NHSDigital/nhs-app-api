@@ -30,9 +30,9 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 import Sources from '@/lib/sources';
+import HeaderMenu from '@/components/HeaderMenu';
 import A11yTitleAnnouncer from '@/components/widgets/A11yTitleAnnouncer';
 import NativeCallbacks from '@/services/native-app';
-import HeaderMenu from '@/components/HeaderMenu';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
 import NavigationMenu from '@/components/NavigationMenu';

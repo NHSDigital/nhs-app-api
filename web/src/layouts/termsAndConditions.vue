@@ -12,19 +12,20 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 import Sources from '@/lib/sources';
-import HomeHeader from '@/components/HomeHeader';
-import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
+import HomeHeader from '@/components/HomeHeader';
+import Spinner from '@/components/widgets/Spinner';
 import NativeVersionSetup from '../services/nativeVersionSetup';
+
 
 export default {
   components: {
-    Spinner,
     ApiError,
     ConnectionError,
     FlashMessage,
+    Spinner,
     HomeHeader,
   },
   head() {

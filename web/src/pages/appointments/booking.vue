@@ -77,9 +77,7 @@ import isEmpty from 'lodash/fp/isEmpty';
 import qs from 'qs';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import MessageList from '@/components/widgets/MessageList';
 import GenericButton from '@/components/widgets/GenericButton';
-import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
 import VueScrollTo from 'vue-scrollto';
@@ -110,12 +108,10 @@ export default {
     DesktopGenericBackLink,
     MessageDialog,
     MessageText,
-    MessageList,
-    FloatingButtonBottom,
     Filters,
     SlotList,
-    VueScrollTo,
     GenericButton,
+    VueScrollTo,
   },
   data() {
     return {

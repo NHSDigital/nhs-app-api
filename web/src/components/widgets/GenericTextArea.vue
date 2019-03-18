@@ -1,11 +1,11 @@
 <template>
   <div :class="[$style.form, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <textarea v-tabbing="textAreaClasses"
+    <textarea :id="id"
               ref="textArea"
-              :class="getStyleClasses"
-              :id="id"
-              :required="required"
               v-model="textValue"
+              v-tabbing="textAreaClasses"
+              :class="getStyleClasses"
+              :required="required"
               :aria-labelledby="aLabelledBy"
               :maxlength="maxlength"
               :name="name"

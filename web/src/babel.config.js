@@ -1,4 +1,4 @@
-// eslint-disable-line unexpected-unnamed-function
+// eslint-disable-next-line func-names
 module.exports = function (api) {
   if (api) {
     api.cache(true);

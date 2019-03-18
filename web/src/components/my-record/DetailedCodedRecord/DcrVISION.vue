@@ -46,8 +46,8 @@
                   :supplier="record.supplier" />
 
     <analytics-tracked-tag :id="`${DIAGNOSIS}Header`"
-                           :class ="[$style['record-title'],
-                                     getCollapsedState(isDiagnosisCollapsed)]"
+                           :class="[$style['record-title'],
+                                    getCollapsedState(isDiagnosisCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="DIAGNOSIS"
                            :text="$t('my_record.diagnosis.sectionHeader.default')"
@@ -63,8 +63,8 @@
                :supplier="record.supplier" />
 
     <analytics-tracked-tag :id="`${EXAMINATIONS}Header`"
-                           :class ="[$style['record-title'],
-                                     getCollapsedState(isExaminationCollapsed)]"
+                           :class="[$style['record-title'],
+                                    getCollapsedState(isExaminationCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="EXAMINATIONS"
                            :text="$t('my_record.examinations.sectionHeader.default')"
@@ -81,8 +81,8 @@
                   :supplier="record.supplier" />
 
     <analytics-tracked-tag :id="`${PROCEDURES}Header`"
-                           :class ="[$style['record-title'],
-                                     getCollapsedState(isProceduresCollapsed)]"
+                           :class="[$style['record-title'],
+                                    getCollapsedState(isProceduresCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="PROCEDURES"
                            :text="$t('my_record.procedures.sectionHeader.default')"

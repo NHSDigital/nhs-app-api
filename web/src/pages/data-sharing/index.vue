@@ -1,7 +1,9 @@
+<!-- eslint-disable vue/no-v-html -->
+<!-- eslint-disable vue/no-template-shadow -->
 <template>
   <div v-if="showTemplate" class="content">
     <div :class="$style['page']">
-      <h1 :class="$style['pageTitle']" :key="`${pageId}header`">
+      <h1 :key="`${pageId}header`" :class="$style['pageTitle']">
         {{ $t('ds01.titles.' + pageId) }}
       </h1>
       <ul id="contents" :class="$style['list-menu']">
@@ -48,8 +50,8 @@
 /* eslint-disable import/extensions */
 import NativeCallbacks from '@/services/native-app';
 import BottomNav from '@/components/data-sharing/BottomNav';
-import Overview from '@/components/data-sharing/Overview';
 import Benefits from '@/components/data-sharing/Benefits';
+import Overview from '@/components/data-sharing/Overview';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
 import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoiceDoesNotApply';
 import GenericButton from '@/components/widgets/GenericButton';

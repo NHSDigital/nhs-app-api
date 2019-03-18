@@ -20,9 +20,9 @@
         <error-message v-if="showErrors">
           {{ $t('organDonation.withdrawReason.errorMessageText') }}
         </error-message>
-        <select-dropdown :class="[$style.select, $style['mb-4']]"
+        <select-dropdown v-model="reasonId"
+                         :class="[$style.select, $style['mb-4']]"
                          :required="true"
-                         v-model="reasonId"
                          select-id="reason">
           <option v-for="option in reasons"
                   :key="option.id"
@@ -70,11 +70,6 @@ export default {
     MessageText,
     SelectDropdown,
   },
-  fetch({ redirect, store }) {
-    if (!store.state.organDonation.isWithdrawing) {
-      redirect(ORGAN_DONATION.path);
-    }
-  },
   data() {
     return {
       hasTriedToContinue: false,
@@ -91,6 +86,11 @@ export default {
     showErrors() {
       return (this.hasTriedToContinue && !this.reasonId);
     },
+  },
+  fetch({ redirect, store }) {
+    if (!store.state.organDonation.isWithdrawing) {
+      redirect(ORGAN_DONATION.path);
+    }
   },
   methods: {
     continueClicked() {

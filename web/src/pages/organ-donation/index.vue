@@ -79,10 +79,6 @@ export default {
     ReaffirmDecision,
     YourDecision,
   },
-  async asyncData({ store }) {
-    await store.dispatch('organDonation/getReferenceData');
-    await store.dispatch('organDonation/getRegistration');
-  },
   data() {
     return {
       decision: this.$store.state.organDonation.originalRegistration.decision,
@@ -115,6 +111,10 @@ export default {
     isConflicted() {
       return this.state === STATE_CONFLICTED && this.decision === DECISION_UNKNOWN;
     },
+  },
+  async asyncData({ store }) {
+    await store.dispatch('organDonation/getReferenceData');
+    await store.dispatch('organDonation/getRegistration');
   },
   created() {
     this.$store.dispatch('organDonation/amendCancel');
