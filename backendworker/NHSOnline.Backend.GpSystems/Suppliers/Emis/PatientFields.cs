@@ -20,7 +20,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
                 nameof(MedicalRecord.DateOfBirth),
                 nameof(ContactDetails.MobileNumber),
                 nameof(ContactDetails.TelephoneNumber),
-                nameof(DemographicsGetResponse.FirstName)
+                nameof(DemographicsGetResponse.FirstName),
+                nameof(LinkageDetails.AccountId),
+                nameof(LinkageDetails.LinkageKey),
             };
         }
     }
