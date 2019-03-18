@@ -56,14 +56,16 @@
     <generic-button v-if="loadComplete && $store.state.device.isNativeApp"
                     id="back-to-appointments"
                     :class="[$style.button, $style.grey]"
-                    @click.stop.prevent="goBack()">
+                    @click.stop.prevent="goBack">
       {{ $t('appointments.booking.backButtonText') }}
     </generic-button>
 
     <desktopGenericBackLink
-      v-if="loadComplete && !$store.state.device.isNativeApp"
+      v-else-if="loadComplete"
       :path="appointmentsPath"
-      :button-text="'appointments.booking.desktopBackButtonText'"/>
+      :button-text="'appointments.booking.desktopBackButtonText'"
+      @clickAndPrevent="goBack"
+    />
   </div>
 </template>
 

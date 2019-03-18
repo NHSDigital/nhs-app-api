@@ -20,15 +20,15 @@
         </div>
         <form v-if="$store.state.device.isNativeApp" :action="myRecordReturnPath" method="get">
           <input :value="noJsWarningAcceptance" type="hidden" name="nojs">
-          <floating-button-bottom :button-classes="['grey']" @click="onBackButtonClicked">
+          <floating-button-bottom :button-classes="['grey']" @click.prevent="onBackButtonClicked">
             {{ $t('my_record.testresultdetails.backButton') }}
           </floating-button-bottom>
         </form>
         <desktopGenericBackLink
           v-if="!$store.state.device.isNativeApp"
-          :path="myRecordReturnPath"
+          :path="noJsPath"
           :button-text="'my_record.diagnosisDetails.backButton'"
-          :state-transfer-required="true"/>
+          @clickAndPrevent="onBackButtonClicked"/>
       </div>
     </div>
   </div>
@@ -46,17 +46,19 @@ export default {
     DesktopGenericBackLink,
   },
   data() {
+    const noJsData = JSON.stringify({ myRecord: { hasAcceptedTerms: true } });
+    const location = '#testResultsHeader';
     return {
-      myRecordReturnPath: `${MYRECORD.path}#testResultsHeader`,
-      noJsWarningAcceptance: this.$store.state.myRecord.nojsData,
+      myRecordReturnPath: MYRECORD.path + location,
+      noJsWarningAcceptance: noJsData,
+      noJsPath: `${MYRECORD.path}?nojs=${encodeURIComponent(noJsData) + location}`,
     };
   },
   async asyncData({ store }) {
     await store.dispatch('myRecord/loadTestResults');
   },
   methods: {
-    onBackButtonClicked(event) {
-      event.preventDefault();
+    onBackButtonClicked() {
       redirectTo(this, this.myRecordReturnPath, null);
     },
   },

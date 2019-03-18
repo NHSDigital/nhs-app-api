@@ -138,9 +138,10 @@
       </generic-button>
 
       <desktopGenericBackLink
-        v-if="!$store.state.device.isNativeApp"
+        v-else
         :path="appointmentBookingPath"
-        :button-text="'appointments.confirmation.backButtonText'"/>
+        :button-text="'appointments.confirmation.backButtonText'"
+        @clickAndPrevent="onCancelButtonClicked"/>
     </div>
   </div>
 </template>

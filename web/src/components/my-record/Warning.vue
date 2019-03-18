@@ -27,20 +27,23 @@
              type="hidden"
              name="nojs">
 
-      <generic-button :class="[$style.button, $style.green]" @click="onContinueButtonClicked">
+      <generic-button :class="[$style.button, $style.green]"
+                      @click="onContinueButtonClicked">
         {{ $t('my_record.warning.agreeButtonText') }}
       </generic-button>
     </form>
     <form v-if="$store.state.device.isNativeApp" :action="indexPath" method="get">
-      <generic-button :class="[$style.button, $style.grey]" @click="onBackButtonClicked">
+      <generic-button :class="[$style.button, $style.grey]"
+                      @click="onBackButtonClicked">
         {{ $t('my_record.warning.backButtonText') }}
       </generic-button>
     </form>
 
     <desktopGenericBackLink
-      v-if="!$store.state.device.isNativeApp"
+      v-else
       :path="indexPath"
-      :button-text="'my_record.warning.backButtonText'"/>
+      :button-text="'my_record.warning.backButtonText'"
+      @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>
 

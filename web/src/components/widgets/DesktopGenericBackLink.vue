@@ -1,15 +1,10 @@
 <template>
-  <a v-if="!stateTransferRequired" :class="$style.desktopBackLink"
-     :href="path">
-    {{ $t(getBackButtonText) }}</a>
-  <a v-else :class="$style.desktopBackLink"
+  <a :class="$style.desktopBackLink"
      :href="path"
-     @click.prevent="onBackLinkClicked($event)">
+     @click.prevent="$emit('clickAndPrevent', $event)">
     {{ $t(getBackButtonText) }}</a>
 </template>
 <script>
-import { redirectTo } from '@/lib/utils';
-
 export default {
   name: 'DesktopGenericBackButton',
   props: {
@@ -21,22 +16,10 @@ export default {
       type: String,
       default: 'generic.backButton.text',
     },
-    stateTransferRequired: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     getBackButtonText() {
       return this.buttonText;
-    },
-  },
-  methods: {
-    onBackLinkClicked(event) {
-      if (this.stateTransferRequired) {
-        event.preventDefault();
-        redirectTo(this, this.path, null);
-      }
     },
   },
 };

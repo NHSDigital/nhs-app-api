@@ -52,14 +52,14 @@
     <generic-button v-if="$store.state.device.isNativeApp"
                     id="btn_back_appointment"
                     :button-classes="['button', 'grey']"
-                    @click.stop.prevent="onBackButtonClicked($event)">
+                    @click.stop.prevent="onBackButtonClicked">
       {{ $t('appointments.cancelling.backButtonText') }}
     </generic-button>
-    <form v-else :action="appointmentPath">
-      <desktopGenericBackLink
-        :path="appointmentPath"
-        :button-text="'appointments.cancelling.backButtonText'"/>
-    </form>
+    <desktopGenericBackLink
+      v-else
+      :path="appointmentPath"
+      :button-text="'appointments.cancelling.backButtonText'"
+      @clickAndPrevent="onBackButtonClicked"/>
   </div>
 </template>
 
