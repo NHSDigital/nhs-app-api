@@ -1,11 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import Vuex from 'vuex';
-import each from 'jest-each';
-import { mount, createLocalVue } from '@vue/test-utils';
-import createStore from '@/store/index';
+import analytics from '@/store/modules/analytics';
 import ApiError from '@/components/errors/ApiError';
-import locale from '@/locale';
+import device from '@/store/modules/device';
+import each from 'jest-each';
+import errors from '@/store/modules/errors';
 import { get, has } from 'lodash/fp';
+import locale from '@/locale';
+import { mount, createLocalVue } from '@vue/test-utils';
+import Vuex from 'vuex';
 import testData from './testData';
 
 const engLocale = locale.en;
@@ -18,7 +20,13 @@ const createApiErrorComponent = ($route, apiError) => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
 
-  const store = createStore();
+  const store = new Vuex.Store({
+    modules: {
+      errors,
+      device,
+      analytics,
+    },
+  });
   store.app = { $env: {} };
   store.dispatch('errors/setRoutePath', $route);
   store.dispatch('errors/addApiError', apiError);

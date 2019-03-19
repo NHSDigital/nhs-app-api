@@ -1,6 +1,3 @@
-/* eslint-disable global-require */
-import Vuex from 'vuex';
-
 import cookieBanner from './modules/cookieBanner';
 import header from './modules/header';
 import pageTitle from './modules/pageTitle';
@@ -22,41 +19,32 @@ import myRecord from './modules/myRecord';
 import organDonation from './modules/organDonation';
 import throttling from './modules/throttling';
 
-const createStore = () => new Vuex.Store({
-  modules: {
-    cookieBanner,
-    header,
-    pageTitle,
-    availableAppointments,
-    auth,
-    device,
-    http,
-    navigation,
-    prescriptions,
-    repeatPrescriptionCourses,
-    session,
-    errors,
-    myAppointments,
-    myRecord,
-    flashMessage,
-    analytics,
-    termsAndConditions,
-    appVersion,
-    organDonation,
-    throttling,
-  },
-  actions: {
-    async nuxtServerInit({ dispatch }, { req }) {
-      const authCookie = this.$cookies.get('nhso.auth');
-      if (process.server) {
-        const consola = require('consola');
-        const { redirectUri, codeVerifier } = authCookie || {};
-        consola.info(`Auth Cookie values for request: ${req.url}: redirectUri: ${redirectUri}, codeVerifier: ${codeVerifier}`);
-      }
-      await dispatch('auth/updateConfig', this.$cookies.get('nhso.auth'));
-      await dispatch('session/setInfo', this.$cookies.get('nhso.session'));
-    },
-  },
-});
+export const modules = {
+  analytics,
+  appVersion,
+  auth,
+  availableAppointments,
+  cookieBanner,
+  device,
+  errors,
+  flashMessage,
+  header,
+  http,
+  myAppointments,
+  myRecord,
+  navigation,
+  organDonation,
+  pageTitle,
+  prescriptions,
+  repeatPrescriptionCourses,
+  session,
+  termsAndConditions,
+  throttling,
+};
 
-export default createStore;
+export const actions = {
+  async nuxtServerInit({ dispatch }) {
+    await dispatch('auth/updateConfig', this.$cookies.get('nhso.auth'));
+    await dispatch('session/setInfo', this.$cookies.get('nhso.session'));
+  },
+};

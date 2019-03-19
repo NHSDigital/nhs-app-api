@@ -2,7 +2,7 @@
 
 import Vuex from 'vuex';
 import { createLocalVue } from '@vue/test-utils';
-import createStore from '@/store';
+import { actions } from '@/store/index';
 
 const checkRecursively = (first, second) => {
   if (first instanceof String || first === undefined) return;
@@ -26,8 +26,8 @@ describe('store', () => {
   });
 
   it('will have new state instances for each new store', () => {
-    const storeOne = createStore();
-    const storeTwo = createStore();
+    const storeOne = new Vuex.Store(actions);
+    const storeTwo = new Vuex.Store(actions);
 
     for (const moduleKey of Object.keys(storeOne._modules.root._children)) {
       const moduleOne = storeOne._modules.root._children[moduleKey];

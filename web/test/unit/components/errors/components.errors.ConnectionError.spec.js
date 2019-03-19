@@ -1,27 +1,34 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import Vuex from 'vuex';
 import each from 'jest-each';
-import { mount, createLocalVue } from '@vue/test-utils';
-import createStore from '@/store/index';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ConnectionError from '@/components/errors/ConnectionError';
+import { initialState } from '@/store/modules/errors/mutation-types';
+import getters from '@/store/modules/errors/getters';
 import locale from '@/locale';
 import { get, has } from 'lodash/fp';
+import { createStore } from '../../helpers';
 
 const engLocale = locale.en;
 const $te = key => has(key, engLocale);
 const $t = key => get(key, engLocale);
 const errorId = 'error';
-let component;
 
-const createApiErrorComponent = ($route, apiError) => {
+const createConnectionErrorComponent = ($route, apiError) => {
   const localVue = createLocalVue();
+  const $http = jest.fn();
   localVue.use(Vuex);
 
   const store = createStore();
-  store.dispatch('errors/setRoutePath', $route.path);
-  store.dispatch('errors/addApiError', apiError);
 
-  component = mount(ConnectionError, {
+  store.state.errors = initialState();
+  store.state.errors.apiErrors = [apiError];
+  store.state.errors.routePath = $route.path;
+  store.state.errors.getters = getters;
+  store.state.errors.hasConnectionProblem = true;
+
+  return shallowMount(ConnectionError, {
+    $http,
     store,
     localVue,
     mocks: {
@@ -53,7 +60,7 @@ describe('ConnectionError.vue', () => {
     const route = { path };
     const apiError = { message: 'API failed to return a response.' };
 
-    createApiErrorComponent(route, apiError);
+    const component = createConnectionErrorComponent(route, apiError);
 
     expect(component.vm.header).toEqual('Connection error');
     expect(component.vm.subheader).toEqual('There\'s an issue with your internet connection');
