@@ -1,9 +1,6 @@
-using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
@@ -11,7 +8,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session
 {
-    [Route("session/extend"), PfsSecurityMode]
+    [Route("session/extend")]
     public class SessionExtendController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

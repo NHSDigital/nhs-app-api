@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
@@ -11,7 +10,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    [Route("patient/appointments"),PfsSecurityMode]
+    [Route("patient/appointments")]
     public class AppointmentsController : Controller
     {
         private readonly ILogger<AppointmentsController> _logger;

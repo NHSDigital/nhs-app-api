@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Prescriptions;
 using NHSOnline.Backend.GpSystems.Prescriptions.Models;
@@ -16,7 +15,7 @@ using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
-    [Route("patient/prescriptions"), PfsSecurityMode]
+    [Route("patient/prescriptions")]
     public class PrescriptionsController : Controller
     {
         private readonly ConfigurationSettings _settings;

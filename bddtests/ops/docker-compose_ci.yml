@@ -17,7 +17,6 @@ services:
     env_file:
       - vars_ci.env
     environment:
-      - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_URLS=http://*:8082
       - PORT=8082
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
@@ -44,7 +43,6 @@ services:
     env_file:
       - vars_ci.env
     environment:
-      - BACKENDWORKER_RUNMODE=cid
       - ASPNETCORE_URLS=http://*:8084
       - PORT=8084
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y

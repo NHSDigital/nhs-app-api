@@ -5,11 +5,10 @@ using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
-    [Route("patient/organdonation/referencedata"), PfsSecurityMode]
+    [Route("patient/organdonation/referencedata")]
     public class OrganDonationReferenceDataController : Controller
     {
         

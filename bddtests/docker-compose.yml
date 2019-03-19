@@ -25,7 +25,6 @@ services:
   api.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:
-      - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8082
       - PORT=8082
@@ -93,7 +92,6 @@ services:
       - nhsonline.redis.sds
       - nhsonline.redis.session
     environment:
-      - BACKENDWORKER_RUNMODE=cid
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8084
       - ConfigurationSettings__EmisExtendedHttpTimeoutSeconds=15

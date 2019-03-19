@@ -8,11 +8,10 @@ using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.PfsApi.TermsAndConditions;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 {
-    [Route("patient/terms-and-conditions/consent"),PfsSecurityMode]
+    [Route("patient/terms-and-conditions/consent")]
     public class TermsAndConditionsController : Controller
     {
         private readonly ITermsAndConditionsService _termsAndConditionsService;

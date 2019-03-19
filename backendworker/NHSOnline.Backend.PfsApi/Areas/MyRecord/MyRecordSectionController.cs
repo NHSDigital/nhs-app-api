@@ -1,8 +1,6 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord;
 using NHSOnline.Backend.Support;
@@ -11,7 +9,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
-    [Route("patient/my-record/section"), PfsSecurityMode]
+    [Route("patient/my-record/section")]
     public class MyRecordSectionController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

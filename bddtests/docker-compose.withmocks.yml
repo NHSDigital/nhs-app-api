@@ -19,7 +19,6 @@ services:
   api.local.bitraft.io:
     image: nhsonline.backend.pfsapi
     environment:
-      - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8082
       - PORT=8082
@@ -53,7 +52,6 @@ services:
   cid.local.bitraft.io:
     image: nhsonline.backend.cidapi
     environment:
-      - BACKENDWORKER_RUNMODE=cid
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8084
       - PORT=8084

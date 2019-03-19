@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.Support;
@@ -10,7 +9,7 @@ using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Demographics
 {
-    [Route("patient"),PfsSecurityMode]
+    [Route("patient")]
     public class DemographicsController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

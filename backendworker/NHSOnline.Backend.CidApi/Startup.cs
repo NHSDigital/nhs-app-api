@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,8 +9,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
@@ -36,7 +29,6 @@ namespace NHSOnline.Backend.CidApi
         
         private readonly ILoggerFactory _loggerFactory;
         
-        private readonly RunMode _runMode;
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
@@ -49,7 +41,6 @@ namespace NHSOnline.Backend.CidApi
             Configuration = configuration;
             _env = env;
             _loggerFactory = loggerFactory;
-            _runMode = GetRunMode(configuration);
 
             if (env.IsDevelopment())
             {
@@ -117,10 +108,8 @@ namespace NHSOnline.Backend.CidApi
             _modularStartup.ConfigureServices(services);
         }
 
-        private void ConfigureMvcOptions(MvcOptions options)
+        private static void ConfigureMvcOptions(MvcOptions options)
         {
-            options.Conventions.Add(new SecurityModeConvention(
-                            _runMode, _loggerFactory.CreateLogger<SecurityModeConvention>()));
             options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
             options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
@@ -204,23 +193,6 @@ namespace NHSOnline.Backend.CidApi
             }
 
             startupLogger.LogInformation(logMessageStringBuilder.ToString());
-        }
-
-        private static RunMode GetRunMode(IConfiguration configuration)
-        {
-            if (null == configuration["runMode"])
-            {
-                throw new ConfigurationNotFoundException("command line parameter runMode is not set");
-            }
-
-            var stringMode = configuration["runMode"];
-
-            if (!Enum.TryParse(stringMode, true, out RunMode runMode))
-            {
-                runMode = RunMode.None;
-            }
-
-            return runMode;
         }
     }
 }

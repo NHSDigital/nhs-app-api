@@ -4,14 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.PfsApi.Areas.OdsCode.Models;
-using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OdsCode
 {
-    [Route("odscodelookup"), PfsSecurityMode]
+    [Route("odscodelookup")]
     public class OdsCodeLookupController : Controller
     {
         private readonly ILogger<OdsCodeLookupController> _logger;

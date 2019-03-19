@@ -7,12 +7,10 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.PfsApi.OrganDonation;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.ApiSupport;
-using NHSOnline.Backend.PfsApi.OrganDonation.Mappers;
 
 namespace NHSOnline.Backend.PfsApi.Areas.OrganDonation
 {
-    [Route("patient/organdonation"), PfsSecurityMode]
+    [Route("patient/organdonation")]
     public class OrganDonationController : Controller
     {
         private readonly ILogger<OrganDonationController> _logger;

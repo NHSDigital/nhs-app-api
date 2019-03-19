@@ -13,11 +13,10 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.Temporal;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.CidApi.Areas.Linkage
 {
-    [Route("patient/linkage"), CidSecurityMode]
+    [Route("patient/linkage")]
     public class LinkageController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

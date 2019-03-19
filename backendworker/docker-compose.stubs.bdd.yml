@@ -20,7 +20,6 @@ services:
       - nhsonline.redis.sds
       - nhsonline.redis.session
     environment:
-      - BACKENDWORKER_RUNMODE=cid
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8084
       - PORT=8084

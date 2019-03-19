@@ -96,7 +96,6 @@ ENV TERMS_CONDITIONS_COSMOS_COLLECTION_NAME consent
 ENV NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
 ENV NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
 ENV STUB_TERMS_AND_CONDITIONS false
-ENV BACKENDWORKER_RUNMODE none
 ENV IM1CACHE_MONGO_DATABASE_COLLECTION im1cache
 ENV ORGAN_DONATION_BASE_URL https://nhsbt-apim-dev01.azure-api.net/uat3/odr/v1/
 ENV ORGAN_DONATION_CLIENT_ID ODR-26-NHSAP
@@ -124,4 +123,4 @@ RUN update-ca-certificates
 
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && exec dotnet NHSOnline.Backend.PfsApi.dll --runMode=$BACKENDWORKER_RUNMODE
+CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && exec dotnet NHSOnline.Backend.PfsApi.dll

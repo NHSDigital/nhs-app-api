@@ -44,7 +44,6 @@
     },
     "NHSOnline.Backend.CidApi": {
       "commandName": "Project",
-      "commandLineArgs": "--runMode=cid",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
@@ -92,14 +91,12 @@
         "STUB_TERMS_AND_CONDITIONS": "true",
         "CORS_AUTHORITY": "http://web.local.bitraft.io:3000",
         "CookieDomain": ".bitraft.io",
-        "runMode": "dev",
         "ConfigurationSettings__CookieDomain": ".bitraft.io",
         "VISION_ODS_REMAP_ENABLED": "false"
       }
     },
     "NHSOnline.Backend.CidApi.Bdd": {
       "commandName": "Project",
-      "commandLineArgs": "--runMode=cid",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
@@ -122,7 +119,6 @@
         "GP_PROVIDER_ENABLED_VISION": "true",
         "IM1CACHE_MONGO_DATABASE_COLLECTION": "im1Cache",
         "REDIS_ODSLOOKUP_CONFIG": "api.local.bitraft.io:6379",
-        "runMode": "dev",
         "SESSION_ENCRYPTION_KEY_FILE": "DevelopmentSessionEncryptionKey.txt",
         "SESSION_MONGO_DATABASE_COLLECTION": "session",
         "SESSION_MONGO_DATABASE_HOST": "localhost",

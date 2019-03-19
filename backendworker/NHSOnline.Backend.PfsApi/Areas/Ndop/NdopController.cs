@@ -5,11 +5,10 @@ using NHSOnline.Backend.PfsApi.Ndop;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Ndop
 {
-    [Route("patient/ndop"),PfsSecurityMode]
+    [Route("patient/ndop")]
     public class NdopController : Controller
     {
         private readonly INdopService _ndopService;

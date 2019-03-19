@@ -5,11 +5,10 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Areas.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.GpSearch
 {
-    [Route("gpsearch"),PfsSecurityMode]
+    [Route("gpsearch")]
     public class GpSearchController : Controller
     {
         private readonly IGpSearchService _gpSearchService;

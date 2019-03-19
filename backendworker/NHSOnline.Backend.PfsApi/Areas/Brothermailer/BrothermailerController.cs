@@ -5,11 +5,10 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Brothermailer.Models;
 using NHSOnline.Backend.PfsApi.Brothermailer;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Brothermailer
 {
-    [Route("brothermailer"),PfsSecurityMode]
+    [Route("brothermailer")]
     public class BrothermailerController : Controller
     {
         private readonly IBrothermailerService _brothermailerService;

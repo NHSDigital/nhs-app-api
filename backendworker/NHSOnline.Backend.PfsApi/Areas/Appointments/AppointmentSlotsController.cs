@@ -8,11 +8,10 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Temporal;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
-    [Route("patient/appointment-slots"),PfsSecurityMode]
+    [Route("patient/appointment-slots")]
     public class AppointmentSlotsController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

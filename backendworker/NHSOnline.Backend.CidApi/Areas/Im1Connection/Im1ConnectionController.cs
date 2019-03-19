@@ -9,11 +9,10 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
 {
-    [Route("patient/im1connection"),CidSecurityMode]
+    [Route("patient/im1connection")]
     public class Im1ConnectionController : Controller
     {
         private readonly IOdsCodeLookup _odsCodeLookup;

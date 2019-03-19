@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.PfsApi.Areas.Configuration.Models;
 using NHSOnline.Backend.PfsApi.Devices;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Configuration
 {
-    [Route("configuration"), PfsSecurityMode]
+    [Route("configuration")]
     public class ConfigurationController : Controller
     {
         private readonly ILogger<ConfigurationController> _logger;

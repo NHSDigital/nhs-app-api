@@ -87,7 +87,6 @@ ENV GP_PROVIDER_ENABLED_TPP true
 ENV GP_PROVIDER_ENABLED_VISION true
 ENV GP_PROVIDER_ENABLED_MICROTEST true
 ENV STUB_TERMS_AND_CONDITIONS false
-ENV BACKENDWORKER_RUNMODE none
 ENV IM1CACHE_MONGO_DATABASE_COLLECTION im1cache
 ENV VISION_ODS_REMAP_ENABLED false
 
@@ -104,4 +103,4 @@ RUN update-ca-certificates
 
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && exec dotnet NHSOnline.Backend.CidApi.dll --runMode=$BACKENDWORKER_RUNMODE
+CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && exec dotnet NHSOnline.Backend.CidApi.dll

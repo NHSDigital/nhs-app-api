@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.PfsApi.HealthCheck;
 
 namespace NHSOnline.Backend.PfsApi.Areas.HealthCheck
 {
-    [Route("healthcheck"),AllSecurityMode]
+    [Route("healthcheck")]
     public class HealthCheckController : Controller
     {
         private readonly IHealthCheckService _healthCheckService;
