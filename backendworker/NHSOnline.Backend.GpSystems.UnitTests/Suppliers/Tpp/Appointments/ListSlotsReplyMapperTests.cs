@@ -19,11 +19,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
     [TestClass]
     public class ListSlotsReplyMapperTests
     {
-        private IDateTimeOffsetProvider _dateTimeOffsetProvider;
-        private TimeZoneInfoProvider _timeZoneInfoProvider;
         private ListSlotsReplyMapper _systemUnderTest;
         private IFixture _fixture;
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
+        private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
 
         [TestInitialize]
         public void TestInitialize()
@@ -31,15 +30,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
             
+            _dateTimeOffsetProviderMock = _fixture.Freeze<Mock<IDateTimeOffsetProvider>>();
+            
             _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(DateTime.UtcNow);
             
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
-            _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
-            _fixture.Inject(_dateTimeOffsetProvider);
+            _fixture.Inject(_dateTimeOffsetProviderMock);
             
             _systemUnderTest = new ListSlotsReplyMapper(_fixture.Create<SessionMapper>());
         }
@@ -80,7 +79,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var session = CreateSession("Leeds", "101", "", "General Session Appointment");
             var slot = CreateSlot("2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
             session.Slots = new[] { slot }.ToList();
-
+            
+            
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
 
             var listSlotsReply = new ListSlotsReply
             {
@@ -92,8 +93,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Id = "101",
                 Clinicians =  Array.Empty<string>(),
                 Location = "Leeds",
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime = slotTime,
+                StartTime = slotTime,
                 Type = "Emergency",
                 SessionName = "General Session Appointment"
             };
@@ -118,7 +119,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var slot = CreateSlot("2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
             session.Slots = new[] { slot }.ToList();
 
-
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
+            
             var listSlotsReply = new ListSlotsReply
             {
                 Sessions = new List<Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Session> { session }
@@ -129,8 +131,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
                 Location = "",
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime =  slotTime,
+                StartTime = slotTime,
                 Type = "Emergency", 
                 SessionName = "General Session Appointment"
             };

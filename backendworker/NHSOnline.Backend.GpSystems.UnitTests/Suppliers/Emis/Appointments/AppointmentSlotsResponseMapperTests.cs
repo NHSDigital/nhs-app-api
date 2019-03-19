@@ -26,11 +26,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private const string SessionId = "SESSION_ID";
 
         private IFixture _fixture;
-        private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
-        private TimeZoneInfoProvider _timeZoneInfoProvider;
         private IAppointmentSlotsResponseMapper _sut;
         private EmisUserSession _userSession;
+        private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
         DemographicsGetResponse _demographics;
 
         [TestInitialize]
@@ -47,8 +46,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform())
             });
-            _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            
+            _dateTimeOffsetProviderMock = _fixture.Freeze<Mock<IDateTimeOffsetProvider>>();
 
             var slotsMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentSlotsMapper>();
 
@@ -64,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _demographics = new DemographicsGetResponse();
 
             _sut =
-                new AppointmentSlotsResponseMapper(new AppointmentSlotsMapper(_dateTimeOffsetProvider, slotsMapperLogger,_fixture.Create<EmisEnumMapper>()));
+                new AppointmentSlotsResponseMapper(new AppointmentSlotsMapper(_dateTimeOffsetProviderMock.Object, slotsMapperLogger,_fixture.Create<EmisEnumMapper>()));
         }
 
         [TestMethod]
@@ -288,6 +287,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var appointmentSlotSession =
                 CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
 
+            
+            var slotTimes = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
+            
+            
             var slotsResponse = new AppointmentSlotsGetResponse
             {
                 Sessions = new[] { appointmentSlotSession }
@@ -303,8 +306,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 Id = "1",
                 Clinicians = Array.Empty<string>(),
                 Location = "",
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime = slotTimes,
+                StartTime = slotTimes,
                 Type = "Emergency",
                 SessionName = "General Session Appointment"
             };
@@ -344,6 +347,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             var appointmentSlotSession =
                 CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency","Unknown");
+            
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
 
             var slotsResponse = new AppointmentSlotsGetResponse
             {
@@ -360,8 +365,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 Id = "1",
                 Clinicians = Array.Empty<string>(),
                 Location = "",
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime = slotTime,
+                StartTime = slotTime,
                 Type = "Emergency",
                 SessionName = "General Session Appointment"
             };

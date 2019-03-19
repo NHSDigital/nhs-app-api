@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using FluentAssertions;
+using Moq;
 
 namespace UnitTestHelper
 {
@@ -22,6 +23,24 @@ namespace UnitTestHelper
         public static string DateTimeToJson(DateTime dateTime)
         {
             return dateTime.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
+        }
+        
+        public static DateTimeOffset? MockDateTimeOffset(this Mock<IDateTimeOffsetProvider> dateTimeOffsetProviderMock, DateTime dateTime)
+        {
+            DateTimeOffset? slotTime= new DateTimeOffset(dateTime);
+            dateTimeOffsetProviderMock.Setup(x => x.TryCreateDateTimeOffset(DateTimeToJson(dateTime), out slotTime))
+                .Returns(true);
+            return slotTime;
+        }
+        
+        public static DateTimeOffset? MockDateTimeOffset(this Mock<IDateTimeOffsetProvider> dateTimeOffsetProviderMock, string dateTime)
+        {
+            var formattedDateTime =
+                DateTime.Parse(dateTime, CultureInfo.InvariantCulture);
+            DateTimeOffset? slotTime= new DateTimeOffset(formattedDateTime);
+            dateTimeOffsetProviderMock.Setup(x => x.TryCreateDateTimeOffset(DateTimeToJson(formattedDateTime), out slotTime))
+                .Returns(true);
+            return slotTime;
         }
     }
 }

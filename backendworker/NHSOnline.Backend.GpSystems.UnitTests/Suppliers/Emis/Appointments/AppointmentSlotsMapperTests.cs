@@ -21,31 +21,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
     public class AppointmentSlotsMapperTests
     {
         private IFixture _fixture;
-        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
-        private IDateTimeOffsetProvider _dateTimeOffsetProvider;
-        private TimeZoneInfoProvider _timeZoneInfoProvider;
         private AppointmentSlotsMapper _systemUnderTest;
         private Mock<IEmisEnumMapper> _mockEmisEnumMapper;
         private Mock<ILogger<AppointmentSlotsMapper>> _mockLogger;
+        private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
-            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
-                .Returns(DateTime.UtcNow);
-            
+
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
-            _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
+            
+            _dateTimeOffsetProviderMock = _fixture.Freeze<Mock<IDateTimeOffsetProvider>>();
             
             _mockEmisEnumMapper = _fixture.Freeze<Mock<IEmisEnumMapper>>();
          
             _mockLogger = _fixture.Freeze<Mock<ILogger<AppointmentSlotsMapper>>>();
-            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProvider, _mockLogger.Object,_mockEmisEnumMapper.Object);            
+            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProviderMock.Object, _mockLogger.Object,_mockEmisEnumMapper.Object);
         }
 
         [TestMethod]
@@ -125,7 +119,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             
             var sessionHolders = new[] { sessionHolder };
             var sessions = new[] { session };
-
+            
+            var start = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
+            var end = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T11:14:19");
+            
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, null, sessionHolders, sessions);
 
@@ -134,9 +131,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "101",
                 Clinicians = new[] { "Dr McCoy" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T11:14:19"),
+                EndTime = end,
                 Location = "",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = start,
                 Type = "Emergency",
                 SessionName = "TestSessionName"
             };
@@ -164,6 +161,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var sessionHolders = new[] { sessionHolder };
             var sessions = new[] { session };
             
+            var start = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
+            
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
 
@@ -174,7 +173,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = null,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = start,
                 Type = "Emergency",
                 SessionName = "TestSessionName"
             };
@@ -207,6 +206,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var sessions = new[] { session, sessionWithInvalidStartTime };
             
             _mockLogger.SetupLogger(LogLevel.Warning, $"Unable to parse EMIS Appointment Slot Start Time of '{invalidStartTime}", null).Verifiable();
+            
+            var startEndSlot = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-07-12T10:59:19");
+            
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
 
@@ -215,9 +217,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "901",
                 Clinicians = new[] { "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = startEndSlot,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = startEndSlot,
                 Type = "Emergency",
                 SessionName = "TestSessionName"
             };
@@ -250,6 +252,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var locations = new[] { location };
             var sessionHolders = new[] { sessionHolder };
             var sessions = new[] { session, sessionWithInvalidStartTime };
+            
+            var slot1Times = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
+            var slot2Times = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-07-12T10:59:19");
 
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
@@ -259,9 +264,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "901",
                 Clinicians = new[]{ "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = slot2Times,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = slot2Times,
                 Type = "Emergency",
                 SessionName = "TestSessionName",
                 Channel = Channel.Unknown
@@ -271,9 +276,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "101",
                 Clinicians = new[]{ "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime = slot1Times,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = slot1Times,
                 Type = "Emergency",
                 SessionName = "TestSessionName",
                 Channel = Channel.Unknown
@@ -283,9 +288,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "102",
                 Clinicians = new[]{ "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = slot2Times,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = slot2Times,
                 Type = "Unknown",
                 SessionName = "TestSessionName",
                 Channel = Channel.Unknown
@@ -319,6 +324,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var locations = new[] { location };
             var sessionHolders = new[] { sessionHolder };
             var sessions = new[] { session, sessionWithInvalidStartTime };
+            
+            var slot1Times = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
+            var slot2Times = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-07-12T10:59:19");
 
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
@@ -328,9 +336,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "901",
                 Clinicians = new[]{ "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = slot2Times,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = slot2Times,
                 Type = "Emergency",
                 SessionName = "TestSessionName",
                 Channel = Channel.Unknown
@@ -340,9 +348,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "101",
                 Clinicians = new[]{ "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime = slot1Times,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = slot1Times,
                 Type = "Emergency",
                 SessionName = "TestSessionName",
                 Channel = Channel.Unknown
@@ -377,6 +385,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var locations = new[] { location };
             var sessionHolders = new[] { sessionHolder };
             var sessions = new[] { session, sessionWithInvalidStartTime };
+            
+            var slot1Times = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
+            var slot2Times = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-07-12T10:59:19");
 
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
@@ -386,9 +397,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "901",
                 Clinicians = new[] { "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = slot2Times,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = slot2Times,
                 Type = "Emergency",
                 SessionName = "GP Session",
             };
@@ -397,9 +408,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                EndTime = slot1Times,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = slot1Times,
                 Type = "Emergency",
                 SessionName = "TestSessionName",
             };
@@ -424,6 +435,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var sessions = new[] { session };
 
             var outputChannel = _fixture.Create<Channel>();
+            
+            _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-05-09T10:59:19");
 
             _mockEmisEnumMapper.Setup(x => x.MapSlotTypeStatus(inputSlotTypeStatus, Channel.Unknown))
                 .Returns(outputChannel);
@@ -453,6 +466,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var sessionHolders = new[] { sessionHolder };
             var sessions = new[] { session };
 
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-07-12T10:59:19");
+
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
 
@@ -461,9 +476,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "901",
                 Clinicians = new List<string>(),
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = slotTime,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = slotTime,
                 Type = "Emergency",
                 SessionName = "TestSessionName",
             };
@@ -491,6 +506,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             var locations = new[] { location };
             var sessions = new[] { session };
+            
+            var slotTime = _dateTimeOffsetProviderMock.MockDateTimeOffset("2018-07-12T10:59:19");
 
             // Act
             var actualResponse = _systemUnderTest.Map(slotSessions, locations, null, sessions);
@@ -500,9 +517,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "900",
                 Clinicians = new List<string>(),
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = slotTime,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = slotTime,
                 Type = "Emergency",
                 SessionName = "GP Session"
             };
@@ -511,9 +528,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             {
                 Id = "901",
                 Clinicians = new List<string>(),
-                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                EndTime = slotTime,
                 Location = "Leeds",
-                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-07-12T10:59:19"),
+                StartTime = slotTime,
                 Type = "Emergency",
                 SessionName = "GP Session"
             };
