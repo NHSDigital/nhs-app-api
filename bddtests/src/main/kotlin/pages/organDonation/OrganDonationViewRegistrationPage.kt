@@ -6,7 +6,6 @@ import org.junit.Assert
 import pages.HybridPageElement
 import pages.assertElementNotPresent
 import pages.assertIsVisible
-import pages.assertSingleElementPresent
 import pages.sharedElements.BannerObject
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
@@ -37,20 +36,25 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
     fun assertDecisionSubmitted() {
         BannerObject.success(this, "Decision submitted")
                 .assertVisible("We have successfully received your organ donation decision.")
-        assertText("What happens next",
-                "We will process your decision and you will then be able to view and amend this via the NHS App. " +
-                        "This may take up to 4 days. " +
-                        "Remember to let your family know your decision about organ donation.")
+
+        val bodyTextDecisionFound = arrayOf(
+                "We will process your registration and you will then be able to view and amend this via the NHS App. " +
+                        "This may take up to 2 working days.")
+        OrganDonationDetailsAssertor.withH2Header("What happens next", this)
+                .assert(bodyTextDecisionFound)
     }
 
     fun assertDecisionFound() {
         waitForSpinnerToDisappear()
+
         BannerObject.success(this, "Decision found")
                 .assertVisible("Your registration is currently being processed.")
-        assertText("We are still processing your registration",
-                "Please check back in 2 days. " +
-                        "You’ll then be able to view and amend your decision via the NHS App. " +
-                        "Remember to let your family know your decision about organ donation.")
+
+        val bodyTextDecisionFound = arrayOf(
+                "Please check back in 2 working days. " +
+                        "You’ll then be able to view and amend your decision via the NHS App.")
+        OrganDonationDetailsAssertor.withH2Header("We are still processing your registration", this)
+                .assert(bodyTextDecisionFound)
     }
 
     private val faithYesText = "When I die, I would like NHS staff to speak with my family " +
@@ -80,10 +84,4 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
             "//div[@id='faithAndBeliefs']",
             page = this,
             helpfulName = "Faith and Beliefs section")
-
-    private fun assertText(header: String, text: String) {
-        HybridPageElement(
-                " //div[strong[contains(text(),'$header')]]/p[contains(text(),'$text')]",
-                page = this).assertSingleElementPresent()
-    }
 }

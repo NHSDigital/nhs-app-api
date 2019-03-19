@@ -7,7 +7,7 @@
           <message-text>
             {{ $t('organDonation.viewDecision.conflictedState.messageText') }}</message-text>
         </message-dialog>
-        <strong>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</strong>
+        <h2>{{ $t('organDonation.viewDecision.conflictedState.registrationHeader') }}</h2>
         <p :class="$style.messageText">
           {{ $t('organDonation.viewDecision.conflictedState.registrationText') }}</p>
       </div>

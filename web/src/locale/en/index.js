@@ -725,10 +725,10 @@ export default {
       pageHeader: 'Something went wrong',
       header: 'Something went wrong',
       500: {
-        message: 'You need to contact NHS Blood and Transplant to get help with this.',
+        message: 'You can contact NHS Blood and Transplant to get help with this.',
       },
       502: {
-        message: 'You need to contact NHS Blood and Transplant to get help with this.',
+        message: 'You can contact NHS Blood and Transplant to get help with this.',
         1: {
           retryButtonText: 'Try again',
           message: 'If the problem persists you can contact NHS Blood and Transplant to get help with this.',
@@ -741,10 +741,10 @@ export default {
         pageHeader: 'Something went wrong',
         header: 'Something went wrong',
         500: {
-          message: 'You need to contact NHS Blood and Transplant to get help with this.',
+          message: 'You can contact NHS Blood and Transplant to get help with this.',
         },
         502: {
-          message: 'You need to contact NHS Blood and Transplant to get help with this.',
+          message: 'You can contact NHS Blood and Transplant to get help with this.',
           1: {
             retryButtonText: 'Try again',
             message: 'If the problem persists you can contact NHS Blood and Transplant to get help with this.',
@@ -935,16 +935,15 @@ export default {
         messageText: 'Your registration is currently being processed.',
         dialogText: 'Decision found',
         registrationHeader: 'We are still processing your registration',
-        registrationText: 'Please check back in 2 days. You’ll then be able to view and amend your ' +
-          'decision via the NHS App. Remember to let your family know your decision about organ donation.',
+        registrationText: 'Please check back in 2 working days. You’ll then be able to view and amend your ' +
+          'decision via the NHS App.',
       },
       decisionSubmitted: {
         messageText: 'We have successfully received your organ donation decision.',
         dialogText: 'Decision submitted',
         registrationHeader: 'What happens next',
-        registrationText: 'We will process your decision and you will then be able to view and ' +
-          'amend this via the NHS App. This may take up to 4 days. Remember to let ' +
-          'your family know your decision about organ donation.',
+        registrationText: 'We will process your registration and you will then be able to view and ' +
+          'amend this via the NHS App. This may take up to 2 working days.',
       },
       successMessageText: 'We have updated your decision',
       successMessageDialogText: 'Success',

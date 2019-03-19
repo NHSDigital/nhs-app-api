@@ -6,7 +6,7 @@
         <message-text>
           {{ $t('organDonation.viewDecision.decisionSubmitted.messageText') }}</message-text>
       </message-dialog>
-      <strong>{{ $t('organDonation.viewDecision.decisionSubmitted.registrationHeader') }}</strong>
+      <h2>{{ $t('organDonation.viewDecision.decisionSubmitted.registrationHeader') }}</h2>
       <p :class="$style.messageText">
         {{ $t('organDonation.viewDecision.decisionSubmitted.registrationText') }}</p>
     </div>
