@@ -2,7 +2,6 @@ package mocking.data.appointments
 
 import mocking.emis.models.SlotTypeStatus
 import mocking.stubs.appointments.AppointmentSessionFacadeBuilder
-import mocking.stubs.appointments.AppointmentsSlotsExampleBuilder
 import mocking.stubs.appointments.IdValue
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
@@ -92,13 +91,6 @@ class AppointmentsSlotsExample {
 
         val appointmentSessions: ArrayList<AppointmentSessionFacade>
 
-        val filter = generateAppointmentData.generateFilter(
-                DEFAULT_SLOT_TYPE,
-                staffDrWho.value,
-                locationLeeds.value,
-                arrayListOf(startDateAppointment1, startDateAppointment2)
-        )
-
         if (appointmentSessionFacade == null) {
             val appointmentSession1 = generateAppointmentData.generateAppointmentSession(
                     sessionDetails = AppointmentSessionFacadeBuilder()
@@ -120,6 +112,13 @@ class AppointmentsSlotsExample {
         } else {
             appointmentSessions = appointmentSessionFacade
         }
+
+        val filter = generateAppointmentData.generateFilter(
+                DEFAULT_SLOT_TYPE,
+                locationLeeds.value,
+                staffDrWho.value,
+                appointmentSessions
+        )
 
         return AppointmentsSlotsExampleBuilderWithExpectations()
                 .appointmentSessions(appointmentSessions)
@@ -193,12 +192,12 @@ class AppointmentsSlotsExample {
                 dates = arrayListOf(startDateAppointment2)
         )
 
+        val appointments = arrayListOf(appointment1, appointment2)
+
         val filter = generateAppointmentData.generateFilter(
                 type = DEFAULT_SLOT_TYPE,
-                dateArray = arrayListOf(telephoneStartDateAppointment)
+                globalSessions = appointments
         )
-
-        val appointments = arrayListOf(appointment1, appointment2)
 
         return AppointmentsSlotsExampleBuilderWithExpectations()
                 .appointmentSessions(appointments)
@@ -208,44 +207,58 @@ class AppointmentsSlotsExample {
 
     fun singleSlotExample(dates: ArrayList<AppointmentDate> = arrayListOf(startDateAppointment1)):
             AppointmentSlotsResponseFacade {
-        val filter = generateAppointmentData.generateFilter(
-                type = DEFAULT_SLOT_TYPE,
-                doctor = staffDrWho.value,
-                location = locationLeeds.value,
-                dateArray = dates
-        )
-
-        return generateAppointmentData.generateAppointments(
+        val appointmentSessions = generateAppointmentData.generateAppointments(
                 locationNames = arrayListOf(locationLeeds.value),
                 typesArray = arrayListOf(DEFAULT_SLOT_TYPE),
                 staffNames = arrayListOf(staffDrWho.value),
-                dates = dates,
-                filter = filter
+                dates = dates
         )
+
+        val filter = generateAppointmentData.generateFilter(
+                type = DEFAULT_SLOT_TYPE,
+                location = locationLeeds.value,
+                doctor = staffDrWho.value,
+                globalSessions = appointmentSessions
+        )
+
+        return AppointmentsSlotsExampleBuilderWithExpectations()
+                .appointmentSessions(appointmentSessions)
+                .filterValues(filter)
+                .build()
     }
 
     fun multipleSlotsOneLocation(): AppointmentSlotsResponseFacade {
-        val filter = generateAppointmentData.generateFilter(DEFAULT_SLOT_TYPE, staffDrWho.value,
-                locationLeeds.value, arrayListOf(startDateAppointment1))
-
-        return generateAppointmentData.generateAppointments(
+        val appointmentSessions = generateAppointmentData.generateAppointments(
                 locationNames = arrayListOf(locationLeeds.value),
                 typesArray = arrayListOf(DEFAULT_SLOT_TYPE),
                 staffNames = arrayListOf(staffDrWho.value, staffDrScott.value),
-                dates = arrayListOf(startDateAppointment1, startDateAppointment2),
-                filter = filter
+                dates = arrayListOf(startDateAppointment1, startDateAppointment2)
         )
+
+        val filter = generateAppointmentData.generateFilter(DEFAULT_SLOT_TYPE, locationLeeds.value,
+                staffDrWho.value, appointmentSessions)
+
+        return AppointmentsSlotsExampleBuilderWithExpectations()
+                .appointmentSessions(appointmentSessions)
+                .filterValues(filter)
+                .build()
     }
 
     fun multipleSlotsOneTime(): AppointmentSlotsResponseFacade {
         val dates: ArrayList<AppointmentDate> = arrayListOf(startDateAppointment1)
-        val filter = generateAppointmentData.generateFilter(type = DEFAULT_SLOT_TYPE,
-                dateArray = arrayListOf(startDateAppointment1))
 
-        return generateAppointmentData.generateAppointments(
+        val appointmentSessions = generateAppointmentData.generateAppointments(
                 locationNames = arrayListOf(locationLeeds.value),
                 typesArray = arrayListOf(DEFAULT_SLOT_TYPE),
-                staffNames = arrayListOf(staffDrScott.value, staffDrWho.value), dates = dates, filter = filter)
+                staffNames = arrayListOf(staffDrScott.value, staffDrWho.value), dates = dates)
+
+        val filter = generateAppointmentData.generateFilter(type = DEFAULT_SLOT_TYPE,
+                globalSessions = appointmentSessions)
+
+        return AppointmentsSlotsExampleBuilderWithExpectations()
+                .appointmentSessions(appointmentSessions)
+                .filterValues(filter)
+                .build()
     }
 
     fun slotForDayAfterTomorrow(): AppointmentSlotsResponseFacade {

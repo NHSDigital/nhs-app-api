@@ -6,6 +6,5 @@ data class AppointmentFilterFacade(
         val type: String? = null,
         val location: String? = null,
         val doctor: String? = null,
-        val date: String? = null,
         val filteredSlots: Map<String, Set<FilterSlotDetails>> = mapOf()
 )

@@ -1,6 +1,5 @@
 package mocking.data.appointments
 
-import mocking.stubs.appointments.AppointmentsSlotsExampleBuilder
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade

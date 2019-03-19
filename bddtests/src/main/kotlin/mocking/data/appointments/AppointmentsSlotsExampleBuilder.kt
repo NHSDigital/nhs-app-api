@@ -1,4 +1,4 @@
-package mocking.stubs.appointments
+package mocking.data.appointments
 
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade

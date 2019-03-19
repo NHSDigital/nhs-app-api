@@ -58,12 +58,11 @@ class AppointmentSessionFacadeBuilder {
 
 class AppointmentSlotFacadeArrayBuilder {
 
-    private var nextSlotId = 1
     private var appointmentSlots: ArrayList<AppointmentSlotFacade> = arrayListOf()
 
     fun addAppointment(appointment: AppointmentSlotFacadeBuilder.() -> AppointmentSlotFacadeBuilder)
             : AppointmentSlotFacadeArrayBuilder {
-        val builder = AppointmentSlotFacadeBuilder().slotId(nextSlotId++)
+        val builder = AppointmentSlotFacadeBuilder()
         val appointmentBuilder = appointment.invoke(builder)
         appointmentSlots.add(appointmentBuilder.build())
         return this

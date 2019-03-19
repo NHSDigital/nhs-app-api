@@ -1,5 +1,6 @@
 package mocking.data.appointments
 
+import constants.DateTimeFormats
 import mocking.emis.models.SlotTypeStatus
 import mocking.stubs.appointments.AppointmentSessionFacadeBuilder
 import mocking.stubs.appointments.AppointmentSlotFacadeArrayBuilder
@@ -7,9 +8,9 @@ import mocking.stubs.appointments.AppointmentSlotFacadeBuilder
 import mocking.stubs.appointments.IdValue
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.AppointmentDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 
 private const val STARTING_SESSION_ID = 0
@@ -25,8 +26,7 @@ class GenerateAppointmentData {
     fun generateAppointments(locationNames: ArrayList<String>,
                              typesArray: ArrayList<String>,
                              staffNames: ArrayList<String>,
-                             dates: ArrayList<AppointmentDate>,
-                             filter: AppointmentFilterFacade): AppointmentSlotsResponseFacade {
+                             dates: ArrayList<AppointmentDate>): ArrayList<AppointmentSessionFacade> {
 
         val appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
         val staffDetails = generateStaffDetails(staffNames)
@@ -47,11 +47,7 @@ class GenerateAppointmentData {
             }
         }
 
-        return AppointmentsSlotsExampleBuilderWithExpectations()
-                .appointmentSessions(appointmentSessions)
-                .filterValues(filter)
-                .build()
-
+        return appointmentSessions
     }
 
     fun generateAppointmentSession(sessionDetails: AppointmentSessionFacadeBuilder,
@@ -85,12 +81,15 @@ class GenerateAppointmentData {
     }
 
 
-    private fun generateSlotsForAppointment(dates: ArrayList<AppointmentDate>, types: ArrayList<String>, channel:
-    SlotTypeStatus):
+    private fun generateSlotsForAppointment(
+            dates: ArrayList<AppointmentDate>,
+            types: ArrayList<String>,
+            channel:
+            SlotTypeStatus
+    ):
             AppointmentSlotFacadeArrayBuilder {
 
         val appointmentSlotFacadeArrayBuilder = AppointmentSlotFacadeArrayBuilder()
-
 
         for (date in dates) {
             val isSlotInPast = date.date < LocalDateTime.now()
@@ -114,32 +113,46 @@ class GenerateAppointmentData {
         return appointmentSlotFacadeArrayBuilder
     }
 
-    private fun generateMapOfAppointmentDatesAndTimes(arrayOfFilteredSlots: ArrayList<FilterSlotDetails>)
+    fun generateFilter(
+            type: String,
+            location: String? = null,
+            doctor: String? = null,
+            globalSessions: ArrayList<AppointmentSessionFacade>
+    ): AppointmentFilterFacade {
+
+        val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+
+        val listOfFilteredSlots = globalSessions.filter { session ->
+            (location == null || session.location == location) &&
+                    (doctor == null || session.staffDetails.any { staff ->
+                        staff.staffName == doctor
+                    })
+        }.flatMap { session ->
+            session.slots.filter { slot ->
+                slot.slotTypeName == type
+            }.map {slot ->
+                FilterSlotDetails(
+                        LocalDateTime.parse(slot.startTime, currentDateFormat)
+                ).sessionName(session.sessionType!!)
+            }
+        }
+
+        return AppointmentFilterFacade(
+                type,
+                location,
+                doctor,
+                generateMapOfAppointmentDatesAndTimes(listOfFilteredSlots)
+        )
+    }
+
+    private fun generateMapOfAppointmentDatesAndTimes(listOfFilteredSlots: List<FilterSlotDetails>)
             : Map<String, Set<FilterSlotDetails>> {
         var result = mapOf<String, Set<FilterSlotDetails>>()
-        for (slotDetails in arrayOfFilteredSlots) {
+        for (slotDetails in listOfFilteredSlots) {
             val date = slotDetails.dateAsUIString
             val currentSetOfSlots = result[date] ?: setOf()
             result = result.plus(Pair(date, currentSetOfSlots.plus(slotDetails)))
         }
         return result
-    }
-
-    fun generateFilter(type: String? = null, doctor: String? = null, location: String? = null,
-                       dateArray: ArrayList<AppointmentDate>): AppointmentFilterFacade {
-
-        val dates: ArrayList<FilterSlotDetails> = arrayListOf()
-
-        for (aDate in dateArray) {
-            val date = FilterSlotDetails(aDate.date, aDate.hour, aDate.minute).sessionName(aDate.sessionName)
-            dates.add(date)
-        }
-
-        return AppointmentFilterFacade(
-                type = type,
-                doctor = doctor,
-                location = location,
-                filteredSlots = generateMapOfAppointmentDatesAndTimes(dates)
-        )
     }
 }
