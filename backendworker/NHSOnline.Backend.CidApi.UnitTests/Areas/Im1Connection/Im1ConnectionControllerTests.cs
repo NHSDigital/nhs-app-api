@@ -9,14 +9,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.GpSystems.Im1Connection.Models;
+using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Im1Connection;
+using NHSOnline.Backend.GpSystems.Im1Connection.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
-using NHSOnline.Backend.CidApi.Areas.Im1Connection;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Im1Connection
+namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
 {
     [TestClass]
     public class Im1ConnectionControllerTests
