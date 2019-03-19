@@ -14,10 +14,6 @@ class OrganDonationFaithModule(page: HybridPageObject) {
 
     private val containerXPath = "//div[h2[text()=\"$title\"]]"
 
-    private var yesOption ="Yes"
-    private var noOption ="No"
-    private var preferNotToSayOption ="Prefer not to say"
-
     private val container = HybridPageElement(
             containerXPath,
             page = page,
@@ -28,20 +24,15 @@ class OrganDonationFaithModule(page: HybridPageObject) {
     }
 
     fun assertChoice(faith: FaithDeclaration) {
-        val map = mapOf(
-                FaithDeclaration.Yes to yesOption,
-                FaithDeclaration.No to noOption,
-                FaithDeclaration.NotStated to preferNotToSayOption)
-        Assert.assertTrue("Test setup incorrect, no mapping set for $faith",map.containsKey(faith))
-        assertChoice(map[faith]!!)
+        assertChoice(getFaith(faith))
     }
 
     fun assertChoice(choice: String) {
         val actualText = container.element.findElement(By.xpath("./p/b")).text
 
         Assert.assertEquals("Faith and Beliefs",
-                "I would like NHS staff to speak to my family and anyone else appropriate about " +
-                        "how organ donation can go ahead in line with my faith or beliefs",
+                "I would like NHS staff to speak to my family and anyone else appropriate about how organ " +
+                        "donation can go ahead in line with my faith / beliefs",
                 actualText)
 
         val actualChoice = container.element.findElement(By.xpath("./span")).text
@@ -49,5 +40,30 @@ class OrganDonationFaithModule(page: HybridPageObject) {
         Assert.assertEquals("Faith and Beliefs Choice",
                 choice,
                 actualChoice)
+    }
+
+    companion object {
+
+        private var yesOption ="Yes - this is applicable to me"
+        private var noOption ="No - this is not applicable to me"
+        private var preferNotToSayOption ="Prefer not to say"
+
+        fun getFaith(faith:String): FaithDeclaration{
+            val map = mapOf(
+                    yesOption to FaithDeclaration.Yes,
+                    noOption to FaithDeclaration.No,
+                    preferNotToSayOption to FaithDeclaration.NotStated)
+            Assert.assertTrue("Test setup incorrect, missing value for $faith", map.containsKey(faith))
+            return map[faith]!!
+        }
+
+        fun getFaith(faith:FaithDeclaration): String{
+            val map = mapOf(
+                    FaithDeclaration.Yes to yesOption,
+                    FaithDeclaration.No to noOption,
+                    FaithDeclaration.NotStated to preferNotToSayOption)
+            Assert.assertTrue("Test setup incorrect, missing value for $faith", map.containsKey(faith))
+            return map[faith]!!
+        }
     }
 }

@@ -17,7 +17,8 @@
         {{ $t('organDonation.faith.endOfLifeWishes.header') }}
       </template>
       <ul>
-        <li v-for="listItem of $t('organDonation.faith.endOfLifeWishes.listItems')" :key="listItem">
+        <li v-for="(listItem, index) of $t('organDonation.faith.endOfLifeWishes.listItems')"
+            :key="index">
           {{ listItem }}
         </li>
       </ul>

@@ -11,7 +11,7 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     And no options on the Organ Donation Faith And Beliefs page are selected
-    When I select the option 'Yes - this is applicable to me' to share my organ donation faith and beliefs
+    When I select an option in sharing my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button
@@ -31,7 +31,7 @@ Feature: Organ Donation
       | VISION    |
 
   Scenario Outline: A user can select '<Option>' for faith and belief sharing when opting to donate all their organs
-    Given I am a EMIS user not registered with organ donation, who wishes to register and opt in
+    Given I am a EMIS user not registered with organ donation, who wishes to opt in with '<Option>' faith decision
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     And I choose to donate my organs
@@ -46,16 +46,17 @@ Feature: Organ Donation
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
-    And my choice of '<Display>' to share my faith and beliefs is displayed on the Organ Donation Check Details page
+    And my choice of '<Option>' to share my faith and beliefs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation has been successfully created
+    And the faith and beliefs decision of '<Option>' is displayed on the Organ Donation View Registration page
     Examples:
-      | Option                            | Display           |
-      | Yes - this is applicable to me    | Yes               |
-      | No - this is not applicable to me | No                |
-      | Prefer not to say                 | Prefer not to say |
+      | Option                            |
+      | Yes - this is applicable to me    |
+      | No - this is not applicable to me |
+      | Prefer not to say                 |
 
   Scenario Outline: A <GP System> user can opt to not donate their organs
     Given I am a <GP System> user not registered with organ donation, who wishes to register and opt out
@@ -93,7 +94,7 @@ Feature: Organ Donation
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     And no options on the Organ Donation Faith And Beliefs page are selected
-    When I select the option 'No - this is not applicable to me' to share my organ donation faith and beliefs
+    When I select an option in sharing my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button

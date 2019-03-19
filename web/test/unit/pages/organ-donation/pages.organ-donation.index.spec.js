@@ -1,6 +1,7 @@
 import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import NextSteps from '@/components/organ-donation/NextSteps';
@@ -37,6 +38,13 @@ const createState =
     return state;
   };
 
+const createPageStore = ({ state, isSomeOrgans = false } = {}) => createStore({
+  state,
+  getters: {
+    'organDonation/isSomeOrgans': isSomeOrgans,
+  },
+});
+
 const createStyle = () => ({
   button: 'button',
   grey: 'grey',
@@ -48,6 +56,7 @@ const verifyComponentExistence = ({
   amendDecision,
   appointedRepresentative,
   decisionDetails,
+  faithDetailsRegistered,
   findOutMore,
   makeDecision,
   nextSteps,
@@ -58,11 +67,11 @@ const verifyComponentExistence = ({
   const showOrNot = bool => (bool ? 'show' : 'not show');
 
   it(`will ${showOrNot(alreadyRegistered)} AlreadyRegisteredLink`, () => {
-    expect(wrapperFn().find(AlreadyRegisteredLink).exists()).toEqual(alreadyRegistered);
+    expect(wrapperFn().find(AlreadyRegisteredLink).exists()).toBe(alreadyRegistered);
   });
 
   it(`will ${showOrNot(amendDecision)} AmendDecisionLink`, () => {
-    expect(wrapperFn().find(AmendDecisionLink).exists()).toEqual(amendDecision);
+    expect(wrapperFn().find(AmendDecisionLink).exists()).toBe(amendDecision);
   });
 
   it(`will ${showOrNot(appointedRepresentative)} appointed representative`, () => {
@@ -70,31 +79,35 @@ const verifyComponentExistence = ({
   });
 
   it(`will ${showOrNot(decisionDetails)} DecisionDetails`, () => {
-    expect(wrapperFn().find(DecisionDetails).exists()).toEqual(decisionDetails);
+    expect(wrapperFn().find(DecisionDetails).exists()).toBe(decisionDetails);
+  });
+
+  it(`will ${showOrNot(faithDetailsRegistered)} FaithDetailsRegistered`, () => {
+    expect(wrapperFn().find(FaithDetailsRegistered).exists()).toBe(faithDetailsRegistered);
   });
 
   it(`will ${showOrNot(findOutMore)} FindOutMoreLink`, () => {
-    expect(wrapperFn().find(FindOutMoreLink).exists()).toEqual(findOutMore);
+    expect(wrapperFn().find(FindOutMoreLink).exists()).toBe(findOutMore);
   });
 
   it(`will ${showOrNot(makeDecision)} MakeDecision`, () => {
-    expect(wrapperFn().find(MakeDecision).exists()).toEqual(makeDecision);
+    expect(wrapperFn().find(MakeDecision).exists()).toBe(makeDecision);
   });
 
   it(`will ${showOrNot(nextSteps)} NextSteps`, () => {
-    expect(wrapperFn().find(NextSteps).exists()).toEqual(nextSteps);
+    expect(wrapperFn().find(NextSteps).exists()).toBe(nextSteps);
   });
 
   it(`will ${showOrNot(otherThingsToDo)} OtherThingsToDo`, () => {
-    expect(wrapperFn().find(OtherThingsToDo).exists()).toEqual(otherThingsToDo);
+    expect(wrapperFn().find(OtherThingsToDo).exists()).toBe(otherThingsToDo);
   });
 
   it(`will ${showOrNot(reaffirmDecision)} ReaffirmDecision`, () => {
-    expect(wrapperFn().find(ReaffirmDecision).exists()).toEqual(reaffirmDecision);
+    expect(wrapperFn().find(ReaffirmDecision).exists()).toBe(reaffirmDecision);
   });
 
   it(`will ${showOrNot(yourDecision)} YourDecision`, () => {
-    expect(wrapperFn().find(YourDecision).exists()).toEqual(yourDecision);
+    expect(wrapperFn().find(YourDecision).exists()).toBe(yourDecision);
   });
 };
 
@@ -107,7 +120,7 @@ describe('organ donation index page', () => {
 
   describe('created', () => {
     beforeEach(() => {
-      $store = createStore({ state: createState() });
+      $store = createPageStore({ state: createState() });
       wrapper = mountOrganDonation();
     });
 
@@ -135,7 +148,7 @@ describe('organ donation index page', () => {
 
   describe('asyncData', () => {
     beforeEach(() => {
-      $store = createStore({ state: createState() });
+      $store = createPageStore({ state: createState() });
       wrapper = mountOrganDonation();
       wrapper.vm.$options.asyncData({ store: $store });
     });
@@ -151,7 +164,7 @@ describe('organ donation index page', () => {
 
   describe('new registration (original decision is not found)', () => {
     beforeEach(() => {
-      $store = createStore({ state: createState() });
+      $store = createPageStore({ state: createState() });
       $style = createStyle();
       wrapper = mountOrganDonation();
     });
@@ -162,6 +175,7 @@ describe('organ donation index page', () => {
         amendDecision: false,
         appointedRepresentative: false,
         decisionDetails: false,
+        faithDetailsRegistered: false,
         findOutMore: true,
         makeDecision: true,
         nextSteps: false,
@@ -174,7 +188,7 @@ describe('organ donation index page', () => {
     describe('computed', () => {
       describe('hasExistingDecision', () => {
         it('will be false as the original decision was not found', () => {
-          expect(wrapper.vm.hasExistingDecision).toEqual(false);
+          expect(wrapper.vm.hasExistingDecision).toBe(false);
         });
       });
     });
@@ -182,7 +196,7 @@ describe('organ donation index page', () => {
 
   describe('loaded registration (appointed representative)', () => {
     beforeEach(() => {
-      $store = createStore({
+      $store = createPageStore({
         state: createState({
           decision: DECISION_APPOINTED_REP,
         }),
@@ -196,6 +210,7 @@ describe('organ donation index page', () => {
         amendDecision: true,
         appointedRepresentative: true,
         decisionDetails: false,
+        faithDetailsRegistered: false,
         findOutMore: false,
         makeDecision: false,
         nextSteps: false,
@@ -207,7 +222,7 @@ describe('organ donation index page', () => {
 
     describe('YourDecision component', () => {
       it('will have the decision set to app-rep', () => {
-        expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_APPOINTED_REP);
+        expect(wrapper.find(YourDecision).props().decision).toBe(DECISION_APPOINTED_REP);
       });
     });
 
@@ -220,7 +235,7 @@ describe('organ donation index page', () => {
     describe('computed', () => {
       describe('hasExistingDecision', () => {
         it('will be true as the original decision is appointed representative', () => {
-          expect(wrapper.vm.hasExistingDecision).toEqual(true);
+          expect(wrapper.vm.hasExistingDecision).toBe(true);
         });
       });
     });
@@ -228,7 +243,7 @@ describe('organ donation index page', () => {
 
   describe('loaded registration (conflicted state)', () => {
     beforeEach(() => {
-      $store = createStore({
+      $store = createPageStore({
         state: createState({
           originalDecision: DECISION_UNKNOWN,
         }),
@@ -256,6 +271,7 @@ describe('organ donation index page', () => {
         amendDecision: false,
         appointedRepresentative: false,
         decisionDetails: false,
+        faithDetailsRegistered: false,
         findOutMore: false,
         makeDecision: false,
         nextSteps: false,
@@ -268,7 +284,7 @@ describe('organ donation index page', () => {
 
   describe('loaded registration (original decision is found)', () => {
     beforeEach(() => {
-      $store = createStore({
+      $store = createPageStore({
         state: createState(),
       });
     });
@@ -287,6 +303,7 @@ describe('organ donation index page', () => {
           amendDecision: true,
           appointedRepresentative: false,
           decisionDetails: false,
+          faithDetailsRegistered: false,
           findOutMore: false,
           makeDecision: false,
           nextSteps: true,
@@ -298,14 +315,14 @@ describe('organ donation index page', () => {
 
       describe('YourDecision component', () => {
         it('will have the decision set to opt-out', () => {
-          expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_OPT_OUT);
+          expect(wrapper.find(YourDecision).props().decision).toBe(DECISION_OPT_OUT);
         });
       });
 
       describe('computed', () => {
         describe('hasExistingDecision', () => {
           it('will be true as the original decision is opt-out', () => {
-            expect(wrapper.vm.hasExistingDecision).toEqual(true);
+            expect(wrapper.vm.hasExistingDecision).toBe(true);
           });
         });
       });
@@ -313,12 +330,7 @@ describe('organ donation index page', () => {
 
     describe('opt-in, all organs', () => {
       beforeEach(() => {
-        $store = createStore({
-          state: createState(),
-          getters: {
-            'organDonation/isSomeOrgans': false,
-          },
-        });
+        $store = createPageStore({ state: createState() });
         $store.state.organDonation.originalRegistration.decision = DECISION_OPT_IN;
         $store.state.organDonation.originalRegistration.decisionDetails.all = true;
         wrapper = mountOrganDonation();
@@ -330,6 +342,7 @@ describe('organ donation index page', () => {
           amendDecision: true,
           appointedRepresentative: false,
           decisionDetails: false,
+          faithDetailsRegistered: true,
           findOutMore: false,
           makeDecision: false,
           nextSteps: true,
@@ -347,20 +360,20 @@ describe('organ donation index page', () => {
         });
 
         it('will have isSomeOrgans of false', () => {
-          expect(reaffirmDecision.vm.isSomeOrgans).toEqual(false);
+          expect(reaffirmDecision.vm.isSomeOrgans).toBe(false);
         });
       });
 
       describe('YourDecision component', () => {
         it('will have the decision set to opt-in', () => {
-          expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_OPT_IN);
+          expect(wrapper.find(YourDecision).props().decision).toBe(DECISION_OPT_IN);
         });
       });
 
       describe('computed', () => {
         describe('hasExistingDecision', () => {
           it('will be true as the original decision is opt-in', () => {
-            expect(wrapper.vm.hasExistingDecision).toEqual(true);
+            expect(wrapper.vm.hasExistingDecision).toBe(true);
           });
         });
       });
@@ -370,12 +383,7 @@ describe('organ donation index page', () => {
       const choices = { heart: 'Yes' };
 
       beforeEach(() => {
-        $store = createStore({
-          state: createState(),
-          getters: {
-            'organDonation/isSomeOrgans': true,
-          },
-        });
+        $store = createPageStore({ state: createState(), isSomeOrgans: true });
         $store.state.organDonation.originalRegistration.decision = DECISION_OPT_IN;
         $store.state.organDonation.originalRegistration.decisionDetails.all = false;
         $store.state.organDonation.originalRegistration.decisionDetails.choices = choices;
@@ -388,6 +396,7 @@ describe('organ donation index page', () => {
           amendDecision: true,
           appointedRepresentative: false,
           decisionDetails: true,
+          faithDetailsRegistered: true,
           findOutMore: false,
           makeDecision: false,
           nextSteps: true,
@@ -411,20 +420,20 @@ describe('organ donation index page', () => {
         });
 
         it('will have an isSomeOrgans of true', () => {
-          expect(reaffirmDecision.vm.isSomeOrgans).toEqual(true);
+          expect(reaffirmDecision.vm.isSomeOrgans).toBe(true);
         });
       });
 
       describe('YourDecision component', () => {
         it('will have the decision set to opt-in', () => {
-          expect(wrapper.find(YourDecision).props().decision).toEqual(DECISION_OPT_IN);
+          expect(wrapper.find(YourDecision).props().decision).toBe(DECISION_OPT_IN);
         });
       });
 
       describe('computed', () => {
         describe('hasExistingDecision', () => {
           it('will be true as the original decision is opt-in', () => {
-            expect(wrapper.vm.hasExistingDecision).toEqual(true);
+            expect(wrapper.vm.hasExistingDecision).toBe(true);
           });
         });
       });

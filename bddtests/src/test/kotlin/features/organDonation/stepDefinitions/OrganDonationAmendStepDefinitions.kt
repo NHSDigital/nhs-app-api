@@ -31,11 +31,12 @@ open class OrganDonationAmendStepDefinitions {
     fun iAmRegisteredWithOrganDonationAsOptInButAmendToSome(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        val existingRegistration = factory.existing.optIn()
+        val demographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.No)
+        val existingRegistration = factory.existing.optIn(demographics)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.amend { registration->registration.some(
-                OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
+                OrganDonationRegistrationDataBuilder.someOrgansListUpdated(), demographics) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
@@ -44,8 +45,8 @@ open class OrganDonationAmendStepDefinitions {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
 
-        val faithDeclaration = OrganDonationDemographics(faithDeclaration = FaithDeclaration.NotStated)
-        val existingRegistration = factory.existing.optIn(faithDeclaration)
+        val originalDemographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.No)
+        val existingRegistration = factory.existing.optIn(originalDemographics)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         val amendedDemographics =
@@ -55,6 +56,7 @@ open class OrganDonationAmendStepDefinitions {
                                 OrganDonationReferenceDataBuilder.chinese.display),
                         religion = KeyValuePair(OrganDonationReferenceDataBuilder.hindhu.code,
                                 OrganDonationReferenceDataBuilder.hindhu.display))
+        OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED.set(amendedDemographics)
 
         val amendedRequest = OrganDonationRegistrationRequest(
                 registration = OrganDonationRegistration.optIn(SerenityHelpers.getPatient(), amendedDemographics),
@@ -74,7 +76,7 @@ open class OrganDonationAmendStepDefinitions {
         val existingRegistration = factory.existing.optInSome()
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.optOut {
+        factory.amend { registration->registration.optOut() {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
@@ -82,10 +84,11 @@ open class OrganDonationAmendStepDefinitions {
     fun iAmRegisteredWithOrganDonationAsSomeButAmendToOptIn(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        val existingRegistration = factory.existing.optInSome()
+        val demographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
+        val existingRegistration = factory.existing.optInSome(demographics)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
-        factory.amend { registration->registration.optIn {
+        factory.amend { registration->registration.optIn(demographics) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
@@ -93,11 +96,12 @@ open class OrganDonationAmendStepDefinitions {
     fun iAmRegisteredWithOrganDonationAsSomeButAmendTheSelectedOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        val existingRegistration = factory.existing.optInSome()
+        val demographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
+        val existingRegistration = factory.existing.optInSome(demographics)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.amend { registration->registration.some(
-                OrganDonationRegistrationDataBuilder.someOrgansListUpdated()) {
+                OrganDonationRegistrationDataBuilder.someOrgansListUpdated(), demographics) {
             request -> request.respondWithSuccess(existingRegistration.id) }}
     }
 
@@ -105,12 +109,13 @@ open class OrganDonationAmendStepDefinitions {
     fun iAmRegisteredWithOrganDonationAsSomeButAmendTheSelectedOrgansToDecideUndecided(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
-        val existingRegistration = factory.existing.optInSomeNotAllDecided()
+        val demographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
+        val existingRegistration = factory.existing.optInSomeNotAllDecided(demographics)
         OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.set(existingRegistration.id)
 
         factory.amend { registration ->
             registration.some(
-                    OrganDonationRegistrationDataBuilder.someOrgansListUpdated())
+                    OrganDonationRegistrationDataBuilder.someOrgansListUpdated(), demographics)
             { request -> request.respondWithSuccess(existingRegistration.id) }
         }
     }

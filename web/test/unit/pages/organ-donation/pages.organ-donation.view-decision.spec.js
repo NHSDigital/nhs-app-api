@@ -1,5 +1,6 @@
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import NextSteps from '@/components/organ-donation/NextSteps';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 import ViewDecision from '@/pages/organ-donation/view-decision';
@@ -83,6 +84,10 @@ describe('view decision', () => {
       it('will not show the decision details', () => {
         expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
       });
+
+      it('will show the faith details module', () => {
+        expect(wrapper.find(FaithDetailsRegistered).exists()).toBe(true);
+      });
     });
 
     describe('selected some organs', () => {
@@ -96,6 +101,10 @@ describe('view decision', () => {
       it('will show the decision details', () => {
         expect(wrapper.find(DecisionDetails).exists()).toEqual(true);
       });
+
+      it('will show the faith details module', () => {
+        expect(wrapper.find(FaithDetailsRegistered).exists()).toBe(true);
+      });
     });
 
     describe('opt out', () => {
@@ -107,6 +116,10 @@ describe('view decision', () => {
 
       it('will not show the decision details', () => {
         expect(wrapper.find(DecisionDetails).exists()).toEqual(false);
+      });
+
+      it('will not show the faith details module', () => {
+        expect(wrapper.find(FaithDetailsRegistered).exists()).toBe(false);
       });
     });
   });
@@ -139,6 +152,10 @@ describe('view decision', () => {
 
     it('will not show your decision', () => {
       expect(wrapper.find(YourDecision).exists()).toBe(false);
+    });
+
+    it('will not show the faith details module', () => {
+      expect(wrapper.find(FaithDetailsRegistered).exists()).toBe(false);
     });
 
     it('will not show next steps', () => {

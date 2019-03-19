@@ -6,11 +6,13 @@ import cucumber.api.java.en.Then
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
+import mocking.organDonation.models.OrganDonationDemographics
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.organDonation.OrganDonationChoicePage
+import pages.organDonation.OrganDonationFaithModule
 import java.net.URL
 
 private const val NEW_TAB_WAIT_TIME = 1000L
@@ -33,7 +35,7 @@ open class OrganDonationStepDefinitions {
         factory.existing.optOut()
     }
 
-    @Given("I am a (\\w+) user registered with organ donation to donate all organs")
+    @Given("^I am a (\\w+) user registered with organ donation to donate all organs$")
     fun iAmRegisteredWithOrganDonationToDonateAllOrgans(gpSystem: String) {
         val factory = OrganDonationFactory(gpSystem)
         factory.setupPatientForAppUse()
@@ -71,6 +73,13 @@ open class OrganDonationStepDefinitions {
         }
     }
 
+    @Given("^I am a (\\w+) user registered with organ donation to donate all organs with a faith decision of '(.*)'$")
+    fun iAmRegisteredWithOrganDonationToDonateAllOrgansAndDecisionOfFaith(gpSystem: String, faith: String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        val demographics = OrganDonationDemographics(faithDeclaration = OrganDonationFaithModule.getFaith(faith))
+        factory.existing.optIn(demographics)
+    }
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register$")
     fun iAmNotRegisteredWithOrganDonationWishToRegister(gpSystem: String) {
@@ -94,6 +103,17 @@ open class OrganDonationStepDefinitions {
         factory.setupPatientForAppUse()
         factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
         factory.create { registration -> registration.optIn { request -> request.respondWithSuccess("test") } }
+    }
+
+    @Given("^I am a (\\w+) user not registered with organ donation, who wishes to opt in with '(.*)' faith " +
+            "decision$")
+    fun iAmNotRegisteredWithOrganDonationWishToRegisterAndOptInWithFaithDecision(gpSystem: String, faith:String) {
+        val factory = OrganDonationFactory(gpSystem)
+        factory.setupPatientForAppUse()
+        factory.lookUpRegistrationWithSuccessfulDemographics { a -> a.respondWithError(HttpStatus.SC_NOT_FOUND) }
+        val demographics = OrganDonationDemographics(faithDeclaration = OrganDonationFaithModule.getFaith(faith))
+        factory.create { registration -> registration.optIn(demographics) {
+            request -> request.respondWithSuccess("test") } }
     }
 
     @Given("^I am a (\\w+) user not registered with organ donation, who wishes to register and donate some organs$")

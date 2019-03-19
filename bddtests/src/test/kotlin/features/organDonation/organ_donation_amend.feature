@@ -58,13 +58,13 @@ Feature: Organ Donation - Amend
     And I click the 'Continue' button
     Then the Organ Donation Faith And Beliefs page is displayed
     And the previous option on the Organ Donation Faith And Beliefs page is selected
-    When I select the option 'Yes - this is applicable to me' to share my organ donation faith and beliefs
+    When I select an option in sharing my organ donation faith and beliefs
     And I click the 'Continue' button
     Then the Organ Donation Decision Additional Details page is displayed
     When I click the 'Continue' button
     Then the Organ Donation Check Details page is displayed
     And the choice of wishing to donate organs is displayed on the Organ Donation Check Details page
-    And my choice of 'Yes' to share my faith and beliefs is displayed on the Organ Donation Check Details page
+    And my choice of whether to share my faith and beliefs is displayed on the Organ Donation Check Details page
     When I confirm that my details are accurate, and accept the privacy statement for organ donation
     And I click the 'Submit my decision' button
     Then the Organ Donation View Registration page is displayed

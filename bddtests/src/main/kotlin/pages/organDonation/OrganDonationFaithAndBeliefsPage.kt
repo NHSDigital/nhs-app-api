@@ -2,11 +2,10 @@ package pages.organDonation
 
 import mocking.organDonation.models.FaithDeclaration
 import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert
 import pages.HybridPageElement
 import pages.assertSingleElementPresent
-import pages.sharedElements.RadioButtons
 import pages.sharedElements.ExpandElement
+import pages.sharedElements.RadioButtons
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
@@ -34,12 +33,7 @@ open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
     }
 
     fun selectOption(faith:FaithDeclaration) {
-        val map = mapOf(
-                FaithDeclaration.Yes to yesOption,
-                FaithDeclaration.No to noOption,
-                FaithDeclaration.NotStated to preferNotToSayOption)
-        Assert.assertTrue("Test setup incorrect, no mapping set for $faith",map.containsKey(faith))
-        radioButtons.button(map[faith]!!).select()
+        radioButtons.button(OrganDonationFaithModule.getFaith(faith)).select()
     }
 
     private fun assertInformation() {

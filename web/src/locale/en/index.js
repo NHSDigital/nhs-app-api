@@ -835,6 +835,11 @@ export default {
       appointedRep: {
         phoneLabel: 'To view, or change, your appointed representative call the organ donation line:',
       },
+      faithAndBeliefs: {
+        Yes: 'When I die, I would like NHS staff to speak with my family (and anyone else appropriate) about how organ donation can go ahead in line with my faith and beliefs.',
+        No: 'When I die, I do not want NHS staff to speak with my family (and anyone else appropriate) about how organ donation can go ahead in line with my faith and beliefs.',
+        NotStated: 'I prefer not to say whether I want NHS staff to speak with my family (and anyone else appropriate) about how organ donation can go ahead in line with my faith and beliefs.',
+      },
     },
     yourChoice: {
       subheader: 'Your choice',
@@ -878,10 +883,10 @@ export default {
       },
       faith: {
         subheader: 'Faith / beliefs details',
-        description: 'I would like NHS staff to speak to my family and anyone else appropriate about how organ donation can go ahead in line with my faith or beliefs',
+        description: 'I would like NHS staff to speak to my family and anyone else appropriate about how organ donation can go ahead in line with my faith / beliefs',
         declaration: {
-          Yes: 'Yes',
-          No: 'No',
+          Yes: 'Yes - this is applicable to me',
+          No: 'No - this is not applicable to me',
           NotStated: 'Prefer not to say',
         },
       },

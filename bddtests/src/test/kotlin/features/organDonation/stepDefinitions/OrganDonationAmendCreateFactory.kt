@@ -29,20 +29,24 @@ class OrganDonationAmendCreateFactory(var patient: Patient,
         registrationSetup(registration, action)
     }
 
-    fun optIn(action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        val organDonationDemographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
+    fun optIn(demographics: OrganDonationDemographics? =null, action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
+        val organDonationDemographics = demographics
+                ?: OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
         OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
-                OrganDonationRegistration.optIn(patient,organDonationDemographics),
+                OrganDonationRegistration.optIn(patient, organDonationDemographics),
                 OrganDonationAdditionalDetails.getAdditionalDetails(organDonationDemographics))
         registrationSetup(registration, action)
     }
 
-    fun some(organs : OrganDecisions,action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
-        val organDonationDemographics = OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
+    fun some(organs : OrganDecisions,
+             demographics: OrganDonationDemographics? =null,
+             action: (OrganDonationSubmitDecisionBuilder) -> Mapping) {
+        val organDonationDemographics = demographics
+                ?: OrganDonationDemographics(faithDeclaration = FaithDeclaration.Yes)
         OrganDonationSerenityHelpers.DEMOGRAPHICS_UPDATED.set(organDonationDemographics)
         val registration = OrganDonationRegistrationRequest(
-                OrganDonationRegistration.some(patient,organs,
+                OrganDonationRegistration.some(patient, organs,
                         organDonationDemographics),
                 OrganDonationAdditionalDetails.getAdditionalDetails(organDonationDemographics))
         registrationSetup(registration, action)

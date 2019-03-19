@@ -6,7 +6,9 @@ import mocking.data.organDonation.OrganDecisions
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.set
+import mocking.organDonation.models.OrganDonationDemographics
 import pages.assertIsVisible
+import pages.organDonation.OrganDonationFaithModule
 import pages.organDonation.OrganDonationViewRegistrationPage
 
 open class OrganDonationViewRegistrationStepDefinitions {
@@ -56,6 +58,7 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsNo()
         organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.nextSteps.assertDisplayedWithText()
+        organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
     }
 
     @Then("^the decision to opt in to organ donation has been successfully created$")
@@ -64,6 +67,10 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsYes()
         organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.nextSteps.assertLinksPresent()
+        organDonationViewRegistrationPage.assertFaithTextIsPresent(
+                OrganDonationSerenityHelpers
+                        .DEMOGRAPHICS_UPDATED
+                        .getOrFail<OrganDonationDemographics>().faithDeclaration)
     }
 
     @Then("^the decision to opt in to organ donation with some organs has been successfully created$")
@@ -74,6 +81,10 @@ open class OrganDonationViewRegistrationStepDefinitions {
         )
         organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.nextSteps.assertLinksPresent()
+        organDonationViewRegistrationPage.assertFaithTextIsPresent(
+                OrganDonationSerenityHelpers
+                        .DEMOGRAPHICS_UPDATED
+                        .getOrFail<OrganDonationDemographics>().faithDeclaration)
     }
 
     @Then("^the decision to opt out of organ donation is displayed$")
@@ -103,16 +114,25 @@ open class OrganDonationViewRegistrationStepDefinitions {
     @Then("^the choice of an organ donation appointed representative is displayed$")
     fun theChoiceOfAnOrganDonationAppointedRepresentativeIsDisplayed() {
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsAppointedRepresentative()
+        organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
+        organDonationViewRegistrationPage.otherThings.assertLinksPresent()
+        organDonationViewRegistrationPage.nextSteps.assertNotDisplayed()
     }
 
     @Then("the organ donation decision has been submitted and is to be processed$")
     fun theOrganDonationDecisionHasBeenSubmittedAndIsToBeProcessed() {
         organDonationViewRegistrationPage.assertDecisionSubmitted()
+        organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
+        organDonationViewRegistrationPage.otherThings.assertOnlyBloodLinkPresent()
+        organDonationViewRegistrationPage.nextSteps.assertNotDisplayed()
     }
 
     @Then("the organ donation decision has been found and is to be processed$")
     fun theOrganDonationDecisionHasBeenFoundAndIsToBeProcessed() {
         organDonationViewRegistrationPage.assertDecisionFound()
+        organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
+        organDonationViewRegistrationPage.otherThings.assertOnlyBloodLinkPresent()
+        organDonationViewRegistrationPage.nextSteps.assertNotDisplayed()
     }
 
     @Then("^the Organ Donation View Registration page is displayed with my existing decision to opt-in$")
@@ -121,6 +141,10 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.nextSteps.assertLinksPresent()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsYes()
+        organDonationViewRegistrationPage.assertFaithTextIsPresent(
+                OrganDonationSerenityHelpers
+                .DEMOGRAPHICS_EXISTING
+                .getOrFail<OrganDonationDemographics>().faithDeclaration)
     }
 
     @Then("^the Organ Donation View Registration page is displayed with my existing decision to opt-out$")
@@ -129,6 +153,7 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.nextSteps.assertDisplayedWithText()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsNo()
+        organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
     }
 
     @Then("^the Organ Donation View Registration page is displayed with my existing decision to opt-in-some$")
@@ -138,6 +163,10 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.nextSteps.assertLinksPresent()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsSome(
                 OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING.getOrFail())
+        organDonationViewRegistrationPage.assertFaithTextIsPresent(
+                OrganDonationSerenityHelpers
+                        .DEMOGRAPHICS_EXISTING
+                        .getOrFail<OrganDonationDemographics>().faithDeclaration)
     }
 
     @Then("^the Organ Donation View Registration page is displayed with my existing " +
@@ -147,6 +176,7 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.nextSteps.assertNotDisplayed()
         organDonationViewRegistrationPage.otherThings.assertLinksPresent()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsAppointedRepresentative()
+        organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
     }
 
     @Then("^the decision to opt out of organ donation has been successfully updated$")
@@ -167,5 +197,10 @@ open class OrganDonationViewRegistrationStepDefinitions {
         val organsToDonate = OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
                 .getOrFail<OrganDecisions>()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsSome(organsToDonate)
+    }
+
+    @Then("the faith and beliefs decision of '(.*)' is displayed on the Organ Donation View Registration page")
+    fun theFaithAndBeliefsDecisionIsDisplayedOnTheOrganDonationViewRegistrationPage(faith : String){
+        organDonationViewRegistrationPage.assertFaithTextIsPresent(OrganDonationFaithModule.getFaith(faith))
     }
 }

@@ -17,6 +17,8 @@
       <your-decision :decision-details="$store.state.organDonation.registration.decisionDetails"
                      :decision="$store.state.organDonation.registration.decision"/>
       <decision-details v-if="isSomeOrgans" :choices="currentChoices"/>
+      <faith-details-registered v-if="isOptInDecision"
+                                :declaration="faithDeclaration"/>
       <amend-decision-link :class="$style.amendDecision"/>
       <next-steps :is-opt-in-decision="isOptInDecision"/>
     </div>
@@ -29,6 +31,7 @@ import get from 'lodash/fp/get';
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import NextSteps from '@/components/organ-donation/NextSteps';
@@ -40,6 +43,7 @@ export default {
   components: {
     AmendDecisionLink,
     DecisionDetails,
+    FaithDetailsRegistered,
     MessageText,
     MessageDialog,
     NextSteps,
@@ -50,6 +54,7 @@ export default {
   data() {
     return {
       currentChoices: get('organDonation.registration.decisionDetails.choices')(this.$store.state) || {},
+      faithDeclaration: this.$store.state.organDonation.registration.faithDeclaration,
       isOptInDecision: get('organDonation.registration.decision')(this.$store.state) === DECISION_OPT_IN,
       isSomeOrgans: this.$store.getters['organDonation/isSomeOrgans'],
     };

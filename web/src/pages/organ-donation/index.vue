@@ -15,9 +15,8 @@
         <your-decision :decision="decision" :decision-details="decisionDetails"
                        header-key="organDonation.registered.yourDecision.subheader"/>
         <div v-if="hasExistingOptIn">
-          <decision-details
-            v-if="isSomeOrgans"
-            :choices="choices"/>
+          <decision-details v-if="isSomeOrgans" :choices="choices"/>
+          <faith-details-registered :declaration="faithDeclaration"/>
         </div>
         <reaffirm-decision v-if="!hasAppointedRep" :is-some-organs="isSomeOrgans"/>
         <amend-decision-link :class="$style['mt-3']"/>
@@ -46,9 +45,10 @@
 
 <script>
 import get from 'lodash/fp/get';
+import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
 import AmendDecisionLink from '@/components/organ-donation/AmendDecisionLink';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
-import AlreadyRegisteredLink from '@/components/organ-donation/AlreadyRegisteredLink';
+import FaithDetailsRegistered from '@/components/organ-donation/FaithDetailsRegistered';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -67,9 +67,10 @@ import {
 
 export default {
   components: {
+    AlreadyRegisteredLink,
     AmendDecisionLink,
     DecisionDetails,
-    AlreadyRegisteredLink,
+    FaithDetailsRegistered,
     FindOutMoreLink,
     MakeDecision,
     MessageText,
@@ -83,6 +84,7 @@ export default {
     return {
       decision: this.$store.state.organDonation.originalRegistration.decision,
       decisionDetails: this.$store.state.organDonation.originalRegistration.decisionDetails,
+      faithDeclaration: this.$store.state.organDonation.originalRegistration.faithDeclaration,
       isSomeOrgans: this.$store.getters['organDonation/isSomeOrgans'],
       state: this.$store.state.organDonation.originalRegistration.state,
     };
