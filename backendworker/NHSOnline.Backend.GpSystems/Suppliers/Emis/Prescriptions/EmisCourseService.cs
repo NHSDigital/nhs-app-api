@@ -95,7 +95,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Something went wrong while building the response");
-                        _logger.LogEmisErrorResponse(coursesResponse);
                         return new GetCoursesResult.InternalServerError();
                     }
                 }

@@ -74,7 +74,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Something went wrong building the Prescription History response");
-                        _logger.LogEmisErrorResponse(prescriptionsResponse);
                         return new PrescriptionResult.InternalServerError();
                     }
                 }

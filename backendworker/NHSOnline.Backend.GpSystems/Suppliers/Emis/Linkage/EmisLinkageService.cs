@@ -67,7 +67,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                     catch (Exception e)
                     {
                         _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
-                        _logger.LogEmisErrorResponse(response);
                         return new LinkageResult.InternalServerError();
                     }
                 }
@@ -115,7 +114,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Linkage
                     catch (Exception e)
                     {
                         _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
-                        _logger.LogEmisErrorResponse(getLinkageKeyResponse);
                         return new LinkageResult.InternalServerError();
                     }
                 }
