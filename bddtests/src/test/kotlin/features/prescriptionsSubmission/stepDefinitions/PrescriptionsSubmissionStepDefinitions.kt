@@ -23,9 +23,9 @@ import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert.assertTrue
 import pages.prescription.PrescriptionsPage
 import utils.SerenityHelpers
+import utils.assertTrueWithRetry
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
@@ -218,7 +218,8 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
     fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
-        assertTrue(prescriptionPage.isOrderSuccessfullTextVisible())
+        assertTrueWithRetry(prescriptionPage.isOrderSuccessfullTextVisible(),
+                "Expected order success text to be visible")
 
         when (currentProvider) {
             ProviderTypes.TPP -> {

@@ -45,10 +45,8 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
 
     fun assertDecisionFound() {
         waitForSpinnerToDisappear()
-        waitForElement {
-            BannerObject.success(this, "Decision found")
-                    .assertVisible("Your registration is currently being processed.")
-        }
+        BannerObject.success(this, "Decision found")
+                .assertVisible("Your registration is currently being processed.")
         assertText("We are still processing your registration",
                 "Please check back in 2 days. " +
                         "You’ll then be able to view and amend your decision via the NHS App. " +
