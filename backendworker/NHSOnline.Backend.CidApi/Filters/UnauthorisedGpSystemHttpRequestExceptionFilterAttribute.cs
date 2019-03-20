@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 
-namespace NHSOnline.Backend.ApiSupport.Filters
+namespace NHSOnline.Backend.CidApi.Filters
 {
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
-    public sealed class UnauthorisedGpSystemHttpRequestExceptionFilterAttributeAttribute : ExceptionFilterAttribute
+    public sealed class UnauthorisedGpSystemHttpRequestExceptionFilterAttribute : ExceptionFilterAttribute
     {
-        private readonly ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttributeAttribute> _logger;
+        private readonly ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute> _logger;
 
-        public ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttributeAttribute> Logger => _logger;
-
-        public UnauthorisedGpSystemHttpRequestExceptionFilterAttributeAttribute(ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttributeAttribute> logger)
+        public ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute> Logger => _logger;
+        
+        public UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(
+            ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute> logger)
         {
             _logger = logger;
         }

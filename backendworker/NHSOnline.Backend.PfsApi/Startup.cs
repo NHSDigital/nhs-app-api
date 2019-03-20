@@ -23,6 +23,7 @@ using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.PfsApi.DependencyInjection;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
+using NHSOnline.Backend.PfsApi.Filters;
 
 namespace NHSOnline.Backend.PfsApi
 {
@@ -104,6 +105,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<ISessionCacheService, MongoSessionCacheService>();
             services.AddTransient<IIm1CacheServiceConfig, Im1CacheServiceConfig>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
+            services.AddSingleton<IUserSessionManager, UserSessionManager>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<IOdsCodeMassager, OdsCodeMassager>();
             services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
@@ -133,7 +135,7 @@ namespace NHSOnline.Backend.PfsApi
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
-            options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttributeAttribute));
+            options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
         }
 
         private void ConfigureServiceCookies(CookieAuthenticationOptions options)

@@ -20,6 +20,7 @@ using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
 using NHSOnline.Backend.CidApi.DependencyInjection;
+using NHSOnline.Backend.CidApi.Filters;
 using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
@@ -127,7 +128,7 @@ namespace NHSOnline.Backend.CidApi
                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
             );
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
-            options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttributeAttribute));
+            options.Filters.Add(typeof(UnauthorisedGpSystemHttpRequestExceptionFilterAttribute));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
