@@ -32,8 +32,7 @@ class NhsoHttpException(
 
         private fun parseBody(response: HttpResponse): String? {
             val rd = BufferedReader(InputStreamReader(response.entity.content))
-            val result = rd.use { it.readText() }
-            return result
+            return rd.use { it.readText() }
         }
     }
 }

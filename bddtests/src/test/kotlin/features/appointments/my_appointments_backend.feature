@@ -72,6 +72,7 @@ Feature: My appointments backend
     But <GP System> does not offer online booking to my patient
     When my appointments are requested
     Then I receive a "Forbidden" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -83,10 +84,14 @@ Feature: My appointments backend
     But <GP System> returns corrupted response for my appointments
     When my appointments are requested
     Then I receive a "Internal Server Error" error
+    And the response contains an empty body
+  @bug @NHSO-4923
+    Examples:
+      | GP System |
+      | TPP       |
     Examples:
       | GP System |
       | EMIS      |
-      | TPP       |
       | VISION    |
 
   Scenario Outline: Requesting my appointments the <GP System> times out and returns "Gateway Timeout" error
@@ -94,6 +99,7 @@ Feature: My appointments backend
     But <GP System> will time out when trying to retrieve my appointments
     When my appointments are requested
     Then I receive a "Gateway Timeout" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -105,6 +111,7 @@ Feature: My appointments backend
     And I have logged in and have a valid session cookie
     When my appointments are requested
     Then I receive a "Bad Gateway" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -116,6 +123,7 @@ Feature: My appointments backend
     And I have logged in and have a valid session cookie
     When my appointments are requested
     Then I receive a "Bad Gateway" error
+    And the response contains an empty body
     Examples:
       | Appointment Type       |
       | past                   |

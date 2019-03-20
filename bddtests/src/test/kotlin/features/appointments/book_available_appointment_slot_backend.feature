@@ -22,6 +22,7 @@ Feature: Book appointments API
     Given I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted with no slot identifier
     Then I receive a "Bad Request" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -32,6 +33,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted with slot identifier of 0 characters
     Then I receive a "Bad Request" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -52,6 +54,7 @@ Feature: Book appointments API
     Given I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted with no booking reason
     Then I receive a "Bad Request" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -62,6 +65,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted with booking reason of 0 characters
     Then I receive a "Bad Request" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -94,6 +98,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted with booking reason of 151 characters
     Then I receive a "Bad Request" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -103,6 +108,7 @@ Feature: Book appointments API
     Given an appointment booking for <GP System> can be successful, but session has expired
     When an appointment booking is submitted
     Then I receive an "Unauthorized" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -113,6 +119,7 @@ Feature: Book appointments API
     Given an appointment booking for <GP System> can be successful
     When an appointment booking is submitted
     Then I receive an "Unauthorized" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -123,6 +130,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then I receive an "Forbidden" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -134,6 +142,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then I receive a "Conflict" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -146,6 +155,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then I receive an "Conflict" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -156,6 +166,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then I receive an "Conflict" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -167,6 +178,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then I receive a "Bad Gateway" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -178,6 +190,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then I receive a "Bad Gateway" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -189,6 +202,7 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then I receive a "Gateway Timeout" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -200,13 +214,17 @@ Feature: Book appointments API
     And I have logged into <GP System> and have a valid session cookie
     When an appointment booking is submitted
     Then I receive a "Internal Server Error" error
+    And the response contains an empty body
   @bug @NHSO-3039
     Examples:
       | GP System |
       | EMIS      |
+  @bug @NHSO-4923
     Examples:
       | GP System |
       | TPP       |
+    Examples:
+      | GP System |
       | VISION    |
 
 #    The handling of telephone appointments is currently only a requirement for EMIS

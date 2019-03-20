@@ -80,9 +80,19 @@ class CommonSteps : AbstractSteps() {
     @Then("^I receive (?:a|an) \"(.*)\" error$")
     fun thenIReceiveAMessage(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
-        val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
-        assertNotNull("An exception was expected but was not returned within the expected time limit.", exception)
-        assertEquals(converted, exception.statusCode)
+        val errorResponse = SerenityHelpers.getHttpException()
+        assertNotNull(
+                "An exception was expected but was not returned within the expected time limit.",
+                errorResponse
+        )
+        assertEquals("Incorrect status code returned. ", converted, errorResponse!!.statusCode)
+    }
+
+    @Then("the response contains an empty body$")
+    fun theResponseBodyIsEmpty(){
+        val errorResponse = SerenityHelpers.getHttpException()
+        Assert.assertNotNull("Expected Response", errorResponse)
+        assertEquals("Expected an empty body. ", "", errorResponse!!.body)
     }
 
     @Then("^I receive (?:a|an) \"(.*)\" success code")

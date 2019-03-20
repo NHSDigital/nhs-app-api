@@ -26,6 +26,7 @@ Feature: View available appointment slots backend
     And I have logged in and have a valid session cookie
     When the available appointment slots are retrieved
     Then I receive a "Bad Gateway" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -37,16 +38,19 @@ Feature: View available appointment slots backend
     Given there are available EMIS appointment slots, but session has expired
     When the available appointment slots are retrieved
     Then I receive an "Unauthorized" error
+    And the response contains an empty body
 
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots with a missing NHSO-Session-Id cookie returns "Unauthorized" error
     When the available appointment slots are retrieved without a cookie
     Then I receive an "Unauthorized" error
+    And the response contains an empty body
 
   Scenario Outline: Requesting available appointment slots when <GP system> is unavailable returns "Bad gateway" error
     Given I have logged into <GP System> and have a valid session cookie
     When the available appointment slots are retrieved
     Then I receive a "Bad Gateway" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
@@ -59,6 +63,7 @@ Feature: View available appointment slots backend
     And I have logged in and have a valid session cookie
     When the available appointment slots are retrieved
     Then I receive a "Gateway Timeout" error
+    And the response contains an empty body
     Examples:
       | GP System |
       | EMIS      |
