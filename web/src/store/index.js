@@ -43,14 +43,8 @@ export const modules = {
 };
 
 export const actions = {
-  async nuxtServerInit({ dispatch }, { req }) {
-    const authCookie = this.$cookies.get('nhso.auth');
-    if (process.server) {
-      const consola = require('consola');
-      const { redirectUri, codeVerifier } = authCookie || {};
-      consola.info(`Auth Cookie values for request: ${req.url}: redirectUri: ${redirectUri}, codeVerifier: ${codeVerifier}`);
-    }
-    await dispatch('auth/updateConfig', authCookie);
+  async nuxtServerInit({ dispatch }) {
+    await dispatch('auth/updateConfig', this.$cookies.get('nhso.auth'));
     await dispatch('session/setInfo', this.$cookies.get('nhso.session'));
   },
 };
