@@ -326,8 +326,8 @@ export default {
       }
 
       this.confirmTheBook(
-        this.slot, this.symptoms, this.telephoneNumber
-        , this.otherTelephoneNumber.trim(),
+        this.slot, this.symptoms, this.telephoneNumber,
+        this.otherTelephoneNumber.trim(),
       );
     },
     confirmTheBook(slot, reason, telephoneNumberField, otherTelephoneNumberField) {

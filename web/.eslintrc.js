@@ -24,6 +24,10 @@ module.exports = {
     // don't require .vue extension when importing
     'import/extensions': ['error', 'never', ],
     'import/no-unresolved': 0,
+    'operator-linebreak': 'off',
+    'object-curly-newline': 'off',
+    'implicit-arrow-linebreak': 'off',
+    'no-multiple-empty-lines': 'off',
     //don't require linebreak before/after opening/closing tags on single or multiline elements
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multiline-html-element-content-newline': 'off',
