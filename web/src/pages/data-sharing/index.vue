@@ -3,21 +3,25 @@
 <template>
   <div v-if="showTemplate" class="content">
     <div :class="$style['page']">
-      <h1 :key="`${pageId}header`" :class="$style['pageTitle']">
-        {{ $t('ds01.titles.' + pageId) }}
-      </h1>
+      <h2 :class="$style['pageTitle']">
+        {{ $t('ds01.mainHeader') }}
+      </h2>
       <ul id="contents" :class="$style['list-menu']">
         <li v-for="pageId in pageIds" :key="pageId">
           <a :class="isLinkActive(pageId)" tabindex="0" role="link" @click="goToPage(pageId)"
              @keypress="contentsKeyPressed($event, pageId)">{{ $t('ds01.titles.' + pageId) }}</a>
         </li>
       </ul>
+      <h2 :class="$style['title']" :key="`${pageId}header`">
+        {{ $t('ds01.titles.' + pageId) }}
+      </h2>
       <Overview v-if="pageId === 'p1'"/>
       <WhereConfidentialPatientInformationIsUsed v-if="pageId === 'p2'"/>
       <WhereYourChoiceDoesNotApply v-if="pageId === 'p3'"/>
+      <MakeYourChoice v-if="pageId === 'p4'"/>
     </div>
 
-    <analytics-tracked-tag v-if="pageId === 'p3' && device === 'ios'"
+    <analytics-tracked-tag v-if="pageId === 'p4' && device === 'ios'"
                            id="start-now-button"
                            :class="[$style.button, $style.green]"
                            :text="$t('ds01.startNowButton')"
@@ -28,7 +32,7 @@
       {{ $t('ds01.startNowButton') }}
     </analytics-tracked-tag>
 
-    <form v-if="pageId === 'p3' && device !== 'ios'" id="ndop-token-form"
+    <form v-if="pageId === 'p4' && device !== 'ios'" id="ndop-token-form"
           :action="dataPreferencesUrl" :target="formTarget" method="POST"
           name="ndopTokenForm">
       <input v-model="ndopToken" type="hidden" name="token">
@@ -54,6 +58,7 @@ import Benefits from '@/components/data-sharing/Benefits';
 import Overview from '@/components/data-sharing/Overview';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
 import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoiceDoesNotApply';
+import MakeYourChoice from '@/components/data-sharing/MakeYourChoice';
 import GenericButton from '@/components/widgets/GenericButton';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
@@ -67,6 +72,7 @@ export default {
     Benefits,
     WhereConfidentialPatientInformationIsUsed,
     WhereYourChoiceDoesNotApply,
+    MakeYourChoice,
     AnalyticsTrackedTag,
   },
   data() {
