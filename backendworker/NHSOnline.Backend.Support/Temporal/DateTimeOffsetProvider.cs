@@ -43,10 +43,10 @@ namespace NHSOnline.Backend.Support.Temporal
             return new DateTimeOffset(dateTime, offSet);
         }
         
-        public DateTimeOffset CreateDateTimeOffset(DateTime date)
+        public DateTimeOffset CreateDateTimeOffset(DateTime dateTime)
         {
-            var offSet = _localTimeZone.GetUtcOffset(date);
-            return new DateTimeOffset(date, offSet);
+            var offSet = _localTimeZone.GetUtcOffset(dateTime);
+            return new DateTimeOffset(dateTime, offSet);
         }
 
         public DateTimeOffset ConvertToLocalTime(DateTimeOffset dateTimeOffset)

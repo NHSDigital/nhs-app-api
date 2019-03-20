@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -66,11 +67,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
                         var kvp = new Dictionary<string, string>
                         {
-                            { "Total courses from response before filtering", totalCourses.ToString() },
-                            { "Total courses after filtering", coursesResponse.Body.Courses.Count().ToString() }
+                            { "Total courses from response before filtering", totalCourses.ToString(CultureInfo.InvariantCulture) },
+                            { "Total courses after filtering", coursesResponse.Body.Courses.Count().ToString(CultureInfo.InvariantCulture) }
                         };
 
-                        await _auditor.Audit(AuditType, "Total courses before filtering: {0}, Total courses after filtering: {1}", totalCourses.ToString(), coursesResponse.Body.Courses.Count().ToString());
+                        await _auditor.Audit(AuditType, "Total courses before filtering: {0}, Total courses after filtering: {1}", 
+                            totalCourses.ToString(CultureInfo.InvariantCulture), 
+                            coursesResponse.Body.Courses.Count().ToString(CultureInfo.InvariantCulture));
 
                         _logger
                             .LogInformationKeyValuePairs("Filtering counts", kvp);

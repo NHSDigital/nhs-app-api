@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -109,7 +110,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
 
             var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
 
-            var coursesBeforeFiltering = prescriptionsResponse.PrescriptionRequests.Sum(x => x.RequestedMedicationCourses.Count()).ToString();
+            var coursesBeforeFiltering = prescriptionsResponse.PrescriptionRequests
+                .Sum(x => x.RequestedMedicationCourses.Count())
+                .ToString(CultureInfo.InvariantCulture);
 
             await _auditor.Audit(AuditType, "Total courses before filtering: {0}", coursesBeforeFiltering);
 
@@ -139,27 +142,27 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                     filteredPrescriptionsCount += 1;
                 }
 
-                _logger.LogInformation($"{repeatCoursesInPrescription.Count()} repeat courses in this prescription");
+                _logger.LogInformation($"{repeatCoursesInPrescription.Count} repeat courses in this prescription");
 
                 totalCoursesRunningTotal += repeatCoursesInPrescription.Count;
             }
 
-            var prescriptionsReturnedToUserCount = prescriptionsWithRepeatCourses.Count();
-            var prescriptionsRecievedCount = prescriptionsResponse.PrescriptionRequests.Count();
+            var prescriptionsReturnedToUserCount = prescriptionsWithRepeatCourses.Count;
+            var prescriptionsReceivedCount = prescriptionsResponse.PrescriptionRequests.Count();
             var prescriptionsWithNoRepeatableCoursesCount = filteredPrescriptionsCount;
 
             var kvp = new Dictionary<string, string>
             {
-                { "Prescriptions Received",  prescriptionsRecievedCount.ToString()},
-                { "Prescriptions with no repeatable courses",  prescriptionsWithNoRepeatableCoursesCount.ToString()},
-                { "Returned to user",  prescriptionsReturnedToUserCount.ToString() }
+                { "Prescriptions Received",  prescriptionsReceivedCount.ToString(CultureInfo.InvariantCulture)},
+                { "Prescriptions with no repeatable courses",  prescriptionsWithNoRepeatableCoursesCount.ToString(CultureInfo.InvariantCulture)},
+                { "Returned to user",  prescriptionsReturnedToUserCount.ToString(CultureInfo.InvariantCulture) }
             };
 
             await _auditor.Audit(AuditType, 
-                    "Prescriptions Recieved: {0}, Number of prescriptions without repeatable courses: {1}, Number of prescriptions returned to user: {2}", 
-                    prescriptionsRecievedCount.ToString(), 
-                    prescriptionsWithNoRepeatableCoursesCount.ToString(), 
-                    prescriptionsReturnedToUserCount.ToString());
+                    "Prescriptions Received: {0}, Number of prescriptions without repeatable courses: {1}, Number of prescriptions returned to user: {2}", 
+                    prescriptionsReceivedCount.ToString(CultureInfo.InvariantCulture), 
+                    prescriptionsWithNoRepeatableCoursesCount.ToString(CultureInfo.InvariantCulture), 
+                    prescriptionsReturnedToUserCount.ToString(CultureInfo.InvariantCulture));
 
             _logger.LogInformationKeyValuePairs("Prescription Count", kvp);
 
