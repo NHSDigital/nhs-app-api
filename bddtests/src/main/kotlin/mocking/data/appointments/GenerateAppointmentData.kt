@@ -149,6 +149,7 @@ class GenerateAppointmentData {
             return appointmentsSlotsResponse.staffDetails.any { staffDetails ->
                 session.staffDetails.any { staffId ->
                     staffId == staffDetails.staffDetailsid
+                            && staffDetails.staffName == doctor
                 }
             }
         }

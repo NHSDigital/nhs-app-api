@@ -74,6 +74,35 @@ Feature: View available appointment slots
       | EMIS      |
       | VISION    |
 
+  Scenario Outline: A <GP System> user can filter on slot type and location and only the appropriate slots will be displayed
+    Given there are available appointment slots with different slot types and locations for <GP System>
+    And I am logged in
+    And I am on the Available Appointments page
+    When I select a particular slot type and location
+    And I select time period for 'All available'
+    Then I only see results for the selected filter options
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
+  Scenario Outline: A <GP System> user can filter by selected clinician and only the appropriate slots will be displayed
+    Given there are available appointment slots with different clinician for <GP System>
+    And I am logged in
+    And I am on the Available Appointments page
+    When I select a particular slot type and location
+    And I select time period for 'All available'
+    Then I only see results for the selected filter options
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
+
   Scenario Outline: A <GP System> user enters the available appointments page, but only 1 appointment is available
     Given there is 1 available appointment slot for <GP System>
     And I am logged in

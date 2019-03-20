@@ -13,6 +13,7 @@ import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.Patient
 import org.apache.http.HttpStatus.SC_OK
+import org.junit.Assert
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -78,11 +79,14 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
     private fun extractSessionsFromFacade(facade: AppointmentSlotsResponseFacade): List<AppointmentSession> {
         return facade.sessions.map { session ->
             val slots = session.slots.map { slot ->
+                val slotTypeName = facade.slotTypes.find { slotType -> slot.slotTypeId == slotType.slotTypeId }
+                Assert.assertNotNull("Corresponding slot type not found. " +
+                        "Couldn't find ${slot.slotTypeId}", slotTypeName)
                 AppointmentSlot(
                         slot.slotId!!,
                         convertStringToEmisTimeString(slot.startTime!!),
                         convertStringToEmisTimeString(slot.endTime!!),
-                        facade.slotTypes.find { slotType -> slot.slotTypeId == slotType.slotTypeId }!!.slotTypeName,
+                        slotTypeName!!.slotTypeName,
                         slot.channel
                 )
             }

@@ -1,6 +1,8 @@
 package features.appointments.steps
 
 import features.appointments.factories.AppointmentsSlotsFactory
+import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
+import mockingFacade.appointments.AppointmentSessionFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
@@ -44,8 +46,14 @@ open class AvailableAppointmentsSteps {
             expectedTimeSlot: String,
             expectedSessionName: String?
     ) {
+        println(sessionVariableCalled<java.util.ArrayList<AppointmentSessionFacade>>(
+                AppointmentsSlotsExampleBuilderWithExpectations
+                        .AppointmentSlotSerenityKeys
+                        .APPOINTMENT_SLOTS_EXAMPLE_SESSIONS
+        ))
         assertEquals(
-                "Incorrect number of time-slots present",
+                "Incorrect number of time-slots present for " +
+                        "$expectedDateHeading, $expectedTimeSlot, $expectedSessionName",
                 1,
                 availableAppointmentsPage.timeSlotForDateTimeSession(
                         expectedDateHeading,

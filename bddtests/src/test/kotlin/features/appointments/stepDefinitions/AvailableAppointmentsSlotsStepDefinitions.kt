@@ -15,6 +15,7 @@ import mocking.MockingClient
 import mocking.data.appointments.AppointmentSessionVariableKeys
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
+import mocking.data.appointments.AppointmentsSlotsExampleForFiltering
 import mocking.data.appointments.FilterSlotDetails
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mockingFacade.appointments.AppointmentFilterFacade
@@ -52,6 +53,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     val mockingClient = MockingClient.instance
     private val appointmentSlotsExample = AppointmentsSlotsExample()
+    private val appointmentSlotsExampleForFiltering = AppointmentsSlotsExampleForFiltering()
 
     private val expiredCookie = Cookie(
             "Set-Cookie",
@@ -131,6 +133,20 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^there are appointment slots on some days in the next few weeks but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsInTheNextFewWeeksForGPSystem(gpSystem: String) {
         thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem)
+    }
+
+    @Given("^there are available appointment slots with different slot types and locations for (\\w+)$")
+    fun thereAreAvailableAppointmentSlotsWithDifferentSlotTypesForGPSystem(gpSystem: String) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val exampleForFiltering = appointmentSlotsExampleForFiltering.getExampleForFilteringSlotTypesAndLocations()
+        appointmentsSlotsFactory.generateExample(exampleForFiltering)
+    }
+
+    @Given("^there are available appointment slots with different clinician for (\\w+)$")
+    fun thereAreAvailableAppointmentSlotsWithDifferentClinicianForGPSystem(gpSystem: String) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val exampleForFiltering = appointmentSlotsExampleForFiltering.getExampleForFilteringClinincian()
+        appointmentsSlotsFactory.generateExample(exampleForFiltering)
     }
 
     @Given("^the (.*) doesn't respond in a timely fashion for available appointment slots$")
@@ -273,6 +289,11 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointmentsFilter.selectFilterOptionsToRevealSlots()
     }
 
+    @When("^I select a particular slot type and location$")
+    fun iFilterType() {
+        availableAppointmentsFilter.selectFilterOptionsToRevealSlots()
+    }
+
     @When("^I select time period for '(.*)'$")
     fun iFilterTimePeriod(timePeriod: String) {
         availableAppointments.availableAppointmentsPage.timePeriodFilter.selectByText(timePeriod)
@@ -379,9 +400,9 @@ class AvailableAppointmentsSlotsStepDefinitions {
     fun aMessageIsDisplayedIndicatingThereAreNoSlotAvailable() {
         availableAppointments.availableAppointmentsPage.warning().assertVisible(
                 arrayListOf("No appointments available",
-                "There are currently no appointments available to book online right now. " +
-                "If you need to book one now, call your GP surgery.",
-                "If it's urgent and you don't know what to do, call 111 to get help near you."))
+                        "There are currently no appointments available to book online right now. " +
+                                "If you need to book one now, call your GP surgery.",
+                        "If it's urgent and you don't know what to do, call 111 to get help near you."))
     }
 
     @Then("^a message is displayed indicating there are no slots for selected criteria$")
@@ -400,6 +421,11 @@ class AvailableAppointmentsSlotsStepDefinitions {
                 AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
         ).filteredSlots.keys
         availableAppointments.assertThatOtherDatesAreNotDisplayed(expectedDates)
+    }
+
+    @Then("^I only see results for the selected filter options$")
+    fun onlyAvailableSlotsAreDisplayedForFilterOptions() {
+        availableSlotsAreDisplayedThatMeetTheNewCriteria()
     }
 
     @Then("^I see results for each of the remaining days for this week, " +

@@ -10,6 +10,7 @@ import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import pages.appointments.AvailableAppointmentsPage
 import pages.navigation.HeaderNative
 
@@ -145,6 +146,7 @@ open class AvailableAppointmentFilterSteps {
         val filterValues = sessionVariableCalled<AppointmentFilterFacade>(
                 AppointmentsSlotsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_FILTERED_APPOINTMENTS
         )
+        assertNotNull("Filter options to select are not stored as a Serenity variable. ", filterValues)
         if (!filterValues.type.isNullOrEmpty())
             availableAppointmentsPage.appointmentTypeFilter.selectByText(filterValues.type!!)
         if (!filterValues.location.isNullOrEmpty())

@@ -24,21 +24,21 @@ private const val END_OF_DAY_TIME_HOUR = 23
 private const val END_OF_DAY_TIME_MIN = 45
 
 private const val DEFAULT_MINUTE_VALUE = 15
-private const val HOURLY_INCREMENT = 2
+const val HOURLY_INCREMENT = 2
 
 private const val CANCELLATION_CUTOFF: Long = 30
 
-private const val DEFAULT_SLOT_TYPE = "Slot"
-private const val CLINIC_SESSION_TYPE = "Clinic"
-private const val TELEPHONE_SESSION_TYPE = "Telephone"
+const val DEFAULT_SLOT_TYPE = "Slot"
+const val CLINIC_SESSION_TYPE = "Clinic"
+const val TELEPHONE_SESSION_TYPE = "Telephone"
 
 private const val STARTING_LOCATION_ID = 1
 private const val STARTING_CLINICIAN_ID = 1
 private const val STARTING_SLOT_TYPE_ID = 1
 
-class AppointmentsSlotsExample {
+open class AppointmentsSlotsExample {
 
-    private val currentTime = LocalDateTime.now()
+    protected val currentTime = LocalDateTime.now()
     private var currentDateToAdd = currentTime
     val remainingDatesForThisWeek = setWeek()
     val datesForNextWeek = setWeek()
@@ -47,36 +47,33 @@ class AppointmentsSlotsExample {
 
     private var nextLocationId = STARTING_LOCATION_ID
     private var nextStaffId = STARTING_CLINICIAN_ID
-    private var nextSlotTypeId = STARTING_SLOT_TYPE_ID
+    protected var nextSlotTypeId = STARTING_SLOT_TYPE_ID
 
     private val startDateAppointment1 = AppointmentDate(
             tomorrowDate,
             DEFAULT_TIME_HOUR,
-            DEFAULT_TIME_MIN,
-            sessionName = CLINIC_SESSION_TYPE
+            DEFAULT_TIME_MIN
     )
     private val startDateAppointment2 = AppointmentDate(
             tomorrowDate,
             ALTERNATE_DEFAULT_TIME_HOUR,
-            ALTERNATE_DEFAULT_TIME_MIN,
-            sessionName = CLINIC_SESSION_TYPE
+            ALTERNATE_DEFAULT_TIME_MIN
     )
 
     private val telephoneStartDateAppointment = AppointmentDate(
             tomorrowDate,
             DEFAULT_TIME_HOUR,
-            DEFAULT_TIME_MIN,
-            sessionName = TELEPHONE_SESSION_TYPE
+            DEFAULT_TIME_MIN
     )
 
     private val historicalDate = AppointmentDate(LocalDateTime.now().minusMonths(MONTHS_IN_HALF_YEAR),
-            DEFAULT_START_VALUE, DEFAULT_MINUTE_VALUE, sessionName = CLINIC_SESSION_TYPE)
+            DEFAULT_START_VALUE, DEFAULT_MINUTE_VALUE)
 
-    private val locationLeeds = LocationFacade(nextLocationId++, "Leeds")
-    private val locationSheffield = LocationFacade(nextLocationId++, "Sheffield")
-    private val staffDrWho = StaffDetailsFacade(nextStaffId++, "Dr. Who")
-    private val staffDrScott = StaffDetailsFacade(nextStaffId++, "Dr. Scott")
-    private val slotTypeDefault = SlotTypeFacade(nextSlotTypeId++, DEFAULT_SLOT_TYPE)
+    protected val locationLeeds = LocationFacade(nextLocationId++, "Leeds")
+    protected val locationSheffield = LocationFacade(nextLocationId++, "Sheffield")
+    protected val staffDrWho = StaffDetailsFacade(nextStaffId++, "Dr. Who")
+    protected val staffDrScott = StaffDetailsFacade(nextStaffId++, "Dr. Scott")
+    protected val slotTypeDefault = SlotTypeFacade(nextSlotTypeId++, DEFAULT_SLOT_TYPE)
 
     private val defaultSessionDetails = AppointmentSessionFacadeBuilder()
             .sessionType(CLINIC_SESSION_TYPE)
@@ -100,7 +97,8 @@ class AppointmentsSlotsExample {
             : AppointmentsSlotsExampleBuilder {
 
         val appointmentSessions: ArrayList<AppointmentSessionFacade>
-        var appointmentsSlotsExampleBuilder = AppointmentsSlotsExampleBuilderWithExpectations()
+        var appointmentsSlotsExampleBuilder: AppointmentsSlotsExampleBuilder
+                = AppointmentsSlotsExampleBuilderWithExpectations()
 
         if (appointmentSessionFacade == null) {
             val appointmentSession1 = generateAppointmentData.generateAppointmentSession(
@@ -125,7 +123,7 @@ class AppointmentsSlotsExample {
                     .locationsList(listOf(locationLeeds, locationSheffield))
                     .appointmentTypesList(listOf(slotTypeDefault))
                     .cliniciansList(listOf(staffDrWho, staffDrScott))
-                    .appointmentSessions(appointmentSessions) as AppointmentsSlotsExampleBuilderWithExpectations
+                    .appointmentSessions(appointmentSessions)
         } else {
             appointmentSessions = appointmentSessionFacade
 
@@ -137,7 +135,7 @@ class AppointmentsSlotsExample {
                     .locationsList(locationsList)
                     .appointmentTypesList(slotTypeList)
                     .cliniciansList(clinicianList)
-                    .appointmentSessions(appointmentSessions) as AppointmentsSlotsExampleBuilderWithExpectations
+                    .appointmentSessions(appointmentSessions)
         }
 
         val filter = generateAppointmentData.generateFilter(
@@ -165,8 +163,7 @@ class AppointmentsSlotsExample {
         val pastAppointmentDate = arrayListOf(AppointmentDate(
                 currentTime.minusMinutes(DEFAULT_MINUTE_VALUE.toLong()),
                 DEFAULT_START_VALUE,
-                DEFAULT_MINUTE_VALUE,
-                sessionName = CLINIC_SESSION_TYPE
+                DEFAULT_MINUTE_VALUE
         ))
 
         return generateAppointmentData.generateAppointmentSession(
@@ -180,8 +177,7 @@ class AppointmentsSlotsExample {
     fun getExampleWithAppointmentWithinCutoffTime(): AppointmentSessionFacade {
         val cutOffTimeAppointment = arrayListOf(
                 AppointmentDate(
-                        LocalDateTime.now().plusMinutes(CANCELLATION_CUTOFF),
-                        sessionName = CLINIC_SESSION_TYPE
+                        LocalDateTime.now().plusMinutes(CANCELLATION_CUTOFF)
                 )
         )
 
@@ -334,21 +330,18 @@ class AppointmentsSlotsExample {
     fun slotForDayAfterTomorrow(): AppointmentSlotsResponseFacade {
         val dayAfterTomorrow = LocalDateTime.now().plusDays(DAY_AFTER_TOMORROW)
         val date = arrayListOf(AppointmentDate(dayAfterTomorrow, DEFAULT_START_VALUE + HOURLY_INCREMENT,
-                DEFAULT_START_VALUE,
-                sessionName = CLINIC_SESSION_TYPE))
+                DEFAULT_START_VALUE))
         return singleSlotExample(date)
     }
 
     fun slotForEndOfToday(): AppointmentSlotsResponseFacade {
-        val date = arrayListOf(AppointmentDate(LocalDateTime.now(), END_OF_DAY_TIME_HOUR, END_OF_DAY_TIME_MIN,
-                sessionName = CLINIC_SESSION_TYPE))
+        val date = arrayListOf(AppointmentDate(LocalDateTime.now(), END_OF_DAY_TIME_HOUR, END_OF_DAY_TIME_MIN))
         return singleSlotExample(date)
     }
 
     fun slotForThisTimeNextWeek(): AppointmentSlotsResponseFacade {
         val aWeekToday = LocalDateTime.now().plusDays(DAYS_IN_WEEK)
-        val date = AppointmentDate(aWeekToday, DEFAULT_TIME_HOUR, DEFAULT_TIME_MIN,
-                sessionName = CLINIC_SESSION_TYPE)
+        val date = AppointmentDate(aWeekToday, DEFAULT_TIME_HOUR, DEFAULT_TIME_MIN)
         return singleSlotExample(arrayListOf(date))
     }
 
