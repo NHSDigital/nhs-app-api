@@ -72,11 +72,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
                 .WithHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider.Object)
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
+            var dateRange = new AppointmentSlotsDateRange(fromDate, toDate);
 
             var response = await _sut.AppointmentSlotsGet(odsCode, nhsNumber, dateRange);
 
@@ -106,11 +102,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
                 .WithHeaders(additionalHeaders)
                 .Respond("application/json", nonJsonResponse);
 
-            var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider.Object)
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
+            var dateRange = new AppointmentSlotsDateRange(fromDate, toDate);
 
             var response = await _sut.AppointmentSlotsGet(odsCode, nhsNumber, dateRange);
 

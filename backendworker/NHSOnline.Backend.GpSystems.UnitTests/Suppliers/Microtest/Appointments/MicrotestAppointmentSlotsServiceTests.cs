@@ -59,11 +59,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
 
-            _dateRange = new AppointmentSlotsDateRange(dateTimeOffsetProvider)
-            {
-                FromDate = _fromDateTimeOffset,
-                ToDate = _toDateTimeOffset
-            };
+            _dateRange = new AppointmentSlotsDateRange(_fromDateTimeOffset,
+                _toDateTimeOffset);
 
             _systemUnderTest = new MicrotestAppointmentSlotsService(
                 _mockMicrotestClient.Object,

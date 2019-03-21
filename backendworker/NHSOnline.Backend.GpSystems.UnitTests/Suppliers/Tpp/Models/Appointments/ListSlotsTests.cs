@@ -19,8 +19,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models.Appointment
     {
         private const string PatientId = "Test patient id";
         private const string OnlineUserId = "Test online user id";
-        private const string FromDate = "2018/12/25 08:30:00";
-        private const string FromDateFormatted = "2018-12-25T08:30:00.0Z";
+        private const string FromDate = "2018/12/24 08:30:00";
+        private const string FromDateFormatted = "2018-12-24T08:30:00.0Z";
         private const string ToDate = "2018/12/31 17:30:00";
         private const string NumberOfDays = "7";
 
@@ -41,11 +41,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models.Appointment
             var fromDateTime = DateTime.Parse(FromDate, CultureInfo.InvariantCulture);
             var toDateTime = DateTime.Parse(ToDate, CultureInfo.InvariantCulture);
 
-            var dateRange = new AppointmentSlotsDateRange(dateTimeOffsetProvider)
-            {
-                FromDate = fromDateTime,
-                ToDate = toDateTime
-            };
+            var dateRange = new AppointmentSlotsDateRange(fromDateTime, toDateTime);
 
             return new ListSlots(userSession, dateRange);
         }

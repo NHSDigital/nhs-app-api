@@ -307,7 +307,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         public async Task GetAvailableAppointments_FormatsRequestCorrectly()
         {
             // Arrange
-            var dateRange = _fixture.Create<AppointmentSlotsDateRange>();
+            var dateRange = new AppointmentSlotsDateRange(DateTimeOffset.Now, DateTimeOffset.Now.AddDays(29));
             var bodyResponse = _fixture.Create<VisionResponseEnvelope<AvailableAppointmentsResponse>>();
             var received = new VisionRequest<AvailableAppointmentsRequest>();
 

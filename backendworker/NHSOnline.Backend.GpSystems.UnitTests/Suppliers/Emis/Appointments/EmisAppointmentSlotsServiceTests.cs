@@ -59,11 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             _fromDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
 
-            _dateRange = new AppointmentSlotsDateRange(dateTimeOffsetProvider)
-            {
-                FromDate = _fromDateTimeOffset,
-                ToDate = _toDateTimeOffset
-            };
+            _dateRange = new AppointmentSlotsDateRange(_fromDateTimeOffset, _toDateTimeOffset);
 
             _slotsMetadataGetQueryParameters =
                 new SlotsMetadataGetQueryParameters(_fromDateTimeOffset, _toDateTimeOffset, _emisUserSession.UserPatientLinkToken);
