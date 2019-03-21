@@ -30,6 +30,7 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     private val overviewId = "Overview"
     private val dataUseId = "Where confidential patient information is used"
     private val manageChoiceId = "Where your choice does not apply"
+    private val makeChoiceId = "Make your choice"
 
     @Given("^I am on the Data Sharing page$")
     fun iAmOnTheDataSharingPage() {
@@ -49,6 +50,9 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
             manageChoiceId -> {
                 dataSharing.onManageYourChoicePage()
             }
+            makeChoiceId -> {
+                dataSharing.onMakeYourChoicePage()
+            }
             else -> throw IllegalArgumentException("$page is not a valid page name.")
         }
     }
@@ -64,6 +68,9 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
             }
             manageChoiceId -> {
                 dataSharing.linkContentsManageYourChoice.click()
+            }
+            makeChoiceId -> {
+                dataSharing.linkContentsMakeYourChoice.click()
             }
             else -> throw IllegalArgumentException("$link is not a valid link name.")
         }

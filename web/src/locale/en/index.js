@@ -1183,10 +1183,12 @@ export default {
   },
   ds01: {
     header: 'Find out why your data matters',
+    mainHeader: 'Choose if data from your health records is shared for research and planning',
     titles: {
       p1: 'Overview',
       p2: 'Where confidential patient information is used',
       p3: 'Where your choice does not apply',
+      p4: 'Make your choice',
     },
     subtitle: 'Manage your data choice',
     startNowButton: 'Start now',
@@ -1300,6 +1302,13 @@ export default {
             title: 'Where there is a specific exclusion',
             text: 'Your choice does not apply to a small number of specific exclusions. In these cases, your confidential patient information may still be used at any time. For example, when information is used to collect official national statistics, like the Population Census.',
           },
+        ],
+      },
+      p4: {
+        paragraphs: [
+          'If you decide to opt out, this will be respected and applied by NHS Digital and Public Health England. These organisations collect, process and release health and adult social care data on a national basis. Your decision will also be respected and applied by all other organisations that are responsible for health and care information by March 2020.',
+          'An opt-out will only apply to the health and care system in England. This does not apply to your health data where you have accessed health or care services outside of England, such as in Scotland and Wales.',
+          'If you choose to opt out, your data may still be used during some specific situations. For example, during an epidemic where there might be a risk to other people\'s health.',
         ],
       },
     },

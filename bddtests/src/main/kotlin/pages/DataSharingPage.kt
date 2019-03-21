@@ -13,28 +13,34 @@ open class DataSharingPage : HybridPageObject() {
     private val titleOverview = "Overview"
     private val titleDataUse = "Where confidential patient information is used"
     private val titleManageYourChoice = "Where your choice does not apply"
+    private val titleMakeYourChoice = "Make your choice"
 
     val linkContentsOverview = contentsLink(titleOverview)
     val linkContentsDataUse = contentsLink(titleDataUse)
     val linkContentsManageYourChoice = contentsLink(titleManageYourChoice)
+    val linkContentsMakeYourChoice = contentsLink(titleMakeYourChoice)
     val linkDataSharingMoreInfo = createBrowserElement(
             "//a[contains(text(), 'Visit the NHS.UK website')]")
 
     // Asserts
-    private fun titleElement(title: String): HybridPageElement {
-        return createBrowserElement("//h1[contains(text(),\"$title\")]")
+    private fun subTitleElement(title: String): HybridPageElement {
+        return createBrowserElement("//h2[contains(text(),\"$title\")]")
     }
 
     fun onOverviewPage() {
-        titleElement(titleOverview).assertSingleElementPresent()
+        subTitleElement(titleOverview).assertSingleElementPresent()
     }
 
     fun onDataUsePage() {
-        titleElement(titleDataUse).assertSingleElementPresent()
+        subTitleElement(titleDataUse).assertSingleElementPresent()
     }
 
     fun onManageYourChoicePage() {
-        titleElement(titleManageYourChoice).assertSingleElementPresent()
+        subTitleElement(titleManageYourChoice).assertSingleElementPresent()
+    }
+
+    fun onMakeYourChoicePage(){
+        subTitleElement(titleMakeYourChoice).assertSingleElementPresent()
     }
 
     private fun createBrowserElement(locator: String): HybridPageElement {

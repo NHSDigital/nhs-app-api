@@ -20,6 +20,7 @@ Feature: Data Sharing
   |StartingPage|Clicks|TargetPage                                     |
   |Overview    |1     |Where confidential patient information is used |
   |Overview    |2     |Where your choice does not apply               |
+  |Overview    |3     |Make your choice                               |
 
   Scenario Outline: A use navigates through the Data Sharing Preferences pages via the Contents links
     Given I am on the Data Sharing <StartingPage> page
@@ -30,6 +31,7 @@ Feature: Data Sharing
   |Overview    |Overview                                       |Overview                                       |
   |Overview    |Where confidential patient information is used |Where confidential patient information is used |
   |Overview    |Where your choice does not apply               |Where your choice does not apply               |
+  |Overview    |Make your choice                               |Make your choice                               |
 
   @android
   Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
@@ -40,7 +42,7 @@ Feature: Data Sharing
   @smoketest
   Scenario: A user chooses to manage their Data Sharing preferences
     Given I am on the Data Sharing Overview page
-    And I click the Next button 2 times
-    And I am on the Data Sharing Where your choice does not apply page
+    And I click the Next button 3 times
+    And I am on the Data Sharing Make your choice page
     When I click the Start Now button
     Then I am on the Ndop website
