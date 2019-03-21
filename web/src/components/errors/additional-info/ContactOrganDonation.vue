@@ -10,7 +10,7 @@
       {{ $t('organ_donation.errors.contact.email') }}
     </message-text>
     <message-text>
-      customer.service@nhsbt.nhs.uk
+      customer.services@nhsbt.nhs.uk
     </message-text>
     <message-text>
       {{ $t('organ_donation.errors.contact.otherWays') }}

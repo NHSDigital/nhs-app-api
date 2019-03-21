@@ -6,6 +6,7 @@ import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.getOrFail
 import mocking.organDonation.models.OrganDonationDemographics
 import pages.assertIsVisible
+import pages.organDonation.OrganDonationAdditionalDetailsModule
 import pages.organDonation.OrganDonationCheckDetailsPage
 import utils.SerenityHelpers
 
@@ -29,6 +30,7 @@ open class OrganDonationCheckDetailsStepDefinitions {
         val patient = SerenityHelpers.getPatient()
         organDonationCheckDetailsPage.assertDisplayed()
         organDonationCheckDetailsPage.assertPersonalDetailsSection(patient)
+        organDonationCheckDetailsPage.assertContactDetailsSection(patient)
     }
 
     @Then("^the choice of not wishing to donate organs is displayed on the Organ Donation Check Details page")
@@ -58,7 +60,10 @@ open class OrganDonationCheckDetailsStepDefinitions {
 
     @Then("^my ethnicity and religion are recorded as not chosen on the Organ Donation Check Details page")
     fun myEthnicityAndReligionIsRecordedAsNotChosenOnTheOrganDonationCheckDetailsPage() {
-        organDonationCheckDetailsPage.additionalDetailsModule.assertEthnicityAndReligion("", "")
+        organDonationCheckDetailsPage.additionalDetailsModule.assertEthnicityAndReligion(
+                OrganDonationAdditionalDetailsModule.didNotAnswer,
+                OrganDonationAdditionalDetailsModule.didNotAnswer)
+
     }
 
     @Then("^my choice of whether to share my faith and beliefs is displayed on the Organ Donation Check Details page")
@@ -93,9 +98,8 @@ open class OrganDonationCheckDetailsStepDefinitions {
     fun aValidationMessageIsShownIfBothOrEitherOfTheRequiredConditionsForOrganDonationAreNotChecked() {
 
         val problem = "There's a problem"
-        val accuracyValidationMessage = "You must confirm that the information provided is true, complete and accurate."
-        val privacyStatementValidationMessage = "You must confirm that you have read the privacy statement " +
-                "and consent to your information being used accordingly."
+        val accuracyValidationMessage = "Check your information. Confirm if it is accurate."
+        val privacyStatementValidationMessage = "Read the privacy statement. Confirm if you give your consent."
 
         organDonationCheckDetailsPage.accuracyCheckBox.assertIsVisible()
 

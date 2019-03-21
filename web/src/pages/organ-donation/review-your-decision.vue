@@ -10,12 +10,14 @@
     </message-dialog>
 
     <h2>{{ $t('organDonation.reviewYourDecision.header') }}</h2>
+    <personal-details
+      :name="$store.state.organDonation.registration.nameFull"
+      :date-of-birth="$store.state.organDonation.registration.dateOfBirth"
+      :gender="$store.state.organDonation.registration.gender"
+      :nhs-number="$store.state.organDonation.registration.nhsNumber"
+      :address="$store.state.organDonation.registration.addressFull"/>
     <hr :class="$style.rule" aria-hidden="true">
-    <about-you :name="$store.state.organDonation.registration.nameFull"
-               :date-of-birth="$store.state.organDonation.registration.dateOfBirth"
-               :gender="$store.state.organDonation.registration.gender"
-               :nhs-number="$store.state.organDonation.registration.nhsNumber"
-               :address="$store.state.organDonation.registration.addressFull"/>
+    <contact-details :address="$store.state.organDonation.registration.addressFull"/>
     <hr :class="$style.rule" aria-hidden="true">
     <div v-if="showAdditionalDetails">
       <additional-information
@@ -57,7 +59,8 @@
 <script>
 import isEmpty from 'lodash/fp/isEmpty';
 import get from 'lodash/fp/get';
-import AboutYou from '@/components/organ-donation/AboutYou';
+import PersonalDetails from '@/components/organ-donation/PersonalDetails';
+import ContactDetails from '@/components/organ-donation/ContactDetails';
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
 import BackButton from '@/components/BackButton';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
@@ -73,16 +76,17 @@ import { EnsureCanSubmit } from '@/components/organ-donation/EnsureDecisionMixin
 
 export default {
   components: {
-    AboutYou,
     AdditionalInformation,
     BackButton,
     Confirmation,
+    ContactDetails,
     DecisionDetails,
     FaithDetails,
     GenericButton,
     MessageDialog,
     MessageList,
     MessageText,
+    PersonalDetails,
     YourDecision,
   },
   mixins: [EnsureCanSubmit],

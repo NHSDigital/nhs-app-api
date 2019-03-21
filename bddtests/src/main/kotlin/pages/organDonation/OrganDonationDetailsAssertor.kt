@@ -5,8 +5,7 @@ import org.junit.Assert
 import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.assertIsVisible
-import pages.assertSingleElementPresent
+import pages.assertElementNotPresent
 
 class OrganDonationDetailsAssertor private constructor(
             title: String,
@@ -20,8 +19,8 @@ class OrganDonationDetailsAssertor private constructor(
             page = page,
             helpfulName = "container for '$title' section")
 
-    init {
-        container.assertSingleElementPresent().assertIsVisible()
+    fun assertElementNotPresent(){
+        container.assertElementNotPresent()
     }
 
     fun assertPair(expectedValues: Array<KeyValuePair<String, String>>): OrganDonationDetailsAssertor {

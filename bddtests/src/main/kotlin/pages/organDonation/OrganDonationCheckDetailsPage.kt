@@ -1,20 +1,16 @@
 package pages.organDonation
 
+import mocking.organDonation.models.KeyValuePair
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
-import pages.HybridPageElement
 import pages.sharedElements.CheckBoxElement
-import mocking.organDonation.models.KeyValuePair
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
 
-    override val titleText: String = "Check your details before submitting"
+    override val titleText: String = "About you"
 
-    val privacyStatementLink = HybridPageElement(
-            "//a[normalize-space() = 'privacy statement']",
-            page = this,
-            helpfulName = "privacy statement link")
+    val privacyStatementLink = getLink("privacy statement")
 
     val accuracyCheckBox = CheckBoxElement(this,
             "I confirm that the information given in this form is true, complete and accurate")
@@ -24,16 +20,23 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
                     "accordance with the terms")
 
     fun assertPersonalDetailsSection(patient: Patient) {
-        val bodyText = arrayOf("The details above are retrieved from your GP services record, " +
-                "please contact your GP to amend them.")
-        OrganDonationDetailsAssertor.withH3Header("About you", this)
+        val bodyText = "Contact your GP surgery to amend your personal details."
+        OrganDonationDetailsAssertor.withH3Header("Personal details", this)
                 .assertPair(arrayOf(
                         KeyValuePair("Name", patient.formattedFullName()),
                         KeyValuePair("Date of birth", patient.formattedDateOfBirth()),
                         KeyValuePair("Gender", patient.sex.toString()),
-                        KeyValuePair("NHS number", patient.formattedNHSNumber()),
-                        KeyValuePair("Address", patient.address.full())))
+                        KeyValuePair("NHS number", patient.formattedNHSNumber())))
                 .assert(bodyText)
+    }
+
+    fun assertContactDetailsSection(patient: Patient) {
+        val bodyText1 = "We will only contact you about your organ donation registration."
+        val bodyText2 = "Contact your GP surgery to amend your postal address."
+        OrganDonationDetailsAssertor.withH3Header("Contact details", this)
+                .assert(arrayOf(bodyText1, bodyText2))
+                .assertPair(arrayOf(
+                        KeyValuePair("Postal address", patient.address.full())))
     }
 
     val yourDecisionModule by lazy { OrganDonationYourDecisionModule(this) }

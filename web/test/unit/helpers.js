@@ -54,7 +54,7 @@ export const createScrollTo = () => {
 
 export const initFilters = () => [
   'longDate',
-].map(filter => Vue.filter(filter, () => {}));
+].map(filter => Vue.filter(filter, value => value));
 
 export const mount = (component, {
   $env = {},

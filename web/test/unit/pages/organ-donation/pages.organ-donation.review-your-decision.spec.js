@@ -1,6 +1,8 @@
 import AdditionalInformation from '@/components/organ-donation/AdditionalInformation';
 import BackButton from '@/components/BackButton';
+import ContactDetails from '@/components/organ-donation/ContactDetails';
 import DecisionDetails from '@/components/organ-donation/DecisionDetails';
+import PersonalDetails from '@/components/organ-donation/PersonalDetails';
 import ReviewYourDecision from '@/pages/organ-donation/review-your-decision';
 import YourDecision from '@/components/organ-donation/YourDecision';
 import {
@@ -59,6 +61,14 @@ describe('review your decision', () => {
   beforeEach(() => {
     initFilters();
     wrapper = mountPage({ state: createState() });
+  });
+
+  it('will show personal details', () => {
+    expect(wrapper.find(PersonalDetails).exists()).toBe(true);
+  });
+
+  it('will show contact details', () => {
+    expect(wrapper.find(ContactDetails).exists()).toBe(true);
   });
 
   it('will show additional information', () => {

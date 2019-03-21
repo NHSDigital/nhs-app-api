@@ -861,22 +861,29 @@ export default {
       },
     },
     reviewYourDecision: {
-      header: 'Check your details before submitting',
+      header: 'About you',
       errorMsgHeader: 'There\'s a problem',
       submitButton: 'Submit my decision',
-      aboutYou: {
-        subheader: 'About you',
+      personalDetails: {
+        subheader: 'Personal details',
         nameheader: 'Name',
         dateofbirthheader: 'Date of birth',
         genderheader: 'Gender',
         nhsnumberheader: 'NHS number',
-        addressheader: 'Address',
-        description: 'The details above are retrieved from your GP services record, please contact your GP to amend them.',
+        description: 'Contact your GP surgery to amend your personal details.',
+      },
+      contactDetails: {
+        subheader: 'Contact details',
+        text: 'We will only contact you about your organ donation registration.',
+        addressheader: 'Postal address',
+        changeDetailsText: 'Contact your GP surgery to amend your postal address.',
       },
       additionalInformation: {
         subheader: 'Additional information',
         ethnicityheader: 'Ethnicity',
         religionheader: 'Religion',
+        noDecision: 'You did not answer',
+        text: 'This optional information is only used by the NHS to understand the make up of the NHS Organ Donor Register and is not stored against your registration.',
       },
       faith: {
         subheader: 'Faith / beliefs details',
@@ -917,8 +924,8 @@ export default {
         privacyText2: ' and give consent for the use of my information in accordance with the terms',
         privacyLinkText: 'privacy statement',
         errors: {
-          accuracy: 'You must confirm that the information provided is true, complete and accurate.',
-          privacy: 'You must confirm that you have read the privacy statement and consent to your information being used accordingly.',
+          accuracy: 'Check your information. Confirm if it is accurate.',
+          privacy: 'Read the privacy statement. Confirm if you give your consent.',
         },
       },
       withdraw: {
@@ -966,6 +973,7 @@ export default {
       errorMsgHeader: 'There\'s a problem',
       allSelectedValidationText: 'Make a decision for all categories to continue',
       yesRequiredValidationText: 'At least one category must be set to yes to continue',
+      inlineErrorMessage: 'Make a decision',
       moreAboutOrgansLinkText: 'Find out more about organs and tissue',
       choices: {
         subheader: 'Please select which organs and tissue you would like to donate:',
