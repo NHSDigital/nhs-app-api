@@ -1,0 +1,4 @@
+#include "Defaults.xcconfig"
+
+HOME_URL = www-scratch14.dev.nonlive.nhsapp.service.nhs.uk/
+BASE_API_URL = api-scratch14.dev.nonlive.nhsapp.service.nhs.uk/v1/
