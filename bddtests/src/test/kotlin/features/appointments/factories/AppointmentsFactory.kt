@@ -2,7 +2,6 @@ package features.appointments.factories
 
 import constants.DateTimeFormats
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
-import utils.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -11,6 +10,7 @@ import mockingFacade.appointments.AppointmentSlotFacade
 import models.Patient
 import models.Slot
 import net.serenitybdd.core.Serenity
+import utils.SerenityHelpers
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,6 +22,7 @@ abstract class AppointmentsFactory(gpSupplier: String) {
     val patient: Patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)
     protected val supplier: String = gpSupplier
     protected val appointmentMapper: MockingClientAppointmentMappingFactory
+    protected val appointmentSlotsFactoryHelper = AppointmentSlotsFactoryHelper()
 
     init {
         SerenityHelpers.setPatient(patient)
@@ -46,14 +47,14 @@ abstract class AppointmentsFactory(gpSupplier: String) {
         val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
-        val location = session.location
+
         return Slot(
                 date = date,
                 time = time,
                 sessionName = session.sessionType!!,
-                slotType = slot.slotTypeName!!,
-                location = location!!,
-                clinicians = setOf(session.staffDetails.first().staffName!!),
+                slotType = appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
+                location = appointmentSlotsFactoryHelper.getLocationNameFromId(session),
+                clinicians = setOf(appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session).first()),
                 id = slot.slotId
         )
     }

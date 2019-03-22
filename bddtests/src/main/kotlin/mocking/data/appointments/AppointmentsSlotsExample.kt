@@ -2,9 +2,11 @@ package mocking.data.appointments
 
 import mocking.emis.models.SlotTypeStatus
 import mocking.stubs.appointments.AppointmentSessionFacadeBuilder
-import mocking.stubs.appointments.IdValue
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
+import mockingFacade.appointments.metadata.LocationFacade
+import mockingFacade.appointments.metadata.SlotTypeFacade
+import mockingFacade.appointments.metadata.StaffDetailsFacade
 import models.AppointmentDate
 import java.time.DayOfWeek.MONDAY
 import java.time.LocalDateTime
@@ -31,7 +33,8 @@ private const val CLINIC_SESSION_TYPE = "Clinic"
 private const val TELEPHONE_SESSION_TYPE = "Telephone"
 
 private const val STARTING_LOCATION_ID = 1
-private const val STARTING_CLINICIAN_ID = 101
+private const val STARTING_CLINICIAN_ID = 1
+private const val STARTING_SLOT_TYPE_ID = 1
 
 class AppointmentsSlotsExample {
 
@@ -44,6 +47,7 @@ class AppointmentsSlotsExample {
 
     private var nextLocationId = STARTING_LOCATION_ID
     private var nextStaffId = STARTING_CLINICIAN_ID
+    private var nextSlotTypeId = STARTING_SLOT_TYPE_ID
 
     private val startDateAppointment1 = AppointmentDate(
             tomorrowDate,
@@ -68,10 +72,16 @@ class AppointmentsSlotsExample {
     private val historicalDate = AppointmentDate(LocalDateTime.now().minusMonths(MONTHS_IN_HALF_YEAR),
             DEFAULT_START_VALUE, DEFAULT_MINUTE_VALUE, sessionName = CLINIC_SESSION_TYPE)
 
-    private val locationLeeds = IdValue(nextLocationId++, "Leeds")
-    private val locationSheffield = IdValue(nextLocationId++, "Sheffield")
-    private val staffDrWho = IdValue(nextStaffId++, "Dr. Who")
-    private val staffDrScott = IdValue(nextStaffId++, "Dr. Scott")
+    private val locationLeeds = LocationFacade(nextLocationId++, "Leeds")
+    private val locationSheffield = LocationFacade(nextLocationId++, "Sheffield")
+    private val staffDrWho = StaffDetailsFacade(nextStaffId++, "Dr. Who")
+    private val staffDrScott = StaffDetailsFacade(nextStaffId++, "Dr. Scott")
+    private val slotTypeDefault = SlotTypeFacade(nextSlotTypeId++, DEFAULT_SLOT_TYPE)
+
+    private val defaultSessionDetails = AppointmentSessionFacadeBuilder()
+            .sessionType(CLINIC_SESSION_TYPE)
+            .locationId(locationLeeds.locationId)
+            .staffDetails(staffDrWho.staffDetailsid)
 
     private val generateAppointmentData = GenerateAppointmentData()
 
@@ -90,50 +100,65 @@ class AppointmentsSlotsExample {
             : AppointmentsSlotsExampleBuilder {
 
         val appointmentSessions: ArrayList<AppointmentSessionFacade>
+        var appointmentsSlotsExampleBuilder = AppointmentsSlotsExampleBuilderWithExpectations()
 
         if (appointmentSessionFacade == null) {
             val appointmentSession1 = generateAppointmentData.generateAppointmentSession(
-                    sessionDetails = AppointmentSessionFacadeBuilder()
-                            .sessionType(CLINIC_SESSION_TYPE)
-                            .location(locationLeeds)
-                            .staffDetails(staffDrWho),
-                    slotTypes = arrayListOf(DEFAULT_SLOT_TYPE),
-                    dates = arrayListOf(startDateAppointment1))
+                    sessionDetails = defaultSessionDetails,
+                    slotTypes = arrayListOf(slotTypeDefault),
+                    dates = arrayListOf(startDateAppointment1),
+                    staff = staffDrWho
+            )
             val appointmentSession2 = generateAppointmentData.generateAppointmentSession(
                     sessionDetails = AppointmentSessionFacadeBuilder()
                             .sessionType(CLINIC_SESSION_TYPE)
-                            .location(locationSheffield)
-                            .staffDetails(staffDrScott),
-                    slotTypes = arrayListOf(DEFAULT_SLOT_TYPE),
-                    dates = arrayListOf(startDateAppointment2)
+                            .locationId(locationSheffield.locationId)
+                            .staffDetails(staffDrScott.staffDetailsid),
+                    slotTypes = arrayListOf(slotTypeDefault),
+                    dates = arrayListOf(startDateAppointment2),
+                    staff = staffDrScott
             )
 
             appointmentSessions = arrayListOf(appointmentSession1, appointmentSession2)
+
+            appointmentsSlotsExampleBuilder = appointmentsSlotsExampleBuilder
+                    .locationsList(listOf(locationLeeds, locationSheffield))
+                    .appointmentTypesList(listOf(slotTypeDefault))
+                    .cliniciansList(listOf(staffDrWho, staffDrScott))
+                    .appointmentSessions(appointmentSessions) as AppointmentsSlotsExampleBuilderWithExpectations
         } else {
             appointmentSessions = appointmentSessionFacade
+
+            val locationsList = listOf(locationLeeds)
+            val slotTypeList = listOf(slotTypeDefault)
+            val clinicianList = listOf(staffDrWho)
+
+            appointmentsSlotsExampleBuilder = appointmentsSlotsExampleBuilder
+                    .locationsList(locationsList)
+                    .appointmentTypesList(slotTypeList)
+                    .cliniciansList(clinicianList)
+                    .appointmentSessions(appointmentSessions) as AppointmentsSlotsExampleBuilderWithExpectations
         }
 
         val filter = generateAppointmentData.generateFilter(
                 DEFAULT_SLOT_TYPE,
-                locationLeeds.value,
-                staffDrWho.value,
-                appointmentSessions
+                locationLeeds.locationName,
+                staffDrWho.staffName,
+                appointmentsSlotsExampleBuilder.build()
         )
 
-        return AppointmentsSlotsExampleBuilderWithExpectations()
-                .appointmentSessions(appointmentSessions)
+        return appointmentsSlotsExampleBuilder
                 .filterValues(filter)
     }
 
 
     fun getHistoricalAppointmentSession(): AppointmentSessionFacade {
         return generateAppointmentData.generateAppointmentSession(
-                sessionDetails = AppointmentSessionFacadeBuilder()
-                        .sessionType(CLINIC_SESSION_TYPE)
-                        .location(locationLeeds)
-                        .staffDetails(staffDrWho),
-                slotTypes = arrayListOf(DEFAULT_SLOT_TYPE),
-                dates = arrayListOf(historicalDate))
+                sessionDetails = defaultSessionDetails,
+                slotTypes = arrayListOf(slotTypeDefault),
+                dates = arrayListOf(historicalDate),
+                staff = staffDrWho
+        )
     }
 
     fun getExampleWithPastAppointment(): AppointmentSessionFacade {
@@ -145,12 +170,10 @@ class AppointmentsSlotsExample {
         ))
 
         return generateAppointmentData.generateAppointmentSession(
-                sessionDetails = AppointmentSessionFacadeBuilder()
-                        .sessionType(CLINIC_SESSION_TYPE)
-                        .location(locationLeeds)
-                        .staffDetails(staffDrWho),
-                slotTypes = arrayListOf(DEFAULT_SLOT_TYPE),
-                dates = pastAppointmentDate
+                sessionDetails = defaultSessionDetails,
+                slotTypes = arrayListOf(slotTypeDefault),
+                dates = pastAppointmentDate,
+                staff = staffDrWho
         )
     }
 
@@ -163,12 +186,10 @@ class AppointmentsSlotsExample {
         )
 
         return generateAppointmentData.generateAppointmentSession(
-                sessionDetails = AppointmentSessionFacadeBuilder()
-                        .sessionType(CLINIC_SESSION_TYPE)
-                        .location(locationLeeds)
-                        .staffDetails(staffDrWho),
-                slotTypes = arrayListOf(DEFAULT_SLOT_TYPE),
-                dates = cutOffTimeAppointment
+                sessionDetails = defaultSessionDetails,
+                slotTypes = arrayListOf(slotTypeDefault),
+                dates = cutOffTimeAppointment,
+                staff = staffDrWho
         )
     }
 
@@ -176,70 +197,104 @@ class AppointmentsSlotsExample {
         val appointment1 = generateAppointmentData.generateAppointmentSession(
                 sessionDetails = AppointmentSessionFacadeBuilder()
                         .sessionType(TELEPHONE_SESSION_TYPE)
-                        .location(locationLeeds)
-                        .staffDetails(staffDrWho),
-                slotTypes = arrayListOf(DEFAULT_SLOT_TYPE),
+                        .locationId(locationLeeds.locationId)
+                        .staffDetails(staffDrWho.staffDetailsid),
+                slotTypes = arrayListOf(slotTypeDefault),
                 dates = arrayListOf(telephoneStartDateAppointment),
+                staff = staffDrWho,
                 channel = SlotTypeStatus.Telephone
         )
 
         val appointment2 = generateAppointmentData.generateAppointmentSession(
                 sessionDetails = AppointmentSessionFacadeBuilder()
                         .sessionType(CLINIC_SESSION_TYPE)
-                        .location(locationLeeds)
-                        .staffDetails(staffDrScott),
-                slotTypes = arrayListOf(DEFAULT_SLOT_TYPE),
-                dates = arrayListOf(startDateAppointment2)
+                        .locationId(locationLeeds.locationId)
+                        .staffDetails(staffDrScott.staffDetailsid),
+                slotTypes = arrayListOf(slotTypeDefault),
+                dates = arrayListOf(startDateAppointment2),
+                staff = staffDrScott
         )
 
         val appointments = arrayListOf(appointment1, appointment2)
 
+        val appointmentsSlotsExampleBuilder = AppointmentsSlotsExampleBuilderWithExpectations()
+                .locationsList(listOf(locationLeeds))
+                .appointmentTypesList(listOf(slotTypeDefault))
+                .cliniciansList(listOf(staffDrWho, staffDrScott))
+                .appointmentSessions(appointments)
+
         val filter = generateAppointmentData.generateFilter(
                 type = DEFAULT_SLOT_TYPE,
-                globalSessions = appointments
+                appointmentsSlotsResponse = appointmentsSlotsExampleBuilder.build()
         )
 
-        return AppointmentsSlotsExampleBuilderWithExpectations()
-                .appointmentSessions(appointments)
+        return appointmentsSlotsExampleBuilder
                 .filterValues(filter)
                 .build()
     }
 
     fun singleSlotExample(dates: ArrayList<AppointmentDate> = arrayListOf(startDateAppointment1)):
             AppointmentSlotsResponseFacade {
+
+        val locations = generateAppointmentData.generateLocationDetails(arrayListOf(locationLeeds.locationName))
+        val types = generateAppointmentData.generateSlotTypes(arrayListOf(DEFAULT_SLOT_TYPE))
+        val clinicians = generateAppointmentData.generateStaffDetails(arrayListOf(staffDrWho.staffName))
+
         val appointmentSessions = generateAppointmentData.generateAppointments(
-                locationNames = arrayListOf(locationLeeds.value),
-                typesArray = arrayListOf(DEFAULT_SLOT_TYPE),
-                staffNames = arrayListOf(staffDrWho.value),
+                locationNames = locations,
+                typesNames = types,
+                staffNames = clinicians,
                 dates = dates
         )
 
+        val appointmentsSlotsExampleBuilder = AppointmentsSlotsExampleBuilderWithExpectations()
+                .locationsList(locations)
+                .appointmentTypesList(types)
+                .cliniciansList(clinicians)
+                .appointmentSessions(appointmentSessions)
+
         val filter = generateAppointmentData.generateFilter(
                 type = DEFAULT_SLOT_TYPE,
-                location = locationLeeds.value,
-                doctor = staffDrWho.value,
-                globalSessions = appointmentSessions
+                location = locationLeeds.locationName,
+                doctor = staffDrWho.staffName,
+                appointmentsSlotsResponse = appointmentsSlotsExampleBuilder.build()
         )
 
-        return AppointmentsSlotsExampleBuilderWithExpectations()
-                .appointmentSessions(appointmentSessions)
+        return appointmentsSlotsExampleBuilder
+                .locationsList(locations)
+                .appointmentTypesList(types)
+                .cliniciansList(clinicians)
                 .filterValues(filter)
                 .build()
     }
 
     fun multipleSlotsOneLocation(): AppointmentSlotsResponseFacade {
+        val locations = generateAppointmentData.generateLocationDetails(arrayListOf(locationLeeds.locationName))
+        val types = generateAppointmentData.generateSlotTypes(arrayListOf(DEFAULT_SLOT_TYPE))
+        val clinicians = generateAppointmentData.generateStaffDetails(
+                arrayListOf(staffDrWho.staffName, staffDrScott.staffName)
+        )
+
         val appointmentSessions = generateAppointmentData.generateAppointments(
-                locationNames = arrayListOf(locationLeeds.value),
-                typesArray = arrayListOf(DEFAULT_SLOT_TYPE),
-                staffNames = arrayListOf(staffDrWho.value, staffDrScott.value),
+                locationNames = locations,
+                typesNames = types,
+                staffNames = clinicians,
                 dates = arrayListOf(startDateAppointment1, startDateAppointment2)
         )
 
-        val filter = generateAppointmentData.generateFilter(DEFAULT_SLOT_TYPE, locationLeeds.value,
-                staffDrWho.value, appointmentSessions)
-
-        return AppointmentsSlotsExampleBuilderWithExpectations()
+        val appointmentsSlotsExampleBuilder = AppointmentsSlotsExampleBuilderWithExpectations()
+                .locationsList(locations)
+                .appointmentTypesList(types)
+                .cliniciansList(clinicians)
                 .appointmentSessions(appointmentSessions)
+
+        val filter = generateAppointmentData.generateFilter(DEFAULT_SLOT_TYPE, locationLeeds.locationName,
+                staffDrWho.staffName, appointmentsSlotsExampleBuilder.build())
+
+        return appointmentsSlotsExampleBuilder
+                .locationsList(locations)
+                .appointmentTypesList(types)
+                .cliniciansList(clinicians)
                 .filterValues(filter)
                 .build()
     }
@@ -247,16 +302,31 @@ class AppointmentsSlotsExample {
     fun multipleSlotsOneTime(): AppointmentSlotsResponseFacade {
         val dates: ArrayList<AppointmentDate> = arrayListOf(startDateAppointment1)
 
+        val locations = generateAppointmentData.generateLocationDetails(arrayListOf(locationLeeds.locationName))
+        val types = generateAppointmentData.generateSlotTypes(arrayListOf(DEFAULT_SLOT_TYPE))
+        val clinicians = generateAppointmentData.generateStaffDetails(
+                arrayListOf(staffDrScott.staffName, staffDrWho.staffName)
+        )
+
         val appointmentSessions = generateAppointmentData.generateAppointments(
-                locationNames = arrayListOf(locationLeeds.value),
-                typesArray = arrayListOf(DEFAULT_SLOT_TYPE),
-                staffNames = arrayListOf(staffDrScott.value, staffDrWho.value), dates = dates)
+                locationNames = locations,
+                typesNames = types,
+                staffNames = clinicians,
+                dates = dates)
+
+        val appointmentsSlotsExampleBuilder = AppointmentsSlotsExampleBuilderWithExpectations()
+                .locationsList(locations)
+                .appointmentTypesList(types)
+                .cliniciansList(clinicians)
+                .appointmentSessions(appointmentSessions)
 
         val filter = generateAppointmentData.generateFilter(type = DEFAULT_SLOT_TYPE,
-                globalSessions = appointmentSessions)
+                appointmentsSlotsResponse = appointmentsSlotsExampleBuilder.build())
 
-        return AppointmentsSlotsExampleBuilderWithExpectations()
-                .appointmentSessions(appointmentSessions)
+        return appointmentsSlotsExampleBuilder
+                .locationsList(locations)
+                .appointmentTypesList(types)
+                .cliniciansList(clinicians)
                 .filterValues(filter)
                 .build()
     }

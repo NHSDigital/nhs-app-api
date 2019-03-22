@@ -5,7 +5,7 @@ import mocking.emis.models.Session
 import mocking.emis.models.SessionHolder
 
 class GetAppointmentSlotsMetaResponseModel(
-        val locations: ArrayList<Location>,
-        val sessionHolders: ArrayList<SessionHolder>,
-        val sessions: ArrayList<Session>
+        val locations: List<Location>,
+        val sessionHolders: List<SessionHolder>,
+        val sessions: List<Session>
 )

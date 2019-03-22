@@ -35,8 +35,8 @@ class GeneralAppointmentsHelper {
                                             convertDateToVisionTime(slot.startTime!!),
                                             convertDateToVisionTime(slot.endTime!!)
                                     ),
-                                    session.staffDetails.first().staffDetailsid.toString(),
-                                    session.locationid,
+                                    session.staffDetails.first().toString(),
+                                    session.locationId,
                                     slot.slotTypeId,
                                     session.sessionId
                             )
@@ -56,17 +56,15 @@ class GeneralAppointmentsHelper {
 
         private fun extractLocationsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade):
                 List<mocking.vision.models.appointments.Location> {
-            return slotsResponseFacade.sessions.map { session ->
-                Location(session.locationid, session.location!!)
-            }.distinct()
+            return slotsResponseFacade.locations.map { location ->
+                Location(location.locationId, location.locationName)
+            }
         }
 
         private fun extractOwnersFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade): List<Owner> {
-            return slotsResponseFacade.sessions.flatMap { session ->
-                session.staffDetails.map { clinician ->
-                    Owner(clinician.staffDetailsid!!, clinician.staffName!!)
-                }
-            }.distinct()
+            return slotsResponseFacade.staffDetails.map { staffDetails ->
+                Owner(staffDetails.staffDetailsid, staffDetails.staffName)
+            }
         }
 
         private fun extractSessionsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade):
@@ -77,11 +75,9 @@ class GeneralAppointmentsHelper {
         }
 
         private fun extractSlotTypesFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade): List<SlotType> {
-            return slotsResponseFacade.sessions.flatMap { session ->
-                session.slots.map { slot ->
-                    SlotType(slot.slotTypeId!!, slot.slotTypeName!!)
-                }
-            }.distinct()
+            return slotsResponseFacade.slotTypes.map { slotType ->
+                SlotType(slotType.slotTypeId, slotType.slotTypeName)
+            }
         }
 
         fun extractVPCancelReasonsFromFacade(slotsResponseFacade: AppointmentSlotsResponseFacade)

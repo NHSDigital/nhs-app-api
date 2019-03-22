@@ -27,14 +27,12 @@ class MyAppointmentsFactoryVision : MyAppointmentsFactory("VISION") {
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
-                                slot.slotTypeName!!,
+                                appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
                                 session.sessionType!!,
                                 slot.startTime!!,
                                 slot.endTime!!,
-                                session.location!!,
-                                session.staffDetails.map { staff ->
-                                    staff.staffName!!
-                                },
+                                appointmentSlotsFactoryHelper.getLocationNameFromId(session),
+                                appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session),
                                 (slot.slotInThePast ?: false).toString()
                         )
                     }

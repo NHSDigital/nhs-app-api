@@ -34,14 +34,12 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
-                                slot.slotTypeName!!,
+                                appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
                                 session.sessionType!!,
                                 slot.startTime!!,
                                 slot.endTime!!,
-                                session.location!!,
-                                session.staffDetails.map { staff ->
-                                    staff.staffName!!
-                                }
+                                appointmentSlotsFactoryHelper.getLocationNameFromId(session),
+                                appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session)
                         )
                     }
                 },
@@ -49,14 +47,12 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
-                                slot.slotTypeName!!,
+                                appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
                                 session.sessionType!!,
                                 slot.startTime!!,
                                 slot.endTime!!,
-                                session.location!!,
-                                session.staffDetails.map { staff ->
-                                    staff.staffName!!
-                                },
+                                appointmentSlotsFactoryHelper.getLocationNameFromId(session),
+                                appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session),
                                 null
                         )
                     }
@@ -89,18 +85,14 @@ class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
         val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
-        val location = session.location
-        val cliniciansNames: ArrayList<String> = ArrayList()
-        session.staffDetails.forEach { staff ->
-            cliniciansNames.add(staff.staffName!!)
-        }
+
         return Slot(
                 date = date,
                 time = time,
                 sessionName = session.sessionType!!,
-                slotType = slot.slotTypeName!!,
-                location = location!!,
-                clinicians = HashSet(cliniciansNames),
+                slotType = appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
+                location = appointmentSlotsFactoryHelper.getLocationNameFromId(session),
+                clinicians = appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session).toSet(),
                 id = slot.slotId
         )
     }

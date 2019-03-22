@@ -3,21 +3,21 @@ package mocking.data.appointments
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
+import mockingFacade.appointments.metadata.LocationFacade
+import mockingFacade.appointments.metadata.SlotTypeFacade
+import mockingFacade.appointments.metadata.StaffDetailsFacade
 import java.util.*
 
 open class AppointmentsSlotsExampleBuilder {
 
     protected var appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
+    protected var appointmentTypesList: List<SlotTypeFacade> = listOf()
+    protected var locationsList: List<LocationFacade> = listOf()
+    protected var cliniciansList: List<StaffDetailsFacade> = listOf()
     protected var filter: AppointmentFilterFacade = AppointmentFilterFacade()
-    protected var appointmentTypesList: List<String> = listOf()
-    protected var locationsList: List<String> = listOf()
-    protected var cliniciansList: List<String> = listOf()
 
     fun appointmentSessions(value: ArrayList<AppointmentSessionFacade>): AppointmentsSlotsExampleBuilder {
         appointmentSessions = value
-        appointmentTypesList = appointmentTypesList(value)
-        locationsList = locationsList(value)
-        cliniciansList = cliniciansList(value)
         return this
     }
 
@@ -26,26 +26,19 @@ open class AppointmentsSlotsExampleBuilder {
         return this
     }
 
-    private fun appointmentTypesList(value: ArrayList<AppointmentSessionFacade>): List<String> {
-        return value.flatMap { session ->
-            session.slots.map { slot ->
-                slot.slotTypeName!!
-            }
-        }.distinct()
+    fun appointmentTypesList(value: List<SlotTypeFacade>): AppointmentsSlotsExampleBuilder {
+        appointmentTypesList = value
+        return this
     }
 
-    private fun locationsList(value: ArrayList<AppointmentSessionFacade>): List<String> {
-        return value.map { session ->
-            session.location!!
-        }.distinct()
+    fun locationsList(value: List<LocationFacade>): AppointmentsSlotsExampleBuilder {
+        locationsList = value
+        return this
     }
 
-    private fun cliniciansList(value: ArrayList<AppointmentSessionFacade>): List<String> {
-        return value.flatMap { session ->
-            session.staffDetails.map { staff ->
-                staff.staffName!!
-            }
-        }.distinct()
+    fun cliniciansList(value: List<StaffDetailsFacade>): AppointmentsSlotsExampleBuilder {
+        cliniciansList = value
+        return this
     }
 
     open fun build(): AppointmentSlotsResponseFacade {
@@ -53,6 +46,12 @@ open class AppointmentsSlotsExampleBuilder {
     }
 
     private fun getExample(): AppointmentSlotsResponseFacade {
-        return AppointmentSlotsResponseFacade(appointmentSessions, "1")
+        return AppointmentSlotsResponseFacade(
+                appointmentSessions,
+                "1",
+                locationsList,
+                cliniciansList,
+                appointmentTypesList
+        )
     }
 }

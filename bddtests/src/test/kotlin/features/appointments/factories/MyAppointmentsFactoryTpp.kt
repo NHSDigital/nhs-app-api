@@ -31,11 +31,11 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
-                                session.sessionDetails!!,
+                                slot.slotDetails,
                                 "",
                                 slot.startTime!!,
                                 slot.endTime!!,
-                                session.location!!
+                                appointmentSlotsFactoryHelper.getLocationNameFromId(session)
                         )
                     }
                 },
@@ -43,11 +43,11 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
-                                session.sessionDetails!!,
+                                slot.slotDetails,
                                 "",
                                 slot.startTime!!,
                                 slot.endTime!!,
-                                session.location!!,
+                                appointmentSlotsFactoryHelper.getLocationNameFromId(session),
                                 disableCancellation = null
                         )
                     }
@@ -79,13 +79,13 @@ class MyAppointmentsFactoryTpp : MyAppointmentsFactory("TPP") {
         val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
-        val sessionDetails = session.sessionDetails
-        val location = session.location
+        val slotDetails = slot.slotDetails
+
         return Slot(
                 date = date,
                 time = time,
-                slotType = sessionDetails!!,
-                location = location!!,
+                slotType = slotDetails,
+                location = appointmentSlotsFactoryHelper.getLocationNameFromId(session),
                 id = slot.slotId
         )
     }

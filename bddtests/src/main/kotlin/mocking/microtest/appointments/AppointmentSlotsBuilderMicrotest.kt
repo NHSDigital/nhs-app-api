@@ -49,12 +49,19 @@ class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
                                 val endTime = convertStringToMicrotestTimeString(slot.endTime!!)
                                 AppointmentSlot(
                                         slot.slotId!!.toString(),
-                                        slot.slotTypeName!!,
+                                        facade.slotTypes.find {
+                                            slotType -> slot.slotTypeId == slotType.slotTypeId
+                                        }!!.slotTypeName,
                                         startTime,
                                         setDuration(startTime, endTime),
                                         endTime,
-                                        session.location!!,
-                                        session.staffDetails.map { clinician -> clinician.staffName!! },
+                                        facade.locations.find { location -> session.locationId == location.locationId
+                                        }!!.locationName,
+                                        session.staffDetails.map { clinician ->
+                                            facade.staffDetails.find { staff -> clinician == staff
+                                                    .staffDetailsid
+                                            }!!.staffName
+                                        },
                                         slot.channel.toString()
                                 )
                             }

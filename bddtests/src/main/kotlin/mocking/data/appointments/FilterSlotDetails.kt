@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class FilterSlotDetails(private var dateAsLocalDateTime: LocalDateTime,
+class FilterSlotDetails(var dateAsLocalDateTime: LocalDateTime,
                         hoursOverride: Int? = null,
                         minutesOverride: Int? = null) {
 

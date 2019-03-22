@@ -5,7 +5,8 @@ import mocking.emis.models.Appointment
 import mocking.emis.models.Location
 import mocking.emis.models.Session
 import mocking.emis.models.SessionHolder
-import mockingFacade.appointments.MyAppointmentsFacade
+import mocking.emis.models.SessionType
+import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -15,18 +16,22 @@ class GetAppointmentHelper {
 
     companion object {
 
-        fun extractListOfAppointmentsFromFacade(facade: MyAppointmentsFacade): List<Appointment> {
-            return facade.myAppointments?.sessions?.flatMap { session ->
+        private const val DEFAULT_DURATION: Int = 10
+
+        fun extractListOfAppointmentsFromFacade(facade: AppointmentSlotsResponseFacade): List<Appointment> {
+            return facade.sessions.flatMap { session ->
                 session.slots.map { slot ->
                     Appointment(
                             slot.slotId!!,
                             session.sessionId!!,
                             convertDateToEmisTime(slot.startTime!!),
                             convertDateToEmisTime(slot.endTime!!),
-                            slotTypeName = slot.slotTypeName!!
+                            slotTypeName = facade.slotTypes.find { slotType ->
+                                slotType.slotTypeId == slot.slotTypeId
+                            }!!.slotTypeName
                     )
                 }
-            } ?: emptyList()
+            }
         }
 
         private fun convertDateToEmisTime(time: String): String {
@@ -37,31 +42,30 @@ class GetAppointmentHelper {
             return queryDateFormat.format(dateToPass)
         }
 
-        fun extractLocationsFromFacade(facade: MyAppointmentsFacade): List<Location> {
-            return facade.myAppointments?.sessions?.map { session ->
-                Location(session.locationid!!, session.location!!)
-            } ?: emptyList()
+        fun extractLocationsFromFacade(facade: AppointmentSlotsResponseFacade): List<Location> {
+            return facade.locations.map { location ->
+                Location(location.locationId, location.locationName)
+            }
         }
 
-        fun extractCliniciansFromFacade(facade: MyAppointmentsFacade): List<SessionHolder> {
-            val cliniciansAcrossAllSessions = facade.myAppointments?.sessions?.flatMap { session ->
-                session.staffDetails.map { clinician ->
-                    SessionHolder(clinician.staffDetailsid!!, clinician.staffName!!)
-                }
-            } ?: emptyList()
-            return cliniciansAcrossAllSessions.distinct()
+        fun extractCliniciansFromFacade(facade: AppointmentSlotsResponseFacade): List<SessionHolder> {
+            return facade.staffDetails.map { staffDetails ->
+                SessionHolder(staffDetails.staffDetailsid, staffDetails.staffName)
+            }
         }
 
-        fun extractSessionsFromFacade(facade: MyAppointmentsFacade): List<Session> {
-            return facade.myAppointments?.sessions?.map { session ->
+        fun extractSessionsFromFacade(facade: AppointmentSlotsResponseFacade): List<Session> {
+            return facade.sessions.map { session ->
                 Session(
                         session.sessionType!!,
                         session.sessionId!!,
-                        session.locationid,
-                        clinicianIds = session.staffDetails.map { staff -> staff.staffDetailsid!! }
+                        session.locationId,
+                        DEFAULT_DURATION,
+                        SessionType.Timed,
+                        session.slots.size,
+                        session.staffDetails
                 )
-            } ?: emptyList()
-
+            }
         }
     }
 }

@@ -81,8 +81,9 @@ class MyAppointmentsBuilderTpp(
                         slot.slotId!!.toString(),
                         convertDateToTppTime(slot.startTime!!),
                         convertDateToTppTime(slot.endTime!!),
-                        session.sessionDetails!!,
-                        session.location!!
+                        slot.slotDetails,
+                        facade.myAppointments.locations.find { location -> location.locationId == session.locationId
+                        }!!.locationName
                 )
             }
         }

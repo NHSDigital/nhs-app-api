@@ -11,6 +11,8 @@ import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import mockingFacade.appointments.MyAppointmentsFacade
+import mockingFacade.appointments.metadata.LocationFacade
+import mockingFacade.appointments.metadata.SlotTypeFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
@@ -73,6 +75,20 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
                 slots = arrayListOf(sessionOfSelectedSlot.slots.first())
         )
         val appointmentSlotsResponseFacade = AppointmentSlotsResponseFacade(arrayListOf(sessionWithOnlySelectedSlot))
+        appointmentSlotsResponseFacade.locations = arrayListOf(
+                LocationFacade(
+                        sessionWithOnlySelectedSlot.locationId!!,
+                        appointmentSlotsFactoryHelper.getLocationNameFromId(sessionWithOnlySelectedSlot)
+                )
+        )
+        appointmentSlotsResponseFacade.staffDetails = appointmentSlotsFactoryHelper
+                .extractStaffDetailsFacadesByIds(sessionWithOnlySelectedSlot.staffDetails)
+        appointmentSlotsResponseFacade.slotTypes = arrayListOf(
+                SlotTypeFacade(
+                        sessionWithOnlySelectedSlot.slots.first().slotTypeId,
+                        appointmentSlotsFactoryHelper.getSlotTypeNameFromId(sessionWithOnlySelectedSlot.slots.first())
+                )
+        )
         appointmentSlotsResponseFacade.cancellationReasons = getDefaultCancellationReasons().subList(
                 0,
                 numberOfCancellationReasons

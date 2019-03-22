@@ -82,7 +82,7 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                         slot.slotId!!,
                         convertStringToEmisTimeString(slot.startTime!!),
                         convertStringToEmisTimeString(slot.endTime!!),
-                        slot.slotTypeName,
+                        facade.slotTypes.find { slotType -> slot.slotTypeId == slotType.slotTypeId }!!.slotTypeName,
                         slot.channel
                 )
             }

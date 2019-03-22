@@ -47,14 +47,12 @@ class MyAppointmentsStepDefinitionsBackend {
 
     @Given("^I have historical and upcoming appointments for (\\w+)$")
     fun iHaveHistoricalAndUpcomingAppointments(gpService: String) {
+        val historicalAppointments = appointmentSlotsExample.getHistoricalAppointmentSession()
+        val upcomingAppointments = appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime()
+        val allAppointments = arrayListOf(historicalAppointments, upcomingAppointments)
         val viewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulMyAppointmentsResponse(
-                appointmentSlotsExample.getGenericExample(
-                        arrayListOf(
-                                appointmentSlotsExample.getHistoricalAppointmentSession(),
-                                appointmentSlotsExample.getExampleWithAppointmentWithinCutoffTime()
-                        )
-                )
+                appointmentSlotsExample.getGenericExample(allAppointments)
         )
     }
 

@@ -18,7 +18,6 @@ private const val APPOINTMENT_SLOT_RESPONSE_VALIDITY_TIME = 10L
 
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
-    protected val appointmentSlotsFactoryHelper = AppointmentSlotsFactoryHelper()
     private val appointmentSlotsExample = AppointmentsSlotsExample()
 
     fun generateDefaultAvailableAppointmentSlotExample(

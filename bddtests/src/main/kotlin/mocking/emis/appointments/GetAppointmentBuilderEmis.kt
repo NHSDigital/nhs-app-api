@@ -61,10 +61,10 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
         return respondWithBody(
                 GetAppointmentsResponseModel(
                         queryDateFormat.format(currentDateMinusOneYear),
-                        GetAppointmentHelper.extractListOfAppointmentsFromFacade(facade),
-                        GetAppointmentHelper.extractLocationsFromFacade(facade),
-                        GetAppointmentHelper.extractCliniciansFromFacade(facade),
-                        GetAppointmentHelper.extractSessionsFromFacade(facade)
+                        GetAppointmentHelper.extractListOfAppointmentsFromFacade(facade.myAppointments!!),
+                        GetAppointmentHelper.extractLocationsFromFacade(facade.myAppointments),
+                        GetAppointmentHelper.extractCliniciansFromFacade(facade.myAppointments),
+                        GetAppointmentHelper.extractSessionsFromFacade(facade.myAppointments)
                 )
         )
     }

@@ -3,6 +3,9 @@ package features.appointments.steps
 import features.appointments.factories.AppointmentsSlotsFactory
 import mocking.data.appointments.AppointmentsSlotsExampleBuilderWithExpectations
 import mockingFacade.appointments.AppointmentFilterFacade
+import mockingFacade.appointments.metadata.LocationFacade
+import mockingFacade.appointments.metadata.SlotTypeFacade
+import mockingFacade.appointments.metadata.StaffDetailsFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
@@ -21,14 +24,15 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {
-        val expected = Serenity.sessionVariableCalled<List<String>>(
+        val expected = Serenity.sessionVariableCalled<List<SlotTypeFacade>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_TYPE_KEY
         )
 
         availableAppointmentsPage.appointmentTypeFilter.assertContents(
-                expected.plus(appointmentTypeDefaultOption) as ArrayList<String>
+                expected.map { it -> it.slotTypeName }
+                        .plus(appointmentTypeDefaultOption) as ArrayList<String>
         )
 
         verifyThatNoAppointmentTypesIsSelected()
@@ -37,14 +41,15 @@ open class AvailableAppointmentFilterSteps {
     @Step
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
         val expectedLocations =
-                Serenity.sessionVariableCalled<List<String>>(
+                Serenity.sessionVariableCalled<List<LocationFacade>>(
                         AppointmentsSlotsExampleBuilderWithExpectations
                                 .AppointmentSlotSerenityKeys
                                 .EXPECTED_APPOINTMENT_LOCATIONS_KEY
                 )
 
         availableAppointmentsPage.locationFilter.assertContents(
-                expectedLocations.plus(locationDefaultOption) as ArrayList<String>
+                expectedLocations.map { location -> location.locationName }
+                        .plus(locationDefaultOption) as ArrayList<String>
         )
 
         assertEquals(
@@ -57,14 +62,15 @@ open class AvailableAppointmentFilterSteps {
     @Step
     fun verifyThatCliniciansFilterExistsAndIsCorrectlyPopulated() {
         val expectedClinicians =
-                sessionVariableCalled<List<String>>(
+                sessionVariableCalled<List<StaffDetailsFacade>>(
                         AppointmentsSlotsExampleBuilderWithExpectations
                                 .AppointmentSlotSerenityKeys
                                 .EXPECTED_APPOINTMENT_CLINICIANS_KEY
                 )
 
         availableAppointmentsPage.clinicianFilter.assertContents(
-                expectedClinicians.plus(clinicianDefaultOption) as ArrayList<String>
+                expectedClinicians.map { clinician -> clinician.staffName }
+                        .plus(clinicianDefaultOption) as ArrayList<String>
         )
 
         verifyThatNoSpecificClinicianIsSelected()
@@ -103,7 +109,7 @@ open class AvailableAppointmentFilterSteps {
 
     @Step
     fun verifyThatLocationIsSelected() {
-        val locations = Serenity.sessionVariableCalled<List<String>>(
+        val locations = Serenity.sessionVariableCalled<List<LocationFacade>>(
                 AppointmentsSlotsExampleBuilderWithExpectations
                         .AppointmentSlotSerenityKeys
                         .EXPECTED_APPOINTMENT_LOCATIONS_KEY
@@ -111,7 +117,7 @@ open class AvailableAppointmentFilterSteps {
         assertEquals("Test setup incorrect, expected only one location", 1, locations.count())
         assertEquals(
                 "Incorrect location option currently selected. ",
-                locations.first(),
+                locations.first().locationName,
                 availableAppointmentsPage.locationFilter.getSelectedValue()
         )
     }

@@ -114,27 +114,41 @@ class AppointmentSlotsBuilderTpp(
         val sessionsList: MutableCollection<Session> = mutableListOf()
         model.sessions.forEach { session ->
             sessionsList.addAll(
-                    session.slots.map { slot -> slotConverter(session, slot) })
+                    session.slots.map { slot -> slotConverter(model, session, slot) })
         }
 
         return ListSlotsReply(patientId = tppUserSession.patientId,
                 onlineUserId = tppUserSession.onlineUserId,
                 uuid = TppConfig.uuid,
-                bookableDays = model.bookableDays!!,
+                bookableDays = model.bookableDays,
                 Session = sessionsList)
     }
 
-    private fun slotConverter(session: AppointmentSessionFacade, slot: AppointmentSlotFacade): Session {
+    private fun slotConverter(
+            fullResponse: AppointmentSlotsResponseFacade,
+            session: AppointmentSessionFacade,
+            slot:
+            AppointmentSlotFacade
+    ): Session {
 
         return Session(
                 sessionId = getValueOrTestSetupIncorrectly(slot.slotId, "sessionId"),
                 type = getValueOrTestSetupIncorrectly(session.sessionType, "sessionType"),
-                staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails.first().staffName, "staffName"),
-                location = getValueOrTestSetupIncorrectly(session.location, "location"),
+                staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails.map { clinician ->
+                    fullResponse.staffDetails.find { staff ->
+                        clinician == staff.staffDetailsid
+                    }!!.staffName
+                }.first(), "staffName"),
+                location = getValueOrTestSetupIncorrectly(fullResponse.locations.find { location ->
+                    session.locationId == location.locationId
+                }!!.locationName, "location"),
                 Slot = mutableListOf(Slot(
                         startDate = convertStringToTppTimeString(slot.startTime!!),
                         endDate = convertStringToTppTimeString(slot.endTime!!),
-                        type = slot.slotTypeName!!)))
+                        type = fullResponse.slotTypes.find {
+                            slotType -> slot.slotTypeId == slotType.slotTypeId
+                        }!!.slotTypeName
+                )))
     }
 
     private fun convertStringToTppTimeString(time: String): String {

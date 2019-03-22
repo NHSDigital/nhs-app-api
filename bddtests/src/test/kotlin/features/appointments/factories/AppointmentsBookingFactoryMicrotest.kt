@@ -32,14 +32,14 @@ class AppointmentsBookingFactoryMicrotest : AppointmentsBookingFactory("MICROTES
         val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
-        val location = session.location
+
         return Slot(
                 date = date,
                 time = time,
                 sessionName = null,
-                slotType = slot.slotTypeName!!,
-                location = location!!,
-                clinicians = setOf(session.staffDetails.first().staffName!!),
+                slotType = appointmentSlotsFactoryHelper.getSlotTypeNameFromId(slot),
+                location = appointmentSlotsFactoryHelper.getLocationNameFromId(session),
+                clinicians = setOf(appointmentSlotsFactoryHelper.getClinicianNamesFromIds(session).first()),
                 id = slot.slotId
         )
     }

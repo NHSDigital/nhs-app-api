@@ -3,42 +3,37 @@ package mocking.stubs.appointments
 import mocking.emis.models.SlotTypeStatus
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
-import mockingFacade.appointments.StaffDetailsFacade
 import java.util.*
 
 class AppointmentSessionFacadeBuilder {
 
-    private val sessionDetails = "Clinic - Slot, Clinician: %s"
-
-    private var session = AppointmentSessionFacade()
+    private var sessionId: Int? = null
+    private var sessionType: String? = null
+    private var staffDetails: List<Int> = arrayListOf()
+    private var locationId: Int? = null
+    private var slots: List<AppointmentSlotFacade> = arrayListOf()
 
     fun sessionId(value: Int): AppointmentSessionFacadeBuilder {
-        session.sessionId = value
+        sessionId = value
         return this
     }
 
     fun sessionType(value: String): AppointmentSessionFacadeBuilder {
-        session.sessionType = value
+        sessionType = value
         return this
     }
 
-    fun staffDetails(staff: IdValue): AppointmentSessionFacadeBuilder {
+    fun staffDetails(staff: Int): AppointmentSessionFacadeBuilder {
         return staffDetails(arrayListOf(staff))
     }
 
-    fun staffDetails(staff: ArrayList<IdValue>): AppointmentSessionFacadeBuilder {
-        session.staffDetails = (staff.map { clinician -> StaffDetailsFacade(clinician.value, clinician.id) })
-        session.sessionDetails =
-                String.format(
-                        sessionDetails,
-                        staff.joinToString { clinician -> clinician.value }
-                )
+    fun staffDetails(staff: List<Int>): AppointmentSessionFacadeBuilder {
+        staffDetails = staff
         return this
     }
 
-    fun location(location: IdValue): AppointmentSessionFacadeBuilder {
-        session.location = location.value
-        session.locationid = location.id
+    fun locationId(location: Int): AppointmentSessionFacadeBuilder {
+        locationId = location
         return this
     }
 
@@ -47,12 +42,19 @@ class AppointmentSessionFacadeBuilder {
 
         val builder = AppointmentSlotFacadeArrayBuilder()
         val thing = value.invoke(builder)
-        session.slots = thing.build()
+        slots = thing.build()
         return this
     }
 
     fun build(): AppointmentSessionFacade {
-        return session
+        return AppointmentSessionFacade(
+                slots.firstOrNull()?.startTime,
+                sessionId,
+                sessionType,
+                staffDetails,
+                locationId,
+                slots
+        )
     }
 }
 
@@ -73,14 +75,16 @@ class AppointmentSlotFacadeArrayBuilder {
     }
 }
 
+
 class AppointmentSlotFacadeBuilder {
 
     private var slotId: Int = 1
-    private var startDate: String = ""
-    private var endDate: String = ""
-    private lateinit var slotTypeName: String
+    private lateinit var startDate: String
+    private lateinit var endDate: String
+    private var slotTypeId: Int = 1
     private var slotInThePast: Boolean = false
-    private var channel: SlotTypeStatus = SlotTypeStatus.Unknown
+    private lateinit var channel: SlotTypeStatus
+    private lateinit var slotDetails: String
 
     fun slotId(value: Int): AppointmentSlotFacadeBuilder {
         slotId = value
@@ -97,8 +101,8 @@ class AppointmentSlotFacadeBuilder {
         return this
     }
 
-    fun slotTypeName(value: String): AppointmentSlotFacadeBuilder {
-        slotTypeName = value
+    fun slotTypeId(value: Int): AppointmentSlotFacadeBuilder {
+        slotTypeId = value
         return this
     }
 
@@ -112,18 +116,23 @@ class AppointmentSlotFacadeBuilder {
         return this
     }
 
+    // Need to think if there's a way to dynamically set this
+    fun slotDetails(slotTypeName: String, sessionName: String, clinician: String):
+    AppointmentSlotFacadeBuilder {
+        slotDetails = "$sessionName - $slotTypeName, Clinician: $clinician"
+        return this
+    }
 
     fun build(): AppointmentSlotFacade {
         return AppointmentSlotFacade(
                 slotId = slotId,
                 startTime = startDate,
                 endTime = endDate,
-                slotTypeName = slotTypeName,
+                slotTypeId = slotTypeId,
                 slotInThePast = slotInThePast,
+                slotDetails = slotDetails,
                 channel = channel
 
         )
     }
 }
-
-data class IdValue(val id: Int, val value: String)

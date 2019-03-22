@@ -7,7 +7,7 @@ import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
-import mocking.emis.appointments.helpers.AppointmentSlotsMetaHelper
+import mocking.emis.appointments.helpers.GetAppointmentHelper
 import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
@@ -59,9 +59,9 @@ class AppointmentSlotsMetaBuilderEmis(
     }
 
     override fun respondWithSuccess(facade: AppointmentSlotsResponseFacade): Mapping {
-        val locations = AppointmentSlotsMetaHelper.getMetaSlotLocationsList(facade.sessions)
-        val sessionHolders = AppointmentSlotsMetaHelper.getMetaSlotSessionHoldersList(facade.sessions)
-        val slotSessions = AppointmentSlotsMetaHelper.getMetaSlotSessionsList(facade.sessions)
+        val locations = GetAppointmentHelper.extractLocationsFromFacade(facade)
+        val sessionHolders = GetAppointmentHelper.extractCliniciansFromFacade(facade)
+        val slotSessions = GetAppointmentHelper.extractSessionsFromFacade(facade)
 
         val appointmentSlotsMetaResponseModel = GetAppointmentSlotsMetaResponseModel(
                 locations,

@@ -5,13 +5,16 @@ import mocking.emis.models.SlotTypeStatus
 import mocking.stubs.appointments.AppointmentSessionFacadeBuilder
 import mocking.stubs.appointments.AppointmentSlotFacadeArrayBuilder
 import mocking.stubs.appointments.AppointmentSlotFacadeBuilder
-import mocking.stubs.appointments.IdValue
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
+import mockingFacade.appointments.AppointmentSlotFacade
+import mockingFacade.appointments.AppointmentSlotsResponseFacade
+import mockingFacade.appointments.metadata.LocationFacade
+import mockingFacade.appointments.metadata.SlotTypeFacade
+import mockingFacade.appointments.metadata.StaffDetailsFacade
 import models.AppointmentDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.collections.ArrayList
 
 private const val STARTING_SESSION_ID = 0
 private const val STARTING_SLOT_ID = 100
@@ -23,24 +26,23 @@ class GenerateAppointmentData {
     var sessionId = STARTING_SESSION_ID
     var slotId = STARTING_SLOT_ID
 
-    fun generateAppointments(locationNames: ArrayList<String>,
-                             typesArray: ArrayList<String>,
-                             staffNames: ArrayList<String>,
+    fun generateAppointments(locationNames: List<LocationFacade>,
+                             typesNames: List<SlotTypeFacade>,
+                             staffNames: List<StaffDetailsFacade>,
                              dates: ArrayList<AppointmentDate>): ArrayList<AppointmentSessionFacade> {
 
         val appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
-        val staffDetails = generateStaffDetails(staffNames)
-        val locationDetails = generateLocationDetails(locationNames)
 
-        for (staff in staffDetails) {
-            for (location in locationDetails) {
+        for (staff in staffNames) {
+            for (location in locationNames) {
                 appointmentSessions.add(
                         generateAppointmentSession(
                                 AppointmentSessionFacadeBuilder()
                                         .sessionType(sessionClinicType)
-                                        .location(location)
-                                        .staffDetails(staff),
-                                typesArray,
+                                        .locationId(location.locationId)
+                                        .staffDetails(staff.staffDetailsid),
+                                staff,
+                                typesNames,
                                 dates
                         )
                 )
@@ -51,41 +53,55 @@ class GenerateAppointmentData {
     }
 
     fun generateAppointmentSession(sessionDetails: AppointmentSessionFacadeBuilder,
-                                   slotTypes: ArrayList<String>,
+                                   staff: StaffDetailsFacade,
+                                   slotTypes: List<SlotTypeFacade>,
                                    dates: ArrayList<AppointmentDate>,
                                    channel: SlotTypeStatus = SlotTypeStatus.Unknown):
             AppointmentSessionFacade {
 
+        val appointmentSessionFacade = sessionDetails.build()
+        val sessionType = appointmentSessionFacade.sessionType
+
         return sessionDetails
                 .sessionId(sessionId++)
-                .slots { generateSlotsForAppointment(dates, slotTypes, channel) }
+                .slots { generateSlotsForAppointment(dates, slotTypes, channel, staff, sessionType!!) }
                 .build()
     }
 
-    private fun generateStaffDetails(staff: ArrayList<String>): ArrayList<IdValue> {
-        val staffDetails: ArrayList<IdValue> = arrayListOf()
+    fun generateStaffDetails(staff: ArrayList<String>): List<StaffDetailsFacade> {
+        val staffDetails: ArrayList<StaffDetailsFacade> = arrayListOf()
         for (staffName in staff) {
-            staffDetails.add(IdValue(staff.indexOf(staffName), staffName))
+            staffDetails.add(StaffDetailsFacade(staff.indexOf(staffName), staffName))
         }
         return staffDetails
     }
 
-    private fun generateLocationDetails(locations: ArrayList<String>): ArrayList<IdValue> {
-        val locationDetails: ArrayList<IdValue> = arrayListOf()
+    fun generateLocationDetails(locations: ArrayList<String>): List<LocationFacade> {
+        val locationDetails: ArrayList<LocationFacade> = arrayListOf()
 
         for (location in locations) {
-            locationDetails.add(IdValue(locations.indexOf(location), location))
+            locationDetails.add(LocationFacade(locations.indexOf(location), location))
         }
 
         return locationDetails
     }
 
+    fun generateSlotTypes(typesNames: ArrayList<String>): List<SlotTypeFacade> {
+        val slotTypes: ArrayList<SlotTypeFacade> = arrayListOf()
+
+        for (typeName in typesNames) {
+            slotTypes.add(SlotTypeFacade(typesNames.indexOf(typeName), typeName))
+        }
+
+        return slotTypes
+    }
 
     private fun generateSlotsForAppointment(
-            dates: ArrayList<AppointmentDate>,
-            types: ArrayList<String>,
-            channel:
-            SlotTypeStatus
+            dates: List<AppointmentDate>,
+            types: List<SlotTypeFacade>,
+            channel: SlotTypeStatus,
+            staff: StaffDetailsFacade,
+            sessionType: String
     ):
             AppointmentSlotFacadeArrayBuilder {
 
@@ -95,16 +111,17 @@ class GenerateAppointmentData {
             val isSlotInPast = date.date < LocalDateTime.now()
 
             val startDate = FilterSlotDetails(date.date, date.hour, date.minute)
-            val endDate = FilterSlotDetails(date.date, date.hour, date.minute?.plus(date.duration))
+            val endDate = FilterSlotDetails(startDate.dateAsLocalDateTime.plusMinutes(date.duration.toLong()))
 
             for (type in types) {
                 val appointment = AppointmentSlotFacadeBuilder()
                         .slotId(slotId++)
-                        .slotTypeName(type)
+                        .slotTypeId(type.slotTypeId)
                         .startDate(startDate.dateTimeAsBackendString)
                         .endDate(endDate.dateTimeAsBackendString)
                         .channel(channel)
                         .setSlotInThePast(isSlotInPast)
+                        .slotDetails(type.slotTypeName, sessionType, staff.staffName)
 
                 appointmentSlotFacadeArrayBuilder.addAppointment { appointment }
             }
@@ -117,25 +134,50 @@ class GenerateAppointmentData {
             type: String,
             location: String? = null,
             doctor: String? = null,
-            globalSessions: ArrayList<AppointmentSessionFacade>
+            appointmentsSlotsResponse: AppointmentSlotsResponseFacade
     ): AppointmentFilterFacade {
 
         val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
 
-        val listOfFilteredSlots = globalSessions.filter { session ->
-            (location == null || session.location == location) &&
-                    (doctor == null || session.staffDetails.any { staff ->
-                        staff.staffName == doctor
-                    })
-        }.flatMap { session ->
-            session.slots.filter { slot ->
-                slot.slotTypeName == type
-            }.map {slot ->
-                FilterSlotDetails(
-                        LocalDateTime.parse(slot.startTime, currentDateFormat)
-                ).sessionName(session.sessionType!!)
+        fun getAssociatedSessionLocationName(session: AppointmentSessionFacade): String {
+            return appointmentsSlotsResponse.locations.find { location ->
+                location.locationId == session.locationId
+            }!!.locationName
+        }
+
+        fun hasAssociatedClinician(session: AppointmentSessionFacade): Boolean {
+            return appointmentsSlotsResponse.staffDetails.any { staffDetails ->
+                session.staffDetails.any { staffId ->
+                    staffId == staffDetails.staffDetailsid
+                }
             }
         }
+
+        fun convertToSlotDetails(session: AppointmentSessionFacade, slot: AppointmentSlotFacade): FilterSlotDetails {
+            return FilterSlotDetails(
+                    LocalDateTime.parse(slot.startTime, currentDateFormat)
+            ).sessionName(session.sessionType!!)
+        }
+
+        fun getAssociatedAppointmentSlot(session: AppointmentSessionFacade): List<AppointmentSlotFacade> {
+            return session.slots.filter { slot ->
+                type == appointmentsSlotsResponse.slotTypes.find { slotType ->
+                    slotType.slotTypeId == slot.slotTypeId
+                }!!.slotTypeName
+            }
+        }
+
+        val listOfFilteredSlots = appointmentsSlotsResponse.sessions
+                .filter { session ->
+                    (location == null || location == getAssociatedSessionLocationName(session))
+                            && (doctor == null || hasAssociatedClinician(session))
+                }
+                .flatMap { session ->
+                    getAssociatedAppointmentSlot(session)
+                            .map { slot ->
+                                convertToSlotDetails(session, slot)
+                            }
+                }
 
         return AppointmentFilterFacade(
                 type,
