@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians =  Array.Empty<string>(),
                 Location = "Leeds",
                 EndTime = slotTime,
-                StartTime = slotTime,
+                StartTime = (DateTimeOffset) slotTime,
                 Type = "Emergency",
                 SessionName = "General Session Appointment"
             };
@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 Location = "",
                 EndTime =  slotTime,
-                StartTime = slotTime,
+                StartTime = (DateTimeOffset) slotTime,
                 Type = "Emergency", 
                 SessionName = "General Session Appointment"
             };

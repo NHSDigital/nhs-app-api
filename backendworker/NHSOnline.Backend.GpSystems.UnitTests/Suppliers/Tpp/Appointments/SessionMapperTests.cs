@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time2,
                 Location = "Leeds",
-                StartTime = time2,
+                StartTime = (DateTimeOffset) time2,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time1,
                 Location = "Leeds",
-                StartTime = time1,
+                StartTime = (DateTimeOffset) time1,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time2,
                 Location = "Leeds",
-                StartTime = time2,
+                StartTime = (DateTimeOffset) time2,
                 Type = "Unknown",
                 SessionName = "",
                 Channel = Channel.Unknown
@@ -166,7 +166,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time2,
                 Location = "Leeds",
-                StartTime = time2,
+                StartTime = (DateTimeOffset) time2,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown
@@ -178,7 +178,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time1,
                 Location = "Leeds",
-                StartTime = time1,
+                StartTime = (DateTimeOffset) time1,
                 Type = "Emergency",
                 SessionName = "",
                 Channel = Channel.Unknown
@@ -224,7 +224,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time1,
                 Location = "Leeds",
-                StartTime = time1,
+                StartTime = (DateTimeOffset) time1,
                 Type = "Emergency",
                 SessionName = "GP Session"
             };
@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time2,
                 Location = "Leeds",
-                StartTime = time2,
+                StartTime = (DateTimeOffset) time2,
                 Type = "Unknown",
                 SessionName = "GP Session"
             };
@@ -246,7 +246,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time2,
                 Location = "Leeds",
-                StartTime = time2,
+                StartTime = (DateTimeOffset) time2,
                 Type = "Emergency",
                 SessionName = ""
             };
@@ -300,7 +300,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = null,
                 Location = "Leeds",
-                StartTime = time1,
+                StartTime = (DateTimeOffset) time1,
                 Type = "Emergency",
                 SessionName = ""
             };
@@ -335,7 +335,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 Clinicians = new[] { "Dr House" },
                 EndTime = time1,
                 Location = "Leeds",
-                StartTime =time1,
+                StartTime =(DateTimeOffset) time1,
                 Type = "Emergency",
                 SessionName = ""
             };
