@@ -12,7 +12,7 @@
              @keypress="contentsKeyPressed($event, pageId)">{{ $t('ds01.titles.' + pageId) }}</a>
         </li>
       </ul>
-      <h2 :class="$style['title']" :key="`${pageId}header`">
+      <h2 :key="`${pageId}header`" :class="$style['title']">
         {{ $t('ds01.titles.' + pageId) }}
       </h2>
       <Overview v-if="pageId === 'p1'"/>

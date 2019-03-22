@@ -123,7 +123,8 @@ export default {
   },
   async submitRegistration({ commit, state }) {
     const request = buildRequest(state);
-    const response = await this.app.$http[`${state.isAmending ? 'put' : 'post'}V1PatientOrgandonation`](request);
+    const action = state.isAmending || state.isReaffirming ? 'put' : 'post';
+    const response = await this.app.$http[`${action}V1PatientOrgandonation`](request);
 
     commit(SET_STATE, response.state);
     commit(SET_REGISTRATION_ID, response.identifier);

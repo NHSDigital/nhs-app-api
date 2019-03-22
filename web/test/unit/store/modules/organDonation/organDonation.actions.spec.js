@@ -300,9 +300,47 @@ describe('organ donation actions', () => {
       });
     });
 
+    describe('is reaffirming', () => {
+      beforeEach(async () => {
+        state.isReaffirming = true;
+        await actions.submitRegistration({ commit, state });
+      });
+
+      it('will call the `putV1PatientOrgandonation` endpoint', () => {
+        expect($http.putV1PatientOrgandonation).toHaveBeenCalledWith({
+          organDonationRegistrationRequest: {
+            additionalDetails: state.additionalDetails,
+            registration: state.registration,
+          },
+        });
+      });
+
+      it('will commit the returned identifier using the SET_REGISTRATION_ID mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(
+          SET_REGISTRATION_ID,
+          expectedIdentifier,
+        );
+      });
+
+      it('will commit the returned state using the SET_STATE mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(SET_STATE, expectedState);
+      });
+
+      it('will commit the UPDATE_ORIGINAL_REGISTRATION mutation type', () => {
+        expect(commit).toHaveBeenCalledWith(UPDATE_ORIGINAL_REGISTRATION);
+      });
+
+      it('will push organ donation view decision to the router', () => {
+        expect(actions.$router.push).toHaveBeenCalledWith(
+          ORGAN_DONATION_VIEW_DECISION.path,
+        );
+      });
+    });
+
     describe('new registration', () => {
       beforeEach(async () => {
         state.isAmending = false;
+        state.isReaffirming = false;
         await actions.submitRegistration({ commit, state });
       });
 
