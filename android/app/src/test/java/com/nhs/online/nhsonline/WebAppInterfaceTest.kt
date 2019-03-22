@@ -7,7 +7,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.activities.MainActivity
-import com.nhs.online.nhsonline.network.Reachability
+import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
+import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import junit.framework.Assert
@@ -46,6 +47,8 @@ class WebAppInterfaceTest {
         }
         nhsWebMock = mock()
         webAppInterface = WebAppInterface(contextMock, contextMock, nhsWebMock)
+        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
+
     }
 
     @Test

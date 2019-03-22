@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog
 import android.widget.TextView
 import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
+import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.support.AppDialogs
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
@@ -29,6 +31,7 @@ class MainActivityTest {
     fun setUp() {
         mainActivity = Robolectric.buildActivity(MainActivity::class.java).create().get()
         spyActivity = spy(mainActivity)
+        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
     }
 
     @Test

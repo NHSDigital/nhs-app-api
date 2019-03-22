@@ -6,6 +6,8 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
+import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
+import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.ConfigurationResponse
 import com.nhs.online.nhsonline.services.ConfigurationService
 import com.nhs.online.nhsonline.services.KnownService
@@ -61,6 +63,7 @@ class LifeCycleObserverTest {
         ReflectionHelpers.setField(lifeCycleObserver,
             "configurationService",
             configurationServiceMock)
+        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
     }
 
     @Test

@@ -8,7 +8,7 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.network.Reachability
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
@@ -62,8 +62,8 @@ class NhsWeb(
             knownService = knownServices.findMatchingServiceInfo(path)
         }
         urlLoader.reloadUrl = urlLoader.produceValidUrl(path)
-        if (!Reachability.isConnectedToNetwork(activity)) {
-            handleConnectionError(path, knownService)
+        if (!isConnectedToNetwork) {
+            handleConnectionError(knownService)
             return
         }
         knownService?.header?.let { nativeHeader ->
@@ -156,7 +156,7 @@ class NhsWeb(
 
     fun announceForAccessibility(text: String) = webView.announceForAccessibility(text)
 
-    private fun handleConnectionError(path: String, knownService: KnownService.Info?) {
+    private fun handleConnectionError(knownService: KnownService.Info?) {
         showConnectionError(knownService?.errorMessage)
         Log.d(TAG, "Failing Url: ${urlLoader.reloadUrl}")
     }

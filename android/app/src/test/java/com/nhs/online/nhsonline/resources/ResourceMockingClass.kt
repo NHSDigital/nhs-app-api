@@ -99,11 +99,6 @@ open class ResourceMockingClass {
         Mockito.`when`(networkInfo.isAvailable).thenReturn(false)
         Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(false)
 
-        Mockito.`when`( connectivityManager.activeNetworkInfo ).thenReturn(networkInfo)
-        Mockito.`when`( networkInfo.isConnected).thenReturn( false)
-        Mockito.`when`(networkInfo.isAvailable).thenReturn(false)
-        Mockito.`when`(networkInfo.isConnectedOrConnecting).thenReturn(false)
-
         val mockResource: Resources = mock {
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
             on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"

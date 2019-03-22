@@ -11,6 +11,8 @@ import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
+import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
+import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.PersistData
 import junit.framework.Assert
@@ -36,9 +38,9 @@ class NhsWebTest {
         interactorMock = mock()
         webViewMock = mock()
         urlLoader = mock()
-        mockConnection(true)
         nhsWeb = NhsWeb(spyActivity, interactorMock, webViewMock)
         ReflectionHelpers.setField(nhsWeb, "urlLoader", urlLoader)
+        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
     }
 
     @Test
@@ -51,7 +53,7 @@ class NhsWebTest {
     @Test
     fun loadUrl_WithNoConnection_Calls_ShowUnavailabilityError() {
         val url = "http://unit-test.com"
-        mockConnection(false)
+        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
         nhsWeb.loadUrl(url)
         verify(interactorMock).showUnavailabilityError(any())
     }
@@ -177,16 +179,5 @@ class NhsWebTest {
         Assert.assertFalse(nhsWeb.isUserLoggedIn)
         verify(interactorMock).dismissSessionExtensionDialog()
         verify(interactorMock).showBiometricLoginIfEnabled()
-    }
-
-    private fun mockConnection(connected: Boolean = true) {
-        val networkInfoMock: NetworkInfo = mock {
-            on { isConnectedOrConnecting } doReturn connected
-        }
-        val connectivityManagerMock: ConnectivityManager = mock {
-            on { activeNetworkInfo } doReturn networkInfoMock
-        }
-        whenever(spyActivity.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(
-            connectivityManagerMock)
     }
 }

@@ -22,7 +22,8 @@ import com.nhs.online.nhsonline.biometrics.IBiometricsInteractor
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
-import com.nhs.online.nhsonline.network.Reachability
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.support.*
 import com.nhs.online.nhsonline.web.NhsWeb
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
@@ -36,12 +37,13 @@ import kotlinx.android.synthetic.main.success_layout.*
 import java.net.URL
 import java.util.logging.Logger
 
+
 private val TAG = MainActivity::class.java.simpleName
 
 class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private val logger = Logger.getLogger(TAG)
     private val biometricsInterface = BiometricsInterface(this)
-
+    private lateinit var connectionStateMonitor: ConnectionStateMonitor
     private lateinit var nhsWeb: NhsWeb
     private lateinit var appDialogs: AppDialogs
     private lateinit var appWebInterface: AppWebInterface
@@ -75,6 +77,8 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
+        connectionStateMonitor = ConnectionStateMonitor(this)
+        connectionStateMonitor.registerNetworkCallback()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -90,7 +94,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private fun onErrorRetryButton() {
         logger.info("${this::class.java.simpleName}: Entering OnErrorRetryButton")
 
-        if (!Reachability.isConnectedToNetwork(this)) {
+        if (!isConnectedToNetwork) {
             logger.info(
                 "${this::class.java.simpleName}: Leaving OnErrorRetryButton as presently no network access")
             return
@@ -126,6 +130,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun onDestroy() {
         super.onDestroy()
         biometricsInterface.cancelAllProgressingTasks()
+        connectionStateMonitor.deregisterNetworkCallback()
     }
 
     override fun onNewIntent(intent: Intent?) {

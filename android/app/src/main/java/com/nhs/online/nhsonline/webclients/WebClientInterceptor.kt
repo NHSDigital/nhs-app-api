@@ -9,7 +9,7 @@ import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import com.nhs.online.nhsonline.network.Reachability
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.web.NhsWeb
 import java.io.InputStream
@@ -60,7 +60,7 @@ class WebClientInterceptor(
         nhsWeb.setReloadUrl(url)
         cancelTrackingWebRequestResponse()
 
-        if (!isConnectedToInternet()) {
+        if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onPageStarted > no internet")
 
@@ -88,7 +88,7 @@ class WebClientInterceptor(
 
     override fun onLoadResource(view: WebView?, url: String?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLoadResource > url $url")
-        if (!isConnectedToInternet()) {
+        if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onLoadResource > isConnectedToInternet")
             if (!noConnectionHandled) {
@@ -206,11 +206,6 @@ class WebClientInterceptor(
             "${this::class.java.simpleName}: Entering shouldHandleUnavailability > url $urlString > ${matchingKnownService != null}")
 
         return matchingKnownService != null
-    }
-
-    fun isConnectedToInternet(): Boolean {
-        Log.d(Application.TAG, "${this::class.java.simpleName}: isConnectedToInternet")
-        return Reachability.isConnectedToNetwork(context)
     }
 
     private fun hasMissingQueryString(url: String?): Boolean {
