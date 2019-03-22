@@ -1,43 +1,49 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.NominatedPharmacy;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
-using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
+using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
+using System;
+using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using System.Linq;
+using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
-    [Route("patient/pharmacy/nominated"), PfsSecurityMode]
+    [Route("patient"), PfsSecurityMode]
     public class NominatedPharmacyController : Controller
     {
         private readonly ILogger<NominatedPharmacyController> _logger;
         private readonly INominatedPharmacyService _nominatedPharmacyService;
         private readonly IPharmacyService _pharmacyService;
         private readonly IPharmacyDetailsToPharmacyDetailsResponseMapper _pharmacyDetailsToPharmacyDetailsResponseMapper;
+        private readonly IPharmacySearchService _pharmacySearchService;
         private readonly IAuditor _auditor;
-        
+
         public NominatedPharmacyController(
             ILogger<NominatedPharmacyController> logger,
             INominatedPharmacyService nominatedPharmacyService,
             IPharmacyService pharmacyService,
             IPharmacyDetailsToPharmacyDetailsResponseMapper pharmacyDetailsToPharmacyDetailsResponseMapper,
-            IAuditor auditor)
+            IPharmacySearchService pharmacySearchService,
+            IAuditor auditor
+           )
         {
             _logger = logger;
             _nominatedPharmacyService = nominatedPharmacyService;
             _pharmacyService = pharmacyService;
             _pharmacyDetailsToPharmacyDetailsResponseMapper = pharmacyDetailsToPharmacyDetailsResponseMapper;
+            _pharmacySearchService = pharmacySearchService;
             _auditor = auditor;
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Route("pharmacy/nominated")]
         public async Task<IActionResult> Get()
         {
             _logger.LogEnter();
@@ -75,6 +81,43 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             }
 
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        [HttpGet]
+        [Route("pharmacies")]
+        public async Task<IActionResult> Search([FromQuery] string postcode)
+        {
+            try
+            {
+                _logger.LogEnter();
+                _logger.LogInformation($"Fetching Pharmacies for {postcode}");
+
+                var pharmacySearchResponse = await _pharmacySearchService.Search(postcode);
+
+                var pharmacies = Enumerable.Empty<PharmacyDetailsResponse>();
+
+                if (HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacySearchResponse.StatusCode))
+                {
+                    try
+                    {
+                        pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(
+                            pharmacySearchResponse.Pharmacies,
+                            pharmacySearchResponse.PostcodeCoordinate);
+                    }
+                    catch(Exception e)
+                    {
+                        _logger.LogError(e, $"Error during mapping list of { nameof(Organisation) } to list of {nameof(PharmacyDetailsResponse)}");
+                    }
+                }
+
+                await _auditor.Audit(Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, $"Returning { pharmacies.Count() } pharmacies");
+
+                return Ok(pharmacies);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
     }
 }

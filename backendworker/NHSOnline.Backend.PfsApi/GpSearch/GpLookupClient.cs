@@ -47,6 +47,13 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 PostcodeSearchPath);            
         }
 
+        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>>
+            GpPostcodeSearch(OrganisationPostcodeSearchData searchData)
+        {
+            return await Post<OrganisationPostcodeSearchData, NhsOrganisationSearchResponse>(searchData,
+                OrganisationSearchPath);
+        }
+
         public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> PharmacySearch(OrganisationSearchData searchData)
         {
             _logger.LogEnter();
@@ -54,10 +61,11 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 OrganisationSearchPath);
         }
 
-        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> GpPostcodeSearch(OrganisationPostcodeSearchData searchData)
+        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> PharmaciesSearch(OrganisationSearchData searchData)
         {
-            return await Post<OrganisationPostcodeSearchData, NhsOrganisationSearchResponse>(searchData,
-                OrganisationSearchPath);   
+            _logger.LogEnter();
+            return await Post<OrganisationSearchData, NhsOrganisationSearchResponse>(searchData,
+                OrganisationSearchPath);
         }
         
         private async Task<NhsSearchApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string path)
@@ -107,6 +115,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 ILogger logger)
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
+                                
                 return string.IsNullOrEmpty(stringResponse)
                     ? this : ParseResponse(responseParser, stringResponse, responseMessage);
             }

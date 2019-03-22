@@ -110,6 +110,7 @@
         "CORS_AUTHORITY": "http://web.local.bitraft.io:3000",
         "CookieDomain": ".bitraft.io",
         "ConfigurationSettings__CookieDomain": ".bitraft.io",
+        "PHARMACY_API_RESULT_LIMIT": "20",
         "POSTCODE_LOOKUP_SEARCH_RADIUS_KM": "",
         "GP_LOOKUP_API_RESULTS_LIMIT": "",
         "GP_LOOKUP_API_KEY": "",

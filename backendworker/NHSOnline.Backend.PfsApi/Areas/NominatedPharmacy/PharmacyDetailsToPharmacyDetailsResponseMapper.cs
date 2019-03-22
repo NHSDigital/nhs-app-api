@@ -3,7 +3,9 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using GeoCoordinatePortable;
 using static NHSOnline.Backend.Worker.GpSearch.ResponseEnums;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
@@ -34,6 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 County = pharmacy.County,
                 City = pharmacy.City,
                 Postcode = pharmacy.Postcode,
+                NACSCode = pharmacy.NACSCode,
                 TelephoneNumber = pharmacy.GetContactsArray().FirstOrDefault(x => x.OrganisationContactMethodType == OrganisationContactMethodType.Telephone)?.OrganisationContactValue,
                 OpeningTimes = pharmacy.GetOpeningTimesArray()
                     .Where(x => x.IsOpen && x.WeekDay.HasValue)
@@ -45,6 +48,41 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             };
 
             return pharmacyDetails;
+        }
+
+
+        public IEnumerable<PharmacyDetailsResponse> Map(IEnumerable<Organisation> pharmacies, GeoCoordinate postcodeCoordinate)
+        {
+            foreach (var pharmacy in pharmacies)
+            {
+                yield return Map(pharmacy, postcodeCoordinate);
+            }
+        }
+
+        private PharmacyDetailsResponse Map(Organisation pharmacy, GeoCoordinate postcodeCoordinate)
+        {
+            var result = Map(pharmacy);
+
+            if (postcodeCoordinate != null)
+            {
+                try
+                {
+                    result.Distance = GetDistanceInMiles(
+                        postcodeCoordinate.GetDistanceTo(new GeoCoordinate(
+                            pharmacy.Geocode.Coordinates[1],
+                            pharmacy.Geocode.Coordinates[0])));
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    _logger.LogError(ex, "Invalid GeoCoordinates");
+                }
+            }          
+            return result;
+        }
+
+        private static double GetDistanceInMiles(double distanceInMeters)
+        {
+            return Math.Round((distanceInMeters / 1609.344), 1);
         }
     }
 }

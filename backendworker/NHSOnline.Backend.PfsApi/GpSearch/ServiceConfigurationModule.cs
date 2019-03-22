@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
 {
@@ -14,7 +15,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             services.AddTransient<INhsSearchResultChecker, NhsSearchResultChecker>();
             services.AddTransient<INhsSearchMapper, NhsSearchMapper>();
             services.AddTransient<IPostcodeParser, PostcodeParser>();
-            services.AddTransient<GpSearchService>();           
+            services.AddTransient<GpSearchService>();
+            services.AddTransient<IPharmacySearchService, PharmacySearchService>();
             
             base.ConfigureServices(services, configuration);
         }

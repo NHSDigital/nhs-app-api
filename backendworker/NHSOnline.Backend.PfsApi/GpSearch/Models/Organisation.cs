@@ -33,14 +33,16 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 
         public IEnumerable<OpeningTime> GetOpeningTimesArray()
         {
-            var listOfOpeningTimes = JsonConvert.DeserializeObject<IEnumerable<OpeningTime>>(OpeningTimes);
+            var listOfOpeningTimes = !string.IsNullOrEmpty(OpeningTimes) ?
+                JsonConvert.DeserializeObject<IEnumerable<OpeningTime>>(OpeningTimes) : Enumerable.Empty<OpeningTime>();
 
             return listOfOpeningTimes ?? Enumerable.Empty<OpeningTime>();
         }
 
         public IEnumerable<ContactInformation> GetContactsArray()
         {
-            var listOfContacts = JsonConvert.DeserializeObject<IEnumerable<ContactInformation>>(Contacts);
+            var listOfContacts = !string.IsNullOrEmpty(Contacts)?
+                JsonConvert.DeserializeObject<IEnumerable<ContactInformation>>(Contacts) : Enumerable.Empty<ContactInformation>();
 
             return listOfContacts ?? Enumerable.Empty<ContactInformation>();
         }

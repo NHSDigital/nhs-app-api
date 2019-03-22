@@ -16,7 +16,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public NominatedPharmacyService(
             ILogger<NominatedPharmacyService> logger,
             INominatedPharmacyClient prescriptionTrackingClient,
-            INominatedPharmacyConfig config)
+            INominatedPharmacyConfig config
+            )
         {
             _logger = logger;
             _prescriptionTrackingClient = prescriptionTrackingClient;

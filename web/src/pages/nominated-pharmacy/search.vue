@@ -38,14 +38,12 @@
 
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import MedicationCourseStatus from '@/lib/medication-course-status';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
-import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-
 
 export default {
   components: {
@@ -64,16 +62,6 @@ export default {
       submissionError: false,
     };
   },
-  async searchNominatedPharmacy() {
-    return {
-      statusDisplayPriority: {
-        [MedicationCourseStatus.Rejected]: 1,
-        [MedicationCourseStatus.Requested]: 2,
-        [MedicationCourseStatus.Approved]: 3,
-      },
-    };
-  },
-
   computed: {
     hasLoaded() {
       return this.$store.state.searchNominatedPharmacy.hasLoaded;
@@ -82,25 +70,71 @@ export default {
       return this.submissionError;
     },
   },
-  created() {
-  },
   methods: {
     dynamicStyle(...args) {
       return getDynamicStyle(this, args);
     },
-    searchFormSubmitted() {
-      this.submissionError = !this.validateSearchQuery(this.searchQuery);
+    async searchClicked() {
+      if (this.isButtonDisabled) return;
+      this.isButtonDisabled = true;
+
+      const processedQuery = this.processQuery(this.searchQuery);
+
+      if (!this.validateSearchQuery(processedQuery)) {
+        this.submissionError = true;
+        this.isButtonDisabled = false;
+        return;
+      }
+      const pharmacySearchResponse = await this.searchForPharmacies(processedQuery);
+
+      if (pharmacySearchResponse.technicalError) {
+        this.submissionError = true;
+        this.isButtonDisabled = false;
+        return;
+      }
+
+      this.$store.dispatch('nominatedPharmacy/setSearchQuery', processedQuery);
+      this.$store.dispatch('nominatedPharmacy/setSearchResults', pharmacySearchResponse);
+      this.goToUrl(NOMINATED_PHARMACY_SEARCH_RESULTS.path);
+
+      this.isButtonDisabled = false;
     },
-    validateSearchQuery(searchQuery) {
+    searchFormSubmitted() {
+      this.searchClicked();
+    },
+    processQuery(searchQuery) {
       let processedQuery;
 
       if (searchQuery) {
         processedQuery = searchQuery.trim();
       }
-      if (processedQuery) {
-        return processedQuery.length >= 1 && processedQuery.length <= 10;
-      }
-      return false;
+
+      return processedQuery;
+    },
+    validateSearchQuery(searchQuery) {
+      return searchQuery && searchQuery.length >= 1 && searchQuery.length <= 10;
+    },
+    async searchForPharmacies(searchQuery) {
+      const pharmacySearchResult = {
+        noResultsFound: false,
+        technicalError: false,
+        pharmacies: [],
+      };
+
+      const pharmacySearchParams = {
+        postcode: searchQuery,
+      };
+
+      await this.$store.app.$http.getV1PatientPharmacies(pharmacySearchParams)
+        .then((response) => {
+          pharmacySearchResult.pharmacies = response;
+          pharmacySearchResult.noResultsFound = pharmacySearchResult.pharmacies.length === 0;
+        })
+        .catch(() => {
+          pharmacySearchResult.technicalError = true;
+        });
+
+      return pharmacySearchResult;
     },
   },
 };

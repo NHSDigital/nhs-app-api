@@ -1681,4 +1681,71 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
+    /v1/patient/pharmacies:
+      get:
+        tags:
+          - "pharmacy"
+        summary: "Search for pharmacies."
+        description: "Returns Response object containing list of pharmacies matched in search."
+        parameters:
+          -
+            in: "query"
+            name: "postcode"
+            required: true
+            description: "Postcode to be used when searching for pharmacies"
+            type: "string"
+        responses:
+          200:
+            description: "Search Executed Successfully"
+            schema:
+              type: "object"
+              properties:
+                pharmacies:
+                  type: "array"
+                  description: "Array of pharmacies matched in search"
+                  items:
+                    type: "object"
+                    properties:
+                      pharmacyName:
+                        type: "string"
+                        description: "Name of the nominated pharmacy."
+                      addressLine1:
+                        type: "string"
+                        description: "First line of address."
+                      addressLine2:
+                        type: "string"
+                        description: "Second line of address."
+                      addressLine3:
+                        type: "string"
+                        description: "Third line of address."
+                      city:
+                        type: "string"
+                        description: "Name of the city."
+                      county:
+                        type: "string"
+                        description: "Name of the county."
+                      postcode:
+                        type: "string"
+                        description: "Postcode."
+                      telephoneNumber:
+                        type: "string"
+                        description: "Telephone number of the nominated pharmacy."
+                      openingTimes:
+                        type: "array"
+                        description: "An array of opening times."
+                        items:
+                          type: "object"
+                          properties:
+                            day:
+                              type: "string"
+                              description: "Day of the week."
+                            time:
+                              type: "string"
+                              description: "Opening and closing time."
+          400:
+            description: "Bad request. Supplied request is invalid."
+          500:
+            description: "An unexpected error occurred processing the request."
+          502:
+            description: "Bad response received from upstream system."
 

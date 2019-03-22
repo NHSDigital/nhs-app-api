@@ -2,31 +2,33 @@ swagger: "2.0"
 
 info:
   version: 0.0.1
-  title: NHS App Sub-API - Nominated Pharmacy
+  title: NHS App Sub-API - Pharmacies
   description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require NHSO-Session-Id cookie in header from session endpoint.
 
 paths:
-  /pharmacy/nominated:
+  /pharmacies:
     get:
       tags:
         - pharmacy
-      summary: Gets the nominated pharmacy detail for a given patient.
-      description: Returns the nominated pharmacy detail for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint.
-      produces:
-        - application/json
+      summary: Search for pharmacies.
+      description: Returns Response object containing list of pharmacies matched in search.
+      parameters:
+        - in: query
+          name: postcode
+          required: true
+          description: Postcode to be used when searching for pharmacies
+          type: string
       responses:
         200:
-          description: Returns a pharmacy object with its associated meta data. Returns an empty pharmacy if no nominated pharmacy was found.
+          description: Search Executed Successfully
           schema:
-            $ref: "#/definitions/NominatedPharmacyResponse"
-        401:
-          description: User session missing or expired.
+            $ref: "#/definitions/PharmacySearchResponse"
+        400:
+          description: Bad request. Supplied request is invalid.
         500:
           description: An unexpected error occurred processing the request.
         502:
           description: Bad response received from upstream system.
-        504:
-          description: Timeout when calling upstream system.
 
 definitions:
   NominatedPharmacyResponse:
@@ -70,3 +72,11 @@ definitions:
       time:
         type: string
         description: Opening and closing time.
+  PharmacySearchResponse:
+    type: object
+    properties:
+      pharmacies:
+        type: array
+        description: Array of pharmacies matched in search
+        items:
+          $ref: "#/definitions/NominatedPharmacyResponse"

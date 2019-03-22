@@ -19,6 +19,8 @@ using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy;
 using NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
+using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
+using NHSOnline.Backend.Support.Auditing;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 {
@@ -31,8 +33,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
         private Mock<ILogger<NominatedPharmacyController>> _mockLogger;
         private Mock<INominatedPharmacyService> _mockNominatedPharmacyService;
+        private Mock<IPharmacySearchService> _mockPharmacySearchService;
         private Mock<IPharmacyService> _mockPharmacyService;
         private Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper> _mockMapper;
+        private Mock<IAuditor> _auditor;
         
         [TestInitialize]
         public void TestInitialize()
@@ -49,7 +53,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockLogger = _fixture.Freeze<Mock<ILogger<NominatedPharmacyController>>>();
             _mockNominatedPharmacyService = _fixture.Freeze<Mock<INominatedPharmacyService>>();
             _mockPharmacyService = _fixture.Freeze<Mock<IPharmacyService>>();
+            _mockPharmacySearchService = _fixture.Freeze<Mock<IPharmacySearchService>>();
             _mockMapper = _fixture.Freeze<Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper>>();
+            _auditor = _fixture.Freeze<Mock<IAuditor>>();
             
             var httpContextItems = new Dictionary<object, object>
             {
@@ -192,6 +198,51 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             value.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        [TestMethod]
+        public async Task Search_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
+        {
+            // Arrange
+            string postcode = "ABC";
+
+            var org1 = _fixture.Create<Organisation>();
+            var organisations = new List<Organisation> { org1 };
+
+            var postcodeCoordinate = new GeoCoordinatePortable.GeoCoordinate
+            {
+                Latitude = 1,
+                Longitude = 2,
+            };
+
+            var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, organisations)
+            {
+                PostcodeCoordinate = postcodeCoordinate,
+            };
+
+            _mockPharmacySearchService
+                .Setup(x => x.Search(postcode))
+                .Returns(Task.FromResult(pharmacySearchResponse))
+                .Verifiable();
+
+            var pharmacy1 = _fixture.Create<PharmacyDetailsResponse>();
+            var mappedResult = new List<PharmacyDetailsResponse> { pharmacy1 };
+
+            _mockMapper
+                .Setup(x => x.Map(organisations, postcodeCoordinate))
+                .Returns(mappedResult)
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Search(postcode);
+
+            // Assert
+            _mockPharmacySearchService.Verify();
+            _mockMapper.Verify();
+            _auditor.Verify(x => x.Audit(Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            value.Should().BeEquivalentTo(mappedResult);
         }
     }
 }

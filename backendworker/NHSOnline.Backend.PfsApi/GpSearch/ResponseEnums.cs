@@ -31,6 +31,7 @@
             Telephone = 0,
             Website = 1,
             Email = 2,
+            Fax = 3,
         }
     }
 }

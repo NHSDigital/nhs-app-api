@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                 {
                     Body = new NhsPostcodeSearchResponse
                     {
-                        PostcodeDatas = new List<PostcodeData>
+                        PostcodeData = new List<PostcodeData>
                         {
                             new PostcodeData { Latitude = testLatitude, Longitude = testLongitude }
                         }
@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                 {
                     Body = new NhsPostcodeSearchResponse 
                     { 
-                        PostcodeDatas = new List<PostcodeData>()
+                        PostcodeData = new List<PostcodeData>()
                     },
                 };
                 

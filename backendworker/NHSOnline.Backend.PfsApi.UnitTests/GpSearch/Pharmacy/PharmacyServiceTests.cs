@@ -13,7 +13,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy;
 
-namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
+namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
 {
     [TestClass]
     public class PharmacyServiceTests

@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         {
             _logger.LogEnter();
             
-            searchTerm = SanitizeSearch(searchTerm);
+            searchTerm = OrganisationSearchUtility.SanitizeSearch(searchTerm);
            
             var isValid = new ValidateAndLog(_logger)
                 .IsNotNullOrWhitespace(searchTerm, nameof(searchTerm))
@@ -52,16 +52,16 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
             if (!postcodeMatch.IsPostcode)
             {
-                searchTerm = PrepareSearch(searchTerm);
+                searchTerm = OrganisationSearchUtility.PrepareSearch(searchTerm);
                 var data = GetOrganisationSearchData(searchTerm);
                 return await ExecuteOrganisationSearch(data);
             }
 
             try
             {
-                var search = PrepareSearch(postcodeMatch.Postcode, true);
+                var search = OrganisationSearchUtility.PrepareSearch(postcodeMatch.Postcode, true);
 
-                var postcodeSearchData = GetPostcodeSearchData(search, string.IsNullOrEmpty(postcodeMatch.Inward));
+                var postcodeSearchData = OrganisationSearchUtility.CreatePostcodeSearchQuery(search, string.IsNullOrEmpty(postcodeMatch.Inward));
 
                 try
                 {
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                         return new GpSearchResult.InternalServerError();
                     }
 
-                    var postcodeData = postcodeSearchResult?.Body?.PostcodeDatas?.FirstOrDefault();
+                    var postcodeData = postcodeSearchResult?.Body?.PostcodeData?.FirstOrDefault();
 
                     if (postcodeData == null)
                     {
@@ -173,47 +173,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 QueryType = "simple",
                 Count = true,
             };
-        }
-
-        private static PostcodeSearchData GetPostcodeSearchData(string searchTerm, bool outcodeOnly)
-        {
-            return new PostcodeSearchData
-            {
-                Top = 1,
-                Search = searchTerm,
-                Count = true,
-                Filter = GetPostcodesAndPlacesFilter(outcodeOnly),
-            };
-        }
-
-        private static string GetPostcodesAndPlacesFilter(bool outcodeOnly)
-        {
-            return outcodeOnly ? "Type eq 'PostcodeOutCode'" : "LocalType eq 'Postcode'";
-        }
-        
-        private static string SanitizeSearch(string searchTerm)
-        {
-            if (string.IsNullOrEmpty(searchTerm))
-            {
-                return searchTerm;
-            }
-            
-            var dashesRemoved = searchTerm.Trim().Replace('-', ' ');
-            var multipleSpacesRemoved = Regex.Replace(dashesRemoved, "\\s\\s+/g", " ");
-            var sanitisedSearchCriteria = Regex.Replace(multipleSpacesRemoved, "[/\\\\^$*+&?,.()|[\\]{}\"~:!<>£;@%^'`]/g", string.Empty);
-            
-            return sanitisedSearchCriteria;
-        }
-        
-        private static string PrepareSearch(string searchTerm, bool matchWhole = false)
-        {
-            if (matchWhole)
-            {
-                return $"\"{searchTerm}\"";
-            }
-
-            var parts = searchTerm.Split(' ').Join("*+");
-            return $"{parts}*";
         }
     }
 }

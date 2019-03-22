@@ -48,3 +48,5 @@ paths:
     $ref: './nhsonline.usersession.yaml#/paths/~1session~1extend'
   /v1/patient/pharmacy/nominated:
     $ref: './nhsonline.nominatedpharmacy.yaml#/paths/~1pharmacy~1nominated'
+  /v1/patient/pharmacies:
+    $ref: './nhsonline.pharmacies.yaml#/paths/~1pharmacies'

@@ -1,4 +1,9 @@
-import { NOMINATED_PHARMACY_CLEAR, NOMINATED_PHARMACY_LOADED } from './mutation-types';
+import {
+  NOMINATED_PHARMACY_CLEAR,
+  NOMINATED_PHARMACY_LOADED,
+  SET_SEARCH_QUERY,
+  SET_SEARCH_RESULTS,
+} from './mutation-types';
 
 export default {
   load({ commit }) {
@@ -10,5 +15,11 @@ export default {
   },
   clear({ commit }) {
     commit(NOMINATED_PHARMACY_CLEAR);
+  },
+  setSearchQuery({ commit }, searchQuery) {
+    commit(SET_SEARCH_QUERY, searchQuery);
+  },
+  setSearchResults({ commit }, searchResults) {
+    commit(SET_SEARCH_RESULTS, searchResults);
   },
 };

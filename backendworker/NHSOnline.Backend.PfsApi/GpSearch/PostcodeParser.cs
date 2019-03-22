@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 parsedPostcode.Postcode = matchedPostCode.Groups[0].Value;
                 parsedPostcode.Inward = matchedPostCode.Groups[9].Value;
             }
-
+            
             return parsedPostcode;
         }
     }

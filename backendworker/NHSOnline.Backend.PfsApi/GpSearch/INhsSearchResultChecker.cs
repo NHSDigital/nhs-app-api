@@ -1,4 +1,5 @@
 ﻿using NHSOnline.Backend.PfsApi.GpSearch.Models;
+using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
 {
@@ -6,5 +7,9 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
     {
         GpSearchResult Check(
             GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> nhsSearchResponse, string postcode);
+        
+        PharmacySearchResponse CheckPharmacies(
+            GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> pharmacySearchResponse, string postcode);
+            
     }
 }

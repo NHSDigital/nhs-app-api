@@ -152,6 +152,33 @@ export default {
     changePharmacyLink: 'Change my nominated pharmacy',
     openingTimes: 'Opening times',
   },
+  searchNominatedPharmacy: {
+    pageTitle: 'Change my nominated pharmacy',
+    line1: 'The pharmacy you choose is where your repeat prescription will be sent.',
+    subHeader: 'Postcode',
+    line2: 'Find pharmacies within 5km of this postcode.',
+    searchButton: 'Search',
+    link1: 'See all internet pharmacies',
+    link2: 'See all dispensing appliance contractors',
+    emptySearchError: 'Enter a postcode',
+  },
+  nominatedPharmacySearchResults: {
+    header: 'Change my nominated pharmacy',
+    title: 'Change my nominated pharmacy',
+    resultSummary: {
+      showingPharmaciesNear: 'Pharmacies near "{searchQuery}"',
+      showingAll: 'Showing all pharmacies.',
+    },
+    backButton: 'Back',
+    distanceAway: '{distance} miles away',
+    errors: {
+      noResultsFound: {
+        header: 'No results found',
+        title: 'No results found',
+        foundNoResults: 'We found no pharmacies near "{searchQuery}".',
+      },
+    },
+  },
   noConnection: {
     header: 'Connection error',
     subheader: 'There\'s an issue with your internet connection',
@@ -766,7 +793,6 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
-    changeNominatedPharmacy: 'Change my nominated pharmacy',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     /* Data sharing header should be updated in Android, iOS, and Web if changed */
@@ -775,6 +801,7 @@ export default {
     login: 'Login',
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
+    changeNominatedPharmacy: 'Change my nominated pharmacy',
   },
   pageTitles: {
     home: 'Home',
@@ -792,13 +819,14 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'Sensitive information - My record',
-    changeNominatedPharmacy: 'Change my nominated pharmacy',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
     dataSharing: 'Find out why your data matters',
     more: 'More',
     login: 'Login',
     termsAndConditions: 'Accept conditions of use',
+    nominatedPharmacy: 'My nominated pharmacy',
+    changeNominatedPharmacy: 'Change my nominated pharmacy',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',

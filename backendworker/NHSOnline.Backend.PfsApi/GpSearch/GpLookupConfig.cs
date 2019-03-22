@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
     public class GpLookupConfig: IGpLookupConfig
     {
         public int GpLookupApiResultsLimit { get; }
+        public int PharmacySearchApiLimit { get; }
         public Uri NhsSearchBaseUrl { get; }
         public string GpLookupApiKey { get; }
         public string PostcodeLookupSearchRadiusKm { get; }
@@ -16,6 +17,9 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         public GpLookupConfig(IConfiguration configuration, ILogger<GpLookupConfig> logger)
         {
             GpLookupApiResultsLimit = int.Parse(configuration.GetOrWarn("GP_LOOKUP_API_RESULTS_LIMIT", logger), Thread.CurrentThread.CurrentCulture);
+            
+            PharmacySearchApiLimit =
+                int.Parse(configuration.GetOrWarn("PHARMACY_API_RESULT_LIMIT", logger), Thread.CurrentThread.CurrentCulture);
       
             var gpLookupApiUriString = configuration.GetOrWarn("NHS_SEARCH_BASE_URL", logger);
           

@@ -16,5 +16,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
 
         Task<GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>>
             PharmacySearch(OrganisationSearchData searchData);
+        
+        Task<GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>>
+            PharmaciesSearch(OrganisationSearchData searchData);
     }
 }

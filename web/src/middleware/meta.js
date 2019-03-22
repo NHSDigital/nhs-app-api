@@ -26,7 +26,6 @@ import {
   MY_RECORD_VISION_PROCEDURES_DETAIL,
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   MY_RECORD_VISION_DIAGNOSIS_DETAIL,
-  NOMINATED_PHARMACY_SEARCH,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,
@@ -44,6 +43,8 @@ import {
   SYMPTOMS,
   TERMSANDCONDITIONS,
   NOMINATED_PHARMACY,
+  NOMINATED_PHARMACY_SEARCH,
+  NOMINATED_PHARMACY_SEARCH_RESULTS,
 } from '@/lib/routes';
 
 function setPageTitle(route, store, app) {
@@ -194,6 +195,7 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.termsAndConditions';
       break;
     case NOMINATED_PHARMACY_SEARCH.name:
+    case NOMINATED_PHARMACY_SEARCH_RESULTS.name:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.changeNominatedPharmacy';
       route.meta.pageTitleKey = 'pageTitles.changeNominatedPharmacy';
