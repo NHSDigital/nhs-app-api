@@ -10,10 +10,10 @@
         {{ $t('rp12.reasonMissing.summarySubHeader') }}
       </message-text>
       <message-list v-if="!courseSelectionValid">
-        <li :class="$style['validation-text']">{{ $t('rp03.noMedicinesSelected') }}</li>
+        <li>{{ $t('rp03.noMedicinesSelected') }}</li>
       </message-list>
       <message-list v-if="!specialRequestValid">
-        <li :class="$style['validation-text']">{{ $t('rp03.specialRequestRequired') }}</li>
+        <li>{{ $t('rp03.specialRequestRequired') }}</li>
       </message-list>
     </message-dialog>
 
@@ -27,14 +27,18 @@
           <div :class="{
             [$style['validation-inline']]: (error && !courseSelectionValid),
             [$style['validation-border-left']]: (error && !courseSelectionValid)}">
-            <error-message v-if="error && !courseSelectionValid" id="error-type">
+            <error-message v-if="error && !courseSelectionValid" id="error-type"
+                           :class="$style['validatioin-text']">
               {{ $t('rp03.noMedicinesSelected') }}
             </error-message>
-            <repeat-prescription
-              v-for="repeatPrescription in repeatPrescriptionCourses"
-              :key="repeatPrescription.id"
-              :selected="repeatPrescription.selected"
-              :prescription-details="repeatPrescription" />
+            <fieldset>
+              <legend>{{ $t('rp03.subHeader') }}</legend>
+              <repeat-prescription
+                v-for="repeatPrescription in repeatPrescriptionCourses"
+                :key="repeatPrescription.id"
+                :selected="repeatPrescription.selected"
+                :prescription-details="repeatPrescription" />
+            </fieldset>
           </div>
         </div>
         <input :value="specialRequestNecessity" type="hidden" name="specialRequestNecessity">
@@ -43,7 +47,8 @@
                [$style['validation-inline']]: (error && !specialRequestValid),
                [$style['validation-border-left']]: (error && !specialRequestValid)}]"
              role="form">
-          <error-message v-if="error && !specialRequestValid" id="error-type">
+          <error-message v-if="error && !specialRequestValid" id="error-type"
+                         :class="$style['validatioin-text']">
             {{ $t('rp03.specialRequestRequired') }}
           </error-message>
           <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest">
@@ -92,7 +97,8 @@
     </form>
     <desktopGenericBackLink v-else
                             :path="prescriptionsPath"
-                            :button-text="'rp03.backButton'"/>
+                            :button-text="'rp03.backButton'"
+                            @clickAndPrevent="backToPrescriptionsClicked"/>
   </div>
 </template>
 
@@ -245,6 +251,16 @@ export default {
   @import "../../style/info";
   @import "../../style/errorvalidation";
   .pull-content {
+    fieldset {
+      border: none;
+      legend {
+        display: none;
+      }
+    }
+    .validatioin-text {
+      font-weight: normal !important;
+      color: $error !important;
+    }
     &.desktopWeb {
       font-family: $default-web;
       &>* {

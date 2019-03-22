@@ -42,7 +42,8 @@
     </generic-button>
     <desktopGenericBackLink v-else
                             :path="prescriptionRepeatCoursesPath"
-                            :button-text="'rp04.backButton'"/>
+                            :button-text="'rp04.backButton'"
+                            @clickAndPrevent="backToPrescriptionsClicked"/>
   </div>
 </template>
 
