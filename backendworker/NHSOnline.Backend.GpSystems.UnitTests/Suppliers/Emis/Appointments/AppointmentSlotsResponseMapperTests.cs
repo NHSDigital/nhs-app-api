@@ -26,7 +26,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private const string SessionId = "SESSION_ID";
 
         private IFixture _fixture;
-        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private IAppointmentSlotsResponseMapper _sut;
         private EmisUserSession _userSession;
         private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
@@ -36,10 +35,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
-            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
-                .Returns(DateTime.UtcNow);
             
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[]

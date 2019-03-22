@@ -21,7 +21,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
     {
         private ListSlotsReplyMapper _systemUnderTest;
         private IFixture _fixture;
-        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
 
         [TestInitialize]
@@ -31,10 +30,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
                 .Customize(new AutoMoqCustomization());
             
             _dateTimeOffsetProviderMock = _fixture.Freeze<Mock<IDateTimeOffsetProvider>>();
-            
-            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
-            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
-                .Returns(DateTime.UtcNow);
             
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });

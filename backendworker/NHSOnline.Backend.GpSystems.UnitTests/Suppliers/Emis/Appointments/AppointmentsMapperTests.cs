@@ -27,17 +27,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private DateTime _nextMonth;
         private DateTime _twoDaysFromNow;
         private DateTime _lastMonth;
-        private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
         private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            
-            _mockCurrentDateTimeProvider = _fixture.Freeze<Mock<ICurrentDateTimeProvider>>();
-            _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
-                .Returns(DateTime.UtcNow);
             
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
