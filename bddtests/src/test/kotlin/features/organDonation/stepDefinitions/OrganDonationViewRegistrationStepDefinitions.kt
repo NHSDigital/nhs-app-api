@@ -25,7 +25,7 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.nextSteps.shareLinkClick()
     }
 
-    @When("^I select the 'Tell your family' link on the Organ Donation View Registration page$")
+    @When("^I select the 'Tell your family and friends' link on the Organ Donation View Registration page$")
     fun iSelectTheTellYourFamilyLinkOnTheOrganDonationViewRegistrationPage() {
         organDonationViewRegistrationPage.nextSteps.tellFamilyLinkClick()
     }

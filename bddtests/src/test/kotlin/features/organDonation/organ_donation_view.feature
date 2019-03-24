@@ -102,12 +102,12 @@ Feature: Organ Donation View
     When I select the 'Share that you are a donor' link on the Organ Donation View Registration page
     Then a new tab opens https://www.organdonation.nhs.uk/share-my-decision
 
-  Scenario: A user can navigate to the external 'Tell your family' page when viewing their registration
+  Scenario: A user can navigate to the external 'Tell your family and friends' page when viewing their registration
     Given I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
     And I navigate to the internal Organ Donation Page
     Then the Organ Donation View Registration page is displayed
-    When I select the 'Tell your family' link on the Organ Donation View Registration page
+    When I select the 'Tell your family and friends' link on the Organ Donation View Registration page
     Then a new tab opens https://www.organdonation.nhs.uk/share-my-decision/how-to-discuss-my-decision/
 
   Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when

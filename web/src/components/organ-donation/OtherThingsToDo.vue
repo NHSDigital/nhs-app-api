@@ -5,7 +5,7 @@
       <li v-if="canWithdraw">
         <a id="btn_withdraw" :class="$style.noDecoration" href="#"
            @click.stop.prevent="withdrawDecision">
-          <h2>{{ $t('organDonation.otherThings.withdraw.subheader') }}</h2>
+          <h3>{{ $t('organDonation.otherThings.withdraw.subheader') }}</h3>
           <p>{{ $t('organDonation.otherThings.withdraw.body') }}</p>
         </a>
       </li>
@@ -17,7 +17,7 @@
                                  'organDonation.otherThings.bloodDonation.subheader')}.
                                ${$t('organDonation.otherThings.bloodDonation.body')}`"
                                tag="a" target="_blank">
-          <h2>{{ $t('organDonation.otherThings.bloodDonation.subheader') }}</h2>
+          <h3>{{ $t('organDonation.otherThings.bloodDonation.subheader') }}</h3>
           <p>{{ $t('organDonation.otherThings.bloodDonation.body') }}</p>
         </analytics-tracked-tag>
       </li>
@@ -55,11 +55,24 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/listmenu";
   @import '../../style/buttons';
+  @import '../../style/colours';
+  @import '../../style/textstyles';
+  @import "../../style/listmenu";
 
   .noDecoration {
     text-decoration: none;
+  }
+
+  .list-menu {
+    li {
+      a {
+        h3 {
+          @include h2;
+          color: $nhs_blue;
+        }
+      }
+    }
   }
 
 </style>

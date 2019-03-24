@@ -808,10 +808,10 @@ export default {
       subheader: 'Other things you can do',
       bloodDonation: {
         subheader: 'Register to be a blood donor',
-        body: 'If you want to give more, why not sign up to give blood? You can easily book an appointment and find your local centre via the app.',
+        body: 'You could save lives by giving blood. It’s simple. You can find your local centre and book an appointment via the app.',
       },
       withdraw: {
-        subheader: 'Withdraw your decision',
+        subheader: 'Withdraw my decision',
         body: 'Remove an existing registration from the Organ Donor Register. There will be no recorded decision for you about organ donation.',
       },
     },
@@ -961,7 +961,7 @@ export default {
           body: 'Help promote organ donation on social media by telling people you are a donor.',
         },
         tellFamily: {
-          subheader: 'Tell your family',
+          subheader: 'Tell your family and friends',
           body: 'Use our message templates and conversation guides to tell your family and friends you are a donor.',
         },
         optOutText: 'Please inform your family about your decision.',

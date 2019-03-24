@@ -21,7 +21,7 @@ open class OrganDonationNextStepsModule(page :HybridPageObject) : MenuLinks(page
         private const val shareLinkTitle ="Share that you are a donor"
         private const val shareLinkDescription ="Help promote organ donation on social media " +
                 "by telling people you are a donor."
-        private const val tellFamilyLinkTitle ="Tell your family"
+        private const val tellFamilyLinkTitle ="Tell your family and friends"
         private const val tellFamilyLinkDescription ="Use our message templates and " +
                 "conversation guides to tell your family and friends you are a donor."
 
@@ -29,6 +29,7 @@ open class OrganDonationNextStepsModule(page :HybridPageObject) : MenuLinks(page
                 title = "Next steps",
                 links = arrayOf(Pair(shareLinkTitle, shareLinkDescription),
                         Pair(tellFamilyLinkTitle, tellFamilyLinkDescription)),
-                textOverride = "Please inform your family about your decision.")
+                textOverride = "Please inform your family about your decision.",
+                linkStyling = "h3")
     }
 }

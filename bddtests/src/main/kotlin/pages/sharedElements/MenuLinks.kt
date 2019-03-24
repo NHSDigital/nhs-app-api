@@ -10,12 +10,14 @@ import pages.assertSingleElementPresent
 data class MenuLinksContent(val title:String,
                             val links: Array<Pair<String,String>>,
                             val textOverride:String?=null,
-                            val containerXPath:String ="//div[h2[text()='$title']]")
+                            val containerXPath:String ="//div[h2[text()='${title}']]",
+                            val linkStyling:String ="h2")
 
 open class MenuLinks(private val page : HybridPageObject, val content : MenuLinksContent) {
 
     private val sections = "${content.containerXPath}//ul/li//a"
-    private fun specificLinkXPath(linkTitle: String) = "$sections[h2[contains(text(),'$linkTitle')]]"
+    private fun specificLinkXPath(linkTitle: String)
+            = "$sections[${content.linkStyling}[contains(text(),'$linkTitle')]]"
 
     private val container = HybridPageElement(
             webDesktopLocator = content.containerXPath,

@@ -12,7 +12,7 @@
                                    'organDonation.viewDecision.nextSteps.shareDecision.subheader')}.
                                  ${$t('organDonation.viewDecision.nextSteps.shareDecision.body')}`"
                                  tag="a" target="_blank">
-            <h2>{{ $t('organDonation.viewDecision.nextSteps.shareDecision.subheader') }}</h2>
+            <h3>{{ $t('organDonation.viewDecision.nextSteps.shareDecision.subheader') }}</h3>
             <p>{{ $t('organDonation.viewDecision.nextSteps.shareDecision.body') }}</p>
           </analytics-tracked-tag>
         </li>
@@ -25,7 +25,7 @@
                                    'organDonation.viewDecision.nextSteps.tellFamily.subheader')}.
                                  ${$t('organDonation.viewDecision.nextSteps.tellFamily.body')}`"
                                  tag="a" target="_blank">
-            <h2>{{ $t('organDonation.viewDecision.nextSteps.tellFamily.subheader') }}</h2>
+            <h3>{{ $t('organDonation.viewDecision.nextSteps.tellFamily.subheader') }}</h3>
             <p>{{ $t('organDonation.viewDecision.nextSteps.tellFamily.body') }}</p>
           </analytics-tracked-tag>
         </li>
@@ -62,11 +62,24 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/listmenu";
   @import '../../style/buttons';
+  @import '../../style/colours';
+  @import '../../style/textstyles';
+  @import "../../style/listmenu";
 
   .no-decoration {
     text-decoration: none;
+  }
+
+  .list-menu {
+    li {
+      a {
+        h3 {
+          @include h2;
+          color: $nhs_blue;
+        }
+      }
+    }
   }
 
 </style>
