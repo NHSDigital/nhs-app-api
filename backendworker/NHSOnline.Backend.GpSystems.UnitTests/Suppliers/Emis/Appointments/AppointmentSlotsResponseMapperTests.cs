@@ -26,10 +26,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private const string SessionId = "SESSION_ID";
 
         private IFixture _fixture;
-        private IAppointmentSlotsResponseMapper _sut;
+        private IAppointmentSlotsResponseMapper _systemUnderTest;
         private EmisUserSession _userSession;
         private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
-        DemographicsGetResponse _demographics;
+        private DemographicsGetResponse _demographics;
 
         [TestInitialize]
         public void TestInitialize()
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             _demographics = new DemographicsGetResponse();
 
-            _sut =
+            _systemUnderTest =
                 new AppointmentSlotsResponseMapper(new AppointmentSlotsMapper(_dateTimeOffsetProviderMock.Object, slotsMapperLogger,_fixture.Create<EmisEnumMapper>()));
         }
 
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Act
             var actualResponse =
-                _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, demographicsWithTelephone, _userSession);
+                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, demographicsWithTelephone, _userSession);
 
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Act
             var actualResponse = 
-                _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Act
             var actualResponse = 
-                _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -210,7 +210,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
             // Act
             var actualResponse = 
-                _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+                _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -254,7 +254,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -315,7 +315,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettingsResponse, _demographics, _userSession);
+            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettingsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -374,7 +374,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             // Act
-            var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
+            var actualResponse = _systemUnderTest.Map(slotsResponse, slotsMetadataResponse, practiceSettigsResponse, _demographics, _userSession);
             
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);

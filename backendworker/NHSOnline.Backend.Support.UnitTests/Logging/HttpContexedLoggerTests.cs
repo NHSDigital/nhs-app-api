@@ -131,11 +131,11 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         private DummyController _systemUnderTest;
         private Stream _stream;
 
-        ActionExecutingContext _actionExecutingContext;
-        ResultExecutedContext _resultContext;
+        private ActionExecutingContext _actionExecutingContext;
+        private ResultExecutedContext _resultContext;
 
         [TestInitialize]
-        public void TestInitialise()
+        public void TestInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
             actionContext.HttpContext.Items.Add("UserSession", new UserSession() { Key = SessionId });
             _systemUnderTest.ControllerContext = new ControllerContext(actionContext);
             _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(),
-                new Dictionary<String, object>(), _systemUnderTest);
+                new Dictionary<string, object>(), _systemUnderTest);
             _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1),
                 _systemUnderTest);
         }

@@ -12,88 +12,88 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
     {
         private string _invalidConnectionToken = "";
         private string _validConnectionToken = "";
-        private ITokenValidationService _sut;
+        private ITokenValidationService _systemUnderTest;
         private ILogger<TppTokenValidationService> _logger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _logger = Mock.Of<ILogger<TppTokenValidationService>>();
-            _sut = new TppTokenValidationService(_logger);
+            _systemUnderTest = new TppTokenValidationService(_logger);
         }
         
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsNotInAJsonStringFormat()
         {
-            _sut.IsValidConnectionTokenFormat("foobar").Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat("foobar").Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsNull()
         {
-            _sut.IsValidConnectionTokenFormat(null).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(null).Should().BeFalse();
         }
         
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsEmpty()
         {
-            _sut.IsValidConnectionTokenFormat("").Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat("").Should().BeFalse();
         }
         
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsMissingPassphrase()
         {
             _invalidConnectionToken = "{\"accountId\":\"account_id\",\"providerId\":\"providerId\"}";
-            _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsMissingAccountId()
         {
             _invalidConnectionToken = "{\"passphrase\":\"passphrase\",\"providerId\":\"providerId\"}";
-            _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsMissingProviderId()
         {
             _invalidConnectionToken = "{\"passphrase\":\"passphrase\",\"accountId\":\"account_id\"}";
-            _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenPassphraseIsEmpty()
         {
             _invalidConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"\",\"providerId\":\"providerId\"}";
-            _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenAccountIdIsEmpty()
         {
             _invalidConnectionToken = "{\"accountId\":\"\",\"passphrase\":\"\",\"providerId\":\"providerId\"}";
-            _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenProviderIdIsEmpty()
         {
             _invalidConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"passphrase\",\"providerId\":\"\"}";
-            _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsTrue_WhenTokenIsInAJsonStringFormat()
         {
             _validConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"passphrase\",\"providerId\":\"provder_id\"}";
-            _sut.IsValidConnectionTokenFormat(_validConnectionToken).Should().BeTrue();
+            _systemUnderTest.IsValidConnectionTokenFormat(_validConnectionToken).Should().BeTrue();
         }
         
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsTrue_WhenTokenIsInAJsonCamelCaseStringFormat()
         {
             _validConnectionToken = "{\"AccountId\":\"account_id\",\"Passphrase\":\"passphrase\",\"ProviderId\":\"provder_id\"}";
-            _sut.IsValidConnectionTokenFormat(_validConnectionToken).Should().BeTrue();
+            _systemUnderTest.IsValidConnectionTokenFormat(_validConnectionToken).Should().BeTrue();
         }
     }
 }

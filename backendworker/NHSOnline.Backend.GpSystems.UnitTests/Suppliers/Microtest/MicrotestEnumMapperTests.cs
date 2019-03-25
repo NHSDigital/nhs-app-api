@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
     [TestClass]
     public class MicrotestEnumMapperTests
     {
-        private IMicrotestEnumMapper _sut;
+        private IMicrotestEnumMapper _systemUnderTest;
         private ILogger<MicrotestEnumMapper> _logger;
         private IFixture _fixture;
 
@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _logger = _fixture.Freeze<ILoggerFactory>().CreateLogger<MicrotestEnumMapper>();
-            _sut = new MicrotestEnumMapper(_logger);
+            _systemUnderTest = new MicrotestEnumMapper(_logger);
         }
 
         [DataTestMethod]
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         public void MapChannel_ChannelIsMapped_ReturnsEnum(string channel, Channel expected)
         {
             //Act
-            var result = _sut.MapChannel(channel, null);
+            var result = _systemUnderTest.MapChannel(channel, null);
 
             //Assert
             result.Should().Be(expected);
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
         public void MapChannel_ChannelIsNotMapped_ReturnsRequestedDefault()
         {
             //Act
-            var result = _sut.MapChannel("not mapped", Channel.Telephone);
+            var result = _systemUnderTest.MapChannel("not mapped", Channel.Telephone);
 
             //Assert
             result.Should().Be(Channel.Telephone);

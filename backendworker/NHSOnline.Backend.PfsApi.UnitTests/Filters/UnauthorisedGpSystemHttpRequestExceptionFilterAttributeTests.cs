@@ -20,19 +20,19 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
     [TestClass]
     public class UnauthorisedGpSystemHttpRequestExceptionFilterAttributeTests
     {
-        private UnauthorisedGpSystemHttpRequestExceptionFilterAttribute _sut;
+        private UnauthorisedGpSystemHttpRequestExceptionFilterAttribute _systemUnderTest;
         private Mock<HttpContext> _mockHttpContext;
         private ActionContext _actionContext;
         private Mock<IUserSessionManager> _userSessionManager;
 
         [TestInitialize]
-        public void Setup()
+        public void TestInitialize()
         {
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
             var logger = fixture.Freeze<Mock<ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute>>>();
             
             _userSessionManager = fixture.Freeze<Mock<IUserSessionManager>>();
-            _sut = new UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(_userSessionManager.Object, logger.Object);
+            _systemUnderTest = new UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(_userSessionManager.Object, logger.Object);
             
             var mockAuthenticationService = new Mock<IAuthenticationService>();
             var mockServiceProvider = new Mock<IServiceProvider>();
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             };
 
             // Act
-            await _sut.OnExceptionAsync(exceptionContext);
+            await _systemUnderTest.OnExceptionAsync(exceptionContext);
 
             // Assert
             exceptionContext.Result.Should().NotBeNull();
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             };
 
             // Act
-            await _sut.OnExceptionAsync(exceptionContext);
+            await _systemUnderTest.OnExceptionAsync(exceptionContext);
 
             // Assert
             _userSessionManager.Verify(x => x.SignOutAsync(_mockHttpContext.Object));
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Filters
             };
 
             // Act
-            await _sut.OnExceptionAsync(exceptionContext);
+            await _systemUnderTest.OnExceptionAsync(exceptionContext);
 
             // Assert
             exceptionContext.Result.Should().BeNull();

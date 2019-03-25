@@ -12,9 +12,9 @@ namespace NHSOnline.Backend.Support.UnitTests.Hasher
         private HashingService _hashService;
 
         [TestInitialize]
-        public void TestInitialise()
+        public void TestInitialize()
         {
-            SHA512CryptoServiceProvider provider = new SHA512CryptoServiceProvider();
+            var provider = new SHA512CryptoServiceProvider();
             _hashService = new HashingService(provider);
         }
 

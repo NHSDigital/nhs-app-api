@@ -13,8 +13,8 @@ namespace NHSOnline.Backend.Support.UnitTests.ValidationAttributes
     [TestClass]
     public class SafeStringAttributeTests
     {
-        const string MemberName = "FieldName";
-        const string DisplayName = "DisplayName";
+        private const string MemberName = "FieldName";
+        private const string DisplayName = "DisplayName";
         private SafeStringAttribute _attribute;
         private Mock<IServiceProvider> _serviceProvider;
         private IFixture _fixture;
@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Support.UnitTests.ValidationAttributes
         private Mock<ILogger<SafeStringAttribute>> _safeStringLogger;
 
         [TestInitialize]
-        public void Setup()
+        public void TestInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())

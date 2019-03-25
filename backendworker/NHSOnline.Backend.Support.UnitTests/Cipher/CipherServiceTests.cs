@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Cipher
         private CipherService _cipherService;
 
         [TestInitialize]
-        public void TestInitialise()
+        public void TestInitialize()
         {
             var configurationMock = new Mock<IConfiguration>();
             configurationMock.Setup(config => config[CipherConfiguration.CipherKeyFilePathConfigurationName]).Returns(TempConfigurationFilePath);

@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
     [TestClass]
     public sealed class VisionPFSClientTests : IDisposable
     {
-        private IVisionPFSClient _sut;
+        private IVisionPFSClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private IOptions<ConfigurationSettings> _options;
         private Mock<IVisionPFSConfig> _configMock;
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
             _fixture.Inject(_httpClient);
             
-            _sut = _fixture.Create<VisionPFSClient>();
+            _systemUnderTest = _fixture.Create<VisionPFSClient>();
         }
 
         [TestMethod]
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
             
             // Act
-            var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
+            var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
             // Assert
             response.HasErrorResponse.Should().BeTrue();
@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
-            var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
+            var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
             // Assert
             response.HasErrorResponse.Should().BeTrue();
@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
-            var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
+            var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
             // Assert
             response.HasErrorResponse.Should().BeTrue();
@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
-            var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
+            var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
             // Assert
             response.HasErrorResponse.Should().BeTrue();
@@ -193,7 +193,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
             
             // Act
-            var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
+            var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
@@ -215,7 +215,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
             
             // Act
-            var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
+            var response = await _systemUnderTest.GetConfiguration(_connectionToken, _odsCode);
 
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
@@ -240,7 +240,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
-            var response = await _sut.GetEligibleRepeats(_visionUserSession);
+            var response = await _systemUnderTest.GetEligibleRepeats(_visionUserSession);
 
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
@@ -268,7 +268,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
-            var response = await _sut.GetHistoricPrescriptions(_visionUserSession, request);
+            var response = await _systemUnderTest.GetHistoricPrescriptions(_visionUserSession, request);
 
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
@@ -296,7 +296,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
-            var response = await _sut.OrderNewPrescription(_visionUserSession, request);
+            var response = await _systemUnderTest.OrderNewPrescription(_visionUserSession, request);
 
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
@@ -334,7 +334,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
-            await _sut.GetAvailableAppointments(_visionUserSession, dateRange);
+            await _systemUnderTest.GetAvailableAppointments(_visionUserSession, dateRange);
 
             // Assert
             received.ServiceContent.Should().BeEquivalentTo(expectedVisionRequest.ServiceContent);

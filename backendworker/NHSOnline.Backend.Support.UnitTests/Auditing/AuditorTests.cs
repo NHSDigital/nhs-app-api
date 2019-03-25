@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Auditing
         }
 
         [TestInitialize]
-        public void TestInitialise()
+        public void TestInitialize()
         {
             // Setup injection of factory.
             _fixture = new Fixture()

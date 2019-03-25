@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
     [TestClass]
     public sealed class VisionLinkageClientTests : IDisposable
     {
-        private IVisionLinkageClient _sut;
+        private IVisionLinkageClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private Mock<IVisionLinkageConfig> _configMock;
         private IFixture _fixture;
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             _fixture.Inject(_configMock);
             _fixture.Inject(_httpClient);
 
-            _sut = _fixture.Create<VisionLinkageClient>();
+            _systemUnderTest = _fixture.Create<VisionLinkageClient>();
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .WhenVision(HttpMethod.Get, expectedUri)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _sut.GetLinkageKey(getLinkageKeyRequest);
+            var response = await _systemUnderTest.GetLinkageKey(getLinkageKeyRequest);
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                 .Respond("application/json", JsonConvert.SerializeObject(linkageResponse));
 
             // Act
-            var response = await _sut.CreateLinkageKey(createLinkageKey);
+            var response = await _systemUnderTest.CreateLinkageKey(createLinkageKey);
 
             // Assert
             response.Body.Should().BeEquivalentTo(linkageResponse);
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
                     JsonConvert.SerializeObject(errorResponseWrapper));
 
             // Act
-            var response = await _sut.CreateLinkageKey(createLinkageKey);
+            var response = await _systemUnderTest.CreateLinkageKey(createLinkageKey);
 
             // Assert
             response.StatusCode.Should().Be(409);

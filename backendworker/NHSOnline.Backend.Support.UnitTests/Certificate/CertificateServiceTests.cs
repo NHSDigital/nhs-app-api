@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Certificate
         private const string Passphrase = "password1";
 
         [TestInitialize]
-        public void TestInitialise()
+        public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockCertificateServiceLogger = _fixture.Freeze<Mock<ILogger<CertificateService>>>();

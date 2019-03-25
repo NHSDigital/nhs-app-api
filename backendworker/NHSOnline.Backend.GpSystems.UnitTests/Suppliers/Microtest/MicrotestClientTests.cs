@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
     {
         public static readonly Uri BaseUri = new Uri("http://microtest_base_url/");
 
-        private IMicrotestClient _sut;
+        private IMicrotestClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private Mock<IMicrotestConfig> _configMock;
         private MicrotestHttpClient _httpClient;
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             _fixture.Inject(_configMock);
             _fixture.Inject(_httpClient);
 
-            _sut = _fixture.Create<MicrotestClient>();
+            _systemUnderTest = _fixture.Create<MicrotestClient>();
         }
         
         [TestMethod]
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             var dateRange = new AppointmentSlotsDateRange(fromDate, toDate);
 
-            var response = await _sut.AppointmentSlotsGet(odsCode, nhsNumber, dateRange);
+            var response = await _systemUnderTest.AppointmentSlotsGet(odsCode, nhsNumber, dateRange);
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             var dateRange = new AppointmentSlotsDateRange(fromDate, toDate);
 
-            var response = await _sut.AppointmentSlotsGet(odsCode, nhsNumber, dateRange);
+            var response = await _systemUnderTest.AppointmentSlotsGet(odsCode, nhsNumber, dateRange);
 
             response.StatusCode.Should().Be(500);
         }

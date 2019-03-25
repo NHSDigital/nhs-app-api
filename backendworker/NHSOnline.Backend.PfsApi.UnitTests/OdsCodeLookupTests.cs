@@ -35,8 +35,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         public async Task LookupSupplier_NullOrEmptyOdsCode_ReturnsOptionNone(string odsCode)
         {
             var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
-            var result = await sut.LookupSupplier(odsCode);
+            var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
+            var result = await systemUnderTest.LookupSupplier(odsCode);
 
             result.HasValue.Should().BeFalse();
         }
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
         public async Task LookupSupplier_RedisCacheReturnsNull_ReturnsOptionNone()
         {
             const string odsCode = "ABC123";
-            RedisValue redisValue = default(RedisValue);
+            var redisValue = default(RedisValue);
 
             var database = new Mock<IDatabase>();
             database.Setup(x => x.StringGetAsync(odsCode, CommandFlags.None)).Returns(Task.FromResult(redisValue));
@@ -57,9 +57,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
                 .Returns(connectionMultiplexer.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
+            var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
-            var result = await sut.LookupSupplier(odsCode);
+            var result = await systemUnderTest.LookupSupplier(odsCode);
             result.HasValue.Should().BeFalse();
         }
 
@@ -79,9 +79,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
                 .Returns(connectionMultiplexer.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
+            var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
-            var result = await sut.LookupSupplier(odsCode);
+            var result = await systemUnderTest.LookupSupplier(odsCode);
             result.HasValue.Should().BeFalse();
         }
 
@@ -103,8 +103,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
                 .Returns(connectionMultiplexer.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
-            var actual = await sut.LookupSupplier(odsCode);
+            var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
+            var actual = await systemUnderTest.LookupSupplier(odsCode);
 
             actual.HasValue.Should().BeTrue();
             actual.ValueOrFailure().Should().Be(supplier);
@@ -129,9 +129,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
                 .Returns(connectionMultiplexer.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
+            var systemUnderTest = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
-            var actual = await sut.LookupSupplier(odsCode);
+            var actual = await systemUnderTest.LookupSupplier(odsCode);
             actual.HasValue.Should().BeTrue();
             actual.ValueOrFailure().Should().Be(supplier);
         }

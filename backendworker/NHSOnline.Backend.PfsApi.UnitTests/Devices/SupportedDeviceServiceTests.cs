@@ -21,13 +21,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
         private Mock<ILogger<SupportedDeviceService>> _logger;
         private IOptions<ConfigurationSettings> _options;
 
-        const string MinimumSupportedAndroidVersion = "2.1.0";
-        const string MinimumSupportediOSVersion = "3.5.0";
+        private const string MinimumSupportedAndroidVersion = "2.1.0";
+        private const string MinimumSupportediOSVersion = "3.5.0";
 
         private readonly Uri _testFidoServerUrl = new Uri("http://test.test.com");
 
         [TestInitialize]
-        public void TestInitialise()
+        public void TestInitialize()
         {
             _options = Options.Create(new ConfigurationSettings
             {
@@ -37,10 +37,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
                 FidoServerUrl = _testFidoServerUrl
             });
 
-            TestInitialiseWithOptions(_options);
+            TestInitializeWithOptions(_options);
         }
 
-        private void TestInitialiseWithOptions(IOptions<ConfigurationSettings> options)
+        private void TestInitializeWithOptions(IOptions<ConfigurationSettings> options)
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
@@ -155,7 +155,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             });
 
             // Reinitialise with new options
-            TestInitialiseWithOptions(options);
+            TestInitializeWithOptions(options);
 
             // Act
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);

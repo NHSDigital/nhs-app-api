@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
     [TestClass]
     public class EmisEnumMapperTests
     {
-        private IEmisEnumMapper _sut;
+        private IEmisEnumMapper _systemUnderTest;
         private ILogger<EmisEnumMapper> _logger;
         private IFixture _fixture;
 
@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _logger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
-            _sut = new EmisEnumMapper(_logger);
+            _systemUnderTest = new EmisEnumMapper(_logger);
         }
 
         [DataTestMethod]
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void MapNecessity_KeyIsNullOrEmptyAndDefaultProvided_ReturnsDefault(string key, Necessity defaultNecessity)
         {
             //Act
-            var result = _sut.MapNecessity(key, defaultNecessity);
+            var result = _systemUnderTest.MapNecessity(key, defaultNecessity);
 
             //Assert
             result.Should().Be(defaultNecessity);
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void MapNecessity_KeyIsNotMapped_ReturnsDefault()
         {
             //Act
-            var result = _sut.MapNecessity("this does not map", Necessity.Mandatory);
+            var result = _systemUnderTest.MapNecessity("this does not map", Necessity.Mandatory);
 
             //Assert
             result.Should().Be(Necessity.Mandatory);
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void MapNecessity_KeyIsNullOrEmptyAndDefaultNotProvided_ThrowsException(string key)
         {
             //Act
-            _sut.MapNecessity(key, null);
+            _systemUnderTest.MapNecessity(key, null);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void MapNecessity_KeyIsNotMappedAndDefaultNotProvided_ThrowsException()
         {
             //Act
-            _sut.MapNecessity("this does not match", null);
+            _systemUnderTest.MapNecessity("this does not match", null);
         }
 
         [DataTestMethod]
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void MapNecessity_KeyIsMapped_ReturnsEnum(string key, Necessity expected)
         {
             //Act
-            var result = _sut.MapNecessity(key, null);
+            var result = _systemUnderTest.MapNecessity(key, null);
 
             //Assert
             result.Should().Be(expected);
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void MapNecessity_KeyIsMappedIgnoringCase_ReturnsEnum(string key, Necessity expected)
         {
             //Act
-            var result = _sut.MapNecessity(key, null);
+            var result = _systemUnderTest.MapNecessity(key, null);
 
             //Assert
             result.Should().Be(expected);
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void MapSlotTypeStatus_KeyIsMapped_ReturnsEnum(string key, Channel expected)
         {
             //Act
-            var result = _sut.MapSlotTypeStatus(key, null);
+            var result = _systemUnderTest.MapSlotTypeStatus(key, null);
 
             //Assert
             result.Should().Be(expected);
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void MapSlotTypeStatus_KeyIsMappedIgnoringCase_ReturnsEnum(string key, Channel expected)
         {
             //Act
-            var result = _sut.MapSlotTypeStatus(key, null);
+            var result = _systemUnderTest.MapSlotTypeStatus(key, null);
 
             //Assert
             result.Should().Be(expected);

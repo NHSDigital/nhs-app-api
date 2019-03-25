@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Support;
@@ -13,7 +12,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
     public class EmisTokenValidationServiceTests
     {
         private ILogger<EmisTokenValidationService> _logger;
-        private ITokenValidationService _sut;
+        private ITokenValidationService _systemUnderTest;
 
         private const string Guid = "2fc69313-a4c6-4a46-a617-56cdb423c122";
 
@@ -21,25 +20,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void TestInitialize()
         {
             _logger = Mock.Of<ILogger<EmisTokenValidationService>>();
-            _sut = new EmisTokenValidationService(_logger);
+            _systemUnderTest = new EmisTokenValidationService(_logger);
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsNotInAGuidFormat()
         {
-            _sut.IsValidConnectionTokenFormat("foobar").Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat("foobar").Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsNull()
         {
-            _sut.IsValidConnectionTokenFormat(null).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(null).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsTrue_WhenTokenIsInAGuidFormat()
         {
-            _sut.IsValidConnectionTokenFormat(Guid).Should().BeTrue();
+            _systemUnderTest.IsValidConnectionTokenFormat(Guid).Should().BeTrue();
         }
 
         [TestMethod]
@@ -47,7 +46,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         {
             var token = new EmisConnectionToken { AccessIdentityGuid = Guid, Im1CacheKey = "foo" }.SerializeJson();
 
-            _sut.IsValidConnectionTokenFormat(token).Should().BeTrue();
+            _systemUnderTest.IsValidConnectionTokenFormat(token).Should().BeTrue();
         }
 
         [DataTestMethod]
@@ -64,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 Im1CacheKey = retrievalKey
             }.SerializeJson();
 
-            _sut.IsValidConnectionTokenFormat(token).Should().BeFalse();
+            _systemUnderTest.IsValidConnectionTokenFormat(token).Should().BeFalse();
         }
     }
 }

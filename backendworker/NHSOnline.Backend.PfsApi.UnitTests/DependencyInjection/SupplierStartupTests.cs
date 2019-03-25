@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.DependencyInjection
         private Mock<IGpSystemRegistrationService> _gpSystemRegistrationService;
 
         [TestInitialize]
-        public void TestInitialise()
+        public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 

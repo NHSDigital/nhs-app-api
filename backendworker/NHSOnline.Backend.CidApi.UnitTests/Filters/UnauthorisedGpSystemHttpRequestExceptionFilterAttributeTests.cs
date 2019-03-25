@@ -19,17 +19,17 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Filters
     [TestClass]
     public class UnauthorisedGpSystemHttpRequestExceptionFilterAttributeTests
     {
-        private UnauthorisedGpSystemHttpRequestExceptionFilterAttribute _sut;
+        private UnauthorisedGpSystemHttpRequestExceptionFilterAttribute _systemUnderTest;
         private Mock<HttpContext> _mockHttpContext;
         private ActionContext _actionContext;
 
         [TestInitialize]
-        public void Setup()
+        public void TestInitialize()
         {
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
             var logger = fixture.Freeze<Mock<ILogger<UnauthorisedGpSystemHttpRequestExceptionFilterAttribute>>>();
             
-            _sut = new UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(logger.Object);
+            _systemUnderTest = new UnauthorisedGpSystemHttpRequestExceptionFilterAttribute(logger.Object);
             
             var mockAuthenticationService = new Mock<IAuthenticationService>();
             var mockServiceProvider = new Mock<IServiceProvider>();
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Filters
             };
 
             // Act
-            _sut.OnException(exceptionContext);
+            _systemUnderTest.OnException(exceptionContext);
 
             // Assert
             exceptionContext.Result.Should().NotBeNull();
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Filters
             };
 
             // Act
-            _sut.OnException(exceptionContext);
+            _systemUnderTest.OnException(exceptionContext);
 
             // Assert
             exceptionContext.Result.Should().BeNull();

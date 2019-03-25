@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.ValidationAttributes
         private Mock<ILogger<AcceptsAttribute>> _acceptedValuesLogger;
 
         [TestInitialize]
-        public void Setup()
+        public void TestInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())

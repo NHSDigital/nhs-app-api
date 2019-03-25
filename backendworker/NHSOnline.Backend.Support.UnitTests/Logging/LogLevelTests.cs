@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Logging
         private Stream _stream;
 
         [TestInitialize]
-        public void TestInitialise()
+        public void TestInitialize()
         {
             _stream = new MemoryStream();
         }
