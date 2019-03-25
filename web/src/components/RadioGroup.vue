@@ -1,24 +1,34 @@
 <template>
-  <component :is="container" class="radio-group">
-    <legend v-if="header">
-      <h3>{{ header }}</h3>
-    </legend>
-    <generic-radio-button v-for="radio in radios" :key="radio.value"
-                          :hint="radio.hint"
-                          :label="radio.label"
-                          :name="name"
-                          :checked="currentValue === radio.value"
-                          :value="radio.value"
-                          @select="selected"/>
-  </component>
+  <error-group :show-error="showError">
+    <component :is="container" class="radio-group">
+      <legend v-if="header">
+        <h3>{{ header }}</h3>
+      </legend>
+      <error-message v-if="errorMessage && showError">
+        {{ errorMessage }}
+      </error-message>
+      <generic-radio-button v-for="radio in radios" :key="radio.value"
+                            :class="{ inline: inline }"
+                            :hint="radio.hint"
+                            :label="radio.label"
+                            :name="name"
+                            :checked="currentValue === radio.value"
+                            :value="radio.value"
+                            @select="selected"/>
+    </component>
+  </error-group>
 </template>
 
 <script>
+import ErrorGroup from '@/components/ErrorGroup';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 
 export default {
   name: 'RadioGroup',
   components: {
+    ErrorGroup,
+    ErrorMessage,
     GenericRadioButton,
   },
   props: {
@@ -26,9 +36,17 @@ export default {
     currentValue: {
       default: '',
     },
+    errorMessage: {
+      type: String,
+      default: '',
+    },
     header: {
       type: String,
       default: '',
+    },
+    inline: {
+      type: Boolean,
+      default: false,
     },
     name: {
       type: String,
@@ -37,6 +55,10 @@ export default {
     radios: {
       type: Array,
       required: true,
+    },
+    showError: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

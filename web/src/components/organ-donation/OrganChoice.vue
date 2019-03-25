@@ -1,33 +1,22 @@
 <template>
-  <div :class="$style['new-choice']">
-    <h3>{{ $t(title) }}</h3>
-    <div :class="$style['horizontal-radio']">
-      <generic-radio-button
-        :class="$style['choice-radio-button']"
-        :name="organName"
-        :label="$t('organDonation.someOrgans.choiceYes')"
-        :value="'Yes'"
-        :checked="currentChoice === 'Yes'"
-        @select="selected"/>
-    </div>
-    <div :class="$style['horizontal-radio']">
-      <generic-radio-button
-        :class="$style['choice-radio-button']"
-        :name="organName"
-        :label="$t('organDonation.someOrgans.choiceNo')"
-        :value="'No'"
-        :checked="currentChoice === 'No'"
-        @select="selected"/>
-    </div>
-  </div>
+  <radio-group :key="organName"
+               :name="organName"
+               :radios="choices"
+               :inline="true"
+               :header="$t(title)"
+               :current-value="currentChoice"
+               :show-error="showError"
+               :error-message="$t('organDonation.someOrgans.inlineErrorMessage')"
+               @select="selected"/>
 </template>
 <script>
-import GenericRadioButton from '@/components/widgets/GenericRadioButton';
+import RadioGroup from '@/components/RadioGroup';
+import { NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 
 export default {
   name: 'OrganChoice',
   components: {
-    GenericRadioButton,
+    RadioGroup,
   },
   props: {
     title: {
@@ -38,10 +27,25 @@ export default {
       type: String,
       required: true,
     },
+    showErrors: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      choices: [
+        { label: this.$t('organDonation.someOrgans.choiceYes'), value: YES },
+        { label: this.$t('organDonation.someOrgans.choiceNo'), value: NO },
+      ],
+    };
   },
   computed: {
     currentChoice() {
       return this.$store.state.organDonation.registration.decisionDetails.choices[this.organName];
+    },
+    showError() {
+      return this.showErrors && this.currentChoice === NOT_STATED;
     },
   },
   methods: {
@@ -52,24 +56,4 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-@import "../../style/info";
-@import "../../style/buttons";
-@import "../../style/spacings";
-
-.horizontal-radio {
-  float: left;
-  margin-right: $four;
-}
-
-.new-choice {
-    clear: left;
-}
-
-.choice-radio-button {
-  margin-top: $one;
-  margin-bottom: $two;
-  &:last-of-type {
-    margin-bottom: 1.5em;
-  }
-}
 </style>

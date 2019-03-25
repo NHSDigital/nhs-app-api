@@ -1,6 +1,6 @@
 import BackButton from '@/components/BackButton';
+import RadioGroup from '@/components/RadioGroup';
 import YourChoice from '@/pages/organ-donation/your-choice';
-import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import { ORGAN_DONATION, ORGAN_DONATION_FAITH } from '@/lib/routes';
 import {
   DECISION_APPOINTED_REP,
@@ -9,7 +9,7 @@ import {
   DECISION_UNKNOWN,
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
-import { $t, createStore, mount } from '../../helpers';
+import { $t, createRouter, createStore, mount } from '../../helpers';
 
 const createState = (choice = '') => {
   const state = {
@@ -35,10 +35,14 @@ describe('organ donation your choice page', () => {
   });
 
   beforeEach(() => {
-    $router = [];
+    $router = createRouter();
     state = createState();
     $store = createStore({ state });
     wrapper = mountWrapper();
+  });
+
+  it('will have radio buttons', () => {
+    expect(wrapper.find(RadioGroup).exists()).toBe(true);
   });
 
   describe('no decision set', () => {
@@ -146,7 +150,7 @@ describe('organ donation your choice page', () => {
 
       it('will display the continue button text for your choice', () => {
         const key = 'organDonation.yourChoice.continueButtonText';
-        expect(continueButton.text()).toEqual(`translate_${key}`);
+        expect(continueButton.text()).toBe(`translate_${key}`);
       });
 
       it('will be set as a green button', () => {
@@ -161,44 +165,16 @@ describe('organ donation your choice page', () => {
         });
 
         it('will push the organ donation faith page on the router', () => {
-          expect($router).toContain(ORGAN_DONATION_FAITH.path);
+          expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_FAITH.path);
         });
       });
     });
   });
 
   describe('for new registrations', () => {
-    let allOrgansButton;
-    let someOrgansButton;
-
-    beforeEach(() => {
-      allOrgansButton = wrapper.findAll(GenericRadioButton).at(0);
-      someOrgansButton = wrapper.findAll(GenericRadioButton).at(1);
-    });
-
     describe('currentChoice', () => {
-      it('will equal true', () => {
+      it('will have no value', () => {
         expect(wrapper.vm.currentChoice).toEqual('');
-      });
-    });
-
-    describe('all organs radio button', () => {
-      it('will exist', () => {
-        expect(allOrgansButton.exists()).toBe(true);
-      });
-
-      it('will not be selected', () => {
-        expect(allOrgansButton.vm.isSelected).toEqual(false);
-      });
-    });
-
-    describe('some organs radio button', () => {
-      it('will exist', () => {
-        expect(someOrgansButton.exists()).toBe(true);
-      });
-
-      it('will not be selected', () => {
-        expect(someOrgansButton.vm.isSelected).toEqual(false);
       });
     });
   });

@@ -12,15 +12,12 @@
       <h2>{{ $t('organDonation.yourChoice.subheader') }}</h2>
       <p>{{ $t('organDonation.yourChoice.description') }}</p>
     </div>
-    <error-group :show-error="showErrors">
-      <error-message v-if="showErrors">
-        {{ $t('organDonation.yourChoice.errorMessageText') }}
-      </error-message>
-      <radio-group :class="$style.radioGroup"
-                   :current-value="currentChoice"
-                   :radios="radioButtons"
-                   @select="selected"/>
-    </error-group>
+    <radio-group :class="$style.radioGroup"
+                 :current-value="currentChoice"
+                 :radios="radioButtons"
+                 :show-error="showErrors"
+                 :error-message="$t('organDonation.yourChoice.errorMessageText')"
+                 @select="selected"/>
     <generic-button id="continue-button"
                     :class="[$style.button, $style.green]"
                     @click.prevent="continueClicked">

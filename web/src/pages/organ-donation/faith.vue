@@ -29,21 +29,11 @@
     <div :class="$style.info">
       <p><b>{{ $t('organDonation.faith.choices.header') }}</b></p>
     </div>
-    <generic-radio-button :class="$style.choiceRadioButton"
-                          :label="$t('organDonation.faith.choices.yes.title')"
-                          :checked="currentChoice === yesValue"
-                          :value="yesValue"
-                          @select="radioButtonSelected"/>
-    <generic-radio-button :class="$style.choiceRadioButton"
-                          :label="$t('organDonation.faith.choices.no.title')"
-                          :checked="currentChoice === noValue"
-                          :value="noValue"
-                          @select="radioButtonSelected"/>
-    <generic-radio-button :class="$style.choiceRadioButton"
-                          :label="$t('organDonation.faith.choices.preferNotToSay.title')"
-                          :checked="currentChoice === preferNotToSayValue"
-                          :value="preferNotToSayValue"
-                          @select="radioButtonSelected"/>
+    <radio-group :radios="choices"
+                 :current-value="currentChoice"
+                 :show-error="showError"
+                 :error-message="$t('organDonation.faith.inlineErrorMessage')"
+                 @select="radioButtonSelected"/>
     <generic-button id="continue-to-additional-details"
                     :class="[$style.button, $style.green]"
                     @click.stop.prevent="continueClicked">
@@ -58,12 +48,12 @@
 import BackButton from '@/components/BackButton';
 import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
 import GenericButton from '@/components/widgets/GenericButton';
-import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
+import RadioGroup from '@/components/RadioGroup';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
-import { YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
+import { NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
 import { EnsureOptInDecision } from '@/components/organ-donation/EnsureDecisionMixin';
 import { redirectTo } from '@/lib/utils';
@@ -73,17 +63,19 @@ export default {
     BackButton,
     CollapsibleDialog,
     GenericButton,
-    GenericRadioButton,
     MessageDialog,
     MessageList,
     MessageText,
+    RadioGroup,
   },
   mixins: [EnsureOptInDecision],
   data() {
     return {
-      yesValue: YES,
-      noValue: NO,
-      preferNotToSayValue: NOT_STATED,
+      choices: [
+        { value: YES, label: this.$t('organDonation.faith.choices.yes.title') },
+        { value: NO, label: this.$t('organDonation.faith.choices.no.title') },
+        { value: NOT_STATED, label: this.$t('organDonation.faith.choices.preferNotToSay.title') },
+      ],
       hasTriedToContinue: false,
     };
   },
@@ -128,14 +120,6 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/info";
 @import "../../style/buttons";
-
-.choiceRadioButton {
-  margin-top: 0.5em;
-  margin-bottom: 1em;
-  &:last-of-type {
-    margin-bottom: 1.5em;
-  }
-}
 ul {
   list-style-type: none;
   margin: 0;

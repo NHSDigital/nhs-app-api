@@ -6,9 +6,9 @@
            :checked="checked"
            type="radio"
            :aria-describedby="hintId"
-           @change.stop="selected">
+           @click.stop="selected">
     <label :for="inputId">{{ label }}</label>
-    <span  v-if="hint" :id="hintId">{{ hint }}</span>
+    <span v-if="hint" :id="hintId">{{ hint }}</span>
   </div>
 </template>
 
@@ -17,10 +17,6 @@ export default {
   name: 'GenericRadioButton',
   props: {
     hint: {
-      type: String,
-      default: '',
-    },
-    id: {
       type: String,
       default: '',
     },
@@ -50,18 +46,10 @@ export default {
     hintId() {
       return this.hint ? `${this.inputId}-hint` : '';
     },
-    isSelected() {
-      return this.model === this.value;
-    },
   },
   methods: {
     selected() {
       this.$emit('select', this.value);
-    },
-    onKeyDown(e) {
-      if (e.keyCode === 13) {
-        this.selected(e);
-      }
     },
   },
 };

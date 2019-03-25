@@ -1,14 +1,25 @@
+import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import RadioGroup from '@/components/RadioGroup';
 import { mount } from '../helpers';
 
-const mountGroup = propsData => mount(RadioGroup, { propsData });
-const createPropsData = ({ header = '' } = {}) => ({
+const mountGroup = propsData => mount(RadioGroup, {
+  propsData,
+  state: {
+    device: {
+      isNativeApp: false,
+    },
+  },
+});
+
+const createPropsData = ({ header = '', errorMessage = '', showError = false } = {}) => ({
+  errorMessage,
   header,
   radios: [
     { value: 'first', label: 'first label' },
     { value: 'second', label: 'second label' },
   ],
+  showError,
 });
 
 describe('Radio group', () => {
@@ -25,6 +36,32 @@ describe('Radio group', () => {
 
   it('will display all radio buttons', () => {
     expect(wrapper.findAll(GenericRadioButton).length).toBe(2);
+  });
+
+  describe('error message', () => {
+    const errorMessage = 'Error Message';
+
+    describe('when showing error', () => {
+      beforeEach(() => {
+        const propsData = createPropsData({ errorMessage, showError: true });
+        wrapper = mountGroup(propsData);
+      });
+
+      it('will display error message', () => {
+        expect(wrapper.find(ErrorMessage).exists()).toBe(true);
+      });
+    });
+
+    describe('when not showing error', () => {
+      beforeEach(() => {
+        const propsData = createPropsData({ errorMessage, showError: false });
+        wrapper = mountGroup(propsData);
+      });
+
+      it('will not display error message', () => {
+        expect(wrapper.find(ErrorMessage).exists()).toBe(false);
+      });
+    });
   });
 
   describe('with header', () => {

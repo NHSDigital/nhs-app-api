@@ -772,6 +772,7 @@ export default {
       continueButtonText: 'Continue',
       errorMsgHeader: 'There\'s a problem',
       errorMsgText: 'Respond to the faith/belief declaration. Choose yes, no or prefer not to say.',
+      inlineErrorMessage: 'Choose yes, no or prefer not to say.',
       body: {
         paragraph1: 'When you die, NHS staff can ask your family (and anyone else appropriate) about your faith and beliefs. This is how NHS staff will find out about any end of life wishes you might have.',
         paragraph2: 'Record here whether you want our specialist nurses to discuss your faith or beliefs with your family when you die, at the same time they approach them about organ donation.',
@@ -843,7 +844,7 @@ export default {
     },
     yourChoice: {
       subheader: 'Your choice',
-      description: 'You can select to donate some, or all of your organs and tissue.',
+      description: 'You can choose to donate some, or all, of your organs and tissue.',
       continueButtonText: 'Continue',
       errorMessageHeader: 'There\'s a problem',
       errorMessageText: 'Choose to donate all or some of your organs.',
@@ -967,6 +968,7 @@ export default {
       errorMsgHeader: 'There\'s a problem',
       allSelectedValidationText: 'Make a decision for all categories to continue',
       yesRequiredValidationText: 'At least one category must be set to yes to continue',
+      inlineErrorMessage: 'Make a decision',
       choiceYes: 'Yes',
       choiceNo: 'No',
       heartTitle: 'Heart',

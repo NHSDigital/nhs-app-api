@@ -44,6 +44,9 @@ describe('confirmation', () => {
               isPrivacyAccepted: false,
             },
           },
+          propsData: {
+            submitAttempted: false,
+          },
         });
 
       wrapper = mountConfirmation();

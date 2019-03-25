@@ -1,7 +1,7 @@
 <template>
   <div id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <div ref="validationMessage" tabindex="-1">
-      <message-dialog v-if="hasTriedToContinue && !hasMadeChoices" message-type="error">
+      <message-dialog v-if="showErrors" message-type="error">
         <message-text data-purpose="error-heading">
           {{ $t('organDonation.someOrgans.errorMsgHeader') }}
         </message-text>
@@ -19,11 +19,10 @@
       <h2>{{ $t('organDonation.someOrgans.subheader') }}</h2>
       <p>{{ $t('organDonation.someOrgans.description') }}</p>
     </div>
-    <organ-choice
-      v-for="choice in choices"
-      :key="choice"
-      :title="`organDonation.someOrgans.${choice}Title`"
-      :organ-name="choice"/>
+    <organ-choice v-for="choice in choices" :key="choice"
+                  :title="`organDonation.someOrgans.${choice}Title`"
+                  :organ-name="choice"
+                  :show-errors="showInlineErrors"/>
     <generic-button id="continue-button"
                     :class="[$style.button, $style.green]"
                     @click.prevent="continueClicked">
@@ -38,14 +37,14 @@ import BackButton from '@/components/BackButton';
 import EnsureDecisionMixin from '@/components/organ-donation/EnsureDecisionMixin';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
+import includes from 'lodash/fp/includes';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
-import { ORGAN_DONATION_FAITH } from '@/lib/routes';
+import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
-import { initialState } from '@/store/modules/organDonation/mutation-types';
-import includes from 'lodash/fp/includes';
+import { ORGAN_DONATION_FAITH } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -62,24 +61,34 @@ export default {
   mixins: [EnsureDecisionMixin],
   data() {
     return {
-      setAllOrganChoice: 'organDonation/setSomeOrgans',
-      hasTriedToContinue: false,
-      choices: Object.keys(initialState().registration.decisionDetails.choices),
       activeErrorMessage: '',
+      choices: Object.keys(initialState().registration.decisionDetails.choices),
+      hasTriedToContinue: false,
+      setAllOrganChoice: 'organDonation/setSomeOrgans',
     };
   },
   computed: {
     areAllSelected() {
-      return !includes('NotStated')(this.currentChoices);
-    },
-    hasYesSelection() {
-      return includes('Yes')(this.currentChoices);
-    },
-    hasMadeChoices() {
-      return (this.areAllSelected && this.hasYesSelection);
+      return !includes(NOT_STATED)(this.currentChoices);
     },
     currentChoices() {
       return this.$store.state.organDonation.registration.decisionDetails.choices;
+    },
+    hasMadeChoices() {
+      return this.areAllSelected && this.hasYesSelection;
+    },
+    hasNoSelection() {
+      return includes(NO)(this.currentChoices);
+    },
+    hasYesSelection() {
+      return includes(YES)(this.currentChoices);
+    },
+    showErrors() {
+      return this.hasTriedToContinue && !this.hasMadeChoices;
+    },
+    showInlineErrors() {
+      return this.showErrors && !this.areAllSelected &&
+        (this.hasYesSelection || this.hasNoSelection);
     },
   },
   asyncData({ store }) {

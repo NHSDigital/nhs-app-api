@@ -2,41 +2,51 @@ import BackButton from '@/components/BackButton';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
 import { ORGAN_DONATION_FAITH } from '@/lib/routes';
-import { initialState } from '@/store/modules/organDonation/mutation-types';
+import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 import { $t, createRouter, createStore, mount } from '../../helpers';
 
 const allNoChoices = {
-  heart: 'No',
-  lungs: 'No',
-  kidney: 'No',
-  liver: 'No',
-  corneas: 'No',
-  pancreas: 'No',
-  tissue: 'No',
-  smallBowel: 'No',
+  heart: NO,
+  lungs: NO,
+  kidney: NO,
+  liver: NO,
+  corneas: NO,
+  pancreas: NO,
+  tissue: NO,
+  smallBowel: NO,
+};
+const allNotStatedChoices = {
+  heart: NOT_STATED,
+  lungs: NOT_STATED,
+  kidney: NOT_STATED,
+  liver: NOT_STATED,
+  corneas: NOT_STATED,
+  pancreas: NOT_STATED,
+  tissue: NOT_STATED,
+  smallBowel: NOT_STATED,
 };
 const oneYesChoices = {
-  heart: 'Yes',
-  lungs: 'No',
-  kidney: 'No',
-  liver: 'No',
-  corneas: 'No',
-  pancreas: 'No',
-  tissue: 'No',
-  smallBowel: 'No',
+  heart: YES,
+  lungs: NO,
+  kidney: NO,
+  liver: NO,
+  corneas: NO,
+  pancreas: NO,
+  tissue: NO,
+  smallBowel: NO,
 };
 const someNotSetChoices = {
-  heart: 'NotStated',
-  lungs: 'Yes',
-  kidney: 'NotStated',
-  liver: 'No',
-  corneas: 'No',
-  pancreas: 'No',
-  tissue: 'No',
-  smallBowel: 'No',
+  heart: NOT_STATED,
+  lungs: YES,
+  kidney: NOT_STATED,
+  liver: NO,
+  corneas: NO,
+  pancreas: NO,
+  tissue: NO,
+  smallBowel: NO,
 };
 
-const createState = (choice = false) => {
+const createState = ({ choices = undefined } = {}) => {
   const state = {
     organDonation: initialState(),
     device: {
@@ -44,24 +54,40 @@ const createState = (choice = false) => {
     },
   };
 
-  state.organDonation.registration.decisionDetails.all = choice;
+  if (choices) {
+    state.organDonation.registration.decisionDetails.choices = choices;
+  }
 
   return state;
 };
 
 // Test for choices
 describe('organ donation some organs page', () => {
+  const $style = {
+    button: 'button',
+    green: 'green',
+    error: 'error',
+  };
   let $store;
   let wrapper;
-  let $style;
   let $router;
 
-  beforeEach(() => {
+  const mountSomeOrgans = ({ choices = undefined } = {}) => {
     $router = createRouter();
-    $store = createStore({ state: createState() });
-    wrapper = mount(SomeOrgans, {
-      $router, $store, $t, $style,
+    $store = createStore({
+      state: createState({ choices }),
     });
+
+    return mount(SomeOrgans, {
+      $router,
+      $store,
+      $t,
+      $style,
+    });
+  };
+
+  beforeEach(() => {
+    wrapper = mountSomeOrgans();
     global.scrollTo = jest.fn();
   });
 
@@ -75,6 +101,7 @@ describe('organ donation some organs page', () => {
 
   describe('organ choices', () => {
     let organChoices;
+
     beforeEach(() => {
       organChoices = wrapper.findAll(OrganChoice);
     });
@@ -106,10 +133,6 @@ describe('organ donation some organs page', () => {
 
       beforeEach(() => {
         continueButton = wrapper.find('#continue-button');
-        $style = {
-          button: 'button',
-          green: 'green',
-        };
       });
 
       it('will exist', () => {
@@ -126,70 +149,83 @@ describe('organ donation some organs page', () => {
         expect(continueButton.classes()).toContain($style.green);
       });
 
-      describe('validation is shown when all no choices are set', () => {
-        beforeEach(() => {
-          $style = {
-            button: 'button',
-            green: 'green',
-            error: 'error',
-          };
-          $store.state.organDonation.registration.decisionDetails.choices = allNoChoices;
-          wrapper = mount(SomeOrgans, {
-            $router, $store, $t, $style,
-          });
-          continueButton = wrapper.find('#continue-button');
-        });
-        it('shown when all choices are "No"', () => {
-          continueButton.trigger('click');
-          expect(wrapper.find('.error').exists()).toBe(true);
-        });
-        it('will not push the organ donation additional details page on the router', () => {
-          expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
-        });
-      });
+      describe('click', () => {
+        const clickButton = () => wrapper.find('#continue-button').trigger('click');
 
-      describe('validation is shown when when some choices are not set', () => {
-        beforeEach(() => {
-          $style = {
-            button: 'button',
-            green: 'green',
-            error: 'error',
-          };
-          $store.state.organDonation.registration.decisionDetails.choices = someNotSetChoices;
-          wrapper = mount(SomeOrgans, {
-            $router, $store, $t, $style,
+        describe('when all choices not set', () => {
+          beforeEach(() => {
+            wrapper = mountSomeOrgans({ choices: allNotStatedChoices });
+            clickButton();
           });
-          continueButton = wrapper.find('#continue-button');
-        });
-        it('shown when some choices are not set', () => {
-          continueButton.trigger('click');
-          expect(wrapper.find('.error').exists()).toBe(true);
-        });
-        it('will not push the organ donation additional details page on the router', () => {
-          expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
-        });
-      });
 
-      describe('validation is not shown when when all are selected including minumun of one yes', () => {
-        beforeEach(() => {
-          $style = {
-            button: 'button',
-            green: 'green',
-            error: 'error',
-          };
-          $store.state.organDonation.registration.decisionDetails.choices = oneYesChoices;
-          wrapper = mount(SomeOrgans, {
-            $router, $store, $t, $style,
+          it('will show error dialog', () => {
+            expect(wrapper.find('.error').exists()).toBe(true);
           });
-          continueButton = wrapper.find('#continue-button');
+
+          it('will not push the organ donation additional details page on the router', () => {
+            expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
+          });
+
+          it('will not show inline errors', () => {
+            expect(wrapper.vm.showInlineErrors).toBe(false);
+          });
         });
-        it('shown when some choices are not set', () => {
-          continueButton.trigger('click');
-          expect(wrapper.find('.error').exists()).toBe(false);
+
+        describe('when all no choices are set', () => {
+          beforeEach(() => {
+            wrapper = mountSomeOrgans({ choices: allNoChoices });
+            clickButton();
+          });
+
+          it('will show error dialog', () => {
+            expect(wrapper.find('.error').exists()).toBe(true);
+          });
+
+          it('will not push the organ donation additional details page on the router', () => {
+            expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
+          });
+
+          it('will not show inline errors', () => {
+            expect(wrapper.vm.showInlineErrors).toBe(false);
+          });
         });
-        it('will push the organ donation additional details page on the router', () => {
-          continueButton.trigger('click');
-          expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_FAITH.path);
+
+        describe('when some choices are not set', () => {
+          beforeEach(() => {
+            wrapper = mountSomeOrgans({ choices: someNotSetChoices });
+            clickButton();
+          });
+
+          it('will show error dialog', () => {
+            expect(wrapper.find('.error').exists()).toBe(true);
+          });
+
+          it('will not push the organ donation additional details page on the router', () => {
+            expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
+          });
+
+          it('will show inline errors', () => {
+            expect(wrapper.vm.showInlineErrors).toBe(true);
+          });
+        });
+
+        describe('when all are selected including minimun of one yes', () => {
+          beforeEach(() => {
+            wrapper = mountSomeOrgans({ choices: oneYesChoices });
+            clickButton();
+          });
+
+          it('will not show error dialog', () => {
+            expect(wrapper.find('.error').exists()).toBe(false);
+          });
+
+          it('will push the organ donation additional details page on the router', () => {
+            expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_FAITH.path);
+          });
+
+          it('will not show inline errors', () => {
+            expect(wrapper.vm.showInlineErrors).toBe(false);
+          });
         });
       });
     });
@@ -205,7 +241,7 @@ describe('organ donation some organs page', () => {
       expect(wrapper.vm.areAllSelected).toEqual(false);
     });
 
-    it('will pass at least one "Yes" selected validation', () => {
+    it('will fail at least one "Yes" selected validation', () => {
       expect(wrapper.vm.hasYesSelection).toEqual(false);
     });
 

@@ -14,7 +14,7 @@
                                :class="$style.noDecoration"
                                :text="$t('organDonation.otherThings.bloodDonation.subheader')"
                                :aria-label="`${$t(
-                               'organDonation.otherThings.bloodDonation.subheader')}.
+                                 'organDonation.otherThings.bloodDonation.subheader')}.
                                ${$t('organDonation.otherThings.bloodDonation.body')}`"
                                tag="a" target="_blank">
           <h2>{{ $t('organDonation.otherThings.bloodDonation.subheader') }}</h2>

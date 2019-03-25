@@ -35,6 +35,7 @@
     }
   }
   label {
+    -ms-touch-action: manipulation;
     cursor: pointer;
     display: inline-block;
     margin-bottom: 0;
@@ -71,17 +72,28 @@
     padding-left: 0.6em;
     padding-right: 0.6em;
   }
+  &.inline {
+    clear: none;
+    float: left;
+    margin-right: 24px;
+  }
+}
+
+fieldset.radio-group {
+  border: 0;
 }
 
 .radio-group {
-  &.fieldset{
-    border: 0;
-  }
   .radio-item {
-    @include space(margin, bottom, $two);
-    &:last-child,
-    &:last-of-type {
+    &.inline {
       @include space(margin, bottom, $three);
+    }
+    &:not(.inline) {
+      @include space(margin, bottom, $two);
+      &:last-child,
+      &:last-of-type {
+        @include space(margin, bottom, $three);
+      }
     }
   }
 }

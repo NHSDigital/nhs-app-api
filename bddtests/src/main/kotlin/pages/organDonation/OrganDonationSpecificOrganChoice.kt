@@ -9,13 +9,13 @@ class OrganDonationSpecificOrganChoice(val title:String, page: HybridPageObject)
 
     private val container  by lazy {
         HybridPageElement(
-                "//div[h3[text()=\"$title\"]]",
+                "//fieldset[legend[h3[text()=\"$title\"]]]",
                 page = page,
                 helpfulName = "$title div")
     }
 
     private val radioButtons by lazy {
-        RadioButtons.create(page, "//div[h3[text()=\"$title\"]]/div/div[input[@type=\"radio\"]]" )}
+        RadioButtons.create(page, "//fieldset[legend[h3[text()=\"$title\"]]]/div[input[@type=\"radio\"]]" )}
 
     private val expectedOptions by lazy {
         arrayListOf(

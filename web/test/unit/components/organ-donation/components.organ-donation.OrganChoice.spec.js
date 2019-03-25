@@ -14,21 +14,27 @@ describe('organ choice component', () => {
   let yesRadioButton;
   let noRadioButton;
 
+  const mountOrganChoice = () => mount(OrganChoice, {
+    $store,
+    $t,
+    propsData: {
+      title: 'organDonation.someOrgans.heartTitle',
+      organName: 'heart',
+      showErrors: false,
+    },
+  });
+
   beforeEach(() => {
     $store = createStore({
       state: {
         organDonation: initialState(),
       },
     });
+    wrapper = mountOrganChoice();
   });
 
   describe('yes selected', () => {
     beforeEach(() => {
-      wrapper = mount(OrganChoice, {
-        $store,
-        $t,
-        propsData: { title: 'organDonation.someOrgans.heartTitle', organName: 'heart' },
-      });
       yesRadioButton = wrapper.findAll(GenericRadioButton).at(0);
     });
 
@@ -59,11 +65,6 @@ describe('organ choice component', () => {
 
   describe('no selected', () => {
     beforeEach(() => {
-      wrapper = mount(OrganChoice, {
-        $store,
-        $t,
-        propsData: { title: 'organDonation.someOrgans.heartTitle', organName: 'heart' },
-      });
       noRadioButton = wrapper.findAll(GenericRadioButton).at(1);
     });
 
