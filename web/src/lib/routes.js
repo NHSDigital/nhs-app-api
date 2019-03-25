@@ -107,7 +107,7 @@ const routes = {
     path: '/my-record/noaccess',
   },
   MYRECORDTESTRESULT: {
-    name: 'my-record-testresultdetail',
+    name: 'my-record-testresultdetail-testResultId',
     path: '/my-record/testresultdetail/:testResultId',
   },
   MY_RECORD_VISION_DIAGNOSIS_DETAIL: {

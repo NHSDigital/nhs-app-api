@@ -66,7 +66,7 @@ describe('my-record acceptance middleware', () => {
     beforeEach(() => {
       app = createApp({
         route: {
-          name: 'my-record-testresultdetail',
+          name: 'my-record-testresultdetail-testResultId',
           path: '/my-record/testresultdetail/1',
         },
       });
