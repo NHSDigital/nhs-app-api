@@ -2,14 +2,10 @@
   <div :class="dynamicStyle('loginMain')">
     <div v-if="isPracticeParticipating">
       <h2>{{ $t('login.desc') }}</h2>
-      <form :action="authoriseUrl" method="get" @submit="formSubmitted">
-        <input :value="scope" type="hidden" name="scope">
-        <input v-model="clientId" type="hidden" name="client_id">
-        <input :value="codeChallenge" type="hidden" name="code_challenge">
-        <input :value="codeChallengeMethod" type="hidden" name="code_challenge_method">
-        <input :value="redirectUri" type="hidden" name="redirect_uri">
-        <input :value="state" type="hidden" name="state">
-        <input :value="responseType" type="hidden" name="response_type">
+      <form ref="loginForm"
+            :action="authoriseUrl"
+            method="get"
+            @submit.prevent="redirectToCitizenId">
         <input :value="source" type="hidden" name="source">
         <LoginButton :disabled="isButtonDisabled" />
       </form>
@@ -47,13 +43,11 @@
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import LoginButton from '@/components/LoginButton';
-import Sources from '@/lib/sources';
 import { setCookie } from '@/lib/cookie-manager';
 import { BEGINLOGIN, GP_FINDER } from '@/lib/routes';
 import AuthorisationService from '@/services/authorisation-service';
 import NativeCallbacks from '@/services/native-app';
 import moment from 'moment';
-import querystring from 'querystring';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 
 export default {
@@ -65,19 +59,11 @@ export default {
   data() {
     return {
       authoriseUrl: BEGINLOGIN.path,
-      scope: '',
-      codeChallenge: '',
-      codeChallengeMethod: '',
-      redirectUri: '',
-      state: '',
-      responseType: '',
-      clientId: '',
-      fidoAuthResponse: '',
+      source: this.getSource(),
       practiceParticipating: true,
       practiceName: undefined,
       practiceAddress: undefined,
       isButtonDisabled: false,
-      source: this.getSource(),
     };
   },
   computed: {
@@ -85,7 +71,7 @@ export default {
       return this.practiceParticipating;
     },
     shouldShowBiometrics() {
-      return this.$env.BIOMETRICS_ENABLED && (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios');
+      return this.$store.app.$env.BIOMETRICS_ENABLED && this.$store.state.device.isNativeApp;
     },
     notParticipatingSurgeryName() {
       return this.practiceName;
@@ -135,11 +121,19 @@ export default {
     };
   },
   mounted() {
+    if (this.shouldShowBiometrics && this.$route.query.fidoAuthResponse) {
+      const { authoriseUrl, loginUrl } = this.generateRedirectData();
+      this.authoriseUrl = authoriseUrl;
+      this.$store.app.context.redirect(loginUrl);
+      this.$store.dispatch('analytics/satelliteTrack', 'fidoLogin');
+      return;
+    }
     const betaCookie = this.$cookies.get('BetaCookie');
-    const throttlingEnabled = this.$env.THROTTLING_ENABLED === true || this.$env.THROTTLING_ENABLED === 'true';
+    const throttlingEnabled = this.$store.app.$env.THROTTLING_ENABLED === true || this.$store.app.$env.THROTTLING_ENABLED === 'true';
 
     if (throttlingEnabled && !betaCookie && this.$store.state.device.isNativeApp) {
       this.goToUrl(GP_FINDER.path);
+      this.isButtonDisabled = true;
       return;
     }
 
@@ -152,54 +146,29 @@ export default {
         NativeCallbacks.storeBetaCookie();
       }
     }
-
-    const authorisationService = new AuthorisationService(this.$env);
-    const loginValues = authorisationService.generateLoginValues(
-      this.$route.query.source,
-      this.$cookies,
-      this.$route.query.fidoAuthResponse,
-    );
-
-    this.scope = loginValues.scope;
-    this.codeChallenge = loginValues.codeChallenge;
-    this.codeChallengeMethod = loginValues.codeChallengeMethod;
-    this.redirectUri = loginValues.redirectUri;
-    this.state = loginValues.state;
-    this.responseType = loginValues.responseType;
-    this.clientId = loginValues.clientId;
-    this.authoriseUrl = loginValues.authoriseUrl;
-
-    this.fidoAuthResponse = loginValues.fidoAuthResponse;
-
-    if (this.shouldShowBiometrics && this.fidoAuthResponse) {
-      this.$store.app.context.redirect(this.generateFidoUrl());
-    }
   },
   methods: {
-    async formSubmitted() {
-      if (process.client) {
-        if (this.$store.state.device.source === Sources.Android) {
-          // (Android only)
-          // Disable login button on click.
-          // Page should be refreshed onResume.
-          this.isButtonDisabled = true;
-        }
+    generateRedirectData() {
+      const authorisationService = new AuthorisationService(this.$store.app.$env);
+      const { source } = this.$route.query;
+      const { request, loginUrl } = authorisationService.generateLoginUrl({
+        source,
+        cookies: this.$cookies,
+        fidoAuthResponse: this.$route.query.fidoAuthResponse,
+      });
+      return { authoriseUrl: request.authoriseUrl, loginUrl };
+    },
+    redirectToCitizenId() {
+      if (!this.isButtonDisabled) {
+        const { authoriseUrl, loginUrl } = this.generateRedirectData();
+        this.authoriseUrl = authoriseUrl;
+        this.$store.app.context.redirect(loginUrl);
+        this.isButtonDisabled = true;
         this.$store.dispatch('analytics/satelliteTrack', 'login');
       }
-      return true;
     },
-    generateFidoUrl() {
-      const originalData = this.$data;
-      const newData = {};
-      Object.keys(originalData).forEach((key) => {
-        if (key !== 'authoriseUrl') {
-          newData[this.camelToUnderscore(key)] = originalData[key];
-        }
-      });
-      return `${this.authoriseUrl}?${querystring.stringify(newData)}`;
-    },
-    camelToUnderscore(key) {
-      return key.replace(/([A-Z])/g, '_$1').toLowerCase();
+    getSource() {
+      return this.$route.query.source;
     },
     resetAndGoToGPFinder() {
       setCookie({
@@ -215,9 +184,6 @@ export default {
     },
     dynamicStyle(...args) {
       return getDynamicStyle(this, args);
-    },
-    getSource() {
-      return this.$route.query.source;
     },
   },
 };

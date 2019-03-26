@@ -23,7 +23,7 @@ describe('login values generation', () => {
   };
   const fidoAuthResponse = 'mock auth response';
 
-  const request = authorisationService.generateLoginValues(source, cookies, fidoAuthResponse);
+  const { request } = authorisationService.generateLoginUrl({ source, cookies, fidoAuthResponse });
 
   it('uses the correct source in the request', () => {
     const redirectUri = authorisationService.getRedirectUri(source);

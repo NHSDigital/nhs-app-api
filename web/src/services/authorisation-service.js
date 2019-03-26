@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import Sources from '@/lib/sources';
+import querystring from 'querystring';
 
 const base64URLEncode = value =>
   value
@@ -15,6 +16,34 @@ const sha256 = value =>
 const createVerifier = () => base64URLEncode(crypto.randomBytes(32));
 const createChallenge = verifier => base64URLEncode(sha256(verifier));
 
+const camelToUnderscore = key => key.replace(/([A-Z])/g, '_$1').toLowerCase();
+
+const generateFidoUrl = (redirectData) => {
+  const originalData = redirectData;
+  const newData = {};
+  Object.keys(originalData).forEach((key) => {
+    if (key !== 'authoriseUrl') {
+      newData[camelToUnderscore(key)] = originalData[key];
+    }
+  });
+  return `${originalData.authoriseUrl}?${querystring.stringify(newData)}`;
+};
+
+const generateCIDUrl = (redirectData) => {
+  const newData = {
+    [camelToUnderscore('scope')]: redirectData.scope,
+    [camelToUnderscore('clientId')]: redirectData.clientId,
+    [camelToUnderscore('codeChallenge')]: redirectData.codeChallenge,
+    [camelToUnderscore('codeChallengeMethod')]: redirectData.codeChallengeMethod,
+    [camelToUnderscore('redirectUri')]: redirectData.redirectUri,
+    [camelToUnderscore('state')]: redirectData.state,
+    [camelToUnderscore('responseType')]: redirectData.responseType,
+    [camelToUnderscore('source')]: redirectData.source,
+  };
+
+  return `${redirectData.authoriseUrl}?${querystring.stringify(newData)}`;
+};
+
 class AuthorisationService {
   constructor(environment) {
     this.nativeCidRedirectUri = environment.NATIVE_CID_REDIRECT_URI;
@@ -23,7 +52,7 @@ class AuthorisationService {
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT;
   }
 
-  generateLoginValues(source, cookies, fidoAuthResponse) {
+  generateLoginUrl({ source, cookies, fidoAuthResponse }) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
@@ -41,6 +70,7 @@ class AuthorisationService {
       codeChallengeMethod: 'S256',
       authoriseUrl: this.cidAuthEndpoint,
       fidoAuthResponse: fidoResponse,
+      source,
     };
 
     cookies.set('nhso.auth', {
@@ -48,7 +78,14 @@ class AuthorisationService {
       codeVerifier: verifier,
     });
 
-    return request;
+    let responseUrl;
+    if (fidoAuthResponse === undefined) {
+      responseUrl = generateCIDUrl(request);
+    } else {
+      responseUrl = generateFidoUrl(request);
+    }
+
+    return { loginUrl: responseUrl, request };
   }
 
   getRedirectUri(device) {

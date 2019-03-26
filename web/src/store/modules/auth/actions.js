@@ -5,6 +5,7 @@ import { LOGIN } from '@/lib/routes';
 import { removeCookies } from '@/lib/cookie-manager';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
 
+
 const MAX_TRIES = 10;
 
 const final = ({ self, commit }) => {

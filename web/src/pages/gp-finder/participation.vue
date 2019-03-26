@@ -122,10 +122,10 @@ export default {
   asyncData({ store }) {
     if (get('PracticeParticipating')(store.state.throttling.selectedGpPractice)) {
       const authorisationService = new AuthorisationService(store.app.$env);
-      return authorisationService.generateLoginValues(
-        store.state.device.source,
-        store.$cookies,
-      );
+      return authorisationService.generateLoginUrl({
+        source: store.state.device.source,
+        cookies: store.$cookies,
+      }).request;
     }
     return {};
   },

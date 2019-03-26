@@ -29,14 +29,18 @@ export const createRouter = () => ({
 });
 
 export const createStore = ({
+  $cookies = {},
   $env = {},
   $http = {},
-  state = {},
   getters = {},
+  context = {},
+  state = {},
 } = {}) => ({
   app: {
+    $cookies,
     $env,
     $http,
+    context,
   },
   dispatch: jest.fn(),
   getters,
@@ -57,7 +61,9 @@ export const initFilters = () => [
 ].map(filter => Vue.filter(filter, value => value));
 
 export const mount = (component, {
+  $cookies,
   $env = {},
+  $route = {},
   $router = [],
   $store,
   $style = {},
@@ -66,6 +72,7 @@ export const mount = (component, {
   propsData = {},
   shallow = false,
   state = {},
+  stubs = [],
 } = {}) => {
   const store = $store || createStore({ $env, state });
   const localVue = createLocalVue();
@@ -77,13 +84,16 @@ export const mount = (component, {
     data,
     propsData,
     mocks: {
+      $cookies,
+      $route,
       $router,
       $store: store,
+      $style,
       $t: t,
       $tc,
-      $style,
       showTemplate: () => true,
     },
+    stubs,
   });
 };
 

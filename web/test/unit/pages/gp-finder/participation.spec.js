@@ -13,6 +13,14 @@ import { initialState as throttlingInitialState } from '@/store/modules/throttli
 import { shallowMount, createStore } from '../../helpers';
 
 jest.mock('@/services/authorisation-service');
+const loginResponse = {
+  loginUrl: 'boom',
+  request: {
+    authoriseUrl: 'bang',
+  },
+};
+AuthorisationService.prototype.generateLoginUrl = jest.fn().mockImplementation()
+  .mockReturnValue(loginResponse);
 
 describe(('GP Finder participation page'), () => {
   describe(('asyncData'), () => {
@@ -63,7 +71,7 @@ describe(('GP Finder participation page'), () => {
       wrapper.vm.$options.asyncData({ store: $store });
 
       // assert
-      expect(AuthorisationService.mock.instances[0].generateLoginValues).toHaveBeenCalled();
+      expect(AuthorisationService.mock.instances[0].generateLoginUrl).toHaveBeenCalled();
     });
 
     it('will not generate login values for login if practice is participating', () => {
