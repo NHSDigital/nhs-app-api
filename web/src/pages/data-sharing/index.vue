@@ -103,7 +103,10 @@ export default {
     async changePage(index) {
       window.scrollTo(0, 0);
       this.pageIndex = index;
-      await this.getNdopToken();
+      const scope = this;
+      if (!scope.ndopToken && scope.pageId === 'p4') {
+        await this.getNdopToken();
+      }
     },
     goToPage(pageId) {
       this.changePage(_.indexOf(this.pageIds, pageId));
@@ -122,13 +125,11 @@ export default {
     },
     async getNdopToken() {
       const scope = this;
-      if (!scope.ndopToken && scope.pageId === 'p3') {
-        await scope.$store.app.$http
-          .getV1PatientNdop({})
-          .then((p) => {
-            scope.ndopToken = p.response.token;
-          });
-      }
+      await scope.$store.app.$http
+        .getV1PatientNdop({})
+        .then((p) => {
+          scope.ndopToken = p.response.token;
+        });
     },
   },
 };
