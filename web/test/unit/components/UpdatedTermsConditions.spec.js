@@ -1,7 +1,7 @@
-import { mount, createLocalVue } from '@vue/test-utils';
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
 import Vuex from 'vuex';
 import { mount as mountHelper } from '../helpers';
+import { mount, createLocalVue } from '@vue/test-utils';
 
 const $t = key => `translate_${key}`;
 
@@ -25,7 +25,6 @@ const createUpdatedTermsConditionsComponent = ($store) => {
       $store,
       $t,
       $style: {
-        hideDefaultCheckbox: false,
         validationText: 'mock validation test',
         info: 'info',
         customErrorBox: false,
@@ -68,6 +67,7 @@ describe('UpdatedTermsConditions checkbox rendering', () => {
 
 
 describe('UpdatedTermsConditions acceptance Process', () => {
+  let wrapper;
   const $store = {
     state: {
       termsAndConditions: {
@@ -78,20 +78,23 @@ describe('UpdatedTermsConditions acceptance Process', () => {
     app,
   };
 
-  const wrapper = createUpdatedTermsConditionsComponent($store);
+  beforeEach(() => {
+    wrapper = createUpdatedTermsConditionsComponent($store);
+  });
 
   it('has T&Cs unchecked when loaded for the first time', () => {
     expect(wrapper.vm.areTermsAccepted).toBe(false);
   });
 
-  it('registers terms as accepted', () => {
-    wrapper.vm.check();
-    expect(wrapper.vm.areTermsAccepted).toBe(true);
-  });
+  describe('when terms accepted', () => {
+    beforeEach(() => {
+      wrapper.vm.areTermsAccepted = true;
+    });
 
-  it('progresses when submit button clicked', () => {
-    wrapper.vm.onConfirmButtonClicked().then(() => {
-      expect($store.state.termsAndConditions.acceptTerms).toBeCalled();
+    it('progresses when submit button clicked', () => {
+      wrapper.vm.onConfirmButtonClicked().then(() => {
+        expect($store.state.termsAndConditions.acceptTerms).toBeCalled();
+      });
     });
   });
 });
@@ -114,7 +117,7 @@ describe('UpdatedTermsConditions error state', () => {
   });
 
   it('changes error state when terms checked', () => {
-    wrapper.vm.check();
+    wrapper.vm.areTermsAccepted = true;
     wrapper.vm.onConfirmButtonClicked();
     expect(wrapper.vm.getErrorState()).toBeNull();
   });

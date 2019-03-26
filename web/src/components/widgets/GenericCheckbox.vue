@@ -1,18 +1,17 @@
 <template>
   <div :class="getStyleClasses">
-    <div :class="$style.clickme" tabindex="-1" @click="check" @keypress="onKeyDown">
-      <checked-icon :id="checkboxId" :selected="selected"/>
+    <div :class="$style.clickme" tabindex="-1" @click="onClick" @keypress="onKeyDown">
+      <checked-icon :id="`${checkboxId}-icon`" :selected="selected"/>
     </div>
-    <input :id="`${name}-${checkboxId}`"
-           v-tabbing="checkboxPanelStylingClasses"
+    <input :id="checkboxId"
+           ref="checkbox"
+           v-tabbing="[this.$style.form, this.$style['checkbox-panel']]"
            :checked="selected"
-           :class="checkboxStylingClasses"
-           :value="checkboxId"
+           :class="[this.$style.form, this.$style.checkbox, this.$style['sr-only']]"
            :aria-labelledby="aLabelledBy"
            type="checkbox"
-           @change="check">
-
-    <label :id="`${name}-${checkboxId}-label`" :for="`${name}-${checkboxId}`">
+           @change="onChange">
+    <label :id="`${checkboxId}-label`" :for="checkboxId">
       <slot/>
     </label>
   </div>
@@ -24,52 +23,43 @@ import CheckedIcon from '@/components/icons/CheckedIcon';
 import TabFocusMixin from './TabFocusMixin';
 
 export default {
+  name: 'GenericCheckbox',
   components: {
     TabFocusMixin,
     CheckedIcon,
   },
   mixins: [TabFocusMixin.tabMixin],
   props: {
+    aLabelledBy: {
+      type: String,
+      default: '',
+    },
     checkboxId: {
       type: String,
       default: 'checkbox',
     },
-    name: {
-      type: String,
-      default: 'input',
-    },
-    selected: {
-      type: Boolean,
-      default: false,
-    },
-    aLabelledBy: {
-      type: String,
-      default: undefined,
-    },
-    checkboxClasses: {
-      type: Array,
-      default: () => [],
-    },
+    value: Boolean,
   },
-  data: function data() { return { checkedModel: false }; },
   computed: {
-    checkboxPanelStylingClasses() {
-      return [this.$style.form, this.$style['checkbox-panel']];
+    selected: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit('input', val);
+      },
     },
-    checkboxStylingClasses() {
-      return [this.$style.form, this.$style.checkbox, this.$style['sr-only']];
-    },
-  },
-  mounted() {
-    this.checkedModel = this.selected;
   },
   methods: {
-    check() {
-      this.$emit('click');
+    onChange($event) {
+      this.selected = $event.target.checked;
+    },
+    onClick() {
+      this.$refs.checkbox.click();
     },
     onKeyDown(e) {
       if (e.keyCode === 13) {
-        this.check();
+        this.onClick();
       }
     },
   },

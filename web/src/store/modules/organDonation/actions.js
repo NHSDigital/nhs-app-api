@@ -103,6 +103,9 @@ export default {
     commit(SET_PRIVACY_ACCEPTANCE, false);
     commit(SET_ACCURACY_ACCEPTANCE, false);
   },
+  setAccuracyAcceptance({ commit }, value) {
+    commit(SET_ACCURACY_ACCEPTANCE, value);
+  },
   setAllOrgans({ commit }, choice) {
     commit(SET_ALL_ORGANS, choice);
   },
@@ -111,6 +114,9 @@ export default {
   },
   setFaithDeclaration({ commit }, faithDeclaration) {
     commit(SET_FAITH_DECLARATION, faithDeclaration);
+  },
+  setPrivacyAcceptance({ commit }, value) {
+    commit(SET_PRIVACY_ACCEPTANCE, value);
   },
   setSomeOrgans({ commit }, { value, choice }) {
     commit(SET_SOME_ORGANS, { value, choice });
@@ -131,12 +137,6 @@ export default {
     commit(UPDATE_ORIGINAL_REGISTRATION);
 
     this.$router.push(ORGAN_DONATION_VIEW_DECISION.path);
-  },
-  toggleAccuracyAcceptance({ commit, state }) {
-    commit(SET_ACCURACY_ACCEPTANCE, !state.isAccuracyAccepted);
-  },
-  togglePrivacyAcceptance({ commit, state }) {
-    commit(SET_PRIVACY_ACCEPTANCE, !state.isPrivacyAccepted);
   },
   withdrawCancel({ commit }) {
     commit(SET_WITHDRAWING, false);

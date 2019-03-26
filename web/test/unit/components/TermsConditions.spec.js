@@ -25,7 +25,6 @@ const createTermsConditionsComponent = ($store) => {
       $store,
       $t,
       $style: {
-        hideDefaultCheckbox: false,
         validationText: 'mock validation test',
         info: 'info',
         customErrorBox: false,
@@ -96,23 +95,20 @@ describe('TermsConditions acceptance', () => {
     expect(wrapper.vm.isAnalyticsCookieAccepted).toBe(false);
   });
 
-  it('registers terms as accepted', () => {
-    wrapper.vm.checkTerms();
-    expect(wrapper.vm.areTermsAccepted).toBe(true);
-  });
+  describe('when both accepted', () => {
+    beforeEach(() => {
+      wrapper.vm.areTermsAccepted = true;
+      wrapper.vm.isAnalyticsCookieAccepted = true;
+    });
 
-  it('registers analytics as accepted', () => {
-    wrapper.vm.checkAnalyticsCookieAccepted();
-    expect(wrapper.vm.isAnalyticsCookieAccepted).toBe(true);
-  });
-
-  it('progresses when submit button clicked', async () => {
-    await wrapper.vm.onConfirmButtonClicked();
-    expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
-      consentRequest: {
-        ConsentGiven: true,
-        AnalyticsCookieAccepted: true,
-      },
+    it('progresses when submit button clicked', async () => {
+      await wrapper.vm.onConfirmButtonClicked();
+      expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
+        consentRequest: {
+          ConsentGiven: true,
+          AnalyticsCookieAccepted: true,
+        },
+      });
     });
   });
 });
@@ -135,8 +131,8 @@ describe('TermsConditions error state', () => {
   });
 
   it('changes error state when terms checked', () => {
-    wrapper.vm.checkTerms();
-    wrapper.vm.onConfirmButtonClicked();
+    wrapper.vm.areTermsAccepted = true;
+    wrapper.vm.isAnalyticsCookieAccepted = true;
     expect(wrapper.vm.getErrorState()).toBeNull();
   });
 });

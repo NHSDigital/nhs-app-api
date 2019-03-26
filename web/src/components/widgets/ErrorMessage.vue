@@ -1,5 +1,9 @@
 <template>
-  <p :class="[$style['validation-text'], !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <p :class="[
+    'error-message',
+    $style['validation-text'],
+    !$store.state.device.isNativeApp && $style.desktopWeb
+  ]">
     <error-marker-icon/>
     <span data-purpose="error">
       <slot/>

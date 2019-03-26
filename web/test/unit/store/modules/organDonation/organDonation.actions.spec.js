@@ -177,6 +177,26 @@ describe('organ donation actions', () => {
     });
   });
 
+  describe('reaffirmCancel', () => {
+    beforeEach(() => {
+      actions.reaffirmCancel({ commit, state: {} });
+    });
+
+    it('will commit a value of "false" to "SET_REAFFIRMING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_REAFFIRMING, false);
+    });
+  });
+
+  describe('reaffirmStart', () => {
+    beforeEach(() => {
+      actions.reaffirmStart({ commit, state: {} });
+    });
+
+    it('will commit a value of "true" to "SET_REAFFIRMING"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_REAFFIRMING, true);
+    });
+  });
+
   describe('resetAcceptanceChecks', () => {
     it(
       'will commit SET_PRIVACY_ACCEPTANCE and SET_ACCURACY_ACCEPTANCE with a value of false',
@@ -186,6 +206,16 @@ describe('organ donation actions', () => {
         expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, false);
       },
     );
+  });
+
+  describe('setAccuracyAcceptance', () => {
+    beforeEach(() => {
+      actions.setAccuracyAcceptance({ commit }, true);
+    });
+
+    it('will commit the accuracy acceptance', () => {
+      expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, true);
+    });
   });
 
   describe('setAdditionalDetails', () => {
@@ -211,6 +241,26 @@ describe('organ donation actions', () => {
     it('will commit the faith declaration', () => {
       actions.setFaithDeclaration({ commit }, 'Yes');
       expect(commit).toHaveBeenCalledWith(SET_FAITH_DECLARATION, 'Yes');
+    });
+  });
+
+  describe('setPrivacyAcceptance', () => {
+    beforeEach(() => {
+      actions.setPrivacyAcceptance({ commit }, true);
+    });
+
+    it('will commit the accuracy acceptance', () => {
+      expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, true);
+    });
+  });
+
+  describe('setWithdrawReasonId', () => {
+    beforeEach(() => {
+      actions.setWithdrawReasonId({ commit }, 'Other');
+    });
+
+    it('will commit a value of "Other" to "SET_WITHDRAW_REASON_ID"', () => {
+      expect(commit).toHaveBeenCalledWith(SET_WITHDRAW_REASON_ID, 'Other');
     });
   });
 
@@ -367,76 +417,6 @@ describe('organ donation actions', () => {
         expect(actions.$router.push).toHaveBeenCalledWith(ORGAN_DONATION_VIEW_DECISION.path);
       });
     });
-  });
-
-  describe('reaffirmCancel', () => {
-    beforeEach(() => {
-      actions.reaffirmCancel({ commit, state: {} });
-    });
-
-    it('will commit a value of "false" to "SET_REAFFIRMING"', () => {
-      expect(commit).toHaveBeenCalledWith(SET_REAFFIRMING, false);
-    });
-  });
-
-  describe('reaffirmStart', () => {
-    beforeEach(() => {
-      actions.reaffirmStart({ commit, state: {} });
-    });
-
-    it('will commit a value of "true" to "SET_REAFFIRMING"', () => {
-      expect(commit).toHaveBeenCalledWith(SET_REAFFIRMING, true);
-    });
-  });
-
-  describe('setWithdrawReasonId', () => {
-    beforeEach(() => {
-      actions.setWithdrawReasonId({ commit }, 'Other');
-    });
-
-    it('will commit a value of "Other" to "SET_WITHDRAW_REASON_ID"', () => {
-      expect(commit).toHaveBeenCalledWith(SET_WITHDRAW_REASON_ID, 'Other');
-    });
-  });
-
-  describe('toggleAccuracyAcceptance', () => {
-    it(
-      'will commit SET_ACCURACY_ACCEPTANCE with a value of true when `isAccuracyAcceptance` is false',
-      () => {
-        const state = { isAccuracyAccepted: false };
-        actions.toggleAccuracyAcceptance({ commit, state });
-        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, true);
-      },
-    );
-
-    it(
-      'will commit SET_ACCURACY_ACCEPTANCE with a value of false when `isAccuracyAcceptance` is true',
-      () => {
-        const state = { isAccuracyAccepted: true };
-        actions.toggleAccuracyAcceptance({ commit, state });
-        expect(commit).toHaveBeenCalledWith(SET_ACCURACY_ACCEPTANCE, false);
-      },
-    );
-  });
-
-  describe('togglePrivacyAcceptance', () => {
-    it(
-      'will commit SET_PRIVACY_ACCEPTANCE with a value of true when `isPrivacyAcceptance` is false',
-      () => {
-        const state = { isPrivacyAccepted: false };
-        actions.togglePrivacyAcceptance({ commit, state });
-        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, true);
-      },
-    );
-
-    it(
-      'will commit SET_PRIVACY_ACCEPTANCE with a value of false when `isPrivacyAcceptance` is true',
-      () => {
-        const state = { isPrivacyAccepted: true };
-        actions.togglePrivacyAcceptance({ commit, state });
-        expect(commit).toHaveBeenCalledWith(SET_PRIVACY_ACCEPTANCE, false);
-      },
-    );
   });
 
   describe('withdrawCancel', () => {

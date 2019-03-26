@@ -38,12 +38,8 @@
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
       <generic-checkbox v-model="areTermsAccepted"
-                        :selected="areTermsAccepted"
-                        :check-box-classes="[$style.hideDefaultCheckbox]"
                         :a-labelled-by="getAriaLabel"
-                        checkbox-id="agree_checkbox"
-                        name="termsAndConditions"
-                        @click="check">
+                        checkbox-id="termsAndConditions-agree_checkbox">
         <span :class="$style.termsAndConditionsCaption">
           {{ $t('updatedTermsAndConditions.checkBoxText1') }}
           <span>
@@ -73,21 +69,18 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
-import CheckedIcon from '@/components/icons/CheckedIcon';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-import MessageDialog from '@/components/widgets/MessageDialog';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericCheckbox from '@/components/widgets/GenericCheckbox';
+import MessageDialog from '@/components/widgets/MessageDialog';
 import { INDEX } from '@/lib/routes';
 
 export default {
   components: {
-    CheckedIcon,
-    GenericButton,
     ErrorMessage,
-    MessageDialog,
+    GenericButton,
     GenericCheckbox,
+    MessageDialog,
   },
   data() {
     return {
@@ -106,9 +99,6 @@ export default {
     },
   },
   methods: {
-    check() {
-      this.areTermsAccepted = !this.areTermsAccepted;
-    },
     stopProp(event) {
       event.stopPropagation();
     },

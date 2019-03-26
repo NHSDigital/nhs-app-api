@@ -13,16 +13,15 @@ describe('GenericCheckbox.vue', () => {
     wrapper = mountConfirmation({
       propsData: {
         checkboxId: 'checkboxId',
-        name: 'name',
       },
     });
   });
 
   it('will verify that a checkbox has an associated label', () => {
-    expect(wrapper.find("input[type='checkbox'][id='name-checkboxId']")
+    expect(wrapper.find("input[type='checkbox'][id='checkboxId']")
       .exists()).toEqual(true);
 
-    expect(wrapper.find("label[for='name-checkboxId']")
+    expect(wrapper.find("label[for='checkboxId']")
       .exists()).toEqual(true);
   });
 });

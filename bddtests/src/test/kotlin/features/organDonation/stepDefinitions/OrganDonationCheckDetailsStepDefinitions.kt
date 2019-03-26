@@ -102,29 +102,53 @@ open class OrganDonationCheckDetailsStepDefinitions {
         val privacyStatementValidationMessage = "Read the privacy statement. Confirm if you give your consent."
 
         organDonationCheckDetailsPage.accuracyCheckBox.assertIsVisible()
+        organDonationCheckDetailsPage.privacyStatementCheckBox.assertIsVisible()
 
+        verifyValidationWhenBothAreNotChecked(problem, accuracyValidationMessage, privacyStatementValidationMessage)
+        verifyValidationWhenOnlyAccuracyIsChecked(problem, privacyStatementValidationMessage)
+        verifyValidationWhenOnlyPrivacyIsChecked(problem, accuracyValidationMessage)
+    }
+
+    private fun verifyValidationWhenBothAreNotChecked(problem: String,
+                                                      accuracyValidationMessage: String,
+                                                      privacyStatementValidationMessage: String) {
         organDonationCheckDetailsPage.accuracyCheckBox.assertUnchecked()
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertUnchecked()
         organDonationCheckDetailsPage.clickSubmit()
 
+        organDonationCheckDetailsPage.accuracyCheckBox.assertInlineError(accuracyValidationMessage)
+        organDonationCheckDetailsPage.privacyStatementCheckBox.assertInlineError(privacyStatementValidationMessage)
         organDonationCheckDetailsPage.validationBanner.assertVisible(
                 arrayListOf(problem, "$accuracyValidationMessage\n$privacyStatementValidationMessage"))
+    }
 
+    private fun verifyValidationWhenOnlyAccuracyIsChecked(problem: String, privacyStatementValidationMessage: String) {
         organDonationCheckDetailsPage.accuracyCheckBox.click()
         organDonationCheckDetailsPage.accuracyCheckBox.assertChecked()
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertUnchecked()
         organDonationCheckDetailsPage.clickSubmit()
 
+        organDonationCheckDetailsPage.accuracyCheckBox.assertNoInlineError()
+        organDonationCheckDetailsPage.privacyStatementCheckBox.assertInlineError(privacyStatementValidationMessage)
         organDonationCheckDetailsPage.validationBanner.assertVisible(
                 arrayListOf(problem, privacyStatementValidationMessage))
 
+        // revert selection
         organDonationCheckDetailsPage.accuracyCheckBox.click()
+    }
+
+    private fun verifyValidationWhenOnlyPrivacyIsChecked(problem: String, accuracyValidationMessage: String) {
         organDonationCheckDetailsPage.accuracyCheckBox.assertUnchecked()
         organDonationCheckDetailsPage.privacyStatementCheckBox.click()
         organDonationCheckDetailsPage.privacyStatementCheckBox.assertChecked()
         organDonationCheckDetailsPage.clickSubmit()
 
+        organDonationCheckDetailsPage.accuracyCheckBox.assertInlineError(accuracyValidationMessage)
+        organDonationCheckDetailsPage.privacyStatementCheckBox.assertNoInlineError()
         organDonationCheckDetailsPage.validationBanner.assertVisible(
                 arrayListOf(problem, accuracyValidationMessage))
+
+        // revert selection
+        organDonationCheckDetailsPage.privacyStatementCheckBox.click()
     }
 }

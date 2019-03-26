@@ -1,71 +1,127 @@
 import Confirmation from '@/components/organ-donation/Confirmation';
-import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { createStore, mount, shallowMount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 describe('confirmation', () => {
   let $store;
-  let state;
   let wrapper;
 
-  beforeEach(() => {
-    state = {
-      organDonation: initialState(),
-    };
-    $store = createStore({ state });
-    wrapper = shallowMount(Confirmation, {
-      $store,
-      propsData: {
-        submitAttempted: false,
+  const mountConfirmation = ({ submitAttempted = false } = {}) => {
+    $store = createStore({
+      state: {
+        organDonation: {
+          isAccuracyAccepted: false,
+          isPrivacyAccepted: false,
+        },
+        device: {
+          isNativeApp: false,
+        },
       },
     });
+
+    return mount(Confirmation, {
+      $store,
+      propsData: {
+        submitAttempted,
+      },
+    });
+  };
+
+  beforeEach(() => {
+    wrapper = mountConfirmation();
   });
 
-  describe('toggleAccuracy', () => {
-    it('will dispatch `toggleAccuracyAcceptance`', () => {
-      wrapper.vm.toggleAccuracy();
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/toggleAccuracyAcceptance');
+  describe('isAccuracyAccepted setter', () => {
+    it('will dispatch `setAccuracyAcceptance`', () => {
+      wrapper.vm.isAccuracyAccepted = true;
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/setAccuracyAcceptance', true);
     });
   });
 
-  describe('togglePrivacy', () => {
-    it('will dispatch `togglePrivacyAcceptance`', () => {
-      wrapper.vm.togglePrivacy();
-      expect($store.dispatch).toHaveBeenCalledWith('organDonation/togglePrivacyAcceptance');
+  describe('isPrivacyAccepted setter', () => {
+    it('will dispatch `setPrivacyAcceptance`', () => {
+      wrapper.vm.isPrivacyAccepted = false;
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/setPrivacyAcceptance', false);
     });
   });
 
   describe('Confirmation checkbox rendering', () => {
-    beforeEach(() => {
-      const mountConfirmation = () =>
-        mount(Confirmation, {
-          state: {
-            organDonation: {
-              isAccuracyAccepted: false,
-              isPrivacyAccepted: false,
-            },
-          },
-          propsData: {
-            submitAttempted: false,
-          },
-        });
-
-      wrapper = mountConfirmation();
-    });
-
     it('will verify an associated label for the confirmation on your decision checkbox', () => {
-      expect(wrapper.find("input[type='checkbox'][id='accuracy-accuracy-checkbox']")
+      expect(wrapper.find("input[type='checkbox'][id='accuracy-checkbox']")
         .exists()).toEqual(true);
 
-      expect(wrapper.find("label[for='accuracy-accuracy-checkbox']")
+      expect(wrapper.find("label[for='accuracy-checkbox']")
         .exists()).toEqual(true);
     });
 
     it('will verify an associated label for the privacy checkbox', () => {
-      expect(wrapper.find("input[type='checkbox'][id='privacy-privacy-checkbox']")
+      expect(wrapper.find("input[type='checkbox'][id='privacy-checkbox']")
         .exists()).toEqual(true);
 
-      expect(wrapper.find("label[for='privacy-privacy-checkbox']")
+      expect(wrapper.find("label[for='privacy-checkbox']")
         .exists()).toEqual(true);
+    });
+  });
+
+  describe('inline errors', () => {
+    const errorMessage = 'translate_organDonation.reviewYourDecision.confirmation.errors.';
+    const showOrNot = bool => (bool ? 'show' : 'not show');
+
+    const assertInlineMessage = ({ accuracy = false, privacy = false }, wrapperFn) => {
+      it(`will ${showOrNot(accuracy)} inline error for accuracy`, () => {
+        const span = wrapperFn().find('#accuracy-checkbox-error span');
+        expect(span.exists()).toBe(accuracy);
+        if (accuracy) {
+          expect(span.text()).toBe(`${errorMessage}accuracy`);
+        }
+      });
+
+      it(`will ${showOrNot(privacy)} inline error for privacy`, () => {
+        const span = wrapperFn().find('#privacy-checkbox-error span');
+        expect(span.exists()).toBe(privacy);
+        if (privacy) {
+          expect(span.text()).toBe(`${errorMessage}privacy`);
+        }
+      });
+    };
+
+    beforeEach(() => {
+      wrapper = mountConfirmation({ submitAttempted: true });
+    });
+
+    describe('when both are not accepted', () => {
+      beforeEach(() => {
+        $store.state.organDonation.isAccuracyAccepted = false;
+        $store.state.organDonation.isPrivacyAccepted = false;
+      });
+
+      assertInlineMessage({ accuracy: true, privacy: true }, () => wrapper);
+    });
+
+    describe('when privacy is not accepted', () => {
+      beforeEach(() => {
+        $store.state.organDonation.isAccuracyAccepted = true;
+        $store.state.organDonation.isPrivacyAccepted = false;
+      });
+
+      assertInlineMessage({ accuracy: false, privacy: true }, () => wrapper);
+    });
+
+    describe('when accuracy is not accepted', () => {
+      beforeEach(() => {
+        $store.state.organDonation.isAccuracyAccepted = false;
+        $store.state.organDonation.isPrivacyAccepted = true;
+      });
+
+      assertInlineMessage({ accuracy: true, privacy: false }, () => wrapper);
+    });
+
+    describe('when both are accepted', () => {
+      beforeEach(() => {
+        $store.state.organDonation.isAccuracyAccepted = true;
+        $store.state.organDonation.isPrivacyAccepted = true;
+      });
+
+      assertInlineMessage({ accuracy: false, privacy: false }, () => wrapper);
     });
   });
 });

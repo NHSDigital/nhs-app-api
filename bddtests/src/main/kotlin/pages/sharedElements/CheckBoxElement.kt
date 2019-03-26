@@ -2,6 +2,7 @@ package pages.sharedElements
 
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
@@ -27,6 +28,21 @@ class CheckBoxElement(page : HybridPageObject, text:String) {
 
     fun assertUnchecked() {
         Assert.assertEquals("Expected unchecked",0, getCheckedElementsCount())
+    }
+
+    fun assertInlineError(errorMessage: String) {
+        val inlineErrors = getInlineError()
+        Assert.assertEquals("Expected inline error", 1, inlineErrors.count())
+        Assert.assertEquals("Expected error message", errorMessage, inlineErrors.single().text)
+    }
+
+    fun assertNoInlineError() {
+        Assert.assertEquals("Expected no inline error", 0, getInlineError().count())
+    }
+
+    private fun getInlineError(): List<WebElement> {
+        return checkBoxElement.element
+                .findElements(By.xpath("./preceding-sibling::p[contains(@class, error-message)]/span"))
     }
 
     private fun getCheckedElementsCount(): Int {
