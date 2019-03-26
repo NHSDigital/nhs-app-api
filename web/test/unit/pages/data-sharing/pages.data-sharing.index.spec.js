@@ -29,16 +29,14 @@ it('will retrieve the token on the last on the page', () => {
   wrapper.vm.getNdopToken = getNdopToken;
   const button = wrapper.find('#next-button');
 
-  for(let i = 0; i <= 3; i++) {
+  for (let i = 0; i <= 3; i += 1) {
     button.trigger('click');
-    wrapper.setData({ pageIndex: i })
+    wrapper.setData({ pageIndex: i });
 
-    if(i === 3) {
+    if (i === 3) {
       expect(getNdopToken).toHaveBeenCalled();
     } else {
       expect(getNdopToken).not.toHaveBeenCalled();
     }
   }
-
-
 });
