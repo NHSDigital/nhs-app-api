@@ -1,0 +1,14 @@
+{
+  "id": "https://nhsapp.service.nhs.uk/service-journey-rules-config.schema.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "definition of the config yaml file",
+  "additionalProperties": false,
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "folderOrder": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

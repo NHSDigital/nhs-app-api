@@ -37,6 +37,9 @@ WORKDIR /app
 EXPOSE $PORT
 COPY --from=publish /app .
 
+ARG SJR_ARGS
+ENV ENV_SJR_ARGS=$SJR_ARGS
+
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD exec dotnet NHSOnline.Backend.ServiceJourneyRulesApi.dll
+CMD exec dotnet NHSOnline.Backend.ServiceJourneyRulesApi.dll $ENV_SJR_ARGS

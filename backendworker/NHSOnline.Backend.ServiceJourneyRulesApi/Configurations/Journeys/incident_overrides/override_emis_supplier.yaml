@@ -1,0 +1,10 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  supplier: "EMIS"
+journeys:
+  appointments:
+    journeyType: disabled
+  prescriptions:
+    journeyType: disabled
+  medicalRecord:
+    journeyType: disabled

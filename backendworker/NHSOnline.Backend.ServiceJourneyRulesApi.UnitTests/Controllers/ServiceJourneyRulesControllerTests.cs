@@ -1,3 +1,4 @@
+using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -47,7 +48,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
                 });
 
             var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.IsTrue(getResponse.Value.Appointments.JourneyType == JourneyDisabled);
+            Assert.IsTrue(getResponse.Value.Appointments.JourneyType.Equals(JourneyDisabled, StringComparison.Ordinal));
         }
 
         [TestMethod]
@@ -63,7 +64,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
                 });
 
             var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.IsTrue(getResponse.Value.Appointments.JourneyType == AppointmentsJourney);
+            Assert.IsTrue(getResponse.Value.Appointments.JourneyType.Equals(AppointmentsJourney, StringComparison.Ordinal));
         }
     }
 }

@@ -1,0 +1,5 @@
+$schema: "Schemas/Rules/rules_schema.json"
+folderOrder:
+  - defaults
+  - informatica
+  - incident_overrides

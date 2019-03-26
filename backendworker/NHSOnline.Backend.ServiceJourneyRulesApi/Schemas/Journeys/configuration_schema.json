@@ -1,0 +1,120 @@
+{
+  "id": "https://nhsapp.service.nhs.uk/service-journey-rules.schema.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "A single rule for the NHS App Journeys",
+  "additionalProperties": false,
+  "type": "object",
+  "definitions": {
+    "appointmentsJourney": {
+      "oneOf": [{
+        "additionalProperties": false,
+        "properties": {
+          "journeyType": {
+            "enum": [ "im1Appointments" ]
+          }
+        }
+      },{
+        "additionalProperties": false,
+        "properties": {
+          "journeyType": {
+            "enum": [ "disabled" ]
+          }
+        }
+      }]
+    },
+    "prescriptionsJourney": {
+      "oneOf": [{
+        "additionalProperties": false,
+        "properties": {
+          "journeyType": {
+            "enum": [ "im1Prescriptions" ]
+          }
+        }
+      },{
+        "additionalProperties": false,
+        "properties": {
+          "journeyType": {
+            "enum": [ "disabled" ]
+          }
+        }
+      }]
+    },
+    "medicalRecordJourney": {
+      "oneOf": [{
+        "additionalProperties": false,
+        "properties": {
+          "journeyType": {
+            "enum": [ "im1MedicalRecord" ]
+          }
+        }
+      },{
+        "additionalProperties": false,
+        "properties": {
+          "journeyType": {
+            "enum": [ "disabled" ]
+          }
+        }
+      }]
+    }
+  },
+  "properties": {
+    "$schema": { "type": "string" },
+    "target": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "*": {
+              "type": "string",
+              "enum": ["*"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "odsCode": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ccgCode": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "supplier": { "enum": ["EMIS", "TPP", "Vision", "Microtest"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "odsGroup": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "journeys": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "signin": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" }
+          }
+        },
+        "appointments": { "$ref": "#/definitions/appointmentsJourney" },
+        "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
+        "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" }
+      }
+    }
+  }
+}

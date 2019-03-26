@@ -2,8 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
-
         <IsPackable>false</IsPackable>
+        <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,10 +14,30 @@
         <PackageReference Include="Moq" Version="4.10.1" />
         <PackageReference Include="MSTest.TestAdapter" Version="1.2.1" />
         <PackageReference Include="MSTest.TestFramework" Version="1.2.1" />
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRulesApi\NHSOnline.Backend.ServiceJourneyRulesApi.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="TestData\Configurations\Journeys\defaults\all_defaults.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="TestData\Configurations\Journeys\defaults\emis_supplier.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="TestData\Configurations\Journeys\defaults\vision_supplier.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <EmbeddedResource Include="TestData\invalid_yaml.yaml" />
+      <EmbeddedResource Include="TestData\Schemas\duplicate_file.json" />
+      <EmbeddedResource Include="TestData\Schemas\invalid_schema.json" />
+      <EmbeddedResource Include="TestData\Schemas\SubFolder\duplicate_file.json" />
+      <EmbeddedResource Include="TestData\Schemas\valid_schema.json" />
+      <None Remove="TestData\Schemas\invalid_schema.json" />
+      <None Remove="TestData\Schemas\valid_schema.json" />
     </ItemGroup>
 
 </Project>

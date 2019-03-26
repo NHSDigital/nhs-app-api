@@ -2,14 +2,57 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.1</TargetFramework>
+        <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+        <PackageReference Include="NJsonSchema" Version="9.13.23" />
+        <PackageReference Include="YamlDotNet" Version="5.4.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\NHSOnline.Backend.ApiSupport\NHSOnline.Backend.ApiSupport.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Configurations\Journeys" />
+      <Folder Include="RuleConfiguration" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Configurations\Journeys\defaults\emis_supplier.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Configurations\Journeys\incident_overrides\override_A29928.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Configurations\Journeys\informatica\odscode_A29928.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Configurations\Rules\rules.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Configurations\incident_overrides\override_A29928.yaml" />
+      <None Remove="Configurations\informatica\odscode_A29928.yaml" />
+      <None Remove="Configurations\rules.yaml" />
+      <None Remove="Schemas\Configurations\configuration_schema.json" />
+      <None Remove="Schemas\Rules\rules_schema.json" />
+      <EmbeddedResource Include="Schemas\Journeys\configuration_schema.json" />
+      <EmbeddedResource Include="Schemas\Rules\rules_schema.json" />
+      <None Remove="Configurations\Journeys\defaults\all_defaults.yaml" />
+      <Content Include="Configurations\Journeys\defaults\all_defaults.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Configurations\Journeys\defaults\vision_supplier.yaml" />
+      <Content Include="Configurations\Journeys\defaults\vision_supplier.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Configurations\Journeys\incident_overrides\override_emis_supplier.yaml" />
+      <Content Include="Configurations\Journeys\incident_overrides\override_emis_supplier.yaml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
 </Project>

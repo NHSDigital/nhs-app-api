@@ -1,0 +1,10 @@
+$schema: "Schemas/Journeys/configuration_schema.json"
+target:
+  supplier: "Vision"
+journeys:
+  appointments:
+    journeyType: im1Appointments
+  prescriptions:
+    journeyType: im1Prescriptions
+  medicalRecord:
+    journeyType: im1MedicalRecord
