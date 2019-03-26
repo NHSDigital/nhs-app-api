@@ -31,12 +31,12 @@ paths:
           description: Bad response received from upstream system.
 
 definitions:
-  NominatedPharmacyResponse:
+  Pharmacy:
     type: object
     properties:
       pharmacyName:
         type: string
-        description: Name of the nominated pharmacy.
+        description: Name of the pharmacy.
       addressLine1:
         type: string
         description: First line of address.
@@ -57,7 +57,10 @@ definitions:
         description: Postcode.
       telephoneNumber:
         type: string
-        description: Telephone number of the nominated pharmacy.
+        description: Telephone number of the pharmacy.
+      odsCode:
+        type: string
+        description: Code to identify the pharmacy
       openingTimes:
         type: array
         description: An array of opening times.
@@ -79,4 +82,4 @@ definitions:
         type: array
         description: Array of pharmacies matched in search
         items:
-          $ref: "#/definitions/NominatedPharmacyResponse"
+          $ref: "#/definitions/Pharmacy"

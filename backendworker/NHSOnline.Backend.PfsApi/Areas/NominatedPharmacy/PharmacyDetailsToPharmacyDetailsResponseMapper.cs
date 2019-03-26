@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 County = pharmacy.County,
                 City = pharmacy.City,
                 Postcode = pharmacy.Postcode,
-                NACSCode = pharmacy.NACSCode,
+                OdsCode = pharmacy.NACSCode,
                 TelephoneNumber = pharmacy.GetContactsArray().FirstOrDefault(x => x.OrganisationContactMethodType == OrganisationContactMethodType.Telephone)?.OrganisationContactValue,
                 OpeningTimes = pharmacy.GetOpeningTimesArray()
                     .Where(x => x.IsOpen && x.WeekDay.HasValue)

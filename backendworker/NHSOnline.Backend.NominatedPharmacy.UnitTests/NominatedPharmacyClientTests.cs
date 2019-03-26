@@ -1,99 +1,88 @@
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using AutoFixture.AutoMoq;
-using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Support.ResponseParsers;
-using RichardSzalay.MockHttp;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
-using NHSOnline.Backend.NominatedPharmacy.ApiModels;
-using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
+using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
+using FluentAssertions;
+using NHSOnline.Backend.NominatedPharmacy.Clients;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
+using NHSOnline.Backend.NominatedPharmacy.Models;
 
 namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 {
     [TestClass]
-    public sealed class NominatedPharmacyClientTests : IDisposable
+    public class NominatedPharmacyClientTests
     {
-        private INominatedPharmacyClient _sut;
-        private MockHttpMessageHandler _mockHttpHandler;
-        private Mock<INominatedPharmacyConfig> _configMock;
         private IFixture _fixture;
-        private string _odsCode;
-        private NominatedPharmacyHttpClient _httpClient;        
-        private static readonly Uri ApiUrl = new Uri("http://spine_nominated_pharmacy_base_url/", UriKind.Absolute);
-        private const string GetNominatedPharmacySoapActionName = "urn:nhs:names:services:pdsquery/QUPA_IN000008UK02";
-        
-        private Mock<IEnvelopeService> _mockEnvelopeService;
+        private INominatedPharmacyClient _sut;
+        private Mock<INominatedPharmacyPDSClient> _nominatedPharmacyPDSClientMock;
+        private Mock<INominatedPharmacySubmitClient> _nominatedPharmacySubmitClientMock;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
-            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfig>>();
-            _configMock.SetupGet(x => x.BaseUrl).Returns(ApiUrl);
-            
-            _mockEnvelopeService = _fixture.Freeze<Mock<IEnvelopeService>>();
-            _odsCode = _fixture.Create<string>();
-            
-            _mockHttpHandler = new MockHttpMessageHandler();
-            _httpClient = new NominatedPharmacyHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 
-            _fixture.Inject(_httpClient);
-            
+            _nominatedPharmacyPDSClientMock = _fixture.Freeze<Mock<INominatedPharmacyPDSClient>>();
+            _nominatedPharmacySubmitClientMock = _fixture.Freeze<Mock<INominatedPharmacySubmitClient>>();
+
             _sut = _fixture.Create<NominatedPharmacyClient>();
         }
-        
+
         [TestMethod]
-        public async Task GetNominatedPharmacy_ReturnsNominatedPharmacy_WhenValidRequested()
+        public async Task NominatedPharmacyGet_ReturnsSuccessfully()
         {
             // Arrange
-            var request = new QUPA_IN000008UK02();
+            var getNominatedPharmacyRequest = new QUPA_IN000008UK02();
 
-            var bodyResponse = new NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>
-            {
-                Body = new Body<QUPA_IN000009UK03_Response>
-                {
-                    RetrievalQueryResponse = new QUPA_IN000009UK03_Response
+            _nominatedPharmacyPDSClientMock
+                .Setup(x => x.NominatedPharmacyGet(It.IsAny<QUPA_IN000008UK02>()))
+                .Returns(Task.FromResult(
+                    new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(System.Net.HttpStatusCode.OK)
                     {
-                        QUPA_IN000009UK03 = new QUPA_IN000009UK03(),
+                        RawResponse = new NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>(),
                     }
-                }
-            };
-
-            _mockEnvelopeService
-                .Setup(x => x.BuildEnvelope(
-                    It.Is<PdsRequest<QUPA_IN000008UK02>>(pr => pr.Body == request),
-                    It.Is<IServiceDefinition>(sd => sd.SoapActionName.Equals(GetNominatedPharmacySoapActionName, StringComparison.Ordinal))))
-                .Returns("requestXml")
+                ))
                 .Verifiable();
-            
-            var responseContent = new StringContent(bodyResponse.SerializeXml());
 
-            _mockHttpHandler
-                .WhenNominatedPharmacy(HttpMethod.Post, new Uri(ApiUrl, "syncservice-pds/pds"))
-                .WithContent("requestXml")
-                .WithHeaders("SoapAction", GetNominatedPharmacySoapActionName)
-                .Respond(HttpStatusCode.OK, responseContent);
-            
             // Act
-            var response = await _sut.NominatedPharmacyGet(request);
+            var result = await _sut.NominatedPharmacyGet(getNominatedPharmacyRequest);
 
             // Assert
-            response.Body.QUPA_IN000009UK03.Should().BeEquivalentTo(bodyResponse.Body.RetrievalQueryResponse.QUPA_IN000009UK03);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            _mockEnvelopeService.Verify();
+            _nominatedPharmacyPDSClientMock.Verify();
+            result.Should()
+                .BeOfType<NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>>();
         }
 
-        public void Dispose()
+        [TestMethod]
+        public async Task NominatedPharmacyUpdate_ReturnsSuccessfully()
         {
-            _mockHttpHandler.Dispose();
+            // Arrange
+            var nominatedPharmacyUpdateRequest = _fixture.Create<NominatedPharmacyUpdateRequest>();
+
+            _nominatedPharmacySubmitClientMock
+                .Setup(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdateRequest>()))
+                .Returns(Task.FromResult(
+                    new NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>(System.Net.HttpStatusCode.OK)
+                    {
+                        RawResponse = _fixture.Create<NominatedPharmacyResponseEnvelope<NominatedPharmacyUpdateResponse>>(),
+                    }
+                ))
+                .Verifiable();
+
+            // Act
+            var result = await _sut.UpdateNominatedPharmacy(nominatedPharmacyUpdateRequest);
+
+            // Assert
+            _nominatedPharmacySubmitClientMock.Verify();
+            result.Should()
+                .BeOfType<NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>>();
         }
     }
 }

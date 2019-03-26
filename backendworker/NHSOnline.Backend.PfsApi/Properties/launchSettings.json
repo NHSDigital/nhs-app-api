@@ -46,6 +46,13 @@
         "TPP_CERTIFICATE_PASSWORD": "",
         "TPP_CERTIFICATE_PATH": "../certs/TppNhsTest.pfx",
         "VISION_ODS_REMAP_ENABLED": "false"
+        "SPINE_ACCREDITED_SYSTEM_ID_FROM": "200000000355",
+        "SPINE_ACCREDITED_SYSTEM_ID_TO": "200000000627",
+        "SDS_ROLE": "R8000",
+        "SDS_USER_ID": "102046035980",
+        "SDS_ROLE_ID": "102046062988",
+        "SPINE_IP": "10.0.255.22",
+        "NOMINATED_PHARMACY_URL": "http://stubs.local.bitraft.io:8080/spine/"
       }
     },
     "NHSOnline.Backend.PfsApi": {
@@ -110,16 +117,23 @@
         "CORS_AUTHORITY": "http://web.local.bitraft.io:3000",
         "CookieDomain": ".bitraft.io",
         "ConfigurationSettings__CookieDomain": ".bitraft.io",
-        "PHARMACY_API_RESULT_LIMIT": "20",
-        "POSTCODE_LOOKUP_SEARCH_RADIUS_KM": "",
-        "GP_LOOKUP_API_RESULTS_LIMIT": "",
         "GP_LOOKUP_API_KEY": "",
-        "NHS_SEARCH_BASE_URL": "",
+        "PHARMACY_API_RESULT_LIMIT": "20",
+        "POSTCODE_LOOKUP_SEARCH_RADIUS_KM": "10",
+        "GP_LOOKUP_API_RESULTS_LIMIT": "1",
+        "NHS_SEARCH_BASE_URL": "https://nhsapiint.azure-api.net/",
         "BROTHER_MAILER_URL": "",
         "BROTHER_MAILER_ADDRESSBOOK_ID": "",
         "BROTHER_MAILER_SIG": "",
         "BROTHER_MAILER_USER_ID": "",
         "VISION_ODS_REMAP_ENABLED": "false",
+        "SPINE_ACCREDITED_SYSTEM_ID_FROM": "200000000355",
+        "SPINE_ACCREDITED_SYSTEM_ID_TO": "200000000627",
+        "SDS_ROLE": "R8000",
+        "SDS_USER_ID": "102046035980",
+        "SDS_ROLE_ID": "102046062988",
+        "SPINE_IP": "10.0.255.22",
+        "NOMINATED_PHARMACY_URL": "http://stubs.local.bitraft.io:8080/spine/"
         "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086"
       }
     },

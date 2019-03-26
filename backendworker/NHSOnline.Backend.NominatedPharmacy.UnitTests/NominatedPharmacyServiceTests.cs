@@ -1,12 +1,15 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using static NHSOnline.Backend.NominatedPharmacy.NominatedPharmacyClient;
+using NHSOnline.Backend.NominatedPharmacy.Models;
+using System;
+using System.Net;
+using System.Threading.Tasks;
+using NHSOnline.Backend.NominatedPharmacy.Clients;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
@@ -20,8 +23,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         private Mock<INominatedPharmacyConfig> _configMock;
         private IFixture _fixture;
 
-        const string SpineAccreditedSystemIdFrom = "0001";
-        const string SpineAccreditedSystemIdTo = "0002";
+        private const string SpineAccreditedSystemIdFrom = "0001";
+        private const string SpineAccreditedSystemIdTo = "0002";
 
         [TestInitialize]
         public void TestInitialize()
@@ -59,7 +62,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                     It.Is<QUPA_IN000008UK02>(
                         req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId", StringComparison.OrdinalIgnoreCase) &&
                         req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo, StringComparison.OrdinalIgnoreCase) &&
-                        req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,  StringComparison.OrdinalIgnoreCase))
+                        req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom, StringComparison.OrdinalIgnoreCase))
                     ))
                 .Returns(Task.FromResult(
                     new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(HttpStatusCode.OK)
@@ -109,6 +112,16 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                                 }
                                                             }
                                                         }
+                                                    },
+                                                    PertinentInformation = new PertinentInformation
+                                                    {
+                                                        PertinentSerialChangeNumber = new PertinentSerialChangeNumber
+                                                        {
+                                                            Value = new Value
+                                                            {
+                                                                _value = "22",
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -127,6 +140,73 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _nominatedPharmacyClient.Verify();
             result.HttpStatusCode.Should().Be(httpStatusCode);
             result.PharmacyOdsCode.Should().Be(expectedPharmacyOdsCodeInResult);
+        }
+
+        [TestMethod]
+        public async Task NominatedPharmacyUpdate_Returns400_WhenUpdateClientFails()
+        {
+            // Arrange
+            const string nhsNumber = "2393729384";
+            const string pharmacyOdsCode = "AB837";
+            string pertinentSerialChangeNumber = new Guid().ToString();
+
+            _nominatedPharmacyClient
+                .Setup(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdateRequest>()))
+                .Returns(Task.FromResult(
+                    new NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>(HttpStatusCode.BadRequest)
+                    ))
+                    .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, pharmacyOdsCode, pertinentSerialChangeNumber);
+
+            // Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [TestMethod]
+        public async Task NominatedPharmacyUpdate_ReturnsSuccessfulResponse_WhenClientUpdateIsSuccessful()
+        {
+            // Arrange
+            const string nhsNumber = "2393729384";
+            const string pharmacyOdsCode = "AB837";
+            string pertinentSerialChangeNumber = new Guid().ToString();
+
+            _nominatedPharmacyClient
+                .Setup(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdateRequest>()))
+                .Returns(Task.FromResult(
+                    new NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>(HttpStatusCode.OK)
+                ))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, pharmacyOdsCode, pertinentSerialChangeNumber);
+
+            // Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task NominatedPharmacyUpdate_ReturnsInternalServerError_WhenClientThrowsException()
+        {
+            // Arrange
+            const string nhsNumber = "2393729384";
+            const string pharmacyOdsCode = "AB837";
+            string pertinentSerialChangeNumber = new Guid().ToString();
+
+            _nominatedPharmacyClient
+                .Setup(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdateRequest>()))
+                .Throws<Exception>()
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, pharmacyOdsCode, pertinentSerialChangeNumber);
+
+            // Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.InternalServerError);
         }
     }
 }

@@ -1,8 +1,10 @@
 package mocking.stubs.pds
 
+import com.github.tomakehurst.wiremock.stubbing.Scenario
 import mocking.MockingClient
 import mocking.spine.pds.PdsNominatedPharmacyBuilder
 
+@Suppress("MaxLineLength")
 class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
 
     companion object {
@@ -12,8 +14,35 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
     }
 
     fun generateSpineStubs() {
-        
-        val p1Response = """<?xml version='1.0' encoding='UTF-8'?>
+        val changeNominatedPharmacy = "Pharmacy"
+        val pharmacyUpdatedScenario = "CHANGED"
+        val updateSoapAction = "urn:nhs:names:services:pdsquery/QUPA_IN000008UK02"
+
+        // Get nominated pharmacy ods code
+        mockingClient.forSpine {
+            PdsNominatedPharmacyBuilder(updateSoapAction)
+                    .respondWithSuccess(getP1Response("FAJ15"))
+                    .inScenario(changeNominatedPharmacy)
+                    .whenScenarioStateIs(Scenario.STARTED)
+                    .willSetStateTo(pharmacyUpdatedScenario) }
+
+        // Get nominated pharmacy ods code (2nd Time after update )
+        mockingClient.forSpine {
+            PdsNominatedPharmacyBuilder(updateSoapAction)
+                    .respondWithSuccess(getP1Response("FK275"))
+                    .inScenario(changeNominatedPharmacy)
+                    .whenScenarioStateIs(pharmacyUpdatedScenario)
+        }
+
+        // Update nominated pharmacy ods code
+        mockingClient.forSpine {
+            PdsNominatedPharmacyBuilder("urn:nhs:names:services:pds/PRPA_IN000203UK06")
+                    .respondWithAccepted() }
+
+    }
+
+    fun getP1Response(odsCode: String): String {
+        return """<?xml version='1.0' encoding='UTF-8'?>
             <SOAP-ENV:Envelope
 	        xmlns:crs="http://national.carerecords.nhs.uk/schema/crs/"
 	        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
@@ -97,7 +126,8 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                                                     <id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="EA42CF39"/>
                                                     <performer typeCode="PRF">
                                                         <assignedEntity classCode="ASSIGNED">
-                                                            <id root="2.16.840.1.113883.2.1.4.3" extension="FAJ15"/>
+                                                            <id root="2.16.840.1.113883.2.1.4.3"
+                                                             extension="${odsCode}"/>
                                                         </assignedEntity>
                                                     </performer>
                                                 </patientCareProvisionEvent>
@@ -123,8 +153,5 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
 	</SOAP-ENV:Body>
     </SOAP-ENV:Envelope>
                 """
-
-        mockingClient.forSpine { PdsNominatedPharmacyBuilder().respondWithSuccess(p1Response) }
-
     }
 }

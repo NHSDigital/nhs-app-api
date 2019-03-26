@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace NHSOnline.Backend.NominatedPharmacy
+namespace NHSOnline.Backend.NominatedPharmacy.Clients
 {
     public class NominatedPharmacyHttpClient
     {

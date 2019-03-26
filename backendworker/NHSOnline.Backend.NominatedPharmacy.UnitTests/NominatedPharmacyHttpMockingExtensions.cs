@@ -13,6 +13,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             Uri apiUrl)
         {
             return handler.When(method, apiUrl.ToString());
-        }  
+        }
     }
 }

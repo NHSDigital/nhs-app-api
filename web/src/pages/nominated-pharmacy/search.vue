@@ -11,8 +11,8 @@
       </error-message>
       <form @submit.prevent="searchFormSubmitted">
         <generic-text-input id="searchTextInput"
-                            :class="$style.inputSpacing"
                             v-model="searchQuery"
+                            :class="$style.inputSpacing"
                             type="text"
                             name="searchQuery"
                             maxlength="10"/>

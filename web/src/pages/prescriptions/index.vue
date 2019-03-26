@@ -124,8 +124,6 @@ export default {
       return this.$store.state.prescriptions.hasLoaded;
     },
   },
-  created() {
-  },
   methods: {
     onOrderRepeatPrescriptionClicked() {
       redirectTo(this, this.repeatCoursesPath, null);

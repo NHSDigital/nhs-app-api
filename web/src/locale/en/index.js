@@ -152,16 +152,6 @@ export default {
     changePharmacyLink: 'Change my nominated pharmacy',
     openingTimes: 'Opening times',
   },
-  searchNominatedPharmacy: {
-    pageTitle: 'Change my nominated pharmacy',
-    line1: 'The pharmacy you choose is where your repeat prescription will be sent.',
-    subHeader: 'Postcode',
-    line2: 'Find pharmacies within 5km of this postcode.',
-    searchButton: 'Search',
-    link1: 'See all internet pharmacies',
-    link2: 'See all dispensing appliance contractors',
-    emptySearchError: 'Enter a postcode',
-  },
   nominatedPharmacySearchResults: {
     header: 'Change my nominated pharmacy',
     title: 'Change my nominated pharmacy',
@@ -801,6 +791,7 @@ export default {
     login: 'Login',
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
+    confirmNominatedPharmacy: 'Confirm my nominated pharmacy',
     changeNominatedPharmacy: 'Change my nominated pharmacy',
   },
   pageTitles: {
@@ -827,6 +818,7 @@ export default {
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
     changeNominatedPharmacy: 'Change my nominated pharmacy',
+    confirmNominatedPharmacy: 'Confirm my nominated pharmacy',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',
@@ -1262,6 +1254,12 @@ export default {
     link1: 'See all internet pharmacies',
     link2: 'See all dispensing appliance contractors',
     emptySearchError: 'Enter a postcode',
+  },
+  confirmNominatedPharmacy: {
+    confirmButton: 'Confirm',
+    cancelButton: 'Cancel',
+    line1: 'This is the pharmacy your next repeat prescription will be sent to.',
+    pharmacyChanged: 'You changed your nominated pharmacy.',
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',

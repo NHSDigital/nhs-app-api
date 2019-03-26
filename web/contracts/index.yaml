@@ -952,7 +952,15 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+              type: "object"
+              description: "error response from backend api."
+              properties: 
+                errorCode: 
+                  type: "integer"
+                  description: "error code."
+                errorMessage: 
+                  type: "string"
+                  description: "error message."
           504: 
             description: "Timeout when calling upstream system."
       post: 
@@ -997,7 +1005,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
       put: 
@@ -1090,15 +1098,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              type: "object"
-              description: "error response from backend api."
-              properties: 
-                errorCode: 
-                  type: "integer"
-                  description: "error code."
-                errorMessage: 
-                  type: "string"
-                  description: "error message."
+              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
       delete: 
@@ -1162,7 +1162,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
     /v1/patient/organdonation/referencedata: 
@@ -1214,7 +1214,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
     /v1/patient/prescriptions: 
@@ -1623,7 +1623,77 @@
             description: "Could not extend service. Can occur if already timed out, or there is a problem with the request."
           504: 
             description: "Timeout when calling upstream system."
-    /v1/patient/pharmacy/nominated: 
+    /v1/patient/pharmacies: 
+      get: 
+        tags: 
+          - "pharmacy"
+        summary: "Search for pharmacies."
+        description: "Returns Response object containing list of pharmacies matched in search."
+        parameters: 
+          - 
+            in: "query"
+            name: "postcode"
+            required: true
+            description: "Postcode to be used when searching for pharmacies"
+            type: "string"
+        responses: 
+          200: 
+            description: "Search Executed Successfully"
+            schema: 
+              type: "object"
+              properties: 
+                pharmacies: 
+                  type: "array"
+                  description: "Array of pharmacies matched in search"
+                  items: 
+                    type: "object"
+                    properties: 
+                      pharmacyName: 
+                        type: "string"
+                        description: "Name of the pharmacy."
+                      addressLine1: 
+                        type: "string"
+                        description: "First line of address."
+                      addressLine2: 
+                        type: "string"
+                        description: "Second line of address."
+                      addressLine3: 
+                        type: "string"
+                        description: "Third line of address."
+                      city: 
+                        type: "string"
+                        description: "Name of the city."
+                      county: 
+                        type: "string"
+                        description: "Name of the county."
+                      postcode: 
+                        type: "string"
+                        description: "Postcode."
+                      telephoneNumber: 
+                        type: "string"
+                        description: "Telephone number of the pharmacy."
+                      odsCode: 
+                        type: "string"
+                        description: "Code to identify the pharmacy"
+                      openingTimes: 
+                        type: "array"
+                        description: "An array of opening times."
+                        items: 
+                          type: "object"
+                          properties: 
+                            day: 
+                              type: "string"
+                              description: "Day of the week."
+                            time: 
+                              type: "string"
+                              description: "Opening and closing time."
+          400: 
+            description: "Bad request. Supplied request is invalid."
+          500: 
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "Bad response received from upstream system."
+    /v1/patient/nominated-pharmacy: 
       get: 
         tags: 
           - "pharmacy"
@@ -1681,71 +1751,38 @@
             description: "Bad response received from upstream system."
           504: 
             description: "Timeout when calling upstream system."
-    /v1/patient/pharmacies:
-      get:
-        tags:
+      post: 
+        tags: 
           - "pharmacy"
-        summary: "Search for pharmacies."
-        description: "Returns Response object containing list of pharmacies matched in search."
-        parameters:
-          -
-            in: "query"
-            name: "postcode"
+        summary: "Update nominated pharmacy for a patient."
+        description: "Returns http response."
+        consumes: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "body"
+            name: "UpdateNominatedPharmacyRequest"
             required: true
-            description: "Postcode to be used when searching for pharmacies"
-            type: "string"
-        responses:
-          200:
-            description: "Search Executed Successfully"
-            schema:
+            description: "Updates a patients nominated pharmacy to the submitted OdsCode"
+            schema: 
               type: "object"
-              properties:
-                pharmacies:
-                  type: "array"
-                  description: "Array of pharmacies matched in search"
-                  items:
-                    type: "object"
-                    properties:
-                      pharmacyName:
-                        type: "string"
-                        description: "Name of the nominated pharmacy."
-                      addressLine1:
-                        type: "string"
-                        description: "First line of address."
-                      addressLine2:
-                        type: "string"
-                        description: "Second line of address."
-                      addressLine3:
-                        type: "string"
-                        description: "Third line of address."
-                      city:
-                        type: "string"
-                        description: "Name of the city."
-                      county:
-                        type: "string"
-                        description: "Name of the county."
-                      postcode:
-                        type: "string"
-                        description: "Postcode."
-                      telephoneNumber:
-                        type: "string"
-                        description: "Telephone number of the nominated pharmacy."
-                      openingTimes:
-                        type: "array"
-                        description: "An array of opening times."
-                        items:
-                          type: "object"
-                          properties:
-                            day:
-                              type: "string"
-                              description: "Day of the week."
-                            time:
-                              type: "string"
-                              description: "Opening and closing time."
-          400:
+              required: 
+                - "odsCode"
+              properties: 
+                odsCode: 
+                  type: "string"
+                  description: "New ods code a patient has selected"
+        responses: 
+          200: 
+            description: "Nominated pharmacy successfully updated."
+          400: 
             description: "Bad request. Supplied request is invalid."
-          500:
+          401: 
+            description: "User session missing or expired."
+          500: 
             description: "An unexpected error occurred processing the request."
-          502:
+          502: 
             description: "Bad response received from upstream system."
+          504: 
+            description: "Timeout when calling upstream system."
 

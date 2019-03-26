@@ -449,6 +449,10 @@ const routes = {
     name: 'nominated-pharmacy',
     path: '/nominated-pharmacy',
   },
+  NOMINATED_PHARMACY_CONFIRM: {
+    name: 'nominated-pharmacy-confirm',
+    path: '/nominated-pharmacy/confirm',
+  },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
     path: '/nominated-pharmacy/results',
@@ -544,6 +548,7 @@ export const {
   MY_RECORD_VISION_TEST_RESULTS_DETAIL,
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
+  NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,

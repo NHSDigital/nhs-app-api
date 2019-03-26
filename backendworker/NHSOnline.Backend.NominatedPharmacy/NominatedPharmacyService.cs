@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.Support.Logging;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy
@@ -176,7 +179,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
             if (!result.HasSuccessResponse)
             {
-                _logger.LogInformation("Error retrieving nominated pharmacy");
+                _logger.LogError("Error retrieving nominated pharmacy");
                 return new GetNominatedPharmacyResult(result.StatusCode);
             }
 
@@ -192,9 +195,48 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 odsCode = patientCareSection?.Performer?.AssignedEntity?.Id?.Extension;
             }
 
-            var successResult = new GetNominatedPharmacyResult(result.StatusCode, odsCode);
+            var pertinentSerialChangeNumber = result?.Body?.QUPA_IN000009UK03?.ControlActEvent?.Subject?.PDSResponse
+                ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?._value;
+
+            var successResult = new GetNominatedPharmacyResult(result.StatusCode, 
+                odsCode, 
+                pertinentSerialChangeNumber
+                );
 
             return successResult;
+        }
+
+        public async Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(string nhsNumber, string odsCode, string pertinentSerialChangeNumber)
+        {
+            _logger.LogEnter();
+
+            try
+            {
+                var result =  await _prescriptionTrackingClient
+                    .UpdateNominatedPharmacy(
+                        new NominatedPharmacyUpdateRequest(
+                            nhsNumber,
+                            odsCode,
+                            pertinentSerialChangeNumber));
+
+                if (!result.HasSuccessResponse)
+                {
+                    _logger.LogInformation("The request to update a patients nominated pharmacy was unsuccessful");
+                    return new UpdateNominatedPharmacyResult(result.StatusCode);
+                }
+
+                _logger.LogInformation("Successfully updated patients nominated pharmacy");
+                return new UpdateNominatedPharmacyResult(result.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,$"An error occurred while trying to update the patients nominated pharmacy");
+                return new UpdateNominatedPharmacyResult(HttpStatusCode.InternalServerError);
+            }
+            finally
+            {
+                _logger.LogExit();
+            }
         }
     }
 }

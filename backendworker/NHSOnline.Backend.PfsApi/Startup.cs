@@ -35,6 +35,8 @@ using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
 using NHSOnline.Backend.PfsApi.Devices;
 using NHSOnline.Backend.NominatedPharmacy;
+using NHSOnline.Backend.NominatedPharmacy.Clients;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
 using NHSOnline.Backend.PfsApi.Filters;
 
@@ -140,6 +142,8 @@ namespace NHSOnline.Backend.PfsApi
             services.AddHttpClient<NominatedPharmacyHttpClient>();
             services.AddTransient<INominatedPharmacyService, NominatedPharmacyService>();
             services.AddSingleton<INominatedPharmacyClient, NominatedPharmacyClient>();
+            services.AddSingleton<INominatedPharmacyPDSClient, NominatedPharmacyPDSClient>();
+            services.AddSingleton<INominatedPharmacySubmitClient, NominatedPharmacySubmitClient>();
             services.AddTransient<IEnvelopeService, EnvelopeService>();
 
             services.AddSingleton(x => new NamedConnectionMultiplexer(

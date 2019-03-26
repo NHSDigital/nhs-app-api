@@ -24,6 +24,7 @@
             General = 0,
             Reception = 1,
             Surgery = 2,
+            Additional = 3,
         }
 
         public enum OrganisationContactMethodType

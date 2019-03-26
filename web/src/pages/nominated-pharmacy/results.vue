@@ -9,13 +9,13 @@
     <ul v-if="!noResultsFound" id="searchResults" :class="$style['list-menu']">
       <h2>{{ foundResults }}</h2>
       <p>{{ $t('nominatedPharmacySearchResults.resultSummary.showingAll') }}</p>
-      <li v-for="pharmacy in pharmacies" :key="`pharmacy-${pharmacy.nacsCode}`">
-        <analytics-tracked-tag :id="`btnPharmacy-${pharmacy.nacsCode}`"
+      <li v-for="pharmacy in pharmacies" :key="`pharmacy-${pharmacy.odsCode}`">
+        <analytics-tracked-tag :id="`btnPharmacy-${pharmacy.odsCode}`"
                                :class="$style['no-decoration']"
                                text="Pharmacy"
                                tag="a"
                                href="#"
-                               @click="pharmacyPracticeClicked(pharmacy)">
+                               @click.native="pharmacyPracticeClicked(pharmacy)">
           <span :class="$style.fieldName">
             {{ pharmacy.pharmacyName }}
           </span>
@@ -46,7 +46,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
-import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CONFIRM } from '@/lib/routes';
 
 export default {
   components: {
@@ -113,7 +113,8 @@ export default {
       return this.$t('nominatedPharmacySearchResults.distanceAway').replace('{distance}', distance);
     },
     async pharmacyPracticeClicked(pharmacy) {
-      console.log(pharmacy);
+      this.$store.dispatch('nominatedPharmacy/select', pharmacy);
+      this.goToUrl(NOMINATED_PHARMACY_CONFIRM.path);
     },
     backButtonClicked() {
       this.goToUrl(NOMINATED_PHARMACY_SEARCH.path);

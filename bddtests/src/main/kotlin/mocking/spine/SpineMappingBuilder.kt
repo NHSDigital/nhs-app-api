@@ -5,20 +5,18 @@ import mocking.spine.ePS.EPSMappingBuilder
 import mocking.spine.ePS.EPSMappingBuilder111ItemDetail
 import mocking.spine.ePS.EPSMappingBuilder111ItemSummary
 
-open class SpineMappingBuilder(method: String, relativePath: String = "")
+open class SpineMappingBuilder(method: String, relativePath: String = "", soapAction: String = "")
     : MappingBuilder(method, "/spine$relativePath") {
 
     companion object {
         val configuration = SpineConfiguration("", "", "", "")
     }
 
+    private var soapActionKey = "SoapAction"
+
     init {
         requestBuilder
-        //.andHeader(HEADER_API_ACCEPT, VAL_APPLICATION_JSON)
-        //.andHeader(HEADER_API_FROM_ASID, configuration.fromAsid)
-        //.andHeader(HEADER_API_USER_ID, configuration.userId)
-        //.andHeader(HEADER_API_PROFILE_ID, configuration.roleProfileId)
-        //.andHeader(HEADER_EPS_TRACE_ID, configuration.epsTraceId)
+        .andHeader(soapActionKey, soapAction)
 
     }
 

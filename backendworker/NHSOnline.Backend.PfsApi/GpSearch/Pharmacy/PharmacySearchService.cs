@@ -141,7 +141,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             return new OrganisationPostcodeSearchData
             {
                 Top = _gpLookupConfig.PharmacySearchApiLimit,
-                Select = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,Postcode,NACSCode,Geocode,Contacts",
+                Select = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,Postcode,NACSCode,Geocode,Contacts,OpeningTimes",
                 Filter = $"OrganisationSubType eq '{ OrganisationSubTypeForCommunityPharmacy }' " +
                          $"and geo.distance(Geocode, geography'POINT({postcodeData.Longitude} {postcodeData.Latitude})') le {_gpLookupConfig.PostcodeLookupSearchRadiusKm}",
                 OrderBy = $"geo.distance(Geocode, geography'POINT({postcodeData.Longitude} {postcodeData.Latitude})')",

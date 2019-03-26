@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models
 
         public string TelephoneNumber { get; set; }
                 
-        public string NACSCode { get; set; }
+        public string OdsCode { get; set; }
         
         public double? Distance { get; set; }
 

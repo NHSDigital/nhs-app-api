@@ -1,0 +1,97 @@
+﻿using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.ResponseParsers;
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
+using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
+
+namespace NHSOnline.Backend.NominatedPharmacy.Clients
+{
+    public class NominatedPharmacySubmitClient : INominatedPharmacySubmitClient
+    {
+        private const string HeaderSoapAction = "SoapAction";
+        
+        private const string PdsPath = "syncservice-pds/pds";
+
+        private readonly NominatedPharmacyHttpClient _httpClient;
+        private readonly ILogger<NominatedPharmacySubmitClient> _logger;
+        private readonly IXmlResponseParser _responseParser;
+
+        public NominatedPharmacySubmitClient(NominatedPharmacyHttpClient httpClient,
+            ILogger<NominatedPharmacySubmitClient> logger, IXmlResponseParser responseParser)
+        {
+            _logger = logger;
+            _httpClient = httpClient;
+            _responseParser = responseParser;
+        }
+
+        public async Task<NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>> UpdateNominatedPharmacy(
+            NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest)
+        {
+            try
+            {
+                _logger.LogEnter();
+
+                var content = BuildContent(nominatedPharmacyUpdateRequest);
+
+                var httpRequest = BuildHttpRequest(PdsPath, content);
+
+                return await SendRequestAndParseResponse<NominatedPharmacyUpdateResponse>(httpRequest);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An unexpected error occurred when updating nominated pharmacy");
+                throw;
+            }
+        }
+
+        private HttpRequestMessage BuildHttpRequest(string path,
+            StringContent content)
+        {
+            var httpRequest =
+                new HttpRequestMessage(HttpMethod.Post, path)
+                {
+                    Content = content
+                };
+
+            httpRequest.Headers.Add(
+                HeaderSoapAction,
+                new[]
+                {
+                    "urn:nhs:names:services:pds/PRPA_IN000203UK06"
+                });
+
+            return httpRequest;
+        }
+
+        private StringContent BuildContent(NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest)
+        {
+            const string ContentType = "Content-Type";
+            var content = new StringContent(nominatedPharmacyUpdateRequest.Body(), Encoding.UTF8);
+
+            content.Headers.Remove(ContentType);
+            var added = content.Headers.TryAddWithoutValidation(ContentType,
+                new[]
+                {
+                    "multipart/related; boundary=\"--=_MIME-Boundary\"; type=\"text/xml\"; start=\"<ebXMLHeader@spine.nhs.uk>\";"
+                });
+
+            return content;
+        }
+
+        private async Task<NominatedPharmacyApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
+            HttpRequestMessage request)
+        {
+            var responseMessage = await _httpClient.Client.SendAsync(request);
+
+            var response = new NominatedPharmacyApiObjectResponse<TResponse>(responseMessage.StatusCode);
+            await response.Parse(responseMessage, _responseParser, _logger);
+            return response;
+        }
+    }
+}

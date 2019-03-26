@@ -6,7 +6,7 @@ info:
   description: NHS App Sub-API - endpoints pertaining to nominated pharmacy require NHSO-Session-Id cookie in header from session endpoint.
 
 paths:
-  /pharmacy/nominated:
+  /nominated-pharmacy:
     get:
       tags:
         - pharmacy
@@ -27,7 +27,39 @@ paths:
           description: Bad response received from upstream system.
         504:
           description: Timeout when calling upstream system.
-
+    post:
+      tags:
+        - pharmacy
+      summary: Update nominated pharmacy for a patient.
+      description: Returns http response.
+      consumes:
+        - "application/json"
+      parameters:
+        - in: body
+          name: UpdateNominatedPharmacyRequest
+          required: true
+          description: Updates a patients nominated pharmacy to the submitted OdsCode
+          schema:
+            type: "object"
+            required:
+              - "odsCode"
+            properties:
+              odsCode:
+                type: "string"
+                description: New ods code a patient has selected
+      responses:
+        200:
+          description: Nominated pharmacy successfully updated.
+        400:
+          description: Bad request. Supplied request is invalid.
+        401:
+          description: User session missing or expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: Bad response received from upstream system.
+        504:
+          description: Timeout when calling upstream system.
 definitions:
   NominatedPharmacyResponse:
     type: object
