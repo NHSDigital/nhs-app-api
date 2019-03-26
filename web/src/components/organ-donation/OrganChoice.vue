@@ -35,8 +35,8 @@ export default {
   data() {
     return {
       choices: [
-        { label: this.$t('organDonation.someOrgans.choiceYes'), value: YES },
-        { label: this.$t('organDonation.someOrgans.choiceNo'), value: NO },
+        { label: this.$t('organDonation.someOrgans.choices.yes'), value: YES },
+        { label: this.$t('organDonation.someOrgans.choices.no'), value: NO },
       ],
     };
   },

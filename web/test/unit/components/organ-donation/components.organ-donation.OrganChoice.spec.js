@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
-import OrganChoice from '@/components/organ-donation/OrganChoice';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
+import OrganChoice from '@/components/organ-donation/OrganChoice';
 import {
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
@@ -16,9 +16,8 @@ describe('organ choice component', () => {
 
   const mountOrganChoice = () => mount(OrganChoice, {
     $store,
-    $t,
     propsData: {
-      title: 'organDonation.someOrgans.heartTitle',
+      title: 'organDonation.someOrgans.choices.heartTitle',
       organName: 'heart',
       showErrors: false,
     },
@@ -49,7 +48,7 @@ describe('organ choice component', () => {
 
     describe('text translations', () => {
       it('will display the organ title', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.someOrgans.heartTitle');
+        expect($t).toHaveBeenCalledWith('organDonation.someOrgans.choices.heartTitle');
       });
     });
 
@@ -79,7 +78,7 @@ describe('organ choice component', () => {
 
     describe('text translations', () => {
       it('will display the organ title', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.someOrgans.heartTitle');
+        expect($t).toHaveBeenCalledWith('organDonation.someOrgans.choices.heartTitle');
       });
     });
 

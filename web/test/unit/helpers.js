@@ -61,6 +61,7 @@ export const mount = (component, {
   $router = [],
   $store,
   $style = {},
+  t = $t,
   data = {},
   propsData = {},
   shallow = false,
@@ -78,7 +79,7 @@ export const mount = (component, {
     mocks: {
       $router,
       $store: store,
-      $t,
+      $t: t,
       $tc,
       $style,
       showTemplate: () => true,

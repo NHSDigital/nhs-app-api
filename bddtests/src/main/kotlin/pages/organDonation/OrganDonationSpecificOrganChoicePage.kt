@@ -1,12 +1,15 @@
 package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
+import pages.assertIsVisible
 import pages.sharedElements.RadioButtons
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationSpecificOrganChoicePage : OrganDonationBasePage() {
 
     override val titleText: String = "Your choice"
+
+    val moreAboutOrgansAndTissueLink = getLink("Find out more about organs and tissue")
 
     private val expectedOptions = arrayListOf(
             "Heart",
@@ -29,6 +32,7 @@ open class OrganDonationSpecificOrganChoicePage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
         assertPageFullyLoaded()
+        moreAboutOrgansAndTissueLink.assertIsVisible()
         organOptions.forEach { option -> option.assertDisplayed() }
     }
 

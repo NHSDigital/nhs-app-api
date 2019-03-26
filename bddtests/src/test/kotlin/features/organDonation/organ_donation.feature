@@ -300,6 +300,20 @@ Feature: Organ Donation
     Then the Organ Donation Faith And Beliefs page is displayed
     And the Organ Donation 'Examples of end of life wishes' is collapsed, and can be expanded
 
+  Scenario: A user can view more information about the specific organs and tissue when opting to donate some organs
+    Given I am a EMIS user not registered with organ donation, who wishes to register and donate some organs
+    And I am logged in
+    And I navigate to the internal Organ Donation Choice Page
+    And I choose to donate my organs
+    Then the Organ Donation Your Choice page is displayed
+    When I select the option to donate some of my organs
+    And I click the 'Continue' button
+    Then the Organ Donation Specific Organ Choice page is displayed
+    When I click the Find out more about organs and tissue link
+    Then the Find Out More About Organs And Tissue Page is displayed
+    When I click the 'Back' button
+    Then the Organ Donation Specific Organ Choice page is displayed
+
   Scenario Outline: A user opting out, where OD returns a <Error Code> recoverable error is shown an error message
   and can retry
     Given I am a EMIS user who wishes to register as opt out, but OD returns recoverable <Error Code> error

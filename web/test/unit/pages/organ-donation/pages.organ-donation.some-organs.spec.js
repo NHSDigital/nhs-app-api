@@ -1,8 +1,8 @@
 import BackButton from '@/components/BackButton';
-import SomeOrgans from '@/pages/organ-donation/some-organs';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
-import { ORGAN_DONATION_FAITH } from '@/lib/routes';
+import SomeOrgans from '@/pages/organ-donation/some-organs';
 import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
+import { ORGAN_DONATION_FAITH, ORGAN_DONATION_MORE_ABOUT_ORGANS } from '@/lib/routes';
 import { $t, createRouter, createStore, mount } from '../../helpers';
 
 const allNoChoices = {
@@ -96,7 +96,33 @@ describe('organ donation some organs page', () => {
   });
 
   it('will translate the some organs description', () => {
-    expect($t).toHaveBeenCalledWith('organDonation.someOrgans.description');
+    expect($t).toHaveBeenCalledWith('organDonation.someOrgans.choices.subheader');
+  });
+
+  describe('more about organs', () => {
+    let moreAboutOrgans;
+
+    beforeEach(() => {
+      moreAboutOrgans = wrapper.find('a');
+    });
+
+    it('will show the more about organs link', () => {
+      expect(moreAboutOrgans.exists()).toBe(true);
+    });
+
+    it('will display text from organDonation.someOrgans.moreAboutOrgansLinkText', () => {
+      expect(moreAboutOrgans.text()).toEqual('translate_organDonation.someOrgans.moreAboutOrgansLinkText');
+    });
+
+    describe('click', () => {
+      beforeEach(() => {
+        moreAboutOrgans.trigger('click');
+      });
+
+      it('will push the organ donation more about organs page on the router', () => {
+        expect($router.push).toHaveBeenCalledWith(ORGAN_DONATION_MORE_ABOUT_ORGANS.path);
+      });
+    });
   });
 
   describe('organ choices', () => {

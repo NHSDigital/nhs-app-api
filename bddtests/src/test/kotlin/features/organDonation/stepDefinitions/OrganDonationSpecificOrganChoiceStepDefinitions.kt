@@ -6,11 +6,13 @@ import mocking.data.organDonation.OrganDecisions
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.set
+import pages.organDonation.OrganDonationFindOutMoreAboutOrgansAndTissuePage
 import pages.organDonation.OrganDonationSpecificOrganChoicePage
 
 open class OrganDonationSpecificOrganChoiceStepDefinitions {
 
     lateinit var organDonationYourChoicePage: OrganDonationSpecificOrganChoicePage
+    lateinit var organDonationFindOutMoreAboutOrgansAndTissuePage: OrganDonationFindOutMoreAboutOrgansAndTissuePage
 
     @When("^I choose which organs to donate")
     fun iChooseWhichOrgansToDonate() {
@@ -29,6 +31,16 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
     @Then("^the Organ Donation Specific Organ Choice page is displayed")
     fun theOrganDonationYourChoicePageIsDisplayed() {
         organDonationYourChoicePage.assertDisplayed()
+    }
+
+    @When("^I click the Find out more about organs and tissue link")
+    fun thenIClickTheFindOutMoreAboutOrgansAndTissueLink(){
+        organDonationYourChoicePage.moreAboutOrgansAndTissueLink.click()
+    }
+
+    @Then("^the Find Out More About Organs And Tissue Page is displayed")
+    fun thenTheFindOutMoreAboutOrgansAndTissuePageIsDisplayed() {
+        organDonationFindOutMoreAboutOrgansAndTissuePage.assertDisplayed()
     }
 
     @Then("^a validation message is shown if a user attempts to continue without selecting a decision for all organs")

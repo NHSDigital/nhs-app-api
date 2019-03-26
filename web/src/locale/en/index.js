@@ -963,22 +963,61 @@ export default {
     },
     someOrgans: {
       subheader: 'Your choice',
-      description: 'Please select which organs and tissue you wish to donate:',
       continueButtonText: 'Continue',
       errorMsgHeader: 'There\'s a problem',
       allSelectedValidationText: 'Make a decision for all categories to continue',
       yesRequiredValidationText: 'At least one category must be set to yes to continue',
-      inlineErrorMessage: 'Make a decision',
-      choiceYes: 'Yes',
-      choiceNo: 'No',
-      heartTitle: 'Heart',
-      lungsTitle: 'Lungs',
-      kidneyTitle: 'Kidney',
-      liverTitle: 'Liver',
-      corneasTitle: 'Corneas',
-      pancreasTitle: 'Pancreas',
-      tissueTitle: 'Tissue',
-      smallBowelTitle: 'Small bowel',
+      moreAboutOrgansLinkText: 'Find out more about organs and tissue',
+      choices: {
+        subheader: 'Please select which organs and tissue you would like to donate:',
+        yes: 'Yes',
+        no: 'No',
+        heartTitle: 'Heart',
+        lungsTitle: 'Lungs',
+        kidneyTitle: 'Kidney',
+        liverTitle: 'Liver',
+        corneasTitle: 'Corneas',
+        pancreasTitle: 'Pancreas',
+        tissueTitle: 'Tissue',
+        smallBowelTitle: 'Small bowel',
+      },
+    },
+    moreAboutOrgans: {
+      header: 'About organs and tissue',
+      contentItems: [
+        {
+          subheader: 'Heart',
+          body: 'Blood being pumped around your body by your heart carries oxygen and nutrients. Without the heart, your body wouldn’t get oxygen. Your heart can be transplanted whole or in some cases the valves (pulmonary and aortic) can be transplanted.',
+        },
+        {
+          subheader: 'Lungs',
+          body: 'Your lungs supply oxygen to your blood and clear carbon dioxide from your body. Without healthy lungs you couldn’t breathe properly.',
+        },
+        {
+          subheader: 'Kidneys',
+          body: 'Your kidneys filter wastes from your blood and convert them to urine. When your kidneys stop working you can develop kidney failure. Harmful wastes and fluids build up in your body and your blood pressure may rise. You can live healthily with one kidney.',
+        },
+        {
+          subheader: 'Liver',
+          body: 'Your liver produces bile to clean out your body. If your liver isn’t working right, you will begin to feel tired, experience nausea, vomiting, decreased appetite, brown urine, or even jaundice - yellowing in the whites of your eyes. Your liver can be transplanted whole or in some cases the cells (hepatocytes) can be transplanted.',
+        },
+        {
+          subheader: 'Corneas',
+          body: 'The cornea lets light into your eyes, without them you wouldn’t be able to see. The gift of sight is precious. Every day 100 people in the UK start to lose their sight. Almost 2 million people in the UK are living with significant sight loss. Your donation can help someone regain their sight.',
+        },
+        {
+          subheader: 'Pancreas',
+          body: 'Your pancreas is in your abdomen. It produces insulin to control your blood sugar levels. If your pancreas is not working correctly your blood sugar level rises, which can lead to diabetes. Your pancreas can be transplanted whole or in some cases the cells (islet cells) can be transplanted.',
+        },
+        {
+          subheader: 'Tissue',
+          body: 'Tissue is a group of cells that carry out a particular job in your body. Tissue donations such as skin, bone and tendons save hundreds of lives every year. One tissue donor can enhance the lives of more than 50 people.',
+        },
+        {
+          subheader: 'Small bowel',
+          body: 'The small bowel (also small intestine) absorbs nutrients and minerals from food we eat. If your small intestine fails, you wouldn’t be able to digest food. You would need to get nutrition from an alternative method, such as through a drip into your vein.',
+        },
+      ],
     },
     withdrawn: {
       dialogText: 'Decision withdrawn',
