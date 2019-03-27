@@ -136,6 +136,7 @@ export default {
     if (this.showError()) {
       this.updatePageTitle();
       this.updatePageHeader();
+      window.scrollTo(0, 0);
     }
   },
   methods: {

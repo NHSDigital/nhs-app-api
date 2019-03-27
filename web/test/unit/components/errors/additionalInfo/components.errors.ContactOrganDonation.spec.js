@@ -26,6 +26,10 @@ describe('ContactOrganDonation', () => {
       expect($t).toHaveBeenCalledWith('organ_donation.errors.contact.email');
     });
 
+    it('will display the NHSApp Enquiries email', () => {
+      expect(wrapper.text()).toContain('NHSApp.Enquiries@nhsbt.nhs.uk');
+    });
+
     it('will display the phone label', () => {
       expect($t).toHaveBeenCalledWith('organ_donation.errors.contact.phone');
     });
@@ -39,7 +43,7 @@ describe('ContactOrganDonation', () => {
     let link;
 
     beforeEach(() => {
-      link = wrapper.find('a');
+      link = wrapper.find('#contactUs');
     });
 
     it('will exist', () => {

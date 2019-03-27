@@ -10,12 +10,12 @@
       {{ $t('organ_donation.errors.contact.email') }}
     </message-text>
     <message-text>
-      customer.services@nhsbt.nhs.uk
+      <a href="mailto:NHSApp.Enquiries@nhsbt.nhs.uk">NHSApp.Enquiries@nhsbt.nhs.uk</a>
     </message-text>
     <message-text>
       {{ $t('organ_donation.errors.contact.otherWays') }}
       <br>
-      <a :href="contactUs">
+      <a id="contactUs" :href="contactUs">
         {{ contactUsText }}
       </a>
     </message-text>
