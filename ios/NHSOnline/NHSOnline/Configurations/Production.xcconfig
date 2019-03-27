@@ -3,3 +3,4 @@
 HOME_URL = www.nhsapp.service.nhs.uk/
 BASE_API_URL = api.nhsapp.service.nhs.uk/v1/
 CID_URL_SUFFIX = login.nhs.uk
+DATA_PREFERENCES_URL = app.your-data-matters.service.nhs.uk/createsession
