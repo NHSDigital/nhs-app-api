@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
 {

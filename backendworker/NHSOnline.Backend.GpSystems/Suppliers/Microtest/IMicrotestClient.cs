@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
@@ -14,5 +15,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         Task<MicrotestClient.MicrotestApiObjectResponse<string>> BookAppointmentSlotPost(
             BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest,
             MicrotestUserSession userSession);
+
+        Task<MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>> DemographicsGet(
+            string odsCode,
+            string nhsNumber);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
@@ -19,7 +20,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         public const string HeaderOdsCode = "NHSO-ODS-Code";
         private const string AppointmentSlotsPath = "patient/appointment-slots?fromDate={0}&toDate={1}";
         private const string AppointmentsPath = "patient/appointments";
-        
+        private const string DemographicsPath = "patient/demographics";
+
         private readonly MicrotestHttpClient _httpClient;
         private readonly ILogger<MicrotestClient> _logger;
         private readonly IJsonResponseParser _responseParser;
@@ -33,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             _logger = loggerFactory.CreateLogger<MicrotestClient>();
             _responseParser = responseParser;
         }
-        
+
         public async Task<MicrotestApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
             string odsCode,
             string nhsNumber,
@@ -66,6 +68,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             _logger.LogDebug($"booking slot: { bookAppointmentSlotPostRequest.SlotId }");
 
             var response = await Post(bookAppointmentSlotPostRequest, AppointmentsPath, userSession.OdsCode, userSession.NhsNumber);
+
+            _logger.LogExit();
+            return response;
+        }
+
+        public async Task<MicrotestApiObjectResponse<DemographicsGetResponse>> DemographicsGet(
+            string odsCode,
+            string nhsNumber)
+        {
+            _logger.LogEnter();
+            var response = await Get<DemographicsGetResponse>(DemographicsPath, odsCode, nhsNumber);
 
             _logger.LogExit();
             return response;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session;
@@ -14,6 +15,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             services.RegisterMicrotestBaseServices();
             services.RegisterMicrotestAppointmentsServices();
             services.RegisterMicrotestSessionServices();
+            services.RegisterMicrotestDemographicsServices();
 
             return services;
         }

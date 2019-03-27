@@ -9,6 +9,7 @@ using NHSOnline.Backend.GpSystems.Session;
 using NHSOnline.Backend.GpSystems.Linkage;
 using System.Diagnostics.CodeAnalysis;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Linkage;
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
         public IDemographicsService GetDemographicsService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<MicrotestDemographicsService>();
         }
 
         public IIm1ConnectionService GetIm1ConnectionService()
