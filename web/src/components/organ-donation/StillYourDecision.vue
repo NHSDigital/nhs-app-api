@@ -2,8 +2,8 @@
   <div :class="$style['mb-3']">
     <h3>{{ $t('organDonation.stillYourDecision.subheader') }}</h3>
     <p :class="$style['mb-1']">{{ $t('organDonation.stillYourDecision.text') }}</p>
-    <reaffirm-decision-link :class="$style['mb-1']"
-                            v-if="showReaffirm"
+    <reaffirm-decision-link v-if="showReaffirm"
+                            :class="$style['mb-1']"
                             :is-some-organs="isSomeOrgans"/>
     <amend-decision-link v-if="showAmend"/>
   </div>

@@ -1,9 +1,9 @@
 <template>
   <div :class="[$style.form, !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <textarea v-tabbing="textAreaClasses"
+    <textarea :id="id"
               ref="textArea"
-              :id="id"
               v-model="textValue"
+              v-tabbing="textAreaClasses"
               :class="getStyleClasses"
               :required="required"
               :aria-labelledby="aLabelledBy"

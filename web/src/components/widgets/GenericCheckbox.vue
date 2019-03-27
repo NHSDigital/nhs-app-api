@@ -3,8 +3,8 @@
     <div :class="$style.clickme" tabindex="-1" @click="check" @keypress="onKeyDown">
       <checked-icon :id="checkboxId" :selected="selected"/>
     </div>
-    <input v-tabbing="checkboxPanelStylingClasses"
-           :id="`${name}-${checkboxId}`"
+    <input :id="`${name}-${checkboxId}`"
+           v-tabbing="checkboxPanelStylingClasses"
            :checked="selected"
            :class="checkboxStylingClasses"
            :value="checkboxId"

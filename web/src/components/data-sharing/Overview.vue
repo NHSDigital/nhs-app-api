@@ -38,7 +38,7 @@
 
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.moreOptions.title') }}</h2>
     <p :aria-label="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') +
-    $t('ds01.pages.p1.moreOptions.paragraph.part2')">
+      $t('ds01.pages.p1.moreOptions.paragraph.part2')">
       <analytics-tracked-tag :href="yourDataMattersUrl"
                              :class="$style['paragraph-link']"
                              :text="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink')"

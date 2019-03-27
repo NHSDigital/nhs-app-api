@@ -36,7 +36,8 @@ module.exports = {
     'vue/html-closing-bracket-newline': 'off',
     //don't require space before closing bracket
     'vue/html-closing-bracket-spacing': 'off',
-
+    'vue/attributes-order': 'error',
+    'vue/html-indent': 'error',
     // disallow reassignment of function parameters
     // disallow parameter object manipulation except for specific exclusions
     'no-param-reassign': ['error', {
