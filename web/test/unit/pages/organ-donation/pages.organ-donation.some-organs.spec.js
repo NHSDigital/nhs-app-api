@@ -192,8 +192,8 @@ describe('organ donation some organs page', () => {
             expect($router).not.toContain(ORGAN_DONATION_FAITH.path);
           });
 
-          it('will not show inline errors', () => {
-            expect(wrapper.vm.showInlineErrors).toBe(false);
+          it('will show inline errors', () => {
+            expect(wrapper.vm.showInlineErrors).toBe(true);
           });
         });
 

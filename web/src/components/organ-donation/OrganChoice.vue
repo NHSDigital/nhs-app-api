@@ -6,7 +6,7 @@
                :header="$t(title)"
                :current-value="currentChoice"
                :show-error="showError"
-               :error-message="$t('organDonation.someOrgans.inlineErrorMessage')"
+               :error-message="$t(inlineErrorMessage)"
                @select="selected"/>
 </template>
 <script>
@@ -38,6 +38,7 @@ export default {
         { label: this.$t('organDonation.someOrgans.choices.yes'), value: YES },
         { label: this.$t('organDonation.someOrgans.choices.no'), value: NO },
       ],
+      inlineErrorMessage: this.$t('organDonation.someOrgans.inlineErrorMessage') + this.$t(this.title).toLowerCase(),
     };
   },
   computed: {

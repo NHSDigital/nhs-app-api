@@ -47,7 +47,7 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
     fun aValidationMessageIsShownIfAUserAttemptsToContinueWithoutSelectingADecisionForAllOrgans() {
 
         val errorMessage = arrayListOf("There's a problem",
-                "Make a decision for all categories to continue")
+                "Choose either ‘yes’ or ‘no’ for each organ.")
 
         organDonationYourChoicePage.assertAllOptionsUnselected()
         organDonationYourChoicePage.clickContinue()
@@ -68,7 +68,7 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
         organDonationYourChoicePage.organOptions.forEach { option -> option.select(false) }
         organDonationYourChoicePage.clickContinue()
         organDonationYourChoicePage.validationBanner.assertVisible(arrayListOf("There's a problem",
-                "At least one category must be set to yes to continue"))
+                "To continue, choose ‘yes’ for at least one organ."))
     }
 
     @Then("^my previous decisions are displayed on the Organ Donation Specific Organ Choice page")

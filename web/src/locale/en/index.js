@@ -971,9 +971,9 @@ export default {
       subheader: 'Your choice',
       continueButtonText: 'Continue',
       errorMsgHeader: 'There\'s a problem',
-      allSelectedValidationText: 'Make a decision for all categories to continue',
-      yesRequiredValidationText: 'At least one category must be set to yes to continue',
-      inlineErrorMessage: 'Make a decision',
+      allSelectedValidationText: 'Choose either ‘yes’ or ‘no’ for each organ.',
+      yesRequiredValidationText: 'To continue, choose ‘yes’ for at least one organ.',
+      inlineErrorMessage: 'Choose either ‘yes’ or ‘no’ for ',
       moreAboutOrgansLinkText: 'Find out more about organs and tissue',
       choices: {
         subheader: 'Please select which organs and tissue you would like to donate:',

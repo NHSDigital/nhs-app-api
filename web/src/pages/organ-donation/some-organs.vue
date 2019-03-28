@@ -50,7 +50,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import OrganChoice from '@/components/organ-donation/OrganChoice';
-import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
+import { initialState, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import { ORGAN_DONATION_FAITH, ORGAN_DONATION_MORE_ABOUT_ORGANS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
@@ -85,9 +85,6 @@ export default {
     hasMadeChoices() {
       return this.areAllSelected && this.hasYesSelection;
     },
-    hasNoSelection() {
-      return includes(NO)(this.currentChoices);
-    },
     hasYesSelection() {
       return includes(YES)(this.currentChoices);
     },
@@ -95,8 +92,7 @@ export default {
       return this.hasTriedToContinue && !this.hasMadeChoices;
     },
     showInlineErrors() {
-      return this.showErrors && !this.areAllSelected &&
-        (this.hasYesSelection || this.hasNoSelection);
+      return this.showErrors && !this.areAllSelected;
     },
   },
   asyncData({ store }) {
