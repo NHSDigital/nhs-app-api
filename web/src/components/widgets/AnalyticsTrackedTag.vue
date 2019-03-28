@@ -70,6 +70,7 @@ export default {
         this.$store.dispatch('analytics/trackLink', navigation);
 
         if (this.clickFunc) {
+          evt.preventDefault();
           this.clickFunc(this.clickParam);
         }
       }

@@ -60,7 +60,7 @@ class WebClientInterceptor(
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageStarted > url $url")
-        nhsWeb.setReloadUrl(url)
+        nhsWeb.reloadUrl = url
         cancelTrackingWebRequestResponse()
         if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
@@ -75,6 +75,7 @@ class WebClientInterceptor(
 
         if (hasMissingQueryString(url)) {
             view?.stopLoading()
+            nhsWeb.requiresFullPageLoad = true
             url?.let { uiInteractor.loadPage(it) }
             return
         }

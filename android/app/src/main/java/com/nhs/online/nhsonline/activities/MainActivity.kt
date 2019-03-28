@@ -214,7 +214,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun loadBiometricLoginPage(url: String) {
-        nhsWeb.useAbsoluteUri = true
+        nhsWeb.requiresFullPageLoad = true
         nhsWeb.loadUrl(url)
     }
 
@@ -354,7 +354,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private fun showErrorScreen() {
         hideBlankScreen()
         activityViewSwitcher.switchTo(ActivityView.ERROR)
-        nhsWeb.useAbsoluteUri = true
+        nhsWeb.requiresFullPageLoad = true
     }
 
     override fun showWebviewScreen() {
@@ -365,7 +365,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
             hideBlankScreen()
 
             if (nhsWeb.isUserLoggedIn) {
-                nhsWeb.useAbsoluteUri = false
+                nhsWeb.requiresFullPageLoad = false
             }
         }
     }
@@ -396,6 +396,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun showNativeBiometricOptions() {
+        nhsWeb.requiresFullPageLoad = true
         activityViewSwitcher.switchTo(ActivityView.FINGERPRINT)
         setHeaderText(resources.getString(R.string.biometric_header))
     }

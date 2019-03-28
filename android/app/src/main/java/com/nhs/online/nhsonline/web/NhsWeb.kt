@@ -2,17 +2,14 @@ package com.nhs.online.nhsonline.web
 
 import android.app.Activity
 import android.util.Log
-import android.view.MenuItem
 import android.webkit.CookieManager
 import android.webkit.WebView
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
-import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.data.ErrorMessageHandler
 import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
-import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
@@ -42,10 +39,12 @@ class NhsWeb(
     private var originalWebViewZoom = 0
 
     var isUserLoggedIn = false
-    var useAbsoluteUri
-        get() = urlLoader.usingAbsoluteUri
+    var requiresFullPageLoad = true
+    var reloadUrl: String? = null
         set(value) {
-            urlLoader.usingAbsoluteUri = value
+            if (value != null && !knownServices.shouldURLOpenExternally(URL(value))) {
+                field = value
+            }
         }
 
     init {
@@ -70,15 +69,24 @@ class NhsWeb(
         if (knownService == null) {
             knownService = knownServices.findMatchingServiceInfo(path)
         }
-        urlLoader.reloadUrl = urlLoader.produceValidUrl(path)
+        val url = urlLoader.produceValidUrl(path)
+        reloadUrl = url
+
         if (!isConnectedToNetwork) {
             showNoConnectionError()
             return
         }
+
+        val loginUrl = readResourceString(R.string.baseURL) + readResourceString(R.string.loginPath)
+        if (path.startsWith(loginUrl)) {
+            requiresFullPageLoad = true
+            isUserLoggedIn = false
+        }
+
         knownService?.header?.let { nativeHeader ->
             uiInteractor.setHeaderText(nativeHeader)
         }
-        urlLoader.loadUrl(path)
+        urlLoader.loadUrl(url, requiresFullPageLoad)
     }
 
     fun isCheckSymptomsUnsecureURL(url: String?): Boolean {
@@ -114,7 +122,7 @@ class NhsWeb(
     fun onSlimHeaderBackButtonPressed(): Boolean {
         when {
             webView.canGoBack() -> webView.goBack()
-            isCheckSymptomsUnsecureURL(urlLoader.reloadUrl) ->
+            isCheckSymptomsUnsecureURL(reloadUrl) ->
                 loadUrl(readResourceString(R.string.checkYourSymptoms))
             else -> activity.onBackPressed()
         }
@@ -144,7 +152,7 @@ class NhsWeb(
     fun onWebLoggedIn() {
         Log.d(TAG, "Entering loggedIn")
         if (isUserLoggedIn) return
-        useAbsoluteUri = false
+        requiresFullPageLoad = false
         isUserLoggedIn = true
 
         uiInteractor.showMenuBar()
@@ -154,7 +162,7 @@ class NhsWeb(
     fun onWebLoggedOut() {
         uiInteractor.showWebviewScreen()
         Log.d(TAG, "Entering loggedOut")
-        useAbsoluteUri = true
+        requiresFullPageLoad = true
         isUserLoggedIn = false
 
         uiInteractor.dismissSessionExtensionDialog()
@@ -175,12 +183,6 @@ class NhsWeb(
         chromeClient.handleLocationPersionResult(grantResults)
     }
 
-    fun setReloadUrl(url: String?) {
-        if (!knownServices.shouldURLOpenExternally(URL(url))) {
-            urlLoader.reloadUrl = url
-        }
-    }
-
     fun loadUrlInChromeTab(urlString: String) {
         openBrowserActivity.start(activity, urlString)
     }
@@ -193,7 +195,7 @@ class NhsWeb(
         return false
     }
 
-    fun reloadCurrentUrl() = urlLoader.reloadRequest()
+    fun reloadCurrentUrl() = urlLoader.reloadRequest(reloadUrl)
 
     fun announceForAccessibility(text: String) = webView.announceForAccessibility(text)
 

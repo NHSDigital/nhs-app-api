@@ -1,42 +1,27 @@
 package com.nhs.online.nhsonline.services
 
-import android.net.Uri
 import android.webkit.URLUtil
 import android.webkit.WebView
 import com.nhs.online.nhsonline.webinterfaces.WebJavascript
 
 
 class UrlLoader(
+
     private val webView: WebView,
     private val knownServices: KnownServices,
     private val baseURL: String
 ) {
     private val webJavascript = WebJavascript(webView)
-    var reloadUrl: String? = null
-    var usingAbsoluteUri: Boolean = true
 
-    fun loadUrl(pageEndPoint: String) {
-        val uriToUse = produceValidUrl(pageEndPoint)
-
-        if (usingAbsoluteUri || knownServices.isCIDRedirectUrl(uriToUse)) {
-            loadPage(uriToUse)
-        } else if (webView.url != null && (webView.url.contains(baseURL))) {
-            if (uriToUse == reloadUrl) {
-                loadPage(uriToUse)
-            } else {
-                val path = getPath(pageEndPoint)
-                webJavascript.loadSpaPath(path)
-            }
+    fun loadUrl(url: String, requiresFullPageLoad: Boolean) {
+        if (!requiresFullPageLoad && isNavigatingFromNhsAppPageToAnotherNhsAppPage(webView.url, url)) {
+            loadUrlThroughSpa(url)
         } else {
-            if (URLUtil.isValidUrl(uriToUse)) {
-                loadExternalPage(uriToUse)
-            } else {
-                loadPage(uriToUse)
-            }
+            hardLoadUrl(url)
         }
     }
 
-    fun reloadRequest() {
+    fun reloadRequest(reloadUrl: String?) {
         if (reloadUrl != null) {
             webView.loadUrl(reloadUrl)
         } else {
@@ -49,18 +34,16 @@ class UrlLoader(
         return if (validUri) endPoint else baseURL + endPoint
     }
 
-    private fun loadExternalPage(pageUrl: String) {
-        val builtUri = Uri.parse(pageUrl)
-
-        val fullUrl = builtUri.toString()
-        webView.loadUrl(fullUrl)
+    private fun loadUrlThroughSpa(url: String) {
+        val path = getPath(url)
+        webJavascript.loadSpaPath(path)
     }
 
-    private fun loadPage(url: String) {
-        val urlWithMissingQueryStrings =
-            knownServices.findKnownServiceAndAddMissingQueryFor(url)
+    private fun hardLoadUrl(url: String) {
+        val urlWithMissingQueryStrings = knownServices.findKnownServiceAndAddMissingQueryFor(url)
         webView.loadUrl(urlWithMissingQueryStrings)
     }
+
 
     private fun getPath(endPoint: String): String {
         var spaPath = endPoint.replace(baseURL, "/")
@@ -69,5 +52,9 @@ class UrlLoader(
             spaPath = "/$spaPath"
         }
         return spaPath
+    }
+
+    private fun isNavigatingFromNhsAppPageToAnotherNhsAppPage(fromUrl: String?, toUrl: String): Boolean {
+        return fromUrl?.contains(baseURL) == true && toUrl.contains(baseURL)
     }
 }

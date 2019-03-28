@@ -1,10 +1,7 @@
 package com.nhs.online.nhsonline.web
 
 import android.app.Activity
-import android.content.Context
 import android.content.res.Resources
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.webkit.WebSettings
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
@@ -44,10 +41,23 @@ class NhsWebTest {
     }
 
     @Test
-    fun loadUrl_Loads_RequestUrl() {
+    fun loadUrl_LoadsRequestUrl_AndPassesValueOf_RequiresFullPageLoad_True() {
         val url = "http://unit-test.com"
+        nhsWeb.requiresFullPageLoad = true
+        whenever(urlLoader.produceValidUrl(url)).thenReturn(url)
         nhsWeb.loadUrl(url)
-        verify(urlLoader).loadUrl(url)
+        verify(urlLoader).loadUrl(url, true)
+        Assert.assertEquals(url, nhsWeb.reloadUrl)
+    }
+
+    @Test
+    fun loadUrl_LoadsRequestUrl_AndPassesValueOf_RequiresFullPageLoad_False() {
+        val url = "http://unit-test.com"
+        nhsWeb.requiresFullPageLoad = false
+        whenever(urlLoader.produceValidUrl(url)).thenReturn(url)
+        nhsWeb.loadUrl(url)
+        verify(urlLoader).loadUrl(url, false)
+        Assert.assertEquals(url, nhsWeb.reloadUrl)
     }
 
     @Test
@@ -63,11 +73,35 @@ class NhsWebTest {
         val baseUrl = "http://unit-test.com"
         val resourceMock: Resources = mock {
             on { getString(R.string.baseURL) } doReturn baseUrl
+            on { getString(R.string.loginPath) } doReturn "login"
         }
         whenever(spyActivity.resources).thenReturn(resourceMock)
         val spyNhsWeb = spy(nhsWeb)
         spyNhsWeb.loadWelcomePage()
         verify(spyNhsWeb).loadUrl(baseUrl)
+    }
+
+    @Test
+    fun loadUrl_ResetsIsLoggedInAndRequiresFullPageReload_WhenUserNavigatesToLoginPage() {
+        // arrange
+        val baseUrl = "http://unit-test.com/"
+        val loginPath = "login"
+        val resourceMock: Resources = mock {
+            on { getString(R.string.baseURL) } doReturn baseUrl
+            on { getString(R.string.loginPath) } doReturn loginPath
+        }
+        val loginUrl = baseUrl + "login"
+        whenever(spyActivity.resources).thenReturn(resourceMock)
+        nhsWeb.requiresFullPageLoad = false
+        nhsWeb.isUserLoggedIn = true
+        whenever(urlLoader.produceValidUrl(loginUrl)).thenReturn(loginUrl)
+        nhsWeb.loadUrl(loginUrl)
+
+        // act
+        verify(urlLoader).loadUrl(loginUrl, true)
+
+        // assert
+        Assert.assertEquals(loginUrl, nhsWeb.reloadUrl)
     }
 
     @Test

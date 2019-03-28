@@ -5,6 +5,8 @@
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.symptoms')"
                              :href="symptomsPath"
+                             :click-func="goToUrl"
+                             :click-param="symptomsPath"
                              data-sid="symptoms-list-item"
                              tag="a">
         {{ $t('navigationMenuList.symptoms') }}
@@ -14,6 +16,8 @@
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.appointments')"
                              :href="appointmentsPath"
+                             :click-func="goToUrl"
+                             :click-param="appointmentsPath"
                              data-sid="appointments-menu-item"
                              tag="a">
         {{ $t('navigationMenuList.appointments') }}
@@ -23,6 +27,8 @@
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.prescriptions')"
                              :href="prescriptionsPath"
+                             :click-func="goToUrl"
+                             :click-param="prescriptionsPath"
                              data-sid="prescriptions-menu-item"
                              tag="a">
         {{ $t('navigationMenuList.prescriptions') }}
@@ -32,6 +38,8 @@
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.myRecord')"
                              :href="myRecordPath"
+                             :click-func="goToUrl"
+                             :click-param="myRecordPath"
                              data-sid="myrecord-menu-item"
                              tag="a">
         {{ $t('navigationMenuList.myRecord') }}
