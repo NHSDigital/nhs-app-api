@@ -26,6 +26,17 @@ Feature: Login
       | GP System |
       | EMIS      |
 
+  #Once prescriptions are completed for microtest, this test can be merged with above
+  Scenario Outline: A <GP System> user sees the home page after logging in
+    Given I am a <GP System> patient
+    And I am logged in
+    Then I see a welcome message
+    And I see the patient details of name, date of birth and NHS number
+    And I see the home page header
+    Examples:
+      | GP System |
+      | MICROTEST |
+
   Scenario: A EMIS user clicks the home link in the footer from another page
     Given I have upcoming appointments before cutoff time for EMIS
     And I am logged in

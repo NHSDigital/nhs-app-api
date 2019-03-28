@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Support
             
             var filteredNhsNumber = sourceNhsNumber.RemoveWhiteSpace();
 
-            // Belt and braces here, apparantly the nhsnumber will always be 10 long,
+            // Belt and braces here, apparently the NHS number will always be 10 long,
             // if not, jut return whatever it is
             if (filteredNhsNumber.Length != 10) return filteredNhsNumber;
             

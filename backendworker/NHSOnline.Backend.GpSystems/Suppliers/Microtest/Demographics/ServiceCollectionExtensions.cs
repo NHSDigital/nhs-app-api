@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
     {
         public static IServiceCollection RegisterMicrotestDemographicsServices(this IServiceCollection services)
         {
-            services.AddTransient<MicrotestDemographicsService>();
+            services.AddTransient<IMicrotestDemographicsService, MicrotestDemographicsService>();
             services.AddTransient<IMicrotestDemographicsMapper, MicrotestDemographicsMapper>();
 
             return services;

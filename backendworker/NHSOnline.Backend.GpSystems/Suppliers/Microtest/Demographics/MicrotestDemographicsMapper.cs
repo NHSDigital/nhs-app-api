@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.GpSystems.Demographics;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
+using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
 {
@@ -15,53 +16,60 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
                 throw new ArgumentNullException(nameof(demographicsGetResponse));
             }
 
+            if (demographicsGetResponse.Demographics == null)
+            {
+                throw new ArgumentException("demographics object is null", nameof(demographicsGetResponse));
+            }
+
+            var demographics = demographicsGetResponse.Demographics;
+
             return new DemographicsResponse
             {
-                PatientName = FormatName(demographicsGetResponse),
-                DateOfBirth = demographicsGetResponse.Dob,
-                Sex = demographicsGetResponse.Sex,
-                NhsNumber = demographicsGetResponse.Nhs,
-                Address = FullAddress(demographicsGetResponse),
+                PatientName = FormatName(demographics),
+                DateOfBirth = demographics.Dob,
+                Sex = demographics.Sex,
+                NhsNumber = demographics.Nhs.FormatToNhsNumber(),
+                Address = FullAddress(demographics),
                 AddressParts = new DemographicsAddress
                 {
-                    Text = FullAddress(demographicsGetResponse, AddressExclusion.Postcode),
-                    Postcode = demographicsGetResponse.Postcode
+                    Text = FullAddress(demographics, AddressExclusion.Postcode),
+                    Postcode = demographics.Postcode
                 },
                 NameParts = new DemographicsName
                 {
-                    Title = demographicsGetResponse.Title,
-                    Given = demographicsGetResponse.Forenames1,
-                    Surname = demographicsGetResponse.Surname
+                    Title = demographics.Title,
+                    Given = demographics.Forenames1,
+                    Surname = demographics.Surname
                 }
             };
         }
 
-        private static string FormatName(DemographicsGetResponse demographicsGetResponse)
+        private static string FormatName(DemographicsData demographicsData)
         {
             return string.Join(" ",
                 new[]
                     {
-                        demographicsGetResponse.Title,
-                        demographicsGetResponse.Forenames1,
-                        demographicsGetResponse.Forenames2,
-                        demographicsGetResponse.Surname
+                        demographicsData.Title,
+                        demographicsData.Forenames1,
+                        demographicsData.Forenames2,
+                        demographicsData.Surname
                     }
                     .Where(part => !string.IsNullOrEmpty(part)));
         }
 
-        private static string FullAddress(DemographicsGetResponse demographicsGetResponse, AddressExclusion? exclusion = null)
+        private static string FullAddress(DemographicsData demographicsData, AddressExclusion? exclusion = null)
         {
             var addressParts = new List<string>
             {
-                demographicsGetResponse.HouseName,
-                demographicsGetResponse.RoadName,
-                demographicsGetResponse.Locality,
-                demographicsGetResponse.PostTown,
-                demographicsGetResponse.County
+                demographicsData.HouseName,
+                demographicsData.RoadName,
+                demographicsData.Locality,
+                demographicsData.PostTown,
+                demographicsData.County
             };
 
             if (exclusion != AddressExclusion.Postcode)
-                addressParts.Add(demographicsGetResponse.Postcode);
+                addressParts.Add(demographicsData.Postcode);
 
             return string.Join(", ", addressParts.Where(part => !string.IsNullOrEmpty(part)));
         }

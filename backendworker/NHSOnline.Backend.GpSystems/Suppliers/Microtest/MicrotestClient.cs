@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.Support.ResponseParsers;
@@ -158,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             
             if (!string.IsNullOrEmpty(nhsNumber))
             {
-                request.Headers.Add(HeaderNhsNumber, new[] { nhsNumber });
+                request.Headers.Add(HeaderNhsNumber, new[] { nhsNumber.RemoveWhiteSpace() });
             }
 
             return request;

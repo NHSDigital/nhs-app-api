@@ -6,6 +6,8 @@ import models.Patient
 class MicrotestSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
 
     override fun createFor(patient: Patient) {
-        // no session required for Microtest
+        client.forMicrotest {
+            demographics.demographicsRequest(patient).respondWithSuccess()
+        }
     }
 }

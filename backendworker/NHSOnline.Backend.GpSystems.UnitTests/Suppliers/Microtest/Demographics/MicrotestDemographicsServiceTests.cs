@@ -11,6 +11,7 @@ using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
 {

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models
+namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics
 {
-    public class DemographicsGetResponse
+    public class DemographicsData
     {
         public string Title { get; set; }
         public string Surname { get; set; }

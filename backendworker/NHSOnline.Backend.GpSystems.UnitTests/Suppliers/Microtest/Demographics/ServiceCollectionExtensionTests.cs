@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
             serviceCollection.Should().NotBeNull();
 
             var registeredServices = serviceCollection.ToList();
-            var microtestDemographicService = new ServiceDescriptor(typeof(MicrotestDemographicsService),
+            var microtestDemographicService = new ServiceDescriptor(typeof(IMicrotestDemographicsService),
                 typeof(MicrotestDemographicsService), ServiceLifetime.Transient);
             var microtestDemographicMapper = new ServiceDescriptor(typeof(IMicrotestDemographicsMapper),
                 typeof(MicrotestDemographicsMapper), ServiceLifetime.Transient);

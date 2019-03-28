@@ -1,0 +1,65 @@
+﻿using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NHSOnline.Backend.GpSystems.Session;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.GpSystems.Demographics;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
+using NHSOnline.Backend.Support;
+
+namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Session
+{
+    [TestClass]
+    public class MicrotestSessionServiceTests
+    {
+        private IFixture _fixture;
+        private ILogger<MicrotestSessionService> _logger;
+        private Mock<IMicrotestDemographicsService> _microtestDemographicsService;
+        private MicrotestSessionService _systemUnderTest;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _logger = _fixture.Freeze<ILogger<MicrotestSessionService>>();
+            _microtestDemographicsService = _fixture.Freeze<Mock<IMicrotestDemographicsService>>();
+
+            _systemUnderTest = new MicrotestSessionService(
+                _logger,
+                _microtestDemographicsService.Object);
+        }
+
+        [TestMethod]
+        public async Task Create_ValidRequest_ReturnsSuccessfullyCreatedResult()
+        {
+            _microtestDemographicsService.Setup(x => x.GetDemographics(It.IsAny<GpUserSession>()))
+                .ReturnsAsync(new DemographicsResult.SuccessfullyRetrieved(new DemographicsResponse()));
+
+            var result = await _systemUnderTest.Create("connectionToken", "odsCode", "nhsNumber");
+
+            result
+                .Should()
+                .BeAssignableTo<GpSessionCreateResult.SuccessfullyCreated>()
+                .Subject
+                .UserSession
+                .Should()
+                .NotBeNull();
+
+        }
+
+        [TestMethod]
+        public async Task Create_InvalidDemographicsResult_ReturnsSupplierSystemUnavailable()
+        {
+            _microtestDemographicsService.Setup(x => x.GetDemographics(It.IsAny<GpUserSession>()))
+                .ReturnsAsync(new DemographicsResult.SupplierSystemUnavailable());
+
+            var result = await _systemUnderTest.Create("connectionToken", "odsCode", "nhsNumber");
+
+            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+        }
+    }
+}

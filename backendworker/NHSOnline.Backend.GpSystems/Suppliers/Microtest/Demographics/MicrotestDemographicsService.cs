@@ -8,7 +8,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
 {
-    public class MicrotestDemographicsService : IDemographicsService
+    public class MicrotestDemographicsService : IMicrotestDemographicsService
     {
         private readonly ILogger<MicrotestDemographicsService> _logger;
         private readonly IMicrotestClient _microtestClient;
