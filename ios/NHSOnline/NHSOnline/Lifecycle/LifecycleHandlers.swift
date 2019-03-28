@@ -149,11 +149,14 @@ class LifecycleHandlers: NSObject {
     }
     
     private func showWhiteScreen() {
-        let window = UIApplication.shared.keyWindow!
-        let v = UIView(frame: window.frame)
-        v.backgroundColor = UIColor.white
-        v.tag = 1
-        window.addSubview(v);
+        guard let _ = UIApplication.shared.keyWindow?.viewWithTag(1) else  {
+            let window = UIApplication.shared.keyWindow!
+            let v = UIView(frame: window.frame)
+            v.backgroundColor = UIColor.white
+            v.tag = 1
+            window.addSubview(v);
+            return
+        }
     }
     
     private func hideWhiteScreen() {
