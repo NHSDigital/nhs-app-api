@@ -20,13 +20,12 @@ class KnownServices {
     private let dataPreferencesTitle = NSLocalizedString("DataPreferencesTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
     private let hotJarTitle = NSLocalizedString("HotJarTitle", comment: "")
-    private var genericError:ErrorMessage
     private var serviceList = Array<KnownService>()
     private var externalSites = Array<URL>()
     
     init(config:Config) {
         self.config = config
-        self.genericError = ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage)
+       
         self.buildExternalSites()
         self.buildKnownServices()
     }
@@ -34,22 +33,7 @@ class KnownServices {
     func shouldURLOpenExternally(_ url: URL) -> Bool {
         return externalSites.contains(url)
     }
-    
-    func getUnavailabilityErrorMessageForService(_ url: URL?) -> ErrorMessage {
-        guard let serviceInfo = findMatchingKnownServiceInfo(url: url) else {
-            return self.getServiceUnavailableErrorMessage()
-        }
-        return serviceInfo.serviceMessage
-    }
-    
-    func getServiceUnavailableErrorMessage() -> ErrorMessage {
-        return genericError
-    }
-    
-    func getNoInternetConnectionErrorMessage() -> ErrorMessage {
-        return genericError
-    }
-    
+
     func findMatchingKnownServiceForHostname(hostname: String?) -> KnownService? {
         if let theHost = hostname {
             for service in serviceList {
@@ -112,11 +96,11 @@ class KnownServices {
     
     private func buildKnownServices() {
         let nhsoService = buildNhsoService()
-        let conditionService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, serviceError: genericError,  title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: true)
-        let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111, serviceError: genericError, title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
-        let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111, serviceError: genericError, title: nhs111Title, validateSession: false, allowNativeInteraction: false)
+        let conditionService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: true)
+        let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111,title: nhs111Title, accessibleTitle: accessibleNhs111Title, validateSession: false, allowNativeInteraction: false)
+        let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111,  title: nhs111Title, validateSession: false, allowNativeInteraction: false)
         let organDonationService = buildDonationService()
-        let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, serviceError: genericError, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
+        let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
         
         self.serviceList.append(nhsoService)
         self.serviceList.append(conditionService)
@@ -127,13 +111,13 @@ class KnownServices {
     }
     
     private func buildDonationService()-> KnownService {
-        let organDonationService = KnownService(serviceUrl: config.OrganDonationUrl, service: .ORGAN_DONATION, serviceError: genericError, title: organDonationTitle, validateSession: false, allowNativeInteraction: true)
+        let organDonationService = KnownService(serviceUrl: config.OrganDonationUrl, service: .ORGAN_DONATION,  title: organDonationTitle, validateSession: false, allowNativeInteraction: true)
         organDonationService.addPathInfo(path: config.NativeDonationPath, service: .ORGAN_DONATION, validateSession: false, allowNativeInteraction: true, title: organDonationTitle)
         return organDonationService
     }
     
     private func buildNhsoService()-> KnownService {
-        let nhsoService = KnownService(serviceUrl: config.HomeUrl, service: .NHS_ONLINE, serviceError: genericError, title: homeTitle, validateSession: true, allowNativeInteraction: true, urlQueryString: config.NhsOnlineRequiredQueryString)
+        let nhsoService = KnownService(serviceUrl: config.HomeUrl, service: .NHS_ONLINE, title: homeTitle, validateSession: true, allowNativeInteraction: true, urlQueryString: config.NhsOnlineRequiredQueryString)
         nhsoService.addPathInfo(path: config.SymptomsUrlPath, service: .SYMPTOMS, validateSession: true, allowNativeInteraction: true, title: symptomsTitle)
         nhsoService.addPathInfo(path: config.CheckSymptomsUrlPath, service: .NHS_ONLINE, validateSession: false,  allowNativeInteraction: false, title: symptomsTitle)
         nhsoService.addPathInfo(path: config.AppointmentsUrlPath, service: .APPOINTMENTS,validateSession: true,  allowNativeInteraction: true, title: appointmentsTitle)

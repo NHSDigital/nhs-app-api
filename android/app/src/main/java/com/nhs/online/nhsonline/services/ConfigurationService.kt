@@ -9,7 +9,10 @@ import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorMessageHandler
+import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -22,7 +25,7 @@ class ConfigurationResponse {
 class ConfigurationService(private val context: Context) {
     private val mRequestQueue: RequestQueue = Volley.newRequestQueue(context)
     var isInProgress = false
-
+    private val errorMessageHandler = ErrorMessageHandler(context)
     fun getConfiguration(callback: IVolleyCallback) {
         isInProgress = true
 
@@ -40,13 +43,16 @@ class ConfigurationService(private val context: Context) {
             Response.ErrorListener { error ->
                 Log.d(Application.TAG,
                     "${this::class.java.simpleName}: Configuration error: $error")
-                if (error is TimeoutError || error is NoConnectionError) {
-                    callback.onError(connectionErrorMessage)
+
+                if(!isConnectedToNetwork) {
+                    callback.onError(errorMessageHandler.getErrorMessage(ErrorType.NoConnection))
                 } else {
-                    callback.onError(serverErrorMessage)
+                    callback.onError(errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure))
                 }
+
                 isInProgress = false
             })
+
         mRequestQueue.add(stringReq)
     }
 
@@ -71,26 +77,14 @@ class ConfigurationService(private val context: Context) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Configuration error: failed to parse response")
 
-            callback.onError(serverErrorMessage)
+            callback.onError(errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure))
         } catch (error: JSONException) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Configuration error: failed to parse response")
 
-            callback.onError(serverErrorMessage)
+            callback.onError(errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure))
         }
     }
-
-    private val connectionErrorMessage =
-        ErrorMessage(context.resources.getString(R.string.connection_error_title),
-            context.resources.getString(R.string.connection_error_message),
-            context.resources.getString(
-                R.string.Accessible_connection_error_message))
-
-    private val serverErrorMessage =
-        ErrorMessage(context.resources.getString(R.string.server_error_title),
-            context.resources.getString(R.string.server_error_message),
-            context.resources.getString(
-                R.string.accessible_server_error_message))
 
     private fun parseBoolean(response: String, propertyId: Int): Boolean {
         val jsonObj = JSONObject(response)

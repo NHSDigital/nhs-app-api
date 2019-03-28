@@ -5,6 +5,8 @@ import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorMessageHandler
+import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
 import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
@@ -38,6 +40,7 @@ class LifeCycleObserverTest {
     private lateinit var rootBeerServiceMock: RootBeer
     private lateinit var appDialogsMock: AppDialogs
     private lateinit var nhsWebMock: NhsWeb
+    private lateinit var errorMessageHandler: ErrorMessageHandler
 
     @Before
     fun setUp() {
@@ -46,7 +49,7 @@ class LifeCycleObserverTest {
         val r = spy(mainActivity.resources)
         whenever(r.getString(R.string.isRootCheckEnabled)).thenReturn("true")
         whenever(contextSpy.resources).thenReturn(r)
-
+        errorMessageHandler = ErrorMessageHandler(contextSpy)
         appWebInterfaceMock = mock(AppWebInterface::class.java)
         configurationServiceMock = mock(ConfigurationService::class.java)
         rootBeerServiceMock = mock(RootBeer::class.java)
@@ -70,7 +73,7 @@ class LifeCycleObserverTest {
     fun onMoveToForeground_notRooted_nullUrl_configurationError() {
         doNothing().whenever(rootBeerServiceMock).setLogging(true)
         whenever(rootBeerServiceMock.isRootedWithoutBusyBoxCheck).thenReturn(false)
-        val em = ErrorMessage("my Error")
+        val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
         doAnswer {
             val callback = it.arguments[0] as IVolleyCallback
             callback.onError(em)
@@ -111,7 +114,7 @@ class LifeCycleObserverTest {
 
         contextSpy.webview.loadUrl(null)
 
-        val em = ErrorMessage("my Error")
+        val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
         doAnswer {
             val callback = it.arguments[0] as IVolleyCallback
             callback.onError(em)
@@ -137,7 +140,7 @@ class LifeCycleObserverTest {
 
         doNothing().whenever(appWebInterfaceMock).validateSession(any())
 
-        val em = ErrorMessage("my Error")
+        val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
         doAnswer {
             val callback = it.arguments[0] as IVolleyCallback
             callback.onError(em)
@@ -168,7 +171,7 @@ class LifeCycleObserverTest {
             callback.invoke()
         }.whenever(appWebInterfaceMock).validateSession(any())
 
-        val em = ErrorMessage("my Error")
+        val em = errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
         doAnswer {
             val callback = it.arguments[0] as IVolleyCallback
             callback.onError(em)
@@ -313,7 +316,7 @@ class LifeCycleObserverTest {
         url: String, shouldValidateSession: Boolean = true
     ): KnownServices {
         val ksi =
-            KnownService.Info(url, ErrorMessage("Danger Will Robinson"), url, shouldValidateSession)
+            KnownService.Info(url, url, shouldValidateSession)
         val knownServicesMock: KnownServices = mock {
             on { findMatchingServiceInfo(url) }.thenReturn(ksi)
         }

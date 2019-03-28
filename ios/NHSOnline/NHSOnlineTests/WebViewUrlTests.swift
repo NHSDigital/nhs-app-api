@@ -68,15 +68,6 @@ class WebViewUrlTests: XCTestCase {
         XCTAssertEqual(urlString, correctUrl)
     }
     
-    func test_When_OrganDonationServiceIsUnavailable_Then_DisplaysCorrectErrorMessage() {
-        let urlString = config().OrganDonationUrl
-        let webViewUrl = URL(string: urlString)
-        let errorMessage = knownServices?.getUnavailabilityErrorMessageForService(webViewUrl!)
-        
-        XCTAssertEqual(errorMessage?.title, NSLocalizedString("ConnectionErrorTitle", comment: ""))
-    }
-
-    
     func test_When_KnownServiceIsNotFoundNilIsReturned() {
         let urlString = "http://notknown.service.url/"
         let webViewUrl = URL(string: urlString)

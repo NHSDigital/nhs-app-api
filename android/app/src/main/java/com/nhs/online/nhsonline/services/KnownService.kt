@@ -7,7 +7,6 @@ import java.net.URL
 
 class KnownService(
     serviceUrl: String,
-    errorMessage: ErrorMessage,
     header: String? = null,
     nativeHeaderDescription: String? = null,
     shouldValidateSession: Boolean = true,
@@ -22,7 +21,7 @@ class KnownService(
         val uri = URI(serviceUrl)
         url = URI(uri.scheme, uri.authority, null, null, null).toURL()
 
-        default = Info("", errorMessage, url.toString(),
+        default = Info("", url.toString(),
             shouldValidateSession, header, nativeHeaderDescription)
 
         generatePathInfoFrom(uri.path)
@@ -30,15 +29,13 @@ class KnownService(
 
     fun addPathInfo(
         path: String, shouldValidateSession: Boolean,
-        header: String, nativeHeaderDescription: String? = null,
-        errorMessage: ErrorMessage? = null
+        header: String, nativeHeaderDescription: String? = null
     ) {
         if (path.isBlank() || path == "/")
             return
         var thePath = if (path.first() != '/') "/$path" else path
         thePath = if (thePath.last() == '/') thePath.substring(0, thePath.length - 1) else thePath
-        val theErrorMessage = errorMessage ?: default.errorMessage
-        pathInfos[thePath] = Info(thePath, theErrorMessage, default.baseUrl,
+        pathInfos[thePath] = Info(thePath, default.baseUrl,
             shouldValidateSession, header, nativeHeaderDescription)
     }
 
@@ -129,7 +126,7 @@ class KnownService(
                 }
             }
         }
-        return if (matchingKey.isEmpty()) null else pathInfos[matchingKey]
+        return if (matchingKey.isEmpty()) default else pathInfos[matchingKey]
     }
 
     private fun buildQueryStringMap(queryStrings: String?): Map<String, String>? {
@@ -162,7 +159,6 @@ class KnownService(
 
     data class Info(
         val path: String,
-        val errorMessage: ErrorMessage,
         val baseUrl: String,
         val shouldValidateSession: Boolean = true,
         val header: String? = null,

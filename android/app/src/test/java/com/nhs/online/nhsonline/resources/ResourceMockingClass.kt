@@ -31,6 +31,7 @@ open class ResourceMockingClass {
             on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again." +
                     "\n\nIf the problem continues and you need to book an appointment or get a prescription now, " +
                     "contact your GP surgery directly. For urgent medical advice, call 111."
+            on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
             on { getString(R.string.Accessible_connection_error_message) } doReturn "Please check your connection and try again.\n" +
                     "        \\n\\nIf the problem persists and you need to book an appointment or get a prescription now,\n" +
                     "        contact your GP surgery directly. For immediate medical advice, call one. one. one.."
@@ -72,7 +73,7 @@ open class ResourceMockingClass {
             on { getString(R.string.prescriptions_header) } doReturn "My repeat prescriptions"
             on { getString(R.string.more_header) } doReturn "More"
             on { getString(R.string.home_header) } doReturn "Home"
-
+            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getStringArray(R.array.nativeAppHosts) } doReturn arrayOf(
                     "https://111.nhs.uk/",
                     "https://111.service.nhs.uk/",
@@ -101,9 +102,11 @@ open class ResourceMockingClass {
 
         val mockResource: Resources = mock {
             on { getString(R.string.connection_error_header) } doReturn "Internet connection error"
+            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
             on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
             on { getString(R.string.connection_error_title) } doReturn "There\\'s an issue with your internet connection"
+            on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
         }
 
         return mock {
@@ -127,6 +130,7 @@ open class ResourceMockingClass {
             on { getString(R.string.connection_error_title) } doReturn "\"There's an issue with your internet connection\""
             on { getString(R.string.nhsUK) } doReturn "https://www.nhs.uk"
             on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
+            on { getString(R.string.server_error_title) } doReturn "We're experiencing technical difficulties"
         }
 
         return mock {

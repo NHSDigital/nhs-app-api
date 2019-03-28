@@ -48,7 +48,7 @@ class ConnectionStateMonitorTests {
         assert(isConnectedToNetwork) {
             "Failed: Returns false for a connected network"
         }
-        
+
         mockConnectionStateMonitor.mockNetworkCallback(ResourceMockingClass().mockDisconnectedContext())
         assert(!isConnectedToNetwork) {
             "Failed: Returns true for a connected network"

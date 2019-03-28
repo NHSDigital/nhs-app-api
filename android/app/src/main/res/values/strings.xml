@@ -32,7 +32,6 @@
         \n\nIf the problem continues and you need to book an appointment or get a prescription now,
         contact your GP surgery directly. For urgent medical advice, call 111.
     </string>
-
     <string name="server_error_title">We\'re experiencing technical difficulties</string>
     <string name="server_error_message">
         \nTry again later. If the problem continues and you need to book an
@@ -51,7 +50,10 @@
         \n\nIf the problem continues and you need to book an appointment or get a prescription now,
         contact your GP surgery directly. For urgent medical advice, call one one one.
     </string>
-
+    <string name="accessible_apiUnavailableErrorMessage">
+    You currently cannot use this service. If the problem continues and you need to book an appointment or
+        get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.
+    </string>
     <!--Start Content texts for the biometric authentication-->
     <string name="biometric_information_message1">
         Log in using your fingerprint
@@ -68,7 +70,9 @@
         Something went wrong when registering for Fingerprint ID.
     </string>
     <string name="service_unavailable">Service unavailable</string>
-
+    <string name="apiUnavailableErrorMessage">You currently cannot use this service. \n\nIf the problem continues and you need to book an
+        appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.
+    </string>
     <string name="retryButtonText">Try again</string>
     <string name="errorIconText">Error</string>
     <string name="successIconText">Success</string>

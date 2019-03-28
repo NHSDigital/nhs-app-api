@@ -3,6 +3,8 @@ package com.nhs.online.nhsonline.services
 import android.content.Context
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorMessageHandler
+import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IVolleyCallback
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import org.junit.Assert
@@ -19,10 +21,11 @@ class ConfigurationServiceTest : ResourceMockingClass() {
         Robolectric.buildActivity(MainActivity::class.java).create().get()
     private lateinit var context: Context
     private var configurationService: ConfigurationService = ConfigurationService(mainActivityMock)
-
+    private lateinit var errorMessageHandler: ErrorMessageHandler
     @Before
     fun setUp() {
         context = mockContext()
+        errorMessageHandler = ErrorMessageHandler(context)
     }
 
     @Test
@@ -57,13 +60,7 @@ class ConfigurationServiceTest : ResourceMockingClass() {
     }
 
     private fun serverConnectionError(): ErrorMessage {
-        return ErrorMessage("We're experiencing technical difficulties",
-            "\nTry again later. If the problem continues and you need to book an " +
-                    "appointment or get a prescription now, contact your GP surgery directly. " +
-                    "For urgent medical advice, call 111.",
-            "\nTry again later. If the problem continues and you need to book an " +
-                    "appointment or get a prescription now, contact your GP surgery directly. " +
-                    "For urgent medical advice, call one. one. one..")
+        return errorMessageHandler.getErrorMessage(ErrorType.ApiCallFailure)
     }
 
     private fun getValidResponse(): String {

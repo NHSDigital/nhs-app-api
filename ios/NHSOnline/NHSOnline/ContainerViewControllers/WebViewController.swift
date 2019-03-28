@@ -103,7 +103,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         self.webViewDelegate?.stopActivityIndicator()
         
         if(!Reachability.isConnectedToNetwork()) {
-            webViewDelegate?.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
+            webViewDelegate?.showNativeViewContainerWithError()
             return
         }
         

@@ -22,6 +22,8 @@
 "ConnectionErrorTitle" = "There's an issue with your internet connection";
 "ConnectionErrorMessage" = "\nCheck your connection and try again. \n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.";
 "APIUnavailableErrorMessage" = "You currently cannot use this service. \n\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.";
+"ServiceUnavailableErrorHeader" = "We're experiencing technical difficulties";
+"ServiceUnavailableErrorBody" = "\nTry again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.";
 
 /*Accessibility*/
 "MyAccountHint" = "Navigates to my account page";
@@ -34,6 +36,7 @@
 "AccessibilityConnectionErrorMessage" = "Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.";
 "AccessibilityBiometricsTimeoutMessage" = "It was not your fault, Try Logging in again.";
 "AccessibilityAPIUnavailableErrorMessage" = "You currently cannot use this service. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.";
+"AccessibilityServiceUnavailableErrorBody" = "Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.";
 
 /*Configuration*/
 "locale" = "en-GB";

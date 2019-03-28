@@ -7,7 +7,7 @@ class KnownService {
     private var urlQueryItems = Array<URLQueryItem>()
     let defaultPathInfo: Info
     
-    init(serviceUrl:String, service: KnownServices.Service, serviceError: ErrorMessage, title: String? = nil, accessibleTitle:String? = nil,
+    init(serviceUrl:String, service: KnownServices.Service,  title: String? = nil, accessibleTitle:String? = nil,
          validateSession: Bool = true, allowNativeInteraction: Bool = false, urlQueryString:String? = nil) {
         self.service = service
         
@@ -20,9 +20,9 @@ class KnownService {
         let baseUrl = self.url.absoluteString
         
         if urlPath.isEmpty || urlPath == "/" {
-            self.defaultPathInfo = Info("", service, serviceError, baseUrl , validateSession, allowNativeInteraction, title, accessibleTitle)
+            self.defaultPathInfo = Info("", service, baseUrl , validateSession, allowNativeInteraction, title, accessibleTitle)
         } else {
-            self.defaultPathInfo = Info("", service, serviceError, baseUrl , validateSession, allowNativeInteraction)
+            self.defaultPathInfo = Info("", service, baseUrl , validateSession, allowNativeInteraction)
             addPathInfo(path: urlPath, service: service, validateSession: validateSession, allowNativeInteraction: allowNativeInteraction, title: title, accessibleTitle:accessibleTitle)
         }
         self.retrieveQueryKeyValueFrom(queryString: urlQueryString)
@@ -31,10 +31,9 @@ class KnownService {
     func addPathInfo(path: String, service: KnownServices.Service, validateSession:Bool = true, allowNativeInteraction: Bool = false, title: String?, accessibleTitle:String? = nil, _ serviceError: ErrorMessage? = nil) {
         if path.isEmpty || path == "/" { return }
         let thePath = convertToInfoPathKey(path: path)
-        let theError = serviceError ?? defaultPathInfo.serviceMessage
         let baseUrl = url.absoluteString
         
-        pathInfoDictionary[thePath] = Info(thePath,service, theError, baseUrl , validateSession, allowNativeInteraction, title, accessibleTitle)
+        pathInfoDictionary[thePath] = Info(thePath,service, baseUrl , validateSession, allowNativeInteraction, title, accessibleTitle)
     }
     
     func findMatchingServicePathInfo(urlString: String, exactPathMatch: Bool = false)-> Info? {
@@ -170,17 +169,15 @@ class KnownService {
     
     struct Info {
         let path: String
-        let serviceMessage: ErrorMessage
         let baseUrl: String
         let validateSession: Bool
         let allowNativeInteraction: Bool
         let serviceName: KnownServices.Service
         let title: String?
         let accessibleTitle: String?
-        init(_ path:String, _ service:KnownServices.Service, _ serviceError :ErrorMessage, _ baseUrl:String, _ validateSession:Bool = true, _ allowNativeInteraction: Bool = false, _ title:String? = nil, _ accessibleTitle: String? = nil ) {
+        init(_ path:String, _ service:KnownServices.Service, _ baseUrl:String, _ validateSession:Bool = true, _ allowNativeInteraction: Bool = false, _ title:String? = nil, _ accessibleTitle: String? = nil ) {
             self.path = path
             self.serviceName = service
-            self.serviceMessage = serviceError
             self.baseUrl = baseUrl
             self.validateSession = validateSession
             self.allowNativeInteraction = allowNativeInteraction

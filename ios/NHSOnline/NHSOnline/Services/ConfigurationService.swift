@@ -105,12 +105,5 @@ class   ConfigurationService : ConfigurationServiceProtocol {
         return sharedConfigurationService
     }
     
-    func getErrorMessage() -> ErrorMessage {
-        let nhsOnlineErrorTitle = NSLocalizedString("ConnectionErrorTitle", comment: "")
-        let nhsOnlineErrorMessage = NSLocalizedString("ConnectionErrorMessage", comment: "")
-        let accessibleNhsOnlineErrorMessage = NSLocalizedString("AccessibilityConnectionErrorMessage", comment: "")
-        
-        return ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage)
-    }
 }
 

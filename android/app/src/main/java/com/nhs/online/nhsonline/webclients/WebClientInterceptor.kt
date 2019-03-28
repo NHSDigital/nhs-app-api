@@ -8,6 +8,8 @@ import android.webkit.*
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorMessageHandler
+import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.KnownServices
@@ -33,7 +35,7 @@ class WebClientInterceptor(
     companion object {
         val logger = Logger.getLogger(WebClientInterceptor::class.java.simpleName)!!
     }
-
+    private val errorMessageHandler = ErrorMessageHandler(context)
     private val handler = Handler()
     private var noConnectionHandled = false
     private var shouldShowErrorPage = false
@@ -65,7 +67,6 @@ class WebClientInterceptor(
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onPageStarted > url $url")
         nhsWeb.setReloadUrl(url)
         cancelTrackingWebRequestResponse()
-
         if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onPageStarted > no internet")
@@ -108,7 +109,6 @@ class WebClientInterceptor(
         super.onLoadResource(view, url)
     }
 
-
     @Suppress("OverridingDeprecatedMember")
     override fun onReceivedError(
         view: WebView?,
@@ -118,8 +118,7 @@ class WebClientInterceptor(
     ) {
         if (shouldHandleUnavailability(failingUrl)) {
             Log.d(Application.TAG,
-                "${this::class.java.simpleName}: Entering onReceivedError > failingUrl $failingUrl")
-
+                    "${this::class.java.simpleName}: Entering onReceivedError > failingUrl $failingUrl > Error Description: $description")
             cancelTrackingWebRequestResponse()
             handleUnavailability(failingUrl, errorCode)
         }
@@ -223,11 +222,8 @@ class WebClientInterceptor(
     fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {
         Log.d(Application.TAG,
             "${this::class.java.simpleName}: Entering stopLoadingWebviewAndShowNoConnectionError > ${view?.url}")
-
         handleUnavailability(view?.url)
         view?.stopLoading()
-        uiInteractor.setHeaderText(context.resources.getString(R.string.connection_error_header))
-
     }
 
     private fun updateHeaderAndNavMenu(url: String?) {
@@ -288,18 +284,24 @@ class WebClientInterceptor(
             "${this::class.java.simpleName}: Entering handleUnavailability > failingUrl $failingUrl")
 
         shouldShowErrorPage = true
+        val pageHeader: String
+        val errorMessage: ErrorMessage
+        when(isConnectedToNetwork) {
+            true -> {
+                errorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
+                pageHeader = context.resources.getString(R.string.service_unavailable)
+            }
+            false -> {
+                errorMessage = errorMessageHandler.getErrorMessage(ErrorType.NoConnection)
+                pageHeader = context.resources.getString(R.string.connection_error_header)
+            }
+        }
 
-        val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
-
-        uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
-
+        Log.d(Application.TAG,
+                "${this::class.java.simpleName}: HandleUnavailability -> ErrorMessage Type:  ${errorMessage.title}")
+        uiInteractor.showUnavailabilityError(errorMessage)
+        uiInteractor.setHeaderText(pageHeader)
         logger.info("Failing Url: $failingUrl with error code: $errorCode")
     }
 
-    private fun getUnavailabilityErrorMessageForService(failingUrl: String?): ErrorMessage {
-        Log.d(Application.TAG,
-            "${this::class.java.simpleName}: Entering getUnavailabilityErrorMessageForService > failingUrl $failingUrl")
-        val serviceInfo = knownServices.findMatchingServiceInfo(failingUrl.toString())
-        return serviceInfo?.errorMessage ?: knownServices.getServiceUnavailabilityError()
-    }
 }

@@ -3,9 +3,13 @@ package com.nhs.online.nhsonline.webclients
 
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
+import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorMessageHandler
+import com.nhs.online.nhsonline.data.ErrorType
 import org.junit.Test
 import org.junit.runner.RunWith
 import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
+import com.nhs.online.nhsonline.network.MockConnectionStateMonitor
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
@@ -24,10 +28,11 @@ class UnsecureWebClientTest {
     private lateinit var unSecureClientMock: UnsecureWebClient
     private lateinit var unSecureInteractorMock: UnsecureInteractor
     private lateinit var schemeHandlersMock: SchemeHandlers
-
+    private lateinit var errorMessageHandler: ErrorMessageHandler
     private val resourceMock = ResourceMockingClass()
+    private lateinit var knownUrlErrMsg: ErrorMessage
 
-    private val knownUrlErrMsg = KnownServices(resourceMock.mockContext()).getServiceUnavailabilityError()
+
 
     @Before
     fun setUp() {
@@ -36,6 +41,8 @@ class UnsecureWebClientTest {
         unSecureClientMock = mock()
         unSecureInteractorMock = mock()
         schemeHandlersMock = mock()
+
+        MockConnectionStateMonitor().mockNetworkCallback(ResourceMockingClass().mockConnectedContext())
     }
 
     @Test
@@ -47,7 +54,9 @@ class UnsecureWebClientTest {
                 context,
                 schemeHandlersMock
         )
-
+        MockConnectionStateMonitor().mockNetworkCallback(context)
+        errorMessageHandler= ErrorMessageHandler(context)
+        knownUrlErrMsg = errorMessageHandler.getErrorMessage(ErrorType.NoConnection)
         unSecureClient.onPageStarted(webViewMock, "https://111.nhs.uk/", null )
 
         verify(webViewMock).stopLoading()
@@ -96,6 +105,7 @@ class UnsecureWebClientTest {
                 context,
                 schemeHandlersMock
         )
+        MockConnectionStateMonitor().mockNetworkCallback(context)
 
         unSecureClient.onLoadResource(webViewMock, "https://111.nhs.uk/")
 
@@ -115,6 +125,7 @@ class UnsecureWebClientTest {
                 context,
                 schemeHandlersMock
         )
+        MockConnectionStateMonitor().mockNetworkCallback(context)
 
         // stop loading should be called once to handle no connection
         unSecureClient.onPageStarted(webViewMock, "https://nhs.uk", null)
@@ -151,6 +162,8 @@ class UnsecureWebClientTest {
                 resourceMock.mockDisconnectedContext(),
                 schemeHandlersMock
         )
+        errorMessageHandler= ErrorMessageHandler(resourceMock.mockContext())
+        knownUrlErrMsg = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
 
         unSecureClient.onReceivedError(webViewMock, 404,
                 "Error", "https://www.nhs.uk")

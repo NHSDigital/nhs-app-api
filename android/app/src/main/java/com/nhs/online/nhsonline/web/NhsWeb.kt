@@ -7,6 +7,8 @@ import android.webkit.WebView
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorMessageHandler
+import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.KnownService
@@ -35,6 +37,7 @@ class NhsWeb(
         UrlLoader(webView, knownServices, activity.getString(R.string.baseURL))
     private val chromeClient = ChromeClientLocationHandler(activity)
     private val appPersistData = PersistData(activity)
+    private val errorMessageHandler = ErrorMessageHandler(activity)
     private var originalWebViewZoom = 0
 
     var isUserLoggedIn = false
@@ -68,7 +71,7 @@ class NhsWeb(
         }
         urlLoader.reloadUrl = urlLoader.produceValidUrl(path)
         if (!isConnectedToNetwork) {
-            handleConnectionError(knownService)
+            showNoConnectionError()
             return
         }
         knownService?.header?.let { nativeHeader ->
@@ -161,19 +164,11 @@ class NhsWeb(
 
     fun announceForAccessibility(text: String) = webView.announceForAccessibility(text)
 
-    private fun handleConnectionError(knownService: KnownService.Info?) {
-        showConnectionError(knownService?.errorMessage)
-        Log.d(TAG, "Failing Url: ${urlLoader.reloadUrl}")
-    }
-
-    fun showConnectionError(errorMessage: ErrorMessage?) {
-        var errorMsg = errorMessage
-        if(errorMsg == null) {
-            errorMsg = knownServices.getServiceUnavailabilityError()
-        }
+    fun showNoConnectionError() {
+        Log.d(TAG, "Entering ShowNoConnectionError")
         webView.stopLoading()
         uiInteractor.setHeaderText(readResourceString(R.string.connection_error_header))
-        uiInteractor.showUnavailabilityError(errorMsg)
+        uiInteractor.showUnavailabilityError(errorMessageHandler.getErrorMessage(ErrorType.NoConnection))
         return
     }
 

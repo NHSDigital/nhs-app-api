@@ -1,6 +1,7 @@
 package com.nhs.online.nhsonline.services
 
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorType
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -8,11 +9,10 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class KnownServiceTest {
-    private val emptyErrorMessage = ErrorMessage("")
 
     @Test
     fun hasMissingQueryString_returnsTrue_forMissingQueryString() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000")
@@ -22,7 +22,7 @@ class KnownServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsTrue_forMissingOneOfMany() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android&param2=param2Value")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?param2=param2Value")
@@ -34,7 +34,7 @@ class KnownServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsFalse_forValidQueryString() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?source=android")
@@ -44,7 +44,7 @@ class KnownServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsFalse_forValidQueryStringDifferentCase() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?SOURCE=ANDROID")
@@ -54,7 +54,7 @@ class KnownServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsTrue_forValidQueryStringMismatchValue() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?source=")
@@ -64,7 +64,7 @@ class KnownServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsFalse_forEmptyUrl() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.hasMissingQueryString("")
@@ -74,7 +74,7 @@ class KnownServiceTest {
 
     @Test
     fun hasOnlyRequiredQueries_returnsFalseWhenUrlHasAnExtraQuery() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
         val url = "http://10.0.2.2:3000??source=android&param=1"
         val result = testService.hasOnlyRequiredQueries(url)
@@ -85,7 +85,7 @@ class KnownServiceTest {
 
     @Test
     fun hasOnlyRequiredQueries_returnsTrueWhenServiceAndUrlHaveSameQuery() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
         val url = "http://10.0.2.2:3000?source=android"
         val result = testService.hasOnlyRequiredQueries(url)
@@ -95,7 +95,7 @@ class KnownServiceTest {
 
     @Test
     fun hasOnlyRequiredQueries_returnsFalseWhenServiceHasQueryButUrlHasNot() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
         val url = "http://10.0.2.2:3000"
         val result = testService.hasOnlyRequiredQueries(url)
@@ -105,7 +105,7 @@ class KnownServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsFullUrl_forMissingQueryString() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000")
@@ -115,7 +115,7 @@ class KnownServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsFullUrl_forIncludedQueryString() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?source=android")
@@ -125,7 +125,7 @@ class KnownServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsOriginalUrl_forNonMatchingHost() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.addMissingQueryStrings("http://www.google.com")
@@ -135,7 +135,7 @@ class KnownServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsFullUrl_forNoQueryString() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000")
 
@@ -144,7 +144,7 @@ class KnownServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsOriginalUrl_forNoQueryStringWithInputQueryString() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?param1=param1Value")
 
@@ -153,7 +153,7 @@ class KnownServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsOriginalUrl_forQueryStringWithAdditionalInputQueryString() {
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage,
+        val testService = KnownService("http://10.0.2.2:3000",
             queryStrings = "?source=android")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?param1=param1Value")
@@ -164,7 +164,7 @@ class KnownServiceTest {
     @Test
     fun hasNativeHeader_returnsTrue_forServiveWithNativeHeader() {
         val testService =
-            KnownService("http://testUrl", emptyErrorMessage, "Header 1")
+            KnownService("http://testUrl", "Header 1")
 
         val result = testService.hasDefaultNativeHeader()
         Assert.assertTrue(result)
@@ -172,7 +172,7 @@ class KnownServiceTest {
 
     @Test
     fun hasNativeHeader_returnsFalse_forServiveWithoutNativeHeader() {
-        val testService = KnownService("http://testUrl", emptyErrorMessage)
+        val testService = KnownService("http://testUrl")
 
         val result = testService.hasDefaultNativeHeader()
         Assert.assertFalse(result)
@@ -182,7 +182,7 @@ class KnownServiceTest {
     fun addPathInfo_generatesPathInfoForSpecifiedPath() {
         val paths = arrayListOf("pathOne", "pathTwo", "pathThree")
         val headers = arrayListOf("HeaderOne", "HeaderTwo", "HeaderThree")
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
         testService.addPathInfo(paths[0], true, headers[0])
         testService.addPathInfo(paths[1], true, headers[1])
         testService.addPathInfo(paths[2], true, headers[2])
@@ -202,7 +202,7 @@ class KnownServiceTest {
         val path2 = "pathTwo"
         val header1 = "HeaderOne"
         val header2 = "HeaderTwo"
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
         testService.addPathInfo(path1WithSlash, false, header1)
         testService.addPathInfo(path2, false, header2)
 
@@ -214,16 +214,13 @@ class KnownServiceTest {
 
     @Test
     fun addPathInfo_WithoutErrorMessageDefaultToServiceDefaultErrorMessage() {
-        val defaultErrorText = "Default Text"
-        val defaultErrorMessage = ErrorMessage(defaultErrorText)
         val path = "Path"
         val header = "Header"
-        val testService = KnownService("http://10.0.2.2:3000", defaultErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
         testService.addPathInfo(path, false, header)
 
         val pathInfo = testService.findMatchingServicePathInfo("http://10.0.2.2:3000/$path")
         Assert.assertEquals(header, pathInfo?.header)
-        Assert.assertEquals(defaultErrorText, pathInfo?.errorMessage?.title)
     }
 
     @Test
@@ -233,7 +230,7 @@ class KnownServiceTest {
         val header1 = "HeaderOne"
         val header2 = "HeaderTwo"
         val defaultHeader = "DefaultHeader"
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage, defaultHeader)
+        val testService = KnownService("http://10.0.2.2:3000", defaultHeader)
         testService.addPathInfo(emptyPath, false, header1)
         testService.addPathInfo(pathWithSlash, false, header2)
         val emptyPathInfo =
@@ -249,7 +246,7 @@ class KnownServiceTest {
     fun findMatchingServicePathInfo_matchesPathInfoWithSameBaseUrlAndStartWithThePathInfoPath() {
         val path = "appointments"
         val pathHeader = "Appointment Header"
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
         testService.addPathInfo(path, true, pathHeader)
         val pathInfo =
             testService.findMatchingServicePathInfo("http://10.0.2.2:3000/$path/extra-path")
@@ -261,7 +258,7 @@ class KnownServiceTest {
     fun findMatchingServicePathInfo_returnNull_whenProvidedUrlDoesNotMatchRequiredBaseUrl() {
         val path = "appointments"
         val randomUrl = "https://www.google.co.uk/$path"
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
         testService.addPathInfo(path, true, "")
         val pathInfo =
             testService.findMatchingServicePathInfo(randomUrl)
@@ -272,7 +269,7 @@ class KnownServiceTest {
     fun findMatchingServicePathInfoByPath_resolveToMatchingPathInfo() {
         val path = "appointments"
         val pathHeader = "Appointment Header"
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
         testService.addPathInfo(path, true, pathHeader)
         val pathInfo =
             testService.findMatchingServicePathInfoByPath(path)
@@ -292,7 +289,7 @@ class KnownServiceTest {
         val closestPath1 = "$path1/random/path"
         val closestPath3 = "$pathPlusPath3/random-path"
 
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
         testService.addPathInfo(path1, false, header1)
         testService.addPathInfo(pathPlusPath2, false, header2)
         testService.addPathInfo(pathPlusPath3, false, header3)
@@ -312,7 +309,7 @@ class KnownServiceTest {
 
         val closestPath1 = "$path1/random/path"
 
-        val testService = KnownService("http://10.0.2.2:3000", emptyErrorMessage)
+        val testService = KnownService("http://10.0.2.2:3000")
         testService.addPathInfo(path1, false, header1)
 
         val closestPath1Info =

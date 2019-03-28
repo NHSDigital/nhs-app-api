@@ -8,12 +8,6 @@ import java.net.URL
 
 
 class KnownServices(private val context: Context) {
-    private val unavailabilityErrorMessage =
-        ErrorMessage(context.resources.getString(R.string.connection_error_title),
-            context.resources.getString(R.string.connection_error_message),
-            context.resources.getString(
-                R.string.Accessible_connection_error_message))
-
     private val serviceList = buildKnownServices()
     private val externalSites = buildExternalSites()
 
@@ -54,10 +48,6 @@ class KnownServices(private val context: Context) {
         return matchingKnownService.addMissingQueryStrings(urlString)
     }
 
-    fun getServiceUnavailabilityError(): ErrorMessage {
-        return unavailabilityErrorMessage
-    }
-
     fun findNHSAppInternalServiceInfoByPath(path: String): KnownService.Info? {
         val nhsService = findMatchingKnownService(fetchStringResource(R.string.baseURL))
         return nhsService?.findMatchingServicePathInfoByPath(path)
@@ -86,7 +76,6 @@ class KnownServices(private val context: Context) {
         val services = arrayListOf<KnownService>()
         val nhsAppService = buildNHSInternalAppService()
         val organDonation = KnownService(fetchStringResource(R.string.organDonation),
-            unavailabilityErrorMessage,
             fetchStringResource(R.string.organ_donation_register_header),
             null,
             false)
@@ -94,8 +83,7 @@ class KnownServices(private val context: Context) {
             false,
             fetchStringResource(R.string.organ_donation_register_header))
 
-        val nhsUK = KnownService(fetchStringResource(R.string.nhsUK),
-            unavailabilityErrorMessage)
+        val nhsUK = KnownService(fetchStringResource(R.string.nhsUK))
         nhsUK.addPathInfo(URL(fetchStringResource(R.string.dataSharing)).path,
             false,
             fetchStringResource(R.string.data_preferences_header))
@@ -106,14 +94,12 @@ class KnownServices(private val context: Context) {
 
         val nhs111 = KnownService(fetchStringResource(
             R.string.nhs111),
-            unavailabilityErrorMessage,
             fetchStringResource(R.string.nhs_111_header),
             fetchStringResource(R.string.nhs_111_header_description),
             false)
         val dataPref = KnownService(fetchStringResource(R.string.dataPreferencesBaseUrl),
-            unavailabilityErrorMessage,
-            fetchStringResource(R.string.conditions_header),
-            fetchStringResource(R.string.conditions_header_description),
+            fetchStringResource(R.string.data_preferences_header),
+            fetchStringResource(R.string.data_preferences_header),
             false)
 
         services.add(nhsAppService)
@@ -126,9 +112,10 @@ class KnownServices(private val context: Context) {
     }
 
     private fun buildNHSInternalAppService(): KnownService {
-        val internalService = KnownService(fetchStringResource(R.string.baseURL),
-            unavailabilityErrorMessage, fetchStringResource(R.string.home_header),
-            queryStrings = fetchStringResource(R.string.nhsOnlineRequiredQueries))
+        val internalService = KnownService(
+                fetchStringResource(R.string.baseURL),
+                fetchStringResource(R.string.home_header),
+                queryStrings = fetchStringResource(R.string.nhsOnlineRequiredQueries))
         internalService.addPathInfo(fetchStringResource(R.string.symptomsPath),
             true,
             fetchStringResource(R.string.symptoms_header))

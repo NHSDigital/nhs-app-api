@@ -115,14 +115,12 @@ class KnownServicesTest : ResourceMockingClass() {
     }
 
     @Test
-    fun findMatchingServiceInfo_resolveToNull_whenServiceInternalPathLocatorIsUnrelated() {
+    fun findMatchingServiceInfo_resolveToDefault_whenServiceInternalPathLocatorIsUnrelated() {
         val unrelatedLocators =
-            arrayListOf("${getResourceString(R.string.baseURL)}/unrelatedPath",
-                "${getResourceString(R.string.nhsUK)}/unrelatedPath",
-                "${getResourceString(R.string.organDonation)}/unrelatedPath")
+            arrayListOf("${getResourceString(R.string.baseURL)}/unrelatedPath")
         unrelatedLocators.forEach { locator ->
             val serviceInfo = testKnownServices.findMatchingServiceInfo(locator)
-            Assert.assertNull(serviceInfo)
+            Assert.assertEquals("Home", serviceInfo?.header)
         }
     }
 

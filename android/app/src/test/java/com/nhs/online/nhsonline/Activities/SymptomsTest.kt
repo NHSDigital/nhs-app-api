@@ -1,9 +1,9 @@
 package com.nhs.online.nhsonline.activities
 
 import android.view.View
-import com.nhaarman.mockito_kotlin.verify
 import com.nhs.online.nhsonline.data.ErrorMessage
-import com.nhs.online.nhsonline.support.setServiceError
+import com.nhs.online.nhsonline.data.ErrorMessageHandler
+import com.nhs.online.nhsonline.data.ErrorType
 import kotlinx.android.synthetic.main.check_my_symptoms_banner.*
 import kotlinx.android.synthetic.main.error_layout.*
 import org.junit.Before
@@ -58,8 +58,9 @@ class SymptomsTest {
     fun errorMessageNullMessage(){
         symptomsActivity.showWebviewScreen()
 
-        val err = ErrorMessage("Device has no connection", null, null)
-        symptomsActivity.showUnavailabilityError(err)
+        val error = ErrorMessageHandler(symptomsActivity).getErrorMessage(ErrorType.NoConnection)
+        error.message = null
+        symptomsActivity.showUnavailabilityError(error)
 
         // Check error screen shown
         assert(symptomsActivity.errorViewLayoutU.visibility == View.VISIBLE) {}
@@ -68,17 +69,16 @@ class SymptomsTest {
         assert(symptomsActivity.tryAgainTextView.visibility == View.VISIBLE)
 
         // checks set service error is called
-        assert(symptomsActivity.errorTextView.text.toString().contains("Device has no connection"))
+        assert(symptomsActivity.errorTextView.text.toString().contains("There's an issue with your internet connection"))
     }
 
     @Test
     fun errorMessage(){
         symptomsActivity.showWebviewScreen()
 
-        val err = ErrorMessage("Device has no connection",
-                "Check your device connectivity",
-                null)
-        symptomsActivity.showUnavailabilityError(err)
+        val error = ErrorMessageHandler(symptomsActivity).getErrorMessage(ErrorType.NoConnection)
+
+        symptomsActivity.showUnavailabilityError(error)
 
         // Check error screen shown
         assert(symptomsActivity.errorViewLayoutU.visibility == View.VISIBLE)
@@ -86,16 +86,15 @@ class SymptomsTest {
 
         assert(symptomsActivity.tryAgainTextView.visibility == View.GONE)
 
-        assert(symptomsActivity.errorTextView.text.toString().contains("Device has no connection"))
+        assert(symptomsActivity.errorTextView.text.toString().contains("There's an issue with your internet connection"))
     }
 
     @Test
     fun showWebViewScreen() {
         // Set up to ensure error view is visible
-        val err = ErrorMessage("Device has no connection",
-                null,
-                null)
-        symptomsActivity.showUnavailabilityError(err)
+        val error = ErrorMessageHandler(symptomsActivity).getErrorMessage(ErrorType.NoConnection)
+
+        symptomsActivity.showUnavailabilityError(error)
 
 
         symptomsActivity.showWebviewScreen()

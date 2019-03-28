@@ -27,7 +27,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.schemeHandlers = SchemeHandlers()
         self.schemeHandlers.registerHandler(handler: MailToSchemeHandler())
     }
-
+    
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -61,7 +61,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             if(!Reachability.isConnectedToNetwork()) {
                 decisionHandler(.cancel)
-                self.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
+                self.showNativeViewContainerWithError()
                 return
             }
 
@@ -97,12 +97,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         decisionHandler(.allow)
     }
     
-    func showNoConnectionErrorView(urlNavigatingTo: String) {
-        self.failedUrl = URL(string: urlNavigatingTo)
-        self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(self.failedUrl))
-        return
-    }
-    
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         if timer != nil {
             clearTimer()
@@ -133,7 +127,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
-        
         if withError._code == NSURLErrorCancelled {
             if #available(iOS 10.0, *) {
                 os_log("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", log: OSLog.default, type: .info, withError.localizedDescription)
@@ -144,15 +137,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         
         if shouldHandleErrors {
-            if withError._domain == "NSURLErrorDomain" {
-                if let info = withError._userInfo as? [String: Any] {
-                    if let url = info["NSErrorFailingURLKey"] as? URL {
-                        self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
-                    }
-                }
-            } else {
-                self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(webView.url))
-            }
+           self.showNativeViewContainerWithError()
             if #available(iOS 10.0, *) {
                 os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
             } else {
@@ -243,7 +228,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 break
             case "updateHeaderText":
                 if(!Reachability.isConnectedToNetwork()) {
-                    self.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
+                    self.showNativeViewContainerWithError()
                     return
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))
@@ -331,8 +316,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 NSLog("Page is not responding for a long time, loading stoped.")
             }
             self.viewController.webViewController?.webView.stopLoading()
-            let url = self.viewController.webViewController?.webView.url
-            self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(url))
+            self.showNativeViewContainerWithError()
         }
     }
     
@@ -372,10 +356,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         stopActivityIndicator()
     }
     
-    func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
+    func showNativeViewContainerWithError() {
         clearTimer()
         stopActivityIndicator()
-        self.viewController.showNativeViewContainer(errorMessage: errorMessage)
+        if !Reachability.isConnectedToNetwork() {
+            self.viewController.showNativeViewContainer(errorMessage: ErrorMessage(.NoInternetConnection))
+        } else {
+            self.viewController.showNativeViewContainer(errorMessage: ErrorMessage(.ServiceUnavailable))
+        }
+        
         UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
     }
     

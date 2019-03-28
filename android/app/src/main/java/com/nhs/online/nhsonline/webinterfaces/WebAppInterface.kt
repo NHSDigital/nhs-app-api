@@ -34,7 +34,7 @@ class WebAppInterface(
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering updateHeaderText")
         activity.runOnUiThread {
             if (!isConnectedToNetwork) {
-                nhsWeb.showConnectionError(null)
+                nhsWeb.showNoConnectionError()
             } else {
                 uiInteractor.setHeaderText(text)
             }

@@ -88,12 +88,7 @@ class HomeViewController : UIViewController {
     func apiCallFailure() {
         guard isOffline() else {
             apiConfigCallError = true
-            let nhsOnlineErrorTitle = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
-            let nhsOnlineErrorMessage = NSLocalizedString("APIUnavailableErrorMessage", comment: "")
-            let accessibleNhsOnlineErrorMessage = NSLocalizedString("AccessibilityAPIUnavailableErrorMessage", comment: "")
-            
-            let error = ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage)
-            
+            let error = ErrorMessage(.APICallFailure)
             return showNativeViewContainer(errorMessage: error)
         }
     }
@@ -302,8 +297,7 @@ class HomeViewController : UIViewController {
     }
     
     func showBiometricsRegistrationError() {
-        let biometricRegistrationError = ErrorMessage(title: "Something went wrong", message: getBiometricRegistrationErrorStrings().BiometricRegistrationErrorMessage, accessibleMessage: getBiometricRegistrationErrorStrings().BiometricRegistrationErrorMessage)
-        self.errorViewController?.setUnavailabilityError(errorMessage: biometricRegistrationError)
+        self.errorViewController?.setUnavailabilityError(errorMessage: ErrorMessage(.BiometricRegistrationError))
         self.updateHeaderText(headerText: getBiometricRegistrationErrorStrings().BiometricRegistrationPageHeader)
         cycleFromViewController(oldViewController: biometricViewController!, toViewController: errorViewController!)
         currentNativeViewController = errorViewController
@@ -312,16 +306,19 @@ class HomeViewController : UIViewController {
     
     func showNativeViewContainer(errorMessage: ErrorMessage) {
         self.errorViewController?.setUnavailabilityError(errorMessage: errorMessage)
-        self.updateHeaderText(headerText: NSLocalizedString("ConnectionErrorHeader", comment: ""))
+        switch errorMessage.type {
+        case .APICallFailure, .ServiceUnavailable:
+            self.updateHeaderText(headerText: NSLocalizedString("ServiceUnavailableErrorMessage", comment: ""))
+        default:
+            self.updateHeaderText(headerText: NSLocalizedString("ConnectionErrorHeader", comment: ""))
+        }
+       
         showErrorViewContainer()
     }
     
     func showBiometricSessionError () {
         self.webViewDelegate?.failedUrl = URL(string: config().HomeUrl + "login")
-        let biometricLoginSessionError = ErrorMessage(title: NSLocalizedString("BiometricSessionTimeoutHeader", comment: ""),
-                                                      message: NSLocalizedString("BiometricSessionTimeoutMessage", comment: ""),
-                                                      accessibleMessage: NSLocalizedString("AccessibilityBiometricsTimeoutMessage", comment: ""))
-        self.errorViewController?.setUnavailabilityError(errorMessage: biometricLoginSessionError)
+        self.errorViewController?.setUnavailabilityError(errorMessage: ErrorMessage(.BiometricLoginSessionError))
         self.errorViewController?.hideTryAgainLabel()
         self.errorViewController?.setTryAgainButtonText(text: NSLocalizedString("BiometricSessionTimeoutButtonText", comment: ""))
         self.updateHeaderText(headerText: NSLocalizedString("BiometricSessionTimeoutHeader", comment: ""))
@@ -370,7 +367,8 @@ class HomeViewController : UIViewController {
     
     func isOffline() -> Bool {
         guard Reachability.isConnectedToNetwork() else {
-            self.webViewDelegate?.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
+            let error = ErrorMessage(.NoInternetConnection)
+            showNativeViewContainer(errorMessage: error)
             return true
         }
         return false

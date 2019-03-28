@@ -8,8 +8,13 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.nhs.online.nhsonline.Application
+import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.data.ErrorMessageHandler
+import com.nhs.online.nhsonline.data.ErrorType
 import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor
+import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 
@@ -22,7 +27,7 @@ class UnsecureWebClient(
     private val context: Context,
     private val schemeHandlers: SchemeHandlers
 ) : WebViewClient() {
-
+    private val errorMessageHandler = ErrorMessageHandler(context)
     private val handler = Handler()
     private var noConnectionHandled = false
     private var shouldShowErrorPage = false
@@ -32,7 +37,7 @@ class UnsecureWebClient(
         uiInteractor.setReloadUrl(url)
         updateHeaderText(url)
 
-        if (!isConnectedToInternet()) {
+        if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onPageStarted > no internet")
             stopLoadingWebviewAndShowNoConnectionError(view)
@@ -60,7 +65,7 @@ class UnsecureWebClient(
 
     override fun onLoadResource(view: WebView?, url: String?) {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering onLoadResource > url $url")
-        if (!isConnectedToInternet()) {
+        if (!isConnectedToNetwork) {
             Log.d(Application.TAG,
                 "${this::class.java.simpleName}: Entering onLoadResource > no internet")
             if (!noConnectionHandled) {
@@ -120,14 +125,6 @@ class UnsecureWebClient(
         return matchingKnownServiceInfo != null
     }
 
-    private fun isConnectedToInternet(): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        Log.d(Application.TAG,
-            "${this::class.java.simpleName}: Entering isConnectedToInternet > ${cm.activeNetworkInfo?.isConnectedOrConnecting} ")
-        return cm.activeNetworkInfo?.isConnectedOrConnecting == true
-    }
-
-
     private fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {
         Log.d(Application.TAG,
             "${this::class.java.simpleName}: Entering stopLoadingWebviewAndShowNoConnectionError")
@@ -179,18 +176,24 @@ class UnsecureWebClient(
             "${this::class.java.simpleName}: Entering handleUnavailability > failingUrl: $failingUrl errorCode: $errorCode")
         shouldShowErrorPage = true
 
-        val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
+        shouldShowErrorPage = true
+        val pageHeader: String
+        val errorMessage: ErrorMessage
+        when(ConnectionStateMonitor.isConnectedToNetwork) {
+            true -> {
+                errorMessage = errorMessageHandler.getErrorMessage(ErrorType.ServiceUnavailable)
+                pageHeader = context.resources.getString(R.string.service_unavailable)
+            }
+            false -> {
+                errorMessage = errorMessageHandler.getErrorMessage(ErrorType.NoConnection)
+                pageHeader = context.resources.getString(R.string.connection_error_header)
+            }
+        }
 
-        uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
-
-        WebClientInterceptor.logger.info("Failing Url: $failingUrl with error code: $errorCode")
-    }
-
-    private fun getUnavailabilityErrorMessageForService(failingUrl: String?): ErrorMessage {
         Log.d(Application.TAG,
-            "${this::class.java.simpleName}: Entering getUnavailabilityErrorMessageForService> failingUrl > $failingUrl")
-        val serviceInfo = knownServices.findMatchingServiceInfo(failingUrl.toString())
-        return serviceInfo?.errorMessage ?: knownServices.getServiceUnavailabilityError()
+                "${this::class.java.simpleName}: HandleUnavailability -> ErrorMessage Type:  ${errorMessage.title}")
+        uiInteractor.showUnavailabilityError(errorMessage)
+        uiInteractor.setHeaderText(pageHeader)
     }
 
     @Suppress("OverridingDeprecatedMember")
@@ -201,5 +204,4 @@ class UnsecureWebClient(
 
         return false
     }
-
 }
