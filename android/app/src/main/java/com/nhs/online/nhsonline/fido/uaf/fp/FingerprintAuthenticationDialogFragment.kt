@@ -69,7 +69,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
 
         cancelButton.setOnClickListener {
             fingerprintAuthProcessor?.cancel()
-            dismiss()
+            dismissAllowingStateLoss()
         }
 
         initiateFingerprintUiHelper()
@@ -94,7 +94,7 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
                 return
             }
         }
-        dismiss()
+        dismissAllowingStateLoss()
     }
 
     fun setFingerprintContent(fingerprintContent: FingerprintContent) {
@@ -111,11 +111,11 @@ class FingerprintAuthenticationDialogFragment : DialogFragment(),
 
     override fun onAuthenticated(cryptoObject: FingerprintManagerCompat.CryptoObject) {
         fingerprintAuthProcessor?.processAuthentication(cryptoObject)
-        dismiss()
+        dismissAllowingStateLoss()
     }
 
     override fun onError() {
-        dismiss()
+        dismissAllowingStateLoss()
         fingerprintUiHelper.stopListening()
     }
 }
