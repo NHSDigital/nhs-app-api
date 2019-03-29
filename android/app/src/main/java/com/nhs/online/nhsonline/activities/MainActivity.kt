@@ -34,7 +34,9 @@ import kotlinx.android.synthetic.main.biometric_layout_content.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import kotlinx.android.synthetic.main.success_layout.*
+import java.net.MalformedURLException
 import java.net.URL
+import java.util.logging.Level
 import java.util.logging.Logger
 
 
@@ -235,7 +237,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun onBackPressed() {
         logger.info("${this::class.java.simpleName}: Entering onBackPressed")
 
-        val path = URL(webview.url).path
+        var path = getCurrentPath(webview.url)
 
         when {
             nhsWeb.isUserLoggedIn -> showExitDialog()
@@ -435,5 +437,22 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     private fun onSuccessButton() {
         activityViewSwitcher.switchTo(ActivityView.WEBVIEW)
         nhsWeb.reloadCurrentUrl()
+    }
+
+    private fun getCurrentPath(currentUrl: String?): String {
+        var path = ""
+
+        if (currentUrl == null) {
+            logger.log(Level.WARNING, "${this::class.java.simpleName}: Current webview url is null")
+            return path
+        }
+
+        try {
+            path = URL(currentUrl).path
+        } catch (e: MalformedURLException) {
+            logger.log(Level.WARNING, "${this::class.java.simpleName}: MalformedUrlException: ${webview.url} $e")
+        }
+
+        return path
     }
 }

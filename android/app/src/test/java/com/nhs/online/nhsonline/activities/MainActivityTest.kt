@@ -129,6 +129,34 @@ class MainActivityTest {
     }
 
     @Test
+    fun onBackButtonPressed_MalFormedUrl_ClosesApp() {
+        spyActivity.webview.loadUrl("ghghgh:/&/|sdsdsdiuw")
+        spyActivity.isSuccessfulConfigCheck = true
+
+        try {
+            spyActivity.onBackPressed()
+        } catch (e: Exception) {
+            assert(false)
+        }
+
+        verify(spyActivity, times(1)).finishAndRemoveTask()
+    }
+
+    @Test
+    fun onBackButtonPressed_NullUrl_ClosesApp() {
+        spyActivity.webview.loadUrl(null)
+        spyActivity.isSuccessfulConfigCheck = true
+
+        try {
+            spyActivity.onBackPressed()
+        } catch (e: Exception) {
+            assert(false)
+        }
+
+        verify(spyActivity, times(1)).finishAndRemoveTask()
+    }
+
+    @Test
     fun showVersionUpgradeDialog_CheckUpdateUrl_NotInitialised_ShowAlertDialog() {
         try {
             val appDialogs = AppDialogs(spyActivity)
