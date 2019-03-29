@@ -75,13 +75,6 @@ object AllergiesData {
         return result
     }
 
-    fun getTppDefaultAllergyModel(): ViewPatientOverviewReply {
-        return ViewPatientOverviewReply(
-                allergies = mutableListOf<ViewPatientOverviewItem>(),
-                drugSensitivities = mutableListOf<ViewPatientOverviewItem>()
-        )
-    }
-
     fun getVisionAllergiesData(count: Int): String {
         val allergy = "<clinical eventdate=\"2007-05-12T00:00:00\" drug_term=\"Paracetamol" +
                 " 500mg capsules\" read_code=\"14L..00\" read_term=\"Hay Fever\" read_code2=\"1833" +

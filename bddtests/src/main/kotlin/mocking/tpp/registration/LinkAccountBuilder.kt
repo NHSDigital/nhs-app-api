@@ -49,15 +49,6 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
         }
     }
 
-    fun respondWithInvalidProviderId(): Mapping {
-        val invalidProviderIdError = Error(
-                ErrorResponseCodeTpp.INVALID_PROVIDER_ID,
-                "There was an error processing your request"
-        )
-
-        return respondWithError(invalidProviderIdError)
-    }
-
     fun respondWithInvalidLinkageCredentials(): Mapping {
         val invalidLinkageCredentialsError = Error(
                 ErrorResponseCodeTpp.INVALID_LINKAGE_CREDENTIALS,

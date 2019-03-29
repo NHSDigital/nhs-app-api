@@ -163,13 +163,6 @@ open class ThrottlingStepDefinitions {
         browser.goToApp()
     }
 
-    @Given("^I have searched for my GP Practice$")
-    fun iHaveSearchedForMyGPPractice() {
-        assertGPFinderPageVisible()
-        thereAreXGPPracticesForMySearchCriteria(MULTIPLE)
-        iSeeTheGPSearchResultsPage("$SOME_RESULTS_COUNT")
-    }
-
     @When("^My GP Practice (is|is not) participating in beta$")
     fun myGPPracticeIsOrIsNotParticipatingInBeta(isOrIsNot: String) {
         val participating = isOrIsNot == "is"
@@ -285,11 +278,6 @@ open class ThrottlingStepDefinitions {
             }
         }
         iClickTheContinueButtonOnTheSendingEmailPage()
-    }
-
-    @When("^I click the back button on the Sending Email Results Page$")
-    fun iClickTheBackButtonOnTheSendingEmailResultsPage(){
-        waitingListJoinedPage.homeButton.click()
     }
 
     @When("^I choose (to|not to) sign up to brothermailer$")

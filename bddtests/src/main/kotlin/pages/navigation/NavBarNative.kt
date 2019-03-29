@@ -62,15 +62,6 @@ open class NavBarNative : NativePageObject() {
         return getNativePageElement(element).element
     }
 
-    private val selectedNavElements = NativePageElement(
-            webDesktopLocator = "//nav[descendant::li[@data-selected='true']]",
-            webMobileLocator = "//nav[descendant::li[@data-selected='true']]",
-            androidLocator = "//*[contains(@content-desc,'selected')]",
-            iOSAccessID = null,
-            helpfulName = null,
-            page = this
-    )
-
     fun select(type: NavBarType) {
         initailiseMenu()
         getNativePageElement(type).click()
@@ -125,10 +116,6 @@ open class NavBarNative : NativePageObject() {
         } else {
             return true // selectedNavElements.elements.size == 1
         }
-    }
-
-    fun hasAnActiveSelection(): Boolean {
-        return containsElements("//*/ancestor::li[@data-selected='true']")
     }
 
     fun isVisible(type: NavBarType): Boolean {

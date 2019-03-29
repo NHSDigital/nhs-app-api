@@ -17,18 +17,6 @@ open class MyRecordDiagnosisStepDefinitions : AbstractDemographicsStepDefinition
     @Steps
     lateinit var browser: BrowserSteps
 
-
-    @Then("^I see the diagnosis heading$" )
-    fun thenISeeTheDiagnosisHeading() {
-        val header = "Diagnosis"
-        myRecordInfoPage.assertSectionHeaderIsVisible(header)
-    }
-
-    @And("^I see the diagnosis section collapsed$" )
-    fun andISeeTheDiagnosisSectionCollapsed(){
-        Assert.assertFalse(myRecordInfoPage.isDiagnosisTextMsgVisible())
-    }
-
     @And( "^I do not have access to diagnosis$" )
     fun givenIDoNotHaveAccessToDiagnosisFor(){
         setPatientToDefaultFor("VISION")

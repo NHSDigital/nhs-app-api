@@ -154,15 +154,4 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
         Thread.sleep(DELAY_BEFORE_RESUME)
         sessionExpiry.scrollAndroidNativePage()
     }
-
-    @When("^I am idle long enough for the session expiry dialog box to appear and session to time out$")
-    fun iAmIdleLongEnoughForTheSessionToExpireNotClickingDialogButtons() {
-        sessionExpiry.scrollAndroidNativePage()
-        sessionExpiry.waitForSessionExpandDialogue()
-        val presentOnPage =  sessionExpiry.isOnPage(SESSION_EXPIRY_HEADER)
-        Assert.assertEquals(true, presentOnPage)
-        sessionExpiry.waitForSessionExiryAfterDialogue()
-
-    }
-
 }

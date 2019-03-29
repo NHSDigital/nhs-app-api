@@ -109,10 +109,6 @@ class MyRecordInfoPage : HybridPageObject() {
         return testResults.visionLink.element.isCurrentlyVisible
     }
 
-    fun isDiagnosisTextMsgVisible(): Boolean {
-        return diagnosis.firstParagraph.isCurrentlyVisible
-    }
-
     fun isVisionSectionPageVisible(linkText: String, sectionName: String): Boolean {
         val sectionLink =
                 HybridPageElement(

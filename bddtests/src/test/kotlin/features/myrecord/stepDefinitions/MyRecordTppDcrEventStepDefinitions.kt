@@ -23,16 +23,6 @@ open class MyRecordTppDcrEventStepDefinitions : AbstractDemographicsStepDefiniti
         }
     }
 
-    @Given("^I have no dcr events for TPP$")
-    fun givenIHaveNoDcrEventsForTPP() {
-        setPatientToDefaultFor("TPP")
-        mockingClient.forTpp {
-            myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
-                    .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
-
-        }
-    }
-
     @Given("^the GP Practice has disabled dcr events functionality for TPP$")
     fun givenThePatientDoesNotHaveAccessToDcrEventsForTPP() {
         setPatientToDefaultFor("TPP")

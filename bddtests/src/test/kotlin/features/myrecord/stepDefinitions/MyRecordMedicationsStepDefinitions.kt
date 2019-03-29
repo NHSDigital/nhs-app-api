@@ -10,7 +10,6 @@ import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import pages.assertIsVisible
 import pages.myrecord.MyRecordInfoPage
 import worker.models.myrecord.MyRecordResponse
@@ -18,12 +17,6 @@ import worker.models.myrecord.MyRecordResponse
 open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
-
-    @Then("^I receive the medications object$")
-    fun thenIReceiveAMedicationsObject() {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertNotNull(result.response.medications.data)
-    }
 
     @Given("^the GP Practice has enabled medications functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityfor(getService: String) {

@@ -150,10 +150,6 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
                 "\ndosage: ${medicationCourse.getInstructionsText()}")
     }
 
-    fun clickBackButton() {
-        backButton.click()
-    }
-
     fun typeTextIntoSpecialRequestTextArea(text: String): String {
         return specialRequestTextArea.typeTextIntoTextArea(text)
     }

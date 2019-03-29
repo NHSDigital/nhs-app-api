@@ -322,5 +322,5 @@ Feature: View available appointment slots
     And I am logged in
     And I am on the Available Appointments page
     When I navigate to Prescriptions
-    And I wait 5 seconds
+    And I wait for 5 seconds
     Then I don't see filters for available slots

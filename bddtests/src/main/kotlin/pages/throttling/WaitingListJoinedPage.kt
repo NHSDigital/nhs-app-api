@@ -72,21 +72,4 @@ class WaitingListJoinedPage : HybridPageObject() {
             androidLocator = null,
             page = this
     )
-
-
-    fun isWaitingListResultsHeaderVisible(): Boolean {
-        return waitingListResultsHeader.element.isDisplayed
-    }
-
-    fun isLetYouKnowTextVisible(): Boolean {
-        return letYouKnowText.element.isDisplayed
-    }
-
-    fun gpSurgeryFeatureText(): Boolean {
-        return gpSurgeryFeatureText.element.isDisplayed
-    }
-
-    fun clickHomeButtonButton() {
-        homeButton.element.click()
-    }
 }

@@ -117,9 +117,4 @@ open class BrowserSteps {
 
         browseTo(url)
     }
-
-    @Step
-    fun refreshPage() {
-        loginPage.driver.navigate().refresh()
-    }
 }

@@ -22,5 +22,5 @@ Feature: Use the navigation header bar
     Given I see the header
     And I navigate away from the home page
     When I click the nhs logo
-    And I wait 2 seconds
+    And I wait for 2 seconds
     Then I see the home page

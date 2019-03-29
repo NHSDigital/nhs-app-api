@@ -4,13 +4,11 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsSlotsFactory
-import features.appointments.steps.AvailableAppointmentsSteps
 import features.myrecord.factories.DemographicsFactory
 import mocking.data.appointments.AppointmentsSlotsExample
 import mocking.emis.demographics.ContactDetails
 import models.Patient
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import utils.SerenityHelpers
 import worker.NhsoHttpException
@@ -22,9 +20,6 @@ import javax.servlet.http.Cookie
 private const val TIMEOUT_IN_SECONDS = 90L
 
 class AvailableAppointmentsSlotsStepDefinitionsBackend {
-
-    @Steps
-    private lateinit var availableAppointments: AvailableAppointmentsSteps
 
     @Given("^the system will time out when trying to retrieve (.*) appointment slots$")
     fun appointmentSlotsTimesOut(gpSystem: String) {

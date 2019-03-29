@@ -23,8 +23,6 @@ import pages.navigation.NavBarNative
 import utils.SerenityHelpers
 import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.options.OptionManager
-import webdrivers.options.device.DeviceWebDesktop
-import webdrivers.options.device.DeviceWebMobile
 import webdrivers.options.nojs.NoJsOption
 import java.net.URL
 
@@ -84,28 +82,6 @@ open class SharedStepDefinitions {
         }
     }
 
-    @Given("^I am on the gp finder$")
-    open fun iAmOnTheGpFinder() {
-        browser.goToApp()
-    }
-
-    @Given("^I am using a (native ios|native android|mobile|desktop) device$")
-    fun iAmUsingAMobileDesktopDevice(device: String) {
-        val optionManager = OptionManager.instance()
-        when(device) {
-            "mobile" -> optionManager.registerOption(DeviceWebMobile())
-            "desktop" -> optionManager.registerOption(DeviceWebDesktop())
-        }
-    }
-
-    @Given("^I am logged in and have not accepted the terms and conditions$")
-    open fun iAmLoggedInAndHaveNotAcceptedTermsAndConditions() {
-        SharedStepDefinitions.patient =
-                Serenity.sessionVariableCalled<Patient>(Patient::class) ?: SharedStepDefinitions.patient
-        browser.goToApp()
-        login.using(SharedStepDefinitions.patient)
-    }
-
     @Given("^I am not logged in$")
     open fun iAmNotLoggedIn() {
         browser.goToApp()
@@ -116,11 +92,6 @@ open class SharedStepDefinitions {
     @When("^I navigate to (\\w+)$")
     open fun iNavigateTo(tab: String) {
         navBar.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
-    }
-
-    @When("^I wait (\\d*) seconds$")
-    open fun iWait(waitInSeconds: Int) {
-        Thread.sleep(waitInSeconds * WAIT_IN_SECONDS_MODIFIER)
     }
 
     @Then("^I see the (.*) menu button")

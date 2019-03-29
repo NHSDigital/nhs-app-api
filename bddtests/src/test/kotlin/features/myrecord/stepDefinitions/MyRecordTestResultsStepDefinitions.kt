@@ -15,8 +15,6 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
-import pages.assertIsVisible
-import pages.assertSingleElementPresent
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import worker.NhsoHttpException
@@ -246,17 +244,6 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     fun thenISelectATestResult() {
         myRecordInfoPage.testResults.toggleShrub()
         myRecordInfoPage.testResults.clickFirst()
-    }
-
-    @Then("I am on the test result detail page")
-    fun thenISeeTheTestResultDetailPage() {
-        myRecordDetailedTestResultPage.testResultDetailsHeader.assertSingleElementPresent().assertIsVisible()
-        myRecordDetailedTestResultPage.back.assertIsVisible()
-    }
-
-    @Then("I click the test result detail back button")
-    fun thenIClickTheTestResultDetailBackButton() {
-        myRecordDetailedTestResultPage.clickBackToMyRecord()
     }
 
     @Then("I click the test result detail back")

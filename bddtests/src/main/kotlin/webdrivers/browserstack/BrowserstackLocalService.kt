@@ -24,9 +24,5 @@ class BrowserstackLocalService {
         fun stop() {
             bsLocal.stop()
         }
-
-        fun isRunning(): Boolean {
-            return bsLocal.isRunning
-        }
     }
 }

@@ -54,7 +54,6 @@ import java.net.URI
 import java.util.*
 
 const val INVALID_VALUE = "xxx-wrong-format-xxx"
-private const val PAGE_LOAD_SLEEP = 1000L
 
 @Suppress("LargeClass", "Do not duplicate this suppression in other classes, " +
         "if possible, break down steps into functional areas")

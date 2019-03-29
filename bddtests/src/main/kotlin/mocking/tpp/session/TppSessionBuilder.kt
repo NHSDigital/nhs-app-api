@@ -52,28 +52,6 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
         }
     }
 
-    fun respondWithSuccesssWithoutSuid(authenticateReply: AuthenticateReply): Mapping {
-        val responseBody = AuthenticateReply(
-                authenticateReply.patientId,
-                authenticateReply.onlineUserId,
-                authenticateReply.uuid,
-                authenticateReply.user)
-
-        val jaxbContext = JAXBContext.newInstance(AuthenticateReply::class.java)
-        val marshaller = jaxbContext.createMarshaller()
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
-
-        val stringWriter = StringWriter()
-        stringWriter.use {
-            marshaller.marshal(responseBody, stringWriter)
-        }
-
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(stringWriter.toString())
-                    .build()
-        }
-    }
-
     fun respondWithError(errorBody: Error): Mapping {
         val responseBody = Error(
                 errorBody.errorCode,

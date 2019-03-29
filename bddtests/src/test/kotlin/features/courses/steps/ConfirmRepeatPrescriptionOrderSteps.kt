@@ -17,11 +17,6 @@ open class ConfirmRepeatPrescriptionOrderSteps {
     }
 
     @Step
-    fun clickConfirmAndOrderRepeatPrescriptionButton() {
-        confirmRepeatPrescriptionsOrderPage.clickConfirmAndOrderRepeatPrescriptionButton()
-    }
-
-    @Step
     fun clickChangeThisPrescriptionButton() {
         confirmRepeatPrescriptionsOrderPage.clickChangeThisPrescriptionButton()
     }

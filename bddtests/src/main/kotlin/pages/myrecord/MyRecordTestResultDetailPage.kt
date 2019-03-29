@@ -11,12 +11,6 @@ class MyRecordTestResultDetailPage: HybridPageObject() {
             "information now, contact your GP surgery directly. " +
             "For urgent medical advice, call 111."
 
-    val testResultDetailsHeader =
-            HybridPageElement(
-                    webDesktopLocator = "//h2[contains(text(),'Test result')]",
-                    androidLocator = null,
-                    page = this)
-
     val back = HybridPageElement(
             webDesktopLocator = "//a[contains(text(),'Back')]",
             androidLocator = "//button[contains(text(),'Back')]",

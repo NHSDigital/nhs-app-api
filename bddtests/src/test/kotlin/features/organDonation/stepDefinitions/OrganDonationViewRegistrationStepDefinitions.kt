@@ -2,7 +2,6 @@ package features.organDonation.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.data.organDonation.OrganDecisions
 import mocking.data.organDonation.OrganDonationSerenityHelpers
 import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.set
@@ -179,25 +178,6 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
     }
 
-    @Then("^the decision to opt out of organ donation has been successfully updated$")
-    fun theDecisionToOptOutOfOrganDonationHasBeenSuccessfullyUpdated() {
-        organDonationViewRegistrationPage.assertCreatedBanner()
-        organDonationViewRegistrationPage.decisionModule.assertDecisionIsNo()
-    }
-
-    @Then("^the decision to opt in to organ donation has been successfully updated$")
-    fun theDecisionToOptInToOrganDonationHasBeenSuccessfullyUpdated() {
-        organDonationViewRegistrationPage.assertCreatedBanner()
-        organDonationViewRegistrationPage.decisionModule.assertDecisionIsYes()
-    }
-
-    @Then("^the decision to opt in to organ donation with some organs has been successfully updated$")
-    fun theDecisionToOptInToOrganDonationWithSomeOrgansHasBeenSuccessfullyUpdated() {
-        organDonationViewRegistrationPage.assertCreatedBanner()
-        val organsToDonate = OrganDonationSerenityHelpers.SOME_ORGANS_UPDATED
-                .getOrFail<OrganDecisions>()
-        organDonationViewRegistrationPage.decisionModule.assertDecisionIsSome(organsToDonate)
-    }
 
     @Then("the faith and beliefs decision of '(.*)' is displayed on the Organ Donation View Registration page")
     fun theFaithAndBeliefsDecisionIsDisplayedOnTheOrganDonationViewRegistrationPage(faith : String){

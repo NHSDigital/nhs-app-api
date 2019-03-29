@@ -72,12 +72,6 @@ class AppointmentsConfirmationStepDefinitions {
         givenIHaveSelectedAnAppointmentSlotToBook()
     }
 
-    @When("^I click the button to go back to my appointments$")
-    fun whenIClickTheButtonToGoBackToMyAppointments() {
-        appointmentsConfirmationSteps.appointmentsConfirmation
-                .clickOnButtonContainingText("Back to my appointments")
-    }
-
     @When("^I click the error page back button$")
     fun whenIClickTheErrorPageBackButton() {
         appointmentsConfirmationSteps.errorPage.button.click()
@@ -138,11 +132,6 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^only the first (\\d+) characters will be displayed$")
     fun thenOnlyTheFirstCharactersWillBeDisplayed(length: Int) {
         appointmentsConfirmationSteps.checkSymptomsLength(length)
-    }
-
-    @Then("^I see appropriate information message when there is an error on appointment confirmation page$")
-    fun thenISeeAppropriateInformationMessageWhenThereIsAnErrorOnAppointmentConfirmationPage() {
-        appointmentsConfirmationSteps.checkTimeoutErrorMessage()
     }
 
     @Then("^I see appropriate information message after 10 seconds when it times-out on appointment confirmation page$")

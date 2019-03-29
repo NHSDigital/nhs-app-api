@@ -111,25 +111,6 @@ class HomePageStepDefinitions : AbstractSteps() {
         }
     }
 
-    @Then("^I can follow the links in the footer")
-    fun iClickFooterLink() {
-
-        val linksToFollow = arrayListOf(
-                { followNHSSiteLink()},
-                { followAboutUsLink() },
-                { followContactUSLink() },
-                { followsiteMapLink()},
-                { followAccessibilityLink() },
-                { followPoliciesLink() }
-        )
-
-        linksToFollow.forEachIndexed { index, link ->
-            link.invoke()
-            if (index != linksToFollow.size - 1)
-                browser.changeTabToHome()
-        }
-    }
-
     @Then("^I click the NHS sites link in the footer")
     fun iClickFooterNHSSitesLink() {
         followNHSSiteLink()

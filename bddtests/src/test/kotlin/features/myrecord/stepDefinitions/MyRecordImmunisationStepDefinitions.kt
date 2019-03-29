@@ -34,7 +34,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
     }
 
     @Given("^there is an error retrieving immunisations data for (.*)$")
-    fun givenThereIsAnErrorRetrievingImmunisationsDatafor(getService: String) {
+    fun givenThereIsAnErrorRetrievingImmunisationsDataFor(getService: String) {
         setPatientToDefaultFor(getService)
         ImmunisationsFactory.getForSupplier(getService).errorRetrieving(patient)
     }

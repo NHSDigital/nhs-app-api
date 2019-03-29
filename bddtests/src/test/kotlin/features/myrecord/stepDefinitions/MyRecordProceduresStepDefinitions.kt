@@ -8,8 +8,6 @@ import features.myrecord.factories.ProceduresFactoryVision
 import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import org.junit.Assert.assertEquals
-import pages.assertSingleElementPresent
 import pages.myrecord.MyRecordInfoPage
 
 class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() {
@@ -18,12 +16,6 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
     lateinit var  proceduresFactoryVision: ProceduresFactoryVision
     @Steps
     lateinit var browser: BrowserSteps
-
-    @Then("^I see the procedures heading$" )
-    fun thenISeeTheProceduresHeading() {
-        val header = "Procedures"
-        myRecordInfoPage.assertSectionHeaderIsVisible(header)
-    }
 
     @And( "^I do not have access to procedures$" )
     fun givenIDoNotHaveAccessToProceduresFor(){
@@ -44,22 +36,11 @@ class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() 
         myRecordInfoPage.procedures.toggleShrub()
     }
 
-    @And("procedures$" )
-    fun andIHaveNoProcedures() {
-        assertTextInSection("Procedures", "No information recorded")
-    }
-
     @And("^an error occurred retrieving the procedures")
     fun andAnErrorOccurredRetrievingTheProcedures() {
         setPatientToDefaultFor("VISION")
         proceduresFactoryVision = ProceduresFactoryVision()
         proceduresFactoryVision.errorRetrieving(patient)
-    }
-
-    private fun assertTextInSection(heading:String, message: String){
-        val section = myRecordInfoPage.getSection(heading)
-        section.header.assertSingleElementPresent()
-        assertEquals(message, section.firstParagraph.text)
     }
 
     @Then( "^I see procedures information$" )

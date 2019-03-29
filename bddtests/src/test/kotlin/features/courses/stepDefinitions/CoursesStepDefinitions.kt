@@ -214,11 +214,6 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         courseSteps.repeatPrescriptions.orderRepeatPrescriptionButton.click()
     }
 
-    @When("I click Back on the Order a repeat prescription page")
-    fun iClickBackOnTheOrderARepeatPrescriptionsPage() {
-        courseSteps.repeatPrescriptions.clickBackButton()
-    }
-
     @When("I click 'Change this repeat prescription' on the Prescription confirmation page")
     fun iClickChangeThisRepeatPrescriptionOnThePrescriptionConfirmationPage() {
         confirmRepeatPrescriptionOrderSteps.clickChangeThisPrescriptionButton()

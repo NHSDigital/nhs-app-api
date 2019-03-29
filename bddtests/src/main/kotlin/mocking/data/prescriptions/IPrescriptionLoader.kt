@@ -2,8 +2,6 @@ package mocking.data.prescriptions
 
 import java.util.*
 
-private const val MAX_QUANTITY_NUMBER = 100
-
 interface IPrescriptionLoader<T> {
     var data: T
 

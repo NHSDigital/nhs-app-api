@@ -160,7 +160,6 @@ Feature: Throttling
     When I click the Practice Not Participating continue button
     Then I see the Sending Email Page
 
-  @totest
   Scenario: Brothermailer email registration service is down
     Given The brothermailer service is down
     And There are multiple GP Practices for my search criteria

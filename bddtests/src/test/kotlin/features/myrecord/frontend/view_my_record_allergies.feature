@@ -1,6 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Allergies
-  
+
   Scenario Outline: A <Service> user can view allergies and adverse reactions section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -78,7 +78,7 @@ Feature: View My Medical Record Information - Allergies
   Scenario Outline: A <Service> user is shown an appropriate error message when an unknown error occurs retrieving their allergies
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
-    And there is an unknown error getting allergies for <Service>
+    And there is an unknown error getting allergies for VISION
     And I am on my record information page
     When I click the Allergies and adverse reactions section on My Record
     Then I see an error occurred message with Allergies and adverse reactions on My Record

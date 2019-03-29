@@ -7,7 +7,6 @@ import features.authentication.steps.LoginSteps
 import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
 import pages.navigation.NavBarNative
 
 open class OneOneOneStepDefinitions {
@@ -22,11 +21,6 @@ open class OneOneOneStepDefinitions {
     @When("^I Check My Symptoms$")
     open fun iCheckMySymptoms() {
         login.loginPage.symptomsButton.click()
-    }
-
-    @And("^Symptoms is unselected")
-    fun symptomsIsUnselected() {
-        Assert.assertFalse(navBar.hasSelectedTab(NavBarNative.NavBarType.SYMPTOMS))
     }
 
     @And("^the Check My Symptoms page is displayed")
