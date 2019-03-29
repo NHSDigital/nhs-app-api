@@ -3,7 +3,7 @@
     <message-dialog message-type="error">
       <message-text :is-header="true">{{ header }}</message-text>
       <message-text>{{ subheader }}</message-text>
-      <message-text>{{ message }}</message-text>
+      <message-text :aria-label="messageLabel">{{ messageText }}</message-text>
     </message-dialog>
     <form method="get">
       <generic-button :class="$style.button" @click.prevent="onRetryButtonClicked">
@@ -14,6 +14,7 @@
 </template>
 <script>
 /* eslint-disable import/extensions */
+import isObject from 'lodash/fp/isObject';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -38,6 +39,12 @@ export default {
     },
     message() {
       return this.getMessage('message');
+    },
+    messageLabel() {
+      return isObject(this.message) ? this.message.label : undefined;
+    },
+    messageText() {
+      return isObject(this.message) ? this.message.text : this.message;
     },
     retryButtonText() {
       return this.getMessage('retryButtonText');

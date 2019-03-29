@@ -8,13 +8,14 @@
         <message-text v-if="subheader!==''" data-purpose="msg-subheader">
           {{ subheader }}
         </message-text>
-        <message-text :is-before-footer="true" data-purpose="msg-text">
-          {{ message }}
+        <message-text :is-before-footer="true" :aria-label="messageLabel"
+                      data-purpose="msg-text">
+          {{ messageText }}
         </message-text>
         <message-text v-if="hasAdditionalInfo" :aria-label="additionalInfoLabel"
                       :class="$style.additionalInfomation"
                       data-purpose="msg-extratext">
-          {{ additionalInfo }}
+          {{ additionalInfoText }}
         </message-text>
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
                    :class="$style.additionalInfomation" />
@@ -31,13 +32,14 @@
       <header-slim>{{ header }}</header-slim>
       <div :class="$style['information-error']">
         <h2>{{ subheader }}</h2>
-        <p>{{ message }}</p>
+        <p :aria-label="messageLabel">{{ messageText }}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
 /* eslint-disable import/extensions */
+import isObject from 'lodash/fp/isObject';
 import ContactOrganDonation from '@/components/errors/additional-info/ContactOrganDonation';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -72,7 +74,10 @@ export default {
       return this.$store.state.errors.pageSettings.additionalInfoComponent;
     },
     additionalInfoLabel() {
-      return this.getMessage('additionalInfoLabel');
+      return isObject(this.additionalInfo) ? this.additionalInfo.label : undefined;
+    },
+    additionalInfoText() {
+      return isObject(this.additionalInfo) ? this.additionalInfo.text : this.additionalInfo;
     },
     buttonClasses() {
       const clazzes = [this.$style.button];
@@ -98,6 +103,12 @@ export default {
     },
     message() {
       return this.getMessage('message');
+    },
+    messageLabel() {
+      return isObject(this.message) ? this.message.label : undefined;
+    },
+    messageText() {
+      return isObject(this.message) ? this.message.text : this.message;
     },
     overrideStyle() {
       return this.$store.state.errors.pageSettings.errorOverrideStyles[this.statusCode];

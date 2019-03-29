@@ -5,12 +5,18 @@ export default {
     pageHeader: 'Server error',
     header: 'We\'re experiencing technical difficulties',
     subheader: '',
-    message: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+    message: {
+      text: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      label: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+    },
     404: {
       pageTitle: 'Page not found',
       header: 'Page not found',
       subheader: 'If you entered a web address, check it was correct.',
-      message: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call 111.',
+      message: {
+        text: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call 111.',
+        label: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call one one one.',
+      },
     },
     502: {
       pageTitle: 'Service currently unavailable',
@@ -42,20 +48,28 @@ export default {
       header: 'Session error',
       subheader: 'There\'s been a problem loading this page.',
       message: 'Go back to the home screen and log in again.',
-      additionalInfo: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
-      additionalInfoLabel: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      additionalInfo: {
+        text: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        label: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      },
       retryButtonText: 'Back to home',
       464: {
         pageHeader: 'Service unavailable',
         header: 'Service unavailable',
         subheader: 'You cannot currently use this service',
-        message: 'You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
+        message: {
+          text: 'You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
+          label: 'You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call one one one.',
+        },
       },
       465: {
         pageHeader: 'Service unavailable',
         header: 'Service unavailable',
         subheader: 'You are too young to use the NHS App',
-        message: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
+        message: {
+          text: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
+          label: 'Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call one one one.',
+        },
       },
     },
   },
@@ -132,7 +146,10 @@ export default {
     header: 'Connection error',
     subheader: 'There\'s an issue with your internet connection',
     retryButtonText: 'Try again',
-    message: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+    message: {
+      text: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      label: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+    },
   },
   betaBanner: {
     label: 'BETA',
@@ -213,18 +230,27 @@ export default {
         pageHeader: 'Appointment data error',
         header: 'There\'s been a problem getting your appointment history',
         subheader: '',
-        message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         504: {
           subheader: '',
           retryButtonText: 'Try again',
-          message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          message: {
+            text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+            label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+          },
         },
         403: {
           pageTitle: 'Appointment booking unavailable',
           pageHeader: 'Appointment booking unavailable',
           header: 'You are not currently able to book appointments online.',
           subheader: '',
-          message: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+          message: {
+            text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+            label: 'Contact your GP surgery for more information. For urgent medical help, call one one one.',
+          },
         },
       },
     },
@@ -254,17 +280,26 @@ export default {
       pageHeader: 'Appointment data error',
       header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      message: {
+        text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      },
       504: {
         subheader: '',
-        message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         retryButtonText: 'Try again',
       },
       403: {
         pageHeader: 'Appointment booking unavailable',
         header: 'You are not currently able to book appointments online',
         subheader: '',
-        message: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+        message: {
+          text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+          label: 'Contact your GP surgery for more information. For urgent medical help, call one one one.',
+        },
       },
     },
     cancelling: {
@@ -281,7 +316,10 @@ export default {
         pageHeader: 'Error sending request',
         header: 'There\'s been a problem sending your request',
         subheader: '',
-        message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         retryButtonText: 'Back to my appointments',
         403: {
           pageHeader: 'Cancel appointment',
@@ -348,9 +386,15 @@ export default {
         pageHeader: 'Appointment data error',
         header: 'There\'s been a problem loading this page',
         subheader: '',
-        message: 'Try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         504: {
-          message: 'Try again now. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          message: {
+            text: 'Try again now. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+            label: 'Try again now. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+          },
           subheader: '',
           retryButtonText: 'Try again',
         },
@@ -359,7 +403,10 @@ export default {
           pageHeader: 'Appointment booking unavailable',
           header: 'You are not currently able to book appointments online',
           subheader: '',
-          message: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+          message: {
+            text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+            label: 'Contact your GP surgery for more information. For urgent medical help, call one one one.',
+          },
         },
       },
     },
@@ -386,7 +433,10 @@ export default {
         pageHeader: 'Error sending request',
         header: 'There\'s been a problem sending your request',
         subheader: '',
-        message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         retryButtonText: 'Back to my appointments',
         460: {
           pageHeader: 'Appointment limit reached',
@@ -412,21 +462,30 @@ export default {
       pageHeader: 'Prescription data error',
       header: 'There\'s been a problem getting your prescription information',
       subheader: '',
-      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      message: {
+        text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      },
       retryButtonText: '',
       403: {
         pageTitle: 'Repeat prescriptions unavailable',
         pageHeader: 'Repeat prescriptions unavailable',
         header: 'You are not currently able to order repeat prescriptions online',
         subheader: '',
-        message: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+        message: {
+          text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+          label: 'Contact your GP surgery for more information. For urgent medical help, call one one one.',
+        },
       },
       504: {
         pageTitle: 'Prescription data error',
         pageHeader: 'Prescription data error',
         header: 'There\'s been a problem getting your prescription information',
         subheader: '',
-        message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         retryButtonText: 'Try again',
       },
     },
@@ -436,14 +495,20 @@ export default {
         pageHeader: 'Prescription data error',
         header: 'There\'s been a problem getting your prescription information',
         subheader: '',
-        message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         retryButtonText: '',
         504: {
           pageTitle: 'Prescription data error',
           pageHeader: 'Prescription data error',
           header: 'There\'s been a problem getting your prescription information',
           subheader: '',
-          message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          message: {
+            text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+            label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+          },
           retryButtonText: 'Try again',
         },
         403: {
@@ -451,7 +516,10 @@ export default {
           pageHeader: 'Repeat prescriptions unavailable',
           header: 'You are not currently able to order repeat prescriptions online',
           subheader: '',
-          message: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+          message: {
+            text: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
+            label: 'Contact your GP surgery for more information. For urgent medical help, call one one one.',
+          },
         },
       },
     },
@@ -461,7 +529,10 @@ export default {
         pageHeader: 'Error sending order',
         header: 'There\'s been a problem sending your order',
         subheader: '',
-        message: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         retryButtonText: 'Back to my repeat prescriptions',
         466: {
           pageTitle: 'Error submitting request',
@@ -478,7 +549,10 @@ export default {
       pageHeader: 'Medical record error',
       header: 'There\'s been a problem getting your medical record information',
       subheader: '',
-      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      message: {
+        text: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        label: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+      },
       retryButtonText: '',
       502: {
         pageHeader: 'Medical record error',
@@ -491,7 +565,10 @@ export default {
         pageHeader: 'Medical record error',
         header: 'There\'s been a problem getting your medical record information',
         subheader: '',
-        message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: {
+          text: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          label: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+        },
         retryButtonText: 'Try again',
       },
     },
@@ -575,7 +652,10 @@ export default {
           pageHeader: 'Test result details data error',
           header: 'There\'s been a problem getting details of your test results',
           subheader: '',
-          message: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          message: {
+            text: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+            label: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call one one one.',
+          },
           retryButtonText: '',
         },
       },

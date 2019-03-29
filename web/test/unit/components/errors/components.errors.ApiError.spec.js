@@ -59,7 +59,12 @@ const assert = (expectedData) => {
     if (expectedData.subheader !== '') {
       expect(component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1).text()).toEqual(expectedData.subheader);
     }
-    expect(component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1).text()).toEqual(expectedData.message);
+
+    const messageElement = component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1);
+    expect(messageElement.text()).toEqual(expectedData.message);
+    if (expectedData.messageLabel) {
+      expect(messageElement.attributes()['aria-label']).toBe(expectedData.messageLabel);
+    }
     if (expectedData.additionalInfo && expectedData.additionalInfo !== '') {
       expect(component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1).text()).toEqual(expectedData.additionalInfo);
     }
@@ -77,9 +82,15 @@ const assert = (expectedData) => {
       expect(component.find(`#${errorId}`).find('button').exists()).toBeFalsy();
     }
   } else {
-    expect(component.findAll('h1').at(0).text()).toEqual(expectedData.header);
-    expect(component.findAll('h2').at(0).text()).toEqual(expectedData.subheader);
-    expect(component.findAll('p').at(0).text()).toEqual(expectedData.message);
+    expect(component.find('h1').text()).toEqual(expectedData.header);
+    expect(component.find('h2').text()).toEqual(expectedData.subheader);
+
+    const messageElement = component.find('p');
+    expect(messageElement.text()).toEqual(expectedData.message);
+
+    if (expectedData.messageLabel) {
+      expect(messageElement.attributes()['aria-label']).toBe(expectedData.messageLabel);
+    }
   }
 };
 

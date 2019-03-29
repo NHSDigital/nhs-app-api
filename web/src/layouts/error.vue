@@ -7,8 +7,9 @@
       <message-text data-purpose="msg-subheader">
         {{ $t('errors.404.subheader') }}
       </message-text>
-      <message-text :is-before-footer="true" data-purpose="msg-text">
-        {{ $t('errors.404.message') }}
+      <message-text :is-before-footer="true" :aria-label="$t('errors.404.message.label')"
+                    data-purpose="msg-text">
+        {{ $t('errors.404.message.text') }}
       </message-text>
     </message-dialog>
   </div>

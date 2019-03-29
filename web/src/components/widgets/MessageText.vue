@@ -1,7 +1,8 @@
 <template>
   <p :class="[$style.msgText,
               extendedStyle,
-              !$store.state.device.isNativeApp && $style.desktopWeb]">
+              !$store.state.device.isNativeApp && $style.desktopWeb]"
+     :aria-label="ariaLabel">
     <slot/>
   </p>
 </template>
@@ -10,6 +11,10 @@
 
 export default {
   props: {
+    ariaLabel: {
+      type: String,
+      default: undefined,
+    },
     isHeader: {
       type: Boolean,
       default: false,
