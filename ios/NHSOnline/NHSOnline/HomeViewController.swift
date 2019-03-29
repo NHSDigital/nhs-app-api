@@ -1,6 +1,7 @@
 import UIKit
 import os.log
 import SafariServices
+import WebKit
 
 class HomeViewController : UIViewController {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
@@ -415,10 +416,9 @@ class HomeViewController : UIViewController {
         self.view.addSubview(v)
     }
     @objc func checkSymptomsAndCIDBack() {
-        let baseUrl = URL(string: config().HomeUrl)
         if let webview = self.webViewController?.webView {
-            if((webview.url?.host == baseUrl?.host && webview.url?.path == config().CheckSymptomsUrlPath)
-                || webview.url!.absoluteString.contains(config().CidUrlSuffix)){
+            if(isCheckYourSymptomsPath(webview: webview)
+                || hasCidUrlSuffix(webview: webview)){
                 self.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)
@@ -472,5 +472,34 @@ class HomeViewController : UIViewController {
         return alertController
     }
     
+    func isCheckYourSymptomsPath(webview: WKWebView!) -> Bool {
+        if #available(iOS 10.0, *) {
+            os_log("Checking current url for symtoms path", log: OSLog.default, type: .info)
+        } else {
+            NSLog("Checking current url for symtoms path")
+        }
+        let baseUrl = URL(string: config().HomeUrl)
+        return (webview.url?.host == baseUrl?.host && webview.url?.path == config().CheckSymptomsUrlPath)
+    }
+    
+    func hasCidUrlSuffix(webview: WKWebView!) -> Bool {
+        if #available(iOS 10.0, *) {
+            os_log("Checking current url for CidSuffix", log: OSLog.default, type: .info)
+        } else {
+            NSLog("Checking current url for CidSuffix")
+        }
+        let absoluteUrl = webview.url?.absoluteString
+        
+        if(absoluteUrl == nil) {
+            if #available(iOS 10.0, *) {
+                os_log("Current webview url is nil on checkSymptomsAndCIDBack call", log: OSLog.default, type: .info)
+            } else {
+                NSLog("Current webview url is nil on checkSymptomsAndCIDBack call")
+            }
+            return false
+        } else {
+            return absoluteUrl!.contains(config().CidUrlSuffix)
+        }
+    }
 }
 
