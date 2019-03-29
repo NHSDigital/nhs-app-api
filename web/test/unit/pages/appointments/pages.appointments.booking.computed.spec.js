@@ -5,6 +5,17 @@ import BookingPage from '@/pages/appointments/booking';
 
 const $t = key => `translate_${key}`;
 const $tc = key => `translate_${key}`;
+const availableAppointments = (options = {}) => ({
+  slots: options.slots || [],
+  filteredSlots: options.filteredSlots || [],
+  hasLoaded: options.hasLoaded || false,
+  selectedOptions: options.selectedOptions || {
+    type: '',
+    location: '',
+    clinician: '',
+    date: '',
+  },
+});
 
 const createBookingPage = ($store, data = {}) => {
   const $http = jest.fn();
@@ -37,11 +48,7 @@ describe('booking.vue - noAvailableAppointments', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-          hasLoaded: true,
-        },
+        availableAppointments: availableAppointments({ hasLoaded: true }),
         myAppointments: {
           disableCancellation: false,
         },
@@ -51,7 +58,7 @@ describe('booking.vue - noAvailableAppointments', () => {
       },
     };
 
-    const page = createBookingPage($store, {});
+    const page = createBookingPage($store);
     expect(page.vm.noAvailableAppointments).toBeDefined();
     expect(page.vm.noAvailableAppointments).toBeTruthy();
   });
@@ -60,11 +67,7 @@ describe('booking.vue - noAvailableAppointments', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [{}],
-          filteredSlots: [],
-          hasLoaded: true,
-        },
+        availableAppointments: availableAppointments({ slots: [{}], hasLoaded: true }),
         myAppointments: {
           disableCancellation: false,
         },
@@ -74,7 +77,7 @@ describe('booking.vue - noAvailableAppointments', () => {
       },
     };
 
-    const page = createBookingPage($store, {});
+    const page = createBookingPage($store);
     expect(page.vm.noAvailableAppointments).toBeDefined();
     expect(page.vm.noAvailableAppointments).toBeFalsy();
   });
@@ -83,11 +86,7 @@ describe('booking.vue - noAvailableAppointments', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: new Map(),
-          filteredSlots: [],
-          hasLoaded: false,
-        },
+        availableAppointments: availableAppointments({ slots: new Map() }),
         myAppointments: {
           disableCancellation: false,
         },
@@ -97,7 +96,7 @@ describe('booking.vue - noAvailableAppointments', () => {
       },
     };
 
-    const page = createBookingPage($store, {});
+    const page = createBookingPage($store);
     expect(page.vm.noAvailableAppointments).toBeDefined();
     expect(page.vm.noAvailableAppointments).toBeFalsy();
   });
@@ -108,11 +107,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [{}],
-          filteredSlots: [],
-          hasLoaded: true,
-        },
+        availableAppointments: availableAppointments({ slots: [{}], hasLoaded: true }),
         myAppointments: {
           disableCancellation: false,
         },
@@ -122,7 +117,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
       },
     };
 
-    const page = createBookingPage($store, {});
+    const page = createBookingPage($store);
     expect(page.vm.availableAppointments).toBeDefined();
     expect(page.vm.availableAppointments).toBeTruthy();
   });
@@ -131,11 +126,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-          hasLoaded: true,
-        },
+        availableAppointments: availableAppointments({ hasLoaded: true }),
         myAppointments: {
           disableCancellation: false,
         },
@@ -145,7 +136,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
       },
     };
 
-    const page = createBookingPage($store, {});
+    const page = createBookingPage($store);
     expect(page.vm.availableAppointments).toBeDefined();
     expect(page.vm.availableAppointments).toBeFalsy();
   });
@@ -154,11 +145,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-          hasLoaded: false,
-        },
+        availableAppointments: availableAppointments(),
         myAppointments: {
           disableCancellation: false,
         },
@@ -168,7 +155,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
       },
     };
 
-    const page = createBookingPage($store, {});
+    const page = createBookingPage($store);
     expect(page.vm.availableAppointments).toBeDefined();
     expect(page.vm.availableAppointments).toBeFalsy();
   });
@@ -179,10 +166,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [{}],
-          filteredSlots: [[['2018-04-12'], [{}]]],
-        },
+        availableAppointments: availableAppointments({ slots: [{}], filteredSlots: [[['2018-04-12'], [{}]]] }),
         myAppointments: {
           disableCancellation: false,
         },
@@ -192,7 +176,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       },
     };
 
-    const page = createBookingPage($store, {});
+    const page = createBookingPage($store);
     expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
@@ -201,10 +185,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-        },
+        availableAppointments: availableAppointments(),
         myAppointments: {
           disableCancellation: false,
         },
@@ -223,10 +204,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-        },
+        availableAppointments: availableAppointments(),
         myAppointments: {
           disableCancellation: false,
         },
@@ -245,10 +223,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-        },
+        availableAppointments: availableAppointments(),
         myAppointments: {
           disableCancellation: false,
         },
@@ -267,14 +242,10 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-          selectedOptions: {
-            type: 'type',
-            location: 'location',
-          },
-        },
+        availableAppointments: availableAppointments({ selectedOptions: {
+          type: 'type',
+          location: 'location' },
+        }),
         myAppointments: {
           disableCancellation: false,
         },

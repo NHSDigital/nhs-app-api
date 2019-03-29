@@ -3,8 +3,14 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import Filters from '@/components/appointments/booking/Filters';
 
 const $t = key => `translate_${key}`;
+const selectedOptions = (options = {}) => ({
+  type: options.type || '',
+  location: options.location || '',
+  clinician: options.clinician || '',
+  date: options.date || '',
+});
 
-const createFiltersComponent = ($store, props = {}) => {
+const createFiltersComponent = ($store, props) => {
   const propsData = props;
   const $http = jest.fn();
   const localVue = createLocalVue();
@@ -111,9 +117,7 @@ describe('Filters.vue', () => {
         },
       },
     };
-
     const component = createFiltersComponent($store, props);
-
     expect(component.find('#clinician').findAll('option').length).toEqual(2);
     expect(component.find('#clinician').findAll('option').at(0).attributes().value).toEqual('1');
     expect(component.find('#clinician').findAll('option').at(0).text()).toEqual('CLINICIAN 1');
@@ -156,9 +160,7 @@ describe('Filters.vue', () => {
           { value: '2', name: 'type_2', translate: true },
         ],
       },
-      selectedOptions: {
-        type: '2',
-      },
+      value: selectedOptions({ type: '2' }),
     };
     const $store = {
       dispatch: jest.fn(),
@@ -182,9 +184,7 @@ describe('Filters.vue', () => {
           { value: '2', name: 'location_2', translate: true },
         ],
       },
-      selectedOptions: {
-        location: '2',
-      },
+      value: selectedOptions({ location: '2' }),
     };
     const $store = {
       dispatch: jest.fn(),
@@ -208,9 +208,7 @@ describe('Filters.vue', () => {
           { value: '2', name: 'clinician_2', translate: true },
         ],
       },
-      selectedOptions: {
-        clinician: '2',
-      },
+      value: selectedOptions({ clinician: '2' }),
     };
     const $store = {
       dispatch: jest.fn(),
@@ -234,9 +232,7 @@ describe('Filters.vue', () => {
           { value: '2', name: 'date_2', translate: true },
         ],
       },
-      selectedOptions: {
-        date: '2',
-      },
+      value: selectedOptions({ date: '2' }),
     };
     const $store = {
       dispatch: jest.fn(),

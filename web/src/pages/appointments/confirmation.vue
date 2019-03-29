@@ -331,6 +331,7 @@ export default {
         this.slot, this.symptoms, this.telephoneNumber,
         this.otherTelephoneNumber.trim(),
       );
+      this.$store.dispatch('availableAppointments/clear');
     },
     confirmTheBook(slot, reason, telephoneNumberField, otherTelephoneNumberField) {
       if (!slot) return;

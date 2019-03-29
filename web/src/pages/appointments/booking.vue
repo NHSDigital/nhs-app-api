@@ -27,7 +27,6 @@
         v-if="availableAppointments"
         v-model="selectedOptions"
         :options="filtersOptions"
-        :selected-options="defaultSelectedOptions"
         :guidance-msg="bookingGuidanceMsg"
       />
 
@@ -142,9 +141,6 @@ export default {
     bookingGuidanceMsg() {
       return getBookingGuidance(this.$store);
     },
-    defaultSelectedOptions() {
-      return getSelectedOptions(this.$store);
-    },
     availableSlots() {
       return getFilteredSlots(this.$store);
     },
@@ -198,9 +194,6 @@ export default {
       appointmentsPath: APPOINTMENTS.path,
       filtered: containsFilter(query),
     }));
-  },
-  beforeDestroy() {
-    this.$store.dispatch('availableAppointments/clear');
   },
   methods: {
     filterSlots(val) {

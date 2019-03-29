@@ -55,6 +55,7 @@
 <script>
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
+import cloneDeep from 'lodash/fp/cloneDeep';
 
 export default {
   components: {
@@ -75,7 +76,7 @@ export default {
         dates: [],
       }),
     },
-    selectedOptions: {
+    value: {
       type: Object,
       default: () => ({
         type: '',
@@ -84,6 +85,11 @@ export default {
         date: '',
       }),
     },
+  },
+  data() {
+    return {
+      selectedOptions: cloneDeep(this.value),
+    };
   },
   computed: {
     type: {
@@ -117,7 +123,8 @@ export default {
   },
   methods: {
     returnSelectedOptions() {
-      this.$emit('input', this.selectedOptions);
+      const copyOptions = cloneDeep(this.selectedOptions);
+      this.$emit('input', copyOptions);
     },
     displayName(option) {
       if (option.translate === true) {
