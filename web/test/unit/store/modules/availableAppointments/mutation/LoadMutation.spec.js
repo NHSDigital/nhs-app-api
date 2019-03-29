@@ -50,7 +50,7 @@ describe('LoadMutation', () => {
     expect(actualResult.slots).toEqual(slots);
   });
 
-  it('will set filtersOptions', () => {
+  it('will set filtersOptions sorted alphabetically', () => {
     const slots = [
       {
         id: 1,
@@ -59,6 +59,14 @@ describe('LoadMutation', () => {
         endTime: '2018-04-21T17:11:59.084865+01:00',
         location: 'Leeds',
         clinicians: ['Dr Who', 'Dr House'],
+      },
+      {
+        id: 2,
+        type: 'General Medicine',
+        startTime: '2019-04-22T12:00:00.0+01:00',
+        endTime: '2019-04-22T12:10:00.0+01:00',
+        location: 'Birmingham',
+        clinicians: ['Dr Taylor'],
       },
     ];
 
@@ -69,15 +77,18 @@ describe('LoadMutation', () => {
       types: [
         { value: '', name: 'appointments.booking.filters.type.default_option', translate: true },
         { value: 'Baby immunisations', name: 'Baby immunisations', translate: false },
+        { value: 'General Medicine', name: 'General Medicine', translate: false },
       ],
       locations: [
         { value: '', name: 'appointments.booking.filters.location.default_option', translate: true },
+        { value: 'Birmingham', name: 'Birmingham', translate: false },
         { value: 'Leeds', name: 'Leeds', translate: false },
       ],
       clinicians: [
         { value: '', name: 'appointments.booking.filters.clinician.default_option', translate: true },
-        { value: 'Dr Who', name: 'Dr Who', translate: false },
         { value: 'Dr House', name: 'Dr House', translate: false },
+        { value: 'Dr Taylor', name: 'Dr Taylor', translate: false },
+        { value: 'Dr Who', name: 'Dr Who', translate: false },
       ],
       dates: [
         { value: 'today', name: 'appointments.booking.filters.date.options.today', translate: true },

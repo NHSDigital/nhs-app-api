@@ -1,6 +1,7 @@
 /* eslint-disable */
 import _ from 'lodash';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
+import namedObjectComparator  from '@/lib/comparators'
 
 export default class LoadMutation {
   constructor(DateProvider) {
@@ -47,13 +48,13 @@ export default class LoadMutation {
       { value: DateFilterValues.ALL, name: 'appointments.booking.filters.date.options.all', translate: true },
     ];
 
-    types.sort();
+    types.sort(namedObjectComparator);
     types.unshift({ value: '', name: 'appointments.booking.filters.type.default_option', translate: true });
 
-    locations.sort();
+    locations.sort(namedObjectComparator);
     locations.unshift({ value: '', name: 'appointments.booking.filters.location.default_option', translate: true });
 
-    clinicians.sort();
+    clinicians.sort(namedObjectComparator);
     clinicians.unshift({ value: '', name: 'appointments.booking.filters.clinician.default_option', translate: true });
 
     return {

@@ -267,8 +267,8 @@ describe('LOAD', () => {
       ],
       clinicians: [
         { value: '', name: 'appointments.booking.filters.clinician.default_option', translate: true },
-        { value: 'Dr Who', name: 'Dr Who', translate: false },
         { value: 'Dr House', name: 'Dr House', translate: false },
+        { value: 'Dr Who', name: 'Dr Who', translate: false },
       ],
       dates: [
         { value: 'today', name: 'appointments.booking.filters.date.options.today', translate: true },
