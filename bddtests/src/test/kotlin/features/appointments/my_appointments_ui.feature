@@ -33,14 +33,19 @@ Feature: My appointments UI with Javascript
       | EMIS      |
       | TPP       |
 
-  Scenario: A VISION user sees appropriate messages when they have no upcoming or historical appointments
-    Given I have no booked appointments for VISION
+
+  Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming appointments
+    Given I have no booked appointments for <GP System>
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
     And I am informed I have no upcoming appointments
     And I am not informed I have no historical appointments
     And I can book an appointment
+    Examples:
+      | GP System |
+      | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user can see their upcoming appointments and a message if there are no historical
   appointments
@@ -88,8 +93,8 @@ Feature: My appointments UI with Javascript
       | TPP       |
 
   @smoketest
-  Scenario: A VISION user can see their upcoming appointments
-    Given I have upcoming appointments before cutoff time for VISION
+  Scenario Outline: A <GP System> user can see their upcoming appointments
+    Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
     When I am on the My Appointments page
     Then the page title is "My appointments"
@@ -97,6 +102,10 @@ Feature: My appointments UI with Javascript
     And each appointment can be cancelled
     And I am not informed I have no historical appointments
     And I can book an appointment
+    Examples:
+    | GP System |
+    | VISION    |
+    | MICROTEST |
 
 
   Scenario: A user sees appropriate information message when appointments are disabled on VISION

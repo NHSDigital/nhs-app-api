@@ -17,6 +17,7 @@ Feature: My appointments backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: API call for my appointments will return appointments from <GP System> when they are only historical
     Given I have historical appointments for <GP System>
@@ -66,6 +67,7 @@ Feature: My appointments backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Online appointment booking is not available to a particular patient of <GP System>
     Given I have logged into <GP System> and have a valid session cookie

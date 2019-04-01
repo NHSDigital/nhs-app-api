@@ -12,6 +12,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             string nhsNumber,
             AppointmentSlotsDateRange dateRange);
 
+        Task<MicrotestClient.MicrotestApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
+            string odsCode,
+            string nhsNumber);
+
         Task<MicrotestClient.MicrotestApiObjectResponse<string>> BookAppointmentSlotPost(
             BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest,
             MicrotestUserSession userSession);

@@ -17,10 +17,8 @@ class MicrotestMappingBuilderAppointments : IAppointmentMappingBuilder {
     override fun viewMyAppointmentsRequest(
             patient: Patient,
             appointmentType: IMyAppointmentsBuilder.AppointmentType
-    ): IMyAppointmentsBuilder {
-        // Not yet implemented for Microtest
-        return GetAppointmentBuilderMicrotest()
-    }
+    ): IMyAppointmentsBuilder = GetAppointmentBuilderMicrotest(patient)
+
 
     override fun bookAppointmentSlotRequest(
             patient: Patient,

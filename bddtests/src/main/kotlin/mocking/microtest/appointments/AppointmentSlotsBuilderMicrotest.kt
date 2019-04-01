@@ -7,13 +7,10 @@ import mocking.microtest.MicrotestMappingBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import org.apache.http.HttpStatus.SC_OK
+import utils.TimeConverter
 import java.time.Duration
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-
-private const val NUMBER_OF_SECONDS_IN_A_MINUTE = 60
 
 class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
                                        toDateTime: ZonedDateTime? = null
@@ -42,7 +39,7 @@ class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
 
     override fun respondWithSuccess(facade: AppointmentSlotsResponseFacade): Mapping {
         return respondWithBody(
-                GetAppointmentsResponseModel(
+                GetAppointmentSlotsResponseModel(
                         facade.sessions.flatMap { session ->
                             session.slots.map { slot ->
                                 val startTime = convertStringToMicrotestTimeString(slot.startTime!!)
@@ -53,7 +50,7 @@ class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
                                             slotType -> slot.slotTypeId == slotType.slotTypeId
                                         }!!.slotTypeName,
                                         startTime,
-                                        setDuration(startTime, endTime),
+                                        TimeConverter.setDuration(startTime, endTime),
                                         endTime,
                                         facade.locations.find { location -> session.locationId == location.locationId
                                         }!!.locationName,
@@ -105,17 +102,5 @@ class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
             andJsonBody(body, GsonFactory.asIs)
                     .andDelay(delayMillisecs)
         }
-    }
-
-    private fun setDuration(startTime: String, endTime: String?): String {
-        val format = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
-        val startTimeAsLocalDateTime = ZonedDateTime.of(LocalDateTime.parse(startTime, format), ZoneId.of
-        ("Europe/London"))
-        val endTimeAsLocalDateTime = ZonedDateTime.of(LocalDateTime.parse(endTime, format), ZoneId.of
-        ("Europe/London"))
-        return (
-                (endTimeAsLocalDateTime.toEpochSecond() - startTimeAsLocalDateTime.toEpochSecond())
-                        / NUMBER_OF_SECONDS_IN_A_MINUTE
-                ).toString() + " Minutes"
     }
 }

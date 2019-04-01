@@ -73,6 +73,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return response;
         }
 
+        public async Task<MicrotestApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
+            string odsCode,
+            string nhsNumber)
+        {
+            _logger.LogEnter();
+
+            var response = await Get<AppointmentsGetResponse>(AppointmentsPath, odsCode, nhsNumber);
+
+            _logger.LogExit();
+            return response;
+        }
+
         public async Task<MicrotestApiObjectResponse<DemographicsGetResponse>> DemographicsGet(
             string odsCode,
             string nhsNumber)

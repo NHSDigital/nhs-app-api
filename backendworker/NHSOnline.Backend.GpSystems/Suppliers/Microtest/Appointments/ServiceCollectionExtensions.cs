@@ -8,10 +8,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             services.AddSingleton<MicrotestAppointmentsValidationService>();
             services.AddTransient<MicrotestAppointmentSlotsService>();
             services.AddTransient<MicrotestAppointmentsService>();
-            
+            services.AddTransient<MicrotestAppointmentsRetrievalService>();
             services.AddTransient<MicrotestAppointmentsBookingService>();
 
             services.AddTransient<IAppointmentSlotsResponseMapper, AppointmentSlotsResponseMapper>();
+            services.AddTransient<IAppointmentsResponseMapper, AppointmentsResponseMapper>();
 
             return services;
         }
