@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         [TestMethod]
         public void Map_AppointmentsAreAppropriateConcreteTypeBasedOnStartTime()
         {
-            var appointmentTime1 = new AppointmentTime(_dateTimeOffsetProvider.CreateDateTimeOffset().SetTimeToMidnight().AddDays(-1));
+            var appointmentTime1 = new AppointmentTime(_dateTimeOffsetProvider.CreateDateTimeOffset().SetTimeToMidnight().AddDays(-1).AddHours(3));
             var appointmentTime2 = new AppointmentTime(Tomorrow().At("14:20"));
 
             var appointment1 =
