@@ -28,7 +28,8 @@ open class ErrorPage : HybridPageObject() {
         return HybridPageElement(
                 webDesktopLocator = locator,
                 androidLocator = androidLocator,
-                page = this
+                page = this,
+                timeToWaitForElement = 45
         )
     }
 

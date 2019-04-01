@@ -5,9 +5,6 @@ import mocking.MockingClient
 import org.junit.Assert.assertEquals
 import pages.ErrorPage
 import pages.appointments.AvailableAppointmentsPage
-import pages.assertElementNotPresent
-
-private const val TIME_TO_WAIT_FOR_SPINNER = 70L
 
 class AvailableAppointmentsSlotsErrorStepDefinitions {
 
@@ -22,11 +19,10 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
 
         val expectedMessageText = "Try again now. If the problem continues and you need to book an appointment now, " +
                 "contact your GP surgery directly. For urgent medical advice, call 111."
-        errorPage.waitForSpinnerToDisappear(TIME_TO_WAIT_FOR_SPINNER)
 
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)
-        errorPage.subHeading.assertElementNotPresent()
+
         assertEquals("expected error text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedMessageText, errorPage.errorText1.element.text)
     }
@@ -41,7 +37,6 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
         val expectedHeader = "There's been a problem loading this page"
         val expectedBody = "Try again later. If the problem continues and you need to book an appointment now, " +
                 "contact your GP surgery directly. For urgent medical advice, call 111."
-        errorPage.waitForSpinnerToDisappear()
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)
         assertEquals("expected error text $expectedBody but found ${errorPage.errorText1.element.text}",
@@ -52,7 +47,6 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
     fun thenISeeAppropriateInformationMessageWhenAppointmentsAreDisabled() {
         val expectedHeader = "You are not currently able to book appointments online"
         val expectedBody = "Contact your GP surgery for more information. For urgent medical help, call 111."
-        errorPage.waitForSpinnerToDisappear()
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)
         assertEquals("expected error text $expectedBody but found ${errorPage.errorText1.element.text}",
@@ -77,7 +71,7 @@ class AvailableAppointmentsSlotsErrorStepDefinitions {
 
     @Then("^I see a timeout on the appointment booking page$")
     fun iSeeATimeOutOnTheAppointmentBookingPage() {
-        availableAppointmentsPage.waitForSpinnerToDisappear(TIME_TO_WAIT_FOR_SPINNER)
+        errorPage.assertHeaderText("There's been a problem loading this page")
         errorPage.assertHasButton("Try again")
     }
 }

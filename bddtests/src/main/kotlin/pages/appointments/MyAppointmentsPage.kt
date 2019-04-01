@@ -5,6 +5,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.assertElementNotPresent
+import pages.withoutRetrying
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments")
 class MyAppointmentsPage : AppointmentSharedElementsPage() {
@@ -98,10 +99,10 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getNumberOfCancelLinks(): Int {
-        return cancelAppointmentLink.elements.size
+        return cancelAppointmentLink.withoutRetrying().elements.size
     }
 
     fun getNumberOfAppointmentsThatCannotBeCancelled(): Int {
-        return cannotCancelAppointmentText.elements.size
+        return cannotCancelAppointmentText.withoutRetrying().elements.size
     }
 }

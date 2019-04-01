@@ -363,7 +363,6 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^I am able to filter on available slots$")
     fun iAmAbleToFilterOnSlots() {
-        availableAppointmentsFilter.availableAppointmentsPage.waitForSpinnerToDisappear()
         thereIsAFilterForAppointmentTypes()
         thereIsAFilterForLocations()
         thereIsAFilterForDoctorsNurses()

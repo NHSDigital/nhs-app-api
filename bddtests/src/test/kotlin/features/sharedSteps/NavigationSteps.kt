@@ -27,11 +27,6 @@ open class NavigationSteps {
     }
 
     @Step
-    fun waitForSpinnerToDisappear() {
-        navBarNative.waitForSpinnerToDisappear()
-    }
-
-    @Step
     fun hasAnyTabSelected(): Boolean {
         return navBarNative.hasSingleSelection()
     }
@@ -47,7 +42,6 @@ open class NavigationSteps {
 
     @Step
     fun select(tab: NavBarNative.NavBarType) {
-        navBarNative.waitForSpinnerToDisappear()
         navBarNative.select(tab)
     }
 

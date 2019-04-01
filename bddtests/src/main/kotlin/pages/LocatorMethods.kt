@@ -1,23 +1,25 @@
 package pages
 
-import net.serenitybdd.core.pages.WebElementFacade
-import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
-import org.openqa.selenium.support.ui.FluentWait
-import java.time.Duration
+import org.openqa.selenium.WebElement
 
-fun HybridPageElement.waitForNonStaleElementToBecomeVisible() : HybridPageElement{
+const val WAIT_FOR_NON_STALE_ELEMENT = 500L
+
+fun HybridPageElement.waitForNonStaleElementToBecomeVisible() : WebElement{
     var staleElement = true
+    var wrappedElement: WebElement? = null
     while(staleElement) {
         try {
-            this.assertIsVisible()
-            staleElement = false
+            wrappedElement = this.element.wrappedElement
+            if(wrappedElement.size!=null || this.element.isVisible)
+                staleElement = false
         }
         catch(e: StaleElementReferenceException) {
+            Thread.sleep(WAIT_FOR_NON_STALE_ELEMENT)
             staleElement = true
         }
     }
-    return this
+    return wrappedElement!!
 }
 
 open class LocatorMethods(var page:HybridPageObject) {
@@ -30,26 +32,7 @@ open class LocatorMethods(var page:HybridPageObject) {
 
     fun assertNativeElementsLoaded(elementToCheck:HybridPageElement){
         if(page.onMobile()) {
-            elementToCheck.shouldBeVisibleOnNative()
-        }
-    }
-
-    private fun HybridPageElement.shouldBeVisibleOnNative(seconds: Long = DEFAULT_VISIBILITY_WAIT){
-        try {
-            page.waitForSpinnerToDisappear()
-            val currentElement = this.element
-            FluentWait<WebElementFacade>(currentElement)
-                    .withTimeout(Duration.ofSeconds(seconds))
-                    .pollingEvery(Duration.ofMillis(POOLING_FREQUENCY))
-                    .until {
-                        currentElement.isPresent
-                    }
-            if (!currentElement.isVisible) {
-                Thread.sleep(DEFAULT_MOBILE_WAIT)
-            }
-        } catch (e: NoSuchElementException) {
-            throw NoSuchElementException("Element $this does not exist on the page.  " +
-                    "Page source:\n${page.driver.pageSource}\n")
+            elementToCheck.assertIsVisible()
         }
     }
 }

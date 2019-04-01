@@ -26,6 +26,11 @@ fun HybridPageElement.assertIsNotVisible(): HybridPageElement {
 }
 
 fun HybridPageElement.assertElementNotPresent(): HybridPageElement {
-    Assert.assertEquals("Expected no matching elements for $helpfulNameToUse", 0, elements.count())
+    Assert.assertEquals("Expected no matching elements for $helpfulNameToUse", 0, withoutRetrying().elements.count())
+    return this
+}
+
+fun HybridPageElement.withoutRetrying(): HybridPageElement {
+    this.timeToWaitForElement = 0
     return this
 }

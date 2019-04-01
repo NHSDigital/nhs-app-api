@@ -6,6 +6,7 @@ import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.Keys
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
+import org.openqa.selenium.WebElement
 import webdrivers.isAndroid
 import webdrivers.isIOS
 import webdrivers.options.OptionManager
@@ -22,8 +23,12 @@ const val LOCATOR_STRATEGY_IOS_ACCESSIBILITY = "IOSACCESS"
 const val HEADER_HEIGHT_PX = 100
 const val FLOATING_BUTTON_HEIGHT_PX = 78.5
 const val NAVBAR_HEIGHT_PX = 70
+
 private const val DEFAULT_WAIT_TIME = 500L
 private const val DEFAULT_RETRIES = 3
+const val TIME_TO_WAIT_FOR_ELEMENT = 10
+const val ELEMENT_RETRY_TIME = 1.0
+const val MILLISECONDS_IN_A_SECOND = 1000L
 
 open class HybridPageElement(
         var webDesktopLocator: String,
@@ -31,28 +36,46 @@ open class HybridPageElement(
         var androidLocator: String? = null,
         var iOSLocator: String? = null,
         open val page: HybridPageObject,
-        helpfulName: String? = null
+        helpfulName: String? = null,
+        var timeToWaitForElement: Int = TIME_TO_WAIT_FOR_ELEMENT
 ) {
     val helpfulNameToUse = helpfulName ?: webDesktopLocator
     val element: WebElementFacade
         get() {
-            return when (locatorStrategy()) {
-                LOCATOR_STRATEGY_IOS -> page.findByXpath(iOSLocator!!)
-                LOCATOR_STRATEGY_ANDROID -> page.findByXpath(androidLocator!!)
-                LOCATOR_STRATEGY_WEBVIEW,
-                LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findByXpath(webDesktopLocator).also {
-                    if ((!it.isCurrentlyVisible).or(it.isUnderneathFixedElements())) {
-                        it.scroll()
-                    }
+            var theElement: WebElementFacade? = null
+            while(theElement==null) {
+                try {
+                    theElement = selectElement()
                 }
-                LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findByXpath(webMobileLocator).also {
-                    if ((!it.isCurrentlyVisible).or(it.isUnderneathFixedElements())) {
-                        it.scroll()
-                    }
+                catch(e: org.openqa.selenium.StaleElementReferenceException){
+                    Thread.sleep(MILLISECONDS_IN_A_SECOND)
                 }
-                else -> throw IllegalArgumentException("Unknown element locator strategy.")
             }
+            return theElement
         }
+
+    private fun selectElement() : WebElementFacade {
+        return when (locatorStrategy()) {
+            LOCATOR_STRATEGY_IOS -> page.findByXpath(iOSLocator!!).also {
+                it.getWrappedElementWithRetry()
+            }
+            LOCATOR_STRATEGY_ANDROID -> page.findByXpath(androidLocator!!).also {
+                it.getWrappedElementWithRetry()
+            }
+            LOCATOR_STRATEGY_WEBVIEW,
+            LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findByXpath(webDesktopLocator).also {
+                if ((it.isUnderneathFixedElements()).or(!it.isCurrentlyVisible)) {
+                    it.scroll()
+                }
+            }
+            LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findByXpath(webMobileLocator).also {
+                if ((it.isUnderneathFixedElements()).or(!it.isCurrentlyVisible)) {
+                    it.scroll()
+                }
+            }
+            else -> throw IllegalArgumentException("Unknown element locator strategy.")
+        }
+    }
 
     fun scrollToElement(): HybridPageElement {
         element.scroll()
@@ -60,11 +83,22 @@ open class HybridPageElement(
     }
 
     open fun click() {
-        this.element.scroll()
-        this.element.click()
+        while(true) {
+            try {
+                this.waitForNonStaleElementToBecomeVisible().scroll()
+                this.waitForNonStaleElementToBecomeVisible().click()
+                return
+            } catch(e: org.openqa.selenium.StaleElementReferenceException) {
+                Thread.sleep(MILLISECONDS_IN_A_SECOND)
+            }
+        }
     }
 
     private fun WebElementFacade.scroll() {
+        scrollTo(this)
+    }
+
+    private fun WebElement.scroll() {
         scrollTo(this)
     }
 
@@ -81,14 +115,25 @@ open class HybridPageElement(
 
     val elements: List<WebElementFacade>
         get() {
-            return when (locatorStrategy()) {
-                LOCATOR_STRATEGY_IOS -> page.findAllByXpath(iOSLocator!!)
-                LOCATOR_STRATEGY_ANDROID -> page.findAllByXpath(androidLocator!!)
-                LOCATOR_STRATEGY_WEBVIEW,
-                LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findAllByXpath(webDesktopLocator)
-                LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findAllByXpath(webMobileLocator)
-                else -> throw IllegalArgumentException("Unknown element locator strategy.")
+            var elements: List<WebElementFacade>
+            var retryCount = (timeToWaitForElement / ELEMENT_RETRY_TIME).toInt()
+            while(true) {
+                elements = when (locatorStrategy()) {
+                    LOCATOR_STRATEGY_IOS -> page.findAllByXpath(iOSLocator!!)
+                    LOCATOR_STRATEGY_ANDROID -> page.findAllByXpath(androidLocator!!)
+                    LOCATOR_STRATEGY_WEBVIEW,
+                    LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findAllByXpath(webDesktopLocator)
+                    LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findAllByXpath(webMobileLocator)
+                    else -> throw IllegalArgumentException("Unknown element locator strategy.")
+                }
+                retryCount--
+
+                if(elements.count()>0 || retryCount<=0)
+                    break
+
+                Thread.sleep((ELEMENT_RETRY_TIME * MILLISECONDS_IN_A_SECOND).toLong())
             }
+            return elements
         }
 
     fun waitForElement(numberOfRetries: Int = DEFAULT_RETRIES,
@@ -164,7 +209,7 @@ open class HybridPageElement(
 
     private fun WebElementFacade.isUnderneathFixedElements(): Boolean {
 
-        val element = this.wrappedElement
+        val element = this.getWrappedElementWithRetry()
 
         val highestPixel = element.location.y
         val lowestPixel = highestPixel + element.size.height
@@ -181,6 +226,28 @@ open class HybridPageElement(
 
     }
 
+    private fun WebElementFacade.getWrappedElementWithRetry() : WebElement {
+        var retryCount = (timeToWaitForElement / ELEMENT_RETRY_TIME).toInt()
+
+        var wrappedElement: WebElement? = null
+
+        while(retryCount>=0) {
+            try {
+                wrappedElement = this.wrappedElement
+                break
+            } catch (exception: org.openqa.selenium.NoSuchElementException) {
+                when(retryCount) {
+                    0 -> throw exception
+                    else -> {
+                        retryCount--
+                        Thread.sleep((ELEMENT_RETRY_TIME * MILLISECONDS_IN_A_SECOND).toLong())
+                    }
+                }
+            }
+        }
+        return wrappedElement!!
+    }
+
     fun typeTextIntoTextArea(text: String): String {
         //Each letter sent individually
         //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
@@ -195,6 +262,8 @@ open class HybridPageElement(
     }
 
    fun sendEnterKey() {
-       this.element.sendKeys(Keys.ENTER)
+       this.waitForNonStaleElementToBecomeVisible().sendKeys(Keys.ENTER)
    }
 }
+
+

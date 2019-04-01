@@ -8,7 +8,6 @@ import org.openqa.selenium.Keys
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.navigation.HeaderNative
-import pages.waitForNonStaleElementToBecomeVisible
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/confirm-prescription-details")
 open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
@@ -69,7 +68,7 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     }
 
     fun clickConfirmAndOrderRepeatPrescriptionButton() {
-        confirmAndOrderRepeatPrescriptionButton.waitForNonStaleElementToBecomeVisible().sendEnterKey()
+        confirmAndOrderRepeatPrescriptionButton.sendEnterKey()
     }
 
     fun clickChangeThisPrescriptionButton() {

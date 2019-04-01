@@ -26,7 +26,6 @@ open class PrescriptionsPage : HybridPageObject() {
 
     fun isLoaded() {
         headerNative.waitForPageHeaderText("My repeat prescriptions")
-        waitForSpinnerToDisappear()
     }
 
     fun isNoPrescriptionsMessageVisible(): Boolean {

@@ -15,6 +15,13 @@ open class MorePage : HybridPageObject() {
             "Find out how the NHS uses your confidential patient " +
                     "information and choose whether or not it can be used for research and planning."
 
+    private val pageTitle = HybridPageElement(
+            webDesktopLocator = "//h1[contains(text(),\"More\")]",
+            androidLocator = null,
+            page = this,
+            helpfulName = "More Title"
+    )
+
     var content = MenuLinksContent(
             title = "More",
             links = arrayOf(
@@ -29,5 +36,9 @@ open class MorePage : HybridPageObject() {
 
     fun assertLinksPresent() {
         links.assertLinksPresent()
+    }
+
+    fun assertTitleIsVisible() {
+        pageTitle.assertIsVisible()
     }
 }

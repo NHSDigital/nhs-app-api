@@ -123,7 +123,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
                 .assertSingleElementPresent()
                 .assertIsVisible()
                 .click()
-        waitForSpinnerToDisappear()
     }
 
     fun getAreAnySlotsPresent(): Boolean {

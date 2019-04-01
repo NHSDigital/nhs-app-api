@@ -38,14 +38,6 @@ open class HybridPageObject : PageObject() {
             page = this
     )
 
-    fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
-        if (onMobile()) {
-            Thread.sleep(DEFAULT_NATIVE_SPINNER_WAIT)
-        } else if (!spinner.elements.isEmpty()) {
-            spinner.shouldNotBeVisible(seconds)
-        }
-    }
-
     private fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
         try {
             val currentElement = this.element
@@ -139,7 +131,8 @@ open class HybridPageObject : PageObject() {
         HybridPageElement(
                 webDesktopLocator = "//button",
                 androidLocator = null,
-                page = this
+                page = this,
+                timeToWaitForElement = 30
         )
                 .withText(text, false).assertIsVisible().click()
     }

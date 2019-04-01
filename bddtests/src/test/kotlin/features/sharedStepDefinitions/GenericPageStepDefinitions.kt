@@ -18,19 +18,16 @@ class GenericPageStepDefinitions {
 
      @When("^I click the '(.*)' button$")
      fun iClickTheButton(buttonText: String) {
-         genericPage.waitForSpinnerToDisappear(TIMEOUT_PLUS_ONE_SECOND)
          genericPage.clickOnButtonContainingText(buttonText)
      }
 
     @When("^I click the '(.*)' link$")
     fun iClickTheLink(linkText: String) {
-        genericPage.waitForSpinnerToDisappear(TIMEOUT_PLUS_ONE_SECOND)
         genericPage.clickOnLinkContainingText(linkText)
     }
 
     @When("^I click the Back link$")
     fun iClickTheBackLink() {
-        genericPage.waitForSpinnerToDisappear(TIMEOUT_PLUS_ONE_SECOND)
         genericPage.clickOnBackLink()
     }
 

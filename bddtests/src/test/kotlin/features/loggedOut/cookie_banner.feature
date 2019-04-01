@@ -37,17 +37,16 @@ Feature: Cookie Banner
     Examples:
       | target page |
       | gp finder   |
-
+    
   Scenario Outline: When the Cookie Banner is acknowledged on the <target page> web page with Javascript <js enabled?>, the cookie is created and the banner no longer appears
     Given I have <js enabled?> javascript
     And I am on the <target page> logged-out page
     When I close the cookie banner
     Then a local cookie is created with expiry date
     And pages will not display the cookie banner
-      | login               |
+      | /login               |
 #      | gp finder           |
-      | check your symptoms |
-      | login               |
+      | /check-your-symptoms |
     Examples:
       | target page         | js enabled? |
       | login               | enabled     |

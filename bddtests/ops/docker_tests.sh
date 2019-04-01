@@ -38,11 +38,11 @@ then
   info "Cleaning up docker networks"
   docker network prune -f
 
-  info "Cleaning docker system"
-  docker system prune -f
-
   info "Cleaning docker volumes"
   docker volume prune -f
+
+  info "Cleaning docker system"
+  docker system prune -f -a
 fi
 
 DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
@@ -96,7 +96,7 @@ else
         then
           TAGS=()
           val=1
-          for filename in $(find .. | grep -F .feature); do
+          for filename in $(find .. | grep -F .feature | grep -v throttling.feature); do
 
             info "Tagging $filename as tranche$val"
 
@@ -214,7 +214,8 @@ then
 fi
 
 for s in $DOCKER_SERVICES; do
-  if [[ "$s" != "api.local.bitraft.io" && "$s" != "www.local.bitraft.io" ]]; then #Don't pull local images we've built as part of the pipeline
+  #Don't pull local images we've built as part of the pipeline
+  if [[ "$s" != "api.local.bitraft.io" && "$s" != "web.local.bitraft.io" && "$s" != "nhsonline-backendservicejourneyrulesapi" ]]; then 
     docker-compose -f docker-compose_ci_run.yml pull $s
   fi
 done
@@ -357,12 +358,13 @@ info "Running $TAG tests"
 done
 
 # Wait for all test runners
+info "Waiting for all processes to terminate"
 for PID in ${PIDS[*]}; do
     wait $PID
 done
 
 # Aggregate test results
-
+info "Aggregating test results"
 for TAG in ${TAGS[*]}; do
   cp -r $workingDir/../../testRunFolder/$TAG/target/site/serenity $workingDir/../target/site/.
   cp -r $workingDir/../../testRunFolder/$TAG/build/test-results $workingDir/../build/.

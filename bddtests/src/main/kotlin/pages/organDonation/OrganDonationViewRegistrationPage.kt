@@ -13,7 +13,7 @@ import pages.sharedElements.TextBlockElement
 open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
 
     override fun assertDisplayed() {
-        waitForSpinnerToDisappear()
+        title.assertIsVisible()
     }
 
     override val titleText: String = "Your decision"
@@ -44,8 +44,6 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
     }
 
     fun assertDecisionFound() {
-        waitForSpinnerToDisappear()
-
         BannerObject.success(this, "Decision found")
                 .assertVisible("Your registration is currently being processed.")
 

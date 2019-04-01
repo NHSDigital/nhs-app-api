@@ -36,7 +36,6 @@ open class HomeSteps {
 
     @Step
     fun waitForLoginToCompleteSuccessfully() {
-        homePage.waitForSpinnerToDisappear()
         homePage.locatorMethods.assertNativeElementsLoaded(homePage.greeting)
     }
 }

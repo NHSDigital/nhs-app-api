@@ -422,7 +422,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         browser.goToApp()
         login.using(patient)
-        home.homePage.waitForSpinnerToDisappear()
     }
 
     @Given("^I am logged in as a (.*) user where the session will fail to clear on signout$")
@@ -555,10 +554,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Throws(Exception::class)
     fun iClickTheSignOutButton() {
         navHeader.clickMyAccount()
-        myAccount.waitForSpinnerToDisappear()
         myAccount.signOutButton.click()
         browser.waitUntilSignoutCompletes()
-        myAccount.waitForSpinnerToDisappear()
     }
 
     @When("^I POST to IM1 Connection to register the user$")

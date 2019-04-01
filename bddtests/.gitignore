@@ -18,6 +18,7 @@ out/
 # Gradle:
 .gradle/
 build/
+cache/
 
 chromedriver*
 

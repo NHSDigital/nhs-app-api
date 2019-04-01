@@ -8,6 +8,8 @@ import pages.HybridPageObject
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 
+const val DROPDOWN_WAIT_TIME = 60
+
 class DropdownElement(val label: String, val helpfulName: String, pageObject: HybridPageObject) {
 
     private val xpathFormat = "//label[contains(text(),'$label')]/following-sibling::span/select"
@@ -17,7 +19,8 @@ class DropdownElement(val label: String, val helpfulName: String, pageObject: Hy
     private val dropDown = HybridPageElement(
             webDesktopLocator = xpathFormat,
             page = pageObject,
-            helpfulName = helpfulName
+            helpfulName = helpfulName,
+            timeToWaitForElement = DROPDOWN_WAIT_TIME
     )
 
     private val inlineError by lazy {

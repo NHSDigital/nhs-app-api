@@ -128,7 +128,6 @@ open class OrganDonationStepDefinitions {
 
     @Given("^the organ donation toggle is set to target the internal page$")
     fun toggleOrganDonationSiteLink() {
-        organDonationChoicePage.waitForSpinnerToDisappear()
         browser.appendSourceQueryString("ios")
     }
 

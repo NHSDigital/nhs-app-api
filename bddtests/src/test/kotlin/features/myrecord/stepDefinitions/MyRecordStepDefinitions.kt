@@ -79,7 +79,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.locatorMethods.waitForNativeStepToComplete()
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
-        myRecordInfoPage.waitForSpinnerToDisappear()
     }
 
     @When("^I enter url address for my record directly into the url$")
@@ -116,7 +115,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @When("^I click the (.*) section on My Record$")
     fun iClickOnTheSection(heading: String) {
-        myRecordInfoPage.waitForSpinnerToDisappear()
         myRecordInfoPage.getSection(heading).toggleShrub()
     }
 
