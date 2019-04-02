@@ -169,6 +169,13 @@ export default {
       },
     },
   },
+  nominatedPharmacyNotFound: {
+    warningText: 'This means you\'ll collect a paper prescription from your GP.',
+    line: 'If you nominate a pharmacy, your prescription will be sent there.',
+    nominatedPharmacyLink: 'Nominate a pharmacy',
+    continueButton: 'Continue without nominating',
+    backButton: 'Back',
+  },
   noConnection: {
     header: 'Connection error',
     subheader: 'There\'s an issue with your internet connection',
@@ -793,6 +800,7 @@ export default {
     nominatedPharmacy: 'My nominated pharmacy',
     confirmNominatedPharmacy: 'Confirm my nominated pharmacy',
     changeNominatedPharmacy: 'Change my nominated pharmacy',
+    nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
   },
   pageTitles: {
     home: 'Home',
@@ -818,6 +826,7 @@ export default {
     termsAndConditions: 'Accept conditions of use',
     nominatedPharmacy: 'My nominated pharmacy',
     changeNominatedPharmacy: 'Change my nominated pharmacy',
+    nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
     confirmNominatedPharmacy: 'Confirm my nominated pharmacy',
   },
   crumbName: {

@@ -19,6 +19,7 @@
         </analytics-tracked-tag>
       </li>
     </ul>
+
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
       <h2>{{ $t('rp01.empty.subHeader') }}</h2>
       <p>
