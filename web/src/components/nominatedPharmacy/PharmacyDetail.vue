@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p v-if="isMyNominatedPharmacy">{{ $t('nominatedPharmacy.line1') }}</p>
+    <p>{{ $t('nominatedPharmacy.line1') }}</p>
     <p v-if="!isMyNominatedPharmacy">{{ $t('confirmNominatedPharmacy.line1') }}</p>
     <h2 :class="$style['pharmacy-name']"> {{ nominatedPharmacy.pharmacyName }} </h2>
     <p> {{ formatAddress(nominatedPharmacy) }} </p>

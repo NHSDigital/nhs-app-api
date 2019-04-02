@@ -12,7 +12,7 @@
 </template>
 <script>
 /* eslint-disable no-unused-vars */
-import { APPOINTMENTS, APPOINTMENT_BOOKING_GUIDANCE, NOMINATED_PHARMACY_NOT_FOUND, PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
+import { APPOINTMENTS, APPOINTMENT_BOOKING_GUIDANCE, NOMINATED_PHARMACY_CHECK, PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import { redirectTo } from '@/lib/utils';
 
@@ -29,7 +29,7 @@ export default {
       formData: {},
     };
     buttonData[PRESCRIPTIONS.name] = {
-      to: PRESCRIPTION_REPEAT_COURSES.path,
+      to: NOMINATED_PHARMACY_CHECK.path,
       text: `${this.$t('rp01.orderPrescriptionButton')}`,
       formData: {},
     };
@@ -44,11 +44,6 @@ export default {
         activeButtonData.formData.myAppointments = {
           disableCancellation: this.$store.state.myAppointments.disableCancellation,
         };
-      }
-      if (activeButtonData && this.$route.name === PRESCRIPTIONS.name) {
-        if (this.$store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
-          activeButtonData.to = NOMINATED_PHARMACY_NOT_FOUND.path;
-        }
       }
       return activeButtonData;
     },

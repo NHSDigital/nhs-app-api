@@ -110,8 +110,8 @@ import NoJsForm from '@/components/no-js/NoJsForm';
 import GlossaryHeader from '@/components/GlossaryHeader';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
-import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
-import { PRESCRIPTIONS, PRESCRIPTION_CONFIRM_COURSES } from '@/lib/routes';
+import DesktopGenericBackLink from '../../components/widgets/DesktopGenericBackLink';
+import { PRESCRIPTIONS, PRESCRIPTION_CONFIRM_COURSES, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -196,6 +196,9 @@ export default {
     prescriptionsPath() {
       return PRESCRIPTIONS.path;
     },
+    checkNominatedPharmacyPath() {
+      return NOMINATED_PHARMACY_CHECK.path;
+    },
     confirmCoursesPath() {
       return PRESCRIPTION_CONFIRM_COURSES.path;
     },
@@ -234,7 +237,7 @@ export default {
       }
     },
     backToPrescriptionsClicked() {
-      redirectTo(this, this.prescriptionsPath, null);
+      redirectTo(this, this.checkNominatedPharmacyPath, null);
     },
   },
 };

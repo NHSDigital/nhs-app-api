@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
 import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
 import { $t } from '../../helpers';
-import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_NOT_FOUND } from '../../../../src/lib/routes';
+import { PRESCRIPTIONS, NOMINATED_PHARMACY_CHECK } from '../../../../src/lib/routes';
 
 let component;
 
@@ -32,7 +32,7 @@ const createHeaderCompanionButton = ($store) => {
 };
 
 describe('HeaderCompanionButton.vue', () => {
-  it('will go to "/nominated-pharmacy/not-found" with no nominated pharmacy', () => {
+  it('will go to "/nominated-pharmacy/check" with no nominated pharmacy', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
@@ -41,15 +41,16 @@ describe('HeaderCompanionButton.vue', () => {
         },
         nominatedPharmacy: {
           pharmacy: {
+            pharmacyName: null,
           },
         },
       },
     };
     createHeaderCompanionButton($store);
-    expect(component.vm.activeButton.to).toEqual(NOMINATED_PHARMACY_NOT_FOUND.path);
+    expect(component.vm.activeButton.to).toEqual(NOMINATED_PHARMACY_CHECK.path);
   });
 
-  it('will go to "/prescriptions/repeat-courses" with nominated pharmacy', () => {
+  it('will go to "/nominated-pharmacy/check" with nominated pharmacy', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
@@ -64,6 +65,6 @@ describe('HeaderCompanionButton.vue', () => {
       },
     };
     createHeaderCompanionButton($store);
-    expect(component.vm.activeButton.to).toEqual(PRESCRIPTION_REPEAT_COURSES.path);
+    expect(component.vm.activeButton.to).toEqual(NOMINATED_PHARMACY_CHECK.path);
   });
 });

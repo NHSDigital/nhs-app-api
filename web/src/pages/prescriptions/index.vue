@@ -13,13 +13,13 @@
           :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
           tag="a">
           <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
-          <p :class="!$store.state.device.isNativeApp && $style.desktopWeb">
-            {{ nominatedPharmacyName }}
+          <p :class="!$store.state.device.isNativeApp
+            && $style.desktopWeb">
+            {{ pharmacyNameOnBtn }}
           </p>
         </analytics-tracked-tag>
       </li>
     </ul>
-
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
       <h2>{{ $t('rp01.empty.subHeader') }}</h2>
       <p>
@@ -44,7 +44,7 @@
     </div>
 
     <no-js-form v-if="$store.state.device.isNativeApp"
-                :action="repeatCoursesPath" method="get"
+                :action="pharmacyCheckPath" method="get"
                 :value="{}">
       <floating-button-bottom v-if="hasLoaded"
                               id="order-prescription-button"
@@ -59,7 +59,8 @@
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import GlossaryHeader from '@/components/GlossaryHeader';
-import { PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY } from '@/lib/routes';
+import NoJsForm from '@/components/no-js/NoJsForm';
+import { NOMINATED_PHARMACY_CHECK, NOMINATED_PHARMACY } from '@/lib/routes';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import keys from 'lodash/fp/keys';
 import each from 'lodash/fp/each';
@@ -92,8 +93,14 @@ export default {
     };
   },
   computed: {
-    repeatCoursesPath() {
-      return PRESCRIPTION_REPEAT_COURSES.path;
+    pharmacyCheckPath() {
+      return NOMINATED_PHARMACY_CHECK.path;
+    },
+    pharmacyNameOnBtn() {
+      if (this.nominatedPharmacyName === undefined) {
+        return this.$t('nominatedPharmacyNotFound.noPharmacyButton');
+      }
+      return this.nominatedPharmacyName;
     },
     showNoPrescriptions() {
       const {
@@ -125,12 +132,28 @@ export default {
       return this.$store.state.prescriptions.hasLoaded;
     },
   },
+  async asyncData({ store }) {
+    await store.dispatch('prescriptions/clear');
+    await store.dispatch('nominatedPharmacy/clear');
+    await store.dispatch('prescriptions/load');
+    await store.dispatch('nominatedPharmacy/load');
+    return {
+      statusDisplayPriority: {
+        [MedicationCourseStatus.Rejected]: 1,
+        [MedicationCourseStatus.Requested]: 2,
+        [MedicationCourseStatus.Approved]: 3,
+      },
+      nominatedPharmacyName: store.state.nominatedPharmacy.pharmacy.pharmacyName,
+    };
+  },
   methods: {
-    onOrderRepeatPrescriptionClicked() {
-      redirectTo(this, this.repeatCoursesPath, null);
-    },
     onNominatedPharmacyDetailClicked() {
+      this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY.path, true);
       redirectTo(this, NOMINATED_PHARMACY.path, null);
+    },
+    onOrderRepeatPrescriptionClicked() {
+      this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_CHECK.path, true);
+      redirectTo(this, NOMINATED_PHARMACY_CHECK.path, null);
     },
   },
 };

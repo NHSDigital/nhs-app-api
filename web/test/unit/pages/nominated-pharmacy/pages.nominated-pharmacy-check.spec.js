@@ -1,9 +1,9 @@
 import * as dependency from '@/lib/utils';
-import NominatedPharmacyNotFound from '@/pages/nominated-pharmacy/not-found';
+import NominatedPharmacyCheck from '@/pages/nominated-pharmacy/check';
 import { $t, createStore, mount } from '../../helpers';
 import { PRESCRIPTION_REPEAT_COURSES, PRESCRIPTIONS, NOMINATED_PHARMACY_SEARCH } from '../../../../src/lib/routes';
 
-describe('no nominated pharmacy found', () => {
+describe('nominated pharmacy not found', () => {
   let $store;
   let $style;
   let wrapper;
@@ -12,10 +12,14 @@ describe('no nominated pharmacy found', () => {
     device: {
       source: 'web',
     },
-    nominatedPharmacy: null,
+    nominatedPharmacy: {
+      pharmacy: {
+        pharmacyName: undefined,
+      },
+    },
   }) => state;
 
-  const mountPage = () => mount(NominatedPharmacyNotFound, { $store, $style, $t });
+  const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t });
 
   describe('warning', () => {
     let warningText;
@@ -62,7 +66,7 @@ describe('no nominated pharmacy found', () => {
         link: 'link',
       };
       wrapper = mountPage();
-      link = wrapper.find('#link-to-add-pharmacy');
+      link = wrapper.find('#link-to-nominate-pharmacy');
     });
 
     it('will exist', () => {
@@ -92,7 +96,7 @@ describe('no nominated pharmacy found', () => {
         green: 'green',
       };
       wrapper = mountPage();
-      continueButton = wrapper.find('#continue-button');
+      continueButton = wrapper.find('#continue-button-found');
     });
 
     it('will exist', () => {
@@ -142,3 +146,68 @@ describe('no nominated pharmacy found', () => {
     });
   });
 });
+
+
+describe('nominated pharmacy found', () => {
+  let $store;
+  let $style;
+  let wrapper;
+
+  const createState = (state = {
+    device: {
+      source: 'web',
+    },
+    nominatedPharmacy: {
+      pharmacy: {
+        pharmacyName: 'Boots',
+      },
+    },
+  }) => state;
+
+  const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t });
+
+  describe('continue-to-repeat-prescriptions', () => {
+    let continueButton;
+
+    beforeEach(() => {
+      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      $style = {
+        button: 'button',
+        green: 'green',
+      };
+      wrapper = mountPage();
+      continueButton = wrapper.find('#continue-button-found');
+    });
+
+    it('will exist', () => {
+      expect(continueButton.exists()).toBe(true);
+    });
+
+    it('will use "nominatedPharmacy.continueButton" for text', () => {
+      expect(continueButton.text())
+        .toEqual('translate_nominatedPharmacy.continueButton');
+    });
+
+    it('will navigate to the repeat prescriptions page on click', async () => {
+      dependency.redirectTo = jest.fn();
+      await continueButton.trigger('click');
+      expect(dependency.redirectTo)
+        .toHaveBeenCalledWith(wrapper.vm, PRESCRIPTION_REPEAT_COURSES.path, null);
+    });
+  });
+
+  describe('show-pharmacy-details', () => {
+    let pharmacyDetails;
+
+    beforeEach(() => {
+      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      wrapper = mountPage();
+      pharmacyDetails = wrapper.find('#pharmacy-details');
+    });
+
+    it('will exist', () => {
+      expect(pharmacyDetails.exists()).toBe(true);
+    });
+  });
+});
+

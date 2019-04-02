@@ -2,7 +2,8 @@
   <div v-if="showTemplate"
        id="mainDiv"
        :class="[$style['pull-content'], !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <div :class="$style.info" data-purpose="info">
+    <div v-if="hasNoNominatedPharmacy"
+         :class="$style.info" data-purpose="info">
       <message-dialog message-type="warning" icon-text="Important">
         <message-text id="warning-text"
                       :class="$style.warningText">
@@ -12,28 +13,32 @@
       <p id="instruction">
         {{ $t('nominatedPharmacyNotFound.line') }}
       </p>
-      <a id="link-to-add-pharmacy"
+      <a id="link-to-nominate-pharmacy"
          :class="[$style.checkFeaturesLink, $style['link']]"
          href="#"
          tag="a"
-         @click.prevent="goToAddNominatedPharmacy">
+         @click.prevent="goToAddOrChangeNominatedPharmacy">
         {{ $t('nominatedPharmacyNotFound.nominatedPharmacyLink') }}
       </a>
     </div>
+    <div v-else-if="!hasNoNominatedPharmacy"
+         :class="$style.info" data-purpose="info">
+      <pharmacy-detail id="pharmacy-details"
+                       :nominated-pharmacy="nominatedPharmacy"
+                       :is-my-nominated-pharmacy="true" />
+    </div>
 
-    <generic-button id="continue-button"
+    <generic-button id="continue-button-found"
                     :button-classes="['green', 'button']"
                     @click.prevent="onContinueButtonClicked">
-      {{ $t('nominatedPharmacyNotFound.continueButton') }}
+      {{ getContinueButtonText }}
     </generic-button>
 
-    <analytics-tracked-tag :text="$t('th03.errors.backButton')">
-      <generic-button id="back-button"
-                      :button-classes="['grey', 'button']" :class="$style.back"
-                      tabindex="0" @click.prevent="onBackButtonClicked">
-        {{ $t('nominatedPharmacyNotFound.backButton') }}
-      </generic-button>
-    </analytics-tracked-tag>
+    <generic-button id="back-button"
+                    :button-classes="['grey', 'button']" :class="$style.back"
+                    tabindex="0" @click.prevent="onBackButtonClicked">
+      {{ $t('nominatedPharmacyNotFound.backButton') }}
+    </generic-button>
   </div>
 </template>
 
@@ -41,6 +46,7 @@
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
@@ -49,6 +55,27 @@ export default {
     GenericButton,
     MessageDialog,
     MessageText,
+    PharmacyDetail,
+  },
+  data() {
+    return {
+      nominatedPharmacy: this.$store.state.nominatedPharmacy.pharmacy,
+    };
+  },
+  computed: {
+    getContinueButtonText() {
+      return this.hasNoNominatedPharmacy ?
+        this.$t('nominatedPharmacyNotFound.continueButton') :
+        this.$t('nominatedPharmacy.continueButton');
+    },
+    hasNoNominatedPharmacy() {
+      return this.nominatedPharmacy.pharmacyName === undefined;
+    },
+  },
+  created() {
+    if (this.$store.state.nominatedPharmacy.hasLoaded === false) {
+      redirectTo(this, PRESCRIPTIONS.path, null);
+    }
   },
   methods: {
     onContinueButtonClicked() {
@@ -57,7 +84,7 @@ export default {
     onBackButtonClicked() {
       redirectTo(this, PRESCRIPTIONS.path, null);
     },
-    goToAddNominatedPharmacy() {
+    goToAddOrChangeNominatedPharmacy() {
       redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
     },
   },
@@ -69,6 +96,10 @@ export default {
   @import '../../style/fonts';
   @import '../../style/buttons';
   @import '../../style/textstyles';
+  @import "../../style/panels";
+  @import '../../style/listmenu';
+  @import "../../style/home";
+
 
   .link {
     margin-top: 0.5em;
@@ -79,24 +110,24 @@ export default {
     display: block;
     font-weight: bold;
   }
-  div {
-   &.desktopWeb {
-    max-width: 540px;
+div {
+  &.desktopWeb {
+  max-width: 540px;
 
-    .warningText {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-
-    li {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-
-    p {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-   }
+  .warningText {
+    font-family: $default_web;
+    font-weight: normal;
   }
+
+  li {
+    font-family: $default_web;
+    font-weight: normal;
+  }
+
+  p {
+    font-family: $default_web;
+    font-weight: normal;
+    }
+  }
+}
 </style>

@@ -37,7 +37,7 @@ describe('confirm nominated pharmacy', () => {
 
     it('will translate the line 1 text', () => {
       expect($t).toHaveBeenCalledWith('confirmNominatedPharmacy.line1');
-      expect($t).not.toHaveBeenCalledWith('nominatedPharmacy.line1');
+      expect($t).toHaveBeenCalledWith('nominatedPharmacy.line1');
     });
   });
 

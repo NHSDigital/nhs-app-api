@@ -12,6 +12,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using System;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy

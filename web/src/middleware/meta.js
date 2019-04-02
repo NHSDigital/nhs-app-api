@@ -45,8 +45,8 @@ import {
   NOMINATED_PHARMACY,
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
-  NOMINATED_PHARMACY_NOT_FOUND,
   NOMINATED_PHARMACY_CONFIRM,
+  NOMINATED_PHARMACY_CHECK,
 } from '@/lib/routes';
 
 function setPageTitle(route, store, app) {
@@ -207,10 +207,14 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.nominatedPharmacy';
       route.meta.pageTitleKey = 'pageTitles.nominatedPharmacy';
       break;
-    case NOMINATED_PHARMACY_NOT_FOUND.name:
+    case NOMINATED_PHARMACY_CHECK.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
-      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
+      route.meta.headerKey = 'pageHeaders.nominatedPharmacyFound';
+      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyFound';
+      if (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
+        route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
+        route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
+      }
       break;
     case NOMINATED_PHARMACY_CONFIRM.name:
       store.dispatch('navigation/setNewMenuItem', 2);

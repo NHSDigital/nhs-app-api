@@ -151,6 +151,17 @@ export default {
     line1: 'If you order repeat medication using the NHS App, this pharmacy is where it will be sent.',
     changePharmacyLink: 'Change my nominated pharmacy',
     openingTimes: 'Opening times',
+    continueButton: 'Continue',
+  },
+  searchNominatedPharmacy: {
+    pageTitle: 'Change my nominated pharmacy',
+    line1: 'The pharmacy you choose is where your repeat prescription will be sent.',
+    subHeader: 'Postcode',
+    line2: 'Find pharmacies within 5km of this postcode.',
+    searchButton: 'Search',
+    link1: 'See all internet pharmacies',
+    link2: 'See all dispensing appliance contractors',
+    emptySearchError: 'Enter a postcode',
   },
   nominatedPharmacySearchResults: {
     header: 'Change my nominated pharmacy',
@@ -175,6 +186,7 @@ export default {
     nominatedPharmacyLink: 'Nominate a pharmacy',
     continueButton: 'Continue without nominating',
     backButton: 'Back',
+    noPharmacyButton: 'No nominated pharmacy',
   },
   noConnection: {
     header: 'Connection error',
@@ -801,6 +813,7 @@ export default {
     confirmNominatedPharmacy: 'Confirm my nominated pharmacy',
     changeNominatedPharmacy: 'Change my nominated pharmacy',
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
+    nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
   },
   pageTitles: {
     home: 'Home',
@@ -828,6 +841,7 @@ export default {
     changeNominatedPharmacy: 'Change my nominated pharmacy',
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
     confirmNominatedPharmacy: 'Confirm my nominated pharmacy',
+    nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',

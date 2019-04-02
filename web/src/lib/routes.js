@@ -457,9 +457,9 @@ const routes = {
     name: 'nominated-pharmacy-results',
     path: '/nominated-pharmacy/results',
   },
-  NOMINATED_PHARMACY_NOT_FOUND: {
-    name: 'nominated-pharmacy-not-found',
-    path: '/nominated-pharmacy/not-found',
+  NOMINATED_PHARMACY_CHECK: {
+    name: 'nominated-pharmacy-check',
+    path: '/nominated-pharmacy/check',
   },
   // Legacy
   LEGACY_MYRECORDWARNING: {
@@ -554,7 +554,7 @@ export const {
   NOMINATED_PHARMACY_SEARCH,
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
-  NOMINATED_PHARMACY_NOT_FOUND,
+  NOMINATED_PHARMACY_CHECK,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,
