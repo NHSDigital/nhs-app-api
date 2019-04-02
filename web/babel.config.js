@@ -3,6 +3,10 @@ module.exports = function (api) {
     api.cache(true);
   }
 
+  const ignore = [
+    '**/.transpiled',
+  ];
+
   const presets = [
     [
       '@babel/preset-env',
@@ -32,6 +36,7 @@ module.exports = function (api) {
   ];
 
   return {
+    ignore,
     presets,
     plugins,
   };
