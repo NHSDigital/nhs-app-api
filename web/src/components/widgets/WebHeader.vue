@@ -76,8 +76,8 @@ export default {
     return {
       helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
       links: [
-        { name: 'Account', value: ACCOUNT.path },
-        { name: 'Log out', value: LOGOUT.path },
+        { name: 'Account', value: ACCOUNT.path, id: 'account-link' },
+        { name: 'Log out', value: LOGOUT.path, id: 'account-logout' },
       ],
       showMenuButton: false,
     };

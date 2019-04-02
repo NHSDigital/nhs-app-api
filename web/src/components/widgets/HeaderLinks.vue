@@ -1,7 +1,9 @@
 <template>
   <div v-if="anchorLinks.length>0" :class="$style['header-links']">
     <span v-for="(anchorLink, index) in anchorLinks" :key="index">
-      <nuxt-link :to="anchorLink.value" tabindex="0">
+      <nuxt-link :id="anchorLink.id"
+                 :to="anchorLink.value"
+                 tabindex="0">
         {{ anchorLink.name }}
       </nuxt-link>
       <b v-if="index<anchorLinks.length-1" aria-hidden="true">

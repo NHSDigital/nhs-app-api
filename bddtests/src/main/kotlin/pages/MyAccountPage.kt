@@ -14,8 +14,9 @@ class MyAccountPage : HybridPageObject() {
     private val nhsNumberPath = "//p//*[@data-sid='user-nhs-number']"
 
     val signOutButton = HybridPageElement(
-            webDesktopLocator = "//button[@id='signout-button']",
-            androidLocator = null,
+            webDesktopLocator = "//a[@id='account-logout']",
+            iOSLocator="//button[@id='signout-button']",
+            androidLocator = "//button[@id='signout-button']",
             page = this
     )
 

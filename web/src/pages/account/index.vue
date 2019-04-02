@@ -1,5 +1,7 @@
 <template xmlns:v-if="http://www.w3.org/1999/xhtml">
-  <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
+  <div v-if="showTemplate"
+       :class="[$style['no-padding'],
+                'pull-content', !$store.state.device.isNativeApp && $style.desktopWeb]">
     <h2>{{ $t('myAccount.detailsHeading') }}</h2>
     <div :class="$style.welcomeSectionContainer">
       <welcome-section :name="$store.state.session.user"
@@ -19,43 +21,43 @@
       </ul>
     </div>
     <h2>{{ $t('myAccount.aboutUsHeading') }}</h2>
-    <ul :class="$style['list-menu']">
-      <li>
+    <ul :class="[$style['list-menu'], $style.myAccountList]">
+      <li :class="$style.listMenuItem">
         <analytics-tracked-tag id="btn_terms" :href="$store.app.$env.TERMS_AND_CONDITIONS_URL"
                                :text="$t('myAccount.termsAndConditions')"
                                tag="a" target="_blank">
           {{ $t('myAccount.termsAndConditions') }}
         </analytics-tracked-tag>
       </li>
-      <li>
+      <li :class="$style.listMenuItem">
         <analytics-tracked-tag id="btn_privacy" :href="$store.app.$env.PRIVACY_POLICY_URL"
                                :text="$t('myAccount.privacyPolicy')"
                                tag="a" target="_blank">
           {{ $t('myAccount.privacyPolicy') }}
         </analytics-tracked-tag>
       </li>
-      <li>
+      <li :class="$style.listMenuItem">
         <analytics-tracked-tag id="btn_cookies" :href="$store.app.$env.COOKIES_POLICY_URL"
                                :text="$t('myAccount.cookiesPolicy')"
                                tag="a" target="_blank">
           {{ $t('myAccount.cookiesPolicy') }}
         </analytics-tracked-tag>
       </li>
-      <li>
+      <li :class="$style.listMenuItem">
         <analytics-tracked-tag id="btn_openSource" :href="$store.app.$env.OPEN_SOURCE_LICENCES_URL"
                                :text="$t('myAccount.openSourceLicences')"
                                tag="a" target="_blank">
           {{ $t('myAccount.openSourceLicences') }}
         </analytics-tracked-tag>
       </li>
-      <li>
+      <li :class="$style.listMenuItem">
         <analytics-tracked-tag id="btn_help" :href="$store.app.$env.HELP_AND_SUPPORT_URL"
                                :text="$t('myAccount.helpAndSupport')"
                                tag="a" target="_blank">
           {{ $t('myAccount.helpAndSupport') }}
         </analytics-tracked-tag>
       </li>
-      <li>
+      <li :class="$style.listMenuItem">
         <analytics-tracked-tag id="btn_accessibility"
                                :href="$store.app.$env.ACCESSIBILITY_STATEMENT"
                                :text="$t('myAccount.accessibilityStatement')"
@@ -76,8 +78,10 @@
     <analytics-tracked-tag :text="$t('signOutButton.signOut')"
                            data-purpose="button">
       <form action="account/signout" method="post">
-        <floating-button-bottom id="signout-button" type="submit"
-                                @click="signout">
+        <floating-button-bottom
+          v-if="$store.state.device.isNativeApp"
+          id="signout-button" type="submit"
+          @click="signout">
           {{ $t('signOutButton.signOut') }}
         </floating-button-bottom>
       </form>
@@ -127,8 +131,10 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
+  @import "../../style/accessibility";
 @import "../../style/listmenu";
 @import "../../style/colours";
+  @import "../../style/webshared";
 .no-padding {
   margin-top: -0.5em;
   margin-left: -1em;
@@ -143,4 +149,17 @@ export default {
 .welcomeSectionContainer{
  margin-left: 1em;
 }
+
+.myAccountList {
+  @include inner-container-width;
+
+  .listMenuItem {
+      font-family: $default-web;
+      font-weight: lighter;
+      a {
+        @extend .focusBorder;
+      }
+  }
+}
+
 </style>
