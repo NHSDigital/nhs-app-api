@@ -1,6 +1,7 @@
 <template>
   <a :class="$style.desktopBackLink"
      :href="path"
+     data-purpose="main-back-button"
      @click.prevent="$emit('clickAndPrevent', $event)">
     {{ $t(getBackButtonText) }}</a>
 </template>

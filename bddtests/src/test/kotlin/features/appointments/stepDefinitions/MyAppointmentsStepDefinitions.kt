@@ -33,7 +33,7 @@ class MyAppointmentsStepDefinitions {
 
     @When("^I select a \"Back\" link$")
     fun iSelectABackLink() {
-        myAppointmentsUISteps.myAppointmentsPage.clickOnLinkContainingText("Back")
+        myAppointmentsUISteps.myAppointmentsPage.clickDesktopBackButton()
     }
 
     @Then("^the Appointment Slot page is displayed$")

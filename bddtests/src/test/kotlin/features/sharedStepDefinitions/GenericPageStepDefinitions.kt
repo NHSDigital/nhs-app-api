@@ -20,4 +20,10 @@ class GenericPageStepDefinitions {
         genericPage.waitForSpinnerToDisappear(TIMEOUT_PLUS_ONE_SECOND)
         genericPage.clickOnLinkContainingText(linkText)
     }
+
+    @When("^I click the Back link$")
+    fun iClickTheBackLink() {
+        genericPage.waitForSpinnerToDisappear(TIMEOUT_PLUS_ONE_SECOND)
+        genericPage.clickOnBackLink()
+    }
 }

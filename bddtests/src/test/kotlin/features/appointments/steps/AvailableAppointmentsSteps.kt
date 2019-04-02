@@ -85,7 +85,7 @@ open class AvailableAppointmentsSteps {
 
     @Step
     fun clickOnBackLink() {
-        availableAppointmentsPage.clickOnLinkContainingText(backComponentText)
+        availableAppointmentsPage.clickDesktopBackButton()
     }
 
     @Step

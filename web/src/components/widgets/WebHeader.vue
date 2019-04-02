@@ -18,6 +18,9 @@
         <header-menu v-if="showMenu" />
       </span>
     </header>
+
+    <bread-crumb-trail :routes="currentBreadCrumbs"/>
+
     <div :class="$style.headerLowerSection">
       <page-title v-if="!isLoginPage"
                   :should-show-desktop-version="!$store.state.device.isNativeApp"/>
@@ -28,17 +31,26 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import { executeHomeNavigationRule, ACCOUNT, APPOINTMENT_BOOKING_GUIDANCE, INDEX, LOGIN, LOGOUT } from '@/lib/routes';
-import { redirectTo } from '@/lib/utils';
+import {
+  executeHomeNavigationRule,
+  getCrumbTrailForRoute,
+  findByName,
+
+  ACCOUNT,
+  LOGIN,
+  LOGOUT,
+} from '@/lib/routes';
 import HeaderLinks from '@/components/widgets/HeaderLinks';
 import HeaderMenu from '@/components/widgets/HeaderMenu';
 import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
 import HomeLink from './HomeLink';
 import PageTitle from './PageTitle';
 import CookieBanner from '../CookieBanner';
+import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
 
 export default {
   components: {
+    BreadCrumbTrail,
     HomeLink,
     HeaderLinks,
     HeaderMenu,
@@ -76,13 +88,16 @@ export default {
     return {
       helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
       links: [
-        { name: 'Account', value: ACCOUNT.path, id: 'account-link' },
-        { name: 'Log out', value: LOGOUT.path, id: 'account-logout' },
+        { name: this.$t('webHeader.links.account'), value: ACCOUNT.path, id: 'account-link' },
+        { name: this.$t('webHeader.links.logout'), value: LOGOUT.path, id: 'account-logout' },
       ],
       showMenuButton: false,
     };
   },
   computed: {
+    currentBreadCrumbs() {
+      return getCrumbTrailForRoute(findByName(this.$route.name));
+    },
     isLoginPage() {
       return this.$route.name === LOGIN.name;
     },

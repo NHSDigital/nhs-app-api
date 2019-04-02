@@ -9,11 +9,11 @@ import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.support.ui.FluentWait
+import pages.sharedElements.BannerObject
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
 import java.time.Duration
-import pages.sharedElements.BannerObject
 
 const val DEFAULT_VISIBILITY_WAIT: Long = 300
 const val DEFAULT_SPINNER_WAIT: Long = 4000
@@ -151,6 +151,13 @@ open class HybridPageObject : PageObject() {
                 page = this
         )
                 .withText(text, false).assertIsVisible().click()
+    }
+
+    fun clickOnBackLink() {
+        HybridPageElement(
+                webDesktopLocator = "//a[@data-purpose='main-back-button']",
+                page = this
+        ).click()
     }
 
     fun WebElementFacade.getTextWithoutUnicodeSuffix(): String{

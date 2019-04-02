@@ -107,6 +107,15 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
+    private val desktopBackLink = HybridPageElement(
+            webDesktopLocator = "//a[@data-purpose='main-back-button']",
+            page = this
+    )
+
+    fun clickDesktopBackButton() {
+        desktopBackLink.click()
+    }
+
     fun selectSlot(date: String, time: String, sessionName: String?) {
         timeSlotForDateTimeSession(date, time, sessionName)
                 .assertSingleElementPresent()
