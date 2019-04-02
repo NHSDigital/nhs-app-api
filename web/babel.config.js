@@ -1,4 +1,4 @@
-module.exports = function (api) {
+module.exports = (api) => {
   if (api) {
     api.cache(true);
   }
@@ -26,6 +26,7 @@ module.exports = function (api) {
   ];
 
   const plugins = [
+    ['@babel/plugin-syntax-dynamic-import'],
     ['@babel/plugin-transform-runtime',
       {
         helpers: true,

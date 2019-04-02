@@ -1,4 +1,3 @@
-import consola from 'consola';
 import cookieBanner from './modules/cookieBanner';
 import header from './modules/header';
 import pageTitle from './modules/pageTitle';
@@ -47,6 +46,11 @@ export const actions = {
   async nuxtServerInit({ dispatch }, { req }) {
     const authCookie = this.$cookies.get('nhso.auth');
     if (process.server) {
+      /*
+      disabled the eslint global-require as consola should only be imported when running on server
+      babel doesn't transpile the library code to es5 (for ie 11) when imports on client
+      */
+      const consola = require('consola'); // eslint-disable-line global-require
       const { redirectUri, codeVerifier } = authCookie || {};
       consola.info(`Auth Cookie values for request: ${req.url}: redirectUri: ${redirectUri}, codeVerifier: ${codeVerifier}`);
     }

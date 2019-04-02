@@ -8,6 +8,9 @@ const config = {
         maxChunks: 4,
       }),
     ],
+    babel: {
+      babelrc: true,
+    },
   },
   head: {
     meta: [
