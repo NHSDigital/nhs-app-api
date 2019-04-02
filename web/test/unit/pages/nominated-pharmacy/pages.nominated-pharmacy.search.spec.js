@@ -1,0 +1,89 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import SearchPharmacies from '@/pages/nominated-pharmacy/search';
+import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
+import { createStore, mount, $t } from '../../helpers';
+
+const $style = {};
+
+const createState = () => ({
+  nominatedPharmacy: initialState(),
+  device: {
+    source: 'web',
+  },
+});
+
+const createHttp = () => ({
+  getV1PatientPharmacies: jest.fn(),
+});
+
+const mountPage = ({ $http, $state = createState(), $store }) =>
+  mount(
+    SearchPharmacies,
+    { $http, $store: ($store || createStore({ $http, $state })), $style, $t },
+  );
+
+describe('search pharmacies', () => {
+  let $store;
+  let $http;
+  let page;
+  let searchPharmaciesPage;
+
+  beforeEach(() => {
+    $http = createHttp();
+    $store = createStore({ $http, state: createState() });
+    page = mountPage({ $store, $http });
+    searchPharmaciesPage = page.find(SearchPharmacies);
+  });
+
+  it('will exist', () => {
+    expect(searchPharmaciesPage.exists()).toBe(true);
+  });
+
+  it('will translate the line text', () => {
+    expect($t).toHaveBeenCalledWith('searchNominatedPharmacy.line1');
+    expect($t).toHaveBeenCalledWith('searchNominatedPharmacy.line2');
+  });
+
+  describe('when pharmacies are found', () => {
+    it('sets noResultsFound to false and handles response', async () => {
+      // arrange
+      const testPostcode = 'rg1';
+      const testPharmacies = [{ pharmacyName: 'boots' }];
+
+      $http.getV1PatientPharmacies.mockResolvedValue(testPharmacies);
+
+      const expectedRequest = { postcode: testPostcode };
+      const expectedResult = {
+        noResultsFound: false,
+        pharmacies: testPharmacies,
+        technicalError: false,
+      };
+
+      // act
+      const result = await page.vm.searchForPharmacies(testPostcode);
+
+      // assert
+      expect(result).not.toBeNull();
+      expect(result).toEqual(expectedResult);
+      expect($http.getV1PatientPharmacies).toHaveBeenCalledWith(expectedRequest);
+    });
+  });
+
+  describe('when pharmacies are not found', () => {
+    it('sets noResultsFound to true and handles response', async () => {
+      // arrange
+      $http.getV1PatientPharmacies.mockResolvedValue([]);
+      const testPostcode = 'rg1';
+      const expectedRequest = { postcode: testPostcode };
+      const expectedResult = { noResultsFound: true, pharmacies: [], technicalError: false };
+
+      // act
+      const result = await page.vm.searchForPharmacies(testPostcode);
+
+      // assert
+      expect(result).not.toBeNull();
+      expect(result).toEqual(expectedResult);
+      expect($http.getV1PatientPharmacies).toHaveBeenCalledWith(expectedRequest);
+    });
+  });
+});

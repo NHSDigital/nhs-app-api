@@ -5,9 +5,15 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
     public interface IGpLookupConfig
     {         
         Uri NhsSearchBaseUrl { get; }
+
         int GpLookupApiResultsLimit { get; }
+
         int PharmacySearchApiLimit { get; }
+
         string GpLookupApiKey { get; }
+
         string PostcodeLookupSearchRadiusKm { get; }
+
+        string PharmacySearchRadiusKm { get; }
     }
 }

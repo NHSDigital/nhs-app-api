@@ -75,6 +75,13 @@
 		p {
 			margin-bottom: 0;
 		}
+
+		&.link {
+			padding: 0em;
+			a {
+				padding: 1em 3em 1em 1em;
+			}
+		}
 	}
 }
 
@@ -86,6 +93,6 @@ ul.list-menu-white {
 	@include ul-list-menu;
 	li {
 		background: $white url(~assets/icon_arrow_left.svg) no-repeat center right 12px;
-		padding: 0.50em 1em 0.50em 1em;
+		padding: 1em;
 	}
 }

@@ -5,7 +5,7 @@
                                     !$store.state.device.isNativeApp && $style.desktopWeb]" >
     <glossary-header v-if="hasLoaded"/>
     <ul :class="$style['list-menu-white']" role="list">
-      <li role="link">
+      <li :class="$style.link" role="link">
         <analytics-tracked-tag
           id="btn_choices" :click-func="onNominatedPharmacyDetailClicked"
           :class="$style['no-decoration']"

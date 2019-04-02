@@ -6,31 +6,37 @@
       </h2>
       <p> {{ foundNoResults }} </p>
     </div>
-    <ul v-if="!noResultsFound" id="searchResults" :class="$style['list-menu']">
+    <div v-if="!noResultsFound">
       <h2>{{ foundResults }}</h2>
       <p>{{ $t('nominatedPharmacySearchResults.resultSummary.showingAll') }}</p>
-      <li v-for="pharmacy in pharmacies" :key="`pharmacy-${pharmacy.odsCode}`">
-        <analytics-tracked-tag :id="`btnPharmacy-${pharmacy.odsCode}`"
-                               :class="$style['no-decoration']"
-                               text="Pharmacy"
-                               tag="a"
-                               href="#"
-                               @click.native="pharmacyPracticeClicked(pharmacy)">
-          <span :class="$style.fieldName">
-            {{ pharmacy.pharmacyName }}
-          </span>
-          <p>
-            {{ pharmacy.formattedAddress = formatAddress(pharmacy) }}
-          </p>
-          <p v-if="pharmacy.telephoneNumber">
-            {{ pharmacy.telephoneNumber }}
-          </p>
-          <p v-if="pharmacy.distance !== null">
-            {{ formatDistance(pharmacy.distance) }}
-          </p>
-        </analytics-tracked-tag>
-      </li>
-    </ul>
+      <ul id="searchResults"
+          :class="[$style['list-menu-white'], $style.resultList]">
+        <li v-for="pharmacy in pharmacies"
+            :key="`pharmacy-${pharmacy.odsCode}`"
+            :class="$style.link">
+          <analytics-tracked-tag :id="`btnPharmacy-${pharmacy.odsCode}`"
+                                 text="Pharmacy"
+                                 tag="a"
+                                 href="#"
+                                 @click.native="pharmacyPracticeClicked(pharmacy)">
+            <div>
+              <p :class="$style.fieldName">
+                {{ pharmacy.pharmacyName }}
+              </p>
+              <p>
+                {{ pharmacy.formattedAddress = formatAddress(pharmacy) }}
+              </p>
+              <p v-if="pharmacy.telephoneNumber">
+                {{ pharmacy.telephoneNumber }}
+              </p>
+              <p v-if="pharmacy.distance !== null">
+                <b>{{ formatDistance(pharmacy.distance) }}</b>
+              </p>
+            </div>
+          </analytics-tracked-tag>
+        </li>
+      </ul>
+    </div>
     <analytics-tracked-tag :text="$t('nominatedPharmacySearchResults.backButton')">
       <generic-button :button-classes="['grey', 'button']" :class="$style.back"
                       tabindex="0" @click="backButtonClicked">
@@ -80,7 +86,6 @@ export default {
       if (this.noResultsFound) {
         header = this.$t('nominatedPharmacySearchResults.errors.noResultsFound.header');
       }
-
       return header;
     },
     getTitle() {
@@ -125,8 +130,16 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/listmenu';
-@import '../../style/headerslim';
-@import '../../style/buttons';
-@import '../../style/throttling/throttling';
-@import '../../style/throttling/gpfinderresults';
+@import "../../style/colours";
+
+.resultList {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.fieldName {
+   padding-bottom: 1rem;
+   color: $dark_grey;
+   font-weight: 700;
+}
 </style>

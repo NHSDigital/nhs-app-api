@@ -1258,7 +1258,7 @@ export default {
     pageTitle: 'Change my nominated pharmacy',
     line1: 'The pharmacy you choose is where your repeat prescription will be sent.',
     subHeader: 'Postcode',
-    line2: 'Find pharmacies within 5km of this postcode.',
+    line2: 'Find pharmacies within 5 miles of this postcode.',
     searchButton: 'Search',
     link1: 'See all internet pharmacies',
     link2: 'See all dispensing appliance contractors',
