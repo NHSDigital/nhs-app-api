@@ -72,6 +72,9 @@ namespace NHSOnline.Backend.PfsApi
         // Note that some service registration has now been moved into Module classes within the namespaces containing the services that they register, to avoid namespace dependency cycles.
         public void ConfigureServices(IServiceCollection services)
         {
+            /* Do not remove this line. This calls a static method to ensure all the necessary configuration values
+             are populated and valid */
+            ConfigurationSettings.GetSettings(Configuration);
             services.Configure<ConfigurationSettings>(
                 Configuration.GetSection(ConfigurationSettings.ConfigurationSectionName));
 
