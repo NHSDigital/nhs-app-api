@@ -9,7 +9,7 @@ import pages.sharedElements.MenuLinks
 open class OrganDonationOtherThingsModule(page :HybridPageObject) : MenuLinks(page, otherThingsContent) {
 
     fun assertOnlyBloodLinkPresent(){
-        assertPresentWithLinks(arrayOf(Pair(registerBloodDonorLinkTitle, registerBloodDonorLinkDescription)))
+        assertLinksPresent(registerBloodDonorLinkTitle)
     }
 
     fun registerBloodDonorLinkClick() {

@@ -1,6 +1,9 @@
 <template>
   <div :class="getStyleClasses">
-    <div :class="$style.clickme" tabindex="-1" @click="onClick" @keypress="onKeyDown">
+    <div :class="$style.clickme"
+         aria-hidden="true"
+         @click="onClick"
+         @keypress="onKeyDown">
       <checked-icon :id="`${checkboxId}-icon`" :selected="selected"/>
     </div>
     <input :id="checkboxId"
@@ -8,7 +11,6 @@
            v-tabbing="[this.$style.form, this.$style['checkbox-panel']]"
            :checked="selected"
            :class="[this.$style.form, this.$style.checkbox, this.$style['sr-only']]"
-           :aria-labelledby="aLabelledBy"
            type="checkbox"
            @change="onChange">
     <label :id="`${checkboxId}-label`" :for="checkboxId">
@@ -30,10 +32,6 @@ export default {
   },
   mixins: [TabFocusMixin.tabMixin],
   props: {
-    aLabelledBy: {
-      type: String,
-      default: '',
-    },
     checkboxId: {
       type: String,
       default: 'checkbox',

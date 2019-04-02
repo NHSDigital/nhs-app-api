@@ -56,7 +56,7 @@ open class OrganDonationViewRegistrationStepDefinitions {
         organDonationViewRegistrationPage.assertCreatedBanner()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsNo()
         organDonationViewRegistrationPage.otherThings.assertLinksPresent()
-        organDonationViewRegistrationPage.nextSteps.assertDisplayedWithText()
+        organDonationViewRegistrationPage.nextSteps.assertOnlyTellFamilyLinkPresent()
         organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
     }
 
@@ -150,7 +150,7 @@ open class OrganDonationViewRegistrationStepDefinitions {
     fun theOrganDonationPageIsDisplayedWithMyExistingDecisionToOptOut() {
         organDonationViewRegistrationPage.assertDisplayed()
         organDonationViewRegistrationPage.otherThings.assertLinksPresent()
-        organDonationViewRegistrationPage.nextSteps.assertDisplayedWithText()
+        organDonationViewRegistrationPage.nextSteps.assertOnlyTellFamilyLinkPresent()
         organDonationViewRegistrationPage.decisionModule.assertDecisionIsNo()
         organDonationViewRegistrationPage.assertFaithTextIsNotPresent()
     }

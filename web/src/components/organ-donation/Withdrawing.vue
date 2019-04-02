@@ -4,7 +4,6 @@
     <p>
       {{ $t('organDonation.reviewYourDecision.withdraw.body') }}
     </p>
-    <hr :class="$style.rule" aria-hidden="true">
   </div>
 </template>
 

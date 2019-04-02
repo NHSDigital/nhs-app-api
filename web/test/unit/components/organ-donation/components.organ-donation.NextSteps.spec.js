@@ -4,10 +4,10 @@ import { createStore, mount } from '../../helpers';
 describe('next steps component', () => {
   let wrapper;
   let $store;
+  const TELL_FAMILY_URL = 'www.foo.com';
 
   describe('opt in', () => {
     const SHARE_DECISION_URL = 'www.boo.com';
-    const TELL_FAMILY_URL = 'www.foo.com';
     beforeEach(() => {
       $store = createStore({
         $env: {
@@ -64,6 +64,11 @@ describe('next steps component', () => {
 
   describe('opt out', () => {
     beforeEach(() => {
+      $store = createStore({
+        $env: {
+          ORGAN_DONATION_TELL_FAMILY_URL: TELL_FAMILY_URL,
+        },
+      });
       wrapper = mount(NextSteps, {
         $store,
         propsData: { isOptInDecision: false },
@@ -74,12 +79,24 @@ describe('next steps component', () => {
       expect(wrapper.find('#btn_shareDecision').exists()).toBe(false);
     });
 
-    it('tell family link will not exist', () => {
-      expect(wrapper.find('#btn_tellFamily').exists()).toBe(false);
-    });
+    describe('tell family link', () => {
+      let tellFamilyLink;
 
-    it('will display text from organDonation.nextSteps.optOutText', () => {
-      expect(wrapper.text()).toEqual('translate_organDonation.viewDecision.nextSteps.subheader translate_organDonation.viewDecision.nextSteps.optOutText');
+      beforeEach(() => {
+        tellFamilyLink = wrapper.find('#btn_tellFamily');
+      });
+
+      it('will exist', () => {
+        expect(tellFamilyLink.exists()).toBe(true);
+      });
+
+      it('will have target set to blank', () => {
+        expect(tellFamilyLink.attributes().target).toEqual('_blank');
+      });
+
+      it('will go to share decision external url', () => {
+        expect(tellFamilyLink.attributes().href).toEqual(TELL_FAMILY_URL);
+      });
     });
   });
 });

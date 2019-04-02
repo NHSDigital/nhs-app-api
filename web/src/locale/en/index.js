@@ -835,7 +835,7 @@ export default {
         all: 'I want to donate all my organs and tissue.',
       },
       appointedRep: {
-        phoneLabel: 'To view, or change, your appointed representative call the organ donation line:',
+        phoneLabel: 'To check, or change, your appointed representative call the organ donation line:',
       },
       faithAndBeliefs: {
         Yes: 'When I die, I would like NHS staff to speak with my family (and anyone else appropriate) about how organ donation can go ahead in line with my faith and beliefs.',
@@ -938,7 +938,7 @@ export default {
     },
     stillYourDecision: {
       subheader: 'Is this still your decision?',
-      text: 'Keeping your registration up to date will help your family should organ donation be possible.',
+      text: 'Keeping your registration up to date will help your family, should organ donation be possible.',
     },
     viewDecision: {
       conflictedState: {

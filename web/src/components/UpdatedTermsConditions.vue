@@ -38,7 +38,6 @@
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
       <generic-checkbox v-model="areTermsAccepted"
-                        :a-labelled-by="getAriaLabel"
                         checkbox-id="termsAndConditions-agree_checkbox">
         <span :class="$style.termsAndConditionsCaption">
           {{ $t('updatedTermsAndConditions.checkBoxText1') }}
@@ -90,13 +89,6 @@ export default {
       areTermsAccepted: false,
       hasTriedToContinue: false,
     };
-  },
-  computed: {
-    getAriaLabel() {
-      return this.hasTriedToContinue && !this.areTermsAccepted ?
-        'error_msg termsAndConditions-agree_checkbox-label'
-        : 'termsAndConditions-agree_checkbox-label';
-    },
   },
   methods: {
     stopProp(event) {

@@ -1,7 +1,6 @@
 package pages.sharedElements
 
 import org.junit.Assert
-import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertElementNotPresent
@@ -35,27 +34,10 @@ open class MenuLinks(private val page : HybridPageObject, val content : MenuLink
         )
     }
 
-    fun assertDisplayedWithText() {
-        val section = container.assertSingleElementPresent()
-        val text = section.element.findElements(By.ByXPath("./*"))
-                .map { element -> element.text }.toTypedArray()
-        val expectedText = arrayOf(content.title, content.textOverride)
-        Assert.assertArrayEquals("expected values in section", expectedText, text)
-    }
+    fun assertLinksPresent(vararg titles: String) {
+        val links = filterLinksByTitle(titles)
 
-    fun assertLinksPresent() {
-        assertPresentWithLinks(content.links)
-    }
-
-    fun assertPresentWithLinks(expectedLinks: Array<Pair<String, String>>) {
-        val links = listOfLinks().elements
-        Assert.assertEquals("Number of expected Links",
-                expectedLinks.count(),
-                links.count())
-        expectedLinks.forEach { link ->
-            link(link.first).assertSingleElementPresent()
-            assertDescription(link.first, link.second)
-        }
+        assertPresentWithLinks(links)
     }
 
     fun link(linkTitle: String): HybridPageElement {
@@ -89,5 +71,26 @@ open class MenuLinks(private val page : HybridPageObject, val content : MenuLink
         Assert.assertEquals("Description Body",
                 description,
                 body.assertSingleElementPresent().element.text)
+    }
+
+    private fun filterLinksByTitle(titles: Array<out String>): Array<Pair<String, String>>{
+        if (titles.any()) {
+            return content.links
+                    .filter { link -> titles.any { title -> title == link.first } }
+                    .toTypedArray()
+        }
+
+        return content.links
+    }
+
+    private fun assertPresentWithLinks(expectedLinks: Array<Pair<String, String>>) {
+        val links = listOfLinks().elements
+        Assert.assertEquals("Number of expected Links",
+                expectedLinks.count(),
+                links.count())
+        expectedLinks.forEach { link ->
+            link(link.first).assertSingleElementPresent()
+            assertDescription(link.first, link.second)
+        }
     }
 }

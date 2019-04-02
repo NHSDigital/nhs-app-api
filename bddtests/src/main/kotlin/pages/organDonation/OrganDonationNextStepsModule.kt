@@ -16,6 +16,10 @@ open class OrganDonationNextStepsModule(page :HybridPageObject) : MenuLinks(page
         link(tellFamilyLinkTitle).click()
     }
 
+    fun assertOnlyTellFamilyLinkPresent() {
+        assertLinksPresent(tellFamilyLinkTitle)
+    }
+
     companion object {
 
         private const val shareLinkTitle ="Share that you are a donor"
@@ -27,9 +31,8 @@ open class OrganDonationNextStepsModule(page :HybridPageObject) : MenuLinks(page
 
         private var nextStepsContent = MenuLinksContent(
                 title = "Next steps",
-                links = arrayOf(Pair(shareLinkTitle, shareLinkDescription),
-                        Pair(tellFamilyLinkTitle, tellFamilyLinkDescription)),
-                textOverride = "Please inform your family about your decision.",
+                links = arrayOf(Pair(tellFamilyLinkTitle, tellFamilyLinkDescription),
+                        Pair(shareLinkTitle, shareLinkDescription)),
                 linkStyling = "h3")
     }
 }

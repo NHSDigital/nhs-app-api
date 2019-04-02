@@ -45,7 +45,6 @@
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
       <generic-checkbox v-model="areTermsAccepted"
-                        :a-labelled-by="getAcceptTermsCheckboxLabel"
                         checkbox-id="termsAndConditions-agree_checkbox">
         <span :class="$style.termsAndConditionsCaption">
           {{ $t('termsAndConditions.checkBoxText1') }}
@@ -72,7 +71,6 @@
       </generic-checkbox>
     </div>
     <generic-checkbox v-model="isAnalyticsCookieAccepted"
-                      :a-labelled-by="'analyticsCookie-agree_analyticsCookieCheckbox-label'"
                       checkbox-id="analyticsCookie-agree_analyticsCookieCheckbox">
       {{ $t('termsAndConditions.analyticsCookieCheckBoxText') }}
     </generic-checkbox>
@@ -109,13 +107,6 @@ export default {
       isAnalyticsCookieAccepted: false,
       hasTriedToContinue: false,
     };
-  },
-  computed: {
-    getAcceptTermsCheckboxLabel() {
-      return this.hasTriedToContinue && !this.areTermsAccepted ?
-        'error_msg termsAndConditions-agree_checkbox-label'
-        : 'termsAndConditions-agree_checkbox-label';
-    },
   },
   methods: {
     stopProp(event) {
