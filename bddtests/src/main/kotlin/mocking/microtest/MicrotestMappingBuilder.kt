@@ -30,4 +30,10 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
             andJsonBody("")
         }
     }
+
+    fun respondWithInternalServerError(): Mapping {
+        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+            andJsonBody("")
+        }
+    }
 }

@@ -82,7 +82,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.Name.Title.Should().Be(response.NameParts.Title);
             result.AddressFull.Should().Be(response.Address);
             result.Address.Should().NotBeNull();
-            result.Address.Text.Should().Be(response.AddressParts.Text);
+            result.Address.HouseName.Should().Be(response.AddressParts.HouseName);
+            result.Address.NumberStreet.Should().Be(response.AddressParts.NumberStreet);
+            result.Address.Village.Should().Be(response.AddressParts.Village);
+            result.Address.Town.Should().Be(response.AddressParts.Town);
+            result.Address.County.Should().Be(response.AddressParts.County);
             result.Address.PostCode.Should().Be(response.AddressParts.Postcode);
             result.DateOfBirth.Should().Be(response.DateOfBirth);
             result.NhsNumber.Should().Be(response.NhsNumber);
@@ -222,9 +226,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             result.Name.Surname.Should().Be(registration.Name.Surname);
             result.Name.Title.Should().Be(registration.Name.Title);
             result.AddressFull.Should().Be(registration.AddressFull);
-            result.Address.Should().NotBeNull();
-            result.Address.Text.Should().Be(registration.Address.Text);
-            result.Address.PostCode.Should().Be(registration.Address.PostCode);
+            result.Address.Should().BeEquivalentTo(registration.Address);
             result.DateOfBirth.Should().Be(registration.DateOfBirth);
             result.NhsNumber.Should().Be(registration.NhsNumber);
             result.Gender.Should().Be(registration.Gender);

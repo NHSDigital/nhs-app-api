@@ -29,6 +29,7 @@ Feature: Organ Donation
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A user can select '<Option>' for faith and belief sharing when opting to donate all their organs
     Given I am a EMIS user not registered with organ donation, who wishes to opt in with '<Option>' faith decision
@@ -80,6 +81,7 @@ Feature: Organ Donation
       | GP System |
       | EMIS      |
       | TPP       |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user can opt to donate some of their organs
     Given I am a <GP System> user not registered with organ donation, who wishes to register and donate some organs
@@ -112,6 +114,7 @@ Feature: Organ Donation
       | GP System |
       | EMIS      |
       | VISION    |
+      | MICROTEST |
 
   Scenario: A user can choose to record their ethnicity and religion when opting out of organ donation
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out

@@ -90,8 +90,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Demographics
                           $"{item.Address.Town}, {item.Address.County}, {item.Address.Postcode}",
                 AddressParts = new DemographicsAddress
                 {
-                    Text = $"{item.Address.HouseNameFlatNumber}, {item.Address.NumberStreet}, {item.Address.Village}, " +
-                           $"{item.Address.Town}, {item.Address.County}",
+                    HouseName = item.Address.HouseNameFlatNumber,
+                    NumberStreet = item.Address.NumberStreet,
+                    Village = item.Address.Village,
+                    Town = item.Address.Town,
+                    County = item.Address.County,
                     Postcode = item.Address.Postcode
                 },
                 NameParts = new DemographicsName
@@ -153,8 +156,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Demographics
                           $"{item.Address.Town}, {item.Address.County}, {item.Address.Postcode}",
                 AddressParts = new DemographicsAddress
                 {
-                    Text = $"{item.Address.HouseNameFlatNumber}, {item.Address.NumberStreet}, {item.Address.Village}, " +
-                           $"{item.Address.Town}, {item.Address.County}",
+                    HouseName = item.Address.HouseNameFlatNumber,
+                    NumberStreet = item.Address.NumberStreet,
+                    Village = item.Address.Village,
+                    Town = item.Address.Town,
+                    County = item.Address.County,
                     Postcode = item.Address.Postcode
                 },
                 NameParts = new DemographicsName

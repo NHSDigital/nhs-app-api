@@ -30,10 +30,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
                 DateOfBirth = patientDemographics.DateOfBirth,
                 Sex = patientDemographics.Gender?.Text,
                 NhsNumber = nhsNumber,
-                Address = formattedAddress?.FullText,
+                Address = formattedAddress?.ToString(),
                 AddressParts = new DemographicsAddress
                 {
-                    Text = formattedAddress?.NoPostcodeText,
+                    HouseName = formattedAddress?.HouseName,
+                    NumberStreet = formattedAddress?.HouseNumberStreet,
+                    Town = formattedAddress?.Town,
+                    County = formattedAddress?.County,
                     Postcode = formattedAddress?.Postcode
                 },
                 NameParts = new DemographicsName
@@ -77,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
         {
             return !string.IsNullOrEmpty(text)
                 ? UkCultureTextInfo.ToTitleCase(UkCultureTextInfo.ToLower(text))
-                : string.Empty;
+                : null;
         }
 
         private static string FormatHouseNumberAndStreet(string houseNumber, string street)
@@ -99,10 +102,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
 
             public string Postcode { get; set; }
 
-            public string NoPostcodeText => JoinNotNull(", ", HouseName, HouseNumberStreet,
-                Town, County);
-
-            public string FullText => JoinNotNull(", ", NoPostcodeText, Postcode);
+            public override string ToString() => JoinNotNull(", ",  HouseName, HouseNumberStreet,
+                Town, County, Postcode);
         }
     }
 }

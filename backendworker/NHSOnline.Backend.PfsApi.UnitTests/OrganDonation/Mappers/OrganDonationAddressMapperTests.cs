@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -101,36 +102,64 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         public void MapToOrganDonationAddress_WhenPassingBothAddresss_UseSplitAddress()
         {
             // Arrange
-            var address = _fixture.Create<NHSOnline.Backend.PfsApi.OrganDonation.Models.Address>();
+            var address = new NHSOnline.Backend.PfsApi.OrganDonation.Models.Address
+            {
+                HouseName = "House name Split",
+                NumberStreet = "Street Split",
+                Village = "Village Split",
+                Town = "Town Split",
+                County = "County Split",
+                PostCode = "EC1A 1BB"
+            };
             
             // Act 
             var result = _organDonationAddressMapper.Map("15 Street, Town, EC1A 1BB", address);
 
             // Assert
             result.Should().NotBeNull();
-            result.Line.Should().ContainSingle().Which.Should().Be(address.Text);
+            result.Line.Should().ContainInOrder(address.HouseName, address.NumberStreet, address.Village,
+                $"{address.Town}, {address.County}");
             result.PostalCode.Should().Be(address.PostCode);
         }
 
         
         [TestMethod]
-        [DataRow(null, null)]
-        [DataRow("18 Street, Town", null)]
-        [DataRow(null, "W1A 0AX")]
-        [DataRow("18 Street, Town", "W1A 0AX")]
-        public void MapToOrganDonationAddress_WhenPassingSplitAddress_MapAddress(string text, string postcode)
+        [DataRow("house name", "street", "village", "town", "county", "W1A 0AX", "house name", "street", "village", "town, county")]
+        [DataRow(null, "15 street", "village", "town", "county", "W1A 0AX", "15 street", "village", "town", "county")]
+        [DataRow(null, "15 street", null, "town", "county", "W1A 0AX", "15 street", "town", "county", null)]
+        [DataRow(null, "15 street", null, "town", null, "W1A 0AX", "15 street", "town", null, null)]
+        [DataRow("house name", null, null, null, null, "W1A 0AX", "house name", null, null, null)]
+        public void MapToOrganDonationAddress_WhenPassingSplitAddress_MapAddress(
+            string houseName,
+            string numberStreet,
+            string village,
+            string town,
+            string county,
+            string postcode,
+            string firstLine,
+            string secondLine,
+            string thirdLine,
+            string fourthLine)
         {
+            // Arrange
+            var expected = new[] { firstLine, secondLine, thirdLine, fourthLine }
+                .Where(s => !string.IsNullOrEmpty(s));
+            
             // Act 
             var result = _organDonationAddressMapper.Map(null,
                 new PfsApi.OrganDonation.Models.Address
                 {
-                    Text = text,
+                    HouseName = houseName,
+                    NumberStreet = numberStreet,
+                    Village = village,
+                    Town = town,
+                    County = county,
                     PostCode = postcode
                 });
 
             //Assert
             result.Should().NotBeNull();
-            result.Line.Should().ContainSingle().Which.Should().Be(text);
+            result.Line.Should().ContainInOrder(expected);
             result.PostalCode.Should().Be(postcode);
         }
     }

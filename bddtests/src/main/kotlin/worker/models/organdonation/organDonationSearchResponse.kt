@@ -21,7 +21,11 @@ data class Name(var title: String,
                 var givenName: String,
                 var surname: String)
 
-data class Address(var text: String,
+data class Address(var houseName: String,
+                   var numberStreet: String,
+                   var village: String,
+                   var town: String,
+                   var county: String,
                    var postCode: String)
 
 data class DecisionDetails(var all: Boolean,

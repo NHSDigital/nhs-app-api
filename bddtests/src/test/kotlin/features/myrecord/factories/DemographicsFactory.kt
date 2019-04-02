@@ -20,7 +20,8 @@ abstract class DemographicsFactory {
                     hashMapOf(
                             "EMIS" to { DemographicsFactoryEmis() },
                             "TPP" to { DemographicsFactoryTpp() },
-                            "VISION" to { DemographicsFactoryVision() })
+                            "VISION" to { DemographicsFactoryVision() },
+                            "MICROTEST" to { DemographicsFactoryMicrotest() })
                 }
     }
 }

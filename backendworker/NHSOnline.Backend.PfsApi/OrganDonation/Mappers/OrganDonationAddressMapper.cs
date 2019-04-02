@@ -8,7 +8,7 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
-    internal class OrganDonationAddressMapper : IMapper<string, Models.Address, ApiModels.Address>
+    internal class OrganDonationAddressMapper : IMapper<string, Models.Address, Address>
     {
         private static readonly Regex PostCodeRegex =
             new Regex(@"([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})");
@@ -58,12 +58,37 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             };
         }
 
-        private Address Map(OrganDonation.Models.Address address) => address != null
-            ? new Address
+        private Address Map(OrganDonation.Models.Address address)
+        {
+            if (address == null) return null;
+            
+            var parts = new List<string> {
+                    address.HouseName,
+                    address.NumberStreet,
+                    address.Village,
+                    address.Town,
+                    address.County
+                }
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .ToList();
+
+            var mappedAddress = new Address
             {
-                PostalCode = address.PostCode,
-                Line = new List<string> { address.Text }
+                PostalCode = address.PostCode
+            };
+
+            switch (parts.Count)
+            {
+                case int n when n > 4:
+                    mappedAddress.Line = new List<string>(parts.Take(3));
+                    mappedAddress.Line.Add(string.Join(", ", parts.Skip(3)));
+                    break;
+                default:
+                    mappedAddress.Line = parts;
+                    break;
             }
-            : null;
+
+            return mappedAddress;
+        }
     }
 }

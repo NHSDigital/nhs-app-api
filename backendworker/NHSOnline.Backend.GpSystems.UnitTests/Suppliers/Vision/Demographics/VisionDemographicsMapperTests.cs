@@ -75,7 +75,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
                 Address = "The Lodge, 12 Test Street, Test Town, L1 511",
                 AddressParts = new DemographicsAddress
                 {
-                    Text = "The Lodge, 12 Test Street, Test Town",
+                    HouseName = "The Lodge",
+                    NumberStreet = "12 Test Street",
+                    Town = "Test Town",
                     Postcode = "L1 511"
                 },
                 NameParts = new DemographicsName
@@ -116,7 +118,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
                 Address = "The Lodge, Test Street, L1 511",
                 AddressParts = new DemographicsAddress
                 {
-                    Text = "The Lodge, Test Street",
+                    HouseName = "The Lodge",
+                    NumberStreet = "Test Street",
                     Postcode = "L1 511"
                 },
                 NameParts = new DemographicsName
@@ -157,7 +160,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Demographics
                 Address = "The Lodge, 12 Test Street, L1 511",
                 AddressParts = new DemographicsAddress
                 {
-                    Text = "The Lodge, 12 Test Street",
+                    HouseName = "The Lodge",
+                    NumberStreet = "12 Test Street",
                     Postcode = "L1 511"
                 },
                 NameParts = new DemographicsName

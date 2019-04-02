@@ -41,7 +41,11 @@ const createRegistration = () => ({
   dateOfBirth: '',
   addressFull: '',
   address: {
-    text: '',
+    houseName: '',
+    numberStreet: '',
+    village: '',
+    town: '',
+    county: '',
     postcode: '',
   },
   emailAddress: '',

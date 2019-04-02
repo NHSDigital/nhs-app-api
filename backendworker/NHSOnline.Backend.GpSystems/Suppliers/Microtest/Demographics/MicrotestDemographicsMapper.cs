@@ -32,7 +32,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
                 Address = FullAddress(demographics),
                 AddressParts = new DemographicsAddress
                 {
-                    Text = FullAddress(demographics, AddressExclusion.Postcode),
+                    HouseName = demographics.HouseName,
+                    NumberStreet = demographics.RoadName,
+                    Village = demographics.Locality,
+                    Town = demographics.PostTown,
+                    County = demographics.County,
                     Postcode = demographics.Postcode
                 },
                 NameParts = new DemographicsName
@@ -57,7 +61,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
                     .Where(part => !string.IsNullOrEmpty(part)));
         }
 
-        private static string FullAddress(DemographicsData demographicsData, AddressExclusion? exclusion = null)
+        private static string FullAddress(DemographicsData demographicsData)
         {
             var addressParts = new List<string>
             {
@@ -65,11 +69,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
                 demographicsData.RoadName,
                 demographicsData.Locality,
                 demographicsData.PostTown,
-                demographicsData.County
+                demographicsData.County,
+                demographicsData.Postcode
             };
-
-            if (exclusion != AddressExclusion.Postcode)
-                addressParts.Add(demographicsData.Postcode);
 
             return string.Join(", ", addressParts.Where(part => !string.IsNullOrEmpty(part)));
         }

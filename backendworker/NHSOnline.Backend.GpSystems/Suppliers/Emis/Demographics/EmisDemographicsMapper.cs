@@ -31,7 +31,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
                 Address = demographicsGetResponse.Address?.ToString(),
                 AddressParts = new DemographicsAddress
                 {
-                    Text = demographicsGetResponse.Address?.ToString(AddressExclusion.Postcode),
+                    HouseName = demographicsGetResponse.Address?.HouseNameFlatNumber,
+                    NumberStreet = demographicsGetResponse.Address?.NumberStreet,
+                    Village = demographicsGetResponse.Address?.Village,
+                    Town = demographicsGetResponse.Address?.Town,
+                    County = demographicsGetResponse.Address?.County,
                     Postcode = demographicsGetResponse.Address?.Postcode
                 },
                 NameParts = new DemographicsName

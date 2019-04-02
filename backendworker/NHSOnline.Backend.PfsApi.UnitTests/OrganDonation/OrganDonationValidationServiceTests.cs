@@ -296,7 +296,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 Registration = new OrganDonationStoreRegistration
                 {
                     AddressFull = "Bridgewater Place, LS11 5BZ",
-                    Address = new Address { Text = "Bridgewater Place", PostCode = "LS11 5BZ" },
+                    Address = new Address { HouseName = "Bridgewater Place", PostCode = "LS11 5BZ" },
                     DateOfBirth = new DateTime(1990, 1, 1),
                     Identifier = "Test",
                     Name = new Name { GivenName = "Test", Surname = "User" },
@@ -420,7 +420,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             return new OrganDonationWithdrawRequest
             {
                 AddressFull = "Bridgewater Place, LS11 5BZ",
-                Address = new Address { Text = "Bridgewater Place", PostCode = "LS11 5BZ" },
+                Address = new Address { HouseName = "Bridgewater Place", PostCode = "LS11 5BZ" },
                 DateOfBirth = new DateTime(1990, 1, 1),
                 Identifier = "Test",
                 Name = new Name { GivenName = "Test", Surname = "User" },

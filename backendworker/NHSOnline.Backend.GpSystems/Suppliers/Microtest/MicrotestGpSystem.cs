@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
 
         public IDemographicsService GetDemographicsService()
         {
-            return _serviceProvider.GetService<MicrotestDemographicsService>();
+            return _serviceProvider.GetService<IMicrotestDemographicsService>();
         }
 
         public IIm1ConnectionService GetIm1ConnectionService()

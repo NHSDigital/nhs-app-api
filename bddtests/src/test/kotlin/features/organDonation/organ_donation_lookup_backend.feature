@@ -13,6 +13,7 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: When looking for a registration, a <GP System> user who opted in receives a 200 and donation details
     Given I am a <GP System> api user registered with organ donation to donate all organs
@@ -25,6 +26,7 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: When looking for a registration, a <GP System> user who opted in with some organs receives a 200
   and donation details
@@ -39,6 +41,7 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: When looking for a registration, a <GP System> user who has an appointed representative receives a 200
   and donation details
@@ -52,6 +55,7 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
 
   Scenario Outline: When looking for an organ donation registration, an unregistered <GP System> user receives a 200
@@ -67,6 +71,7 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: When looking for an organ donation registration but the system has a conflict, the <GP System>
   user receives a 200 response with state value of "conflicted"
@@ -132,6 +137,7 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: When looking for an organ donation registration but <GP System> times out when returning
   demographics, the user receives a 504 response
@@ -145,3 +151,4 @@ Feature: Organ Donation Lookup Backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |

@@ -58,7 +58,7 @@ Stop:
 ## Tests
 ``` bash
 # run unit tests
-npm run test-unit
+npm run test
 
 # run all tests
 npm test

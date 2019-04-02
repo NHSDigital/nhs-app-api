@@ -29,6 +29,7 @@ Feature: Organ Donation View
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate all
   their organs
@@ -42,6 +43,7 @@ Feature: Organ Donation View
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A <GP System> user registered with organ donation can view their existing decision to donate some
   of their organs
@@ -55,6 +57,7 @@ Feature: Organ Donation View
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario: A user registered to donate some organs can see which organs they have not yet decided on
     Given I am a EMIS user registered with organ donation to donate some organs, but not all are decided on
@@ -80,6 +83,7 @@ Feature: Organ Donation View
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: A user registered with organ donation can view their existing faith decision of <Option>
     Given I am a EMIS user registered with organ donation to donate all organs with a faith decision of '<Option>'
@@ -88,11 +92,11 @@ Feature: Organ Donation View
     Then the Organ Donation View Registration page is displayed
     And the decision to opt in to organ donation with all organs is displayed
     And the faith and beliefs decision of '<Option>' is displayed on the Organ Donation View Registration page
-  Examples:
-    | Option                            |
-    | Yes - this is applicable to me    |
-    | No - this is not applicable to me |
-    | Prefer not to say                 |
+    Examples:
+      | Option                            |
+      | Yes - this is applicable to me    |
+      | No - this is not applicable to me |
+      | Prefer not to say                 |
 
   Scenario: A user can navigate to the external 'Share my decision' page when viewing their registration
     Given I am a EMIS user registered with organ donation to donate all organs

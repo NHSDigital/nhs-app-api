@@ -21,6 +21,10 @@ Feature: Organ Donation Withdraw Backend
       | opt-in-some              | VISION      |
       | opt-out                  | VISION      |
       | appoint-a-representative | VISION      |
+      | opt-in                   | MICROTEST   |
+      | opt-in-some              | MICROTEST   |
+      | opt-out                  | MICROTEST   |
+      | appoint-a-representative | MICROTEST   |
 
   Scenario Outline: As a user, when I attempt to withdraw organ donation decision an OD response of <OD Response Code> will prompt a 502 response in the backend with a retry option
     Given I am a EMIS user registered with OD, but on attempting to withdraw decision OD returns <OD Response Code> error

@@ -882,9 +882,21 @@
                   type: "object"
                   description: "User's address from the GP System."
                   properties: 
-                    text: 
+                    houseName: 
                       type: "string"
-                      description: "User's address from the GP System."
+                      description: "User's house name from the GP System."
+                    numberStreet: 
+                      type: "string"
+                      description: "User's house number and street from the GP System."
+                    village: 
+                      type: "string"
+                      description: "User's village from the GP System."
+                    town: 
+                      type: "string"
+                      description: "User's town from the GP System."
+                    county: 
+                      type: "string"
+                      description: "User's county from the GP System."
                     postcode: 
                       type: "string"
                       description: "User's postcode from the GP System."

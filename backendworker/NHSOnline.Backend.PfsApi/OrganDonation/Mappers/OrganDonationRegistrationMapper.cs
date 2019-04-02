@@ -90,7 +90,11 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             var address = organDonationRegistration.Address != null
                 ? new Address
                 {
-                    Text = organDonationRegistration.Address.Text,
+                    HouseName = organDonationRegistration.Address.HouseName,
+                    NumberStreet = organDonationRegistration.Address.NumberStreet,
+                    Village = organDonationRegistration.Address.Village,
+                    Town = organDonationRegistration.Address.Town,
+                    County = organDonationRegistration.Address.County,
                     PostCode = organDonationRegistration.Address.PostCode
                 }
                 : null;
@@ -103,7 +107,11 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             var address = demographicsResponse.AddressParts != null
                 ? new Address
                 {
-                    Text = demographicsResponse.AddressParts.Text,
+                    HouseName = demographicsResponse.AddressParts.HouseName,
+                    NumberStreet = demographicsResponse.AddressParts.NumberStreet,
+                    Village = demographicsResponse.AddressParts.Village,
+                    Town = demographicsResponse.AddressParts.Town,
+                    County = demographicsResponse.AddressParts.County,
                     PostCode = demographicsResponse.AddressParts.Postcode
                 }
                 : null;

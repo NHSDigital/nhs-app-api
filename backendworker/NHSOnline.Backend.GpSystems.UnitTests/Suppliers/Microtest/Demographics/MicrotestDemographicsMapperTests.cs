@@ -85,8 +85,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
                           $"{demographics.PostTown}, {demographics.County}, {demographics.Postcode}",
                 AddressParts = new DemographicsAddress
                 {
-                    Text = $"{demographics.HouseName}, {demographics.RoadName}, {demographics.Locality}, " +
-                           $"{demographics.PostTown}, {demographics.County}",
+                    HouseName = demographics.HouseName,
+                    NumberStreet = demographics.RoadName,
+                    Village = demographics.Locality,
+                    Town = demographics.PostTown,
+                    County = demographics.County,
                     Postcode = demographics.Postcode
                 },
                 NameParts = new DemographicsName
