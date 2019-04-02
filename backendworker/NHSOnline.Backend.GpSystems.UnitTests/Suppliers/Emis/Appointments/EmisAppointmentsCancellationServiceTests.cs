@@ -26,17 +26,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         private EmisAppointmentsService _systemUnderTest;
         private AppointmentCancelRequest _request;
         private string _cancellationReasonText;
+        private Mock<ICancellationReasonService> _cancellationReasonService;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
-            _emisUserSession = _fixture.Create<EmisUserSession>();
-
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
-
-            _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
+            _cancellationReasonService = _fixture.Freeze<Mock<ICancellationReasonService>>();
+            _emisUserSession = _fixture.Create<EmisUserSession>();
 
             _request = new AppointmentCancelRequest
             {
@@ -45,12 +43,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             };
 
             _cancellationReasonText = "No longer required";
+            
+            CancellationReason cancellationReason = new CancellationReason
+            {
+                Id = _request.CancellationReasonId,
+                DisplayName = _cancellationReasonText
+            };
+            // Arrange
+            _cancellationReasonService.Setup(x=>x.TryGetCancellationReason(_request.CancellationReasonId,out cancellationReason))
+                .Returns(true)
+                .Verifiable();
+            
+            _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
+
         }
 
         [TestMethod]
         public async Task Cancel_HappyPath_ReturnsSuccessfullyCancelledResponse()
         {
-            // Arrange
+           //Arrange
             var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode.Created)
             {
                 Body = new CancelAppointmentDeleteResponse { IsCancelled = true },

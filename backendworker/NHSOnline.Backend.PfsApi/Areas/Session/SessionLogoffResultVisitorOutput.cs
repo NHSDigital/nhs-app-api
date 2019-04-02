@@ -1,4 +1,3 @@
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session

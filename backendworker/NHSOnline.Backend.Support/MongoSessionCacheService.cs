@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Cipher;
 using NHSOnline.Backend.Support.Logging;
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments {
+namespace NHSOnline.Backend.GpSystems.Appointments {
     using System;
     
     

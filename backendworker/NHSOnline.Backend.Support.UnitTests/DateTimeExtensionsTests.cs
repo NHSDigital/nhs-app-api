@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NHSOnline.Backend.Support.UnitTests

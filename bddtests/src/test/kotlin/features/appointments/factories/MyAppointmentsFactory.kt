@@ -133,6 +133,17 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
         appointmentMapper.requestMapping { mapping(viewMyAppointmentsRequest(patient)) }
     }
 
+    private val defaultReasons = arrayListOf(
+            AppointmentCancellationReason("R1_NoLongerRequired", "No longer required"),
+            AppointmentCancellationReason("R2_UnableToAttend", "Unable to attend")
+    )
+
+    open fun getDefaultCancellationReasons(): List<AppointmentCancellationReason> {
+        val reasons = defaultReasons
+        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(reasons)
+        return reasons
+    }
+
     private fun setSerenityVariablesForUITests(myAppointmentsFacade: MyAppointmentsFacade) {
         Serenity.setSessionVariable(MyAppointmentsFacade::class).to(myAppointmentsFacade)
         Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
@@ -146,8 +157,6 @@ abstract class MyAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(g
     abstract fun getExpectedUiRepresentationOfUpcomingSlots(facade: MyAppointmentsFacade): List<Slot>
 
     abstract fun getExpectedUiRepresentationOfHistoricalSlots(facade: MyAppointmentsFacade): List<Slot>
-
-    abstract fun getDefaultCancellationReasons(): List<AppointmentCancellationReason>
 
     companion object : SupplierSpecificFactory<MyAppointmentsFactory>() {
 

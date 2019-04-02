@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using NHSOnline.Backend.Support;
 using ServiceConfigurationModule = NHSOnline.Backend.Support.DependencyInjection.ServiceConfigurationModule;
 
 namespace NHSOnline.Backend.Support

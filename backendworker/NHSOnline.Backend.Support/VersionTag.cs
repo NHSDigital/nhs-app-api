@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NHSOnline.Backend.Support
+﻿namespace NHSOnline.Backend.Support
 {
     public sealed class VersionTag
     {

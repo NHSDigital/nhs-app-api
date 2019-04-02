@@ -18,7 +18,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Settings;
-using NHSOnline.Backend.GpSystems.UnitTests;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments

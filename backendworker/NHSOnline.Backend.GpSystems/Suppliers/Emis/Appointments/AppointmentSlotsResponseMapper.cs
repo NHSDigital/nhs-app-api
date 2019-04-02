@@ -8,8 +8,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
     public interface IAppointmentSlotsResponseMapper
     {
         AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse,
-            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, 
-            PracticeSettingsGetResponse body, 
+            AppointmentSlotsMetadataGetResponse slotsMetadataResponse,
+            PracticeSettingsGetResponse body,
             DemographicsGetResponse demographics,
             EmisUserSession userSession);
     }
@@ -24,24 +24,26 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         }
 
         public AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse,
-            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, 
-            PracticeSettingsGetResponse body, 
+            AppointmentSlotsMetadataGetResponse slotsMetadataResponse,
+            PracticeSettingsGetResponse body,
             DemographicsGetResponse demographics,
             EmisUserSession userSession)
         {
-            if(slotsResponse == null)
+            if (slotsResponse == null)
             {
                 throw new HttpRequestException();
             }
+
             var slots = _slotMapper.Map(slotsResponse?.Sessions, slotsMetadataResponse?.Locations,
                 slotsMetadataResponse?.SessionHolders, slotsMetadataResponse?.Sessions);
-            
+
             var response = new AppointmentSlotsResponse
             {
                 BookingGuidance = body?.Messages?.AppointmentsMessage?.Trim() ?? string.Empty,
                 Slots = slots,
                 BookingReasonNecessity = userSession.AppointmentBookingReasonNecessity,
-                TelephoneNumbers = demographics?.ContactDetails?.GetTelephoneArray() ?? Array.Empty<PatientTelephoneNumber>()
+                TelephoneNumbers = demographics?.ContactDetails?.GetTelephoneArray() ??
+                                   Array.Empty<PatientTelephoneNumber>()
             };
 
             return response;

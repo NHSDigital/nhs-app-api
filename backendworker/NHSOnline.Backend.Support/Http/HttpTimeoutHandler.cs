@@ -1,12 +1,10 @@
 using System;
-using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Support.Settings;
-using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.Support.Http
 {

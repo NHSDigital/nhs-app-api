@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             return response;
         }
         
-        public async Task<MicrotestApiObjectResponse<string>> BookAppointmentSlotPost(
+        public async Task<MicrotestApiObjectResponse<string>> AppointmentsPost(
             BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest,
             MicrotestUserSession userSession)
         {
@@ -68,6 +68,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             _logger.LogDebug($"booking slot: { bookAppointmentSlotPostRequest.SlotId }");
 
             var response = await Post(bookAppointmentSlotPostRequest, AppointmentsPath, userSession.OdsCode, userSession.NhsNumber);
+
+            _logger.LogExit();
+            return response;
+        }
+        
+        public async Task<MicrotestApiObjectResponse<string>> AppointmentsDelete(
+            CancelAppointmentDeleteRequest cancelAppointmentDeleteRequest, MicrotestUserSession userSession)
+        {
+            _logger.LogEnter();
+            _logger.LogDebug($"Cancelling slot: { cancelAppointmentDeleteRequest.AppointmentId }");
+
+            var response = await Delete(cancelAppointmentDeleteRequest, AppointmentsPath, userSession.OdsCode, userSession.NhsNumber);
 
             _logger.LogExit();
             return response;
@@ -112,6 +124,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             string nhsNumber = null)
         {
             var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber);
+            var requestBodyJson = JsonConvert.SerializeObject(requestBody);
+            request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
+            
+            return await SendRequestAndGetResponse(request);
+        }
+        
+        private async Task<MicrotestApiObjectResponse<string>> Delete<TRequest>(
+            TRequest requestBody,
+            string path,
+            string odsCode = null,
+            string nhsNumber = null)
+        {
+            var request = BuildRequest(HttpMethod.Delete, path, odsCode, nhsNumber);
             var requestBodyJson = JsonConvert.SerializeObject(requestBody);
             request.Content = new StringContent(requestBodyJson, Encoding.UTF8, "application/json");
             

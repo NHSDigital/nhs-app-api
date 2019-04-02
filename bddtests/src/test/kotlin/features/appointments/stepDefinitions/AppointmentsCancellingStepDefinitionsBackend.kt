@@ -28,7 +28,8 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
         var reason = ""
-        if (gpSystem == "EMIS") {
+        if (gpSystem == "EMIS" || gpSystem == "MICROTEST")
+        {
             reason = "No longer required"
         }
 

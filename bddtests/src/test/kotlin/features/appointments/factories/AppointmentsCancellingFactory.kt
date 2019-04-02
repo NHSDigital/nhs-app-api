@@ -48,7 +48,8 @@ class AppointmentsCancellingFactory(gpSystem: String) : AppointmentsFactory(gpSy
             hashMapOf(
                     "EMIS" to { AppointmentsCancellingFactory("EMIS") },
                     "TPP" to { AppointmentsCancellingFactory("TPP") },
-                    "VISION" to { AppointmentsCancellingFactory("VISION") })
+                    "VISION" to { AppointmentsCancellingFactory("VISION") },
+                    "MICROTEST" to { AppointmentsCancellingFactory("MICROTEST")})
         }
 
         val defaultApptCancellingReason = "Cancel an appointment."

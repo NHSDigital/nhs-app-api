@@ -42,6 +42,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 {
                     if (!response.StatusCode.IsSuccessStatusCode())
                     {
+                        _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentsRetrievalService)}) return an unanticipated " +
+                                         $"error with status code: '{response.StatusCode}'.");
                         return new AppointmentsResult.SupplierSystemUnavailable();
                     }
 

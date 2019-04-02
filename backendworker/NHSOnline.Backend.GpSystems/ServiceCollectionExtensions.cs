@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Linkage;
 using NHSOnline.Backend.GpSystems.Suppliers;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
@@ -68,6 +69,7 @@ namespace NHSOnline.Backend.GpSystems
         private static IServiceCollection RegisterBaseGpSystemsServices(this IServiceCollection services)
         {
             services.AddTransient<IHtmlSanitizer, HtmlSanitizer>();
+            services.AddTransient<ICancellationReasonService, CancellationReasonService>();
             services.AddSingleton<IGpSystemFactory, GpSystemFactory>();
             services.AddSingleton<IIm1CacheService, Im1CacheService>();
             services.AddSingleton<IIm1CacheKeyGenerator, Im1CacheKeyGenerator>();

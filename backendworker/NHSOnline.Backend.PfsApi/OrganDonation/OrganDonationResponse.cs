@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,7 +8,6 @@ using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.Support.ResponseParsers;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation
 {

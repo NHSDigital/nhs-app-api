@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Resources;
+﻿using System.Linq;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
 {
@@ -16,11 +13,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
     public class AppointmentsResponseMapper : IAppointmentsResponseMapper
     {
         private readonly IAppointmentsMapper _appointmentsMapper;
+        private readonly ICancellationReasonService _defaultCancellationReasons;
 
         public AppointmentsResponseMapper(
-            IAppointmentsMapper appointmentsMapper)
+            IAppointmentsMapper appointmentsMapper,
+            ICancellationReasonService defaultCancellationReasons)
         {
             _appointmentsMapper = appointmentsMapper;
+            _defaultCancellationReasons = defaultCancellationReasons;
         }
 
         public AppointmentsResponse Map(AppointmentsGetResponse sourceAppointments)
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             var upcomingAppointments = allAppointments
                 .Where(x => x is UpcomingAppointment).Cast<UpcomingAppointment>();
 
-            var cancellationReasons = GetDefaultCancellationReasons();
+            var cancellationReasons = _defaultCancellationReasons.GetDefaultCancellationReasons();
 
             var response = new AppointmentsResponse
             {
@@ -46,20 +46,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             };
 
             return response;
-        }
-
-        private static IEnumerable<CancellationReason> GetDefaultCancellationReasons()
-        {
-            var resourceManager = new ResourceManager(typeof(CancellationReasons));
-
-            var resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
-
-            return resourceSet.Cast<DictionaryEntry>()
-                .Select(r => new CancellationReason
-                {
-                    Id = r.Key.ToString(),
-                    DisplayName = r.Value.ToString()
-                });
         }
     }
 }

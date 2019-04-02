@@ -7,9 +7,12 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.Support.Temporal;
+using Appointment = NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments.Appointment;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 {
@@ -17,17 +20,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
     public class AppointmentsResponseMapperTests
     {
         private IFixture _fixture;
-        private ILogger<AppointmentsResponseMapper> _logger;
         private Mock<IDateTimeOffsetProvider> _mockDateTimeOffsetProvider;
         private AppointmentsGetResponse _appointmentsGetResponse;
         private AppointmentsResponseMapper _systemUnderTest;
         private List<Appointment> _getResponseAppointments;
+        private IEnumerable<CancellationReason> _expectedCancellationReasons;
+        private Mock<ICancellationReasonService> _mockCancellationReasonService;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = _fixture.Create<ILogger<AppointmentsResponseMapper>>();
+            _expectedCancellationReasons = _fixture.CreateMany<CancellationReason>();
+            _mockCancellationReasonService = _fixture.Freeze<Mock<ICancellationReasonService>>();
+            _mockCancellationReasonService.Setup(x => x.GetDefaultCancellationReasons())
+                .Returns(_expectedCancellationReasons)
+                .Verifiable();
             
             _fixture.Register(() => new DateTimeOffset(new DateTime(2018, 12, 25, 13, 0, 0)));
             _getResponseAppointments = _fixture.CreateMany<Appointment>().ToList();
@@ -35,10 +43,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                 .With(x => x.Appointments, _getResponseAppointments)
                 .Create();
 
-            _mockDateTimeOffsetProvider = new Mock<IDateTimeOffsetProvider>();
+            _mockDateTimeOffsetProvider = _fixture.Freeze<Mock<IDateTimeOffsetProvider>>();
             _mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset())
                 .Returns(new DateTimeOffset(new DateTime(2018, 12, 25, 12, 30, 0)));
-            _systemUnderTest = new AppointmentsResponseMapper(_logger, _mockDateTimeOffsetProvider.Object);
+            _systemUnderTest = _fixture.Create<AppointmentsResponseMapper>();
         }
 
         [TestMethod]
@@ -55,6 +63,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
                         StringComparison.Ordinal)));
                 upcomingAppointment.SessionName.Should().BeEmpty();
             }
+            
+            response.CancellationReasons.Should().BeEquivalentTo(_expectedCancellationReasons);
+            _mockCancellationReasonService.Verify();
         }
 
         [TestMethod]

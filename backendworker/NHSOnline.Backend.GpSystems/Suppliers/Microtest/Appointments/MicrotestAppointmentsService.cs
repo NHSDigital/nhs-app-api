@@ -1,3 +1,4 @@
+
 using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Appointments;
@@ -8,14 +9,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
     public class MicrotestAppointmentsService : IAppointmentsService
     {
         private readonly MicrotestAppointmentsBookingService _booker;
+        private readonly MicrotestAppointmentsCancellationService _canceller;
         private readonly MicrotestAppointmentsRetrievalService _getter;
         
         public MicrotestAppointmentsService(
-            MicrotestAppointmentsBookingService booker,
+            MicrotestAppointmentsBookingService booker, 
+            MicrotestAppointmentsCancellationService canceller,
             MicrotestAppointmentsRetrievalService getter)
         {
             _getter = getter;
             _booker = booker;
+            _canceller = canceller;
+            _getter = getter;
         }
         
         public async Task<AppointmentBookResult> Book(GpUserSession gpUserSession, AppointmentBookRequest request)
@@ -25,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 
         public async Task<AppointmentCancelResult> Cancel(GpUserSession gpUserSession, AppointmentCancelRequest request)
         {
-            return await Task.FromResult(new AppointmentCancelResult.BadRequest());
+            return await _canceller.Cancel((MicrotestUserSession) gpUserSession, request);
         }
 
         public async Task<AppointmentsResult> GetAppointments(GpUserSession gpUserSession)

@@ -1,29 +1,15 @@
 package features.appointments.factories
 
-import mocking.emis.models.AppointmentCancellationReason
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper.Companion.historicalAppointmentsFromSessions
 import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper.Companion.upcomingAppointmentsFromSessions
 import models.Slot
-import net.serenitybdd.core.Serenity
 import worker.models.appointments.AppointmentResponseObject
 import worker.models.appointments.MyAppointmentsResponse
 
 class MyAppointmentsFactoryEmis : MyAppointmentsFactory("EMIS") {
-
-    private val emisCancellationReason1 =
-            AppointmentCancellationReason("R1_NoLongerRequired", "No longer required")
-
-    private val emisCancellationReason2 =
-            AppointmentCancellationReason("R2_UnableToAttend", "Unable to attend")
-
-    override fun getDefaultCancellationReasons(): List<AppointmentCancellationReason> {
-        val reasons = arrayListOf(emisCancellationReason1, emisCancellationReason2)
-        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(reasons)
-        return reasons
-    }
 
     override fun getExpectedApiResponse(facade: MyAppointmentsFacade): MyAppointmentsResponse {
         val sessions = facade.myAppointments!!.sessions

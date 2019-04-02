@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace NHSOnline.Backend.Support
+﻿namespace NHSOnline.Backend.Support
 {
     public interface IOdsCodeMassager
     {

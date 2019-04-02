@@ -6,7 +6,6 @@ using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Support.Logging;
-using Appointment = NHSOnline.Backend.GpSystems.Suppliers.Emis.Models.Appointment;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 {

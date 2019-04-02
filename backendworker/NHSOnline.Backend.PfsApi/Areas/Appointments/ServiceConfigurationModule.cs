@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {

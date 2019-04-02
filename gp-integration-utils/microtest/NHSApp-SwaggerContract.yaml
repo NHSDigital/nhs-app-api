@@ -112,7 +112,7 @@ paths:
               - appointmentId
             properties:
               appointmentId:
-                type: number
+                type: string
                 description: Identifier of the appointment to be cancelled.
                 minLength: 1
               cancelReason:

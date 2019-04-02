@@ -13,6 +13,7 @@ Feature: Ability to cancel an appointment
     Examples:
       | GP System |
       | VISION    |
+      | MICROTEST |
 
   @native-smoketest
     Examples:
@@ -48,6 +49,7 @@ Feature: Ability to cancel an appointment
       | GP System |
       | EMIS      |
       | VISION    |
+      | MICROTEST |
 
   Scenario:  A VISION user is presented with a validation message if no reason is selected, even when there is just one
     Given I have upcoming appointments before cutoff time for VISION with only one cancellation reason
@@ -74,10 +76,12 @@ Feature: Ability to cancel an appointment
       | No longer required | EMIS      |
 
     Examples:
-      | Reason           | GP System |
-      | Unable to attend | EMIS      |
-      | Reason 1         | VISION    |
-      | Reason 2         | VISION    |
+      | Reason             | GP System |
+      | Unable to attend   | EMIS      |
+      | Reason 1           | VISION    |
+      | Reason 2           | VISION    |
+      | No longer required | MICROTEST |
+      | Unable to attend   | MICROTEST |
 
   Scenario:  Vision user can cancel appointment when there is just one reason
     Given VISION is available to cancel a previously booked appointment before cutoff time, with only one available reason
@@ -112,6 +116,7 @@ Feature: Ability to cancel an appointment
       | GP System |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   @native-smoketest
     Examples:

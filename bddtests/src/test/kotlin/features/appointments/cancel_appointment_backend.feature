@@ -12,6 +12,7 @@ Feature: Ability to cancel an appointment via api
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario: EMIS API will not cancel the appointment if reason an invalid reason is provided
     Given EMIS is available to cancel a previously booked appointment before cutoff time

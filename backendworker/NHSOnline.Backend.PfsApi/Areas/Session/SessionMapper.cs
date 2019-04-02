@@ -1,9 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.CitizenId;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Session

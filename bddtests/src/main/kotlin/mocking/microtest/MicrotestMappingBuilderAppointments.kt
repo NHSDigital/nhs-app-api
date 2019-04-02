@@ -6,6 +6,7 @@ import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilde
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.microtest.appointments.AppointmentSlotsBuilderMicrotest
 import mocking.microtest.appointments.BookAppointmentsBuilderMicrotest
+import mocking.microtest.appointments.DeleteAppointmentsBuilderMicrotest
 import mocking.microtest.appointments.GetAppointmentBuilderMicrotest
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
@@ -30,9 +31,7 @@ class MicrotestMappingBuilderAppointments : IAppointmentMappingBuilder {
     override fun cancelAppointmentRequest(
             patient: Patient,
             request: CancelAppointmentSlotFacade
-    ): ICancelAppointmentsBuilder {
-        TODO("not implemented")
-    }
+    ): ICancelAppointmentsBuilder = DeleteAppointmentsBuilderMicrotest(request)
 
     override fun appointmentSlotsRequest(patient: Patient,
                                          fromDateTime: ZonedDateTime?,

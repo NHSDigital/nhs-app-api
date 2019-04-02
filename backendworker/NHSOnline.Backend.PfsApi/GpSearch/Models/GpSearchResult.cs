@@ -1,5 +1,4 @@
-﻿using NHSOnline.Backend.PfsApi.Areas.GpSearch.Models;
-using NHSOnline.Backend.PfsApi.GpSearch.GpLookup;
+﻿using NHSOnline.Backend.PfsApi.GpSearch.GpLookup;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 {

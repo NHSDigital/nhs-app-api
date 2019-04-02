@@ -16,7 +16,6 @@ using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
-using NHSOnline.Backend.GpSystems;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 {

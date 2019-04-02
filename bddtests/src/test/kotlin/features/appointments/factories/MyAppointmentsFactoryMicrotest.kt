@@ -1,16 +1,15 @@
 package features.appointments.factories
 
-import mocking.emis.models.AppointmentCancellationReason
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import mockingFacade.appointments.helpers.MyAppointmentFacadeHelper
 import models.Slot
-import net.serenitybdd.core.Serenity
 import worker.models.appointments.AppointmentResponseObject
 import worker.models.appointments.MyAppointmentsResponse
 
 class MyAppointmentsFactoryMicrotest : MyAppointmentsFactory("MICROTEST") {
+
     override fun getExpectedApiResponse(facade: MyAppointmentsFacade): MyAppointmentsResponse {
         val sessions = facade.myAppointments!!.sessions
         val upcomingAppointments = MyAppointmentFacadeHelper.upcomingAppointmentsFromSessions(sessions)
@@ -51,12 +50,6 @@ class MyAppointmentsFactoryMicrotest : MyAppointmentsFactory("MICROTEST") {
     override fun getExpectedUiRepresentationOfHistoricalSlots(facade: MyAppointmentsFacade): List<Slot> {
         // Not yet implemented for Microtest
         return emptyList()
-    }
-
-    override fun getDefaultCancellationReasons(): List<AppointmentCancellationReason> {
-        val reasons = emptyList<AppointmentCancellationReason>()
-        Serenity.setSessionVariable(AppointmentCancellationReason::class).to(reasons)
-        return reasons
     }
 
     override fun getExpectedUiRepresentationOfSlot(

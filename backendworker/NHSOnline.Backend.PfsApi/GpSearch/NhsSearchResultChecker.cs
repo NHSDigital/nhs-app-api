@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.Areas.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch

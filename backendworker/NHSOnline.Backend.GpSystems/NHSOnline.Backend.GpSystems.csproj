@@ -21,11 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Suppliers\Emis\Appointments\CancellationReasons.Designer.cs">
-      <DependentUpon>CancellationReasons.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Suppliers\Emis\EmisApiErrorMessages.Designer.cs">
       <DependentUpon>EmisApiErrorMessages.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -39,10 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Suppliers\Emis\Appointments\CancellationReasons.resx">
-      <LastGenOutput>CancellationReasons.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Suppliers\Emis\EmisApiErrorMessages.resx">
       <LastGenOutput>EmisApiErrorMessages.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>

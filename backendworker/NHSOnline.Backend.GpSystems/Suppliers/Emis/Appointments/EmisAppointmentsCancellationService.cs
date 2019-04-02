@@ -16,16 +16,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
     {
         private readonly IEmisClient _emisClient;
         private readonly ILogger<EmisAppointmentsCancellationService> _logger;
+        private readonly ICancellationReasonService _cancellationReasonService;
 
         public EmisAppointmentsCancellationService(
             ILogger<EmisAppointmentsCancellationService> logger,
-            IEmisClient emisClient)
+            IEmisClient emisClient,
+            ICancellationReasonService cancellationReasonService)
         {
             _emisClient = emisClient;
             _logger = logger;
+            _cancellationReasonService = cancellationReasonService;
         }
 
-        public async Task<AppointmentCancelResult> Cancel(EmisUserSession emisUserSession,
+        public async Task<AppointmentCancelResult> Cancel(
+            EmisUserSession emisUserSession,
             AppointmentCancelRequest request)
         {
             try
@@ -60,11 +64,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             AppointmentCancelRequest request
         )
         {
-            if (TryGetCancellationReason(request.CancellationReasonId, out var cancellationReasonText) &&
+            if (_cancellationReasonService.TryGetCancellationReason(request.CancellationReasonId, out var cancellationReason) &&
                 TryGetAppointmentId(request, out var slotId))
             {
                 var deleteRequest = new CancelAppointmentDeleteRequest(emisUserSession.UserPatientLinkToken,
-                    cancellationReasonText, slotId);
+                    cancellationReason.DisplayName, slotId);
 
                 return Option.Some(deleteRequest);
             }
@@ -81,31 +85,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             _logger.LogError(
                 $"Supplied appointment ID '{request.AppointmentId}' could not be converted to a 64-bit integer.");
             return false;
-        }
-
-        private bool TryGetCancellationReason(string requestCancellationReasonId, out string cancellationReasonText)
-        {
-            cancellationReasonText = GetCancellationReason(requestCancellationReasonId);
-            if (cancellationReasonText != null)
-            {
-                return true;
-            }
-            _logger.LogError(
-                $"Supplied cancellation reason ID '{requestCancellationReasonId}' was not found in cancellation reasons resource file.");
-            return false;
-        }
-
-        private static string GetCancellationReason(string requestCancellationReasonId)
-        {
-            if (string.IsNullOrWhiteSpace(requestCancellationReasonId))
-            {
-                return null;
-            }
-
-            var resourceManager = new ResourceManager(typeof(CancellationReasons));
-            var resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
-            var cancellationReasonText = resourceSet.GetString(requestCancellationReasonId);
-            return cancellationReasonText;
         }
 
         private AppointmentCancelResult InterpretAppointmentsDeleteResponse(
