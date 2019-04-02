@@ -1,9 +1,9 @@
 /* eslint-disable */
-import NhsWebReporter from '@/logging/nhsWebReporter'
-
 export default () => {
   if (process.server) {
     const consola = require('consola');
-    consola.clear().add(new NhsWebReporter());
+    // Consola doesn't expose enough to be able to configure a custom reporter and so we're altering its internals.
+    // There is a further ticket (NHSO-3830) that will look to replace Consola
+    consola._reporters[0].options.dateFormat = 'YYYY-MM-DD HH:mm:ss.SSSZ';
   }
 };
