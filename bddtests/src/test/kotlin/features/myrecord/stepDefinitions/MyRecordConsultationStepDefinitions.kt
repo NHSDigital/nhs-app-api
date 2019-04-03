@@ -11,6 +11,7 @@ import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import pages.myrecord.MyRecordInfoPage
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -19,8 +20,9 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
-    @Given("the GP Practice has multiple consultations for (.*)")
-    fun givenTheGpPracticeHasMultipleConsultationsFor(getService: String) {
+    @Given("^the GP Practice has multiple consultations$")
+    fun givenTheGpPracticeHasMultipleConsultationsFor() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         when (getService) {
             "EMIS" -> {
@@ -38,9 +40,9 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         }
     }
 
-    @Given("the Patient has no access to consultations for (.*)")
-    fun givenTheGPPracticeHasNoAccessToConsultations(getService: String) {
-        when (getService) {
+    @Given("^the Patient has no access to consultations$")
+    fun givenTheGPPracticeHasNoAccessToConsultations() {
+        when (SerenityHelpers.getGpSupplier()) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis).respondWithExceptionWhenNotEnabled()
@@ -61,9 +63,9 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         }
     }
 
-    @Given("the GP Practice has no consultations for (.*)")
-    fun givenThePracticeHasNoConsultationsFor(getService: String) {
-        when (getService) {
+    @Given("^the GP Practice has no consultations$")
+    fun givenThePracticeHasNoConsultations() {
+        when (SerenityHelpers.getGpSupplier()) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
@@ -82,9 +84,9 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         }
     }
 
-    @Given("an error occurred retrieving the consultations for (.*)")
-    fun givenAnErrorOccurredRetrievingTestResultsFrom(getService: String) {
-        when (getService) {
+    @Given("^an error occurred retrieving the consultations$")
+    fun givenAnErrorOccurredRetrievingTestResults() {
+        when (SerenityHelpers.getGpSupplier()) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     myRecord.consultationsRequest(EmisMockDefaults.patientEmis).respondWithNonDataAccessException()

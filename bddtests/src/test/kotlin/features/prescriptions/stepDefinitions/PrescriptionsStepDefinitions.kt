@@ -7,6 +7,7 @@ import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
@@ -30,6 +31,8 @@ import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.tpp.models.Error
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.defaults.VisionMockDefaults
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import models.prescriptions.HistoricPrescription
@@ -40,7 +43,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.navigation.HeaderNative
-import pages.navigation.NavBarNative
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptions.PrescriptionsListResponse
@@ -57,6 +59,14 @@ private const val NUM_OF_PRESCRIPTIONS = 10
         "if possible, break down steps into functional areas")
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
+    @Steps
+    lateinit var browser: BrowserSteps
+    @Steps
+    lateinit var home: HomeSteps
+    @Steps
+    lateinit var login: LoginSteps
+    @Steps
+    lateinit var navigation: NavigationSteps
     @Steps
     lateinit var prescriptions: PrescriptionsSteps
 
@@ -76,13 +86,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     lateinit var prescriptionsListResponse: PrescriptionsListResponse
     lateinit var errorPage: ErrorPage
 
-    @Steps
-    lateinit var browser: BrowserSteps
-    @Steps
-    lateinit var login: LoginSteps
-    @Steps
-    lateinit var navigation: NavigationSteps
-
     @Then("^I see prescriptions page loaded$")
     fun iSeePrescriptionsPageLoaded() {
         prescriptions.isLoaded()
@@ -98,19 +101,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         prescriptions.assertNoRepeatPrescriptionsMessageShown()
     }
 
-    @When("^I am on the prescriptions page")
-    fun whenIAmOnThePrescriptionsPage() {
-        browser.goToApp()
-        login.using(currentPatient)
-        navigation.select(NavBarNative.NavBarType.PRESCRIPTIONS)
-        prescriptions.isLoaded()
-    }
-
-    @Given("^I have no repeat prescriptions for (.*)$")
-    fun givenIHaveNoRepeatPrescriptions(gpSystem: String) {
-        val patient = Patient.getDefault(gpSystem)
-        SerenityHelpers.setPatient(patient)
-        initialize(gpSystem)
+    @Given("^I have no repeat prescriptions$")
+    fun givenIHaveNoRepeatPrescriptions() {
+        initialize(SerenityHelpers.getGpSupplier())
         givenIHaveXPastRepeatPrescriptions(0)
         givenEachRepeatPrescriptionContainsXCoursesOfWhichXAreRepeats(0, 0)
     }
@@ -188,8 +181,13 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @Given("^I am using (.*) GP System$")
-    fun givenIHaveXPastRepeatPrescriptions(gpSystem: String) {
+    @Given("^I am patient using the (.*) GP System$")
+    fun givenIAmAPatientUsingGPSystem(gpSystem: String) {
+        SerenityHelpers.setGpSupplier(gpSystem)
+        currentPatient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(currentPatient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
         initialize(gpSystem)
     }
 

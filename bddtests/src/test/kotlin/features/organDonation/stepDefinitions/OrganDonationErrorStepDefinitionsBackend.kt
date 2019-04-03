@@ -7,6 +7,7 @@ import mocking.data.organDonation.set
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
 import org.junit.Assert
+import utils.SerenityHelpers
 import worker.models.organdonation.OrganDonationSearchResponse
 import worker.models.organdonation.OrganDonationState
 
@@ -83,14 +84,14 @@ class OrganDonationErrorStepDefinitionsBackend {
         }
     }
 
-    @Given("^I am a (\\w+) api user registered with organ donation, but demographics will time out$")
-    fun iAmRegisteredWithOrganDonationButDemographicsWillThrowTimeOutError(gpSystem: String) {
-        OrganDonationFactory(gpSystem).demographicsTimeout()
+    @Given("^I am an api user registered with organ donation, but demographics will time out$")
+    fun iAmRegisteredWithOrganDonationButDemographicsWillThrowTimeOutError() {
+        OrganDonationFactory(SerenityHelpers.getGpSupplier()).demographicsTimeout()
     }
 
-    @Given("^I am a (\\w+) api user registered with organ donation, but demographics will return an internal error$")
-    fun iAmRegisteredWithOrganDonationButDemographicsWillThrowInternalError(gpSystem: String) {
-        OrganDonationFactory(gpSystem).demographicsInternalError()
+    @Given("^I am an api user registered with organ donation, but demographics will return an internal error$")
+    fun iAmRegisteredWithOrganDonationButDemographicsWillThrowInternalError() {
+        OrganDonationFactory(SerenityHelpers.getGpSupplier()).demographicsInternalError()
     }
 
     @Then("^I receive an organ donation response with state value of 'conflicted'")

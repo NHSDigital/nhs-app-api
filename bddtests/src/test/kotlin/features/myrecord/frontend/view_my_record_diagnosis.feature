@@ -4,7 +4,7 @@ Feature: View My Medical Record Information - Diagnosis
 
   Scenario: A VISION user can view diagnosis information
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And the GP Practice has multiple diagnosis
     And I am on my record information page
     When I click the diagnosis section
@@ -13,7 +13,7 @@ Feature: View My Medical Record Information - Diagnosis
   Scenario: A VISION user can view diagnosis information without Javascript
     Given I have disabled javascript
     And the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And the GP Practice has multiple diagnosis
     And I am on my record information page
     When I click the diagnosis section
@@ -21,7 +21,7 @@ Feature: View My Medical Record Information - Diagnosis
 
   Scenario: A VISION user has no access to diagnosis section
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And I do not have access to diagnosis
     And I am on my record information page
     When I click the diagnosis section
@@ -29,7 +29,7 @@ Feature: View My Medical Record Information - Diagnosis
 
   Scenario: An error occurs when trying to retrieve diagnosis data from VISION
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And an error occurred retrieving the diagnosis
     And I am on my record information page
     When I click the diagnosis section
@@ -37,7 +37,7 @@ Feature: View My Medical Record Information - Diagnosis
 
   Scenario: A VISION user navigates directly to the diagnosis details page
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And the GP Practice has multiple diagnosis
     And I am on my record information page
     When I enter url address for diagnosis detail directly into the url

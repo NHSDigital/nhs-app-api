@@ -223,8 +223,9 @@ open class LinkageStepDefinitions {
         setLinkageInformation(linkage, LinkageResult.LinkageKeyAlreadyExists)
     }
 
-    @When("^I call the (.*) Linkage GET endpoint$")
-    fun iCallTheLinkageGETEndpoint(gpSystem: String) {
+    @When("^I call the Linkage GET endpoint$")
+    fun iCallTheLinkageGETEndpoint() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
 
         val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
@@ -246,8 +247,9 @@ open class LinkageStepDefinitions {
         }
     }
 
-    @When("^(?:I|(?:[Tt]hey)) call the (.*) Linkage POST endpoint$")
-    fun iCallTheLinkagePOSTEndpoint(gpSystem: String) {
+    @When("^(?:I|(?:[Tt]hey)) call the Linkage POST endpoint$")
+    fun iCallTheLinkagePOSTEndpoint() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
 
         val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
@@ -275,8 +277,9 @@ open class LinkageStepDefinitions {
         }
     }
 
-    @When("^(?:I|(?:[Tt]hey)) call the (.*) Linkage POST endpoint which responds after (\\d+) seconds$")
-    fun iCallTheLinkagePOSTEndpoi5nt(gpSystem: String, delay: Long) {
+    @When("^(?:I|(?:[Tt]hey)) call the Linkage POST endpoint which responds after (\\d+) seconds$")
+    fun iCallTheLinkagePOSTEndpoint(delay: Long) {
+        val gpSystem = SerenityHelpers.getGpSupplier()
 
         val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
@@ -304,8 +307,9 @@ open class LinkageStepDefinitions {
         }
     }
 
-    @When("^(?:I|(?:[Tt]hey)) call the (.*) Linkage POST endpoint CID connection times out$")
-    fun iCallTheLinkagePOSTEndpointCIDConnectionTimesOut(gpSystem: String) {
+    @When("^(?:I|(?:[Tt]hey)) call the Linkage POST endpoint CID connection times out$")
+    fun iCallTheLinkagePOSTEndpointCIDConnectionTimesOut() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
         val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
         val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
 
@@ -342,10 +346,12 @@ open class LinkageStepDefinitions {
     }
 
     private fun validLinkage(gpSystem: String): LinkageInformationFacade {
+        SerenityHelpers.setGpSupplier(gpSystem)
         return LinkageFactory.getForSupplier(gpSystem).validLinkageDetails
     }
 
     private fun validOtherLinkage(gpSystem: String): LinkageInformationFacade {
+        SerenityHelpers.setGpSupplier(gpSystem)
         return LinkageFactory.getForSupplier(gpSystem).validOtherLinkageDetails
     }
 

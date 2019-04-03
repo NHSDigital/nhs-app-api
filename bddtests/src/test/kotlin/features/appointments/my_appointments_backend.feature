@@ -8,7 +8,7 @@ Feature: My appointments backend
 
   Scenario Outline: API call for my appointments will successfully return appointments from <GP System> when they are only upcoming
     Given I have upcoming appointments before cutoff time for <GP System>
-    And I have logged into <GP System> and have a valid session cookie
+    And I have logged in and have a valid session cookie
     When my appointments are requested
     Then I will only receive upcoming appointments
     And a list of cancellation reasons if the GP Service provides the list
@@ -70,8 +70,8 @@ Feature: My appointments backend
       | MICROTEST |
 
   Scenario Outline: Online appointment booking is not available to a particular patient of <GP System>
-    Given I have logged into <GP System> and have a valid session cookie
-    But <GP System> does not offer online booking to my patient
+    Given <GP System> does not offer online booking to my patient
+    And I have logged in and have a valid session cookie
     When my appointments are requested
     Then I receive a "Forbidden" error
     And the response contains an empty body
@@ -82,8 +82,8 @@ Feature: My appointments backend
       | VISION    |
 
   Scenario Outline: Appropriate error response, when <GP System> returns corrupted data
-    Given I have logged into <GP System> and have a valid session cookie
-    But <GP System> returns corrupted response for my appointments
+    Given <GP System> returns corrupted response for my appointments
+    And I have logged in and have a valid session cookie
     When my appointments are requested
     Then I receive a "Internal Server Error" error
     And the response contains an empty body
@@ -97,8 +97,8 @@ Feature: My appointments backend
       | VISION    |
 
   Scenario Outline: Requesting my appointments the <GP System> times out and returns "Gateway Timeout" error
-    Given I have logged into <GP System> and have a valid session cookie
-    But <GP System> will time out when trying to retrieve my appointments
+    Given <GP System> will time out when trying to retrieve my appointments
+    And I have logged in and have a valid session cookie
     When my appointments are requested
     Then I receive a "Gateway Timeout" error
     And the response contains an empty body

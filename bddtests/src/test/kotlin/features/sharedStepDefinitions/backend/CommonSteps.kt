@@ -6,7 +6,6 @@ import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import utils.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -165,7 +164,6 @@ class CommonSteps : AbstractSteps() {
         val patient = Patient.getDefault(gpSystem)
 
         Serenity.setSessionVariable(GP_SYSTEM).to(gpSystem)
-        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(gpSystem)
 

@@ -12,28 +12,32 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
 import pages.myrecord.MyRecordInfoPage
+import utils.SerenityHelpers
 import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
-    @Given("^the GP Practice has enabled medications functionality for (.*)$")
-    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityfor(getService: String) {
+    @Given("^the GP Practice has enabled medications functionality$")
+    fun givenTheGPPracticeHasEnabledMedicationsFunctionality() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         MedicationsFactory.getForSupplier(getService).enabledWithRecords(patient)
     }
 
-    @Given("^the GP Practice has enabled medication functionality and the patient has no medications for (.*)$")
-    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityAndPatientHasNoMedicationsFor(getService: String) {
+    @Given("^the GP Practice has enabled medication functionality and the patient has no medications$")
+    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityAndPatientHasNoMedications() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         val factory = MedicationsFactory.getForSupplier(getService);
         factory.enabledWithBlankRecord(patient)
         factory.getResult()
     }
 
-    @But("^the GP Practice has disabled medications functionality for (.*)$")
-    fun butTheGPPracticeHasDisabledMedicationsFunctionalityFor(getService: String) {
+    @But("^the GP Practice has disabled medications functionality$")
+    fun butTheGPPracticeHasDisabledMedicationsFunctionality() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         when (getService) {
             "EMIS" -> {

@@ -1,7 +1,6 @@
 package features.appointments.factories
 
 import constants.DateTimeFormats
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -9,7 +8,6 @@ import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import models.Patient
 import models.Slot
-import net.serenitybdd.core.Serenity
 import utils.SerenityHelpers
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,7 +25,6 @@ abstract class AppointmentsFactory(gpSupplier: String) {
     init {
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(supplier)
-        Serenity.setSessionVariable(GLOBAL_PROVIDER_TYPE).to(supplier)
         appointmentMapper = MockingClientAppointmentMappingFactory.getForSupplier(supplier)
     }
 

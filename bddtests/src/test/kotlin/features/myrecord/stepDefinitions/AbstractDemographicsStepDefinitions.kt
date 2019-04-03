@@ -1,9 +1,8 @@
 package features.myrecord.stepDefinitions
 
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.MockingClient
 import models.Patient
-import net.serenitybdd.core.Serenity.setSessionVariable
+import utils.SerenityHelpers
 
 const val HTTP_EXCEPTION = "HttpException"
 
@@ -13,6 +12,6 @@ abstract class AbstractDemographicsStepDefinitions {
 
     fun setPatientToDefaultFor(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
-        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
+        SerenityHelpers.setGpSupplier(gpSystem)
     }
 }

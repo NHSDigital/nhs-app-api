@@ -12,6 +12,7 @@ import mocking.vision.VisionConstants.allergiesView
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import pages.myrecord.MyRecordInfoPage
+import utils.SerenityHelpers
 import worker.models.myrecord.MyRecordResponse
 
 private const val NUMBER_OF_ALLERGIES = 5
@@ -20,10 +21,9 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
-    @Given("^the GP Practice has enabled allergies functionality " +
-            "and the patient has \"(.*)\" allergies for (.*)$")
-    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergiesForService(count: Int,
-                                                                                               getService: String) {
+    @Given("^the GP Practice has enabled allergies functionality and the patient has \"(.*)\" allergies$")
+    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndPatientHasSomeAllergies(count: Int) {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         AllergiesFactory.getForSupplier(getService).enabledWithRecords(patient, count)
     }
@@ -39,11 +39,10 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         { request -> request.respondWithSuccess(AllergiesData.getVisionAllergiesDrugAndNonDrugData()) }
     }
 
-    @Given("the GP Practice has enabled allergies functionality " +
-            "and has 5 different allergies with different date formats for (.*)")
-    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndHasFiveDifferentAllergiesWithDifferentDateFormats(
-            getService: String) {
-
+    @Given("the GP Practice has enabled allergies functionality and has 5 different " +
+            "allergies with different date formats")
+    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndHasFiveDifferentAllergiesWithDifferentDateFormats() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         when (getService) {
             "EMIS" ->
@@ -60,8 +59,9 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         }
     }
 
-    @But("the GP Practice has disabled allergies functionality for (.*)")
-    fun butTheGPPracticeHasDisabledAllergiesFunctionalityForService(getService: String) {
+    @But("the GP Practice has disabled allergies functionality")
+    fun butTheGPPracticeHasDisabledAllergiesFunctionalityForService() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         AllergiesFactory.getForSupplier(getService).disabled(patient)
     }

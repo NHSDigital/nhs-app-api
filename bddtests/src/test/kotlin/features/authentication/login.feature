@@ -4,11 +4,10 @@ Feature: Login
   Logging into the service is handled via the CitizenID service.
   A user will be shown personalised welcome messages upon successful login.
 
-
   @smoketest
   Scenario Outline: A <GP System> user sees the home page after logging in
     Given I have no booked appointments for <GP System>
-    And I have no repeat prescriptions for <GP System>
+    And I have no repeat prescriptions
     And I am logged in
     Then I see a welcome message
     And I see the patient details of name, date of birth and NHS number
@@ -68,7 +67,7 @@ Feature: Login
     Given I am logged in as a EMIS user
     When I see the home page
     Then I click the accessibility link in the footer
-    
+
   Scenario: A EMIS user sees the home page after logging in and tries to access the policies footer link
     Given I am logged in as a EMIS user
     When I see the home page
@@ -129,11 +128,11 @@ Feature: Login
     Then I see the home page
     When I use the header link to log out of the website
     Then I see the login page
-    
+
   Scenario: A EMIS user can cycle the header links
     Given I am logged in as a EMIS user
     And I have no booked appointments for EMIS
-    And I have no repeat prescriptions for EMIS
+    And I have no repeat prescriptions
     When I see the home page
     Then I can cycle through the header links
 
@@ -186,7 +185,7 @@ Feature: Login
   Scenario: Logging in with a cached Im1 Connection Token for an EMIS user will remove that token from the cache
     Given I have valid EMIS linkage details and it's the first time a linkage key has been created for my nhs number
     And no IM1 Connection Token is currently cached
-    And I call the EMIS Linkage POST endpoint
+    And I call the Linkage POST endpoint
     And I POST to IM1 Connection to register the user
     When I have logged in with the user associated with the IM1 Connection Token
     Then the IM1 Connection Token is no longer in the cache
@@ -195,7 +194,7 @@ Feature: Login
   Scenario: Logging in with a cached Im1 Connection Token for a TPP user will remove that token from the cache
     Given I have valid TPP linkage details for posting
     And no IM1 Connection Token is currently cached
-    And I call the TPP Linkage POST endpoint
+    And I call the Linkage POST endpoint
     And I POST to IM1 Connection to register the user
     When I have logged in with the user associated with the IM1 Connection Token
     Then the IM1 Connection Token is no longer in the cache
@@ -204,16 +203,16 @@ Feature: Login
   Scenario: Logging in as a different EMIS user after an Im1 Connection Token is cached won't remove that token
     Given another EMIS user has a new linkage key created for them
     And no IM1 Connection Token is currently cached
-    And they call the EMIS Linkage POST endpoint
+    And I call the Linkage POST endpoint
     And the IM1 Connection Token is in the cache
-    When I have logged into EMIS and have a valid session cookie
+    When I have logged in and have a valid session cookie
     Then the IM1 Connection Token is in the cache
 
   @backend
   Scenario: Logging in as a different TPP user after an Im1 Connection Token is cached won't remove that token
     Given another user has valid TPP linkage details
     And no IM1 Connection Token is currently cached
-    And they call the TPP Linkage POST endpoint
+    And I call the Linkage POST endpoint
     And the IM1 Connection Token is in the cache
-    When I have logged into TPP and have a valid session cookie
+    When I have logged in and have a valid session cookie
     Then the IM1 Connection Token is in the cache

@@ -3,10 +3,10 @@
 Feature: View My Medical Record Information - Combined I see the my record warning page
   Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
     Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality for <Service>
-    And the GP Practice has enabled allergies functionality and the patient has "2" allergies for <Service>
-    And the GP Practice has multiple consultations for <Service>
-    And the GP Practice has six test results for <Service>
+    And the GP Practice has enabled demographics functionality
+    And the GP Practice has enabled allergies functionality and the patient has "2" allergies
+    And the GP Practice has multiple consultations
+    And the GP Practice has six test results
 
     When I am on the record warning page
     Then I see the my record warning page
@@ -29,8 +29,8 @@ Feature: View My Medical Record Information - Combined I see the my record warni
 
   Scenario Outline: A <Service> user can view acute, current and discontinued medications
     Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality for <Service>
-    And the GP Practice has enabled medications functionality for <Service>
+    And the GP Practice has enabled demographics functionality
+    And the GP Practice has enabled medications functionality
     And I am on my record information page
 
     When I click the Acute (short-term) medications section on My Record
@@ -50,9 +50,9 @@ Feature: View My Medical Record Information - Combined I see the my record warni
 
   Scenario Outline: A <Service> user can view immunisations and problems
     Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality for <Service>
-    And the GP Practice has enabled immunisations functionality and multiple immunisation records exist for <Service>
-    And the GP Practice has enabled problems functionality for <Service>
+    And the GP Practice has enabled demographics functionality
+    And the GP Practice has enabled immunisations functionality and multiple immunisation records exist
+    And the GP Practice has enabled problems functionality
     And I am on my record information page
 
     When I click the Immunisations section on My Record
@@ -68,7 +68,7 @@ Feature: View My Medical Record Information - Combined I see the my record warni
 
   Scenario: A VISION user can view allergies and demographics
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And the GP Practice has enabled allergies functionality and has a drug and non drug allergy record for VISION
     When I am on the record warning page
     Then I see the my record warning page

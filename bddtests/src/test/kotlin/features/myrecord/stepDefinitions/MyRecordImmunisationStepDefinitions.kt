@@ -7,6 +7,7 @@ import features.myrecord.factories.ImmunisationsFactory
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import pages.myrecord.MyRecordInfoPage
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -15,26 +16,30 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
-    @Given("^the GP Practice has enabled immunisations functionality and multiple immunisation records exist for (.*)$")
-    fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleRecordsExistFor(getService: String) {
+    @Given("^the GP Practice has enabled immunisations functionality and multiple immunisation records exist$")
+    fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleRecordsExist() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         ImmunisationsFactory.getForSupplier(getService).enabledWithRecords(patient)
     }
 
-    @Given("^no immunisation records exist for the patient for (.*)$")
-    fun givenNoImmunisationRecordsExistForThePatientFor(getService: String) {
+    @Given("^no immunisation records exist for the patient$")
+    fun givenNoImmunisationRecordsExistForThePatient() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         ImmunisationsFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
     }
 
-    @Given("^the user does not have access to view immunisations for (.*)$")
-    fun givenUserDoesNotHaveAccessToViewImmunisationsFor(getService: String) {
+    @Given("^the user does not have access to view immunisations$")
+    fun givenUserDoesNotHaveAccessToViewImmunisations() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         ImmunisationsFactory.getForSupplier(getService).noAccess(patient)
     }
 
-    @Given("^there is an error retrieving immunisations data for (.*)$")
-    fun givenThereIsAnErrorRetrievingImmunisationsDataFor(getService: String) {
+    @Given("^there is an error retrieving immunisations data$")
+    fun givenThereIsAnErrorRetrievingImmunisationsData() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         ImmunisationsFactory.getForSupplier(getService).errorRetrieving(patient)
     }

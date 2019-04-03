@@ -11,7 +11,7 @@ Feature: Session Expiry and Extend
 
   @long-running
   @nativepending @NHSO-2974
-  @tech-debt @NHSO-1742  
+  @tech-debt @NHSO-1742
   Scenario: On session expiry, a user on a secure screen is automatically signed out
     Given I am a EMIS patient
     And I am logged in
@@ -304,8 +304,7 @@ Feature: Session Expiry and Extend
       | TPP       |
 
   Scenario Outline: The <GP System> GP practice session has expired and user selects the prescriptions button
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I am logged in
     Given the GP System session has expired when viewing prescriptions
     When I navigate to prescriptions

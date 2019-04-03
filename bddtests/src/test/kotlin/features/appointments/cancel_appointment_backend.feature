@@ -33,7 +33,7 @@ Feature: Ability to cancel an appointment via api
 
   Scenario Outline: <GP System> returns corrupted data when trying to cancel a previously booked appointment
     Given <GP System> returns corrupted response when trying to cancel a previously booked appointment
-    And I have logged into <GP System> and have a valid session cookie
+    And I have logged in and have a valid session cookie
     When I send a cancellation request to the API with a valid cancellation reason
     Then I receive a "Internal Server Error" error
     And the response contains an empty body

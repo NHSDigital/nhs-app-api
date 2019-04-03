@@ -7,7 +7,6 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.factories.TestResultsFactory
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import features.sharedSteps.BrowserSteps
 import mocking.data.myrecord.TestResultsData
 import net.serenitybdd.core.Serenity
@@ -17,6 +16,7 @@ import org.junit.Assert.assertEquals
 import pages.ErrorPage
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordTestResultDetailPage
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -64,8 +64,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         }
     }
 
-    @Given("^the GP Practice has six test results for (.*)$")
-    fun givenTheGpPracticeHasSixTestResultsFor(getService: String) {
+    @Given("^the GP Practice has six test results$")
+    fun givenTheGpPracticeHasSixTestResults() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         TestResultsFactory.getForSupplier(getService).enabledWithRecords(patient)
     }
@@ -126,26 +127,30 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         }
     }
 
-    @Given("^I do not have access to test results for (.*)$")
-    fun givenIDoNotHaveAccessToTestResultsFor(getService: String) {
+    @Given("^I do not have access to test results$")
+    fun givenIDoNotHaveAccessToTestResults() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         TestResultsFactory.getForSupplier(getService).noAccess(patient)
     }
 
-    @Given("^I have no test results for (.*)$")
-    fun givenIHaveNoTestResultsFor(getService: String) {
+    @Given("^I have no test results$")
+    fun givenIHaveNoTestResults() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         TestResultsFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
     }
 
-    @Given("^an error occurred retrieving the test results from (.*)$")
-    fun givenAnErrorOccurredRetrievingTestResultsFrom(getService: String) {
+    @Given("^an error occurred retrieving the test results$")
+    fun givenAnErrorOccurredRetrievingTestResults() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         TestResultsFactory.getForSupplier(getService).errorRetrieving(patient)
     }
 
-    @But("^the GP Practice has disabled test results functionality for (.*)$")
-    fun butTheGPPracticeHasDisabledTestResultsFunctionalityFor(getService: String) {
+    @But("^the GP Practice has disabled test results functionality$")
+    fun butTheGPPracticeHasDisabledTestResultsFunctionality() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         TestResultsFactory.getForSupplier(getService).disabled(patient)
     }
@@ -288,9 +293,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
                 myRecordInfoPage.getTestResultChildCount() > 1)
     }
 
-    @Then("^I see the test result heading for (.*)$")
-    fun thenISeeTheTestResultHeading(getService: String) {
-        val header = when (getService) {
+    @Then("^I see the test result heading$")
+    fun thenISeeTheTestResultHeading() {
+        val header = when (SerenityHelpers.getGpSupplier()) {
             "TPP" -> {
                 "Test results (past 6 months)"
             }
@@ -308,9 +313,9 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Then("^I see test result information$")
     fun thenISeeTestResultInformation() {
-        val provider = Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE);
+        val gpSystem = SerenityHelpers.getGpSupplier()
 
-        if (provider == "VISION") {
+        if (gpSystem == "VISION") {
             Assert.assertTrue(myRecordInfoPage.isVisionTestResultsLinkVisible())
         } else {
             Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())

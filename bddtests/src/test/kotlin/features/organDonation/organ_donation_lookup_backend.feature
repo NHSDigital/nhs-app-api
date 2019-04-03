@@ -124,7 +124,7 @@ Feature: Organ Donation Lookup Backend
   the user receives a 502 response
       #The OD data needs to be placed after log in, as the demographics timeout will affect creating a session
     Given I have logged into <GP System> and have a valid session cookie
-    And I am a <GP System> api user registered with organ donation, but demographics will return an internal error
+    And I am an api user registered with organ donation, but demographics will return an internal error
     When I request my organ donation details
     Then I receive a "Bad Gateway" error
     Examples:
@@ -137,7 +137,7 @@ Feature: Organ Donation Lookup Backend
   demographics, the user receives a 504 response
     #The OD data needs to be placed after log in, as the demographics timeout will affect creating a session
     Given I have logged into <GP System> and have a valid session cookie
-    And I am a <GP System> api user registered with organ donation, but demographics will time out
+    And I am an api user registered with organ donation, but demographics will time out
     When I request my organ donation details
     Then I receive a "Gateway Timeout" error
     Examples:

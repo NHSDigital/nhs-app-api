@@ -9,8 +9,8 @@ Feature: View courses
   Scenario Outline: Requesting courses with correct data returns a list of repeat courses that can be requested
     Given I am a <GP System> patient
     And I have historic prescriptions
-    And I have logged into <GP System> and have a valid session cookie
-    And I have 10 <GP System> assigned prescriptions
+    And I have logged in and have a valid session cookie
+    And I have 10 assigned prescriptions
     And 5 of my prescriptions are of type repeat
     And 2 of my prescriptions can be requested
     When I get the users courses with a valid cookie

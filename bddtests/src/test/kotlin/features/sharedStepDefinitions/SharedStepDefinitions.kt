@@ -60,7 +60,6 @@ open class SharedStepDefinitions {
         patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         SerenityHelpers.setGpSupplier(gpSystem)
-        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)

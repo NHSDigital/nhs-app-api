@@ -4,7 +4,7 @@ Feature: View My Medical Record Information - Procedures
 
   Scenario: A VISION user can view procedures information
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And the GP Practice has multiple procedures
     And I am on my record information page
     When I click the procedures section
@@ -13,7 +13,7 @@ Feature: View My Medical Record Information - Procedures
   Scenario: A VISION user can view procedures information without Javascript
     Given I have disabled javascript
     And the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And the GP Practice has multiple procedures
     And I am on my record information page
     When I click the procedures section
@@ -21,7 +21,7 @@ Feature: View My Medical Record Information - Procedures
 
   Scenario: A VISION user has no access to procedures section
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And I do not have access to procedures
     And I am on my record information page
     When I click the procedures section
@@ -29,7 +29,7 @@ Feature: View My Medical Record Information - Procedures
 
   Scenario: An error occurs when trying to retrieve procedures data from VISION
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And an error occurred retrieving the procedures
     And I am on my record information page
     When I click the procedures section
@@ -37,7 +37,7 @@ Feature: View My Medical Record Information - Procedures
 
   Scenario: A VISION user navigates directly to the procedures details page
     Given the my record wiremocks are initialised for VISION
-    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled demographics functionality
     And the GP Practice has multiple procedures
     And I am on my record information page
     When I enter url address for procedures detail directly into the url

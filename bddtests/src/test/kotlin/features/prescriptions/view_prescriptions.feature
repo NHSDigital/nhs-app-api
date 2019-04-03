@@ -3,11 +3,11 @@ Feature: View prescriptions
   A user can view information about their prescriptions after logging in
 
   Scenario Outline: <GP System> patient selects the prescriptions menu button
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    And I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see the prescriptions menu button
 
     Examples:
@@ -21,11 +21,11 @@ Feature: View prescriptions
       | EMIS      |
 
   Scenario Outline: <GP System> patient selects the prescriptions menu button
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see prescriptions page loaded
     And the prescriptions menu button is highlighted
 
@@ -40,11 +40,11 @@ Feature: View prescriptions
       | EMIS      |
 
   Scenario Outline: <GP System> patient with no past repeat prescriptions
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 0 past repeat prescriptions
     And each repeat prescription contains 0 courses of which 0 are repeats
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see no prescriptions
     And I see a message indicating that I have no repeat prescriptions
 
@@ -60,11 +60,11 @@ Feature: View prescriptions
 
 
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 110 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 100 prescriptions
 
     Examples:
@@ -75,11 +75,11 @@ Feature: View prescriptions
 
   @smoketest
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 3 prescriptions
 
     Examples:
@@ -90,11 +90,11 @@ Feature: View prescriptions
 
 
   Scenario Outline: <GP System> patient who has multiple prescription each containing the same repeat prescription
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription shares the same course
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 3 prescriptions
 
     Examples:
@@ -104,11 +104,11 @@ Feature: View prescriptions
       | VISION    |
 
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 3 are repeats
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 3 prescriptions
 
     Examples:
@@ -118,16 +118,15 @@ Feature: View prescriptions
 
 
   Scenario: EMIS patient who has acute prescriptions
-    Given I am a EMIS patient
-    And I am using EMIS GP System
+    Given I am patient using the EMIS GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 2 prescriptions
 
   Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     Given prescriptions is disabled at a GP Practice level
     And I am logged in
     When I navigate to prescriptions
@@ -144,12 +143,12 @@ Feature: View prescriptions
       | EMIS      |
 
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has only dosage info
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 1 prescriptions
 
     Examples:
@@ -159,12 +158,12 @@ Feature: View prescriptions
       | VISION    |
 
   Scenario Outline: A <GP System> user with historic prescriptions with missing dosage info
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+    Given I am patient using the <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has only quantity info
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 1 prescriptions
 
     Examples:
@@ -173,23 +172,17 @@ Feature: View prescriptions
       | TPP       |
       | VISION    |
 
-  Scenario Outline: <GP System> user with historic prescriptions with missing dosage and quantity info
-    Given I am a <GP System> patient
-    And I am using <GP System> GP System
+  Scenario: VISION user with historic prescriptions with missing dosage and quantity info
+    Given I am patient using the VISION GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And each course has no info
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 1 prescriptions
 
-    Examples:
-      | GP System |
-      | VISION    |
-
-
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
-    Given I am a EMIS patient
-    And I am using EMIS GP System
+    Given I am patient using the EMIS GP System
     And I have 6 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And courses have status
@@ -199,7 +192,8 @@ Feature: View prescriptions
       | Rejected            |
       | Unknown             |
       | Cancelled           |
-    When I am on the prescriptions page
+    And I am logged in
+    And I navigate to prescriptions
     Then I see 4 prescriptions
 
   @backend
@@ -294,15 +288,11 @@ Feature: View prescriptions
       | VISION    |
 
   @backend
-  Scenario Outline: <GP System> GP practice has disabled prescriptions functionality
-    Given I have logged into <GP System> and have a valid session cookie
+  Scenario: EMIS GP practice has disabled prescriptions functionality
+    Given I have logged into EMIS and have a valid session cookie
     And the GP System has disabled prescriptions
     When I request prescriptions for the last 6 months
     Then I receive a "Forbidden" error
-
-    Examples:
-      | GP System |
-      | EMIS      |
 
   @backend
   Scenario Outline: <GP System> GP system fails to return in a timely fashion

@@ -1,6 +1,5 @@
 package features.courses.stepDefinitions
 
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -12,7 +11,6 @@ import features.prescriptions.helpers.PrescriptionHelpers
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
 import mocking.emis.practices.NecessityOption
@@ -21,31 +19,25 @@ import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
 import pages.prescription.RepeatPrescriptionsPage
 import utils.SerenityHelpers
-import worker.NhsoHttpException
-import worker.WorkerClient
-import worker.models.courses.CoursesListResponse
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
 
-    val isVisibleIndicator = "is"
+    private val isVisibleIndicator = "is"
 
+    @Steps
+    lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
+    @Steps
+    lateinit var courseSteps: CourseSteps
     @Steps
     lateinit var login: LoginSteps
     @Steps
     lateinit var prescriptionsSteps: PrescriptionsSteps
-    @Steps
-    lateinit var courseSteps: CourseSteps
-
-    lateinit var repeatPrescriptions : RepeatPrescriptionsPage
-
-    @Steps
-    lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
 
     val mockingClient = MockingClient.instance
 
+    lateinit var repeatPrescriptions : RepeatPrescriptionsPage
 
     lateinit var coursesLoader: ICoursesLoader<*>
 
@@ -57,13 +49,13 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     var showQuantity: Boolean = true
     var showDosage: Boolean = true
 
-    @Given("I have (\\d+) (.*) assigned prescriptions")
-    fun iHaveXAssignedPrescriptions(numberOfCourses: Int, gpSystem: String) {
+    @Given("^I have (\\d+) assigned prescriptions$")
+    fun iHaveXAssignedPrescriptions(numberOfCourses: Int) {
         numOfCourses = numberOfCourses
-        initalize(gpSystem)
+        initialize()
     }
 
-    @Given("I have (\\d+) assigned prescriptions which have (.*)")
+    @Given("^I have (\\d+) assigned prescriptions which have (.*)$")
     fun iHaveXAssignedPrescriptionsWhichHasX(numberOfCourses: Int, content: String) {
         numOfCourses = numberOfCourses
         showDosage = content.toLowerCase().contains("dosage")
@@ -71,54 +63,59 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         setupWiremockandCreateData()
     }
 
-    @And("(\\d+) of my prescriptions are of type repeat")
-    fun xOfMyPrescriptionsAreOfTypeRepeat(numberOfRepeats: Int) {
-        numOfRepeats = numberOfRepeats
-    }
-
-    @And("(\\d+) of my prescriptions can be requested")
-    fun xOfMyPrescriptionCanBeRequested(numberCanBeRequested: Int) {
-        numCanBeRequested = numberCanBeRequested
-        setupWiremockandCreateData()
-    }
-
-    @When("I get the users courses with a valid cookie")
-    fun whenIGetTheUsersCoursesWithAnValidCookie() {
-        try {
-            val result = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.getCoursesConnection()
-
-            Serenity.setSessionVariable(CoursesListResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
-    }
-
-    @Then("^I receive a list of (\\d+) repeating prescriptions that can be requested$")
-    fun thenIReceiveAListOfXRepeatingPrescriptionsDateDescending(expectedNumberOfRepeatingPrescriptions: Int) {
-        val result = Serenity.sessionVariableCalled<CoursesListResponse>(CoursesListResponse::class)
-        Assert.assertNotNull("No courses in session", result)
-
-        val actualNumberOfRepeatPrescriptions = result.courses.count()
-
-        Assert.assertEquals(
-                "Unexpected number of repeat prescriptions. Expected: "
-                        + expectedNumberOfRepeatingPrescriptions
-                        + ". Actual: "
-                        + actualNumberOfRepeatPrescriptions,
-                expectedNumberOfRepeatingPrescriptions,
-                result.courses.count())
-    }
-
     @Given("^I have historic prescriptions$")
     fun iHaveHistoricPrescriptions() {
         configureWireMockForHistoricPrescriptions()
     }
 
-    @And("(.*) has enabled special request text")
-    fun gpProviderHasEnabledSpecialRequestText(gpSystem: String) {
-        initalize(gpSystem)
+    @Given("I select (\\d+) repeatable prescriptions out of (\\d+) available$")
+    fun iSelectXRepeatablePrescriptionsOutOf(numberOfPrescriptionsToSelect: Int, numberOfPrescriptions: Int) {
+        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
+
+        repeatPrescriptions.verifyVisiblePrescriptionCount(numberOfPrescriptions)
+    }
+
+    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int) {
+        iClickOrderARepeatPrescription()
+
+        val courses = getAvailableCoursesFilteredSortedOrdered()
+        val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
+        courseSteps.selectRepeatPrescriptions(coursesToSelect)
+        selectedCourses = coursesToSelect
+    }
+
+    @Given("^there are (\\d*) repeatable prescriptions available$")
+    fun thereAreXXRepeatablePrescriptionsAvailable(numberOfPrescriptionsToCreate: Int) {
+        iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
+    }
+
+    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available which have (.*)")
+    fun iSelectXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToSelect: Int,
+                                                  numberOfPrescriptionsToCreate: Int,
+                                                  content: String) {
+        iHaveXAssignedPrescriptionsWhichHasX(numberOfPrescriptionsToCreate, content)
+        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
+
+        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
+    }
+
+    @Given("(\\d+) of my prescriptions are of type repeat")
+    fun xOfMyPrescriptionsAreOfTypeRepeat(numberOfRepeats: Int) {
+        numOfRepeats = numberOfRepeats
+    }
+
+    @Given("(\\d+) of my prescriptions can be requested")
+    fun xOfMyPrescriptionCanBeRequested(numberCanBeRequested: Int) {
+        numCanBeRequested = numberCanBeRequested
+        setupWiremockandCreateData()
+    }
+
+    @Given("special request text has been enabled")
+    fun gpProviderHasEnabledSpecialRequestText() {
+        initialize()
 
         PrescriptionHelpers.setPrescriptionCommentsAllowed(true)
 
@@ -127,9 +124,9 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @And("(.*) has disabled special request text")
-    fun gpProviderHasDisabledSpecialRequestText(gpSystem: String) {
-        initalize(gpSystem)
+    @Given("special request text has been disabled")
+    fun gpProviderHasDisabledSpecialRequestText() {
+        initialize()
 
         PrescriptionHelpers.setPrescriptionCommentsAllowed(false)
 
@@ -152,61 +149,15 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @When("I click 'Order a new repeat prescription'")
-    fun iClickOrderARepeatPrescription() {
-        prescriptionsSteps.prescriptions.clickOrderARepeatPrescriptionButton()
-    }
-
-    @Then("I see the available repeatable prescriptions")
-    fun iSeeTheAvailableRepeatablePrescriptions() {
-        courseSteps.isLoaded()
-        val coursesToCheck = getAvailableCoursesFilteredSortedOrdered()
-        courseSteps.assertCorrectRepeatPrescriptionsShown(coursesToCheck)
-    }
-
-    @And("a message is displayed indicating that you don't have any medication available to order")
-    fun aMessageIsDisplayedIndicatingThatYouDontHaveAnyRepeatMedicationAvailableToOrder() {
-        courseSteps.assertNoMedicationAvailableToOrderMessageShown()
-    }
-
-    @Given("I select (\\d+) repeatable prescriptions out of (\\d+) available$")
-    fun iSelectXRepeatablePrescriptionsOutOf(numberOfPrescriptionsToSelect: Int, numberOfPrescriptions: Int) {
-        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
-
-        repeatPrescriptions.verifyVisiblePrescriptionCount(numberOfPrescriptions)
-    }
-
-    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int) {
-        iClickOrderARepeatPrescription()
-
-        val courses = getAvailableCoursesFilteredSortedOrdered()
-        val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
-        courseSteps.selectRepeatPrescriptions(coursesToSelect)
-        selectedCourses = coursesToSelect
-    }
-
-    @Given("^there are (\\d*) (.*) repeatable prescriptions available$")
-    fun thereAreXXRepeatablePrescriptionsAvailable(numberOfPrescriptionsToCreate: Int, gpSystem: String) {
-        iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate, gpSystem)
-        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
-        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
-    }
-
-    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available which have (.*)")
-    fun iSelectXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToSelect: Int,
-                                                  numberOfPrescriptionsToCreate: Int,
-                                                  content: String) {
-        iHaveXAssignedPrescriptionsWhichHasX(numberOfPrescriptionsToCreate, content)
-        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
-        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
-
-        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
-    }
-
-    @And("I enter text \"(.*)\" for special request")
+    @When("I enter text \"(.*)\" for special request")
     fun iEnterTextForSpecialRequest(text: String) {
         Serenity.setSessionVariable("specialRequestText")
                 .to(courseSteps.repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text))
+    }
+
+    @When("I click 'Order a new repeat prescription'")
+    fun iClickOrderARepeatPrescription() {
+        prescriptionsSteps.prescriptions.clickOrderARepeatPrescriptionButton()
     }
 
     @When("I click Continue on the Order a repeat prescription page")
@@ -217,6 +168,26 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     @When("I click 'Change this repeat prescription' on the Prescription confirmation page")
     fun iClickChangeThisRepeatPrescriptionOnThePrescriptionConfirmationPage() {
         confirmRepeatPrescriptionOrderSteps.clickChangeThisPrescriptionButton()
+    }
+
+    @When("I select (\\d+) additional repeat prescriptions")
+    fun iSelectXAdditionalRepeatPrescriptions(numberOfAdditionalRepeatPrescriptionsToSelect: Int) {
+        val courses = getAvailableCoursesFilteredSortedOrdered()
+        val coursesToSelect = courses.drop(selectedCourses.size).take(numberOfAdditionalRepeatPrescriptionsToSelect)
+        courseSteps.selectRepeatPrescriptions(coursesToSelect)
+        selectedCourses = selectedCourses.plus(coursesToSelect)
+    }
+
+    @Then("a message is displayed indicating that you don't have any medication available to order")
+    fun aMessageIsDisplayedIndicatingThatYouDontHaveAnyRepeatMedicationAvailableToOrder() {
+        courseSteps.assertNoMedicationAvailableToOrderMessageShown()
+    }
+
+    @Then("I see the available repeatable prescriptions")
+    fun iSeeTheAvailableRepeatablePrescriptions() {
+        courseSteps.isLoaded()
+        val coursesToCheck = getAvailableCoursesFilteredSortedOrdered()
+        courseSteps.assertCorrectRepeatPrescriptionsShown(coursesToCheck)
     }
 
     @Then("I don't see the special request text on prescription confirmation")
@@ -263,26 +234,8 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     }
 
     @Then("A validation message (.*) displayed indicating the user has not selected any repeat prescriptions")
-    fun aValidationMessageIsDisplayedIndicatingTheUserhasNotSelectedAnyRepeatPrescriptions(visibility: String) {
+    fun aValidationMessageIsDisplayedIndicatingTheUserHasNotSelectedAnyRepeatPrescriptions(visibility: String) {
         courseSteps.assertNoRepeatPrescriptionsSelectedMessageVisibility(visibility.toLowerCase() == isVisibleIndicator)
-    }
-
-    @When("I select (\\d+) additional repeat prescriptions")
-    fun iSelectXAdditionalRepeatPrescriptions(numberOfAdditionalRepeatPrescriptionsToSelect: Int) {
-        val courses = getAvailableCoursesFilteredSortedOrdered()
-        val coursesToSelect = courses.drop(selectedCourses.size).take(numberOfAdditionalRepeatPrescriptionsToSelect)
-        courseSteps.selectRepeatPrescriptions(coursesToSelect)
-        selectedCourses = selectedCourses.plus(coursesToSelect)
-    }
-
-    @Then("I see a message indicating there was an error sending my order")
-    fun iSeeAMessageOrderNotSuccessful() {
-        confirmRepeatPrescriptionOrderSteps.assertErrorSendingOrderShown()
-    }
-
-    @Then("I see a message indicating I've previously ordered one of the selected medications within the last 30 days")
-    fun iSeeAMessageIndicatingIvePreviouslyOrderedOneOfTheSelectedMedicationsWithinTheLast30days() {
-        confirmRepeatPrescriptionOrderSteps.assertMedicationOrderedWithinTheLast30DaysErrorShown()
     }
 
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
@@ -291,12 +244,11 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     private fun configureWireMockForHistoricPrescriptions() {
         if (currentProvider == null) {
-            initalize(Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
+            initialize()
         }
 
         if (currentProvider == ProviderTypes.EMIS) {
             PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
-
         }
 
         if (currentProvider == ProviderTypes.VISION) {
@@ -305,9 +257,8 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     }
 
     private fun setupWiremockandCreateData() {
-
         if (currentProvider == null) {
-            initalize(Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
+            initialize()
         }
 
         val prescriptionsFactory = PrescriptionsFactory.getForSupplier(currentProvider.toString())
@@ -320,8 +271,8 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
                 showQuantity)
     }
 
-    private fun initalize(gpSystem: String) {
-
+    private fun initialize() {
+        val gpSystem = SerenityHelpers.getGpSupplier()
         val factory = PrescriptionsFactory.getForSupplier(gpSystem)
 
         currentPatient = factory.patient

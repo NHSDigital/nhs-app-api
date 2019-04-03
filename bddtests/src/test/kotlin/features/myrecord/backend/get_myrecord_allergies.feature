@@ -5,13 +5,13 @@ Feature: Get Allergies data
 
   Scenario Outline: GP practice for <Service> has enabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled allergies functionality and the patient has "3" allergies for <Service>
-    And I have logged into <Service> and have a valid session cookie
+    And the GP Practice has enabled allergies functionality and the patient has "3" allergies
+    And I have logged in and have a valid session cookie
     When I get the users my record data
     Then I receive "3" allergies as part of the my record object
     And the flag informing that the patient has access to the allergy data is set to "True"
     And the flag informing that there was an error retrieving the allergy data is set to "False"
-    And the field indicating supplier is set to <Service>
+    And the field indicating supplier is set
 
     Examples:
       |Service|
@@ -21,13 +21,13 @@ Feature: Get Allergies data
 
   Scenario Outline: GP practice for <Service> has disabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has disabled allergies functionality for <Service>
-    And I have logged into <Service> and have a valid session cookie
+    And the GP Practice has disabled allergies functionality
+    And I have logged in and have a valid session cookie
     When I get the users my record data
     Then I receive "0" allergies as part of the my record object
     And the flag informing that the patient has access to the allergy data is set to "False"
     And the flag informing that there was an error retrieving the allergy data is set to "False"
-    And the field indicating supplier is set to <Service>
+    And the field indicating supplier is set
 
     Examples:
       |Service|

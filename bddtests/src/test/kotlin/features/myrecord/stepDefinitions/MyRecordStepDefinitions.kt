@@ -27,6 +27,7 @@ import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -51,15 +52,17 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
     @Given("^the my record wiremocks are initialised for (.*)$")
-    fun givenMyRecordWiremocksAreInitialisedfor(getService: String) {
+    fun givenMyRecordWiremocksAreInitialisedFor(getService: String) {
+        SerenityHelpers.setGpSupplier(getService)
         setPatientToDefaultFor(getService)
         CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
         SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(this.patient)
         MyRecordFactory.getForSupplier(getService).enabledWithBlankRecord(patient)
     }
 
-    @Given("the GP Practice has disabled summary care record functionality for (.*)")
-    fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionalityFor(getService: String) {
+    @Given("^the GP Practice has disabled summary care record functionality$")
+    fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         MyRecordFactory.getForSupplier(getService).disabled(patient)
     }
@@ -274,10 +277,10 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         assertEquals(message, section.firstParagraph.text)
     }
 
-    @Then("^the field indicating supplier is set to (.*)$")
-    fun thenTheFlagIndicatingSupplierIsSetTo(supplier: String) {
+    @Then("^the field indicating supplier is set$")
+    fun thenTheFlagIndicatingSupplierIsSetTo() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals(supplier, result.response.supplier)
+        assertEquals(SerenityHelpers.getGpSupplier(), result.response.supplier)
     }
 
     @Then("^I am redirected to the my record page$")

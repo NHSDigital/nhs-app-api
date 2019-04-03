@@ -19,6 +19,8 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.defaults.VisionMockDefaults
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -35,7 +37,7 @@ import java.util.*
 private const val WAIT_TIME_GREATER_THAN_THIRTY_SECS = 31L
 
 open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
-    
+
     val mockingClient = MockingClient.instance
 
     var prescriptionSubmissionRequest: PrescriptionSubmissionRequest? = null
@@ -149,9 +151,9 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @Given("I select (\\d+) (.*) repeatable prescriptions to order")
-    fun iSelectXRepeatablePrescriptionsToOrder(amount: Int, gpSystem: String) {
-        prescriptionSubmissionWireMockAndDataSetup(amount, gpSystem)
+    @Given("I select (\\d+) repeatable prescriptions to order")
+    fun iSelectXRepeatablePrescriptionsToOrder(amount: Int) {
+        prescriptionSubmissionWireMockAndDataSetup(amount, SerenityHelpers.getGpSupplier())
     }
 
     @And("^the scenario is (.*)$")
@@ -162,6 +164,11 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Given("^I am using (.*) GP System to submit my prescription$")
     fun givenIHaveXPastRepeatPrescriptions(gpSystem: String) {
+        SerenityHelpers.setGpSupplier(gpSystem)
+        currentPatient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(currentPatient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
         initialize(gpSystem)
     }
 
@@ -243,8 +250,18 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         }
     }
 
+    @Then("I see a message indicating there was an error sending my order")
+    fun iSeeAMessageOrderNotSuccessful() {
+        confirmRepeatPrescriptionOrderSteps.assertErrorSendingOrderShown()
+    }
+
+    @Then("I see a message indicating I've previously ordered one of the selected medications within the last 30 days")
+    fun iSeeAMessageIndicatingIvePreviouslyOrderedOneOfTheSelectedMedicationsWithinTheLast30days() {
+        confirmRepeatPrescriptionOrderSteps.assertMedicationOrderedWithinTheLast30DaysErrorShown()
+    }
+
     private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String) {
-        coursesStepDefinitions.thereAreXXRepeatablePrescriptionsAvailable(amount, gpSystem)
+        coursesStepDefinitions.thereAreXXRepeatablePrescriptionsAvailable(amount)
         coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount)
         currentScenarioState = PrescriptionsFactory.getForSupplier(gpSystem)
                 .setupWireMockAndDataSetup(

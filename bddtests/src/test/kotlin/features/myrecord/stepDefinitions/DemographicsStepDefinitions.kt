@@ -6,6 +6,7 @@ import cucumber.api.java.en.When
 import features.myrecord.factories.DemographicsFactory
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
@@ -23,14 +24,16 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
         }
     }
 
-    @Given("^the GP Practice has enabled demographics functionality for (.*)$")
-    fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor(getService: String) {
+    @Given("^the GP Practice has enabled demographics functionality$")
+    fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         DemographicsFactory.getForSupplier(getService).enabled(this@DemographicsStepDefinitions.patient)
     }
 
-    @Given("^the GP Practice has disabled demographics functionality for (.*)$")
-    fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor(getService: String) {
+    @Given("^the GP Practice has disabled demographics functionality$")
+    fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor() {
+        val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         DemographicsFactory.getForSupplier(getService).disabled(this@DemographicsStepDefinitions.patient)
     }

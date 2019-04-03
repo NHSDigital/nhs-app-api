@@ -3,8 +3,6 @@ package features.sharedStepDefinitions
 
 import models.Patient
 
-const val GLOBAL_PROVIDER_TYPE = "GLOBAL_PROVIDER_TYPE"
-
 open class BaseStepDefinition {
 
     companion object {
