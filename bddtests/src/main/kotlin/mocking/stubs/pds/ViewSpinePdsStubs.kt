@@ -21,7 +21,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
         // Get nominated pharmacy ods code
         mockingClient.forSpine {
             PdsNominatedPharmacyBuilder(updateSoapAction)
-                    .respondWithSuccess(getP1Response("FAJ15"))
+                    .respondWithSuccess(getP1Response("FXH02"))
                     .inScenario(changeNominatedPharmacy)
                     .whenScenarioStateIs(Scenario.STARTED)
                     .willSetStateTo(pharmacyUpdatedScenario) }

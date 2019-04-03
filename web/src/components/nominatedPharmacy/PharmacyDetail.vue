@@ -19,10 +19,20 @@
         {{ $t('nominatedPharmacy.openingTimes') }}
       </template>
       <div>
-        <div v-for="(openingTime, index) in nominatedPharmacy.openingTimes" :key="index">
+        <div v-for="(openingTimeDetail, i)
+               in nominatedPharmacy.openingTimesFormatted"
+             :key="i">
           <div :class="$style['row']">
-            <div :class="$style['column']">{{ openingTime.day }}</div>
-            <div :class="$style['column']">{{ openingTime.time }}</div>
+            <div :class="$style['column']">{{ openingTimeDetail.day }}</div>
+            <div :class="$style['column']">
+              <div
+                v-if="openingTimeDetail.times.length === 0">{{ $t('nominatedPharmacy.closed') }}
+              </div>
+              <div v-else>
+                <div v-for="(openingTime, j) in openingTimeDetail.times"
+                     :key="j">{{ openingTime }}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -152,16 +152,7 @@ export default {
     changePharmacyLink: 'Change my nominated pharmacy',
     openingTimes: 'Opening times',
     continueButton: 'Continue',
-  },
-  searchNominatedPharmacy: {
-    pageTitle: 'Change my nominated pharmacy',
-    line1: 'The pharmacy you choose is where your repeat prescription will be sent.',
-    subHeader: 'Postcode',
-    line2: 'Find pharmacies within 5km of this postcode.',
-    searchButton: 'Search',
-    link1: 'See all internet pharmacies',
-    link2: 'See all dispensing appliance contractors',
-    emptySearchError: 'Enter a postcode',
+    closed: 'Closed',
   },
   nominatedPharmacySearchResults: {
     header: 'Change my nominated pharmacy',

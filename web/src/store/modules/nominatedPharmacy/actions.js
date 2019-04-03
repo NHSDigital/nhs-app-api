@@ -7,13 +7,20 @@ import {
   CLEAR_SELECTED_NOMINATED_PHARMACY,
   SELECT,
 } from './mutation-types';
+import { mapPharmacyDetail } from '@/lib/pharmacy-detail/mapper';
+
+const formatWithOpeningTimes = (pharmacy) => {
+  const response = Object.assign({}, pharmacy);
+  response.openingTimesFormatted = mapPharmacyDetail(pharmacy.openingTimes);
+  return response;
+};
 
 export default {
   load({ commit }) {
     return this.app.$http
       .getV1PatientNominatedPharmacy()
       .then((data) => {
-        commit(NOMINATED_PHARMACY_LOADED, data);
+        commit(NOMINATED_PHARMACY_LOADED, formatWithOpeningTimes(data));
       });
   },
   update({ commit }, data) {
@@ -39,7 +46,7 @@ export default {
     commit(SET_SEARCH_RESULTS, searchResults);
   },
   select({ commit }, nominatedPharmacy) {
-    commit(SELECT, nominatedPharmacy);
+    commit(SELECT, formatWithOpeningTimes(nominatedPharmacy));
   },
   clearSelectedNominatedPharmacy({ commit }) {
     commit(CLEAR_SELECTED_NOMINATED_PHARMACY);
