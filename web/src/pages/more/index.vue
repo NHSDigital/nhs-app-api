@@ -28,7 +28,7 @@
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { DATA_SHARING_PREFERENCES } from '@/lib/routes';
+import { DATA_SHARING_PREFERENCES, INDEX } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -41,10 +41,18 @@ export default {
       return DATA_SHARING_PREFERENCES.path;
     },
   },
+  created() {
+    this.redirectIfDesktop();
+  },
   methods: {
     navigate(event) {
       redirectTo(this, event.currentTarget.pathname, null);
       event.preventDefault();
+    },
+    redirectIfDesktop() {
+      if (!this.$store.state.device.isNativeApp) {
+        redirectTo(this, INDEX.path, null);
+      }
     },
   },
 };

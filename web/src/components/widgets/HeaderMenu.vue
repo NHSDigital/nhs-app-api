@@ -43,7 +43,8 @@
           {{ $t('navigationMenu.myRecordLabel') }}
         </a>
       </li>
-      <li>
+      <!-- Hidden as not in scope for mvp, will be needed in future -->
+      <li v-if="false">
         <a :class="$style['navMenuItem']" :href="morePath"
            data-sid="more-menu-item"
            data-purpose="morePageLink"

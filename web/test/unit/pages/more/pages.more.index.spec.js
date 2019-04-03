@@ -1,12 +1,25 @@
 import More from '@/pages/more';
 import OrganDonationLink from '@/components/organ-donation/OrganDonationLink';
-import { mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 describe('more', () => {
   let wrapper;
+  let $store;
+
+  const mountAs = (native = false) => {
+    $store = createStore({
+      state: {
+        device: {
+          isNativeApp: native,
+        },
+      },
+    });
+
+    return mount(More, { $store });
+  };
 
   beforeEach(() => {
-    wrapper = mount(More);
+    wrapper = mountAs();
   });
 
   it('will include the organ donation link', () => {
