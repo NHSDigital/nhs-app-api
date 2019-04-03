@@ -17,11 +17,11 @@ private const val NEXT_BUTTON_WAIT_TIME = 500L
 class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Steps
+    lateinit var browser: BrowserSteps
+    @Steps
     lateinit var navbarSteps: NavigationSteps
     @Steps
     lateinit var ndop: NdopSteps
-    @Steps
-    lateinit var browser: BrowserSteps
 
     lateinit var dataSharing: DataSharingPage
 

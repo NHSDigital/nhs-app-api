@@ -1,9 +1,8 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.And
-import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import features.myrecord.factories.AllergiesFactory
 import features.myrecord.factories.MyRecordVisionMocker
 import mocking.data.myrecord.AllergiesData
@@ -16,8 +15,8 @@ import utils.SerenityHelpers
 import worker.models.myrecord.MyRecordResponse
 
 private const val NUMBER_OF_ALLERGIES = 5
-open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
 
+open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
@@ -59,7 +58,7 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         }
     }
 
-    @But("the GP Practice has disabled allergies functionality")
+    @Given("the GP Practice has disabled allergies functionality")
     fun butTheGPPracticeHasDisabledAllergiesFunctionalityForService() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
@@ -76,22 +75,22 @@ open class MyRecordAllergiesStepDefinitions : AbstractDemographicsStepDefinition
         { request -> request.respondWithUnknownError() }
     }
 
-    @Then("^I receive \"(.*)\" allergies as part of the my record object$")
-    fun thenIReceiveAnAllergiesObject(count: Int) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(count, result.response.allergies.data.count())
-    }
-
-    @And("^the flag informing that the patient has access to the allergy data is set to \"(.*)\"$")
+    @When("^the flag informing that the patient has access to the allergy data is set to \"(.*)\"$")
     fun andHasAccessToAllergiesDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(value, result.response.allergies.hasAccess)
     }
 
-    @And("^the flag informing that there was an error retrieving the allergy data is set to \"(.*)\"$")
+    @When("^the flag informing that there was an error retrieving the allergy data is set to \"(.*)\"$")
     fun andHasErrorsWhenRetrievingAllergiesDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(value, result.response.allergies.hasErrored)
+    }
+
+    @Then("^I receive \"(.*)\" allergies as part of the my record object$")
+    fun thenIReceiveAnAllergiesObject(count: Int) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        Assert.assertEquals(count, result.response.allergies.data.count())
     }
 
     @Then("^I see one or more drug type allergies record displayed$")

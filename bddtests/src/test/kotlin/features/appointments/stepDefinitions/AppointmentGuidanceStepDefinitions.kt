@@ -5,8 +5,8 @@ import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
 import net.thucydides.core.annotations.Steps
 
-
 class AppointmentGuidanceStepDefinitions {
+
     @Steps
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
 

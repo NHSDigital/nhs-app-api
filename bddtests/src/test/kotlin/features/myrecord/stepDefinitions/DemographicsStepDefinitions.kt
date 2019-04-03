@@ -13,17 +13,6 @@ import worker.models.demographics.Demographics
 
 open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
-    @When("^I get the users demographic data$")
-    fun whenIGetTheUsersDemographicsDataFor() {
-        try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getDemographics()
-
-            Serenity.setSessionVariable(Demographics::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-        }
-    }
-
     @Given("^the GP Practice has enabled demographics functionality$")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor() {
         val getService = SerenityHelpers.getGpSupplier()
@@ -36,6 +25,17 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
         DemographicsFactory.getForSupplier(getService).disabled(this@DemographicsStepDefinitions.patient)
+    }
+
+    @When("^I get the users demographic data$")
+    fun whenIGetTheUsersDemographicsDataFor() {
+        try {
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getDemographics()
+
+            Serenity.setSessionVariable(Demographics::class).to(result)
+        } catch (httpException: NhsoHttpException) {
+            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+        }
     }
 
     @Then("^I receive the demographic object$")

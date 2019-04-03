@@ -65,7 +65,15 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     @Given("^I have historic prescriptions$")
     fun iHaveHistoricPrescriptions() {
-        configureWireMockForHistoricPrescriptions()
+        if (currentProvider == null) {
+            initialize()
+        }
+        if (currentProvider == ProviderTypes.EMIS) {
+            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
+        }
+        if (currentProvider == ProviderTypes.VISION) {
+            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
+        }
     }
 
     @Given("I select (\\d+) repeatable prescriptions out of (\\d+) available$")
@@ -73,6 +81,17 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
 
         repeatPrescriptions.verifyVisiblePrescriptionCount(numberOfPrescriptions)
+    }
+
+    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available which have (.*)")
+    fun iSelectXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToSelect: Int,
+                                                  numberOfPrescriptionsToCreate: Int,
+                                                  content: String) {
+        iHaveXAssignedPrescriptionsWhichHasX(numberOfPrescriptionsToCreate, content)
+        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
+
+        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
     }
 
     fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int) {
@@ -89,17 +108,6 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate)
         xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
         xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
-    }
-
-    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available which have (.*)")
-    fun iSelectXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToSelect: Int,
-                                                  numberOfPrescriptionsToCreate: Int,
-                                                  content: String) {
-        iHaveXAssignedPrescriptionsWhichHasX(numberOfPrescriptionsToCreate, content)
-        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
-        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
-
-        iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect)
     }
 
     @Given("(\\d+) of my prescriptions are of type repeat")
@@ -240,20 +248,6 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
         return coursesLoader.getAvailableCoursesFilteredSortedOrdered()
-    }
-
-    private fun configureWireMockForHistoricPrescriptions() {
-        if (currentProvider == null) {
-            initialize()
-        }
-
-        if (currentProvider == ProviderTypes.EMIS) {
-            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
-        }
-
-        if (currentProvider == ProviderTypes.VISION) {
-            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
-        }
     }
 
     private fun setupWiremockandCreateData() {

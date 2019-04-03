@@ -14,11 +14,27 @@ import pages.navigation.HeaderNative
 class MyAppointmentsStepDefinitions {
 
     @Steps
+    lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
+    @Steps
     lateinit var myAppointmentsUISteps: MyAppointmentsUISteps
 
     lateinit var headerNative: HeaderNative
-    @Steps
-    lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
+
+    @When("^I select \"([^\"]*)\" button$")
+    fun whenISelectButton(buttonText: String) {
+        myAppointmentsUISteps.myAppointmentsPage.locatorMethods.waitForNativeStepToComplete()
+        myAppointmentsUISteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
+    }
+
+    @When("^I select a \"Cancel appointment\" link$")
+    fun iSelectACancelLink() {
+        myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
+    }
+
+    @When("^I select a \"Back\" link$")
+    fun iSelectABackLink() {
+        myAppointmentsUISteps.myAppointmentsPage.clickOnLinkContainingText("Back")
+    }
 
     @Then("^the Appointment Slot page is displayed$")
     fun theAppointmentSlotPageIsDisplayed() {
@@ -98,12 +114,6 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsUISteps.myAppointmentsPage.assertPastTextNotPresent()
     }
 
-    @When("^I select \"([^\"]*)\" button$")
-    fun whenISelectButton(buttonText: String) {
-        myAppointmentsUISteps.myAppointmentsPage.locatorMethods.waitForNativeStepToComplete()
-        myAppointmentsUISteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
-    }
-
     @Then("^I am given the list of upcoming appointments$")
     fun thenIAmGivenTheListOfUpcomingAppointments() {
         myAppointmentsUISteps.checkUpcomingAppointmentsAreCorrectlyPopulated()
@@ -128,16 +138,6 @@ class MyAppointmentsStepDefinitions {
     @Then("^no appointment can be cancelled$")
     fun noAppointmentCanBeCancelled() {
         myAppointmentsUISteps.verifyThatThereAreNoCancelLinks()
-    }
-
-    @When("^I select a \"Cancel appointment\" link$")
-    fun iSelectACancelLink() {
-        myAppointmentsUISteps.myAppointmentsPage.clickFirstCancelAppointmentLink()
-    }
-
-    @When("^I select a \"Back\" link$")
-    fun iSelectABackLink() {
-        myAppointmentsUISteps.myAppointmentsPage.clickOnLinkContainingText("Back")
     }
 
     @Then("^a \"Cancellation confirmed\" message is displayed$")

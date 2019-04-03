@@ -7,8 +7,6 @@ import javax.servlet.http.Cookie
 
 class AppointmentsSharedStepDefinitions {
 
-
-
     companion object {
 
         @Step
@@ -26,6 +24,4 @@ class AppointmentsSharedStepDefinitions {
                         "6zxTv1y0nwu8AAXcUg7EFlSxIKLJV7B7aC0GCiUDAwkxMnzHP6sm; path=/; secure; samesite=lax; httponly"
         )
     }
-
-
 }

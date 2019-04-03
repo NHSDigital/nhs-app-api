@@ -29,30 +29,25 @@ class HomePageStepDefinitions : AbstractSteps() {
     @Steps
     private lateinit var browser: BrowserSteps
     @Steps
-    private lateinit var navBar: NavBarNative
-    @Steps
-    private lateinit var webFooter: WebFooter
-    @Steps
-    private lateinit var navHeader: NavigationSteps
+    private lateinit var checkMySymptoms: CheckMySymptoms
     @Steps
     private lateinit var homeSteps: HomeSteps
     @Steps
-    private lateinit var checkMySymptoms: CheckMySymptoms
+    private lateinit var loginSteps: LoginSteps
     @Steps
     private lateinit var myAppointmentsUISteps: MyAppointmentsUISteps
+    @Steps
+    private lateinit var navBar: NavBarNative
+    @Steps
+    private lateinit var navHeader: NavigationSteps
+    @Steps
+    private lateinit var organDonationSteps: OrganDonationStepDefinitions
     @Steps
     private lateinit var prescriptions: PrescriptionsSteps
     @Steps
     private lateinit var recordSteps: MyRecordStepDefinitions
     @Steps
-    private lateinit var organDonationSteps: OrganDonationStepDefinitions
-    @Steps
-    private lateinit var loginSteps: LoginSteps
-
-    @Then("^I see the beta banner$")
-    fun iSeeTheBetaBanner() {
-        homeSteps.homePage.assertBetaBannerVisible()
-    }
+    private lateinit var webFooter: WebFooter
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
@@ -68,6 +63,11 @@ class HomePageStepDefinitions : AbstractSteps() {
     @When("^I click the help icon on the login page")
     fun iClickTheHelpIconOnTheLoginPage() {
         loginSteps.loginPage.clickHelpIcon()
+    }
+
+    @Then("^I see the beta banner$")
+    fun iSeeTheBetaBanner() {
+        homeSteps.homePage.assertBetaBannerVisible()
     }
 
     @Then("^I see the current app version")

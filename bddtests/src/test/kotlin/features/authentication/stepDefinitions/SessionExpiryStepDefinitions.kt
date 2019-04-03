@@ -25,11 +25,11 @@ private const val DELAY_FOR_DIALOG = 120_000L
 
 class SessionExpiryStepDefinitions : AbstractSteps() {
 
-    lateinit var sessionExpiry: SessionExpiryNative
-    lateinit var patient: Patient
-
     @Steps
     lateinit var login: LoginSteps
+
+    lateinit var sessionExpiry: SessionExpiryNative
+    lateinit var patient: Patient
 
     @Given("^I am logged in as a (.*) user expecting a \"(.*)\"\\ response when extending their session$")
     fun iClickToExtendSessionExpectingResponse(gpSystem: String, expectedResponse: String) {
@@ -75,6 +75,33 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
         Thread.sleep(DELAY_FOR_DIALOG)
     }
 
+    @When("^I click to extend the session$")
+    fun iClickToExtendSession() {
+        val patient = Patient.getDefault("EMIS")
+        PatientVerificationFactory.getForSupplier("EMIS")
+                .setSessionExtendMockResponse(patient, "Success")
+        sessionExpiry.clickExtendSession()
+    }
+
+    @When("^I click to log out$")
+    fun iClickToLogOut() {
+        sessionExpiry.clickLogOut()
+    }
+
+    @When("^I am idle long enough for the session expiry dialog box to appear$")
+    fun iAmIdleLongEnoughForSessionExpiryDialog() {
+        sessionExpiry.waitForSessionExpandDialogue()
+    }
+
+    @When("^I am idle long enough on a secure page for the session expiry dialog box to appear$")
+    fun iAmIdleLongEnoughOnASecurePageForSessionExpiryDialog() {
+        sessionExpiry.waitForSessionExpandDialogue()
+        Thread.sleep(DELAY_BEFORE_RESUME)
+        val presentOnPage =  sessionExpiry.isOnPage(SESSION_EXPIRY_HEADER)
+        Assert.assertEquals(true, presentOnPage)
+        sessionExpiry.scrollAndroidNativePage()
+    }
+
     @Then("^I see the login page with the session expiry notification$")
     fun iSeeTheLoginPageWithTheSessionExpiryNotification() {
         login.loginPage.shouldBeDisplayed()
@@ -87,23 +114,10 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
         Assert.assertEquals(true, presentOnPage)
     }
 
-    @When("^I click to extend the session$")
-    fun iClickToExtendSession() {
-        val patient = Patient.getDefault("EMIS")
-        PatientVerificationFactory.getForSupplier("EMIS")
-                .setSessionExtendMockResponse(patient, "Success")
-        sessionExpiry.clickExtendSession()
-    }
-
     @Then("^the dialog box is not visible on the screen$")
     fun theDialogBoxIsNotVisibile() {
         val presentOnPage = sessionExpiry.isOnPage(SESSION_EXPIRY_HEADER)
         Assert.assertEquals(false, presentOnPage)
-    }
-
-    @When("^I click to log out$")
-    fun iClickToLogOut() {
-        sessionExpiry.clickLogOut()
     }
 
     @Then("^I background the app long enough for the session warning dialog to appear and bring it back to foreground$")
@@ -131,20 +145,6 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
 
     @Then("^I scroll the device$")
     fun iScrollTheDevice() {
-        sessionExpiry.scrollAndroidNativePage()
-    }
-
-    @When("^I am idle long enough for the session expiry dialog box to appear$")
-    fun iAmIdleLongEnoughForSessionExpiryDialog() {
-        sessionExpiry.waitForSessionExpandDialogue()
-    }
-
-    @When("^I am idle long enough on a secure page for the session expiry dialog box to appear$")
-    fun iAmIdleLongEnoughOnASecurePageForSessionExpiryDialog() {
-        sessionExpiry.waitForSessionExpandDialogue()
-        Thread.sleep(DELAY_BEFORE_RESUME)
-        val presentOnPage =  sessionExpiry.isOnPage(SESSION_EXPIRY_HEADER)
-        Assert.assertEquals(true, presentOnPage)
         sessionExpiry.scrollAndroidNativePage()
     }
 

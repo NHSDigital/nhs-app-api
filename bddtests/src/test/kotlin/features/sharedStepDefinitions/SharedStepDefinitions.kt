@@ -1,7 +1,6 @@
 package features.sharedStepDefinitions
 
 import cucumber.api.java.After
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -16,7 +15,6 @@ import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.navigation.NavBarNative
@@ -32,13 +30,13 @@ private const val WAIT_IN_SECONDS = 190L
 open class SharedStepDefinitions {
 
     @Steps
-    lateinit var login: LoginSteps
-    @Steps
     lateinit var browser: BrowserSteps
     @Steps
-    lateinit var navBar: NavigationSteps
-    @Steps
     lateinit var home: HomeSteps
+    @Steps
+    lateinit var login: LoginSteps
+    @Steps
+    lateinit var navBar: NavigationSteps
 
     val mockingClient = MockingClient.instance
 
@@ -88,6 +86,12 @@ open class SharedStepDefinitions {
         EmisSessionCreateJourneyFactory(mockingClient).createFor(EmisMockDefaults.patientEmis)
     }
 
+    @Given("My session has expired")
+    fun givenMySessionHasExpired() {
+        Serenity.setSessionVariable("SESSION_EXPIRY_MINUTES").to(1)
+        iWaitForXSeconds(WAIT_IN_SECONDS)
+    }
+
     @When("^I navigate to (\\w+)$")
     open fun iNavigateTo(tab: String) {
         navBar.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
@@ -100,7 +104,7 @@ open class SharedStepDefinitions {
         }
     }
 
-    @And("^the (.*) menu button is highlighted")
+    @Then("^the (.*) menu button is highlighted")
     fun iSeeAHighlightedMenuButton(type: String) {
         Assert.assertTrue(navBar.hasSelectedTab(NavBarNative.NavBarType.valueOf(type.toUpperCase())))
     }
@@ -128,11 +132,5 @@ open class SharedStepDefinitions {
     @Then("I wait for (\\d+) seconds")
     fun iWaitForXSeconds(secondsToWaitFor: Long) {
         Thread.sleep(((secondsToWaitFor) * WAIT_IN_SECONDS_MODIFIER))
-    }
-
-    @Given("My session has expired")
-    fun givenMySessionHasExpired() {
-        Serenity.setSessionVariable("SESSION_EXPIRY_MINUTES").to(1)
-        iWaitForXSeconds(WAIT_IN_SECONDS)
     }
 }

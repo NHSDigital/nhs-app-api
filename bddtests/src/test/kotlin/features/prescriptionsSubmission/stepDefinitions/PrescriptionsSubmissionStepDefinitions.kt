@@ -1,7 +1,6 @@
 package features.prescriptionsSubmission.stepDefinitions
 
 import com.github.tomakehurst.wiremock.stubbing.Scenario
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -38,24 +37,24 @@ private const val WAIT_TIME_GREATER_THAN_THIRTY_SECS = 31L
 
 open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
+    @Steps
+    lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
+    @Steps
+    lateinit var coursesStepDefinitions: CoursesStepDefinitions
+    @Steps
+    lateinit var prescriptionSteps: PrescriptionsSteps
+
     val mockingClient = MockingClient.instance
 
     var prescriptionSubmissionRequest: PrescriptionSubmissionRequest? = null
+
     lateinit var prescriptionLoader: IPrescriptionLoader<*>
 
-    @Steps
-    lateinit var coursesStepDefinitions: CoursesStepDefinitions
-
-    @Steps
-    lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
-
     lateinit var scenarioTitle: String
+
     var currentScenarioState: String = Scenario.STARTED
 
     lateinit var prescriptionPage: PrescriptionsPage
-
-    @Steps
-    lateinit var prescriptionSteps: PrescriptionsSteps
 
     private var initialHistoricPrescriptionsCount = 0
 
@@ -79,7 +78,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         prescriptionSubmissionRequest = PrescriptionSubmissionRequest(uuids, "")
     }
 
-    @And("^(\\d+) invalid courses")
+    @Given("^(\\d+) invalid courses")
     fun xInvalidCourses(numOfCourses: Int) {
         val uuids: MutableList<String> = mutableListOf()
 
@@ -90,7 +89,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         prescriptionSubmissionRequest!!.courseIds.addAll(uuids)
     }
 
-    @And("^EMIS responds with an error indicating an included course has already been ordered in the last 30 days " +
+    @Given("^EMIS responds with an error indicating an included course has already been ordered in the last 30 days " +
             "when submitting the repeat prescription")
     fun emisRespondsWithErrorIndicatingAnIncludedCourseHasAlreadyBeenOrderedWhenSubmittingRepeatPrescription() {
         mockingClient.forEmis {
@@ -99,7 +98,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @And("^Emis responds with an error indicating a course is invalid")
+    @Given("^Emis responds with an error indicating a course is invalid")
     fun emisRespondsWithAnErrorIndicatingACourseIsInvalid() {
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
@@ -107,7 +106,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @And("^EMIS responds with a Created success code when submitting the repeat prescription")
+    @Given("^EMIS responds with a Created success code when submitting the repeat prescription")
     fun emisRespondsWithACreatedSuccessCodeWhenSubmittingRepeatPrescription() {
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
@@ -115,7 +114,8 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @And("^EMIS responds with an error indicating prescriptions is not enabled when submitting the repeat prescription")
+    @Given("^EMIS responds with an error indicating prescriptions is not enabled when submitting the repeat " +
+            "prescription")
     fun emisRespondsWithAnErrorIndicatingPrescriptionsIsNotEnabled() {
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
@@ -123,31 +123,11 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @When("I submit the repeat prescription")
-    fun whenISubmitTheRepeatPrescription() {
-        try {
-            val response = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.postPrescriptionsConnection(prescriptionSubmissionRequest)
-            SerenityHelpers.setHttpResponse(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
-    }
-
-    @And("^EMIS takes longer than 30 seconds to respond when a repeat prescription is submitted")
+    @Given("^EMIS takes longer than 30 seconds to respond when a repeat prescription is submitted")
     fun emisTakesTooLongToRespondWhenARepeatPrescriptionIsSubmitted() {
         mockingClient.forEmis {
             prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
                     .respondWithCreated().delayedBy(Duration.ofSeconds(WAIT_TIME_GREATER_THAN_THIRTY_SECS))
-        }
-    }
-
-    @And("EMIS responds with an unknown internal server error when a repeat prescription is submitted")
-    fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted() {
-        mockingClient.forEmis {
-            prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
-                    .respondWithGenericInternalServerError()
         }
     }
 
@@ -156,7 +136,19 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         prescriptionSubmissionWireMockAndDataSetup(amount, SerenityHelpers.getGpSupplier())
     }
 
-    @And("^the scenario is (.*)$")
+    private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String) {
+        coursesStepDefinitions.thereAreXXRepeatablePrescriptionsAvailable(amount)
+        coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount)
+        currentScenarioState = PrescriptionsFactory.getForSupplier(gpSystem)
+                .setupWireMockAndDataSetup(
+                        scenarioTitle,
+                        currentScenarioState,
+                        statusSubmitted,
+                        initialHistoricPrescriptionsCount,
+                        amount)
+    }
+
+    @Given("^the scenario is (.*)$")
     fun theScenarioIsX(title: String) {
         scenarioTitle = title
     }
@@ -180,7 +172,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         Serenity.setSessionVariable("EmisPrescriptionsMap").to(emisPrescriptionMap)
     }
 
-    @And("^I have (\\d+) historic prescriptions in this scenario$")
+    @Given("^I have (\\d+) historic prescriptions in this scenario$")
     fun iHaveXHistoricPrescriptionsInThisScenario(amount: Int) {
 
         initialHistoricPrescriptionsCount = amount
@@ -216,10 +208,30 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         }
     }
 
+    @When("I submit the repeat prescription")
+    fun whenISubmitTheRepeatPrescription() {
+        try {
+            val response = Serenity
+                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .prescriptions.postPrescriptionsConnection(prescriptionSubmissionRequest)
+            SerenityHelpers.setHttpResponse(response)
+        } catch (httpException: NhsoHttpException) {
+            SerenityHelpers.setHttpException(httpException)
+        }
+    }
+
     @When("I click Confirm and order repeat prescription")
     fun iClickConfirmAndOrderRepeatPrescription() {
         confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage
                 .clickConfirmAndOrderRepeatPrescriptionButton()
+    }
+
+    @Then("EMIS responds with an unknown internal server error when a repeat prescription is submitted")
+    fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted() {
+        mockingClient.forEmis {
+            prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
+                    .respondWithGenericInternalServerError()
+        }
     }
 
 
@@ -258,17 +270,5 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     @Then("I see a message indicating I've previously ordered one of the selected medications within the last 30 days")
     fun iSeeAMessageIndicatingIvePreviouslyOrderedOneOfTheSelectedMedicationsWithinTheLast30days() {
         confirmRepeatPrescriptionOrderSteps.assertMedicationOrderedWithinTheLast30DaysErrorShown()
-    }
-
-    private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String) {
-        coursesStepDefinitions.thereAreXXRepeatablePrescriptionsAvailable(amount)
-        coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount)
-        currentScenarioState = PrescriptionsFactory.getForSupplier(gpSystem)
-                .setupWireMockAndDataSetup(
-                        scenarioTitle,
-                        currentScenarioState,
-                        statusSubmitted,
-                        initialHistoricPrescriptionsCount,
-                        amount)
     }
 }

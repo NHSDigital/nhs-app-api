@@ -14,6 +14,27 @@ class TermsAndConditionsStepDefinitions {
     lateinit var termsAndConditions: TermsAndConditionsSteps
 
 
+    @Given("^I am on the Terms and conditions page$")
+    fun iAmOnTheTermsAndConditionsPage() {
+        assert(termsAndConditions.mainBodyTextVisible())
+        assert(termsAndConditions.termsOfUseLinkVisible())
+        assert(termsAndConditions.privacyPolicyLinkVisible())
+        assert(termsAndConditions.cookiesPolicyLinkVisible())
+        assert(termsAndConditions.tcCheckBoxVisible())
+        assert(termsAndConditions.continueButtonVisible())
+    }
+
+    @Given("^I have not already accepted terms and conditions$")
+    fun iHaveNotAcceptedTermsAndConditions() {
+        CosmosDb.clearTermsAndConditionsAcceptance()
+    }
+
+    @Given("^I have already accepted terms and conditions$")
+    fun iHaveAlreadyAcceptedTermsAndConditions() {
+        CosmosDb.clearTermsAndConditionsAcceptance()
+        CosmosDb.addTermsAndConditionsAcceptance(OffsetDateTime.now())
+    }
+
     @When("^I click the back arrow$")
     fun iClickTheBackArrow() {
         termsAndConditions.termsAndConditionsPage.tcBackButton.element.click()
@@ -48,26 +69,5 @@ class TermsAndConditionsStepDefinitions {
     fun iSeeErrorMessages() {
         termsAndConditions.secondaryErrorMessageVisible()
         termsAndConditions.mainErrorMessageVisible()
-    }
-
-    @Given("^I am on the Terms and conditions page$")
-    fun iAmOnTheTermsAndConditionsPage() {
-        assert(termsAndConditions.mainBodyTextVisible())
-        assert(termsAndConditions.termsOfUseLinkVisible())
-        assert(termsAndConditions.privacyPolicyLinkVisible())
-        assert(termsAndConditions.cookiesPolicyLinkVisible())
-        assert(termsAndConditions.tcCheckBoxVisible())
-        assert(termsAndConditions.continueButtonVisible())
-    }
-
-    @Given("^I have not already accepted terms and conditions$")
-    fun iHaveNotAcceptedTermsAndConditions() {
-        CosmosDb.clearTermsAndConditionsAcceptance()
-    }
-
-    @Given("^I have already accepted terms and conditions$")
-    fun iHaveAlreadyAcceptedTermsAndConditions() {
-        CosmosDb.clearTermsAndConditionsAcceptance()
-        CosmosDb.addTermsAndConditionsAcceptance(OffsetDateTime.now())
     }
 }

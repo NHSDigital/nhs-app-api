@@ -28,14 +28,14 @@ open class OrganDonationSpecificOrganChoiceStepDefinitions {
         OrganDonationSerenityHelpers.SOME_ORGANS_EXISTING.set(organsToDonate)
     }
 
-    @Then("^the Organ Donation Specific Organ Choice page is displayed")
-    fun theOrganDonationYourChoicePageIsDisplayed() {
-        organDonationYourChoicePage.assertDisplayed()
-    }
-
     @When("^I click the Find out more about organs and tissue link")
     fun thenIClickTheFindOutMoreAboutOrgansAndTissueLink(){
         organDonationYourChoicePage.moreAboutOrgansAndTissueLink.click()
+    }
+
+    @Then("^the Organ Donation Specific Organ Choice page is displayed")
+    fun theOrganDonationYourChoicePageIsDisplayed() {
+        organDonationYourChoicePage.assertDisplayed()
     }
 
     @Then("^the Find Out More About Organs And Tissue Page is displayed")

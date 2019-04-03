@@ -1,13 +1,11 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.myrecord.factories.MyRecordFactory
-import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -35,13 +33,11 @@ import worker.models.myrecord.MyRecordResponse
 open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
-    lateinit var login: LoginSteps
-    @Steps
     lateinit var browser: BrowserSteps
     @Steps
-    lateinit var nav: NavigationSteps
+    lateinit var login: LoginSteps
     @Steps
-    lateinit var navHeader: NavHeaderSteps
+    lateinit var nav: NavigationSteps
     @Steps
     lateinit var webHeader: WebHeader
 
@@ -67,10 +63,66 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         MyRecordFactory.getForSupplier(getService).disabled(patient)
     }
 
+    @Given("^I am on the record warning page$")
+    fun givenIAmOnTheRecordWarningPage() {
+        browser.goToApp()
+        login.using(this.patient)
+        nav.select(NavBarNative.NavBarType.MY_RECORD)
+    }
+
+    @Given("^I am on my record information page$")
+    fun givenIAmOnMyRecordInformationPage() {
+        browser.goToApp()
+        login.using(this.patient)
+        nav.select(NavBarNative.NavBarType.MY_RECORD)
+        myRecordWarningPage.clickAgreeAndContinue()
+        myRecordInfoPage.locatorMethods.waitForNativeStepToComplete()
+        myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
+        myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
+        myRecordInfoPage.waitForSpinnerToDisappear()
+    }
+
     @When("^I enter url address for my record directly into the url$")
     fun whenIEnterUrlAddressForMyRecordDirectlyIntoTheUrl() {
         val fullUrl = Config.instance.url + "/my-record"
         browser.browseTo(fullUrl)
+    }
+
+    @When("^I get the users my record data$")
+    fun whenIGetTheUsersMyRecordData() {
+        try {
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
+
+            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
+        } catch (httpException: NhsoHttpException) {
+            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+        }
+    }
+
+    @When("^I click agree and continue$")
+    fun whenIClickAgreeAndContinue() {
+        myRecordWarningPage.clickAgreeAndContinue()
+    }
+
+    @When("^I click the back to home$")
+    fun whenIClickTheBackToHome() {
+        myRecordWarningPage.clickBacktoHome()
+    }
+
+    @When("^I click My details heading$")
+    fun whenIClickMyDetailsHeading() {
+        myRecordInfoPage.myDetails.toggleShrub()
+    }
+
+    @When("^I click the (.*) section on My Record$")
+    fun iClickOnTheSection(heading: String) {
+        myRecordInfoPage.waitForSpinnerToDisappear()
+        myRecordInfoPage.getSection(heading).toggleShrub()
+    }
+
+    @When("^I navigate away from the medical record page$")
+    fun iNavigateAwayFromTheMedicalRecordPage() {
+        nav.select(NavBarNative.NavBarType.SYMPTOMS)
     }
 
     @Then("^I see record warning page opened$")
@@ -89,7 +141,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         thenISeeAgreeAndContinueButton()
         thenISeeBackToHome()
         thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
-
     }
 
     @Then("^I see the my medical record page$")
@@ -99,7 +150,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         iSeePatientInformationDetails()
         thenISeeMyRecordButtonOnTheNavBarIsHighlighted()
     }
-
 
     @Then("^I see header text is My medical record$")
     fun thenISeeHeaderTextIsMyMedicalRecord() {
@@ -137,26 +187,9 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         assertTrue(nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))
     }
 
-    @Given("^I am on the record warning page$")
-    fun givenIAmOnTheRecordWarningPage() {
-        browser.goToApp()
-        login.using(this.patient)
-        nav.select(NavBarNative.NavBarType.MY_RECORD)
-    }
-
-    @When("^I click agree and continue$")
-    fun whenIClickAgreeAndContinue() {
-        myRecordWarningPage.clickAgreeAndContinue()
-    }
-
     @Then("^the my record information screen is loaded$")
     fun thenTheMyRecordInformationScreenIsLoaded() {
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
-    }
-
-    @When("^I click the back to home$")
-    fun whenIClickTheBackToHome() {
-        myRecordWarningPage.clickBacktoHome()
     }
 
     @Then("^I will return to the home page$")
@@ -187,42 +220,14 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.assertLabelAndValue("NHS number", patient.formattedNHSNumber())
     }
 
-    @Given("^I am on my record information page$")
-    fun givenIAmOnMyRecordInformationPage() {
-        browser.goToApp()
-        login.using(this.patient)
-        nav.select(NavBarNative.NavBarType.MY_RECORD)
-        myRecordWarningPage.clickAgreeAndContinue()
-        myRecordInfoPage.locatorMethods.waitForNativeStepToComplete()
-        myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
-        myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
-        myRecordInfoPage.waitForSpinnerToDisappear()
-    }
-
     @Then("^I click the clinical abbreviations link$")
     fun thenIClickTheClinicalAbbreviationsLink() {
         myRecordInfoPage.clickClinicalAbbreviationsLink()
     }
 
-    @When("^I click My details heading$")
-    fun whenIClickMyDetailsHeading() {
-        myRecordInfoPage.myDetails.toggleShrub()
-    }
-
     @Then("^I do not see patient information details$")
     fun thenIDoNotSeePatientInformationDetails() {
         assertFalse("Name field was visible.", myRecordInfoPage.isNameVisible())
-    }
-
-    @When("^I get the users my record data$")
-    fun whenIGetTheUsersMyRecordData() {
-        try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
-
-            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-        }
     }
 
     @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
@@ -235,12 +240,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see the (.*) heading on My Record$")
     fun iSeeTheHeadingOnMyRecord(heading: String) {
         myRecordInfoPage.assertSectionHeaderIsVisible(heading)
-    }
-
-    @When("^I click the (.*) section on My Record$")
-    fun iClickOnTheSection(heading: String) {
-        myRecordInfoPage.waitForSpinnerToDisappear()
-        myRecordInfoPage.getSection(heading).toggleShrub()
     }
 
     @Then("^I see the (.*) section collapsed on My Record$")
@@ -289,20 +288,15 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         browser.shouldHaveUrl(redirectUrl)
     }
 
-    @And("^I see the top of my medical record page$")
-    fun andISeeTheTopOfMyMedicalRecordPage(){
-        assertEquals(0L, getScrollPositionX())
-        assertEquals(0L, getScrollPositionY())
-    }
-
-    @When("^I navigate away from the medical record page$")
-    fun iNavigateAwayFromTheMedicalRecordPage() {
-        nav.select(NavBarNative.NavBarType.SYMPTOMS)
-    }
-
     @Then("^I return to my medical record page$")
     fun thenIReturnToMyMedicalRecordPage() {
         nav.select(NavBarNative.NavBarType.MY_RECORD)
+    }
+
+    @Then("^I see the top of my medical record page$")
+    fun andISeeTheTopOfMyMedicalRecordPage(){
+        assertEquals(0L, getScrollPositionX())
+        assertEquals(0L, getScrollPositionY())
     }
 
     private fun getScrollPositionX(): Any {

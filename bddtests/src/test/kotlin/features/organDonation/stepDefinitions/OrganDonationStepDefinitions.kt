@@ -20,12 +20,11 @@ private const val NEW_TAB_WAIT_TIME = 1000L
 open class OrganDonationStepDefinitions {
 
     @Steps
-    lateinit var navbarSteps: NavigationSteps
-    @Steps
     lateinit var browser: BrowserSteps
+    @Steps
+    lateinit var navbarSteps: NavigationSteps
 
     lateinit var header: HeaderNative
-
     lateinit var organDonationChoicePage: OrganDonationChoicePage
 
     @Given("I am a (\\w+) user registered with organ donation to not donate my organs")
@@ -142,13 +141,10 @@ open class OrganDonationStepDefinitions {
         }
     }
 
-    fun iAmOnTheOrganDonationPage() {
-        iAmOnTheExternalOrganDonationPage()
-    }
-
-    @Then("^the internal Organ Donation page is displayed$")
-    fun iAmOnTheInternalOrganDonationPage() {
-        organDonationChoicePage.assertDisplayed()
+    private fun pageOpensWithinNativeApp() {
+        header.locatorMethods.waitForNativeStepToComplete()
+        header.waitForPageHeaderText("Organ donation register")
+        navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 
     private fun aNewTabOpens(url: String) {
@@ -157,10 +153,12 @@ open class OrganDonationStepDefinitions {
         browser.shouldHaveUrl(url)
     }
 
-    private fun pageOpensWithinNativeApp() {
-        header.locatorMethods.waitForNativeStepToComplete()
-        header.waitForPageHeaderText("Organ donation register")
-        navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
+    @Then("^the internal Organ Donation page is displayed$")
+    fun iAmOnTheInternalOrganDonationPage() {
+        organDonationChoicePage.assertDisplayed()
     }
 
+    fun iAmOnTheOrganDonationPage() {
+        iAmOnTheExternalOrganDonationPage()
+    }
 }

@@ -29,6 +29,17 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
         setDefaultNationalPracticeCodeSessionVariable(gpSystem)
     }
 
+    @Given("I have no IM1 Connection Token for (.*)")
+    fun givenIHaveNoIm1ConnectionToken(gpSystem: String) {
+        setSessionVariable("ConnectionToken").to(null)
+        setDefaultNationalPracticeCodeSessionVariable(gpSystem)
+    }
+
+    private fun setDefaultNationalPracticeCodeSessionVariable(gpSystem: String) {
+        val odsCode = PatientVerificationFactory.getForSupplier(gpSystem).odsCode
+        setSessionVariable("NationalPracticeCode").to(odsCode)
+    }
+
     @Given("Vision responds with a security header error")
     fun visionRespondsWithASecurityHeaderError() {
         setSessionVariable("ConnectionToken").to(VisionMockDefaults.patientVision.connectionToken)
@@ -65,17 +76,6 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
                             VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithUnknownError()
                 }
-    }
-
-    @Given("I have no IM1 Connection Token for (.*)")
-    fun givenIHaveNoIm1ConnectionToken(gpSystem: String) {
-        setSessionVariable("ConnectionToken").to(null)
-        setDefaultNationalPracticeCodeSessionVariable(gpSystem)
-    }
-
-    private fun setDefaultNationalPracticeCodeSessionVariable(gpSystem: String) {
-        val odsCode = PatientVerificationFactory.getForSupplier(gpSystem).odsCode
-        setSessionVariable("NationalPracticeCode").to(odsCode)
     }
 
     @Given("I have an (.*) ODS Code not in expected format")
@@ -149,6 +149,6 @@ class PatientVerificationStepDefinitions : AbstractSteps() {
     fun thenIReceiveNoNhsNumber() {
         val result = sessionVariableCalled<Im1ConnectionResponse>(Im1ConnectionResponse::class)
         Assert.assertNotNull("IM1 connection response expected, but was null", result)
-        Assert.assertEquals(0, result.nhsNumbers!!.count()) 
+        Assert.assertEquals(0, result.nhsNumbers!!.count())
     }
 }

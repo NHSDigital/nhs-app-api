@@ -1,10 +1,9 @@
 package features.myrecord.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
-import cucumber.api.java.en.And
-import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import features.myrecord.factories.MedicationsFactory
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
@@ -35,7 +34,7 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
         factory.getResult()
     }
 
-    @But("^the GP Practice has disabled medications functionality$")
+    @Given("^the GP Practice has disabled medications functionality$")
     fun butTheGPPracticeHasDisabledMedicationsFunctionality() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
@@ -57,6 +56,18 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
         }
     }
 
+    @When("^the flag informing that the patient has access to the medications data is set to \"(.*)\"$")
+    fun andHasAccessToMedicationsDataIsSetTo(value: Boolean) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals(value, result.response.medications.hasAccess)
+    }
+
+    @When("^the flag informing that there was an error retrieving the medications data is set to \"(.*)\"$")
+    fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals(value, result.response.medications.hasErrored)
+    }
+
     @Then("^I receive \"(.*)\" acute medications as part of the my record object$")
     fun thenIReceiveAnAcuteMedicationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
@@ -73,18 +84,6 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
     fun thenIReceiveADiscontinuedRepeatMedicationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(count, result.response.medications.data.discontinuedRepeatMedications.count())
-    }
-
-    @And("^the flag informing that the patient has access to the medications data is set to \"(.*)\"$")
-    fun andHasAccessToMedicationsDataIsSetTo(value: Boolean) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals(value, result.response.medications.hasAccess)
-    }
-
-    @And("^the flag informing that there was an error retrieving the medications data is set to \"(.*)\"$")
-    fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals(value, result.response.medications.hasErrored)
     }
 
     @Then("^I see current repeat medication information$")

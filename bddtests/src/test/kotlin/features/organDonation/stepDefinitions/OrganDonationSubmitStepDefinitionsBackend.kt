@@ -90,16 +90,6 @@ class OrganDonationSubmitStepDefinitionsBackend {
         }
     }
 
-    @Then("^I receive my registration id from organ donation$")
-    fun iReceiveMyRegistrationIdFromOrganDonation() {
-        val organDonationResponse = Serenity
-                .sessionVariableCalled<OrganDonationRegistrationResponse>(OrganDonationRegistrationResponse::class)
-        val expected = OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.getOrFail<String>()
-        Assert.assertEquals("Expected Organ Donation Registration Id",
-                expected,
-                organDonationResponse.identifier)
-    }
-
     @When("^I submit my organ donation withdraw decision$")
     fun iSubmitMyOrganDonationWithdrawDecision() {
         val withdrawalRequestBody = OrganDonationSerenityHelpers.ORGAN_DONATION_WITHDRAWAL
@@ -112,5 +102,15 @@ class OrganDonationSubmitStepDefinitionsBackend {
         } catch (httpException: NhsoHttpException) {
             SerenityHelpers.setHttpException(httpException)
         }
+    }
+
+    @Then("^I receive my registration id from organ donation$")
+    fun iReceiveMyRegistrationIdFromOrganDonation() {
+        val organDonationResponse = Serenity
+                .sessionVariableCalled<OrganDonationRegistrationResponse>(OrganDonationRegistrationResponse::class)
+        val expected = OrganDonationSerenityHelpers.EXPECTED_REGISTRATION_ID.getOrFail<String>()
+        Assert.assertEquals("Expected Organ Donation Registration Id",
+                expected,
+                organDonationResponse.identifier)
     }
 }

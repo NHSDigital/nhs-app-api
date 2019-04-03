@@ -23,11 +23,11 @@ import utils.SerenityHelpers
 class AppointmentsConfirmationStepDefinitions {
 
     @Steps
+    lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
+    @Steps
     lateinit var availableAppointmentsFilterSteps: AvailableAppointmentFilterSteps
     @Steps
     lateinit var availableAppointmentsSteps: AvailableAppointmentsSteps
-    @Steps
-    lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
     @Given("^I have selected an appointment slot to book$")
     fun givenIHaveSelectedAnAppointmentSlotToBook() {
@@ -129,6 +129,20 @@ class AppointmentsConfirmationStepDefinitions {
         }
     }
 
+    @When("^I enter a phone number for the appointment$")
+    fun whenIEnterAPhoneNumberForTheAppointment() {
+        val telephoneNumber = Serenity.sessionVariableCalled<String>(telephoneNumberToEnter)
+        Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
+        appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
+    }
+
+    @When("^I enter whitespace instead of a phone number for the appointment$")
+    fun whenIEnterWhitespaceInsteadOfAPhoneNumberForTheAppointment() {
+        val telephoneNumber = "  "
+        Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
+        appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
+    }
+
     @Then("^only the first (\\d+) characters will be displayed$")
     fun thenOnlyTheFirstCharactersWillBeDisplayed(length: Int) {
         appointmentsConfirmationSteps.checkSymptomsLength(length)
@@ -199,20 +213,6 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^the focus will go back to empty booking reason input box$")
     fun theFocusWillGoBackToEmptyBookingReasonInputbox() {
         appointmentsConfirmationSteps.appointmentsConfirmation.reasonFormField.assertDoesElementHaveFocus()
-    }
-
-    @When("^I enter a phone number for the appointment$")
-    fun whenIEnterAPhoneNumberForTheAppointment() {
-        val telephoneNumber = Serenity.sessionVariableCalled<String>(telephoneNumberToEnter)
-        Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
-        appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
-    }
-
-    @When("^I enter whitespace instead of a phone number for the appointment$")
-    fun whenIEnterWhitespaceInsteadOfAPhoneNumberForTheAppointment() {
-        val telephoneNumber = "  "
-        Assert.assertNotNull("Expected telephone number to be set, incorrect test setup", telephoneNumber)
-        appointmentsConfirmationSteps.appointmentsConfirmation.describeTelephoneNumber(telephoneNumber)
     }
 
     @Then("^a message is displayed indicating a phone number is required$")

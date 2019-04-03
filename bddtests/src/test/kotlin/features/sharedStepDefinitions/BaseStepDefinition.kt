@@ -1,6 +1,5 @@
 package features.sharedStepDefinitions
 
-
 import models.Patient
 
 open class BaseStepDefinition {

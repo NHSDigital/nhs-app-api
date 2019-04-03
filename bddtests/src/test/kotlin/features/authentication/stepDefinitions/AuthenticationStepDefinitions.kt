@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import config.Config
 import constants.DateTimeFormats
 import cucumber.api.DataTable
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -60,19 +59,19 @@ const val INVALID_VALUE = "xxx-wrong-format-xxx"
 class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Steps
+    lateinit var accountCreation: CIDAccountCreationSteps
+    @Steps
     lateinit var browser: BrowserSteps
     @Steps
-    lateinit var login: LoginSteps
-    @Steps
     lateinit var home: HomeSteps
+    @Steps
+    lateinit var login: LoginSteps
     @Steps
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var navHeader: NavHeaderSteps
     @Steps
     lateinit var webHeader: WebHeader
-    @Steps
-    lateinit var accountCreation: CIDAccountCreationSteps
 
     lateinit var myAccount: MyAccountPage
 
@@ -264,21 +263,68 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         setIm1Request()
     }
 
-    private fun setIm1Request() {
-        this.im1ConnectionRequest = Im1ConnectionRequest(
-                AccountId = patient.accountId,
-                LinkageKey = patient.linkageKey,
-                OdsCode = patient.odsCode,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth)
-    }
-
     @Given("^I have a user's IM1 credentials with missing ODS Code$")
     fun iHaveAnEMISUsersIMCredentialsWithMissingODSCode() {
         this.patient = Patient.johnSmith
         this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have data for an EMIS patient that has already been associated with the application in the GP system$")
+    fun iHaveDataForAnEMISPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
+        this.patient = Patient.getDefault("EMIS")
+
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis {
+            authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))
+                    .respondWithAlreadyLinked()
+        }
+
+        setIm1Request()
+        setSessionVariable("HttpExceptionExpected").to(true)
+    }
+
+    private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {
+        return LinkApplicationRequestModel(
+                surname = patient.surname,
+                dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
+                linkageDetails = LinkageDetailsModel(
+                        accountId = patient.accountId,
+                        nationalPracticeCode = patient.odsCode,
+                        linkageKey = patient.linkageKey
+                )
+        )
+    }
+
+    @Given("^I have data for a Vision patient that has already been associated with the application in the GP system$")
+    fun iHaveDataForAVisionPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
+
+        this.patient = Patient.getDefault("VISION")
+        AuthenticationFactoryVision.patientIsAlreadyRegistered(this.patient)
+
+        setIm1Request()
+        setSessionVariable("HttpExceptionExpected").to(true)
+    }
+
+    @Given("^I have data for a Vision patient with a locked account " +
+            "as the account is opened in the Vision application$")
+    fun iHaveDataForAVisionPatientThatHasALockedAccount() {
+
+        this.patient = Patient.getDefault("VISION")
+        AuthenticationFactoryVision.patientHasALockedAccount(this.patient)
+
+        setIm1Request()
+        setSessionVariable("HttpExceptionExpected").to(true)
+    }
+
+    private fun setIm1Request() {
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
                 Surname = patient.surname,
                 DateOfBirth = patient.dateOfBirth)
     }
@@ -313,163 +359,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 DateOfBirth = patient.dateOfBirth)
     }
 
-    @Given("^I have data for an EMIS patient that has already been associated with the application in the GP system$")
-    fun iHaveDataForAnEMISPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
-        this.patient = Patient.getDefault("EMIS")
-
-        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis {
-            authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))
-                    .respondWithAlreadyLinked()
-        }
-
-        setIm1Request()
-        setSessionVariable("HttpExceptionExpected").to(true)
-    }
-
-
-    @Given("^I have data for a Vision patient that has already been associated with the application in the GP system$")
-    fun iHaveDataForAVisionPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
-
-        this.patient = Patient.getDefault("VISION")
-        AuthenticationFactoryVision.patientIsAlreadyRegistered(this.patient)
-
-        setIm1Request()
-        setSessionVariable("HttpExceptionExpected").to(true)
-    }
-
-    @Given("^I have data for a Vision patient with a locked account " +
-            "as the account is opened in the Vision application$")
-    fun iHaveDataForAVisionPatientThatHasALockedAccount() {
-
-        this.patient = Patient.getDefault("VISION")
-        AuthenticationFactoryVision.patientHasALockedAccount(this.patient)
-
-        setIm1Request()
-        setSessionVariable("HttpExceptionExpected").to(true)
-    }
-
-    @When("^I create a user session$")
-    fun iCreateUserSession() {
-        try {
-            this.userSessionResponse = WorkerClient().authentication.postSessionConnection(
-                    UserSessionRequest(authCode = this.authCode,
-                            codeVerifier = this.codeVerifier!!,
-                            redirectUrl = Config.instance.cidRedirectUri))
-        } catch (httpException: NhsoHttpException) {
-            setErrorResponse(httpException)
-        }
-    }
-
-    @When("^I register the user's IM1 credentials$")
-    fun iRegisterAUsersIMCredentials() {
-        val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1Connection)
-        val response = SerenityRest
-                .given()
-                .contentType("application/json")
-                .body(Gson().toJson(this.im1ConnectionRequest!!))
-                .post(uri)
-
-        if (arrayOf(SC_OK, SC_CREATED).contains(response.statusCode)) {
-            this.im1ConnectionResponse = Gson().fromJson(response.body.asString(), Im1ConnectionResponse::class.java)
-        } else {
-            setErrorResponse(NhsoHttpException(uri = uri.toString(),
-                    statusCode = response.statusCode,
-                    body = response.body?.toString(),
-                    method = "POST"))
-        }
-    }
-
-    @Then("^I receive a response$")
-    fun iReceiveAResponse() {
-        val responses = arrayListOf(this.userSessionResponse, this.im1ConnectionResponse).filter { it != null }
-        Assert.assertEquals("No responses found.  Errors: ${this.errorResponse}", responses.size, 1)
-        Assert.assertEquals(this.errorResponse, null)
-    }
-
-    @And("^the response has a name$")
-    fun theResponseHasAName() {
-        Assert.assertEquals(EmisMockDefaults.patientEmis.formattedFullName(),
-                this.userSessionResponse?.userSessionResponseBody?.name)
-    }
-
-    @And("^the response has a session timeout$")
-    fun theResponseHasASessionLength() {
-        checkNotNull(this.userSessionResponse?.userSessionResponseBody?.sessionTimeout)
-    }
-
-    @Then("^the response has the expected connection token$")
-    fun theResponseHasTheExpectedConnectionToken() {
-        val result = this.im1ConnectionResponse
-
-        val expectedIm1ConnectionToken = this.patient.im1ConnectionTokenAsJson
-
-        val actualIm1ConnectionToken = GsonFactory.asPascal.fromJson<Im1ConnectionToken>(
-                result?.connectionToken,
-                Im1ConnectionToken::class.java
-        )
-
-        Assert.assertEquals(expectedIm1ConnectionToken, actualIm1ConnectionToken)
-    }
-
-    @Then("^the response has the expected NHS numbers$")
-    fun theResponseHasTheExpectedNhsNumbers() {
-        val response = this.im1ConnectionResponse
-        val responseNhsNumbers = response!!.nhsNumbers!!.map { it.nhsNumber.replace(" ", "") }
-
-        Assert.assertEquals(this.patient.nhsNumbers, responseNhsNumbers)
-    }
-
-    @Then("^the cookie contains a session guid with http-only$")
-    fun iReceiveCookieWithSessionIdHttpOnly() {
-        val cookieParams = retrieveCookie(this.userSessionResponse!!)
-        Assert.assertFalse("NHSO-Session-Id is empty or null", cookieParams["NHSO-Session-Id"].isNullOrEmpty())
-        Assert.assertTrue(cookieParams.toString(),
-                !cookieParams["httponly"].isNullOrEmpty() && cookieParams["httponly"]!!.toBoolean())
-    }
-
-    @Then("^I get (?:a|an) \"(.*)\" error")
-    fun thenIReceiveAnError(expectedStatusCode: String) {
-        val code = httpStatusCodeTransform(expectedStatusCode)
-        checkNotNull(this.errorResponse)
-        Assert.assertEquals(code, this.errorResponse?.statusCode)
-    }
-
     @Given("^I have just logged out$")
     fun iHaveJustLoggedOut() {
         browser.goToApp()
         login.using(EmisMockDefaults.patientEmis)
         navHeader.clickMyAccount()
         myAccount.signOutButton.click()
-    }
-
-    @When("I log out")
-    fun iLogOut(){
-        navHeader.clickMyAccount()
-        myAccount.signOutButton.click()
-    }
-
-    @When("I use the header link to log out of the website")
-    fun iLogOutUsingHeaderLink(){
-        webHeader.clickLogout()
-    }
-
-    @Then("I can cycle through the header links")
-    fun iLCycleTheHeaderLinks(){
-        val linksToFollow = arrayListOf(
-                { followSymptomsHeaderLink()},
-                { followAppointmentHeaderLink() },
-                { followPrescriptionsHeaderLink() },
-                { followMedicalRecordHeaderLink()},
-                { followMoreHeaderLink() },
-                { followAccountHeaderLink() }
-        )
-
-        linksToFollow.forEachIndexed { index, link ->
-            if (index != linksToFollow.size)
-            link.invoke()
-        }
-
     }
 
     @Given("^I am logged in as a (.*) user$")
@@ -482,13 +377,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iAmLoggedInWithoutIm1CacheKey(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem).copy(im1ConnectionTokenAsJson = null)
         setupAndLogIn(patient, gpSystem)
-    }
-
-    @When("I log in again")
-    fun iLogInAgain(){
-        val patient = SerenityHelpers.getPatient()
-        login.using(patient)
-        home.waitForLoginToCompleteSuccessfully()
     }
 
     @Given("^I attempt to log in as a (.*) user without an NHS Number$")
@@ -526,21 +414,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         setupAndLogIn(patient, gpSystem)
     }
 
-    @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")
-    fun iSeeAnErrorMessageInformingMeICannotLogInAsIAmUnderSixteen() {
-        serviceUnavailablePage.assertIsPresent("You are too young to use the NHS App",
-                "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. " +
-                        "You can still call or visit your GP surgery to access your NHS services. " +
-                        "For urgent medical advice, call 111.")
-    }
-
-    @Then("^I see an error message informing me I cannot log in$")
-    fun iSeeAnErrorMessageInformingMeICannotLogIn() {
-        serviceUnavailablePage.assertIsPresent("You cannot currently use this service",
-                "You can still call or visit your GP surgery to access your " +
-                "NHS services. For urgent medical advice, call 111.")
-    }
-
     private fun setupAndLogIn(patient: Patient, gpSystem: String) {
         SerenityHelpers.setPatient(patient)
 
@@ -567,6 +440,74 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         browser.goToApp()
         login.using(this.patient)
+    }
+
+    @Given("^I want to register for a (.+) account$")
+    fun iWantToRegisterForAnAccount(gpSystem: String) {
+        this.patient = Patient.getDefault(gpSystem)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
+
+        browser.goToApp()
+    }
+
+    @Given("^no IM1 Connection Token is currently cached$")
+    fun im1ConnectionTokensClearedFromTheCache() {
+        MongoDBConnection.clearIm1Cache()
+    }
+
+    @When("I log out")
+    fun iLogOut(){
+        navHeader.clickMyAccount()
+        myAccount.signOutButton.click()
+    }
+
+    @When("I use the header link to log out of the website")
+    fun iLogOutUsingHeaderLink(){
+        webHeader.clickLogout()
+    }
+
+    @When("^I create a user session$")
+    fun iCreateUserSession() {
+        try {
+            this.userSessionResponse = WorkerClient().authentication.postSessionConnection(
+                    UserSessionRequest(authCode = this.authCode,
+                            codeVerifier = this.codeVerifier!!,
+                            redirectUrl = Config.instance.cidRedirectUri))
+        } catch (httpException: NhsoHttpException) {
+            setErrorResponse(httpException)
+        }
+    }
+
+    @When("^I register the user's IM1 credentials$")
+    fun iRegisterAUsersIMCredentials() {
+        val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1Connection)
+        val response = SerenityRest
+                .given()
+                .contentType("application/json")
+                .body(Gson().toJson(this.im1ConnectionRequest!!))
+                .post(uri)
+
+        if (arrayOf(SC_OK, SC_CREATED).contains(response.statusCode)) {
+            this.im1ConnectionResponse = Gson().fromJson(response.body.asString(), Im1ConnectionResponse::class.java)
+        } else {
+            setErrorResponse(NhsoHttpException(uri = uri.toString(),
+                    statusCode = response.statusCode,
+                    body = response.body?.toString(),
+                    method = "POST"))
+        }
+    }
+
+    private fun setErrorResponse(errorResponse: NhsoHttpException) {
+        this.errorResponse = errorResponse
+        setSessionVariable("HttpException").to(errorResponse)
+    }
+
+    @When("I log in again")
+    fun iLogInAgain(){
+        val patient = SerenityHelpers.getPatient()
+        login.using(patient)
+        home.waitForLoginToCompleteSuccessfully()
     }
 
     @When("I am on the home page")
@@ -601,73 +542,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         }
     }
 
-    @Then("^I see the home page$")
-    fun iSeeTheHomePage() {
-        home.assertHeaderVisible()
-    }
-
-    @Then("^I see the login page$")
-    fun iSeeTheLoginPage() {
-        login.loginPage.shouldBeDisplayed()
-    }
-
-    @Then("^I see a welcome message$")
-    fun iSeeAWelcomeMessageFor() {
-        val patient = SerenityHelpers.getPatient()
-        home.assertWelcomeMessageShownFor(patient)
-    }
-
-    @Then("I see the patient details of name, date of birth and NHS number$")
-    fun iSeePatientDetails() {
-        val patient = SerenityHelpers.getPatient()
-        val regex = """${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
-        Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number " +
-                "to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
-                regex.containsMatchIn(patient.nhsNumbers.first()))
-        home.assertPatientDetailsShownFor(patient)
-    }
-
-    @Then("^I see the home page header$")
-    fun iSeeHeader() {
-        home.assertHeaderVisible()
-    }
-
-    @And("^I see the navigation menu$")
-    fun iSeeNavbar() {
-        nav.assertVisible()
-    }
-
-    @When("^I sign out")
-    @Throws(Exception::class)
-    fun iClickTheSignOutButton() {
-        navHeader.clickMyAccount()
-        myAccount.waitForSpinnerToDisappear()
-        myAccount.signOutButton.click()
-        browser.waitUntilSignoutCompletes()
-        myAccount.waitForSpinnerToDisappear()
-    }
-
-    @Then("^I do not see the menu bar$")
-    @Throws(Exception::class)
-    fun iDoNotSeeMenuBar() {
-        login.loginPage.assertMenuIsNotVisible()
-    }
-
-    @Then("^the user login details are cleared from cookies$")
-    @Throws(Exception::class)
-    fun theUserLoginDetailsAreClearedFromCookies() {
-        browser.checkLoginDetailsAreReset()
-    }
-
-    @Given("^I want to register for a (.+) account$")
-    fun iWantToRegisterForAnAccount(gpSystem: String) {
-        this.patient = Patient.getDefault(gpSystem)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
-
-        browser.goToApp()
-    }
-
     @When("^I select to create an account$")
     fun iClickCreateAccountButton() {
         login.loginPage.loginOrCreateAccountButton.click()
@@ -678,47 +552,18 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         this.patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(this.patient)
         iWantToRegisterForAnAccount(gpSystem)
-        iCompleteAccountRegistration()
-    }
-
-    @And("^I complete the account registration$")
-    fun iCompleteAccountRegistration() {
         login.loginPage.createAccount(patient)
     }
 
-    @Then("^I am redirected to the CID create an account page$")
+
+    @When("^I sign out")
     @Throws(Exception::class)
-    fun thenIAmRedirectedToTheCIDCreateAnAccountPage() {
-        accountCreation.assertPageIsVisible()
-    }
-
-    @Then("^I am redirected to the signed in home page$")
-    @Throws(Exception::class)
-    fun thenIAmRedirectedToTheSignedInHomePage() {
-        navHeader.assertHomePageHeaderVisible()
-    }
-
-    @Given("^no IM1 Connection Token is currently cached$")
-    fun im1ConnectionTokensClearedFromTheCache() {
-        MongoDBConnection.clearIm1Cache()
-    }
-
-    @Then("^the IM1 Connection Token is in the cache$")
-    fun theIm1ConnectionTokenIsInTheCache() {
-        Assert.assertEquals(
-                "Incorrect number of IM1 tokens cached. ${MongoDBConnection.getContentsFromDatabase()}",
-                1,
-                MongoDBConnection.getNumberOfDocumentsFromIm1Cache()
-        )
-    }
-
-    @Then("^the IM1 Connection Token is no longer in the cache$")
-    fun theIm1ConnectionTokenIsNoLongerInTheCache() {
-        Assert.assertEquals(
-                "Incorrect number of IM1 tokens cached. ${MongoDBConnection.getContentsFromDatabase()}",
-                0,
-                MongoDBConnection.getNumberOfDocumentsFromIm1Cache()
-        )
+    fun iClickTheSignOutButton() {
+        navHeader.clickMyAccount()
+        myAccount.waitForSpinnerToDisappear()
+        myAccount.signOutButton.click()
+        browser.waitUntilSignoutCompletes()
+        myAccount.waitForSpinnerToDisappear()
     }
 
     @When("^I POST to IM1 Connection to register the user$")
@@ -754,33 +599,52 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 .postSessionConnection(patient.cidUserSession))
     }
 
-    private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {
-        return LinkApplicationRequestModel(
-                surname = patient.surname,
-                dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
-                linkageDetails = LinkageDetailsModel(
-                        accountId = patient.accountId,
-                        nationalPracticeCode = patient.odsCode,
-                        linkageKey = patient.linkageKey
-                )
-        )
+    @Then("^I receive a response$")
+    fun iReceiveAResponse() {
+        val responses = arrayListOf(this.userSessionResponse, this.im1ConnectionResponse).filter { it != null }
+        Assert.assertEquals("No responses found.  Errors: ${this.errorResponse}", responses.size, 1)
+        Assert.assertEquals(this.errorResponse, null)
     }
 
-    private val _errorMapping: HashMap<String, Int> = hashMapOf(
-            "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
-            "bad request" to HttpStatus.SC_BAD_REQUEST,
-            "gateway timeout" to HttpStatus.SC_GATEWAY_TIMEOUT,
-            "not found" to HttpStatus.SC_NOT_FOUND,
-            "internal server error" to HttpStatus.SC_INTERNAL_SERVER_ERROR,
-            "conflict" to HttpStatus.SC_CONFLICT,
-            "forbidden" to HttpStatus.SC_FORBIDDEN,
-            "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE,
-            "not implemented" to HttpStatus.SC_NOT_IMPLEMENTED
-    )
+    @Then("^the response has a name$")
+    fun theResponseHasAName() {
+        Assert.assertEquals(EmisMockDefaults.patientEmis.formattedFullName(),
+                this.userSessionResponse?.userSessionResponseBody?.name)
+    }
 
-    private fun httpStatusCodeTransform(errorName: String): Int? {
-        return _errorMapping[errorName.toLowerCase()]
-                ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
+    @Then("^the response has a session timeout$")
+    fun theResponseHasASessionLength() {
+        checkNotNull(this.userSessionResponse?.userSessionResponseBody?.sessionTimeout)
+    }
+
+    @Then("^the response has the expected connection token$")
+    fun theResponseHasTheExpectedConnectionToken() {
+        val result = this.im1ConnectionResponse
+
+        val expectedIm1ConnectionToken = this.patient.im1ConnectionTokenAsJson
+
+        val actualIm1ConnectionToken = GsonFactory.asPascal.fromJson<Im1ConnectionToken>(
+                result?.connectionToken,
+                Im1ConnectionToken::class.java
+        )
+
+        Assert.assertEquals(expectedIm1ConnectionToken, actualIm1ConnectionToken)
+    }
+
+    @Then("^the response has the expected NHS numbers$")
+    fun theResponseHasTheExpectedNhsNumbers() {
+        val response = this.im1ConnectionResponse
+        val responseNhsNumbers = response!!.nhsNumbers!!.map { it.nhsNumber.replace(" ", "") }
+
+        Assert.assertEquals(this.patient.nhsNumbers, responseNhsNumbers)
+    }
+
+    @Then("^the cookie contains a session guid with http-only$")
+    fun iReceiveCookieWithSessionIdHttpOnly() {
+        val cookieParams = retrieveCookie(this.userSessionResponse!!)
+        Assert.assertFalse("NHSO-Session-Id is empty or null", cookieParams["NHSO-Session-Id"].isNullOrEmpty())
+        Assert.assertTrue(cookieParams.toString(),
+                !cookieParams["httponly"].isNullOrEmpty() && cookieParams["httponly"]!!.toBoolean())
     }
 
     private fun retrieveCookie(result: UserSessionResponse): HashMap<String, String> {
@@ -800,9 +664,22 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         return cookieParams
     }
 
-    private fun setErrorResponse(errorResponse: NhsoHttpException) {
-        this.errorResponse = errorResponse
-        setSessionVariable("HttpException").to(errorResponse)
+    @Then("I can cycle through the header links")
+    fun iLCycleTheHeaderLinks(){
+        val linksToFollow = arrayListOf(
+                { followSymptomsHeaderLink()},
+                { followAppointmentHeaderLink() },
+                { followPrescriptionsHeaderLink() },
+                { followMedicalRecordHeaderLink()},
+                { followMoreHeaderLink() },
+                { followAccountHeaderLink() }
+        )
+
+        linksToFollow.forEachIndexed { index, link ->
+            if (index != linksToFollow.size)
+            link.invoke()
+        }
+
     }
 
     private fun followAppointmentHeaderLink() {
@@ -835,4 +712,120 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         webHeader.isPageTitleCorrect("Account")
     }
 
+    @Then("^I see an error message informing me I cannot log in as I am under the minimum age$")
+    fun iSeeAnErrorMessageInformingMeICannotLogInAsIAmUnderSixteen() {
+        serviceUnavailablePage.assertIsPresent("You are too young to use the NHS App",
+                "Due to legal restrictions, you cannot use the NHS App until you are at least 13 years old. " +
+                        "You can still call or visit your GP surgery to access your NHS services. " +
+                        "For urgent medical advice, call 111.")
+    }
+
+    @Then("^I see an error message informing me I cannot log in$")
+    fun iSeeAnErrorMessageInformingMeICannotLogIn() {
+        serviceUnavailablePage.assertIsPresent("You cannot currently use this service",
+                "You can still call or visit your GP surgery to access your " +
+                "NHS services. For urgent medical advice, call 111.")
+    }
+
+    @Then("^I get (?:a|an) \"(.*)\" error")
+    fun thenIReceiveAnError(expectedStatusCode: String) {
+        val code = httpStatusCodeTransform(expectedStatusCode)
+        checkNotNull(this.errorResponse)
+        Assert.assertEquals(code, this.errorResponse?.statusCode)
+    }
+
+    private fun httpStatusCodeTransform(errorName: String): Int? {
+        return _errorMapping[errorName.toLowerCase()]
+                ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
+    }
+
+    private val _errorMapping: HashMap<String, Int> = hashMapOf(
+            "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
+            "bad request" to HttpStatus.SC_BAD_REQUEST,
+            "gateway timeout" to HttpStatus.SC_GATEWAY_TIMEOUT,
+            "not found" to HttpStatus.SC_NOT_FOUND,
+            "internal server error" to HttpStatus.SC_INTERNAL_SERVER_ERROR,
+            "conflict" to HttpStatus.SC_CONFLICT,
+            "forbidden" to HttpStatus.SC_FORBIDDEN,
+            "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE,
+            "not implemented" to HttpStatus.SC_NOT_IMPLEMENTED
+    )
+
+    @Then("^I see the home page$")
+    fun iSeeTheHomePage() {
+        home.assertHeaderVisible()
+    }
+
+    @Then("^I see the login page$")
+    fun iSeeTheLoginPage() {
+        login.loginPage.shouldBeDisplayed()
+    }
+
+    @Then("^I see a welcome message$")
+    fun iSeeAWelcomeMessageFor() {
+        val patient = SerenityHelpers.getPatient()
+        home.assertWelcomeMessageShownFor(patient)
+    }
+
+    @Then("I see the patient details of name, date of birth and NHS number$")
+    fun iSeePatientDetails() {
+        val patient = SerenityHelpers.getPatient()
+        val regex = """${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
+        Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number " +
+                "to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
+                regex.containsMatchIn(patient.nhsNumbers.first()))
+        home.assertPatientDetailsShownFor(patient)
+    }
+
+    @Then("^I see the home page header$")
+    fun iSeeHeader() {
+        home.assertHeaderVisible()
+    }
+
+    @Then("^I see the navigation menu$")
+    fun iSeeNavbar() {
+        nav.assertVisible()
+    }
+
+    @Then("^I do not see the menu bar$")
+    @Throws(Exception::class)
+    fun iDoNotSeeMenuBar() {
+        login.loginPage.assertMenuIsNotVisible()
+    }
+
+    @Then("^the user login details are cleared from cookies$")
+    @Throws(Exception::class)
+    fun theUserLoginDetailsAreClearedFromCookies() {
+        browser.checkLoginDetailsAreReset()
+    }
+
+    @Then("^I am redirected to the CID create an account page$")
+    @Throws(Exception::class)
+    fun thenIAmRedirectedToTheCIDCreateAnAccountPage() {
+        accountCreation.assertPageIsVisible()
+    }
+
+    @Then("^I am redirected to the signed in home page$")
+    @Throws(Exception::class)
+    fun thenIAmRedirectedToTheSignedInHomePage() {
+        navHeader.assertHomePageHeaderVisible()
+    }
+
+    @Then("^the IM1 Connection Token is in the cache$")
+    fun theIm1ConnectionTokenIsInTheCache() {
+        Assert.assertEquals(
+                "Incorrect number of IM1 tokens cached. ${MongoDBConnection.getContentsFromDatabase()}",
+                1,
+                MongoDBConnection.getNumberOfDocumentsFromIm1Cache()
+        )
+    }
+
+    @Then("^the IM1 Connection Token is no longer in the cache$")
+    fun theIm1ConnectionTokenIsNoLongerInTheCache() {
+        Assert.assertEquals(
+                "Incorrect number of IM1 tokens cached. ${MongoDBConnection.getContentsFromDatabase()}",
+                0,
+                MongoDBConnection.getNumberOfDocumentsFromIm1Cache()
+        )
+    }
 }

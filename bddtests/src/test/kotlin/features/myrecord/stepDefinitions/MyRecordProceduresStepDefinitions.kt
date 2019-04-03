@@ -12,10 +12,11 @@ import pages.myrecord.MyRecordInfoPage
 
 class MyRecordProceduresStepDefinitions : AbstractDemographicsStepDefinitions() {
 
-    lateinit var myRecordInfoPage: MyRecordInfoPage
-    lateinit var  proceduresFactoryVision: ProceduresFactoryVision
     @Steps
     lateinit var browser: BrowserSteps
+
+    lateinit var myRecordInfoPage: MyRecordInfoPage
+    lateinit var proceduresFactoryVision: ProceduresFactoryVision
 
     @And( "^I do not have access to procedures$" )
     fun givenIDoNotHaveAccessToProceduresFor(){

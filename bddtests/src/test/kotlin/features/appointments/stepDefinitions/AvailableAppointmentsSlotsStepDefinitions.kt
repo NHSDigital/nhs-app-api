@@ -43,13 +43,13 @@ private const val TIMEOUT_IN_SECONDS = 90L
 class AvailableAppointmentsSlotsStepDefinitions {
 
     @Steps
-    lateinit var login: LoginSteps
-    @Steps
-    lateinit var navigation: NavigationSteps
-    @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
     @Steps
     lateinit var availableAppointmentsFilter: AvailableAppointmentFilterSteps
+    @Steps
+    lateinit var login: LoginSteps
+    @Steps
+    lateinit var navigation: NavigationSteps
 
     val mockingClient = MockingClient.instance
     private val appointmentSlotsExample = AppointmentsSlotsExample()

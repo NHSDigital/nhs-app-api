@@ -13,11 +13,6 @@ class UpdatedTermsAndConditionsStepDefinitions {
     @Steps
     lateinit var updatedTermsAndConditions: UpdatedTermsAndConditionsSteps
 
-    @When("^I click the continue button on Updated Terms and Conditions$")
-    fun iClickTheContinueButtonOnUpdatedTermsAndConditions() {
-        updatedTermsAndConditions.updatedTermsAndConditionsPage.continueButton.click()
-    }
-
     @Given("^I see the updated Terms and conditions page$")
     fun iSeeTheUpdatedTermsAndConditionsPage() {
         updatedTermsAndConditions.thePageHeaderIsVisible()
@@ -27,6 +22,11 @@ class UpdatedTermsAndConditionsStepDefinitions {
     fun iHavePreviouslyAcceptedTermsAndConditionsAndUpdatedAcceptanceIsRequired() {
         CosmosDb.clearTermsAndConditionsAcceptance()
         CosmosDb.addTermsAndConditionsAcceptance(OffsetDateTime.parse("2018-11-11T00:00:00+00:00"))
+    }
+
+    @When("^I click the continue button on Updated Terms and Conditions$")
+    fun iClickTheContinueButtonOnUpdatedTermsAndConditions() {
+        updatedTermsAndConditions.updatedTermsAndConditionsPage.continueButton.click()
     }
 
     @Then("^I see error messages indicating I have not yet accepted the updated terms and conditions$")

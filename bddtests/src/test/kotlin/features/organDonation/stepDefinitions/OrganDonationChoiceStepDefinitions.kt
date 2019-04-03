@@ -14,6 +14,7 @@ open class OrganDonationChoiceStepDefinitions {
 
     @Steps
     lateinit var browser: BrowserSteps
+
     lateinit var navBarNative: NavBarNative
     lateinit var header: HeaderNative
     lateinit var morePage: MorePage

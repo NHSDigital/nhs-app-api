@@ -1,8 +1,6 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
-import cucumber.api.java.en.And
-import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -24,11 +22,12 @@ import worker.models.myrecord.MyRecordResponse
 private const val NUMBER_OF_TEST_RESULTS_EQUALS_FOUR = 4
 open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefinitions() {
 
+    @Steps
+    lateinit var browser: BrowserSteps
+
     lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
     lateinit var errorPage: ErrorPage
     lateinit var myRecordInfoPage: MyRecordInfoPage
-    @Steps
-    lateinit var browser: BrowserSteps
 
     @Given("^an error occurs retrieving the test result detail$")
     fun givenAnErrorOccursGettingTestResultDetailForTpp() {
@@ -148,7 +147,7 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
         TestResultsFactory.getForSupplier(getService).errorRetrieving(patient)
     }
 
-    @But("^the GP Practice has disabled test results functionality$")
+    @Given("^the GP Practice has disabled test results functionality$")
     fun butTheGPPracticeHasDisabledTestResultsFunctionality() {
         val getService = SerenityHelpers.getGpSupplier()
         setPatientToDefaultFor(getService)
@@ -169,6 +168,29 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @When("I click a test result$")
     fun whenIClickATestResult() {
         myRecordInfoPage.testResults.clickFirst()
+    }
+
+    @When("^the flag informing that the patient has access to the test results data is set to \"(.*)\"$")
+    fun andHasAccessToMedicationsDataIsSetTo(value: Boolean) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals(value, result.response.testResults.hasAccess)
+    }
+
+    @When("^I click the test result section$")
+    fun whenIClickTheTestResultSection() {
+        myRecordInfoPage.testResults.toggleShrub()
+    }
+
+    @When("^the flag informing that there was an error retrieving the test results data is set to \"(.*)\"$")
+    fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        assertEquals(value, result.response.testResults.hasErrored)
+    }
+
+    @When("^I enter url address for test results detail directly into the url$")
+    fun whenIEnterUrlAddressForTestResultsDetailDirectlyIntoTheUrl() {
+        val fullUrl = Config.instance.url + "/my-record/test-results-detail"
+        browser.browseTo(fullUrl)
     }
 
     @Then("^I receive (.*) test results as part of the my record object$")
@@ -220,18 +242,6 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
                 result.response.testResults.data.first().description)
     }
 
-    @And("^the flag informing that the patient has access to the test results data is set to \"(.*)\"$")
-    fun andHasAccessToMedicationsDataIsSetTo(value: Boolean) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals(value, result.response.testResults.hasAccess)
-    }
-
-    @And("^the flag informing that there was an error retrieving the test results data is set to \"(.*)\"$")
-    fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        assertEquals(value, result.response.testResults.hasErrored)
-    }
-
     @Then("I see the appropriate error message for retrieving test result detail")
     fun thenISeeTheAppropriateErrorMessageForAMyRecordServerError() {
 
@@ -254,11 +264,6 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("I click the test result detail back")
     fun thenIClickTheTestResultDetailBackLink() {
         myRecordDetailedTestResultPage.clickBackToMyRecord()
-    }
-
-    @When("^I click the test result section$")
-    fun whenIClickTheTestResultSection() {
-        myRecordInfoPage.testResults.toggleShrub()
     }
 
     @Then("^I see one test result with one value$")
@@ -330,12 +335,6 @@ open class MyRecordTestResultsStepDefinitions : AbstractDemographicsStepDefiniti
     @Then("I see the my record page scrolled to the test result section")
     fun thenISeeMyRecordPageScrolledToTestResultSection() {
         Assert.assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
-    }
-
-    @When("^I enter url address for test results detail directly into the url$")
-    fun whenIEnterUrlAddressForTestResultsDetailDirectlyIntoTheUrl() {
-        val fullUrl = Config.instance.url + "/my-record/test-results-detail"
-        browser.browseTo(fullUrl)
     }
 }
 

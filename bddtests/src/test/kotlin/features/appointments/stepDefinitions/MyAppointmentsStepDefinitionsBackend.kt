@@ -179,6 +179,14 @@ class MyAppointmentsStepDefinitionsBackend {
         }
     }
 
+    @Given("^the (.*) GP appointment system is unavailable$")
+    fun theAppointmentSystemIsUnavailable(gpSystem: String) {
+        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
+        currentViewAppointmentFactory.createMyAppointments {
+            respondWithGPServiceUnavailableException()
+        }
+    }
+
     @When("^my appointments are requested$")
     fun whenTheAPIRetrievesMyAppointments() {
         myAppointmentsBackendSteps.createSerenityMyAppointmentSessionVariable()
@@ -231,13 +239,5 @@ class MyAppointmentsStepDefinitionsBackend {
     @Then("^a list of cancellation reasons if the GP Service provides the list$")
     fun thenAListOfCancellationReasons() {
         myAppointmentsBackendSteps.checkCancellationReasonExistForApplicableGPService()
-    }
-
-    @Given("^the (.*) GP appointment system is unavailable$")
-    fun theAppointmentSystemIsUnavailable(gpSystem: String) {
-        val currentViewAppointmentFactory = MyAppointmentsFactory.getForSupplier(gpSystem)
-        currentViewAppointmentFactory.createMyAppointments {
-            respondWithGPServiceUnavailableException()
-        }
     }
 }

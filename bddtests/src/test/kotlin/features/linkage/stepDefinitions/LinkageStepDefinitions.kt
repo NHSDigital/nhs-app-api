@@ -329,11 +329,6 @@ open class LinkageStepDefinitions {
                 linkage.surname), DEFAULT_TIMEOUT_MILLISECONDS)
     }
 
-    @Then("^Wait for the request to complete$")
-    fun waitForRequestToComplete() {
-        Thread.sleep(FOUR_SECOND_SLEEP)
-    }
-
     @When("^I receive a valid linkage response$")
     fun iReceiveAValidResponse() {
         val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
@@ -343,6 +338,11 @@ open class LinkageStepDefinitions {
         Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
         Assert.assertEquals(linkage.accountId, linkageResponse.accountId)
         Assert.assertEquals(linkage.linkageKey, linkageResponse.linkageKey)
+    }
+
+    @Then("^Wait for the request to complete$")
+    fun waitForRequestToComplete() {
+        Thread.sleep(FOUR_SECOND_SLEEP)
     }
 
     private fun validLinkage(gpSystem: String): LinkageInformationFacade {

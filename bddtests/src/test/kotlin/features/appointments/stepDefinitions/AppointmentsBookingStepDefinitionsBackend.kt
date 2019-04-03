@@ -105,7 +105,6 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^a telephone appointment booking for EMIS can be successful$")
     fun aTelephoneAppointmentBookingForCanBeSuccessful() {
-
         telephoneAppointmentBookingSetupWithResult(defaultTelephoneNumber) {
             builder -> builder.respondWithSuccess() }
     }
@@ -114,13 +113,6 @@ open class AppointmentsBookingStepDefinitionsBackend {
     fun aTelephoneAppointmentBookingForCannotBeSuccessfulWithoutPhoneNumber() {
         telephoneAppointmentBookingSetupWithResult {
             builder -> builder.respondWithExceptionWhenRequiredFieldMissing() }
-    }
-
-    private fun defaultAppointmentBookingSetupWithResult(
-            gpSystem: String,
-            bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-        AppointmentsBookingFactory.getForSupplier(gpSystem)
-                .defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)
     }
 
     private fun telephoneAppointmentBookingSetupWithResult(
@@ -158,7 +150,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
         val appointmentToBook =
                 Serenity.sessionVariableCalled<AppointmentBookRequest>(AppointmentsBookingFactory
                         .appointmentToBookKey)
-submitAppointmentRequest(appointmentToBook)
+        submitAppointmentRequest(appointmentToBook)
     }
 
     @When("^an appointment booking is submitted with no slot identifier$")
@@ -197,17 +189,6 @@ submitAppointmentRequest(appointmentToBook)
         submitAppointmentRequest(workerAppointmentRequest)
     }
 
-    private fun submitAppointmentRequest(workerAppointmentRequest: AppointmentBookRequest) {
-        try {
-            val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            val sessionCookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
-            val result = workerClient.appointments.postAppointment(workerAppointmentRequest, sessionCookie)
-            Serenity.setSessionVariable("Http Status Code").to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable("HttpException").to(httpException)
-        }
-    }
-
     @Then("^a successful response for appointment booking is returned$")
     fun aSuccessfulResponseIsReturned() {
 
@@ -217,5 +198,23 @@ submitAppointmentRequest(appointmentToBook)
         assertEquals("Expected response $expectedResponse, but was $receivedResponse",
                 HttpStatus.SC_CREATED,
                 receivedResponse)
+    }
+
+    private fun defaultAppointmentBookingSetupWithResult(
+            gpSystem: String,
+            bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
+        AppointmentsBookingFactory.getForSupplier(gpSystem)
+                .defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)
+    }
+
+    private fun submitAppointmentRequest(workerAppointmentRequest: AppointmentBookRequest) {
+        try {
+            val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+            val sessionCookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
+            val result = workerClient.appointments.postAppointment(workerAppointmentRequest, sessionCookie)
+            Serenity.setSessionVariable("Http Status Code").to(result)
+        } catch (httpException: NhsoHttpException) {
+            Serenity.setSessionVariable("HttpException").to(httpException)
+        }
     }
 }

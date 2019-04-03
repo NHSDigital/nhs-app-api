@@ -13,16 +13,15 @@ import pages.navigation.NavBarNative
 class AppointmentNavigationStepDefinitions {
 
     @Steps
-    lateinit var navigation: NavigationSteps
-    @Steps
-    lateinit var myAppointmentsUI: MyAppointmentsUISteps
-    @Steps
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
     @Steps
     lateinit var errorPage: ErrorPage
-
+    @Steps
+    lateinit var myAppointmentsUI: MyAppointmentsUISteps
+    @Steps
+    lateinit var navigation: NavigationSteps
 
     @Given("^I am on the My Appointments page$")
     fun iAmOnMyAppointmentsPage() {

@@ -1,6 +1,5 @@
 package features.throttling.stepDefinitions
 
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -50,11 +49,11 @@ private const val MORE_THAN_MAXIMUM = "more than the maximum"
 
 open class ThrottlingStepDefinitions {
 
-    private val mockingClient = MockingClient.instance
-    private var searchText = ""
-
     @Steps
     lateinit var browser: BrowserSteps
+
+    private val mockingClient = MockingClient.instance
+    private var searchText = ""
 
     lateinit var cidAccountCreationPage: CIDAccountCreationPage
     lateinit var login: LoginPage
@@ -163,6 +162,21 @@ open class ThrottlingStepDefinitions {
         browser.goToApp()
     }
 
+    @Given("^The brothermailer service will return a successful response")
+    fun theBrotherMailerServiceReturnsASuccessfulResponse()
+    {
+        mockingClient.forBrotherMailer {
+            postToBrotherMailer().respondWithOkResponse()
+        }
+    }
+
+    @Given("^The brothermailer service is down$")
+    fun theBrotherMailerServiceIsDown() {
+        mockingClient.forBrotherMailer {
+            postToBrotherMailer().respondWithNotFoundError()
+        }
+    }
+
     @When("^My GP Practice (is|is not) participating in beta$")
     fun myGPPracticeIsOrIsNotParticipatingInBeta(isOrIsNot: String) {
         val participating = isOrIsNot == "is"
@@ -216,55 +230,9 @@ open class ThrottlingStepDefinitions {
         gpParticipationPage.ctaParticipatingContinueButton.click()
     }
 
-    @Then("^The ($TOO_MANY_RESULTS|$TECHNICAL_PROBLEMS|$NO_RESULTS_FOUND) error message (is|is not) visible$")
-    fun theErrorMessageIsOrIsNotVisible(errorType: String, isOrIsNot: String) {
-        when (errorType) {
-            TECHNICAL_PROBLEMS -> {
-                gpSearchResultsPage.technicalProblemsErrorHeaderIsVisible(isOrIsNot == "is")
-            }
-            TOO_MANY_RESULTS -> {
-                gpSearchResultsPage.tooManyResultsErrorHeaderIsVisible(isOrIsNot == "is")
-            }
-            NO_RESULTS_FOUND -> {
-                gpSearchResultsPage.noResultsFoundErrorHeaderIsVisible(isOrIsNot == "is")
-            }
-        }
-    }
-
-    @Then("^I see the GP Finder page with a search criteria error message$")
-    fun iSeeTheGPFinderPageWithASearchCriteriaErrorMessage() {
-        assertTrue(gpFinderPage.isSearchCriteriaErrorMessageShown())
-    }
-
-    @Then("^I see the CID login page$")
-    fun iSeeTheCIDLoginPage() {
-        assertTrue(cidAccountCreationPage.isVisible())
-    }
-
     @When("^I click the Practice Not Participating continue button$")
     fun iClickThePracticeNotParticipatingContinueButton(){
         gpParticipationPage.ctaNotParticipatingContinueButton.click()
-    }
-
-    @Then("^I see the Sending Email Page$")
-    fun iSeeTheSendingEmailPage() {
-        sendingEmailPage.waitingListResultsHeader.assertIsVisible()
-        sendingEmailPage.emailFeatureText.assertIsVisible()
-        sendingEmailPage.emailText.assertIsVisible()
-        sendingEmailPage.continueButton.assertIsVisible()
-    }
-
-    @Then("^I click the back button on Sending Email page$")
-    fun iClickTheBackButtonOSendingEmailPage() {
-        sendingEmailPage.backLink.click()
-    }
-
-    @And("^The brothermailer service will return a successful response")
-    fun theBrotherMailerServiceReturnsASuccessfulResponse()
-    {
-        mockingClient.forBrotherMailer {
-            postToBrotherMailer().respondWithOkResponse()
-        }
     }
 
     @When("^I enter (a valid|an invalid) email and submit$")
@@ -297,6 +265,44 @@ open class ThrottlingStepDefinitions {
         sendingEmailPage.continueButton.click()
     }
 
+    @Then("^The ($TOO_MANY_RESULTS|$TECHNICAL_PROBLEMS|$NO_RESULTS_FOUND) error message (is|is not) visible$")
+    fun theErrorMessageIsOrIsNotVisible(errorType: String, isOrIsNot: String) {
+        when (errorType) {
+            TECHNICAL_PROBLEMS -> {
+                gpSearchResultsPage.technicalProblemsErrorHeaderIsVisible(isOrIsNot == "is")
+            }
+            TOO_MANY_RESULTS -> {
+                gpSearchResultsPage.tooManyResultsErrorHeaderIsVisible(isOrIsNot == "is")
+            }
+            NO_RESULTS_FOUND -> {
+                gpSearchResultsPage.noResultsFoundErrorHeaderIsVisible(isOrIsNot == "is")
+            }
+        }
+    }
+
+    @Then("^I see the GP Finder page with a search criteria error message$")
+    fun iSeeTheGPFinderPageWithASearchCriteriaErrorMessage() {
+        assertTrue(gpFinderPage.isSearchCriteriaErrorMessageShown())
+    }
+
+    @Then("^I see the CID login page$")
+    fun iSeeTheCIDLoginPage() {
+        assertTrue(cidAccountCreationPage.isVisible())
+    }
+
+    @Then("^I see the Sending Email Page$")
+    fun iSeeTheSendingEmailPage() {
+        sendingEmailPage.waitingListResultsHeader.assertIsVisible()
+        sendingEmailPage.emailFeatureText.assertIsVisible()
+        sendingEmailPage.emailText.assertIsVisible()
+        sendingEmailPage.continueButton.assertIsVisible()
+    }
+
+    @Then("^I click the back button on Sending Email page$")
+    fun iClickTheBackButtonOSendingEmailPage() {
+        sendingEmailPage.backLink.click()
+    }
+
     @Then("^I see the invalid email error$")
     fun iSeeTheInvalidEmailError() {
         sendingEmailPage.isInvalidEmailVisible()
@@ -321,13 +327,6 @@ open class ThrottlingStepDefinitions {
             }
         }
         waitingListJoinedPage.homeButton.assertIsVisible()
-    }
-
-    @And("^The brothermailer service is down$")
-    fun theBrotherMailerServiceIsDown() {
-        mockingClient.forBrotherMailer {
-            postToBrotherMailer().respondWithNotFoundError()
-        }
     }
 
     @Then("^I see the brothermailer service is down error$")

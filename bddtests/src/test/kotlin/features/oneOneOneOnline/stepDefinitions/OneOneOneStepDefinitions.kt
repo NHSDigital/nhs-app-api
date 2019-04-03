@@ -1,6 +1,5 @@
 package features.oneOneOneOnline.stepDefinitions
 
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
@@ -12,27 +11,15 @@ import pages.navigation.NavBarNative
 open class OneOneOneStepDefinitions {
 
     @Steps
+    lateinit var checkMySymptoms: CheckMySymptoms
+    @Steps
     lateinit var login: LoginSteps
     @Steps
     lateinit var navBar: NavigationSteps
-    @Steps
-    lateinit var checkMySymptoms: CheckMySymptoms
 
     @When("^I Check My Symptoms$")
     open fun iCheckMySymptoms() {
         login.loginPage.symptomsButton.click()
-    }
-
-    @And("^the Check My Symptoms page is displayed")
-    fun checkMySymptomsPageIsDisplayed() {
-        checkMySymptoms.assertConditionsHeaderVisible()
-        checkMySymptoms.assertNhs111HeaderVisible()
-    }
-
-    @Then("^the Check My Symptoms page header and navigation menu are correct$")
-    fun checkMySymptomsPageHeaderAndNavigationMenuAreCorrect() {
-        navBar.headerNative.assertIsVisible("Check my symptoms")
-        navBar.assertSelectedTab(NavBarNative.NavBarType.SYMPTOMS)
     }
 
     @When("I press the A-Z symptoms header")
@@ -45,4 +32,15 @@ open class OneOneOneStepDefinitions {
         checkMySymptoms.clickNHS111Header()
     }
 
+    @Then("^the Check My Symptoms page is displayed")
+    fun checkMySymptomsPageIsDisplayed() {
+        checkMySymptoms.assertConditionsHeaderVisible()
+        checkMySymptoms.assertNhs111HeaderVisible()
+    }
+
+    @Then("^the Check My Symptoms page header and navigation menu are correct$")
+    fun checkMySymptomsPageHeaderAndNavigationMenuAreCorrect() {
+        navBar.headerNative.assertIsVisible("Check my symptoms")
+        navBar.assertSelectedTab(NavBarNative.NavBarType.SYMPTOMS)
+    }
 }

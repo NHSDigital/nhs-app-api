@@ -1,7 +1,7 @@
 package features.prescriptions.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
-import cucumber.api.java.en.But
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.steps.PrescriptionsSteps
@@ -29,31 +29,31 @@ class PrescriptionsErrorStepDefinitions : BaseStepDefinition() {
     lateinit var errorPage: ErrorPage
 
 
-    @But("The prescriptions endpoint is timing out")
+    @Given("The prescriptions endpoint is timing out")
     fun butThePrescriptionsEndpointIsTimingOut() {
         val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factory.prescriptionsEndpointTimeout(SerenityHelpers.getPatient())
     }
 
-    @But("The prescriptions endpoint is throwing a server error")
+    @Given("The prescriptions endpoint is throwing a server error")
     fun butThePrescriptionsEndpointIsThrowingAServerError() {
         val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factory.prescriptionsEndpointThrowServerError(SerenityHelpers.getPatient())
     }
 
-    @But("The courses endpoint is timing out")
+    @Given("The courses endpoint is timing out")
     fun butTheCoursesEndpointIsTimingOut() {
         val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factory.coursesEndpointTimeout(SerenityHelpers.getPatient())
     }
 
-    @But("The courses endpoint is throwing a server error")
+    @Given("The courses endpoint is throwing a server error")
     fun butTheCoursesEndpointIsThrowingAServerError() {
         val factory = PrescriptionsFactory.getForSupplier(SerenityHelpers.getGpSupplier())
         factory.coursesEndpointThrowingServerError(SerenityHelpers.getPatient())
     }
 
-    @But("The prescription submission endpoint is timing out")
+    @Given("The prescription submission endpoint is timing out")
     fun butThePrescriptionSubmissionEndpointIsTimingOut() {
         mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
                 .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000) }
@@ -62,13 +62,13 @@ class PrescriptionsErrorStepDefinitions : BaseStepDefinition() {
                 .respondWith(HttpStatus.SC_GATEWAY_TIMEOUT, resolve = {}, milliSecondDelay = 15000) }
     }
 
-    @But("The prescription submission endpoint is throwing a server error")
+    @Given("The prescription submission endpoint is throwing a server error")
     fun butThePrescriptionSubmissionEndpointIsThrowingAServerError() {
         mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
                 .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {}) }
     }
 
-    @But("The prescription submission endpoint is throwing an already ordered exception")
+    @Given("The prescription submission endpoint is throwing an already ordered exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnAlreadyOrderedException() {
         mockingClient.forTpp {
             prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
@@ -78,7 +78,7 @@ class PrescriptionsErrorStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @But("The prescription submission endpoint is throwing an invalid guid exception")
+    @Given("The prescription submission endpoint is throwing an invalid guid exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnInvalidGuidException() {
         mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
                 .respondWithError(Error(ErrorResponseCodeTpp.MEDICATION_UNAVAILABLE,
