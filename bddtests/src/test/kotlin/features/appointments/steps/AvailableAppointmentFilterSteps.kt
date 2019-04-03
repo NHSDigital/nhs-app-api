@@ -12,7 +12,6 @@ import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import pages.appointments.AvailableAppointmentsPage
-import pages.navigation.HeaderNative
 
 open class AvailableAppointmentFilterSteps {
 
@@ -21,7 +20,6 @@ open class AvailableAppointmentFilterSteps {
     private val clinicianDefaultOption = "No preference"
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
-    lateinit var headerNative: HeaderNative
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {

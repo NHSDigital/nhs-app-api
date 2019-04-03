@@ -11,7 +11,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import pages.appointments.AvailableAppointmentsPage
-import pages.navigation.HeaderNative
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -25,12 +24,10 @@ open class AvailableAppointmentsSteps {
     private val backComponentText = "Back"
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
-    lateinit var headerNative: HeaderNative
-
 
     @Step
     fun checkIfPageHeaderIsCorrect() {
-        headerNative.waitForPageHeaderText(pageHeader)
+        availableAppointmentsPage.headerNative.waitForPageHeaderText(pageHeader)
     }
 
     @Step

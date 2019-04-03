@@ -76,17 +76,14 @@ open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
             helpfulName = "Telephone Error"
     )
 
+    override val titleText: String = "Confirm appointment"
+
     private fun getTelephoneNumberRadioButtonText(telephoneNumber: String): String {
         return telephoneNumberRadioButtonSection(telephoneNumber).element.text.trim()
     }
 
     fun describeSymptoms(symptoms: String) {
         reasonFormField.typeTextIntoTextArea(symptoms)
-        hideKeyboardIfOnMobile()
-    }
-
-    fun pasteSymptoms(symptoms: String) {
-        reasonFormField.element.sendKeys(symptoms)
         hideKeyboardIfOnMobile()
     }
 

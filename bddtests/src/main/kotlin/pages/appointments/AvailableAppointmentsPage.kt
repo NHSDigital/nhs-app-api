@@ -25,6 +25,8 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     private val noAppointmentsAvailableForDateTextByDateXpathFormat =
             "$dateHeadingByTextXpathFormat/following-sibling::p"
 
+    override val titleText: String = "Book new appointment"
+
     val guidance = ExpandElement(this)
 
     val appointmentTypeFilter = DropdownElement(

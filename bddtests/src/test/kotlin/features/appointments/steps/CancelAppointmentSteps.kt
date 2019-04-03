@@ -16,7 +16,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.appointments.CancelAppointmentPage
-import pages.navigation.HeaderNative
 import worker.WorkerClient
 import worker.models.appointments.GenericResponseObject
 import java.time.LocalDateTime
@@ -30,12 +29,9 @@ open class CancelAppointmentSteps {
 
     private lateinit var cancelAppointmentPage: CancelAppointmentPage
 
-    lateinit var headerNative: HeaderNative
-
     @Step
     fun verifyWeAreOnTheCancelAppointmentScreen() {
-        val expectedHeader = "Cancel appointment"
-        headerNative.waitForPageHeaderText(expectedHeader)
+        cancelAppointmentPage.assertPageFullyLoaded()
         assertEquals("Check your appointment details before cancelling",
                 cancelAppointmentPage.getCheckDetailsText())
     }

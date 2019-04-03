@@ -9,11 +9,12 @@ Feature: Book an available appointment slot UI without Javascript
   Background:
     Given I have disabled javascript
 
-# EMIS Specific Scenarios (For EMIS telephone appointment)
-# The following scenarios covered only telephone appointment options.
-# The telephone number is mandatory if telephone appointment slot selected.
+    #HAPPY PATH JOURNIES
 
-      # Positive submission cases
+    # EMIS Specific Scenarios (For EMIS telephone appointment)
+    # The following scenarios covered only telephone appointment options.
+    # The telephone number is mandatory if telephone appointment slot selected.
+    # Positive submission cases
 
   Scenario: An EMIS user without Javascript cannot enter or select a phone number for non phone appointments
     Given there are EMIS appointments available to book
@@ -26,11 +27,13 @@ Feature: Book an available appointment slot UI without Javascript
     And I do not see a text input to enter phone number
     And I do not see any phone numbers to select
 
+  #FEATURE JOURNIES
+
   Scenario Outline: An EMIS user with noJs can only enter a phone number for phone appointments, when they have <User's Telephone Numbers> phone number saved
     Given I have <User's Telephone Numbers> telephone number(s) stored
     And there are appointments available to book which are of telephone type
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
@@ -56,7 +59,7 @@ Feature: Book an available appointment slot UI without Javascript
     Given I have no telephone number(s) stored
     And there are appointments available to book which are of telephone type
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
@@ -69,7 +72,7 @@ Feature: Book an available appointment slot UI without Javascript
     Given I have no telephone number(s) stored
     And there are appointments available to book which are of telephone type
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
@@ -81,7 +84,7 @@ Feature: Book an available appointment slot UI without Javascript
     Given I have no telephone number(s) stored
     And there are appointments available to book which are of telephone type with optional booking reason
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
@@ -93,7 +96,7 @@ Feature: Book an available appointment slot UI without Javascript
     Given I have no telephone number(s) stored
     And there are appointments available to book which are of telephone type
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
@@ -112,7 +115,7 @@ Feature: Book an available appointment slot UI without Javascript
     And I have no telephone number(s) stored
     And there are appointments available to book which are of telephone type
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
@@ -125,7 +128,7 @@ Feature: Book an available appointment slot UI without Javascript
     Given I have no telephone number(s) stored
     And there are appointments available to book which are of telephone type with optional booking reason
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
@@ -141,7 +144,7 @@ Feature: Book an available appointment slot UI without Javascript
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available
@@ -163,7 +166,7 @@ Feature: Book an available appointment slot UI without Javascript
     Given I wish to book an appointment without specifying a reason
     And there are EMIS appointments available to book where booking reason is set optional
     And I am logged in
-    And I am on the Available Appointments page
+    When I retrieve the 'Appointment Booking' page directly
     And I have filtered such that there is one time displayed that represents multiple slots
     And I click the 'Find available appointments' button
     And I have selected a time when multiple slots are available

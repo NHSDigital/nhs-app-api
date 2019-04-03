@@ -13,6 +13,7 @@ import utils.SerenityHelpers
 import java.time.Duration
 
 private const val DELAY_IN_SECONDS = 12L
+private const val DEFAULT_BOOKING_REASON = "I would like to see a doctor"
 
 class AppointmentsBookingStepDefinitions {
 
@@ -39,26 +40,13 @@ class AppointmentsBookingStepDefinitions {
         factory.generateSuccessfulBookingResponse()
     }
 
-    @Given("^there are (.*) appointments available to book with a reason of (\\d+) character$")
-    fun thereAreAvailableAppointmentsToBookWithAReasonOfNumberOfCharactersSpecified(gpSystem: String,
-                                                                                    numberOfCharacters: Int) {
-        val bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharacters)
+    @Given("^there are (.*) appointments available to book with a reason")
+    fun thereAreAvailableAppointmentsToBookWithAReason(gpSystem: String) {
+        val bookingReasonOfSpecifiedLength = DEFAULT_BOOKING_REASON
+        Serenity.setSessionVariable(symptomsToEnter).to(DEFAULT_BOOKING_REASON)
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateSuccessfulBookingResponse(bookingReasonOfSpecifiedLength)
-    }
-
-    @Given("^there are (.*) appointments available to book with a reason of (\\d+) characters " +
-            "but user attempts to enter (\\d+) characters$")
-    fun thereAreAvailableAppointmentsToBookWithAReasonOfNumberOfCharactersSpecified(gpSystem: String,
-                                                                                    numberOfCharactersAllowed: Int,
-                                                                                    numberOfCharactersEntered: Int) {
-        val bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharactersAllowed)
-        val symptomsToEnter = "x".repeat(numberOfCharactersEntered)
-        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        factory.generateDefaultAvailableAppointmentSlotExample()
-        factory.generateSuccessfulBookingResponse(bookingReasonOfSpecifiedLength)
-        Serenity.setSessionVariable(AppointmentsBookingFactory.symptomsToEnter).to(symptomsToEnter)
     }
 
     @Given("^there are (.*) appointments available to book and user attempts to enter booking reason (.*)\$")

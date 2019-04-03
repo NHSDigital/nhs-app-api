@@ -107,14 +107,6 @@ open class AppointmentsConfirmationSteps {
         checkNumberOfPhoneNumberRadioButtonsSelected(1)
     }
 
-    @Step
-    fun getSymptomsOfLength(length: Int): String {
-        val symptoms = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.symptomsToEnter)
-        Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
-        Assert.assertEquals("Expected number of characters in symptoms, incorrect test setup", length, symptoms.length)
-        return symptoms
-    }
-
     private fun checkNumberOfPhoneNumberRadioButtonsSelected(expectedNumberOfRadioButtonsSelected: Int) {
         Assert.assertEquals(
                 "Incorrect number of radio buttons selected. ",

@@ -56,6 +56,8 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
+    override val titleText: String = "My appointments"
+
     private val upcomingAppointmentParentXpath = "//div[@data-purpose='upcoming-appointments']"
     private val historicalAppointmentParentXpath = "//div[@data-purpose='past-appointments']"
 

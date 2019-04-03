@@ -77,23 +77,11 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.errorPage.button.click()
     }
 
-    @When("^I enter symptoms of (\\d+) characters$")
-    fun whenIEnterSymptomsOfCharacter(length: Int) {
-        val symptoms: String = appointmentsConfirmationSteps.getSymptomsOfLength(length)
-        appointmentsConfirmationSteps.appointmentsConfirmation.describeSymptoms(symptoms)
-    }
-
     @When("^I enter symptoms$")
     fun whenIEnterSymptoms() {
         val symptoms = Serenity.sessionVariableCalled<String>(symptomsToEnter)
         Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
         appointmentsConfirmationSteps.appointmentsConfirmation.describeSymptoms(symptoms)
-    }
-
-    @When("^I paste symptoms of (\\d+) characters$")
-    fun whenIPasteSymptomsOfCharacters(length: Int) {
-        val symptoms: String = appointmentsConfirmationSteps.getSymptomsOfLength(length)
-        appointmentsConfirmationSteps.appointmentsConfirmation.pasteSymptoms(symptoms)
     }
 
     @When("^I select the (\\w+) number from available ones$")

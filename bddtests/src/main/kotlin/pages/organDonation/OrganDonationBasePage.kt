@@ -31,13 +31,6 @@ abstract class OrganDonationBasePage: HybridPageObject() {
 
     protected fun assertPageFullyLoaded() {
         waitForElement(title)
-        waitForElement(HybridPageElement(
-                "//button",
-                "//button",
-                null,
-                null,
-                this
-        ).withText("Back", false))
     }
 
     private fun waitForElement(element: HybridPageElement,

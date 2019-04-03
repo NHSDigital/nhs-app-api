@@ -7,10 +7,11 @@ import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.navigation.HeaderNative
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class AppointmentSharedElementsPage : HybridPageObject() {
+abstract class AppointmentSharedElementsPage : HybridPageObject() {
     private val xPathRoot = "//*"
     private val relativeToParentXPath = ".//*"
     private val dataLabelXpath = "[@data-label='%s']"
@@ -22,6 +23,7 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
     private val appointmentCliniciansXPath = "[starts-with(@data-label, 'clinician')]"
 
     private val selectedAppointmentParentXpath = "//div[@aria-label='selected appointment']"
+    lateinit var headerNative: HeaderNative
 
     val reasonError = HybridPageElement(
             webDesktopLocator = "//*[@data-purpose='reason-error']",
@@ -29,6 +31,11 @@ open class AppointmentSharedElementsPage : HybridPageObject() {
             page = this,
             helpfulName = "Reason Error"
     )
+    abstract val titleText: String?
+
+    fun assertPageFullyLoaded() {
+        headerNative.getPageTitle(titleText!!)
+    }
 
     fun getDateTimestampsOfSlots(appointmentListParentXpath: String): List<Long> {
         val slotTimestamps = arrayListOf<Long>()
