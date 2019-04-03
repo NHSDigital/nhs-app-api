@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private VisionAppointmentsValidationService _systemUnderTest;
 
         [TestInitialize]
-        public void TestInialize()
+        public void TestInitialize()
         {
             Mock<ILogger<VisionAppointmentsValidationService>> logger = new Mock<ILogger<VisionAppointmentsValidationService>>();
             _systemUnderTest = new VisionAppointmentsValidationService(logger.Object);
@@ -57,7 +57,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
         [DataTestMethod]
         [DataRow(null, "good reason")]
-        [DataRow("1234", null)]
         [DataRow("1234", "<script>malicious attack</script>")]
         [DataRow("1234", "<script a='1'>malicious attack</script>")]
         public void IsPostValid_InvalidData_ReturnsFalse(string slotId, string bookingReason)

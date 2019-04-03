@@ -19,11 +19,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             return true;
         }
 
-        protected override bool IsSupplierPostValid(AppointmentBookRequest request) 
+        protected override bool IsSupplierPostValid(AppointmentBookRequest request)
         {
-            return new ValidateAndLog(_logger)
-                .IsNotNullOrWhitespace(request.BookingReason, nameof(request.BookingReason))
-                .IsValid();
+            return true;
         }
     }
 }
