@@ -187,8 +187,8 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.termsAndConditions';
       break;
     default:
-      route.meta.headerKey = '';
-      route.meta.pageTitleKey = '';
+      route.meta.headerKey = 'errors.404.header';
+      route.meta.pageTitleKey = 'errors.404.pageTitle';
       break;
   }
 
