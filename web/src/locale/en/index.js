@@ -714,6 +714,10 @@ export default {
   webHeader: {
     title: '{pageTitle} - NHS App',
   },
+  webFooter: {
+    hiddenHeaderText: 'Support links',
+    copyrightText: 'Crown copyright',
+  },
   navigationMenu: {
     appointmentsLabel: 'Appointments',
     moreLabel: 'More',

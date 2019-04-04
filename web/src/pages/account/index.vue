@@ -22,47 +22,11 @@
     </div>
     <h2>{{ $t('myAccount.aboutUsHeading') }}</h2>
     <ul :class="[$style['list-menu'], $style.myAccountList]">
-      <li :class="$style.listMenuItem">
-        <analytics-tracked-tag id="btn_terms" :href="$store.app.$env.TERMS_AND_CONDITIONS_URL"
-                               :text="$t('myAccount.termsAndConditions')"
+      <li v-for="(link, index) in links" :key="index" :class="$style.listMenuItem">
+        <analytics-tracked-tag :href="link.url"
+                               :text="$t(link.localeLabel)"
                                tag="a" target="_blank">
-          {{ $t('myAccount.termsAndConditions') }}
-        </analytics-tracked-tag>
-      </li>
-      <li :class="$style.listMenuItem">
-        <analytics-tracked-tag id="btn_privacy" :href="$store.app.$env.PRIVACY_POLICY_URL"
-                               :text="$t('myAccount.privacyPolicy')"
-                               tag="a" target="_blank">
-          {{ $t('myAccount.privacyPolicy') }}
-        </analytics-tracked-tag>
-      </li>
-      <li :class="$style.listMenuItem">
-        <analytics-tracked-tag id="btn_cookies" :href="$store.app.$env.COOKIES_POLICY_URL"
-                               :text="$t('myAccount.cookiesPolicy')"
-                               tag="a" target="_blank">
-          {{ $t('myAccount.cookiesPolicy') }}
-        </analytics-tracked-tag>
-      </li>
-      <li :class="$style.listMenuItem">
-        <analytics-tracked-tag id="btn_openSource" :href="$store.app.$env.OPEN_SOURCE_LICENCES_URL"
-                               :text="$t('myAccount.openSourceLicences')"
-                               tag="a" target="_blank">
-          {{ $t('myAccount.openSourceLicences') }}
-        </analytics-tracked-tag>
-      </li>
-      <li :class="$style.listMenuItem">
-        <analytics-tracked-tag id="btn_help" :href="$store.app.$env.HELP_AND_SUPPORT_URL"
-                               :text="$t('myAccount.helpAndSupport')"
-                               tag="a" target="_blank">
-          {{ $t('myAccount.helpAndSupport') }}
-        </analytics-tracked-tag>
-      </li>
-      <li :class="$style.listMenuItem">
-        <analytics-tracked-tag id="btn_accessibility"
-                               :href="$store.app.$env.ACCESSIBILITY_STATEMENT"
-                               :text="$t('myAccount.accessibilityStatement')"
-                               tag="a" target="_blank">
-          {{ $t('myAccount.accessibilityStatement') }}
+          {{ $t(link.localeLabel) }}
         </analytics-tracked-tag>
       </li>
     </ul>
@@ -96,6 +60,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import WelcomeSection from '@/components/WelcomeSection';
 import NativeCallbacks from '@/services/native-app';
 import CeMarkIcon from '@/components/icons/CeMarkIcon';
+import { accountLinks } from '@/lib/common-links';
 
 export default {
   components: {
@@ -106,6 +71,7 @@ export default {
   },
   data() {
     return {
+      links: accountLinks(this.$env),
       nativeLoginOptionsMethodExists: true,
     };
   },
@@ -131,34 +97,38 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import "../../style/accessibility";
+@import "../../style/accessibility";
 @import "../../style/listmenu";
 @import "../../style/colours";
-  @import "../../style/webshared";
+@import "../../style/webshared";
+
 .no-padding {
   margin-top: -0.5em;
   margin-left: -1em;
   margin-right: -1em;
-  padding-bottom : 5em;
-  p, h2 {
+  padding-bottom: 5em;
+
+  p,
+  h2 {
     margin-left: 0.7em;
     margin-top: 0.5em;
   }
 }
 
-.welcomeSectionContainer{
- margin-left: 1em;
+.welcomeSectionContainer {
+  margin-left: 1em;
 }
 
 .myAccountList {
   @include inner-container-width;
 
   .listMenuItem {
-      font-family: $default-web;
-      font-weight: lighter;
-      a {
-        @extend .focusBorder;
-      }
+    font-family: $default-web;
+    font-weight: lighter;
+
+    a {
+      @extend .focusBorder;
+    }
   }
 }
 

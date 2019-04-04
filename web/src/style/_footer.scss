@@ -1,75 +1,140 @@
-@import './colours';
+@import "./colours";
+@import './desktopWeb/accessibility';
+@import './screensizes';
 @import './textstyles';
-@import './fonts';
 
-/** FOOTER */
-footer {
+.footer {
+  padding-bottom: 1.5em;
+  padding-top: 1.5em;
+  padding-left: 1em;
+  background-color: $footer_bg;
+  border-top: 4px solid $nhs_blue;
+  font-family: $default-web;
+
+  &:after {
+    clear: both;
+    content: '';
     display: block;
+  }
 
-    ul li,
-    ol li {
-      margin: 0;
+  .footer-content {
+    @include main-container-width;
+    margin: 0 auto;
+    padding-left: 0.5em;
+
+    .visually-hidden {
+      border: 0;
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
     }
 
-    .nhsuk-global-footer__logo {
+    ul {
       padding-bottom: 1em;
+      list-style-type: none;
+      margin: 0;
+      padding-left: 0;
 
-      a .nhsuk-logo {
-        border: 0;
-        height: 40px;
-        max-width: 100%;
-        vertical-align: middle;
-        width: 99px;
+      li {
+        font-weight: 400;
+        font-size: 14px;
+        font-size: 0.875rem;
+        line-height: 1.71429;
+        margin-bottom: 0.5rem;
       }
     }
 
-    .nhsuk-global-footer {
-      background-color: #005EB8;
-      color: #FFFFFF;
-      width: 100%;
+    a {
+      line-height: inherit;
+      color: $dark_grey;
+      text-decoration: underline;
+      font-weight: normal;
 
+      &:visited {
+        color: $dark_grey;
+      }
+
+      &:focus {
+        @include outlineStyle;
+      }
+    }
+
+    .footer-copyright {
+      font-weight: 400;
+      font-size: 14px;
+      font-size: 0.875rem;
+      line-height: 1.71429;
+      color: $dark_grey;
+      margin-bottom: 0;
+    }
+  }
+}
+
+@include medium-screen {
+  .footer {
+    .footer-content {
       ul {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        list-style-type: none;
-        margin: 0;
-        padding: 2em 0;
+        padding-bottom: 1.5em;
 
         li {
-          a {
-            font-family: $default-web;
-            text-decoration: underline;
-            font-weight: normal;
-            color: $white;
-            line-height: 1.5em;
-            padding: 0.5em;
-
-            &:hover {
-              background: #003d78;
-              box-shadow: none;
-              color: #FFFFFF;
-              text-decoration: underline;
-            }
-
-            &:visited {
-              color: $white;
-            }
-
-            &:active {
-              color: $white;
-            }
-          }
+          font-size: 16px;
+          font-size: 1rem;
+          line-height: 1.5;
         }
       }
-    }
 
-    @media (min-width: 40.0625em) {
-      .nhsuk-global-footer ul li {
-        display: inline-block;
-        font-size: 17px;
-        padding-right: 25px;
-      }
-      .nhsuk-global-footer__logo {
-        padding-bottom: 0;
+      .footer-copyright {
+        font-size: 16px;
+        font-size: 1rem;
+        line-height: 1.5;
       }
     }
   }
+}
+
+@include tablet-and-above {
+  .footer {
+    padding-bottom: 2em;
+
+    .footer-content {
+      margin-left: 2em;
+      margin-right: 2em;
+
+      ul {
+        float: left;
+        padding-bottom: 0;
+        width: 75%;
+
+        li {
+          float: left;
+          margin-right: 2em;
+        }
+      }
+
+      .footer-copyright {
+        float: right;
+        text-align: right;
+        width: 25%;
+      }
+    }
+  }
+}
+
+@include desktop {
+  .footer {
+    .footer-content {
+      margin: 0 auto;
+    }
+  }
+}
+
+@media print {
+  .footer {
+    display: none;
+  }
+}

@@ -16,18 +16,6 @@ open class TermsAndConditionsSteps {
         return termsAndConditionsPage.isMainBodyTextVisible()
     }
     @Step
-    fun termsOfUseLinkVisible() : Boolean {
-        return termsAndConditionsPage.isTermsOfUseLinkVisible()
-    }
-    @Step
-    fun privacyPolicyLinkVisible() : Boolean {
-        return termsAndConditionsPage.isPrivacyPolicyLinkVisible()
-    }
-    @Step
-    fun cookiesPolicyLinkVisible() : Boolean {
-        return termsAndConditionsPage.isCookiesPolicyLinkVisible()
-    }
-    @Step
     fun secondaryErrorMessageVisible() : Boolean {
         return termsAndConditionsPage.isSecondaryErrorMessageVisible()
     }

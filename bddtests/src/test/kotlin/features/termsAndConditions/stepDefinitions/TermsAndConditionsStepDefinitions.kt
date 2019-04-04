@@ -17,9 +17,6 @@ class TermsAndConditionsStepDefinitions {
     @Given("^I am on the Terms and conditions page$")
     fun iAmOnTheTermsAndConditionsPage() {
         assert(termsAndConditions.mainBodyTextVisible())
-        assert(termsAndConditions.termsOfUseLinkVisible())
-        assert(termsAndConditions.privacyPolicyLinkVisible())
-        assert(termsAndConditions.cookiesPolicyLinkVisible())
         assert(termsAndConditions.tcCheckBoxVisible())
         assert(termsAndConditions.continueButtonVisible())
     }

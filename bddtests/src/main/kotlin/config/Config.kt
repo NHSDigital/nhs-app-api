@@ -1,7 +1,5 @@
 package config
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.net.URI
 
 private const val SESSION_EXPIRY_MINUTES: Long = 2
@@ -51,13 +49,6 @@ class Config private constructor() {
 
     val mongoDbHost: String
     val mongoDbPort: Long
-
-    val nhsSites: String
-    val aboutUs: String
-    val contactUs: String
-    val siteMap: String
-    val accessibilityInformation: String
-    val policies: String
 
     val accessibilityOutputFolder: String
 
@@ -114,13 +105,6 @@ class Config private constructor() {
         gpLookupApiKey = envOrDefault("GP_LOOKUP_API_KEY", "testnhssearchservicekey")
         postcodeLookupSearchRadiusKm = envOrDefault("POSTCODE_LOOKUP_SEARCH_RADIUS_KM", "10");
 
-        nhsSites = envOrDefault("NHS_SITES_URL", "https://www.nhs.uk/nhs-sites/")
-        aboutUs = envOrDefault("ABOUT_US_URL", "https://www.nhs.uk/about-us/")
-        contactUs = envOrDefault("CONTACT_US_URL", "https://www.nhs.uk/contact-us/")
-        siteMap = envOrDefault("SITE_MAP_URL", "https://www.nhs.uk/about-us/sitemap/")
-        accessibilityInformation = envOrDefault("ACCESSIBILITY_URL", "https://www.nhs.uk/accessibility/")
-        policies = envOrDefault("POLICIES_URL", "https://www.nhs.uk/our-policies/")
-
         accessibilityOutputFolder = envOrDefault("ACCESSIBILITY_OUTPUT_FOLDER", "accessibilityoutput")
     }
 
@@ -139,7 +123,6 @@ class Config private constructor() {
         val instance: Config by lazy { createConfig() }
 
         val keyStore: KeyStore = KeyStore(constants.JwkValues.cidKeys)
-        val logger: Logger = LoggerFactory.getLogger(Config::class.simpleName)
 
         fun createConfig(): Config {
             return Config()

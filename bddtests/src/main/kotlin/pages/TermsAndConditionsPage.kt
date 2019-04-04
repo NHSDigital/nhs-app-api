@@ -42,19 +42,19 @@ class TermsAndConditionsPage : HybridPageObject() {
     )
 
     val termsOfUseLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'terms of use')]",
+            webDesktopLocator = "//section//a[contains(text(),'terms of use')]",
             androidLocator = null,
             page = this
     )
 
     val privacyPolicyLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'privacy policy')]",
+            webDesktopLocator = "//section//a[contains(text(),'privacy policy')]",
             androidLocator = null,
             page = this
     )
 
     val cookiesPolicyLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(),'cookies policy')]",
+            webDesktopLocator = "//section//a[contains(text(),'cookies policy')]",
             androidLocator = null,
             page = this
     )
@@ -71,18 +71,6 @@ class TermsAndConditionsPage : HybridPageObject() {
 
     fun isMainBodyTextVisible() : Boolean {
         return mainBodyText.element.isVisible
-    }
-
-    fun isTermsOfUseLinkVisible() : Boolean {
-        return termsOfUseLink.element.isVisible
-    }
-
-    fun isPrivacyPolicyLinkVisible() : Boolean {
-        return privacyPolicyLink.element.isVisible
-    }
-
-    fun isCookiesPolicyLinkVisible() : Boolean {
-        return cookiesPolicyLink.element.isVisible
     }
 
     fun isSecondaryErrorMessageVisible() : Boolean {

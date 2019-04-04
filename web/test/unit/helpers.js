@@ -89,6 +89,7 @@ export const mount = (component, {
       $router,
       $store: store,
       $style,
+      $env,
       $t: t,
       $tc,
       showTemplate: () => true,

@@ -1,6 +1,5 @@
 package features.authentication.stepDefinitions
 
-import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -18,11 +17,9 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.assertSingleElementPresent
 import pages.navigation.NavBarNative
-import pages.navigation.WebFooter
 import java.net.URL
 
 private const val SURVEY_URL = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
-private const val NEW_TAB_WAIT_TIME = 1000L
 
 class HomePageStepDefinitions : AbstractSteps() {
 
@@ -46,8 +43,6 @@ class HomePageStepDefinitions : AbstractSteps() {
     private lateinit var prescriptions: PrescriptionsSteps
     @Steps
     private lateinit var recordSteps: MyRecordStepDefinitions
-    @Steps
-    private lateinit var webFooter: WebFooter
 
     @Given("^I am at the login page")
     fun givenIAmAtTheLoginPage() {
@@ -111,47 +106,6 @@ class HomePageStepDefinitions : AbstractSteps() {
         }
     }
 
-    @Then("^I click the NHS sites link in the footer")
-    fun iClickFooterNHSSitesLink() {
-        followNHSSiteLink()
-        browser.changeTabToHome()
-    }
-
-    @Then("^I click the about us link in the footer")
-    fun iClickFooterAboutUsLink() {
-        followAboutUsLink()
-        browser.changeTabToHome()
-    }
-
-    @Then("^I click the contact us link in the footer")
-    fun iClickFooterContactUsLink() {
-        followContactUSLink()
-        browser.changeTabToHome()
-    }
-
-    @Then("^I click the site map link in the footer")
-    fun iClickFooterSiteMapLink() {
-        followsiteMapLink()
-        browser.changeTabToHome()
-    }
-
-    @Then("^I click the accessibility link in the footer")
-    fun iClickFooterAccessibilityLink() {
-        followAccessibilityLink()
-        browser.changeTabToHome()
-    }
-
-    @Then("^I click the policies link in the footer")
-    fun iClickFooterPoliciesLink() {
-        followPoliciesLink()
-        browser.changeTabToHome()
-    }
-
-    @Then("^I click the home link in the footer")
-    fun iClickFooterHomeLink() {
-        followFooterHomeLink()
-    }
-
     private fun navigateBackToHomePage(){
         navHeader.headerNative.clickHome()
         homeSteps.assertHeaderVisible()
@@ -186,47 +140,6 @@ class HomePageStepDefinitions : AbstractSteps() {
     private fun followOrganDonationLink() {
         homeSteps.homePage.organDonationLink.click()
         organDonationSteps.iAmOnTheOrganDonationPage()
-    }
-
-    private fun followNHSSiteLink() {
-        webFooter.nhsSitesLink()
-        aNewTabOpens(Config.instance.nhsSites)
-    }
-
-    private fun followAboutUsLink() {
-        webFooter.aboutUsLink()
-        aNewTabOpens(Config.instance.aboutUs)
-    }
-
-    private fun followContactUSLink() {
-        webFooter.contactUsLink()
-        aNewTabOpens(Config.instance.contactUs)
-    }
-
-    private fun followsiteMapLink() {
-        webFooter.siteMapLink()
-        aNewTabOpens(Config.instance.siteMap)
-    }
-
-    private fun followAccessibilityLink() {
-        webFooter.accessibilityInformationLink()
-        aNewTabOpens(Config.instance.accessibilityInformation)
-    }
-
-    private fun followPoliciesLink() {
-        webFooter.policiesLink()
-        aNewTabOpens(Config.instance.policies)
-    }
-
-    private fun followFooterHomeLink() {
-        webFooter.homeLink()
-    }
-
-    private fun aNewTabOpens(url: String) {
-        //wait required to load page as in testing the should have url will never continue without it
-        Thread.sleep(NEW_TAB_WAIT_TIME)
-        browser.changeTab(URL(url))
-        browser.shouldHaveUrl(url)
     }
 }
 

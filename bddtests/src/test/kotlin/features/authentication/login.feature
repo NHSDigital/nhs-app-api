@@ -36,43 +36,6 @@ Feature: Login
       | GP System |
       | MICROTEST |
 
-  Scenario: A EMIS user clicks the home link in the footer from another page
-    Given I have upcoming appointments before cutoff time for EMIS
-    And I am logged in
-    And I am on the Appointment Guidance page
-    When I click the home link in the footer
-    Then I see the home page
-
-  Scenario: A EMIS user sees the home page after logging in and tries to access the NHS sites footer link
-    Given I am logged in as a EMIS user
-    When I see the home page
-    Then I click the NHS sites link in the footer
-
-  Scenario: A EMIS user sees the home page after logging in and tries to access the about us footer link
-    Given I am logged in as a EMIS user
-    When I see the home page
-    Then I click the about us link in the footer
-
-  Scenario: A EMIS user sees the home page after logging in and tries to access the contact us footer link
-    Given I am logged in as a EMIS user
-    When I see the home page
-    Then I click the contact us link in the footer
-
-  Scenario: A EMIS user sees the home page after logging in and tries to access the site map footer link
-    Given I am logged in as a EMIS user
-    When I see the home page
-    Then I click the site map link in the footer
-
-  Scenario: A EMIS user sees the home page after logging in and tries to access the accessibility footer link
-    Given I am logged in as a EMIS user
-    When I see the home page
-    Then I click the accessibility link in the footer
-
-  Scenario: A EMIS user sees the home page after logging in and tries to access the policies footer link
-    Given I am logged in as a EMIS user
-    When I see the home page
-    Then I click the policies link in the footer
-
   Scenario Outline: A <GP System> user can still log in when the Im1 Connection Token doesn't contain a key
     Given I am logged in as a <GP System> user created before Im1 Cache Keys existed
     Then I see a welcome message

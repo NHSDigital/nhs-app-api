@@ -3,6 +3,7 @@
 $phone-width: 375px;
 $tablet-width: 768px;
 $desktop-width: 1024px;
+$medium-screen: 40.0625em;
 $desktop-tablet-width: 48.0625em;
 $desktop-wide-width: 1366px;
 
@@ -26,6 +27,11 @@ $desktop-wide-width: 1366px;
   }
 }
 
+@mixin medium-screen {
+  @media (min-width: $medium-screen) {
+    @content;
+  }
+}
 
 @mixin tablet {
   @media (min-device-width: #{$tablet-width}) and (max-device-width: #{$desktop-width - 1px}) {
