@@ -1,4 +1,4 @@
-@organ-donation
+@organdonation
 Feature: Organ Donation View
 
   @nativepending @NHSO-2972

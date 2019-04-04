@@ -109,7 +109,7 @@ else
           
         elif [ "$RUN_NATIVE" == 1 ]
         then
-          TAGS=(native-smoketest)
+          TAGS=(organdonation)
         else
           TAGS=specific
           BDD_CUCUMBER_OPTIONS_PREFIX=$BDD_CUCUMBER_OPTIONS_PREFIX"'"

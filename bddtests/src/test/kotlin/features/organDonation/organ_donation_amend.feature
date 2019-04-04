@@ -1,4 +1,4 @@
-@organ-donation
+@organdonation
 Feature: Organ Donation - Amend
 
   Scenario: A user who opted to donate all their organs can amend it to not donate
