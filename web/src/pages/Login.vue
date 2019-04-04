@@ -43,6 +43,7 @@
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import LoginButton from '@/components/LoginButton';
+import GenericButton from '@/components/widgets/GenericButton';
 import { setCookie } from '@/lib/cookie-manager';
 import { BEGINLOGIN, GP_FINDER } from '@/lib/routes';
 import AuthorisationService from '@/services/authorisation-service';
@@ -55,6 +56,7 @@ export default {
   components: {
     AnalyticsTrackedTag,
     LoginButton,
+    GenericButton,
   },
   data() {
     return {

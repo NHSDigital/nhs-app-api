@@ -1,13 +1,16 @@
 <template>
-  <div class="radio-item">
+  <div :class="$style['nhsuk-radios__item']">
     <input :id="inputId"
+           v-model="selectedValue"
+           :class="$style['nhsuk-radios__input']"
            :value="value"
            :name="name"
-           :checked="checked"
            type="radio"
            :aria-describedby="hintId"
+           :required="required"
            @click.stop="selected">
-    <label :for="inputId">{{ label }}</label>
+    <label :class="[$style['nhsuk-label'], $style['nhsuk-radios__label']]"
+           :for="inputId">{{ label }}</label>
     <span v-if="hint" :id="hintId">{{ hint }}</span>
   </div>
 </template>
@@ -32,9 +35,13 @@ export default {
     value: {
       default: '',
     },
-    checked: {
+    // eslint-disable-next-line vue/require-prop-types
+    selectedValue: {
+      default: '',
+    },
+    required: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   data() {
@@ -54,6 +61,17 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-@import '../../style/radiobutton';
+<style module lang="scss" scoped>
+ @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_ifff";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_functions";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_mixins";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/settings/colours";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/settings/spacing";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/tools/spacing";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/tools/sass-mq";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/settings/typography";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/settings/globals";
+ @import "../../../node_modules/nhsuk-frontend/packages/core/tools/typography";
+ @import "../../../node_modules/nhsuk-frontend/packages/components/label/label";
+@import "../../../node_modules/nhsuk-frontend/packages/components/radios/radios";
 </style>

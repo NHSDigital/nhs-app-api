@@ -1,16 +1,22 @@
 <template>
   <div :class="[$style.form, !$store.state.device.isNativeApp && $style.desktopWeb]">
+    <span v-if="error" :id="errorId" class="nhsuk-error-message">
+      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+      {{ errorText }}
+    </span>
     <input :id="id"
            ref="textInput"
            v-model="textValue"
-           v-tabbing="textInputClasses"
-           :class="getStyleClasses"
-           :aria-labelledby="aLabelledBy"
+           :aria-labelledby="ariaLabels"
            :maxlength="maxlength"
+           :min="min"
+           :max="max"
            :required="required"
            :name="name"
            :type="type"
            :pattern="pattern"
+           :step="step"
+           :class="inputClasses"
            autocomplete="off"
            autocorrect="off"
            autocapitalize="off"
@@ -19,14 +25,7 @@
 </template>
 
 <script>
-
-import TabFocusMixin from './TabFocusMixin';
-
 export default {
-  components: {
-    TabFocusMixin,
-  },
-  mixins: [TabFocusMixin.tabMixin],
   props: {
     name: {
       type: String,
@@ -36,6 +35,14 @@ export default {
       type: String,
       default: '255',
     },
+    min: {
+      type: Number,
+      default: undefined,
+    },
+    max: {
+      type: Number,
+      default: undefined,
+    },
     aLabelledBy: {
       type: String,
       default: undefined,
@@ -43,10 +50,6 @@ export default {
     id: {
       type: String,
       default: undefined,
-    },
-    textInputClasses: {
-      type: Array,
-      default() { return []; },
     },
     type: {
       type: String,
@@ -56,33 +59,52 @@ export default {
       type: Boolean,
       default: false,
     },
-    initialContents: {
-      type: String,
-      default: undefined,
+    value: {
+      type: [String, Number],
+      default() { return undefined; },
     },
     pattern: {
       type: String,
       default: undefined,
     },
-  },
-  data: function data() {
-    return {
-      model: undefined,
-    };
+    step: {
+      type: String,
+      default: undefined,
+    },
+    error: {
+      type: Boolean,
+      default: false,
+    },
+    errorText: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     textValue: {
       get() {
-        return this.model;
+        return this.value;
       },
       set(value) {
-        this.model = value;
         this.$emit('input', value);
       },
     },
-  },
-  created() {
-    this.model = this.initialContents;
+    inputClasses() {
+      return [
+        'nhsuk-input',
+        this.error ? 'nhsuk-input--error' : undefined,
+      ];
+    },
+    errorId() {
+      return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+    ariaLabels() {
+      const ariaLabels = [
+        this.aLabelledBy ? this.aLabelledBy : undefined,
+        this.error ? this.errorId : undefined,
+      ].join(' ').trim();
+      return ariaLabels || undefined;
+    },
   },
   methods: {
     focus() {
@@ -93,8 +115,6 @@ export default {
 
 </script>
 <style module lang="scss" scoped>
-@import '../../style/forms';
-
 div {
  &.desktopWeb {
   .form {

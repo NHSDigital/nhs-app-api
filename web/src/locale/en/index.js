@@ -18,6 +18,16 @@ export default {
     backButton: {
       text: 'Back',
     },
+    input: {
+      errors: {
+        messagePrefix: 'Error: ',
+      },
+    },
+    table: {
+      errors: {
+        noData: 'Error loading table data',
+      },
+    },
   },
   auth_return: {
     errors: {

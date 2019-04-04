@@ -29,7 +29,8 @@
     <div :class="$style.info">
       <p><b>{{ $t('organDonation.faith.choices.header') }}</b></p>
     </div>
-    <radio-group :radios="choices"
+    <radio-group v-model="selectedValue"
+                 :radios="choices"
                  :current-value="currentChoice"
                  :show-error="showError"
                  :error-message="$t('organDonation.faith.inlineErrorMessage')"
@@ -77,6 +78,7 @@ export default {
         { value: NOT_STATED, label: this.$t('organDonation.faith.choices.preferNotToSay.title') },
       ],
       hasTriedToContinue: false,
+      selectedValue: undefined,
     };
   },
   computed: {

@@ -59,7 +59,6 @@
           </label>
           <generic-text-area id="specialRequest"
                              v-model="specialRequest"
-                             :initial-contents="specialRequest"
                              :required="(specialRequestNecessity === 'Mandatory')"
                              text-area-ref="specialRequest"
                              name="specialRequest"

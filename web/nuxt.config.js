@@ -23,6 +23,9 @@ const config = {
     // Simple usage
     'cookie-universal-nuxt',
   ],
+  css: [
+    '~/style/_nhsukfrontend.scss',
+  ],
   plugins: [
     '~/plugins/routing.js',
     '~/plugins/environmentVariables.js',

@@ -12,7 +12,8 @@
       <h2>{{ $t('organDonation.yourChoice.subheader') }}</h2>
       <p>{{ $t('organDonation.yourChoice.description') }}</p>
     </div>
-    <radio-group :class="$style.radioGroup"
+    <radio-group v-model="selectedValue"
+                 :class="$style.radioGroup"
                  :current-value="currentChoice"
                  :radios="radioButtons"
                  :show-error="showErrors"
@@ -72,6 +73,7 @@ export default {
         },
       ],
       setAllOrgansAction: 'organDonation/setAllOrgans',
+      selectedValue: undefined,
     };
   },
   computed: {

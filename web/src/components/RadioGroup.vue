@@ -7,12 +7,13 @@
       <error-message v-if="errorMessage && showError">
         {{ errorMessage }}
       </error-message>
-      <generic-radio-button v-for="radio in radios" :key="radio.value"
+      <generic-radio-button v-for="radio in radios"
+                            :key="radio.value"
+                            :selected-value="selectedValue"
                             :class="{ inline: inline }"
                             :hint="radio.hint"
                             :label="radio.label"
                             :name="name"
-                            :checked="currentValue === radio.value"
                             :value="radio.value"
                             @select="selected"/>
     </component>
@@ -64,17 +65,23 @@ export default {
   data() {
     return {
       container: this.header ? 'fieldset' : 'div',
+      selectedValue: this.currentValue,
     };
   },
   methods: {
     selected(value) {
-      this.$emit('select', value);
+      this.selectedValue = value;
+      this.$emit('select', this.selectedValue);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style module lang="scss" scoped>
 @import '../style/radiobutton';
+
+.nhsuk-fieldset{
+ margin-bottom: 16px;
+}
 </style>
 

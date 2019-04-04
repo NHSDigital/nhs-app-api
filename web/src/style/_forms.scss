@@ -21,7 +21,7 @@
 		padding-top: 0.5em;
 	}
 
-	input[type=text], input[type=tel],
+	input[type=text], input[type=number], input[type=tel],
 	textarea {
 		width: 100%;
 		box-sizing: border-box;
@@ -46,7 +46,7 @@
 			filter: brightness(120%);
 		}
 	}
-	input[type=text], input[type=tel] {
+	input[type=text], input[type=number], input[type=tel] {
 		height: 3.125em;
 		line-height: 3.125em;
 	}

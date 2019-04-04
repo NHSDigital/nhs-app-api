@@ -1,5 +1,6 @@
 <template>
   <radio-group :key="organName"
+               v-model="selectedValue"
                :name="organName"
                :radios="choices"
                :inline="true"
@@ -39,6 +40,7 @@ export default {
         { label: this.$t('organDonation.someOrgans.choices.no'), value: NO },
       ],
       inlineErrorMessage: this.$t('organDonation.someOrgans.inlineErrorMessage') + this.$t(this.title).toLowerCase(),
+      selectedValue: this.currentChoice,
     };
   },
   computed: {
