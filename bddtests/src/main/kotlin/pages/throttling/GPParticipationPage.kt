@@ -1,23 +1,11 @@
 package pages.throttling
 
 import mocking.data.nhsAzureSearchData.NhsAzureSearchData.ORGANISATION_NAME
-import org.junit.Assert.assertTrue
-import pages.HybridPageObject
 import pages.HybridPageElement
-
-private const val NUM_PARTICIPATING_AVAILABLE_FEATURES = 4
-private const val NUM_PARTICIPATING_UNAVAILABLE_FEATURES = 0
-private const val NUM_NOT_PARTICIPATING_AVAILABLE_FEATURES = 1
-private const val NUM_NOT_PARTICIPATING_UNAVAILABLE_FEATURES = 3
+import pages.HybridPageObject
+import pages.sharedElements.TextBlockElement
 
 class GPParticipationPage : HybridPageObject() {
-
-    var featuresUsedHeader = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(), 'NHS App features used by ')]",
-            webMobileLocator = "//h2[contains(text(), 'NHS App features used by ')]",
-            androidLocator = null,
-            page = this
-    )
 
     val featuresUsedHeaderParticipatingPractice = HybridPageElement(
             webDesktopLocator = "//h2[contains(text(), 'NHS App features used by $ORGANISATION_NAME 1')]",
@@ -33,49 +21,7 @@ class GPParticipationPage : HybridPageObject() {
             page = this
     )
 
-    val currentlyAvailableHeader = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(), 'Currently available')]",
-            webMobileLocator = "//h2[contains(text(), 'Currently available')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val comingSoonHeader = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(), 'Coming soon')]",
-            webMobileLocator = "//h2[contains(text(), 'Coming soon')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val availableFeatures = HybridPageElement(
-            webDesktopLocator = "//ul[@id='availableFeatures']/li",
-            webMobileLocator = "//ul[@id='availableFeatures']/li",
-            androidLocator = null,
-            page = this
-    )
-
-    val unavailableFeatures = HybridPageElement(
-            webDesktopLocator = "//ul[@id='unavailableFeatures']/li",
-            webMobileLocator = "//ul[@id='unavailableFeatures']/li",
-            androidLocator = null,
-            page = this
-    )
-
-    val ctaParticipatingContinueButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(), 'Continue')]",
-            webMobileLocator = "//button[contains(text(), 'Continue')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val ctaNotParticipatingContinueButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(), 'Continue')]",
-            webMobileLocator = "//button[contains(text(), 'Continue')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val ctaNotMySurgeryButton = HybridPageElement(
+    val notMySurgeryLink = HybridPageElement(
             webDesktopLocator = "//a[contains(text(), 'This is not my GP surgery')]",
             webMobileLocator = "//a[contains(text(), 'This is not my GP surgery')]",
             androidLocator = null,
@@ -97,24 +43,27 @@ class GPParticipationPage : HybridPageObject() {
     )
 
     fun assertNotParticipatingFeaturesVisible() {
-        assertTrue(unavailableFeatures.elements.count() == NUM_NOT_PARTICIPATING_UNAVAILABLE_FEATURES)
-        assertTrue(availableFeatures.elements.count() == NUM_NOT_PARTICIPATING_AVAILABLE_FEATURES)
+        TextBlockElement.withH2Header("Currently available", this)
+                .assertList(
+                        "Check symptoms",
+                        "Record organ donation decision")
+
+        TextBlockElement.withH2Header("Coming soon", this)
+                .assertList(
+                        "Book and manage appointments",
+                        "Order repeat prescriptions",
+                        "View your medical records")
     }
 
     fun assertParticipatingFeaturesVisible() {
-        assertTrue(unavailableFeatures.elements.count() == NUM_PARTICIPATING_UNAVAILABLE_FEATURES)
-        assertTrue(availableFeatures.elements.count() == NUM_PARTICIPATING_AVAILABLE_FEATURES)
-    }
+        TextBlockElement.withH2Header("Currently available", this)
+                .assertList(
+                        "Check symptoms",
+                        "Book and manage appointments",
+                        "Order repeat prescriptions",
+                        "View your medical records")
 
-    fun clickNotMySurgeryButton() {
-        ctaNotMySurgeryButton.click()
-    }
-
-    fun setHeaderToLookFor(participating: Boolean) {
-        featuresUsedHeader = if (participating) {
-            featuresUsedHeaderParticipatingPractice
-        } else {
-            featuresUsedHeaderNotParticipatingPractice
-        }
+        TextBlockElement.withH2Header("Coming soon", this)
+                .assertElementNotPresent()
     }
 }

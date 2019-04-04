@@ -6,6 +6,7 @@ import pages.HybridPageElement
 import pages.assertSingleElementPresent
 import pages.sharedElements.ExpandElement
 import pages.sharedElements.RadioButtons
+import pages.sharedElements.TextBlockElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
@@ -37,14 +38,13 @@ open class OrganDonationFaithAndBeliefsPage : OrganDonationBasePage() {
     }
 
     private fun assertInformation() {
-        val bodyTextOne = arrayOf(
-                "When you die, NHS staff can ask your family (and anyone else appropriate) about your " +
-                        "faith and beliefs. " +
-                        "This is how NHS staff will find out about any end of life wishes you might have.",
-                "Record here whether you want our specialist nurses to discuss your faith or beliefs with your " +
-                        "family when you die, at the same time they approach them about organ donation.")
-        OrganDonationDetailsAssertor.withH2Header("Faith / beliefs", this)
-                .assert(bodyTextOne)
+        TextBlockElement.withH2Header("Faith / beliefs", this)
+                .assert("When you die, NHS staff can ask your family (and anyone else appropriate) about your " +
+                         "faith and beliefs. This is how NHS staff will find out about any end of life wishes you " +
+                        "might have.")
+                .assert("Record here whether you want our specialist nurses to discuss your faith or " +
+                        "beliefs with your family when you die, at the same time they approach them about " +
+                        "organ donation.")
         question.assertSingleElementPresent()
     }
 

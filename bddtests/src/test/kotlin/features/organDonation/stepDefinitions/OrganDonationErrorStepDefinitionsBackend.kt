@@ -3,10 +3,10 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.set
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpStatus
 import org.junit.Assert
+import utils.set
 import utils.SerenityHelpers
 import worker.models.organdonation.OrganDonationSearchResponse
 import worker.models.organdonation.OrganDonationState

@@ -2,6 +2,7 @@ package pages.organDonation
 
 import net.thucydides.core.annotations.DefaultUrl
 import pages.sharedElements.DropdownElement
+import pages.sharedElements.TextBlockElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationWithdrawDecisionPage : OrganDonationBasePage()  {
@@ -22,13 +23,12 @@ open class OrganDonationWithdrawDecisionPage : OrganDonationBasePage()  {
     val defaultDropDownValue = "Select reason"
 
     private fun assertBody() {
-        val bodyText = arrayOf("Withdrawing your decision means there will be no recorded decision for you, " +
-                "and without this your family will be asked to decide for you, when you die.",
-                "If you are certain you do not want to donate your organs or tissue, " +
-                        "you need to register a 'no' decision.",
-                "Whatever you decide, please make sure your family know your decision.")
-        OrganDonationDetailsAssertor.withH2Header(titleText, this)
-                .assert(bodyText)
+        TextBlockElement.withH2Header(titleText, this)
+                .assert("Withdrawing your decision means there will be no recorded decision for you, " +
+                        "and without this your family will be asked to decide for you, when you die.",
+                        "If you are certain you do not want to donate your organs or tissue, " +
+                                "you need to register a 'no' decision.",
+                        "Whatever you decide, please make sure your family know your decision.")
     }
 
     fun assertWithdrawalListValidationError() {

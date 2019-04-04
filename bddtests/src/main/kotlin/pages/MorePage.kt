@@ -7,7 +7,7 @@ import pages.sharedElements.MenuLinksContent
 @DefaultUrl("http://web.local.bitraft.io:3000/more")
 open class MorePage : HybridPageObject() {
 
-    private val organDonationTitle = "Set organ donation preferences"
+    private val organDonationTitle = "Manage organ donation decision"
     private val organDonationDescription = "Help save thousands of lives in the UK every year by signing up" +
             " to become a donor on the NHS Organ Donor Register."
     private val dataSharingTitle = "Find out why your data matters"

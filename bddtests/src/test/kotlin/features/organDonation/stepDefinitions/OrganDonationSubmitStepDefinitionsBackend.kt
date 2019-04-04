@@ -4,9 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
-import mocking.data.organDonation.getOrFail
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.set
 import mocking.organDonation.OrganDonationWithdrawalResponse
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import mocking.organDonation.models.OrganDonationWithdrawRequest
@@ -15,6 +13,8 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
 import utils.SerenityHelpers
+import utils.getOrFail
+import utils.set
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.organdonation.OrganDonationRegistrationResponse

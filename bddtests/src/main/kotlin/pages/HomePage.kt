@@ -78,7 +78,7 @@ open class HomePage : HybridPageObject() {
 
     val viewMedicalRecordLink = link("View my medical record")
 
-    val organDonationLink = link("Set organ donation preferences")
+    val organDonationLink = link("Manage organ donation decision")
 
     val expectedLinks = arrayListOf(checkSymptomsLink,
             bookAndManageAppointmentsLink,

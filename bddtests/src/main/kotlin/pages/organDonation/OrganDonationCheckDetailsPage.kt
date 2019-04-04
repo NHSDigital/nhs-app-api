@@ -4,6 +4,7 @@ import mocking.organDonation.models.KeyValuePair
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
 import pages.sharedElements.CheckBoxElement
+import pages.sharedElements.TextBlockElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
@@ -21,7 +22,7 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
 
     fun assertPersonalDetailsSection(patient: Patient) {
         val bodyText = "Contact your GP surgery to amend your personal details."
-        OrganDonationDetailsAssertor.withH3Header("Personal details", this)
+        TextBlockElement.withH3Header("Personal details", this)
                 .assertPair(arrayOf(
                         KeyValuePair("Name", patient.formattedFullName()),
                         KeyValuePair("Date of birth", patient.formattedDateOfBirth()),
@@ -33,8 +34,8 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
     fun assertContactDetailsSection(patient: Patient) {
         val bodyText1 = "We will only contact you about your organ donation registration."
         val bodyText2 = "Contact your GP surgery to amend your postal address."
-        OrganDonationDetailsAssertor.withH3Header("Contact details", this)
-                .assert(arrayOf(bodyText1, bodyText2))
+        TextBlockElement.withH3Header("Contact details", this)
+                .assert(bodyText1, bodyText2)
                 .assertPair(arrayOf(
                         KeyValuePair("Postal address", patient.address.full())))
     }

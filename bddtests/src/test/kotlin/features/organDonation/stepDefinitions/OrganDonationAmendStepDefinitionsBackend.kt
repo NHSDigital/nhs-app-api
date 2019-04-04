@@ -3,7 +3,7 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Given
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.set
+import utils.set
 
 class OrganDonationAmendStepDefinitionsBackend {
 

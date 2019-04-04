@@ -5,11 +5,11 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.set
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import org.apache.http.HttpStatus
 import pages.organDonation.OrganDonationErrorPage
+import utils.set
 
 private const val ERROR_SCENARIO = "error scenario"
 private const val ERROR_SCENARIO_WILL_SUCCEED = "to succeed"

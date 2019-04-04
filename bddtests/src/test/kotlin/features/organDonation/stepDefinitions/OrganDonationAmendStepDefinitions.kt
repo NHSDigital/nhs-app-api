@@ -4,7 +4,6 @@ import cucumber.api.java.en.Given
 import mocking.data.organDonation.OrganDonationReferenceDataBuilder
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.set
 import mocking.organDonation.models.FaithDeclaration
 import mocking.organDonation.models.KeyValuePair
 import mocking.organDonation.models.OrganDonationAdditionalDetails
@@ -13,6 +12,7 @@ import mocking.organDonation.models.OrganDonationRegistrationRequest
 import mocking.organDonation.models.OrganDonationDemographics
 import mocking.organDonation.ORGAN_DONATION_ERROR_CODE_UPDATE_CONFLICT
 import utils.SerenityHelpers
+import utils.set
 
 open class OrganDonationAmendStepDefinitions {
 

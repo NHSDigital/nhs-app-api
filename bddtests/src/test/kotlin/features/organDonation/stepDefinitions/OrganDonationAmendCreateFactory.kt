@@ -3,7 +3,6 @@ package features.organDonation.stepDefinitions
 import mocking.MockingClient
 import mocking.data.organDonation.OrganDecisions
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.set
 import mocking.models.Mapping
 import mocking.organDonation.OrganDonationMappingBuilder
 import mocking.organDonation.OrganDonationSubmitDecisionBuilder
@@ -13,6 +12,7 @@ import mocking.organDonation.models.OrganDonationDemographics
 import mocking.organDonation.models.OrganDonationRegistration
 import mocking.organDonation.models.OrganDonationRegistrationRequest
 import models.Patient
+import utils.set
 
 class OrganDonationAmendCreateFactory(var patient: Patient,
                                       var decisionBuilder: OrganDonationMappingBuilder

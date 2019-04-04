@@ -2,8 +2,8 @@ package pages.throttling
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.HybridPageObject
 
 class GPSearchResultsPage : HybridPageObject() {
 
@@ -13,13 +13,6 @@ class GPSearchResultsPage : HybridPageObject() {
         const val NO_RESULTS_FOUND_TEXT = "No results found"
         const val FULL_POSTCODE_WITH_SPACE = "SW9 1NG"
     }
-
-    private var gpPracticeToSelect: HybridPageElement = HybridPageElement(
-            webDesktopLocator = "",
-            webMobileLocator = "",
-            androidLocator = null,
-            page = this
-    )
 
     private val technicalProblemsErrorHeader = HybridPageElement(
             webDesktopLocator = "//h3[contains(text(), \"$TECHNICAL_PROBLEMS_ERROR_HEADER\")]",
@@ -49,21 +42,21 @@ class GPSearchResultsPage : HybridPageObject() {
             page = this
     )
 
-    private val participatingGPPractice = HybridPageElement(
+    val participatingGPPractice = HybridPageElement(
             webDesktopLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81090']",
             webMobileLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81090']",
             androidLocator = null,
             page = this
     )
 
-    private val notParticipatingGPPractice = HybridPageElement(
+    val notParticipatingGPPractice = HybridPageElement(
             webDesktopLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81091']",
             webMobileLocator = "//ul[@id='searchResults']/li/a[@id='btnGpPractice-F81091']",
             androidLocator = null,
             page = this
     )
 
-    private val foundGPPracticeByPostcode = HybridPageElement(
+    val foundGPPracticeByPostcode = HybridPageElement(
             webDesktopLocator = "//ul[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
             webMobileLocator = "//ul[@id='searchResults']//p[contains(text(),'$FULL_POSTCODE_WITH_SPACE')]",
             androidLocator = null,
@@ -94,20 +87,7 @@ class GPSearchResultsPage : HybridPageObject() {
         }
     }
 
-    fun selectMyGpPractice() {
-        gpPracticeToSelect.click()
-    }
-
     fun resultsExistForSearch(count: Int): Boolean {
         return searchResults.elements.size == count
     }
-
-    fun setPracticeToSelect(participating: Boolean) {
-        gpPracticeToSelect = if (participating) participatingGPPractice else notParticipatingGPPractice
-    }
-
-    fun gpPracticeFoundByPostcodeIsVisible(): Boolean {
-        return foundGPPracticeByPostcode.element.isVisible
-    }
-
 }

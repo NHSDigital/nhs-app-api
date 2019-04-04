@@ -1,6 +1,6 @@
-import LoginButton from '@/components/LoginButton';
-import Login from '@/pages/Login';
 import AuthorisationService from '@/services/authorisation-service';
+import Login from '@/pages/Login';
+import LoginButton from '@/components/LoginButton';
 import { $t, createStore, mount } from '../helpers';
 
 jest.mock('@/services/authorisation-service');
@@ -13,59 +13,50 @@ const loginResponse = {
 AuthorisationService.prototype.generateLoginUrl = jest.fn().mockImplementation()
   .mockReturnValue(loginResponse);
 
-const $env = {
-  BIOMETRICS_ENABLED: true,
-  THROTTLING_ENABLED: true,
-};
 const defaultQuery = {
   source: 'android',
 };
 
-let $cookies;
-let $store;
-let cookieValue;
-let state;
-let stubs;
-let wrapper;
-
-const mountWithQueryData = ({ isNativeApp = true, query, source = 'android' }) => {
-  state = {
-    appVersion: {
-      webVersion: '1.2.3',
-      nativeVersion: '3.2.1',
-    },
-    device: {
-      isNativeApp,
-      source,
-    },
+const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', data }) => {
+  const $env = {
+    BIOMETRICS_ENABLED: true,
+    THROTTLING_ENABLED: true,
   };
 
-  cookieValue = {};
-  $cookies = {
-    get: jest.fn().mockImplementation('BetaCookie').mockReturnValue(cookieValue),
+
+  const $cookies = {
+    get: jest.fn().mockImplementation('BetaCookie').mockReturnValue({}),
     set: jest.fn(),
   };
 
-  $store = createStore({
-    $env,
-    state,
-    $cookies,
-    context: {
-      redirect: jest.fn(),
-    },
-  });
-
-  stubs = ['no-ssr'];
-
   return mount(Login, {
     $env,
-    $store,
+    $store: createStore({
+      $env,
+      state: {
+        appVersion: {
+          webVersion: '1.2.3',
+          nativeVersion: '3.2.1',
+        },
+        device: {
+          isNativeApp,
+          source,
+        },
+      },
+      $cookies,
+      context: {
+        redirect: jest.fn(),
+      },
+    }),
     $t,
     $route: {
       query,
     },
     $cookies,
-    stubs,
+    data,
+    stubs: {
+      'no-ssr': '<div><slot/></div>',
+    },
   });
 };
 
@@ -75,6 +66,8 @@ const createFidoQueries = () =>
   });
 
 describe('login page', () => {
+  let wrapper;
+
   beforeEach(() => {
     wrapper = mountWithQueryData({ query: defaultQuery });
     AuthorisationService.mockClear();
@@ -108,5 +101,34 @@ describe('login page', () => {
 
     wrapper = mountWithQueryData({ query: fidoQuery, isNativeApp: false, source: 'web' });
     expect(AuthorisationService).not.toHaveBeenCalled();
+  });
+
+  it('will not display record organ donation link', () => {
+    expect(wrapper.find('#btn_organDonation').exists()).toBe(false);
+  });
+
+  describe('throttling', () => {
+    beforeEach(() => {
+      wrapper = mountWithQueryData({
+        query: defaultQuery,
+        data: () => ({ practiceParticipating: false }),
+      });
+    });
+
+    describe('record organ donation link', () => {
+      let link;
+
+      beforeEach(() => {
+        link = wrapper.find('#btn_organDonation');
+      });
+
+      it('will exist', () => {
+        expect(link.exists()).toBe(true);
+      });
+
+      it('will translate "shared.organDonation.recordDecision"', () => {
+        expect(link.text()).toBe('translate_shared.organDonation.recordDecision');
+      });
+    });
   });
 });

@@ -11,19 +11,24 @@
     </header>
 
     <div v-if="showTemplate" :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
-      <h2>{{ this.$t('th06.whatHappensNextHeading') }}</h2>
-      <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph1') }}</p>
-      <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph2') }}</p>
-      <p v-else>{{ this.$t('th06.whatHappensNextNotJoinedParagraph') }}</p>
-      <h2>{{ this.$t('th06.untilThenHeading') }}</h2>
-      <p>{{ this.$t('th06.untilThenParagraph') }}</p>
-      <analytics-tracked-tag :text="this.$t('th06.homeButton')">
-        <generic-button :class="$style.goToHomeScreenButton"
-                        :button-classes="['grey', 'button']"
-                        @click="onReturnHomeClicked">
-          {{ this.$t('th06.homeButton') }}
-        </generic-button>
-      </analytics-tracked-tag>
+      <div :class="$style.info">
+        <h2>{{ this.$t('th06.whatHappensNextHeading') }}</h2>
+        <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph1') }}</p>
+        <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph2') }}</p>
+        <p v-else>{{ this.$t('th06.whatHappensNextNotJoinedParagraph') }}</p>
+      </div>
+      <div :class="$style.info">
+        <h2>{{ this.$t('th06.untilThenHeading') }}</h2>
+        <p>{{ this.$t('th06.untilThenSymptomsParagraph') }}</p>
+        <p>{{ this.$t('th06.untilThenOrganDonationParagraph') }}</p>
+        <analytics-tracked-tag :text="this.$t('th06.homeButton')">
+          <generic-button :class="$style.goToHomeScreenButton"
+                          :button-classes="['grey', 'button']"
+                          @click="onReturnHomeClicked">
+            {{ this.$t('th06.homeButton') }}
+          </generic-button>
+        </analytics-tracked-tag>
+      </div>
     </div>
   </div>
 </template>
@@ -92,6 +97,7 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
+@import '../../style/info';
 @import '../../style/elements';
 @import '../../style/buttons';
 @import '../../style/throttling/throttling';

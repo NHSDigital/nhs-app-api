@@ -2,14 +2,14 @@ package pages.organDonation
 
 import mocking.organDonation.models.KeyValuePair
 import pages.HybridPageObject
-import pages.assertElementNotPresent
+import pages.sharedElements.TextBlockElement
 
 class OrganDonationAdditionalDetailsModule(private val page: HybridPageObject) {
 
     private val title = "Additional information"
 
     private val assertor by lazy {
-        OrganDonationDetailsAssertor.withH3Header(title, page)
+        TextBlockElement.withH3Header(title, page)
     }
 
     fun assertNotDisplayed() {

@@ -22,11 +22,26 @@
           {{ $t('login.checkWhatFeaturesYouCanUse') }}
         </analytics-tracked-tag>
         <div v-if="!isPracticeParticipating && this.$store.state.device.isNativeApp">
+          <ul :class="$style['list-menu']">
+            <li role="link">
+              <analytics-tracked-tag id="btn_organDonation"
+                                     :href="organDonationUrl"
+                                     :class="[$style['no-decoration'], $style.focusBorder]"
+                                     :text="$t('shared.organDonation.recordDecision')"
+                                     tag="a"
+                                     target="_blank">
+                <h3>{{ $t('shared.organDonation.recordDecision') }}</h3>
+              </analytics-tracked-tag>
+            </li>
+          </ul>
           <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
           <h5>{{ notParticipatingSurgeryName }}</h5>
           <p>{{ notParticipatingSurgeryAddress }}</p>
-          <analytics-tracked-tag :text="$t('login.notMyGpSurgery')" :class="$style.notMySurgeryLink"
-                                 :click-func="resetAndGoToGPFinder" tag="a">
+          <analytics-tracked-tag :text="$t('login.notMyGpSurgery')"
+                                 :class="$style.notMySurgeryLink"
+                                 :click-func="resetAndGoToGPFinder"
+                                 href="#"
+                                 tag="a">
             {{ $t('login.notMyGpSurgery') }}
           </analytics-tracked-tag>
         </div>
@@ -43,7 +58,6 @@
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import LoginButton from '@/components/LoginButton';
-import GenericButton from '@/components/widgets/GenericButton';
 import { setCookie } from '@/lib/cookie-manager';
 import { BEGINLOGIN, GP_FINDER } from '@/lib/routes';
 import AuthorisationService from '@/services/authorisation-service';
@@ -56,16 +70,16 @@ export default {
   components: {
     AnalyticsTrackedTag,
     LoginButton,
-    GenericButton,
   },
   data() {
     return {
       authoriseUrl: BEGINLOGIN.path,
-      source: this.getSource(),
+      isButtonDisabled: false,
+      organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
       practiceParticipating: true,
       practiceName: undefined,
       practiceAddress: undefined,
-      isButtonDisabled: false,
+      source: this.getSource(),
     };
   },
   computed: {
@@ -191,13 +205,35 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
- @import "../style/home";
- .appVersion {
+@import "../style/accessibility";
+@import '../style/colours';
+@import "../style/home";
+@import "../style/listmenu";
+.no-decoration {
+  text-decoration: none;
+}
+
+.list-menu {
+  margin-left: -1.3em;
+  margin-right: -1.3em;
+  margin-top: -1em;
+  li {
+    a {
+      h3 {
+        text-align: left;
+        padding-top: 0;
+        color: $nhs_blue;
+      }
+    }
+  }
+}
+
+.appVersion {
   text-align: center;
   color: #637683;
   font-size: small;
- }
- .throttlingContent+.appVersion {
+}
+.throttlingContent+.appVersion {
   margin-top: 0.5em;
- }
+}
 </style>

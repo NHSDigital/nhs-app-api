@@ -7,6 +7,7 @@ import pages.HybridPageElement
 import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.sharedElements.BannerObject
+import pages.sharedElements.TextBlockElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
@@ -37,11 +38,9 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
         BannerObject.success(this, "Decision submitted")
                 .assertVisible("We have successfully received your organ donation decision.")
 
-        val bodyTextDecisionFound = arrayOf(
-                "We will process your registration and you will then be able to view and amend this via the NHS App. " +
-                        "This may take up to 2 working days.")
-        OrganDonationDetailsAssertor.withH2Header("What happens next", this)
-                .assert(bodyTextDecisionFound)
+        TextBlockElement.withH2Header("What happens next", this)
+                .assert("We will process your registration and you will then be able to view and amend this " +
+                        "via the NHS App. This may take up to 2 working days.")
     }
 
     fun assertDecisionFound() {
@@ -50,11 +49,9 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
         BannerObject.success(this, "Decision found")
                 .assertVisible("Your registration is currently being processed.")
 
-        val bodyTextDecisionFound = arrayOf(
-                "Please check back in 2 working days. " +
-                        "You’ll then be able to view and amend your decision via the NHS App.")
-        OrganDonationDetailsAssertor.withH2Header("We are still processing your registration", this)
-                .assert(bodyTextDecisionFound)
+        TextBlockElement.withH2Header("We are still processing your registration", this)
+                .assert("Please check back in 2 working days. " +
+                                "You’ll then be able to view and amend your decision via the NHS App.")
     }
 
     private val faithYesText = "When I die, I would like NHS staff to speak with my family " +

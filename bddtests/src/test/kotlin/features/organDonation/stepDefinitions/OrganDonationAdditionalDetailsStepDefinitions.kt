@@ -3,10 +3,10 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.getOrFail
 import mocking.organDonation.models.OrganDonationDemographics
 import pages.navigation.HeaderNative
 import pages.organDonation.OrganDonationAdditionalDetailsPage
+import utils.getOrFail
 
 open class OrganDonationAdditionalDetailsStepDefinitions {
 

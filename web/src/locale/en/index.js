@@ -728,7 +728,7 @@ export default {
   },
   sc04: {
     organDonation: {
-      subheader: 'Set organ donation preferences',
+      subheader: 'Manage organ donation decision',
       body: 'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register.',
     },
     dataSharing: {
@@ -761,7 +761,7 @@ export default {
     appointments: 'Book and manage appointments',
     prescriptions: 'Order a repeat prescription',
     myRecord: 'View my medical record',
-    organDonation: 'Set organ donation preferences',
+    organDonation: 'Manage organ donation decision',
   },
   organ_donation: {
     errors: {
@@ -1106,6 +1106,11 @@ export default {
       },
     },
   },
+  shared: {
+    organDonation: {
+      recordDecision: 'Record my organ donation decision',
+    },
+  },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',
     checker: 'Check symptoms',
@@ -1241,6 +1246,9 @@ export default {
       'Order repeat prescriptions',
       'View your medical records',
     ],
+    organDonationNotParticipating: [
+      'Record organ donation decision',
+    ],
     createAccountMessage: 'To use the NHS App fully, you\'ll need to create an NHS account.',
     ctaContinue: 'Continue',
     ctaNotMySurgery: 'This is not my GP surgery',
@@ -1268,7 +1276,8 @@ export default {
     whatHappensNextJoinedParagraph2: 'When your GP surgery can use all the features of the app, we\'ll email you. You\'ll then be able to create an NHS login.',
     whatHappensNextNotJoinedParagraph: 'Check in with your GP surgery to find out when they\'ll be using all the features of the app. When they are, they will help you set up an NHS login.',
     untilThenHeading: 'What you can do until then',
-    untilThenParagraph: 'You can check your symptoms in the app. \'Check if you need urgent help\' will direct you to medical help, if you need it.',
+    untilThenSymptomsParagraph: 'You can check your symptoms in the app. \'Check if you need urgent help\' will direct you to medical help, if you need it.',
+    untilThenOrganDonationParagraph: 'You can also record your organ donation decision.',
     gpSurgeryFeatureText: 'When your GP surgery can use all features of the app, we’ll send you an email.',
     homeButton: 'Go to home screen',
   },

@@ -4,10 +4,10 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.data.organDonation.OrganDecisions
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.getOrFail
-import mocking.data.organDonation.set
 import pages.organDonation.OrganDonationFindOutMoreAboutOrgansAndTissuePage
 import pages.organDonation.OrganDonationSpecificOrganChoicePage
+import utils.getOrFail
+import utils.set
 
 open class OrganDonationSpecificOrganChoiceStepDefinitions {
 

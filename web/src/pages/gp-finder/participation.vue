@@ -22,12 +22,14 @@
 
       <hr>
 
-      <h2>{{ $t('th04.currentlyAvailableHeader') }}</h2>
-      <ul id="availableFeatures" :class="$style.availableFeatures">
-        <li v-for="(feature, index) in availableFeatures" :key="`feature-${index}`">
-          {{ feature }}
-        </li>
-      </ul>
+      <div>
+        <h2>{{ $t('th04.currentlyAvailableHeader') }}</h2>
+        <ul id="availableFeatures" :class="$style.availableFeatures">
+          <li v-for="(feature, index) in availableFeatures" :key="`feature-${index}`">
+            {{ feature }}
+          </li>
+        </ul>
+      </div>
 
       <div v-if="unavailableFeatures">
         <h2>{{ $t('th04.comingSoonHeader') }}</h2>
@@ -91,6 +93,7 @@ export default {
     return {
       defaultFeatures: this.$t('th04.defaultFeatures'),
       conditionalFeatures: this.$t('th04.conditionalFeatures'),
+      organDonationNotParticipating: this.$t('th04.organDonationNotParticipating'),
       authoriseUrl: BEGINLOGIN.path,
       scope: '',
       codeChallenge: '',
@@ -107,7 +110,8 @@ export default {
     },
     availableFeatures() {
       return this.practiceParticipating ?
-        this.defaultFeatures.concat(this.conditionalFeatures) : this.defaultFeatures;
+        [...this.defaultFeatures, ...this.conditionalFeatures] :
+        [...this.defaultFeatures, ...this.organDonationNotParticipating];
     },
     unavailableFeatures() {
       return !this.practiceParticipating ? this.conditionalFeatures : undefined;

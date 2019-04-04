@@ -1,8 +1,8 @@
 package mocking.organDonation.models
 
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.set
 import models.Patient
+import utils.set
 
 data class OrganDonationWithdrawRequest(
         var identifier: String,

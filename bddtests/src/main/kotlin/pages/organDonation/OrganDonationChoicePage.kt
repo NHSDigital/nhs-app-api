@@ -1,11 +1,11 @@
 package pages.organDonation
 
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.isTrueOrFalse
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.assertIsVisible
+import utils.isTrueOrFalse
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 class OrganDonationChoicePage : OrganDonationBasePage() {

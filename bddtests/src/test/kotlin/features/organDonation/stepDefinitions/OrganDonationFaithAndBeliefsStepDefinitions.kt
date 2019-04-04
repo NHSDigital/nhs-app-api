@@ -3,11 +3,11 @@ package features.organDonation.stepDefinitions
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.data.organDonation.OrganDonationSerenityHelpers
-import mocking.data.organDonation.getOrFail
 import mocking.organDonation.models.FaithDeclaration
 import mocking.organDonation.models.OrganDonationDemographics
 import org.junit.Assert
 import pages.organDonation.OrganDonationFaithAndBeliefsPage
+import utils.getOrFail
 
 open class OrganDonationFaithAndBeliefsStepDefinitions {
 

@@ -1,4 +1,4 @@
-package pages.organDonation
+package pages.sharedElements
 
 import mocking.organDonation.models.KeyValuePair
 import org.junit.Assert
@@ -7,7 +7,7 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertElementNotPresent
 
-class OrganDonationDetailsAssertor private constructor(
+class TextBlockElement private constructor(
             title: String,
             private val page: HybridPageObject,
             titleStyling : String) {
@@ -23,7 +23,7 @@ class OrganDonationDetailsAssertor private constructor(
         container.assertElementNotPresent()
     }
 
-    fun assertPair(expectedValues: Array<KeyValuePair<String, String>>): OrganDonationDetailsAssertor {
+    fun assertPair(expectedValues: Array<KeyValuePair<String, String>>): TextBlockElement {
 
         val fields = container.element.findElements(By.xpath(".//h4"))
 
@@ -42,12 +42,16 @@ class OrganDonationDetailsAssertor private constructor(
         return this
     }
 
-    fun assert(expectedText: String): OrganDonationDetailsAssertor {
-        return assert(arrayOf(expectedText))
+    fun assert(vararg expectedTexts: String): TextBlockElement {
+        return assertInternal(".//p", expectedTexts)
     }
 
-    fun assert(expectedText: Array<String>): OrganDonationDetailsAssertor {
-        val actualText = container.element.findElements(By.xpath(".//p"))
+    fun assertList(vararg expectedValues : String): TextBlockElement{
+        return assertInternal("./ul/li", expectedValues)
+    }
+
+    private fun assertInternal(locator: String, expectedText: Array<out String>): TextBlockElement {
+        val actualText = container.element.findElements(By.xpath(locator))
                 .map { element -> element.text }.toTypedArray()
 
         expectedText.forEach { expected ->
@@ -59,12 +63,12 @@ class OrganDonationDetailsAssertor private constructor(
 
     companion object {
 
-        fun withH2Header(title: String, page: HybridPageObject):OrganDonationDetailsAssertor{
-            return OrganDonationDetailsAssertor(title, page, "h2")
+        fun withH2Header(title: String, page: HybridPageObject):TextBlockElement{
+            return TextBlockElement(title, page, "h2")
         }
 
-        fun withH3Header(title: String, page: HybridPageObject):OrganDonationDetailsAssertor{
-            return OrganDonationDetailsAssertor(title, page, "h3")
+        fun withH3Header(title: String, page: HybridPageObject):TextBlockElement{
+            return TextBlockElement(title, page, "h3")
         }
     }
 }
