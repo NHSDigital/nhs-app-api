@@ -6,6 +6,7 @@ namespace NHSOnline.Backend.Support.Temporal
     {
         DateTime UtcNow { get; }
         DateTime LocalNow { get; }
+        DateTime Today { get; }
     }
     
     public class CurrentDateTimeProvider : ICurrentDateTimeProvider
@@ -19,5 +20,6 @@ namespace NHSOnline.Backend.Support.Temporal
 
         public DateTime UtcNow => DateTime.UtcNow;
         public DateTime LocalNow => TimeZoneInfo.ConvertTime(DateTime.UtcNow, _timeZoneInfo);
+        public DateTime Today => DateTime.Today;
     }
 }
