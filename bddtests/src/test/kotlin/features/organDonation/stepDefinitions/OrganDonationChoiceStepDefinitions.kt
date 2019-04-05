@@ -24,7 +24,8 @@ open class OrganDonationChoiceStepDefinitions {
     fun iNavigateToTheInternalOrganDonationPage() {
         navBarNative.select(NavBarNative.NavBarType.MORE)
         morePage.waitForSpinnerToDisappear()
-        browser.appendSourceQueryString("ios")
+        if (!header.onMobile())
+            browser.appendSourceQueryString("ios")
         morePage.btnOrganDonation.click()
     }
 
