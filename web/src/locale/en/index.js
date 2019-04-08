@@ -6,6 +6,12 @@ export default {
     header: 'We\'re experiencing technical difficulties',
     subheader: '',
     message: 'Try again later. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+    404: {
+      pageTitle: 'Page not found',
+      header: 'Page not found',
+      subheader: 'If you entered a web address, check it was correct.',
+      message: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call 111.',
+    },
     502: {
       pageTitle: 'Service currently unavailable',
       pageHeader: 'Service currently unavailable',
@@ -474,12 +480,6 @@ export default {
       subheader: '',
       message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       retryButtonText: '',
-      404: {
-        pageTitle: 'Page not found',
-        header: 'Page not found',
-        subheader: 'If you entered a web address, check it was correct.',
-        message: 'You can go directly to book an appointment or order a repeat prescription, or use the menu buttons to find the service you need. For urgent medical advice, call 111.',
-      },
       502: {
         pageHeader: 'Medical record error',
         header: 'There\'s been a problem getting your medical record information',
