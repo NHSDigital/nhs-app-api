@@ -10,7 +10,7 @@ const createState = () => ({
   },
 });
 
-const createComponent = ({ $store = createStore({ state: createState() }), data = {} } = {}) => {
+const createComponent = ({ $store = createStore({ state: createState() }) } = {}) => {
   const $style = {
     info: 'info',
     h2: 'h2',
@@ -20,7 +20,6 @@ const createComponent = ({ $store = createStore({ state: createState() }), data 
   return shallowMount(Warning, {
     $store,
     $style,
-    data,
   });
 };
 

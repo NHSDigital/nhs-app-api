@@ -3,13 +3,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import merge from 'lodash/fp/merge';
-import testUtils from '@vue/test-utils';
+import { createLocalVue, mount as vueMount, shallowMount as vueShallowMount } from '@vue/test-utils';
 
-const {
-  createLocalVue,
-  mount: vueMount,
-  shallowMount: vueShallowMount,
-} = testUtils;
 
 export const $t = jest.fn().mockImplementation(key => `translate_${key}`);
 export const $tc = $t;
@@ -47,9 +42,6 @@ export const createStore = ({
   state,
 });
 
-// initialise scrollTo
-global.scrollTo = jest.fn();
-
 export const createScrollTo = () => {
   const scrollTo = jest.fn();
   global.scrollTo = scrollTo;
@@ -68,7 +60,7 @@ export const mount = (component, {
   $store,
   $style = {},
   t = $t,
-  data = {},
+  data = undefined,
   propsData = {},
   shallow = false,
   state = {},

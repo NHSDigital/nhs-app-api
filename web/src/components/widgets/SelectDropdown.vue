@@ -1,8 +1,7 @@
 <template>
-  <span :class="getStyleClasses">
+  <span :class="defaultClasses">
     <select :id="selectId"
             v-model="selectedValue"
-            v-tabbing="defaultClasses"
             :name="selectName"
             :aria-labelledby="aLabelledBy"
             :class="[
@@ -18,14 +17,7 @@
 </template>
 
 <script>
-
-import TabFocusMixin from './TabFocusMixin';
-
 export default {
-  components: {
-    TabFocusMixin,
-  },
-  mixins: [TabFocusMixin.tabMixin],
   props: {
     value: {
       type: String,
@@ -82,7 +74,7 @@ export default {
 @import "../../style/select";
 @import "../../style/errorvalidation";
 
- select::-ms-expand {
+select::-ms-expand {
   display: none;
- }
+}
 </style>

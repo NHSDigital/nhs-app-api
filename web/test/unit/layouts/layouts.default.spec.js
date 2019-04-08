@@ -1,16 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies import/imports-first */
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { $t } from '../helpers';
 
 jest.mock('@/components/widgets/HotJar', () => {
 });
 /* eslint-disable import/first */
 import DefaultPage from '@/layouts/default';
 
-const $t = key => `translate_${key}`;
-const $tc = key => `translate_${key}`;
-
-const createDefaultPage = ($store, data = []) => {
+const createDefaultPage = ($store) => {
   const $http = jest.fn();
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -29,14 +27,12 @@ const createDefaultPage = ($store, data = []) => {
 
   return shallowMount(DefaultPage, {
     localVue,
-    data,
     mocks: {
       $http,
       $store,
       $env,
       $route,
       $t,
-      $tc,
       $style,
       showTemplate: () => true,
     },
@@ -82,7 +78,7 @@ describe('default.vue - is native', () => {
 
     jest.spyOn($store, 'dispatch');
 
-    createDefaultPage($store, {});
+    createDefaultPage($store);
     expect($store.dispatch)
       .toHaveBeenLastCalledWith('auth/nativeLogin');
   });
@@ -92,7 +88,7 @@ describe('default.vue - is native', () => {
 
     jest.spyOn($store, 'dispatch');
 
-    createDefaultPage($store, {});
+    createDefaultPage($store);
     expect($store.dispatch)
       .not
       .toHaveBeenLastCalledWith('auth/nativeLogin');

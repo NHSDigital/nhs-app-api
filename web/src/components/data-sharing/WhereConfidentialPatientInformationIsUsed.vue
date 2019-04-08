@@ -1,7 +1,7 @@
 <template>
   <div class="content">
 
-    <p v-for="paragraph of $t('ds01.pages.p2.intro.paragraphs')" :key="paragraph">
+    <p v-for="(paragraph, index) of $t('ds01.pages.p2.intro.paragraphs')" :key="index">
       {{ paragraph }}
     </p>
     <ul>

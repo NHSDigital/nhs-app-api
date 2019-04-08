@@ -1,8 +1,6 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import { mount, createLocalVue } from '@vue/test-utils';
 import Filters from '@/components/appointments/booking/Filters';
+import { createStore, mount } from '../../../helpers';
 
-const $t = key => `translate_${key}`;
 const selectedOptions = (options = {}) => ({
   type: options.type || '',
   location: options.location || '',
@@ -10,35 +8,21 @@ const selectedOptions = (options = {}) => ({
   date: options.date || '',
 });
 
-const createFiltersComponent = ($store, props) => {
-  const propsData = props;
-  const $http = jest.fn();
-  const localVue = createLocalVue();
-
-  return mount(Filters, {
-    localVue,
-    propsData,
-    mocks: {
-      $store,
-      $style: { form: 'form' },
-      $http,
-      $t,
+const createFiltersComponent = propsData => mount(Filters, {
+  propsData,
+  $store: createStore({
+    state: {
+      device: {
+        source: 'web',
+      },
     },
-  });
-};
+  }),
+  $style: { form: 'form' },
+});
 
 describe('Filters.vue', () => {
   it('will do not render drop-down options by default', () => {
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
-
-    const component = createFiltersComponent($store);
+    const component = createFiltersComponent();
 
     expect(component.find('#type').findAll('option').length).toEqual(0);
     expect(component.find('#location').findAll('option').length).toEqual(0);
@@ -55,16 +39,8 @@ describe('Filters.vue', () => {
         ],
       },
     };
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
 
-    const component = createFiltersComponent($store, props);
+    const component = createFiltersComponent(props);
 
     expect(component.find('#type').findAll('option').length).toEqual(2);
     expect(component.find('#type').findAll('option').at(0).attributes().value).toEqual('1');
@@ -82,16 +58,8 @@ describe('Filters.vue', () => {
         ],
       },
     };
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
 
-    const component = createFiltersComponent($store, props);
+    const component = createFiltersComponent(props);
 
     expect(component.find('#location').findAll('option').length).toEqual(2);
     expect(component.find('#location').findAll('option').at(0).attributes().value).toEqual('1');
@@ -109,15 +77,8 @@ describe('Filters.vue', () => {
         ],
       },
     };
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
-    const component = createFiltersComponent($store, props);
+
+    const component = createFiltersComponent(props);
     expect(component.find('#clinician').findAll('option').length).toEqual(2);
     expect(component.find('#clinician').findAll('option').at(0).attributes().value).toEqual('1');
     expect(component.find('#clinician').findAll('option').at(0).text()).toEqual('CLINICIAN 1');
@@ -134,16 +95,8 @@ describe('Filters.vue', () => {
         ],
       },
     };
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
 
-    const component = createFiltersComponent($store, props);
+    const component = createFiltersComponent(props);
 
     expect(component.find('#time-period').findAll('option').length).toEqual(2);
     expect(component.find('#time-period').findAll('option').at(0).attributes().value).toEqual('1');
@@ -162,16 +115,8 @@ describe('Filters.vue', () => {
       },
       value: selectedOptions({ type: '2' }),
     };
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
 
-    const component = createFiltersComponent($store, props);
+    const component = createFiltersComponent(props);
 
     expect(component.find('#type').findAll('option').at(1).attributes().value).toEqual('2');
   });
@@ -186,16 +131,8 @@ describe('Filters.vue', () => {
       },
       value: selectedOptions({ location: '2' }),
     };
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
 
-    const component = createFiltersComponent($store, props);
+    const component = createFiltersComponent(props);
 
     expect(component.find('#location').findAll('option').at(1).attributes().value).toEqual('2');
   });
@@ -210,16 +147,8 @@ describe('Filters.vue', () => {
       },
       value: selectedOptions({ clinician: '2' }),
     };
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
 
-    const component = createFiltersComponent($store, props);
+    const component = createFiltersComponent(props);
 
     expect(component.find('#clinician').findAll('option').at(1).attributes().value).toEqual('2');
   });
@@ -234,16 +163,8 @@ describe('Filters.vue', () => {
       },
       value: selectedOptions({ date: '2' }),
     };
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    };
 
-    const component = createFiltersComponent($store, props);
+    const component = createFiltersComponent(props);
 
     expect(component.find('#time-period').findAll('option').at(1).attributes().value).toEqual('2');
   });

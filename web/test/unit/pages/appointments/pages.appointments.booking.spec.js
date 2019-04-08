@@ -2,9 +2,7 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
 import BookingPage from '@/pages/appointments/booking';
-
-const $t = key => `translate_${key}`;
-const $tc = key => `translate_${key}`;
+import { $t, $tc } from '../../helpers';
 
 const app = {
   $analytics: {
@@ -12,7 +10,7 @@ const app = {
   },
 };
 
-const createBookingPage = ($store, data = []) => {
+const createBookingPage = ($store, data) => {
   const $http = jest.fn();
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -61,7 +59,7 @@ describe('booking.vue', () => {
       app,
     };
 
-    const page = createBookingPage($store, {});
+    const page = createBookingPage($store);
 
     expect(page.find('.warning').exists()).toBeTruthy();
     expect(page.find('.warning p').text()).toContain('translate_appointments.booking.noAppointmentsAvailable');
@@ -90,12 +88,12 @@ describe('booking.vue', () => {
       app,
     };
 
-    const data = {
+    const data = () => ({
       filters: {
         type: 'Emergency',
         location: 'Leeds',
       },
-    };
+    });
 
     const page = createBookingPage($store, data);
     page.vm.filterSlots();

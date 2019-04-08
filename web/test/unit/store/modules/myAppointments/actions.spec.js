@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
-import { LOADED, CANCEL_SUCCESS } from '@/store/modules/myAppointments/mutation-types';
 import actions from '@/store/modules/myAppointments/actions';
+import { LOADED } from '@/store/modules/myAppointments/mutation-types';
 
 const API_HOST = 'http://unit.test';
 
@@ -44,8 +44,11 @@ describe('load', () => {
 });
 
 describe('cancel', () => {
-  it('will delete the patients appointment from the backend', () => {
-    const that = {
+  let that;
+  let data;
+
+  beforeEach(async () => {
+    that = {
       app: {
         $http: {
           deleteV1PatientAppointments: jest.fn().mockResolvedValue(),
@@ -53,28 +56,17 @@ describe('cancel', () => {
       },
       dispatch: jest.fn(),
     };
-
-    cancel.call(that, { commit: jest.fn() }, { API_HOST });
-    expect(that.app.$http.deleteV1PatientAppointments).toBeCalled();
+    data = { foo: 'bar' };
+    process.client = true;
+    await cancel.call(that, {}, data);
   });
 
-  it('will call commit to mark cancellation success', () => {
-    const expected = {};
+  it('will delete the patients appointment from the backend', () => {
+    expect(that.app.$http.deleteV1PatientAppointments)
+      .toBeCalledWith({ appointmentCancelRequest: data });
+  });
 
-    const that = {
-      app: {
-        $http: {
-          deleteV1PatientAppointments: () => Promise.resolve(expected),
-        },
-      },
-      dispatch: jest.fn(),
-    };
-
-    const commit = jest.fn();
-    const data = { foo: 'bar' };
-
-    cancel.call(that, ({ commit }, data)).then(() => {
-      expect(commit).toBeCalledWith(CANCEL_SUCCESS);
-    });
+  it('will dispatch appointment_cancelled', () => {
+    expect(that.dispatch).toBeCalledWith('analytics/satelliteTrack', 'appointment_cancelled');
   });
 });

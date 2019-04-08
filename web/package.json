@@ -32,6 +32,12 @@
       "js",
       "vue"
     ],
+    "setupFiles": [
+      "<rootDir>/test/setup.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTests.js"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/prod_node_modules/"
@@ -92,7 +98,7 @@
     "@babel/preset-env": "7.3.4",
     "@babel/register": "7.0.0",
     "@types/jest": "24.0.11",
-    "@vue/test-utils": "1.0.0-beta.16",
+    "@vue/test-utils": "1.0.0-beta.29",
     "avoriaz": "6.3.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-loader": "8.0.5",

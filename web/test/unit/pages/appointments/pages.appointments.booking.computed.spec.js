@@ -1,10 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import Vuex from 'vuex';
-import { mount, createLocalVue } from '@vue/test-utils';
 import BookingPage from '@/pages/appointments/booking';
+import { mount, createLocalVue } from '@vue/test-utils';
+import { $t, $tc } from '../../helpers';
 
-const $t = key => `translate_${key}`;
-const $tc = key => `translate_${key}`;
 const availableAppointments = (options = {}) => ({
   slots: options.slots || [],
   filteredSlots: options.filteredSlots || [],
@@ -17,7 +16,7 @@ const availableAppointments = (options = {}) => ({
   },
 });
 
-const createBookingPage = ($store, data = {}) => {
+const createBookingPage = ($store) => {
   const $http = jest.fn();
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -28,7 +27,6 @@ const createBookingPage = ($store, data = {}) => {
 
   return mount(BookingPage, {
     localVue,
-    data,
     mocks: {
       $http,
       $store,

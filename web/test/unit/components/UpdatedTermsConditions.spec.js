@@ -1,16 +1,12 @@
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
 import Vuex from 'vuex';
-import { mount as mountHelper } from '../helpers';
 import { mount, createLocalVue } from '@vue/test-utils';
+import { $t, createStore, mount as mountHelper } from '../helpers';
 
-const $t = key => `translate_${key}`;
-
-const app = {
-  $env: {
-    TERMS_CONDITIONS_URL: 'http://example.com',
-    PRIVACY_POLICY_URL: 'http://example.com',
-    COOKIES_POLICY_URL: 'http://example.com',
-  },
+const $env = {
+  TERMS_CONDITIONS_URL: 'http://example.com',
+  PRIVACY_POLICY_URL: 'http://example.com',
+  COOKIES_POLICY_URL: 'http://example.com',
 };
 
 const createUpdatedTermsConditionsComponent = ($store) => {
@@ -65,18 +61,17 @@ describe('UpdatedTermsConditions checkbox rendering', () => {
   });
 });
 
-
 describe('UpdatedTermsConditions acceptance Process', () => {
   let wrapper;
-  const $store = {
+  const $store = createStore({
     state: {
       termsAndConditions: {
         areAccepted: false,
         acceptTerms: jest.fn(input => input),
       },
     },
-    app,
-  };
+    $env,
+  });
 
   beforeEach(() => {
     wrapper = createUpdatedTermsConditionsComponent($store);
@@ -92,22 +87,26 @@ describe('UpdatedTermsConditions acceptance Process', () => {
     });
 
     it('progresses when submit button clicked', () => {
-      wrapper.vm.onConfirmButtonClicked().then(() => {
-        expect($store.state.termsAndConditions.acceptTerms).toBeCalled();
+      wrapper.vm.onConfirmButtonClicked();
+      expect($store.dispatch).toBeCalledWith('termsAndConditions/acceptTerms', {
+        consentRequest: {
+          ConsentGiven: true,
+          UpdatingConsent: true,
+        },
       });
     });
   });
 });
 
 describe('UpdatedTermsConditions error state', () => {
-  const $store = {
+  const $store = createStore({
     state: {
       termsAndConditions: {
         areAccepted: false,
       },
     },
-    app,
-  };
+    $env,
+  });
 
   const wrapper = createUpdatedTermsConditionsComponent($store);
 

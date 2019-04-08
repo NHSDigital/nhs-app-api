@@ -1,9 +1,11 @@
 import AccountPage from '@/pages/account/index';
 import WebFooter from '@/components/widgets/WebFooter';
-import { mount, createStore, toClass } from '../../helpers';
+import { createStore, initFilters, mount, toClass } from '../../helpers';
 
 describe('Account Page', () => {
   let wrapper;
+
+  initFilters();
 
   const $env = {
     TERMS_AND_CONDITIONS_URL: 'https://terms-and-conditions',

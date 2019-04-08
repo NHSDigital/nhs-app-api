@@ -32,7 +32,7 @@ export default {
   clearAppointments({ commit }) {
     commit(CLEAR_APPOINTMENTS);
   },
-  cancel({ commit }, data) {
+  cancel(_, data) {
     /* eslint-disable no-unused-vars */
     const param = {
       appointmentCancelRequest: data,

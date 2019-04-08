@@ -1,67 +1,51 @@
-import { mount, createLocalVue } from '@vue/test-utils';
 import TimeSlot from '@/components/appointments/booking/TimeSlot';
-import Vuex from 'vuex';
 import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
-
-const $t = key => `translate_${key}`;
-
-const app = {
-  $env: {
-    TERMS_CONDITIONS_URL: 'http://example.com',
-    PRIVACY_POLICY_URL: 'http://example.com',
-    COOKIES_POLICY_URL: 'http://example.com',
-  },
-};
-
-const $store = {
-  state: {
-    availableAppointments: {
-      bookingReasonNecessity: 'very_important_reason',
-      select: jest.fn(),
-      deselect: jest.fn(),
-    },
-    myAppointments: {
-      disableCancellation: '',
-    },
-    device: {
-      source: 'web',
-    },
-  },
-  dispatch: jest.fn(),
-  app,
-};
+import { createStore, mount } from '../../helpers';
 
 const timeSlot = {
   startTime: 50,
   endTime: 500,
 };
 
-const createTimeSlotComponent = () => {
-  const $http = jest.fn();
-  const localVue = createLocalVue();
-  localVue.use(Vuex);
-
-  return mount(TimeSlot, {
-    localVue,
-    mocks: {
-      $http,
-      $store,
-      $t,
-      $style: {
-        selected: 'mock',
-        timeSlot: 'mock',
-      },
-      $emit: jest.fn(),
-    },
-    propsData: {
-      timeSlot,
-    },
-    showTemplate: () => true,
-  });
-};
+const createTimeSlotComponent = $store => mount(TimeSlot, {
+  $store,
+  $style: {
+    selected: 'mock',
+    timeSlot: 'mock',
+  },
+  propsData: {
+    timeSlot,
+  },
+});
 
 describe('TimeSlot', () => {
-  const wrapper = createTimeSlotComponent();
+  let wrapper;
+  let $store;
+
+  beforeEach(() => {
+    $store = createStore({
+      state: {
+        availableAppointments: {
+          bookingReasonNecessity: 'very_important_reason',
+          select: jest.fn(),
+          deselect: jest.fn(),
+        },
+        myAppointments: {
+          disableCancellation: '',
+        },
+        device: {
+          source: 'web',
+        },
+      },
+      $env: {
+        TERMS_CONDITIONS_URL: 'http://example.com',
+        PRIVACY_POLICY_URL: 'http://example.com',
+        COOKIES_POLICY_URL: 'http://example.com',
+      },
+    });
+
+    wrapper = createTimeSlotComponent($store);
+  });
 
   it('creates links successfully', () => {
     const link = wrapper.vm.createLink(timeSlot);
