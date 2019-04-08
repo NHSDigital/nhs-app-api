@@ -1,4 +1,4 @@
-@organdonation
+@organ-donation
 @backend
 Feature: Organ Donation Amend Backend
 

@@ -1,4 +1,4 @@
-@organdonation
+@organ-donation
 Feature: Organ Donation Withdraw
 
   #All combinations of GP System users and Decisions have been covered in backend tests

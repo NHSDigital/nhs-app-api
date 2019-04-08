@@ -1,4 +1,4 @@
-@organdonation
+@organ-donation
 Feature: Organ Donation
 
   Scenario Outline: A <GP System> user can opt to donate all their organs

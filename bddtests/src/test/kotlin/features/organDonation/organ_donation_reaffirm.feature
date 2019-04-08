@@ -1,4 +1,4 @@
-@organdonation
+@organ-donation
 Feature: Organ Donation - Reaffirm
 
   Scenario: A user registered with organ donation can reaffirm their decision to not donate
