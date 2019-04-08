@@ -12,6 +12,10 @@ describe('mapping for opening times of nominated pharmacy', () => {
           time: '08:00-18:00',
         },
         {
+          day: 'Monday',
+          time: '19:00-20:00',
+        },
+        {
           day: 'Tuesday',
           time: '08:00-20:00',
         },
@@ -42,23 +46,23 @@ describe('mapping for opening times of nominated pharmacy', () => {
           },
           {
             day: 'Monday',
-            times: ['08:00-18:00'],
+            times: ['8am to 6pm', '7pm to 8pm'],
           },
           {
             day: 'Tuesday',
-            times: ['08:00-20:00'],
+            times: ['8am to 8pm'],
           },
           {
             day: 'Wednesday',
-            times: ['08:00-20:00'],
+            times: ['8am to 8pm'],
           },
           {
             day: 'Thursday',
-            times: ['08:00-20:00'],
+            times: ['8am to 8pm'],
           },
           {
             day: 'Friday',
-            times: ['08:00-20:00'],
+            times: ['8am to 8pm'],
           },
           {
             day: 'Saturday',
