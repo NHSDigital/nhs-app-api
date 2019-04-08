@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
     internal class OrganDonationAddressMapper : IMapper<string, Models.Address, Address>
     {
+        private const char Delimiter = ',';
         private static readonly Regex PostCodeRegex =
             new Regex(@"([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})");
 
@@ -42,8 +43,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             if (postCodeMatches.Any())
             {
                 postCode = postCodeMatches.Last().Value;
-                line = fullAddress.Replace(postCode, string.Empty, StringComparison.Ordinal)
-                    .TrimEnd();
+                line = fullAddress.Replace(postCode, string.Empty, StringComparison.Ordinal);
             }
             else
             {
@@ -51,14 +51,15 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 line = fullAddress;
             }
 
-            return new Address
-            {
-                Line = new List<string> { line },
-                PostalCode = postCode
-            };
+            var parts = line.Split(Delimiter, StringSplitOptions.RemoveEmptyEntries)
+                .Where(l => !string.IsNullOrWhiteSpace(l))
+                .Select(l => l.Trim())
+                .ToList();
+            
+            return Map(postCode, parts);
         }
 
-        private Address Map(OrganDonation.Models.Address address)
+        private Address Map(Models.Address address)
         {
             if (address == null) return null;
             
@@ -72,16 +73,21 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 .Where(p => !string.IsNullOrWhiteSpace(p))
                 .ToList();
 
+            return Map(address.PostCode, parts);
+        }
+
+        private Address Map(string postCode, List<string> parts)
+        {
             var mappedAddress = new Address
             {
-                PostalCode = address.PostCode
+                PostalCode = postCode
             };
 
             switch (parts.Count)
             {
                 case int n when n > 4:
                     mappedAddress.Line = new List<string>(parts.Take(3));
-                    mappedAddress.Line.Add(string.Join(", ", parts.Skip(3)));
+                    mappedAddress.Line.Add(string.Join($"{Delimiter} ", parts.Skip(3)));
                     break;
                 default:
                     mappedAddress.Line = parts;

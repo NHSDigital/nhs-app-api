@@ -64,22 +64,22 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 
             // Assert
             result.Should().NotBeNull();
-            result.Line.Should().ContainSingle().Which.Should().Be("15 Street, Town,");
+            result.Line.Should().ContainInOrder("15 Street", "Town");
             result.PostalCode.Should().Be(mappedPostcode);
         }
 
         [TestMethod]
-        [DataRow("15 Street, Town, W1A 0AX, EC1A 1BB", "15 Street, Town, W1A 0AX,", "EC1A 1BB")]
-        [DataRow("15 Street, EC1A 1BB, Town, W1A 0AX", "15 Street, EC1A 1BB, Town,", "W1A 0AX")]
+        [DataRow("15 Street, Town, W1A 0AX, EC1A 1BB", "15 Street", "Town", "W1A 0AX", "EC1A 1BB")]
+        [DataRow("15 Street, EC1A 1BB, Town, W1A 0AX", "15 Street", "EC1A 1BB", "Town", "W1A 0AX")]
         public void MapToOrganDonationAddress_WhenPassingFullAddress_With_Two_Postcodes_Should_Pick_The_Last_One(
-            string fullAddress, string mappedLine, string mappedPostcode)
+            string fullAddress, string firstLine, string secondLine, string thirdLine, string mappedPostcode)
         {
             // Act 
             var result = _organDonationAddressMapper.Map(fullAddress, null);
 
             // Assert
             result.Should().NotBeNull();
-            result.Line.Should().ContainSingle().Which.Should().Be(mappedLine);
+            result.Line.Should().ContainInOrder(firstLine, secondLine, thirdLine);
             result.PostalCode.Should().Be(mappedPostcode);
         }
 
@@ -94,8 +94,35 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 
             //Assert
             result.Should().NotBeNull();
-            result.Line.Should().ContainSingle().Which.Should().Be(fullAddress);
+            result.Line.Should().ContainInOrder("15 Street", "Town");
             result.PostalCode.Should().BeNull();
+        }
+        
+        [TestMethod]
+        [DataRow("house name, street, village, town, county, W1A 0AX", "house name", "street", "village", "town, county", "W1A 0AX")]
+        [DataRow("15 street, village, town, county, W1A 0AX", "15 street", "village", "town", "county", "W1A 0AX")]
+        [DataRow("15 street, , town, county, W1A 0AX", "15 street", "town", "county", null, "W1A 0AX")]
+        [DataRow("15 street, town, W1A 0AX", "15 street", "town", null, null, "W1A 0AX")]
+        [DataRow("house name, W1A 0AX", "house name", null, null, null, "W1A 0AX")]
+        public void MapToOrganDonationAddress_WhenPassingFullAddress_ShouldSplitThem(
+            string fullAddress,
+            string firstLine,
+            string secondLine,
+            string thirdLine,
+            string fourthLine,
+            string postcode)
+        {
+            // Arrange
+            var expected = new[] { firstLine, secondLine, thirdLine, fourthLine }
+                .Where(s => !string.IsNullOrEmpty(s));
+            
+            // Act 
+            var result = _organDonationAddressMapper.Map(fullAddress, null);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Line.Should().ContainInOrder(expected);
+            result.PostalCode.Should().Be(postcode);
         }
         
         [TestMethod]
