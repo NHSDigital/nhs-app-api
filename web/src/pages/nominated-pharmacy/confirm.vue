@@ -24,7 +24,7 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import { redirectTo } from '@/lib/utils';
-import { NOMINATED_PHARMACY } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH_RESULTS, NOMINATED_PHARMACY } from '@/lib/routes';
 
 export default {
   components: {
@@ -50,7 +50,7 @@ export default {
       redirectTo(this, NOMINATED_PHARMACY.path, null);
     },
     cancelButtonClicked() {
-      redirectTo(this, NOMINATED_PHARMACY.path, null);
+      redirectTo(this, NOMINATED_PHARMACY_SEARCH_RESULTS.path, null);
     },
   },
 };

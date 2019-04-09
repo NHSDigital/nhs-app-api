@@ -19,19 +19,14 @@
         <generic-button :button-classes="['green', 'button']">
           {{ $t('searchNominatedPharmacy.searchButton') }}
         </generic-button>
+        <analytics-tracked-tag :text="$t('th03.errors.backButton')">
+          <generic-button
+            :button-classes="['grey', 'button']" :class="$style['back']"
+            tabindex="0" @click.prevent="cancelButtonClicked">
+            {{ $t('th03.errors.backButton') }}
+          </generic-button>
+        </analytics-tracked-tag>
       </form>
-      <analytics-tracked-tag :href="allPharmaciesURL"
-                             :text="$t('searchNominatedPharmacy.link1')"
-                             tag="a">
-        <abbreviations-arrow-right-icon />
-        {{ $t('searchNominatedPharmacy.link1') }}
-      </analytics-tracked-tag>
-      <analytics-tracked-tag :href="allDispensingContractorsURL"
-                             :text="$t('searchNominatedPharmacy.link2')"
-                             tag="a">
-        <abbreviations-arrow-right-icon />
-        {{ $t('searchNominatedPharmacy.link2') }}
-      </analytics-tracked-tag>
     </div>
   </div>
 </template>
@@ -42,8 +37,9 @@ import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
+import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
@@ -135,6 +131,9 @@ export default {
         });
 
       return pharmacySearchResult;
+    },
+    cancelButtonClicked() {
+      redirectTo(this, NOMINATED_PHARMACY.path, null);
     },
   },
 };

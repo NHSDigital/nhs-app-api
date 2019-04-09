@@ -1,4 +1,4 @@
-import { mapPharmacyDetail } from '@/lib/pharmacy-detail/mapper';
+import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
 describe('mapping for opening times of nominated pharmacy', () => {
   let data;

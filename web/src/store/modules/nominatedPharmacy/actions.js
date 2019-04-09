@@ -7,7 +7,7 @@ import {
   CLEAR_SELECTED_NOMINATED_PHARMACY,
   SELECT,
 } from './mutation-types';
-import { mapPharmacyDetail } from '@/lib/pharmacy-detail/mapper';
+import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
 const formatWithOpeningTimes = (pharmacy) => {
   const response = Object.assign({}, pharmacy);
