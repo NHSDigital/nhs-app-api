@@ -37,6 +37,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private Owner _owner2;
         private List<Owner> _owners;
         private Mock<ICurrentDateTimeProvider> _mockCurrentDateTimeProvider;
+        private Mock<ILogger<BookedAppointmentMapper>> _mockLogger;
+        private const string DuplicatesLogMessagePrefix = "Duplicate keys found when building dictionary: ";
 
         [TestInitialize]
         public void TestInitialize()
@@ -57,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object,
                 configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider, _mockCurrentDateTimeProvider.Object);
-
+            
             _location1 = _fixture.Create<Location>();
             _location2 = _fixture.Create<Location>();
             _locations = new[] { _location1, _location2 }.ToList();
@@ -73,7 +75,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _owner2 = _fixture.Create<Owner>();
             _owners = new[] { _owner1, _owner2 }.ToList();
 
-            _systemUnderTest = new BookedAppointmentMapper(_dateTimeOffsetProvider);
+            _mockLogger = _fixture.Freeze<Mock<ILogger<BookedAppointmentMapper>>>();
+
+            _systemUnderTest = new BookedAppointmentMapper(_dateTimeOffsetProvider, _mockLogger.Object);
         }
 
         [TestMethod]
@@ -136,6 +140,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse.ToList());
+            
+            _mockLogger.VerifyLogger(
+                LogLevel.Information, 
+                DuplicatesLogMessagePrefix,
+                null, Times.Never());
         }
         
         [TestMethod]
@@ -226,27 +235,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         [TestMethod]
         public void Map_AppointmentWithinCutOffTime_DisableCancellationSet()
         {
+            // Arrange
             const string now = "2018-12-25T15:15:01";
             const int cutOffMinutes = 15;
             const string cancellable = "2018-12-25T15:40:00";
             const string nonCancellable = "2018-12-25T15:30:00";
 
             var currentTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(now);
-            DateTimeOffset? noncancellableDateTimeOffset = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(nonCancellable);
+            DateTimeOffset? nonCancellableDateTimeOffset = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(nonCancellable);
             DateTimeOffset? cancellableDateTimeOffset = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(cancellable);
 
-
-            var slotTime1 = new SlotTime(noncancellableDateTimeOffset.Value, noncancellableDateTimeOffset.Value.AddMinutes(10));
+            var slotTime1 = new SlotTime(nonCancellableDateTimeOffset.Value, nonCancellableDateTimeOffset.Value.AddMinutes(10));
             var slotTime2 = new SlotTime(cancellableDateTimeOffset.Value, cancellableDateTimeOffset.Value.AddMinutes(10));
 
             var mockDateTimeOffsetProvider = new Mock<IDateTimeOffsetProvider>();
             mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(currentTime);
-            mockDateTimeOffsetProvider.Setup(x => x.TryCreateDateTimeOffset(nonCancellable, out noncancellableDateTimeOffset))
+            mockDateTimeOffsetProvider.Setup(x => x.TryCreateDateTimeOffset(nonCancellable, out nonCancellableDateTimeOffset))
                 .Returns(true);
             mockDateTimeOffsetProvider.Setup(x => x.TryCreateDateTimeOffset(cancellable, out cancellableDateTimeOffset))
                 .Returns(true);
 
-            _systemUnderTest = new BookedAppointmentMapper(mockDateTimeOffsetProvider.Object);
+            _systemUnderTest = new BookedAppointmentMapper(mockDateTimeOffsetProvider.Object, _mockLogger.Object);
 
             var slot1 = new BookedSlot
             {
@@ -275,8 +284,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var bookedAppointmentsResponse =
                 CreateBookedAppointmentsResponse(slots, _locations, _sessions, _slotTypes, _owners, cutOffMinutes);
 
+            // Act
             var actualResponse = _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
 
+            // Assert
             var expectedResponse = new[] 
             {
                 new UpcomingAppointment
@@ -304,6 +315,153 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse.ToList());
+        }
+
+        [TestMethod]
+        public void Map_MultipleLocationsWithSameId_LogsDuplicates()
+        {   
+            // Arrange
+            var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
+
+            var slot1 = new BookedSlot
+            {
+                DateTime = slotTime1.Start.ToVisionDateTimeString(),
+                Id = "SLOTX01",
+                Location = _location1.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithDescription.Id, 
+                Owner = _owner1.Id,
+                Duration = slotTime1.Duration
+            };
+
+            var slot2 = new BookedSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX02",
+                Location = _location2.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithoutDescription.Id,
+                Owner = _owner2.Id,
+                Duration = slotTime2.Duration
+            };
+
+            var slots = new[] { slot1, slot2 }.ToList();
+
+            var location3 = new Location { Id = _location1.Id, Name = "Duplicate Location" };
+            _locations.Add(location3);
+
+            var bookedAppointmentsResponse =
+                CreateBookedAppointmentsResponse(slots, _locations, _sessions, _slotTypes, _owners);
+            
+            // Act
+            Action act = () => _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
+            
+            // Assert
+            act.Should().Throw<ArgumentException>();
+            _mockLogger.VerifyLogger(
+                LogLevel.Information, 
+                DuplicatesLogMessagePrefix,
+                null, Times.Exactly(1));
+        }
+        
+        [TestMethod]
+        public void Map_MultipleSlotTypesWithSameId_LogsDuplicates()
+        {   
+            // Arrange
+            var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
+
+            var slot1 = new BookedSlot
+            {
+                DateTime = slotTime1.Start.ToVisionDateTimeString(),
+                Id = "SLOTX01",
+                Location = _location1.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithDescription.Id, 
+                Owner = _owner1.Id,
+                Duration = slotTime1.Duration
+            };
+
+            var slot2 = new BookedSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX02",
+                Location = _location2.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithoutDescription.Id,
+                Owner = _owner2.Id,
+                Duration = slotTime2.Duration
+            };
+
+            var slots = new[] { slot1, slot2 }.ToList();
+
+            var slotType3 = new SlotType { Id = _slotTypeWithDescription.Id, Description = "Duplicate Slot Type" };
+            _slotTypes.Add(slotType3);
+
+            var bookedAppointmentsResponse =
+                CreateBookedAppointmentsResponse(slots, _locations, _sessions, _slotTypes, _owners);
+            
+            // Act
+            Action act = () => _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
+            
+            // Assert
+            act.Should().Throw<ArgumentException>();
+            _mockLogger.VerifyLogger(
+                LogLevel.Information, 
+                DuplicatesLogMessagePrefix,
+                null, Times.Exactly(1));
+        }
+        
+        [TestMethod]
+        public void Map_MultipleSessionsWithSameId_LogsDuplicates()
+        {   
+            // Arrange
+            var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
+
+            var slot1 = new BookedSlot
+            {
+                DateTime = slotTime1.Start.ToVisionDateTimeString(),
+                Id = "SLOTX01",
+                Location = _location1.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithDescription.Id, 
+                Owner = _owner1.Id,
+                Duration = slotTime1.Duration
+            };
+
+            var slot2 = new BookedSlot
+            {
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
+                Id = "SLOTX02",
+                Location = _location2.Id,
+                Session = _generalSession.Id,
+                Type = _slotTypeWithoutDescription.Id,
+                Owner = _owner2.Id,
+                Duration = slotTime2.Duration
+            };
+
+            var slots = new[] { slot1, slot2 }.ToList();
+
+            var session2 = _fixture.Build<SlotSession>()
+                .With(x => x.Location, _location1.Id)
+                .With(x => x.Id, _generalSession.Id)
+                .Create();
+            _sessions.Add(session2);
+
+            var bookedAppointmentsResponse =
+                CreateBookedAppointmentsResponse(slots, _locations, _sessions, _slotTypes, _owners);
+            
+            // Act
+            Action act = () => _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
+            
+            // Assert
+            act.Should().Throw<ArgumentException>();
+            _mockLogger.VerifyLogger(
+                LogLevel.Information, 
+                DuplicatesLogMessagePrefix,
+                null, Times.Exactly(1));
         }
         
         private DateTimeOffset Tomorrow()

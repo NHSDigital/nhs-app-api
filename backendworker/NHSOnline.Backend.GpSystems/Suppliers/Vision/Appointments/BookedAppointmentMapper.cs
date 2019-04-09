@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
@@ -15,10 +17,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
     public class BookedAppointmentMapper: IBookedAppointmentMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
+        private readonly ILogger<BookedAppointmentMapper> _logger;
 
-        public BookedAppointmentMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public BookedAppointmentMapper(
+            IDateTimeOffsetProvider dateTimeOffsetProvider,
+            ILogger<BookedAppointmentMapper> logger)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
+            _logger = logger;
         }
 
         public IEnumerable<UpcomingAppointment> Map(BookedAppointments bookedAppointments)
@@ -63,25 +69,27 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             return mappedAppointments;
         }
         
-        private static Dictionary<string, string> SetUpLocations(IEnumerable<Location> locations)
+        private Dictionary<string, string> SetUpLocations(IEnumerable<Location> locations)
         {
             return locations == null
                 ? new Dictionary<string, string>()
-                : locations.ToDictionary(location => location.Id, location => location.Name);
+                : locations.ToDictionaryLogOnFailure(location => location.Id, location => location.Name,
+                    _logger);
         }
         
-        private static Dictionary<string, string> SetUpSlotType(IEnumerable<SlotType> slotTypes)
+        private Dictionary<string, string> SetUpSlotType(IEnumerable<SlotType> slotTypes)
         {
             return slotTypes == null
                 ? new Dictionary<string, string>()
-                : slotTypes.ToDictionary(slotType => slotType.Id, slotType => slotType.Description);
+                : slotTypes.ToDictionaryLogOnFailure(slotType => slotType.Id, slotType => slotType.Description, 
+                    _logger);
         }
         
-        private static Dictionary<string, string> SetUpSessions(IEnumerable<SlotSession> sessions)
+        private Dictionary<string, string> SetUpSessions(IEnumerable<SlotSession> sessions)
         {
             return sessions == null
                 ? new Dictionary<string, string>()
-                : sessions.ToDictionary(session => session.Id, session => session.Description);
+                : sessions.ToDictionaryLogOnFailure(session => session.Id, session => session.Description, _logger);
         }
 
         private static IEnumerable<string> GetClinician(string ownerId, IEnumerable<Owner> owners)

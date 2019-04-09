@@ -14,7 +14,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Session;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 {
@@ -27,7 +26,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         private VisionUserSession _visionUserSession;
         private VisionAppointmentsRetrievalService _systemUnderTest;
         private VisionResponse<BookedAppointmentsResponse> _visionClientGetResponse;
-        private ISessionCacheService _sessionCacheService;
         
         [TestInitialize]
         public void TestInitialize()
@@ -39,7 +37,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionClientGetResponse = _fixture.Create<VisionResponse<BookedAppointmentsResponse>>();
-            _sessionCacheService = _fixture.Create<ISessionCacheService>();
             _visionUserSession.IsAppointmentsEnabled = true;
 
             var response = GetVisionResponse(_visionClientGetResponse);
@@ -51,8 +48,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _systemUnderTest = new VisionAppointmentsRetrievalService(
                 _fixture.Create<ILogger<VisionAppointmentsRetrievalService>>(),
                 _mockVisionClient.Object,
-                _mockBookedAppointmentsResponseMapper.Object,
-                _sessionCacheService);
+                _mockBookedAppointmentsResponseMapper.Object);
         }
         
         [TestMethod]

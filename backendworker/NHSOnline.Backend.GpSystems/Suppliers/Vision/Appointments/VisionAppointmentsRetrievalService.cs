@@ -16,19 +16,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         private readonly IVisionClient _visionClient;
         private readonly IBookedAppointmentsResponseMapper _responseMapper;
         private readonly ILogger<VisionAppointmentsRetrievalService> _logger;
-        private readonly ISessionCacheService _sessionCacheService;
 
         public VisionAppointmentsRetrievalService(
             ILogger<VisionAppointmentsRetrievalService> logger,
             IVisionClient visionClient,
-            IBookedAppointmentsResponseMapper responseMapper,
-            ISessionCacheService sessionCacheService
+            IBookedAppointmentsResponseMapper responseMapper
         )
         {
             _visionClient = visionClient;
             _responseMapper = responseMapper;
             _logger = logger;
-            _sessionCacheService = sessionCacheService;
         }
         
         public async Task<AppointmentsResult> GetAppointments(GpUserSession gpUserSession)
