@@ -61,11 +61,6 @@ export default {
     GenericButton,
     MessageDialog,
   },
-  head() {
-    return {
-      title: `${this.getTitle} - ${this.$t('appTitle')}`,
-    };
-  },
   data() {
     const { searchResults, searchQuery } = this.$store.state.nominatedPharmacy;
     const { pharmacies, technicalError, noResultsFound } = searchResults;

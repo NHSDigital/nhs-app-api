@@ -27,11 +27,6 @@ export default {
     GenericButton,
     PharmacyDetail,
   },
-  head() {
-    return {
-      title: `${this.getTitle} - ${this.$t('appTitle')}`,
-    };
-  },
   data() {
     return {
       nominatedPharmacy: this.$store.state.nominatedPharmacy.pharmacy,
