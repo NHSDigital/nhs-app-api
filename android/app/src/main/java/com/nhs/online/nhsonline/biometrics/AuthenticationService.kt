@@ -58,23 +58,29 @@ class AuthenticationService(
                 biometricsInteractor.dismissProgressDialog()
                 return@requestUafAuthenticationMessage
             }
-            try {
-                val signInCallback = object : FingerprintAuthCallback(response.result) {
-                    override fun processAuthentication(cryptObj: FingerprintManagerCompat.CryptoObject): Int =
-                            completeFidoSignIn(cryptObj, this.uafMessage)
+            completeSignInStart(response)
+        }
+    }
 
-                    override fun cancel() {
-                        isFingerprintLoginStarted = false
-                    }
+    fun completeSignInStart(response: BiometricCallResult) {
+        try {
+            val signInCallback = object : FingerprintAuthCallback(response.result) {
+                override fun processAuthentication(cryptObj: FingerprintManagerCompat.CryptoObject): Int =
+                    completeFidoSignIn(cryptObj, this.uafMessage)
+
+                override fun cancel() {
+                    isFingerprintLoginStarted = false
                 }
-                biometricsInteractor.dismissProgressDialog()
-                val fingerprintContent = fingerprintDialog.generateFingerprintContent(false)
-                fingerprintDialog.showFingerprintAuthDialog(signInCallback, fingerprintContent)
-            } catch (e: BiometricsInvalidSignatureException) {
-                isFingerprintLoginStarted = false
-                handleInvalidKeys()
             }
-
+            biometricsInteractor.dismissProgressDialog()
+            val fingerprintContent = fingerprintDialog.generateFingerprintContent(false)
+            fingerprintDialog.showFingerprintAuthDialog(signInCallback, fingerprintContent)
+        } catch (e: BiometricsInvalidSignatureException) {
+            isFingerprintLoginStarted = false
+            handleInvalidKeys()
+        } catch (e: IllegalStateException) {
+            Log.d(TAG, "Unable to show the fingerprint dialog: ", e)
+            isFingerprintLoginStarted = false
         }
     }
 
