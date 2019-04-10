@@ -105,7 +105,7 @@
                              :a-labelled-by="reasonBoxAriaLabelledBy"
                              :text-area-classes="defaultClasses"
                              :required="true"
-                             :class="showReasonError && $style.errorBorder"
+                             :error.sync="showReasonError"
                              name="bookingReason"
                              maxlength="150"/>
 

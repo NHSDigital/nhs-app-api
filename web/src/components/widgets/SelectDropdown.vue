@@ -4,10 +4,9 @@
             v-model="selectedValue"
             :name="selectName"
             :aria-labelledby="aLabelledBy"
-            :class="[
-              $style['custom-dropdown__select'],
-              $style['custom-dropdown__select_element'],
-              $style['custom-dropdown__select--white']
+            :class="[$style['custom-dropdown__select'],
+                     $style['custom-dropdown__select_element'],
+                     $style['custom-dropdown__select--white']
             ]"
             :required="required"
             tabindex="0">

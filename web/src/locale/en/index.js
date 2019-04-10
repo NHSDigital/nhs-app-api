@@ -1505,6 +1505,14 @@ export default {
       },
     },
   },
+  onlineConsultations: {
+    questions: {
+      quantity: {
+        initialUnitDropdownValue: 'Select unit',
+      },
+    },
+  },
+
   web: {
     home: {
       title: 'NHS App',

@@ -1,18 +1,13 @@
 <template>
-  <div :class="formGroupClasses">
-    <!-- eslint-disable vue/no-v-html -->
-    <label :id="questionId" :class="$style['nhsuk-label']" :for="answerId" v-html="text"/>
-    <generic-text-input :id="answerId"
-                        v-model="stringValue"
-                        :name="name"
-                        :error="error"
-                        :error-text="errorText"
-                        type="text"/>
-  </div>
+  <generic-text-input :id="id"
+                      v-model="stringValue"
+                      :name="name"
+                      :error="error"
+                      :error-text="errorText"
+                      type="text"/>
 </template>
 
 <script>
-
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 
 export default {
@@ -21,15 +16,7 @@ export default {
     GenericTextInput,
   },
   props: {
-    text: {
-      type: String,
-      default: '',
-    },
-    questionId: {
-      type: String,
-      default: undefined,
-    },
-    answerId: {
+    id: {
       type: String,
       default: undefined,
     },
@@ -43,7 +30,7 @@ export default {
     },
     value: {
       type: String,
-      default: undefined,
+      default: '',
     },
     error: {
       type: Boolean,
@@ -54,34 +41,34 @@ export default {
       default: undefined,
     },
   },
+  data() {
+    return {
+      isValid: true,
+    };
+  },
   computed: {
-    formGroupClasses() {
-      return [
-        'nhsuk-form-group',
-        this.error ? 'nhsuk-form-group--error' : undefined,
-      ];
-    },
     stringValue: {
       get() {
         return this.value;
       },
       set(value) {
+        this.checkAndEmitIsValueValid(value);
         this.$emit('input', value);
       },
     },
   },
+  created() {
+    this.checkAndEmitIsValueValid(this.value);
+  },
+  methods: {
+    checkAndEmitIsValueValid(value) {
+      this.isValid = this.isValidInput(value);
+      this.$emit('validate', this.isValid);
+    },
+    isValidInput(value) {
+      const isEmpty = (this.required && value === '');
+      return !isEmpty;
+    },
+  },
 };
 </script>
-
-<style module lang="scss" scoped>
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/globals";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/all";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/spacing";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/spacing";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/mixins";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/sass-mq";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/typography";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/typography";
- @import "../../../node_modules/nhsuk-frontend/packages/components/label/label";
-
-</style>

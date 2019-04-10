@@ -66,6 +66,8 @@ export const mount = (component, {
   shallow = false,
   state = {},
   stubs = [],
+  methods = {},
+  slots = {},
 } = {}) => {
   const store = $store || createStore({ $env, state });
   const localVue = createLocalVue();
@@ -89,6 +91,8 @@ export const mount = (component, {
       showTemplate: () => true,
     },
     stubs,
+    methods,
+    slots,
   });
 };
 

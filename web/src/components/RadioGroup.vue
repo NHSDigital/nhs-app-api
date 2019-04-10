@@ -10,12 +10,12 @@
       </error-message>
       <div :class="[$style['nhsuk-radios'], inline && $style['nhsuk-radios--inline']]">
         <generic-radio-button v-for="radio in radios"
-                              :key="radio.value"
+                              :key="getValue(radio)"
                               :selected-value="selectedValue"
                               :hint="radio.hint"
-                              :label="radio.label"
+                              :label="getLabel(radio)"
                               :name="name"
-                              :value="radio.value"
+                              :value="getValue(radio)"
                               :class="$style['nhsuk-radios__item']"
                               @select="selected"/>
       </div>
@@ -76,27 +76,27 @@ export default {
       this.selectedValue = value;
       this.$emit('select', this.selectedValue);
     },
+    getValue(radio) {
+      if (radio.value !== undefined && radio.value !== '') {
+        return radio.value;
+      } if (radio.code !== undefined && radio.code !== '') {
+        return radio.code;
+      }
+      return '';
+    },
+    getLabel(radio) {
+      if (radio.label !== undefined && radio.label !== '') {
+        return radio.label;
+      } if (radio.description !== undefined && radio.description !== '') {
+        return radio.description;
+      }
+      return '';
+    },
   },
 };
 </script>
 
 <style module lang="scss" scoped>
-@import '../style/radiobutton';
-@import "../../node_modules/nhsuk-frontend/packages/core/settings/globals";
-@import "../../node_modules/nhsuk-frontend/packages/core/tools/_ifff";
-@import "../../node_modules/nhsuk-frontend/packages/core/tools/_functions";
-@import "../../node_modules/nhsuk-frontend/packages/core/settings/spacing";
-@import "../../node_modules/nhsuk-frontend/packages/core/tools/spacing";
-@import "../../node_modules/nhsuk-frontend/packages/core/settings/colours";
-@import "../../node_modules/nhsuk-frontend/packages/core/tools/sass-mq";
-@import "../../node_modules/nhsuk-frontend/packages/core/settings/_typography";
-@import "../../node_modules/nhsuk-frontend/packages/core/tools/_typography";
-@import "../../node_modules/nhsuk-frontend/packages/core/tools/_mixins";
-@import "../../node_modules/nhsuk-frontend/packages/core/objects/_form-group";
-@import "../../node_modules/nhsuk-frontend/packages/components/error-message/error-message";
-@import "../../node_modules/nhsuk-frontend/packages/components/fieldset/fieldset";
-@import "../../node_modules/nhsuk-frontend/packages/components/radios/radios";
-
 .nhsuk-fieldset{
  margin-bottom: 16px;
 }

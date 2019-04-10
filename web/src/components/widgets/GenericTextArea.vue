@@ -1,10 +1,14 @@
 <template>
-  <div :class="[$style['nhsuk-form-group'], !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+    <span v-if="error" :id="errorId" class="nhsuk-error-message">
+      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+      {{ errorText }}
+    </span>
     <textarea :id="id"
               ref="textArea"
               v-model="textValue"
               v-tabbing="textAreaClasses"
-              :class="$style['nhsuk-textarea']"
+              :class="inputClasses"
               :required="required"
               :aria-labelledby="aLabelledBy"
               :maxlength="maxlength"
@@ -58,6 +62,14 @@ export default {
       type: String,
       default: '',
     },
+    error: {
+      type: Boolean,
+      default: false,
+    },
+    errorText: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     textValue: {
@@ -67,6 +79,15 @@ export default {
       set(value) {
         this.$emit('input', value);
       },
+    },
+    inputClasses() {
+      return [
+        'nhsuk-textarea',
+        this.error ? 'nhsuk-textarea--error' : undefined,
+      ];
+    },
+    errorId() {
+      return this.id ? `${this.id}-error-message` : 'error-message';
     },
   },
   methods: {
@@ -78,24 +99,9 @@ export default {
 
 </script>
 <style module lang="scss" scoped>
-@import "../../../node_modules/nhsuk-frontend/packages/core/settings/_spacing";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_spacing";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_ifff";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_functions";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/globals";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/colours";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/mixins";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/sass-mq";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/typography";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/typography";
-@import "../../../node_modules/nhsuk-frontend/packages/components/textarea/textarea";
-
-
 div {
- &.desktopWeb {
-  .nhsuk-textarea {
-   max-width: 540px;
+  &.desktopWeb {
+    max-width: 540px;
   }
- }
 }
 </style>

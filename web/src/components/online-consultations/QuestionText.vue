@@ -1,15 +1,11 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
-  <div :class="formGroupClasses">
-    <label :id="questionId"
-           :for="answerId"
-           class="question nhsuk-label"
-           v-html="text"/>
-    <generic-text-area :id="answerId"
-                       v-model="textValue"
-                       :name="answerName"
-                       :maxlength="maxlength"/>
-  </div>
+  <generic-text-area :id="id"
+                     v-model="textValue"
+                     :required="required"
+                     :name="name"
+                     :error="error"
+                     :error-text="errorText"
+                     :maxlength="maxlength"/>
 </template>
 
 <script>
@@ -21,58 +17,63 @@ export default {
     GenericTextArea,
   },
   props: {
-    questionId: {
-      type: String,
-      default: 'text-question',
-    },
     value: {
       type: String,
       default: '',
     },
-    answerId: {
+    id: {
       type: String,
       default: 'text-answer',
     },
-    answerName: {
+    name: {
       type: String,
       default: 'text-answer',
-    },
-    text: {
-      type: String,
-      required: true,
     },
     maxlength: {
       type: String,
       default: '255',
     },
+    required: {
+      type: Boolean,
+      default: true,
+    },
+    error: {
+      type: Boolean,
+      default: false,
+    },
+    errorText: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
-      model: this.value,
+      isValid: true,
     };
   },
   computed: {
     textValue: {
       get() {
-        return this.model;
+        return this.value;
       },
       set(value) {
-        this.model = value;
+        this.checkAndEmitIsValueValid(value);
         this.$emit('input', value);
       },
     },
-    formGroupClasses() {
-      return [
-        'nhsuk-form-group',
-        this.error ? 'nhsuk-form-group--error' : undefined,
-      ];
+  },
+  created() {
+    this.checkAndEmitIsValueValid(this.value);
+  },
+  methods: {
+    checkAndEmitIsValueValid(value) {
+      this.isValid = this.isValidInput(value);
+      this.$emit('validate', this.isValid);
+    },
+    isValidInput(value) {
+      const isEmpty = (this.required && value === '');
+      return !isEmpty && (value.length <= this.maxlength);
     },
   },
 };
 </script>
-<style lang="scss">
-.question {
-  display: inline-block;
-  margin-bottom: 1em;
-}
-</style>

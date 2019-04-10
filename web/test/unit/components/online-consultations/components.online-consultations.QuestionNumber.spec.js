@@ -1,16 +1,12 @@
-/* eslint-disable no-console */
 import each from 'jest-each';
 import QuestionNumber from '@/components/online-consultations/QuestionNumber';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import { mount, shallowMount } from '../../helpers';
 
-const defaultQuestionId = 'number-question';
 const defaultAnswerIdName = 'number-answer';
-const testQuestionId = 'test-question-id';
 const integerPattern = '^-?\\d+$';
 
 const defaultPropsData = {
-  text: 'This is a <strong>question?</strong>',
   min: 1,
   max: 100,
   value: 20,
@@ -19,16 +15,17 @@ const defaultPropsData = {
   questionId: 'number-question',
   answerId: 'number-answer',
   name: 'number-answer',
+  required: true,
 };
 
 let wrapper;
-const getQuestionWrapper = (id = defaultQuestionId) => wrapper.find(`label#${id}`);
-const getInputWrapper = (useComponent = true) => wrapper.find(useComponent ? GenericTextInput : 'input[type=number]');
+const getInputWrapper = (useComponent = true) => wrapper.find(useComponent ? GenericTextInput : 'input[type=tel]');
 const getInputWrappers = () => wrapper.findAll(GenericTextInput);
 
 const mountQuestion = ({
   propsData = defaultPropsData,
   shallow = true,
+  methods = {},
 } = {}) => (shallow ? shallowMount : mount)(QuestionNumber, {
   propsData,
   state: {
@@ -36,62 +33,53 @@ const mountQuestion = ({
       isNativeApp: false,
     },
   },
+  methods,
 });
 
 describe('QuestionNumber.vue', () => {
+  describe('Lifecycle hooks', () => {
+    describe('created', () => {
+      it('should call checkAndEmitIsValueValid', () => {
+        const checkAndEmitIsValueValid = jest.fn();
+        wrapper = mountQuestion({
+          methods: {
+            checkAndEmitIsValueValid,
+          },
+        });
+        expect(checkAndEmitIsValueValid).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
   describe('Data properties', () => {
+    each([true, false]).it('should emit a validate event indicating whether the initial value is valid or not', (isValid) => {
+      const isValidInput = jest.fn().mockReturnValue(isValid);
+      wrapper = mountQuestion({
+        methods: {
+          isValidInput,
+        },
+      });
+      const validateEmitted = wrapper.emitted().validate;
+
+      expect(validateEmitted.length).toEqual(1);
+      expect(validateEmitted[0][0]).toEqual(isValid);
+    });
     it('should be properly configured based on the component properties', () => {
       wrapper = mountQuestion();
-      wrapper.vm.isValidInput = jest.fn().mockReturnValue(true);
 
       expect(wrapper.vm.value).toEqual(defaultPropsData.value);
       expect(wrapper.vm.isInteger).toEqual(true);
-      expect(wrapper.vm.hasErrored).toEqual(true);
-      expect(wrapper.vm.isValid).toEqual(true);
       expect(wrapper.vm.pattern).toEqual(integerPattern);
       expect(wrapper.vm.regex).toEqual(new RegExp(integerPattern));
     });
   });
 
   describe('Computed properties', () => {
-    describe('formGroupClasses', () => {
-      each([{
-        hasErrored: false,
-        classes: ['nhsuk-form-group', undefined],
-      }, {
-        hasErrored: true,
-        classes: ['nhsuk-form-group', 'nhsuk-form-group--error'],
-      }]).it('should return appropriate classes based on if the error should be shown', (data) => {
-        wrapper = mountQuestion();
-        wrapper.vm.hasErrored = data.hasErrored;
-
-        expect(wrapper.vm.formGroupClasses).toEqual(data.classes);
-      });
-    });
-
-    describe('showError', () => {
-      each([true, false]).it('should return whether the validation has errored', (hasErrored) => {
-        wrapper = mountQuestion();
-        wrapper.vm.hasErrored = hasErrored;
-
-        expect(wrapper.vm.showError).toEqual(hasErrored);
-      });
-    });
-
     describe('numberValue (with v-model support)', () => {
       it('should return the value in value prop', () => {
         wrapper = mountQuestion();
 
         expect(wrapper.vm.numberValue).toEqual(defaultPropsData.value);
-      });
-      it('should call isValidInput and assign the result to isValid', () => {
-        wrapper = mountQuestion();
-        wrapper.vm.isValidInput = jest.fn().mockReturnValue(true);
-
-        wrapper.vm.numberValue = '222';
-
-        expect(wrapper.vm.isValid).toEqual(true);
-        expect(wrapper.vm.isValidInput).toHaveBeenCalled();
       });
       it('should emit an input event on set with the new value', () => {
         wrapper = mountQuestion();
@@ -104,92 +92,113 @@ describe('QuestionNumber.vue', () => {
     });
 
     it('should only emit an decimal when type is decimal', () => {
+      const isValidInput = jest.fn().mockImplementation(() => true);
       wrapper = mountQuestion({
         propsData: {
           ...defaultPropsData,
           type: 'decimal',
         },
+        methods: {
+          isValidInput,
+        },
       });
-      wrapper.vm.isValidInput = jest.fn().mockImplementation(() => true);
+
       wrapper.vm.numberValue = '1.23';
       expect(wrapper.emitted().input[0][0]).toEqual('1.23');
     });
   });
 
   describe('Methods', () => {
+    describe('checkAndEmitIsValueValid', () => {
+      each([{
+        isValid: true,
+        value: 1,
+      }, {
+        isValid: false,
+        value: 2,
+      }]).it('should check if the value prop is valid and emit the result', (data) => {
+        const isValidInput = jest.fn().mockReturnValue(data.isValid);
+        wrapper = mountQuestion({
+          propsData: {
+            value: data.value,
+          },
+          methods: {
+            isValidInput,
+          },
+        });
+        expect(isValidInput).toHaveBeenCalledTimes(1);
+        expect(isValidInput).toHaveBeenCalledWith(data.value);
+        expect(wrapper.vm.isValid).toEqual(data.isValid);
+      });
+    });
     describe('isValidInput', () => {
       each([{
         input: '1.23',
         type: 'integer',
+        required: true,
         expected: false,
       }, {
         input: '0',
         type: 'decimal',
+        required: true,
         expected: false,
       }, {
         input: '2000',
         type: 'decimal',
+        required: true,
         expected: false,
       }, {
         input: 'invalid',
         type: 'integer',
+        required: true,
         expected: false,
       }, {
         input: '',
         type: 'integer',
+        required: true,
         expected: false,
       }, {
         input: '1',
         type: 'integer',
+        required: true,
         expected: true,
       }, {
         input: '1.23',
         type: 'decimal',
+        required: true,
         expected: true,
-      }]).it('should return false if the value is the wrong type, outside min/max range or is not a number', (data) => {
+      }, {
+        input: '',
+        type: 'decimal',
+        required: false,
+        expected: true,
+      }, {
+        input: '12.3',
+        type: 'decimal',
+        required: false,
+        expected: true,
+      }, {
+        input: '12.3.3.3',
+        type: 'decimal',
+        required: false,
+        expected: false,
+      }, {
+        input: '12.',
+        type: 'decimal',
+        required: false,
+        expected: false,
+      }]).it('should return false if the value is required, the wrong type, outside min/max range or is not a number', (data) => {
         wrapper = mountQuestion({
           propsData: {
             ...defaultPropsData,
             type: data.type,
+            required: data.required,
           },
         });
         const isValid = wrapper.vm.isValidInput(data.input);
 
         expect(isValid).toEqual(data.expected);
       });
-    });
-
-    describe('validate', () => {
-      each([true, false]).it('should set hasErrored to the inverse of isValid', (isValid) => {
-        wrapper = mountQuestion();
-        wrapper.vm.isValid = isValid;
-        wrapper.vm.validate();
-
-        expect(wrapper.vm.hasErrored).toEqual(!isValid);
-      });
-    });
-  });
-
-  describe('Question', () => {
-    it('should have an element to render the question html', () => {
-      wrapper = mountQuestion();
-      const questionWrapper = getQuestionWrapper();
-
-      expect(questionWrapper.exists()).toEqual(true);
-      expect(questionWrapper.element.innerHTML).toEqual(defaultPropsData.text);
-    });
-
-    it('should allow an id to be specified for the question element', () => {
-      wrapper = mountQuestion({
-        propsData: {
-          ...defaultPropsData,
-          questionId: testQuestionId,
-        },
-      });
-      const questionWrapper = getQuestionWrapper(testQuestionId);
-
-      expect(questionWrapper.exists()).toEqual(true);
-      expect(questionWrapper.element.innerHTML).toEqual(defaultPropsData.text);
     });
   });
 
@@ -202,9 +211,14 @@ describe('QuestionNumber.vue', () => {
     });
 
     it('should catch input events from the answer input', () => {
-      wrapper = mountQuestion({ shallow: false });
+      const isValidInput = jest.fn().mockImplementation(() => true);
+      wrapper = mountQuestion({
+        methods: {
+          isValidInput,
+        },
+        shallow: false,
+      });
       const inputWrapper = getInputWrapper(false);
-      wrapper.vm.isValidInput = jest.fn().mockImplementation(() => true);
 
       inputWrapper.element.value = 98;
       inputWrapper.trigger('input');
@@ -212,7 +226,7 @@ describe('QuestionNumber.vue', () => {
       const inputsEmitted = wrapper.emitted().input;
 
       expect(inputsEmitted.length).toEqual(1);
-      expect(inputsEmitted[0][0]).toEqual(98);
+      expect(inputsEmitted[0][0]).toEqual('98');
     });
 
     describe('Properties', () => {
@@ -225,7 +239,7 @@ describe('QuestionNumber.vue', () => {
         expect(textInputVm.value).toEqual(defaultPropsData.value);
         expect(textInputVm.min).toEqual(defaultPropsData.min);
         expect(textInputVm.max).toEqual(defaultPropsData.max);
-        expect(textInputVm.type).toEqual('number');
+        expect(textInputVm.type).toEqual('tel');
         expect(textInputVm.name).toEqual(defaultAnswerIdName);
         expect(textInputVm.id).toEqual(defaultAnswerIdName);
         expect(textInputVm.step).toEqual('any');
@@ -233,22 +247,26 @@ describe('QuestionNumber.vue', () => {
         expect(textInputVm.errorText).toEqual(defaultPropsData.errorText);
         expect(textInputVm.aLabelledBy).toEqual(defaultPropsData.questionId);
       });
-      each(['integer', 'decimal', 'random']).it('should only allow integer or decimal types', (type) => {
-        const shouldError = ['integer', 'decimal'].indexOf(type) === -1;
-        console.error = jest.fn();
 
-        wrapper = mountQuestion({
-          propsData: {
-            ...defaultPropsData,
-            type,
-          },
-        });
+      each([{
+        value: 'integer',
+        isValid: true,
+      }, {
+        value: 'decimal',
+        isValid: true,
+      }, {
+        value: undefined,
+        isValid: false,
+      }, {
+        value: 'random',
+        isValid: false,
+      }, {
+        value: '',
+        isValid: false,
+      }]).it('should only allow type integer or decimal', (data) => {
+        const { validator } = wrapper.vm.$options.props.type;
 
-        if (shouldError) {
-          expect(console.error).toHaveBeenCalled();
-        } else {
-          expect(console.error).not.toHaveBeenCalled();
-        }
+        expect(validator && validator(data.value)).toBe(data.isValid);
       });
     });
   });

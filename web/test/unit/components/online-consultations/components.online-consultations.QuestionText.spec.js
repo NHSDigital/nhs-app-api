@@ -1,17 +1,16 @@
+// import each from 'jest-each';
 import QuestionInteger from '@/components/online-consultations/QuestionText';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import { shallowMount, mount } from '../../helpers';
 
-const defaultQuestionId = 'text-question';
 const defaultAnswerId = 'text-answer';
 
 let wrapper;
-const getQuestionWrapper = (id = defaultQuestionId) => wrapper.find(`label#${id}`);
 const getInputWrapper = (useComponent = true) => wrapper.find(useComponent ? GenericTextArea : 'textarea');
 
 const defaultPropsData = {
-  text: '<h1>What are you asking?</h1>',
   value: 'answer',
+  maxlength: '20',
 };
 
 const mountQuestion = ({
@@ -27,13 +26,6 @@ const mountQuestion = ({
 });
 
 describe('QuestionText.vue', () => {
-  it('will verify the question is present on the page', () => {
-    wrapper = mountQuestion();
-    const question = getQuestionWrapper();
-
-    expect(question.exists()).toBe(true);
-  });
-
   describe('Answer', () => {
     beforeEach(() => {
       wrapper = mountQuestion();
@@ -53,7 +45,6 @@ describe('QuestionText.vue', () => {
       textAreaInput.trigger('input');
       const inputsEmitted = wrapper.emitted().input;
 
-      expect(wrapper.vm.textValue).toEqual('testString');
       expect(inputsEmitted.length).toBe(1);
       expect(inputsEmitted[0][0]).toEqual('testString');
     });
@@ -64,7 +55,6 @@ describe('QuestionText.vue', () => {
       wrapper = mountQuestion();
 
       expect(wrapper.vm.value).toEqual(defaultPropsData.value);
-      expect(wrapper.vm.text).toEqual(defaultPropsData.text);
     });
   });
 
@@ -74,7 +64,25 @@ describe('QuestionText.vue', () => {
 
       expect(textAreaInputVm.name).toEqual(defaultAnswerId);
       expect(textAreaInputVm.id).toEqual(defaultAnswerId);
-      expect(textAreaInputVm.maxlength).toEqual('255');
+      expect(textAreaInputVm.maxlength).toEqual('20');
+    });
+  });
+
+  describe('Methods', () => {
+    describe('isValidInput', () => {
+      it('will be invalid if text length is greater than maxlength', () => {
+        wrapper = mountQuestion();
+        const isValidInput = wrapper.vm.isValidInput('This is longer than 20 characters.');
+
+        expect(isValidInput).toEqual(false);
+      });
+      it('will be invalid if text is required and value is blank', () => {
+        const propsData = { text: 'Another question?', required: true };
+        wrapper = mountQuestion({ ...defaultPropsData, propsData });
+        const isValidInput = wrapper.vm.isValidInput('');
+
+        expect(isValidInput).toEqual(false);
+      });
     });
   });
 });

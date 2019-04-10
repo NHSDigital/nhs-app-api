@@ -1,22 +1,16 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
-  <div :class="formGroupClasses">
-    <label :id="questionId"
-           :for="id"
-           class="question nhsuk-label"
-           v-html="text"/>
-    <generic-text-input :id="id"
-                        v-model.number="numberValue"
-                        :a-labelled-by="questionId"
-                        :name="name"
-                        :min="min"
-                        :max="max"
-                        :required="true"
-                        :error="showError"
-                        :error-text="errorText"
-                        step="any"
-                        type="number"/>
-  </div>
+  <generic-text-input :id="id"
+                      v-model="numberValue"
+                      :a-labelled-by="questionId"
+                      :name="name"
+                      :min="min"
+                      :max="max"
+                      :required="required"
+                      :error="error"
+                      :error-text="errorText"
+                      step="any"
+                      type="tel"/>
 </template>
 
 <script>
@@ -26,6 +20,7 @@ const integerPattern = '^-?\\d+$';
 const decimalPattern = '^-?\\d+(\\.\\d+)?$';
 
 export default {
+  name: 'QuestionNumber',
   components: {
     GenericTextInput,
   },
@@ -33,10 +28,6 @@ export default {
     questionId: {
       type: String,
       default: 'number-question',
-    },
-    text: {
-      type: String,
-      required: true,
     },
     id: {
       type: String,
@@ -61,7 +52,7 @@ export default {
     type: {
       type: String,
       default: 'integer',
-      validator: value => (['integer', 'decimal'].indexOf(value) !== -1),
+      validator: value => (['integer', 'decimal'].includes(value)),
     },
     error: {
       type: Boolean,
@@ -71,56 +62,54 @@ export default {
       type: String,
       default: undefined,
     },
+    required: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     const isInteger = this.type === 'integer';
+
     return {
       isInteger,
-      hasErrored: this.error,
-      isValid: this.isValidInput(this.value),
       pattern: isInteger ? integerPattern : decimalPattern,
       regex: new RegExp(isInteger ? integerPattern : decimalPattern),
+      isValid: true,
     };
   },
   computed: {
-    formGroupClasses() {
-      return [
-        'nhsuk-form-group',
-        this.showError ? 'nhsuk-form-group--error' : undefined,
-      ];
-    },
-    showError() {
-      return this.hasErrored;
-    },
     numberValue: {
       get() {
         return this.value;
       },
       set(value) {
-        this.isValid = this.isValidInput(value);
+        this.checkAndEmitIsValueValid(value);
         this.$emit('input', value);
       },
     },
   },
+  created() {
+    this.checkAndEmitIsValueValid(this.value);
+  },
   methods: {
+    checkAndEmitIsValueValid(value) {
+      this.isValid = this.isValidInput(value);
+      this.$emit('validate', this.isValid);
+    },
     isValidInput(value) {
+      if (!this.required && !value) {
+        return true;
+      }
       const isANumber = !Number.isNaN(value);
-      const lessThanMax = this.max === undefined || value <= this.max;
-      const moreThanMin = this.min === undefined || value >= this.min;
+      const lessThanOrEqualToMax = this.max === undefined || value <= this.max;
+      const moreThanOrEqualToMin = this.min === undefined || value >= this.min;
       const matchesRegex = `${value}`.match(this.regex) !== null;
 
-      return isANumber && lessThanMax && moreThanMin && matchesRegex;
-    },
-    validate() {
-      this.hasErrored = !this.isValid;
+      return isANumber &&
+             lessThanOrEqualToMax &&
+             moreThanOrEqualToMin &&
+             matchesRegex;
     },
   },
 };
 </script>
-
-<style lang="scss">
-.question {
-  display: inline-block;
-  margin-bottom: 1em;
-}
-</style>

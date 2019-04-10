@@ -128,7 +128,6 @@ $kernel: -0.063em;
 	font-weight: 700;
 	font-size: 1em;
 	line-height: 1.5em;
-	color: $dark_grey;
 }
 @mixin default_text {
 	display: block;
@@ -156,7 +155,6 @@ $kernel: -0.063em;
 	font-weight: 700;
 	font-size: 0.813em;
 	line-height: 0.813em;
-	color: $dark_grey;
 }
 @mixin small_text {
 	display: block;

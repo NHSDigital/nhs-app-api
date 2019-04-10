@@ -1,6 +1,6 @@
 import QuestionString from '@/components/online-consultations/QuestionString';
+import GenericTextInput from '@/components/widgets/GenericTextInput';
 import { mount } from '../../helpers';
-import GenericTextInput from '../../../../src/components/widgets/GenericTextInput';
 
 
 let wrapper;
@@ -21,20 +21,7 @@ describe('QuestionString.vue', () => {
     wrapper = mountConfirmation({
       propsData: {
         name: 'name',
-        questionId: 'qid',
-        text: 'This is a <strong>sample question</strong>?',
       },
-    });
-  });
-
-  describe('Question', () => {
-    it('should have a question element', () => {
-      expect(wrapper.find("[id='qid']").exists()).toBe(true);
-    });
-
-    it('should have an element to render the question html', () => {
-      expect(wrapper.find("[id='qid']").element.innerHTML)
-        .toEqual('This is a <strong>sample question</strong>?');
     });
   });
 

@@ -4,49 +4,26 @@
       <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
       {{ errorText }}
     </span>
-    <generic-radio-button :key="optionOneKey"
-                          :selected-value="selectedValue"
-                          :label="optionOneLabel"
-                          :name="name"
-                          :value="YES"
-                          @select="selected"/>
-    <generic-radio-button :key="optionTwoKey"
-                          :selected-value="selectedValue"
-                          :label="optionTwoLabel"
-                          :name="name"
-                          :value="NO"
-                          @select="selected"/>
+    <radio-group :key="name"
+                 v-model="selectedValue"
+                 :name="name"
+                 :radios="options"
+                 :current-value="selectedValue"
+                 @select="selected"/>
   </fieldset>
 </template>
 
 <script>
+import RadioGroup from '@/components/RadioGroup';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 
-const YES = 'Yes';
-const NO = 'No';
-
 export default {
-  name: 'QuestionBoolean',
+  name: 'QuestionChoice',
   components: {
     GenericRadioButton,
+    RadioGroup,
   },
   props: {
-    optionOneKey: {
-      type: String,
-      default: undefined,
-    },
-    optionTwoKey: {
-      type: String,
-      default: undefined,
-    },
-    optionOneLabel: {
-      type: String,
-      required: true,
-    },
-    optionTwoLabel: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
@@ -63,10 +40,13 @@ export default {
       type: String,
       default: 'Please make a choice',
     },
+    // eslint-disable-next-line vue/require-prop-types
     value: {
-      type: String,
       default: undefined,
-      validator: value => ([YES, NO, undefined].includes(value)),
+    },
+    options: {
+      type: Array,
+      required: true,
     },
     required: {
       type: Boolean,
@@ -75,18 +55,16 @@ export default {
   },
   data() {
     return {
-      YES,
-      NO,
       selectedValue: this.value,
     };
   },
   computed: {
     validValues() {
-      const values = [YES, NO];
+      const codes = this.options.map(option => option.code);
       if (!this.required) {
-        values.push(undefined);
+        codes.push(undefined);
       }
-      return values;
+      return codes;
     },
   },
   created() {

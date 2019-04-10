@@ -1,15 +1,15 @@
 <template>
-  <div :class="$style['nhsuk-radios__item']">
+  <div class="nhsuk-radios__item">
     <input :id="inputId"
            v-model="selectedValue"
-           :class="$style['nhsuk-radios__input']"
+           class="nhsuk-radios__input"
            :value="value"
            :name="name"
            type="radio"
            :aria-describedby="hintId"
            :required="required"
            @click.stop="selected">
-    <label :class="[$style['nhsuk-label'], $style['nhsuk-radios__label']]"
+    <label class="nhsuk-label nhsuk-radios__label"
            :for="inputId">{{ label }}</label>
     <span v-if="hint" :id="hintId" class="nhsuk-hint nhsuk-radios__hint">{{ hint }}</span>
   </div>
@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     hintId() {
-      return this.hint ? `${this.inputId}-hint` : '';
+      return this.hint ? `${this.inputId}-hint` : undefined;
     },
   },
   methods: {
@@ -61,21 +61,3 @@ export default {
   },
 };
 </script>
-<style module lang="scss" scoped>
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_ifff";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_functions";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/_mixins";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/colours";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/spacing";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/spacing";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/sass-mq";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/typography";
- @import "../../../node_modules/nhsuk-frontend/packages/core/settings/globals";
- @import "../../../node_modules/nhsuk-frontend/packages/core/tools/typography";
- @import "../../../node_modules/nhsuk-frontend/packages/components/label/label";
-@import "../../../node_modules/nhsuk-frontend/packages/components/radios/radios";
-
- .nhsuk-label {
-  color:#212b32
- }
-</style>

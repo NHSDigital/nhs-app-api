@@ -163,11 +163,15 @@ export default {
   &.desktopWeb {
     max-width: 540px;
   }
+
+  .errorBorder{
+    max-width: 540px;
+  }
+
   .reason {
     margin-bottom: 2em;
   }
 }
-
 
 .appointmentContainer {
   margin-bottom: 1em;
