@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support;
@@ -62,25 +61,28 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
         }
         
         public async Task<MicrotestApiObjectResponse<string>> AppointmentsPost(
-            BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest,
-            MicrotestUserSession userSession)
+            string odsCode,
+            string nhsNumber,
+            BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest)
         {
             _logger.LogEnter();
             _logger.LogDebug($"booking slot: { bookAppointmentSlotPostRequest.SlotId }");
 
-            var response = await Post(bookAppointmentSlotPostRequest, AppointmentsPath, userSession.OdsCode, userSession.NhsNumber);
+            var response = await Post(bookAppointmentSlotPostRequest, AppointmentsPath, odsCode, nhsNumber);
 
             _logger.LogExit();
             return response;
         }
         
         public async Task<MicrotestApiObjectResponse<string>> AppointmentsDelete(
-            CancelAppointmentDeleteRequest cancelAppointmentDeleteRequest, MicrotestUserSession userSession)
+            string odsCode,
+            string nhsNumber,
+            CancelAppointmentDeleteRequest cancelAppointmentDeleteRequest)
         {
             _logger.LogEnter();
             _logger.LogDebug($"Cancelling slot: { cancelAppointmentDeleteRequest.AppointmentId }");
 
-            var response = await Delete(cancelAppointmentDeleteRequest, AppointmentsPath, userSession.OdsCode, userSession.NhsNumber);
+            var response = await Delete(cancelAppointmentDeleteRequest, AppointmentsPath, odsCode, nhsNumber);
 
             _logger.LogExit();
             return response;
@@ -122,7 +124,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             TRequest requestBody,
             string path,
             string odsCode = null,
-            string nhsNumber = null)
+            string nhsNumber = null
+            )
         {
             var request = BuildRequest(HttpMethod.Post, path, odsCode, nhsNumber);
             var requestBodyJson = JsonConvert.SerializeObject(requestBody);
@@ -135,7 +138,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             TRequest requestBody,
             string path,
             string odsCode = null,
-            string nhsNumber = null)
+            string nhsNumber = null
+            )
         {
             var request = BuildRequest(HttpMethod.Delete, path, odsCode, nhsNumber);
             var requestBodyJson = JsonConvert.SerializeObject(requestBody);
@@ -229,7 +233,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
                 HttpResponseMessage responseMessage,
                 ILogger logger)
             {
-
                 Body = responseParser.ParseBody<TBody>(stringResponse, responseMessage);
                 
                 if (Body == null)

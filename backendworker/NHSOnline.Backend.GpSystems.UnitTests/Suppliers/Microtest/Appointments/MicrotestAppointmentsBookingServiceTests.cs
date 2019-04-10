@@ -86,10 +86,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MicrotestClient.MicrotestApiObjectResponse<string> response)
         {
             _mockMicrotestClient.Setup(x => x.AppointmentsPost(
+                    _microtestUserSession.OdsCode,
+                    _microtestUserSession.NhsNumber,
                     It.Is<BookAppointmentSlotPostRequest>(p=> 
                         p.BookingReason.Equals(BookingReason, StringComparison.Ordinal)
-                        && p.SlotId == Convert.ToInt64(SlotId, CultureInfo.InvariantCulture)),
-                    It.IsAny<MicrotestUserSession>()
+                        && p.SlotId.Equals(SlotId, StringComparison.Ordinal))
                 )
             ).Returns(
                 Task.FromResult(

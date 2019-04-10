@@ -1,6 +1,6 @@
 package mocking.microtest.appointments
 
 class PostAppointmentRequestModel(
-    var slotId: Int,
+    var slotId: String,
     var bookingReason: String
 )

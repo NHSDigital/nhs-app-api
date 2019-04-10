@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 
                 var bookAppointmentSlotPostRequest = new BookAppointmentSlotPostRequest(request);
 
-                var response = await _microtestClient.AppointmentsPost(bookAppointmentSlotPostRequest, userSession);
+                var response = await _microtestClient.AppointmentsPost(userSession.OdsCode, userSession.NhsNumber, bookAppointmentSlotPostRequest);
                 return InterpretAppointmentsPostResponse(response);
             }
             catch (HttpRequestException exception)

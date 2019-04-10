@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments
         public BookAppointmentSlotPostRequest(AppointmentBookRequest request)
         {
             BookingReason = request.BookingReason;
-            SlotId = Convert.ToInt64(request.SlotId, CultureInfo.InvariantCulture);
+            SlotId = request.SlotId;
 
             if (!string.IsNullOrWhiteSpace(request.TelephoneNumber))
             {
@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments
         }
 
         [JsonProperty("slotId")]
-        public long SlotId { get;  }
+        public string SlotId { get;  }
         [JsonProperty("bookingReason")]
         public string BookingReason { get;  }
         [JsonProperty("telephoneNumber", NullValueHandling=NullValueHandling.Ignore)]

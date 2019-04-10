@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 }
 
                 var deleteRequest = deleteRequestOption.ValueOrFailure();
-                var response = await _microtestClient.AppointmentsDelete(deleteRequest, userSession);
+                var response = await _microtestClient.AppointmentsDelete(userSession.OdsCode, userSession.NhsNumber, deleteRequest);
                 return InterpretAppointmentsDeleteResponse(response);
             }
             catch (HttpRequestException exception)

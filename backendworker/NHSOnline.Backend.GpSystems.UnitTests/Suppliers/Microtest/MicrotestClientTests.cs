@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -13,6 +14,7 @@ using RichardSzalay.MockHttp;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 using NHSOnline.Backend.Support;
 using UnitTestHelper;
 
@@ -62,9 +64,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             var expectedResponse = _fixture.Create<AppointmentSlotsGetResponse>();
 
-            MockMicrotestHttpRequest(HttpMethod.Get, 
-                "patient/appointment-slots?fromDate=2000-01-01&toDate=2000-01-02", 
-                JsonConvert.SerializeObject(expectedResponse));
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get, "patient/appointment-slots?fromDate=2000-01-01&toDate=2000-01-02")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
 
             var dateRange = new AppointmentSlotsDateRange(fromDate, toDate);
 
@@ -85,9 +88,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
 
             var nonJsonResponse = _fixture.Create<string>();
 
-            MockMicrotestHttpRequest(HttpMethod.Get, 
-                "patient/appointment-slots?fromDate=2000-01-01&toDate=2000-01-02", 
-                nonJsonResponse);
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get, "patient/appointment-slots?fromDate=2000-01-01&toDate=2000-01-02")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", nonJsonResponse);
 
             var dateRange = new AppointmentSlotsDateRange(fromDate, toDate);
 
@@ -98,20 +102,120 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest
             response.StatusCode.Should().Be(500);
         }
 
-        private void MockMicrotestHttpRequest(HttpMethod httpMethod, string path, string response)
+        [TestMethod]
+        public async Task AppointmentsGet_ReturnsAppointmentsGetResponse_WhenValidlyRequested()
         {
-            var httpHeaders = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>(MicrotestClient.HeaderNhsNumber, _nhsNumber.RemoveWhiteSpace()),
-                new KeyValuePair<string, string>(MicrotestClient.HeaderOdsCode, _odsCode)
-            };
+            // Arrange
+            var expectedResponse = _fixture.Create<AppointmentsGetResponse>();
 
             _mockHttpHandler
-                .WhenMicrotest(httpMethod, path)
-                .WithHeaders(httpHeaders)
-                .Respond("application/json", response);
+                .WhenMicrotest(HttpMethod.Get, "patient/appointments")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
         }
 
+        [TestMethod]
+        public async Task AppointmentsGet_ReturnsInternalServerError_WhenResponseIsNotJson()
+        {
+            // Arrange
+            var nonJsonResponse = _fixture.Create<string>();
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get, "patient/appointments")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", nonJsonResponse);
+
+            // Act
+            var response = await _systemUnderTest.AppointmentsGet(_odsCode, _nhsNumber);
+
+            // Assert
+            response.StatusCode.Should().Be(500);
+        }
+
+
+        [TestMethod]
+        public async Task AppointmentsPost_Returns201Created_WhenValidlyRequested()
+        {
+            // Arrange
+            var request = _fixture.Create<BookAppointmentSlotPostRequest>();
+            const string expectedResponse = "Appointment successfully created.";
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Post, "patient/appointments")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .WithContent(JsonConvert.SerializeObject(request))
+                .Respond(HttpStatusCode.Created, "text/html", expectedResponse);
+            
+            // Act
+            var response = await _systemUnderTest.AppointmentsPost(_odsCode, _nhsNumber, request);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+        
+        [TestMethod]
+        public async Task AppointmentsDelete_Returns204NoContent_WhenValidlyRequested()
+        {
+            // Arrange
+            var request = _fixture.Create<CancelAppointmentDeleteRequest>();
+            const string expectedResponse = "";
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Delete, "patient/appointments")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.NoContent, "text/html", expectedResponse);
+            
+            // Act
+            var response = await _systemUnderTest.AppointmentsDelete(_odsCode, _nhsNumber, request);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+        
+        [TestMethod]
+        public async Task DemographicsGet_ReturnsDemographicsResponse_WhenValidlyRequested()
+        {
+            // Arrange
+            var expectedResponse = _fixture.Create<DemographicsGetResponse>();
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get, "patient/demographics")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _systemUnderTest.DemographicsGet(_odsCode, _nhsNumber);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+        }
+
+        [TestMethod]
+        public async Task DemographicsGet_ReturnsInternalServerError_WhenResponseIsNotJson()
+        {
+            // Arrange
+            var nonJsonResponse = _fixture.Create<string>();
+
+            _mockHttpHandler
+                .WhenMicrotest(HttpMethod.Get, "patient/demographics")
+                .WithMicrotestHeaders(_odsCode, _nhsNumber)
+                .Respond(HttpStatusCode.OK, "application/json", nonJsonResponse);
+
+            // Act
+            var response = await _systemUnderTest.DemographicsGet(_odsCode, _nhsNumber);
+
+            // Assert
+            response.StatusCode.Should().Be(500);
+        }
+        
         public void Dispose()
         {
             _mockHttpHandler.Dispose();

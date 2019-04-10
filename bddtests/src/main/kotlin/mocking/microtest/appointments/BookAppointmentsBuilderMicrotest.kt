@@ -17,7 +17,7 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
 
     init {
         val requestBody = PostAppointmentRequestModel (
-                slotId = request.slotId,
+                slotId = request.slotId.toString(),
                 bookingReason = request.bookingReason.toString())
         requestBuilder
                 .andJsonBody(requestBody)

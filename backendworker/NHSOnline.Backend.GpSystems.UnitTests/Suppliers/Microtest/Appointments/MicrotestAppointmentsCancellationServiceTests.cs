@@ -74,10 +74,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             MicrotestClient.MicrotestApiObjectResponse<string> response)
         {
             _mockMicrotestClient.Setup(x => x.AppointmentsDelete(
+                    _microtestUserSession.OdsCode,
+                    _microtestUserSession.NhsNumber,
                     It.Is<CancelAppointmentDeleteRequest>(
                         p => p.AppointmentId.Equals(AppointmentIdToBeCancelled, StringComparison.Ordinal) &&
-                             p.CancelReason.Equals(CancellationDisplayName, StringComparison.Ordinal)),
-                    It.IsAny<MicrotestUserSession>()
+                             p.CancelReason.Equals(CancellationDisplayName, StringComparison.Ordinal))
                 ))
                 .Returns(Task.FromResult(response))
                 .Verifiable();

@@ -18,11 +18,14 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             string nhsNumber);
 
         Task<MicrotestClient.MicrotestApiObjectResponse<string>> AppointmentsPost(
-            BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest,
-            MicrotestUserSession userSession);
+            string odsCode,
+            string nhsNumber,
+            BookAppointmentSlotPostRequest bookAppointmentSlotPostRequest);
 
         Task<MicrotestClient.MicrotestApiObjectResponse<string>> AppointmentsDelete(
-            CancelAppointmentDeleteRequest cancelAppointmentDeleteRequest, MicrotestUserSession userSession);
+            string odsCode,
+            string nhsNumber,
+            CancelAppointmentDeleteRequest cancelAppointmentDeleteRequest);
 
         Task<MicrotestClient.MicrotestApiObjectResponse<DemographicsGetResponse>> DemographicsGet(
             string odsCode,
