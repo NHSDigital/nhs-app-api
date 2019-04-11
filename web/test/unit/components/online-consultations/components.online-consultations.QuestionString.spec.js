@@ -57,7 +57,7 @@ describe('QuestionString.vue', () => {
 
     it('has a type of text', async () => {
       const input = wrapper.find('input');
-      expect(input.attributes('type').type).toBe('text');
+      expect(input.attributes().type).toBe('text');
     });
   });
 });

@@ -9,16 +9,16 @@
       </span>
 
       <generic-radio-button :key="optionOneKey"
+                            :selected-value="selectedValue"
                             :label="optionOneLabel"
                             :name="name"
                             value="Yes"
-                            :selected-value="value"
                             @select="selected"/>
       <generic-radio-button :key="optionTwoKey"
+                            :selected-value="selectedValue"
                             :label="optionTwoLabel"
                             :name="name"
                             value="No"
-                            :selected-value="value"
                             @select="selected"/>
     </fieldset>
   </div>
@@ -81,8 +81,14 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      selectedValue: this.value,
+    };
+  },
   methods: {
     selected(value) {
+      this.selectedValue = value;
       this.$emit('input', value);
     },
   },
