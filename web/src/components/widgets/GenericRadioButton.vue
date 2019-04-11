@@ -11,7 +11,7 @@
            @click.stop="selected">
     <label :class="[$style['nhsuk-label'], $style['nhsuk-radios__label']]"
            :for="inputId">{{ label }}</label>
-    <span v-if="hint" :id="hintId">{{ hint }}</span>
+    <span v-if="hint" :id="hintId" class="nhsuk-hint nhsuk-radios__hint">{{ hint }}</span>
   </div>
 </template>
 
@@ -74,4 +74,8 @@ export default {
  @import "../../../node_modules/nhsuk-frontend/packages/core/tools/typography";
  @import "../../../node_modules/nhsuk-frontend/packages/components/label/label";
 @import "../../../node_modules/nhsuk-frontend/packages/components/radios/radios";
+
+ .nhsuk-label {
+  color:#212b32
+ }
 </style>

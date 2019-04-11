@@ -1,21 +1,24 @@
 <template>
   <error-group :show-error="showError">
-    <component :is="container" class="radio-group">
-      <legend v-if="header">
-        <h3>{{ header }}</h3>
+    <component :is="container"
+               :class="[$style['nhsuk-fieldset'], $style['nhsuk-form-group--error']]">
+      <legend v-if="header" :class="$style['nhsuk-fieldset__legend']">
+        {{ header }}
       </legend>
       <error-message v-if="errorMessage && showError">
         {{ errorMessage }}
       </error-message>
-      <generic-radio-button v-for="radio in radios"
-                            :key="radio.value"
-                            :selected-value="selectedValue"
-                            :class="{ inline: inline }"
-                            :hint="radio.hint"
-                            :label="radio.label"
-                            :name="name"
-                            :value="radio.value"
-                            @select="selected"/>
+      <div :class="[$style['nhsuk-radios'], inline && $style['nhsuk-radios--inline']]">
+        <generic-radio-button v-for="radio in radios"
+                              :key="radio.value"
+                              :selected-value="selectedValue"
+                              :hint="radio.hint"
+                              :label="radio.label"
+                              :name="name"
+                              :value="radio.value"
+                              :class="$style['nhsuk-radios__item']"
+                              @select="selected"/>
+      </div>
     </component>
   </error-group>
 </template>
@@ -79,9 +82,28 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../style/radiobutton';
+@import "../../node_modules/nhsuk-frontend/packages/core/settings/globals";
+@import "../../node_modules/nhsuk-frontend/packages/core/tools/_ifff";
+@import "../../node_modules/nhsuk-frontend/packages/core/tools/_functions";
+@import "../../node_modules/nhsuk-frontend/packages/core/settings/spacing";
+@import "../../node_modules/nhsuk-frontend/packages/core/tools/spacing";
+@import "../../node_modules/nhsuk-frontend/packages/core/settings/colours";
+@import "../../node_modules/nhsuk-frontend/packages/core/tools/sass-mq";
+@import "../../node_modules/nhsuk-frontend/packages/core/settings/_typography";
+@import "../../node_modules/nhsuk-frontend/packages/core/tools/_typography";
+@import "../../node_modules/nhsuk-frontend/packages/core/tools/_mixins";
+@import "../../node_modules/nhsuk-frontend/packages/core/objects/_form-group";
+@import "../../node_modules/nhsuk-frontend/packages/components/error-message/error-message";
+@import "../../node_modules/nhsuk-frontend/packages/components/fieldset/fieldset";
+@import "../../node_modules/nhsuk-frontend/packages/components/radios/radios";
 
 .nhsuk-fieldset{
  margin-bottom: 16px;
 }
+
+ .nhsuk-radios--inline{
+  display: inline;
+ }
+
 </style>
 

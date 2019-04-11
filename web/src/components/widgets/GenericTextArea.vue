@@ -88,7 +88,7 @@ export default {
  @import "../../../node_modules/nhsuk-frontend/packages/core/tools/sass-mq";
  @import "../../../node_modules/nhsuk-frontend/packages/core/settings/typography";
  @import "../../../node_modules/nhsuk-frontend/packages/core/tools/typography";
-@import "../../../node_modules/nhsuk-frontend/packages/components/input/input";
+@import "../../../node_modules/nhsuk-frontend/packages/components/textarea/textarea";
 
 
 div {

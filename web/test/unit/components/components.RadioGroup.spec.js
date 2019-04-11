@@ -31,7 +31,7 @@ describe('Radio group', () => {
   });
 
   it('will use "div" to group radio buttons', () => {
-    expect(wrapper.find('div.radio-group').exists()).toBe(true);
+    expect(wrapper.find('div').exists()).toBe(true);
   });
 
   it('will display all radio buttons', () => {
@@ -74,7 +74,7 @@ describe('Radio group', () => {
     });
 
     it('will use "fieldset" to group radio buttons', () => {
-      expect(wrapper.find('fieldset.radio-group').exists()).toBe(true);
+      expect(wrapper.find('fieldset').exists()).toBe(true);
     });
 
     it('will use legend to display header', () => {
