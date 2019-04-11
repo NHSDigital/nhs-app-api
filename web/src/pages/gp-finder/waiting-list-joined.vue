@@ -82,9 +82,11 @@ export default {
       this.goToUrl(LOGIN.path);
     },
     backButtonClicked() {
-      this.$store.dispatch('throttling/init');
       this.goToUrl(GP_FINDER.path);
     },
+  },
+  beforeDestroy() {
+    this.$store.dispatch('throttling/init');
   },
 };
 </script>
