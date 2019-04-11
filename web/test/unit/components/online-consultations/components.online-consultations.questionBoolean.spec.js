@@ -14,6 +14,8 @@ describe('question text', () => {
         name: 'name',
         questionId: 'qid',
         text: 'This is a <strong>sample question</strong>?',
+        optionOneLabel: 'LabelOne',
+        optionTwoLabel: 'LabelTwo',
       },
     });
   });
@@ -47,6 +49,8 @@ describe('radio buttons', () => {
         optionOneLabel: 'labelOneText',
         optionTwoLabel: 'labelTwoText',
         name: 'name',
+        text: 'text',
+        questionId: 'qid',
       },
       data: {
         selectedValue: '',
