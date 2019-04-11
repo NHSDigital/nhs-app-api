@@ -30,7 +30,7 @@ open class GpFinderPageStepDefinitions {
         browser.goToApp()
         gpFinderPage.driver.manage().deleteAllCookies()
         browser.goToApp()
-        browser.appendSourceQueryString("ios")
+        //browser.appendSourceQueryString("ios")
         CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.jackJackson)
     }
 
@@ -56,7 +56,7 @@ open class GpFinderPageStepDefinitions {
 
     @When("^I click the link to skip the throttling flow$")
     fun iClickTheLinkToSkipTheThrottlingFlow() {
-        gpFinderPage.clickSkipThrottlingLink()
+        gpFinderPage.clickLoginButton()
     }
 
     @Then("^I see the GP Finder Page$")

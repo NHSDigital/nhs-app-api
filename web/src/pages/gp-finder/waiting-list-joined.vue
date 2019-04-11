@@ -1,39 +1,26 @@
 <template>
-  <div>
-
-    <header :class="[$style.slim]">
-      <h1 :class="[$style.h1]"> {{ getHeaderText }} </h1>
-      <analytics-tracked-tag text="back">
-        <button @click="backButtonClicked">
-          <back-icon/>
-        </button>
+  <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
+    <div>
+      <h2>{{ this.$t('th06.whatHappensNextHeading') }}</h2>
+      <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph1') }}</p>
+      <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph2') }}</p>
+      <p v-else>{{ this.$t('th06.whatHappensNextNotJoinedParagraph') }}</p>
+      <h2>{{ this.$t('th06.untilThenHeading') }}</h2>
+      <p>{{ this.$t('th06.untilThenSymptomsParagraph') }}</p>
+      <p>{{ this.$t('th06.untilThenOrganDonationParagraph') }}</p>
+      <analytics-tracked-tag :text="this.$t('th06.homeButton')">
+        <generic-button :class="$style.goToHomeScreenButton"
+                        :button-classes="[$store.state.device.isNativeApp
+                          ?'button':'button-desktop', 'grey']"
+                        @click="onReturnHomeClicked">
+          {{ this.$t('th06.homeButton') }}
+        </generic-button>
       </analytics-tracked-tag>
-    </header>
-
-    <div v-if="showTemplate" :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
-      <div :class="$style.info">
-        <h2>{{ this.$t('th06.whatHappensNextHeading') }}</h2>
-        <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph1') }}</p>
-        <p v-if="joined">{{ this.$t('th06.whatHappensNextJoinedParagraph2') }}</p>
-        <p v-else>{{ this.$t('th06.whatHappensNextNotJoinedParagraph') }}</p>
-      </div>
-      <div :class="$style.info">
-        <h2>{{ this.$t('th06.untilThenHeading') }}</h2>
-        <p>{{ this.$t('th06.untilThenSymptomsParagraph') }}</p>
-        <p>{{ this.$t('th06.untilThenOrganDonationParagraph') }}</p>
-        <analytics-tracked-tag :text="this.$t('th06.homeButton')">
-          <generic-button :class="$style.goToHomeScreenButton"
-                          :button-classes="['grey', 'button']"
-                          @click="onReturnHomeClicked">
-            {{ this.$t('th06.homeButton') }}
-          </generic-button>
-        </analytics-tracked-tag>
-      </div>
     </div>
   </div>
 </template>
-
 <script>
+/* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import BackIcon from '@/components/icons/BackIcon';
 import HeaderSlim from '@/components/HeaderSlim';
@@ -46,7 +33,6 @@ import get from 'lodash/fp/get';
 import moment from 'moment';
 
 export default {
-  layout: 'throttling',
   components: {
     AnalyticsTrackedTag,
     HeaderSlim,
@@ -67,7 +53,19 @@ export default {
   beforeDestroy() {
     this.$store.dispatch('throttling/init');
   },
+  mounted() {
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.showHeaderSlim();
+      NativeCallbacks.hideWhiteScreen();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  },
   methods: {
+    getHeaderState() {
+      return !this.$store.state.device.isNativeApp
+        ? this.$style.webHeader : this.$style.nativeHeader;
+    },
     onReturnHomeClicked() {
       const betaCookie = this.$store.app.$cookies.get('BetaCookie');
 
@@ -97,10 +95,22 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/info';
-@import '../../style/elements';
-@import '../../style/buttons';
-@import '../../style/throttling/throttling';
-@import '../../style/throttling/gpfindersendemail';
-@import '../../style/headerslim';
+  @import '../../style/elements';
+  @import '../../style/buttons';
+  @import '../../style/throttling/throttling';
+  @import '../../style/throttling/gpfindersendemail';
+  .webHeader {
+    &.web {
+      margin-top: -3.625em;
+    }
+  }
+
+  .nativeHeader {
+    padding: 0 0 3.125em 2.0px;
+  }
+  .throttlingContent {
+    padding-top:0;
+    padding-left:0;
+  }
+
 </style>

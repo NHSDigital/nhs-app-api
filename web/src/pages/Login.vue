@@ -13,7 +13,7 @@
     <no-ssr placeholder="">
       <div :class="$style.throttlingContent">
         <analytics-tracked-tag
-          v-if="showCheckFeaturesLink && isPracticeParticipating"
+          v-if="!hasCookie && isPracticeParticipating"
           :class="[$style.checkFeaturesLink, !$store.state.device.isNativeApp && $style.desktopWeb]"
           :text="$t('login.checkWhatFeaturesYouCanUse')"
           :click-func="resetAndGoToGPFinder"
@@ -21,7 +21,8 @@
           tabindex="0">
           {{ $t('login.checkWhatFeaturesYouCanUse') }}
         </analytics-tracked-tag>
-        <div v-if="!isPracticeParticipating && this.$store.state.device.isNativeApp">
+        <div v-if="!isPracticeParticipating">
+          <br>
           <ul :class="$style['list-menu']">
             <li role="link">
               <analytics-tracked-tag id="btn_organDonation"
@@ -34,19 +35,20 @@
               </analytics-tracked-tag>
             </li>
           </ul>
-          <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
-          <h5>{{ notParticipatingSurgeryName }}</h5>
-          <p>{{ notParticipatingSurgeryAddress }}</p>
-          <analytics-tracked-tag :text="$t('login.notMyGpSurgery')"
-                                 :class="$style.notMySurgeryLink"
-                                 :click-func="resetAndGoToGPFinder"
-                                 href="#"
-                                 tag="a">
-            {{ $t('login.notMyGpSurgery') }}
-          </analytics-tracked-tag>
+          <div v-if="!isPracticeParticipating">
+            <h2 :class="$style.moreFeaturesComingSoon">{{ $t('login.moreFeaturesComingSoon') }}</h2>
+            <h5>{{ notParticipatingSurgeryName }}</h5>
+            <p>{{ notParticipatingSurgeryAddress }}</p>
+            <analytics-tracked-tag :text="$t('login.notMyGpSurgery')"
+                                   :class="$style.notMySurgeryLink"
+                                   :click-func="resetAndGoToGPFinder"
+                                   href="#"
+                                   tag="a">
+              {{ $t('login.notMyGpSurgery') }}
+            </analytics-tracked-tag>
+          </div>
         </div>
-      </div>
-    </no-ssr>
+      </div></no-ssr>
     <div v-if="this.$store.state.device.isNativeApp" :class="$style.appVersion">
       Version {{ this.$store.state.appVersion.webVersion }}
       <span v-if="this.$store.state.appVersion.nativeVersion">
@@ -59,7 +61,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import LoginButton from '@/components/LoginButton';
 import { setCookie } from '@/lib/cookie-manager';
-import { BEGINLOGIN, GP_FINDER } from '@/lib/routes';
+import { BEGINLOGIN } from '@/lib/routes';
 import AuthorisationService from '@/services/authorisation-service';
 import NativeCallbacks from '@/services/native-app';
 import moment from 'moment';
@@ -80,6 +82,7 @@ export default {
       practiceName: undefined,
       practiceAddress: undefined,
       source: this.getSource(),
+      hasCookie: false,
     };
   },
   computed: {
@@ -127,6 +130,7 @@ export default {
           practiceParticipating,
           practiceName: betaCookie.PracticeName,
           practiceAddress: betaCookie.PracticeAddress,
+          hasCookie: true,
         };
       }).catch(() => Promise.resolve());
     }
@@ -134,6 +138,7 @@ export default {
       practiceParticipating: true,
       practiceName: undefined,
       practiceAddress: undefined,
+      hasCookie: false,
     };
   },
   mounted() {
@@ -147,8 +152,8 @@ export default {
     const betaCookie = this.$cookies.get('BetaCookie');
     const throttlingEnabled = this.$store.app.$env.THROTTLING_ENABLED === true || this.$store.app.$env.THROTTLING_ENABLED === 'true';
 
-    if (throttlingEnabled && !betaCookie && this.$store.state.device.isNativeApp) {
-      this.goToUrl(GP_FINDER.path);
+    if (throttlingEnabled && !betaCookie) {
+      this.$store.dispatch('device/goToGPFinder');
       this.isButtonDisabled = true;
       return;
     }
@@ -196,7 +201,7 @@ export default {
           secure: this.$store.app.$env.SECURE_COOKIES,
         },
       });
-      this.goToUrl(GP_FINDER.path);
+      this.$store.dispatch('device/goToGPFinder');
     },
     dynamicStyle(...args) {
       return getDynamicStyle(this, args);

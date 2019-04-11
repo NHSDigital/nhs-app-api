@@ -1,18 +1,16 @@
 <template>
-  <div>
-
-    <header :class="[$style.slim]">
-      <h1 :class="[$style.h1]"> {{ getHeaderText }} </h1>
-      <analytics-tracked-tag text="back">
-        <button @click="backButtonClicked">
-          <back-icon/>
-        </button>
-      </analytics-tracked-tag>
-    </header>
-
-    <div :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
-
+  <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
+    <div>
       <div v-if="noResultsFound">
+        <div :class="$style.searchResult">
+          <p> {{ gpPractices.length + $t('th03.resultsFound') + '\'' + searchQuery + '\'' }}</p>
+          <p v-if="!$store.state.device.isNativeApp">
+            <a tabindex="0" :class="$style['paragraph-link']" role="link"
+               @click="backButtonClicked">
+              {{ $t('th03.searchAgain') }}
+            </a>
+          </p>
+        </div>
         <h2 :key="'noResultsFoundHeader'">
           {{ $t('th03.errors.noResultsFound.noResultsFoundHeader') }}
         </h2>
@@ -56,6 +54,15 @@
       </div>
 
       <ul v-if="!technicalError && !noResultsFound" id="searchResults" :class="$style['list-menu']">
+        <div :class="$style.searchResult">
+          <p> {{ gpPractices.length + $t('th03.resultsFound') + '\'' + searchQuery + '\'' }}</p>
+          <p v-if="!$store.state.device.isNativeApp">
+            <a tabindex="0" :class="$style['paragraph-link']" role="link"
+               @click="backButtonClicked">
+              {{ $t('th03.searchAgain') }}
+            </a>
+          </p>
+        </div>
         <li v-for="gpPractice in gpPractices"
             :key="`gpPractice-${gpPractice.nacsCode}`">
           <analytics-tracked-tag :id="`btnGpPractice-${gpPractice.nacsCode}`"
@@ -74,8 +81,11 @@
 
       <analytics-tracked-tag :text="$t('th03.errors.backButton')">
         <generic-button v-if="tooManyResults || technicalError || noResultsFound"
-                        :button-classes="['grey', 'button']" :class="$style.back"
-                        tabindex="0" @click="backButtonClicked">
+                        :button-classes="[$store.state.device.isNativeApp
+                                            ?'button':'button-desktop',
+                                          'grey']" :class="$style.back"
+                        tabindex="0"
+                        @click="backButtonClicked">
           {{ $t('th03.errors.backButton') }}
         </generic-button>
       </analytics-tracked-tag>
@@ -87,6 +97,7 @@
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import HeaderSlim from '@/components/HeaderSlim';
 import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
@@ -96,17 +107,12 @@ import NativeCallbacks from '@/services/native-app';
 import moment from 'moment';
 
 export default {
-  layout: 'throttling',
   components: {
     AnalyticsTrackedTag,
+    HeaderSlim,
     BackIcon,
     GenericButton,
     MessageDialog,
-  },
-  head() {
-    return {
-      title: `${this.getTitle} - ${this.$t('appTitle')}`,
-    };
   },
   data() {
     const { searchResults, searchQuery } = this.$store.state.throttling;
@@ -128,15 +134,37 @@ export default {
       return this.organisations;
     },
     getHeaderText() {
-      let header = this.$t('th03.header');
+      let header = this.$t('th03.title');
 
       if (this.noResultsFound) {
-        header = this.$t('th03.errors.noResultsFound.header');
+        header = this.$t('th03.errors.noResultsFound.title');
       } else if (this.technicalError) {
-        header = this.$t('th03.errors.serviceUnavailable.header');
+        header = this.$t('th03.errors.serviceUnavailable.title');
       }
-
       return header;
+    },
+    foundNoResults() {
+      return this.$t('th03.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
+    },
+  },
+  mounted() {
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.showHeaderSlim();
+      NativeCallbacks.hideWhiteScreen();
+    } else {
+      window.scrollTo(0, 0);
+    }
+    if (!this.searchQuery ||
+      (!this.organisations && !this.technicalError &&
+       !this.noResultsFound && !this.tooManyResults)) {
+      this.goToUrl(GP_FINDER.path);
+    }
+    this.getTitle();
+  },
+  methods: {
+    getHeaderState() {
+      return !this.$store.state.device.isNativeApp
+        ? this.$style.webHeader : this.$style.nativeHeader;
     },
     getTitle() {
       let title = this.$t('th03.title');
@@ -146,21 +174,9 @@ export default {
       } else if (this.technicalError) {
         title = this.$t('th03.errors.serviceUnavailable.title');
       }
-
+      this.$store.dispatch('header/updateHeaderText', title);
       return title;
     },
-    foundNoResults() {
-      return this.$t('th03.errors.noResultsFound.foundNoResults').replace('{searchQuery}', this.searchQuery);
-    },
-  },
-  mounted() {
-    if (!this.searchQuery ||
-      (!this.organisations && !this.technicalError &&
-       !this.noResultsFound && !this.tooManyResults)) {
-      this.goToUrl(GP_FINDER.path);
-    }
-  },
-  methods: {
     formatAddress(gpPractice) {
       return [gpPractice.address1, gpPractice.address2, gpPractice.address3, gpPractice.city,
         gpPractice.county, gpPractice.postcode].filter(Boolean).join(', ');
@@ -230,8 +246,20 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/listmenu';
-@import '../../style/headerslim';
 @import '../../style/buttons';
 @import '../../style/throttling/throttling';
 @import '../../style/throttling/gpfinderresults';
+.webHeader {
+  &.web {
+    margin-top: -3.625em;
+  }
+}
+
+.nativeHeader {
+  padding: 0 0 3.125em 2.0px;
+}
+.throttlingContent {
+  padding-top:0;
+  padding-left:0;
+}
 </style>

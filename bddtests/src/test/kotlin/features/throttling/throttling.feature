@@ -19,7 +19,7 @@ Feature: Throttling
     When I select a practice which is participating in beta
     Then I see the Practice Participating page
     When I click the 'Continue' button
-    Then I see the CID login page
+    Then I see the NHS login page
 
   Scenario Outline: A user searches can find their GP when searching using a valid postcode or outward code
     Given there is a GP Practice with a postcode like <Postcode>
@@ -56,6 +56,13 @@ Feature: Throttling
     Then I see the GP Search Results Page with 2 search results
     When I select a practice which is participating in beta
     And I click the 'This is not my GP surgery' link
+    Then I see the GP Finder Page
+
+  Scenario: A user can get to the GP Finder Page using the search again link if no results are found
+    Given there are 0 GP Practices for my search criteria
+    When I enter criteria and submit my search in the GP Practice finder
+    Then the No Results Found page for GP Search is visible
+    And I click the 'Search again' link
     Then I see the GP Finder Page
 
   Scenario: A user sees an error message if the NHS Service Search is unavailable
@@ -132,24 +139,6 @@ Feature: Throttling
 
     When I enter an invalid email and submit
     Then I see the invalid email error
-
-  Scenario: A user can get back to Participating page from Sending Email page
-    Given the brothermailer service will return a successful response
-    And there are 2 GP Practices for my search criteria
-    When I enter criteria and submit my search in the GP Practice finder
-    Then I see the GP Search Results Page with 2 search results
-
-    When I select a practice which is not participating in beta
-    Then I see the Practice Not Participating page
-
-    When I click the 'Continue' button
-    Then I see the Sending Email Page
-
-    When I click the back button on Sending Email page
-    Then I see the Practice Not Participating page
-
-    When I click the 'Continue' button
-    Then I see the Sending Email Page
 
   Scenario: A users sees an error if Brothermailer email registration service is down
     Given the brothermailer service is down

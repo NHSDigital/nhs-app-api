@@ -6,7 +6,7 @@ h2 {
 
 ul.list-menu {
   border-top:none !important;
-  
+
   li {
     padding-left: 0;
 
@@ -31,7 +31,7 @@ ul.suggestions {
    color: $dark_grey;
    font-weight: 700;
 }
- 
+
 .no-decoration {
   text-decoration: none;
 }
@@ -58,6 +58,12 @@ ul.suggestions {
 
   hr {
     margin-top: 1em;
+  }
+}
+
+.searchResult {
+  p {
+    padding-bottom: 1em;
   }
 }
 

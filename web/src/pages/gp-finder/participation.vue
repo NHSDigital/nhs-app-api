@@ -1,17 +1,6 @@
 <template>
-  <div>
-
-    <header :class="[$style.slim]">
-      <h1 :class="[$style.h1]"> {{ getHeaderText }} </h1>
-      <analytics-tracked-tag text="back">
-        <button @click="backButtonClicked">
-          <back-icon/>
-        </button>
-      </analytics-tracked-tag>
-    </header>
-
-    <div v-if="showTemplate" :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
-
+  <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
+    <div>
       <h2>{{ `${$t('th04.featuresHeader')} ${practiceName}` }}</h2>
       <analytics-tracked-tag :text="$t('th04.ctaNotMySurgery')"
                              :click-func="backButtonClicked"
@@ -54,15 +43,17 @@
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
         <analytics-tracked-tag :text="this.$t('th04.ctaContinue')">
-          <generic-button :class="$style.continue" :button-classes="['green', 'button']">
+          <generic-button :class="$style.continue" :button-classes="[$store.state.device.isNativeApp
+            ?'button':'button-desktop', 'green']">
             {{ this.$t('th04.ctaContinue') }}
           </generic-button>
         </analytics-tracked-tag>
       </form>
 
       <analytics-tracked-tag v-else :text="this.$t('th04.ctaContinue')">
-        <generic-button :button-classes="['green', 'button']" :class="$style.continue"
-                        @click="continueButtonClicked">
+        <generic-button :button-classes="[$store.state.device.isNativeApp
+                          ?'button':'button-desktop', 'green',]" :class="$style.continue"
+                        @click="notParticipatingCTAClicked">
           {{ this.$t('th04.ctaContinue') }}
         </generic-button>
       </analytics-tracked-tag>
@@ -73,9 +64,10 @@
     </div>
   </div>
 </template>
-
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import NativeCallbacks from '@/services/native-app';
+import HeaderSlim from '@/components/HeaderSlim';
 import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import { GP_FINDER, BEGINLOGIN, GP_FINDER_SENDING_EMAIL } from '@/lib/routes';
@@ -83,8 +75,8 @@ import AuthorisationService from '@/services/authorisation-service';
 import get from 'lodash/fp/get';
 
 export default {
-  layout: 'throttling',
   components: {
+    HeaderSlim,
     AnalyticsTrackedTag,
     BackIcon,
     GenericButton,
@@ -134,13 +126,22 @@ export default {
     return {};
   },
   mounted() {
-    if (!this.$store.state.throttling.selectedGpPractice) {
-      this.$store.dispatch('throttling/init');
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.showHeaderSlim();
+      NativeCallbacks.hideWhiteScreen();
+    } else {
+      window.scrollTo(0, 0);
+    }
+    if (!get('selectedGpPractice.ODSCode')(this.$store.state.throttling)) {
       this.goToUrl(GP_FINDER.path);
     }
   },
   methods: {
-    continueButtonClicked() {
+    getHeaderState() {
+      return !this.$store.state.device.isNativeApp
+        ? this.$style.webHeader : this.$style.nativeHeader;
+    },
+    notParticipatingCTAClicked() {
       this.goToUrl(GP_FINDER_SENDING_EMAIL.path);
     },
     backButtonClicked() {
@@ -153,7 +154,20 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/buttons';
-@import "../../style/headerslim";
 @import '../../style/throttling/throttling';
 @import '../../style/throttling/gpfinderparticipation';
+.webHeader {
+  &.web {
+    margin-top: -3.625em;
+  }
+}
+
+.nativeHeader {
+  padding: 0 0 3.125em 2.0px;
+}
+.throttlingContent {
+  padding-top:0;
+  padding-left:0;
+}
+
 </style>

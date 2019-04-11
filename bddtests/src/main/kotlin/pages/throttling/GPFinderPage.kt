@@ -19,9 +19,9 @@ class GPFinderPage : HybridPageObject() {
             page = this
     )
 
-    private val alreadyUsingAppLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(), \"I'm already using the NHS App\")]",
-            webMobileLocator = "//a[contains(text(), \"I'm already using the NHS App\")]",
+    private val loginButton = HybridPageElement(
+            webDesktopLocator = "//button[contains(text(), \"Login to NHS App\")]",
+            webMobileLocator = "//button[contains(text(), \"Login to NHS App\")]",
             androidLocator = null,
             page = this
     )
@@ -60,8 +60,8 @@ class GPFinderPage : HybridPageObject() {
         continueButton.element.click()
     }
 
-    fun clickSkipThrottlingLink() {
-        alreadyUsingAppLink.click()
+    fun clickLoginButton() {
+        loginButton.click()
     }
 
     fun isSearchCriteriaErrorMessageShown(): Boolean {

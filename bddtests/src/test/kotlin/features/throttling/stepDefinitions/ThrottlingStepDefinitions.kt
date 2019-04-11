@@ -29,8 +29,8 @@ open class ThrottlingStepDefinitions {
 
     private val mockingClient = MockingClient.instance
 
-    lateinit var cidAccountCreationPage: CIDAccountCreationPage
     lateinit var login: LoginPage
+    lateinit var cidAccountCreationPage: CIDAccountCreationPage
 
     @Given("^the brothermailer service is down$")
     fun theBrotherMailerServiceIsDown() {
@@ -105,8 +105,8 @@ open class ThrottlingStepDefinitions {
         login.recordMyOrganDonationDecisionLink.assertIsVisible()
     }
 
-    @Then("^I see the CID login page$")
-    fun iSeeTheCIDLoginPage() {
+    @Then("^I see the NHS login page$")
+    fun iSeeTheNHSLoginPage() {
         assertTrue(cidAccountCreationPage.isVisible())
     }
 }

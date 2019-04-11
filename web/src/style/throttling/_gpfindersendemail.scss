@@ -7,6 +7,9 @@ h2:not(:first-of-type) {
     margin-top: 1em;
 }
 
+p:last-of-type {
+  margin-top: 1em;
+}
 h4 {
   letter-spacing: initial;
 }

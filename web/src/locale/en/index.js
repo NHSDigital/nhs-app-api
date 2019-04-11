@@ -1201,6 +1201,10 @@ export default {
     notMyGpSurgery: 'This isn\'t my GP surgery',
     checkWhatFeaturesYouCanUse: 'Check what features you can use',
   },
+  loginBanner: {
+    alreadyHaveNHSLogin: 'Already have an NHS Login?',
+    loginLink: 'Login to NHS App',
+  },
   surveyBar: {
     barText: 'Help us make this service better.',
     linkText: ' Complete our quick survey.',
@@ -1280,6 +1284,8 @@ export default {
   th03: {
     header: 'Select your GP surgery',
     title: 'Select your GP surgery',
+    resultsFound: ' result(s) for : ',
+    searchAgain: 'Search again',
     errors: {
       backButton: 'Back',
       serviceUnavailable: {

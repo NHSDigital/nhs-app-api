@@ -1,6 +1,10 @@
 <template>
-  <div v-if="versionCheckComplete && throttlingEnabled" :class="$style.flexContainer">
-    <analytics-tracked-tag id="help_icon"
+  <div :class="[getHeaderState(),
+                $store.state.device.isNativeApp? $style.flexContainer : '',
+                'pull-content',
+                $store.state.device.isNativeApp && $style.web]">
+    <analytics-tracked-tag v-if="$store.state.device.isNativeApp"
+                           id="help_icon"
                            :class="$style['help-icon']"
                            :href="helpAndSupportURL"
                            tag="a"
@@ -9,8 +13,8 @@
                            tabindex="-1">
       <help-icon/>
     </analytics-tracked-tag>
-
-    <div :class="[$style.throttlingHeader, $style['header-container']]">
+    <div v-if="$store.state.device.isNativeApp"
+         :class="[$style.throttlingHeader, $style['header-container']]">
       <header>
         <div :class="$style.spacer" />
         <nhs-logo :class="$style.nhsoLogo"/>
@@ -18,9 +22,11 @@
       </header>
       <throttling-banner />
     </div>
-
-    <div :class="$style.throttlingContent">
-      <h1>{{ $t('th02.heading1') }}</h1>
+    <div :class="[$style.webHeader,
+                  $style.throttlingContent,
+                  'pull-content',
+                  getDesktopStyle()]">
+      <h1 v-if="$store.state.device.isNativeApp">{{ $t('th02.heading1') }}</h1>
       <h2>{{ $t('th02.heading2') }}</h2>
 
       <p id="search-label">{{ $t('th02.hintText') }}</p>
@@ -38,14 +44,16 @@
                             name="searchQuery"
                             maxlength="150"/>
         <analytics-tracked-tag :text="$t('th02.callToAction')">
-          <generic-button :button-classes="['green', 'button']"
+          <generic-button :button-classes="[$store.state.device.isNativeApp
+                            ?'button':'button-desktop', 'green']"
                           @click.prevent="searchFormSubmitted">
             {{ $t('th02.callToAction') }}
           </generic-button>
         </analytics-tracked-tag>
       </form>
-
-      <analytics-tracked-tag :click-func="hasAnAccountLinkClicked"
+      <login-banner v-if="!$store.state.device.isNativeApp"/>
+      <analytics-tracked-tag v-if="$store.state.device.isNativeApp"
+                             :click-func="hasAnAccountLinkClicked"
                              :text="$t('th02.hasAnAccountLink')"
                              tag="a"
                              tabindex="0">
@@ -58,7 +66,9 @@
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import LoginBanner from '@/components/LoginBanner';
 import GenericButton from '@/components/widgets/GenericButton';
+import HeaderSlim from '@/components/HeaderSlim';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import HelpIcon from '@/components/icons/HelpIcon';
 import NhsLogo from '@/components/icons/NhsLogo';
@@ -69,14 +79,15 @@ import NativeCallbacks from '@/services/native-app';
 import moment from 'moment';
 
 export default {
-  layout: 'throttling',
   components: {
     NhsLogo,
     HelpIcon,
     ThrottlingBanner,
+    LoginBanner,
     ErrorMessage,
     GenericTextInput,
     GenericButton,
+    HeaderSlim,
     AnalyticsTrackedTag,
   },
   data() {
@@ -89,11 +100,11 @@ export default {
     };
   },
   computed: {
+    getHeaderText() {
+      return this.$store.state.header.headerText;
+    },
     showError() {
       return this.submissionError;
-    },
-    throttlingEnabled() {
-      return this.$store.app.$env.THROTTLING_ENABLED;
     },
   },
   beforeCreate() {
@@ -102,9 +113,11 @@ export default {
     }
   },
   mounted() {
-    if (!this.throttlingEnabled) {
-      this.goToUrl(LOGIN.path);
-      return;
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.hideHeader();
+      NativeCallbacks.hideWhiteScreen();
+    } else {
+      window.scrollTo(0, 0);
     }
     this.$nextTick(() => {
       if (process.client) {
@@ -169,6 +182,14 @@ export default {
       this.goToUrl(GP_FINDER_RESULTS.path);
 
       this.submitting = false;
+    },
+    getHeaderState() {
+      return !this.$store.state.device.isNativeApp
+        ? this.$style.webHeader : this.$style.nativeHeader;
+    },
+    getDesktopStyle() {
+      return !this.$store.state.device.isNativeApp
+        ? this.$style.desktopContent : '';
     },
     processQuery(searchQuery) {
       let processedQuery;
@@ -250,11 +271,29 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/buttons';
-@import '../../style/throttling/throttling';
-@import '../../style/throttling/gpfindersearch';
+  @import '../../style/buttons';
+  @import '../../style/throttling/throttling';
+  @import '../../style/throttling/gpfindersearch';
 
-.inputSpacing{
- margin-bottom: 1em;
-}
+  .inputSpacing{
+    margin-bottom: 1em;
+  }
+  .webHeader {
+    &.web {
+      margin-top: -3.625em;
+    }
+  }
+
+  .desktopContent {
+    padding-top:0;
+    padding-left:0;
+    h2 {
+      font-size: 1.375em;
+    }
+    p {
+      color:#212B32;
+      font-size: 1.1em;
+    }
+  }
 </style>
+

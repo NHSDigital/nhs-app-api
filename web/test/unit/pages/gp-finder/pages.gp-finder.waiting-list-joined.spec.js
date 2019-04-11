@@ -8,6 +8,9 @@ describe('Waiting List Joined/Not Joined page', () => {
         header: {
           headerText: '',
         },
+        device: {
+          isNativeApp: true,
+        },
       },
     });
     mount(WaitingListJoinedPage, {

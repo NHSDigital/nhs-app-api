@@ -6,6 +6,7 @@ import pages.HybridPageObject
 import pages.HybridPageElement
 
 open class CIDAccountCreationPage : HybridPageObject() {
+
     val mockPatientInput = HybridPageElement(
             webDesktopLocator = "//input[@name='mock_patient']",
             androidLocator = null,

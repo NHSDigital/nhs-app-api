@@ -30,7 +30,7 @@ h3 {
   margin-bottom: 0.5em;
   padding-left: 1em;
   left: -0.5rem;
-  list-style: url('~assets/icon_checked_tick.svg'); 
+  list-style: url('~assets/icon_checked_tick.svg');
 }
 
 .unavailableFeatures {
@@ -51,7 +51,8 @@ h3 {
 
 .linkBack{
   text-decoration: underline;
-  font-weight: bold;
+  /* TODO: Needed for native?
+  /* font-weight: bold; */
   font-size: 1em;
   box-sizing: content-box;
   color: $nhs_blue;

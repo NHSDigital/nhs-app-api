@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import SymptomBanner from '@/components/SymptonBanner';
+import SymptomBanner from '@/components/SymptomBanner';
 import NhsLogo from '@/components/icons/NhsLogo';
 import HelpIcon from '../components/icons/HelpIcon';
 

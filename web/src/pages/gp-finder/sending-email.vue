@@ -1,17 +1,9 @@
 <template>
-  <div>
-
-    <header :class="[$style.slim]">
-      <h1 :class="[$style.h1]"> {{ getHeaderText }} </h1>
-      <analytics-tracked-tag text="back">
-        <button @click="backButtonClicked">
-          <back-icon/>
-        </button>
-      </analytics-tracked-tag>
-    </header>
-
-    <div :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
-      <h3>{{ this.$t('th05.emailFeatureText') }}</h3>
+  <div :class="[getHeaderState(), 'pull-content', $store.state.device.isNativeApp && $style.web]">
+    <div>
+      <h3 :class="[$style.h1]">
+        {{ this.$t('th05.emailFeatureText') }}
+      </h3>
 
       <form :class="$style.signup" @submit.prevent="signupFormSubmitted">
         <error-message v-if="choiceError" id="choice-error-label" role="alert"
@@ -59,8 +51,9 @@
                               @select="radioButtonSelected"/>
 
         <analytics-tracked-tag :text="this.$t('th05.callToAction')">
-          <generic-button :button-classes="['green', 'button']"
-                          @click.prevent="signupFormSubmitted">
+          <generic-button :button-classes="[$store.state.device.isNativeApp
+                                              ?'button':'button-desktop',
+                                            'green']" @click.prevent="signupFormSubmitted">
             {{ this.$t('th05.callToAction') }}
           </generic-button>
         </analytics-tracked-tag>
@@ -68,20 +61,22 @@
     </div>
   </div>
 </template>
-
 <script>
+/* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import NativeCallbacks from '@/services/native-app';
+import HeaderSlim from '@/components/HeaderSlim';
 import BackIcon from '@/components/icons/BackIcon';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
-import { GP_FINDER, GP_FINDER_PARTICIPATION, GP_FINDER_WAITING_LIST_JOINED } from '@/lib/routes';
+import { GP_FINDER_PARTICIPATION, GP_FINDER_WAITING_LIST_JOINED } from '@/lib/routes';
 import get from 'lodash/fp/get';
 
 export default {
-  layout: 'throttling',
   components: {
+    HeaderSlim,
     AnalyticsTrackedTag,
     BackIcon,
     ErrorMessage,
@@ -105,7 +100,7 @@ export default {
   computed: {
     showError() {
       return this.submissionError || this.connectionError ||
-             this.invalidEmailError || this.notEnteredEmailError;
+          this.invalidEmailError || this.notEnteredEmailError;
     },
     getHeaderText() {
       return this.$store.state.header.headerText;
@@ -134,11 +129,18 @@ export default {
     },
   },
   mounted() {
-    if (!get('selectedGpPractice.ODSCode')(this.$store.state.throttling)) {
-      this.goToUrl(GP_FINDER.path);
+    if (this.$store.state.device.isNativeApp) {
+      NativeCallbacks.showHeaderSlim();
+      NativeCallbacks.hideWhiteScreen();
+    } else {
+      window.scrollTo(0, 0);
     }
   },
   methods: {
+    getHeaderState() {
+      return !this.$store.state.device.isNativeApp
+        ? this.$style.webHeader : this.$style.nativeHeader;
+    },
     backButtonClicked() {
       this.$store.dispatch('throttling/setWaitingListChoice', undefined);
       this.goToUrl(GP_FINDER_PARTICIPATION.path);
@@ -208,10 +210,23 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/forms';
-@import '../../style/elements';
-@import '../../style/buttons';
-@import '../../style/throttling/throttling';
-@import '../../style/throttling/gpfindersendemail';
-@import '../../style/headerslim';
+  @import '../../style/forms';
+  @import '../../style/elements';
+  @import '../../style/buttons';
+  @import '../../style/throttling/throttling';
+  @import '../../style/throttling/gpfindersendemail';
+  .webHeader {
+    &.web {
+      margin-top: -3.625em;
+    }
+  }
+
+  .nativeHeader {
+    padding: 0 0 3.125em 2.0px;
+  }
+  .throttlingContent {
+    padding-top:0;
+    padding-left:0;
+  }
+
 </style>

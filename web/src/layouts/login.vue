@@ -61,7 +61,7 @@ import NativeCallbacks from '@/services/native-app';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
-import SymptomBanner from '@/components/SymptonBanner';
+import SymptomBanner from '@/components/SymptomBanner';
 import BetaBanner from '@/components/BetaBanner';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 import CookieBanner from '../components/CookieBanner';
