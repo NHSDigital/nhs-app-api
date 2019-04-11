@@ -118,8 +118,8 @@ services:
       - OnlineConsultationsProvidersSettings__Providers__0__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8080/
       - OnlineConsultationsProvidersSettings__Providers__0__BearerToken=shfjlkasdhflashfl
   nhsonline.stubs:
-    image: nhsapp.azurecr.io/wiremock:2.17.0-alpine
-    command: --local-response-templating
+    image: nhsapp.azurecr.io/wiremock:2.22.0-alpine
+    command: --local-response-templating --verbose
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
