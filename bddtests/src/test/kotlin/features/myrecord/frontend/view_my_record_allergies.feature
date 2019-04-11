@@ -9,24 +9,26 @@ Feature: View My Medical Record Information - Allergies
     And I see the Allergies and adverse reactions section collapsed on My Record
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
-      |VISION|
+      | Service |
+      | EMIS    |
+      | TPP     |
+      | VISION  |
 
 
-  Scenario Outline: A <Service> user does not have Summary Care Record access who is disabled at practice-level or patient level
+  Scenario Outline: A <Service> user without Summary Care Record access cannot view allergies section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
     But the GP Practice has disabled allergies functionality
     And I am on my record information page
-    Then I see Service not offered by GP or to specific user or access revoked warning message
+    Then I do not see the Allergies and adverse reactions heading on My Record
+    But I see the test result heading
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
-      |VISION|
+      | Service |
+      | EMIS    |
+      | TPP     |
+      | VISION  |
+
 
   Scenario Outline: A <Service> user has no allergies on their record
     Given the my record wiremocks are initialised for <Service>
@@ -37,10 +39,11 @@ Feature: View My Medical Record Information - Allergies
     Then I see a message indicating that I have no information recorded for Allergies and adverse reactions on My Record
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
-      |VISION|
+      | Service |
+      | EMIS    |
+      | TPP     |
+      | VISION  |
+
 
   Scenario Outline: A <Service> user has one or more allergy records
     Given the my record wiremocks are initialised for <Service>
@@ -51,9 +54,10 @@ Feature: View My Medical Record Information - Allergies
     And I see one or more drug type allergies record displayed
 
     Examples:
-      |Service|
-      |EMIS|
-      |TPP|
+      | Service |
+      | EMIS    |
+      | TPP     |
+
 
   Scenario: An EMIS user has multiple allergies with different date display formats
     Given the my record wiremocks are initialised for EMIS
@@ -63,6 +67,7 @@ Feature: View My Medical Record Information - Allergies
     When I click the Allergies and adverse reactions section on My Record
     And I see 5 allergies with different date formats
 
+
   Scenario: A VISION user has a drug and non drug allergy record
     Given the my record wiremocks are initialised for VISION
     And the GP Practice has enabled demographics functionality
@@ -70,6 +75,7 @@ Feature: View My Medical Record Information - Allergies
     And I am on my record information page
     When I click the Allergies and adverse reactions section on My Record
     Then I see a drug and non drug allergy record from VISION
+
 
   Scenario: A VISION user is shown an appropriate error message when an unknown error occurs retrieving their allergies
     Given the my record wiremocks are initialised for VISION

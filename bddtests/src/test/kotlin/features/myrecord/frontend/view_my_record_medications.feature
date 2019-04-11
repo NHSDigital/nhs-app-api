@@ -44,12 +44,15 @@ Feature: View My Medical Record Information - Medications
       | VISION  |
 
 
-  Scenario Outline: A <Service> user has no access to view medications
+  Scenario Outline: A <Service> user cannot view medications when they cannot access their Summary Care Record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
     And the GP Practice has disabled summary care record functionality
     And I am on my record information page
-    Then I see a message indicating that I have no access to view my summary care record
+    Then I do not see the Acute (short-term) medications heading on My Record
+    And I do not see the Repeat medications: current heading on My Record
+    And I do not see the Repeat medications: discontinued heading on My Record
+    But I see the test result heading
 
     Examples:
       | Service |

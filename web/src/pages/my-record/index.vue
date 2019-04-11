@@ -19,12 +19,15 @@
                          :patient-details="$store.state.myRecord.patientDetails"/>
       </div>
 
-      <div v-if="hasSummaryRecordAccess" :class="$style.summaryRecordContainer">
-        <scr-emis v-if="supplier === 'EMIS'" :record="$store.state.myRecord.record"/>
+      <div v-if="hasRecordAccess()" :class="$style.summaryRecordContainer">
 
-        <scr-tpp v-if="supplier === 'TPP'" :record="$store.state.myRecord.record"/>
+        <template v-if="hasSummaryRecordAccess">
+          <scr-emis v-if="supplier === 'EMIS'" :record="$store.state.myRecord.record"/>
 
-        <scr-vision v-if="supplier === 'VISION'" :record="$store.state.myRecord.record"/>
+          <scr-tpp v-if="supplier === 'TPP'" :record="$store.state.myRecord.record"/>
+
+          <scr-vision v-if="supplier === 'VISION'" :record="$store.state.myRecord.record"/>
+        </template>
 
         <div v-if="hasDetailedRecordAccess">
 
@@ -139,6 +142,9 @@ export default {
         default:
           break;
       }
+    },
+    hasRecordAccess() {
+      return this.hasSummaryRecordAccess || this.hasDetailedRecordAccess;
     },
   },
 };

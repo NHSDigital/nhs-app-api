@@ -8,6 +8,8 @@ import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
+import pages.assertElementNotPresent
+
 
 const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
 
@@ -78,6 +80,10 @@ class MyRecordInfoPage : HybridPageObject() {
         MyRecordWrapper(header, this).header.assertSingleElementPresent().assertIsVisible()
     }
 
+    fun assertSectionHeaderNotPresent(header: String) {
+        MyRecordWrapper(header, this).header.assertElementNotPresent()
+    }
+
     fun getSection(header: String): MyRecordWrapper {
         return MyRecordWrapper(header, this)
     }
@@ -127,10 +133,6 @@ class MyRecordInfoPage : HybridPageObject() {
                         page = this)
 
         return sectionPageHeader.element.isVisible
-    }
-
-    fun isExaminationsTextMsgVisible(): Boolean {
-        return examinations.firstParagraph.isCurrentlyVisible
     }
 
     fun getSummaryCareNoAccessMessage(): String {

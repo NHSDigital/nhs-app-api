@@ -242,6 +242,11 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.assertSectionHeaderIsVisible(heading)
     }
 
+    @Then("^I do not see the (.*) heading on My Record$")
+    fun iDoNotSeeTheHeadingOnMyRecord(heading: String) {
+        myRecordInfoPage.assertSectionHeaderNotPresent(heading)
+    }
+
     @Then("^I see the (.*) section collapsed on My Record$")
     fun iSeeTheSectionCollapsed(heading: String) {
         val section = myRecordInfoPage.getSection(heading)
