@@ -13,13 +13,14 @@
     <div :class="[$style.webHeader, $style.throttlingContent, 'pull-content']">
       <h3>{{ this.$t('th05.emailFeatureText') }}</h3>
 
-      <form :class="$style.signup" @submit.prevent="joinWaitingListFormSubmitted">
+      <form :class="$style.signup" @submit.prevent="signupFormSubmitted">
         <error-message v-if="choiceError" id="choice-error-label" role="alert"
                        aria-live="assertive">
           {{ this.$t('th05.choiceError') }}
         </error-message>
         <generic-radio-button :class="$style.choiceRadioButton"
                               :label="$t('th05.yesRadioButtonText')"
+                              :selected-value="$store.state.throttling.waitingListChoice"
                               value="yes"
                               name="choice"
                               @select="radioButtonSelected"/>
@@ -52,12 +53,14 @@
 
         <generic-radio-button :class="[$style.choiceRadioButton, $style.last]"
                               :label="$t('th05.noRadioButtonText')"
+                              :selected-value="$store.state.throttling.waitingListChoice"
                               value="no"
                               name="choice"
                               @select="radioButtonSelected"/>
 
         <analytics-tracked-tag :text="this.$t('th05.callToAction')">
-          <generic-button :button-classes="['green', 'button']" @click="callToActionClicked">
+          <generic-button :button-classes="['green', 'button']"
+                          @click.prevent="signupFormSubmitted">
             {{ this.$t('th05.callToAction') }}
           </generic-button>
         </analytics-tracked-tag>
@@ -88,6 +91,7 @@ export default {
   },
   data() {
     return {
+      submitting: false,
       connectionError: false,
       invalidEmailError: false,
       notEnteredEmailError: false,
@@ -142,20 +146,20 @@ export default {
     radioButtonSelected(value) {
       this.$store.dispatch('throttling/setWaitingListChoice', this.choice = value);
     },
-    async callToActionClicked() {
-      if (this.continueClicked) return;
-      this.continueClicked = true;
+    async signupFormSubmitted() {
+      if (this.submitting) return;
+      this.submitting = true;
 
       this.resetErrors();
 
       if (!this.choice) {
-        this.continueClicked = false;
+        this.submitting = false;
         this.choiceError = true;
         return;
       }
 
       if (this.choice === 'no') {
-        this.continueClicked = false;
+        this.submitting = false;
         this.goToUrl(GP_FINDER_WAITING_LIST_JOINED.path);
         return;
       }
@@ -163,13 +167,13 @@ export default {
       const emailIsValid = this.emailAddress && (this.emailAddress = this.emailAddress.trim());
 
       if (!emailIsValid) {
-        this.continueClicked = false;
+        this.submitting = false;
         this.notEnteredEmailError = true;
         return;
       }
 
       if (this.emailAddress.indexOf('@') === -1) {
-        this.continueClicked = false;
+        this.submitting = false;
         this.invalidEmailError = true;
         return;
       }
@@ -192,10 +196,7 @@ export default {
           this.invalidEmailError = true;
         });
 
-      this.continueClicked = false;
-    },
-    joinWaitingListFormSubmitted() {
-      this.callToActionClicked();
+      this.submitting = false;
     },
     resetErrors() {
       this.choiceError = false;

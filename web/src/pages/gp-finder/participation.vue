@@ -60,7 +60,7 @@
 
       <analytics-tracked-tag v-else :text="this.$t('th04.ctaContinue')">
         <generic-button :button-classes="['green', 'button']" :class="$style.continue"
-                        @click="notParticipatingCTAClicked">
+                        @click="continueButtonClicked">
           {{ this.$t('th04.ctaContinue') }}
         </generic-button>
       </analytics-tracked-tag>
@@ -136,7 +136,7 @@ export default {
     }
   },
   methods: {
-    notParticipatingCTAClicked() {
+    continueButtonClicked() {
       this.goToUrl(GP_FINDER_SENDING_EMAIL.path);
     },
     backButtonClicked() {

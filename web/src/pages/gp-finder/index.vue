@@ -39,7 +39,7 @@
                             maxlength="150"/>
         <analytics-tracked-tag :text="$t('th02.callToAction')">
           <generic-button :button-classes="['green', 'button']"
-                          @click="ctaClicked">
+                          @click.prevent="searchFormSubmitted">
             {{ $t('th02.callToAction') }}
           </generic-button>
         </analytics-tracked-tag>
@@ -82,7 +82,7 @@ export default {
   data() {
     return {
       searchQuery: '',
-      continueClicked: false,
+      submitting: false,
       helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
       submissionError: false,
       versionCheckComplete: false,
@@ -144,18 +144,15 @@ export default {
     });
   },
   methods: {
-    searchFormSubmitted() {
-      this.ctaClicked();
-    },
-    async ctaClicked() {
-      if (this.continueClicked) return;
-      this.continueClicked = true;
+    async searchFormSubmitted() {
+      if (this.submitting) return;
+      this.submitting = true;
 
       const processedQuery = this.processQuery(this.searchQuery);
 
       if (!processedQuery) {
         this.submissionError = true;
-        this.continueClicked = false;
+        this.submitting = false;
         return;
       }
 
@@ -163,7 +160,7 @@ export default {
 
       if (gpSearchResponse.submissionError) {
         this.submissionError = true;
-        this.continueClicked = false;
+        this.submitting = false;
         return;
       }
 
@@ -171,7 +168,7 @@ export default {
       this.$store.dispatch('throttling/setSearchResults', gpSearchResponse);
       this.goToUrl(GP_FINDER_RESULTS.path);
 
-      this.continueClicked = false;
+      this.submitting = false;
     },
     processQuery(searchQuery) {
       let processedQuery;
