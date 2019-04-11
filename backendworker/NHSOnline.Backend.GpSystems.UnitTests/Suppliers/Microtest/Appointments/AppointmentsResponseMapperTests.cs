@@ -4,7 +4,6 @@ using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Appointments;

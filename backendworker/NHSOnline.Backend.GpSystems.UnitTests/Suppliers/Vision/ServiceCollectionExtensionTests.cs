@@ -62,19 +62,19 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
 
         public static void CheckAllVisionPfsRegisteredServices(ServiceCollection services)
         {
-            Suppliers.Vision.Appointments.ServiceCollectionExtensionsTests.CheckRegisteredVisionAppointmentServices(services);
-            Suppliers.Vision.Demographics.ServiceCollectionExtensionsTests.CheckRegisteredVisionDemographicsServices(services);
-            Suppliers.Vision.Envelope.ServiceCollectionExtensionsTests.CheckRegisteredVisionEnvelopeServices(services);
-            Suppliers.Vision.PatientRecord.ServiceCollectionExtensionsTests.CheckRegisteredVisionPatientRecordServices(services);
-            Suppliers.Vision.Prescriptions.ServiceCollectionExtensionsTests.CheckRegisteredVisionPrescriptionsServices(services);
-            Suppliers.Vision.Session.ServiceCollectionExtensionsTests.CheckRegisteredVisionSessionServices(services);
+            Appointments.ServiceCollectionExtensionsTests.CheckRegisteredVisionAppointmentServices(services);
+            Demographics.ServiceCollectionExtensionsTests.CheckRegisteredVisionDemographicsServices(services);
+            Envelope.ServiceCollectionExtensionsTests.CheckRegisteredVisionEnvelopeServices(services);
+            PatientRecord.ServiceCollectionExtensionsTests.CheckRegisteredVisionPatientRecordServices(services);
+            Prescriptions.ServiceCollectionExtensionsTests.CheckRegisteredVisionPrescriptionsServices(services);
+            Session.ServiceCollectionExtensionsTests.CheckRegisteredVisionSessionServices(services);
         }
         
         public static void CheckAllVisionCidRegisteredServices(ServiceCollection services)
         {
-            Suppliers.Vision.Envelope.ServiceCollectionExtensionsTests.CheckRegisteredVisionEnvelopeServices(services);
-            Suppliers.Vision.Im1Connection.ServiceCollectionExtensionsTests.CheckRegisteredVisionIm1ConnectionServices(services);
-            Suppliers.Vision.Linkage.ServiceCollectionExtensionsTests.CheckRegisteredVisionLinkageServices(services);
+            Envelope.ServiceCollectionExtensionsTests.CheckRegisteredVisionEnvelopeServices(services);
+            Im1Connection.ServiceCollectionExtensionsTests.CheckRegisteredVisionIm1ConnectionServices(services);
+            Linkage.ServiceCollectionExtensionsTests.CheckRegisteredVisionLinkageServices(services);
         }
     }
 }

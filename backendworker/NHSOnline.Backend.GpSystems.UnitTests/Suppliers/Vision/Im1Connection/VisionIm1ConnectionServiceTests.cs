@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.GpSystems.Im1Connection.Models;
@@ -32,7 +31,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         private Mock<IVisionClient> _mockVisionClient;
         private Mock<IIm1CacheService> _im1CacheService;
         private Mock<IIm1CacheKeyGenerator> _im1CacheKeyGenerator;
-        private ILogger<VisionIm1ConnectionService> _logger;
         private VisionIm1ConnectionService _systemUnderTest;
 
         [TestInitialize]
@@ -42,7 +40,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             _mockVisionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _im1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
             _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
-            _logger = Mock.Of<ILogger<VisionIm1ConnectionService>>();
             _systemUnderTest = _fixture.Create<VisionIm1ConnectionService>();
         }
 

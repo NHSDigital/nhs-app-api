@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.PfsApi.GpSearch.GpLookup;
+using NHSOnline.Backend.PfsApi.GpSearch;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.GpSearch

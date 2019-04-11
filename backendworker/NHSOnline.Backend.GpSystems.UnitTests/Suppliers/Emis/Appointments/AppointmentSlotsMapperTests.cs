@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public void Map_ReturnsEmptyArray_WhenSessionsInAppointmentsSlotsResponseIsEmpty()
         {
             // Arrange
-            var slotSessions = new List<AppointmentSlotSession>();
+            var slotSessions = Array.Empty<AppointmentSlotSession>();
             
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");

@@ -43,12 +43,12 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
         }
 
         [TestMethod]
-        public void SendAsyc_ThrowsTimoutException_WhenTaskThrowsOperationCancelledException()
+        public void SendAsync_ThrowsTimoutException_WhenTaskThrowsOperationCancelledException()
         {
             var httpRequestMessage = _fixture.Create<HttpRequestMessage>();
             
-            MockHttpMessageHandler _mockHttpHandler = new MockHttpMessageHandler();
-            _mockHttpHandler.Fallback.Respond(async () =>
+            var mockHttpHandler = new MockHttpMessageHandler();
+            mockHttpHandler.Fallback.Respond(async () =>
             {
                 await Task.Delay(10000);
                 return new HttpResponseMessage(HttpStatusCode.OK);
@@ -67,35 +67,35 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 .Returns(expectedRequestId);
 
             var systemUnderTest = _fixture.Create<HttpTimeoutHandler<IHttpRequestIdentifier>>();
-            systemUnderTest.InnerHandler = _mockHttpHandler;
+            systemUnderTest.InnerHandler = mockHttpHandler;
 
             var invoker = new HttpMessageInvoker(systemUnderTest);
             Func<Task> act = async () => { await invoker.SendAsync(httpRequestMessage, new CancellationToken()); };
 
             act.Should().Throw<TimeoutException>().Which.Message.Should().Be(expectedRequestId.ToString());
             
-            _mockHttpHandler.Dispose();
+            mockHttpHandler.Dispose();
         }
         
         [TestMethod]
-        public async Task SendAsyc_ReturnsHttpResponseMessage_WhenSuccessful()
+        public async Task SendAsync_ReturnsHttpResponseMessage_WhenSuccessful()
         {
             var httpRequestMessage = _fixture.Create<HttpRequestMessage>();
             var httpContent = _fixture.Create<HttpContent>();
             
-            MockHttpMessageHandler _mockHttpHandler = new MockHttpMessageHandler();
-            _mockHttpHandler
+            var mockHttpHandler = new MockHttpMessageHandler();
+            mockHttpHandler
                 .When(httpRequestMessage.Method, httpRequestMessage.RequestUri.ToString())
                 .Respond(httpContent);
                 
-            _mockHttpHandler.Fallback.Respond(async () =>
+            mockHttpHandler.Fallback.Respond(async () =>
             {
                 await Task.Delay(10000);
                 return new HttpResponseMessage(HttpStatusCode.OK);
             });
 
             var systemUnderTest = _fixture.Create<HttpTimeoutHandler<IHttpRequestIdentifier>>();
-            systemUnderTest.InnerHandler = _mockHttpHandler;
+            systemUnderTest.InnerHandler = mockHttpHandler;
 
             var invoker = new HttpMessageInvoker(systemUnderTest);
             var result = await invoker.SendAsync(httpRequestMessage, new CancellationToken());
@@ -103,31 +103,31 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             result.Content.Should().BeEquivalentTo(httpContent);
             
-            _mockHttpHandler.Dispose();
+            mockHttpHandler.Dispose();
         }
         
         [TestMethod]
-        public async Task SendAsyc_EmisExtendedTimeout_TimeoutGreaterThanDefault_Successful()
+        public async Task SendAsync_EmisExtendedTimeout_TimeoutGreaterThanDefault_Successful()
         {
             var httpRequestMessage = _fixture.Create<HttpRequestMessage>();
             var httpContent = _fixture.Create<HttpContent>();
             
-            MockHttpMessageHandler _mockHttpHandler = new MockHttpMessageHandler();
-            _mockHttpHandler
+            var mockHttpHandler = new MockHttpMessageHandler();
+            mockHttpHandler
                 .When(httpRequestMessage.Method, httpRequestMessage.RequestUri.ToString())
                 .Respond(httpContent);
 
             httpRequestMessage.Properties.Add(HttpRequestConstants.CustomTimeout,
                 _configurationSettings.EmisExtendedHttpTimeoutSeconds);
             
-            _mockHttpHandler.Fallback.Respond(async () =>
+            mockHttpHandler.Fallback.Respond(async () =>
             {
                 await Task.Delay(3000);
                 return new HttpResponseMessage(HttpStatusCode.OK);
             });
 
             var systemUnderTest = _fixture.Create<HttpTimeoutHandler<IHttpRequestIdentifier>>();
-            systemUnderTest.InnerHandler = _mockHttpHandler;
+            systemUnderTest.InnerHandler = mockHttpHandler;
 
             var invoker = new HttpMessageInvoker(systemUnderTest);
             var result = await invoker.SendAsync(httpRequestMessage, new CancellationToken());
@@ -135,31 +135,31 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             result.Content.Should().BeEquivalentTo(httpContent);
             
-            _mockHttpHandler.Dispose();
+            mockHttpHandler.Dispose();
         }
         
         [TestMethod]
-        public async Task SendAsyc_EmisExtendedTimeout_TimeoutEmisExtendedTimeout_ThrowException()
+        public async Task SendAsync_EmisExtendedTimeout_TimeoutEmisExtendedTimeout_ThrowException()
         {
             var httpRequestMessage = _fixture.Create<HttpRequestMessage>();
             var httpContent = _fixture.Create<HttpContent>();
             
-            MockHttpMessageHandler _mockHttpHandler = new MockHttpMessageHandler();
-            _mockHttpHandler
+            var mockHttpHandler = new MockHttpMessageHandler();
+            mockHttpHandler
                 .When(httpRequestMessage.Method, httpRequestMessage.RequestUri.ToString())
                 .Respond(httpContent);
 
             httpRequestMessage.Properties.Add(HttpRequestConstants.CustomTimeout,
                 _configurationSettings.EmisExtendedHttpTimeoutSeconds);
             
-            _mockHttpHandler.Fallback.Respond(async () =>
+            mockHttpHandler.Fallback.Respond(async () =>
             {
                 await Task.Delay(8000);
                 return new HttpResponseMessage(HttpStatusCode.OK);
             });
 
             var systemUnderTest = _fixture.Create<HttpTimeoutHandler<IHttpRequestIdentifier>>();
-            systemUnderTest.InnerHandler = _mockHttpHandler;
+            systemUnderTest.InnerHandler = mockHttpHandler;
 
             var invoker = new HttpMessageInvoker(systemUnderTest);
             var result = await invoker.SendAsync(httpRequestMessage, new CancellationToken());
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
             result.StatusCode.Should().Be(HttpStatusCode.OK);
             result.Content.Should().BeEquivalentTo(httpContent);
             
-            _mockHttpHandler.Dispose();
+            mockHttpHandler.Dispose();
         }
     }
 }

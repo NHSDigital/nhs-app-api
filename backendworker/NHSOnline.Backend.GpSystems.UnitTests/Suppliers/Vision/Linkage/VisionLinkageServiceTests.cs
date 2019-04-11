@@ -24,8 +24,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
         private VisionLinkageService _systemUnderTest;
         private Mock<IVisionClient> _visionClient;
         private Mock<IVisionLinkageMapper> _visionLinkageMapper;
-        private Mock<IIm1CacheService> _im1CacheService;
-        private Mock<IIm1CacheKeyGenerator> _im1CacheKeyGenerator;
         private IFixture _fixture;
 
         [TestInitialize]
@@ -35,8 +33,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
 
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionLinkageMapper = _fixture.Freeze<Mock<IVisionLinkageMapper>>();
-            _im1CacheService = _fixture.Freeze<Mock<IIm1CacheService>>();
-            _im1CacheKeyGenerator = _fixture.Freeze<Mock<IIm1CacheKeyGenerator>>();
             _systemUnderTest = _fixture.Create<VisionLinkageService>();
         }
 
@@ -50,7 +46,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             var surname = _fixture.Create<string>();
             var dateOfBirth = _fixture.Create<DateTime>();
             var odsCode = _fixture.Create<string>();
-            var cacheKey = _fixture.Create<string>();
             var apiKey = _fixture.Create<string>();
             var linkageKey = _fixture.Create<string>();
 
@@ -117,7 +112,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             string visionApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
         {
             // Arrange
-            var getLinkageKeyResponse = _fixture.Create<LinkageKeyGetResponse>();
             var nhsNumber = _fixture.Create<string>();
             var surname = _fixture.Create<string>();
             var dateOfBirth = _fixture.Create<DateTime>();
@@ -176,7 +170,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Linkage
             var surname = _fixture.Create<string>();
             var dateOfBirth = _fixture.Create<DateTime>();
             var odsCode = _fixture.Create<string>();
-            var cacheKey = _fixture.Create<string>();
             var apiKey = _fixture.Create<string>();
             var linkageKey = _fixture.Create<string>();
             var email = _fixture.Create<string>();

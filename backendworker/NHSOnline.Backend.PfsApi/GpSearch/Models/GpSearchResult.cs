@@ -1,6 +1,4 @@
-﻿using NHSOnline.Backend.PfsApi.GpSearch.GpLookup;
-
-namespace NHSOnline.Backend.PfsApi.GpSearch.Models
+﻿namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 {
     public abstract class GpSearchResult
     {

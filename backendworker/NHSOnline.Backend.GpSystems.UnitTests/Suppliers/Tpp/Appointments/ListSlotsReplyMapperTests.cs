@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;

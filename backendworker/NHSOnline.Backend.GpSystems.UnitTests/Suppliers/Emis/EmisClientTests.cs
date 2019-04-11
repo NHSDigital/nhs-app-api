@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         private IFixture _fixture;
         private Mock<IOptions<ConfigurationSettings>> _settings;
         private ConfigurationSettings _configurationSettings;
-        private Mock<HttpMessageHandler> mockedHandler;
+        private Mock<HttpMessageHandler> _mockedHandler;
 
         [TestInitialize]
         public void TestInitialize()
@@ -546,7 +546,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
             await _systemUnderTest.CoursesGet(userPatientLinkToken, sessionId, endUserSessionId);
 
             // Assert
-            mockedHandler.Protected().Verify(
+            _mockedHandler.Protected().Verify(
                 "SendAsync",
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req =>
@@ -558,8 +558,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
         private void SetupMockedHandlerEmisForEmisCustomTimeout()
         {
-            mockedHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            mockedHandler
+            _mockedHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+            _mockedHandler
                 .Protected()
                 .Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
@@ -573,7 +573,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
                 })
                 .Verifiable();
 
-            var httpClient = new EmisHttpClient(new HttpClient(mockedHandler.Object), _configMock.Object);
+            var httpClient = new EmisHttpClient(new HttpClient(_mockedHandler.Object), _configMock.Object);
 
             _fixture.Inject(_configMock);
             _fixture.Inject(httpClient);
@@ -583,7 +583,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
 
         private void VerifyCustomTimeoutPresentInRequest()
         {
-            mockedHandler.Protected().Verify(
+            _mockedHandler.Protected().Verify(
                 "SendAsync",
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req =>

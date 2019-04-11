@@ -8,13 +8,13 @@ namespace NHSOnline.Backend.Support
 {
     public class OdsCodeMassager : IOdsCodeMassager
     {
-		private static readonly List<string> VisionCIDOdsCodes = new List<string> { "G85075", "G85672" };
+		private static readonly List<string> VisionCidOdsCodes = new List<string> { "G85075", "G85672" };
 
-        private const string VisionTestODSCode = "X00100";
+        private const string VisionTestOdsCode = "X00100";
 
         public bool IsEnabled { get; }
 
-        ILogger<OdsCodeMassager> _logger;
+        private readonly ILogger<OdsCodeMassager> _logger;
 
         public OdsCodeMassager(IConfiguration configuration, ILogger<OdsCodeMassager> logger)
         {
@@ -27,10 +27,10 @@ namespace NHSOnline.Backend.Support
 
         public string CheckOdsCode(string odsCode)
         {
-            if (IsEnabled && VisionCIDOdsCodes.Contains(odsCode.ToUpper(CultureInfo.InvariantCulture)))
+            if (IsEnabled && VisionCidOdsCodes.Contains(odsCode.ToUpper(CultureInfo.InvariantCulture)))
             {
                 _logger.LogInformation($"Before we do the OdsCodeMassage, code is {odsCode}");
-                return VisionTestODSCode;
+                return VisionTestOdsCode;
             }
             return odsCode;
         }

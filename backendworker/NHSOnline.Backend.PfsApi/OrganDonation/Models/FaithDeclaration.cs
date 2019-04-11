@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.Serialization;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Models

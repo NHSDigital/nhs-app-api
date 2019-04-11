@@ -1,11 +1,11 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
-using System.Collections.Generic;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var response = _systemUnderTest.Map(tppPastAppointmentsResponse, tppUpcomingAppointmentsResponse);
 
             // Assert
-            var expectedCancellationReasons = new List<CancellationReason>();
+            var expectedCancellationReasons = Array.Empty<CancellationReason>();
 
             response.CancellationReasons.Should().BeEquivalentTo(expectedCancellationReasons);
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules

@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
             _configuration.Setup(x => x["GP_PROVIDER_ENABLED_EMIS"]).Returns("True");
 
             _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableEmis == true)))
+                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableEmis)))
                 .Verifiable();
 
             // Act
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
             _configuration.Setup(x => x["GP_PROVIDER_ENABLED_VISION"]).Returns("True");
 
             _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableVision == true)))
+                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableVision)))
                 .Verifiable();
 
             // Act
@@ -127,7 +127,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
             _configuration.Setup(x => x["GP_PROVIDER_ENABLED_TPP"]).Returns("True");
 
             _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableTpp == true)))
+                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableTpp)))
                 .Verifiable();
 
             // Act
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.CidApi.UnitTests.DependencyInjection
             _configuration.Setup(x => x["GP_PROVIDER_ENABLED_MICROTEST"]).Returns("True");
 
             _gpSystemRegistrationService
-                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableMicrotest == true)))
+                .Setup(x => x.RegisterCidServices(serviceCollection, It.Is<EnableGpSupplierConfiguration>(config => config.EnableMicrotest)))
                 .Verifiable();
 
             // Act

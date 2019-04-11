@@ -8,7 +8,6 @@ using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {

@@ -35,7 +35,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
         public async Task
             SendEmailAddress_WhenCalledWithMissingEmailAddress_ReturnsBadRequest(string emailAddress)
         {
-
             // Arrange
             var missingEmailRequest = 
                 new BrothermailerRequest
@@ -47,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
             var result = await _brothermailerService.SendEmailAddress(missingEmailRequest);
             
             // Assert
-            var response = result.Should().BeAssignableTo<BrothermailerResult.BadRequest>();
+            result.Should().BeAssignableTo<BrothermailerResult.BadRequest>();
         }
         
         [TestMethod]
@@ -56,7 +55,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
         public async Task
             SendEmailAddress_WhenCalledWithMissingOdscode_ReturnsBadRequest(string odscode)
         {
-
             // Arrange
             var missingOdscodeRequest = 
                 new BrothermailerRequest { OdsCode = odscode };
@@ -65,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
             var result = await _brothermailerService.SendEmailAddress(missingOdscodeRequest);
             
             // Assert
-            var response = result.Should().BeAssignableTo<BrothermailerResult.BadRequest>();
+            result.Should().BeAssignableTo<BrothermailerResult.BadRequest>();
         }
         
         [TestMethod]

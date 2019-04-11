@@ -8,12 +8,12 @@ namespace NHSOnline.Backend.ApiSupport.UnitTests.Middleware
 {
     public class DummyResponseFeature : IHttpResponseFeature
     {
+        private Func<object, Task> _callback;
+        private object _state;
+        
         public Stream Body { get; set; }
 
-        public bool HasStarted
-        {
-            get { return hasStarted; }
-        }
+        public bool HasStarted { get; private set; }
 
         public IHeaderDictionary Headers { get; set; }
 
@@ -28,18 +28,14 @@ namespace NHSOnline.Backend.ApiSupport.UnitTests.Middleware
 
         public void OnStarting(Func<object, Task> callback, object state)
         {
-            this.callback = callback;
-            this.state = state;
+            _callback = callback;
+            _state = state;
         }
-
-        bool hasStarted = false;
-        Func<object, Task> callback;
-        object state;
-
+        
         public Task InvokeCallBack()
         {
-            hasStarted = true;
-            return callback(state);
+            HasStarted = true;
+            return _callback(_state);
         }
     }
 }

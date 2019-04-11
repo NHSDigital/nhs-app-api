@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         [TestMethod]
         public void MapToWithdrawRequest_WithoutId_MapsCorrectly()
         {
-            var result = SuccessfulTest(null);
+            var result = SuccessfulTest();
             result.Id.Should().BeNullOrEmpty();
         }
 

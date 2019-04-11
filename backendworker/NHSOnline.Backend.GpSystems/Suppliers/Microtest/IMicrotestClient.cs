@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using NHSOnline.Backend.GpSystems.Appointments;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 

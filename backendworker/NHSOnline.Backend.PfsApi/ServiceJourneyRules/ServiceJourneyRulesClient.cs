@@ -1,13 +1,7 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.GpSystems;
 using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.ResponseParsers;
 
 namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules

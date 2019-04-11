@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Http;
 
 namespace NHSOnline.Backend.CidApi.Filters

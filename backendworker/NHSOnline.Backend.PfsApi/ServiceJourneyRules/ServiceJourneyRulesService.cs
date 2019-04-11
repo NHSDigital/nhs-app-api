@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.PfsApi.ServiceJourneyRules.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.ServiceJourneyRules

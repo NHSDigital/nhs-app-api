@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers
             html = RemoveEmptyAnchorTags(html);
             
             doc.LoadHtml(html);
-            SanitizeHtmlNode(doc.DocumentNode, doc);
+            SanitizeHtmlNode(doc.DocumentNode);
 
             using (var sw = new StringWriter())
             using (var writer = new XmlTextWriter(sw))
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers
             return Regex.Replace(html, @"<a[^>]*>\s*<\/[^>]*a>", string.Empty);
         }
         
-        private void SanitizeHtmlNode(HtmlNode node, HtmlDocument doc)
+        private void SanitizeHtmlNode(HtmlNode node)
         {
             if (node.NodeType == HtmlNodeType.Element)
             {
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers
             
             for (var i = node.ChildNodes.Count - 1; i >= 0; i--)
             {
-                SanitizeHtmlNode(node.ChildNodes[i], doc);
+                SanitizeHtmlNode(node.ChildNodes[i]);
             }
         }
 

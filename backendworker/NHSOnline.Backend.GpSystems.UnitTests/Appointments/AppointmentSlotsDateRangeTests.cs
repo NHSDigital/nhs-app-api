@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Appointments
         }
         
         [TestMethod]
-        public void SetsDefaultRangeAllBST()
+        public void SetsDefaultRangeAllBst()
         {
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(new DateTime(2019,9,20,12,1,0,0, DateTimeKind.Utc));
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Appointments
         }
         
         [TestMethod]
-        public void SetsDefaultRangeAllUTC()
+        public void SetsDefaultRangeAllUtc()
         {
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(new DateTime(2019,1,4,12,1,0,0, DateTimeKind.Utc));
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Appointments
         }
         
         [TestMethod]
-        public void SetsDefaultStartDateBSTEndDateUTC()
+        public void SetsDefaultStartDateBstEndDateUtc()
         {
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(new DateTime(2019,10,20,12,1,0,0, DateTimeKind.Utc));
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Appointments
         }
         
         [TestMethod]
-        public void SetsDefaultRangeStartDateUTCEndDateBST()
+        public void SetsDefaultRangeStartDateUtcEndDateBst()
         {
             _mockCurrentDateTimeProvider.SetupGet(x => x.UtcNow)
                 .Returns(new DateTime(2019,3,3,0,0,0,0, DateTimeKind.Utc));

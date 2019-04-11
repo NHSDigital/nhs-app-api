@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NHSOnline.Backend.PfsApi.HealthCheck.Models
+namespace NHSOnline.Backend.PfsApi.HealthCheck
 {
     public class HealthCheckResponse
     {

@@ -327,10 +327,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         public async Task Logoff_WhenCalledWithInvalidSession_ReturnsNotAuthenticated()
         {
             // Arrange
-            var notAuthenticatedResponse = _fixture.Build<Error>()
-                .With(x => x.ErrorCode, TppApiErrorCodes.NotAuthenticated)
-                .Create();
-
             _mockTppClient
                 .Setup(x => x.LogoffPost(It.IsAny<TppUserSession>()))
                 .ThrowsAsync(new UnauthorisedGpSystemHttpRequestException());

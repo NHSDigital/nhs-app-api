@@ -1,7 +1,5 @@
-using System.Configuration;
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

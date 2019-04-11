@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Appointments.Models;
-using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 {

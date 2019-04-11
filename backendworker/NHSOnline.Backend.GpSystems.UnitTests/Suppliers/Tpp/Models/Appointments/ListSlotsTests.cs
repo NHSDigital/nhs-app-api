@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
-using NHSOnline.Backend.Support.Temporal;
-using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models.Appointments
 {
@@ -31,12 +25,6 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Models.Appointment
                 PatientId = PatientId,
                 OnlineUserId = OnlineUserId
             };
-
-            var configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
-            var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            var currentDateTimeProvider = new CurrentDateTimeProvider(timeZoneInfoProvider);
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider, currentDateTimeProvider);
 
             var fromDateTime = DateTime.Parse(FromDate, CultureInfo.InvariantCulture);
             var toDateTime = DateTime.Parse(ToDate, CultureInfo.InvariantCulture);

@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             {
                 PastAppointments = new[]
                 {
-                    new Backend.GpSystems.Appointments.Models.PastAppointment
+                    new PastAppointment
                     {
                         StartTime = new DateTimeOffset(DateTime.Parse("2017-12-12T09:30:00", CultureInfo.InvariantCulture)),
                         EndTime = new DateTimeOffset(DateTime.Parse("2017-12-12T09:40:00", CultureInfo.InvariantCulture)),

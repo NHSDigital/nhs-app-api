@@ -200,7 +200,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
         [TestMethod]
         public void MapToRegistrationRequest_WithoutId_MapsCorrectly()
         {
-            var result = SuccessfulOptOutTest(null);
+            var result = SuccessfulOptOutTest();
             result.Id.Should().BeNullOrEmpty();
         }
 

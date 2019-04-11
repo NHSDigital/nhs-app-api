@@ -1,5 +1,4 @@
 using System;
-using System.Security.Policy;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;

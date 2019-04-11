@@ -10,7 +10,6 @@ using Moq.Language.Flow;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics;
-using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Demographics;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
@@ -34,14 +33,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
             _mockMicrotestClient = _fixture.Freeze<Mock<IMicrotestClient>>();
             _mockMicrotestDemographicsMapper = _fixture.Freeze<Mock<IMicrotestDemographicsMapper>>();
             _systemUnderTest = _fixture.Create<MicrotestDemographicsService>();
-
         }
 
         [TestMethod]
         public async Task GetDemographics_Successful()
         {
             // Arrange
-            var response = CreateResponse(HttpStatusCode.OK);
+            var response = CreateResponse();
             var mappedResponse = _fixture.Create<DemographicsResponse>();
 
             SetupDemographicsMapper(response, mappedResponse);

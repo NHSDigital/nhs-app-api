@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             var result = new CourseListResponse
             {
                 Courses = eligibleRepeatsResponse.Repeats.Select(MapRepeatToCourse),
-                SpecialRequestNecessity = eligibleRepeatsResponse.Settings?.AllowFreeText == true ? GpSystems.SharedModels.Necessity.Optional : GpSystems.SharedModels.Necessity.NotAllowed,
+                SpecialRequestNecessity = eligibleRepeatsResponse.Settings?.AllowFreeText == true ? SharedModels.Necessity.Optional : SharedModels.Necessity.NotAllowed,
             };
 
             return result;

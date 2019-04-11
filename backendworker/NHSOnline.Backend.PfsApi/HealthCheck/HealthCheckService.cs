@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Support;
-using NHSOnline.Backend.PfsApi.HealthCheck.Models;
 
 namespace NHSOnline.Backend.PfsApi.HealthCheck
 {

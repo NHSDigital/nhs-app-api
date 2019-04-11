@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 PostcodeSearchPath);            
         }
         
-        public async Task<GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> 
+        public async Task<NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>> 
             GpPostcodeSearch(OrganisationPostcodeSearchData searchData)
         {
             return await Post<OrganisationPostcodeSearchData, NhsOrganisationSearchResponse>(searchData,

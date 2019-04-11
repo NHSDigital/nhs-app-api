@@ -1,6 +1,6 @@
 ﻿using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
-namespace NHSOnline.Backend.PfsApi.GpSearch.GpLookup
+namespace NHSOnline.Backend.PfsApi.GpSearch
 {
     public interface IGpSearchResultVisitor<out T>
     {
@@ -8,6 +8,5 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.GpLookup
         T Visit(GpSearchResult.Unsuccessful result);
         T Visit(GpSearchResult.NhsSearchServiceUnavailable result);
         T Visit(GpSearchResult.BadRequest result);
-        
     }
 }

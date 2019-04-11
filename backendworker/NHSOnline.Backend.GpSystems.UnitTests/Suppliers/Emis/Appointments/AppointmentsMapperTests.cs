@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         public void Map_ReturnsEmptyArray_WhenAppointmentsInResponseIsEmpty()
         {
             // Arrange
-            var appointments = new List<Appointment>();
+            var appointments = Array.Empty<Appointment>();
 
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");

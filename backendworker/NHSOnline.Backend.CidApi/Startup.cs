@@ -24,11 +24,7 @@ using StackExchange.Redis;
 namespace NHSOnline.Backend.CidApi
 {
     public class Startup
-    {
-        private readonly IHostingEnvironment _env;
-        
-        private readonly ILoggerFactory _loggerFactory;
-        
+    {        
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
@@ -39,8 +35,6 @@ namespace NHSOnline.Backend.CidApi
         public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
-            _env = env;
-            _loggerFactory = loggerFactory;
 
             if (env.IsDevelopment())
             {

@@ -110,13 +110,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Ndop
             ndopResponse.Should().BeOfType<GetNdopResult.Unsuccessful>();
         }
 
+        [TestMethod]
         public void GetJwtToken_WhenCalledWithEmptyCredentials_ReturnsUnsuccessfulResponse()
         {
             // Arrange
-            const string key = "401b09eab3c013d4ca54922bb80";
             const string testNhsNumber = "123456789";
-
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
             _ndopSigning.Setup(x => x.GetSigningCredentials()).Returns(() => null);
 
