@@ -31,6 +31,22 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             return Map(secondSource) ?? Map(firstSource);
         }
 
+        private Address Map(Models.Address address)
+        {
+            if (address == null) return null;
+
+            var parts = new List<string>
+                {
+                    address.HouseName,
+                    address.NumberStreet,
+                    address.Village,
+                }
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .ToList();
+
+            return MapPartsToAddress(parts, address.PostCode, address.Town, address.County);
+        }
+
         private Address Map(string fullAddress)
         {
             new ValidateAndLog(_logger)
@@ -38,63 +54,51 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
                 .IsValid();
 
             var postCodeMatches = PostCodeRegex.Matches(fullAddress);
-            string postCode, line;
 
-            if (postCodeMatches.Any())
-            {
-                postCode = postCodeMatches.Last().Value;
-                line = fullAddress.Replace(postCode, string.Empty, StringComparison.Ordinal);
-            }
-            else
-            {
-                postCode = null;
-                line = fullAddress;
-            }
+            new ValidateAndLog(_logger)
+                .IsListPopulated(postCodeMatches, nameof(fullAddress), ValidateAndLog.ValidationOptions.ThrowError)
+                .IsValid();
+            
+            var postCode = postCodeMatches.Last().Value;
+            var line = fullAddress.Replace(postCode, string.Empty, StringComparison.Ordinal);
+            return SplitAddressLineAndMap(line, postCode);
+        }
 
+        private Address SplitAddressLineAndMap(string line, string postCode)
+        {
             var parts = line.Split(Delimiter, StringSplitOptions.RemoveEmptyEntries)
                 .Where(l => !string.IsNullOrWhiteSpace(l))
                 .Select(l => l.Trim())
                 .ToList();
-            
-            return Map(postCode, parts);
-        }
-
-        private Address Map(Models.Address address)
-        {
-            if (address == null) return null;
-            
-            var parts = new List<string> {
-                    address.HouseName,
-                    address.NumberStreet,
-                    address.Village,
-                    address.Town,
-                    address.County
-                }
-                .Where(p => !string.IsNullOrWhiteSpace(p))
-                .ToList();
-
-            return Map(address.PostCode, parts);
-        }
-
-        private Address Map(string postCode, List<string> parts)
-        {
-            var mappedAddress = new Address
-            {
-                PostalCode = postCode
-            };
 
             switch (parts.Count)
             {
-                case int n when n > 4:
-                    mappedAddress.Line = new List<string>(parts.Take(3));
-                    mappedAddress.Line.Add(string.Join($"{Delimiter} ", parts.Skip(3)));
-                    break;
+                case var n when n >= 4:
+                    return MapPartsToAddress(parts.Take(2).ToList(), postCode, parts[2], JoinString(parts.Skip(3)));
+                case 3:
+                    return MapPartsToAddress(parts.Take(2).ToList(), postCode, parts.Last());
                 default:
-                    mappedAddress.Line = parts;
-                    break;
+                    return MapPartsToAddress(parts, postCode);
             }
-
-            return mappedAddress;
         }
+
+        private Address MapPartsToAddress(List<string> parts, string postCode, string city = null, string district = null)
+        {
+            return new Address
+            {
+                Line = parts.Count > 2
+                    ? new List<string>
+                    {
+                        parts.First(),
+                        JoinString(parts.Skip(1)),
+                    }
+                    : parts,
+                City = city,
+                District = district,
+                PostalCode = postCode
+            };
+        }
+
+        private static string JoinString(IEnumerable<string> parts) => string.Join($"{Delimiter} ", parts);
     }
 }

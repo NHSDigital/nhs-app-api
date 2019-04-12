@@ -13,6 +13,8 @@ namespace NHSOnline.Backend.Support
         private bool _argumentsAreValid;
         private readonly List<ArgumentException> _exceptions = new List<ArgumentException>();
 
+        private const string NotSuppliedErrorLogMessage = "The value for '{0}' has not been supplied";
+
         [Flags]
         public enum ValidationOptions
         {
@@ -55,8 +57,7 @@ namespace NHSOnline.Backend.Support
             var match = Regex.Match(value, Constants.OdsCodeFormats.GpPracticeEnglandWales);
             if (!match.Success)
             {
-                _logger.LogError("Invalid Ods code supplied");
-                HandleValueInvalid(name, options);
+                HandleError(name, "Invalid Ods code supplied", options);
             }
 
             return this;
@@ -64,15 +65,9 @@ namespace NHSOnline.Backend.Support
 
         public ValidateAndLog IsSafeString(string value, string name, ValidationOptions options = ValidationOptions.None)
         {
-            if(string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value) && !value.IsSafeString())
             {
-                return this;
-            }
-
-            if (!value.IsSafeString())
-            {
-                _logger.LogError("Unsafe string provided, possible script injection attempt");
-                HandleValueInvalid(name, options);
+                HandleError(name, "Unsafe string provided, possible script injection attempt", options);
             }
 
             return this;
@@ -82,19 +77,13 @@ namespace NHSOnline.Backend.Support
         {
             if(string.IsNullOrWhiteSpace(value) && minLength > 0)
             {
-                HandleMissingValue(name, options);
+                HandleNullError(name, options);
                 return this;
             }
-
-            if(string.IsNullOrWhiteSpace(value))
+            
+            if (!string.IsNullOrWhiteSpace(value) && (value.Length > maxLength || value.Length < minLength))
             {
-                return this;
-            }
-
-            if (value.Length > maxLength || value.Length < minLength)
-            {
-                _logger.LogError("String provided is outside of valid range");
-                HandleValueInvalid(name, options);
+                HandleError(name, "String provided is outside of valid range", options);
             }
 
             return this;
@@ -104,53 +93,31 @@ namespace NHSOnline.Backend.Support
         {
             if(value == null || !value.Any())
             {
-                _logger.LogError("Null or empty list provided but expected a populated list");
-                HandleValueInvalid(name, options);
+                HandleError(name, "Null or empty list provided but expected a populated list", options);
             }
 
             return this;
-        }
-
-        private void HandleMissingValue(string name, ValidationOptions options)
-        {
-            _logger.LogError(string.Format(CultureInfo.InvariantCulture, $"The value for '{name}' has not been supplied"));
-            _argumentsAreValid = false;
-
-            if((options & ValidationOptions.ThrowError) == ValidationOptions.ThrowError)
-            {
-                HandleNullError(name, options);
-            }
-        }
-
-        private void HandleValueInvalid(string name, ValidationOptions options)
-        {
-            _argumentsAreValid = false;
-
-            if ((options & ValidationOptions.ThrowError) == ValidationOptions.ThrowError)
-            {
-                HandleError(name, options);
-            }
         }
 
         public ValidateAndLog HasValue<T>(T value, string name, ValidationOptions options)
         {
             if (value.Equals(default(T)))
             {
-                HandleError(name, options);
+                HandleError(name, NotSuppliedErrorLogMessage, options);
             }
             
             return this;
         }
 
         private void HandleNullError(string name, ValidationOptions options)
-            => HandleError(name, options, paramName => new ArgumentNullException(paramName));
+            => HandleError(name, options, NotSuppliedErrorLogMessage, paramName => new ArgumentNullException(paramName));
         
-        private void HandleError(string name, ValidationOptions options)
-            => HandleError(name, options, paramName => new ArgumentException(paramName, paramName));
+        private void HandleError(string name, string message, ValidationOptions options)
+            => HandleError(name, options, message, paramName => new ArgumentException(paramName, paramName));
         
-        private void HandleError(string name, ValidationOptions options, Func<string, ArgumentException> createException)
+        private void HandleError(string name, ValidationOptions options, string message, Func<string, ArgumentException> createException)
         {
-            _logger.LogError(string.Format(CultureInfo.InvariantCulture, "The value for '{0}' has not been supplied", name));
+            _logger.LogError(string.Format(CultureInfo.InvariantCulture, message, name));
             _argumentsAreValid = false;
 
             if((options & ValidationOptions.ThrowError) == ValidationOptions.ThrowError)
