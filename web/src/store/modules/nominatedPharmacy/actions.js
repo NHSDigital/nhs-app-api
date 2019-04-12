@@ -11,7 +11,9 @@ import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
 const formatWithOpeningTimes = (pharmacy) => {
   const response = Object.assign({}, pharmacy);
-  response.openingTimesFormatted = mapPharmacyDetail(pharmacy.openingTimes);
+  if (pharmacy) {
+    response.openingTimesFormatted = mapPharmacyDetail(pharmacy.openingTimes);
+  }
   return response;
 };
 

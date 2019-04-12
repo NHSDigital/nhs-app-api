@@ -34,6 +34,18 @@ describe('mapping for opening times of nominated pharmacy', () => {
     };
   });
 
+  it('will throw error if opening times is null', () => {
+    expect(() => {
+      mapPharmacyDetail(null);
+    }).toThrow('no opening times provided to map');
+  });
+
+  it('will throw error if opening times is undefined', () => {
+    expect(() => {
+      mapPharmacyDetail(undefined);
+    }).toThrow('no opening times provided to map');
+  });
+
   describe('map openingTimes after formatting', () => {
     let formattedData;
     beforeEach(() => {

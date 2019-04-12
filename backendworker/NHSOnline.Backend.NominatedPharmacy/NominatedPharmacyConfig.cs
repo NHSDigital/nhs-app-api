@@ -11,10 +11,11 @@ namespace NHSOnline.Backend.NominatedPharmacy
         {
             SpineAccreditedSystemIdFrom = configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_FROM", logger);
             SpineAccreditedSystemIdTo = configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_TO", logger);
-            SpineIp = configuration.GetOrWarn("SPINE_IP", logger);
-            SdsRole = configuration.GetOrWarn("SDS_ROLE_ID", logger);
+            PdsQueryFromAddress = configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", logger);
+            PdsQueryTo = configuration.GetOrWarn("PDS_QUERY_TO", logger);
+            PartSdsRoleId = configuration.GetOrWarn("PART_SDS_ROLE_ID", logger);
             SdsUserId = configuration.GetOrWarn("SDS_USER_ID", logger);
-            SdsRoleId = configuration.GetOrWarn("SDS_ROLE_ID", logger);
+            PersonSdsRoleId = configuration.GetOrWarn("PERSON_SDS_ROLE_ID", logger);
             MessageId = Guid.NewGuid().ToString();
             
             var nominatedPharmacyUriString = configuration.GetOrWarn("NOMINATED_PHARMACY_URL", logger);
@@ -31,14 +32,16 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
         public string SpineAccreditedSystemIdTo { get; }
 
-        public string SpineIp { get; }
+        public string PdsQueryFromAddress { get; }
 
-        public string SdsRole { get; }
+        public string PdsQueryTo { get; }
+
+        public string PartSdsRoleId { get; }
 
         public string SdsUserId { get; }
 
-        public string SdsRoleId { get; }
+        public string PersonSdsRoleId { get; }
 
-        public string MessageId { get;  }
+        public string MessageId { get; }
     }
 }

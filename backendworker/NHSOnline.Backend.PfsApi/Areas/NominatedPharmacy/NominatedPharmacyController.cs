@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                     return new OkResult();
                 }
 
-                _logger.LogInformation($"Nominated pharmacy retrieved. Updating nominated pharmacy ods code: { result.PharmacyOdsCode }");
+                _logger.LogInformation($"Nominated pharmacy retrieved with ods code: { result.PharmacyOdsCode }");
 
                 var pharmacyDetailResponse = await _pharmacyService.GetPharmacyDetail(result.PharmacyOdsCode);
 

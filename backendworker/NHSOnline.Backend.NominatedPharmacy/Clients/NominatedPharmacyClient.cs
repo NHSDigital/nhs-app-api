@@ -1,19 +1,7 @@
-﻿using System;
-using System.Globalization;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using NHSOnline.Backend.NominatedPharmacy.ApiModels;
+﻿using System.Threading.Tasks;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using NHSOnline.Backend.NominatedPharmacy.Models;
-using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
-using NHSOnline.Backend.NominatedPharmacy.Soap;
-using NHSOnline.Backend.Support;
-using NHSOnline.Backend.Support.ResponseParsers;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 
 namespace NHSOnline.Backend.NominatedPharmacy.Clients

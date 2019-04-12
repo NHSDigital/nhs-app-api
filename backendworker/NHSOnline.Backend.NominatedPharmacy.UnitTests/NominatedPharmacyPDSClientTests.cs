@@ -11,7 +11,6 @@ using NHSOnline.Backend.Support.ResponseParsers;
 using RichardSzalay.MockHttp;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
-using NHSOnline.Backend.NominatedPharmacy.ApiModels;
 using NHSOnline.Backend.NominatedPharmacy.Clients;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
@@ -30,6 +29,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         private NominatedPharmacyHttpClient _httpClient;
         private static readonly Uri ApiUrl = new Uri("http://spine_nominated_pharmacy_base_url/", UriKind.Absolute);
         private const string GetNominatedPharmacySoapActionName = "urn:nhs:names:services:pdsquery/QUPA_IN000008UK02";
+        private const string PdsPath = "sync-service";
 
         private Mock<IEnvelopeService> _mockEnvelopeService;
 
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
             _mockEnvelopeService
                 .Setup(x => x.BuildEnvelope(
-                    It.Is<PdsRequest<QUPA_IN000008UK02>>(pr => pr.Body == request),
+                    It.Is<QUPA_IN000008UK02>(pr => pr == request),
                     It.Is<IServiceDefinition>(sd => sd.SoapActionName.Equals(GetNominatedPharmacySoapActionName, StringComparison.Ordinal))))
                 .Returns("requestXml")
                 .Verifiable();
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             var responseContent = new StringContent(bodyResponse.SerializeXml());
 
             _mockHttpHandler
-                .WhenNominatedPharmacy(HttpMethod.Post, new Uri(ApiUrl, "syncservice-pds/pds"))
+                .WhenNominatedPharmacy(HttpMethod.Post, new Uri(ApiUrl, PdsPath))
                 .WithContent("requestXml")
                 .WithHeaders("SoapAction", GetNominatedPharmacySoapActionName)
                 .Respond(HttpStatusCode.OK, responseContent);

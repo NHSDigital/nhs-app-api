@@ -331,16 +331,22 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
         {
             [XmlElement(ElementName = "administrativeGenderCode", Namespace = "urn:hl7-org:v3")]
             public AdministrativeGenderCode AdministrativeGenderCode { get; set; }
+
             [XmlElement(ElementName = "birthTime", Namespace = "urn:hl7-org:v3")]
             public BirthTime BirthTime { get; set; }
+
             [XmlElement(ElementName = "playedOtherProviderPatient", Namespace = "urn:hl7-org:v3")]
-            public PlayedOtherProviderPatient PlayedOtherProviderPatient { get; set; }
+            public List<PlayedOtherProviderPatient> PlayedOtherProviderPatients { get; set; }
+
             [XmlElement(ElementName = "COCT_MT000201UK02.PartOfWhole", Namespace = "urn:hl7-org:v3")]
             public COCT_MT000201UK02PartOfWhole COCT_MT000201UK02PartOfWhole { get; set; }
+
             [XmlElement(ElementName = "COCT_MT000203UK02.PartOfWhole", Namespace = "urn:hl7-org:v3")]
             public COCT_MT000203UK02PartOfWhole COCT_MT000203UK02PartOfWhole { get; set; }
+
             [XmlAttribute(AttributeName = "classCode")]
             public string ClassCode { get; set; }
+
             [XmlAttribute(AttributeName = "determinerCode")]
             public string DeterminerCode { get; set; }
         }
@@ -554,25 +560,25 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
         [XmlRoot(ElementName = "QUPA_IN000008UK02", Namespace = "urn:hl7-org:v3")]
         public class QUPA_IN000008UK02
         {
-            [XmlElement(ElementName = "id", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "id")]
             public Id Id { get; set; }
-            [XmlElement(ElementName = "creationTime", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "creationTime")]
             public CreationTime CreationTime { get; set; }
-            [XmlElement(ElementName = "versionCode", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "versionCode")]
             public VersionCode VersionCode { get; set; }
-            [XmlElement(ElementName = "interactionId", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "interactionId")]
             public InteractionId InteractionId { get; set; }
-            [XmlElement(ElementName = "processingCode", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "processingCode")]
             public ProcessingCode ProcessingCode { get; set; }
-            [XmlElement(ElementName = "processingModeCode", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "processingModeCode")]
             public ProcessingModeCode ProcessingModeCode { get; set; }
-            [XmlElement(ElementName = "acceptAckCode", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "acceptAckCode")]
             public AcceptAckCode AcceptAckCode { get; set; }
-            [XmlElement(ElementName = "communicationFunctionRcv", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "communicationFunctionRcv")]
             public CommunicationFunctionRcv CommunicationFunctionRcv { get; set; }
-            [XmlElement(ElementName = "communicationFunctionSnd", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "communicationFunctionSnd")]
             public CommunicationFunctionSnd CommunicationFunctionSnd { get; set; }
-            [XmlElement(ElementName = "ControlActEvent", Namespace = "urn:hl7-org:v3")]
+            [XmlElement(ElementName = "ControlActEvent")]
             public ControlActEvent ControlActEvent { get; set; }
             [XmlAttribute(AttributeName = "xmlns")]
             public string Xmlns { get; set; }

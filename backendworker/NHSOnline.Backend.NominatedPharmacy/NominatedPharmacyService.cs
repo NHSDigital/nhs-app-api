@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Models;
+using NHSOnline.Backend.NominatedPharmacy.Soap;
+using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 
@@ -12,6 +15,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
 {
     public class NominatedPharmacyService : INominatedPharmacyService
     {
+        const string NominatedPharmacyCode = "P1";
+
         private readonly ILogger<NominatedPharmacyService> _logger;
         private readonly INominatedPharmacyClient _prescriptionTrackingClient;
         private readonly INominatedPharmacyConfig _config;
@@ -30,7 +35,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public async Task<GetNominatedPharmacyResult> GetNominatedPharmacy(string nhsNumber)
         {
             const string Dev = "DEV";
-            const string Instance = "Instance";
+            const string Instance = "INSTANCE";
 
             var request = new QUPA_IN000008UK02
             {
@@ -101,7 +106,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                             ClassCode = "AGNT",
                             Id = new Id
                             {
-                                Extension = _config.SdsRoleId,
+                                Extension = _config.PersonSdsRoleId,
                                 Root = "1.2.826.0.1285.0.2.0.67",
                             },
                             AgentPersonSDSInner = new AgentPersonSDSInner
@@ -122,7 +127,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                                     ClassCode = "ROL",
                                     Id = new Id
                                     {
-                                        Extension = _config.SdsRole,
+                                        Extension = _config.PartSdsRoleId,
                                         Root = "1.2.826.0.1285.0.2.1.104",
                                     },
                                 },
@@ -141,7 +146,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                                 DeterminerCode = Instance,
                                 Id = new Id
                                 {
-                                    Extension = "918999199235",
+                                    Extension = _config.SpineAccreditedSystemIdFrom,
                                     Root = "1.2.826.0.1285.0.2.0.107",
                                 },
                             },
@@ -164,7 +169,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
                             Value = new Value
                             {
                                 Root = "2.16.840.1.113883.2.1.4.1",
-                                Extension = nhsNumber,
+                                Extension = nhsNumber.RemoveWhiteSpace(),
                             },
                         },
                         RetrievalItem = new RetrievalItem
@@ -172,7 +177,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
                             SemanticsText = "person.allData",
                         },
                     },
-                }
+                },
+                Xmlns = NominatedPharmacyNamespaces.Hl7,
             };
 
             var result = await _prescriptionTrackingClient.NominatedPharmacyGet(request);
@@ -184,24 +190,30 @@ namespace NHSOnline.Backend.NominatedPharmacy
             }
 
             // Only use result if P1.
-            var patientCareSection = result?.Body?.QUPA_IN000009UK03?.ControlActEvent?
-                .Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?
-                .PlayedOtherProviderPatient?.SubjectOf?.PatientCareProvisionEvent;
+            var patientCareProvisionEvents = result?.Body?.QUPA_IN000009UK03?.ControlActEvent
+                ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
+                ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent);
 
             string odsCode = null;
 
-            if (patientCareSection != null && patientCareSection.Code?._code == "P1")
+            if (patientCareProvisionEvents != null)
             {
-                odsCode = patientCareSection?.Performer?.AssignedEntity?.Id?.Extension;
+                var patientCareP1Section = patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == NominatedPharmacyCode);
+
+                if (patientCareP1Section != null)
+                {
+                    odsCode = patientCareP1Section?.Performer?.AssignedEntity?.Id?.Extension;
+                    _logger.LogInformation($"User retrieved nominated pharmacy with ods code: { odsCode }");
+                }
             }
 
             var pertinentSerialChangeNumber = result?.Body?.QUPA_IN000009UK03?.ControlActEvent?.Subject?.PDSResponse
                 ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?._value;
 
-            var successResult = new GetNominatedPharmacyResult(result.StatusCode, 
+            var successResult = new GetNominatedPharmacyResult(
+                result.StatusCode, 
                 odsCode, 
-                pertinentSerialChangeNumber
-                );
+                pertinentSerialChangeNumber);
 
             return successResult;
         }

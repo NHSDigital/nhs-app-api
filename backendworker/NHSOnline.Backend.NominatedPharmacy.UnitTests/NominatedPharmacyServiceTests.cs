@@ -7,10 +7,10 @@ using NHSOnline.Backend.NominatedPharmacy.Models;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using NHSOnline.Backend.NominatedPharmacy.Clients;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 {
@@ -36,9 +36,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             _configMock.SetupGet(x => x.SpineAccreditedSystemIdFrom).Returns(SpineAccreditedSystemIdFrom);
             _configMock.SetupGet(x => x.SpineAccreditedSystemIdTo).Returns(SpineAccreditedSystemIdTo);
             _configMock.SetupGet(x => x.MessageId).Returns(new Guid().ToString());
-            _configMock.SetupGet(x => x.SdsRoleId).Returns("roleId");
+            _configMock.SetupGet(x => x.PersonSdsRoleId).Returns("roleId");
             _configMock.SetupGet(x => x.SdsUserId).Returns("userId");
-            _configMock.SetupGet(x => x.SdsRole).Returns("sdsRole");
+            _configMock.SetupGet(x => x.PartSdsRoleId).Returns("sdsRole");
 
             _systemUnderTest = _fixture.Create<NominatedPharmacyService>();
         }
@@ -54,7 +54,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             string expectedPharmacyOdsCodeInResult)
         {
             // Arrange
-            const string nhsNumber = "2393729384";
+            const string nhsNumber = "239 372 9384";
+            const string nhsNumberTrimmed = "2393729384";
             const string pharmacyOdsCode = "AB837";
 
             _nominatedPharmacyClient
@@ -62,7 +63,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                     It.Is<QUPA_IN000008UK02>(
                         req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId", StringComparison.OrdinalIgnoreCase) &&
                         req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo, StringComparison.OrdinalIgnoreCase) &&
-                        req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom, StringComparison.OrdinalIgnoreCase))
+                        req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom, StringComparison.OrdinalIgnoreCase) &&
+                        req.ControlActEvent.Query.PersonId.Value.Extension.Equals(nhsNumberTrimmed, StringComparison.OrdinalIgnoreCase))
                     ))
                 .Returns(Task.FromResult(
                     new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(HttpStatusCode.OK)
@@ -87,23 +89,26 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                         {
                                                             PatientPerson = new PatientPerson
                                                             {
-                                                                PlayedOtherProviderPatient = new PlayedOtherProviderPatient
+                                                                PlayedOtherProviderPatients = new List<PlayedOtherProviderPatient>
                                                                 {
-                                                                    SubjectOf = new SubjectOf
+                                                                    new PlayedOtherProviderPatient
                                                                     {
-                                                                        PatientCareProvisionEvent = new PatientCareProvisionEvent
+                                                                        SubjectOf = new SubjectOf
                                                                         {
-                                                                            Code = new Code
+                                                                            PatientCareProvisionEvent = new PatientCareProvisionEvent
                                                                             {
-                                                                                _code = code
-                                                                            },
-                                                                            Performer = new Performer
-                                                                            {
-                                                                                AssignedEntity = new AssignedEntity
+                                                                                Code = new Code
                                                                                 {
-                                                                                    Id = new Id
+                                                                                    _code = code
+                                                                                },
+                                                                                Performer = new Performer
+                                                                                {
+                                                                                    AssignedEntity = new AssignedEntity
                                                                                     {
-                                                                                        Extension = pharmacyOdsCode,
+                                                                                        Id = new Id
+                                                                                        {
+                                                                                            Extension = pharmacyOdsCode,
+                                                                                        }
                                                                                     }
                                                                                 }
                                                                             }

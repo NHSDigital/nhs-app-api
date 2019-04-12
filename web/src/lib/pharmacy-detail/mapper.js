@@ -11,10 +11,14 @@ const convertTimeRange = (timeRangeIn24h) => {
 };
 
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-export default (data) => {
+
+export default (openingTimes) => {
+  if (!openingTimes) {
+    throw new Error('no opening times provided to map');
+  }
   const openingTimeDetailArray = [];
   daysInWeek.forEach((dayInWeek) => {
-    const openingTimeDetails = data.filter(dayDetail => dayDetail.day === dayInWeek);
+    const openingTimeDetails = openingTimes.filter(dayDetail => dayDetail.day === dayInWeek);
     const day = { day: dayInWeek, times: [] };
     if (openingTimeDetails.length > 0) {
       day.times = openingTimeDetails.map(v => convertTimeRange(v.time));

@@ -6,7 +6,6 @@ using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 
@@ -15,8 +14,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
     public class NominatedPharmacySubmitClient : INominatedPharmacySubmitClient
     {
         private const string HeaderSoapAction = "SoapAction";
-        
-        private const string PdsPath = "syncservice-pds/pds";
+        private const string PdsPath = "sync-service";
 
         private readonly NominatedPharmacyHttpClient _httpClient;
         private readonly ILogger<NominatedPharmacySubmitClient> _logger;
@@ -50,8 +48,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             }
         }
 
-        private HttpRequestMessage BuildHttpRequest(string path,
-            StringContent content)
+        private HttpRequestMessage BuildHttpRequest(string path, StringContent content)
         {
             var httpRequest =
                 new HttpRequestMessage(HttpMethod.Post, path)

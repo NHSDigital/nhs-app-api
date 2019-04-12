@@ -9,14 +9,16 @@ namespace NHSOnline.Backend.NominatedPharmacy
         string SpineAccreditedSystemIdFrom { get; }
 
         string SpineAccreditedSystemIdTo { get; }
-        
-        string SpineIp { get; }
 
-        string SdsRole { get; }
+        string PdsQueryTo { get; }
+
+        string PdsQueryFromAddress { get; }
+
+        string PartSdsRoleId { get; }
 
         string SdsUserId { get; }
 
-        string SdsRoleId { get; }
+        string PersonSdsRoleId { get; }
         
         string MessageId { get; }
     }

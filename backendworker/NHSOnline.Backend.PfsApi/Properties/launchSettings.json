@@ -45,13 +45,14 @@
         "TPP_BASE_URL": "https://systmonline2.tpp-uk.com:60015/Patient/",
         "TPP_CERTIFICATE_PASSWORD": "",
         "TPP_CERTIFICATE_PATH": "../certs/TppNhsTest.pfx",
-        "VISION_ODS_REMAP_ENABLED": "false"
+        "VISION_ODS_REMAP_ENABLED": "false",
         "SPINE_ACCREDITED_SYSTEM_ID_FROM": "200000000355",
         "SPINE_ACCREDITED_SYSTEM_ID_TO": "200000000627",
-        "SDS_ROLE": "R8000",
+        "PART_SDS_ROLE_ID": "R8000",
         "SDS_USER_ID": "102046035980",
-        "SDS_ROLE_ID": "102046062988",
-        "SPINE_IP": "10.0.255.22",
+        "PERSON_SDS_ROLE_ID": "102046062988",
+        "PDS_QUERY_FROM_ADDRESS": "10.0.255.22",
+        "PDS_QUERY_TO": "https://192.168.128.11/syncservice-pds/pds",
         "NOMINATED_PHARMACY_URL": "http://stubs.local.bitraft.io:8080/spine/"
       }
     },
@@ -130,10 +131,11 @@
         "VISION_ODS_REMAP_ENABLED": "false",
         "SPINE_ACCREDITED_SYSTEM_ID_FROM": "200000000355",
         "SPINE_ACCREDITED_SYSTEM_ID_TO": "200000000627",
-        "SDS_ROLE": "R8000",
+        "PART_SDS_ROLE_ID": "R8000",
         "SDS_USER_ID": "102046035980",
-        "SDS_ROLE_ID": "102046062988",
-        "SPINE_IP": "10.0.255.22",
+        "PERSON_SDS_ROLE_ID": "102046062988",
+        "PDS_QUERY_FROM_ADDRESS": "10.0.255.22",
+        "PDS_QUERY_TO": "https://192.168.128.11/syncservice-pds/pds",
         "NOMINATED_PHARMACY_URL": "http://stubs.local.bitraft.io:8080/spine/",
         "SERVICE_JOURNEY_RULES_BASE_URL": "http://servicejourneyrulesapi.local.bitraft.io:8086"
       }

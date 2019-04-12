@@ -12,14 +12,20 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
     public class NominatedPharmacyEnvelope
     {
         private const string SoapEnv = "SOAP-ENV";
-            
+        private const string PdsPath = "sync-service";
+
+        private INominatedPharmacyConfig _config;
+
+        public XmlDocument Envelope { get; set; }
+
         public NominatedPharmacyEnvelope(IServiceDefinition serviceDefinition, INominatedPharmacyConfig config, ILogger logger)
         {
             XmlDocument xmlDocument = BuildCoreXml(serviceDefinition, config, logger);
             
             var nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
             nsmgr.AddNamespace("SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/");
-            
+
+            _config = config;
             Envelope = xmlDocument;
         }
 
@@ -46,10 +52,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
 
                     writer.WriteElementString(Wsa, "MessageID", null, String.Format(CultureInfo.InvariantCulture, "uuid:{0}", config.MessageId));
                     writer.WriteElementString(Wsa, "Action", null, serviceDefinition.SoapActionName);
-                    writer.WriteElementString(Wsa, "To", null, "https://192.168.128.11/syncservice-pds/pds");
-
+                    writer.WriteElementString(Wsa, "To", null, config.PdsQueryTo);
                     writer.WriteStartElement(Wsa, "From", null);
-                    writer.WriteElementString(Wsa, "Address", null, config.SpineIp);
+                    writer.WriteElementString(Wsa, "Address", null, config.PdsQueryFromAddress);
                     writer.WriteEndElement();
                     
                     writer.WriteStartElement(hl7, "communicationFunctionRcv", null);
@@ -71,7 +76,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
                     writer.WriteEndElement();
 
                     writer.WriteStartElement(Wsa, "ReplyTo", null);
-                    writer.WriteElementString(Wsa, "Address", null, config.SpineIp);
+                    writer.WriteElementString(Wsa, "Address", null, config.PdsQueryFromAddress);
                     writer.WriteEndElement();
 
                     writer.WriteEndElement();
@@ -93,8 +98,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
 
             return xmlDocument;
         }
-        
-        public XmlDocument Envelope { get; set; }
 
         public void AddBody(object body)
         {

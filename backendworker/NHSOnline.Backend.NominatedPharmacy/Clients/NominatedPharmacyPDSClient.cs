@@ -1,12 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.NominatedPharmacy.ApiModels;
 using NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions;
-using NHSOnline.Backend.NominatedPharmacy.Soap;
-using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.ResponseParsers;
-using System;
 using System.Globalization;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +17,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
 
         private const string HeaderSoapAction = "SoapAction";
 
-        private const string PdsPath = "syncservice-pds/pds";
+        private const string PdsPath = "sync-service";
 
         private readonly NominatedPharmacyHttpClient _httpClient;
         private readonly ILogger<NominatedPharmacyPDSClient> _logger;
@@ -55,15 +50,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
         }
 
         private async Task<NominatedPharmacyApiObjectResponse<TResponse>> Post<TResponse, TRequest>(
-            IServiceDefinition serviceDefinition, string path, TRequest requestContent)
-        {
-            var request = new PdsRequest<TRequest>(requestContent);
-
-            return await Post<TResponse, TRequest>(serviceDefinition, path, request);
-        }
-
-        private async Task<NominatedPharmacyApiObjectResponse<TResponse>> Post<TResponse, TRequest>(
-            IServiceDefinition serviceDefinition, string path, PdsRequest<TRequest> request)
+            IServiceDefinition serviceDefinition, string path, TRequest request)
         {
             var httpRequest = BuildHttpRequest(serviceDefinition, path, request);
             var response = await SendRequestAndParseResponse<TResponse>(httpRequest);
@@ -71,8 +58,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             return response;
         }
 
-        private HttpRequestMessage BuildHttpRequest<T>(IServiceDefinition serviceDefinition, string path,
-            PdsRequest<T> request)
+        private HttpRequestMessage BuildHttpRequest<T>(IServiceDefinition serviceDefinition, string path, T request)
         {
             var envelope = _envelopeService.BuildEnvelope(request, serviceDefinition);
             var httpRequest =
