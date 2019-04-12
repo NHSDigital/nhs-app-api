@@ -4,7 +4,7 @@
               ref="textArea"
               v-model="textValue"
               v-tabbing="textAreaClasses"
-              :class="$style['nhsuk-input']"
+              :class="$style['nhsuk-textarea']"
               :required="required"
               :aria-labelledby="aLabelledBy"
               :maxlength="maxlength"
@@ -93,7 +93,7 @@ export default {
 
 div {
  &.desktopWeb {
-  .form {
+  .nhsuk-textarea {
    max-width: 540px;
   }
  }

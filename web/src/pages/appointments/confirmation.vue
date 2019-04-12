@@ -490,6 +490,10 @@ export default {
   margin-top: 1em;
  }
 
+.errorBorder {
+  max-width: 540px;
+}
+
 div {
  &.desktopWeb {
   p {

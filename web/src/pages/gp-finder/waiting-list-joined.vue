@@ -59,6 +59,9 @@ export default {
       return this.$store.state.header.headerText;
     },
   },
+  beforeDestroy() {
+    this.$store.dispatch('throttling/init');
+  },
   methods: {
     onReturnHomeClicked() {
       const betaCookie = this.$store.app.$cookies.get('BetaCookie');
@@ -84,9 +87,6 @@ export default {
     backButtonClicked() {
       this.goToUrl(GP_FINDER.path);
     },
-  },
-  beforeDestroy() {
-    this.$store.dispatch('throttling/init');
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.form, !$store.state.device.isNativeApp && $style.desktopWeb]">
+  <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <span v-if="error" :id="errorId" class="nhsuk-error-message">
       <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
       {{ errorText }}
@@ -116,10 +116,10 @@ export default {
 </script>
 <style module lang="scss" scoped>
 div {
- &.desktopWeb {
-  .form {
-   max-width: 540px;
+  &.desktopWeb {
+    input {
+      max-width: 540px;
+    }
   }
- }
 }
 </style>
