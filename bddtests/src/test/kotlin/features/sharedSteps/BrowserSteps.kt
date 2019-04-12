@@ -64,6 +64,16 @@ open class BrowserSteps {
     }
 
     @Step
+    open fun shouldHaveUrlHost(url: String) {
+        val requiredUrl = URL(url)
+        WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
+                .pollingEvery(Duration.ofMillis(POLLING_DURATION))
+                .until {
+                    URL(it.currentUrl).host == requiredUrl.host
+                }
+    }
+
+    @Step
     fun checkLoginDetailsAreReset() {
         assertNull(fetchCookie("nhso.session"))
     }
@@ -87,9 +97,9 @@ open class BrowserSteps {
         for (window in loginPage.driver.windowHandles) {
             driver.switchTo().window(window)
             allWindows.add(0, driver.currentUrl)
-            if ((url == URL(driver.currentUrl)) || ("$url/" == URL(driver.currentUrl).toString())) {
+            val currentTabUrl = URL(driver.currentUrl)
+            if(url.host == currentTabUrl.host)
                 return
-            }
         }
 
         throw NoSuchElementException("No tab found with $url. All windows: ${allWindows.reversed()}")

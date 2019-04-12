@@ -41,7 +41,7 @@ export default {
     return {
       accuracyCheckboxId: 'accuracy-checkbox',
       privacyCheckboxId: 'privacy-checkbox',
-      privacyUrl: 'https://www.nhsbt.nhs.uk/privacy/',
+      privacyUrl: this.$store.app.$env.ORGAN_DONATION_PRIVACY_URL,
     };
   },
   computed: {

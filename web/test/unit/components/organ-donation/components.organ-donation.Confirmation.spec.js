@@ -5,7 +5,14 @@ describe('confirmation', () => {
   let $store;
   let wrapper;
 
-  const mountConfirmation = ({ submitAttempted = false } = {}) => {
+  const mountConfirmation = ({ submitAttempted = false } = {}) => mount(Confirmation, {
+    $store,
+    propsData: {
+      submitAttempted,
+    },
+  });
+
+  beforeEach(() => {
     $store = createStore({
       state: {
         organDonation: {
@@ -17,16 +24,6 @@ describe('confirmation', () => {
         },
       },
     });
-
-    return mount(Confirmation, {
-      $store,
-      propsData: {
-        submitAttempted,
-      },
-    });
-  };
-
-  beforeEach(() => {
     wrapper = mountConfirmation();
   });
 
@@ -59,6 +56,39 @@ describe('confirmation', () => {
 
       expect(wrapper.find("label[for='privacy-checkbox']")
         .exists()).toEqual(true);
+    });
+  });
+
+  describe('privacy link', () => {
+    const URL_EXTERNAL = 'www.foo.com';
+    let link;
+
+    beforeEach(() => {
+      $store = createStore({
+        state: {
+          organDonation: {
+            isAccuracyAccepted: false,
+            isPrivacyAccepted: false,
+          },
+          device: {
+            isNativeApp: false,
+          },
+        },
+        $env: {
+          ORGAN_DONATION_PRIVACY_URL: URL_EXTERNAL,
+        },
+      });
+      wrapper = mountConfirmation();
+      link = wrapper.find('a');
+    });
+
+    it('will exist', () => {
+      expect(link.exists()).toBe(true);
+    });
+
+    it('will have the external privacy link, with target set', () => {
+      expect(link.attributes().target).toEqual('_blank');
+      expect(link.attributes().href).toEqual(URL_EXTERNAL);
     });
   });
 

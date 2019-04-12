@@ -153,7 +153,7 @@ Feature: Organ Donation
     And I navigate to the internal Organ Donation Choice Page
     When I follow the opt-out journey to the 'Check Details' page
     And I select the privacy statement link on the Organ Donation Check Details page
-    Then a new tab opens https://www.nhsbt.nhs.uk/privacy/
+    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-privacy/
 
   Scenario: A user can register to be a blood donor on the organ donation View Registration page
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
@@ -161,7 +161,7 @@ Feature: Organ Donation
     And I navigate to the internal Organ Donation Choice Page
     When I follow the opt-out journey to the 'Confirmation' page
     When I select the 'Register to be a blood donor' link on the Organ Donation View Registration page
-    Then a new tab opens https://my.blood.co.uk/preregister
+    Then a new tab opens with a host name matching that of https://my.blood.co.uk/preregister
 
   Scenario: A user can navigate back through the opt out journey
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
@@ -286,14 +286,14 @@ Feature: Organ Donation
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I select the Think You're Already Registered Organ Donation link
-    Then a new tab opens https://www.organdonation.nhs.uk/register-to-donate/check-registration/
+    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-check/
 
   Scenario: A user can find out more about organ donation when registering
     Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I select the Find Out More About Organ Donation link
-    Then a new tab opens https://www.organdonation.nhs.uk/faq/
+    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-donation/
 
   Scenario: A user can find out more about examples of of end of life wishes
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt in

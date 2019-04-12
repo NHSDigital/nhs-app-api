@@ -9,7 +9,7 @@ Feature: Use the navigation header bar
   Scenario: A patient can access the help and support page by clicking the help icon
     Given I see the header
     When I click the help icon
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
 
   @native-smoketest
   Scenario: A patient can access the my account page by clicking the my account icon

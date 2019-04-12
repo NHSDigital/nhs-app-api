@@ -62,7 +62,7 @@ Feature: Use Terms and conditions page
     And I am logged in
     And I am on the Terms and conditions page
     When I click on Privacy policy
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/
 
   @cosmos
   Scenario: A patient can navigate to the Cookies policy page
@@ -71,7 +71,7 @@ Feature: Use Terms and conditions page
     And I am logged in
     And I am on the Terms and conditions page
     When I click on Cookies policy
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
 
   @cosmos
   Scenario: A patient can navigate to the Terms of use page
@@ -80,4 +80,4 @@ Feature: Use Terms and conditions page
     And I am logged in
     And I am on the Terms and conditions page
     When I click on Terms of use
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/

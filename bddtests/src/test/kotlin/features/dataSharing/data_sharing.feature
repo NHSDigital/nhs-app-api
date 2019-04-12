@@ -37,7 +37,7 @@ Feature: Data Sharing
   Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
     Given I am on the Data Sharing Overview page
     When I click the Data Sharing More Info link
-    Then a new tab opens https://www.nhs.uk/your-nhs-data-matters/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/your-nhs-data-matters/
 
   @smoketest
   Scenario: A user chooses to manage their Data Sharing preferences

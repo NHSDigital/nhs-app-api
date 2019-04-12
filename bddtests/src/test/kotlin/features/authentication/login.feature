@@ -134,7 +134,7 @@ Feature: Login
     Given I am at the login page
     Given I see the help icon on the login page
     When I click the help icon on the login page
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
 
   Scenario Outline: A <GP System> user that is 13 years old can log in
     Given I attempt to log in as a <GP System> user that is 13

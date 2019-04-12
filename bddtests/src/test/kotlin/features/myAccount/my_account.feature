@@ -24,29 +24,29 @@ Feature: View My Account Page
   Scenario: A patient can navigate to the Terms of use page
     Given I am on the My Account page
     When I click the Terms of use link
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/
 
   Scenario: A patient can navigate to the Privacy policy page
     Given I am on the My Account page
     When I click the Privacy policy link
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/
 
   Scenario: A patient can navigate to the Cookies policy page
     Given I am on the My Account page
     When I click the Cookies policy link
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
 
   Scenario: A patient can navigate to the Open source licences page
     Given I am on the My Account page
     When I click the Open source licences link
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/
 
   Scenario: A patient can navigate to the Help and support page
     Given I am on the My Account page
     When I click the Help and support link
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
 
   Scenario: A patient can navigate to the Accessibility statement page
     Given I am on the My Account page
     When I click the Accessibility statement link
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/accessibility-statement/

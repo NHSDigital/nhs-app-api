@@ -12,7 +12,7 @@ Feature: Access 111 Online with no javascript
     Then the Check My Symptoms page is displayed
 
     When I press the A-Z symptoms header
-    Then a new tab opens https://www.nhs.uk/conditions/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/conditions/
 
 
   Scenario: The User is logged in and can view the symptoms links with javascript disabled and can click the urgent help header
@@ -23,4 +23,4 @@ Feature: Access 111 Online with no javascript
     Then the Check My Symptoms page is displayed
 
     When I press the urgent help header
-    Then a new tab opens https://111.nhs.uk/
+    Then a new tab opens with a host name matching that of https://111.nhs.uk/

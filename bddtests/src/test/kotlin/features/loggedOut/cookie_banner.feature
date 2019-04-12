@@ -9,7 +9,7 @@ Feature: Cookie Banner
     Then I see the cookie banner
     And no cookie is created that would hide this banner
     When I select the information link
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/#manage
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/#manage
     Examples:
       | target page         | js enabled? |
       | login               | enabled     |

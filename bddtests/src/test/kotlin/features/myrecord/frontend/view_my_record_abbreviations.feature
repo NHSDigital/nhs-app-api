@@ -6,4 +6,4 @@ Feature: My Record - Clinical Abbreviations
     And the GP Practice has enabled demographics functionality
     And I am on my record information page
     When I click the clinical abbreviations link
-    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/
+    Then a new tab opens with a host name matching that of https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/
