@@ -124,6 +124,7 @@
                           :button-classes="[$store.state.device.isNativeApp
                                               ?'button':'button-desktop',
                                             'green']"
+                          click-delay="medium"
                           @click.prevent="onConfirmButtonClicked">
             {{ $t('appointments.confirmation.confirmButtonText') }}
           </generic-button>

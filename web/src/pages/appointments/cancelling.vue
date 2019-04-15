@@ -44,6 +44,7 @@
         </div>
         <generic-button id="btn_cancel_appointment"
                         :button-classes="['button', 'green']"
+                        click-delay="medium"
                         @click.stop.prevent="onCancelButtonClicked($event)">
           {{ $t('appointments.cancelling.cancelButtonText') }}
         </generic-button>

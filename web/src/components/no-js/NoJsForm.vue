@@ -1,5 +1,5 @@
 <template>
-  <form :class="className" :action="action" :method="method">
+  <form :class="className" :action="action" :method="method" @submit.prevent="() => {}">
     <input :name="inputName" :value="JSON.stringify(value)" type="hidden">
     <slot/>
   </form>

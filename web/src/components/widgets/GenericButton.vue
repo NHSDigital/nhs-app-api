@@ -7,9 +7,11 @@
 </template>
 
 <script>
+import DebounceMixin from '@/components/widgets/DebounceMixin';
 
 export default {
   name: 'GenericButton',
+  mixins: [DebounceMixin],
   props: {
     buttonClasses: {
       type: Array,

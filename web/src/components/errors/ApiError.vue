@@ -23,6 +23,7 @@
       <form :action="retryUrl" method="get">
         <generic-button v-if="retryButtonText" :class="buttonClasses"
                         data-purpose="retry-or-back-button"
+                        click-delay="medium"
                         @click.stop.prevent="onRetryButtonClicked">
           {{ retryButtonText }}
         </generic-button>

@@ -121,6 +121,10 @@ const config = {
     ORGAN_DONATION_INTEGRATION_ENABLED: false,
     // Session
     SESSION_EXPIRING_WARNING_SECONDS: 60,
+    // Click debounce delay in ms
+    DEBOUNCE_SHORT: 500,
+    DEBOUNCE_MEDIUM: 2000,
+    DEBOUNCE_LONG: 5000,
   },
 };
 

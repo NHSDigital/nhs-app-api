@@ -30,6 +30,7 @@
     <generic-button id="btn_confirm_and_order_prescription"
                     :button-classes="['button' , 'green',
                                       !$store.state.device.isNativeApp && 'medium']"
+                    click-delay="medium"
                     @click="onConfirmButtonClicked">
       {{ $t('rp04.confirmButton') }}
     </generic-button>

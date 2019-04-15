@@ -38,6 +38,7 @@
     <confirmation :submit-attempted="submitAttempted"/>
     <generic-button id="submit-button"
                     :class="[$style.button, $style.green]"
+                    click-delay="medium"
                     @click="clickSubmit">
       {{ $t('organDonation.reviewYourDecision.submitButton') }}
     </generic-button>
