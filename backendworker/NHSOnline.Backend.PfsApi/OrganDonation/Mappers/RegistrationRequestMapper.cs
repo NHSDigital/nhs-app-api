@@ -6,6 +6,7 @@ using NHSOnline.Backend.PfsApi.OrganDonation.Models;
 using Name = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Name;
 using Address = NHSOnline.Backend.PfsApi.OrganDonation.ApiModels.Address;
 using static NHSOnline.Backend.Support.Constants.OrganDonationConstants;
+using static NHSOnline.Backend.Support.ValidateAndLog.ValidationOptions;
 
 namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 {
@@ -42,6 +43,10 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
 
         public RegistrationRequest Map(OrganDonationRegistrationRequest source)
         {
+            new ValidateAndLog(_logger)
+                .IsNotNull(source, nameof(source), ThrowError)
+                .IsValid();
+
             var registrationRequest = new RegistrationRequest
             {
                 Id = source.Registration.Identifier,

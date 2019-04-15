@@ -288,5 +288,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
 
             return result;
         }
+
+        [TestMethod] 
+        public void MapToRegistrationRequest_WhenPassingNull_ThrowsArgumentNullException()
+        {
+            // Act and Assert
+            Action act = () => _registrationRequestMapper.Map(null);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("source");
+        }
     }
 }

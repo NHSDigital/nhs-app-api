@@ -1,8 +1,6 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Demographics;
 using NHSOnline.Backend.PfsApi.OrganDonation.ApiModels;
 using NHSOnline.Backend.PfsApi.OrganDonation.Models;
@@ -16,34 +14,18 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 {
     public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
     {
-private readonly ILogger<ServiceConfigurationModule> _logger;
-
-        public ServiceConfigurationModule(ILoggerFactory loggerFactory)
-        {
-            _logger = loggerFactory.CreateLogger<ServiceConfigurationModule>();
-        }
-
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<OrganDonationHttpRequestIdentifier>();
             services.AddSingleton<IOrganDonationConfig, OrganDonationConfig>();
 
-            if (bool.TrueString.Equals(
-                configuration.GetOrWarn("ORGAN_DONATION_INTEGRATION_ENABLED", _logger),
-                StringComparison.OrdinalIgnoreCase))
-            {
-                services.AddSingleton<IOrganDonationClient, OrganDonationClient>();
-                services.AddSingleton<OrganDonationHttpClientHandler>();
+            services.AddSingleton<IOrganDonationClient, OrganDonationClient>();
+            services.AddSingleton<OrganDonationHttpClientHandler>();
 
-                services.AddHttpClient<OrganDonationHttpClient>()
-                    .ConfigurePrimaryHttpMessageHandler<OrganDonationHttpClientHandler>()
-                    .AddHttpMessageHandler<HttpTimeoutHandler<OrganDonationHttpRequestIdentifier>>()
-                    .AddHttpMessageHandler<HttpRequestIdentificationHandler<OrganDonationHttpRequestIdentifier>>();
-            }
-            else
-            {
-                services.AddSingleton<IOrganDonationClient, OrganDonationMockClient>();
-            }
+            services.AddHttpClient<OrganDonationHttpClient>()
+                .ConfigurePrimaryHttpMessageHandler<OrganDonationHttpClientHandler>()
+                .AddHttpMessageHandler<HttpTimeoutHandler<OrganDonationHttpRequestIdentifier>>()
+                .AddHttpMessageHandler<HttpRequestIdentificationHandler<OrganDonationHttpRequestIdentifier>>();
 
             services.AddSingleton<IOrganDonationValidationService, OrganDonationValidationService>();
             services.AddSingleton<IOrganDonationService, OrganDonationService>();
@@ -76,13 +58,11 @@ private readonly ILogger<ServiceConfigurationModule> _logger;
                 .AddSingleton<IMapper<string, Models.Address, Address>, OrganDonationAddressMapper>();
 
             services.AddSingleton<IMapper<Models.Name, Name>, OrganDonationNameMapper>();
-            services
-                .AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, RegistrationRequestMapper
-                >();
+            services.AddSingleton<IMapper<OrganDonationRegistrationRequest, RegistrationRequest>, 
+                RegistrationRequestMapper>();
 
-            services
-                .AddSingleton<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>, WithdrawRequestMapper
-                >();
+            services.AddSingleton<IMapper<OrganDonationWithdrawRequest, WithdrawRequest>, 
+                    WithdrawRequestMapper>();
 
             services
                 .AddSingleton<IMapper<OrganDonationResponse<OrganDonationBasicResponse>, OrganDonationRegistrationResponse>,
@@ -97,12 +77,17 @@ private readonly ILogger<ServiceConfigurationModule> _logger;
             services.AddSingleton<IOrganDonationIdentifierMapper, OrganDonationIdentifierMapper>();
 
             services.AddSingleton<IMapper<HttpStatusCode, OrganDonationResult>, OrganDonationResultErrorMapper>();
-            services.AddSingleton<IMapper<HttpStatusCode, OrganDonationRegistrationResult>, OrganDonationRegistrationResultErrorMapper>();
-            services.AddSingleton<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>, OrganDonationReferenceDataResultErrorMapper>();
-            services.AddSingleton<IMapper<HttpStatusCode, OrganDonationWithdrawResult>, OrganDonationWithdrawResultErrorMapper>();
+            services
+                .AddSingleton<IMapper<HttpStatusCode, OrganDonationRegistrationResult>,
+                    OrganDonationRegistrationResultErrorMapper>();
+            services
+                .AddSingleton<IMapper<HttpStatusCode, OrganDonationReferenceDataResult>,
+                    OrganDonationReferenceDataResultErrorMapper>();
+            services
+                .AddSingleton<IMapper<HttpStatusCode, OrganDonationWithdrawResult>,
+                    OrganDonationWithdrawResultErrorMapper>();
 
             base.ConfigureServices(services, configuration);
         }
-
     }
 }

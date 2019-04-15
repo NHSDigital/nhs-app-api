@@ -151,8 +151,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             // Act and Assert
             Action act = () => _lookupToRegistrationMapper.Map(registration, null);
 
-
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("secondSource");
+            act.Should().Throw<AggregateException>()
+                .And.InnerExceptions.Should().HaveCount(2)
+                .And.AllBeOfType<ArgumentNullException>()
+                .And.Contain(x => ((ArgumentNullException)x).ParamName.Equals("secondSource", StringComparison.Ordinal))
+                .And.Contain(x => ((ArgumentNullException)x).ParamName.Equals("Entry", StringComparison.Ordinal));
         }
         
         [TestMethod]
@@ -167,10 +170,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             };
 
             // Act and Assert
-            Action act = () => _lookupToRegistrationMapper.Map(registration, null);
+            Action act = () => _lookupToRegistrationMapper.Map(registration, response);
 
-
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("secondSource");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("Entry");
         }
         
         [TestMethod]
@@ -185,10 +187,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation.Mappers
             };
 
             // Act and Assert
-            Action act = () => _lookupToRegistrationMapper.Map(registration, null);
+            Action act = () => _lookupToRegistrationMapper.Map(registration, response);
 
 
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("secondSource");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("existingRegistration");
         }
 
         [TestMethod]

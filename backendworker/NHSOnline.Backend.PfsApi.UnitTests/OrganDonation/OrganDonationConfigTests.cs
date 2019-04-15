@@ -28,33 +28,33 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
             SetupConfigurationValue("ORGAN_DONATION_CLIENT_ID", "ABCD");
             SetupConfigurationValue("ORGAN_DONATION_OCP_APIM_SUBSCRIPTION_KEY", "1234");
             SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", "86400");
-;        }
+        }
 
         [TestMethod]
         public void Constructor_WhenConfigurationHasNoValueForReferenceDataExpirySeconds_ThrowsAnException()
         {
             // Arrange
             SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", null);
-            
+
             // Act
             Action create = () => new OrganDonationConfig(_mockConfiguration.Object, _logger);
-            
+
             // Assert
             create
                 .Should()
                 .Throw<ConfigurationNotFoundException>()
                 .WithMessage("Configuration value 'ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS' not found");
         }
-        
+
         [TestMethod]
         public void Constructor_WhenConfigurationValueForReferenceDataExpirySecondsIsNotAnInteger_ThrowsAnException()
         {
             // Arrange
             SetupConfigurationValue("ORGAN_DONATION_REFERENCE_DATA_EXPIRY_SECONDS", "boo");
-            
+
             // Act
             Action create = () => new OrganDonationConfig(_mockConfiguration.Object, _logger);
-            
+
             // Assert
             create
                 .Should()

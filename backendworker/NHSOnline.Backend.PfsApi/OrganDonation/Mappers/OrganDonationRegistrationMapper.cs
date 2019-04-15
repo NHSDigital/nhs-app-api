@@ -52,15 +52,21 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation.Mappers
             };
         }
 
-        public OrganDonationRegistration Map(OrganDonationRegistration firstSource,
+        public OrganDonationRegistration Map(
+            OrganDonationRegistration firstSource,
             RegistrationLookupResponse secondSource)
         {
             new ValidateAndLog(_logger)
                 .IsNotNull(firstSource, nameof(firstSource), ThrowError)
                 .IsNotNull(secondSource, nameof(secondSource), ThrowError)
+                .IsNotNull(secondSource?.Entry, nameof(secondSource.Entry), ThrowError)
                 .IsValid();
 
-            var existingRegistration = secondSource.Entry.First().Resource;
+            var existingRegistration = secondSource.Entry.FirstOrDefault()?.Resource;
+
+            new ValidateAndLog(_logger)
+                .IsNotNull(existingRegistration, nameof(existingRegistration), ThrowError)
+                .IsValid();
 
             var result = new OrganDonationRegistration
             {

@@ -8,6 +8,7 @@ import mocking.organDonation.models.OrganDonationWithdrawRequest
 import mocking.organDonation.models.Issue
 import mocking.organDonation.models.CodeableConcept
 import mocking.organDonation.models.Coding
+import mocking.organDonation.models.OrganDonationErrorResponse
 import models.Patient
 
 const val HEADER_SUBSCRIPTION_KEY = "Ocp-Apim-Subscription-Key"
@@ -40,11 +41,13 @@ open class OrganDonationMappingBuilder(method: String, relativePath: String = ""
                     + withdrawRequestBody.identifier)
 
     fun respondWithError(httpStatus: Int) : Mapping {
-        val responseBody = listOf(Issue(
-                details = CodeableConcept(
-                        listOf(Coding(
-                                errorResponseCodingSystem,
-                                "")))))
+        val responseBody = OrganDonationErrorResponse(listOf(
+                Issue(code ="001",
+                        diagnostics = "This is a mocked diagnostics response for status $httpStatus",
+                        details = CodeableConcept(
+                                listOf(Coding(
+                                        errorResponseCodingSystem,
+                                        "This is a mocked details response for status $httpStatus"))))))
         return respondWith(httpStatus) {
             andJsonBody(responseBody).build()
         }

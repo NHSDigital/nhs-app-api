@@ -36,12 +36,6 @@ abstract class MappingBuilder(method: String, url: String) {
         }
     }
 
-    fun respondWithFailureJson(jsonBody: String, statusCode: Int): Mapping {
-        return respondWith(statusCode){
-            andBody(jsonBody, contentType = "application/json")
-        }
-    }
-
     fun redirectTo(url: String, milliSecondDelay: Int = 0): Mapping {
         val responseBuilder = ResponseBuilder(SC_FOUND)
         responseBuilder.andHeader("Location", url).andTemplateTransformer()
