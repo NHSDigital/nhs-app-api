@@ -13,10 +13,19 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
         [JsonProperty(PropertyName = "filter")]
         public string Filter { get; set; }
         
+        [JsonProperty(PropertyName = "search")]
+        public string Search { get; set; }
+        
         [JsonProperty(PropertyName = "count")]
         public bool Count { get; set; }
         
         [JsonProperty(PropertyName = "orderby")]
         public string OrderBy { get; set; }
+        
+        [JsonProperty(PropertyName = "queryType")]
+        public string QueryType { get; set; }
+        
+        [JsonProperty(PropertyName = "searchMode")]
+        public string SearchMode { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
     public class PharmacySearchService : IPharmacySearchService
     {
         const string OrganisationSubTypeForCommunityPharmacy = "Community Pharmacy";
+        const int MetricIDForEPSEnabledPharmacy = 10051;
 
         private readonly ILogger<PharmacySearchService> _logger;
         private readonly IGpLookupClient _gpLookupClient;
@@ -144,8 +145,11 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 Select = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,Postcode,NACSCode,Geocode,Contacts,OpeningTimes",
                 Filter = $"OrganisationSubType eq '{ OrganisationSubTypeForCommunityPharmacy }' " +
                          $"and geo.distance(Geocode, geography'POINT({postcodeData.Longitude} {postcodeData.Latitude})') le {_gpLookupConfig.PharmacySearchRadiusKm}",
+                Search = $"Metrics:({ MetricIDForEPSEnabledPharmacy })",
                 OrderBy = $"geo.distance(Geocode, geography'POINT({postcodeData.Longitude} {postcodeData.Latitude})')",
                 Count = true,
+                QueryType = "full",
+                SearchMode = "all"
             };
         }
     }

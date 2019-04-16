@@ -26,6 +26,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
         private IPostcodeParser _postcodeParser;
 
         private IFixture _fixture;
+
+        private const int EPSEnabledMetricID = 10051;
    
         
         [TestInitialize]
@@ -50,7 +52,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
             Search_WhenCalledWithValidPostcode_ReturnsListOfPharmacies(string postcode, string filterName)
         {
             // Arrange
-           var postcodeSearchResult =
+            const string latitude = "1";
+            const string longitude = "2";
+
+            var postcodeSearchResult =
                 new GpLookupClient.NhsSearchApiObjectResponse<NhsPostcodeSearchResponse>(HttpStatusCode.OK)
                 {
                     Body = new NhsPostcodeSearchResponse 
@@ -59,8 +64,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                         {
                             new PostcodeData
                             {
-                                Latitude = "1",
-                                Longitude = "2"
+                                Latitude = latitude,
+                                Longitude = longitude,
                             }
                         }
                     },
@@ -81,7 +86,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                        }
                    }
                };
-
            var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, new List<Organisation>
            {
                new Organisation
@@ -98,9 +102,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                         p.Top == 1 &&
                         string.Equals(p.Filter, filterName, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(postcodeSearchResult));
-            
+
            _gpLookupClient
-                .Setup(x => x.GpPostcodeSearch(It.IsAny<OrganisationPostcodeSearchData>()))
+                .Setup(x => x.GpPostcodeSearch(It.Is<OrganisationPostcodeSearchData>(p =>
+                    p.Search.Equals("Metrics:("+EPSEnabledMetricID+")", StringComparison.Ordinal) &&
+                    p.QueryType.Equals("full", StringComparison.Ordinal) &&
+                    p.SearchMode.Equals("all", StringComparison.Ordinal) &&
+                    p.Filter.Contains("OrganisationSubType eq 'Community Pharmacy' and "
+                                      + $"geo.distance(Geocode, geography'POINT({longitude} {latitude})') le "
+                                      + _gpLookupConfig.PharmacySearchRadiusKm, StringComparison.Ordinal) &&
+                    p.OrderBy.Equals($"geo.distance(Geocode, geography'POINT({longitude} {latitude})')", StringComparison.Ordinal) &&
+                    p.Top == _gpLookupConfig.PharmacySearchApiLimit)))
                 .Returns(Task.FromResult(pharmacyResponse));
 
            _nhsSearchResultChecker
