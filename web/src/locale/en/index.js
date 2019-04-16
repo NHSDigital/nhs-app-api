@@ -738,8 +738,6 @@ export default {
     errors: {
       contact: {
         email: 'Email',
-        phone: 'Phone number',
-        otherWays: 'For other ways to contact them, visit:',
       },
       pageTitle: 'Something went wrong',
       pageHeader: 'Something went wrong',

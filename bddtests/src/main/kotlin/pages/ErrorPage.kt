@@ -24,7 +24,7 @@ open class ErrorPage : HybridPageObject() {
 
     val button = findElementByLocator(backButtonLocator)
 
-    private fun findElementByLocator(locator: String, androidLocator: String? = null): HybridPageElement {
+    protected fun findElementByLocator(locator: String, androidLocator: String? = null): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = locator,
                 androidLocator = androidLocator,

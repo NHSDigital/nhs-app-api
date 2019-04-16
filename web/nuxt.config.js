@@ -75,7 +75,6 @@ const config = {
     CID_CLIENT_ID: 'nhs-online',
     CID_AUTH_ENDPOINT: 'https://auth.ext.signin.nhs.uk/authorize',
     // Organ Donation
-    ORGAN_DONATION_CONTACT_US_URL: 'https://www.nhsbt.nhs.uk/contact-us',
     ORGAN_DONATION_FIND_OUT_MORE_URL: 'https://www.organdonation.nhs.uk/app/app-donation/',
     ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',
     BLOOD_DONATION_URL: 'https://my.blood.co.uk/preregister',

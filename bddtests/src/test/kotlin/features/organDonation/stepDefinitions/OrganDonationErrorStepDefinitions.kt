@@ -196,6 +196,7 @@ class OrganDonationErrorStepDefinitions {
         organDonationErrorPage.assertHeaderText(organDonationErrorPage.errorHeader)
                 .assertMessageText(organDonationErrorPage.errorMessageNoRetry)
                 .assertNoButton(OD_ERROR_RETRY_BUTTON)
+        organDonationErrorPage.assertContactDetails()
     }
 
     @Then("^I see an appropriate Organ Donation error message with a retry option$")
@@ -203,5 +204,6 @@ class OrganDonationErrorStepDefinitions {
         organDonationErrorPage.assertHeaderText(organDonationErrorPage.errorHeader)
                 .assertMessageText(organDonationErrorPage.errorMessageWithRetry)
                 .assertHasButton(OD_ERROR_RETRY_BUTTON)
+        organDonationErrorPage.assertContactDetails()
     }
 }
