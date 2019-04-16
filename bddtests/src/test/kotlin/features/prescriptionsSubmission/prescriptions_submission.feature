@@ -6,7 +6,6 @@ Feature: Prescriptions submission
   Background:
     Given the scenario is submit prescription
 
-  @smoketest
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
@@ -20,8 +19,11 @@ Feature: Prescriptions submission
     Examples:
     | GP System |
     | EMIS      |
-    | TPP       |
     | VISION    |
+  @smoketest
+    Examples:
+    | GP System |
+    | TPP       |
 
   Scenario Outline: The <GP System> user orders a repeat prescription with 1 entries
     And I am using <GP System> GP System to submit my prescription

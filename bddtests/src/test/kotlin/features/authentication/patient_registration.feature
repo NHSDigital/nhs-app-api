@@ -234,7 +234,7 @@ Feature: Registration
       | TPP       |
       | VISION    |
 
-  @smoketest
+
   @ios
   Scenario Outline: <GP System> User launches and completes account creation from web
     Given I have completed <GP System> account creation
@@ -247,7 +247,7 @@ Feature: Registration
       | GP System |
       | TPP       |
       | VISION    |
-
+  @smoketest
   @native-smoketest
     Examples:
       | GP System |

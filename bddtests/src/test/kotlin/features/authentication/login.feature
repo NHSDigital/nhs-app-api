@@ -4,7 +4,6 @@ Feature: Login
   Logging into the service is handled via the CitizenID service.
   A user will be shown personalised welcome messages upon successful login.
 
-  @smoketest
   Scenario Outline: A <GP System> user sees the home page after logging in
     Given I have no booked appointments for <GP System>
     And I have no repeat prescriptions
@@ -21,6 +20,7 @@ Feature: Login
 
   @native-smoketest
   @android
+  @smoketest
     Examples:
       | GP System |
       | EMIS      |

@@ -92,7 +92,6 @@ Feature: My appointments UI with Javascript
       | EMIS      |
       | TPP       |
 
-  @smoketest
   Scenario Outline: A <GP System> user can see their upcoming appointments
     Given I have upcoming appointments before cutoff time for <GP System>
     And I am logged in
@@ -105,6 +104,9 @@ Feature: My appointments UI with Javascript
     Examples:
     | GP System |
     | VISION    |
+  @smoketest
+    Examples:
+    | GP System |
     | MICROTEST |
 
 

@@ -1,6 +1,7 @@
 @my-record
-@smoketest
+
 Feature: View My Medical Record Information - Combined I see the my record warning page
+
   Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality
@@ -25,6 +26,9 @@ Feature: View My Medical Record Information - Combined I see the my record warni
     Examples:
       | Service |
       | EMIS    |
+  @smoketest
+    Examples:
+      | Service |
       | TPP     |
 
   Scenario Outline: A <Service> user can view acute, current and discontinued medications
@@ -46,6 +50,9 @@ Feature: View My Medical Record Information - Combined I see the my record warni
       | Service |
       | EMIS    |
       | TPP     |
+  @smoketest
+    Examples:
+      | Service |
       | VISION  |
 
   Scenario Outline: A <Service> user can view immunisations and problems
@@ -64,8 +71,12 @@ Feature: View My Medical Record Information - Combined I see the my record warni
     Examples:
       | Service |
       | EMIS    |
+  @smoketest
+    Examples:
+      | Service |
       | VISION  |
 
+  @smoketest
   Scenario: A VISION user can view allergies and demographics
     Given the my record wiremocks are initialised for VISION
     And the GP Practice has enabled demographics functionality

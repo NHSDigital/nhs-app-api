@@ -73,7 +73,6 @@ Feature: View prescriptions
       | TPP       |
       | VISION    |
 
-  @smoketest
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
     Given I am patient using the <GP System> GP System
     And I have 3 past repeat prescriptions
@@ -82,9 +81,12 @@ Feature: View prescriptions
     And I navigate to prescriptions
     Then I see 3 prescriptions
 
+  @smoketest
     Examples:
       | GP System |
       | EMIS      |
+    Examples:
+      | GP System |
       | TPP       |
       | VISION    |
 

@@ -167,7 +167,6 @@ Feature: View courses
       | TPP       |
       | VISION    |
 
-  @smoketest
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given I am a <GP System> patient
     And I have historic prescriptions
@@ -188,8 +187,11 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
-      | TPP       |
       | VISION    |
+  @smoketest
+    Examples:
+      | GP System |
+      | TPP       |
 
 
   Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value

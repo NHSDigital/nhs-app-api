@@ -4,8 +4,7 @@ Feature: Sign out of mobile web
   In order to ensure privacy with personalised NHS services
   As a registered and signed in user
   I want to be able to sign out from my NHS account so personal data cannot be seen
-
-  @smoketest
+  
   Scenario Outline: A <GP Supplier> user is shown the onboarding sign in screen after clicking the "Sign out" button
     Given I am logged in as a <GP Supplier> user
     When I sign out
@@ -15,6 +14,9 @@ Feature: Sign out of mobile web
       | GP Supplier |
       | EMIS        |
       | TPP         |
+  @smoketest
+    Examples:
+      | GP Supplier |
       | VISION      |
 
   @manual

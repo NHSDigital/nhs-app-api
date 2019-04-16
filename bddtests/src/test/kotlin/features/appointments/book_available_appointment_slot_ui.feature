@@ -57,7 +57,6 @@ Feature: Book an available appointment slot UI with Javascript
       | VISION    |
       | MICROTEST |
 
-  @smoketest
   @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 character
@@ -77,6 +76,7 @@ Feature: Book an available appointment slot UI with Javascript
       | MICROTEST |
 
   @native-smoketest
+  @smoketest
     Examples:
       | GP System |
       | EMIS      |
