@@ -22,7 +22,6 @@ import utils.SerenityHelpers
 import webdrivers.browserstack.BrowserstackLocalService
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
-import java.net.URL
 
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
 private const val WAIT_IN_SECONDS = 190L
@@ -111,11 +110,9 @@ open class SharedStepDefinitions {
 
     @Then("^none of the menu buttons are highlighted")
     fun iDoNotSeeAHighlightedMenuButton() {
-
         if(home.headerNative.onMobile()) {
             Assert.assertFalse("Nav bar has highlighted item, expected none", navBar.hasAnyTabSelected())
         }
-
     }
 
     @Then("^I am redirected to '(.*)'$")
@@ -125,8 +122,7 @@ open class SharedStepDefinitions {
 
     @Then("^a new tab opens with a host name matching that of (.*)$")
     fun aNewTabOpensWithAHostMatchingThatOf(url: String) {
-        browser.changeTab(URL(url))
-        browser.shouldHaveUrlHost(url)
+        browser.assertNewTabWithHost(url)
     }
 
     @Then("I wait for (\\d+) seconds")

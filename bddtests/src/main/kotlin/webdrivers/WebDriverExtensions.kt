@@ -6,6 +6,9 @@ import io.appium.java_client.ios.IOSDriver
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.WebDriverFacade
 import org.openqa.selenium.WebDriver
+import java.net.URL
+
+private const val NEW_TAB_DELAY = 1000L
 
 fun WebDriver.isIOS(): Boolean {
     val isIOS = this is IOSDriver<*>
@@ -56,4 +59,19 @@ fun WebDriver.getMobileDriver(): AppiumDriver<WebElementFacade> {
             this.getSpecificDriver<IOSDriver<WebElementFacade>>()
         }
     }
+}
+
+fun WebDriver.getOpenTabUrls(): List<URL> {
+    // Chrome can lockup if we switch to a new tab too quickly
+    // This does not throw an exception that we can catch and retry with
+    // A sleep is the only way we have found to wait for the tab to load enough
+    // to find the currentUrl
+    Thread.sleep(NEW_TAB_DELAY)
+    return windowHandles.map { windowHandle -> getTabUrl(windowHandle)}
+}
+
+private fun WebDriver.getTabUrl(windowHandle :String): URL {
+    val openedTab = switchTo().window(windowHandle)
+    val openedTabUrlString = openedTab.currentUrl
+    return URL(openedTabUrlString)
 }

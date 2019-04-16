@@ -510,11 +510,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         home.waitForLoginToCompleteSuccessfully()
     }
 
-    @When("I am on the home page")
-    fun gotoHomePage() {
-        browser.changeTabToHome()
-    }
-
     @When("^I browse to the page at (.*)$")
     fun iBrowseToPageAt(url: String) {
         this.currentUrl = nav.browseToPage(url)

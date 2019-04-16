@@ -1,21 +1,18 @@
 package features.sharedSteps
 
-import config.Config
 import junit.framework.TestCase.assertNull
-import net.serenitybdd.core.exceptions.SerenityManagedException
 import net.thucydides.core.annotations.Step
+import org.junit.Assert
 import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.loggedOut.LoginPage
+import webdrivers.getOpenTabUrls
 import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
-import java.net.MalformedURLException
 import java.net.URL
 import java.time.Duration
 import java.util.*
-
-
 
 private const val SIGN_OUT_WAIT_TIME = 1000L
 private const val LOAD_URL_WAIT_TIME = 30L
@@ -64,16 +61,6 @@ open class BrowserSteps {
     }
 
     @Step
-    open fun shouldHaveUrlHost(url: String) {
-        val requiredUrl = URL(url)
-        WebDriverWait(loginPage.driver, LOAD_URL_WAIT_TIME)
-                .pollingEvery(Duration.ofMillis(POLLING_DURATION))
-                .until {
-                    URL(it.currentUrl).host == requiredUrl.host
-                }
-    }
-
-    @Step
     fun checkLoginDetailsAreReset() {
         assertNull(fetchCookie("nhso.session"))
     }
@@ -106,16 +93,11 @@ open class BrowserSteps {
     }
 
     @Step
-    fun changeTabToHome() {
-        val baseUrl: String = Config.instance.url
-        try {
-            changeTab(URL(baseUrl))
-        } catch (e: MalformedURLException) {
-            val message = "Malformed URL: $baseUrl"
-            println("ERROR:")
-            println(message)
-            throw SerenityManagedException(message, e)
-        }
+    fun assertNewTabWithHost(url: String) {
+        val expectedHost = URL(url).host
+        val tabHosts = loginPage.driver.getOpenTabUrls().map { tab->tab.host }
+        Assert.assertTrue("Expected to contain host of $url. Actual ${tabHosts.joinToString()}",
+                tabHosts.contains(expectedHost))
     }
 
     @Step
