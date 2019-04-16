@@ -22,8 +22,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.ServiceDefinitions
                 var nominatedPharmacyEnvelope = new NominatedPharmacyEnvelope(serviceDefinition, _config, _logger);
                 nominatedPharmacyEnvelope.AddBody(request);
 
-                _logger.LogInformation(nominatedPharmacyEnvelope.Envelope.OuterXml);
-
                 return nominatedPharmacyEnvelope.Envelope.OuterXml;
             }
             catch (Exception e)

@@ -25,6 +25,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
         private const string SpineAccreditedSystemIdFrom = "0001";
         private const string SpineAccreditedSystemIdTo = "0002";
+        private const string nhsNumber = "239 372 9384";
+        private const string nhsNumberTrimmed = "2393729384";
+        private const string currentPharmacyOdsCode = "PHA12";
+        private const string updatedPharmacyOdsCode = "AB837";
 
         [TestInitialize]
         public void TestInitialize()
@@ -44,7 +48,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         }
 
         [DataTestMethod]
-        [DataRow("P1", HttpStatusCode.OK, "AB837")]
+        [DataRow("P1", HttpStatusCode.OK, currentPharmacyOdsCode)]
         [DataRow("P2", HttpStatusCode.OK, null)]
         [DataRow("P3", HttpStatusCode.OK, null)]
         [DataRow("1", HttpStatusCode.OK, null)]
@@ -54,10 +58,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             string expectedPharmacyOdsCodeInResult)
         {
             // Arrange
-            const string nhsNumber = "239 372 9384";
-            const string nhsNumberTrimmed = "2393729384";
-            const string pharmacyOdsCode = "AB837";
-
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPA_IN000008UK02>(
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                                                     {
                                                                                         Id = new Id
                                                                                         {
-                                                                                            Extension = pharmacyOdsCode,
+                                                                                            Extension = currentPharmacyOdsCode,
                                                                                         }
                                                                                     }
                                                                                 }
@@ -151,8 +151,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         public async Task NominatedPharmacyUpdate_Returns400_WhenUpdateClientFails()
         {
             // Arrange
-            const string nhsNumber = "2393729384";
-            const string pharmacyOdsCode = "AB837";
             string pertinentSerialChangeNumber = new Guid().ToString();
 
             _nominatedPharmacyClient
@@ -162,8 +160,16 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                     ))
                     .Verifiable();
 
+            var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
+            {
+                HasExistingNominatedPharmacy = true,
+                UpdatedOdsCode = updatedPharmacyOdsCode,
+                NhsNumber = nhsNumber,
+                PertinentSerialChangeNumber = pertinentSerialChangeNumber,
+            };
+
             // Act
-            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, pharmacyOdsCode, pertinentSerialChangeNumber);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nominatedPharmacyUpdate);
 
             // Assert
             _nominatedPharmacyClient.Verify();
@@ -174,8 +180,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         public async Task NominatedPharmacyUpdate_ReturnsSuccessfulResponse_WhenClientUpdateIsSuccessful()
         {
             // Arrange
-            const string nhsNumber = "2393729384";
-            const string pharmacyOdsCode = "AB837";
             string pertinentSerialChangeNumber = new Guid().ToString();
 
             _nominatedPharmacyClient
@@ -185,8 +189,16 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 ))
                 .Verifiable();
 
+            var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
+            {
+                HasExistingNominatedPharmacy = true,
+                UpdatedOdsCode = updatedPharmacyOdsCode,
+                NhsNumber = nhsNumber,
+                PertinentSerialChangeNumber = pertinentSerialChangeNumber,
+            };
+
             // Act
-            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, pharmacyOdsCode, pertinentSerialChangeNumber);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nominatedPharmacyUpdate);
 
             // Assert
             _nominatedPharmacyClient.Verify();
@@ -197,8 +209,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         public async Task NominatedPharmacyUpdate_ReturnsInternalServerError_WhenClientThrowsException()
         {
             // Arrange
-            const string nhsNumber = "2393729384";
-            const string pharmacyOdsCode = "AB837";
             string pertinentSerialChangeNumber = new Guid().ToString();
 
             _nominatedPharmacyClient
@@ -206,8 +216,16 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 .Throws<Exception>()
                 .Verifiable();
 
+            var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
+            {
+                HasExistingNominatedPharmacy = true,
+                UpdatedOdsCode = updatedPharmacyOdsCode,
+                NhsNumber = nhsNumber,
+                PertinentSerialChangeNumber = pertinentSerialChangeNumber,
+            };
+
             // Act
-            var result = await _systemUnderTest.UpdateNominatedPharmacy(nhsNumber, pharmacyOdsCode, pertinentSerialChangeNumber);
+            var result = await _systemUnderTest.UpdateNominatedPharmacy(nominatedPharmacyUpdate);
 
             // Assert
             _nominatedPharmacyClient.Verify();

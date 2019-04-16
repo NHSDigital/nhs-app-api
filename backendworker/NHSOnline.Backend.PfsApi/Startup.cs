@@ -144,6 +144,7 @@ namespace NHSOnline.Backend.PfsApi
             services.AddSingleton<INominatedPharmacyClient, NominatedPharmacyClient>();
             services.AddSingleton<INominatedPharmacyPDSClient, NominatedPharmacyPDSClient>();
             services.AddSingleton<INominatedPharmacySubmitClient, NominatedPharmacySubmitClient>();
+            services.AddTransient<INominatedPharmacyGatewayUpdateService, NominatedPharmacyGatewayUpdateService>();
             services.AddTransient<IEnvelopeService, EnvelopeService>();
 
             services.AddSingleton(x => new NamedConnectionMultiplexer(

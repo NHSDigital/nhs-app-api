@@ -16,6 +16,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             PartSdsRoleId = configuration.GetOrWarn("PART_SDS_ROLE_ID", logger);
             SdsUserId = configuration.GetOrWarn("SDS_USER_ID", logger);
             PersonSdsRoleId = configuration.GetOrWarn("PERSON_SDS_ROLE_ID", logger);
+            ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds = configuration.GetIntOrDefault("DELAY_AFTER_NOMINATED_PHARMACY_UPDATE_IN_MILLISECONDS", logger);
             MessageId = Guid.NewGuid().ToString();
             
             var nominatedPharmacyUriString = configuration.GetOrWarn("NOMINATED_PHARMACY_URL", logger);
@@ -33,14 +34,16 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public string SpineAccreditedSystemIdTo { get; }
 
         public string PdsQueryFromAddress { get; }
-
+        
         public string PdsQueryTo { get; }
-
+        
         public string PartSdsRoleId { get; }
 
         public string SdsUserId { get; }
 
         public string PersonSdsRoleId { get; }
+
+        public int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
 
         public string MessageId { get; }
     }

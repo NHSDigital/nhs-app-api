@@ -51,7 +51,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         {
             // Arrange         
             var nominatedPharmacyUpdateRequest = new NominatedPharmacyUpdateRequest(
-                "111", 
+                "111",
+                true,
                 "ODSFFF",
                 "444");
 

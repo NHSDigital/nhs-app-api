@@ -8,6 +8,6 @@ namespace NHSOnline.Backend.NominatedPharmacy
     {
         Task<GetNominatedPharmacyResult> GetNominatedPharmacy(string nhsNumber);
         
-        Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(string nhsNumber, string odsCode, string pertinentSerialChangeNumber);
+        Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(NominatedPharmacyUpdate nominatedPharmacyUpdate);
     }
 }

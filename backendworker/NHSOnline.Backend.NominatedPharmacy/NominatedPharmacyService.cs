@@ -218,7 +218,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
             return successResult;
         }
 
-        public async Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(string nhsNumber, string odsCode, string pertinentSerialChangeNumber)
+        public async Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(NominatedPharmacyUpdate nominatedPharmacyUpdate)
         {
             _logger.LogEnter();
 
@@ -227,9 +227,10 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 var result =  await _prescriptionTrackingClient
                     .UpdateNominatedPharmacy(
                         new NominatedPharmacyUpdateRequest(
-                            nhsNumber,
-                            odsCode,
-                            pertinentSerialChangeNumber));
+                            nominatedPharmacyUpdate.NhsNumber,
+                            nominatedPharmacyUpdate.HasExistingNominatedPharmacy,
+                            nominatedPharmacyUpdate.UpdatedOdsCode,
+                            nominatedPharmacyUpdate.PertinentSerialChangeNumber));
 
                 if (!result.HasSuccessResponse)
                 {
@@ -237,12 +238,12 @@ namespace NHSOnline.Backend.NominatedPharmacy
                     return new UpdateNominatedPharmacyResult(result.StatusCode);
                 }
 
-                _logger.LogInformation("Successfully updated patients nominated pharmacy");
+                _logger.LogInformation("Successfully completed request to update patient's nominated pharmacy");
                 return new UpdateNominatedPharmacyResult(result.StatusCode);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,$"An error occurred while trying to update the patients nominated pharmacy");
+                _logger.LogError(ex, $"An error occurred while trying to update the patients nominated pharmacy");
                 return new UpdateNominatedPharmacyResult(HttpStatusCode.InternalServerError);
             }
             finally

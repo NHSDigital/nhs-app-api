@@ -21,5 +21,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
         string PersonSdsRoleId { get; }
         
         string MessageId { get; }
+
+        int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
     }
 }

@@ -12,7 +12,6 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
     public class NominatedPharmacyEnvelope
     {
         private const string SoapEnv = "SOAP-ENV";
-        private const string PdsPath = "sync-service";
 
         private INominatedPharmacyConfig _config;
 
@@ -20,7 +19,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
 
         public NominatedPharmacyEnvelope(IServiceDefinition serviceDefinition, INominatedPharmacyConfig config, ILogger logger)
         {
-            XmlDocument xmlDocument = BuildCoreXml(serviceDefinition, config, logger);
+            XmlDocument xmlDocument = BuildCoreXml(serviceDefinition, config);
             
             var nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
             nsmgr.AddNamespace("SOAP-ENV", "http://schemas.xmlsoap.org/soap/envelope/");
@@ -29,7 +28,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Soap
             Envelope = xmlDocument;
         }
 
-        private static XmlDocument BuildCoreXml(IServiceDefinition serviceDefinition, INominatedPharmacyConfig config, ILogger logger)
+        private static XmlDocument BuildCoreXml(IServiceDefinition serviceDefinition, INominatedPharmacyConfig config)
         {
             const string Xmlns = "xmlns";
             const string Wsa = "wsa";

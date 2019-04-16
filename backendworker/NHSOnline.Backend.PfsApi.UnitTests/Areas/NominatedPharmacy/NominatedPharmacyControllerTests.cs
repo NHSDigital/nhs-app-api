@@ -28,6 +28,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
     [TestClass]
     public class NominatedPharmacyControllerTests
     {
+        const string odsCode = "AB123";
+        const string updatedOdsCode = "BB999";
+        string pertinentSerialChangeNumber = Guid.NewGuid().ToString();
+        
         private NominatedPharmacyController _systemUnderTest;
         private IFixture _fixture;
         private UserSession _userSession;
@@ -36,9 +40,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         private Mock<INominatedPharmacyService> _mockNominatedPharmacyService;
         private Mock<IPharmacySearchService> _mockPharmacySearchService;
         private Mock<IPharmacyService> _mockPharmacyService;
+        private Mock<INominatedPharmacyGatewayUpdateService> _mockNominatedPharmacyGatewayUpdateService;
         private Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper> _mockMapper;
-        private string pertinentSerialChangeNumber = new Guid().ToString();
-
         private Mock<IAuditor> _auditor;
 
         [TestInitialize]
@@ -57,6 +60,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockNominatedPharmacyService = _fixture.Freeze<Mock<INominatedPharmacyService>>();
             _mockPharmacyService = _fixture.Freeze<Mock<IPharmacyService>>();
             _mockPharmacySearchService = _fixture.Freeze<Mock<IPharmacySearchService>>();
+            _mockNominatedPharmacyGatewayUpdateService = _fixture.Freeze<Mock<INominatedPharmacyGatewayUpdateService>>();
             _mockMapper = _fixture.Freeze<Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper>>();
             _auditor = _fixture.Freeze<Mock<IAuditor>>();
 
@@ -81,7 +85,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         {
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
-            const string odsCode = "AB123";
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
             
@@ -149,7 +152,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         {
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
-
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.InternalServerError);
             
             _mockNominatedPharmacyService
@@ -173,9 +175,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Get_Returns500_IfNominatedPharmacySearchIsSuccessfulButPharmacyDetailsSearchIsUnsuccessful()
         {
             // Arrange
-            string odsCode = "AB123";
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
-            string pertinentSerialChangeNumber = new Guid().ToString();
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
             
@@ -205,69 +205,40 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         }
 
         [TestMethod]
-        public async Task Update_ReturnsSuccessful200Result_WhenServiceReturnsSuccessfully()
+        public async Task Update_ReturnsResultFromService_WhenServiceReturnsSuccessfully()
         {
             // Arrange
-            #region GetPharmacyResultSetup
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
-            const string odsCode = "AB123";
-            string pertinentSerialChangeNumber = new Guid().ToString();
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
-
-            _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
-                .Returns(Task.FromResult(nominatedPharmacyResult))
+            _mockNominatedPharmacyGatewayUpdateService
+                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode))
+                .Returns(Task.FromResult(new StatusCodeResult((int)HttpStatusCode.OK)))
                 .Verifiable();
-
-            #endregion
-
-            #region UpdatePharmacyResultSetup
-            const string updatedOdsCode = "BB999";
-
-            var updateNominatedPharmacyResult = new UpdateNominatedPharmacyResult(HttpStatusCode.OK);
-
-            _mockNominatedPharmacyService
-                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode, pertinentSerialChangeNumber))
-                .Returns(Task.FromResult(updateNominatedPharmacyResult))
-                .Verifiable();
-
+            
             var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
             {
                 OdsCode = updatedOdsCode
             };
 
-            #endregion
-
             // Act
             var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
 
             // Assert
-            _mockNominatedPharmacyService.Verify();
-
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Exactly(1));
-            _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode, pertinentSerialChangeNumber), Times.Once);
-            var value = result.Should().BeAssignableTo<OkResult>().Subject;
+            _mockNominatedPharmacyGatewayUpdateService.Verify();            
+            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            value.StatusCode.Should().Be((int)HttpStatusCode.OK);
         }
 
         [TestMethod]
-        public async Task Update_ReturnsSuccessful500Result_WhenGetPharmacyFails()
+        public async Task Update_ReturnsInternalServerError_WhenServiceThrowsException()
         {
             // Arrange
-            #region GetPharmacyResultSetup
-            string odsCode = "AB123";
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
-            string pertinentSerialChangeNumber = new Guid().ToString();
-            const string updatedOdsCode = "BB999";
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.BadGateway, odsCode, pertinentSerialChangeNumber);
-
-            _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
-                .Returns(Task.FromResult(nominatedPharmacyResult))
+            _mockNominatedPharmacyGatewayUpdateService
+                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode))
+                .Throws<Exception>()
                 .Verifiable();
-
-            #endregion
 
             var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
             {
@@ -278,90 +249,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
 
             // Assert
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Once);
-            _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode, pertinentSerialChangeNumber), Times.Never);
-
+            _mockNominatedPharmacyGatewayUpdateService.Verify();
             var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            value.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
-        }
-
-        [TestMethod]
-        public async Task Update_ReturnsSuccessful400Result_WhenUpdatePharmacyFails()
-        {
-            // Arrange
-            #region GetPharmacyResultSetup
-            string odsCode = "AB123";
-            string nhsNumber = _userSession.GpUserSession.NhsNumber;
-            string pertinentSerialChangeNumber = new Guid().ToString();
-
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
-
-            _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
-                .Returns(Task.FromResult(nominatedPharmacyResult))
-                .Verifiable();
-
-            #endregion
-
-            #region UpdatePharmacyResultSetup
-            const string updatedOdsCode = "BB999";
-
-            var updateNominatedPharmacyResult = new UpdateNominatedPharmacyResult(HttpStatusCode.BadRequest);
-
-            _mockNominatedPharmacyService
-                .Setup(x => x.UpdateNominatedPharmacy(nhsNumber, updatedOdsCode, pertinentSerialChangeNumber))
-                .Returns(Task.FromResult(updateNominatedPharmacyResult))
-                .Verifiable();
-
-            var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
-            {
-                OdsCode = updatedOdsCode
-            };
-
-            #endregion
-
-            // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
-
-            // Assert
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Once);
-            _mockNominatedPharmacyService.Verify(x => x.UpdateNominatedPharmacy(nhsNumber,updatedOdsCode, pertinentSerialChangeNumber), Times.Once);
-            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            value.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        }
-        
-        [TestMethod]
-        public async Task Update_ReturnsBadGateway_WhenGetPharmacyHadMissingPertinentSerialChangeNumber()
-        {
-            // Arrange
-            #region GetPharmacyResultSetup
-            string odsCode = "AB123";
-            string nhsNumber = _userSession.GpUserSession.NhsNumber;
-            string pertinentSerialChangeNumber = null;
-            const string updatedOdsCode = "BB999";
-
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
-
-            _mockNominatedPharmacyService
-                .Setup(x => x.GetNominatedPharmacy(nhsNumber))
-                .Returns(Task.FromResult(nominatedPharmacyResult))
-                .Verifiable();
-
-            #endregion
-
-            var updateNominatedPharmacyRequest = new UpdateNominatedPharmacyRequest
-            {
-                OdsCode = updatedOdsCode
-            };
-
-            // Act
-            var result = await _systemUnderTest.Update(updateNominatedPharmacyRequest);
-
-            // Assert
-            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Once);
-
-            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            value.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            value.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
         }
 
         [TestMethod]

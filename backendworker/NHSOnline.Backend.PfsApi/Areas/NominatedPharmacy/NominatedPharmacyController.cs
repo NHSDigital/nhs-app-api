@@ -12,8 +12,6 @@ using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using System;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using NHSOnline.Backend.ApiSupport;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
@@ -25,7 +23,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         private readonly IPharmacyService _pharmacyService;
         private readonly IPharmacyDetailsToPharmacyDetailsResponseMapper _pharmacyDetailsToPharmacyDetailsResponseMapper;
         private readonly IPharmacySearchService _pharmacySearchService;
+        private readonly INominatedPharmacyGatewayUpdateService _nominatedPharmacyGatewayUpdateService;
         private readonly IAuditor _auditor;
+        private readonly INominatedPharmacyConfig _config;
 
         public NominatedPharmacyController(
             ILogger<NominatedPharmacyController> logger,
@@ -33,7 +33,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             IPharmacyService pharmacyService,
             IPharmacyDetailsToPharmacyDetailsResponseMapper pharmacyDetailsToPharmacyDetailsResponseMapper,
             IPharmacySearchService pharmacySearchService,
-            IAuditor auditor
+            INominatedPharmacyGatewayUpdateService nominatedPharmacyGatewayUpdateService,
+            IAuditor auditor,
+            INominatedPharmacyConfig config
            )
         {
             _logger = logger;
@@ -41,7 +43,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             _pharmacyService = pharmacyService;
             _pharmacyDetailsToPharmacyDetailsResponseMapper = pharmacyDetailsToPharmacyDetailsResponseMapper;
             _pharmacySearchService = pharmacySearchService;
+            _nominatedPharmacyGatewayUpdateService = nominatedPharmacyGatewayUpdateService;
             _auditor = auditor;
+            _config = config;
         }
 
         [HttpGet("nominated-pharmacy")]
@@ -90,42 +94,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             _logger.LogEnter();
             UserSession userSession = HttpContext.GetUserSession();
 
-            var result = await _nominatedPharmacyService.GetNominatedPharmacy(userSession.GpUserSession.NhsNumber);
-
-            if (HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
+            try
             {
-                if (string.IsNullOrEmpty(result.PertinentSerialChangeNumber))
-                {
-                    _logger.LogError("Missing pertinentSerialChangeNumber which is required for the update request");
-                    return new StatusCodeResult((int)HttpStatusCode.BadGateway);
-                }
-                
-                _logger.LogInformation($"Nominated pharmacy retrieved. Updating nominated pharmacy to: {model.OdsCode}");            
-
-                var updateNominatedPharmacyResult = await _nominatedPharmacyService
-                    .UpdateNominatedPharmacy(userSession.GpUserSession.NhsNumber,
-                        model.OdsCode, result.PertinentSerialChangeNumber);
-
-                if (HttpStatusCodeExtensions.IsSuccessStatusCode(updateNominatedPharmacyResult.HttpStatusCode))
-                {
-                    _logger.LogInformation($"Successfully updated nominated pharmacy to {result.PharmacyOdsCode}");
-                    await _auditor.Audit(Constants.AuditingTitles.UpdatedNominatedPharmacy, "Successfully updated nominated pharmacy");
-                    return Ok();
-
-                }
-                else
-                {
-                    _logger.LogInformation($"Error updating nominated pharmacy{ result.PharmacyOdsCode }");
-                    await _auditor.Audit(Constants.AuditingTitles.UpdatedNominatedPharmacy, "Failed to update nominated pharmacy");
-                    return new StatusCodeResult((int)updateNominatedPharmacyResult.HttpStatusCode);
-                }
+                var result = await _nominatedPharmacyGatewayUpdateService.UpdateNominatedPharmacy(userSession.GpUserSession.NhsNumber, model.OdsCode);
+                return result;
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogInformation($"Error retrieving nominated pharmacy from Spine - HttpStatusCode { result.HttpStatusCode }");
+                _logger.LogError(ex, $"An error occurred while trying to update the patient's nominated pharmacy");
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
-
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            finally
+            {
+                _logger.LogExit();
+            }
         }
 
         [HttpGet]

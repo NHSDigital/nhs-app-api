@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.Support
     public static class ConfigurationExtensions
     {
         private const string LogMessage = "Attempted to get a value for {0} from the environment but no value was found.";
+        private const string LogMessageParseError = "Attempted to parse value {0} for name {1} from the environment but encountered an error.";
 
         public static string GetOrWarn<T>(this IConfiguration configuration, string key, ILogger<T> logger)
         {
@@ -42,9 +43,26 @@ namespace NHSOnline.Backend.Support
             var strValue = GetOrThrow(configuration, key, logger);
             if (!int.TryParse(strValue, out var value))
             {
-                logger.LogError(string.Format(CultureInfo.InvariantCulture, LogMessage, key));
+                logger.LogError(string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key));
                 throw new ConfigurationNotFoundException(key);
             }
+            return value;
+        }
+
+        public static int GetIntOrDefault<T>(this IConfiguration configuration, string key, ILogger<T> logger)
+        {
+            int value = 0;
+
+            var strValue = GetOrWarn(configuration, key, logger);
+
+            if (strValue != null)
+            {
+                if (!int.TryParse(strValue, out value))
+                {
+                    logger.LogWarning(string.Format(CultureInfo.InvariantCulture, LogMessageParseError, strValue, key));
+                }
+            }
+            
             return value;
         }
 

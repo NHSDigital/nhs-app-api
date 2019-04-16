@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.Backend.NominatedPharmacy\NHSOnline.Backend.NominatedPharmacy.csproj" />
+    <ProjectReference Include="..\UnitTestHelper\UnitTestHelper.csproj" />
   </ItemGroup>
 
 </Project>
