@@ -5,10 +5,12 @@ import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.Keys
 import org.openqa.selenium.NoSuchElementException
+import org.openqa.selenium.StaleElementReferenceException
 import webdrivers.isAndroid
 import webdrivers.isIOS
 import webdrivers.options.OptionManager
 import webdrivers.options.device.DeviceWebMobile
+import java.lang.AssertionError
 
 const val LOCATOR_STRATEGY_ANDROID = "ANDROID"
 const val LOCATOR_STRATEGY_WEBVIEW = "WEBVIEW"
@@ -20,6 +22,8 @@ const val LOCATOR_STRATEGY_IOS_ACCESSIBILITY = "IOSACCESS"
 const val HEADER_HEIGHT_PX = 100
 const val FLOATING_BUTTON_HEIGHT_PX = 78.5
 const val NAVBAR_HEIGHT_PX = 70
+private const val DEFAULT_WAIT_TIME = 500L
+private const val DEFAULT_RETRIES = 3
 
 open class HybridPageElement(
         var webDesktopLocator: String,
@@ -86,6 +90,29 @@ open class HybridPageElement(
                 else -> throw IllegalArgumentException("Unknown element locator strategy.")
             }
         }
+
+    fun waitForElement(numberOfRetries: Int = DEFAULT_RETRIES,
+                               waitTime: Long = DEFAULT_WAIT_TIME): HybridPageElement {
+        //These pages are throwing stale exceptions when interacting with them
+        //By waiting for specific elements, we ensure that the page is fully loaded
+        var retryCountdown = numberOfRetries
+        var staleElement = true
+        while (staleElement || retryCountdown > 0) {
+            try {
+                assertIsVisible()
+                staleElement = false
+                retryCountdown=0
+            } catch (e: StaleElementReferenceException) {
+                staleElement = true
+            } catch (e: AssertionError) {
+                Thread.sleep(waitTime)
+                retryCountdown--
+                if(retryCountdown==0)
+                    throw e
+            }
+        }
+        return this
+    }
 
     fun locatorStrategy(): String {
         return if (page.driver.isAndroid() && androidLocator != null) {

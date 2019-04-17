@@ -6,14 +6,14 @@ Feature: Throttling
     And I see the GP Finder Page
 
   Scenario: A user searches for their practice to find out it is not participating in beta
-    Given There are multiple GP Practices for my search criteria
+    Given there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
     When I select a practice which is not participating in beta
     Then I see the Practice Not Participating page
 
   Scenario: A user is redirected to an external login page after continuing through the participating practice journey
-    Given There are multiple GP Practices for my search criteria
+    Given there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
     When I select a practice which is participating in beta
@@ -22,10 +22,10 @@ Feature: Throttling
     Then I see the CID login page
 
   Scenario Outline: A user searches can find their GP when searching using a valid postcode or outward code
-    Given There is a GP Practice with a postcode like <Postcode>
+    Given there is a GP Practice with a postcode like <Postcode>
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 1 search results
-    And The GP Practice found matches the searched postcode
+    And the GP Practice found matches the searched postcode
     Examples:
     | Postcode |
     | SW9      |
@@ -33,37 +33,36 @@ Feature: Throttling
     | SW9 1NG  |
     | Sw91ng   |
 
-  Scenario: A user does not see the Too many results warning if the max results are returned
-    Given There are the maximum limit GP Practices for my search criteria
+  Scenario: A user does not see the too many results warning if the max results are returned
+    Given there are 20 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 20 search results
-    And The Too many results error message is not visible
+    And the Too Many Results message for GP Search is not visible
 
   Scenario: A user sees a message if too many results are found
-    Given There are more than the maximum GP Practices for my search criteria
+    Given there are 21 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 20 search results
-    And The Too many results error message is visible
+    And the Too Many Results message for GP Search is visible
 
   Scenario: A user sees a message if no results are found
-    Given There are no GP Practices for my search criteria
+    Given there are 0 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
-    Then I see the GP Search Results Page with 0 search results
-    And The No results found error message is visible
+    Then the No Results Found page for GP Search is visible
 
   Scenario: A user is redirected to the GP finder page after selecting 'This is not my surgery' link
-    Given There are multiple GP Practices for my search criteria
+    Given there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
     When I select a practice which is participating in beta
-    And I click the This is not my GP surgery button
+    And I click the 'This is not my GP surgery' link
     Then I see the GP Finder Page
 
   Scenario: A user sees an error message if the NHS Service Search is unavailable
-    Given The NHS Service Search is unavailable
+    Given the NHS Service Search is unavailable
     When I enter criteria and submit my search in the GP Practice finder
-    Then I see the GP Search Results Page with 0 search results
-    And The Technical problems error message is visible
+    Then I see the GP Search Results Page with no search results
+    And the Technical Problems error message for GP Search is visible
 
   @native @3844
   Scenario: A user sees an error message if they search with invalid criteria
@@ -78,8 +77,8 @@ Feature: Throttling
 
   @native @3844
   Scenario: A user who chooses to register their email with brothermailer sees the Waiting list joined page
-    Given The brothermailer service will return a successful response
-    And There are multiple GP Practices for my search criteria
+    Given the brothermailer service will return a successful response
+    And there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
     When I select a practice which is not participating in beta
@@ -89,13 +88,13 @@ Feature: Throttling
 
     When I choose to sign up to brothermailer
     And I enter a valid email and submit
-    Then I see the Waiting List Joined page
-    And I click the go to home screen button
+    Then I see the GP Search Waiting List Joined page
+    And I click the 'Go to home screen' button
     And I see the login page for practice not participating
 
   Scenario: A user who chooses not to register their email with brothermailer sees the Waiting list not joined page
-    Given The brothermailer service will return a successful response
-    And There are multiple GP Practices for my search criteria
+    Given the brothermailer service will return a successful response
+    And there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
     When I select a practice which is not participating in beta
@@ -105,11 +104,11 @@ Feature: Throttling
 
     When I choose not to sign up to brothermailer
     And I click the 'Continue' button
-    Then I see the Waiting List Not Joined page
+    Then I see the GP Search Waiting List Not Joined page
 
   Scenario: A user sees a message if they do not choose any option on the brothermailer signup page
-    Given The brothermailer service will return a successful response
-    And There are multiple GP Practices for my search criteria
+    Given the brothermailer service will return a successful response
+    And there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
     When I select a practice which is not participating in beta
@@ -121,7 +120,7 @@ Feature: Throttling
     Then I see the make a choice error
 
   Scenario: A user sees a message if they enter an invalid email with brothermailer
-    Given There are multiple GP Practices for my search criteria
+    Given there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
 
@@ -135,8 +134,8 @@ Feature: Throttling
     Then I see the invalid email error
 
   Scenario: A user can get back to Participating page from Sending Email page
-    Given The brothermailer service will return a successful response
-    And There are multiple GP Practices for my search criteria
+    Given the brothermailer service will return a successful response
+    And there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
 
@@ -153,8 +152,8 @@ Feature: Throttling
     Then I see the Sending Email Page
 
   Scenario: A users sees an error if Brothermailer email registration service is down
-    Given The brothermailer service is down
-    And There are multiple GP Practices for my search criteria
+    Given the brothermailer service is down
+    And there are 2 GP Practices for my search criteria
     When I enter criteria and submit my search in the GP Practice finder
     Then I see the GP Search Results Page with 2 search results
 

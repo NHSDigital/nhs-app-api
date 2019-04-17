@@ -21,13 +21,6 @@ class GPParticipationPage : HybridPageObject() {
             page = this
     )
 
-    val notMySurgeryLink = HybridPageElement(
-            webDesktopLocator = "//a[contains(text(), 'This is not my GP surgery')]",
-            webMobileLocator = "//a[contains(text(), 'This is not my GP surgery')]",
-            androidLocator = null,
-            page = this
-    )
-
     val createAccountMessage = HybridPageElement(
             webDesktopLocator = "//p[@id='createAccountMessage']",
             webMobileLocator = "//p[@id='createAccountMessage']",

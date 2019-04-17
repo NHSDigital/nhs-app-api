@@ -1,18 +1,12 @@
 package features.throttling.stepDefinitions
 
 import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
 import pages.assertIsVisible
 import pages.throttling.GPParticipationPage
 
 open class GpParticipationPageStepDefinitions {
 
     lateinit var gpParticipationPage: GPParticipationPage
-
-    @When("^I click the This is not my GP surgery button$")
-    fun iClickTheThisIsNotMyGPSurgeryButton() {
-        gpParticipationPage.notMySurgeryLink.click()
-    }
 
     @Then("^I see the Practice Not Participating page$")
     fun iSeeThePracticeNotParticipatingPage() {

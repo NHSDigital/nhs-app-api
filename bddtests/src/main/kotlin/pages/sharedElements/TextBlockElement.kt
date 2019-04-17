@@ -9,10 +9,10 @@ import pages.assertElementNotPresent
 
 class TextBlockElement private constructor(
             title: String,
-            private val page: HybridPageObject,
+            page: HybridPageObject,
             titleStyling : String) {
 
-    private val containerXPath = "//div[$titleStyling[text()=\"$title\"]]"
+    private val containerXPath = "//div[$titleStyling[normalize-space(text())=\"$title\"]]"
 
     private val container = HybridPageElement(
             containerXPath,

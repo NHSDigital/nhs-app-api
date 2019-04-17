@@ -10,29 +10,26 @@ open class SendingEmailPageStepDefinitions {
 
     lateinit var sendingEmailPage: SendingEmailPage
 
-    @When("^I enter (a valid|an invalid) email and submit$")
-    fun iEnterAValidOrInvalidEmailAndSubmit(validOrInvalid: String){
-        when (validOrInvalid) {
-            "a valid" -> {
-                sendingEmailPage.enterEmail(SendingEmailPage.validEmail)
-            }
-            "an invalid" -> {
-                sendingEmailPage.enterEmail(SendingEmailPage.invalidEmail)
-            }
-        }
+    @When("^I enter a valid email and submit$")
+    fun iEnterAValidEmailAndSubmit(){
+        sendingEmailPage.enterEmail(SendingEmailPage.validEmail)
         sendingEmailPage.continueButton.click()
     }
 
-    @When("^I choose (to|not to) sign up to brothermailer$")
-    fun iChooseToOrNotToSignUpToBrotherMailer(toOrNotTo: String) {
-        when (toOrNotTo) {
-            "to" -> {
-                sendingEmailPage.yesRadioButton.click()
-            }
-            "not to" -> {
-                sendingEmailPage.noRadioButton.click()
-            }
-        }
+    @When("^I enter an invalid email and submit$")
+    fun iEnterAnInvalidEmailAndSubmit(){
+        sendingEmailPage.enterEmail(SendingEmailPage.invalidEmail)
+        sendingEmailPage.continueButton.click()
+    }
+
+    @When("^I choose to sign up to brothermailer$")
+    fun iChooseToSignUpToBrotherMailer() {
+        sendingEmailPage.yesRadioButton.click()
+    }
+
+    @When("^I choose not to sign up to brothermailer$")
+    fun iChooseNotToSignUpToBrotherMailer() {
+        sendingEmailPage.noRadioButton.click()
     }
 
     @When("^I click the back button on Sending Email page$")
@@ -58,7 +55,7 @@ open class SendingEmailPageStepDefinitions {
 
     @Then("^I see the Sending Email Page$")
     fun iSeeTheSendingEmailPage() {
-        sendingEmailPage.waitingListResultsHeader.assertIsVisible()
+        sendingEmailPage.waitingListResultsHeader.waitForElement()
         sendingEmailPage.emailFeatureText.assertIsVisible()
         sendingEmailPage.emailText.assertIsVisible()
         sendingEmailPage.continueButton.assertIsVisible()

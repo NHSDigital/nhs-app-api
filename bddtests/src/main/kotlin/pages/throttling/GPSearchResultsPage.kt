@@ -1,39 +1,18 @@
 package pages.throttling
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.sharedElements.BannerObject
+import pages.sharedElements.TextBlockElement
 
 class GPSearchResultsPage : HybridPageObject() {
 
     companion object {
-        const val TECHNICAL_PROBLEMS_ERROR_HEADER = "We are experiencing technical problems"
-        const val TOO_MANY_RESULTS_TEXT = "Can't find your GP surgery?"
-        const val NO_RESULTS_FOUND_TEXT = "No results found"
         const val FULL_POSTCODE_WITH_SPACE = "SW9 1NG"
     }
 
-    private val technicalProblemsErrorHeader = HybridPageElement(
-            webDesktopLocator = "//h3[contains(text(), \"$TECHNICAL_PROBLEMS_ERROR_HEADER\")]",
-            webMobileLocator = "//h3[contains(text(), \"$TECHNICAL_PROBLEMS_ERROR_HEADER\")]",
-            androidLocator = null,
-            page = this
-    )
-
-    private val noResultsFoundErrorHeader = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(), \"$NO_RESULTS_FOUND_TEXT\")]",
-            webMobileLocator = "//h2[contains(text(), \"$NO_RESULTS_FOUND_TEXT\")]",
-            androidLocator = null,
-            page = this
-    )
-
-    private val tooManyResultsErrorHeader = HybridPageElement(
-            webDesktopLocator = "//h2[contains(text(), \"$TOO_MANY_RESULTS_TEXT\")]",
-            webMobileLocator = "//h2[contains(text(), \"$TOO_MANY_RESULTS_TEXT\")]",
-            androidLocator = null,
-            page = this
-    )
+    private val errorBanner = BannerObject.error(this)
 
     private val searchResults = HybridPageElement(
             webDesktopLocator = "//ul[@id='searchResults']/li",
@@ -63,31 +42,33 @@ class GPSearchResultsPage : HybridPageObject() {
             page = this
     )
 
-    fun technicalProblemsErrorHeaderIsVisible(isVisible: Boolean) {
-        if (isVisible) {
-            assertTrue(technicalProblemsErrorHeader.element.isVisible)
-        } else {
-            assertFalse(findByXpath(technicalProblemsErrorHeader.webDesktopLocator).isVisible)
-        }
-    }
-
-    fun noResultsFoundErrorHeaderIsVisible(isVisible: Boolean) {
-        if (isVisible) {
-            assertTrue(noResultsFoundErrorHeader.element.isVisible)
-        } else {
-            assertFalse(findByXpath(noResultsFoundErrorHeader.webDesktopLocator).isVisible)
-        }
+    fun noResultsFoundErrorHeaderIsVisible() {
+        TextBlockElement.withH2Header("No results found", this)
+                .assert("We found no GP surgeries near \"Chesterfield\".")
     }
 
     fun tooManyResultsErrorHeaderIsVisible(isVisible: Boolean) {
+        val tooManyResultsMessage = TextBlockElement.withH2Header("Can't find your GP surgery?",this)
         if (isVisible) {
-            assertTrue(tooManyResultsErrorHeader.element.isVisible)
+            tooManyResultsMessage.assert("We can only show 20 results for what you search. " +
+                    "The more specific your search, the better the results.")
         } else {
-            assertFalse(findByXpath(tooManyResultsErrorHeader.webDesktopLocator).isVisible)
+            tooManyResultsMessage.assertElementNotPresent()
         }
     }
 
-    fun resultsExistForSearch(count: Int): Boolean {
-        return searchResults.elements.size == count
+    fun assertNumberOfResults(expectedResults: Int) {
+        val actualResults = searchResults.waitForElement().elements
+        Assert.assertEquals("Number of search results", expectedResults, actualResults.size)
+    }
+
+    fun assertNoResults() {
+        val actualResults = searchResults.elements
+        Assert.assertEquals("Number of search results", 0, actualResults.size)
+    }
+
+    fun assertTechnicalProblemsBanner() {
+        errorBanner.assertVisible(arrayListOf("We are experiencing technical problems",
+                "Something has gone wrong with this service. It wasn't your fault."))
     }
 }

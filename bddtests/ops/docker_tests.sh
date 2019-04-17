@@ -106,6 +106,8 @@ else
 
             let "val +=1"
           done
+
+          TAGS+=(throttling)
           
         elif [ "$RUN_NATIVE" == 1 ]
         then
@@ -268,7 +270,7 @@ info "Running $TAG tests"
     else
       if [ $TAG == "throttling" ]
       then
-        BDD_CUCUMBER_OPTIONS="--strict --tags @$TAG"
+        BDD_CUCUMBER_OPTIONS="--strict --tags '@$TAG and not @native'"
       else
         BDD_CUCUMBER_OPTIONS="--strict $BDD_CUCUMBER_OPTIONS_PREFIX and @$TAG'"
       fi

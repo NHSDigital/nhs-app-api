@@ -17,23 +17,7 @@ object NhsAzureSearchData {
     private const val BASE_ORGANISATION_ID = 4648
     private const val POSTCODE_SEARCH_INDEX = 9
 
-    fun getLessThanMaxNumberOfOrganisationData(): NHSAzureSearchOrganisationReply {
-        return generateXOrganisationData(2)
-    }
-
-    fun getMaxNumberOfOrganisationData(): NHSAzureSearchOrganisationReply {
-        return generateXOrganisationData(ORGANISATION_LIMIT)
-    }
-
-    fun getZeroOrganisationData(): NHSAzureSearchOrganisationReply {
-        return generateXOrganisationData(0)
-    }
-
-    fun getMoreThanMaxNumberOfOrganisationData(): NHSAzureSearchOrganisationReply {
-        return generateXOrganisationData(ORGANISATION_LIMIT + 2)
-    }
-
-    private fun generateXOrganisationData(numberOfItems: Int): NHSAzureSearchOrganisationReply {
+    fun generateOrganisationData(numberOfItems: Int): NHSAzureSearchOrganisationReply {
         val searchItems = mutableListOf<NhsAzureSearchOrganisationItem>()
 
         for(i in 1..Math.min(numberOfItems, NhsAzureSearchData.ORGANISATION_LIMIT)) {
