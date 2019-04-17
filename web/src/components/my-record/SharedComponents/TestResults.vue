@@ -52,7 +52,7 @@
       <a :class="$style.viewTestResult"
          :href="testResultsPath + nojsQuery"
          tabindex="0"
-         @click="viewVisionTestResults"
+         @click.prevent="viewVisionTestResults"
          @keypress="onKeyDownVision($event)">
         {{ $t('my_record.testResults.visionDetailsLink') }}
       </a>
