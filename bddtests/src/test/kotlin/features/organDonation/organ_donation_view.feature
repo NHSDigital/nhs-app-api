@@ -105,7 +105,8 @@ Feature: Organ Donation View
     Then the Organ Donation View Registration page is displayed
     When I select the 'Share that you are a donor' link on the Organ Donation View Registration page
     Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-share/
-
+    
+@tech-debt @NHSO-5031
   Scenario: A user can navigate to the external 'Tell your family and friends' page when viewing their registration
     Given I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
