@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.GpSystems
         {
             if (!HasSuccessResponse)
             {
-                logger.LogError($"Request failed with status code {responseMessage.StatusCode}");
+                logger.LogWarning($"Request failed with status code {responseMessage.StatusCode}");
 
                 if (!FormatResponseIfUnsuccessful)
                 {
