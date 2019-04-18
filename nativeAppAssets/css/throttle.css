@@ -150,7 +150,6 @@ main.onboard .carousel .board-slide-three {
 }
 
 main.onboard .carousel div.slide {
-  display: table !important;
   height: 100%;
   vertical-align: middle;
   padding-bottom: 9em;
@@ -163,7 +162,6 @@ main.onboard .carousel div.slide .content {
   vertical-align: middle;
   text-align: left;
   margin: auto;
-  display: table-cell;
   font-family: "FrutigerLTW01-45Light",
     Arial,
     sans-serif;
