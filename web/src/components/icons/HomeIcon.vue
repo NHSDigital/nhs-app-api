@@ -4,8 +4,7 @@
                     role="img" aria-labelledby="icon-title"
                     version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title id="icon-title">{{ $t('icons.homeIcon.title') }}</title>
-    <defs>NHS Logo</defs>
-    <g id="nhs_logo" role="presentation" stroke="none"
+    <g id="nhs_logo" stroke="none"
        stroke-width="1" fill="none" fill-rule="evenodd">
       <!--eslint-disable-next-line -->
             <polygon id="Fill-1" fill="#FFFFFF" points="0 31.8736173 78.3641739 31.8736173 78.3641739 0 0 0"></polygon>

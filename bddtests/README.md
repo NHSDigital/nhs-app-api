@@ -144,6 +144,12 @@ gradle clean prepare test aggregate \
 ```
 Output files in the `/bddtests/accessibilityoutput` folder (by default).
 
+Execute to get the Pa11y on docker image
+
+```
+docker pull nhsapp.azurecr.io/chrome:latest
+```
+
 Execute the Gradle Pa11y task to test the html files:
 
 ```
