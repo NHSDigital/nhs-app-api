@@ -23,8 +23,10 @@ describe('nominated pharmacy not found', () => {
 
   describe('warning', () => {
     let warningText;
+
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
       warningText = wrapper.find('#warning-text');
     });
@@ -43,6 +45,7 @@ describe('nominated pharmacy not found', () => {
     let instruction;
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
+      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
       instruction = wrapper.find('#instruction');
     });
@@ -65,6 +68,7 @@ describe('nominated pharmacy not found', () => {
       $style = {
         link: 'link',
       };
+      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
       link = wrapper.find('#link-to-nominate-pharmacy');
     });
@@ -95,6 +99,7 @@ describe('nominated pharmacy not found', () => {
         button: 'button',
         green: 'green',
       };
+      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
       continueButton = wrapper.find('#continue-button-found');
     });
@@ -125,6 +130,7 @@ describe('nominated pharmacy not found', () => {
         button: 'button',
         grey: 'grey',
       };
+      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
       backButton = wrapper.find('#back-button');
     });
@@ -175,6 +181,7 @@ describe('nominated pharmacy found', () => {
         button: 'button',
         green: 'green',
       };
+      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
       wrapper = mountPage();
       continueButton = wrapper.find('#continue-button-found');
     });
@@ -202,6 +209,7 @@ describe('nominated pharmacy found', () => {
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
       wrapper = mountPage();
+      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = false;
       pharmacyDetails = wrapper.find('#pharmacy-details');
     });
 

@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content']" >
     <pharmacy-detail
-      :nominated-pharmacy="nominatedPharmacy"
+      :pharmacy="nominatedPharmacy"
       :is-my-nominated-pharmacy="true" />
     <analytics-tracked-tag :text="$t('th03.errors.backButton')">
       <generic-button

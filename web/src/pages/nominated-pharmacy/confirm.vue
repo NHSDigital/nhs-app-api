@@ -1,8 +1,8 @@
 <template>
   <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
-    <pharmacy-detail
-      :nominated-pharmacy="nominatedPharmacy"
-      :is-my-nominated-pharmacy="false" />
+    <pharmacy-detail id="pharmacy-detail"
+                     :pharmacy="nominatedPharmacy"
+                     :is-my-nominated-pharmacy="false" />
     <generic-button id="confirm-button"
                     :class="[$style.button, $style.green]"
                     @click.stop.prevent="submitNominatedPharmacy">

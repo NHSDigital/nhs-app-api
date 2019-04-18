@@ -2,9 +2,8 @@
   <div>
     <p>{{ $t('nominatedPharmacy.line1') }}</p>
     <p v-if="!isMyNominatedPharmacy">{{ $t('confirmNominatedPharmacy.line1') }}</p>
-    <h2 :class="$style['pharmacy-name']"> {{ nominatedPharmacy.pharmacyName }} </h2>
-    <p> {{ formatAddress(nominatedPharmacy) }} </p>
-    <p> {{ nominatedPharmacy.telephoneNumber }} </p>
+    <pharmacy-summary id="pharmacy-summary"
+                      :pharmacy="pharmacy" />
     <analytics-tracked-tag v-if="isMyNominatedPharmacy"
                            :click-func="goToChangeNominatedPharmacySearch"
                            :class="[$style.checkFeaturesLink, $style['link']]"
@@ -20,7 +19,7 @@
       </template>
       <div>
         <div v-for="(openingTimeDetail, i)
-               in nominatedPharmacy.openingTimesFormatted"
+               in pharmacy.openingTimesFormatted"
              :key="i">
           <div :class="$style['row']">
             <div :class="$style['column']">{{ openingTimeDetail.day }}</div>
@@ -45,15 +44,17 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
 import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
     AnalyticsTrackedTag,
     CollapsibleDialog,
+    PharmacySummary,
   },
   props: {
-    nominatedPharmacy: {
+    pharmacy: {
       type: Object,
       required: true,
     },
@@ -63,16 +64,6 @@ export default {
     },
   },
   methods: {
-    formatAddress(nominatedPharmacy) {
-      return [
-        nominatedPharmacy.addressLine1,
-        nominatedPharmacy.addressLine2,
-        nominatedPharmacy.addressLine3,
-        nominatedPharmacy.county,
-        nominatedPharmacy.city,
-        nominatedPharmacy.postcode,
-      ].filter(Boolean).join(', ');
-    },
     goToChangeNominatedPharmacySearch() {
       redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
     },

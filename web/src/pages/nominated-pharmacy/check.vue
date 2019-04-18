@@ -21,10 +21,10 @@
         {{ $t('nominatedPharmacyNotFound.nominatedPharmacyLink') }}
       </a>
     </div>
-    <div v-else-if="!hasNoNominatedPharmacy"
+    <div v-else
          :class="$style.info" data-purpose="info">
       <pharmacy-detail id="pharmacy-details"
-                       :nominated-pharmacy="nominatedPharmacy"
+                       :pharmacy="pharmacy"
                        :is-my-nominated-pharmacy="true" />
     </div>
 
@@ -59,7 +59,8 @@ export default {
   },
   data() {
     return {
-      nominatedPharmacy: this.$store.state.nominatedPharmacy.pharmacy,
+      pharmacy: this.$store.state.nominatedPharmacy.pharmacy,
+      hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],
     };
   },
   computed: {
@@ -67,9 +68,6 @@ export default {
       return this.hasNoNominatedPharmacy ?
         this.$t('nominatedPharmacyNotFound.continueButton') :
         this.$t('nominatedPharmacy.continueButton');
-    },
-    hasNoNominatedPharmacy() {
-      return this.nominatedPharmacy.pharmacyName === undefined;
     },
   },
   created() {

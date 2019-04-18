@@ -26,7 +26,14 @@
           {{ $t('rp03.noSpecialRequestDefaultText') }}
         </p>
       </div>
+      <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
+        <hr>
+        <h2 :class="$style.pharmacyHeader">{{ $t('rp04.nominatedPharmacyHeader') }}</h2>
+        <pharmacy-summary id="pharmacy-summary"
+                          :pharmacy="nominatedPharmacy" />
+      </div>
     </div>
+
     <generic-button id="btn_confirm_and_order_prescription"
                     :button-classes="['button' , 'green',
                                       !$store.state.device.isNativeApp && 'medium']"
@@ -53,17 +60,21 @@
 import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 import GenericButton from '@/components/widgets/GenericButton';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
+import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
     GenericButton,
     DesktopGenericBackLink,
+    PharmacySummary,
   },
   data() {
     return {
       selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],
+      hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,
+      nominatedPharmacy: this.$store.state.nominatedPharmacy.pharmacy,
     };
   },
   computed: {
@@ -114,6 +125,9 @@ export default {
     .panel {
       margin-bottom: 1em;
     }
+    .pharmacyHeader {
+      font-size: 1.5em;
+    }
     hr {
       opacity: unset;
     }
@@ -121,4 +135,5 @@ export default {
     white-space: pre-line;
   }
   }
+
 </style>

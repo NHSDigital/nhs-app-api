@@ -133,6 +133,7 @@ export default {
     pageTitle: 'TBC',
     subHeader: 'Check your prescription details before ordering',
     specialRequestsLabel: 'Special requests relating to this order',
+    nominatedPharmacyHeader: 'My nominated pharmacy',
     confirmButton: 'Confirm and order prescription',
     backButton: 'Change this prescription',
   },
