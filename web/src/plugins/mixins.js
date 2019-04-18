@@ -42,7 +42,7 @@ Vue.mixin({
         }
       }
 
-      redirectTo(this, url, null);
+      redirectTo(this, url);
     },
     correctUrl(url) {
       if (url === LOGIN.path && this.$store.getters['session/isLoggedIn']()) {

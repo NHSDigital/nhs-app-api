@@ -65,6 +65,8 @@ import {
   DECISION_UNKNOWN,
   STATE_CONFLICTED,
 } from '@/store/modules/organDonation/mutation-types';
+import { INDEX } from '@/lib/routes';
+import { isNativeApp } from '@/components/NativeOnlyMixin';
 
 export default {
   components: {
@@ -108,9 +110,13 @@ export default {
       return this.state === STATE_CONFLICTED && this.decision === DECISION_UNKNOWN;
     },
   },
-  async asyncData({ store }) {
-    await store.dispatch('organDonation/getReferenceData');
-    await store.dispatch('organDonation/getRegistration');
+  async asyncData({ redirect, route, store }) {
+    if (!isNativeApp({ route, store })) {
+      redirect(INDEX.path);
+    } else {
+      await store.dispatch('organDonation/getReferenceData');
+      await store.dispatch('organDonation/getRegistration');
+    }
   },
   created() {
     this.$store.dispatch('organDonation/amendCancel');

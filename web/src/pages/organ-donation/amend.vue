@@ -18,7 +18,8 @@
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import GenericButton from '@/components/widgets/GenericButton';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
-import { ORGAN_DONATION } from '@/lib/routes';
+import { INDEX, ORGAN_DONATION } from '@/lib/routes';
+import { isNativeApp } from '@/components/NativeOnlyMixin';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -27,8 +28,10 @@ export default {
     GenericButton,
     MakeDecision,
   },
-  fetch({ redirect, store }) {
-    if (!store.state.organDonation.isAmending) {
+  fetch({ redirect, route, store }) {
+    if (!isNativeApp({ route, store })) {
+      redirect(INDEX.path);
+    } else if (!store.state.organDonation.isAmending) {
       redirect(ORGAN_DONATION.path);
     }
   },

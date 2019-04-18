@@ -1,16 +1,23 @@
 import find from 'lodash/fp/find';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import Withdraw from '@/pages/organ-donation/withdraw-reason';
+import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 import { $t, createRouter, createStore, mount } from '../../helpers';
 
-const createState = (state = {
-  organDonation: initialState(),
+const createState = ({ isWithdrawing = false, referenceData = {}, withdrawReasonId = '' } = {}) => ({
   device: {
-    source: 'web',
+    isNativeApp: false,
   },
-}) => state;
+  organDonation: {
+    ...initialState(),
+    ...{
+      isWithdrawing,
+      referenceData,
+      withdrawReasonId,
+    },
+  },
+});
 
 describe('organ donation withdraw reason page', () => {
   // In this case we want string numbers to be coerced into actual numbers and vice versa.
@@ -23,39 +30,76 @@ describe('organ donation withdraw reason page', () => {
 
   beforeEach(() => {
     $router = createRouter();
-    state = createState();
-
-    state.organDonation.referenceData = {
-      withdrawReasons: [
-        { id: 1, displayName: 'Select reason' },
-        { id: 2, displayName: 'Other' },
-        { id: 3, displayName: 'Leaving the UK' },
-        { id: 4, displayName: 'Religious grounds' },
-        { id: 5, displayName: 'I registered in error' },
-        { id: 6, displayName: 'I\'ve changed my mind' },
-        { id: 7, displayName: 'My family do not agree' },
-      ],
-    };
-    state.organDonation.withdrawReasonId = '';
+    state = createState({
+      referenceData: {
+        withdrawReasons: [
+          { id: 1, displayName: 'Select reason' },
+          { id: 2, displayName: 'Other' },
+          { id: 3, displayName: 'Leaving the UK' },
+          { id: 4, displayName: 'Religious grounds' },
+          { id: 5, displayName: 'I registered in error' },
+          { id: 6, displayName: 'I\'ve changed my mind' },
+          { id: 7, displayName: 'My family do not agree' },
+        ],
+      },
+    });
     $store = createStore({ state });
   });
 
-  describe('not withdrawing', () => {
+  describe('fetch', () => {
+    let redirect;
+
+    const fetch = ({ isWithdrawing = false, source }) => {
+      redirect = jest.fn();
+
+      wrapper.vm.$options.fetch({
+        redirect,
+        route: {
+          query: {
+            source,
+          },
+        },
+        store: createStore({
+          state: createState({ isWithdrawing }),
+        }),
+      });
+    };
+
     beforeEach(() => {
-      state.organDonation.isWithdrawing = false;
-      wrapper = mount(Withdraw, { $t, $store });
+      wrapper = mount(Withdraw, { $store });
     });
 
-    describe('fetch', () => {
-      let redirect;
-
+    describe('not native', () => {
       beforeEach(() => {
-        redirect = jest.fn();
-        wrapper.vm.$options.fetch({ redirect, store: $store });
+        fetch({ isWithdrawing: false, source: 'web' });
       });
 
-      it('will redirect back to the organ donation page', () => {
-        expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+      it('will redirect back to the home page', () => {
+        expect(redirect).toBeCalledWith(INDEX.path);
+      });
+    });
+
+    describe('native', () => {
+      const source = 'ios';
+
+      describe('not withdrawing', () => {
+        beforeEach(() => {
+          fetch({ isWithdrawing: false, source });
+        });
+
+        it('will redirect back to the organ donation page', () => {
+          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
+        });
+      });
+
+      describe('withdrawing', () => {
+        beforeEach(() => {
+          fetch({ isWithdrawing: true, source });
+        });
+
+        it('will not redirect', () => {
+          expect(redirect).not.toBeCalled();
+        });
       });
     });
   });
@@ -63,20 +107,7 @@ describe('organ donation withdraw reason page', () => {
   describe('withdrawing', () => {
     beforeEach(() => {
       state.organDonation.isWithdrawing = true;
-      wrapper = mount(Withdraw, { $t, $store });
-    });
-
-    describe('fetch', () => {
-      let redirect;
-
-      beforeEach(() => {
-        redirect = jest.fn();
-        wrapper.vm.$options.fetch({ redirect, store: $store });
-      });
-
-      it('will not redirect back to the organ donation page', () => {
-        expect(redirect).not.toHaveBeenCalledWith(ORGAN_DONATION.path);
-      });
+      wrapper = mount(Withdraw, { $store });
     });
 
     describe('reason', () => {
@@ -162,7 +193,7 @@ describe('organ donation withdraw reason page', () => {
           beforeEach(() => {
             reasonId = 'Other';
             state.organDonation.withdrawReasonId = reasonId;
-            wrapper = mount(Withdraw, { $t, $store, $router });
+            wrapper = mount(Withdraw, { $store, $router });
             continueButton = wrapper.find('#continue-button');
             continueButton.trigger('click');
           });
@@ -203,7 +234,7 @@ describe('organ donation withdraw reason page', () => {
 
       describe('click', () => {
         beforeEach(() => {
-          wrapper = mount(Withdraw, { $t, $store, $router });
+          wrapper = mount(Withdraw, { $store, $router });
           backButton = wrapper.find('#back-button');
           backButton.trigger('click');
         });

@@ -9,6 +9,7 @@ import glob from 'glob';
 const exclusions = [
   '../src/components/organ-donation/EnsureDecisionMixin.vue',
   '../src/components/widgets/HotJar.vue',
+  '../src/components/NativeOnlyMixin.vue',
 ];
 
 const importComponent = (path) => {

@@ -11,7 +11,7 @@ fun HybridPageElement.assertSingleElementPresent(): HybridPageElement {
 }
 
 fun HybridPageElement.assertIsVisible(): HybridPageElement {
-    Assert.assertTrue("Expected $helpfulNameToUse to be visible", element.isVisible)
+    Assert.assertTrue("Expected $helpfulNameToUse to be visible", waitForNonStaleElementToBecomeVisible().isDisplayed)
     return this
 }
 

@@ -6,7 +6,7 @@ import { $t, createStore, mount } from '../../helpers';
 const createState = () => ({
   organDonation: initialState(),
   device: {
-    source: 'web',
+    isNativeApp: true,
   },
 });
 

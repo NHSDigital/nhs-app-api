@@ -57,7 +57,8 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageList from '@/components/widgets/MessageList';
 import MessageText from '@/components/widgets/MessageText';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
+import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
+import { isNativeApp } from '@/components/NativeOnlyMixin';
 
 export default {
   components: {
@@ -87,8 +88,10 @@ export default {
       return (this.hasTriedToContinue && !this.reasonId);
     },
   },
-  fetch({ redirect, store }) {
-    if (!store.state.organDonation.isWithdrawing) {
+  fetch({ redirect, route, store }) {
+    if (!isNativeApp({ route, store })) {
+      redirect(INDEX.path);
+    } else if (!store.state.organDonation.isWithdrawing) {
       redirect(ORGAN_DONATION.path);
     }
   },

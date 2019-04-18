@@ -39,7 +39,7 @@ const createState = ({
   return {
     organDonation,
     device: {
-      source: 'web',
+      isNativeApp: true,
     },
   };
 };

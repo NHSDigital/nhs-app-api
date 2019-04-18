@@ -50,7 +50,7 @@ const createState = ({ choices = undefined } = {}) => {
   const state = {
     organDonation: initialState(),
     device: {
-      source: 'web',
+      isNativeApp: false,
     },
   };
 

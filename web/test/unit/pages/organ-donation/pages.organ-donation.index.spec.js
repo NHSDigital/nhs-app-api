@@ -24,7 +24,7 @@ const createState =
     const state = {
       organDonation: initialState(),
       device: {
-        source: 'web',
+        isNativeApp: true,
       },
     };
 
@@ -116,7 +116,7 @@ describe('organ donation index page', () => {
   let $style;
   let wrapper;
 
-  const mountOrganDonation = () => mount(OrganDonation, { $store, $style, $t });
+  const mountOrganDonation = () => mount(OrganDonation, { $store, $style });
 
   describe('created', () => {
     beforeEach(() => {

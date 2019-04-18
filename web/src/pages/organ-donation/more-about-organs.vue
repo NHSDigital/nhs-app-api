@@ -13,11 +13,13 @@
 
 <script>
 import BackButton from '@/components/BackButton';
+import NativeOnlyMixin from '@/components/NativeOnlyMixin';
 
 export default {
   components: {
     BackButton,
   },
+  mixins: [NativeOnlyMixin],
 };
 </script>
 

@@ -20,6 +20,7 @@
 <script>
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import NativeOnlyMixin from '@/components/NativeOnlyMixin';
 import OtherThingsToDo from '@/components/organ-donation/OtherThingsToDo';
 
 export default {
@@ -28,6 +29,7 @@ export default {
     MessageDialog,
     OtherThingsToDo,
   },
+  mixins: [NativeOnlyMixin],
   created() {
     this.$store.dispatch('organDonation/init');
   },

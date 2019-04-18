@@ -1,14 +1,8 @@
 import BackButton from '@/components/BackButton';
 import RadioGroup from '@/components/RadioGroup';
 import YourChoice from '@/pages/organ-donation/your-choice';
-import { ORGAN_DONATION, ORGAN_DONATION_FAITH } from '@/lib/routes';
-import {
-  DECISION_APPOINTED_REP,
-  DECISION_OPT_IN,
-  DECISION_OPT_OUT,
-  DECISION_UNKNOWN,
-  initialState,
-} from '@/store/modules/organDonation/mutation-types';
+import { initialState } from '@/store/modules/organDonation/mutation-types';
+import { ORGAN_DONATION_FAITH } from '@/lib/routes';
 import { $t, createRouter, createStore, mount } from '../../helpers';
 
 const createState = (choice = '') => {
@@ -30,7 +24,6 @@ describe('organ donation your choice page', () => {
   const mountWrapper = () => mount(YourChoice, {
     $router,
     $store,
-    $t,
     $style,
   });
 
@@ -43,68 +36,6 @@ describe('organ donation your choice page', () => {
 
   it('will have radio buttons', () => {
     expect(wrapper.find(RadioGroup).exists()).toBe(true);
-  });
-
-  describe('no decision set', () => {
-    beforeEach(() => {
-      state.organDonation.registration.decision = DECISION_UNKNOWN;
-    });
-
-    describe('fetch (via mixin)', () => {
-      it('will redirect back to the organ donation', () => {
-        const redirect = jest.fn();
-        wrapper.vm.$options.fetch({ redirect, store: $store });
-        expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
-      });
-    });
-  });
-
-  describe('has decision', () => {
-    beforeEach(() => {
-      wrapper = mountWrapper({ });
-    });
-
-    describe('opt in', () => {
-      beforeEach(() => {
-        state.organDonation.registration.decision = DECISION_OPT_IN;
-      });
-
-      describe('fetch (via mixin)', () => {
-        it('will not redirect', () => {
-          const redirect = jest.fn();
-          wrapper.vm.$options.fetch({ redirect, store: $store });
-          expect(redirect).not.toHaveBeenCalled();
-        });
-      });
-    });
-
-    describe('opt out', () => {
-      beforeEach(() => {
-        state.organDonation.registration.decision = DECISION_OPT_OUT;
-      });
-
-      describe('fetch (via mixin)', () => {
-        it('will redirect back to the organ donation index', () => {
-          const redirect = jest.fn();
-          wrapper.vm.$options.fetch({ redirect, store: $store });
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
-        });
-      });
-    });
-
-    describe('the user appointed a representative', () => {
-      beforeEach(() => {
-        state.organDonation.registration.decision = DECISION_APPOINTED_REP;
-      });
-
-      describe('fetch (via mixin)', () => {
-        it('will redirect back to the organ donation index', () => {
-          const redirect = jest.fn();
-          wrapper.vm.$options.fetch({ redirect, store: $store });
-          expect(redirect).toHaveBeenCalledWith(ORGAN_DONATION.path);
-        });
-      });
-    });
   });
 
   describe('back', () => {
@@ -174,7 +105,7 @@ describe('organ donation your choice page', () => {
   describe('for new registrations', () => {
     describe('currentChoice', () => {
       it('will have no value', () => {
-        expect(wrapper.vm.currentChoice).toEqual('');
+        expect(wrapper.vm.currentChoice).toBe('');
       });
     });
   });

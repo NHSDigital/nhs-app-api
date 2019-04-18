@@ -15,7 +15,7 @@ describe('organ donation faith page', () => {
     state = {
       organDonation: initialState(),
       device: {
-        source: 'web',
+        isNativeApp: false,
       },
     };
 
