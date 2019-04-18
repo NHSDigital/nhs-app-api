@@ -234,7 +234,6 @@ Feature: Registration
       | TPP       |
       | VISION    |
 
-
   @ios
   Scenario Outline: <GP System> User launches and completes account creation from web
     Given I have completed <GP System> account creation

@@ -5,15 +5,19 @@ import cucumber.api.java.en.When
 import features.organDonation.stepDefinitions.OrganDonationStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import features.sharedSteps.PageUrl
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.HomePage
 import pages.MorePage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 
 class MoreStepDefinitions {
 
+    @Steps
+    lateinit var pageUrl: PageUrl
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
@@ -25,6 +29,8 @@ class MoreStepDefinitions {
 
     lateinit var morePage: MorePage
 
+    lateinit var homePage: HomePage
+
     val mockingClient = MockingClient.instance
 
 
@@ -33,14 +39,19 @@ class MoreStepDefinitions {
         morePage.btnOrganDonation.click()
     }
 
+    @When("^I follow the organ donation link on the home page")
+    fun followOrganDonationLinkOnHomePage() {
+        homePage.organDonationLink.click()
+    }
+
     @When("^I choose to set my data sharing preferences")
     fun setDataSharingPreferences() {
         mockingClient.forNdop {
             postTokenToNdop()
                     .respondWithNdopMockPage()
         }
-        morePage.btnDataSharing.click()
-        morePage.locatorMethods.waitForNativeStepToComplete()
+        val urlForPage = pageUrl.getPage("data sharing")
+        browser.browseTo(urlForPage)
     }
 
     @Then("^I am on the More Page$")

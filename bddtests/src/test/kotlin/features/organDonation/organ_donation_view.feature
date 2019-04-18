@@ -1,19 +1,17 @@
 @organ-donation
 Feature: Organ Donation View
-
+  
   @nativepending @NHSO-2972
   Scenario: A user can navigate to the external version of 'Manage organ donation decision' when toggle is set as so
     Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
-    And I navigate to More
-    When I choose to set my organ donation preferences
+    When I follow the organ donation link on the home page
     Then the external Organ Donation page is displayed
-
-  Scenario: A user can navigate to the native version of 'Manage organ donation decision' when toggle is set as so
+    
+  Scenario: A user can navigate to the native version of 'Manage organ donation preferences' when toggle is set as so
     Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
-    And I navigate to more
-    And the organ donation toggle is set to target the internal page
+    And I retrieve the 'more' page directly
     When I choose to set my organ donation preferences
     Then the internal Organ Donation page is displayed
 

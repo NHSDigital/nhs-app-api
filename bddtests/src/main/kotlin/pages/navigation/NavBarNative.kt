@@ -14,7 +14,8 @@ open class NavBarNative : NativePageObject() {
     enum class NavBarType(val webDesktopLocator: String,
                           val webMobileLocator: String,
                           val androidLocator: String?,
-                          val iOSAccessID: String?) {
+                          val iOSAccessID: String?,
+                          val nativeOnly: Boolean = false) {
         SYMPTOMS(
                 "symptoms-menu-item",
                 "symptoms-menu-item",
@@ -39,7 +40,8 @@ open class NavBarNative : NativePageObject() {
                 "more-menu-item",
                 "more-menu-item",
                 "more",
-                "More")
+                "More",
+                true)
     }
 
     private fun getNativePageElement(element: NavBarType): NativePageElement {

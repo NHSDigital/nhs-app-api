@@ -666,7 +666,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 { followAppointmentHeaderLink() },
                 { followPrescriptionsHeaderLink() },
                 { followMedicalRecordHeaderLink()},
-                { followMoreHeaderLink() },
                 { followAccountHeaderLink() }
         )
 

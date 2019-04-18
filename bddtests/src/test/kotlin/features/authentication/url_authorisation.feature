@@ -87,7 +87,6 @@ Feature: Authorisation occurs during each URL visit
       | /appointments/confirmation                  | /appointments/booking          |
       | /data-sharing                               | /data-sharing                  |
       | /                                           | /                              |
-      | /more                                       | /more                          |
       | /my-record                                  | /my-record                     |
       | /my-record/noaccess                         | /my-record/noaccess            |
       | /prescriptions                              | /prescriptions                 |

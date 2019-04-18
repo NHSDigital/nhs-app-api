@@ -15,7 +15,7 @@ open class PageUrl {
                 "my prescriptions"             to "/prescriptions",
                 "prescription repeat courses"  to "/prescriptions/repeat-courses",
                 "organ donation"               to "/organ-donation",
-                "more"                         to "/more",
+                "more"                         to "/more?source=ios",
                 "account"                      to "/account",
                 "terms and conditions"         to "/terms-and-conditions"
                 )

@@ -7,7 +7,7 @@ Feature: Data Sharing
   Background:
     Given I am a EMIS patient
     And I am logged in
-    And I navigate to more
+    And I retrieve the 'More' page directly
     When I choose to set my data sharing preferences
 
   Scenario Outline: A user navigates through Data Sharing Preferences pages via the Next/Previous buttons

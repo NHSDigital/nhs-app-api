@@ -56,7 +56,8 @@ open class NavigationSteps {
         navBarNative.initailiseMenu()
 
         for (tab in NavBarNative.NavBarType.values()) {
-            Assert.assertTrue("$tab not visible", hasVisible(tab))
+            if(!tab.nativeOnly)
+                Assert.assertTrue("$tab not visible", hasVisible(tab))
         }
     }
 
