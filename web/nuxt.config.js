@@ -1,6 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const webpack = require('webpack');
 
+const APP_VERSION_TAG = 'dev_web_npm';
+
 const config = {
   build: {
     plugins: [
@@ -8,6 +10,7 @@ const config = {
         maxChunks: 4,
       }),
     ],
+    publicPath: `/_nuxt/${APP_VERSION_TAG}`.replace(/\./g, '-'),
     babel: {
       babelrc: true,
     },

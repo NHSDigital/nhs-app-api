@@ -29,6 +29,12 @@ COPY --chown=nodejs:nodejs . .
 ARG COMMIT_ID
 RUN sed -i "s/.*COMMIT_ID:.*/    COMMIT_ID: '$COMMIT_ID',/" nuxt.config.js
 
+ARG APP_VERSION_TAG
+RUN if [ -n "$APP_VERSION_TAG" ] ; \
+ then \
+ sed -i "s/.*const APP_VERSION_TAG.*/const APP_VERSION_TAG = '$APP_VERSION_TAG';/" nuxt.config.js; \
+ fi
+
 RUN npm run build
 
 # Tests
