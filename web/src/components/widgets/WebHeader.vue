@@ -24,7 +24,7 @@
     <div :class="$style.headerLowerSection">
       <page-title v-if="!isLoginPage"
                   :should-show-desktop-version="!$store.state.device.isNativeApp"/>
-      <header-companion-button/>
+      <header-companion-button v-if="shouldShowButton"/>
     </div>
   </div>
 </template>
@@ -109,6 +109,11 @@ export default {
     },
     loggedIn() {
       return !!this.$store.state.session.csrfToken;
+    },
+    shouldShowButton() {
+      return (
+        !this.$store.getters['errors/showApiError']
+      );
     },
   },
   mounted() {
