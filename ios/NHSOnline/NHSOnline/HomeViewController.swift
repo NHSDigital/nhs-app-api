@@ -422,6 +422,7 @@ class HomeViewController : UIViewController {
                 self.setVisibilityOfHeaderAndMenuBars(visible: false, isSlim: true)
                 self.showWhiteScreen()
                 self.webViewController?.loadPage(url: config().HomeUrl)
+                self.tabBar.selectedItem = nil
             } else {
                 if(webview.canGoBack) {
                     webview.goBack()
