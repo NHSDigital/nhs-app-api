@@ -1,14 +1,14 @@
 <template>
   <error-group :show-error="showError">
     <component :is="container"
-               :class="[$style['nhsuk-fieldset'], $style['nhsuk-form-group--error']]">
-      <legend v-if="header" :class="$style['nhsuk-fieldset__legend']">
+               class="nhsuk-fieldset nhsuk-form-group--error">
+      <legend v-if="header" class="nhsuk-fieldset__legend">
         {{ header }}
       </legend>
       <error-message v-if="errorMessage && showError">
         {{ errorMessage }}
       </error-message>
-      <div :class="[$style['nhsuk-radios'], inline && $style['nhsuk-radios--inline']]">
+      <div class="nhsuk-radios">
         <generic-radio-button v-for="radio in radios"
                               :key="getValue(radio)"
                               :selected-value="selectedValue"
@@ -16,7 +16,7 @@
                               :label="getLabel(radio)"
                               :name="name"
                               :value="getValue(radio)"
-                              :class="$style['nhsuk-radios__item']"
+                              class="nhsuk-radios__item"
                               @select="selected"/>
       </div>
     </component>
@@ -96,14 +96,10 @@ export default {
 };
 </script>
 
-<style module lang="scss" scoped>
+<style lang="scss">
 .nhsuk-fieldset{
  margin-bottom: 16px;
 }
-
- .nhsuk-radios--inline{
-  display: inline;
- }
 
 </style>
 
