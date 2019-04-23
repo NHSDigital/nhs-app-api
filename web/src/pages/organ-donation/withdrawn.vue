@@ -28,6 +28,9 @@ export default {
     MessageDialog,
     OtherThingsToDo,
   },
+  created() {
+    this.$store.dispatch('organDonation/init');
+  },
 };
 </script>
 

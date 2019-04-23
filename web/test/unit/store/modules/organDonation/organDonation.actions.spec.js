@@ -1,7 +1,6 @@
 import actions from '@/store/modules/organDonation/actions';
 import {
   CLONE_FROM_ORIGINAL,
-  INIT,
   LOADED,
   LOADED_REFERENCE_DATA,
   MAKE_DECISION,
@@ -135,10 +134,6 @@ describe('organ donation actions', () => {
           withdrawReasonId: state.withdrawReasonId,
         },
       });
-    });
-
-    it('will commit INIT', () => {
-      expect(commit).toHaveBeenCalledWith(INIT);
     });
 
     it('will push organ donation withdrawn to the router', () => {

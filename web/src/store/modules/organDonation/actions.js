@@ -66,7 +66,7 @@ export default {
   cloneFromOriginal({ commit }, path) {
     commit(CLONE_FROM_ORIGINAL, path);
   },
-  async deleteRegistration({ commit, state }) {
+  async deleteRegistration({ state }) {
     const request = {
       organDonationWithdrawRequest: {
         ...state.originalRegistration,
@@ -74,8 +74,6 @@ export default {
       },
     };
     await this.app.$http.deleteV1PatientOrgandonation(request);
-
-    commit(INIT);
 
     this.$router.push(ORGAN_DONATION_WITHDRAWN.path);
   },

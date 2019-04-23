@@ -1,18 +1,19 @@
 import Withdrawn from '@/pages/organ-donation/withdrawn';
-import { $t, mount } from '../../helpers';
+import { $t, createStore, mount } from '../../helpers';
 
 describe('withdrawn', () => {
+  let $store;
   let wrapper;
 
   beforeEach(() => {
-    wrapper = mount(Withdrawn, {
-      $t,
+    $store = createStore({
       state: {
         device: {
-          source: 'web',
+          isNativeApp: true,
         },
       },
     });
+    wrapper = mount(Withdrawn, { $store });
   });
 
   it('will show the decision withdrawn dialog text', () => {
@@ -29,5 +30,11 @@ describe('withdrawn', () => {
 
   it('will translate the what next body text', () => {
     expect($t).toHaveBeenCalledWith('organDonation.withdrawn.whatNext.bodyItems');
+  });
+
+  describe('created', () => {
+    it('will dispatch the "organDonation/init" action', () => {
+      expect($store.dispatch).toHaveBeenCalledWith('organDonation/init');
+    });
   });
 });
