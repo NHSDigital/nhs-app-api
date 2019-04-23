@@ -6,6 +6,7 @@ import {
   SET_SEARCH_RESULTS,
   CLEAR_SELECTED_NOMINATED_PHARMACY,
   SELECT,
+  SET_PREVIOUS_PAGE_TO_SEARCH,
 } from './mutation-types';
 import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
@@ -52,5 +53,8 @@ export default {
   },
   clearSelectedNominatedPharmacy({ commit }) {
     commit(CLEAR_SELECTED_NOMINATED_PHARMACY);
+  },
+  setPreviousPageToSearch({ commit }, previousPagePath) {
+    commit(SET_PREVIOUS_PAGE_TO_SEARCH, previousPagePath);
   },
 };

@@ -85,6 +85,7 @@ describe('nominated pharmacy not found', () => {
     it('will redirect to search nominated pharmacy page', async () => {
       dependency.redirectTo = jest.fn();
       await link.trigger('click');
+      expect($store.dispatch).toHaveBeenNthCalledWith(1, 'nominatedPharmacy/setPreviousPageToSearch', '/nominated-pharmacy/check');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path, null);
     });

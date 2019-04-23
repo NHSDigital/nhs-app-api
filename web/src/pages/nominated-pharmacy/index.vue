@@ -2,7 +2,8 @@
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content']" >
     <pharmacy-detail
       :pharmacy="nominatedPharmacy"
-      :is-my-nominated-pharmacy="true" />
+      :is-my-nominated-pharmacy="true"
+      :previous-path="currentPage"/>
     <analytics-tracked-tag :text="$t('th03.errors.backButton')">
       <generic-button
         :button-classes="['grey', 'button']" :class="$style.back"
@@ -18,7 +19,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GenericButton from '@/components/widgets/GenericButton';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
-import { PRESCRIPTIONS } from '@/lib/routes';
+import { PRESCRIPTIONS, NOMINATED_PHARMACY } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -30,6 +31,7 @@ export default {
   data() {
     return {
       nominatedPharmacy: this.$store.state.nominatedPharmacy.pharmacy,
+      currentPage: NOMINATED_PHARMACY.path,
     };
   },
   async asyncData({ store }) {

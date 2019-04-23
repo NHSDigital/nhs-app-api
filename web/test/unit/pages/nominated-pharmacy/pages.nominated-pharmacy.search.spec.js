@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import * as dependency from '@/lib/utils';
 import SearchPharmacies from '@/pages/nominated-pharmacy/search';
 import { initialState } from '@/store/modules/nominatedPharmacy/mutation-types';
 import { createStore, mount, $t } from '../../helpers';
@@ -27,10 +28,17 @@ describe('search pharmacies', () => {
   let $http;
   let page;
   let searchPharmaciesPage;
+  const state = createState({ nominatedPharmacy: { previousPageToSearch: 'ben' } });
 
   beforeEach(() => {
     $http = createHttp();
-    $store = createStore({ $http, state: createState() });
+    $store = createStore({
+      $http,
+      state,
+      getters: {
+        'nominatedPharmacy/previousPage': '/nominated-pharmacy',
+      },
+    });
     page = mountPage({ $store, $http });
     searchPharmaciesPage = page.find(SearchPharmacies);
   });
@@ -84,6 +92,25 @@ describe('search pharmacies', () => {
       expect(result).not.toBeNull();
       expect(result).toEqual(expectedResult);
       expect($http.getV1PatientPharmacies).toHaveBeenCalledWith(expectedRequest);
+    });
+  });
+
+  describe('back button', () => {
+    let backButton;
+
+    beforeEach(() => {
+      backButton = page.find('#back-button');
+    });
+
+    it('will exist', () => {
+      expect(backButton.exists()).toBe(true);
+    });
+
+    it('it will go back to the previous page set in the store', () => {
+      dependency.redirectTo = jest.fn();
+      backButton.trigger('click');
+
+      expect(dependency.redirectTo).toHaveBeenCalledWith(page.vm, '/nominated-pharmacy', null);
     });
   });
 });

@@ -25,7 +25,8 @@
          :class="$style.info" data-purpose="info">
       <pharmacy-detail id="pharmacy-details"
                        :pharmacy="pharmacy"
-                       :is-my-nominated-pharmacy="true" />
+                       :is-my-nominated-pharmacy="true"
+                       :previous-path="currentPage"/>
     </div>
 
     <generic-button id="continue-button-found"
@@ -47,7 +48,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
-import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -59,6 +60,7 @@ export default {
   },
   data() {
     return {
+      currentPage: NOMINATED_PHARMACY_CHECK.path,
       pharmacy: this.$store.state.nominatedPharmacy.pharmacy,
       hasNoNominatedPharmacy: this.$store.getters['nominatedPharmacy/hasNoNominatedPharmacy'],
     };
@@ -83,6 +85,7 @@ export default {
       redirectTo(this, PRESCRIPTIONS.path, null);
     },
     goToAddOrChangeNominatedPharmacy() {
+      this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', NOMINATED_PHARMACY_CHECK.path);
       redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
     },
   },

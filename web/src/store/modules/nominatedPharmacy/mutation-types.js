@@ -5,6 +5,7 @@ export const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
 export const NOMINATED_PHARMACY_UPDATED = 'NOMINATED_PHARMACY_UPDATED';
 export const CLEAR_SELECTED_NOMINATED_PHARMACY = 'CLEAR_SELECTED_NOMINATED_PHARMACY';
 export const SELECT = 'SELECT';
+export const SET_PREVIOUS_PAGE_TO_SEARCH = 'SET_PREVIOUS_PAGE_TO_SEARCH';
 
 export const initialState = () => ({
   pharmacy: {},
@@ -15,4 +16,5 @@ export const initialState = () => ({
     noResultsFound: false,
     pharmacies: [],
   },
+  previousPageToSearch: null,
 });

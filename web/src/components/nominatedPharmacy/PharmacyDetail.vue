@@ -5,6 +5,7 @@
     <pharmacy-summary id="pharmacy-summary"
                       :pharmacy="pharmacy" />
     <analytics-tracked-tag v-if="isMyNominatedPharmacy"
+                           id="link_changeNominatedPharmacy"
                            :click-func="goToChangeNominatedPharmacySearch"
                            :class="[$style.checkFeaturesLink, $style['link']]"
                            :text="$t('nominatedPharmacy.changePharmacyLink')"
@@ -62,9 +63,14 @@ export default {
       type: Boolean,
       required: true,
     },
+    previousPath: {
+      type: String,
+      required: false,
+    },
   },
   methods: {
     goToChangeNominatedPharmacySearch() {
+      this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', this.previousPath);
       redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
     },
   },

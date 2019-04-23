@@ -21,6 +21,7 @@
         </generic-button>
         <analytics-tracked-tag :text="$t('th03.errors.backButton')">
           <generic-button
+            id="back-button"
             :button-classes="['grey', 'button']" :class="$style['back']"
             tabindex="0" @click.prevent="cancelButtonClicked">
             {{ $t('th03.errors.backButton') }}
@@ -37,7 +38,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
-import { NOMINATED_PHARMACY, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import { redirectTo } from '@/lib/utils';
 
@@ -56,6 +57,7 @@ export default {
       allPharmaciesURL: NOMINATED_PHARMACY_SEARCH.path,
       allDispensingContractorsURL: NOMINATED_PHARMACY_SEARCH.path,
       submissionError: false,
+      backButtonPath: this.$store.getters['nominatedPharmacy/previousPage'],
     };
   },
   computed: {
@@ -133,7 +135,7 @@ export default {
       return pharmacySearchResult;
     },
     cancelButtonClicked() {
-      redirectTo(this, NOMINATED_PHARMACY.path, null);
+      redirectTo(this, this.backButtonPath, null);
     },
   },
 };
