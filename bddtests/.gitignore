@@ -40,3 +40,6 @@ ops/docker-compose_ci_run.yml
 ops/vars_ci_run.env
 
 .gradle/
+
+# user settings file
+*.DotSettings.user

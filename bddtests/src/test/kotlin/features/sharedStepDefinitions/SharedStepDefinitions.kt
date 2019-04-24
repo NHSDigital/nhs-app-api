@@ -96,8 +96,8 @@ open class SharedStepDefinitions {
         navBar.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
     }
 
-    @Then("^I see the (.*) menu button")
-    fun iSeeAMenuButton(type: String) {
+    @Then("^I see the (.*) menu button on mobile")
+    fun iSeeAMenuButtonOnMobile(type: String) {
         if(home.headerNative.onMobile()) {
             Assert.assertTrue(navBar.hasVisible(type))
         }

@@ -1,47 +1,40 @@
 @prescription
+@runnow
 Feature: View prescriptions error cases
   A user can view information about their prescriptions after logging in
 
+  #Feature Journies
+
+  @native-smoketest
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out
     Given I am patient using the <GP System> GP System
     And I am logged in
     Given The prescriptions endpoint is timing out
-    When I navigate to prescriptions
+    When I retrieve the 'My Prescriptions' page directly
     And I wait for 20 seconds
     Then I see the appropriate error message for a prescription timeout
     Examples:
       | GP System |
-      | TPP       |
-      | VISION    |
-
-  @native-smoketest
-    Examples:
-      | GP System |
       | EMIS      |
 
+  @native-smoketest
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error
     Given I am patient using the <GP System> GP System
     And I am logged in
     And The prescriptions endpoint is throwing a server error
-    When I navigate to prescriptions
+    When I retrieve the 'My Prescriptions' page directly
     Then I see the appropriate error message for a prescription server error
     Examples:
       | GP System |
-      | TPP       |
       | VISION    |
 
-  @native-smoketest
-    Examples:
-      | GP System |
-      | EMIS      |
-
-  @nativepending @NHSO-2974
+  @long-running
   Scenario: A user navigates to the prescriptions page and the session times out
     Given I am patient using the EMIS GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I am logged in
-    And I navigate to prescriptions
+    When I retrieve the 'My Prescriptions' page directly
     And My session has expired
     Then I see the login page with the session expiry notification
 
@@ -50,9 +43,9 @@ Feature: View prescriptions error cases
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    When I navigate to prescriptions
-    But The courses endpoint is timing out
-    And I click 'Order a new repeat prescription'
+    Then I retrieve the 'My Prescriptions' page directly
+    And The courses endpoint is timing out
+    When I retrieve the 'Prescription Repeat Courses' page directly
     And I wait for 20 seconds
     Then I see the appropriate error message for a prescription timeout
     Examples:
@@ -65,26 +58,20 @@ Feature: View prescriptions error cases
       | GP System |
       | EMIS      |
 
+  @native-smoketest
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
     Given I am patient using the <GP System> GP System
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    When I navigate to prescriptions
+    Then I retrieve the 'My Prescriptions' page directly
     But The courses endpoint is throwing a server error
-    And I click 'Order a new repeat prescription'
+    When I retrieve the 'Prescription Repeat Courses' page directly
     Then I see the appropriate error message for a prescription server error
     Examples:
       | GP System |
       | TPP       |
-      | VISION    |
 
-  @native-smoketest
-    Examples:
-      | GP System |
-      | EMIS      |
-
-  @nativepending @NHSO-2974
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
     Given I am patient using the <GP System> GP System
     And I am logged in
@@ -93,18 +80,17 @@ Feature: View prescriptions error cases
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    But The prescription submission endpoint is timing out
-    When I navigate to prescriptions
-    And I click 'Order a new repeat prescription'
+    Then I retrieve the 'My Prescriptions' page directly
+    And The prescription submission endpoint is timing out
+    When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     And I wait for 20 seconds
     Then I see the appropriate error message for a course request error
     Examples:
       | GP System |
-      | EMIS      |
-      | TPP       |
       | VISION    |
 
+  @native-smoketest
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
     Given I am patient using the <GP System> GP System
     And I am logged in
@@ -113,17 +99,11 @@ Feature: View prescriptions error cases
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    But The prescription submission endpoint is throwing a server error
-    When I navigate to prescriptions
-    And I click 'Order a new repeat prescription'
+    Then I retrieve the 'My Prescriptions' page directly
+    And The prescription submission endpoint is throwing a server error
+    When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
-    Examples:
-      | GP System |
-      | TPP       |
-      | VISION    |
-
-  @native-smoketest
     Examples:
       | GP System |
       | EMIS      |
@@ -137,9 +117,9 @@ Feature: View prescriptions error cases
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    But The prescription submission endpoint is throwing an already ordered exception
-    When I navigate to prescriptions
-    And I click 'Order a new repeat prescription'
+    Then I retrieve the 'My Prescriptions' page directly
+    And The prescription submission endpoint is throwing an already ordered exception
+    When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
     Examples:
@@ -155,9 +135,9 @@ Feature: View prescriptions error cases
     And I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    But The prescription submission endpoint is throwing an invalid guid exception
-    When I navigate to prescriptions
-    And I click 'Order a new repeat prescription'
+    Then I retrieve the 'My Prescriptions' page directly
+    And The prescription submission endpoint is throwing an invalid guid exception
+    When I retrieve the 'Prescription Repeat Courses' page directly
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
     Examples:

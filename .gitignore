@@ -12,3 +12,6 @@ chromedriver_win32/
 chromedriver
 
 bddtests/target/site/
+
+# user settings file
+*.DotSettings.user

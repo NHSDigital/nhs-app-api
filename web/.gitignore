@@ -23,3 +23,6 @@ coverage/
 *.sln
 .nuxt
 docker-compose.override.yml
+
+# user settings file
+*.DotSettings.user
