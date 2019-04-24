@@ -50,9 +50,9 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         [DataTestMethod]
         [DataRow("P1", HttpStatusCode.OK, currentPharmacyOdsCode)]
         [DataRow("P2", HttpStatusCode.OK, null)]
-        [DataRow("P3", HttpStatusCode.OK, null)]
+        [DataRow("P3", HttpStatusCode.OK, currentPharmacyOdsCode)]
         [DataRow("1", HttpStatusCode.OK, null)]
-        public async Task NominatedPharmacyGet_ReturnsSuccessfulResponseWithPharmacyOdsCode_WhenOdsCodeWhenCodeIsP1AndNotOtherwise(
+        public async Task NominatedPharmacyGet_ReturnsSuccessfulResponseWithPharmacyOdsCode_WhenOdsCodeWhenCodeIsP1orP3AndNotOtherwise(
             string code,
             HttpStatusCode httpStatusCode,
             string expectedPharmacyOdsCodeInResult)

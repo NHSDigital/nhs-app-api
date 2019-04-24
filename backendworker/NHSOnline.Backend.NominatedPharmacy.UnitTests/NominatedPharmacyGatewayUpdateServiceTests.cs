@@ -20,6 +20,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
     public class NominatedPharmacyControllerTests
     {
         const string odsCode = "AB123";
+        private const string nominatedPharmacyTypeP3 = "P3";
         const string updatedOdsCode = "BB999";
         readonly string pertinentSerialChangeNumber = Guid.NewGuid().ToString();
         readonly string nhsNumber = "123 456 7891";
@@ -49,8 +50,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_ReturnsSuccessful200Result_WhenServiceReturnsSuccessfully()
         {
             // Arrange            
-            var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
-            var nominatedPharmacyResultAfterUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, updatedOdsCode, pertinentSerialChangeNumber);
+            var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyTypeP3, pertinentSerialChangeNumber);
+            var nominatedPharmacyResultAfterUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, updatedOdsCode, nominatedPharmacyTypeP3, pertinentSerialChangeNumber);
 
             _mockNominatedPharmacyService
                 .SetupSequence(x => x.GetNominatedPharmacy(nhsNumber))
@@ -88,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_ReturnsBadGateway_WhenUpdateReturnsSuccessfully_ButSubsequentRetrievalOfPharmacyIndicatesUpdateWasNotSuccessful()
         {
             // Arrange
-            var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
+            var nominatedPharmacyResultBeforeUpdate = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyTypeP3, pertinentSerialChangeNumber);
 
             _mockNominatedPharmacyService
                 .SetupSequence(x => x.GetNominatedPharmacy(nhsNumber))
@@ -128,7 +129,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_ReturnsSuccessful500Result_WhenGetPharmacyFails()
         {
             // Arrange
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.BadGateway, odsCode, pertinentSerialChangeNumber);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.BadGateway, odsCode, nominatedPharmacyTypeP3, pertinentSerialChangeNumber);
 
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
@@ -150,7 +151,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         public async Task Update_Returns400Result_WhenUpdatePharmacyFails()
         {
             // Arrange            
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyTypeP3, pertinentSerialChangeNumber);
 
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
@@ -190,7 +191,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string pertinentSerialChangeNumber = null;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyTypeP3, pertinentSerialChangeNumber);
 
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))

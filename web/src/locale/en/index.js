@@ -180,6 +180,12 @@ export default {
     backButton: 'Back',
     noPharmacyButton: 'No nominated pharmacy',
   },
+  nominatedPharmacyCannotChange: {
+    line1: 'This is because your nominated pharmacy forms part of your GP surgery.',
+    howToHeader: 'How to change your nominated pharmacy',
+    line2: 'To nominate a new pharmacy, you need to contact your GP surgery directly.',
+    backButton: 'Back',
+  },
   noConnection: {
     header: 'Connection error',
     subheader: 'There\'s an issue with your internet connection',
@@ -806,6 +812,7 @@ export default {
     changeNominatedPharmacy: 'Change my nominated pharmacy',
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
+    cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
   },
   pageTitles: {
     home: 'Home',
@@ -834,6 +841,7 @@ export default {
     nominatedPharmacyNotFound: 'You have not nominated a pharmacy',
     confirmNominatedPharmacy: 'Confirm my nominated pharmacy',
     nominatedPharmacyFound: 'Check the pharmacy this will be sent to',
+    cannotChangePharmacy: 'You cannot change your nominated pharmacy with the NHS App',
   },
   crumbName: {
     backTo: 'Back to {crumbName}',

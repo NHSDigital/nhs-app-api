@@ -15,7 +15,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
 {
     public class NominatedPharmacyService : INominatedPharmacyService
     {
-        const string NominatedPharmacyCode = "P1";
+        const string NominatedPharmacyCodeP1 = "P1";
+        const string NominatedPharmacyCodeP3 = "P3";
 
         private readonly ILogger<NominatedPharmacyService> _logger;
         private readonly INominatedPharmacyClient _prescriptionTrackingClient;
@@ -195,15 +196,24 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent);
 
             string odsCode = null;
+            string nominatedPharmacyType = null;
 
             if (patientCareProvisionEvents != null)
             {
-                var patientCareP1Section = patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == NominatedPharmacyCode);
-
+                var patientCareP1Section = patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == NominatedPharmacyCodeP1);
+                var patientCareP3Section = patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == NominatedPharmacyCodeP3);
+                
                 if (patientCareP1Section != null)
                 {
                     odsCode = patientCareP1Section?.Performer?.AssignedEntity?.Id?.Extension;
+                    nominatedPharmacyType = NominatedPharmacyCodeP1;
                     _logger.LogInformation($"User retrieved nominated pharmacy with ods code: { odsCode }");
+                } 
+                else if (patientCareP3Section != null)
+                {
+                    odsCode = patientCareP3Section?.Performer?.AssignedEntity?.Id?.Extension;
+                    nominatedPharmacyType = NominatedPharmacyCodeP3;
+                    _logger.LogInformation($"User retrieved dispensing doctor with ods code: { odsCode }");
                 }
             }
 
@@ -212,8 +222,10 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
             var successResult = new GetNominatedPharmacyResult(
                 result.StatusCode, 
-                odsCode, 
-                pertinentSerialChangeNumber);
+                odsCode,
+                nominatedPharmacyType,
+                pertinentSerialChangeNumber
+                );
 
             return successResult;
         }

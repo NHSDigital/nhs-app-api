@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using NHSOnline.Backend.NominatedPharmacy.Soap;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 
 namespace NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy
@@ -13,5 +14,8 @@ namespace NHSOnline.Backend.Worker.GpSearch.Models.Pharmacy
 
         public HttpStatusCode StatusCode { get; set; }
         public Organisation Pharmacy { get; set; }
+        
+        public string NominatedPharmacyType { get; set; }
+        
     }
 }

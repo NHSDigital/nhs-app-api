@@ -77,6 +77,10 @@ describe('nominated pharmacy found', () => {
     nominatedPharmacy: {
       pharmacy: {
         pharmacyName: 'Boots',
+        openingTimesFormatted: [{
+          day: 'Sunday',
+          times: [],
+        }],
       },
     },
   }) => state;

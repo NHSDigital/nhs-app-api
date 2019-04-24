@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                         Time = x.Times,
                     }),
             };
-
+            
             return pharmacyDetails;
         }
 

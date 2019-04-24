@@ -4,8 +4,9 @@
     <p v-if="!isMyNominatedPharmacy">{{ $t('confirmNominatedPharmacy.line1') }}</p>
     <pharmacy-summary id="pharmacy-summary"
                       :pharmacy="pharmacy" />
-    <analytics-tracked-tag v-if="isMyNominatedPharmacy"
-                           id="link_changeNominatedPharmacy"
+    <hr>
+    <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink"
+                           id="link-to-change-pharmacy"
                            :click-func="goToChangeNominatedPharmacySearch"
                            :class="[$style.checkFeaturesLink, $style['link']]"
                            :text="$t('nominatedPharmacy.changePharmacyLink')"
@@ -13,46 +14,25 @@
                            tabindex="0">
       {{ $t('nominatedPharmacy.changePharmacyLink') }}
     </analytics-tracked-tag>
-
-    <collapsible-dialog :class="$style['opening-times']">
-      <template slot="header">
-        {{ $t('nominatedPharmacy.openingTimes') }}
-      </template>
-      <div>
-        <div v-for="(openingTimeDetail, i)
-               in pharmacy.openingTimesFormatted"
-             :key="i">
-          <div :class="$style['row']">
-            <div :class="$style['column']">{{ openingTimeDetail.day }}</div>
-            <div :class="$style['column']">
-              <div
-                v-if="openingTimeDetail.times.length === 0">{{ $t('nominatedPharmacy.closed') }}
-              </div>
-              <div v-else>
-                <div v-for="(openingTime, j) in openingTimeDetail.times"
-                     :key="j">{{ openingTime }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </collapsible-dialog>
+    <pharmacy-opening-times id="pharmacy-opening-times"
+                            :pharmacyOpeningTime="pharmacy.openingTimesFormatted" />
   </div>
 </template>
 
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
-import { NOMINATED_PHARMACY_SEARCH } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CANNOT_CHANGE } from '@/lib/routes';
+import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
+import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
     AnalyticsTrackedTag,
-    CollapsibleDialog,
     PharmacySummary,
+    PharmacyOpeningTimes,
   },
   props: {
     pharmacy: {
@@ -67,14 +47,26 @@ export default {
       type: String,
       required: false,
     },
+    canChangePharmacy: {
+      type: Boolean,
+      required: false,
+    },
+  },
+  computed: {
+    showChangeNominatedPharmacyLink() {
+      return (this.isMyNominatedPharmacy && this.canChangePharmacy);
+    },
   },
   methods: {
     goToChangeNominatedPharmacySearch() {
       this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', this.previousPath);
-      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
+      const nextPage = (this.pharmacy.pharmacyType === PharmacyType.P3) ?
+        NOMINATED_PHARMACY_CANNOT_CHANGE.path : NOMINATED_PHARMACY_SEARCH.path;
+      redirectTo(this, nextPage, null);
     },
   },
 };
+
 </script>
 
 <style module lang="scss" scoped>
@@ -83,17 +75,6 @@ export default {
 @import "../../style/colours";
 @import "../../style/textstyles";
 @import "../../style/home";
-
-.opening-times {
-  margin-bottom: 1em;
-  margin-top: 1em;
-}
-
-.link {
-    margin-top: 0.5em;
-    cursor: pointer;
-    text-decoration: underline;
-}
 
 .pharmacy-name {
   margin-top: 0.5em;

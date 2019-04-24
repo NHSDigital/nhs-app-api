@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
     public class Organisation
     {
         public string OrganisationName { get; set; }
-
+        
         public string Address1 { get; set; }
 
         public string Address2 { get; set; }

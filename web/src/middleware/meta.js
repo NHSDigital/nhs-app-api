@@ -47,6 +47,7 @@ import {
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_CHECK,
+  NOMINATED_PHARMACY_CANNOT_CHANGE,
 } from '@/lib/routes';
 
 function setPageTitle(route, store, app) {
@@ -226,6 +227,11 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaders.confirmNominatedPharmacy';
       route.meta.pageTitleKey = 'pageTitles.confirmNominatedPharmacy';
+      break;
+    case NOMINATED_PHARMACY_CANNOT_CHANGE.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaders.cannotChangePharmacy';
+      route.meta.pageTitleKey = 'pageTitles.cannotChangePharmacy';
       break;
     default:
       route.meta.headerKey = 'errors.404.header';

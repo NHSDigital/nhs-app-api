@@ -1569,7 +1569,7 @@
                 odsCode: 
                   type: "string"
                   description: "Unique code that identifies a user's GP practice"
-                token: 
+                token:
                   type: "string"
                   description: "User's session CsrfToken"
                 nhsNumber: 
@@ -1672,9 +1672,12 @@
                       telephoneNumber: 
                         type: "string"
                         description: "Telephone number of the pharmacy."
-                      odsCode: 
+                      odsCode:
                         type: "string"
                         description: "Code to identify the pharmacy"
+                      pharmacyType: 
+                        type: "string"
+                        description: "Type of the nominated pharmacy."
                       openingTimes: 
                         type: "array"
                         description: "An array of opening times."

@@ -5,6 +5,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy.Models
     public class PharmacyDetailsResponse
     {
         public string PharmacyName { get; set; }
+        
+        public string PharmacyType { get; set; }
 
         public string AddressLine1 { get; set; }
 

@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             UserSession userSession = HttpContext.GetUserSession();
 
             var result = await _nominatedPharmacyService.GetNominatedPharmacy(userSession.GpUserSession.NhsNumber);
-
+            
             if (HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
             {
                 if (string.IsNullOrEmpty(result.PharmacyOdsCode))
@@ -72,6 +72,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 if (HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacyDetailResponse.StatusCode))
                 {
                     var pharmacyDetails = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmacyDetailResponse.Pharmacy);
+                    pharmacyDetails.PharmacyType = result.NominatedPharmacyType;
                     await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, "Successfully retrieved nominated pharmacy");
                     return new OkObjectResult(pharmacyDetails);
                 }

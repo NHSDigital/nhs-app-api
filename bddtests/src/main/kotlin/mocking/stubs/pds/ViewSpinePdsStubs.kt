@@ -3,6 +3,7 @@ package mocking.stubs.pds
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import mocking.MockingClient
 import mocking.spine.pds.PdsNominatedPharmacyBuilder
+import java.lang.StringBuilder
 
 @Suppress("MaxLineLength")
 class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
@@ -11,6 +12,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
         private const val IP = "10.0.225.22"
         private const val fromAsid = "200000000355"
         private const val toAsid = "200000000355"
+        private var pharmacyTypes = arrayOf("P1")
     }
 
     fun generateSpineStubs() {
@@ -21,7 +23,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
         // Get nominated pharmacy ods code
         mockingClient.forSpine {
             PdsNominatedPharmacyBuilder(updateSoapAction)
-                    .respondWithSuccess(getP1Response("FC177"))
+                    .respondWithSuccess(getResponse("FC177", pharmacyTypes))
                     .inScenario(changeNominatedPharmacy)
                     .whenScenarioStateIs(Scenario.STARTED)
                     .willSetStateTo(pharmacyUpdatedScenario) }
@@ -29,7 +31,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
         // Get nominated pharmacy ods code (2nd Time after update )
         mockingClient.forSpine {
             PdsNominatedPharmacyBuilder(updateSoapAction)
-                    .respondWithSuccess(getP1Response("FK275"))
+                    .respondWithSuccess(getResponse("FK275", pharmacyTypes))
                     .inScenario(changeNominatedPharmacy)
                     .whenScenarioStateIs(pharmacyUpdatedScenario)
         }
@@ -41,7 +43,28 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
 
     }
 
-    fun getP1Response(odsCode: String): String {
+    fun getPatientCareProvision(odsCode: String, pharmacyTypes: kotlin.Array<String>) : StringBuilder {
+        val patientCareProvisionBuilder = StringBuilder();
+        if(pharmacyTypes.size > 0) {
+            for (pharmacyType in pharmacyTypes) {
+                patientCareProvisionBuilder.append("""<patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
+                                        <code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="${pharmacyType}"/>
+                                      <effectiveTime>
+                                        <low value="20190402"/>
+                                      </effectiveTime>
+                                      <id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="P000000042"/>
+                                      <performer typeCode="PRF">
+                                        <assignedEntity classCode="ASSIGNED">
+                                          <id root="2.16.840.1.113883.2.1.4.3" extension="${odsCode}"/>
+                                        </assignedEntity>
+                                      </performer>
+                                        </patientCareProvisionEvent>""");
+            }
+        }
+        return patientCareProvisionBuilder;
+    }
+
+    fun getResponse(odsCode: String, pharmacyTypes: kotlin.Array<String>): String {
         return """
             <?xml version='1.0' encoding='UTF-8'?>
             <SOAP-ENV:Envelope
@@ -135,18 +158,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                                 </playedOtherProviderPatient>
                                 <playedOtherProviderPatient classCode="PAT">
                                   <subjectOf typeCode="SBJ">
-                                    <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
-                                      <code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="P1"/>
-                                      <effectiveTime>
-                                        <low value="20190402"/>
-                                      </effectiveTime>
-                                      <id root="2.16.840.1.113883.2.1.3.2.4.18.1" extension="P000000042"/>
-                                      <performer typeCode="PRF">
-                                        <assignedEntity classCode="ASSIGNED">
-                                          <id root="2.16.840.1.113883.2.1.4.3" extension="${odsCode}"/>
-                                        </assignedEntity>
-                                      </performer>
-                                    </patientCareProvisionEvent>
+                                      ${ getPatientCareProvision(odsCode, pharmacyTypes) }
                                   </subjectOf>
                                 </playedOtherProviderPatient>
                                 <COCT_MT000201UK02.PartOfWhole classCode="PART">

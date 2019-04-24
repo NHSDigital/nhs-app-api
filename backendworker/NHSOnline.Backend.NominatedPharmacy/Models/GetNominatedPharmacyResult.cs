@@ -7,6 +7,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
         public HttpStatusCode HttpStatusCode { get; }
 
         public string PharmacyOdsCode { get; }
+        
+        public string NominatedPharmacyType { get; }
 
         public string PertinentSerialChangeNumber { get; }
 
@@ -15,9 +17,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.Models
             HttpStatusCode = httpStatusCode;
         }
 
-        public GetNominatedPharmacyResult(HttpStatusCode httpStatusCode, string pharmacyOdsCode, string pertinentSerialChangeNumber) : this(httpStatusCode)
+        public GetNominatedPharmacyResult(HttpStatusCode httpStatusCode, string pharmacyOdsCode, string nominatedPharmacyType, string pertinentSerialChangeNumber) : this(httpStatusCode)
         {
             PharmacyOdsCode = pharmacyOdsCode;
+            NominatedPharmacyType = nominatedPharmacyType;
             PertinentSerialChangeNumber = pertinentSerialChangeNumber;
         }
     }

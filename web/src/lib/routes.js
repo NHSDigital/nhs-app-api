@@ -487,6 +487,15 @@ const routes = {
       },
     },
   },
+  NOMINATED_PHARMACY_CANNOT_CHANGE: {
+    name: 'nominated-pharmacy-cannot-change',
+    path: '/nominated-pharmacy/cannot-change',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
   // Legacy
   LEGACY_MYRECORDWARNING: {
     name: 'my-record-warning',
@@ -581,6 +590,7 @@ export const {
   NOMINATED_PHARMACY_CONFIRM,
   NOMINATED_PHARMACY_SEARCH_RESULTS,
   NOMINATED_PHARMACY_CHECK,
+  NOMINATED_PHARMACY_CANNOT_CHANGE,
   ORGAN_DONATION,
   ORGAN_DONATION_ADDITIONAL_DETAILS,
   ORGAN_DONATION_AMEND,

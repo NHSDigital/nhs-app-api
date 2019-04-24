@@ -17,6 +17,10 @@ describe('nominated pharmacy not found', () => {
     nominatedPharmacy: {
       pharmacy: {
         pharmacyName: undefined,
+        openingTimesFormatted: [{
+          day: 'Sunday',
+          times: [],
+        }],
       },
     },
   }) => state;
@@ -115,6 +119,10 @@ describe('nominated pharmacy found', () => {
     nominatedPharmacy: {
       pharmacy: {
         pharmacyName: 'Boots',
+        openingTimesFormatted: [{
+          day: 'Sunday',
+          times: [],
+        }],
       },
     },
   }) => state;

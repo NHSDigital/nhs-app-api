@@ -67,6 +67,9 @@ definitions:
       pharmacyName:
         type: string
         description: Name of the nominated pharmacy.
+      pharmacyType:
+        type: string
+        description: Type of the nominated pharmacy.
       addressLine1:
         type: string
         description: First line of address.

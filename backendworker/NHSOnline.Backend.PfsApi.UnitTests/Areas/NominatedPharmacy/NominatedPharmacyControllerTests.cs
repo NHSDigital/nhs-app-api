@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
     {
         const string odsCode = "AB123";
         const string updatedOdsCode = "BB999";
+        private const string nominatedPharmacyType = "P1";
         string pertinentSerialChangeNumber = Guid.NewGuid().ToString();
         
         private NominatedPharmacyController _systemUnderTest;
@@ -86,7 +87,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyType, pertinentSerialChangeNumber);
             
             var pharmacyOrgansation = _fixture.Create<Organisation>();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrgansation);
@@ -118,6 +119,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(mappedResult);
+            mappedResult.PharmacyType.Should().Be(nominatedPharmacyType);
         }
 
         [DataTestMethod]
@@ -128,7 +130,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyType, pertinentSerialChangeNumber);
             
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
@@ -177,7 +179,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyType, pertinentSerialChangeNumber);
             
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))

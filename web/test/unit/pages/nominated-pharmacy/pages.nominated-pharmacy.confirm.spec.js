@@ -16,6 +16,10 @@ describe('confirm nominated pharmacy', () => {
     nominatedPharmacy: {
       selectedNominatedPharmacy: {
         odsCode: 'RR123',
+        openingTimesFormatted: [{
+          day: 'Sunday',
+          times: [],
+        }],
       },
     },
   }) => state;
