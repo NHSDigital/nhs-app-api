@@ -7,7 +7,8 @@
     <ul :class="$style['list-menu-white']" role="list">
       <li :class="$style.link" role="link">
         <analytics-tracked-tag
-          id="btn_choices" :click-func="onNominatedPharmacyDetailClicked"
+          id="btn_choices"
+          :click-func="onNominatedPharmacyDetailClicked"
           :class="$style['no-decoration']"
           :text="$t('rp01.nominatedPharmacy')"
           :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"

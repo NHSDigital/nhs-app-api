@@ -144,37 +144,10 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/buttons";
 @import "../../style/spacings";
-@import '../../style/throttling/gpfindersearch';
 @import '../../style/colours';
 
 .above-float-button {
   margin-bottom: $marginBottomFullScreen;
-}
-.info {
-  margin-bottom: 0em;
-  padding: 0.5em 1em 0em 1em;
-  :focus {
-    outline-color: $focus_highlight;
-  }
-  a, analytics-tracked-tag {
-    padding-bottom: 0.25em;
-    padding-top: 0.5em;
-    padding-left: 0em;
-    text-align: left;
-    text-decoration: none;
-    margin-bottom: 0.25em;
-    font-size: 1em;
-    font-weight: bold;
-  }
-p {
-    font-size: 1em;
-    color: #212B32;
-    margin-bottom: 0.25em;
-  }
-  h3 {
-    margin-bottom: 0em;
-    padding-bottom: 0em;
-  }
 }
 .inputSpacing{
  margin-bottom: 1em;

@@ -1,11 +1,13 @@
 import * as dependency from '@/lib/utils';
 import NominatedPharmacyCheck from '@/pages/nominated-pharmacy/check';
+import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import { $t, createStore, mount } from '../../helpers';
-import { PRESCRIPTION_REPEAT_COURSES, PRESCRIPTIONS, NOMINATED_PHARMACY_SEARCH } from '../../../../src/lib/routes';
+import { PRESCRIPTION_REPEAT_COURSES, PRESCRIPTIONS } from '../../../../src/lib/routes';
 
 describe('nominated pharmacy not found', () => {
   let $store;
   let $style;
+  let $router;
   let wrapper;
 
   const createState = (state = {
@@ -19,79 +21,25 @@ describe('nominated pharmacy not found', () => {
     },
   }) => state;
 
-  const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t });
+  const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t, $router });
 
-  describe('warning', () => {
-    let warningText;
-
-    beforeEach(() => {
-      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
-      wrapper = mountPage();
-      warningText = wrapper.find('#warning-text');
-    });
-
-    it('will exist', () => {
-      expect(warningText.exists()).toBe(true);
-    });
-
-    it('will use "nominatedPharmacyNotFound.warningText" for text', () => {
-      expect(warningText.text())
-        .toEqual('translate_nominatedPharmacyNotFound.warningText');
-    });
-  });
-
-  describe('instruction', () => {
-    let instruction;
-    beforeEach(() => {
-      $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
-      wrapper = mountPage();
-      instruction = wrapper.find('#instruction');
-    });
-
-    it('will exist', () => {
-      expect(instruction.exists()).toBe(true);
-    });
-
-    it('will use "nominatedPharmacyNotFound.line" for text', () => {
-      expect(instruction.text())
-        .toEqual('translate_nominatedPharmacyNotFound.line');
-    });
-  });
-
-  describe('link-to-add-nominated-pharmacy', () => {
-    let link;
+  describe('no nominated pharmacy warning', () => {
+    let noNominatedPharmacyWarning;
 
     beforeEach(() => {
       $store = createStore({ dispatch: jest.fn(() => Promise.resolve()), state: createState() });
-      $style = {
-        link: 'link',
-      };
+      $style = {};
       $store.getters['nominatedPharmacy/hasNoNominatedPharmacy'] = true;
       wrapper = mountPage();
-      link = wrapper.find('#link-to-nominate-pharmacy');
+      noNominatedPharmacyWarning = wrapper.find(NoNominatedPharmacyWarning);
     });
 
     it('will exist', () => {
-      expect(link.exists()).toBe(true);
-    });
-
-    it('will use "nominatedPharmacyNotFound.nominatedPharmacyLink" for text', () => {
-      expect(link.text())
-        .toEqual('translate_nominatedPharmacyNotFound.nominatedPharmacyLink');
-    });
-
-    it('will redirect to search nominated pharmacy page', async () => {
-      dependency.redirectTo = jest.fn();
-      await link.trigger('click');
-      expect($store.dispatch).toHaveBeenNthCalledWith(1, 'nominatedPharmacy/setPreviousPageToSearch', '/nominated-pharmacy/check');
-      expect(dependency.redirectTo)
-        .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY_SEARCH.path, null);
+      expect(noNominatedPharmacyWarning.exists()).toBe(true);
     });
   });
 
-  describe('continue-to-repeat-prescriptions', () => {
+  describe('continue to repeat prescriptions', () => {
     let continueButton;
 
     beforeEach(() => {
@@ -122,7 +70,7 @@ describe('nominated pharmacy not found', () => {
     });
   });
 
-  describe('back-to-prescriptions', () => {
+  describe('back to prescriptions', () => {
     let backButton;
 
     beforeEach(() => {
@@ -173,7 +121,7 @@ describe('nominated pharmacy found', () => {
 
   const mountPage = () => mount(NominatedPharmacyCheck, { $store, $style, $t });
 
-  describe('continue-to-repeat-prescriptions', () => {
+  describe('continue to repeat prescriptions', () => {
     let continueButton;
 
     beforeEach(() => {
@@ -204,7 +152,7 @@ describe('nominated pharmacy found', () => {
     });
   });
 
-  describe('show-pharmacy-details', () => {
+  describe('show pharmacy details', () => {
     let pharmacyDetails;
 
     beforeEach(() => {
@@ -219,4 +167,3 @@ describe('nominated pharmacy found', () => {
     });
   });
 });
-

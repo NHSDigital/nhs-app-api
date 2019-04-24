@@ -204,16 +204,22 @@ export default function ({ route, store, app }) {
       break;
     case NOMINATED_PHARMACY.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      route.meta.headerKey = 'pageHeaders.nominatedPharmacy';
-      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacy';
-      break;
-    case NOMINATED_PHARMACY_CHECK.name:
-      store.dispatch('navigation/setNewMenuItem', 2);
-      route.meta.headerKey = 'pageHeaders.nominatedPharmacyFound';
-      route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyFound';
       if (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
+      } else {
+        route.meta.headerKey = 'pageHeaders.nominatedPharmacy';
+        route.meta.pageTitleKey = 'pageTitles.nominatedPharmacy';
+      }
+      break;
+    case NOMINATED_PHARMACY_CHECK.name:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      if (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
+        route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
+        route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
+      } else {
+        route.meta.headerKey = 'pageHeaders.nominatedPharmacyFound';
+        route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyFound';
       }
       break;
     case NOMINATED_PHARMACY_CONFIRM.name:

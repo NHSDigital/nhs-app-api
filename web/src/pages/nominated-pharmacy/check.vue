@@ -2,24 +2,8 @@
   <div v-if="showTemplate"
        id="mainDiv"
        :class="[$style['pull-content'], !$store.state.device.isNativeApp && $style.desktopWeb]">
-    <div v-if="hasNoNominatedPharmacy"
-         :class="$style.info" data-purpose="info">
-      <message-dialog message-type="warning" icon-text="Important">
-        <message-text id="warning-text"
-                      :class="$style.warningText">
-          {{ $t('nominatedPharmacyNotFound.warningText') }}
-        </message-text>
-      </message-dialog>
-      <p id="instruction">
-        {{ $t('nominatedPharmacyNotFound.line') }}
-      </p>
-      <a id="link-to-nominate-pharmacy"
-         :class="[$style.checkFeaturesLink, $style['link']]"
-         href="#"
-         tag="a"
-         @click.prevent="goToAddOrChangeNominatedPharmacy">
-        {{ $t('nominatedPharmacyNotFound.nominatedPharmacyLink') }}
-      </a>
+    <div v-if="hasNoNominatedPharmacy">
+      <no-nominated-pharmacy-warning/>
     </div>
     <div v-else
          :class="$style.info" data-purpose="info">
@@ -45,18 +29,16 @@
 
 <script>
 import GenericButton from '@/components/widgets/GenericButton';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
-import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
+import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
+import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
   components: {
     GenericButton,
-    MessageDialog,
-    MessageText,
     PharmacyDetail,
+    NoNominatedPharmacyWarning,
   },
   data() {
     return {
@@ -84,16 +66,11 @@ export default {
     onBackButtonClicked() {
       redirectTo(this, PRESCRIPTIONS.path, null);
     },
-    goToAddOrChangeNominatedPharmacy() {
-      this.$store.dispatch('nominatedPharmacy/setPreviousPageToSearch', NOMINATED_PHARMACY_CHECK.path);
-      redirectTo(this, NOMINATED_PHARMACY_SEARCH.path, null);
-    },
   },
 };
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/info';
   @import '../../style/fonts';
   @import '../../style/buttons';
   @import '../../style/textstyles';
@@ -101,16 +78,6 @@ export default {
   @import '../../style/listmenu';
   @import "../../style/home";
 
-
-  .link {
-    margin-top: 0.5em;
-    margin-bottom: 1.5em;
-    cursor: pointer;
-    text-decoration: underline;
-    color: #005EB8;
-    display: block;
-    font-weight: bold;
-  }
 div {
   &.desktopWeb {
   max-width: 540px;

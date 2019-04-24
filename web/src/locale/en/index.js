@@ -859,6 +859,7 @@ export default {
     symptoms: 'Symptoms',
     termsAndConditions: 'Terms',
     legacyMyRecordWarning: 'My Record',
+    nominatedPharmacy: 'My nominated pharmacy',
   },
   myAccount: {
     detailsHeading: 'Details',

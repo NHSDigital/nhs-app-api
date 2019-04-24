@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.PfsApi.GpSearch.GpLookup;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {

@@ -292,10 +292,6 @@ const routes = {
       },
     },
   },
-  NOMINATED_PHARMACY_SEARCH: {
-    name: 'nominated-pharmacy-search',
-    path: '/nominated-pharmacy/search',
-  },
   ORGAN_DONATION: {
     name: 'organ-donation',
     path: '/organ-donation',
@@ -448,18 +444,48 @@ const routes = {
   NOMINATED_PHARMACY: {
     name: 'nominated-pharmacy',
     path: '/nominated-pharmacy',
+    crumb: {
+      i8nKey: 'nominatedPharmacy',
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
+  },
+  NOMINATED_PHARMACY_SEARCH: {
+    name: 'nominated-pharmacy-search',
+    path: '/nominated-pharmacy/search',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
   },
   NOMINATED_PHARMACY_CONFIRM: {
     name: 'nominated-pharmacy-confirm',
     path: '/nominated-pharmacy/confirm',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
   },
   NOMINATED_PHARMACY_SEARCH_RESULTS: {
     name: 'nominated-pharmacy-results',
     path: '/nominated-pharmacy/results',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
   },
   NOMINATED_PHARMACY_CHECK: {
     name: 'nominated-pharmacy-check',
     path: '/nominated-pharmacy/check',
+    crumb: {
+      get parentRoute() {
+        return this.allRoutes.PRESCRIPTIONS;
+      },
+    },
   },
   // Legacy
   LEGACY_MYRECORDWARNING: {
