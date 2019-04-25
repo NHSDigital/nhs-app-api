@@ -1,8 +1,7 @@
-<!-- eslint-disable vue/no-v-html -->
 <!-- eslint-disable vue/no-template-shadow -->
 <template>
   <div v-if="showTemplate" class="content">
-    <div :class="$style['page']">
+    <div :class="$style['page']" aria-live="polite">
       <h2 :class="$style['pageTitle']">
         {{ $t('ds01.mainHeader') }}
       </h2>
