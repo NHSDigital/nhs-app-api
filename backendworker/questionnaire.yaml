@@ -1,0 +1,199 @@
+openapi: 3.0.1
+info:
+  title: NHS Online CDS API.
+  description: NHS Online CDS API - clinical decision support api.
+  version: 0.0.1
+servers:
+- url: /
+paths:
+  /fhir/Questionnaire/{id}:
+    get:
+      summary: Gets the question for the specified id.
+      description: Gets the question for the specified id.
+      parameters:
+      - name: id
+        in: path
+        description: id of the question.
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation. Questionnaire returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Questionnaire'
+  /fhir/QuestionnaireResponse:
+    post:
+      summary: Posts the question answer, for the specified questionnaire.
+      description: Posts the question answer, for the specified questionnaire.
+      requestBody:
+        description: Body of answered question.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionnaireResponse"
+      responses:
+        200:
+          description: Successful operation. Questionnaire answer returned.
+components:
+  schemas:
+    Domain:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          description: This is the type of the requested resource.
+        text:
+          type: string
+          description: Text summary of the resource, for human interpretation.
+        contained:
+          type: object
+          description: Contained, inline resources.
+        extension:
+          type: object
+          description: Additional content defined by implementations.
+        modifierExtension:
+          type: object
+          description: Extensions that cannot be ignored.
+    Questionnaire:
+      allOf:     
+        - $ref: '#/components/schemas/Domain'
+        - type: object
+          required:
+            - subjectType
+          properties:
+            id:
+              type: string
+              description: The id of the question.
+            status:
+              type: string
+              description: Valid responses are draft | active | retired | unknown.
+            code:
+              type: string
+              description: Concept that represents the overall questionnaire.
+            subjectType:
+              type: string
+              description: Resource that can be subject of QuestionnaireResponse ResourceType (Required).
+            item:
+              type: array
+              items:
+                type: object
+                properties:
+                  repeats:
+                    type: boolean
+                    description: Whether the item may repeat.
+                  item:
+                    type: object
+                    properties: {}
+                    description: Nested questionnaire items.
+                  linkId:
+                    type: string
+                    description: Unique id for item in questionnaire.
+                  code:
+                    type: string
+                    description: Corresponding concept for this item in a terminology.
+                  options:
+                    type: string
+                    properties: {}
+                    description: Valueset containing permitted answers.
+                  text:
+                    type: string
+                    description: Primary text for the item.
+                  type:
+                    type: string
+                    description: The type of questionnaire item this is. If this is set
+                      to 'group', the EMS User interface MUST present all sub-items together
+                      to the user, with the group item description as the header.
+                  required:
+                    type: boolean
+                    description: Whether the item must be included in data results.
+                  option:
+                    type: object
+                    properties:
+                      valueInteger:
+                        type: integer
+                        description: Value of type integer.
+                      valueDate:
+                        type: string
+                        description: Value of type date.
+                      valueTime:
+                        type: string
+                        description: Value of type time.
+                      valueString:
+                        type: string
+                        description: Value of type string.
+                      valueCoding:
+                        type: object
+                        description: Value of type coding.
+                    description: Permitted answer
+    QuestionnaireResponse:
+      allOf:
+        - $ref: '#/components/schemas/Domain'
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The id of the question.
+            questionnaire: 
+              type: string
+              description: This MUST be populated with a reference to the Questionnaire to which this QuestionnaireResponse is responding.
+            item:
+              type: array
+              items:
+                type: object
+                properties:
+                  linkId:
+                    type: string
+                    description: Unique id for item in questionnaire.
+                  answer:
+                    type: object
+                    properties:
+                      valueInteger:
+                        type: integer
+                        description: Value of type integer.
+                      valueDate:
+                        type: string
+                        description: Value of type date.
+                      valueTime:
+                        type: string
+                        description: Value of type time.
+                      valueString:
+                        type: string
+                        description: Value of type string.
+                      valueCoding:
+                        type: object
+                        description: Value of type coding.
+                      valueBoolean:
+                        type: boolean
+                        description: Value of type boolean.
+                      valueDecimal:
+                        type: integer
+                        description: Value of type decimal.
+                      valueDateTime:
+                        type: string
+                        description: Value of type dateTime.
+                      valueUri:
+                        type: string
+                        description: Value of type uri.
+                      valueAttachment:
+                        type: object
+                        description: Value of type attachment. 
+                      valueQuantity:
+                        type: object
+                        description: Value of type quantity.
+                      valueReference:
+                        type: string
+                        description: Value of type reference.
+                      item:
+                        type: object
+                        description: Nested groups and questions.
+                    description: Valueset containing permitted answers.
+                  text:
+                    type: string
+                    description: Primary text for the item.
+                  item:
+                    type: object
+                    description: Nested questionnaire response items.
