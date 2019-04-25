@@ -468,6 +468,37 @@
 			"response": []
 		},
 		{
+			"name": "(16) - RequestSystmOnlineMessages",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "RequestSystmOnlineMessages"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<RequestSystmOnlineMessages  apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\" unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\" />"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "(1) - LinkAccount (will overwrite the user details)",
 			"event": [
 				{
