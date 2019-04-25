@@ -27,8 +27,10 @@ import isEmpty from 'lodash/fp/isEmpty';
 export default {
   name: 'BreadCrumbTrail',
   props: {
-    routes: Array,
-    default: () => [],
+    routes: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
     lastCrumb() {

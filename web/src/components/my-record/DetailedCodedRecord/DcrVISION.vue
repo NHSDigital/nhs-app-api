@@ -117,6 +117,7 @@ const EXAMINATIONS = 'examination';
 const PROCEDURES = 'procedures';
 
 export default {
+  name: 'DcrVISION',
   components: {
     AnalyticsTrackedTag,
     Immunisations,

@@ -42,6 +42,7 @@ const TESTRESULTS = 'testresults';
 const EVENTS = 'events';
 
 export default {
+  name: 'DcrTPP',
   components: {
     AnalyticsTrackedTag,
     Events,

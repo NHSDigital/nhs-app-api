@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'RadioButtonIcon',
   props: {
     selected: {
       type: Boolean,

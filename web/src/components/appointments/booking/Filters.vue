@@ -58,6 +58,7 @@ import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
 import cloneDeep from 'lodash/fp/cloneDeep';
 
 export default {
+  name: 'Filters',
   components: {
     SelectDropdown,
     CollapsibleDialog,

@@ -26,6 +26,7 @@ import PlusMinusIcon from '@/components/icons/PlusMinusIcon';
 const ENTER_KEY_CODE = 13;
 
 export default {
+  name: 'CollapsibleDialog',
   components: {
     PlusMinusIcon,
   },

@@ -26,6 +26,7 @@ import { MY_RECORD_VISION_DIAGNOSIS_DETAIL } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'Diagnosis',
   components: {
     DcrErrorNoAccess,
   },

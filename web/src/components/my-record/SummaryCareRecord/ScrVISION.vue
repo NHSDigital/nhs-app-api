@@ -79,6 +79,7 @@ const CURRENTREPEATMEDICATIONS = 'currentrepeatmedications';
 const DISCONTINUEDREPEATMEDICATIONS = 'discontinuedrepeatmedications';
 
 export default {
+  name: 'ScrVISION',
   components: {
     AllergiesAndAdverseReactions,
     Medications,

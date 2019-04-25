@@ -67,6 +67,7 @@ import { MY_RECORD_VISION_TEST_RESULTS_DETAIL } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'TestResults',
   components: {
     DcrErrorNoAccess,
   },

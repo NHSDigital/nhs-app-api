@@ -32,6 +32,7 @@ import orderBy from 'lodash/fp/orderBy';
 import ScrErrorNoAccess from '@/components/my-record/SharedComponents/SCRErrorNoAccess';
 
 export default {
+  name: 'Medications',
   components: {
     ScrErrorNoAccess,
   },

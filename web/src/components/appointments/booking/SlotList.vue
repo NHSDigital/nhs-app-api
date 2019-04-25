@@ -27,6 +27,7 @@ import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'SlotList',
   components: {
     TimeSlot,
   },

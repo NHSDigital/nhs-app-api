@@ -2,6 +2,7 @@
 <template />
 <script>
 export default {
+  name: 'HotJar',
   head() {
     if (this.$env.HOTJAR_SITE_ID) {
       /* eslint-disable prefer-template */

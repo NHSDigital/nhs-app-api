@@ -13,6 +13,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 
 export default {
+  name: 'LoginButton',
   components: {
     GenericButton,
   },

@@ -9,6 +9,7 @@
 import { noJsParameterName } from '@/lib/noJs';
 
 export default {
+  name: 'NoJsForm',
   props: {
     value: {
       type: Object,

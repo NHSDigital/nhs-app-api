@@ -25,6 +25,7 @@ import _ from 'lodash';
 import ScrErrorNoAccess from '@/components/my-record/SharedComponents/SCRErrorNoAccess';
 
 export default {
+  name: 'AllergiesAndAdverseReactions',
   components: {
     ScrErrorNoAccess,
   },

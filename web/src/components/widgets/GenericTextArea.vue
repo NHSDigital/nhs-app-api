@@ -25,6 +25,7 @@
 import TabFocusMixin from './TabFocusMixin';
 
 export default {
+  name: 'GenericTextArea',
   components: {
     TabFocusMixin,
   },

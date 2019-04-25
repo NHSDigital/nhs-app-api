@@ -10,6 +10,7 @@
 <script>
 
 export default {
+  name: 'MessageText',
   props: {
     ariaLabel: {
       type: String,

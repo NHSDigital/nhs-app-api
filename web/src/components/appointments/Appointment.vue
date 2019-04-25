@@ -63,6 +63,7 @@ import { createUri } from '@/lib/noJs';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'Appointment',
   components: {
     ClinicianIcon,
     LocationIcon,

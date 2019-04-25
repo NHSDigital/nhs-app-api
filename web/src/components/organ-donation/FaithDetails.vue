@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: 'FaithDetails',
   props: {
     declaration: {
       type: String,

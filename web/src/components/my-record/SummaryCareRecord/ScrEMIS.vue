@@ -78,6 +78,7 @@ const CURRENTREPEATMEDICATIONS = 'currentrepeatmedications';
 const DISCONTINUEDREPEATMEDICATIONS = 'discontinuedrepeatmedications';
 
 export default {
+  name: 'ScrEMIS',
   components: {
     AllergiesAndAdverseReactions,
     Medications,

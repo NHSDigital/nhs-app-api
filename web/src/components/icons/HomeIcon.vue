@@ -25,6 +25,7 @@ import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
 import { INDEX } from '@/lib/routes';
 
 export default {
+  name: 'HomeIcon',
   components: {
     TabFocusedIcon,
   },

@@ -75,6 +75,7 @@ import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORD, MORE, ACCOUNT, LOGOUT 
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'HeaderMenuWidget',
   props: {
     showMiniMenuOnSmallMedia: {
       type: Boolean,

@@ -49,6 +49,7 @@ import CookieBanner from '../CookieBanner';
 import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
 
 export default {
+  name: 'WebHeader',
   components: {
     BreadCrumbTrail,
     HomeLink,

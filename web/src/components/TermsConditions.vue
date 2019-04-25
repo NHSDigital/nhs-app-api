@@ -91,6 +91,7 @@ import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 import { INDEX } from '@/lib/routes';
 
 export default {
+  name: 'TermsConditions',
   components: {
     CheckedIcon,
     GenericButton,

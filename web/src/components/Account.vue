@@ -17,6 +17,7 @@ function signoutClicked(event) {
 }
 
 export default {
+  name: 'Account',
   components: {
     GenericButton,
   },

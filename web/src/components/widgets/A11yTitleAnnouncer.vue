@@ -7,6 +7,7 @@
 <script>
 
 export default {
+  name: 'A11yTitleAnnouncer',
   data() {
     return {
       a11yText: `${this.$store.state.pageTitle.pageTitle}`,

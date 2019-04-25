@@ -19,6 +19,7 @@ import NhsLogo from '@/components/icons/NhsLogo';
 import HelpIcon from '../components/icons/HelpIcon';
 
 export default {
+  name: 'HomeHeader',
   components: {
     SymptomBanner,
     NhsLogo,

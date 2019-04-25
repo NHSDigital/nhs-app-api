@@ -28,6 +28,7 @@ import _ from 'lodash';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 
 export default {
+  name: 'Events',
   components: {
     DcrErrorNoAccess,
   },

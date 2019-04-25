@@ -17,6 +17,7 @@
 
 <script>
 export default {
+  name: 'SelectDropdown',
   props: {
     value: {
       type: String,

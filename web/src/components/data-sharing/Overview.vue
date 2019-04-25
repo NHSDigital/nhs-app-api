@@ -56,6 +56,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
+  name: 'Overview',
   components: {
     AnalyticsTrackedTag,
   },

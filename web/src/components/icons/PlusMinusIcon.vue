@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'PlusMinusIcon',
   props: {
     iconPlus: {
       type: Boolean,

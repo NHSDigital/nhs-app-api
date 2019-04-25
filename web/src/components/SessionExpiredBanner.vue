@@ -4,6 +4,11 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'SessionExpiredBanner',
+};
+</script>
 <style module lang="scss" scoped>
 @import "../style/textstyles";
 @import "../style/colours";

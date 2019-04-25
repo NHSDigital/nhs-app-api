@@ -75,6 +75,7 @@ import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORD, MORE } from '@/lib/rou
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'NavigationMenu',
   components: {
     SymptomsIcon,
     AppointmentsIcon,

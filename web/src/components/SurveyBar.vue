@@ -15,6 +15,7 @@
 </template>
 <script>
 export default {
+  name: 'SurveyBar',
   props: {
     initialBarStatusOpen: {
       default: true,

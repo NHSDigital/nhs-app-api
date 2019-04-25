@@ -26,6 +26,7 @@
 
 <script>
 export default {
+  name: 'GenericTextInput',
   props: {
     name: {
       type: String,

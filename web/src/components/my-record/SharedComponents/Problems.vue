@@ -35,6 +35,7 @@ import orderBy from 'lodash/fp/orderBy';
 import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 
 export default {
+  name: 'Problems',
   components: {
     DcrErrorNoAccess,
   },

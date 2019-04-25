@@ -30,6 +30,7 @@
 
 <script>
 export default {
+  name: 'PrescriptionsIcon',
   props: {
     selected: {
       type: Boolean,

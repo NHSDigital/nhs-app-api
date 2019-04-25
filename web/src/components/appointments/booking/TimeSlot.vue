@@ -25,6 +25,7 @@ import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
 import { createUri } from '@/lib/noJs';
 
 export default {
+  name: 'TimeSlot',
   components: {
     TabFocusMixin,
   },

@@ -28,6 +28,7 @@
 import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
 
 export default {
+  name: 'BackIcon',
   components: {
     TabFocusedIcon,
   },

@@ -14,6 +14,7 @@
 <script>
 
 export default {
+  name: 'MessageDialog',
   props: {
     iconText: {
       type: String,

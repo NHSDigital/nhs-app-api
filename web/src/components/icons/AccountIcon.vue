@@ -15,6 +15,7 @@
 import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
 
 export default {
+  name: 'AccountIcon',
   components: {
     TabFocusedIcon,
   },

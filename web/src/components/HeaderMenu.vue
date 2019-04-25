@@ -25,6 +25,7 @@ import HelpIcon from '../components/icons/HelpIcon';
 import HomeIcon from '../components/icons/HomeIcon';
 
 export default {
+  name: 'HeaderMenu',
   components: {
     AccountIcon,
     HomeIcon,

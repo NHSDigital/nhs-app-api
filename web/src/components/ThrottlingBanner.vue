@@ -9,6 +9,7 @@
 import StatusLabel from '@/components/widgets/StatusLabel';
 
 export default {
+  name: 'ThrottlingBanner',
   components: {
     StatusLabel,
   },

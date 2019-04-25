@@ -26,6 +26,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
+  name: 'PatientDetails',
   props: {
     patientDetails: {
       type: Object,

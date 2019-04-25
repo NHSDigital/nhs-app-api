@@ -29,6 +29,7 @@ const getOrganDonationIntegrationEnabled = flow(
 );
 
 export default {
+  name: 'OrganDonationLink',
   components: {
     AnalyticsTrackedTag,
   },

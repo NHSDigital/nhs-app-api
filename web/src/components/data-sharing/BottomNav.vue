@@ -16,6 +16,7 @@ import _ from 'lodash';
 import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
+  name: 'BottomNav',
   components: {
     GenericButton,
   },

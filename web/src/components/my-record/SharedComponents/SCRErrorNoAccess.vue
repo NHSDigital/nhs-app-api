@@ -13,6 +13,7 @@
 
 
 export default {
+  name: 'SCRErrorNoAccess',
   props: {
     hasErrored: {
       type: Boolean,

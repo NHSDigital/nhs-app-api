@@ -9,7 +9,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'MakeYourChoice',
+};
 </script>
 
 <style module scoped lang="scss">

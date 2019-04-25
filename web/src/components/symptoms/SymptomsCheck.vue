@@ -34,6 +34,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
+  name: 'SymptomsCheck',
   components: {
     AnalyticsTrackedTag,
   },

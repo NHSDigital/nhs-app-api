@@ -4,6 +4,7 @@
 
 <script>
 export default {
+  name: 'StatusLabel',
   props: {
     labelText: {
       type: String,

@@ -23,6 +23,7 @@
 import TabFocusMixin from './TabFocusMixin';
 
 export default {
+  name: 'TabFocusedIcon',
   components: {
     TabFocusMixin,
   },

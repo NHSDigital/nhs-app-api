@@ -19,6 +19,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 
 export default {
+  name: 'FlashMessage',
   components: {
     MessageDialog,
     MessageText,

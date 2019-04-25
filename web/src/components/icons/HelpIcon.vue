@@ -16,6 +16,7 @@
 import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
 
 export default {
+  name: 'HelpIcon',
   components: {
     TabFocusedIcon,
   },

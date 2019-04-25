@@ -7,6 +7,7 @@
 <script>
 
 export default {
+  name: 'MessageList',
   props: {
     isError: {
       type: Boolean,

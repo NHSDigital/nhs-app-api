@@ -27,6 +27,7 @@ import { MY_RECORD_VISION_EXAMINATIONS_DETAIL } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'Examinations',
   components: {
     DcrErrorNoAccess,
   },

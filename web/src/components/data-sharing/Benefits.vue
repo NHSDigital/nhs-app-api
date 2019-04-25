@@ -25,7 +25,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'Benefits',
+};
 </script>
 
 <style module scoped lang="scss">

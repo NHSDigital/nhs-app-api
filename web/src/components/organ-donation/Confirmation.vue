@@ -28,6 +28,7 @@
 import Checkbox from '@/components/Checkbox';
 
 export default {
+  name: 'Confirmation',
   components: {
     Checkbox,
   },

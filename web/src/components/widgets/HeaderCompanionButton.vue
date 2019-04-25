@@ -16,6 +16,7 @@ import NoJsForm from '@/components/no-js/NoJsForm';
 import { redirectTo } from '@/lib/utils';
 
 export default {
+  name: 'HeaderCompanionButton',
   components: {
     NoJsForm,
   },

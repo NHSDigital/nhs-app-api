@@ -13,7 +13,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'WhereYourChoiceDoesNotApply',
+};
 </script>
 
 <style module scoped lang='scss'>

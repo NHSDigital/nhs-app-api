@@ -58,6 +58,7 @@ const getMappedValue = ({ map, statusCode, errorCode }) => {
 };
 
 export default {
+  name: 'ApiError',
   components: {
     ContactOrganDonation,
     GenericButton,

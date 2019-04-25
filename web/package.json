@@ -119,6 +119,7 @@
     "eslint-plugin-standard": "4.0.0",
     "eslint-plugin-vue": "5.2.2",
     "fs": "0.0.2",
+    "glob": "7.1.3",
     "jest": "24.5.0",
     "jest-each": "24.5.0",
     "jest-serializer-vue": "2.0.2",

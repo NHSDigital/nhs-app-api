@@ -16,6 +16,7 @@
 
 
 export default {
+  name: 'DCRErrorNoAccess',
   props: {
     hasAccess: {
       type: Boolean,

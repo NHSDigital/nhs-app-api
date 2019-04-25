@@ -11,6 +11,7 @@
 <script>
 /* eslint-disable no-unreachable */
 export default {
+  name: 'AnalyticsTrackedTag',
   props: {
     id: {
       type: String,

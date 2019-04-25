@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'Spinner',
   computed: {
     isVisible() {
       return this.$store.state.http.loadingCounter;

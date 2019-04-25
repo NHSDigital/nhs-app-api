@@ -16,6 +16,7 @@
 <script>
 /* eslint-disable no-unused-vars */
 export default {
+  name: 'HeaderLinks',
   props: {
     anchorLinks: {
       type: Array,

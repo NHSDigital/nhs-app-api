@@ -73,6 +73,7 @@ const PROBLEMS = 'problems';
 const CONSULTATIONS = 'consultations';
 
 export default {
+  name: 'DcrEMIS',
   components: {
     AnalyticsTrackedTag,
     Immunisations,

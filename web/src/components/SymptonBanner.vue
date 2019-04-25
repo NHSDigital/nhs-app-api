@@ -25,6 +25,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import { getDynamicStyle, exchangeStyle } from '@/lib/desktop-experience';
 
 export default {
+  name: 'SymptonBanner',
   components: {
     GenericButton,
   },

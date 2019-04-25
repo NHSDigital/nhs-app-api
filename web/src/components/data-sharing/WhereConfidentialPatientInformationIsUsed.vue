@@ -38,7 +38,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'WhereConfidentialPatientInformationIsUsed',
+};
 </script>
 
 <style module scoped lang="scss">

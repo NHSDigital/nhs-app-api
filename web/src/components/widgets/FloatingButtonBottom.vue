@@ -14,6 +14,7 @@
 import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
+  name: 'FloatingButtonBottom',
   components: {
     GenericButton,
   },

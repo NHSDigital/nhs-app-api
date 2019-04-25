@@ -22,6 +22,7 @@ import ClinicianIcon from '@/components/icons/ClinicianIcon';
 import Appointment from '@/components/appointments/Appointment';
 
 export default {
+  name: 'PastAppointments',
   components: {
     ClinicianIcon,
     LocationIcon,

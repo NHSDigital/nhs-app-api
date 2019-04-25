@@ -18,6 +18,7 @@ import { ACCOUNT_SIGNOUT } from '@/lib/routes';
 const ENTER_KEY_CODE = 13;
 
 export default {
+  name: 'HeaderSlim',
   components: {
     BackIcon,
   },

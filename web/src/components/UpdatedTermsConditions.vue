@@ -75,6 +75,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import { INDEX } from '@/lib/routes';
 
 export default {
+  name: 'UpdatedTermsConditions',
   components: {
     ErrorMessage,
     GenericButton,

@@ -8,6 +8,7 @@ import { createLocalVue, mount as vueMount, shallowMount as vueShallowMount } fr
 
 export const $t = jest.fn().mockImplementation(key => `translate_${key}`);
 export const $tc = $t;
+export const $te = jest.fn().mockReturnValue(true);
 
 export const mockCookies = () => ({
   get: jest.fn(),
@@ -59,7 +60,7 @@ export const mount = (component, {
   $router = [],
   $store,
   $style = {},
-  $te = () => false,
+  te = $te,
   t = $t,
   data = undefined,
   propsData = {},
@@ -87,7 +88,7 @@ export const mount = (component, {
       $env,
       $t: t,
       $tc,
-      $te,
+      $te: te,
       showTemplate: () => true,
     },
     stubs,

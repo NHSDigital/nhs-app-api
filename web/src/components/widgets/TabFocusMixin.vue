@@ -7,6 +7,7 @@ const KeyCodes = {
 };
 
 export default {
+  name: 'TabFocusMixin',
   tabMixin: {
     directives: {
       tabbing: {

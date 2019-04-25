@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  name: 'FormPost',
   props: {
     action: {
       type: String,

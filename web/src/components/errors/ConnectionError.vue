@@ -21,6 +21,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 
 export default {
+  name: 'ConnectionError',
   components: {
     MessageDialog,
     MessageText,

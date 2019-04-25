@@ -10,6 +10,7 @@
 
 <script>
 export default {
+  name: 'CheckedIcon',
   props: {
     selected: {
       type: Boolean,

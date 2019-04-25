@@ -15,6 +15,7 @@
 
 <script>
 export default {
+  name: 'GenericCheckboxNoJs',
   props: {
     name: {
       type: String,

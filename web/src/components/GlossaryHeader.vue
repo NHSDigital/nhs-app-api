@@ -19,6 +19,7 @@ import AbbreviationsArrowRightIcon from './icons/AbbreviationsArrowRightIcon';
 import AnalyticsTrackedTag from './widgets/AnalyticsTrackedTag';
 
 export default {
+  name: 'GlossaryHeader',
   components: {
     AbbreviationsArrowRightIcon,
     AnalyticsTrackedTag,

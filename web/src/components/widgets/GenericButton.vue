@@ -9,6 +9,7 @@
 <script>
 
 export default {
+  name: 'GenericButton',
   props: {
     buttonClasses: {
       type: Array,

@@ -2,6 +2,7 @@
 import get from 'lodash/fp/get';
 
 export default {
+  name: 'ErrorMessageMixin',
   computed: {
     component() {
       return this.$store.state.errors.routePath.substring(1).replace(/\//g, '.').replace(/-/g, '_');
