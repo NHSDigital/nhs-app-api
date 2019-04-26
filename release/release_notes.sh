@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -e
+
+function die () {
+  echo >&2 "===]> Error: $@ "
+  exit 1
+}
+
+function info () {
+  echo >&2 "===]> Info: $@ ";
+}
+
+function displayUsage () {
+  echo "Usage: ./release_notes.sh [-h]
+
+  Create release notes for the version set in the environment variable TAG. TAG must be in the format
+  v.[Major].[Minor].[Patch][Ignored Optional Postfix] e.g. v1.8.0 or v1.8.0-RC1
+  The release notes will be created in a file in the format <TAG>.txt against the associated previous
+  release. i.e if it is a minor update, the release notes will be created against the previous minor version.
+
+  Flags:
+    -h     Display this help message
+  "
+  exit 1
+}
+
+while getopts "h" opt; do
+
+  case $opt in
+    h)
+      displayUsage
+      ;;
+    \?)
+      displayUsage
+      ;;
+  esac
+done
+
+if [ -z $TAG ]
+then
+  die "TAG is not set"
+fi
+
+
+read VERSION_PARTS[{1..3}] <<<  $(echo "$TAG" | sed 's/v\([0-9.]*\)\(.*\)/\1/' | awk -F \. {'print $1,$2, $3'})
+
+info "v${VERSION_PARTS[1]}.${VERSION_PARTS[2]}.${VERSION_PARTS[3]}";
+
+if [ "${VERSION_PARTS[3]}" -ne "0" ]; then
+  info "Patch Update";
+  PATCH_BELOW=$((VERSION_PARTS[3] - 1))
+  VERSION_BELOW="v${VERSION_PARTS[1]}.${VERSION_PARTS[2]}.${PATCH_BELOW}"
+elif [ "${VERSION_PARTS[2]}" -ne "0" ]; then
+  info "Minor Update"
+  MINOR_BELOW=$((VERSION_PARTS[2] - 1))
+  VERSION_BELOW="v${VERSION_PARTS[1]}.${MINOR_BELOW}.${VERSION_PARTS[3]}"
+else
+  info "Major Update"
+  MAJOR_BELOW=$((VERSION_PARTS[1] - 1))
+  VERSION_BELOW="v${MAJOR_BELOW}.${VERSION_PARTS[2]}.${VERSION_PARTS[3]}"
+fi
+
+info "Comparing $TAG to $VERSION_BELOW"
+
+
+git log --pretty=format:"%s" $VERSION_BELOW..$TAG > $TAG.txt
+
+info "Release notes written to $TAG.txt"
