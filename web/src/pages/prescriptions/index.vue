@@ -28,13 +28,15 @@
       </div>
     </div>
 
-    <form v-if="$store.state.device.isNativeApp" :action="repeatCoursesPath" method="get">
+    <no-js-form v-if="$store.state.device.isNativeApp"
+                :action="repeatCoursesPath" method="get"
+                :value="{}">
       <floating-button-bottom v-if="hasLoaded"
                               id="order-prescription-button"
-                              @click="onRepeatPrescriptionButtonClicked">
+                              @click.stop.prevent="onOrderRepeatPrescriptionClicked">
         {{ $t('rp01.orderPrescriptionButton') }}
       </floating-button-bottom>
-    </form>
+    </no-js-form>
   </div>
 </template>
 
@@ -49,12 +51,14 @@ import each from 'lodash/fp/each';
 import sortBy from 'lodash/fp/sortBy';
 import isEmpty from 'lodash/fp/isEmpty';
 import { redirectTo } from '@/lib/utils';
+import NoJsForm from '@/components/no-js/NoJsForm';
 
 export default {
   components: {
     FloatingButtonBottom,
     HistoricPrescription,
     GlossaryHeader,
+    NoJsForm,
   },
   computed: {
     repeatCoursesPath() {
@@ -104,9 +108,8 @@ export default {
   created() {
   },
   methods: {
-    onRepeatPrescriptionButtonClicked(e) {
-      redirectTo(this, PRESCRIPTION_REPEAT_COURSES.path, null);
-      e.preventDefault();
+    onOrderRepeatPrescriptionClicked() {
+      redirectTo(this, this.repeatCoursesPath, null);
     },
   },
 };
