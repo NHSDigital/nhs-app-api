@@ -3,8 +3,8 @@ using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json
 {
-    public interface ISchemaValidator
+    internal interface ISchemaValidator
     {
-        Task<JsonValidationResult> ValidateJsonAgainstSchema(FileData schemaFile, FileData jsonFile);
+        Task<bool> ValidateJsonAgainstSchema(FileData schemaFile, FileData jsonFile);
     }
 }

@@ -5,6 +5,7 @@
     <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP2_1;CODE_ANALYSIS</DefineConstants>

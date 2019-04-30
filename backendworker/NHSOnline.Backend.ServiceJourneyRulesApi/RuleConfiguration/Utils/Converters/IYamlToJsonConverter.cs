@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Converters
 {
-    public interface IYamlToJsonConverter
+    internal interface IYamlToJsonConverter
     {
-        FileData Convert(FileData yamlFile);
-        IEnumerable<FileData> ConvertAll(IEnumerable<FileData> yamlFiles);
+        bool Convert(FileData yamlFile, out FileData jsonFile);
     }
 }

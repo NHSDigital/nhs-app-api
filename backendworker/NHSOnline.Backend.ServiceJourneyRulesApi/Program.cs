@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
-using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Converters;
-using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
+using NHSOnline.Backend.ServiceJourneyRulesApi.Service;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi
 {
@@ -21,25 +20,43 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             ServeWebApi
         }
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var runMode = DetermineRunModeFromCommandLineArgs(args);
 
             if (runMode == RunMode.Validate)
             {
-                ValidateJourneyConfigurationFiles();
+                await BuildConsoleApp(args).RunAsync();
             }
-
-            BuildWebHost(args).Run();
+            else
+            {
+                await BuildWebHost(args).RunAsync();
+            }
         }
 
+        private static IConfigurationRoot BuildConfiguration(string[] args)
+            => SetupConfiguration(new ConfigurationBuilder(), args).Build();
 
-        public static IConfigurationRoot BuildConfiguration(string[] args) => new ConfigurationBuilder()
-            .AddEnvironmentVariables()
-            .AddCommandLine(args)
-            .Build();
+        private static IConfigurationBuilder SetupConfiguration(IConfigurationBuilder builder, string[] args)
+            => builder.AddEnvironmentVariables().AddCommandLine(args);
+        
+        private static IHost BuildConsoleApp(string[] args) =>
+            new HostBuilder()
+                .UseConsoleLifetime()
+                .ConfigureAppConfiguration(config => SetupConfiguration(config, args))
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddHostedService<ValidationService>();
+                    new ServiceConfigurationModule().ConfigureServices(services, context.Configuration);
+                })
+                .ConfigureLogging((context, logging) =>
+                {
+                    logging.AddConfiguration(context.Configuration.GetSection("Logging"))
+                        .AddConsole();
+                })
+                .Build();
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        private static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseConfiguration(BuildConfiguration(args))
@@ -47,37 +64,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                 .ConfigureLogging((context, logBuilder) => logBuilder.ClearProviders())
                 .Build();
 
-        private static void ValidateJourneyConfigurationFiles()
-        {
-            var errorHandler = new ErrorHandler(new LoggerFactory().AddConsole().CreateLogger("SJR Configuration Validation"));
-
-            var fileHandler = new FileHandler(errorHandler, Assembly.GetExecutingAssembly());
-
-            var schemaValidator = new SchemaValidator(errorHandler);
-
-            var deserializer = new DeserializerBuilder().WithNamingConvention(new CamelCaseNamingConvention()).Build();
-            var serializer = new SerializerBuilder().JsonCompatible().Build();
-            var yamlToJsonConverter = new YamlToJsonConverter(errorHandler, deserializer, serializer);
-
-            var configurationRuleFileValidator =
-                new ConfigurationRuleFileValidator(errorHandler, fileHandler, yamlToJsonConverter, schemaValidator);
-
-            var exitCode = configurationRuleFileValidator.ValidateJourneyConfigurationFiles();
-
-            Environment.Exit(exitCode);
-        }
-
-        private static RunMode DetermineRunModeFromCommandLineArgs(IEnumerable<string> args)
-        {
-            foreach (var s in args)
-            {
-                if (s.Contains(Constants.Args.ValidateMode, StringComparison.Ordinal))
-                {
-                    return RunMode.Validate;
-                }
-            }
-
-            return RunMode.ServeWebApi;
-        }
+        private static RunMode DetermineRunModeFromCommandLineArgs(IEnumerable<string> args) => 
+            args.Any(s => s.Contains(Constants.Args.ValidateMode, StringComparison.Ordinal)) 
+                ? RunMode.Validate 
+                : RunMode.ServeWebApi;
     }
 }

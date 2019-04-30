@@ -89,14 +89,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "supplier": { "enum": ["EMIS", "TPP", "Vision", "Microtest"] }
-          }
-        },
-        {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "odsGroup": { "type": "string" }
+            "supplier": { "enum": ["emis", "tpp", "vision", "microtest"] }
           }
         }
       ]
@@ -113,8 +106,16 @@
         },
         "appointments": { "$ref": "#/definitions/appointmentsJourney" },
         "prescriptions": { "$ref": "#/definitions/prescriptionsJourney" },
-        "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" }
-      }
+        "medicalRecord": { "$ref": "#/definitions/medicalRecordJourney" },
+      },
+      "anyOf": [{
+        "required": ["appointments"]
+      },{
+        "required": ["prescriptions"]
+      },{
+        "required": ["medicalRecord"]
+      }]
     }
-  }
+  },
+  "required": ["target", "journeys"]
 }

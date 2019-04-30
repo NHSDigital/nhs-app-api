@@ -1,10 +1,10 @@
-using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Controllers;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Models;
+using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Service;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
@@ -21,9 +21,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
         private Mock<IServiceJourneyRulesService> _mockServiceJourneyRulesService;
 
         private const string TestOdsCode = "A29928";
-
-        private const string JourneyDisabled = "disabled";
-        private const string AppointmentsJourney = "im1Appointments";
         
         [TestInitialize]
         public void TestInitialize()
@@ -41,14 +38,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(TestOdsCode))
                 .Returns(new ServiceJourneyRulesResponse()
                 {
-                    Appointments = new Appointments()
+                    Appointments = new Appointments
                     {
-                        JourneyType = JourneyDisabled
+                        JourneyType = AppointmentsJourneyType.Disabled
                     }
                 });
 
             var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.IsTrue(getResponse.Value.Appointments.JourneyType.Equals(JourneyDisabled, StringComparison.Ordinal));
+            Assert.AreEqual(getResponse.Value.Appointments.JourneyType, AppointmentsJourneyType.Disabled);
         }
 
         [TestMethod]
@@ -57,14 +54,14 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.Controllers
             _mockServiceJourneyRulesService.Setup(x => x.GetServiceJourneyRulesForOdsCode(TestOdsCode))
                 .Returns(new ServiceJourneyRulesResponse()
                 {
-                    Appointments = new Appointments()
+                    Appointments = new Appointments
                     {
-                        JourneyType = AppointmentsJourney
+                        JourneyType = AppointmentsJourneyType.Im1Appointments
                     }
                 });
 
             var getResponse = _systemUnderTest.Get(TestOdsCode);
-            Assert.IsTrue(getResponse.Value.Appointments.JourneyType.Equals(AppointmentsJourney, StringComparison.Ordinal));
+            Assert.AreEqual(getResponse.Value.Appointments.JourneyType, AppointmentsJourneyType.Im1Appointments);
         }
     }
 }

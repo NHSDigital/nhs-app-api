@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Support.UnitTests
             _mockLogger.VerifyLogger(
                 LogLevel.Information, 
                 DuplicatesLogMessagePrefix,
-                null, Times.Never());
+                Times.Never());
         }
         
         [TestMethod]
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.Support.UnitTests
             _mockLogger.VerifyLogger(
                 LogLevel.Information, 
                 DuplicatesLogMessagePrefix,
-                null, Times.Never());
+                Times.Never());
             result.Should().BeEquivalentTo(expectedResult);
         }
 
@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.Support.UnitTests
             _mockLogger.VerifyLogger(
                 LogLevel.Information, 
                 DuplicatesLogMessagePrefix,
-                null, Times.Exactly(1));
+                Times.Once());
         }
     }
 }

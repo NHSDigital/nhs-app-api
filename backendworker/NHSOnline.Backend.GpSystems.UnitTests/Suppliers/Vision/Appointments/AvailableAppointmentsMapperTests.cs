@@ -299,7 +299,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
                 }
             };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
-            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse Vision Appointment Slot - slot type name null or empty", null, Times.Exactly(2));
+            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse Vision Appointment Slot - slot type name null or empty", Times.Exactly(2));
         }
         
         [TestMethod]

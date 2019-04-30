@@ -1,11 +1,14 @@
-using System.Collections.Generic;
+using System.IO;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 {
-    public interface IFileHandler
+    internal interface IFileHandler
     {
-        FileData ReadEmbeddedResourceFromFileName(string fileName);
-        List<FileData> ReadContentFilesFromDirectory(string directory);
+        string[] GetFiles(string directoryPath);
+        
+        bool ReadEmbeddedResourceFromFileName(string filePath, out FileData fileData);
+        
+        TextReader GetTextReaderToReadFileContent(string filePath);
     }
 }

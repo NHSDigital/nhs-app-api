@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var expectedResponse = new[] { slot1, slot2 };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
-            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse TPP Appointment Slot - slot type name null or empty", null, Times.Exactly(1));
+            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse TPP Appointment Slot - slot type name null or empty", Times.Once());
         }
 
         [TestMethod]

@@ -1,78 +1,57 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 using YamlDotNet.Serialization;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Converters
 {
-    public class YamlToJsonConverter : IYamlToJsonConverter
+    internal class YamlToJsonConverter : IYamlToJsonConverter
     {
-        private readonly IErrorHandler _errorHandler;
+        private readonly ILogger _logger;
         private readonly IDeserializer _deserializer;
         private readonly ISerializer _serializer;
 
-        public YamlToJsonConverter(IErrorHandler errorHandler, IDeserializer deserializer, ISerializer serializer)
+        public YamlToJsonConverter(
+            ILogger<YamlToJsonConverter> logger,
+            IDeserializer deserializer,
+            ISerializer serializer)
         {
-            _errorHandler = errorHandler;
+            _logger = logger;
             _deserializer = deserializer;
             _serializer = serializer;
         }
 
-        public FileData Convert(FileData yamlFile)
+        public bool Convert(FileData yamlFile, out FileData jsonFile)
         {
-            if (yamlFile == null)
+            if (yamlFile != null)
             {
-                return null;
-            }
-
-            var result = new FileData
-            {
-                Name = yamlFile.Name
-            };
-
-            try
-            {
-                _errorHandler.LogInformation($"Deserializing {yamlFile.Name}");
-
-                using (var sr = new StringReader(yamlFile.Data))
+                try
                 {
-                    var yaml = _deserializer.Deserialize(sr);
+                    _logger.LogInformation($"Deserializing {yamlFile.Name}");
 
-                    using (var json = new StringWriter())
+                    using (var sr = new StringReader(yamlFile.Data))
                     {
-                        _errorHandler.LogInformation($"Successfully deserialized {yamlFile.Name}");
-                        _serializer.Serialize(json, yaml);
-                        result.Data = json.ToString();
+                        var yaml = _deserializer.Deserialize(sr);
+
+                        using (var json = new StringWriter())
+                        {
+                            _logger.LogInformation($"Successfully deserialized {yamlFile.Name}");
+                            _serializer.Serialize(json, yaml);
+
+                            jsonFile = new FileData(yamlFile.Name, json.ToString());
+                            return true;
+                        }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                _errorHandler.LogError($"Error deserializing {yamlFile.Name}");
-
-                result.IsError = true;
-                result.Error = e.Message;
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error deserializing {yamlFile.Name}");
+                }
             }
 
-            return result;
-        }
-
-        public IEnumerable<FileData> ConvertAll(IEnumerable<FileData> yamlFiles)
-        {
-            var result = new List<FileData>();
-
-            if (yamlFiles == null)
-            {
-                return result;
-            }
-
-            foreach (var yamlFile in yamlFiles)
-            {
-                result.Add(Convert(yamlFile));
-            }
-
-            return result;
+            jsonFile = null;
+            return false;
         }
     }
 }

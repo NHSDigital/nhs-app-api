@@ -359,7 +359,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var expectedResponse = new[]{ slot1, slot2 };
             
             actualResponse.Should().BeEquivalentTo(expectedResponse);
-            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse EMIS Appointment Slot - slot type name null or empty", null, Times.Exactly(1));
+            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse EMIS Appointment Slot - slot type name null or empty", Times.Once());
         }
 
         [TestMethod]
@@ -418,7 +418,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var expectedResponse = new[] { slot1, slot2 };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
-            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse EMIS Appointment Slot - slot type name null or empty", null, Times.Exactly(1));
+            _mockLogger.VerifyLogger(LogLevel.Warning, "Unable to parse EMIS Appointment Slot - slot type name null or empty", Times.Once());
         }
         
         [TestMethod]

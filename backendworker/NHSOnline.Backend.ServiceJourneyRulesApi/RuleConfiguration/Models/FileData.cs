@@ -1,10 +1,16 @@
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
 {
-    public class FileData
+    internal class FileData
     {
-        public string Name  { get; set; }
-        public string Data  { get; set; }
-        public bool IsError { get; set; }
-        public string Error { get; set; }
+
+        public string Name { get; }
+        
+        public string Data { get; }
+        
+        public FileData(string name, string data)
+        {
+            Name = name;
+            Data = data;
+        }
     }
 }

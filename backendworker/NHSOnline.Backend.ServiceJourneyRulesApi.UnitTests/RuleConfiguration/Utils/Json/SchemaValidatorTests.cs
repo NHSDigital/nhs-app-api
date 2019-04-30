@@ -4,11 +4,16 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
-using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json;
+using UnitTestHelper;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.Utils.Json
 {
@@ -19,79 +24,62 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         private const string ValidJson = @"{ ""target"": true }";
         private const string InvalidSchemaFileName = ".invalid_schema.json";
         private const string InvalidJson = @"{ ""target"": 1 }";
-        private Mock<IErrorHandler> _mockErrorHandler;
+        private Mock<ILogger<SchemaValidator>> _mockLogger;
         private ISchemaValidator _validator;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _mockErrorHandler = new Mock<IErrorHandler>();
-            _validator = new SchemaValidator(_mockErrorHandler.Object);
-        }
-
-        [TestMethod]
-        public async Task ValidateJsonAgainstSchema_WhenCalledWithInvalidSchema_ReturnsResultWithErrors()
-        {
-            var validationResult = await _validator.ValidateJsonAgainstSchema(
-                GetEmbeddedResource(InvalidSchemaFileName),
-                new FileData());
-
-            _mockErrorHandler.Verify(errorHandler => errorHandler.LogError(It.IsAny<string>()), Times.Once);
-            Assert.IsTrue(validationResult.IsErrors);
-        }
-
-        [TestMethod]
-        public async Task ValidateJsonAgainstSchema_WillReuseExistingJsonSchema_IfAlreadyCached()
-        {
-            var validJsonSchema = GetEmbeddedResource(ValidSchemaFileName);
-            var invalidJsonSchema = GetEmbeddedResource(InvalidSchemaFileName);
-            // schema cached based on file name
-            invalidJsonSchema.Name = validJsonSchema.Name;
-            var validJson = new FileData
-            {
-                Name = "",
-                Data = ValidJson
-            };
-
-            var firstValidationResult = await _validator.ValidateJsonAgainstSchema(validJsonSchema, validJson);
-            var secondValidationResult = await _validator.ValidateJsonAgainstSchema(invalidJsonSchema, validJson);
+            var fixture = new Fixture()
+                .Customize(new AutoMoqCustomization());
             
-            Assert.IsFalse(firstValidationResult.IsErrors);
-            Assert.AreEqual(firstValidationResult.IsErrors, secondValidationResult.IsErrors);
-            Assert.IsTrue(firstValidationResult.Errors.Count == 0);
-            Assert.IsTrue(secondValidationResult.Errors.Count == 0);
+            _mockLogger = fixture.Freeze<Mock<ILogger<SchemaValidator>>>();
+            
+            _validator = fixture.Create<SchemaValidator>();
         }
 
         [TestMethod]
-        public async Task ValidateJsonAgainstSchema_WhenCalledWithValidSchemaInvalidJson_ReturnsResultWithErrors()
+        public async Task ValidateJsonAgainstSchema_WhenCalledWithInvalidSchema_ReturnsFalse()
         {
-            var validJsonSchema = GetEmbeddedResource(ValidSchemaFileName);
-            var jsonFile = new FileData
-            {
-                Data = InvalidJson
-            };
+            // act
+            var result = await _validator.ValidateJsonAgainstSchema(
+                GetEmbeddedResource(InvalidSchemaFileName),
+                new FileData(null, null));
+            
+            // assert
+            _mockLogger.VerifyLogger(LogLevel.Error, typeof(JsonReaderException), Times.Once());
 
-            var jsonValidationResult = await _validator.ValidateJsonAgainstSchema(validJsonSchema, jsonFile);
-
-            Assert.IsTrue(jsonValidationResult.IsErrors);
-            Assert.IsTrue(jsonValidationResult.Errors.Count > 0);
-            Assert.IsNull(jsonValidationResult.Json);
+            result.Should().BeFalse();
         }
 
         [TestMethod]
-        public async Task ValidateJsonAgainstSchema_WhenCalledWithValidSchemaValidJson_ReturnsResultWithoutErrors()
+        public async Task ValidateJsonAgainstSchema_WhenCalledWithValidSchemaInvalidJson_ReturnsFalse()
         {
+            // arrange
             var validJsonSchema = GetEmbeddedResource(ValidSchemaFileName);
-            var jsonFile = new FileData
-            {
-                Data = ValidJson
-            };
+            var jsonFile = new FileData(string.Empty, InvalidJson);
 
-            var jsonValidationResult = await _validator.ValidateJsonAgainstSchema(validJsonSchema, jsonFile);
+            // act
+            var result = await _validator.ValidateJsonAgainstSchema(validJsonSchema, jsonFile);
 
-            Assert.IsFalse(jsonValidationResult.IsErrors);
-            Assert.AreEqual(jsonValidationResult.Errors.Count, 0);
-            Assert.AreEqual(jsonFile.Data, jsonValidationResult.Json);
+            // assert
+            _mockLogger.VerifyLogger(LogLevel.Error, Times.Once());
+
+            result.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public async Task ValidateJsonAgainstSchema_WhenCalledWithValidSchemaValidJson_ReturnsTrue()
+        {
+            // arrange
+            var validJsonSchema = GetEmbeddedResource(ValidSchemaFileName);
+            var jsonFile = new FileData(string.Empty, ValidJson);
+
+            // act
+            var result = await _validator.ValidateJsonAgainstSchema(validJsonSchema, jsonFile);
+
+            // assert
+            result.Should().BeTrue();
         }
 
         private static FileData GetEmbeddedResource(string fileName)
@@ -102,11 +90,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             using (var resourceStream = assembly.GetManifestResourceStream(resourceName))
             using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
             {
-                return new FileData
-                {
-                    Name = resourceName,
-                    Data = reader.ReadToEnd()
-                };
+                return new FileData(resourceName, reader.ReadToEnd());
             }
         }
     }

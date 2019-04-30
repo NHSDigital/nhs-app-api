@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _mockLogger.VerifyLogger(
                 LogLevel.Information, 
                 DuplicatesLogMessagePrefix,
-                null, Times.Never());
+                Times.Never());
         }
         
         [TestMethod]
@@ -362,7 +362,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _mockLogger.VerifyLogger(
                 LogLevel.Information, 
                 DuplicatesLogMessagePrefix,
-                null, Times.Exactly(1));
+                Times.Once());
         }
         
         [TestMethod]
@@ -410,7 +410,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _mockLogger.VerifyLogger(
                 LogLevel.Information, 
                 DuplicatesLogMessagePrefix,
-                null, Times.Exactly(1));
+                Times.Once());
         }
         
         [TestMethod]
@@ -461,7 +461,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             _mockLogger.VerifyLogger(
                 LogLevel.Information, 
                 DuplicatesLogMessagePrefix,
-                null, Times.Exactly(1));
+                Times.Once());
         }
         
         private DateTimeOffset Tomorrow()

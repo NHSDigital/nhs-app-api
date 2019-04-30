@@ -5,11 +5,13 @@
         <IsPackable>false</IsPackable>
         <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoFixture" Version="4.8.0" />
         <PackageReference Include="AutoFixture.AutoMoq" Version="4.8.0" />
+        <PackageReference Include="FluentAssertions" Version="5.6.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
         <PackageReference Include="Moq" Version="4.10.1" />
         <PackageReference Include="MSTest.TestAdapter" Version="1.2.1" />
@@ -19,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\NHSOnline.Backend.ServiceJourneyRulesApi\NHSOnline.Backend.ServiceJourneyRulesApi.csproj" />
+      <ProjectReference Include="..\UnitTestHelper\UnitTestHelper.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -31,6 +34,9 @@
       <Content Include="TestData\Configurations\Journeys\defaults\vision_supplier.yaml">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <Content Include="TestData\GpInfo\gpinfo.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
       <EmbeddedResource Include="TestData\invalid_yaml.yaml" />
       <EmbeddedResource Include="TestData\Schemas\duplicate_file.json" />
       <EmbeddedResource Include="TestData\Schemas\invalid_schema.json" />
@@ -38,6 +44,10 @@
       <EmbeddedResource Include="TestData\Schemas\valid_schema.json" />
       <None Remove="TestData\Schemas\invalid_schema.json" />
       <None Remove="TestData\Schemas\valid_schema.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="TestData\GpInfo" />
     </ItemGroup>
 
 </Project>

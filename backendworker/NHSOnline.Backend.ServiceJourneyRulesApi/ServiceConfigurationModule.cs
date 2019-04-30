@@ -1,6 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
+using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Converters;
+using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Json;
+using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps;
 using NHSOnline.Backend.ServiceJourneyRulesApi.Service;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi
 {
@@ -8,7 +15,26 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IServiceJourneyRulesService, ServiceJourneyRulesService>();           
+            services.AddTransient<IServiceJourneyRulesService, ServiceJourneyRulesService>();
+            services.AddTransient<IProcessState, ProcessState>();
+            
+            services.AddSingleton(new DeserializerBuilder()
+                .WithNamingConvention(new CamelCaseNamingConvention()).Build());
+            services.AddSingleton(new SerializerBuilder().JsonCompatible().Build());
+            services.AddSingleton(Assembly.GetExecutingAssembly());
+            
+            services.AddSingleton<IYamlReaderFactory, YamlReaderFactory>();
+            services.AddSingleton<IYamlToJsonConverter, YamlToJsonConverter>();
+            services.AddSingleton<IConfigurationRuleFileValidator, ConfigurationRuleFileValidator>();
+            services.AddSingleton<ISchemaValidator, SchemaValidator>();
+            services.AddSingleton<IFileHandler, FileHandler>();
+            services.AddSingleton<IGpInfoReader, GpInfoReader>();
+            services.AddSingleton<IValidatorStep, LoadRequiredFiles>();
+            services.AddSingleton<IValidatorStep, LoadConfigurationFiles>();
+            services.AddSingleton<IValidatorStep, ValidateUniqueOdsConfiguration>();
+            services.AddSingleton(typeof(EnumDescriptionConverter<>));
+            services.AddSingleton<IServiceJourneyRulesConfiguration, ServiceJourneyRulesConfiguration>();
+            
             base.ConfigureServices(services, configuration);
         }
     }

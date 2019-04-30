@@ -1,5 +1,6 @@
 $schema: "Schemas/Rules/rules_schema.json"
 folderOrder:
   - defaults
+  - suppliers
   - informatica
   - incident_overrides

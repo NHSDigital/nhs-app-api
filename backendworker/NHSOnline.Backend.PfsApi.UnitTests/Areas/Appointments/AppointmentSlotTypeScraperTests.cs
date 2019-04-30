@@ -474,7 +474,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _systemUnderTest.LogInformation(appointmentSlotsInformation);
             
             // Assert
-            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, null, Times.Once());
+            _mockLogger.VerifyLogger(LogLevel.Information, expectedLogMessage, Times.Once());
            
         }
         

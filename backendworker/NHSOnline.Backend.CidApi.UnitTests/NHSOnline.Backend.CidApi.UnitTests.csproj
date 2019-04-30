@@ -5,6 +5,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\TestCode.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

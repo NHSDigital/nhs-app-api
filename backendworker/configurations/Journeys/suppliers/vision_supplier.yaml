@@ -1,6 +1,6 @@
 $schema: "Schemas/Journeys/configuration_schema.json"
 target:
-  supplier: "Vision"
+  supplier: "vision"
 journeys:
   appointments:
     journeyType: im1Appointments

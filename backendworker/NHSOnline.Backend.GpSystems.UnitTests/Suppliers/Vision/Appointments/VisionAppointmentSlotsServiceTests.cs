@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             response.Slots.Count().Should().Be(3);
             _mockVisionClient.VerifyAll();
-            _mockLogger.VerifyLogger(LogLevel.Warning, "Appointment slots retrieved for Vision patient is equal to the maximum requested", null, Times.Never());
+            _mockLogger.VerifyLogger(LogLevel.Warning, "Appointment slots retrieved for Vision patient is equal to the maximum requested", Times.Never());
         }
 
         [TestMethod]

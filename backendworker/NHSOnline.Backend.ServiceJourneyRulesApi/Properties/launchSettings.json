@@ -22,7 +22,11 @@
         "SESSION_MONGO_DATABASE_PASSWORD": "",
         "SESSION_MONGO_DATABASE_NAME": "development",
         "SESSION_MONGO_DATABASE_COLLECTION": "session",
-        "AUDIT_SINK_TYPE": "FILE"
+        "AUDIT_SINK_TYPE": "FILE",
+        "GP_INFO_FILE_PATH": "../configurations/gpinfo.csv",
+        "CONFIGURATION_FOLDER_PATH": "../configurations",
+        "RULES_FOLDER_NAME": "Rules",
+        "JOURNEYS_FOLDER_NAME": "Journeys"
       }
     },
     "NHSOnline.Backend.ServiceJourneyRulesApi": {
@@ -37,7 +41,21 @@
         "SESSION_MONGO_DATABASE_PASSWORD": "",
         "SESSION_MONGO_DATABASE_NAME": "development",
         "SESSION_MONGO_DATABASE_COLLECTION": "session",
-        "AUDIT_SINK_TYPE": "FILE"
+        "AUDIT_SINK_TYPE": "FILE",
+        "GP_INFO_FILE_PATH": "../configurations/gpinfo.csv",
+        "CONFIGURATION_FOLDER_PATH": "../configurations",
+        "RULES_FOLDER_NAME": "Rules",
+        "JOURNEYS_FOLDER_NAME": "Journeys"
+      }
+    },
+    "Validate": {
+      "commandName": "Project",
+      "commandLineArgs": "--validate-only",
+      "environmentVariables": {
+        "GP_INFO_FILE_PATH": "../configurations/gpinfo.csv",
+        "CONFIGURATION_FOLDER_PATH": "../configurations",
+        "RULES_FOLDER_NAME": "Rules",
+        "JOURNEYS_FOLDER_NAME": "Journeys"
       }
     }
   }

@@ -4,6 +4,7 @@
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ThreadPoolMinThreads>100</ThreadPoolMinThreads>

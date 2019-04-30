@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
         <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

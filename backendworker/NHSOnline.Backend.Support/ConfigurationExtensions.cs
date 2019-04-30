@@ -40,8 +40,7 @@ namespace NHSOnline.Backend.Support
         public static int GetIntOrThrow<T>(this IConfiguration configuration, string key, ILogger<T> logger)
         {
             var strValue = GetOrThrow(configuration, key, logger);
-            int value;
-            if (!int.TryParse(strValue, out value))
+            if (!int.TryParse(strValue, out var value))
             {
                 logger.LogError(string.Format(CultureInfo.InvariantCulture, LogMessage, key));
                 throw new ConfigurationNotFoundException(key);
