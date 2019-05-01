@@ -2,9 +2,7 @@
 
   <div v-if="showTemplate" :class="[$style['pull-content'],
                                     !$store.state.device.isNativeApp && $style.desktopWeb]">
-
-    <glossary-header />
-
+    <glossary-header v-if="!showNoRepeatCourses" />
     <message-dialog v-if="error" message-type="error">
       <message-text>
         {{ $t('rp12.reasonMissing.summarySubHeader') }}

@@ -7,7 +7,7 @@ import {
   DECISION_OPT_IN,
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
-import { $t, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 describe('organ donation button', () => {
   let $store;
@@ -25,7 +25,6 @@ describe('organ donation button', () => {
     beforeEach(() => {
       wrapper = mount(OrganDonationButton, {
         $store,
-        $t,
         propsData: { decision: DECISION_OPT_OUT },
       });
     });
@@ -37,11 +36,11 @@ describe('organ donation button', () => {
 
     describe('text translations', () => {
       it('will display the no button header', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.register.noButton.header');
+        expect(wrapper.text()).toContain('translate_organDonation.register.noButton.header');
       });
 
       it('will display the no button subheader', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.register.noButton.subheader');
+        expect(wrapper.text()).toContain('translate_organDonation.register.noButton.subheader');
       });
     });
 
@@ -58,7 +57,6 @@ describe('organ donation button', () => {
     beforeEach(() => {
       wrapper = mount(OrganDonationButton, {
         $store,
-        $t,
         propsData: { decision: DECISION_OPT_IN },
       });
     });
@@ -70,11 +68,11 @@ describe('organ donation button', () => {
 
     describe('text translations', () => {
       it('will display the yes button header', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.register.yesButton.header');
+        expect(wrapper.text()).toContain('translate_organDonation.register.yesButton.header');
       });
 
       it('will display the yes button subheader', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.register.yesButton.subheader');
+        expect(wrapper.text()).toContain('translate_organDonation.register.yesButton.subheader');
       });
     });
 

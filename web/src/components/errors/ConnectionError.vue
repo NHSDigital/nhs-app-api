@@ -1,14 +1,16 @@
 <template>
-  <div v-if="isVisible" class="pull-content">
+  <div v-if="isVisible"
+       :class="[!$store.state.device.isNativeApp && $style.desktopWeb, 'pull-content']">
     <message-dialog message-type="error">
-      <message-text :is-header="true">{{ header }}</message-text>
+      <message-text v-if="$store.state.device.isNativeApp"
+                    :is-header="true">{{ header }}</message-text>
       <message-text>{{ subheader }}</message-text>
       <message-text :aria-label="messageLabel">{{ messageText }}</message-text>
     </message-dialog>
     <form method="get">
-      <generic-button :class="$style.button" @click.prevent="onRetryButtonClicked">
+      <button :class="[ $style.button ]" @click.prevent="onRetryButtonClicked">
         {{ retryButtonText }}
-      </generic-button>
+      </button>
     </form>
   </div>
 </template>
@@ -17,7 +19,6 @@
 import isObject from 'lodash/fp/isObject';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
-import GenericButton from '@/components/widgets/GenericButton';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 
 export default {
@@ -25,7 +26,6 @@ export default {
   components: {
     MessageDialog,
     MessageText,
-    GenericButton,
   },
   mixins: [ErrorMessageMixin],
   computed: {
@@ -70,4 +70,10 @@ export default {
 <style module lang="scss" scoped>
   @import '../../style/buttons';
 
+  .desktopWeb {
+    button.button {
+      width: auto;
+      min-width: 16.875em;
+    }
+  }
 </style>

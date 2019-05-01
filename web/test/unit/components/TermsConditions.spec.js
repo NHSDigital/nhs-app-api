@@ -2,12 +2,12 @@ import { get } from 'lodash/fp';
 import { mount, createLocalVue } from '@vue/test-utils';
 import TermsConditions from '@/components/TermsConditions';
 import Vuex from 'vuex';
-import { $t as $tHelper, mount as mountHelper } from '../helpers';
+import { mount as mountHelper } from '../helpers';
 
 const locale = {
   'termsAndConditions.listItems': ['item 1', 'item 2'],
 };
-const $t = key => get(key, locale) || $tHelper(key);
+const $t = key => get(key, locale);
 
 const app = {
   $env: {

@@ -1,7 +1,7 @@
 import MakeDecision from '@/components/organ-donation/MakeDecision';
 import OrganDonationButton from '@/components/organ-donation/OrganDonationButton';
 import { DECISION_OPT_IN, DECISION_OPT_OUT, initialState } from '@/store/modules/organDonation/mutation-types';
-import { $t, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 describe('make decision', () => {
   let wrapper;
@@ -17,7 +17,7 @@ describe('make decision', () => {
 
   const mountWrapper = () => {
     const store = $store || createStore({ state });
-    return mount(MakeDecision, { $store: store, $t });
+    return mount(MakeDecision, { $store: store });
   };
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('make decision', () => {
       });
 
       it('will translate the register subheader', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.register.subheaderRegister');
+        expect(wrapper.text()).toContain('translate_organDonation.register.subheaderRegister');
       });
     });
 
@@ -44,7 +44,7 @@ describe('make decision', () => {
       });
 
       it('will translate the amend subheader', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.register.subheaderAmend');
+        expect(wrapper.text()).toContain('translate_organDonation.register.subheaderAmend');
       });
     });
   });

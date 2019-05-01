@@ -31,6 +31,9 @@ export default {
     {
       route: APPOINTMENTS.path,
       errorOverrideStyles: { 403: 'plain' },
+      redirectUrl: {
+        default: APPOINTMENTS.path,
+      },
     },
     {
       route: APPOINTMENT_CANCELLING.path,
@@ -43,6 +46,7 @@ export default {
       errorOverrideStyles: { 403: 'plain' },
       redirectUrl: {
         504: APPOINTMENT_BOOKING.path,
+        default: APPOINTMENTS.path,
       },
     },
     {
@@ -55,6 +59,7 @@ export default {
     },
     {
       route: PRESCRIPTION_CONFIRM_COURSES.path,
+      errorOverrideStyles: { 466: 'plain' },
       redirectUrl: {
         default: PRESCRIPTIONS.path,
       },
@@ -69,6 +74,12 @@ export default {
       route: BEGINLOGIN.path,
       redirectUrl: {
         default: LOGIN.path,
+      },
+    },
+    {
+      route: MYRECORD.path,
+      redirectUrl: {
+        default: MYRECORD.path,
       },
     },
     {
@@ -94,14 +105,23 @@ export default {
     {
       route: PRESCRIPTIONS.path,
       errorOverrideStyles: { 403: 'plain' },
+      redirectUrl: {
+        default: PRESCRIPTIONS.path,
+      },
     },
     {
       route: PRESCRIPTION_REPEAT_COURSES.path,
       errorOverrideStyles: { 403: 'plain' },
+      redirectUrl: {
+        default: PRESCRIPTIONS.path,
+      },
     },
     {
       route: PRESCRIPTION_CONFIRM_COURSES.path,
       errorOverrideStyles: { 403: 'plain' },
+      redirectUrl: {
+        default: PRESCRIPTIONS.path,
+      },
     },
   ],
   forPage(routePath) {

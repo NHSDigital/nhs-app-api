@@ -23,6 +23,10 @@ export default {
     BackIcon,
   },
   props: {
+    showInDesktop: {
+      type: Boolean,
+      default: true,
+    },
     showInNative: {
       type: Boolean,
       default: false,
@@ -37,10 +41,8 @@ export default {
       return this.correctUrl(this.clickUrl);
     },
     showHeader() {
-      if (this.showInNative) {
-        return true;
-      }
-      return !this.$store.state.device.isNativeApp;
+      return (this.showInNative && this.$store.state.device.isNativeApp)
+          || (this.showInDesktop && !this.$store.state.device.isNativeApp);
     },
   },
   methods: {

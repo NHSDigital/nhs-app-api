@@ -1,9 +1,10 @@
 import find from 'lodash/fp/find';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import Withdraw from '@/pages/organ-donation/withdraw-reason';
-import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { $t, createRouter, createStore, mount } from '../../helpers';
+import { createRouter, createStore, mount } from '../../helpers';
+import { INDEX, ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
+import locale from '@/locale/en/index';
 
 const createState = ({ isWithdrawing = false, referenceData = {}, withdrawReasonId = '' } = {}) => ({
   device: {
@@ -116,7 +117,8 @@ describe('organ donation withdraw reason page', () => {
       });
 
       it('will translate the reason body text', () => {
-        expect($t).toHaveBeenCalledWith('organDonation.withdrawReason.bodyItems');
+        const items = locale.organDonation.withdrawReason.bodyItems;
+        items.forEach(item => expect(wrapper.text()).toContain(item));
       });
 
       describe('dropdown', () => {
@@ -229,7 +231,7 @@ describe('organ donation withdraw reason page', () => {
       });
 
       it('will translate the generic back button text', () => {
-        expect($t).toHaveBeenCalledWith('generic.backButton.text');
+        expect(backButton.text()).toEqual('translate_generic.backButton.text');
       });
 
       describe('click', () => {

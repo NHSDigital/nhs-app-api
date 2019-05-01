@@ -1,9 +1,9 @@
 import Amend from '@/pages/organ-donation/amend';
 import FindOutMoreLink from '@/components/organ-donation/FindOutMoreLink';
 import MakeDecision from '@/components/organ-donation/MakeDecision';
-import { INDEX, ORGAN_DONATION } from '@/lib/routes';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { $t, createRouter, createStore, mount } from '../../helpers';
+import { createRouter, createStore, mount } from '../../helpers';
+import { INDEX, ORGAN_DONATION } from '@/lib/routes';
 
 const createState = ({ isAmending = false, isNativeApp = false } = {}) => ({
   device: {
@@ -128,7 +128,7 @@ describe('organ donation amend page', () => {
       });
 
       it('will translate the generic back button text', () => {
-        expect($t).toHaveBeenCalledWith('generic.backButton.text');
+        expect(backButton.text()).toEqual('translate_generic.backButton.text');
       });
 
       describe('click', () => {

@@ -2,7 +2,7 @@ import BackButton from '@/components/BackButton';
 import Faith from '@/pages/organ-donation/faith';
 import { initialState, YES, NO, NOT_STATED } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_ADDITIONAL_DETAILS } from '@/lib/routes';
-import { $t, createRouter, createScrollTo, createStore, mount } from '../../helpers';
+import { createRouter, createScrollTo, createStore, mount } from '../../helpers';
 
 describe('organ donation faith page', () => {
   let $store;
@@ -29,7 +29,6 @@ describe('organ donation faith page', () => {
     wrapper = mount(Faith, {
       $router,
       $store,
-      $t,
       $style,
     });
   });

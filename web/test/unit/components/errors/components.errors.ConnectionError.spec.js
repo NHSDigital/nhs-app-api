@@ -26,13 +26,14 @@ const createConnectionErrorComponent = ($route, apiError) => {
   $store.state.errors.routePath = $route.path;
   $store.state.errors.getters = getters;
   $store.state.errors.hasConnectionProblem = true;
+  $store.state.device = { isNativeApp: true };
 
   return mount(ConnectionError, {
     $route,
     $style: { serverError: errorId, button: 'button' },
     $store,
     $te,
-    t: $t,
+    $t,
   });
 };
 

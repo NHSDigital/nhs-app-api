@@ -1,8 +1,10 @@
 <template>
-  <div v-if="isVisible">
+  <div v-if="isVisible" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
     <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
       <message-dialog :override-style="overrideStyle" message-type="error">
-        <message-text :is-header="true" :override-style="overrideStyle" data-purpose="msg-header">
+        <message-text :is-header="true"
+                      :override-style="overrideStyle"
+                      data-purpose="msg-header">
           {{ header }}
         </message-text>
         <message-text v-if="subheader!==''" data-purpose="msg-subheader">
@@ -13,24 +15,35 @@
           {{ messageText }}
         </message-text>
         <message-text v-if="hasAdditionalInfo" :aria-label="additionalInfoLabel"
-                      :class="$style.additionalInfomation"
+                      :class="$style.additionalInformation"
                       data-purpose="msg-extratext">
           {{ additionalInfoText }}
         </message-text>
         <component :is="additionalInfoComponentName" v-if="additionalInfoComponentName"
-                   :class="$style.additionalInfomation" />
+                   :class="$style.additionalInformation" />
       </message-dialog>
       <form :action="retryUrl" method="get">
-        <generic-button v-if="retryButtonText" :class="buttonClasses"
+        <generic-button v-if="retryButtonText && ($store.state.device.isNativeApp || retryAction)"
+                        :class="[
+                          ...dynamicStyle('button'),
+                          $style.retryButton,
+                          buttonClasses
+                        ]"
                         data-purpose="retry-or-back-button"
                         click-delay="medium"
                         @click.stop.prevent="onRetryButtonClicked">
           {{ retryButtonText }}
         </generic-button>
+        <desktopGenericBackLink
+          v-if="retryButtonText && !$store.state.device.isNativeApp && retryUrl"
+          :path="retryUrl"
+          :button-text="retryButtonText"
+          @clickAndPrevent="onRetryButtonClicked"
+        />
       </form>
     </div>
     <div v-else>
-      <header-slim>{{ header }}</header-slim>
+      <header-slim :show-in-native="true" :show-in-desktop="false">{{ header }}</header-slim>
       <div :class="$style['information-error']">
         <h2>{{ subheader }}</h2>
         <p :aria-label="messageLabel">{{ messageText }}</p>
@@ -42,11 +55,13 @@
 /* eslint-disable import/extensions */
 import isObject from 'lodash/fp/isObject';
 import ContactOrganDonation from '@/components/errors/additional-info/ContactOrganDonation';
+import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 import GenericButton from '@/components/widgets/GenericButton';
 import HeaderSlim from '@/components/HeaderSlim';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import { getDynamicStyle } from '@/lib/desktop-experience';
 
 const getMappedValue = ({ map, statusCode, errorCode }) => {
   if (!map) {
@@ -62,6 +77,7 @@ export default {
   name: 'ApiError',
   components: {
     ContactOrganDonation,
+    DesktopGenericBackLink,
     GenericButton,
     HeaderSlim,
     MessageDialog,
@@ -153,6 +169,9 @@ export default {
     }
   },
   methods: {
+    dynamicStyle(...args) {
+      return getDynamicStyle(this, args);
+    },
     onRetryButtonClicked() {
       if (this.retryAction) {
         this.$store.dispatch(this.retryAction);
@@ -182,8 +201,9 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../style/buttons';
+  @import '../../style/spacings';
 
-  .additionalInfomation {
+  .additionalInformation {
      margin-bottom: 1em
   }
 

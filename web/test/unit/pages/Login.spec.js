@@ -1,7 +1,7 @@
 import AuthorisationService from '@/services/authorisation-service';
 import Login from '@/pages/Login';
 import LoginButton from '@/components/LoginButton';
-import { $t, createStore, mount } from '../helpers';
+import { createStore, mount } from '../helpers';
 
 jest.mock('@/services/authorisation-service');
 const loginResponse = {
@@ -48,7 +48,6 @@ const mountWithQueryData = ({ isNativeApp = true, query, source = 'android', dat
         redirect: jest.fn(),
       },
     }),
-    $t,
     $route: {
       query,
     },
