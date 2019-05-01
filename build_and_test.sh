@@ -85,6 +85,7 @@ WEB_NAME=nhsonline-web
 CID_BACKEND_NAME=nhsonline-backendcidapi
 PFS_BACKEND_NAME=nhsonline-backendpfsapi
 SJR_BACKEND_NAME=nhsonline-backendservicejourneyrulesapi
+CDS_BACKEND_NAME=nhsonline-backendclinicaldecisionsupportapi
 TAG=$(git rev-parse HEAD)
 
 cd bddtests/ops
@@ -113,6 +114,9 @@ docker tag $DOCKER_REGISTRY/$PFS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$PFS_BACKEND
 
 docker build . -t $DOCKER_REGISTRY/$SJR_BACKEND_NAME:$TAG -f NHSOnline.Backend.ServiceJourneyRulesApi/Dockerfile
 docker tag $DOCKER_REGISTRY/$SJR_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$SJR_BACKEND_NAME:latest
+
+docker build . -t $DOCKER_REGISTRY/$CDS_BACKEND_NAME:$TAG -f NHSOnline.Backend.ClinicalDecisionSupportApi/Dockerfile
+docker tag $DOCKER_REGISTRY/$CDS_BACKEND_NAME:$TAG $DOCKER_REGISTRY/$CDS_BACKEND_NAME:latest
 
 cd ../bddtests/ops
 RUN_AS_DEVELOP=$RUN_AS_DEVELOP RUN_SUBSET=$RUN_SUBSET ENABLE_LONG_RUNNING=$ENABLE_LONG_RUNNING SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ENABLE_COSMOS_TESTS=$ENABLE_COSMOS_TESTS COSMOS_AUTHKEY=$COSMOS_AUTHKEY ./docker_tests.sh

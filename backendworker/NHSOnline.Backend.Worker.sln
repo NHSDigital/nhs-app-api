@@ -27,7 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 		contracts\ReadMe.md = contracts\ReadMe.md
 		contracts\gpSupplierSpecific\tpp-linkage.yaml = contracts\gpSupplierSpecific\tpp-linkage.yaml
-		questionnaire.yaml = questionnaire.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F3286FE-0E62-411C-A0A2-4C9AEFE54EC1}"
@@ -57,6 +56,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests", "NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests\NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.csproj", "{BA421B7B-6AB8-4095-A3CB-2B9F0C2A1B85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ServiceJourneyRulesApi", "NHSOnline.Backend.ServiceJourneyRulesApi\NHSOnline.Backend.ServiceJourneyRulesApi.csproj", "{C8D4E4FC-316C-4535-A89F-23DD34ADA155}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.ClinicalDecisionSupportApi", "NHSOnline.Backend.ClinicalDecisionSupportApi\NHSOnline.Backend.ClinicalDecisionSupportApi.csproj", "{97CD6062-3DC2-448A-8865-C1F6747C3BFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,6 +117,10 @@ Global
 		{C8D4E4FC-316C-4535-A89F-23DD34ADA155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8D4E4FC-316C-4535-A89F-23DD34ADA155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8D4E4FC-316C-4535-A89F-23DD34ADA155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97CD6062-3DC2-448A-8865-C1F6747C3BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97CD6062-3DC2-448A-8865-C1F6747C3BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97CD6062-3DC2-448A-8865-C1F6747C3BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97CD6062-3DC2-448A-8865-C1F6747C3BFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

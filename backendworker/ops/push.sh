@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-APIS=(pfsapi cidapi servicejourneyrulesapi)
+APIS=(pfsapi cidapi servicejourneyrulesapi clinicaldecisionsupportapi)
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
 
 for api in "${APIS[@]}"
