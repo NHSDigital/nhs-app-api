@@ -9,9 +9,9 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.GpSystems.Suppliers;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord;
+using NHSOnline.Backend.Support.Sanitization;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
 {

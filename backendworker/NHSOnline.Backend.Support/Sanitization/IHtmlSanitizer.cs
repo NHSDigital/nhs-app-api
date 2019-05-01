@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.GpSystems.Suppliers
+﻿namespace NHSOnline.Backend.Support.Sanitization
 {
     public interface IHtmlSanitizer
     {

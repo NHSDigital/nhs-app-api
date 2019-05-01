@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.GpSystems.Suppliers;
+using NHSOnline.Backend.Support.Sanitization;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers
 {

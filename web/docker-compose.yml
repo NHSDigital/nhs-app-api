@@ -112,6 +112,7 @@ services:
       - SESSION_MONGO_DATABASE_PORT=27017
       - SESSION_MONGO_DATABASE_USERNAME=
       - SESSION_MONGO_DATABASE_PASSWORD=
+      - EMS_CDSS_STUB_URL=http://ems.cdss.stubs.local.bitraft.io:8088
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:

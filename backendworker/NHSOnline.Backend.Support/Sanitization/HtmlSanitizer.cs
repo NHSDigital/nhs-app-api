@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using HtmlAgilityPack;
 
-namespace NHSOnline.Backend.GpSystems.Suppliers
+namespace NHSOnline.Backend.Support.Sanitization
 {
     public class HtmlSanitizer: IHtmlSanitizer
     {

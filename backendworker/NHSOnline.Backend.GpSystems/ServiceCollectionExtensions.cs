@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Linkage;
-using NHSOnline.Backend.GpSystems.Suppliers;
 using NHSOnline.Backend.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.GpSystems.Suppliers.Microtest;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Sanitization;
 
 namespace NHSOnline.Backend.GpSystems
 {

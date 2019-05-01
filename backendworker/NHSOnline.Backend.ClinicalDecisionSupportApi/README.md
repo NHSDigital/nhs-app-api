@@ -11,12 +11,17 @@
 Add the following to `/etc/hosts`
 
 ```
+127.0.0.1       ems.cdss.stubs.local.bitraft.io
 127.0.0.1       clinicaldecisionsupportapi.local.bitraft.io
 ```
 
 ### Add run configuration to IDE
 
 Create a run configuration to target the `NHSOnline.Backend.ClinicalDecisionSupportApi` project.
+
+### EMS CDSS Supplier Stub
+
+Currently the CDS Api depends on the [EMS CDSS Supplier Stub Api](https://gitlab.com/ems-test-harness/ems-poc-public/cdss-supplier-stub). This is being used as a temporary CDSS supplier. Follow the instructions in the README.
 
 <br>
 <br>

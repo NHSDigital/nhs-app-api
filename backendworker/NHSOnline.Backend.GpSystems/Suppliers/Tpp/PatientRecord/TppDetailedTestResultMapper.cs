@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.PatientRecord.Models;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.PatientRecord;
+using NHSOnline.Backend.Support.Sanitization;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
 {

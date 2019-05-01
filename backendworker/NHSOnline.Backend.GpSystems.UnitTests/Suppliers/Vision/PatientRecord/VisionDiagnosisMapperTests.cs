@@ -4,9 +4,9 @@ using AutoFixture.AutoMoq;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.GpSystems.Suppliers;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
+using NHSOnline.Backend.Support.Sanitization;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.PatientRecord
 {
