@@ -1,31 +1,14 @@
 /* eslint-disable import/prefer-default-export */
-/* eslint-disable import/no-extraneous-dependencies */
-import get from 'lodash/fp/get';
-import has from 'lodash/fp/has';
-import isString from 'lodash/fp/isString';
-import _locale from '@/locale/en';
-import merge from 'lodash/fp/merge';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Vue from 'vue';
 import Vuex from 'vuex';
+import merge from 'lodash/fp/merge';
 import { createLocalVue, mount as vueMount, shallowMount as vueShallowMount } from '@vue/test-utils';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
-export const create$T = () => jest
-  .fn()
-  .mockImplementation((key) => {
-    const value = get(key)(_locale);
-    if (isString(value) || value === undefined) {
-      return `translate_${key}`;
-    }
-
-    return value;
-  });
-
-export const create$Te = () => jest
-  .fn()
-  .mockImplementation(key => has(key)(_locale));
+export const $t = jest.fn().mockImplementation(key => `translate_${key}`);
+export const $tc = $t;
+export const $te = jest.fn().mockReturnValue(true);
 
 export const mockCookies = () => ({
   get: jest.fn(),
@@ -70,8 +53,6 @@ export const initFilters = () => [
   'longDate',
 ].map(filter => Vue.filter(filter, value => value));
 
-export const locale = _locale;
-
 export const mount = (component, {
   $cookies,
   $env = {},
@@ -79,9 +60,8 @@ export const mount = (component, {
   $router = [],
   $store,
   $style = {},
-  $t = create$T(),
-  $tc = create$T(),
-  $te = create$Te(),
+  te = $te,
+  t = $t,
   data = undefined,
   propsData = {},
   shallow = false,
@@ -91,6 +71,9 @@ export const mount = (component, {
   slots = {},
 } = {}) => {
   const store = $store || createStore({ $env, state });
+  const localVue = createLocalVue();
+  localVue.use(Vuex);
+
   const mountFn = shallow ? vueShallowMount : vueMount;
   return mountFn(component, {
     localVue,
@@ -103,9 +86,9 @@ export const mount = (component, {
       $store: store,
       $style,
       $env,
-      $t,
+      $t: t,
       $tc,
-      $te,
+      $te: te,
       showTemplate: () => true,
     },
     stubs,

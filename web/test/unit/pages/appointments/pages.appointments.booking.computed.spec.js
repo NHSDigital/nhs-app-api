@@ -2,10 +2,7 @@
 import Vuex from 'vuex';
 import BookingPage from '@/pages/appointments/booking';
 import { mount, createLocalVue } from '@vue/test-utils';
-import { create$T } from '../../helpers';
-
-const $t = create$T();
-const $tc = $t;
+import { $t, $tc } from '../../helpers';
 
 const availableAppointments = (options = {}) => ({
   slots: options.slots || [],

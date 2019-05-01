@@ -4,9 +4,6 @@ import get from 'lodash/fp/get';
 export default {
   name: 'ErrorMessageMixin',
   computed: {
-    domain() {
-      return this.hasApiError ? 'errors' : 'noConnection';
-    },
     component() {
       return this.$store.state.errors.routePath.substring(1).replace(/\//g, '.').replace(/-/g, '_');
     },
@@ -37,11 +34,13 @@ export default {
       return this.getText(`${this.component}.${domain}.${type}`);
     },
     getMessage(type) {
+      const domain = this.hasApiError ? 'errors' : 'noConnection';
+
       if (this.showError()) {
         return this.getComponentErrorCodeKey(type)
-          || this.getText(`${this.component}.${this.domain}.${type}`)
+          || this.getText(`${this.component}.${domain}.${type}`)
           || this.getText(`errors.${this.statusCode}.${type}`)
-          || this.getText(`${this.domain}.${type}`);
+          || this.getText(`${domain}.${type}`);
       }
 
       return '';

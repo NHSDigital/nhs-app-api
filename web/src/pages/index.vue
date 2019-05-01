@@ -1,6 +1,5 @@
 <template>
   <div :class="!$store.state.device.isNativeApp && $style.mainContentContainer">
-
     <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content',
                                       $style.mainContent]">
       <div :class="$style['banner-container']">

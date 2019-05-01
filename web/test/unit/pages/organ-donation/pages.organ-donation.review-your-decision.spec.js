@@ -11,7 +11,7 @@ import {
   DECISION_OPT_IN,
   STATE_OK,
 } from '@/store/modules/organDonation/mutation-types';
-import { createScrollTo, createStore, initFilters, mount } from '../../helpers';
+import { $t, createScrollTo, createStore, initFilters, mount } from '../../helpers';
 
 const createState = ({
   all = false,
@@ -55,7 +55,7 @@ describe('review your decision', () => {
 
   const mountPage = ({ state, getters }) => {
     $store = createStore({ state, getters });
-    return mount(ReviewYourDecision, { $store, $style });
+    return mount(ReviewYourDecision, { $store, $style, $t });
   };
 
   beforeEach(() => {
@@ -80,11 +80,11 @@ describe('review your decision', () => {
   });
 
   it('will not show withdraw header text', () => {
-    expect(wrapper.text()).not.toContain('translate_organDonation.reviewYourDecision.withdraw.subheader');
+    expect($t).not.toHaveBeenCalledWith('organDonation.reviewYourDecision.withdraw.subheader');
   });
 
   it('will not show withdraw body text', () => {
-    expect(wrapper.text()).not.toContain('translate_organDonation.reviewYourDecision.withdraw.body');
+    expect($t).not.toHaveBeenCalledWith('organDonation.reviewYourDecision.withdraw.body');
   });
 
   it('will have a back button', () => {
@@ -109,11 +109,11 @@ describe('review your decision', () => {
     });
 
     it('will show withdraw header text', () => {
-      expect(wrapper.text()).toContain('translate_organDonation.reviewYourDecision.withdraw.subheader');
+      expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.withdraw.subheader');
     });
 
     it('will show withdraw body text', () => {
-      expect(wrapper.text()).toContain('translate_organDonation.reviewYourDecision.withdraw.body');
+      expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.withdraw.body');
     });
   });
 
@@ -164,8 +164,8 @@ describe('review your decision', () => {
         it('will show a message for each validation error', () => {
           expect(wrapper.vm.validationErrors.length).toBe(2);
           expect(wrapper.findAll('#errors li').length).toBe(wrapper.vm.validationErrors.length);
-          expect(wrapper.text()).toContain('translate_organDonation.reviewYourDecision.confirmation.errors.accuracy');
-          expect(wrapper.text()).toContain('translate_organDonation.reviewYourDecision.confirmation.errors.privacy');
+          expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.confirmation.errors.accuracy');
+          expect($t).toHaveBeenCalledWith('organDonation.reviewYourDecision.confirmation.errors.privacy');
         });
 
         it('will scroll to the top', () => {

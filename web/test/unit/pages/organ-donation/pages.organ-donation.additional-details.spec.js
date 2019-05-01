@@ -3,7 +3,7 @@ import AdditionalDetails from '@/pages/organ-donation/additional-details';
 import BackButton from '@/components/BackButton';
 import { ORGAN_DONATION, ORGAN_DONATION_REVIEW_YOUR_DECISION } from '@/lib/routes';
 import { DECISION_OPT_IN, initialState } from '@/store/modules/organDonation/mutation-types';
-import { createStore, mount } from '../../helpers';
+import { $t, createStore, mount } from '../../helpers';
 
 describe('additional-details', () => {
   // In this case we want string numbers to be coerced into actual numbers and vice versa.
@@ -41,7 +41,7 @@ describe('additional-details', () => {
     });
 
     it('will translate the additional details subheader', () => {
-      expect(wrapper.text()).toContain('translate_organDonation.additionalDetails.subheader');
+      expect($t).toHaveBeenCalledWith('organDonation.additionalDetails.subheader');
     });
 
     describe('dropdowns', () => {

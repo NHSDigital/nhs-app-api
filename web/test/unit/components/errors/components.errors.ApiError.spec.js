@@ -1,386 +1,197 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import has from 'lodash/fp/has';
-import Vue from 'vue';
+import analytics from '@/store/modules/analytics';
 import ApiError from '@/components/errors/ApiError';
-import { initialState as initialErrorsState } from '@/store/modules/errors/mutation-types';
-import { initialState as initialDeviceState } from '@/store/modules/device/mutation-types';
-import { createStore, locale, mount } from '../../helpers';
-import MessageDialog from '@/components/widgets/MessageDialog';
-import MessageText from '@/components/widgets/MessageText';
+import device from '@/store/modules/device';
+import each from 'jest-each';
+import errors from '@/store/modules/errors';
+import { get, has } from 'lodash/fp';
+import locale from '@/locale';
+import { mount, createLocalVue } from '@vue/test-utils';
+import Vuex from 'vuex';
+import testData from './testData';
 
-Vue.mixin({
-  computed: {
-    showTemplate: {
-      get() {
-        return true;
-      },
-      set() {
-      },
-    },
-  },
-  methods: {
-    correctUrl(url) {
-      return url;
-    },
-  },
-});
+const engLocale = locale.en;
+const $te = key => has(key, engLocale);
+const $t = key => get(key, engLocale);
+const errorId = 'error';
+let component;
 
-const testMessages = {
-  400: 'Bad Request',
-  403: 'Forbidden',
-  409: 'Conflict',
-  460: 'Limit reached',
-  461: 'Too late',
-  464: 'ODS code not supported or no nhs number',
-  465: 'Underage',
-  500: 'Internal Server Error',
-  502: 'Bad Gateway',
-  504: 'Gateway Timeout',
+const createApiErrorComponent = ($route, apiError) => {
+  const localVue = createLocalVue();
+  localVue.use(Vuex);
+
+  const store = new Vuex.Store({
+    modules: {
+      errors,
+      device,
+      analytics,
+    },
+  });
+  store.app = { $env: {} };
+  store.dispatch('errors/setRoutePath', $route);
+  store.dispatch('errors/addApiError', apiError);
+
+  component = mount(ApiError, {
+    store,
+    localVue,
+    mocks: {
+      $style: { serverError: errorId, button: 'button' },
+      $route,
+      $t,
+      $te,
+      correctUrl: url => url,
+    },
+  });
 };
 
-const createState = ({
-  action,
-  additionalInfoComponentName,
-  isNativeApp = false,
-  path,
-  status,
-}) => ({
-  errors: {
-    ...initialErrorsState(),
-    ...{
-      apiErrors: [{
-        error: status,
-        status,
-        message: testMessages[status],
-      }],
-      pageSettings: {
-        action,
-        additionalInfoComponentName,
-        errorOverrideStyles: {},
-      },
-      routePath: path,
-    },
-  },
-  device: {
-    ...initialDeviceState(),
-    ...{
-      isNativeApp,
-    },
-  },
-});
+const assert = (expectedData) => {
+  if (expectedData.showError === false) {
+    expect(component.vm.showError()).toBeDefined();
+    expect(component.vm.showError()).toBeFalsy();
+    return;
+  }
 
-describe('api errors', () => {
-  let $store;
-  let getters;
-  let state;
-  let wrapper;
+  expect(component.vm.pageTitle).toEqual(expectedData.pageTitle);
+  expect(component.vm.pageHeader).toEqual(expectedData.pageHeader);
+  let paragraphIndex = -1;
+  if (expectedData.isInformationError !== true) {
+    expect(component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1).text()).toEqual(expectedData.header);
+    if (expectedData.subheader !== '') {
+      expect(component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1).text()).toEqual(expectedData.subheader);
+    }
 
-  const $style = { additionalInformation: 'additionalInformation' };
-  const $te = key => has(key)(locale);
+    const messageElement = component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1);
+    expect(messageElement.text()).toEqual(expectedData.message);
+    if (expectedData.messageLabel) {
+      expect(messageElement.attributes()['aria-label']).toBe(expectedData.messageLabel);
+    }
+    if (expectedData.additionalInfo && expectedData.additionalInfo !== '') {
+      expect(component.find(`#${errorId}`).findAll('p').at(paragraphIndex += 1).text()).toEqual(expectedData.additionalInfo);
+    }
 
-  const mountApiError = () => mount(ApiError, {
-    $store,
-    $style,
-    // $t,
-    $te,
+    if (expectedData.additionalInfoComponent) {
+      expect(component.find({ name: expectedData.additionalInfoComponent }).exists()).toBe(true);
+    } else {
+      expect(component.find(`#${errorId}`).findAll('p').length).toEqual(paragraphIndex + 1);
+    }
+
+    if (expectedData.hasRetryButton) {
+      expect(component.find(`#${errorId}`).find('.button').text()).toEqual(expectedData.retryButtonText);
+      expect(component.vm.retryUrl).toEqual(expectedData.redirectUrl);
+    } else {
+      expect(component.find(`#${errorId}`).find('button').exists()).toBeFalsy();
+    }
+  } else {
+    expect(component.find('h1').text()).toEqual(expectedData.header);
+    expect(component.find('h2').text()).toEqual(expectedData.subheader);
+
+    const messageElement = component.find('p');
+    expect(messageElement.text()).toEqual(expectedData.message);
+
+    if (expectedData.messageLabel) {
+      expect(messageElement.attributes()['aria-label']).toBe(expectedData.messageLabel);
+    }
+  }
+};
+
+describe('ApiError.vue', () => {
+  each(testData[400]).it('page %s will show correct message when API returns a 400 bad request response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 400 }, message: 'Bad Request' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
   });
 
-  describe('standard error', () => {
-    beforeEach(() => {
-      getters = {
-        'errors/showApiError': true,
-        'errors/isStandardError': true,
-      };
-    });
+  each(testData[403]).it('page %s will show correct message when the API returns a 403 forbidden response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 403 }, message: 'Forbidden' };
 
-    describe('additional info', () => {
-      const getAdditionalInfo = () => wrapper.find(`.${$style.additionalInformation}`);
+    createApiErrorComponent(route, apiError);
 
-      describe('path has additional info', () => {
-        let additionalInfo;
-
-        beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments/confirmation', status: 460 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-          additionalInfo = getAdditionalInfo();
-        });
-
-        it('will exist', () => {
-          expect(additionalInfo.exists()).toBe(true);
-        });
-
-        it('will have text', () => {
-          expect(additionalInfo.text()).toBe('translate_appointments.confirmation.errors.460.additionalInfo');
-        });
-
-        it('will not have label', () => {
-          expect(additionalInfo.attributes('aria-label')).toBeUndefined();
-        });
-      });
-
-      describe('path has additional info and label', () => {
-        let additionalInfo;
-        const additionalInfoText = locale.auth_return.errors.additionalInfo.text;
-        const additionalInfoLabel = locale.auth_return.errors.additionalInfo.label;
-
-        beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/auth-return', status: 400 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-          additionalInfo = getAdditionalInfo();
-        });
-
-        it('will exist', () => {
-          expect(additionalInfo.exists()).toBe(true);
-        });
-
-        it('will have text', () => {
-          expect(additionalInfo.text()).toBe(additionalInfoText);
-        });
-
-        it('will have label', () => {
-          expect(additionalInfo.attributes('aria-label')).toBe(additionalInfoLabel);
-        });
-      });
-
-      describe('path does not have additional info', () => {
-        beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments', status: 400 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-        });
-
-        it('will not exist', () => {
-          expect(getAdditionalInfo().exists()).toBe(false);
-        });
-      });
-    });
-
-    describe('message', () => {
-      let message;
-      const getMessage = () => wrapper.find('*[data-purpose="msg-text"]');
-
-      describe('path has message text', () => {
-        beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments/cancelling', status: 403 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-          message = getMessage();
-        });
-
-        it('will have text', () => {
-          expect(message.text()).toBe('translate_appointments.cancelling.errors.403.message');
-        });
-
-        it('will not have label', () => {
-          expect(message.attributes('aria-label')).toBeUndefined();
-        });
-      });
-
-      describe('path has message text and label', () => {
-        const messageText = locale.appointments.errors.message.text;
-        const messageLabel = locale.appointments.errors.message.label;
-
-        beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments', status: 400 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-          message = getMessage();
-        });
-
-        it('will have text', () => {
-          expect(message.text()).toBe(messageText);
-        });
-
-        it('will have label', () => {
-          expect(message.attributes('aria-label')).toBe(messageLabel);
-        });
-      });
-    });
-
-    describe('standard message text', () => {
-      describe('is native app', () => {
-        beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments/cancelling', status: 403 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-        });
-
-        it('will have a message dialog', () => {
-          expect(wrapper.find(MessageDialog).exists()).toBe(true);
-        });
-
-        it('will have three message texts', () => {
-          expect(wrapper.findAll(MessageText).length).toBe(3);
-        });
-
-        it('will contain the header', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.403.header');
-        });
-
-        it('will contain the subheader', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.subheader');
-        });
-
-        it('will contain the message', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.403.message');
-        });
-      });
-
-      describe('is not native app', () => {
-        beforeEach(() => {
-          state = createState({ isNativeApp: false, path: '/appointments/cancelling', status: 403 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-        });
-
-        it('will have a message dialog', () => {
-          expect(wrapper.find(MessageDialog).exists()).toBe(true);
-        });
-
-        it('will have three message texts', () => {
-          expect(wrapper.findAll(MessageText).length).toBe(3);
-        });
-
-        it('will contain the header', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.403.header');
-        });
-
-        it('will contain the subheader', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.subheader');
-        });
-
-        it('will contain the message', () => {
-          expect(wrapper.find(MessageDialog).text()).toContain('.errors.403.message');
-        });
-      });
-    });
-
-    describe('retry button', () => {
-      describe('no retry text', () => {
-        beforeEach(() => {
-          state = createState({ isNativeApp: true, path: '/appointments', status: 400 });
-          $store = createStore({ getters, state });
-          wrapper = mountApiError();
-        });
-
-        it('will not exist', () => {
-          expect(wrapper.find('[data-purpose="retry-or-back-button"').exists()).toBe(false);
-        });
-      });
-
-      describe('retry text', () => {
-        describe('is native app', () => {
-          beforeEach(() => {
-            state = createState({ isNativeApp: true, path: '/appointments/cancelling', status: 400 });
-            $store = createStore({ getters, state });
-            wrapper = mountApiError();
-          });
-
-          it('will exist', () => {
-            expect(wrapper.find('[data-purpose="retry-or-back-button"').exists()).toBe(true);
-          });
-        });
-
-        describe('is not native app', () => {
-          describe('no retry action or text', () => {
-            beforeEach(() => {
-              state = createState({ isNativeApp: false, path: '/appointments/cancelling', status: 400 });
-              $store = createStore({ getters, state });
-              wrapper = mountApiError();
-            });
-
-            it('will not exist', () => {
-              expect(wrapper.find('[data-purpose="retry-or-back-button"').exists()).toBe(false);
-            });
-          });
-
-          describe('retry action but no retry text', () => {
-            beforeEach(() => {
-              // This state does not have retry text because there is no `retryButtonText`
-              // associated with appointments in the locale file
-              state = createState({
-                action: { 400: '/test' },
-                isNativeApp: false,
-                path: '/appointments',
-                status: 400,
-              });
-              $store = createStore({ getters, state });
-              wrapper = mountApiError();
-            });
-
-            it('will not exist', () => {
-              expect(wrapper.find('[data-purpose="retry-or-back-button"').exists()).toBe(false);
-            });
-          });
-
-          describe('retry action and retry text', () => {
-            beforeEach(() => {
-              // This has retry text because auth-return has an associated `retryButtonText`
-              // in the locale file.
-              state = createState({
-                action: { 400: '/test' },
-                isNativeApp: false,
-                path: '/auth-return',
-                status: 400,
-              });
-              $store = createStore({ getters, state });
-              wrapper = mountApiError();
-            });
-
-            it('will exist', () => {
-              expect(wrapper.find('[data-purpose="retry-or-back-button"').exists()).toBe(true);
-            });
-
-            it('will have the retry text', () => {
-              expect(wrapper.find('[data-purpose="retry-or-back-button"').text())
-                .toEqual('translate_auth_return.errors.retryButtonText');
-            });
-          });
-        });
-      });
-
-      it('will not display if there is no retry text', () => {
-
-      });
-    });
+    assert(expectedData);
   });
 
-  describe('is information error', () => {
-    beforeEach(() => {
-      getters = {
-        'errors/showApiError': true,
-        'errors/isStandardError': false,
-      };
-    });
+  each(testData[409]).it('page %s will show correct message when the API returns a 409 conflict response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 409 }, message: 'Conflict' };
 
-    describe('is native app', () => {
-      beforeEach(() => {
-        state = createState({ isNativeApp: true, path: '/appointments', status: 400 });
-        $store = createStore({ getters, state });
-        wrapper = mountApiError();
-      });
+    createApiErrorComponent(route, apiError);
 
-      it('will have a slim header', () => {
-        expect(wrapper.find('h1').exists()).toBe(true);
-      });
-    });
+    assert(expectedData);
+  });
 
-    describe('is not native app', () => {
-      beforeEach(() => {
-        state = createState({ isNativeApp: false, path: '/appointments', status: 400 });
-        $store = createStore({ getters, state });
-        wrapper = mountApiError();
-      });
+  each(testData[460]).it('page %s will show correct message when the API returns a 460 limit reached response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 460 }, message: 'Limit reached' };
 
-      it('will not have a slim header', () => {
-        expect(wrapper.find('h1').exists()).toBe(false);
-      });
+    createApiErrorComponent(route, apiError);
 
-      it('will have an h2 set to the subheader', () => {
-        expect(wrapper.find('h2').text()).toEqual('translate_appointments.errors.subheader');
-      });
-    });
+    assert(expectedData);
+  });
+
+  each(testData[461]).it('page %s will show correct message when the API returns a 461 too late response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 461 }, message: 'Too late' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+  each(testData[464]).it('page %s will show correct message when the API returns a 464 unsupported ods code or no nhs number', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 464 }, message: 'ODS code not supported or no nhs number' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+  each(testData[465]).it('page %s will show correct message when the API returns a 465 user did not meet the minimum age requirement', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 465 }, message: 'Underage' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+
+  each(testData[500]).it('page %s will show correct message when the API returns a 500 internal server error response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 500 }, message: 'Internal Server Error' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+  each(testData[502]).it('page %s will show correct message when the API returns a 502 bad gateway response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 502 }, message: 'Bad Gateway' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+  each(testData[5021]).it('page %s will show correct message when the API returns a 502 bad gateway response with error code', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 502, data: { errorCode: 1 } }, message: 'Bad Gateway' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+  each(testData[504]).it('page %s will show correct message when the API returns a 504 gateway timeout response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 504 }, message: 'Gateway Timeout' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
   });
 });

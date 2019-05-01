@@ -3,7 +3,7 @@ import OrganChoice from '@/components/organ-donation/OrganChoice';
 import SomeOrgans from '@/pages/organ-donation/some-organs';
 import { initialState, NO, NOT_STATED, YES } from '@/store/modules/organDonation/mutation-types';
 import { ORGAN_DONATION_FAITH, ORGAN_DONATION_MORE_ABOUT_ORGANS } from '@/lib/routes';
-import { createRouter, createStore, mount } from '../../helpers';
+import { $t, createRouter, createStore, mount } from '../../helpers';
 
 const allNoChoices = {
   heart: NO,
@@ -81,6 +81,7 @@ describe('organ donation some organs page', () => {
     return mount(SomeOrgans, {
       $router,
       $store,
+      $t,
       $style,
     });
   };
@@ -91,11 +92,11 @@ describe('organ donation some organs page', () => {
   });
 
   it('will translate the some organs subheader', () => {
-    expect(wrapper.text()).toContain('translate_organDonation.someOrgans.subheader');
+    expect($t).toHaveBeenCalledWith('organDonation.someOrgans.subheader');
   });
 
   it('will translate the some organs description', () => {
-    expect(wrapper.text()).toContain('translate_organDonation.someOrgans.choices.subheader');
+    expect($t).toHaveBeenCalledWith('organDonation.someOrgans.choices.subheader');
   });
 
   describe('more about organs', () => {

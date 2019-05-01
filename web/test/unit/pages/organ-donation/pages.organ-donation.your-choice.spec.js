@@ -1,9 +1,9 @@
 import BackButton from '@/components/BackButton';
 import RadioGroup from '@/components/RadioGroup';
 import YourChoice from '@/pages/organ-donation/your-choice';
-import { ORGAN_DONATION_FAITH } from '@/lib/routes';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { createRouter, createStore, mount } from '../../helpers';
+import { ORGAN_DONATION_FAITH } from '@/lib/routes';
+import { $t, createRouter, createStore, mount } from '../../helpers';
 
 const createState = (choice = '') => {
   const state = {
@@ -69,6 +69,7 @@ describe('organ donation your choice page', () => {
         wrapper = mount(YourChoice, {
           $router,
           $store,
+          $t,
           $style,
         });
         continueButton = wrapper.find('#continue-button');

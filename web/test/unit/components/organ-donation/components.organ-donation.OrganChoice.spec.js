@@ -4,7 +4,7 @@ import OrganChoice from '@/components/organ-donation/OrganChoice';
 import {
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
-import { createStore, mount } from '../../helpers';
+import { $t, createStore, mount } from '../../helpers';
 
 const organName = 'heart';
 
@@ -48,7 +48,7 @@ describe('organ choice component', () => {
 
     describe('text translations', () => {
       it('will display the organ title', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.someOrgans.choices.heartTitle');
+        expect($t).toHaveBeenCalledWith('organDonation.someOrgans.choices.heartTitle');
       });
     });
 
@@ -78,7 +78,7 @@ describe('organ choice component', () => {
 
     describe('text translations', () => {
       it('will display the organ title', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.someOrgans.choices.heartTitle');
+        expect($t).toHaveBeenCalledWith('organDonation.someOrgans.choices.heartTitle');
       });
     });
 

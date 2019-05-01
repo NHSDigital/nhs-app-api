@@ -1,9 +1,8 @@
 import UpdatedTermsConditions from '@/components/UpdatedTermsConditions';
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
-import { create$T, createStore, mount as mountHelper } from '../helpers';
+import { $t, createStore, mount as mountHelper } from '../helpers';
 
-const $t = create$T();
 const $env = {
   TERMS_CONDITIONS_URL: 'http://example.com',
   PRIVACY_POLICY_URL: 'http://example.com',

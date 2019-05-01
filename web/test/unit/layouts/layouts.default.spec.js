@@ -1,9 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies import/imports-first */
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { create$T } from '../helpers';
-
-const $t = create$T();
+import { $t } from '../helpers';
 
 jest.mock('@/components/widgets/HotJar', () => {
 });

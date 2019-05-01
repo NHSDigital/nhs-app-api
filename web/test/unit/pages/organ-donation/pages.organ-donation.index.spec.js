@@ -17,7 +17,7 @@ import {
   STATE_CONFLICTED,
   initialState,
 } from '@/store/modules/organDonation/mutation-types';
-import { createStore, mount } from '../../helpers';
+import { $t, createStore, mount } from '../../helpers';
 
 const createState =
   ({ decision = DECISION_UNKNOWN, originalDecision = decision, originalChoices } = {}) => {
@@ -228,7 +228,7 @@ describe('organ donation index page', () => {
 
     describe('appointed representative section', () => {
       it('will translate the phone label', () => {
-        expect(wrapper.text()).toContain('translate_organDonation.registered.appointedRep.phoneLabel');
+        expect($t).toHaveBeenCalledWith('organDonation.registered.appointedRep.phoneLabel');
       });
     });
 

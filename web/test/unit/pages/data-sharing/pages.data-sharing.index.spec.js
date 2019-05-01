@@ -1,9 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import DataSharing from '@/pages/data-sharing/';
-import { create$T, createStore, mount } from '../../helpers';
+import { $t, createStore, mount } from '../../helpers';
 import { initialState } from '@/store/modules/navigation/mutation-types';
-
-const $t = create$T();
 
 const createState = () => ({
   device: {

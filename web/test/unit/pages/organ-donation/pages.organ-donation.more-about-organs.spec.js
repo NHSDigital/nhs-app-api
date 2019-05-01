@@ -1,7 +1,7 @@
 import BackButton from '@/components/BackButton';
 import MoreAboutOrgans from '@/pages/organ-donation/more-about-organs';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { createStore, locale, mount } from '../../helpers';
+import { $t, createStore, mount } from '../../helpers';
 
 const createState = () => ({
   organDonation: initialState(),
@@ -16,6 +16,15 @@ describe('organ donation more about organs', () => {
 
   const mountMoreAboutOrgans = () => mount(MoreAboutOrgans, {
     $store,
+    t: (key) => {
+      if (key === 'organDonation.moreAboutOrgans.contentItems') {
+        return [
+          { subheader: 'Heart', body: 'Cardiac' },
+          { subheader: 'Lungs', body: 'Pulmonary' },
+        ];
+      }
+      return $t(key);
+    },
   });
 
   beforeEach(() => {
@@ -37,13 +46,15 @@ describe('organ donation more about organs', () => {
     });
 
     it('will add each content item with a subheader', () => {
-      const items = locale.organDonation.moreAboutOrgans.contentItems;
-      items.forEach((item, index) => expect(subheaders.at(index).text()).toBe(item.subheader));
+      expect(subheaders.length).toBe(2);
+      expect(subheaders.at(0).text()).toBe('Heart');
+      expect(subheaders.at(1).text()).toBe('Lungs');
     });
 
     it('will add each content item with a body', () => {
-      const items = locale.organDonation.moreAboutOrgans.contentItems;
-      items.forEach((item, index) => expect(bodies.at(index).text()).toBe(item.body));
+      expect(bodies.length).toBe(2);
+      expect(bodies.at(0).text()).toBe('Cardiac');
+      expect(bodies.at(1).text()).toBe('Pulmonary');
     });
   });
 

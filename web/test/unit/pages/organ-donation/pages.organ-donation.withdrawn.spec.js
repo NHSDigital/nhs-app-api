@@ -1,5 +1,5 @@
 import Withdrawn from '@/pages/organ-donation/withdrawn';
-import { locale, createStore, mount } from '../../helpers';
+import { $t, createStore, mount } from '../../helpers';
 
 describe('withdrawn', () => {
   let $store;
@@ -21,16 +21,7 @@ describe('withdrawn', () => {
   });
 
   it('will translate the message text', () => {
-    const items = locale.organDonation.withdrawn.messageTextItems;
-    wrapper = mount(Withdrawn, {
-      state: {
-        device: {
-          source: 'web',
-        },
-      },
-    });
-
-    items.forEach(item => expect(wrapper.text()).toContain(item));
+    expect($t).toHaveBeenCalledWith('organDonation.withdrawn.messageTextItems');
   });
 
   it('will show the what next header text', () => {
@@ -38,8 +29,7 @@ describe('withdrawn', () => {
   });
 
   it('will translate the what next body text', () => {
-    const items = locale.organDonation.withdrawn.whatNext.bodyItems;
-    items.forEach(item => expect(wrapper.text()).toContain(item));
+    expect($t).toHaveBeenCalledWith('organDonation.withdrawn.whatNext.bodyItems');
   });
 
   describe('created', () => {

@@ -1,9 +1,6 @@
 <template>
-  <div :class="[ mType,
-                 ...extraClasses,
-                 !$store.state.device.isNativeApp && $style.desktopWeb,
-                 plainStyle,
-  ]">
+  <div :class="[mType, ...extraClasses,
+                !$store.state.device.isNativeApp && $style.desktopWeb]">
     <div v-if="showIcon" :class="$style.icon">
       {{ iText }}
     </div>
@@ -58,10 +55,6 @@ export default {
     mType() {
       return this.showIcon ? [this.$style.msg, this.$style[this.messageType]] : [];
     },
-    plainStyle() {
-      // return this.overrideStyle === 'plain' ? this.$style.plain : '';
-      return this.overrideStyle === 'plain' ? this.$style.plain : '';
-    },
     showIcon() {
       return this.overrideStyle !== 'plain';
     },
@@ -71,14 +64,5 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/messages";
-@import "../../style/spacings";
-
-.plain {
-  &.desktopWeb {
-    margin-left: 0-$three;
-  }
-}
-
-
 
 </style>
