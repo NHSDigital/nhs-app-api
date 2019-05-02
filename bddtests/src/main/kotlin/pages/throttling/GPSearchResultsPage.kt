@@ -69,6 +69,7 @@ class GPSearchResultsPage : HybridPageObject() {
 
     fun assertTechnicalProblemsBanner() {
         errorBanner.assertVisible(arrayListOf("We are experiencing technical problems",
-                "Something has gone wrong with this service. It wasn't your fault."))
+                "Something has gone wrong with this service. It wasn't your fault.",
+                "Come back later. If it still isn't working then, contact us about the problem."))
     }
 }

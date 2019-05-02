@@ -31,7 +31,8 @@
       <div v-else-if="technicalError" :class="$style.technicalError">
         <message-dialog>
           <h3> {{ $t('th03.errors.serviceUnavailable.errorDialogHeader') }} </h3>
-          <p> {{ $t('th03.errors.serviceUnavailable.errorDialogText') }} </p>
+          <p> {{ $t('th03.errors.serviceUnavailable.errorDialogText1') }} </p>
+          <p> {{ $t('th03.errors.serviceUnavailable.errorDialogText2') }} </p>
         </message-dialog>
       </div>
 
@@ -78,10 +79,6 @@
           {{ $t('th03.errors.backButton') }}
         </generic-button>
       </analytics-tracked-tag>
-
-      <p v-if="technicalError">
-        {{ $t('th03.errors.serviceUnavailable.mainContent') }}
-      </p>
 
     </div>
   </div>

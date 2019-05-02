@@ -1286,8 +1286,8 @@ export default {
         header: 'Technical problems',
         title: 'Technical problems',
         errorDialogHeader: 'We are experiencing technical problems',
-        errorDialogText: 'Something has gone wrong with this service. It wasn\'t your fault.',
-        mainContent: 'Come back later. If it still isn\'t working then, contact us about the problem.',
+        errorDialogText1: 'Something has gone wrong with this service. It wasn\'t your fault.',
+        errorDialogText2: 'Come back later. If it still isn\'t working then, contact us about the problem.',
       },
       tooManyResults: {
         header: 'Too many results found',
