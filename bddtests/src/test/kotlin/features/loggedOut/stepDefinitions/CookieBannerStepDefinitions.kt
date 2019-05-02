@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.loggedOut.steps.CookieBannerSteps
 import features.sharedSteps.BrowserSteps
+import features.throttling.stepDefinitions.GpFinderPageStepDefinitions
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.CheckMySymptomsPage
@@ -12,8 +13,6 @@ import pages.loggedOut.CookieBanner
 import pages.loggedOut.LoginPage
 
 private const val COOKIE_OPTIONS_COOKIE_NAME = "nhso.cookie_options"
-private const val LOGIN_PAGE = "login"
-private const val CHECK_YOUR_SYMPTOMS_PAGE = "check your symptoms"
 private const val DO_SEE = "see"
 private const val DO_NOT_SEE = "do not see"
 private const val WILL = "will"
@@ -25,22 +24,29 @@ class CookieBannerStepDefinitions {
     private lateinit var browserSteps: BrowserSteps
     @Steps
     lateinit var cookieBannerSteps: CookieBannerSteps
+    @Steps
+    lateinit var gpFinderSteps: GpFinderPageStepDefinitions
 
     private lateinit var loginPage: LoginPage
     private lateinit var checkMySymptomsPage: CheckMySymptomsPage
     private lateinit var cookieBanner: CookieBanner
 
-    @When("^I am on the ($LOGIN_PAGE|$CHECK_YOUR_SYMPTOMS_PAGE) logged-out page$")
-    fun iAmOnTheLoggedOutPage(page: String) {
-        when (page) {
-            LOGIN_PAGE -> browserSteps.goToApp()
-            CHECK_YOUR_SYMPTOMS_PAGE -> {
-                browserSteps.goToApp()
-                loginPage.symptomsButton.click()
-                checkMySymptomsPage.isConditionsHeaderVisible()
-                checkMySymptomsPage.isNhs111HeaderVisible()
-            }
-        }
+    @When("^I am on the login logged-out page$")
+    fun iAmOnTheLoginLoggedOutPage() {
+        browserSteps.goToApp()
+    }
+
+    @When("^I am on the check your symptoms logged-out page$")
+    fun iAmOnTheCheckYourSymptomsLoggedOutPage(){
+        browserSteps.goToApp()
+        loginPage.symptomsButton.click()
+        checkMySymptomsPage.isConditionsHeaderVisible()
+        checkMySymptomsPage.isNhs111HeaderVisible()
+    }
+
+    @When("^I am on the gp finder logged-out page$")
+    fun iAmOnTheGpFinderLoggedOutPage(){
+        gpFinderSteps.iHaveNotLoggedInAndIHaveNotPreviouslySelectedMyGPPractice()
     }
 
     @When("^I select the information link$")

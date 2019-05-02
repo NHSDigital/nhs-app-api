@@ -16,13 +16,8 @@ Feature: Cookie Banner
       | check your symptoms | enabled     |
       | login               | disabled    |
       | check your symptoms | disabled    |
-# GP Finder not yet implemented for Responsive Web.
-# We need to be mindful that there are a few pages in GP Finder and that this just refers to the first page.
-  @pending  @NHSO-3844
-    Examples:
-      | target page | js enabled? |
-      | gp finder   | enabled     |
-      | gp finder   | disabled    |
+      | gp finder           | enabled     |
+      | gp finder           | disabled    |
 
   @native
   @native-smoketest
@@ -33,10 +28,7 @@ Feature: Cookie Banner
       | target page         |
       | login               |
       | check your symptoms |
-  @pending  @NHSO-3844
-    Examples:
-      | target page |
-      | gp finder   |
+      | gp finder           |
     
   Scenario Outline: When the Cookie Banner is acknowledged on the <target page> web page with Javascript <js enabled?>, the cookie is created and the banner no longer appears
     Given I have <js enabled?> javascript
@@ -45,7 +37,7 @@ Feature: Cookie Banner
     Then a local cookie is created with expiry date
     And pages will not display the cookie banner
       | /login               |
-#      | gp finder           |
+      | /gp-finder           |
       | /check-your-symptoms |
     Examples:
       | target page         | js enabled? |
@@ -53,11 +45,8 @@ Feature: Cookie Banner
       | check your symptoms | enabled     |
       | login               | disabled    |
       | check your symptoms | disabled    |
-  @pending  @NHSO-3844
-    Examples:
-      | target page | js enabled? |
-      | gp finder   | enabled     |
-      | gp finder   | disabled    |
+      | gp finder           | enabled     |
+      | gp finder           | disabled    |
 
   Scenario Outline: Cookie Banner doesn't appear when logged in on web, when Javascript <js enabled?>
     Given I have <js enabled?> javascript
