@@ -25,18 +25,29 @@ export default {
     FlashMessage,
   },
   head() {
-    const head = {
-      htmlAttrs: {
-        lang: `${this.$t('language')}`,
-      },
-      title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
-      script: [
-        {
-          src: this.$store.app.$env.ANALYTICS_SCRIPT_URL,
+    let head = {};
+    if (this.$store.state.termsAndConditions.analyticsCookieAccepted) {
+      head = {
+        htmlAttrs: {
+          lang: `${this.$t('language')}`,
         },
-      ],
-      __dangerouslyDisableSanitizers: ['noscript'],
-    };
+        script: [
+          {
+            src: this.$store.app.$env.ANALYTICS_SCRIPT_URL,
+          },
+        ],
+        title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
+        __dangerouslyDisableSanitizers: ['noscript'],
+      };
+    } else {
+      head = {
+        htmlAttrs: {
+          lang: `${this.$t('language')}`,
+        },
+        title: `${this.$store.state.pageTitle.pageTitle} - ${this.$t('appTitle')}`,
+        __dangerouslyDisableSanitizers: ['noscript'],
+      };
+    }
 
     const sessionCookie = this.$store.app.$cookies.get('nhso.session');
 

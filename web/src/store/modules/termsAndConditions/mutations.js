@@ -12,7 +12,10 @@ export default {
     mergeCookie({
       cookies: this.app.$cookies,
       key: 'nhso.terms',
-      value: { areAccepted: state.areAccepted },
+      value: {
+        areAccepted: state.areAccepted,
+        analyticsCookieAccepted: state.analyticsCookieAccepted,
+      },
       options: { secure: this.app.$env.SECURE_COOKIES },
     });
   },
@@ -28,5 +31,6 @@ export default {
   [INIT_ACCEPTANCE](state) {
     state.areAccepted = false;
     state.updatedConsentRequired = false;
+    state.analyticsCookieAccepted = false;
   },
 };

@@ -2,7 +2,7 @@
 import { isEmpty } from 'lodash/fp';
 import moment from 'moment';
 
-import { APPOINTMENTS } from '@/lib/routes';
+import { APPOINTMENTS, TERMSANDCONDITIONS } from '@/lib/routes';
 
 const APP_ID = 'nhs:app';
 const pageNamePrefix = `${APP_ID}`;
@@ -78,7 +78,9 @@ export default function (app, store, route) {
 
       try {
         // eslint-disable-next-line no-underscore-dangle
-        if (window._satellite) {
+        if (!routePath.includes(TERMSANDCONDITIONS.path)
+          && store.state.termsAndConditions.analyticsCookieAccepted
+          && window._satellite) {
           window._satellite.track('page_view');
         }
       } catch (ex) {

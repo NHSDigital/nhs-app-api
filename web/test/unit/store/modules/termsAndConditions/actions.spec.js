@@ -50,6 +50,31 @@ describe('termsAndConditions/actions', () => {
       expect(app.$http.postV1PatientTermsAndConditionsConsent).toBeCalledWith(consentTerms);
     });
 
+    describe('update terms and conditions post is successful', () => {
+      beforeEach(async () => {
+        await app
+          .$http
+          .postV1PatientTermsAndConditionsConsent
+          .mockResolvedValue(() => '');
+        app.$http.getV1PatientTermsAndConditionsConsent = jest.fn(() => Promise.resolve({
+          response: { consentGiven: true, analyticsCookieAccepted: true },
+        }));
+        consentTerms = {
+          consentRequest: {
+            ConsentGiven: true,
+            AnalyticsCookieAccepted: true,
+            UpdatingConsent: true,
+          },
+        };
+      });
+
+      it('will call postV1PatientTermsAndConditionsConsent if update consent is set to true', async () => {
+        actions.acceptTerms({ commit }, consentTerms);
+        expect(app.$http.getV1PatientTermsAndConditionsConsent).toBeCalled();
+      });
+    });
+
+
     describe('post is successful', () => {
       beforeEach(async () => {
         await app
@@ -106,7 +131,10 @@ describe('termsAndConditions/actions', () => {
           .mockReturnValue(cookieValue)
 
           .mockImplementation('nhso.terms')
-          .mockReturnValue({ areAccepted: true, updatedConsentRequired: false });
+          .mockReturnValue({
+            analyticsCookieAccepted: false,
+            areAccepted: true,
+            updatedConsentRequired: false });
 
         state = { areAccepted: false, analyticsCookieAccepted: false };
         await actions.checkAcceptance({ commit, state });
@@ -137,7 +165,10 @@ describe('termsAndConditions/actions', () => {
       it('will commit the result from getV1PatientTermsAndConditionsConsent', () => {
         expect(commit).toBeCalledWith(
           SET_ACCEPTANCE,
-          { areAccepted: true, analyticsCookieAccepted: true },
+          {
+            analyticsCookieAccepted: true,
+            areAccepted: true,
+          },
         );
       });
     });

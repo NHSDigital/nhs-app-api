@@ -3,6 +3,6 @@ export const SET_UPDATED_CONSENT_REQUIRED = 'SET_UPDATED_CONSENT_REQUIRED';
 export const INIT_ACCEPTANCE = 'INIT_ACCEPTANCE';
 export const initialState = () => ({
   areAccepted: false,
-  analyticsCookieAccepted: '',
+  analyticsCookieAccepted: false,
   updatedConsentRequired: false,
 });

@@ -9,6 +9,19 @@ export default {
     commit(INIT_ACCEPTANCE);
   },
   async acceptTerms({ commit }, consentTerms) {
+    let analyticsCookie = false;
+    if (consentTerms.consentRequest.UpdatingConsent) {
+      await this
+        .app
+        .$http
+        .getV1PatientTermsAndConditionsConsent({})
+        .then((data) => {
+          if (data) {
+            analyticsCookie = data.response.analyticsCookieAccepted;
+          }
+        })
+        .catch(err => Promise.reject(err));
+    } else { analyticsCookie = consentTerms.consentRequest.AnalyticsCookieAccepted; }
     return this
       .app
       .$http
@@ -16,7 +29,7 @@ export default {
       .then(() => {
         const consentGiven = {
           areAccepted: consentTerms.consentRequest.ConsentGiven,
-          analyticsCookieAccepted: consentTerms.consentRequest.AnalyticsCookieAccepted,
+          analyticsCookieAccepted: analyticsCookie,
         };
 
         commit(SET_ACCEPTANCE, consentGiven);
@@ -31,16 +44,16 @@ export default {
   async checkAcceptance({ commit, state }) {
     const getTermsAndConditions = (termsAndConditions, property) =>
       termsAndConditions[property] || (this.app.$cookies.get('nhso.terms') || {})[property];
-
     const areAccepted = getTermsAndConditions(state, 'areAccepted');
     const updatedConsentRequired = getTermsAndConditions(state, 'updatedConsentRequired');
+    const analyticsCookieAccepted = getTermsAndConditions(state, 'analyticsCookieAccepted') || false;
 
     let promise;
     if (areAccepted && !updatedConsentRequired) {
       promise = Promise.resolve({
         consentGiven: {
           areAccepted,
-          analyticsCookieAccepted: state.analyticsCookieAccepted,
+          analyticsCookieAccepted,
         },
         consentRequired: updatedConsentRequired,
       });

@@ -22,7 +22,7 @@ describe('termsAndConditions/mutations', () => {
     expect(state.areAccepted).toEqual(true);
     expect(app.$cookies.set).toHaveBeenCalledWith(
       'nhso.terms',
-      { areAccepted: true },
+      { analyticsCookieAccepted: true, areAccepted: true },
       { secure: true, path: '/' },
     );
     expect(state.analyticsCookieAccepted).toEqual(true);
@@ -34,7 +34,7 @@ describe('termsAndConditions/mutations', () => {
     expect(state.areAccepted).toEqual(false);
     expect(app.$cookies.set).toHaveBeenCalledWith(
       'nhso.terms',
-      { areAccepted: false },
+      { analyticsCookieAccepted: false, areAccepted: false },
       { secure: true, path: '/' },
     );
     expect(state.analyticsCookieAccepted).toEqual(false);
