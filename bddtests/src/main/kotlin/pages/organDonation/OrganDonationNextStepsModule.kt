@@ -8,14 +8,6 @@ import pages.sharedElements.MenuLinks
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationNextStepsModule(page :HybridPageObject) : MenuLinks(page, nextStepsContent) {
 
-    fun shareLinkClick() {
-        link(shareLinkTitle).click()
-    }
-
-    fun tellFamilyLinkClick() {
-        link(tellFamilyLinkTitle).click()
-    }
-
     fun assertOnlyTellFamilyLinkPresent() {
         assertLinksPresent(tellFamilyLinkTitle)
     }

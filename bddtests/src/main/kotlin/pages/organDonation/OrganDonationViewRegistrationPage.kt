@@ -8,6 +8,7 @@ import pages.assertElementNotPresent
 import pages.assertIsVisible
 import pages.sharedElements.BannerObject
 import pages.sharedElements.TextBlockElement
+import pages.text
 
 @DefaultUrl("http://web.local.bitraft.io:3000/organ-donation")
 open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
@@ -72,7 +73,7 @@ open class OrganDonationViewRegistrationPage : OrganDonationBasePage() {
                 "Test setup incorrect, map does not contain value for $faith",
                 map.containsKey(faith))
 
-        Assert.assertEquals("Expected Faith text", map[faith], faithSection.element.text.trim())
+        Assert.assertEquals("Expected Faith text", map[faith], faithSection.text.trim())
     }
 
     private val faithSection = HybridPageElement(

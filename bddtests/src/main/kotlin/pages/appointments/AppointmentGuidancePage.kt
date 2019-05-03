@@ -37,7 +37,9 @@ class AppointmentGuidancePage : HybridPageObject() {
 
     fun isSubHeaderTextEqualTo(text: String, elementWasStale: Boolean = false): Boolean {
         return try {
-            main.element.findBy<WebElementFacade>("//*[@id='guidance_sub_header' and contains(text(), '$text')]")
+            main.actOnTheElement {
+                it.findBy<WebElementFacade>("//*[@id='guidance_sub_header' and contains(text(), '$text')]")
+            }
             true
         } catch (e: StaleElementReferenceException) {
             if (!elementWasStale) {
@@ -53,11 +55,13 @@ class AppointmentGuidancePage : HybridPageObject() {
 
     fun getGuidanceBody(): List<Pair<String, Boolean>> {
         val list = arrayListOf<Pair<String, Boolean>>()
-        val listElements = content.element.thenFindAll("*")
-        listElements.forEach { listElement ->
-            val guidanceLine = listElement.getTextWithoutUnicodeSuffix()
-            val isLineInBold = listElement.tagName == "strong"
-            list.add(Pair(guidanceLine, isLineInBold))
+        content.actOnTheElement {
+            val listElements = it.thenFindAll("*")
+            listElements.forEach { listElement ->
+                val guidanceLine = listElement.getTextWithoutUnicodeSuffix()
+                val isLineInBold = listElement.tagName == "strong"
+                list.add(Pair(guidanceLine, isLineInBold))
+            }
         }
         return list
     }

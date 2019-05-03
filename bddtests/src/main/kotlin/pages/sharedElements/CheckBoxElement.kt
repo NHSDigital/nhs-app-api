@@ -2,7 +2,6 @@ package pages.sharedElements
 
 import org.junit.Assert
 import org.openqa.selenium.By
-import org.openqa.selenium.WebElement
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertIsVisible
@@ -19,7 +18,7 @@ class CheckBoxElement(page : HybridPageObject, text:String) {
     }
 
     fun click() {
-        checkBoxElement.element.findElement(By.xpath("./label")).click()
+        checkBoxElement.actOnTheElement { it.findElement(By.xpath("./label")).click() }
     }
 
     fun assertChecked() {
@@ -33,20 +32,31 @@ class CheckBoxElement(page : HybridPageObject, text:String) {
     fun assertInlineError(errorMessage: String) {
         val inlineErrors = getInlineError()
         Assert.assertEquals("Expected inline error", 1, inlineErrors.count())
-        Assert.assertEquals("Expected error message", errorMessage, inlineErrors.single().text)
+        Assert.assertEquals("Expected error message", errorMessage, inlineErrors.single())
     }
 
     fun assertNoInlineError() {
         Assert.assertEquals("Expected no inline error", 0, getInlineError().count())
     }
 
-    private fun getInlineError(): List<WebElement> {
-        return checkBoxElement.element
-                .findElements(By.xpath("./preceding-sibling::p[contains(@class, error-message)]/span"))
+    private fun getInlineError(): List<String> {
+        val inlineErrors = mutableListOf<String>()
+
+        checkBoxElement.actOnTheElement {
+            inlineErrors.addAll(
+                it.findElements(By.xpath("./preceding-sibling::p[contains(@class, error-message)]/span"))
+                        .map { webElement -> webElement.text }
+            )
+        }
+
+        return inlineErrors
     }
 
     private fun getCheckedElementsCount(): Int {
-        val elements = checkBoxElement.element.findElements(By.xpath("./div//*[local-name() = 'svg']"))
-        return elements.count()
+        var elementCount = 0
+        checkBoxElement.actOnTheElement {
+            elementCount = it.findElements(By.xpath("./div//*[local-name() = 'svg']")).count()
+        }
+        return elementCount
     }
 }

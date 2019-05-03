@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.navigation.steps.NavHeaderSteps
+import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import pages.navigation.NavBarNative
@@ -11,6 +12,8 @@ import pages.navigation.NavBarNative
 
 class NavHeaderStepDefinitions {
 
+    @Steps
+    lateinit var browser: BrowserSteps
     @Steps
     lateinit var nav: NavigationSteps
     @Steps
@@ -27,6 +30,7 @@ class NavHeaderStepDefinitions {
 
     @When("^I click the help icon$")
     fun iClickTheHelpIcon() {
+        browser.storeCurrentTabCount()
         navHeader.clickHelp()
     }
 

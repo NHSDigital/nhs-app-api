@@ -18,7 +18,7 @@ open class UpdatedTermsAndConditionsSteps {
 
     @When("^I agree to the updated terms and conditions$")
     fun iAgreeToTheUpdatedTermsAndConditions() {
-        updatedTermsAndConditionsPage.updatedTermsAndConditionsLabel.element.click()
+        updatedTermsAndConditionsPage.updatedTermsAndConditionsLabel.click()
         updatedTermsAndConditionsPage.continueButton.click()
     }
 

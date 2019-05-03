@@ -20,11 +20,13 @@ import org.junit.Assert.assertTrue
 import org.openqa.selenium.JavascriptExecutor
 import pages.assertIsVisible
 import pages.assertSingleElementPresent
+import pages.isCurrentlyVisible
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
 import pages.navigation.WebHeader
+import pages.text
 import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -216,11 +218,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         myRecordInfoPage.assertLabelAndValue("Sex", sex)
         myRecordInfoPage.assertLabelAndValue("Address", address)
         myRecordInfoPage.assertLabelAndValue("NHS number", patient.formattedNHSNumber())
-    }
-
-    @Then("^I click the clinical abbreviations link$")
-    fun thenIClickTheClinicalAbbreviationsLink() {
-        myRecordInfoPage.clickClinicalAbbreviationsLink()
     }
 
     @Then("^I do not see patient information details$")

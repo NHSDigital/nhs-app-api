@@ -43,16 +43,6 @@ open class OrganDonationChoiceStepDefinitions {
         button.click()
     }
 
-    @When("^I select the Find Out More About Organ Donation link")
-    fun iSelectTheFindOutMoreLink() {
-        organDonationChoicePage.findOutMoreLink.assertIsVisible().click()
-    }
-
-    @When("^I select the Think You're Already Registered Organ Donation link")
-    fun iSelectTheThinkYoureAlreadyRegisteredOrganDonationLink() {
-        organDonationChoicePage.alreadyRegisteredLink.assertIsVisible().click()
-    }
-
     @Then("^the internal Organ Donation Choice Page is displayed")
     fun theInternalOrganDonationChoicePageIsDisplayed() {
         organDonationChoicePage.assertDisplayed()

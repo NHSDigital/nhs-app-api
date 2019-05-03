@@ -120,13 +120,10 @@ open class SharedStepDefinitions {
         browser.shouldHaveUrl(url)
     }
 
-    @Then("^a new tab opens with a host name matching that of (.*)$")
-    fun aNewTabOpensWithAHostMatchingThatOf(url: String) {
-        browser.assertNewTabWithHost(url)
-    }
-
     @Then("I wait for (\\d+) seconds")
     fun iWaitForXSeconds(secondsToWaitFor: Long) {
         Thread.sleep(((secondsToWaitFor) * WAIT_IN_SECONDS_MODIFIER))
     }
+
+
 }

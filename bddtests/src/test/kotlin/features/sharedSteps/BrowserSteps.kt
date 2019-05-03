@@ -1,12 +1,12 @@
 package features.sharedSteps
 
 import junit.framework.TestCase.assertNull
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.openqa.selenium.Cookie
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.loggedOut.LoginPage
-import webdrivers.getOpenTabUrls
 import webdrivers.options.ChromeOptionManager
 import webdrivers.options.OptionManager
 import webdrivers.options.nojs.NoJsOption
@@ -17,6 +17,7 @@ import java.util.*
 private const val SIGN_OUT_WAIT_TIME = 1000L
 private const val LOAD_URL_WAIT_TIME = 30L
 private const val POLLING_DURATION = 100L
+private const val TAB_COUNT_VARIABLE = "TabCount"
 
 open class BrowserSteps {
 
@@ -93,11 +94,15 @@ open class BrowserSteps {
     }
 
     @Step
-    fun assertNewTabWithHost(url: String) {
-        val expectedHost = URL(url).host
-        val tabHosts = loginPage.driver.getOpenTabUrls().map { tab->tab.host }
-        Assert.assertTrue("Expected to contain host of $url. Actual ${tabHosts.joinToString()}",
-                tabHosts.contains(expectedHost))
+    fun storeCurrentTabCount() {
+        Serenity.setSessionVariable(TAB_COUNT_VARIABLE).to(loginPage.driver.windowHandles.count())
+    }
+
+    @Step
+    fun assertNewTab() {
+        val handles = loginPage.driver.windowHandles
+        Assert.assertTrue("Expected a new tab to be opened",
+                handles.count()==Serenity.sessionVariableCalled<Int>(TAB_COUNT_VARIABLE) + 1)
     }
 
     @Step

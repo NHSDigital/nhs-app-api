@@ -3,8 +3,9 @@ package pages.sharedElements
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.assertElementNotPresent
 import pages.assertSingleElementPresent
+import pages.assertElementNotPresent
+import pages.text
 
 data class MenuLinksContent(val title:String,
                             val links: Array<Pair<String,String>>,
@@ -70,7 +71,7 @@ open class MenuLinks(private val page : HybridPageObject, val content : MenuLink
         val body = linkDescriptionBody(title)
         Assert.assertEquals("Description Body",
                 description,
-                body.assertSingleElementPresent().element.text)
+                body.assertSingleElementPresent().text)
     }
 
     private fun filterLinksByTitle(titles: Array<out String>): Array<Pair<String, String>>{

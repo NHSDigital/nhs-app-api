@@ -76,11 +76,6 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
         }
     }
 
-    @When("^I click the Data Sharing More Info link$")
-    fun iClickTheDataSharingMoreInfoLink() {
-        dataSharing.linkDataSharingMoreInfo.click()
-    }
-
     @When("^I click the Start Now button$")
     fun iClickTheStartNowButton() {
         dataSharing.btnStartNow.click()

@@ -11,9 +11,9 @@ class NdopPage : HybridPageObject() {
 
     fun tokenIsDisplayed(): Boolean {
         if (onMobile()){
-            return pageTitle.element.isPresent
+            return pageTitle.isPresent
         } else {
-            return pageTitle.element.isDisplayed
+            return pageTitle.isDisplayed
         }
     }
 

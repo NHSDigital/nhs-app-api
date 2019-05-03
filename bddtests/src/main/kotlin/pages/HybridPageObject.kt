@@ -4,21 +4,21 @@ import config.Config
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.SerenityWebdriverManager
+import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.support.ui.FluentWait
 import pages.sharedElements.BannerObject
+import utils.PageLogging
 import webdrivers.getMobileDriver
 import webdrivers.isAndroid
 import webdrivers.isIOS
 import java.time.Duration
 
-const val DEFAULT_VISIBILITY_WAIT: Long = 300
 const val DEFAULT_SPINNER_WAIT: Long = 4000
 const val DEFAULT_MOBILE_WAIT: Long = 5000
-const val DEFAULT_NATIVE_SPINNER_WAIT: Long = 1000
 const val POOLING_FREQUENCY: Long = 100
 const val WEB_CONTEXT: String = "webview"
 
@@ -28,7 +28,9 @@ open class HybridPageObject : PageObject() {
 
     val validationBanner by lazy { BannerObject.error(this) }
 
-    val locatorMethods by lazy {LocatorMethods(this)}
+    val locatorMethods by lazy { LocatorMethods(this) }
+
+    val pageLogging by lazy { PageLogging(driver) }
 
     val spinner = HybridPageElement(
             webDesktopLocator = "//*[@id='loading-spinner']",
@@ -38,25 +40,35 @@ open class HybridPageObject : PageObject() {
             page = this
     )
 
+    private fun namedLinkWthGivenUrl(linkTitle: String, url: String) : HybridPageElement {
+        return HybridPageElement(
+            webDesktopLocator = "//a[@href='$url' and contains(.,'$linkTitle')]",
+            page = this
+        )
+    }
+
     private fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
-        try {
-            val currentElement = this.element
-            FluentWait<WebElementFacade>(currentElement)
-                    .withTimeout(Duration.ofSeconds(seconds))
-                    .pollingEvery(Duration.ofMillis(POOLING_FREQUENCY))
-                    .until {
-                        !it.isPresent || !it.isCurrentlyVisible
-                    }
-        } catch (e: NoSuchElementException) {
-            // continue
-        } catch (e: StaleElementReferenceException) {
-            // continue
+
+        actOnTheElement { elem ->
+            try {
+                FluentWait<WebElementFacade>(elem)
+                        .withTimeout(Duration.ofSeconds(seconds))
+                        .pollingEvery(Duration.ofMillis(POOLING_FREQUENCY))
+                        .until {
+                            !it.isPresent || !it.isCurrentlyVisible
+                        }
+
+            } catch (e: NoSuchElementException) {
+                // continue
+            } catch (e: StaleElementReferenceException) {
+                // continue
+            }
         }
     }
 
     fun findAllByXpath(xpath: String): List<WebElementFacade> {
         switchWebview()
-        logSelectorAndSource(xpath)
+        pageLogging.logSelectorAndSource(xpath)
         return findAll(By.xpath(xpath))
     }
 
@@ -64,7 +76,7 @@ open class HybridPageObject : PageObject() {
         switchWebview()
         val element: WebElementFacade
         try {
-            logSelectorAndSource(xpath)
+            pageLogging.logSelectorAndSource(xpath)
             element = findBy(xpath)
         } catch (e: NoSuchElementException) {
             throw NoSuchElementException("No element found on page:\n${driver.pageSource}", e)
@@ -90,13 +102,6 @@ open class HybridPageObject : PageObject() {
             }
         }
         setDriver<HybridPageObject>(driver)
-    }
-
-    fun logSelectorAndSource(selector: String) {
-        if (Config.instance.showPageSourceForXPathQuery == "true") {
-            println("Selector: $selector")
-            println("Current source:\n${driver.pageSource}")
-        }
     }
 
     override fun <T : PageObject?> switchToPage(pageObjectClass: Class<T>?): T {
@@ -149,28 +154,13 @@ open class HybridPageObject : PageObject() {
         return this.text.removeSuffix(charValToRemove)
     }
 
-    private fun getActionPageElement(actionText: String): HybridPageElement {
-        val webLocator = "//a[contains(text(),'$actionText')]"
-        val nativeLocator = "//button[contains(text(),'$actionText')]"
-        return HybridPageElement(
-                webDesktopLocator = webLocator,
-                iOSLocator = nativeLocator,
-                androidLocator = nativeLocator,
-                page = this,
-                timeToWaitForElement = 30
-        ).withText(actionText, false)
-    }
+    fun assertLinkExistsAndClickIt(linkTitle: String, url: String) {
+        namedLinkWthGivenUrl(linkTitle, url).actOnTheElement {
+            Assert.assertTrue("Expected the link called $linkTitle with target of $url to be available",
+                    it.isVisible)
+        }
 
-    fun isActionVisible(actionText: String): Boolean {
-        return getActionPageElement(actionText)
-                .element
-                .isCurrentlyVisible
-    }
-
-    fun clickOnActionContainingText(actionText: String) {
-        getActionPageElement(actionText)
-                .assertIsVisible()
-                .click()
+        namedLinkWthGivenUrl(linkTitle,url).click()
     }
 }
 

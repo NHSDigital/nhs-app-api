@@ -10,6 +10,7 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import pages.assertIsVisible
+import pages.isVisible
 import pages.myrecord.MyRecordInfoPage
 import utils.SerenityHelpers
 import worker.models.myrecord.MyRecordResponse
@@ -88,12 +89,12 @@ open class MyRecordMedicationsStepDefinitions : AbstractDemographicsStepDefiniti
 
     @Then("^I see current repeat medication information$")
     fun thenISeeCurrentRepeatMedicationInformation() {
-        Assert.assertTrue(myRecordInfoPage.repeatMedications.firstElement.element.isVisible)
+        Assert.assertTrue(myRecordInfoPage.repeatMedications.firstElement.isVisible)
     }
 
     @Then("^I see discontinued repeat medication information$")
     fun thenISeeDiscontinuedRepeatMedicationInformation() {
-        Assert.assertTrue(myRecordInfoPage.discontinuedRepeatMedications.firstElement.element.isVisible)
+        Assert.assertTrue(myRecordInfoPage.discontinuedRepeatMedications.firstElement.isVisible)
     }
 
     @Then("^I see acute medication information$")

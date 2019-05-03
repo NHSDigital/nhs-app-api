@@ -25,19 +25,22 @@ class TextBlockElement private constructor(
 
     fun assertPair(expectedValues: Array<KeyValuePair<String, String>>): TextBlockElement {
 
-        val fields = container.element.findElements(By.xpath(".//h4"))
+        container.actOnTheElement {
+            val fields = it.findElements(By.xpath(".//h4"))
 
-        val actualValues = fields.map { field ->
-            KeyValuePair(field.text,
-                    field!!.findElement(By.ByXPath("./following-sibling::p")).text)
-        }
+            val actualValues = fields.map { field ->
+                KeyValuePair(field.text,
+                        field!!.findElement(By.ByXPath("./following-sibling::p")).text)
+            }
 
-        Assert.assertEquals("Expected number of pairs. Expected: '${expectedValues.toList()}', Actual: '$actualValues'",
-                expectedValues.count(), actualValues.count())
+            Assert.assertEquals(
+                    "Expected number of pairs. Expected: '${expectedValues.toList()}', Actual: '$actualValues'",
+                    expectedValues.count(), actualValues.count())
 
-        expectedValues.forEach { expected ->
-            val foundPair = actualValues.first { value -> value.key == expected.key }
-            Assert.assertEquals("expected value", expected.key, foundPair.key)
+            expectedValues.forEach { expected ->
+                val foundPair = actualValues.first { value -> value.key == expected.key }
+                Assert.assertEquals("expected value", expected.key, foundPair.key)
+            }
         }
         return this
     }
@@ -51,12 +54,14 @@ class TextBlockElement private constructor(
     }
 
     private fun assertInternal(locator: String, expectedText: Array<out String>): TextBlockElement {
-        val actualText = container.element.findElements(By.xpath(locator))
-                .map { element -> element.text }.toTypedArray()
+        container.actOnTheElement {
+            val actualText = it.findElements(By.xpath(locator))
+                    .map { element -> element.text }.toTypedArray()
 
-        expectedText.forEach { expected ->
-            Assert.assertTrue("Expected to contain: '$expected'. Actual: '${actualText.joinToString()}'",
-                    actualText.contains(expected))
+            expectedText.forEach { expected ->
+                Assert.assertTrue("Expected to contain: '$expected'. Actual: '${actualText.joinToString()}'",
+                        actualText.contains(expected))
+            }
         }
         return this
     }

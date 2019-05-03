@@ -41,6 +41,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.navigation.HeaderNative
+import pages.text
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptions.PrescriptionsListResponse
@@ -405,9 +406,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
         headerNative.waitForPageHeaderText("Repeat prescriptions unavailable")
 
-        assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.element.text)
+        assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.text)
         assertEquals("Contact your GP surgery for more information. " +
-                "For urgent medical help, call 111.", errorPage.errorText1.element.text)
+                "For urgent medical help, call 111.", errorPage.errorText1.text)
     }
 
     @Then("I select (\\d+) prescription to order")

@@ -4,11 +4,13 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.MyAppointmentsUISteps
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.assertIsVisible
 import pages.assertSingleElementPresent
+import pages.assertIsVisible
+import pages.waitUntilPresent
+import pages.isDisplayed
+import pages.isCurrentlyEnabled
 import pages.navigation.HeaderNative
 
 class MyAppointmentsStepDefinitions {
@@ -77,13 +79,13 @@ class MyAppointmentsStepDefinitions {
     @Then("^I can book an appointment$")
     fun iCanBookAnAppointment() {
         myAppointmentsUISteps.myAppointmentsPage.bookButton.assertSingleElementPresent().assertIsVisible()
-        myAppointmentsUISteps.myAppointmentsPage.bookButton.element.waitUntilPresent<WebElementFacade>()
+        myAppointmentsUISteps.myAppointmentsPage.bookButton.waitUntilPresent()
 
         Assert.assertTrue("Book an appointment is not displaying",
-                myAppointmentsUISteps.myAppointmentsPage.bookButton.element.isDisplayed)
+                myAppointmentsUISteps.myAppointmentsPage.bookButton.isDisplayed)
 
         Assert.assertTrue("Book an appointment is not enabled",
-                myAppointmentsUISteps.myAppointmentsPage.bookButton.element.isCurrentlyEnabled)
+                myAppointmentsUISteps.myAppointmentsPage.bookButton.isCurrentlyEnabled)
     }
 
     @Then("^the page title is \"My appointments\"$")

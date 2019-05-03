@@ -11,8 +11,6 @@ open class OrganDonationCheckDetailsPage : OrganDonationBasePage() {
 
     override val titleText: String = "About you"
 
-    val privacyStatementLink = getLink("privacy statement")
-
     val accuracyCheckBox = CheckBoxElement(this,
             "I confirm that the information given in this form is true, complete and accurate")
 

@@ -61,7 +61,9 @@ open class NavBarNative : NativePageObject() {
     }
 
     private fun getElement(element: NavBarType): WebElementFacade {
-        return getNativePageElement(element).element
+        var webElement: WebElementFacade? = null
+        getNativePageElement(element).actOnTheElement { webElement = it }
+        return webElement!!
     }
 
     fun select(type: NavBarType) {

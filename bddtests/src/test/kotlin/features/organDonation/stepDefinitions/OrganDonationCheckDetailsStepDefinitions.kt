@@ -14,11 +14,6 @@ open class OrganDonationCheckDetailsStepDefinitions {
 
     lateinit var organDonationCheckDetailsPage: OrganDonationCheckDetailsPage
 
-    @When("I select the privacy statement link on the Organ Donation Check Details page")
-    fun iSelectThePrivacyStatementLinkOnTheOrganDonationCheckDetailsPage() {
-        organDonationCheckDetailsPage.privacyStatementLink.assertIsVisible().click()
-    }
-
     @When("^I confirm that my details are accurate, and accept the privacy statement for organ donation")
     fun iConfirmThatMyDetailsAreAccurateAndAcceptThePrivacyStatement() {
         organDonationCheckDetailsPage.accuracyCheckBox.click()

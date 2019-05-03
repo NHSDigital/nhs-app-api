@@ -16,12 +16,15 @@ class OrganDonationErrorPage: ErrorPage() {
     private val contactDetailsText = arrayOf("Email", "NHSApp.Enquiries@nhsbt.nhs.uk")
 
     fun assertContactDetails() {
-        val actualText = contactDetailsLocation.element.findElements(By.xpath(".//p"))
-                .map { element -> element.text }.toTypedArray()
+        contactDetailsLocation.actOnTheElement {
+            val actualText = it.findElements(By.xpath(".//p"))
+                    .map { element -> element.text }.toTypedArray()
 
-        contactDetailsText.forEach { expected ->
-            Assert.assertTrue("Expected to contain: '$expected'. Actual: '${actualText.joinToString()}'",
-                    actualText.contains(expected))
+
+            contactDetailsText.forEach { expected ->
+                Assert.assertTrue("Expected to contain: '$expected'. Actual: '${actualText.joinToString()}'",
+                        actualText.contains(expected))
+            }
         }
     }
 }

@@ -245,8 +245,8 @@ Feature: Organ Donation - Amend
     Then I navigate to the internal Organ Donation Page
     When I choose to amend my Organ Donation decision
     Then the internal Organ Donation Choice Page is displayed
-    When I select the Find Out More About Organ Donation link
-    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-donation/
+    When I click the link called 'Find out more about organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/'
+    Then a new tab has been opened by the link
 
   Scenario Outline: A user amending a decision, where OD returns a <Error Code> recoverable error, is shown an
   error message and can retry

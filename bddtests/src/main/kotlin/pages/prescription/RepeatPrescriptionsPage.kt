@@ -6,7 +6,9 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.isVisible
 import pages.navigation.HeaderNative
+import pages.typeTextIntoTextArea
 
 const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
 
@@ -155,6 +157,6 @@ open class RepeatPrescriptionsPage : HybridPageObject() {
     }
 
     fun isSpecialRequestTextAreaVisible(): Boolean {
-        return specialRequestTextArea.elements.isNotEmpty() && specialRequestTextArea.element.isVisible
+        return specialRequestTextArea.elements.isNotEmpty() && specialRequestTextArea.isVisible
     }
 }

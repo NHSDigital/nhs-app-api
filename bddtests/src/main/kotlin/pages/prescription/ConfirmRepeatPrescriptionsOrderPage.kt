@@ -8,6 +8,7 @@ import org.openqa.selenium.Keys
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.navigation.HeaderNative
+import pages.sendKeys
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/confirm-prescription-details")
 open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
@@ -72,7 +73,7 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     }
 
     fun clickChangeThisPrescriptionButton() {
-        changeThisPrescriptionButton.element.sendKeys(Keys.ENTER)
+        changeThisPrescriptionButton.sendKeys(Keys.ENTER)
     }
 
     fun errorSendingOrderErrorIsVisible(): Boolean {

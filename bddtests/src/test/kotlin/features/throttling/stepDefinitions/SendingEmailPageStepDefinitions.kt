@@ -4,6 +4,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import org.junit.Assert
 import pages.assertIsVisible
+import pages.text
 import pages.throttling.SendingEmailPage
 
 open class SendingEmailPageStepDefinitions {
@@ -44,7 +45,7 @@ open class SendingEmailPageStepDefinitions {
 
     @Then("^I see the brothermailer service is down error$")
     fun iSeeTheBrotherMailerServiceIsDown() {
-        val message = sendingEmailPage.inLineError.element.text
+        val message = sendingEmailPage.inLineError.text
         Assert.assertEquals("There was a problem adding you. Please try again", message)
     }
 

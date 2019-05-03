@@ -46,7 +46,7 @@ open class ErrorPage : HybridPageObject() {
 
     fun assertHasButton(expectedText: String) {
         button.assertSingleElementPresent()
-        Assert.assertEquals("Expected button text", expectedText, button.element.text)
+        Assert.assertEquals("Expected button text", expectedText, button.text)
     }
 
     fun assertPageHeader(pageHeaderText: String): ErrorPage {
@@ -55,22 +55,22 @@ open class ErrorPage : HybridPageObject() {
     }
 
     fun assertHeaderText(headerText: String): ErrorPage {
-        assertEquals("Content header incorrect. ", headerText, heading.element.text)
+        assertEquals("Content header incorrect. ", headerText, heading.text)
         return this
     }
 
     fun assertSubHeaderText(subHeaderText: String): ErrorPage {
-        assertEquals("Content sub-header incorrect. ", subHeaderText, subHeading.element.text)
+        assertEquals("Content sub-header incorrect. ", subHeaderText, subHeading.text)
         return this
     }
 
     fun assertMessageText(messageText: String): ErrorPage {
-        assertEquals("Content message incorrect. ", messageText, errorText1.element.text)
+        assertEquals("Content message incorrect. ", messageText, errorText1.text)
         return this
     }
 
     fun assertRetryButtonText(retryButtonText: String): ErrorPage {
-        assertEquals("Retry button text incorrect. ", retryButtonText, button.element.text)
+        assertEquals("Retry button text incorrect. ", retryButtonText, button.text)
         return this
     }
 
@@ -80,7 +80,7 @@ open class ErrorPage : HybridPageObject() {
     }
 
     fun assertErrorDetailText(errorDetailText: String): ErrorPage {
-        assertEquals("Content message incorrect. ", errorDetailText, errorText2.element.text)
+        assertEquals("Content message incorrect. ", errorDetailText, errorText2.text)
         return this
     }
 }

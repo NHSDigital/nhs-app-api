@@ -152,16 +152,16 @@ Feature: Organ Donation
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I follow the opt-out journey to the 'Check Details' page
-    And I select the privacy statement link on the Organ Donation Check Details page
-    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-privacy/
+    When I click the link called 'privacy statement' with a url of 'https://www.organdonation.nhs.uk/app/app-privacy/'
+    Then a new tab has been opened by the link
 
   Scenario: A user can register to be a blood donor on the organ donation View Registration page
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
     When I follow the opt-out journey to the 'Confirmation' page
-    When I select the 'Register to be a blood donor' link on the Organ Donation View Registration page
-    Then a new tab opens with a host name matching that of https://www.blood.co.uk/
+    When I click the link called 'Register to be a blood donor' with a url of 'https://www.blood.co.uk/'
+    Then a new tab has been opened by the link
 
   Scenario: A user can navigate back through the opt out journey
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out
@@ -285,15 +285,15 @@ Feature: Organ Donation
     Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
-    When I select the Think You're Already Registered Organ Donation link
-    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-check/
+    When I click the link called 'Think you have registered already?' with a url of 'https://www.organdonation.nhs.uk/app/app-check/'
+    Then a new tab has been opened by the link
 
   Scenario: A user can find out more about organ donation when registering
     Given I am a EMIS user not registered with organ donation, who wishes to register
     And I am logged in
     And I navigate to the internal Organ Donation Choice Page
-    When I select the Find Out More About Organ Donation link
-    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-donation/
+    When I click the link called 'Find out more about organ donation' with a url of 'https://www.organdonation.nhs.uk/app/app-donation/'
+    Then a new tab has been opened by the link
 
   Scenario: A user can find out more about examples of of end of life wishes
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt in

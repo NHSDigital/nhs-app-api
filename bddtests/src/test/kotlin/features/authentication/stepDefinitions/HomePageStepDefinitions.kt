@@ -57,6 +57,7 @@ class HomePageStepDefinitions : AbstractSteps() {
 
     @When("^I click the help icon on the login page")
     fun iClickTheHelpIconOnTheLoginPage() {
+        browser.storeCurrentTabCount()
         loginSteps.loginPage.clickHelpIcon()
     }
 

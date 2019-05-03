@@ -16,6 +16,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.appointments.CancelAppointmentPage
+import pages.text
 import worker.WorkerClient
 import worker.models.appointments.GenericResponseObject
 import java.time.LocalDateTime
@@ -63,7 +64,7 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyTheInlineReasonValidationError() {
-        assertEquals("Select a reason for cancelling", cancelAppointmentPage.reasonError.element.text)
+        assertEquals("Select a reason for cancelling", cancelAppointmentPage.reasonError.text)
     }
 
     @Step

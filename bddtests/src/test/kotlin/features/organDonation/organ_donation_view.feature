@@ -101,17 +101,16 @@ Feature: Organ Donation View
     And I am logged in
     And I navigate to the internal Organ Donation Page
     Then the Organ Donation View Registration page is displayed
-    When I select the 'Share that you are a donor' link on the Organ Donation View Registration page
-    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-share/
-    
-@tech-debt @NHSO-5031
+    When I click the link called 'Share that you are a donor' with a url of 'https://www.organdonation.nhs.uk/app/app-share/'
+    Then a new tab has been opened by the link
+
   Scenario: A user can navigate to the external 'Tell your family and friends' page when viewing their registration
     Given I am a EMIS user registered with organ donation to donate all organs
     And I am logged in
     And I navigate to the internal Organ Donation Page
     Then the Organ Donation View Registration page is displayed
-    When I select the 'Tell your family and friends' link on the Organ Donation View Registration page
-    Then a new tab opens with a host name matching that of https://www.organdonation.nhs.uk/app/app-tell/
+    When I click the link called 'Tell your family and friends' with a url of 'https://www.organdonation.nhs.uk/app/app-tell/'
+    Then a new tab has been opened by the link
 
   Scenario Outline: A user when navigating to Organ Donation, but OD returns a <Error Code> recoverable error when
   retrieving their registration, is shown an error message and can retry

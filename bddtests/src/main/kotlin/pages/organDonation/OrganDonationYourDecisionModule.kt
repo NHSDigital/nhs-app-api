@@ -67,15 +67,17 @@ class OrganDonationYourDecisionModule(private val page: HybridPageObject) {
             return
         }
         organSection(expectedKey).assertIsVisible()
-        val actualValues = organSection.element
-                .findElements(By.xpath("./following-sibling::ul/li"))
-                .map { element -> element.text }
+        organSection.actOnTheElement {
+            val actualValues =
+                    it.findElements(By.xpath("./following-sibling::ul/li"))
+                    .map { element -> element.text }
 
-        val message = "Expected list of options. " +
-                "Expected: ${expectedValues.joinToString()}. " +
-                "Actual: ${actualValues.joinToString()}."
-        Assert.assertEquals(message, expectedValues.count(), actualValues.count())
-        Assert.assertTrue(message, actualValues.containsAll(expectedValues))
+            val message = "Expected list of options. " +
+                    "Expected: ${expectedValues.joinToString()}. " +
+                    "Actual: ${actualValues.joinToString()}."
+            Assert.assertEquals(message, expectedValues.count(), actualValues.count())
+            Assert.assertTrue(message, actualValues.containsAll(expectedValues))
+        }
     }
 
     private fun organSection(expectedKey: String): HybridPageElement {

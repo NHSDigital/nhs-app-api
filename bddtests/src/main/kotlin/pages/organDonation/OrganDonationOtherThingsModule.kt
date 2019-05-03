@@ -12,10 +12,6 @@ open class OrganDonationOtherThingsModule(page :HybridPageObject) : MenuLinks(pa
         assertLinksPresent(registerBloodDonorLinkTitle)
     }
 
-    fun registerBloodDonorLinkClick() {
-        link(registerBloodDonorLinkTitle).click()
-    }
-
     fun withdrawDecisionLinkClick() {
         link(withdrawYourDecisionLinkTitle).click()
     }

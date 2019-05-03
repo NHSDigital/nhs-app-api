@@ -2,6 +2,7 @@ package pages.throttling
 
 import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.isVisible
 
 open class NHSLoginPage : HybridPageObject() {
 
@@ -12,6 +13,6 @@ open class NHSLoginPage : HybridPageObject() {
     )
 
     fun isVisible() : Boolean {
-        return continueToCreateLoginButton.element.isVisible
+        return continueToCreateLoginButton.isVisible
     }
 }

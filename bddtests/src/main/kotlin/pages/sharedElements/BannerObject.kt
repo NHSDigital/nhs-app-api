@@ -28,17 +28,20 @@ class BannerObject private constructor(page : HybridPageObject,
 
         container.assertSingleElementPresent().assertIsVisible()
 
-        val bannerTitle = container.element.findElement(By.xpath("./div[1]")).text
-        Assert.assertEquals("Expected banner title", title, bannerTitle)
+        container.actOnTheElement {
 
-        val bannerText = container.element.findElements(By.xpath("./$innerXPath/*"))
-                .map { element -> element.text }
+            val bannerTitle = it.findElement(By.xpath("./div[1]")).text
+            Assert.assertEquals("Expected banner title", title, bannerTitle)
 
-        val message = "Expected banner text. " +
-                "Expected: ${expectedText.joinToString()}. " +
-                "Actual: ${bannerText.joinToString()}."
-        Assert.assertEquals(message, expectedText.count(), bannerText.count())
-        Assert.assertTrue(message, expectedText.containsAll(bannerText))
+            val bannerText = it.findElements(By.xpath("./$innerXPath/*"))
+                    .map { element -> element.text }
+
+            val message = "Expected banner text. " +
+                    "Expected: ${expectedText.joinToString()}. " +
+                    "Actual: ${bannerText.joinToString()}."
+            Assert.assertEquals(message, expectedText.count(), bannerText.count())
+            Assert.assertTrue(message, expectedText.containsAll(bannerText))
+        }
     }
 
     companion object {

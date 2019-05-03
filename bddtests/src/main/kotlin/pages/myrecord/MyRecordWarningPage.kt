@@ -2,6 +2,8 @@ package pages.myrecord
 
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.isVisible
+import pages.text
 
 class MyRecordWarningPage : HybridPageObject() {
 
@@ -25,15 +27,15 @@ class MyRecordWarningPage : HybridPageObject() {
 
 
     fun isBackToHomePresent(): Boolean {
-        return backToHome.element.isVisible
+        return backToHome.isVisible
     }
 
     fun isAgreePresent(): Boolean {
-        return btnAgree.element.isVisible
+        return btnAgree.isVisible
     }
 
     fun warningText(): String {
-        return txtWarning.element.text
+        return txtWarning.text
     }
 
     fun clickAgreeAndContinue() {

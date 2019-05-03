@@ -4,11 +4,14 @@ import net.serenitybdd.core.pages.WebElementFacade
 import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
-import pages.HybridPageElement
 import pages.HybridPageObject
-import pages.assertIsVisible
+import pages.HybridPageElement
 import pages.assertSingleElementPresent
+import pages.text
+import pages.assertIsVisible
 import pages.assertElementNotPresent
+import pages.isCurrentlyVisible
+import pages.isVisible
 
 
 const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
@@ -41,7 +44,7 @@ class MyRecordInfoPage : HybridPageObject() {
 
         Assert.assertEquals("Value for $expectedLabel",
                 expectedValue,
-                value.assertSingleElementPresent().element.text)
+                value.assertSingleElementPresent().text)
     }
 
     private fun getValueFromField(label: String): HybridPageElement {
@@ -90,16 +93,11 @@ class MyRecordInfoPage : HybridPageObject() {
 
     fun isNameVisible(): Boolean {
         return try {
-                getValueFromField("Name").element.isCurrentlyVisible
+                getValueFromField("Name").isCurrentlyVisible
             } catch (e: NoSuchElementException) {
                 false
             }
 
-    }
-
-    fun clickClinicalAbbreviationsLink() {
-        clinicalAbbreviationsLink.click()
-        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 
     fun getTestResultChildCount(): Int {
@@ -112,7 +110,7 @@ class MyRecordInfoPage : HybridPageObject() {
     }
 
     fun isVisionTestResultsLinkVisible(): Boolean {
-        return testResults.visionLink.element.isCurrentlyVisible
+        return testResults.visionLink.isCurrentlyVisible
     }
 
     fun isVisionSectionPageVisible(linkText: String, sectionName: String): Boolean {
@@ -132,10 +130,10 @@ class MyRecordInfoPage : HybridPageObject() {
                         androidLocator = null,
                         page = this)
 
-        return sectionPageHeader.element.isVisible
+        return sectionPageHeader.isVisible
     }
 
     fun getSummaryCareNoAccessMessage(): String {
-        return noSummaryCareAccessMessage.element.text
+        return noSummaryCareAccessMessage.text
     }
 }

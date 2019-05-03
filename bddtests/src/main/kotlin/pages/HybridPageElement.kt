@@ -1,7 +1,6 @@
 package pages
 
 import net.serenitybdd.core.pages.WebElementFacade
-import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.Keys
 import org.openqa.selenium.NoSuchElementException
@@ -40,19 +39,6 @@ open class HybridPageElement(
         var timeToWaitForElement: Int = TIME_TO_WAIT_FOR_ELEMENT
 ) {
     val helpfulNameToUse = helpfulName ?: webDesktopLocator
-    val element: WebElementFacade
-        get() {
-            var theElement: WebElementFacade? = null
-            while(theElement==null) {
-                try {
-                    theElement = selectElement()
-                }
-                catch(e: org.openqa.selenium.StaleElementReferenceException){
-                    Thread.sleep(MILLISECONDS_IN_A_SECOND)
-                }
-            }
-            return theElement
-        }
 
     private fun selectElement() : WebElementFacade {
         return when (locatorStrategy()) {
@@ -65,12 +51,12 @@ open class HybridPageElement(
             LOCATOR_STRATEGY_WEBVIEW,
             LOCATOR_STRATEGY_BROWSER_DESKTOP -> page.findByXpath(webDesktopLocator).also {
                 if ((it.isUnderneathFixedElements()).or(!it.isCurrentlyVisible)) {
-                    it.scroll()
+                    scrollTo(it)
                 }
             }
             LOCATOR_STRATEGY_BROWSER_MOBILE -> page.findByXpath(webMobileLocator).also {
                 if ((it.isUnderneathFixedElements()).or(!it.isCurrentlyVisible)) {
-                    it.scroll()
+                    scrollTo(it)
                 }
             }
             else -> throw IllegalArgumentException("Unknown element locator strategy.")
@@ -78,28 +64,15 @@ open class HybridPageElement(
     }
 
     fun scrollToElement(): HybridPageElement {
-        element.scroll()
+        actOnTheElement { scrollTo(it) }
         return this
     }
 
     open fun click() {
-        while(true) {
-            try {
-                this.waitForNonStaleElementToBecomeVisible().scroll()
-                this.waitForNonStaleElementToBecomeVisible().click()
-                return
-            } catch(e: org.openqa.selenium.StaleElementReferenceException) {
-                Thread.sleep(MILLISECONDS_IN_A_SECOND)
-            }
+        waitForElementToBecomeVisible().actOnTheElement {
+            scrollTo(it)
+            it.click()
         }
-    }
-
-    private fun WebElementFacade.scroll() {
-        scrollTo(this)
-    }
-
-    private fun WebElement.scroll() {
-        scrollTo(this)
     }
 
     protected fun scrollTo(elem: Any) {
@@ -157,6 +130,23 @@ open class HybridPageElement(
             }
         }
         return this
+    }
+
+    fun actOnTheElement(actionOn: (elem: WebElementFacade) -> Unit) {
+        var retryAssertionsOnce = 2
+        while(retryAssertionsOnce>0) {
+            try {
+                actionOn(selectElement())
+                break
+            }
+            catch(e: org.openqa.selenium.StaleElementReferenceException){
+                Thread.sleep(MILLISECONDS_IN_A_SECOND)
+            }
+            catch(e: AssertionError) {
+                retryAssertionsOnce--
+                Thread.sleep(MILLISECONDS_IN_A_SECOND)
+            }
+        }
     }
 
     fun locatorStrategy(): String {
@@ -248,21 +238,15 @@ open class HybridPageElement(
         return wrappedElement!!
     }
 
-    fun typeTextIntoTextArea(text: String): String {
-        //Each letter sent individually
-        //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
-        //Keys can sometimes go missing; so we return the actual text that got typed and assert that something went in
-        text.toCharArray().map { letter ->
-            this.element.sendKeys(letter.toString())
+    val textValue: String
+        get() {
+            var text = ""
+            actOnTheElement { text = it.text }
+            return text
         }
 
-        Assert.assertTrue("Expected some text to be output to the text area", this.element.value.isNotEmpty())
-
-        return this.element.value
-    }
-
    fun sendEnterKey() {
-       this.waitForNonStaleElementToBecomeVisible().sendKeys(Keys.ENTER)
+       this.waitForElementToBecomeVisible().sendKeys(Keys.ENTER)
    }
 }
 

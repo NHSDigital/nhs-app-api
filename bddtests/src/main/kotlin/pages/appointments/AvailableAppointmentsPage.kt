@@ -3,8 +3,11 @@ package pages.appointments
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertTrue
 import pages.HybridPageElement
-import pages.assertIsVisible
+import pages.withoutRetrying
 import pages.assertSingleElementPresent
+import pages.isPresent
+import pages.text
+import pages.assertIsVisible
 import pages.sharedElements.BannerObject
 import pages.sharedElements.DropdownElement
 import pages.sharedElements.ExpandElement
@@ -126,7 +129,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getAreAnySlotsPresent(): Boolean {
-        return timeSlots.elements.isNotEmpty()
+        return timeSlots.withoutRetrying().elements.isNotEmpty()
     }
 
     fun assertDateHeadingPresent(expectedDateHeading: String) {
@@ -136,13 +139,13 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     fun getNoSlotsAvailableTextAtDate(date: String): String {
         val hybridPageElement = noAppointmentsAvailableForDateTextByDate(date)
         hybridPageElement.assertSingleElementPresent()
-        return hybridPageElement.element.text
+        return hybridPageElement.text
     }
 
     fun getNumberOfDateHeadingsPresent(): Int {
         assertTrue(
                 "No date headings are present. Please use assertElementNotPresent() if this is correct behaviour. ",
-                dateHeading.element.isPresent
+                dateHeading.isPresent
         )
         return dateHeading.elements.size
     }
@@ -150,7 +153,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     fun getNumberOfTimeSlotsPresent(): Int {
         assertTrue(
                 "No time slots are present. Please use assertElementNotPresent() if this is correct behaviour. ",
-                timeSlots.element.isPresent
+                timeSlots.isPresent
         )
         return timeSlots.elements.size
     }

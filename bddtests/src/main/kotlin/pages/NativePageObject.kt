@@ -83,7 +83,7 @@ abstract class NativePageObject : HybridPageObject() {
         switchNative()
         val elementNative: MobileElement
         try {
-            logSelectorAndSource(accessibiltyId)
+            pageLogging.logSelectorAndSource(accessibiltyId)
             elementNative = getNativeMobileDriver().findElementByAccessibilityId(accessibiltyId)
 
         } catch (e: NoSuchElementException) {
@@ -98,7 +98,7 @@ abstract class NativePageObject : HybridPageObject() {
 
         val elementNative: MobileElement
         try {
-            logSelectorAndSource(xpath)
+            pageLogging.logSelectorAndSource(xpath)
             elementNative = getNativeMobileDriver().findElementByXPath(xpath)
         } catch (e: NoSuchElementException) {
             throw NoSuchElementException("No element found on page:\n${driver.pageSource}", e)

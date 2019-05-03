@@ -6,6 +6,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.HybridPageElement
 import pages.HybridPageObject
+import pages.isDisplayed
+import pages.isVisible
 
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
 class LoginPage : HybridPageObject() {
@@ -93,15 +95,15 @@ class LoginPage : HybridPageObject() {
                 loginOrCreateAccountButtonIsDisplayed())
     }
 
-    private fun symptomsButtonHeaderIsDisplayed() = symptomsButtonHeading.element.isDisplayed
+    private fun symptomsButtonHeaderIsDisplayed() = symptomsButtonHeading.isDisplayed
 
-    private fun symptomsButtonIsDisplayed() = symptomsButton.element.isDisplayed
+    private fun symptomsButtonIsDisplayed() = symptomsButton.isDisplayed
 
-    private fun loginOrCreateAccountButtonHeaderIsDisplayed() = loginOrCreateAccountButtonHeading.element.isDisplayed
+    private fun loginOrCreateAccountButtonHeaderIsDisplayed() = loginOrCreateAccountButtonHeading.isDisplayed
 
-    private fun loginOrCreateAccountButtonIsDisplayed() = loginOrCreateAccountButton.element.isDisplayed
+    private fun loginOrCreateAccountButtonIsDisplayed() = loginOrCreateAccountButton.isDisplayed
 
-    fun helpIconIsVisible() = helpIcon.element.isVisible
+    fun helpIconIsVisible() = helpIcon.isVisible
 
     // Checks to see the menu item is not present on the page.
     fun assertMenuIsNotVisible() {
@@ -109,6 +111,6 @@ class LoginPage : HybridPageObject() {
     }
 
     fun assertTimeoutBannerIsVisible() {
-        assertTrue("Expected timeout banner to be visible", timeoutBanner.element.isVisible)
+        assertTrue("Expected timeout banner to be visible", timeoutBanner.isVisible)
     }
 }

@@ -11,6 +11,8 @@ import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.appointments.AppointmentsConfirmationPage
 import pages.assertElementNotPresent
+import pages.isActionVisible
+import pages.text
 
 open class AppointmentsConfirmationSteps {
 
@@ -21,13 +23,13 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkValidationErrorMessage() {
-        val message = appointmentsConfirmation.reasonError.element.text
+        val message = appointmentsConfirmation.reasonError.text
         assertEquals("Enter a reason for this appointment", message)
     }
 
     @Step
     fun checkTelephoneNumberRequiredErrorMessage() {
-        val message = appointmentsConfirmation.telephoneError.element.text
+        val message = appointmentsConfirmation.telephoneError.text
         assertEquals("Enter a telephone number", message)
     }
 
@@ -68,11 +70,11 @@ open class AppointmentsConfirmationSteps {
         val errorHeading = "There's been a problem sending your request"
         val errorText = "Go back and try again. If the problem continues and you need to book " +
                 "or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
-        assertEquals("Expected heading text $errorHeading but found ${errorPage.heading.element.text}",
-                errorHeading, errorPage.heading.element.text)
+        assertEquals("Expected heading text $errorHeading but found ${errorPage.heading.text}",
+                errorHeading, errorPage.heading.text)
         errorPage.subHeading.assertElementNotPresent()
-        assertEquals("Expected error text $errorText but found ${errorPage.errorText1.element.text}",
-                errorText, errorPage.errorText1.element.text)
+        assertEquals("Expected error text $errorText but found ${errorPage.errorText1.text}",
+                errorText, errorPage.errorText1.text)
     }
 
     @Step

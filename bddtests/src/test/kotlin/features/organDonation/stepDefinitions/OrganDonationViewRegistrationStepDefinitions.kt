@@ -14,21 +14,6 @@ open class OrganDonationViewRegistrationStepDefinitions {
 
     private lateinit var organDonationViewRegistrationPage: OrganDonationViewRegistrationPage
 
-    @When("I select the 'Register to be a blood donor' link on the Organ Donation View Registration page$")
-    fun iSelectThePrivacyStatementLinkOnTheOrganDonationCheckDetailsPage() {
-        organDonationViewRegistrationPage.otherThings.registerBloodDonorLinkClick()
-    }
-
-    @When("^I select the 'Share that you are a donor' link on the Organ Donation View Registration page$")
-    fun iSelectTheShareThatYouAreADonorLinkOnTheOrganDonationViewRegistrationPage() {
-        organDonationViewRegistrationPage.nextSteps.shareLinkClick()
-    }
-
-    @When("^I select the 'Tell your family and friends' link on the Organ Donation View Registration page$")
-    fun iSelectTheTellYourFamilyLinkOnTheOrganDonationViewRegistrationPage() {
-        organDonationViewRegistrationPage.nextSteps.tellFamilyLinkClick()
-    }
-
     @When("^I choose to amend my Organ Donation decision$")
     fun iChooseToAmendMyDecision() {
         OrganDonationSerenityHelpers.IS_AMEND_JOURNEY.set(true)

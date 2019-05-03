@@ -3,6 +3,8 @@ package pages.appointments
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
+import pages.isPresent
+import pages.text
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments")
 class CancelAppointmentPage : AppointmentSharedElementsPage() {
@@ -28,16 +30,16 @@ class CancelAppointmentPage : AppointmentSharedElementsPage() {
     override val titleText: String = "Cancel appointment"
 
     fun getCheckDetailsText(): String {
-        return checkDetailsText.element.text
+        return checkDetailsText.text
     }
 
     fun getReasonDropDownLabelText(): String {
-        return dropDownMenuLabel.element.text
+        return dropDownMenuLabel.text
     }
 
     fun containsDropDownMenu(): Boolean {
         return try {
-            dropDownMenu.element.isPresent
+            dropDownMenu.isPresent
         } catch (e: org.openqa.selenium.NoSuchElementException) {
             false
         }
@@ -45,7 +47,7 @@ class CancelAppointmentPage : AppointmentSharedElementsPage() {
 
     fun selectReason(reason: String): Boolean {
         return try {
-            dropDownMenu.element.selectByVisibleText<WebElementFacade>(reason)
+            dropDownMenu.actOnTheElement { it.selectByVisibleText<WebElementFacade>(reason) }
             true
         } catch (e: NoSuchElementException) {
             false

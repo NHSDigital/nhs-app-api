@@ -41,24 +41,6 @@ class TermsAndConditionsPage : HybridPageObject() {
             page = this
     )
 
-    val termsOfUseLink = HybridPageElement(
-            webDesktopLocator = "//section//a[contains(text(),'terms of use')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val privacyPolicyLink = HybridPageElement(
-            webDesktopLocator = "//section//a[contains(text(),'privacy policy')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val cookiesPolicyLink = HybridPageElement(
-            webDesktopLocator = "//section//a[contains(text(),'cookies policy')]",
-            androidLocator = null,
-            page = this
-    )
-
     val tcBackButton = HybridPageElement(
             webDesktopLocator = "//*[@id='backIcon']",
             androidLocator = null,
@@ -66,22 +48,22 @@ class TermsAndConditionsPage : HybridPageObject() {
     )
 
     fun isMainErrorMessageVisible() : Boolean {
-        return mainErrorMessage.element.isVisible
+        return mainErrorMessage.isVisible
     }
 
     fun isMainBodyTextVisible() : Boolean {
-        return mainBodyText.element.isVisible
+        return mainBodyText.isVisible
     }
 
     fun isSecondaryErrorMessageVisible() : Boolean {
-        return secondaryErrorMessage.element.isVisible
+        return secondaryErrorMessage.isVisible
     }
 
     fun isTcCheckBoxVisible() : Boolean {
-        return tcCheckBox.element.isVisible
+        return tcCheckBox.isVisible
     }
 
     fun isContinueButtonVisible() : Boolean {
-        return continueButton.element.isVisible
+        return continueButton.isVisible
     }
 }

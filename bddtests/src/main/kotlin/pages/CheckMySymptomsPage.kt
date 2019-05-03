@@ -22,7 +22,7 @@ open class CheckMySymptomsPage : HybridPageObject() {
             locatorMethods.waitForNativeStepToComplete()
             driver.switchTo().window(window)
             try {
-                if (conditionsHeader.element.isDisplayed)
+                if (conditionsHeader.isDisplayed)
                     return true
             }
             catch(e: WebDriverException){
@@ -33,7 +33,7 @@ open class CheckMySymptomsPage : HybridPageObject() {
     }
 
     fun isNhs111HeaderVisible(): Boolean {
-        return nhs111Header.element.isDisplayed
+        return nhs111Header.isDisplayed
     }
 
     fun clickNHS111Header(){

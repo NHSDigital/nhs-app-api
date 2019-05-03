@@ -4,6 +4,7 @@ import org.junit.Assert
 import pages.HybridPageElement
 import pages.HybridPageObject
 import pages.assertElementNotPresent
+import pages.text
 
 class ExpandElement(pageObject: HybridPageObject){
 
@@ -41,23 +42,23 @@ class ExpandElement(pageObject: HybridPageObject){
     )
 
     fun collapse(){
-        collapse.element.click()
+        collapse.click()
     }
 
     fun expand(){
-        expand.element.click()
+        expand.click()
     }
 
     fun assertLabel(expectedLabel : String) {
         Assert.assertEquals("Label of expand section",
                 expectedLabel,
-                label.element.text.trim())
+                label.text.trim())
     }
 
     fun assertContent(expectedContent : String) {
         Assert.assertEquals("Content of expand section",
                 expectedContent,
-                content.element.text.trim())
+                content.text.trim())
     }
 
     fun assertCollapsed() {

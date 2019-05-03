@@ -49,11 +49,6 @@ class CookieBannerStepDefinitions {
         gpFinderSteps.iHaveNotLoggedInAndIHaveNotPreviouslySelectedMyGPPractice()
     }
 
-    @When("^I select the information link$")
-    fun iSelectTheInformationLink() {
-        cookieBanner.cookiesInformationLink.click()
-    }
-
     @When("^I close the cookie banner$")
     fun iCloseTheCookieBanner() {
         cookieBanner.cookieBannerClose.click()

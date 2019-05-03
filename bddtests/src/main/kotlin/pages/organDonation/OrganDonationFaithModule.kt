@@ -28,18 +28,20 @@ class OrganDonationFaithModule(page: HybridPageObject) {
     }
 
     fun assertChoice(choice: String) {
-        val actualText = container.element.findElement(By.xpath("./p/b")).text
+        container.actOnTheElement {
+            val actualText = it.findElement(By.xpath("./p/b")).text
 
-        Assert.assertEquals("Faith and Beliefs",
-                "I would like NHS staff to speak to my family and anyone else appropriate about how organ " +
-                        "donation can go ahead in line with my faith / beliefs",
-                actualText)
+            Assert.assertEquals("Faith and Beliefs",
+                    "I would like NHS staff to speak to my family and anyone else appropriate about how organ " +
+                            "donation can go ahead in line with my faith / beliefs",
+                    actualText)
 
-        val actualChoice = container.element.findElement(By.xpath("./span")).text
+            val actualChoice = it.findElement(By.xpath("./span")).text
 
-        Assert.assertEquals("Faith and Beliefs Choice",
-                choice,
-                actualChoice)
+            Assert.assertEquals("Faith and Beliefs Choice",
+                    choice,
+                    actualChoice)
+        }
     }
 
     companion object {

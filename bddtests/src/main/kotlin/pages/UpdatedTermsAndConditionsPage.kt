@@ -34,10 +34,10 @@ class UpdatedTermsAndConditionsPage : HybridPageObject() {
     )
 
     fun isSecondaryErrorMessageVisible() : Boolean {
-        return secondaryErrorMessage.element.isVisible
+        return secondaryErrorMessage.isVisible
     }
 
     fun isMainErrorMessageVisible() : Boolean {
-        return mainErrorMessage.element.isVisible
+        return mainErrorMessage.isVisible
     }
 }

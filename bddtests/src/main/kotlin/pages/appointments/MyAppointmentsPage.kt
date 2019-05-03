@@ -5,6 +5,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 import pages.assertElementNotPresent
+import pages.text
 import pages.withoutRetrying
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments")
@@ -62,11 +63,11 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     private val upcomingAppointmentParentXpath = "//div[@data-purpose='upcoming-appointments']"
     private val historicalAppointmentParentXpath = "//div[@data-purpose='past-appointments']"
 
-    fun getSuccessMessage(): String = successMessage.element.text
+    fun getSuccessMessage(): String = successMessage.text
 
-    fun getNoUpcomingText(): String = actualNoUpcomingText.element.text
+    fun getNoUpcomingText(): String = actualNoUpcomingText.text
 
-    fun getNoPastText(): String = actualNoPastText.element.text
+    fun getNoPastText(): String = actualNoPastText.text
 
     fun assertPastTextNotPresent() = actualNoPastText.assertElementNotPresent()
 

@@ -4,12 +4,15 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.oneOneOneOnline.steps.CheckMySymptoms
+import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import pages.navigation.NavBarNative
 
 open class OneOneOneStepDefinitions {
 
+    @Steps
+    private lateinit var browser: BrowserSteps
     @Steps
     lateinit var checkMySymptoms: CheckMySymptoms
     @Steps
@@ -24,11 +27,13 @@ open class OneOneOneStepDefinitions {
 
     @When("I press the A-Z symptoms header")
     fun iPressTheAtoZHelpHeader() {
+        browser.storeCurrentTabCount()
         checkMySymptoms.clickConditionsHeader()
     }
 
     @When("I press the urgent help header")
     fun iPressUrgentHelpHeader() {
+        browser.storeCurrentTabCount()
         checkMySymptoms.clickNHS111Header()
     }
 

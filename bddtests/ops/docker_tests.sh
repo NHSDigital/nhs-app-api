@@ -215,7 +215,7 @@ fi
 
 for s in $DOCKER_SERVICES; do
   #Don't pull local images we've built as part of the pipeline
-  if [[ "$s" != "api.local.bitraft.io" && "$s" != "web.local.bitraft.io" && "$s" != "nhsonline-backendservicejourneyrulesapi" ]]; then 
+  if [[ "$s" != "api.local.bitraft.io" && "$s" != "web.local.bitraft.io" && "$s" != "nhsonline-backendservicejourneyrulesapi" && "$s" != "nhsonline-backendcidapi" ]]; then 
     docker-compose -f docker-compose_ci_run.yml pull $s
   fi
 done

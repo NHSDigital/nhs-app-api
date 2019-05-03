@@ -90,7 +90,7 @@ open class HomePage : HybridPageObject() {
     fun assertHasWelcomeMessageFor(patient: Patient) {
         val name = "${patient.title} ${patient.firstName} ${patient.surname}".trim()
         val expected = "Welcome, $name"
-        val text = greeting.element.text
+        val text = greeting.text
         Assert.assertEquals("Welcome message did not match", expected, text)
     }
 
@@ -98,15 +98,17 @@ open class HomePage : HybridPageObject() {
 
         assertHasWelcomeMessageFor(patient)
         val actualDetails = arrayListOf<String>()
-        actualDetails.addAll(
-                greeting.element.findElements(
-                        By.xpath("./following-sibling::div[1]/p"))
-                        .map { element -> element.text })
+        greeting.actOnTheElement {
+            actualDetails.addAll(
+                    it.findElements(
+                            By.xpath("./following-sibling::div[1]/p"))
+                            .map { element -> element.text })
+        }
         assertCollection("PatientDetails", expectedDetails, actualDetails)
     }
 
     fun isWelcomeHeaderVisible(): Boolean {
-        return greeting.element.isVisible
+        return greeting.isVisible
     }
 
     private fun assertCollection(message: String, expected: ArrayList<String>, actual: ArrayList<String>) {
@@ -153,6 +155,6 @@ open class HomePage : HybridPageObject() {
         surveyContent.assertSingleElementPresent().assertIsVisible()
         Assert.assertEquals("Expected survey content",
                 "Help us make this service better. Complete our quick survey.",
-                surveyContent.element.text)
+                surveyContent.text)
     }
 }

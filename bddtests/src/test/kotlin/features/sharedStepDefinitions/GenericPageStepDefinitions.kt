@@ -1,12 +1,12 @@
 package features.sharedStepDefinitions
 
+import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.PageUrl
 import net.thucydides.core.annotations.Steps
 import pages.HybridPageObject
-
-private const val TIMEOUT_PLUS_ONE_SECOND = 11L
+import pages.clickOnActionContainingText
 
 class GenericPageStepDefinitions {
 
@@ -40,5 +40,16 @@ class GenericPageStepDefinitions {
     fun iretrieveThePageDirectly(pageName:String) {
         val urlForPage = pageUrl.getPage(pageName)
         browser.browseTo(urlForPage)
+    }
+
+    @When("I click the link called '(.*)' with a url of '(.*)'")
+    fun iClickANamedLinkWithAUrl(linkTitle: String, url: String){
+        browser.storeCurrentTabCount()
+        genericPage.assertLinkExistsAndClickIt(linkTitle,url)
+    }
+
+    @Then("^a new tab has been opened by the link")
+    fun aNewTabOpens() {
+        browser.assertNewTab()
     }
 }

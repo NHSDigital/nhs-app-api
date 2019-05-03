@@ -10,10 +10,8 @@ Feature: Access 111 Online with no javascript
     And I am logged in
     When I navigate to Symptoms
     Then the Check My Symptoms page is displayed
-
     When I press the A-Z symptoms header
-    Then a new tab opens with a host name matching that of https://www.nhs.uk/conditions/
-
+    Then a new tab has been opened by the link
 
   Scenario: The User is logged in and can view the symptoms links with javascript disabled and can click the urgent help header
     Given I have disabled javascript
@@ -21,6 +19,5 @@ Feature: Access 111 Online with no javascript
     And I am logged in
     When I navigate to Symptoms
     Then the Check My Symptoms page is displayed
-
     When I press the urgent help header
-    Then a new tab opens with a host name matching that of https://111.nhs.uk/
+    Then a new tab has been opened by the link

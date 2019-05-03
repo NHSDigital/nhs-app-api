@@ -3,6 +3,7 @@ package pages.throttling
 import net.serenitybdd.core.pages.WebElementFacade
 import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.isVisible
 
 class GPFinderPage : HybridPageObject() {
 
@@ -48,16 +49,18 @@ class GPFinderPage : HybridPageObject() {
     )
 
     fun isFindYourGPSurgeryHeaderVisible(): Boolean {
-        return findYourGPSurgeryHeader.element.isVisible
+        return findYourGPSurgeryHeader.isVisible
     }
 
     fun enterSearchTerm(searchTerm: String) {
-        searchTermField.element.type<WebElementFacade>(searchTerm)
+        searchTermField.actOnTheElement {
+            it.type<WebElementFacade>(searchTerm)
+        }
         hideKeyboardIfOnMobile()
     }
 
     fun clickContinueButton() {
-        continueButton.element.click()
+        continueButton.click()
     }
 
     fun clickLoginButton() {
@@ -65,6 +68,6 @@ class GPFinderPage : HybridPageObject() {
     }
 
     fun isSearchCriteriaErrorMessageShown(): Boolean {
-        return criteriaErrorMessage.element.isVisible
+        return criteriaErrorMessage.isVisible
     }
 }

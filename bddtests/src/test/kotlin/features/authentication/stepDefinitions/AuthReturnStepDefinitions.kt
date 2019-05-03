@@ -10,6 +10,7 @@ import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.loggedOut.AuthReturnPage
 import pages.ErrorPage
+import pages.clickOnActionContainingText
 
 class AuthReturnStepDefinitions : AbstractSteps() {
 

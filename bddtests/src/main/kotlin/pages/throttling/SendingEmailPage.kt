@@ -91,7 +91,9 @@ class SendingEmailPage : HybridPageObject() {
     }
 
     fun enterEmail(searchTerm: String) {
-        emailInputField.element.type<WebElementFacade>(searchTerm)
+        emailInputField.actOnTheElement {
+            it.type<WebElementFacade>(searchTerm)
+        }
     }
 }
 

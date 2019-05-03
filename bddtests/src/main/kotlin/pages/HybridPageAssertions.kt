@@ -11,17 +11,23 @@ fun HybridPageElement.assertSingleElementPresent(): HybridPageElement {
 }
 
 fun HybridPageElement.assertIsVisible(): HybridPageElement {
-    Assert.assertTrue("Expected $helpfulNameToUse to be visible", waitForNonStaleElementToBecomeVisible().isDisplayed)
+    actOnTheElement {
+        Assert.assertTrue("Expected $helpfulNameToUse to be visible", it.isVisible)
+    }
     return this
 }
 
 fun HybridPageElement.assertDoesElementHaveFocus(): HybridPageElement {
-    Assert.assertTrue("Expected $helpfulNameToUse to be visible", element.hasFocus())
+    actOnTheElement {
+        Assert.assertTrue("Expected $helpfulNameToUse to be visible", it.hasFocus())
+    }
     return this
 }
 
 fun HybridPageElement.assertIsNotVisible(): HybridPageElement {
-    Assert.assertFalse("Expected $helpfulNameToUse to not be visible", element.isVisible)
+    actOnTheElement {
+        Assert.assertFalse("Expected $helpfulNameToUse to not be visible", it.isVisible)
+    }
     return this
 }
 

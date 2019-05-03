@@ -66,9 +66,9 @@ class MyAccountPage : HybridPageObject() {
         dateOfBirthText.assertIsVisible()
         nhsNumberText.assertIsVisible()
 
-        val actualUsername = usernameText.element.text.trim().toLowerCase()
-        val actualDateOfBirth = dateOfBirthText.element.text.trim().toLowerCase()
-        val actualNhsNumber = nhsNumberText.element.text.trim()
+        val actualUsername = usernameText.text.trim().toLowerCase()
+        val actualDateOfBirth = dateOfBirthText.text.trim().toLowerCase()
+        val actualNhsNumber = nhsNumberText.text.trim()
 
         Assert.assertEquals("Username", expectedUsername.toLowerCase(), actualUsername)
         Assert.assertEquals("Date Of Birth", expectedDateOfBirth.toLowerCase(), actualDateOfBirth)
@@ -76,7 +76,7 @@ class MyAccountPage : HybridPageObject() {
     }
 
     fun isAboutUsHeaderVisible(): Boolean {
-        return aboutUsHeader.element.isVisible
+        return aboutUsHeader.isVisible
     }
 
     fun assertAllLinksVisible() {

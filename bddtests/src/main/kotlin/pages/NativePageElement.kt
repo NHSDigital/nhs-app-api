@@ -85,14 +85,14 @@ class NativePageElement(
         if(page.onMobile())
             return this.nativeElement.text
 
-        return this.element.text
+        return super.textValue
     }
 
 
     fun isDisplayed(): Boolean {
         return when(page.onMobile()) {
                 true -> {this.nativeElement.isDisplayed }
-                false -> {this.element.isDisplayed }
+                false -> {this.isDisplayed }
             }
     }
 

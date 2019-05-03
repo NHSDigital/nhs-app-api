@@ -4,6 +4,8 @@ import config.Config
 import models.Patient
 import pages.HybridPageObject
 import pages.HybridPageElement
+import pages.isVisible
+import pages.sendKeys
 
 open class CIDAccountCreationPage : HybridPageObject() {
 
@@ -20,12 +22,12 @@ open class CIDAccountCreationPage : HybridPageObject() {
     )
 
     fun isVisible() : Boolean {
-        return createAccountButton.element.isVisible.and(mockPatientInput.element.isVisible)
+        return createAccountButton.isVisible.and(mockPatientInput.isVisible)
     }
 
     fun completeAccountCreation(patient: Patient) {
         if(Config.instance.autoLogin != "true") {
-            mockPatientInput.element.sendKeys(patient.hashCode().toString())
+            mockPatientInput.sendKeys(patient.hashCode().toString())
             hideKeyboardIfOnMobile()
             createAccountButton.click()
         }

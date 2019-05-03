@@ -11,7 +11,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import pages.ErrorPage
 import pages.appointments.MyAppointmentsPage
+import pages.isDisplayed
 import pages.navigation.HeaderNative
+import pages.text
 import java.util.*
 
 open class MyAppointmentsUISteps {
@@ -73,7 +75,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun checkUpcomingAppointmentsAreCorrectlyPopulated() {
-        myAppointmentsPage.upcomingAppointmentsHeading.element.isDisplayed
+        myAppointmentsPage.upcomingAppointmentsHeading.isDisplayed
         checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
         )
@@ -81,7 +83,7 @@ open class MyAppointmentsUISteps {
 
     @Step
     fun checkHistoricalAppointmentsAreCorrectlyPopulated() {
-        myAppointmentsPage.pastAppointmentsHeading.element.isDisplayed
+        myAppointmentsPage.pastAppointmentsHeading.isDisplayed
         checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated(
                 MyAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_HISTORICAL_APPOINTMENTS
         )
@@ -170,9 +172,9 @@ open class MyAppointmentsUISteps {
         val expectedHeader = "There's been a problem getting your appointment history"
         val expectedBody = "Try again later. If the problem continues and you need this information now, " +
                 "contact your GP surgery directly. For urgent medical advice, call 111."
-        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
-                expectedHeader, errorPage.heading.element.text)
-        assertEquals("expected error text $expectedBody but found ${errorPage.errorText1.element.text}",
-                expectedBody, errorPage.errorText1.element.text)
+        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.text}",
+                expectedHeader, errorPage.heading.text)
+        assertEquals("expected error text $expectedBody but found ${errorPage.errorText1.text}",
+                expectedBody, errorPage.errorText1.text)
     }
 }

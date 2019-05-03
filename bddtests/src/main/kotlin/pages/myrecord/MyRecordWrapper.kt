@@ -23,7 +23,7 @@ class MyRecordWrapper(header: String, pageObject: HybridPageObject) {
                     androidLocator = null,
                     page = pageObject)
 
-    val firstParagraph by lazy { paragraphElements.element }
+    val firstParagraph by lazy { paragraphElements }
 
     val visionLink = HybridPageElement(
             webDesktopLocator = "//a[contains(text(),'View your Test Results')]",

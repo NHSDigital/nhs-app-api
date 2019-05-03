@@ -34,7 +34,7 @@ class TermsAndConditionsStepDefinitions {
 
     @When("^I click the back arrow$")
     fun iClickTheBackArrow() {
-        termsAndConditions.termsAndConditionsPage.tcBackButton.element.click()
+        termsAndConditions.termsAndConditionsPage.tcBackButton.click()
     }
 
     @When("^I click the continue button on Terms and Conditions$")
@@ -44,22 +44,7 @@ class TermsAndConditionsStepDefinitions {
 
     @When("^I check the agree to terms and conditions checkbox$")
     fun iAgreeToTheTermsAndConditions() {
-        termsAndConditions.termsAndConditionsPage.termsAndConditionsLabel.element.click()
-    }
-
-    @When("^I click on Privacy policy$")
-    fun iClickOnPrivacyPolicy() {
-        termsAndConditions.termsAndConditionsPage.privacyPolicyLink.click()
-    }
-
-    @When("^I click on Cookies policy$")
-    fun iClickOnCookiesPolicy() {
-        termsAndConditions.termsAndConditionsPage.cookiesPolicyLink.click()
-    }
-
-    @When("^I click on Terms of use$")
-    fun iClickOnTermsOfUsePolicy() {
-        termsAndConditions.termsAndConditionsPage.termsOfUseLink.click()
+        termsAndConditions.termsAndConditionsPage.termsAndConditionsLabel.click()
     }
 
     @Then("^I see error messages indicating I have not yet accepted the terms and conditions$")

@@ -19,8 +19,6 @@ open class DataSharingPage : HybridPageObject() {
     val linkContentsDataUse = contentsLink(titleDataUse)
     val linkContentsManageYourChoice = contentsLink(titleManageYourChoice)
     val linkContentsMakeYourChoice = contentsLink(titleMakeYourChoice)
-    val linkDataSharingMoreInfo = createBrowserElement(
-            "//a[contains(text(), 'Visit the NHS.UK website')]")
 
     // Asserts
     private fun subTitleElement(title: String): HybridPageElement {
