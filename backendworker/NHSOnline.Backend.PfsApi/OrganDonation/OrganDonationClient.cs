@@ -18,9 +18,6 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         private const string RegistrationPath = "Registration";
         private const string AllReferencePath = "ReferenceData";
 
-        private const string SessionIdHeaderKey = "X-Session-ID";
-        private const string SequenceIdHeaderKey = "X-Sequence-ID";
-
         private readonly OrganDonationHttpClient _httpClient;
         private readonly IJsonResponseParser _responseParser;
         private readonly ILogger<OrganDonationClient> _logger;
@@ -111,8 +108,8 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
         private HttpRequestMessage BuildRegistrationRequest<TRequest>(HttpMethod httpMethod, UserSession userSession, string path, TRequest model)
         {
             var request = new HttpRequestMessage(httpMethod, path);
-            request.Headers.Add(SessionIdHeaderKey, userSession.OrganDonationSessionId.ToString());
-            request.Headers.Add(SequenceIdHeaderKey, Guid.NewGuid().ToString());
+            request.Headers.Add(Constants.OrganDonationConstants.SessionIdHeaderKey, userSession.OrganDonationSessionId.ToString());
+            request.Headers.Add(Constants.OrganDonationConstants.SequenceIdHeaderKey, Guid.NewGuid().ToString());
 
             var body = JsonConvert.SerializeObject(model, _serializerSettings);
             request.Content = new StringContent(body);

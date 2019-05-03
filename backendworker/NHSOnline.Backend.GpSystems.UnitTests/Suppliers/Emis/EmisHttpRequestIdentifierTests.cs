@@ -25,41 +25,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis
         public void HttpRequestIdentifier_ValidRequest_ReturnsValidIdentifier()
         {
             var request = _fixture.Create<HttpRequestMessage>();
-
-            var expectedResponse = new HttpRequestIdentity()
-            {
-                Provider = "Emis",
-                Identifier = null,
-                RequestUrl = request.RequestUri,
-                Method = request.Method.ToString()
-            };
             
-            var stringResponse = $"Provider=Emis UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier= ";
+            var stringResponse = $"Provider=Emis UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri}";
 
             var result = _systemUnderTest.Identify(request);
             
-            result.Should().BeEquivalentTo(expectedResponse);
-            result.ToString().Should().Be(stringResponse);
-        }
-        
-        [TestMethod]
-        public void HttpRequestIdentifier_NullRequest_ReturnsValidIdentifier()
-        {
-            HttpRequestMessage request = null;
-
-            var expectedResponse = new HttpRequestIdentity()
-            {
-                Provider = "Emis",
-                Identifier = null,
-                RequestUrl = null,
-                Method = null
-            };
-            
-            var stringResponse = "Provider=Emis UpStreamMethod= UpStreamUrl= UpStreamIdentifier= ";
-
-            var result = _systemUnderTest.Identify(request);
-            
-            result.Should().BeEquivalentTo(expectedResponse);
             result.ToString().Should().Be(stringResponse);
         }
     }

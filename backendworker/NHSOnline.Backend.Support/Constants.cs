@@ -138,6 +138,8 @@ namespace NHSOnline.Backend.Support
 
         public static class OrganDonationConstants
         {
+            public const string SessionIdHeaderKey = "X-Session-ID";
+            public const string SequenceIdHeaderKey = "X-Sequence-ID";
             public const string AllOrgansChoiceKey = "all";
             public const string YesChoiceValue = "yes";
             public const string NoChoiceValue = "no";

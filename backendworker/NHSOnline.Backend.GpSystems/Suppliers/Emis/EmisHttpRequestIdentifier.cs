@@ -8,15 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis
     {
         public HttpRequestIdentity Identify(HttpRequestMessage request)
         {
-            var requestIdentity = new HttpRequestIdentity()
-            {
-                Provider = $"{Supplier.Emis}",
-                Method = request?.Method?.ToString(),
-                RequestUrl = request?.RequestUri,
-                Identifier = null
-            };
-
-            return requestIdentity;
+            return new HttpRequestIdentity($"{Supplier.Emis}", request);
         }
     }
 }

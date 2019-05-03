@@ -28,20 +28,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
             var headerString = _fixture.Create<string>();
             var request = _fixture.Create<HttpRequestMessage>();
             request.Headers.Add(Constants.VisionConstants.RequestIdentifierHeader, headerString);
-
-            var expectedResponse = new HttpRequestIdentity()
-            {
-                Provider = "Vision",
-                Identifier = headerString,
-                RequestUrl = request.RequestUri,
-                Method = request.Method.ToString()
-            };
             
-            var stringResponse = $"Provider=Vision UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier={headerString} ";
+            var stringResponse = $"Provider=Vision UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier={headerString}";
 
             var result = _systemUnderTest.Identify(request);
             
-            result.Should().BeEquivalentTo(expectedResponse);
             result.ToString().Should().Be(stringResponse);
         }
         
@@ -49,41 +40,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision
         public void HttpRequestIdentifier_ValidRequestWithoutHeader_ReturnsValidIdentifier()
         {
             var request = _fixture.Create<HttpRequestMessage>();
-
-            var expectedResponse = new HttpRequestIdentity()
-            {
-                Provider = "Vision",
-                Identifier = null,
-                RequestUrl = request.RequestUri,
-                Method = request.Method.ToString()
-            };
             
-            var stringResponse = $"Provider=Vision UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier= ";
+            var stringResponse = $"Provider=Vision UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier=";
 
             var result = _systemUnderTest.Identify(request);
             
-            result.Should().BeEquivalentTo(expectedResponse);
-            result.ToString().Should().Be(stringResponse);
-        }
-        
-        [TestMethod]
-        public void HttpRequestIdentifier_NullRequest_ReturnsValidIdentifier()
-        {
-            HttpRequestMessage request = null;
-
-            var expectedResponse = new HttpRequestIdentity()
-            {
-                Provider = "Vision",
-                Identifier = null,
-                RequestUrl = null,
-                Method = null
-            };
-            
-            var stringResponse = $"Provider=Vision UpStreamMethod= UpStreamUrl= UpStreamIdentifier= ";
-
-            var result = _systemUnderTest.Identify(request);
-            
-            result.Should().BeEquivalentTo(expectedResponse);
             result.ToString().Should().Be(stringResponse);
         }
     }

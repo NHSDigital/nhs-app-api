@@ -54,13 +54,9 @@ namespace NHSOnline.Backend.Support.UnitTests.Http
                 return new HttpResponseMessage(HttpStatusCode.OK);
             });
 
-            var expectedRequestId = new HttpRequestIdentity
-            {
-                Provider = _fixture.Create<string>(),
-                Identifier = _fixture.Create<string>(),
-                Method = _fixture.Create<string>(),
-                RequestUrl = _fixture.Create<Uri>()
-            };
+            var expectedRequestId = 
+                new HttpRequestIdentity(_fixture.Create<string>(), httpRequestMessage)
+                    .SetCorrelationIdentifier(_fixture.Create<string>());
 
             _requestIdentifier
                 .Setup(x => x.Identify(httpRequestMessage))

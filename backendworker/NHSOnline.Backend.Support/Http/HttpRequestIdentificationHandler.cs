@@ -27,9 +27,9 @@ namespace NHSOnline.Backend.Support.Http
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var identifier = _requestIdentifier.Identify(request);
+            var identity = _requestIdentifier.Identify(request);
             
-            using(_logger.BeginScope($"Provider={identifier.Provider} UpStreamIdentifier={identifier.Identifier}"))
+            using(_logger.BeginScope(identity))
             {
                 return base.SendAsync(request, cancellationToken);
             }

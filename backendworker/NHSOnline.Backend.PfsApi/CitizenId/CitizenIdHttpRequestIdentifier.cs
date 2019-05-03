@@ -7,15 +7,7 @@ namespace NHSOnline.Backend.PfsApi.CitizenId
     {
         public HttpRequestIdentity Identify(HttpRequestMessage request)
         {
-            var requestIdentity = new HttpRequestIdentity()
-            {
-                Provider = "CitizenId",
-                Method = request?.Method?.ToString(),
-                RequestUrl = request?.RequestUri,
-                Identifier = null
-            };
-
-            return requestIdentity;
+            return new HttpRequestIdentity("CitizenId", request);
         }
     }
 }

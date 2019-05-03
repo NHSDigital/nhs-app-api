@@ -25,41 +25,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.CitizenId
         public void HttpRequestIdentifier_ValidRequest_ReturnsValidIdentifier()
         {
             var request = _fixture.Create<HttpRequestMessage>();
-
-            var expectedResponse = new HttpRequestIdentity
-            {
-                Provider = "CitizenId",
-                Identifier = null,
-                RequestUrl = request.RequestUri,
-                Method = request.Method.ToString()
-            };
             
-            var stringResponse = $"Provider=CitizenId UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri} UpStreamIdentifier= ";
+            var stringResponse = $"Provider=CitizenId UpStreamMethod={request.Method} UpStreamUrl={request.RequestUri}";
 
             var result = _systemUnderTest.Identify(request);
             
-            result.Should().BeEquivalentTo(expectedResponse);
-            result.ToString().Should().Be(stringResponse);
-        }
-        
-        [TestMethod]
-        public void HttpRequestIdentifier_NullRequest_ReturnsValidIdentifier()
-        {
-            HttpRequestMessage request = null;
-
-            var expectedResponse = new HttpRequestIdentity
-            {
-                Provider = "CitizenId",
-                Identifier = null,
-                RequestUrl = null,
-                Method = null
-            };
-            
-            var stringResponse = "Provider=CitizenId UpStreamMethod= UpStreamUrl= UpStreamIdentifier= ";
-
-            var result = _systemUnderTest.Identify(request);
-            
-            result.Should().BeEquivalentTo(expectedResponse);
             result.ToString().Should().Be(stringResponse);
         }
     }
