@@ -59,4 +59,24 @@ describe('load', () => {
       .then(() =>
         expect(dependency).toHaveBeenCalledTimes(1));
   });
+
+  it('will ignore error', () => {
+    const errorStatus = {
+      ignoreError: true,
+    };
+
+    const that = {
+      app: {
+        $http: {
+          getV1PatientNominatedPharmacy: jest.fn().mockRejectedValue(),
+        },
+      },
+      dispatch: jest.fn(),
+    };
+    return load
+      .call(that, { })
+      .then(() => {
+        expect(that.app.$http.getV1PatientNominatedPharmacy).toBeCalledWith(errorStatus);
+      });
+  });
 });

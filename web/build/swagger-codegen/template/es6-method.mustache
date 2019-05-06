@@ -11,6 +11,7 @@
     if(parameters === undefined) {
       parameters = {};
     }
+    let ignoreError = parameters.ignoreError || false;
     let deferred = {{#isNode}}Q{{/isNode}}{{^isNode}}$q{{/isNode}}.defer();
     let domain = this.domain;
     let path = '{{&path}}';
@@ -91,7 +92,6 @@
             return deferred.promise;
         }
         {{/required}}
-
     {{/parameters}}
 
     queryParameters = this.mergeQueryParams(parameters, queryParameters);
@@ -104,7 +104,8 @@
       headers,
       queryParameters,
       form,
-      deferred
+      deferred,
+      ignoreError
     });
 
     return deferred.promise;

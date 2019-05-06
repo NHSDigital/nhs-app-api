@@ -1,6 +1,5 @@
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.NominatedPharmacy;
@@ -55,7 +54,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             UserSession userSession = HttpContext.GetUserSession();
 
             var result = await _nominatedPharmacyService.GetNominatedPharmacy(userSession.GpUserSession.NhsNumber);
-            
+
             if (HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
             {
                 if (!result.HasValidPharmacyType)
@@ -63,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                     _logger.LogInformation("Invalid nominated pharmacy type or multiple pharmacy types exist");
                     return new OkObjectResult(new PharmacyDetailsResponse{ NominatedPharmacyEnabled = result.HasValidPharmacyType });
                 }
-                
+
                 if (string.IsNullOrEmpty(result.PharmacyOdsCode))
                 {
                     _logger.LogInformation("No nominated pharmacy. Returning Success.");
@@ -74,29 +73,45 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
                 var pharmacyDetailResponse = await _pharmacyService.GetPharmacyDetail(result.PharmacyOdsCode);
 
-                if (HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacyDetailResponse.StatusCode))
-                {
-                    var pharmacyDetails = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmacyDetailResponse.Pharmacy);
-                    pharmacyDetails.PharmacyType = result.NominatedPharmacyType;
-                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, "Successfully retrieved nominated pharmacy");
-                    return new OkObjectResult(
-                        new PharmacyDetailsResponse
-                        {
-                            PharmacyDetails = pharmacyDetails, 
-                            NominatedPharmacyEnabled = result.HasValidPharmacyType
-                        });
+                  if (HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacyDetailResponse.StatusCode))
+                    {
+                        var pharmacyDetails =
+                            _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmacyDetailResponse.Pharmacy);
+                        pharmacyDetails.PharmacyType = result.NominatedPharmacyType;
+                        await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                            "Successfully retrieved nominated pharmacy");
+                        return new OkObjectResult(
+                            new PharmacyDetailsResponse
+                            {
+                                PharmacyDetails = pharmacyDetails,
+                                NominatedPharmacyEnabled = result.HasValidPharmacyType
+                            });
+                    }
+                    else
+                    {
+                        return new StatusCodeResult(GetErrorStatusCode("Error retrieving pharmacy using pharmacy ods code with status code",
+                            result.HttpStatusCode));
+                    }
                 }
                 else
                 {
-                    _logger.LogInformation($"Error retrieving pharmacy using pharmacy ods code: { result.PharmacyOdsCode }, HttpStatusCode: { result.HttpStatusCode }");
+                    return new StatusCodeResult(GetErrorStatusCode("Error retrieving nominated pharmacy ods code from Spine with status code",
+                        result.HttpStatusCode));
                 }
+        }
+
+        private int GetErrorStatusCode(String errorMessage, HttpStatusCode statusCode)
+        {
+            if (statusCode == HttpStatusCode.InternalServerError)
+            {
+                _logger.LogError($"{errorMessage} returning: {(int) HttpStatusCode.InternalServerError}");
             }
             else
             {
-                _logger.LogInformation($"Error retrieving nominated pharmacy from Spine - HttpStatusCode { result.HttpStatusCode }");
+                statusCode = HttpStatusCode.BadGateway;
+                _logger.LogError($"{errorMessage} returning: {(int) HttpStatusCode.BadGateway}");
             }
-
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            return (int) statusCode;
         }
 
         [HttpPost("nominated-pharmacy")]

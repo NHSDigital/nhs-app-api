@@ -22,10 +22,13 @@ const formatWithOpeningTimes = (pharmacyResponse) => {
 export default {
   load({ commit }) {
     return this.app.$http
-      .getV1PatientNominatedPharmacy()
+      .getV1PatientNominatedPharmacy({
+        ignoreError: true,
+      })
       .then((data) => {
         commit(NOMINATED_PHARMACY_LOADED, formatWithOpeningTimes(data));
-      });
+      })
+      .catch(() => {});
   },
   update({ commit }, data) {
     const request = {

@@ -14,6 +14,7 @@
 /* eslint-disable no-unused-vars */
 import { APPOINTMENTS, APPOINTMENT_BOOKING_GUIDANCE, NOMINATED_PHARMACY_CHECK, PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 import NoJsForm from '@/components/no-js/NoJsForm';
+import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 import { redirectTo } from '@/lib/utils';
 
 export default {

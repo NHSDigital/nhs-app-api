@@ -190,51 +190,64 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 Xmlns = NominatedPharmacyNamespaces.Hl7,
             };
 
-            var result = await _prescriptionTrackingClient.NominatedPharmacyGet(request);
-
-            if (!result.HasSuccessResponse)
+            _logger.LogEnter();
+            try
             {
-                _logger.LogError("Error retrieving nominated pharmacy");
-                return new GetNominatedPharmacyResult(result.StatusCode);
+                var result = await _prescriptionTrackingClient.NominatedPharmacyGet(request);
+
+                if (!result.HasSuccessResponse)
+                {
+                    _logger.LogError("Error retrieving nominated pharmacy");
+                    return new GetNominatedPharmacyResult(result.StatusCode, false);
+                }
+
+                var knownPharmacyTypes = new[] { NominatedPharmacyCode, MedicalApplianceCode, DispensingDoctorCode };
+
+                var patientCareProvisionEvents = result?.Body?.QUPA_IN000009UK03?.ControlActEvent
+                    ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
+                    ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent)
+                    .Where(y => knownPharmacyTypes.Contains(y?.Code?._code));
+
+                string odsCode = null;
+
+                PharmacyCheck pharmacyCheck = new PharmacyCheck { IsValid = false };
+
+                if (patientCareProvisionEvents != null && patientCareProvisionEvents.Any())
+                {
+                    pharmacyCheck = await CheckPharmacy(patientCareProvisionEvents);
+
+                    if (pharmacyCheck.IsValid)
+                    {
+                        odsCode = pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
+                        _logger.LogInformation($"User retrieved nominated pharmacy with ods code: {odsCode}");
+                    }
+                    else
+                    {
+                        _logger.LogInformation("Invalid patient pharmacy or pharmacy combination");
+                        return new GetNominatedPharmacyResult(result.StatusCode, false);
+                    }
+                }
+
+                var pertinentSerialChangeNumber = result?.Body?.QUPA_IN000009UK03?.ControlActEvent?.Subject?.PDSResponse
+                    ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?._value;
+
+                var successResult = new GetNominatedPharmacyResult(
+                    result.StatusCode,
+                    odsCode,
+                    pertinentSerialChangeNumber,
+                    pharmacyCheck.IsValid,
+                    pharmacyCheck.PharmacyType);
+                return successResult;
             }
-
-            var knownPharmacyTypes = new[] { NominatedPharmacyCode, MedicalApplianceCode, DispensingDoctorCode };
-
-            var patientCareProvisionEvents = result?.Body?.QUPA_IN000009UK03?.ControlActEvent
-                ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
-                ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent)
-                .Where(y => knownPharmacyTypes.Contains(y?.Code?._code));
-            
-            string odsCode = null;
-
-            PharmacyCheck pharmacyCheck = new PharmacyCheck { IsValid = false };
-
-            if (patientCareProvisionEvents != null && patientCareProvisionEvents.Any())
+            catch (Exception ex)
             {
-                pharmacyCheck = await CheckPharmacy(patientCareProvisionEvents);
-
-                if (pharmacyCheck.IsValid)
-                {
-                    odsCode = pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
-                    _logger.LogInformation($"User retrieved nominated pharmacy with ods code: {odsCode}");
-                }
-                else
-                {
-                    _logger.LogInformation("Invalid patient pharmacy or pharmacy combination");
-                }
+                _logger.LogError(ex, $"An error occurred while trying to get the patients nominated pharmacy");
+                return new GetNominatedPharmacyResult(HttpStatusCode.InternalServerError);
             }
-
-            var pertinentSerialChangeNumber = result?.Body?.QUPA_IN000009UK03?.ControlActEvent?.Subject?.PDSResponse
-                ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?._value;
-
-            var successResult = new GetNominatedPharmacyResult(
-                result.StatusCode,
-                odsCode,
-                pertinentSerialChangeNumber,
-                pharmacyCheck.IsValid,
-                pharmacyCheck.PharmacyType);
-
-            return successResult;
+            finally
+            {
+                _logger.LogExit();
+            }
         }
 
         public async Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(

@@ -113,4 +113,4 @@ definitions:
         description: An array of opening times.
         items:
           $ref: '#/definitions/OpeningTime'
-      
+

@@ -89,6 +89,7 @@ class {{&className}} {
    * @param {object} queryParameters - querystring parameters
    * @param {object} form - form data object
    * @param {object} deferred - promise object
+   * @param {object} ignoreError - boolean to control dispatching ApiError message
    */
   request({
     method,
@@ -99,6 +100,7 @@ class {{&className}} {
     queryParameters,
     form,
     deferred,
+    ignoreError,
   }){
     const queryParams = queryParameters && Object.keys(queryParameters).length ? this.serializeQueryParams(queryParameters) : null ;
     const urlWithParams = url + (queryParams ? '?' + queryParams : '');
@@ -208,7 +210,9 @@ class {{&className}} {
           resolve({ deferred, store: this.store });
         }
 
-        this.store.dispatch('errors/addApiError', error);
+        if (!ignoreError) {
+          this.store.dispatch('errors/addApiError', error);
+        }
 
         if (process.server && !isEmpty(this.store.state.errors.apiErrors)) {
           resolve({ deferred, store: this.store });

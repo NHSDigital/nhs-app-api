@@ -281,7 +281,59 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             result.PharmacyOdsCode.Should().Be(ExpectedPharmacyOdsCodeInResult);
             result.HasValidPharmacyType.Should().Be(false);
         }
+        
+        [DataTestMethod]
+        public async Task
+            NominatedPharmacyGet_ReturnsUnsuccessfulResponseWhenPharmacySearchFailsDueToClientFailure()
+        {
+            //Arrange
+            _nominatedPharmacyClient
+                .Setup(x => x.NominatedPharmacyGet(
+                    It.IsAny<QUPA_IN000008UK02>()
+                )).Returns(Task.FromResult(GetUnsuccessfulNominatedPharmacyApiObjectResponse()))               
+                .Verifiable();
 
+            //Act
+            var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber);
+            
+            //Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.ServiceUnavailable);
+            result.HasValidPharmacyType.Should().Be(false);        
+        }
+        
+        [TestMethod]
+        public async Task NominatedPharmacyGet_ReturnsInternalServerError_WhenClientThrowsException()
+        {
+            // Arrange
+            string NhSNumber = "ABC123";
+            
+            _nominatedPharmacyClient
+                .Setup(x => x.NominatedPharmacyGet(
+                    It.IsAny<QUPA_IN000008UK02>()
+                )).Throws<Exception>()         
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetNominatedPharmacy(NhSNumber);
+
+            // Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        }
+
+        private static NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>
+            GetUnsuccessfulNominatedPharmacyApiObjectResponse()
+        {
+            return new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(HttpStatusCode.ServiceUnavailable)
+            {
+                RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>
+                {
+                    Body = null
+                }
+            };
+        }
+           
         private static NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>
             GetNominatedPharmacyApiObjectResponse(string[] pharmacyCodes)
         {

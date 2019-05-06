@@ -45,6 +45,7 @@
         </div>
       </div>
     </div>
+
     <no-js-form v-if="$store.state.device.isNativeApp"
                 :action="getContinueButtonPath()" method="get" :value="{}">
       <floating-button-bottom v-if="hasLoaded"
