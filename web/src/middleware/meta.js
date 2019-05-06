@@ -205,7 +205,7 @@ export default function ({ route, store, app }) {
       break;
     case NOMINATED_PHARMACY.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      if (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
+      if (store.getters['nominatedPharmacy/hasNoNominatedPharmacy']) {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
       } else {
@@ -215,7 +215,7 @@ export default function ({ route, store, app }) {
       break;
     case NOMINATED_PHARMACY_CHECK.name:
       store.dispatch('navigation/setNewMenuItem', 2);
-      if (store.state.nominatedPharmacy.pharmacy.pharmacyName === undefined) {
+      if (store.getters['nominatedPharmacy/hasNoNominatedPharmacy']) {
         route.meta.headerKey = 'pageHeaders.nominatedPharmacyNotFound';
         route.meta.pageTitleKey = 'pageTitles.nominatedPharmacyNotFound';
       } else {

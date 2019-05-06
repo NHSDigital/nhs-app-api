@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
@@ -36,16 +37,9 @@ namespace NHSOnline.Backend.NominatedPharmacy
             
             var result = await _nominatedPharmacyService.GetNominatedPharmacy(nhsNumber);
 
-            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
+            if (NominatedPharmacyGetHasError(result, out StatusCodeResult errorResult))
             {
-                _logger.LogInformation($"Error retrieving nominated pharmacy from Spine - HttpStatusCode { result.HttpStatusCode }");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-
-            if (string.IsNullOrEmpty(result.PertinentSerialChangeNumber))
-            {
-                _logger.LogError("Missing pertinentSerialChangeNumber which is required for the update request");
-                return new StatusCodeResult((int)HttpStatusCode.BadGateway);
+                return errorResult;
             }
 
             _logger.LogInformation($"Nominated pharmacy retrieved. Updating nominated pharmacy from { result.PharmacyOdsCode } to: { updatedOdsCode }");
@@ -102,5 +96,33 @@ namespace NHSOnline.Backend.NominatedPharmacy
 
             return new OkResult();
         }
+
+        private bool NominatedPharmacyGetHasError(GetNominatedPharmacyResult result, out StatusCodeResult errorResult)
+        {
+            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
+            {
+                _logger.LogInformation($"Error retrieving nominated pharmacy from Spine - HttpStatusCode { result.HttpStatusCode }");
+                errorResult = new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                return true;
+            }
+
+            if (string.IsNullOrEmpty(result.PertinentSerialChangeNumber))
+            {
+                _logger.LogError("Missing pertinentSerialChangeNumber which is required for the update request");
+                errorResult = new StatusCodeResult((int)HttpStatusCode.BadGateway);
+                return true;
+            }
+            
+            if (!result.HasValidPharmacyType)
+            {
+                _logger.LogError("Invalid pharmacy type or combination");
+                errorResult = new StatusCodeResult((int)HttpStatusCode.BadGateway);
+                return true;
+            }
+
+            errorResult = null;
+            return false;
+        }
+
     }
 }

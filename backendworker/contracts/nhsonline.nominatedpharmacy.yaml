@@ -18,7 +18,7 @@ paths:
         200:
           description: Returns a pharmacy object with its associated meta data. Returns an empty pharmacy if no nominated pharmacy was found.
           schema:
-            $ref: "#/definitions/NominatedPharmacyResponse"
+            $ref: "#/definitions/PharmacyDetailsResponse"
         401:
           description: User session missing or expired.
         500:
@@ -61,7 +61,24 @@ paths:
         504:
           description: Timeout when calling upstream system.
 definitions:
-  NominatedPharmacyResponse:
+  PharmacyDetailsResponse:
+    type: object
+    properties:
+      nominatedPharmacyEnabled:
+        type: boolean
+        description: Returns true if a patients pharmacy is a valid type to show
+      pharmacyDetails:
+        $ref: "#/definitions/PharmacyDetails"
+  OpeningTime:
+    type: object
+    properties:
+      day:
+        type: string
+        description: Day of the week.
+      time:
+        type: string
+        description: Opening and closing time.
+  PharmacyDetails:
     type: object
     properties:
       pharmacyName:
@@ -96,12 +113,4 @@ definitions:
         description: An array of opening times.
         items:
           $ref: '#/definitions/OpeningTime'
-  OpeningTime:
-    type: object
-    properties:
-      day:
-        type: string
-        description: Day of the week.
-      time:
-        type: string
-        description: Opening and closing time.
+      

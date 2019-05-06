@@ -14,14 +14,16 @@ import {
 
 export default {
   [NOMINATED_PHARMACY_LOADED](state, data) {
-    const pharmacy = assign({}, data);
+    const pharmacy = assign({}, data.pharmacyDetails);
 
     state.pharmacy = pharmacy;
     state.hasLoaded = true;
+    state.nominatedPharmacyEnabled = data.nominatedPharmacyEnabled;
   },
   [NOMINATED_PHARMACY_CLEAR](state) {
     state.pharmacy = {};
     state.hasLoaded = false;
+    state.nominatedPharmacyEnabled = null;
   },
   [NOMINATED_PHARMACY_UPDATED](state) {
     state.hasLoaded = false;

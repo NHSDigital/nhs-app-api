@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             _logger = logger;
         }
         
-        public PharmacyDetailsResponse Map(Organisation pharmacy)
+        public PharmacyDetails Map(Organisation pharmacy)
         {
             if (pharmacy == null)
             {
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
             _logger.LogInformation($"Mapping pharmacy of type {nameof(Organisation)} to { nameof(PharmacyDetailsResponse) }.");
 
-            var pharmacyDetails = new PharmacyDetailsResponse
+            var pharmacyDetails = new PharmacyDetails
             {
                 PharmacyName = pharmacy.OrganisationName,
                 AddressLine1 = pharmacy.Address1,
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         }
 
 
-        public IEnumerable<PharmacyDetailsResponse> Map(IEnumerable<Organisation> pharmacies, GeoCoordinate postcodeCoordinate)
+        public IEnumerable<PharmacyDetails> Map(IEnumerable<Organisation> pharmacies, GeoCoordinate postcodeCoordinate)
         {
             foreach (var pharmacy in pharmacies)
             {
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             }
         }
 
-        private PharmacyDetailsResponse Map(Organisation pharmacy, GeoCoordinate postcodeCoordinate)
+        private PharmacyDetails Map(Organisation pharmacy, GeoCoordinate postcodeCoordinate)
         {
             var result = Map(pharmacy);
 

@@ -38,7 +38,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import { getDynamicStyle } from '@/lib/desktop-experience';
 import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS, PRESCRIPTIONS } from '@/lib/routes';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import { redirectTo } from '@/lib/utils';
 
@@ -67,6 +67,11 @@ export default {
     showError() {
       return this.submissionError;
     },
+  },
+  created() {
+    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
+      redirectTo(this, PRESCRIPTIONS.path, null);
+    }
   },
   methods: {
     dynamicStyle(...args) {

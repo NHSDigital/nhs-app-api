@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Models;
 using NHSOnline.Backend.NominatedPharmacy.Soap;
 using NHSOnline.Backend.Support;
+using NHSOnline.Backend.Support.Auditing;
 using NHSOnline.Backend.Support.Logging;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 
@@ -15,22 +19,26 @@ namespace NHSOnline.Backend.NominatedPharmacy
 {
     public class NominatedPharmacyService : INominatedPharmacyService
     {
-        const string NominatedPharmacyCodeP1 = "P1";
-        const string NominatedPharmacyCodeP3 = "P3";
+        const string NominatedPharmacyCode = "P1";
+        const string MedicalApplianceCode = "P2";
+        const string DispensingDoctorCode = "P3";
 
         private readonly ILogger<NominatedPharmacyService> _logger;
         private readonly INominatedPharmacyClient _prescriptionTrackingClient;
         private readonly INominatedPharmacyConfig _config;
+        private readonly IAuditor _auditor;
 
         public NominatedPharmacyService(
             ILogger<NominatedPharmacyService> logger,
             INominatedPharmacyClient prescriptionTrackingClient,
-            INominatedPharmacyConfig config
-            )
+            INominatedPharmacyConfig config,
+            IAuditor auditor
+        )
         {
             _logger = logger;
             _prescriptionTrackingClient = prescriptionTrackingClient;
             _config = config;
+            _auditor = auditor;
         }
 
         public async Task<GetNominatedPharmacyResult> GetNominatedPharmacy(string nhsNumber)
@@ -190,30 +198,29 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 return new GetNominatedPharmacyResult(result.StatusCode);
             }
 
-            // Only use result if P1.
+            var knownPharmacyTypes = new[] { NominatedPharmacyCode, MedicalApplianceCode, DispensingDoctorCode };
+
             var patientCareProvisionEvents = result?.Body?.QUPA_IN000009UK03?.ControlActEvent
                 ?.Subject?.PDSResponse?.Subject?.PatientRole?.PatientPerson?.PlayedOtherProviderPatients
-                ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent);
-
+                ?.Select(x => x.SubjectOf?.PatientCareProvisionEvent)
+                .Where(y => knownPharmacyTypes.Contains(y?.Code?._code));
+            
             string odsCode = null;
-            string nominatedPharmacyType = null;
 
-            if (patientCareProvisionEvents != null)
+            PharmacyCheck pharmacyCheck = new PharmacyCheck { IsValid = false };
+
+            if (patientCareProvisionEvents != null && patientCareProvisionEvents.Any())
             {
-                var patientCareP1Section = patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == NominatedPharmacyCodeP1);
-                var patientCareP3Section = patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == NominatedPharmacyCodeP3);
-                
-                if (patientCareP1Section != null)
+                pharmacyCheck = await CheckPharmacy(patientCareProvisionEvents);
+
+                if (pharmacyCheck.IsValid)
                 {
-                    odsCode = patientCareP1Section?.Performer?.AssignedEntity?.Id?.Extension;
-                    nominatedPharmacyType = NominatedPharmacyCodeP1;
-                    _logger.LogInformation($"User retrieved nominated pharmacy with ods code: { odsCode }");
-                } 
-                else if (patientCareP3Section != null)
+                    odsCode = pharmacyCheck.PatientCareProvisionEvent?.Performer?.AssignedEntity?.Id?.Extension;
+                    _logger.LogInformation($"User retrieved nominated pharmacy with ods code: {odsCode}");
+                }
+                else
                 {
-                    odsCode = patientCareP3Section?.Performer?.AssignedEntity?.Id?.Extension;
-                    nominatedPharmacyType = NominatedPharmacyCodeP3;
-                    _logger.LogInformation($"User retrieved dispensing doctor with ods code: { odsCode }");
+                    _logger.LogInformation("Invalid patient pharmacy or pharmacy combination");
                 }
             }
 
@@ -221,22 +228,23 @@ namespace NHSOnline.Backend.NominatedPharmacy
                 ?.PertinentInformation?.PertinentSerialChangeNumber?.Value?._value;
 
             var successResult = new GetNominatedPharmacyResult(
-                result.StatusCode, 
+                result.StatusCode,
                 odsCode,
-                nominatedPharmacyType,
-                pertinentSerialChangeNumber
-                );
+                pertinentSerialChangeNumber,
+                pharmacyCheck.IsValid,
+                pharmacyCheck.PharmacyType);
 
             return successResult;
         }
 
-        public async Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(NominatedPharmacyUpdate nominatedPharmacyUpdate)
+        public async Task<UpdateNominatedPharmacyResult> UpdateNominatedPharmacy(
+            NominatedPharmacyUpdate nominatedPharmacyUpdate)
         {
             _logger.LogEnter();
 
             try
             {
-                var result =  await _prescriptionTrackingClient
+                var result = await _prescriptionTrackingClient
                     .UpdateNominatedPharmacy(
                         new NominatedPharmacyUpdateRequest(
                             nominatedPharmacyUpdate.NhsNumber,
@@ -261,6 +269,82 @@ namespace NHSOnline.Backend.NominatedPharmacy
             finally
             {
                 _logger.LogExit();
+            }
+        }
+
+        private async Task<PharmacyCheck> CheckPharmacy(
+            IEnumerable<PatientCareProvisionEvent> patientCareProvisionEvents)
+        {
+            const int pharmacyThreshold = 1;
+
+            var patientCareSections = new Dictionary<string, PatientCareProvisionEvent>();
+
+            patientCareSections.AddIfValueNotNull(NominatedPharmacyCode,
+                patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == NominatedPharmacyCode));
+            patientCareSections.AddIfValueNotNull(MedicalApplianceCode,
+                patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == MedicalApplianceCode));
+            patientCareSections.AddIfValueNotNull(DispensingDoctorCode,
+                patientCareProvisionEvents.FirstOrDefault(x => x.Code?._code == DispensingDoctorCode));
+
+            if (!patientCareSections.Any())
+            {
+                _logger.LogInformation("Patient does not have a nominated pharmacy set");
+                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                    "Patient does not have a nominated pharmacy set");
+                return new PharmacyCheck { IsValid = false, PatientCareProvisionEvent = null };
+            }
+            else if (patientCareSections.Count > pharmacyThreshold)
+            {
+                StringBuilder logBuilder = new StringBuilder("Patient has multiple pharmacy types, ");
+
+                var keys = patientCareSections.Select(x => x.Key).ToList();
+                logBuilder.Append(JsonConvert.SerializeObject(keys));
+
+                _logger.LogWarning(logBuilder.ToString());
+                await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, logBuilder.ToString());
+                return new PharmacyCheck { IsValid = false, PatientCareProvisionEvent = null };
+            }
+
+            var patientCareSection = patientCareSections.First();
+            switch (patientCareSection.Key)
+            {
+                case NominatedPharmacyCode:
+                    _logger.LogInformation($"Patient has a valid {NominatedPharmacyCode} pharmacy");
+                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                        $"Successfully retrieved a valid {NominatedPharmacyCode} pharmacy");
+                    return new PharmacyCheck
+                    {
+                        IsValid = true, 
+                        PatientCareProvisionEvent = patientCareSection.Value,
+                        PharmacyType = NominatedPharmacyCode,
+                    };
+                case MedicalApplianceCode:
+                    _logger.LogInformation(
+                        $"Patient has a {MedicalApplianceCode} pharmacy which is not a valid pharmacy type");
+                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                        $"Patient has a {MedicalApplianceCode} pharmacy");
+                    return new PharmacyCheck
+                    {
+                        IsValid = false, 
+                        PatientCareProvisionEvent = null,
+                    };
+                case DispensingDoctorCode:
+                    _logger.LogInformation($"Patient has a valid {DispensingDoctorCode} pharmacy");
+                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
+                        $"Successfully retrieved a valid {DispensingDoctorCode} pharmacy");
+                    return new PharmacyCheck
+                    {
+                        IsValid = true, 
+                        PatientCareProvisionEvent = patientCareSection.Value,
+                        PharmacyType = DispensingDoctorCode,
+                    };
+                default:
+                    _logger.LogError("Unknown error when filtering nominated pharmacy");
+                    return new PharmacyCheck
+                    {
+                        IsValid = false, 
+                        PatientCareProvisionEvent = null
+                    };
             }
         }
     }

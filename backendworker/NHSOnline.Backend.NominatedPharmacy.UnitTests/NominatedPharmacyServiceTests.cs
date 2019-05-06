@@ -11,6 +11,7 @@ using NHSOnline.Backend.NominatedPharmacy.Clients.Interfaces;
 using NHSOnline.Backend.NominatedPharmacy.Clients.Models;
 using static NHSOnline.Backend.NominatedPharmacy.Soap.NominatedPharmacyTypes;
 using System.Collections.Generic;
+using Castle.Core.Internal;
 
 namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 {
@@ -25,10 +26,10 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
 
         private const string SpineAccreditedSystemIdFrom = "0001";
         private const string SpineAccreditedSystemIdTo = "0002";
-        private const string nhsNumber = "239 372 9384";
-        private const string nhsNumberTrimmed = "2393729384";
-        private const string currentPharmacyOdsCode = "PHA12";
-        private const string updatedPharmacyOdsCode = "AB837";
+        private const string NhsNumber = "239 372 9384";
+        private const string NhsNumberTrimmed = "2393729384";
+        private const string CurrentPharmacyOdsCode = "PHA12";
+        private const string UpdatedPharmacyOdsCode = "AB837";
 
         [TestInitialize]
         public void TestInitialize()
@@ -48,24 +49,30 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
         }
 
         [DataTestMethod]
-        [DataRow("P1", HttpStatusCode.OK, currentPharmacyOdsCode)]
-        [DataRow("P2", HttpStatusCode.OK, null)]
-        [DataRow("P3", HttpStatusCode.OK, currentPharmacyOdsCode)]
-        [DataRow("1", HttpStatusCode.OK, null)]
-        public async Task NominatedPharmacyGet_ReturnsSuccessfulResponseWithPharmacyOdsCode_WhenOdsCodeWhenCodeIsP1orP3AndNotOtherwise(
-            string code,
-            HttpStatusCode httpStatusCode,
-            string expectedPharmacyOdsCodeInResult)
+        [DataRow("P1", HttpStatusCode.OK, CurrentPharmacyOdsCode, true)]
+        [DataRow("P2", HttpStatusCode.OK, null, false)]
+        [DataRow("P3", HttpStatusCode.OK, CurrentPharmacyOdsCode, true)]
+        [DataRow("1", HttpStatusCode.OK, null, false)]
+        public async Task
+            NominatedPharmacyGet_ReturnsSuccessfulWhenRequestSucceeds_ReturnsOdsCodeIfValidAndIfItIsAValidPharmacyType(
+                string code,
+                HttpStatusCode httpStatusCode,
+                string expectedPharmacyOdsCodeInResult,
+                bool hasValidPharmacyType)
         {
             // Arrange
             _nominatedPharmacyClient
                 .Setup(x => x.NominatedPharmacyGet(
                     It.Is<QUPA_IN000008UK02>(
-                        req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId", StringComparison.OrdinalIgnoreCase) &&
-                        req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo, StringComparison.OrdinalIgnoreCase) &&
-                        req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom, StringComparison.OrdinalIgnoreCase) &&
-                        req.ControlActEvent.Query.PersonId.Value.Extension.Equals(nhsNumberTrimmed, StringComparison.OrdinalIgnoreCase))
-                    ))
+                        req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId",
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
+                                   StringComparison.OrdinalIgnoreCase))
+                ))
                 .Returns(Task.FromResult(
                     new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(HttpStatusCode.OK)
                     {
@@ -89,32 +96,36 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                                                         {
                                                             PatientPerson = new PatientPerson
                                                             {
-                                                                PlayedOtherProviderPatients = new List<PlayedOtherProviderPatient>
-                                                                {
-                                                                    new PlayedOtherProviderPatient
+                                                                PlayedOtherProviderPatients =
+                                                                    new List<PlayedOtherProviderPatient>
                                                                     {
-                                                                        SubjectOf = new SubjectOf
+                                                                        new PlayedOtherProviderPatient
                                                                         {
-                                                                            PatientCareProvisionEvent = new PatientCareProvisionEvent
+                                                                            SubjectOf = new SubjectOf
                                                                             {
-                                                                                Code = new Code
-                                                                                {
-                                                                                    _code = code
-                                                                                },
-                                                                                Performer = new Performer
-                                                                                {
-                                                                                    AssignedEntity = new AssignedEntity
+                                                                                PatientCareProvisionEvent =
+                                                                                    new PatientCareProvisionEvent
                                                                                     {
-                                                                                        Id = new Id
+                                                                                        Code = new Code
                                                                                         {
-                                                                                            Extension = currentPharmacyOdsCode,
+                                                                                            _code = code
+                                                                                        },
+                                                                                        Performer = new Performer
+                                                                                        {
+                                                                                            AssignedEntity =
+                                                                                                new AssignedEntity
+                                                                                                {
+                                                                                                    Id = new Id
+                                                                                                    {
+                                                                                                        Extension =
+                                                                                                            CurrentPharmacyOdsCode,
+                                                                                                    }
+                                                                                                }
                                                                                         }
                                                                                     }
-                                                                                }
                                                                             }
                                                                         }
                                                                     }
-                                                                }
                                                             }
                                                         }
                                                     },
@@ -136,15 +147,16 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                             }
                         }
                     }))
-                    .Verifiable();
+                .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetNominatedPharmacy(nhsNumber);
+            var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber);
 
             // Assert
             _nominatedPharmacyClient.Verify();
             result.HttpStatusCode.Should().Be(httpStatusCode);
             result.PharmacyOdsCode.Should().Be(expectedPharmacyOdsCodeInResult);
+            result.HasValidPharmacyType.Should().Be(hasValidPharmacyType);
         }
 
         [TestMethod]
@@ -157,14 +169,14 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
                 .Setup(x => x.UpdateNominatedPharmacy(It.IsAny<NominatedPharmacyUpdateRequest>()))
                 .Returns(Task.FromResult(
                     new NominatedPharmacyApiObjectResponse<NominatedPharmacyUpdateResponse>(HttpStatusCode.BadRequest)
-                    ))
-                    .Verifiable();
+                ))
+                .Verifiable();
 
             var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
             {
                 HasExistingNominatedPharmacy = true,
-                UpdatedOdsCode = updatedPharmacyOdsCode,
-                NhsNumber = nhsNumber,
+                UpdatedOdsCode = UpdatedPharmacyOdsCode,
+                NhsNumber = NhsNumber,
                 PertinentSerialChangeNumber = pertinentSerialChangeNumber,
             };
 
@@ -192,8 +204,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
             {
                 HasExistingNominatedPharmacy = true,
-                UpdatedOdsCode = updatedPharmacyOdsCode,
-                NhsNumber = nhsNumber,
+                UpdatedOdsCode = UpdatedPharmacyOdsCode,
+                NhsNumber = NhsNumber,
                 PertinentSerialChangeNumber = pertinentSerialChangeNumber,
             };
 
@@ -219,8 +231,8 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             var nominatedPharmacyUpdate = new NominatedPharmacyUpdate
             {
                 HasExistingNominatedPharmacy = true,
-                UpdatedOdsCode = updatedPharmacyOdsCode,
-                NhsNumber = nhsNumber,
+                UpdatedOdsCode = UpdatedPharmacyOdsCode,
+                NhsNumber = NhsNumber,
                 PertinentSerialChangeNumber = pertinentSerialChangeNumber,
             };
 
@@ -230,6 +242,134 @@ namespace NHSOnline.Backend.NominatedPharmacy.UnitTests
             // Assert
             _nominatedPharmacyClient.Verify();
             result.HttpStatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        }
+
+        [DataTestMethod]
+        [DataRow(new[] { "P1", "P2" }, HttpStatusCode.OK)]
+        [DataRow(new[] { "P1", "P3" }, HttpStatusCode.OK)]
+        [DataRow(new[] { "P1", "P2", "P3", "1"}, HttpStatusCode.OK)]
+        [DataRow(new[] { "P2", "P3" }, HttpStatusCode.OK)]
+        public async Task
+            NominatedPharmacyGet_ReturnsSuccessfulWithNullOdsCodeAndFalseHasValidPharmacyType_WhenMultiplePharmacyTypesExist(
+                string[] pharmacyCodes,
+                HttpStatusCode httpStatusCode)
+        {
+            // Arrange
+            const string ExpectedPharmacyOdsCodeInResult = null;
+            
+            _nominatedPharmacyClient
+                .Setup(x => x.NominatedPharmacyGet(
+                    It.Is<QUPA_IN000008UK02>(
+                        req => req.ControlActEvent.Author.AgentPersonSDS.Id.Extension.Equals("roleId",
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.CommunicationFunctionRcv.Device.Id.Extension.Equals(SpineAccreditedSystemIdTo,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.CommunicationFunctionSnd.Device.Id.Extension.Equals(SpineAccreditedSystemIdFrom,
+                                   StringComparison.OrdinalIgnoreCase) &&
+                               req.ControlActEvent.Query.PersonId.Value.Extension.Equals(NhsNumberTrimmed,
+                                   StringComparison.OrdinalIgnoreCase))
+                ))
+                .Returns(Task.FromResult(GetNominatedPharmacyApiObjectResponse(pharmacyCodes)))               
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.GetNominatedPharmacy(NhsNumber);
+
+            // Assert
+            _nominatedPharmacyClient.Verify();
+            result.HttpStatusCode.Should().Be(httpStatusCode);
+            result.PharmacyOdsCode.Should().Be(ExpectedPharmacyOdsCodeInResult);
+            result.HasValidPharmacyType.Should().Be(false);
+        }
+
+        private static NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>
+            GetNominatedPharmacyApiObjectResponse(string[] pharmacyCodes)
+        {
+            return new NominatedPharmacyApiObjectResponse<QUPA_IN000009UK03_Response>(HttpStatusCode.OK)
+            {
+                RawResponse = new Soap.NominatedPharmacyResponseEnvelope<QUPA_IN000009UK03_Response>
+                {
+                    Body = new Body<QUPA_IN000009UK03_Response>
+                    {
+                        RetrievalQueryResponse = new QUPA_IN000009UK03_Response
+                        {
+                            QUPA_IN000009UK03 = new QUPA_IN000009UK03
+                            {
+                                ControlActEvent = new ControlActEvent
+                                {
+                                    Subject = new Subject
+                                    {
+                                        PDSResponse = new PDSResponse
+                                        {
+                                            Subject = new Subject
+                                            {
+                                                PatientRole = new PatientRole
+                                                {
+                                                    PatientPerson = new PatientPerson
+                                                    {
+                                                        PlayedOtherProviderPatients =
+                                                            GetPatientCareProvisionEvents(pharmacyCodes)
+                                                    }
+                                                }
+                                            },
+                                            PertinentInformation = new PertinentInformation
+                                            {
+                                                PertinentSerialChangeNumber = new PertinentSerialChangeNumber
+                                                {
+                                                    Value = new Value
+                                                    {
+                                                        _value = "22",
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+        
+        private static List<PlayedOtherProviderPatient> GetPatientCareProvisionEvents(string[] pharmacyCodes)
+        {
+            var playedOtherProviderPatientList = new List<PlayedOtherProviderPatient>();
+            
+            foreach (var pharmacyCode in pharmacyCodes)
+            {
+                if (!pharmacyCode.IsNullOrEmpty())
+                {
+                    playedOtherProviderPatientList.Add(new PlayedOtherProviderPatient
+                        {
+                            SubjectOf = new SubjectOf
+                            {
+                                PatientCareProvisionEvent =
+                                    new PatientCareProvisionEvent
+                                    {
+                                        Code = new Code
+                                        {
+                                            _code = pharmacyCode
+                                        },
+                                        Performer = new Performer
+                                        {
+                                            AssignedEntity = new AssignedEntity
+                                            {
+                                                Id = new Id
+                                                {
+                                                    Extension =
+                                                        CurrentPharmacyOdsCode,
+                                                }
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                    );
+                }
+            }
+
+            return playedOtherProviderPatientList;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
     {
         const string odsCode = "AB123";
         const string updatedOdsCode = "BB999";
-        private const string nominatedPharmacyType = "P1";
+        const string NominatedPharmacyType = "P1";
         string pertinentSerialChangeNumber = Guid.NewGuid().ToString();
         
         private NominatedPharmacyController _systemUnderTest;
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyType, pertinentSerialChangeNumber);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType);
             
             var pharmacyOrgansation = _fixture.Create<Organisation>();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrgansation);
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Returns(Task.FromResult(pharmacyDetailResponse))
                 .Verifiable();
 
-            var mappedResult = _fixture.Create<PharmacyDetailsResponse>();
+            var mappedResult = _fixture.Create<PharmacyDetails>();
 
             _mockMapper
                 .Setup(x => x.Map(pharmacyDetailResponse.Pharmacy))
@@ -118,8 +118,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockMapper.Verify();
 
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
-            value.Should().BeEquivalentTo(mappedResult);
-            mappedResult.PharmacyType.Should().Be(nominatedPharmacyType);
+            value.Should().BeEquivalentTo(new PharmacyDetailsResponse{ NominatedPharmacyEnabled = true, PharmacyDetails = mappedResult });
+            mappedResult.PharmacyType.Should().Be(NominatedPharmacyType);
         }
 
         [DataTestMethod]
@@ -130,7 +130,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyType, pertinentSerialChangeNumber);
+            PharmacyDetailsResponse response = new PharmacyDetailsResponse
+            {
+                NominatedPharmacyEnabled = true,
+                PharmacyDetails = null
+            };
+
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType);
             
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
@@ -145,8 +151,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
             _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
 
-            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             value.StatusCode.Should().Be(StatusCodes.Status200OK);
+            value.Value.Should().BeEquivalentTo(response);
         }
 
         [TestMethod]
@@ -179,14 +186,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
-            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, nominatedPharmacyType, pertinentSerialChangeNumber);
+            var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType );
             
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
                 .Verifiable();
 
-            var pharmacyOrgansation = _fixture.Create<Organisation>();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.InternalServerError);
 
             _mockPharmacyService
@@ -281,8 +287,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
                 .Returns(Task.FromResult(pharmacySearchResponse))
                 .Verifiable();
 
-            var pharmacy1 = _fixture.Create<PharmacyDetailsResponse>();
-            var mappedResult = new List<PharmacyDetailsResponse> { pharmacy1 };
+            var pharmacy1 = _fixture.Create<PharmacyDetails>();
+            var mappedResult = new List<PharmacyDetails> { pharmacy1 };
 
             _mockMapper
                 .Setup(x => x.Map(organisations, postcodeCoordinate))

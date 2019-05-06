@@ -43,11 +43,12 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
 
     }
 
-    fun getPatientCareProvision(odsCode: String, pharmacyTypes: kotlin.Array<String>) : StringBuilder {
+    fun getPlayedOtherProviderPatient(odsCode: String, pharmacyTypes: kotlin.Array<String>) : StringBuilder {
         val patientCareProvisionBuilder = StringBuilder();
         if(pharmacyTypes.size > 0) {
             for (pharmacyType in pharmacyTypes) {
-                patientCareProvisionBuilder.append("""<patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
+                patientCareProvisionBuilder.append("""<playedOtherProviderPatient classCode="PAT">
+                                  <subjectOf typeCode="SBJ"> <patientCareProvisionEvent classCode="PCPR" moodCode="EVN">
                                         <code codeSystem="2.16.840.1.113883.2.1.3.2.4.17.37" code="${pharmacyType}"/>
                                       <effectiveTime>
                                         <low value="20190402"/>
@@ -58,7 +59,8 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                                           <id root="2.16.840.1.113883.2.1.4.3" extension="${odsCode}"/>
                                         </assignedEntity>
                                       </performer>
-                                        </patientCareProvisionEvent>""");
+                                        </patientCareProvisionEvent> </subjectOf>
+                                </playedOtherProviderPatient>""");
             }
         }
         return patientCareProvisionBuilder;
@@ -156,11 +158,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
                                     </patientCareProvisionEvent>
                                   </subjectOf>
                                 </playedOtherProviderPatient>
-                                <playedOtherProviderPatient classCode="PAT">
-                                  <subjectOf typeCode="SBJ">
-                                      ${ getPatientCareProvision(odsCode, pharmacyTypes) }
-                                  </subjectOf>
-                                </playedOtherProviderPatient>
+                                      ${ getPlayedOtherProviderPatient(odsCode, pharmacyTypes) }
                                 <COCT_MT000201UK02.PartOfWhole classCode="PART">
                                   <addr use="H">
                                     <streetAddressLine>SUFFOLK HOUSE</streetAddressLine>

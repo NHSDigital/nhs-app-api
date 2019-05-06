@@ -11,7 +11,7 @@
                        :pharmacy="pharmacy"
                        :is-my-nominated-pharmacy="true"
                        :previous-path="currentPage"
-                       :canChangePharmacy="showChangePharmacyLink" />
+                       :can-change-pharmacy="showChangePharmacyLink" />
     </div>
 
     <generic-button id="continue-button-found"
@@ -63,7 +63,7 @@ export default {
     },
   },
   created() {
-    if (this.$store.state.nominatedPharmacy.hasLoaded === false) {
+    if (this.$store.state.nominatedPharmacy.hasLoaded === false || !this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
       redirectTo(this, PRESCRIPTIONS.path, null);
     }
   },

@@ -17,4 +17,5 @@ export const initialState = () => ({
     pharmacies: [],
   },
   previousPageToSearch: null,
+  nominatedPharmacyEnabled: null,
 });

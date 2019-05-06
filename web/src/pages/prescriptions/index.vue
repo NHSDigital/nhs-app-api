@@ -4,23 +4,25 @@
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content' ,
                                     !$store.state.device.isNativeApp && $style.desktopWeb]" >
     <glossary-header v-if="hasLoaded"/>
-    <ul :class="$style['list-menu-white']" role="list">
-      <li :class="$style.link" role="link">
-        <analytics-tracked-tag
-          id="btn_choices"
-          :click-func="onNominatedPharmacyDetailClicked"
-          :class="$style['no-decoration']"
-          :text="$t('rp01.nominatedPharmacy')"
-          :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
-          tag="a">
-          <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
-          <p :class="!$store.state.device.isNativeApp
-            && $style.desktopWeb">
-            {{ pharmacyNameOnBtn }}
-          </p>
-        </analytics-tracked-tag>
-      </li>
-    </ul>
+    <div v-if="showNominatedPharmacy" id="nominated-pharmacy-section">
+      <ul :class="$style['list-menu-white']" role="list">
+        <li :class="$style.link" role="link">
+          <analytics-tracked-tag
+            id="nominated-pharmacy"
+            :click-func="onNominatedPharmacyDetailClicked"
+            :class="$style['no-decoration']"
+            :text="$t('rp01.nominatedPharmacy')"
+            :aria-label="`${$t('rp01.nominatedPharmacy')}. ${$t('rp01.nominatedPharmacy')}`"
+            tag="a">
+            <h3 :aria-label="$t('rp01.nominatedPharmacy')">{{ $t('rp01.nominatedPharmacy') }}</h3>
+            <p :class="!$store.state.device.isNativeApp
+              && $style.desktopWeb">
+              {{ pharmacyName }}
+            </p>
+          </analytics-tracked-tag>
+        </li>
+      </ul>
+    </div>
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
       <h2>{{ $t('rp01.empty.subHeader') }}</h2>
       <p>
@@ -43,10 +45,8 @@
         </div>
       </div>
     </div>
-
     <no-js-form v-if="$store.state.device.isNativeApp"
-                :action="pharmacyCheckPath" method="get"
-                :value="{}">
+                :action="getContinueButtonPath()" method="get" :value="{}">
       <floating-button-bottom v-if="hasLoaded"
                               id="order-prescription-button"
                               @click.stop.prevent="onOrderRepeatPrescriptionClicked">
@@ -61,7 +61,7 @@ import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import GlossaryHeader from '@/components/GlossaryHeader';
 import NoJsForm from '@/components/no-js/NoJsForm';
-import { NOMINATED_PHARMACY_CHECK, NOMINATED_PHARMACY } from '@/lib/routes';
+import { NOMINATED_PHARMACY } from '@/lib/routes';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import keys from 'lodash/fp/keys';
 import each from 'lodash/fp/each';
@@ -70,6 +70,7 @@ import isEmpty from 'lodash/fp/isEmpty';
 import { redirectTo } from '@/lib/utils';
 import NoJsForm from '@/components/no-js/NoJsForm';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import GetNavigationPathFromPrescriptions from '@/lib/prescriptions/navigation';
 
 export default {
   components: {
@@ -94,10 +95,7 @@ export default {
     };
   },
   computed: {
-    pharmacyCheckPath() {
-      return NOMINATED_PHARMACY_CHECK.path;
-    },
-    pharmacyNameOnBtn() {
+    pharmacyName() {
       if (this.nominatedPharmacyName === undefined) {
         return this.$t('nominatedPharmacyNotFound.noPharmacyButton');
       }
@@ -132,6 +130,9 @@ export default {
     hasLoaded() {
       return this.$store.state.prescriptions.hasLoaded;
     },
+    showNominatedPharmacy() {
+      return this.$store.state.nominatedPharmacy.nominatedPharmacyEnabled;
+    },
   },
   async asyncData({ store }) {
     await store.dispatch('prescriptions/clear');
@@ -153,8 +154,12 @@ export default {
       redirectTo(this, NOMINATED_PHARMACY.path, null);
     },
     onOrderRepeatPrescriptionClicked() {
-      this.$store.app.$analytics.trackButtonClick(NOMINATED_PHARMACY_CHECK.path, true);
-      redirectTo(this, NOMINATED_PHARMACY_CHECK.path, null);
+      const path = this.getContinueButtonPath();
+      this.$store.app.$analytics.trackButtonClick(path, true);
+      redirectTo(this, path, null);
+    },
+    getContinueButtonPath() {
+      return GetNavigationPathFromPrescriptions(this.$store);
     },
   },
 };

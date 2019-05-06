@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Assert
             result.Should().NotBeNull();
 
-            var expectedResult = new PharmacyDetailsResponse
+            var expectedResult = new PharmacyDetails
             {
                 PharmacyName = pharmacy.OrganisationName,
                 AddressLine1 = pharmacy.Address1,
@@ -161,9 +161,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Assert
             result.Should().NotBeNull();
 
-            var expectedResult = new List<PharmacyDetailsResponse>
+            var expectedResult = new List<PharmacyDetails>
             {
-                new PharmacyDetailsResponse
+                new PharmacyDetails
                 {
                     PharmacyName = pharmacy.OrganisationName,
                     AddressLine1 = pharmacy.Address1,
@@ -215,9 +215,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Assert
             result.Should().NotBeNull();
 
-            var expectedResult = new List<PharmacyDetailsResponse>
+            var expectedResult = new List<PharmacyDetails>
             {
-                new PharmacyDetailsResponse
+                new PharmacyDetails
                 {
                     PharmacyName = pharmacy.OrganisationName,
                     AddressLine1 = pharmacy.Address1,

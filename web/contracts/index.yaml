@@ -952,15 +952,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              type: "object"
-              description: "error response from backend api."
-              properties: 
-                errorCode: 
-                  type: "integer"
-                  description: "error code."
-                errorMessage: 
-                  type: "string"
-                  description: "error message."
+              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
       post: 
@@ -1005,7 +997,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
       put: 
@@ -1098,7 +1090,15 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
+              type: "object"
+              description: "error response from backend api."
+              properties: 
+                errorCode: 
+                  type: "integer"
+                  description: "error code."
+                errorMessage: 
+                  type: "string"
+                  description: "error message."
           504: 
             description: "Timeout when calling upstream system."
       delete: 
@@ -1162,7 +1162,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
     /v1/patient/organdonation/referencedata: 
@@ -1214,7 +1214,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
     /v1/patient/prescriptions: 
@@ -1569,7 +1569,7 @@
                 odsCode: 
                   type: "string"
                   description: "Unique code that identifies a user's GP practice"
-                token:
+                token: 
                   type: "string"
                   description: "User's session CsrfToken"
                 nhsNumber: 
@@ -1672,12 +1672,9 @@
                       telephoneNumber: 
                         type: "string"
                         description: "Telephone number of the pharmacy."
-                      odsCode:
+                      odsCode: 
                         type: "string"
                         description: "Code to identify the pharmacy"
-                      pharmacyType: 
-                        type: "string"
-                        description: "Type of the nominated pharmacy."
                       openingTimes: 
                         type: "array"
                         description: "An array of opening times."
@@ -1710,42 +1707,51 @@
             schema: 
               type: "object"
               properties: 
-                pharmacyName: 
-                  type: "string"
-                  description: "Name of the nominated pharmacy."
-                addressLine1: 
-                  type: "string"
-                  description: "First line of address."
-                addressLine2: 
-                  type: "string"
-                  description: "Second line of address."
-                addressLine3: 
-                  type: "string"
-                  description: "Third line of address."
-                city: 
-                  type: "string"
-                  description: "Name of the city."
-                county: 
-                  type: "string"
-                  description: "Name of the county."
-                postcode: 
-                  type: "string"
-                  description: "Postcode."
-                telephoneNumber: 
-                  type: "string"
-                  description: "Telephone number of the nominated pharmacy."
-                openingTimes: 
-                  type: "array"
-                  description: "An array of opening times."
-                  items: 
-                    type: "object"
-                    properties: 
-                      day: 
-                        type: "string"
-                        description: "Day of the week."
-                      time: 
-                        type: "string"
-                        description: "Opening and closing time."
+                nominatedPharmacyEnabled: 
+                  type: "boolean"
+                  description: "Returns true if a patients pharmacy is a valid type to show"
+                pharmacyDetails: 
+                  type: "object"
+                  properties: 
+                    pharmacyName: 
+                      type: "string"
+                      description: "Name of the nominated pharmacy."
+                    pharmacyType: 
+                      type: "string"
+                      description: "Type of the nominated pharmacy."
+                    addressLine1: 
+                      type: "string"
+                      description: "First line of address."
+                    addressLine2: 
+                      type: "string"
+                      description: "Second line of address."
+                    addressLine3: 
+                      type: "string"
+                      description: "Third line of address."
+                    city: 
+                      type: "string"
+                      description: "Name of the city."
+                    county: 
+                      type: "string"
+                      description: "Name of the county."
+                    postcode: 
+                      type: "string"
+                      description: "Postcode."
+                    telephoneNumber: 
+                      type: "string"
+                      description: "Telephone number of the nominated pharmacy."
+                    openingTimes: 
+                      type: "array"
+                      description: "An array of opening times."
+                      items: 
+                        type: "object"
+                        properties: 
+                          day: 
+                            type: "string"
+                            description: "Day of the week."
+                          time: 
+                            type: "string"
+                            description: "Opening and closing time."
           401: 
             description: "User session missing or expired."
           500: 

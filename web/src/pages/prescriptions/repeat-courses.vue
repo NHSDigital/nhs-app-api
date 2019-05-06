@@ -93,9 +93,9 @@
       </generic-button>
     </form>
     <desktopGenericBackLink v-else
-                            :path="prescriptionsPath"
+                            :path="getBackPath"
                             :button-text="'rp03.backButton'"
-                            @clickAndPrevent="backToPrescriptionsClicked"/>
+                            @clickAndPrevent="backButtonClicked"/>
   </div>
 </template>
 
@@ -193,11 +193,9 @@ export default {
       }
       return true;
     },
-    prescriptionsPath() {
-      return PRESCRIPTIONS.path;
-    },
-    checkNominatedPharmacyPath() {
-      return NOMINATED_PHARMACY_CHECK.path;
+    getBackPath() {
+      return this.$store.state.nominatedPharmacy.nominatedPharmacyEnabled ?
+        NOMINATED_PHARMACY_CHECK.path : PRESCRIPTIONS.path;
     },
     confirmCoursesPath() {
       return PRESCRIPTION_CONFIRM_COURSES.path;
@@ -236,8 +234,8 @@ export default {
         window.scrollTo(0, 0);
       }
     },
-    backToPrescriptionsClicked() {
-      redirectTo(this, this.checkNominatedPharmacyPath, null);
+    backButtonClicked() {
+      redirectTo(this, this.getBackPath, null);
     },
   },
 };

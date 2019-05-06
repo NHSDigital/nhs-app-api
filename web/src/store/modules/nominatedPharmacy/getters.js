@@ -7,4 +7,7 @@ export default {
   previousPage(state) {
     return state.previousPageToSearch || PRESCRIPTIONS.path;
   },
+  nominatedPharmacyEnabled(state) {
+    return state.nominatedPharmacyEnabled;
+  },
 };

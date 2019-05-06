@@ -7,8 +7,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
     public interface IPharmacyDetailsToPharmacyDetailsResponseMapper
     {
-        PharmacyDetailsResponse Map(Organisation pharmacy);
+        PharmacyDetails Map(Organisation pharmacy);
         
-        IEnumerable<PharmacyDetailsResponse> Map(IEnumerable<Organisation> pharmacies, GeoCoordinate postcodeCoordinate);
+        IEnumerable<PharmacyDetails> Map(IEnumerable<Organisation> pharmacies, GeoCoordinate postcodeCoordinate);
     }
 }

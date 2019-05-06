@@ -2,8 +2,8 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
 import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
-import { $t } from '../../helpers';
-import { PRESCRIPTIONS, NOMINATED_PHARMACY_CHECK } from '../../../../src/lib/routes';
+import { $t, createStore as newStore } from '../../helpers';
+import { PRESCRIPTIONS, NOMINATED_PHARMACY_CHECK, PRESCRIPTION_REPEAT_COURSES } from '../../../../src/lib/routes';
 
 let component;
 
@@ -31,40 +31,40 @@ const createHeaderCompanionButton = ($store) => {
   });
 };
 
+const createState = isValid => ({
+  device: {
+    source: 'web',
+  },
+  nominatedPharmacy: {
+    pharmacy: {
+      pharmacyName: undefined,
+    },
+    nominatedPharmacyEnabled: isValid,
+  },
+});
+
 describe('HeaderCompanionButton.vue', () => {
   it('will go to "/nominated-pharmacy/check" with no nominated pharmacy', () => {
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-        nominatedPharmacy: {
-          pharmacy: {
-            pharmacyName: null,
-          },
-        },
-      },
-    };
+    const $store = newStore(
+      { state: createState(true) },
+    );
     createHeaderCompanionButton($store);
-    expect(component.vm.activeButton.to).toEqual(NOMINATED_PHARMACY_CHECK.path);
+    expect(component.vm.path).toEqual(NOMINATED_PHARMACY_CHECK.path);
   });
 
   it('will go to "/nominated-pharmacy/check" with nominated pharmacy', () => {
-    const $store = {
-      dispatch: jest.fn(),
-      state: {
-        device: {
-          source: 'web',
-        },
-        nominatedPharmacy: {
-          pharmacy: {
-            pharmacyName: 'Boots',
-          },
-        },
-      },
-    };
+    const $store = newStore(
+      { state: createState(true) },
+    );
     createHeaderCompanionButton($store);
-    expect(component.vm.activeButton.to).toEqual(NOMINATED_PHARMACY_CHECK.path);
+    expect(component.vm.path).toEqual(NOMINATED_PHARMACY_CHECK.path);
+  });
+
+  it('will go to "/prescriptions/repeat-courses" when nominated pharmacy should not be shown', () => {
+    const $store = newStore(
+      { state: createState(false) },
+    );
+    createHeaderCompanionButton($store);
+    expect(component.vm.path).toEqual(PRESCRIPTION_REPEAT_COURSES.path);
   });
 });

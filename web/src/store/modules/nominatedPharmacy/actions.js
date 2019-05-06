@@ -10,10 +10,11 @@ import {
 } from './mutation-types';
 import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
-const formatWithOpeningTimes = (pharmacy) => {
-  const response = Object.assign({}, pharmacy);
-  if (pharmacy) {
-    response.openingTimesFormatted = mapPharmacyDetail(pharmacy.openingTimes);
+const formatWithOpeningTimes = (pharmacyResponse) => {
+  const response = Object.assign({}, pharmacyResponse);
+  if (pharmacyResponse.pharmacyDetails) {
+    // eslint-disable-next-line max-len
+    response.pharmacyDetails.openingTimesFormatted = mapPharmacyDetail(pharmacyResponse.pharmacyDetails.openingTimes);
   }
   return response;
 };

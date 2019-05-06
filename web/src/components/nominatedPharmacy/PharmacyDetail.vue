@@ -15,14 +15,14 @@
       {{ $t('nominatedPharmacy.changePharmacyLink') }}
     </analytics-tracked-tag>
     <pharmacy-opening-times id="pharmacy-opening-times"
-                            :pharmacyOpeningTime="pharmacy.openingTimesFormatted" />
+                            :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
   </div>
 </template>
 
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CANNOT_CHANGE } from '@/lib/routes';
+import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CANNOT_CHANGE, PRESCRIPTIONS } from '@/lib/routes';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
@@ -46,6 +46,7 @@ export default {
     previousPath: {
       type: String,
       required: false,
+      default: PRESCRIPTIONS.path,
     },
     canChangePharmacy: {
       type: Boolean,

@@ -1,10 +1,10 @@
 <template>
   <span v-if="activeButton && !(showApiError || hasConnectionProblem)"
         :class="$style.headerCompanion">
-    <no-js-form :action="activeButton.to" :value="activeButton.formData">
+    <no-js-form :action="path" :value="activeButton.formData">
       <button id="header-companion-button"
               :class="$style.companionButton"
-              @click.stop.prevent="onButtonClicked(activeButton.to)">
+              @click.stop.prevent="onButtonClicked(path)">
         {{ activeButton.text }}
       </button>
     </no-js-form>
@@ -24,12 +24,10 @@ export default {
   data() {
     const buttonData = {};
     buttonData[APPOINTMENTS.name] = {
-      to: APPOINTMENT_BOOKING_GUIDANCE.path,
       text: `${this.$t('appointments.index.bookButtonText')}`,
       formData: {},
     };
     buttonData[PRESCRIPTIONS.name] = {
-      to: NOMINATED_PHARMACY_CHECK.path,
       text: `${this.$t('rp01.orderPrescriptionButton')}`,
       formData: {},
     };
@@ -52,6 +50,16 @@ export default {
     },
     showApiError() {
       return this.$store.getters['errors/showApiError'];
+    },
+    path() {
+      if (this.$route.name === APPOINTMENTS.name) {
+        return APPOINTMENT_BOOKING_GUIDANCE.path;
+      }
+      if (this.$route.name === PRESCRIPTIONS.name) {
+        return this.$store.state.nominatedPharmacy.nominatedPharmacyEnabled ?
+          NOMINATED_PHARMACY_CHECK.path : PRESCRIPTION_REPEAT_COURSES.path;
+      }
+      return '';
     },
   },
   methods: {

@@ -9,7 +9,7 @@
         :pharmacy="nominatedPharmacy"
         :is-my-nominated-pharmacy="true"
         :previous-path="currentPage"
-        :canChangePharmacy="true"/>
+        :can-change-pharmacy="true"/>
     </div>
     <analytics-tracked-tag :text="$t('generic.backButton.text')">
       <generic-button
@@ -51,6 +51,11 @@ export default {
     if (store.state.nominatedPharmacy.hasLoaded === false) {
       await store.dispatch('nominatedPharmacy/clear');
       await store.dispatch('nominatedPharmacy/load');
+    }
+  },
+  created() {
+    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
+      redirectTo(this, PRESCRIPTIONS.path, null);
     }
   },
   methods: {

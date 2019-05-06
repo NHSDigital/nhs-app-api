@@ -58,11 +58,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             
             if (HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
             {
+                if (!result.HasValidPharmacyType)
+                {
+                    _logger.LogInformation("Invalid nominated pharmacy type or multiple pharmacy types exist");
+                    return new OkObjectResult(new PharmacyDetailsResponse{ NominatedPharmacyEnabled = result.HasValidPharmacyType });
+                }
+                
                 if (string.IsNullOrEmpty(result.PharmacyOdsCode))
                 {
-                    await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, "Patient does not have a nominated pharmacy set");
-                    _logger.LogInformation($"No nominated pharmacy. Returning Success.");
-                    return new OkResult();
+                    _logger.LogInformation("No nominated pharmacy. Returning Success.");
+                    return new OkObjectResult(new PharmacyDetailsResponse{ NominatedPharmacyEnabled = result.HasValidPharmacyType });
                 }
 
                 _logger.LogInformation($"Nominated pharmacy retrieved with ods code: { result.PharmacyOdsCode }");
@@ -74,7 +79,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                     var pharmacyDetails = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmacyDetailResponse.Pharmacy);
                     pharmacyDetails.PharmacyType = result.NominatedPharmacyType;
                     await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy, "Successfully retrieved nominated pharmacy");
-                    return new OkObjectResult(pharmacyDetails);
+                    return new OkObjectResult(
+                        new PharmacyDetailsResponse
+                        {
+                            PharmacyDetails = pharmacyDetails, 
+                            NominatedPharmacyEnabled = result.HasValidPharmacyType
+                        });
                 }
                 else
                 {
@@ -122,7 +132,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
                 var pharmacySearchResponse = await _pharmacySearchService.Search(postcode);
 
-                var pharmacies = Enumerable.Empty<PharmacyDetailsResponse>();
+                var pharmacies = Enumerable.Empty<PharmacyDetails>();
 
                 if (HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacySearchResponse.StatusCode))
                 {

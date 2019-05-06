@@ -10,7 +10,7 @@
       <pharmacy-summary id="pharmacy-summary"
                         :pharmacy="pharmacy" />
       <pharmacy-opening-times id="pharmacy-opening-times"
-                              :pharmacyOpeningTime="pharmacy.openingTimesFormatted" />
+                              :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
     </div>
 
     <generic-button id="back-button"
@@ -38,6 +38,11 @@ export default {
     return {
       pharmacy: this.$store.state.nominatedPharmacy.pharmacy,
     };
+  },
+  created() {
+    if (!this.$store.getters['nominatedPharmacy/nominatedPharmacyEnabled']) {
+      redirectTo(this, PRESCRIPTIONS.path, null);
+    }
   },
   methods: {
     onBackButtonClicked() {
