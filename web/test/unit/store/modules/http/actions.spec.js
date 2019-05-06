@@ -21,7 +21,7 @@ describe('actions', () => {
 
     it('will commit the IS_LOADING mutation with a value of true', () => {
       actions.isLoading(mutation);
-      expect(mutation.commit).toHaveBeenCalledWith(IS_LOADING, true);
+      expect(mutation.commit).toHaveBeenCalledWith(IS_LOADING);
     });
 
     it('will dispatch the session/updateLastCalledAt action', () => {

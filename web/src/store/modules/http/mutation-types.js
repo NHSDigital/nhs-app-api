@@ -5,6 +5,6 @@ export const CANCEL_REQUESTS = 'CANCEL_REQUESTS';
 export const INIT_HTTP = 'INIT_HTTP';
 
 export const initialState = () => ({
-  loadingCounter: 0,
+  isLoading: false,
   cancelRequestHandlers: [],
 });

@@ -73,6 +73,7 @@ export default {
     onContinueButtonClicked(event) {
       event.preventDefault();
       this.$store.dispatch('myRecord/acceptTerms');
+      this.$store.dispatch('myRecord/load');
     },
     onBackButtonClicked(event) {
       event.preventDefault();

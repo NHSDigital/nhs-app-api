@@ -9,10 +9,10 @@ import {
 
 export default {
   loadingCompleted({ commit }) {
-    commit(LOADING_COMPLETE, true);
+    commit(LOADING_COMPLETE);
   },
   isLoading({ commit }) {
-    commit(IS_LOADING, true);
+    commit(IS_LOADING);
     this.dispatch('session/updateLastCalledAt');
   },
   addCancelRequestHandler({ commit }, handler) {
