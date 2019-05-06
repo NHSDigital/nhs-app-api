@@ -408,21 +408,23 @@ components:
             type: boolean
             description: Whether the item must be included in data results.
           option:
-            type: object
-            properties:
-              valueInteger:
-                type: integer
-                description: Value of type integer.
-              valueDate:
-                type: string
-                description: Value of type date.
-              valueTime:
-                type: string
-                description: Value of type time.
-              valueString:
-                type: string
-                description: Value of type string.
-              valueCoding:
-                $ref: "#/components/schemas/coding"
-                description: Value of type coding.
-            description: Permitted answer
+            type: array
+            items:
+              type: object
+              properties:
+                valueInteger:
+                  type: integer
+                  description: Value of type integer.
+                valueDate:
+                  type: string
+                  description: Value of type date.
+                valueTime:
+                  type: string
+                  description: Value of type time.
+                valueString:
+                  type: string
+                  description: Value of type string.
+                valueCoding:
+                  $ref: "#/components/schemas/coding"
+                  description: Value of type coding.
+              description: Permitted answer
