@@ -60,7 +60,7 @@ describe('search pharmacies', () => {
 
       $http.getV1PatientPharmacies.mockResolvedValue(testPharmacies);
 
-      const expectedRequest = { postcode: testPostcode };
+      const expectedRequest = { searchTerm: testPostcode };
       const expectedResult = {
         noResultsFound: false,
         pharmacies: testPharmacies,
@@ -82,7 +82,7 @@ describe('search pharmacies', () => {
       // arrange
       $http.getV1PatientPharmacies.mockResolvedValue([]);
       const testPostcode = 'rg1';
-      const expectedRequest = { postcode: testPostcode };
+      const expectedRequest = { searchTerm: testPostcode };
       const expectedResult = { noResultsFound: true, pharmacies: [], technicalError: false };
 
       // act

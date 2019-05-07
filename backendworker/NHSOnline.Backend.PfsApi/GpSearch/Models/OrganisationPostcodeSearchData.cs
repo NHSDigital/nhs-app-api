@@ -16,6 +16,9 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
         [JsonProperty(PropertyName = "search")]
         public string Search { get; set; }
         
+        [JsonProperty(PropertyName = "searchFields")]
+        public string SearchFields { get; set; }
+        
         [JsonProperty(PropertyName = "count")]
         public bool Count { get; set; }
         

@@ -952,7 +952,15 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+              type: "object"
+              description: "error response from backend api."
+              properties: 
+                errorCode: 
+                  type: "integer"
+                  description: "error code."
+                errorMessage: 
+                  type: "string"
+                  description: "error message."
           504: 
             description: "Timeout when calling upstream system."
       post: 
@@ -997,7 +1005,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
       put: 
@@ -1090,15 +1098,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              type: "object"
-              description: "error response from backend api."
-              properties: 
-                errorCode: 
-                  type: "integer"
-                  description: "error code."
-                errorMessage: 
-                  type: "string"
-                  description: "error message."
+              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
       delete: 
@@ -1162,7 +1162,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
     /v1/patient/organdonation/referencedata: 
@@ -1214,7 +1214,7 @@
           502: 
             description: "Bad response received from upstream system."
             schema: 
-              $ref: "#/paths/~1v1~1patient~1organdonation/put/responses/502/schema"
+              $ref: "#/paths/~1v1~1patient~1organdonation/get/responses/502/schema"
           504: 
             description: "Timeout when calling upstream system."
     /v1/patient/prescriptions: 
@@ -1632,9 +1632,9 @@
         parameters: 
           - 
             in: "query"
-            name: "postcode"
+            name: "searchTerm"
             required: true
-            description: "Postcode to be used when searching for pharmacies"
+            description: "Name of the city, town or pharmacy or Postcode to be used when searching for pharmacies"
             type: "string"
         responses: 
           200: 

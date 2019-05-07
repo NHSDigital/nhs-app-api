@@ -14,9 +14,9 @@ paths:
       description: Returns Response object containing list of pharmacies matched in search.
       parameters:
         - in: query
-          name: postcode
+          name: searchTerm
           required: true
-          description: Postcode to be used when searching for pharmacies
+          description: Search term to search for pharmacies by postcode, town or pharmacy name.
           type: string
       responses:
         200:

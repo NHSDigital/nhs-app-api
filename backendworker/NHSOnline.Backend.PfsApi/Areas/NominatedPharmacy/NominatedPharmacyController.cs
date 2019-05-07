@@ -138,14 +138,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 
         [HttpGet]
         [Route("pharmacies")]
-        public async Task<IActionResult> Search([FromQuery] string postcode)
+        public async Task<IActionResult> Search([FromQuery] string searchTerm)
         {
             try
             {
                 _logger.LogEnter();
-                _logger.LogInformation($"Fetching Pharmacies for {postcode}");
+                _logger.LogInformation($"Fetching Pharmacies for {searchTerm}");
 
-                var pharmacySearchResponse = await _pharmacySearchService.Search(postcode);
+                var pharmacySearchResponse = await _pharmacySearchService.Search(searchTerm);
 
                 var pharmacies = Enumerable.Empty<PharmacyDetails>();
 

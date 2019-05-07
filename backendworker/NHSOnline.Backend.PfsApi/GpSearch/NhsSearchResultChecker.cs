@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             };
 
             _logger.LogInformationKeyValuePairs("Pharmacy postcode search summary", logDetail);
-
+            
             var searchResponse = new PharmacySearchResponse(
                 pharmacySearchResponse.StatusCode,
                 pharmacySearchResponse.Body.Organisations);

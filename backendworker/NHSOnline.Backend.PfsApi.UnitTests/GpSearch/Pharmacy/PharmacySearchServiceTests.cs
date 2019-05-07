@@ -86,6 +86,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                        }
                    }
                };
+           
            var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, new List<Organisation>
            {
                new Organisation
@@ -101,16 +102,14 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
                         p.Count &&
                         p.Top == 1 &&
                         string.Equals(p.Filter, filterName, StringComparison.Ordinal))))
-                .Returns(Task.FromResult(postcodeSearchResult));
+                .Returns(Task.FromResult(postcodeSearchResult)); 
 
            _gpLookupClient
                 .Setup(x => x.GpPostcodeSearch(It.Is<OrganisationPostcodeSearchData>(p =>
                     p.Search.Equals("Metrics:("+EPSEnabledMetricID+")", StringComparison.Ordinal) &&
                     p.QueryType.Equals("full", StringComparison.Ordinal) &&
                     p.SearchMode.Equals("all", StringComparison.Ordinal) &&
-                    p.Filter.Contains("OrganisationSubType eq 'Community Pharmacy' and "
-                                      + $"geo.distance(Geocode, geography'POINT({longitude} {latitude})') le "
-                                      + _gpLookupConfig.PharmacySearchRadiusKm, StringComparison.Ordinal) &&
+                    p.Filter.Contains("OrganisationSubType eq 'Community Pharmacy'", StringComparison.Ordinal) &&
                     p.OrderBy.Equals($"geo.distance(Geocode, geography'POINT({longitude} {latitude})')", StringComparison.Ordinal) &&
                     p.Top == _gpLookupConfig.PharmacySearchApiLimit)))
                 .Returns(Task.FromResult(pharmacyResponse));
@@ -132,6 +131,62 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch.Pharmacy
         }    
         
         
+        [TestMethod]
+        public async Task
+            Search_WhenCalledWithValidFreeText_ReturnsListOfPharmacies()
+        {
+           // Arrange
+           const string searchTerm = "leeds";
+
+           var organisationReturnResults = new List<Organisation>
+           {
+               new Organisation { OrganisationName = "pharmacy_name_from_GP_lookup_Client_1" },
+               new Organisation { OrganisationName = "pharmacy_name_from_GP_lookup_Client_2" }
+           };
+            
+           var organisationReturnResult =
+               new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
+               {
+                   Body = new NhsOrganisationSearchResponse
+                   {
+                       Organisations = organisationReturnResults,
+                       OrganisationCount = 2,
+                   }
+               };
+           
+           var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, new List<Organisation>
+           {
+               new Organisation {OrganisationName = "organisation_name_from_checker_1"},
+               new Organisation {OrganisationName = "organisation_name_from_checker_2"},
+           });
+            
+            _gpLookupClient
+                .Setup(x => x.GpSearch(It.Is<OrganisationSearchData>(p =>
+                    p.Search.Equals($"Metrics:{ EPSEnabledMetricID } AND { searchTerm }*", StringComparison.Ordinal) &&
+                    p.QueryType.Equals("full", StringComparison.Ordinal) &&
+                    p.SearchMode.Equals("all", StringComparison.Ordinal) &&
+                    p.SearchFields.Equals("OrganisationName,Address2,Address3,City", StringComparison.Ordinal) &&
+                    p.Filter.Contains("OrganisationSubType eq 'Community Pharmacy'", StringComparison.Ordinal) &&
+                    p.Top == _gpLookupConfig.PharmacySearchApiLimit)))
+                .Returns(Task.FromResult(organisationReturnResult))
+                .Verifiable();
+            
+            _nhsSearchResultChecker
+                .Setup(x => x.CheckPharmacies(organisationReturnResult, It.IsAny<string>()))
+                .Returns(pharmacySearchResponse);
+            
+            // Act
+            var result = await _pharmacySearchService.Search(searchTerm);
+            
+            // Assert
+            _gpLookupClient.Verify();
+            var response = result.Should().BeAssignableTo<PharmacySearchResponse>().Subject;
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.Pharmacies.Count.Should().Be(2);
+            response.Pharmacies[0].OrganisationName.Should().Be("organisation_name_from_checker_1");  
+        }    
+
+               
         [TestMethod]
         [DataRow(null)]
         [DataRow("")]

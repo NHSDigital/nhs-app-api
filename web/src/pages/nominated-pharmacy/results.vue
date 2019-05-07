@@ -5,10 +5,14 @@
         {{ $t('nominatedPharmacySearchResults.errors.noResultsFound.header') }}
       </h2>
       <p> {{ foundNoResults }} </p>
+      <h2>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.subHeader') }}</h2>
+      <ul :class="$style.bullet">
+        <li>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.message1') }}</li>
+        <li>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.message2') }}</li>
+      </ul>
     </div>
     <div v-if="!noResultsFound">
-      <h2>{{ foundResults }}</h2>
-      <p>{{ $t('nominatedPharmacySearchResults.resultSummary.showingAll') }}</p>
+      <p>{{ foundResults }}</p>
       <ul id="searchResults"
           :class="[$style['list-menu-white'], $style.resultList]">
         <li v-for="pharmacy in pharmacies"
@@ -142,5 +146,10 @@ export default {
    padding-bottom: 1rem;
    color: $dark_grey;
    font-weight: 700;
+}
+
+.bullet {
+  list-style-type: disc;
+  padding-left: 1rem;
 }
 </style>

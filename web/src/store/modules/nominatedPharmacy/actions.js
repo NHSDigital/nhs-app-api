@@ -12,9 +12,9 @@ import mapPharmacyDetail from '@/lib/pharmacy-detail/mapper';
 
 const formatWithOpeningTimes = (pharmacyResponse) => {
   const response = Object.assign({}, pharmacyResponse);
-  if (pharmacyResponse.pharmacyDetails) {
+  if (response) {
     // eslint-disable-next-line max-len
-    response.pharmacyDetails.openingTimesFormatted = mapPharmacyDetail(pharmacyResponse.pharmacyDetails.openingTimes);
+    response.openingTimesFormatted = mapPharmacyDetail(pharmacyResponse.openingTimes);
   }
   return response;
 };
@@ -26,7 +26,9 @@ export default {
         ignoreError: true,
       })
       .then((data) => {
-        commit(NOMINATED_PHARMACY_LOADED, formatWithOpeningTimes(data));
+        const pharmacyResponse = data;
+        pharmacyResponse.pharmacyDetails = formatWithOpeningTimes(data.pharmacyDetails);
+        commit(NOMINATED_PHARMACY_LOADED, data);
       })
       .catch(() => {});
   },

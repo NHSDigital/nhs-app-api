@@ -125,7 +125,7 @@ export default {
       };
 
       const pharmacySearchParams = {
-        postcode: searchQuery,
+        searchTerm: searchQuery,
       };
 
       await this.$store.app.$http.getV1PatientPharmacies(pharmacySearchParams)

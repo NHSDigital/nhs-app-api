@@ -44,25 +44,25 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                     {
                         Day = x.WeekDay?.ToString(),
                         Time = x.Times,
-                    }),
-            };
-            
+                    })
+            };      
             return pharmacyDetails;
         }
 
 
-        public IEnumerable<PharmacyDetails> Map(IEnumerable<Organisation> pharmacies, GeoCoordinate postcodeCoordinate)
-        {
+      public IEnumerable<PharmacyDetails> Map(IEnumerable<Organisation> pharmacies, GeoCoordinate postcodeCoordinate)
+       {
             foreach (var pharmacy in pharmacies)
             {
                 yield return Map(pharmacy, postcodeCoordinate);
             }
-        }
+       } 
+      
 
-        private PharmacyDetails Map(Organisation pharmacy, GeoCoordinate postcodeCoordinate)
+       private PharmacyDetails Map(Organisation pharmacy, GeoCoordinate postcodeCoordinate)
         {
-            var result = Map(pharmacy);
-
+            var result = Map(pharmacy); 
+            
             if (postcodeCoordinate != null)
             {
                 try
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 {
                     _logger.LogError(ex, "Invalid GeoCoordinates");
                 }
-            }          
+            }         
             return result;
         }
 

@@ -25,8 +25,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 
         public Geocode Geocode { get; set; }
 
-        public IEnumerable<string> ServicesProvided { get; set; }
-
         public string OpeningTimes { get; set; }
 
         public string Contacts { get; set; }

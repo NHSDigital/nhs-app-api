@@ -13,7 +13,5 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         string GpLookupApiKey { get; }
 
         string PostcodeLookupSearchRadiusKm { get; }
-
-        string PharmacySearchRadiusKm { get; }
     }
 }
