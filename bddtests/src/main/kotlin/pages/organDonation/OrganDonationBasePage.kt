@@ -3,6 +3,8 @@ package pages.organDonation
 import pages.HybridPageElement
 import pages.HybridPageObject
 
+const val RACE_CONDITION_WAIT: Long = 50
+
 abstract class OrganDonationBasePage: HybridPageObject() {
 
     abstract val titleText: String
@@ -19,6 +21,12 @@ abstract class OrganDonationBasePage: HybridPageObject() {
 
     fun clickContinue() {
         clickOnButtonContainingText("Continue")
+    }
+    
+    fun clickButton(buttonText:String) {
+        //This wait has been added to ensure race condition does not occur on organ donation pages
+        Thread.sleep(RACE_CONDITION_WAIT)
+        clickOnButtonContainingText(buttonText)
     }
 
     abstract fun assertDisplayed()

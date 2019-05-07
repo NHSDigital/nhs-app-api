@@ -78,10 +78,6 @@ Feature: Login
     Examples:
       | GP System |
       | TPP       |
-
-  @nativesmoketest
-    Examples:
-      | GP System |
       | EMIS      |
 
   Scenario: A EMIS user can log out using the header link

@@ -3,7 +3,7 @@
 Feature: View available appointment slots
   Users can view available appointments from the available appointments Page.
 
-  #HAPPY PATH JOURNEYS
+  #This test covers navigation via buttons/links
 
   #GP System agnostic scenario, so only need to test with EMIS
 
@@ -14,7 +14,7 @@ Feature: View available appointment slots
     And I am on the Available Appointments page
     Then the appointments menu button is highlighted
 
-  #FEATURE JOURNEYS
+# These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: A <GP System> user enters the available appointments page
     Given there are available appointment slots with different criteria for <GP System>

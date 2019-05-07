@@ -2,7 +2,7 @@
 Feature: View prescriptions error cases
   A user can view information about their prescriptions after logging in
 
-  #Feature Journies
+# These tests navigate directly to the pages where the features are to be tested, to save time.
 
   @nativesmoketest
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out

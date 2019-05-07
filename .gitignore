@@ -5,6 +5,7 @@
 .vscode/
 .DS_Store
 audit.txt
+web.DotSettings.user
 
 # Chromedriver#
 ######################

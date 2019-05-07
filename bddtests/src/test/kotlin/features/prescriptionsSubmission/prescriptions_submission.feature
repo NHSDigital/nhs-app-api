@@ -6,7 +6,7 @@ Feature: Prescriptions submission
   Background:
     Given the scenario is submit prescription
 
-  #HAPPY PATH JOURNIES
+  #This test covers navigation via buttons/links
 
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
     And I am using <GP System> GP System to submit my prescription
@@ -24,7 +24,7 @@ Feature: Prescriptions submission
     | GP System |
     | TPP       |
 
-  #FEATURE PATH JOURNIES
+# These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
     And I am using <GP System> GP System to submit my prescription

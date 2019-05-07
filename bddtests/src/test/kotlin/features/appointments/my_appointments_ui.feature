@@ -3,7 +3,7 @@
 Feature: My appointments UI with Javascript
   Users can view their upcoming and past appointments in the My Appointments screen.
 
-  #HAPPY PATH JOURNIES
+  #This test covers navigation via buttons/links
 
   Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
     Given the <GP System> GP appointment system is unavailable
@@ -22,7 +22,7 @@ Feature: My appointments UI with Javascript
       | GP System |
       | EMIS      |
 
-  #FEATURE JOURNIES
+  # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: A <GP System> user sees appropriate messages when they have no upcoming or historical appointments
     Given I have no booked appointments for <GP System>

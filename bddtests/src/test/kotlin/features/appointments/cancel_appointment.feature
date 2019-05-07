@@ -2,7 +2,7 @@
 @cancel
 Feature: Ability to cancel an appointment
 
-  #HAPPY PATH JOURNIES
+  #This test covers navigation via buttons/links
 
   @nativesmoketest
   Scenario Outline: <GP System> user is presented with the cancel appointment screen with a drop-down
@@ -17,7 +17,7 @@ Feature: Ability to cancel an appointment
       | GP System |
       | EMIS      |
 
-  #FEATURE JOURNIES
+# These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: <GP System> user is presented with the cancel appointment screen with a drop-down
     Given I have upcoming appointments before cutoff time for <GP System>

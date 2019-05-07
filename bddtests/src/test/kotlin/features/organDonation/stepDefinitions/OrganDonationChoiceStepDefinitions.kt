@@ -8,6 +8,7 @@ import net.thucydides.core.annotations.Steps
 import pages.MorePage
 import pages.assertIsVisible
 import pages.navigation.HeaderNative
+import pages.navigation.NavBarNative
 import pages.organDonation.OrganDonationChoicePage
 
 open class OrganDonationChoiceStepDefinitions {
@@ -17,11 +18,16 @@ open class OrganDonationChoiceStepDefinitions {
     lateinit var header: HeaderNative
     lateinit var morePage: MorePage
     lateinit var organDonationChoicePage: OrganDonationChoicePage
+    lateinit var navbarNative: NavBarNative
 
     @When("^I navigate to the internal Organ Donation Page")
     fun iNavigateToTheInternalOrganDonationPage() {
-        val url = PageUrl().getPage("more", morePage.onMobile())
-        browser.browseTo(url)
+        if (!morePage.onMobile()) {
+            val url = PageUrl().getPage("more", morePage.onMobile())
+            browser.browseTo(url)
+        } else {
+            navbarNative.select(NavBarNative.NavBarType.MORE)
+        }
         morePage.btnOrganDonation.click()
     }
 

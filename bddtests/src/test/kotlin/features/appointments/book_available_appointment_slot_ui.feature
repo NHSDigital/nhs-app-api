@@ -5,7 +5,7 @@ Feature: Book an available appointment slot UI with Javascript
   As a logged in user
   I want to be able to select, confirm and book selected appointment
 
-  #HAPPY PATH JOURNEYS
+  #This test covers navigation via buttons/links
 
   Scenario Outline: A <GP System> user can navigate to the available appointments page
     Given there are multiple appointment slots at the same time, provided by <GP System>
@@ -16,7 +16,8 @@ Feature: Book an available appointment slot UI with Javascript
       | GP System |
       | EMIS      |
 
-  #FEATURE JOURNEYS
+  # These tests navigate directly to the pages where the features are to be tested, to save time.
+
   Scenario Outline: Only one appointment slot time is displayed when multiple are available for <GP System>
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And a booked appointment can be cancelled

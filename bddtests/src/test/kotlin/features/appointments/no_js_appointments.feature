@@ -5,7 +5,7 @@ Feature: Appointment Service with no Javascript
   Background:
     Given I have disabled javascript
 
-  #HAPPY PATH JOURNIES
+  #This test covers navigation via buttons/links
 
   Scenario Outline: A <GP System> user can find and book available appointments with javascript disabled
     Given there are multiple appointment slots at the same time, provided by <GP System>
@@ -41,7 +41,7 @@ Feature: Appointment Service with no Javascript
       | TPP       |
       | VISION    |
 
-  #FEATURE JOURNIES
+ # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   @bug @NHSO-3651
   Scenario Outline: A <GP System> user is presented with guidance when booking an appointment and can proceed to check

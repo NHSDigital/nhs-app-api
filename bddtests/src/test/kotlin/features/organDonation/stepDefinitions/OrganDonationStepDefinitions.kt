@@ -3,6 +3,7 @@ package features.organDonation.stepDefinitions
 import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.data.organDonation.OrganDonationRegistrationDataBuilder
@@ -11,6 +12,7 @@ import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
 import pages.navigation.HeaderNative
 import pages.navigation.NavBarNative
+import pages.organDonation.OrganDonationBasePage
 import pages.organDonation.OrganDonationChoicePage
 import pages.organDonation.OrganDonationFaithModule
 import java.net.URL
@@ -26,6 +28,8 @@ open class OrganDonationStepDefinitions {
 
     lateinit var header: HeaderNative
     lateinit var organDonationChoicePage: OrganDonationChoicePage
+    @Steps
+    lateinit var page: OrganDonationBasePage
 
     @Given("I am a (\\w+) user registered with organ donation to not donate my organs")
     fun iAmRegisteredWithOrganDonationToNotDonateOrgans(gpSystem: String) {
@@ -129,6 +133,11 @@ open class OrganDonationStepDefinitions {
     @Given("^the organ donation toggle is set to target the internal page$")
     fun toggleOrganDonationSiteLink() {
         browser.appendSourceQueryString("ios")
+    }
+
+    @When("^I click the '(.*)' button on an Organ Donation page$")
+    fun iClickTheButtonOnThePage(buttonText: String) {
+        page.clickButton(buttonText)
     }
 
     @Then("^the external Organ Donation page is displayed$")

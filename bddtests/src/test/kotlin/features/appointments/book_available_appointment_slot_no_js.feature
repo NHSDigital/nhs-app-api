@@ -9,7 +9,7 @@ Feature: Book an available appointment slot UI without Javascript
   Background:
     Given I have disabled javascript
 
-    #HAPPY PATH JOURNEYS
+    #This test covers navigation via buttons/links
 
     # EMIS/Microtest Specific Scenarios (For EMIS/Microtest telephone appointment)
     # The following scenarios covered only telephone appointment options.
@@ -31,7 +31,8 @@ Feature: Book an available appointment slot UI without Javascript
       | EMIS      |
       | MICROTEST |
 
-  #FEATURE JOURNEYS
+
+# These tests navigate directly to the pages where the features are to be tested, to save time.
 
   Scenario Outline: A <GP System> user with noJs can only enter a phone number for phone appointments, when they have <User's Telephone Numbers> phone number saved
     Given I have <User's Telephone Numbers> telephone number(s) stored for <GP System>

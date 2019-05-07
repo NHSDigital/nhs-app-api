@@ -2,7 +2,7 @@
 Feature: View prescriptions
   A user can view information about their prescriptions after logging in
 
-  #HAPPY PATH JOURNIES
+  #This test covers navigation via buttons/links
 
   @nativesmoketest
   Scenario Outline: <GP System> patient selects the prescriptions menu button
@@ -17,7 +17,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
 
-  #FEATURE PATH JOURNIES
+  # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   @nativesmoketest
   Scenario Outline: <GP System> patient with no past repeat prescriptions

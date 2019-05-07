@@ -13,8 +13,8 @@ open class PageUrl {
                 "data sharing"                 to "/data-sharing",
                 "my prescriptions"             to "/prescriptions",
                 "prescription repeat courses"  to "/prescriptions/repeat-courses",
-                "organ donation"               to "/organ-donation",
-                "more"                         to getMorePageUrl(isOnMobile),
+                "organ donation"               to getPageUrl(isOnMobile, "/organ-donation"),
+                "more"                         to getPageUrl(isOnMobile, "/more"),
                 "account"                      to "/account",
                 "terms and conditions"         to "/terms-and-conditions"
                 )
@@ -22,11 +22,11 @@ open class PageUrl {
         return "${Config.instance.url}$path"
     }
 
-    private fun getMorePageUrl(isOnMobile: Boolean): String {
-        val defaultUrl = "/more"
-        val urlForWeb = "$defaultUrl?source=ios"
+    private fun getPageUrl(isOnMobile: Boolean, urlString: String): String {
+        val urlForWeb = "$urlString?source=ios"
+        val suffix = Config.instance.nativeUrlSuffix
         return when (isOnMobile) {
-            true -> defaultUrl
+            true -> "$urlString$suffix"
             false -> urlForWeb
         }
     }

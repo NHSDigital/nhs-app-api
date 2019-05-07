@@ -30,6 +30,8 @@ TC_CPUS=${TC_CPUS:-3}
 TC_RAM=${TC_RAM:-3g}
 MAX_TESTTHREADS=${MAX_TESTTHREADS:-8}
 ACCESSIBILITY_OUTPUT=${ACCESSIBILITY_OUTPUT_FOLDER:-accessibilityoutput}
+IOSURLSUFFIX="?source=ios"
+ADROIDURLSUFFIX="?source=android"
 
 # Free up some docker space if on TC
 
@@ -77,14 +79,14 @@ else
           @onlineconsultations"
         elif [ "$RUN_NATIVE" == 1 ] && [ "$BROWSER" == "browserstack_ios" ]
         then
-          info "Main Tranche - Full BDD Test including Long Running Run Configured"
+          info "Main Tranche - Full iOS BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @nativepending and not
           @nativebug and not @backend and not @bug and not @pending and not @manual and not @tech-debt and not
           @throttling and not @cosmos and not @noJs and not @android and not @accessibility and not
           @onlineconsultations"
         elif [ "$RUN_NATIVE" == 1 ] && [ "$BROWSER" == "browserstack_android" ]
         then
-          info "Main Tranche - Full BDD Test including Long Running Run Configured"
+          info "Main Tranche - Full Android BDD Test including Long Running Run Configured"
           BDD_CUCUMBER_OPTIONS_PREFIX="--tags 'not @nativepending and not
           @nativebug and not @backend and not @bug and not @pending and not @manual and not @tech-debt and not
           @throttling and not @cosmos and not @noJs and not @ios and not @accessibility and not @onlineconsultations"
@@ -152,6 +154,7 @@ then
   if [ "$BROWSER" == "browserstack_android" ]
   then
     APPIUM_TYPE="-Dappium.platformName=ANDROID"
+    URLSUFFIX="URL_NATIVE_SUFFIX=$ADROIDURLSUFFIX"
     if [ -z "$DEVICE" ] && [ -z "$OS" ]
     then
         DEVICENAME="BROWSERSTACK_DEVICE_NAME=$DEVICE"
@@ -162,10 +165,12 @@ then
     fi
   else
     APPIUM_TYPE="-Dappium.platformName=iOS"
+    URLSUFFIX="URL_NATIVE_SUFFIX=$IOSURLSUFFIX"
     if [ -z "$DEVICE" ] && [ -z "$OS" ]
     then
         DEVICENAME="BROWSERSTACK_DEVICE_NAME=$DEVICE"
         OSVERSION="BROWSERSTACK_OS_VERSION=$OS"
+
     else
         DEVICENAME="BROWSERSTACK_DEVICE_NAME=\"iPhone 8\""
         OSVERSION="BROWSERSTACK_OS_VERSION=12.1"
@@ -259,7 +264,11 @@ info "Running $TAG tests"
 
   if [ $TAG == "nativesmoketest" ]
   then
-    sed -i '' -e 's/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=3/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=10/g' vars_ci_run.env
+    sed -i '' -e 's/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=3/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=5/g' vars_ci_run.env
+    sed -i '' -e 's/expireAfterSeconds:60/expireAfterSeconds:300/g' docker-compose_ci_run.yml
+  else
+    sed -i '' -e 's/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=5/ConfigurationSettings\_\_DefaultSessionExpiryMinutes\=3/g' vars_ci_run.env
+    sed -i '' -e 's/expireAfterSeconds:300/expireAfterSeconds:60/g' docker-compose_ci_run.yml
   fi
 
   # Run docker tests per tag
@@ -315,7 +324,7 @@ info "Running $TAG tests"
         echo $(DATE) - $TAG Starting
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
-        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
+        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
         APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
         ./gradlew test --stacktrace \
           -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \
@@ -332,7 +341,7 @@ info "Running $TAG tests"
       $DOCKER_IMAGE bash -c " \
         cd /repo ; \
         $BROWSERSTACK_LOCAL_STRING \
-        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME \
+        BROWSERSTACK_ACCESSKEY=$BROWSERSTACK_ACCESSKEY BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME $URLSUFFIX\
         APP_PATH=$BROWSERSTACK_APPPATH BROWSERSTACK_LOCAL_IDENTIFIER=$NETWORK $DEVICENAME $OSVERSION $APPSCHEME $AUTOLOGIN \
         ./gradlew test --stacktrace \
           -Dcucumber.options=\"--strict $BDD_CUCUMBER_OPTIONS \" \

@@ -135,11 +135,9 @@ open class HybridPageObject : PageObject() {
     fun clickOnButtonContainingText(text: String) {
         HybridPageElement(
                 webDesktopLocator = "//button",
-                androidLocator = null,
                 page = this,
                 timeToWaitForElement = 30
-        )
-                .withText(text, false).assertIsVisible().click()
+        ).withText(text, false).assertIsVisible().click()
     }
 
     fun clickOnBackLink() {
@@ -163,4 +161,3 @@ open class HybridPageObject : PageObject() {
         namedLinkWthGivenUrl(linkTitle,url).click()
     }
 }
-

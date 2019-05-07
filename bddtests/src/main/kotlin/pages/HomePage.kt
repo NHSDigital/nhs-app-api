@@ -17,6 +17,13 @@ open class HomePage : HybridPageObject() {
             helpfulName = "Greeting"
     )
 
+    val dismissButton = HybridPageElement(
+            webDesktopLocator = "//a[@id='btn_biometricBannerDismiss']",
+            androidLocator = null,
+            page = this,
+            helpfulName = "Dismiss Button"
+        ).withText("Dismiss", false)
+
     private val betaBanner = HybridPageElement(
             webDesktopLocator = "//div[span[@data-purpose = 'beta-banner']]//span[contains(text(), " +
                     "'BETA')]/following-sibling::span[contains(text(),'This is a new service')]",

@@ -7,7 +7,7 @@ Feature: My appointments UI without Javascript
   Background:
     Given I have disabled javascript
 
-  #HAPPY PATH JOURNIES
+  #This test covers navigation via buttons/links
 
   Scenario: An EMIS user sees appropriate messages when they have no upcoming or historical appointments
     Given I have no booked appointments for EMIS
@@ -18,7 +18,7 @@ Feature: My appointments UI without Javascript
     And I am informed I have no historical appointments
     And I can book an appointment
 
-   #FEATURE JOURNIES
+ # These tests navigate directly to the pages where the features are to be tested, to save time.
 
   #    Only testing each Scenario for 1 GP System, for no JS
 
