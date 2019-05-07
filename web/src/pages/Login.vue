@@ -77,7 +77,7 @@ export default {
     return {
       authoriseUrl: BEGINLOGIN.path,
       isButtonDisabled: false,
-      organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
+      organDonationUrl: this.$store.app.$env.ORGAN_DONATION_THROTTLING_URL,
       practiceParticipating: true,
       practiceName: undefined,
       practiceAddress: undefined,

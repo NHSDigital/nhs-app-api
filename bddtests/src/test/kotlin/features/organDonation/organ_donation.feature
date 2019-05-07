@@ -161,7 +161,7 @@ Feature: Organ Donation
     And I navigate to the internal Organ Donation Choice Page
     When I follow the opt-out journey to the 'Confirmation' page
     When I select the 'Register to be a blood donor' link on the Organ Donation View Registration page
-    Then a new tab opens with a host name matching that of https://my.blood.co.uk/preregister
+    Then a new tab opens with a host name matching that of https://www.blood.co.uk/
 
   Scenario: A user can navigate back through the opt out journey
     Given I am a EMIS user not registered with organ donation, who wishes to register and opt out

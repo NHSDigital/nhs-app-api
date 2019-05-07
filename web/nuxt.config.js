@@ -77,7 +77,8 @@ const config = {
     // Organ Donation
     ORGAN_DONATION_FIND_OUT_MORE_URL: 'https://www.organdonation.nhs.uk/app/app-donation/',
     ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',
-    BLOOD_DONATION_URL: 'https://my.blood.co.uk/preregister',
+    ORGAN_DONATION_THROTTLING_URL: 'https://www.organdonation.nhs.uk/',
+    BLOOD_DONATION_URL: 'https://www.blood.co.uk/',
     ORGAN_DONATION_ALREADY_REGISTERED_URL: 'https://www.organdonation.nhs.uk/app/app-check/',
     ORGAN_DONATION_SHARE_DECISION_URL: 'https://www.organdonation.nhs.uk/app/app-share/',
     ORGAN_DONATION_TELL_FAMILY_URL: 'https://www.organdonation.nhs.uk/app/app-tell/',
