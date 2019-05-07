@@ -8,21 +8,21 @@ Feature: Login error messages
   Scenario: CitizenID provides invalid data after successful login
     Given I am logged into Citizen ID but am receiving invalid data
     Then I see the appropriate error message for a login error
-    When I click on the navigation button
+    When I click on the navigation action
     Then I see the login page
 
   @native-smoketest
   Scenario: CitizenID login is successful but GP System authentication fails
     Given I am logged into Citizen ID but GP System authentication fails
     Then I see the appropriate error message for a login error
-    When I click on the navigation button
+    When I click on the navigation action
     Then I see the login page
 
   @native-smoketest
   Scenario: CitizenID login is successful but GP System session cannot be established
     Given I am logged into Citizen ID but GP System session cannot be established
     Then I see the appropriate error message for a login error
-    When I click on the navigation button
+    When I click on the navigation action
     Then I see the login page
 
   Scenario Outline: Cannot log in as a <GP System> user with no Date of Birth

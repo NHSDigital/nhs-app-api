@@ -243,7 +243,7 @@ Feature: View available appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     Then I see appropriate information message for time-outs
-    When I click the 'Try again' button
+    When I click the 'Try again' action
     Then I see appropriate information message for time-outs
     And there should be a button to try again
     Examples:
@@ -260,7 +260,7 @@ Feature: View available appointment slots
     And I am logged in
     When I retrieve the 'Appointment Booking' page directly
     Then I see a timeout on the appointment booking page
-    When I click the 'Try again' button
+    When I click the 'Try again' action
     Then I am able to filter on available slots
     Examples:
       | GP System |

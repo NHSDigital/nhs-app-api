@@ -11,7 +11,8 @@ open class ErrorPage : HybridPageObject() {
     private val subHeaderLocator = String.format(errorTextFinderFormat, "msg-subheader")
     private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
     private val extraMessageTextLocator = String.format(errorTextFinderFormat, "msg-extratext")
-    private val backButtonLocator = "//button[@data-purpose='retry-or-back-button']"
+    private val backButtonLocator = "//*[@data-purpose='retry-or-back-button']"
+    private val desktopBackLinkLocator = "//*[@data-purpose='retry-or-back-button']"
     lateinit var headerNative: HeaderNative
 
     val heading = findElementByLocator(headerLocator)
@@ -22,11 +23,17 @@ open class ErrorPage : HybridPageObject() {
 
     private val errorText2 = findElementByLocator(extraMessageTextLocator)
 
-    val button = findElementByLocator(backButtonLocator)
+    val button = findElementByLocator(
+            locator = desktopBackLinkLocator,
+            iOSLocator = backButtonLocator,
+            androidLocator = backButtonLocator
+    )
 
-    protected fun findElementByLocator(locator: String, androidLocator: String? = null): HybridPageElement {
+    protected fun findElementByLocator(locator: String, iOSLocator: String? = null,
+                                       androidLocator: String? = null): HybridPageElement {
         return HybridPageElement(
                 webDesktopLocator = locator,
+                iOSLocator = iOSLocator,
                 androidLocator = androidLocator,
                 page = this,
                 timeToWaitForElement = 45

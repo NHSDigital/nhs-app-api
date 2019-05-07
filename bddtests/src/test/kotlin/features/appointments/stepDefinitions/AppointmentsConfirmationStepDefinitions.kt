@@ -148,9 +148,9 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.checkErrorSendingMessage()
     }
 
-    @Then("^there should be a button to go back to my appointments$")
+    @Then("^there should be an action to go back to my appointments$")
     fun thenThereShouldBeAButtonToGoBackToMyAppointments() {
-        appointmentsConfirmationSteps.checkIfButtonIsVisible("Back to my appointments")
+        appointmentsConfirmationSteps.checkIfActionIsVisible("Back to my appointments")
     }
 
     @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")

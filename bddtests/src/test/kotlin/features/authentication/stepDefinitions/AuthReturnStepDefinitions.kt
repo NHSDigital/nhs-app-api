@@ -76,4 +76,9 @@ class AuthReturnStepDefinitions : AbstractSteps() {
         authReturnPage.clickOnButtonContainingText(retryButtonText)
     }
 
+    @Then("I click on the navigation action")
+    fun thenICLickOnTheNavigationAction() {
+        val retryText = authReturnPage.errorCtaText
+        authReturnPage.clickOnActionContainingText(retryText)
+    }
 }

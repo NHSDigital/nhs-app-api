@@ -2,7 +2,10 @@
 import Vuex from 'vuex';
 import { mount, createLocalVue } from '@vue/test-utils';
 import BookingPage from '@/pages/appointments/booking';
-import { $t, $tc } from '../../helpers';
+import { create$T } from '../../helpers';
+
+const $t = create$T();
+const $tc = $t;
 
 const app = {
   $analytics: {

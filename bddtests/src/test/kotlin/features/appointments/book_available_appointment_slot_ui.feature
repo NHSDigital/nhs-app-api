@@ -109,7 +109,7 @@ Feature: Book an available appointment slot UI with Javascript
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then I see appropriate information message after 10 seconds when it times-out on appointment confirmation page
-    And there should be a button to go back to my appointments
+    And there should be an action to go back to my appointments
     Examples:
       | GP System |
       | EMIS      |
@@ -125,7 +125,7 @@ Feature: Book an available appointment slot UI with Javascript
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then I see appropriate information message when there is an error sending data on appointment confirmation page
-    And there should be a button to go back to my appointments
+    And there should be an action to go back to my appointments
     Examples:
       | GP System |
       | TPP       |

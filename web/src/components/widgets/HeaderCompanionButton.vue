@@ -1,5 +1,6 @@
 <template>
-  <span v-if="activeButton" :class="$style.headerCompanion">
+  <span v-if="activeButton && !(showApiError || hasConnectionProblem)"
+        :class="$style.headerCompanion">
     <no-js-form :action="activeButton.to" :value="activeButton.formData">
       <button id="header-companion-button"
               :class="$style.companionButton"
@@ -45,6 +46,12 @@ export default {
         };
       }
       return activeButtonData;
+    },
+    hasConnectionProblem() {
+      return this.$store.state.errors.hasConnectionProblem;
+    },
+    showApiError() {
+      return this.$store.getters['errors/showApiError'];
     },
   },
   methods: {

@@ -137,15 +137,6 @@ open class HybridPageObject : PageObject() {
                 .withText(text, false).assertIsVisible().click()
     }
 
-    fun clickOnLinkContainingText(text: String) {
-        HybridPageElement(
-                webDesktopLocator = "//a",
-                androidLocator = null,
-                page = this
-        )
-                .withText(text, false).assertIsVisible().click()
-    }
-
     fun clickOnBackLink() {
         HybridPageElement(
                 webDesktopLocator = "//a[@data-purpose='main-back-button']",
@@ -158,10 +149,28 @@ open class HybridPageObject : PageObject() {
         return this.text.removeSuffix(charValToRemove)
     }
 
-    fun isButtonVisible(button: String): Boolean {
-        return findBy<WebElementFacade>(
-                "//button[contains(text()," +
-                        "'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
+    private fun getActionPageElement(actionText: String): HybridPageElement {
+        val webLocator = "//a[contains(text(),'$actionText')]"
+        val nativeLocator = "//button[contains(text(),'$actionText')]"
+        return HybridPageElement(
+                webDesktopLocator = webLocator,
+                iOSLocator = nativeLocator,
+                androidLocator = nativeLocator,
+                page = this,
+                timeToWaitForElement = 30
+        ).withText(actionText, false)
+    }
+
+    fun isActionVisible(actionText: String): Boolean {
+        return getActionPageElement(actionText)
+                .element
+                .isCurrentlyVisible
+    }
+
+    fun clickOnActionContainingText(actionText: String) {
+        getActionPageElement(actionText)
+                .assertIsVisible()
+                .click()
     }
 }
 

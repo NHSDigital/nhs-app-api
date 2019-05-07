@@ -104,8 +104,8 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     val backToMyAppointmentsButton = HybridPageElement(
-            webDesktopLocator = "//button[contains(text(),'Back to my appointments')]",
-            androidLocator = null,
+            webDesktopLocator = "//a[contains(text(),'Back to my appointments')]",
+            androidLocator = "//button[contains(text(),'Back to my appointments')]",
             page = this
     )
 

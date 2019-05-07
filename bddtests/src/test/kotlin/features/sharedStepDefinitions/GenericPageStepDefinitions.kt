@@ -16,6 +16,11 @@ class GenericPageStepDefinitions {
     @Steps
     lateinit var browser: BrowserSteps
 
+     @When("^I click the '(.*)' action$")
+     fun iClickTheAction(actionText: String) {
+         genericPage.clickOnActionContainingText(actionText)
+     }
+
      @When("^I click the '(.*)' button$")
      fun iClickTheButton(buttonText: String) {
          genericPage.clickOnButtonContainingText(buttonText)
@@ -23,7 +28,7 @@ class GenericPageStepDefinitions {
 
     @When("^I click the '(.*)' link$")
     fun iClickTheLink(linkText: String) {
-        genericPage.clickOnLinkContainingText(linkText)
+        genericPage.clickOnActionContainingText(linkText)
     }
 
     @When("^I click the Back link$")

@@ -84,8 +84,8 @@ open class AppointmentsConfirmationSteps {
     }
 
     @Step
-    fun checkIfButtonIsVisible(button: String) {
-        val isVisible = appointmentsConfirmation.isButtonVisible(button)
+    fun checkIfActionIsVisible(action: String) {
+        val isVisible = appointmentsConfirmation.isActionVisible(action)
         Assert.assertTrue(isVisible)
     }
 

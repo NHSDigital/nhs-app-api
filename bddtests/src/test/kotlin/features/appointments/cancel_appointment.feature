@@ -143,7 +143,7 @@ Feature: Ability to cancel an appointment
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
     Then I see appropriate information message when there is an error sending data on appointment confirmation page
-    And there should be a button to go back to my appointments
+    And there should be an action to go back to my appointments
     Examples:
       | Reason           | GP System |
       | Unable to attend | EMIS      |

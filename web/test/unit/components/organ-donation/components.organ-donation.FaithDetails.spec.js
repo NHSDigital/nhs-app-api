@@ -1,6 +1,6 @@
 import FaithDetails from '@/components/organ-donation/FaithDetails';
 import { initialState } from '@/store/modules/organDonation/mutation-types';
-import { $t, createStore, mount } from '../../helpers';
+import { createStore, mount } from '../../helpers';
 
 describe('faith details', () => {
   let wrapper;
@@ -15,7 +15,6 @@ describe('faith details', () => {
 
     wrapper = mount(FaithDetails, {
       $store,
-      $t,
       propsData: { declaration: 'value' },
     });
   });

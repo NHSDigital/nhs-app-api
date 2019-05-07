@@ -1,13 +1,23 @@
 <template>
-  <div id="app">
-    <header-slim :show-in-native="true" :click-url="loginUrl">{{ headerTitle }}</header-slim>
-    <main :class="mainClass">
-      <spinner />
-      <connection-error />
-      <api-error />
-      <flash-message />
-      <nuxt />
-    </main>
+  <div id="app" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+    <div v-if="!$store.state.device.isNativeApp" :class="$style['header-container-desktop']">
+      <web-header :show-menu="false" :show-links="false"/>
+    </div>
+    <div v-else>
+      <header-slim :show-in-native="true" :click-url="loginUrl">{{ headerTitle }}</header-slim>
+    </div>
+    <div :class="[mainClass, $style['main-container-desktop']]">
+      <main :class="mainClass">
+        <spinner />
+        <connection-error />
+        <api-error />
+        <flash-message />
+        <nuxt />
+      </main>
+    </div>
+    <div v-if="!$store.state.device.isNativeApp" :class="$style['footer-container-desktop']">
+      <web-footer/>
+    </div>
   </div>
 </template>
 
@@ -15,6 +25,8 @@
 /* eslint-disable no-underscore-dangle */
 import Sources from '@/lib/sources';
 import HeaderSlim from '@/components/HeaderSlim';
+import WebHeader from '@/components/widgets/WebHeader';
+import WebFooter from '@/components/widgets/WebFooter';
 import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
@@ -26,6 +38,8 @@ import NativeVersionSetup from '../services/nativeVersionSetup';
 export default {
   components: {
     HeaderSlim,
+    WebHeader,
+    WebFooter,
     Spinner,
     ApiError,
     ConnectionError,
@@ -56,9 +70,10 @@ export default {
         : this.$store.state.header.headerText;
     },
     mainClass() {
-      const classes = ['content', 'pull-body', 'slim'];
+      const classes = ['content', 'pull-body'];
       if (this.$store.state.device.isNativeApp) {
         classes.push('native');
+        classes.push('slim');
       }
       return classes;
     },
@@ -93,11 +108,35 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../style/main";
-  @import "../style/pulltorefresh";
-  @import "../style/elements";
+ @import "../style/main";
+ @import "../style/pulltorefresh";
+ @import "../style/elements";
 </style>
 
 <style module lang="scss" scoped>
-  @import "../style/home";
+ @import "../style/home";
+
+ div {
+  &.desktopWeb {
+   display: flex;
+   flex-direction: column;
+   flex-wrap: nowrap;
+   justify-content: flex-start;
+   align-content: stretch;
+   align-items: flex-start;
+   min-height: 100vh;
+
+   .header-container-desktop, .footer-container-desktop {
+    order: 0;
+    flex: 0 0 auto;
+    align-self: stretch;
+   }
+
+   .main-container-desktop {
+    order: 0;
+    flex: 1 0 auto;
+    align-self: stretch;
+   }
+  }
+ }
 </style>
