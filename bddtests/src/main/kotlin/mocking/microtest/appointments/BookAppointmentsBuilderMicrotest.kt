@@ -62,7 +62,7 @@ class BookAppointmentsBuilderMicrotest(request: BookAppointmentSlotFacade)
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
-        TODO("not implemented")
+        return respondWithForbiddenError()
     }
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {

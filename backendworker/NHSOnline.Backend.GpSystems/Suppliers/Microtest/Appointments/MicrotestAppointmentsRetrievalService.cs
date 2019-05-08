@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.Support;
 using NHSOnline.Backend.Support.Logging;
 
@@ -37,23 +38,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 var response = await _microtestClient.AppointmentsGet(microtestUserSession.OdsCode, microtestUserSession.NhsNumber);
 
                 _logger.LogInformation("Appointments GET request complete");
-
-                try
-                {
-                    if (!response.StatusCode.IsSuccessStatusCode())
-                    {
-                        _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentsRetrievalService)}) return an unanticipated " +
-                                         $"error with status code: '{response.StatusCode}'.");
-                        return new AppointmentsResult.SupplierSystemUnavailable();
-                    }
-
-                    return new AppointmentsResult.SuccessfullyRetrieved(_responseMapper.Map(response.Body));
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Error mapping retrieved appointments");
-                    return new AppointmentsResult.InternalServerError();
-                }
+                return InterpretAppointmentsGetResponse(response);
             }
             catch (HttpRequestException e)
             {
@@ -65,5 +50,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 _logger.LogExit();
             }
         }
+        
+        private AppointmentsResult InterpretAppointmentsGetResponse(                  
+            MicrotestClient.MicrotestApiObjectResponse<AppointmentsGetResponse> response)
+        {
+            if (response.HasSuccessResponse)
+            {
+                try
+                {
+                    return new AppointmentsResult.SuccessfullyRetrieved(_responseMapper.Map(response.Body));
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error mapping appointments");
+                    return new AppointmentsResult.InternalServerError();
+                }
+            }
+
+            if (response.HasForbiddenResponse)
+            {
+                _logger.LogError("Call to Microtest returned a forbidden response");
+                return new AppointmentsResult.CannotViewAppointments();
+            }
+
+            _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentsRetrievalService)}) return an unanticipated " +
+                             $"error with status code: '{response.StatusCode}'.");
+            return new AppointmentsResult.SupplierSystemUnavailable();
+        } 
     }
 }

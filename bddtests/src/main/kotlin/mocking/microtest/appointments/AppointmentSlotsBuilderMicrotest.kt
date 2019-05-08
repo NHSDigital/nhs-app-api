@@ -90,7 +90,7 @@ class AppointmentSlotsBuilderMicrotest(fromDateTime: ZonedDateTime? = null,
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
-        TODO("not implemented")
+        return respondWithForbiddenError()
     }
 
     override fun respondWithUnknownException(): Mapping {

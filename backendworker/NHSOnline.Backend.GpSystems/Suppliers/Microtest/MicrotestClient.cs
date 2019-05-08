@@ -202,6 +202,8 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest
             }
             public string ErrorResponseMessage { get; set; }
             public override bool HasSuccessResponse => StatusCode.IsSuccessStatusCode();
+            public bool HasForbiddenResponse => StatusCode == HttpStatusCode.Forbidden;
+
             public override string ErrorForLogging => ErrorResponseMessage;
 
             protected override bool FormatResponseIfUnsuccessful => false;

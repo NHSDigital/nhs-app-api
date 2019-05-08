@@ -61,8 +61,9 @@ class GetAppointmentBuilderMicrotest(val patient: Patient)
     }
 
     override fun respondWithGPErrorWhenNotEnabled(): Mapping {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return respondWith(HttpStatus.SC_FORBIDDEN) {  andJsonBody("") }
     }
+
     private fun convertStringToMicrotestTimeString(time: String): String {
         return convertDateToMicrotestTimeString(ZonedDateTime.parse(time))
     }

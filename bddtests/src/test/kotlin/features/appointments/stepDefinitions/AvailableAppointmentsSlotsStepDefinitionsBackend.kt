@@ -54,6 +54,14 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend {
         factory.enabled(patient)
     }
 
+    @Given("^the system will respond with forbidden when trying to retrieve (.*) appointment slots\$")
+    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider: String) {
+        val factory = AppointmentsSlotsFactory.getForSupplier(provider)
+        factory.generateExample {
+            respondWithGPErrorWhenNotEnabled()
+        }
+    }
+
     @When("^the available appointment slots are retrieved without a cookie$")
     fun theAvailableAppointmentSlotsAreRetrievedWithoutACookie() {
         retrieveAppointmentSlots(null, null, includeCookie = false)

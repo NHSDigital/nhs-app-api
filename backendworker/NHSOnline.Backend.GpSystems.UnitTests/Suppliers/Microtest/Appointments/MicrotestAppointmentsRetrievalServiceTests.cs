@@ -72,6 +72,27 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
+        public async Task GetAppointments_MicrotestClientReturnsForbidden_ReturnsForbiddenResponse()
+        {
+            // Arrange
+            var response = new MicrotestClient.MicrotestApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden);
+            
+            _mockMicrotestClient
+                .Setup(x => x.AppointmentsGet(
+                        It.Is<string>( o => o.Equals(_microtestUserSession.OdsCode, StringComparison.Ordinal)),
+                        It.Is<string>(n => n.Equals(_microtestUserSession.NhsNumber, StringComparison.Ordinal))
+                    )
+                )
+                .ReturnsAsync(response);
+            
+            // Act
+            var result = await _systemUnderTest.GetAppointments(_microtestUserSession);
+
+            // Assert
+            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+        }
+        
+        [TestMethod]
         public async Task GetAppointments_MapperThrows_ReturnsInternalServerError()
         {
             // Arrange

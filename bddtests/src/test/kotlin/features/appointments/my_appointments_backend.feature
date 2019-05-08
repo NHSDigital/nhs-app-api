@@ -80,6 +80,7 @@ Feature: My appointments backend
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Appropriate error response, when <GP System> returns corrupted data
     Given <GP System> returns corrupted response for my appointments

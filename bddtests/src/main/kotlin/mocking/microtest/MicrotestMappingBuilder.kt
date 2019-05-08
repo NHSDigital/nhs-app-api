@@ -25,6 +25,14 @@ open class MicrotestMappingBuilder(method: String, relativePath: String = "")
         return respondWith(HttpStatus.SC_OK) { andHtmlBody(content) }
     }
 
+    fun respondWithForbiddenError(): Mapping {
+        return respondWith(HttpStatus.SC_FORBIDDEN) {  andJsonBody("""
+            {
+                "error": "The patient does not have the necessary permissions within the GP system. (appointments)"
+            }
+        """.trimIndent()) }
+    }
+
     override fun respondWithServiceUnavailable(): Mapping {
         return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
             andJsonBody("")

@@ -58,6 +58,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             if (response.HasSuccessResponse)
             {
                 return new AppointmentCancelResult.SuccessfullyCancelled();
+            } 
+            if (response.HasForbiddenResponse)
+            {
+                return new AppointmentCancelResult.InsufficientPermissions();
             }
 
             _logger.LogError(response.ErrorForLogging);

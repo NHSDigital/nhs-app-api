@@ -22,6 +22,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         private const string SlotId = "2862517";
         private const string TelephoneNumber = "07123456789";
         private const string MicrotestSuccessfulBookingResponse = "Appointment successfully created.";
+        private const string MicrotestForbiddenBookingResponse = "The patient does not have the necessary " +
+                                                                 "permissions within the GP system. (appointments)";
 
         private IFixture _fixture;
         private Mock<IMicrotestClient> _mockMicrotestClient;
@@ -65,6 +67,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             // Assert
             _mockMicrotestClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SuccessfullyBooked>();
+        }
+
+        [TestMethod]
+        public async Task Book_ReturnsForbidden_ReturnsForbiddenResponse()
+        {
+            // Arrange
+            var response = new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.Forbidden)
+            {
+                Body = MicrotestForbiddenBookingResponse
+            };
+
+            MockMicrotestClientAppointmentPostMethod(response);
+
+            // Act
+            var result = await _systemUnderTest.Book(_microtestUserSession, _request);
+
+            // Assert
+            _mockMicrotestClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
         }
 
         [DataTestMethod]

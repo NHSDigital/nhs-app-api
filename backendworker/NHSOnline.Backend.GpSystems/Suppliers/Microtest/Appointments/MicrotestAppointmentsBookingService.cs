@@ -53,6 +53,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
                 return new AppointmentBookResult.SuccessfullyBooked();
             }
 
+            if (response.HasForbiddenResponse)
+            {
+                return new AppointmentBookResult.InsufficientPermissions();
+            }
+
             _logger.LogError(response.ErrorForLogging);
             return new AppointmentBookResult.SupplierSystemUnavailable();
         }

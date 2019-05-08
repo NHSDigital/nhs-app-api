@@ -136,6 +136,7 @@ Feature: Book appointments API
       | EMIS      |
       | TPP       |
       | VISION    |
+      | MICROTEST |
 
   Scenario Outline: Booking an appointment with <GP System> returns "Conflict" response if the chosen appointment slot is not available for booking
     Given an appointment booking for <GP System> cannot be successful because the slot is not available

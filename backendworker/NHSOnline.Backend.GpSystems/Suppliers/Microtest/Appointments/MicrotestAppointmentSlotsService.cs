@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
+using NHSOnline.Backend.GpSystems.Suppliers.Microtest.Models.Appointments;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
@@ -42,23 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
 
                 _logger.LogInformation("Appointment slots request complete");
 
-                if (!appointmentSlotsResponse.HasSuccessResponse)
-                {
-                    _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentSlotsService)}) returned an unanticipated " +
-                                     $"error with status code: '{appointmentSlotsResponse.StatusCode}'.");
-                    return new AppointmentSlotsResult.SupplierSystemUnavailable();
-                }
-
-                try
-                {
-                    var result = _appointmentSlotsResponseMapper.Map(appointmentSlotsResponse.Body);
-                    return new AppointmentSlotsResult.SuccessfullyRetrieved(result);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Error mapping appointment slots");
-                    return new AppointmentSlotsResult.InternalServerError();
-                }
+                return InterpretAppointmentsGetResponse(appointmentSlotsResponse);
             }
             catch (HttpRequestException e)
             {
@@ -68,6 +53,34 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             finally
             {
                 _logger.LogExit();
+            }
+        }
+        
+        private AppointmentSlotsResult InterpretAppointmentsGetResponse(                  
+            MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse> appointmentSlotsResponse)
+        {
+            if (appointmentSlotsResponse.HasForbiddenResponse)
+            {
+                _logger.LogError("Call to Microtest returned a forbidden response");
+                return new AppointmentSlotsResult.CannotBookAppointments();
+            }
+
+            if (!appointmentSlotsResponse.HasSuccessResponse)
+            {
+                _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentSlotsService)}) returned an unanticipated " +
+                                 $"error with status code: '{appointmentSlotsResponse.StatusCode}'.");
+                return new AppointmentSlotsResult.SupplierSystemUnavailable();
+            }
+
+            try
+            {
+                var result = _appointmentSlotsResponseMapper.Map(appointmentSlotsResponse.Body);
+                return new AppointmentSlotsResult.SuccessfullyRetrieved(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error mapping appointment slots");
+                return new AppointmentSlotsResult.InternalServerError();
             }
         }
     }

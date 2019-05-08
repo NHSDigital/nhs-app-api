@@ -59,6 +59,19 @@ Feature: View available appointment slots backend
       | TPP       |
       | VISION    |
 
+  Scenario Outline: Requesting available appointment slots when <GP System> is not accessible returns "Forbidden" error
+    Given the system will respond with forbidden when trying to retrieve <GP System> appointment slots
+    And I have logged into <GP System> and have a valid session cookie
+    And the available appointment slots are retrieved
+    Then I receive a "Forbidden" error
+    And the response contains an empty body
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+      | MICROTEST |
+
   @long-running
   Scenario Outline: Requesting available appointment slots the <GP System> times out and returns "Gateway Timeout" error
     Given the system will time out when trying to retrieve <GP System> appointment slots
