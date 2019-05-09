@@ -48,8 +48,8 @@ describe('search pharmacies', () => {
   });
 
   it('will translate the line text', () => {
-    expect($t).toHaveBeenCalledWith('searchNominatedPharmacy.line1');
-    expect($t).toHaveBeenCalledWith('searchNominatedPharmacy.line2');
+    expect($t).toHaveBeenCalledWith('nominated_pharmacy.search.line1');
+    expect($t).toHaveBeenCalledWith('nominated_pharmacy.search.line2');
   });
 
   describe('when pharmacies are found', () => {

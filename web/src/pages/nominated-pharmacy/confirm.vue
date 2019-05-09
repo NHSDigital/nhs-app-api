@@ -8,11 +8,11 @@
                     @click.stop.prevent="submitNominatedPharmacy">
       {{ $t('nominated_pharmacy.confirm.confirmButton') }}
     </generic-button>
-    <analytics-tracked-tag :text="$t('th03.errors.backButton')">
+    <analytics-tracked-tag :text="$t('generic.backButton.text')">
       <generic-button
         :button-classes="['grey', 'button']" :class="$style['back']"
         tabindex="0" @click.prevent="cancelButtonClicked">
-        {{ $t('th03.errors.backButton') }}
+        {{ $t('generic.backButton.text') }}
       </generic-button>
     </analytics-tracked-tag>
   </div>

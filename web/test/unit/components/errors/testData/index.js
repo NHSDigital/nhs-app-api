@@ -9,6 +9,7 @@ import PrescriptionsConfirmDetails from './prescriptions/confirm-prescription-de
 import Prescriptions from './prescriptions';
 import PrescriptionsRepeatCourses from './prescriptions/repeat-courses';
 import NominatedPharmacyConfirm from './nominatedPharmacy/confirm';
+import NominatedPharmacySearch from './nominatedPharmacy/search';
 
 const status = [400, 403, 409, 500, 502, 504];
 const testData = {};
@@ -24,6 +25,7 @@ for (let i = 0, max = status.length; i < max; i += 1) {
     [...Prescriptions[code]],
     [...PrescriptionsRepeatCourses[code]],
     [...NominatedPharmacyConfirm[code]],
+    [...NominatedPharmacySearch[code]],
   ];
 }
 

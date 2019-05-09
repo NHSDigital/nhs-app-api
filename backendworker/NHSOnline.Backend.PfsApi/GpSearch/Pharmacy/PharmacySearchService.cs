@@ -91,6 +91,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                         organisationSearchQuery,
                         postcodeDetail.Postcode);
 
+
+
                     pharmacySearchResponse.PostcodeCoordinate = new GeoCoordinate(
                         double.Parse(postcodeCoordinates.Latitude, CultureInfo.InvariantCulture),
                         double.Parse(postcodeCoordinates.Longitude, CultureInfo.InvariantCulture));

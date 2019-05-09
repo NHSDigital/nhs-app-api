@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             }
 
             UserSession userSession = HttpContext.GetUserSession();
-            
+
             var isGpPracticeEpsEnabledResult = await _gpSearchService.IsGpPracticeEPSEnabled(userSession.GpUserSession.OdsCode);
 
             if (!HttpStatusCodeExtensions.IsSuccessStatusCode(isGpPracticeEpsEnabledResult.HttpStatusCode))
@@ -153,26 +153,30 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                 _logger.LogInformation($"Fetching Pharmacies for {searchTerm}");
 
                 var pharmacySearchResponse = await _pharmacySearchService.Search(searchTerm);
-
-                var pharmacies = Enumerable.Empty<PharmacyDetails>();
-
-                if (HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacySearchResponse.StatusCode))
+                
+                if (!HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacySearchResponse.StatusCode))
                 {
-                    try
-                    {
-                        pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(
-                            pharmacySearchResponse.Pharmacies,
-                            pharmacySearchResponse.PostcodeCoordinate);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(e, $"Error during mapping list of { nameof(Organisation) } to list of {nameof(PharmacyDetailsResponse)}");
-                    }
+                    return new StatusCodeResult(
+                        GetErrorStatusCode("Error searching for pharmacies", pharmacySearchResponse.StatusCode));
                 }
 
-                await _auditor.Audit(Support.Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, $"Returning { pharmacies.Count() } pharmacies");
+                try
+                {
+                    var pharmacies = Enumerable.Empty<PharmacyDetails>();
 
-                return Ok(pharmacies);
+                    pharmacies = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(
+                        pharmacySearchResponse.Pharmacies,
+                        pharmacySearchResponse.PostcodeCoordinate);
+
+                    await _auditor.Audit(Support.Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, $"Returning { pharmacies.Count() } pharmacies");
+
+                    return Ok(pharmacies);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, $"Error during mapping list of { nameof(Organisation) } to list of {nameof(PharmacyDetailsResponse)}");
+                    return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                }
             }
             finally
             {

@@ -456,5 +456,75 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(mappedResult);
         }
+
+        [DataTestMethod]
+        [DataRow(HttpStatusCode.BadRequest, HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.Forbidden, HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.InternalServerError, HttpStatusCode.InternalServerError)]
+        public async Task Search_ReturnsCorrectStatusCode_WhenServiceReturnsWithNonSuccessStatusCode(HttpStatusCode httpStatusCodeFromService, HttpStatusCode expectedResultStatusCode)
+        {
+            // Arrange
+            string postcode = "ABC";
+            
+            var pharmacySearchResponse = new PharmacySearchResponse(httpStatusCodeFromService);
+
+            _mockPharmacySearchService
+                .Setup(x => x.Search(postcode))
+                .Returns(Task.FromResult(pharmacySearchResponse))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Search(postcode);
+
+            // Assert
+            _mockPharmacySearchService.Verify();
+
+            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            value.StatusCode.Should().Be((int)expectedResultStatusCode);
+        }
+
+        [TestMethod]
+        public async Task Search_Returns500InternalServerError_WhenExceptionOccursInMapper()
+        {
+            // Arrange
+            string postcode = "ABC";
+
+            var org1 = _fixture.Create<Organisation>();
+            var organisations = new List<Organisation> { org1 };
+
+            var postcodeCoordinate = new GeoCoordinatePortable.GeoCoordinate
+            {
+                Latitude = 1,
+                Longitude = 2,
+            };
+
+            var pharmacySearchResponse = new PharmacySearchResponse(HttpStatusCode.OK, organisations)
+            {
+                PostcodeCoordinate = postcodeCoordinate,
+            };
+
+            _mockPharmacySearchService
+                .Setup(x => x.Search(postcode))
+                .Returns(Task.FromResult(pharmacySearchResponse))
+                .Verifiable();
+
+            var pharmacy1 = _fixture.Create<PharmacyDetails>();
+            var mappedResult = new List<PharmacyDetails> { pharmacy1 };
+
+            _mockMapper
+                .Setup(x => x.Map(organisations, postcodeCoordinate))
+                .Throws<Exception>()
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Search(postcode);
+
+            // Assert
+            _mockPharmacySearchService.Verify();
+            _mockMapper.Verify();
+
+            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            value.StatusCode.Should().Be((int)HttpStatusCode.InternalServerError);
+        }
     }
 }

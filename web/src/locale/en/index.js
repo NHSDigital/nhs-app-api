@@ -615,6 +615,23 @@ export default {
         retryButtonText: 'Back to prescriptions',
       },
     },
+    search: {
+      pageTitle: 'Change my nominated pharmacy',
+      line1: 'The pharmacy you choose is where your repeat prescription will be sent.',
+      subHeader: 'Find your pharmacy',
+      line2: 'Enter postcode, town or pharmacy name',
+      searchButton: 'Search',
+      link1: 'See all internet pharmacies',
+      link2: 'See all dispensing appliance contractors',
+      emptySearchError: 'Enter postcode, town or pharmacy name',
+      errors: {
+        pageHeader: 'Service currently unavailable',
+        pageTitle: 'Service currently unavailable',
+        header: 'This service is not available right now',
+        message: 'Try again in a few moments',
+        retryButtonText: 'Back to prescriptions',
+      },
+    },
   },
   my_record: {
     errors: {
@@ -1282,16 +1299,6 @@ export default {
     organDonation: {
       recordDecision: 'Record my organ donation decision',
     },
-  },
-  searchNominatedPharmacy: {
-    pageTitle: 'Change my nominated pharmacy',
-    line1: 'The pharmacy you choose is where your repeat prescription will be sent.',
-    subHeader: 'Find your pharmacy',
-    line2: 'Enter postcode, town or pharmacy name',
-    searchButton: 'Search',
-    link1: 'See all internet pharmacies',
-    link2: 'See all dispensing appliance contractors',
-    emptySearchError: 'Enter postcode, town or pharmacy name',
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',

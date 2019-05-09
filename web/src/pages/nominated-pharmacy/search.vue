@@ -1,17 +1,17 @@
 <template>
   <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
     <div :class="$style.info">
-      <p> {{ $t('searchNominatedPharmacy.line1') }} </p>
-      <h3> {{ $t('searchNominatedPharmacy.subHeader') }} </h3>
+      <p> {{ $t('nominated_pharmacy.search.line1') }} </p>
+      <h3> {{ $t('nominated_pharmacy.search.subHeader') }} </h3>
       <p id="pharmacy-search-label"
          :class="[$style['search-label-spacing'], $style['search-label']]">
-        {{ $t('searchNominatedPharmacy.line2') }}
+        {{ $t('nominated_pharmacy.search.line2') }}
       </p>
       <error-message v-if="showError"
                      :id="$style['error-label']"
                      :class="$style['search-label-spacing']"
                      role="alert">
-        {{ $t('searchNominatedPharmacy.emptySearchError') }}
+        {{ $t('nominated_pharmacy.search.emptySearchError') }}
       </error-message>
       <form @submit.prevent="searchFormSubmitted">
         <generic-text-input id="searchTextInput"
@@ -22,14 +22,14 @@
                             name="searchQuery"
                             :maxlength="searchQueryMaxLengthAsString"/>
         <generic-button :button-classes="['green', 'button']">
-          {{ $t('searchNominatedPharmacy.searchButton') }}
+          {{ $t('nominated_pharmacy.search.searchButton') }}
         </generic-button>
-        <analytics-tracked-tag :text="$t('th03.errors.backButton')">
+        <analytics-tracked-tag :text="$t('generic.backButton.text')">
           <generic-button
             id="back-button"
             :button-classes="['grey', 'button']" :class="$style['back']"
             tabindex="0" @click.prevent="cancelButtonClicked">
-            {{ $t('th03.errors.backButton') }}
+            {{ $t('generic.backButton.text') }}
           </generic-button>
         </analytics-tracked-tag>
       </form>
