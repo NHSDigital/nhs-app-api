@@ -1,6 +1,7 @@
 package features.sharedStepDefinitions
 
 import cucumber.api.java.After
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -9,6 +10,7 @@ import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
+import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
@@ -26,6 +28,7 @@ import webdrivers.options.nojs.NoJsOption
 private const val WAIT_IN_SECONDS_MODIFIER = 1000L
 private const val WAIT_IN_SECONDS = 190L
 
+@Suppress("MaxLineLength")
 open class SharedStepDefinitions {
 
     @Steps
@@ -69,6 +72,14 @@ open class SharedStepDefinitions {
         login.using(patient)
         home.waitForLoginToCompleteSuccessfully()
     }
+
+    @And("Azure organisation search is working")
+    fun azureOrganisationSearchIsWorking() {
+        mockingClient.forNhsAzureSearchOrganisation {
+            nhsAzureSearch.nhsAzureSearchOrganisationRequest(null).respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange())
+        }
+    }
+
 
     @Given("^I have (enabled|disabled) javascript$")
     fun iHaveEnabledDisabledJavascript(status: String) {

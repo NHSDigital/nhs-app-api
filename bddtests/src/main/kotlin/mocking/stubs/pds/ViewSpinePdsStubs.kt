@@ -12,7 +12,7 @@ class ViewSpinePdsStubs(private val mockingClient: MockingClient) {
         private const val IP = "10.0.225.22"
         private const val fromAsid = "200000000355"
         private const val toAsid = "200000000355"
-        private var pharmacyTypes = arrayOf("P1", "P2")
+        private var pharmacyTypes = arrayOf("P1")
     }
 
     fun generateSpineStubs() {

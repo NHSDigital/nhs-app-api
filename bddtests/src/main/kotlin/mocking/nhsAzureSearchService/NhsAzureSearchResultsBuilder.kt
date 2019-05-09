@@ -3,11 +3,13 @@ package mocking.nhsAzureSearchService
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class NhsAzureOrganisationResultsBuilder(requestBody: NhsAzureSearchOrganisationRequestBody) :
+class NhsAzureOrganisationResultsBuilder(requestBody: NhsAzureSearchOrganisationRequestBody?) :
         NhsAzureSearchOrganisationMappingBuilder("POST") {
     init {
-        requestBuilder
-                .andJsonBody(requestBody)
+        if(requestBody != null) {
+            requestBuilder
+                    .andJsonBody(requestBody)
+        }
     }
 
     fun respondWithSuccess(model: NHSAzureSearchOrganisationReply): Mapping {

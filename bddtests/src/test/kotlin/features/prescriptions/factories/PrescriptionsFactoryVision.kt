@@ -5,6 +5,7 @@ import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.data.prescriptions.courses.VisionCoursesLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.defaults.VisionMockDefaults
+import mocking.stubs.prescriptions.ViewPrescriptionsStubs
 import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.NewPrescriptionRepeat
 import mocking.vision.models.OrderNewPrescriptionRequest
@@ -98,5 +99,9 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
                     prescriptions.getEligibleRepeatsRequest(VisionUserSession.fromPatient(patient))
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
+    }
+
+    override fun generateSpineStubs() {
+        ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
 }

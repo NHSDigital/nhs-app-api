@@ -4,6 +4,7 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.courses.TppCoursesLoader
 import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
+import mocking.stubs.prescriptions.ViewPrescriptionsStubs
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
 import models.Patient
@@ -96,5 +97,9 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP") {
                     prescriptions.listRepeatMedication(patient)
                             .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR, resolve = {})
                 }
+    }
+
+    override fun generateSpineStubs() {
+        ViewPrescriptionsStubs(mockingClient).generateSpineStubs()
     }
 }

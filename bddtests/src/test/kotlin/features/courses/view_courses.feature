@@ -167,11 +167,11 @@ Feature: View courses
       | TPP       |
       | VISION    |
 
-  @pending
   @smoketest
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given I am a <GP System> patient
     And I have historic prescriptions
+    And Azure organisation search is working
     And there are 5 repeatable prescriptions available
     And I am logged in
     And I navigate to prescriptions

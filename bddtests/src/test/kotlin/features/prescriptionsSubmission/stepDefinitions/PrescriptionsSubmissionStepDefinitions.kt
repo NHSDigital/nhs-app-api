@@ -14,12 +14,14 @@ import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import mocking.MockingClient
+import mocking.data.nhsAzureSearchData.NhsAzureSearchData
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.defaults.VisionMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.stubs.pds.ViewSpinePdsStubs
 import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -146,129 +148,130 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                         statusSubmitted,
                         initialHistoricPrescriptionsCount,
                         amount)
+
+        mockingClient.forNhsAzureSearchOrganisation {
+            nhsAzureSearch.nhsAzureSearchOrganisationRequest(null
+            ).respondWithSuccess(NhsAzureSearchData.getOrganisationWithinRange(true))
+        }
     }
 
-    @Given("^the scenario is (.*)$")
-    fun theScenarioIsX(title: String) {
-        scenarioTitle = title
-    }
+        @Given("^the scenario is (.*)$")
+        fun theScenarioIsX(title: String) {
+            scenarioTitle = title
+        }
 
 
-    @Given("^I am using (.*) GP System to submit my prescription$")
-    fun givenIHaveXPastRepeatPrescriptions(gpSystem: String) {
-        SerenityHelpers.setGpSupplier(gpSystem)
-        currentPatient = Patient.getDefault(gpSystem)
-        SerenityHelpers.setPatient(currentPatient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
-        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
-        initialize(gpSystem)
-    }
+        @Given("^I am using (.*) GP System to submit my prescription$")
+        fun givenIHaveXPastRepeatPrescriptions(gpSystem: String) {
+            SerenityHelpers.setGpSupplier(gpSystem)
+            currentPatient = Patient.getDefault(gpSystem)
+            SerenityHelpers.setPatient(currentPatient)
+            CitizenIdSessionCreateJourney(mockingClient).createFor(currentPatient)
+            SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(currentPatient)
+            currentProvider = ProviderTypes.valueOf(gpSystem)
+            currentPatient = Patient.getDefault(gpSystem)
+            prescriptionLoader = PrescriptionsFactory.getForSupplier(gpSystem).getPrescriptionsLoader
+            val emisPrescriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
+            Serenity.setSessionVariable("EmisPrescriptionsMap").to(emisPrescriptionMap)
+        }
 
-    private fun initialize(gpSystem: String) {
-        currentProvider = ProviderTypes.valueOf(gpSystem)
-        currentPatient = Patient.getDefault(gpSystem)
-        prescriptionLoader = PrescriptionsFactory.getForSupplier(gpSystem).getPrescriptionsLoader
-        val emisPrescriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
-        Serenity.setSessionVariable("EmisPrescriptionsMap").to(emisPrescriptionMap)
-    }
+        @Given("^I have (\\d+) historic prescriptions in this scenario$")
+        fun iHaveXHistoricPrescriptionsInThisScenario(amount: Int) {
+            ViewSpinePdsStubs(mockingClient).generateSpineStubs()
+            initialHistoricPrescriptionsCount = amount
+            prescriptionLoader.loadData(amount, amount, amount)
 
-    @Given("^I have (\\d+) historic prescriptions in this scenario$")
-    fun iHaveXHistoricPrescriptionsInThisScenario(amount: Int) {
+            when (currentProvider) {
+                ProviderTypes.EMIS -> {
+                    val data = prescriptionLoader.data as PrescriptionRequestsGetResponse
+                    mockingClient.forEmis {
+                        prescriptions.prescriptionsRequest(currentPatient)
+                                .respondWithSuccess(data)
+                                .inScenario(scenarioTitle)
+                                .whenScenarioStateIs(currentScenarioState)
+                    }
 
-        initialHistoricPrescriptionsCount = amount
-        prescriptionLoader.loadData(amount, amount, amount)
-
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                val data = prescriptionLoader.data as PrescriptionRequestsGetResponse
-                mockingClient.forEmis {
-                    prescriptions.prescriptionsRequest(currentPatient)
-                            .respondWithSuccess(data)
-                            .inScenario(scenarioTitle)
-                            .whenScenarioStateIs(currentScenarioState)
+                    val map =
+                            Serenity.sessionVariableCalled<MutableMap<String,
+                                    PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
+                    map[Scenario.STARTED] = data
                 }
-
-                val map =
-                        Serenity.sessionVariableCalled<MutableMap<String,
-                                PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
-                map[Scenario.STARTED] = data
-            }
-            ProviderTypes.TPP -> {
-                mockingClient.forTpp {
-                    prescriptions.listRepeatMedication(currentPatient)
-                            .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
+                ProviderTypes.TPP -> {
+                    mockingClient.forTpp {
+                        prescriptions.listRepeatMedication(currentPatient)
+                                .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
+                    }
                 }
-            }
-            ProviderTypes.VISION -> {
-                mockingClient.forVision {
-                    prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
-                            .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
+                ProviderTypes.VISION -> {
+                    mockingClient.forVision {
+                        prescriptions.getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
+                                .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
+                    }
                 }
             }
         }
-    }
 
-    @When("I submit the repeat prescription")
-    fun whenISubmitTheRepeatPrescription() {
-        try {
-            val response = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .prescriptions.postPrescriptionsConnection(prescriptionSubmissionRequest)
-            SerenityHelpers.setHttpResponse(response)
-        } catch (httpException: NhsoHttpException) {
-            SerenityHelpers.setHttpException(httpException)
-        }
-    }
-
-    @When("I click Confirm and order repeat prescription")
-    fun iClickConfirmAndOrderRepeatPrescription() {
-        confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage
-                .clickConfirmAndOrderRepeatPrescriptionButton()
-    }
-
-    @Then("EMIS responds with an unknown internal server error when a repeat prescription is submitted")
-    fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted() {
-        mockingClient.forEmis {
-            prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
-                    .respondWithGenericInternalServerError()
-        }
-    }
-
-
-    @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
-    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
-        assertTrueWithRetry(prescriptionPage.isOrderSuccessfullTextVisible(),
-                "Expected order success text to be visible")
-
-        when (currentProvider) {
-            ProviderTypes.TPP -> {
-                prescriptionSteps.assertPrescriptionsMatch(
-                        TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply),
-                        amount,
-                        false)
-            }
-            ProviderTypes.EMIS -> {
-                val map =
-                        Serenity.sessionVariableCalled<MutableMap<String,
-                                PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
-
-                prescriptionSteps.assertPrescriptionsMatch(EmisPrescriptionMapper.map(
-                        map[currentScenarioState]!!), amount)
-            }
-            ProviderTypes.VISION -> {
-                prescriptionSteps.assertPrescriptionsMatch(VisionPrescriptionMapper
-                        .map(prescriptionLoader.data as PrescriptionHistory), amount)
+        @When("I submit the repeat prescription")
+        fun whenISubmitTheRepeatPrescription() {
+            try {
+                val response = Serenity
+                        .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                        .prescriptions.postPrescriptionsConnection(prescriptionSubmissionRequest)
+                SerenityHelpers.setHttpResponse(response)
+            } catch (httpException: NhsoHttpException) {
+                SerenityHelpers.setHttpException(httpException)
             }
         }
-    }
 
-    @Then("I see a message indicating there was an error sending my order")
-    fun iSeeAMessageOrderNotSuccessful() {
-        confirmRepeatPrescriptionOrderSteps.assertErrorSendingOrderShown()
-    }
+        @When("I click Confirm and order repeat prescription")
+        fun iClickConfirmAndOrderRepeatPrescription() {
+            confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage
+                    .clickConfirmAndOrderRepeatPrescriptionButton()
+        }
 
-    @Then("I see a message indicating I've previously ordered one of the selected medications within the last 30 days")
-    fun iSeeAMessageIndicatingIvePreviouslyOrderedOneOfTheSelectedMedicationsWithinTheLast30days() {
-        confirmRepeatPrescriptionOrderSteps.assertMedicationOrderedWithinTheLast30DaysErrorShown()
+        @Then("EMIS responds with an unknown internal server error when a repeat prescription is submitted")
+        fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted() {
+            mockingClient.forEmis {
+                prescriptions.repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest)
+                        .respondWithGenericInternalServerError()
+            }
+        }
+
+
+        @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
+        fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
+            assertTrueWithRetry(prescriptionPage.isOrderSuccessfullTextVisible(),
+                    "Expected order success text to be visible")
+
+            when (currentProvider) {
+                ProviderTypes.TPP -> {
+                    prescriptionSteps.assertPrescriptionsMatch(
+                            TppPrescriptionMapper.map(prescriptionLoader.data as ListRepeatMedicationReply),
+                            amount,
+                            false)
+                }
+                ProviderTypes.EMIS -> {
+                    val map =
+                            Serenity.sessionVariableCalled<MutableMap<String,
+                                    PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
+
+                    prescriptionSteps.assertPrescriptionsMatch(EmisPrescriptionMapper.map(
+                            map[currentScenarioState]!!), amount)
+                }
+                ProviderTypes.VISION -> {
+                    prescriptionSteps.assertPrescriptionsMatch(VisionPrescriptionMapper
+                            .map(prescriptionLoader.data as PrescriptionHistory), amount)
+                }
+            }
+        }
+
+        @Then("I see a message indicating there was an error sending my order")
+        fun iSeeAMessageOrderNotSuccessful() {
+            confirmRepeatPrescriptionOrderSteps.assertErrorSendingOrderShown()
+        }
+
+        @Then("I see a message indicating I've previously ordered the medication within the last 30 days")
+        fun iSeeAMessageIndicatingIvePreviouslyOrderedOneOfTheSelectedMedicationsWithinTheLast30days() {
+            confirmRepeatPrescriptionOrderSteps.assertMedicationOrderedWithinTheLast30DaysErrorShown()
+        }
     }
-}

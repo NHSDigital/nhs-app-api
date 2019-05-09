@@ -19,6 +19,7 @@ import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import pages.nominatedPharmacy.NominatedPharmacyCheckPage
 import pages.prescription.RepeatPrescriptionsPage
 import utils.SerenityHelpers
 
@@ -38,6 +39,8 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     val mockingClient = MockingClient.instance
 
     lateinit var repeatPrescriptions : RepeatPrescriptionsPage
+
+    lateinit var nominatedPharmacyCheckPage : NominatedPharmacyCheckPage
 
     lateinit var coursesLoader: ICoursesLoader<*>
 
@@ -96,7 +99,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int) {
         iClickOrderARepeatPrescription()
-
+        nominatedPharmacyCheckPage.clickContinueToRepeatCoursesButton()
         val courses = getAvailableCoursesFilteredSortedOrdered()
         val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
         courseSteps.selectRepeatPrescriptions(coursesToSelect)
