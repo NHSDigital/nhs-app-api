@@ -110,11 +110,13 @@ export default {
   beforeCreate() {
     if (process.client) {
       NativeCallbacks.hideHeader();
+      NativeCallbacks.hideHeaderSlim();
     }
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.hideHeader();
+      NativeCallbacks.hideHeaderSlim();
       NativeCallbacks.hideWhiteScreen();
     } else {
       window.scrollTo(0, 0);
