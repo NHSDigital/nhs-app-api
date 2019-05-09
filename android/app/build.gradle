@@ -133,6 +133,21 @@ android {
             applicationIdSuffix ".scratch12"
             manifestPlaceholders = [appName: "NHS App Scratch 12"]
         }
+        scratch13 {
+            initWith debug
+            applicationIdSuffix ".scratch13"
+            manifestPlaceholders = [appName: "NHS App Scratch 13"]
+        }
+        scratch14 {
+            initWith debug
+            applicationIdSuffix ".scratch14"
+            manifestPlaceholders = [appName: "NHS App Scratch 14"]
+        }
+        scratch15 {
+            initWith debug
+            applicationIdSuffix ".scratch15"
+            manifestPlaceholders = [appName: "NHS App Scratch 15"]
+        }
     }
     testOptions {
         unitTests {
