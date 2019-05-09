@@ -21,14 +21,10 @@
 </template>
 
 <script>
-import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import { footerLinks } from '@/lib/common-links';
 
 export default {
   name: 'WebFooter',
-  components: {
-    AnalyticsTrackedTag,
-  },
   data() {
     return {
       links: footerLinks(this.$env),

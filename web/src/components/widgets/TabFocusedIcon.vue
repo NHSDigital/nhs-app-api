@@ -19,14 +19,10 @@
 </template>
 
 <script>
-
 import TabFocusMixin from './TabFocusMixin';
 
 export default {
   name: 'TabFocusedIcon',
-  components: {
-    TabFocusMixin,
-  },
   mixins: [TabFocusMixin.tabMixin],
   props: {
     iconClasses: {

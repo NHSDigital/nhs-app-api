@@ -68,7 +68,6 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import LoginBanner from '@/components/LoginBanner';
 import GenericButton from '@/components/widgets/GenericButton';
-import HeaderSlim from '@/components/HeaderSlim';
 import GenericTextInput from '@/components/widgets/GenericTextInput';
 import HelpIcon from '@/components/icons/HelpIcon';
 import NhsLogo from '@/components/icons/NhsLogo';
@@ -87,7 +86,6 @@ export default {
     ErrorMessage,
     GenericTextInput,
     GenericButton,
-    HeaderSlim,
     AnalyticsTrackedTag,
   },
   data() {

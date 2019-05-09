@@ -15,8 +15,6 @@ import Sources from '@/lib/sources';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import HomeHeader from '@/components/HomeHeader';
-import Spinner from '@/components/widgets/Spinner';
 import NativeVersionSetup from '../services/nativeVersionSetup';
 
 
@@ -25,8 +23,6 @@ export default {
     ApiError,
     ConnectionError,
     FlashMessage,
-    Spinner,
-    HomeHeader,
   },
   head() {
     const head = {

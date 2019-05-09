@@ -27,7 +27,6 @@ import TabFocusMixin from './TabFocusMixin';
 export default {
   name: 'GenericCheckbox',
   components: {
-    TabFocusMixin,
     CheckedIcon,
   },
   mixins: [TabFocusMixin.tabMixin],

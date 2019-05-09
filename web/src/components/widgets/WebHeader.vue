@@ -44,7 +44,6 @@ import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
 import HeaderLinks from '@/components/widgets/HeaderLinks';
 import HeaderMenu from '@/components/widgets/HeaderMenu';
 import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
-import HomeLink from './HomeLink';
 import PageTitle from './PageTitle';
 import CookieBanner from '../CookieBanner';
 import NhsHeaderLogo from './NhsHeaderLogo';
@@ -54,7 +53,6 @@ export default {
   components: {
     BreadCrumbTrail,
     NhsHeaderLogo,
-    HomeLink,
     HeaderLinks,
     HeaderMenu,
     PageTitle,

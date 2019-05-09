@@ -41,13 +41,8 @@
 </template>
 
 <script>
-import GenericTextInput from '@/components/widgets/GenericTextInput';
-
 export default {
   name: 'GenericTimeInput',
-  components: {
-    GenericTextInput,
-  },
   props: {
     hourId: {
       type: String,

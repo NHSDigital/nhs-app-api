@@ -47,7 +47,6 @@ export default {
     AnalyticsTrackedTag,
     Events,
     TestResults,
-    VueScrollTo,
   },
   props: {
     record: {

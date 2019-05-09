@@ -34,12 +34,9 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 import Sources from '@/lib/sources';
-import HeaderMenu from '@/components/HeaderMenu';
-import A11yTitleAnnouncer from '@/components/widgets/A11yTitleAnnouncer';
 import NativeCallbacks from '@/services/native-app';
 import WebHeader from '@/components/widgets/WebHeader';
 import WebFooter from '@/components/widgets/WebFooter';
-import NavigationMenu from '@/components/NavigationMenu';
 import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
@@ -51,9 +48,6 @@ import NativeVersionSetup from '../services/nativeVersionSetup';
 
 export default {
   components: {
-    A11yTitleAnnouncer,
-    NavigationMenu,
-    HeaderMenu,
     WebHeader,
     WebFooter,
     Spinner,

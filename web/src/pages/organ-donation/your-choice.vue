@@ -32,8 +32,6 @@ import get from 'lodash/fp/get';
 import { isDefault } from '@/lib/organ-donation/registration-comparison';
 import isNil from 'lodash/fp/isNil';
 import BackButton from '@/components/BackButton';
-import ErrorGroup from '@/components/ErrorGroup';
-import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
@@ -48,8 +46,6 @@ import {
 export default {
   components: {
     BackButton,
-    ErrorGroup,
-    ErrorMessage,
     GenericButton,
     MessageDialog,
     MessageList,

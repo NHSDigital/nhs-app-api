@@ -76,7 +76,6 @@ import GenericButton from '@/components/widgets/GenericButton';
 import { APPOINTMENTS, APPOINTMENT_CANCEL_NOJS } from '@/lib/routes';
 import FormPost from '@/components/FormPost';
 import { redirectTo } from '@/lib/utils';
-import NoJsForm from '@/components/no-js/NoJsForm';
 import DesktopGenericBackLink from '@/components/widgets/DesktopGenericBackLink';
 
 export default {
@@ -90,7 +89,6 @@ export default {
     ErrorMessage,
     SelectDropdown,
     FormPost,
-    NoJsForm,
   },
   data() {
     return {

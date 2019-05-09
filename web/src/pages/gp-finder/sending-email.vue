@@ -65,8 +65,6 @@
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import NativeCallbacks from '@/services/native-app';
-import HeaderSlim from '@/components/HeaderSlim';
-import BackIcon from '@/components/icons/BackIcon';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericRadioButton from '@/components/widgets/GenericRadioButton';
@@ -76,9 +74,7 @@ import get from 'lodash/fp/get';
 
 export default {
   components: {
-    HeaderSlim,
     AnalyticsTrackedTag,
-    BackIcon,
     ErrorMessage,
     GenericButton,
     GenericRadioButton,

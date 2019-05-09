@@ -49,7 +49,6 @@
 
 <script>
 import get from 'lodash/fp/get';
-import BackButton from '@/components/BackButton';
 import ErrorGroup from '@/components/ErrorGroup';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -62,7 +61,6 @@ import { isNativeApp } from '@/components/NativeOnlyMixin';
 
 export default {
   components: {
-    BackButton,
     GenericButton,
     ErrorGroup,
     ErrorMessage,

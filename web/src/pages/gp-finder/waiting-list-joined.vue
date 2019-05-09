@@ -22,9 +22,6 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import BackIcon from '@/components/icons/BackIcon';
-import HeaderSlim from '@/components/HeaderSlim';
-import GenericTextInput from '@/components/widgets/GenericTextInput';
 import GenericButton from '@/components/widgets/GenericButton';
 import { LOGIN, GP_FINDER } from '@/lib/routes';
 import { setCookie } from '@/lib/cookie-manager';
@@ -35,9 +32,6 @@ import moment from 'moment';
 export default {
   components: {
     AnalyticsTrackedTag,
-    HeaderSlim,
-    BackIcon,
-    GenericTextInput,
     GenericButton,
   },
   data() {

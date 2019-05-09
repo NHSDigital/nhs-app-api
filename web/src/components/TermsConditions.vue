@@ -83,7 +83,6 @@
 
 <script>
 /* eslint-disable import/extensions */
-import CheckedIcon from '@/components/icons/CheckedIcon';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import GenericButton from '@/components/widgets/GenericButton';
@@ -93,7 +92,6 @@ import { INDEX } from '@/lib/routes';
 export default {
   name: 'TermsConditions',
   components: {
-    CheckedIcon,
     GenericButton,
     ErrorMessage,
     MessageDialog,

@@ -67,8 +67,6 @@
 <script>
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import NativeCallbacks from '@/services/native-app';
-import HeaderSlim from '@/components/HeaderSlim';
-import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import { GP_FINDER, BEGINLOGIN, GP_FINDER_SENDING_EMAIL } from '@/lib/routes';
 import AuthorisationService from '@/services/authorisation-service';
@@ -76,9 +74,7 @@ import get from 'lodash/fp/get';
 
 export default {
   components: {
-    HeaderSlim,
     AnalyticsTrackedTag,
-    BackIcon,
     GenericButton,
   },
   data() {

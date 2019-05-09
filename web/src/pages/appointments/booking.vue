@@ -112,7 +112,6 @@ export default {
     Filters,
     SlotList,
     GenericButton,
-    VueScrollTo,
   },
   data() {
     return {

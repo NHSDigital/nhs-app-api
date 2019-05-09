@@ -31,7 +31,7 @@ module.exports = {
     //don't require linebreak before/after opening/closing tags on single or multiline elements
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multiline-html-element-content-newline': 'off',
-    'vue/no-unused-components': 'off',
+    'vue/no-unused-components': 'error',
     //don't require new line after closing bracket
     'vue/html-closing-bracket-newline': 'off',
     //don't require space before closing bracket

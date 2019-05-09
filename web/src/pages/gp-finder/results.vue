@@ -97,8 +97,6 @@
 <script>
 /* eslint-disable global-require */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import HeaderSlim from '@/components/HeaderSlim';
-import BackIcon from '@/components/icons/BackIcon';
 import GenericButton from '@/components/widgets/GenericButton';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import { setCookie } from '@/lib/cookie-manager';
@@ -109,8 +107,6 @@ import moment from 'moment';
 export default {
   components: {
     AnalyticsTrackedTag,
-    HeaderSlim,
-    BackIcon,
     GenericButton,
     MessageDialog,
   },

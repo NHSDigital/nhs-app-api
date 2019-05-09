@@ -15,12 +15,10 @@
 
 <script>
 import RadioGroup from '@/components/RadioGroup';
-import GenericRadioButton from '@/components/widgets/GenericRadioButton';
 
 export default {
   name: 'QuestionChoice',
   components: {
-    GenericRadioButton,
     RadioGroup,
   },
   props: {

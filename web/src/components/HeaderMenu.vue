@@ -22,13 +22,11 @@
 import { ACCOUNT, INDEX } from '@/lib/routes';
 import AccountIcon from '../components/icons/AccountIcon';
 import HelpIcon from '../components/icons/HelpIcon';
-import NhsHeaderLogo from '../components/widgets/NhsHeaderLogo';
 
 export default {
   name: 'HeaderMenu',
   components: {
     AccountIcon,
-    NhsHeaderLogo,
     HelpIcon,
   },
   head() {

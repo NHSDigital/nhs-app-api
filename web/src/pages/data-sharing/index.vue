@@ -53,22 +53,18 @@
 /* eslint-disable import/extensions */
 import NativeCallbacks from '@/services/native-app';
 import BottomNav from '@/components/data-sharing/BottomNav';
-import Benefits from '@/components/data-sharing/Benefits';
 import Overview from '@/components/data-sharing/Overview';
 import WhereConfidentialPatientInformationIsUsed from '@/components/data-sharing/WhereConfidentialPatientInformationIsUsed';
 import WhereYourChoiceDoesNotApply from '@/components/data-sharing/WhereYourChoiceDoesNotApply';
 import MakeYourChoice from '@/components/data-sharing/MakeYourChoice';
-import GenericButton from '@/components/widgets/GenericButton';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 import _ from 'lodash';
 
 export default {
   components: {
-    GenericButton,
     BottomNav,
     Overview,
-    Benefits,
     WhereConfidentialPatientInformationIsUsed,
     WhereYourChoiceDoesNotApply,
     MakeYourChoice,

@@ -126,7 +126,6 @@ export default {
     Diagnosis,
     Examinations,
     Procedures,
-    VueScrollTo,
   },
   props: {
     record: {

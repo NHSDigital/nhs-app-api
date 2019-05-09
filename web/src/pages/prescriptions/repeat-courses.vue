@@ -104,7 +104,6 @@
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
-import Spinner from '@/components/widgets/Spinner';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import NoJsForm from '@/components/no-js/NoJsForm';
@@ -118,7 +117,6 @@ import { redirectTo } from '@/lib/utils';
 export default {
   components: {
     GenericButton,
-    Spinner,
     RepeatPrescription,
     MessageDialog,
     MessageText,

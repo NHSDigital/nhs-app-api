@@ -84,7 +84,6 @@ const config = {
     ORGAN_DONATION_TELL_FAMILY_URL: 'https://www.organdonation.nhs.uk/app/app-tell/',
     ORGAN_DONATION_PRIVACY_URL: 'https://www.organdonation.nhs.uk/app/app-privacy/',
     // Data Opt-Out
-    DATA_SHARING_URL: 'https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/',
     DATA_PREFERENCES_URL: 'https://ndopapp-int1.thunderbird.service.nhs.uk/createsession',
     // Symptom Checker
     SYMPTOM_CHECKER_URL: 'https://111.nhs.uk',
@@ -110,8 +109,6 @@ const config = {
     YOUR_NHS_DATA_MATTERS_URL: 'https://www.nhs.uk/your-nhs-data-matters/',
     // Appointments
     CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/',
-    // Terms and conditions
-    STUB_TERMS_AND_CONDITIONS: true,
     // App Version
     VERSION_TAG: 'dev_web_npm',
     // Throttling
@@ -119,7 +116,7 @@ const config = {
     GP_LOOKUP_API_RESULTS_LIMIT: 20,
     COMMIT_ID: 'dev',
     CE_MARK_ENABLED: false,
-    ORGAN_DONATION_INTEGRATION_ENABLED: false,
+    ORGAN_DONATION_INTEGRATION_ENABLED: true,
     // Session
     SESSION_EXPIRING_WARNING_SECONDS: 60,
     // Click debounce delay in ms

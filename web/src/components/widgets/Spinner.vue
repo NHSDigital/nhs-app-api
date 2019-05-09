@@ -15,7 +15,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>#loading-spinner {
+<style lang="scss" scoped>
+#loading-spinner {
   position: fixed;
   z-index: 10;
   top: 0em;

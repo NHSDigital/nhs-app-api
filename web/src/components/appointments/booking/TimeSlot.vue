@@ -26,9 +26,6 @@ import { createUri } from '@/lib/noJs';
 
 export default {
   name: 'TimeSlot',
-  components: {
-    TabFocusMixin,
-  },
   mixins: [TabFocusMixin.tabMixin],
   props: {
     timeSlot: {
