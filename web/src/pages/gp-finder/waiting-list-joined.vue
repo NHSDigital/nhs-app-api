@@ -50,9 +50,6 @@ export default {
       return this.$store.state.header.headerText;
     },
   },
-  beforeDestroy() {
-    this.$store.dispatch('throttling/init');
-  },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
       NativeCallbacks.showHeaderSlim();

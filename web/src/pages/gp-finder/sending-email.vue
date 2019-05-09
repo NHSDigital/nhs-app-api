@@ -136,6 +136,9 @@ export default {
       window.scrollTo(0, 0);
     }
   },
+  beforeCreate() {
+    this.$store.dispatch('throttling/setWaitingListChoice', undefined);
+  },
   methods: {
     getHeaderState() {
       return !this.$store.state.device.isNativeApp
