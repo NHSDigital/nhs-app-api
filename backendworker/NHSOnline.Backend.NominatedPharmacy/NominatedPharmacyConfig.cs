@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
     {
         public NominatedPharmacyConfig(IConfiguration configuration, ILogger<NominatedPharmacyConfig> logger)
         {
+            IsNominatedPharmacyEnabled = bool.TrueString.Equals(configuration.GetOrWarn("NOMINATED_PHARMACY_ENABLED", logger), StringComparison.OrdinalIgnoreCase);
             SpineAccreditedSystemIdFrom = configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_FROM", logger);
             SpineAccreditedSystemIdTo = configuration.GetOrWarn("SPINE_ACCREDITED_SYSTEM_ID_TO", logger);
             PdsQueryFromAddress = configuration.GetOrWarn("PDS_QUERY_FROM_ADDRESS", logger);
@@ -46,5 +47,7 @@ namespace NHSOnline.Backend.NominatedPharmacy
         public int ArtificialDelayAfterNominatedPharmacyUpdateInMilliseconds { get; }
 
         public string MessageId { get; }
+
+        public bool IsNominatedPharmacyEnabled { get; }
     }
 }

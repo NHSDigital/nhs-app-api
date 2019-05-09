@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.NominatedPharmacy.Clients
             return httpRequest;
         }
 
-        private StringContent BuildContent(NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest)
+        private static StringContent BuildContent(NominatedPharmacyUpdateRequest nominatedPharmacyUpdateRequest)
         {
             const string ContentType = "Content-Type";
             var content = new StringContent(nominatedPharmacyUpdateRequest.Body(), Encoding.UTF8);

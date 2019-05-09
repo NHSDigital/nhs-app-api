@@ -39,6 +39,151 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
                 _postcodeParser);     
         }
 
+        public async Task IsGpPracticeEpsEnabled_WhenOdsCodeIsBlank_ReturnsBadRequestEnabledFalse()
+        {
+            // Act
+            var result = await _gpSearchService.IsGpPracticeEPSEnabled(string.Empty);
+
+            // Assert
+            _gpLookupClient.Verify(x => x.GpSearch(It.IsAny<OrganisationSearchData>()), Times.Never);
+            result.HttpStatusCode.Should().Be(HttpStatusCode.BadRequest);
+            result.IsGpEpsEnabled.Should().Be(false);
+        }
+
+        public async Task IsGpPracticeEpsEnabled_WhenNoGpPracticeReturned_ReturnsNotFoundAndEnabledFalse()
+        {
+            // Arrange
+            const string odsCode = "AB234";
+            
+            var organisationReturnResult =
+                new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
+                {
+                    Body = new NhsOrganisationSearchResponse
+                    {
+                        Organisations = new List<Organisation>(),
+                        OrganisationCount = 0,
+                    }
+                };
+
+            _gpLookupClient.Setup(x => x.GpSearch(It.IsAny<OrganisationSearchData>()))
+                .Returns(Task.FromResult(organisationReturnResult))
+                .Verifiable();
+
+            // Act
+            var result = await _gpSearchService.IsGpPracticeEPSEnabled(odsCode);
+
+            // Assert
+            _gpLookupClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.NotFound);
+            result.IsGpEpsEnabled.Should().Be(false);
+        }
+
+        public async Task IsGpPracticeEpsEnabled_WhenGpPracticeDoesntHaveAnyMetrics_ReturnsFalse()
+        {
+            // Arrange
+            const string odsCode = "AB234";
+
+            var organisationReturnResults = new List<Organisation>
+            {
+                new Organisation { OrganisationName = "Test GP Practice" }
+            };
+
+            var organisationReturnResult =
+                new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
+                {
+                    Body = new NhsOrganisationSearchResponse
+                    {
+                        Organisations = organisationReturnResults,
+                        OrganisationCount = 1,
+                    }
+                };
+
+            _gpLookupClient.Setup(x => x.GpSearch(It.IsAny<OrganisationSearchData>()))
+                .Returns(Task.FromResult(organisationReturnResult))
+                .Verifiable();
+
+            // Act
+            var result = await _gpSearchService.IsGpPracticeEPSEnabled(odsCode);
+
+            // Assert
+            _gpLookupClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.IsGpEpsEnabled.Should().Be(false);
+        }
+
+        [TestMethod]
+        public async Task IsGpPracticeEpsEnabled_WhenGpPracticeIsNotEpsEnabled_ReturnsFalse()
+        {
+            // Arrange
+            const string odsCode = "AB234";
+            const int metricIdOtherThanToEpsEnabled = 999;
+
+            var organisationReturnResults = new List<Organisation>
+            {
+                new Organisation { OrganisationName = "Test GP Practice", Metrics = $"[{{\"MetricID\": {metricIdOtherThanToEpsEnabled} }}]" }
+            };
+
+            var organisationReturnResult =
+                new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
+                {
+                    Body = new NhsOrganisationSearchResponse
+                    {
+                        Organisations = organisationReturnResults,
+                        OrganisationCount = 1,
+                    }
+                };
+
+            _gpLookupClient.Setup(x => x.GpSearch(It.IsAny<OrganisationSearchData>()))
+                .Returns(Task.FromResult(organisationReturnResult))
+                .Verifiable();
+
+            // Act
+            var result = await _gpSearchService.IsGpPracticeEPSEnabled(odsCode);
+
+            // Assert
+            _gpLookupClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.IsGpEpsEnabled.Should().Be(false);
+        }
+
+        [TestMethod]
+        public async Task IsGpPracticeEpsEnabled_WhenSuccessfulResponseWithEpsEnabled_ReturnsTrue()
+        {
+            // Arrange
+            const string odsCode = "AB234";
+
+            var organisationReturnResults = new List<Organisation>
+            {
+                new Organisation { OrganisationName = "Test GP Practice", Metrics = $"[{{\"MetricID\": {Constants.MetricIdForEPSEnabled} }}]" }
+            };
+
+            var organisationReturnResult =
+                new GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse>(HttpStatusCode.OK)
+                {
+                    Body = new NhsOrganisationSearchResponse
+                    {
+                        Organisations = organisationReturnResults,
+                        OrganisationCount = 1,
+                    }
+                };
+
+            _gpLookupClient.Setup(x => x.GpSearch(It.Is<OrganisationSearchData>(
+                o => o.Top == 1 &&
+                string.Equals(o.Select, "OrganisationID,OrganisationName,NACSCode,Metrics", System.StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(o.Filter, $"OrganisationTypeID eq 'GPB' and NACSCode eq '{odsCode}'", System.StringComparison.OrdinalIgnoreCase))
+                ))
+                .Returns(Task.FromResult(organisationReturnResult))
+                .Verifiable();
+
+            // Act
+            var result = await _gpSearchService.IsGpPracticeEPSEnabled(odsCode);
+
+            // Assert
+            _gpLookupClient.Verify();
+            result.HttpStatusCode.Should().Be(HttpStatusCode.OK);
+            result.IsGpEpsEnabled.Should().Be(true);
+        }
+
         [TestMethod]
         [DataRow("L15BW")]
         [DataRow("L1 5BW")]

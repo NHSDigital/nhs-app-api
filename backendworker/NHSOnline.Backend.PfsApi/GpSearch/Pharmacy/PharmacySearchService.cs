@@ -15,9 +15,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
 {
     public class PharmacySearchService : IPharmacySearchService
     {
-        const string OrganisationSubTypeForCommunityPharmacy = "Community Pharmacy";
-        const int MetricIDForEPSEnabledPharmacy = 10051;
-
         private readonly ILogger<PharmacySearchService> _logger;
         private readonly IGpLookupClient _gpLookupClient;
         private readonly IGpLookupConfig _gpLookupConfig;
@@ -166,9 +163,9 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
             {
                 Top = _gpLookupConfig.PharmacySearchApiLimit,
                 Select = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,Postcode,NACSCode,Geocode,Contacts,OpeningTimes",
-                Filter = $"OrganisationSubType eq '{ OrganisationSubTypeForCommunityPharmacy }' ",
+                Filter = $"OrganisationSubType eq '{ Constants.OrganisationSubTypeForCommunityPharmacy }' ",
                 OrderBy = $"geo.distance(Geocode, geography'POINT({postcodeData.Longitude} {postcodeData.Latitude})')",
-                Search = $"Metrics:({ MetricIDForEPSEnabledPharmacy })",
+                Search = $"Metrics:({ Constants.MetricIdForEPSEnabled })",
                 Count = true,
                 QueryType = "full",
                 SearchMode = "all"
@@ -182,8 +179,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                 Top = _gpLookupConfig.PharmacySearchApiLimit,
                 Select = "OrganisationID,OrganisationName,Address1,Address2,Address3,City,Postcode,NACSCode,Geocode,Contacts,OpeningTimes",
                 SearchFields = "OrganisationName,Address2,Address3,City",
-                Filter = $"OrganisationSubType eq '{ OrganisationSubTypeForCommunityPharmacy }'",
-                Search = $"Metrics:{ MetricIDForEPSEnabledPharmacy } AND { searchTerm }",
+                Filter = $"OrganisationSubType eq '{ Constants.OrganisationSubTypeForCommunityPharmacy }'",
+                Search = $"Metrics:{ Constants.MetricIdForEPSEnabled } AND { searchTerm }",
                 Count = true,
                 QueryType = "full",
                 SearchMode = "all"

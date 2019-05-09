@@ -22,6 +22,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.Support.Auditing;
+using NHSOnline.Backend.PfsApi.GpSearch;
 
 namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
 {
@@ -44,6 +45,8 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         private Mock<INominatedPharmacyGatewayUpdateService> _mockNominatedPharmacyGatewayUpdateService;
         private Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper> _mockMapper;
         private Mock<IAuditor> _auditor;
+        private Mock<INominatedPharmacyConfig> _configMock;
+        private Mock<IGpSearchService> _mockGpSearchService;
 
         [TestInitialize]
         public void TestInitialize()
@@ -64,10 +67,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockNominatedPharmacyGatewayUpdateService = _fixture.Freeze<Mock<INominatedPharmacyGatewayUpdateService>>();
             _mockMapper = _fixture.Freeze<Mock<IPharmacyDetailsToPharmacyDetailsResponseMapper>>();
             _auditor = _fixture.Freeze<Mock<IAuditor>>();
+            _configMock = _fixture.Freeze<Mock<INominatedPharmacyConfig>>();
+            _configMock.SetupGet(x => x.IsNominatedPharmacyEnabled).Returns(true);
+            _mockGpSearchService = _fixture.Freeze<Mock<IGpSearchService>>();
 
             var httpContextItems = new Dictionary<object, object>
             {
-                { Constants.HttpContextItems.UserSession, _userSession }
+                { Support.Constants.HttpContextItems.UserSession, _userSession }
             };
 
             var httpContextMock = new Mock<HttpContext>();
@@ -82,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
+        public async Task Get_ReturnsSuccessfulResult_WhenServicesReturnsSuccessfully()
         {
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
@@ -91,7 +97,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             
             var pharmacyOrgansation = _fixture.Create<Organisation>();
             var pharmacyDetailResponse = new PharmacyDetailResponse(HttpStatusCode.OK, pharmacyOrgansation);
-            
+            var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
+
+            _mockGpSearchService
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
+                .Verifiable();
+
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
@@ -116,10 +128,127 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             _mockNominatedPharmacyService.Verify();
             _mockPharmacyService.Verify();
             _mockMapper.Verify();
+            _mockGpSearchService.Verify();
 
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(new PharmacyDetailsResponse{ NominatedPharmacyEnabled = true, PharmacyDetails = mappedResult });
             mappedResult.PharmacyType.Should().Be(NominatedPharmacyType);
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResultWithEnabledFalse_WhenNominatedPharmacyNotEnabled()
+        {
+            // Arrange
+            string nhsNumber = _userSession.GpUserSession.NhsNumber;
+
+            PharmacyDetailsResponse response = new PharmacyDetailsResponse
+            {
+                NominatedPharmacyEnabled = false,
+                PharmacyDetails = null
+            };
+
+            _configMock.SetupGet(x => x.IsNominatedPharmacyEnabled).Returns(false);
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _mockGpSearchService.Verify(x => x.IsGpPracticeEPSEnabled(It.IsAny<string>()), Times.Never);
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Never);
+            _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
+            _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
+
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            value.StatusCode.Should().Be(StatusCodes.Status200OK);
+            value.Value.Should().BeEquivalentTo(response);
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsSuccessfulResultWithEnabledFalse_WhenGpPracticeIsNotEnabled()
+        {
+            // Arrange
+            string nhsNumber = _userSession.GpUserSession.NhsNumber;
+
+            PharmacyDetailsResponse response = new PharmacyDetailsResponse
+            {
+                NominatedPharmacyEnabled = false,
+                PharmacyDetails = null
+            };
+
+            var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, false);
+
+            _mockGpSearchService
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _mockGpSearchService.Verify();
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Never);
+            _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
+            _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
+
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            value.StatusCode.Should().Be(StatusCodes.Status200OK);
+            value.Value.Should().BeEquivalentTo(response);
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsErrorResultWithEnabledFalse_WhenGpSearchReturnsInternalServerError()
+        {
+            // Arrange
+            string nhsNumber = _userSession.GpUserSession.NhsNumber;
+
+            var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.InternalServerError);
+
+            _mockGpSearchService
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _mockGpSearchService.Verify();
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Never);
+            _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
+            _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
+
+            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            value.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+
+        [DataTestMethod]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.NotFound)]
+        [DataRow(HttpStatusCode.BadGateway)]
+        public async Task Get_ReturnsErrorResultWithEnabledFalse_WhenGpSearchReturnsErrorOtherThanInternalServerError(HttpStatusCode httpStatusCode)
+        {
+            // Arrange
+            string nhsNumber = _userSession.GpUserSession.NhsNumber;
+
+            var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(httpStatusCode);
+
+            _mockGpSearchService
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _mockGpSearchService.Verify();
+            _mockNominatedPharmacyService.Verify(x => x.GetNominatedPharmacy(It.IsAny<string>()), Times.Never);
+            _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
+            _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
+
+            var value = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            value.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
         }
 
         [DataTestMethod]
@@ -137,7 +266,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             };
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType);
-            
+            var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
+
+            _mockGpSearchService
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
+                .Verifiable();
+
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
@@ -147,6 +282,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var result = await _systemUnderTest.Get();
 
             // Assert
+            _mockGpSearchService.Verify();
             _mockNominatedPharmacyService.Verify();
             _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
             _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
@@ -162,7 +298,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Arrange
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.InternalServerError);
-            
+            var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
+
+            _mockGpSearchService
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
+                .Verifiable();
+
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
@@ -172,6 +314,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var result = await _systemUnderTest.Get();
 
             // Assert
+            _mockGpSearchService.Verify();
             _mockNominatedPharmacyService.Verify();
             _mockPharmacyService.Verify(x => x.GetPharmacyDetail(It.IsAny<string>()), Times.Never);
             _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
@@ -187,7 +330,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             string nhsNumber = _userSession.GpUserSession.NhsNumber;
 
             var nominatedPharmacyResult = new GetNominatedPharmacyResult(HttpStatusCode.OK, odsCode, pertinentSerialChangeNumber, true, NominatedPharmacyType );
-            
+            var isGpPracticeEpsEnabledResponse = new IsGpPracticeEpsEnabledResponse(HttpStatusCode.OK, true);
+
+            _mockGpSearchService
+                .Setup(x => x.IsGpPracticeEPSEnabled(_userSession.GpUserSession.OdsCode))
+                .Returns(Task.FromResult(isGpPracticeEpsEnabledResponse))
+                .Verifiable();
+
             _mockNominatedPharmacyService
                 .Setup(x => x.GetNominatedPharmacy(nhsNumber))
                 .Returns(Task.FromResult(nominatedPharmacyResult))
@@ -204,6 +353,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             var result = await _systemUnderTest.Get();
 
             // Assert
+            _mockGpSearchService.Verify();
             _mockNominatedPharmacyService.Verify();
             _mockPharmacyService.Verify();
             _mockMapper.Verify(x => x.Map(It.IsAny<Organisation>()), Times.Never);
@@ -301,7 +451,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.NominatedPharmacy
             // Assert
             _mockPharmacySearchService.Verify();
             _mockMapper.Verify();
-            _auditor.Verify(x => x.Audit(Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
+            _auditor.Verify(x => x.Audit(Support.Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, It.IsAny<string>()));
 
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(mappedResult);

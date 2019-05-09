@@ -85,10 +85,10 @@
       </p>
     </div>
     <form v-if="$store.state.device.isNativeApp"
-          :action="prescriptionsPath" method="get">
+          :action="getBackPath" method="get">
       <generic-button id="back-to-prescriptions"
                       :button-classes="['button' , 'grey']"
-                      @click.stop.prevent="backToPrescriptionsClicked">
+                      @click.stop.prevent="backButtonClicked">
         {{ $t('rp03.backButton') }}
       </generic-button>
     </form>

@@ -6,11 +6,11 @@ using NHSOnline.Backend.PfsApi.GpSearch.Models.Pharmacy;
 using NHSOnline.Backend.Support.Logging;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
-{   
+{
     public class NhsSearchResultChecker : INhsSearchResultChecker
     {
         private readonly ILogger<NhsSearchResultChecker> _logger;
-        
+
         public NhsSearchResultChecker(ILogger<NhsSearchResultChecker> logger)
         {
             _logger = logger;
@@ -39,11 +39,40 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 Organisations = nhsSearchResponse.Body.Organisations,
                 OrganisationQueryCount = nhsSearchResponse.Body.OrganisationCount,
             };
-                
+
             _logger.LogInformation($"{searchResponse.OrganisationQueryCount} results return for search: {postcode}");
             return new GpSearchResult.Success(searchResponse);
         }
-        
+
+        public GpSearchResult CheckOdsCodeSearchResult(
+            GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> nhsSearchResponse,
+            string odsCode)
+        {
+            if (!nhsSearchResponse.HasSuccessResponse)
+            {
+                _logger.LogError(
+                    $"Unsuccessful request searching for Gp Practice by ods code {odsCode}," +
+                    $" Status code: {(int) nhsSearchResponse.StatusCode}");
+                return new GpSearchResult.Unsuccessful();
+            }
+
+            if (nhsSearchResponse.Body == null)
+            {
+                _logger.LogError(
+                    $"Search for Nhs GP Practice by ods code {odsCode}, no response body found");
+                return new GpSearchResult.Unsuccessful();
+            }
+
+            var searchResponse = new GpSearchResponse
+            {
+                Organisations = nhsSearchResponse.Body.Organisations,
+                OrganisationQueryCount = nhsSearchResponse.Body.OrganisationCount,
+            };
+
+            _logger.LogInformation($"{searchResponse.OrganisationQueryCount} results return for search: {odsCode}");
+            return new GpSearchResult.SuccessfullyRetrieved(searchResponse);
+        }
+
         public PharmacySearchResponse CheckPharmacies(GpLookupClient.NhsSearchApiObjectResponse<NhsOrganisationSearchResponse> pharmacySearchResponse, string postcode)
         {
             if (!pharmacySearchResponse.HasSuccessResponse)

@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
     public class Organisation
     {
         public string OrganisationName { get; set; }
-        
+
         public string Address1 { get; set; }
 
         public string Address2 { get; set; }
@@ -29,6 +29,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
 
         public string Contacts { get; set; }
 
+        public string Metrics { get; set; }
+
         public IEnumerable<OpeningTime> GetOpeningTimesArray()
         {
             var listOfOpeningTimes = !string.IsNullOrEmpty(OpeningTimes) ?
@@ -43,6 +45,14 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
                 JsonConvert.DeserializeObject<IEnumerable<ContactInformation>>(Contacts) : Enumerable.Empty<ContactInformation>();
 
             return listOfContacts ?? Enumerable.Empty<ContactInformation>();
+        }
+
+        public IEnumerable<MetricInformation> GetMetricsArray()
+        {
+            var listOfContacts = !string.IsNullOrEmpty(Metrics)?
+                JsonConvert.DeserializeObject<IEnumerable<MetricInformation>>(Metrics) : Enumerable.Empty<MetricInformation>();
+
+            return listOfContacts ?? Enumerable.Empty<MetricInformation>();
         }
     }
 }

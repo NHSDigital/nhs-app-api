@@ -11,6 +11,7 @@ using NHSOnline.Backend.PfsApi.GpSearch.Pharmacy;
 using System;
 using NHSOnline.Backend.PfsApi.GpSearch.Models;
 using System.Linq;
+using NHSOnline.Backend.PfsApi.GpSearch;
 
 namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
 {
@@ -25,6 +26,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
         private readonly INominatedPharmacyGatewayUpdateService _nominatedPharmacyGatewayUpdateService;
         private readonly IAuditor _auditor;
         private readonly INominatedPharmacyConfig _config;
+        private readonly IGpSearchService _gpSearchService;
 
         public NominatedPharmacyController(
             ILogger<NominatedPharmacyController> logger,
@@ -34,7 +36,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             IPharmacySearchService pharmacySearchService,
             INominatedPharmacyGatewayUpdateService nominatedPharmacyGatewayUpdateService,
             IAuditor auditor,
-            INominatedPharmacyConfig config
+            INominatedPharmacyConfig config,
+            IGpSearchService gpSearchService
            )
         {
             _logger = logger;
@@ -45,73 +48,77 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             _nominatedPharmacyGatewayUpdateService = nominatedPharmacyGatewayUpdateService;
             _auditor = auditor;
             _config = config;
+            _gpSearchService = gpSearchService;
         }
 
         [HttpGet("nominated-pharmacy")]
         public async Task<IActionResult> Get()
         {
             _logger.LogEnter();
+
+            if (!_config.IsNominatedPharmacyEnabled)
+            {
+                _logger.LogInformation("Nominated pharmacy feature is disabled");
+                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = false });
+            }
+
             UserSession userSession = HttpContext.GetUserSession();
+            
+            var isGpPracticeEpsEnabledResult = await _gpSearchService.IsGpPracticeEPSEnabled(userSession.GpUserSession.OdsCode);
+
+            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(isGpPracticeEpsEnabledResult.HttpStatusCode))
+            {
+                return new StatusCodeResult(
+                    GetErrorStatusCode(
+                        $"Error retrieving GP practice with ods code { userSession.GpUserSession.OdsCode }",
+                        isGpPracticeEpsEnabledResult.HttpStatusCode));
+            }
+
+            if (!isGpPracticeEpsEnabledResult.IsGpEpsEnabled)
+            {
+                _logger.LogInformation($"GP practice with ods code { userSession.GpUserSession.OdsCode } not enabled for electronic prescription service");
+                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = false });
+            }
 
             var result = await _nominatedPharmacyService.GetNominatedPharmacy(userSession.GpUserSession.NhsNumber);
 
-            if (HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
+            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(result.HttpStatusCode))
             {
-                if (!result.HasValidPharmacyType)
-                {
-                    _logger.LogInformation("Invalid nominated pharmacy type or multiple pharmacy types exist");
-                    return new OkObjectResult(new PharmacyDetailsResponse{ NominatedPharmacyEnabled = result.HasValidPharmacyType });
-                }
-
-                if (string.IsNullOrEmpty(result.PharmacyOdsCode))
-                {
-                    _logger.LogInformation("No nominated pharmacy. Returning Success.");
-                    return new OkObjectResult(new PharmacyDetailsResponse{ NominatedPharmacyEnabled = result.HasValidPharmacyType });
-                }
-
-                _logger.LogInformation($"Nominated pharmacy retrieved with ods code: { result.PharmacyOdsCode }");
-
-                var pharmacyDetailResponse = await _pharmacyService.GetPharmacyDetail(result.PharmacyOdsCode);
-
-                  if (HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacyDetailResponse.StatusCode))
-                    {
-                        var pharmacyDetails =
-                            _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmacyDetailResponse.Pharmacy);
-                        pharmacyDetails.PharmacyType = result.NominatedPharmacyType;
-                        await _auditor.Audit(Constants.AuditingTitles.GetNominatedPharmacy,
-                            "Successfully retrieved nominated pharmacy");
-                        return new OkObjectResult(
-                            new PharmacyDetailsResponse
-                            {
-                                PharmacyDetails = pharmacyDetails,
-                                NominatedPharmacyEnabled = result.HasValidPharmacyType
-                            });
-                    }
-                    else
-                    {
-                        return new StatusCodeResult(GetErrorStatusCode("Error retrieving pharmacy using pharmacy ods code with status code",
-                            result.HttpStatusCode));
-                    }
-                }
-                else
-                {
-                    return new StatusCodeResult(GetErrorStatusCode("Error retrieving nominated pharmacy ods code from Spine with status code",
-                        result.HttpStatusCode));
-                }
-        }
-
-        private int GetErrorStatusCode(String errorMessage, HttpStatusCode statusCode)
-        {
-            if (statusCode == HttpStatusCode.InternalServerError)
-            {
-                _logger.LogError($"{errorMessage} returning: {(int) HttpStatusCode.InternalServerError}");
+                return new StatusCodeResult(GetErrorStatusCode("Error retrieving nominated pharmacy ods code from Spine with status code",
+                    result.HttpStatusCode));
             }
-            else
+            if (!result.HasValidPharmacyType)
             {
-                statusCode = HttpStatusCode.BadGateway;
-                _logger.LogError($"{errorMessage} returning: {(int) HttpStatusCode.BadGateway}");
+                _logger.LogInformation("Invalid nominated pharmacy type or multiple pharmacy types exist");
+                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = result.HasValidPharmacyType });
             }
-            return (int) statusCode;
+
+            if (string.IsNullOrEmpty(result.PharmacyOdsCode))
+            {
+                _logger.LogInformation("No nominated pharmacy. Returning Success.");
+                return new OkObjectResult(new PharmacyDetailsResponse { NominatedPharmacyEnabled = result.HasValidPharmacyType });
+            }
+
+            _logger.LogInformation($"Nominated pharmacy retrieved with ods code: { result.PharmacyOdsCode }");
+
+            var pharmacyDetailResponse = await _pharmacyService.GetPharmacyDetail(result.PharmacyOdsCode);
+
+            if (!HttpStatusCodeExtensions.IsSuccessStatusCode(pharmacyDetailResponse.StatusCode))
+            {
+                return new StatusCodeResult(GetErrorStatusCode("Error retrieving pharmacy using pharmacy ods code with status code",
+                    result.HttpStatusCode));
+            }
+
+            var pharmacyDetails = _pharmacyDetailsToPharmacyDetailsResponseMapper.Map(pharmacyDetailResponse.Pharmacy);
+            pharmacyDetails.PharmacyType = result.NominatedPharmacyType;
+            await _auditor.Audit(Support.Constants.AuditingTitles.GetNominatedPharmacy, "Successfully retrieved nominated pharmacy");
+
+            return new OkObjectResult(
+                new PharmacyDetailsResponse
+                {
+                    PharmacyDetails = pharmacyDetails,
+                    NominatedPharmacyEnabled = result.HasValidPharmacyType
+                });
         }
 
         [HttpPost("nominated-pharmacy")]
@@ -157,13 +164,13 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
                             pharmacySearchResponse.Pharmacies,
                             pharmacySearchResponse.PostcodeCoordinate);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         _logger.LogError(e, $"Error during mapping list of { nameof(Organisation) } to list of {nameof(PharmacyDetailsResponse)}");
                     }
                 }
 
-                await _auditor.Audit(Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, $"Returning { pharmacies.Count() } pharmacies");
+                await _auditor.Audit(Support.Constants.AuditingTitles.SearchNominatedPharmacyAuditTypeResponse, $"Returning { pharmacies.Count() } pharmacies");
 
                 return Ok(pharmacies);
             }
@@ -171,6 +178,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             {
                 _logger.LogExit();
             }
+        }
+
+        private int GetErrorStatusCode(string errorMessage, HttpStatusCode statusCode)
+        {
+            if (statusCode == HttpStatusCode.InternalServerError)
+            {
+                _logger.LogError($"{errorMessage} returning: {(int)HttpStatusCode.InternalServerError}");
+            }
+            else
+            {
+                statusCode = HttpStatusCode.BadGateway;
+                _logger.LogError($"{errorMessage} returning: {(int)HttpStatusCode.BadGateway}");
+            }
+            return (int)statusCode;
         }
     }
 }

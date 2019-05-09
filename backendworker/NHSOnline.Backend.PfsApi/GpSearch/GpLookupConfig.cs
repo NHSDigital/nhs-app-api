@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -13,6 +13,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         public Uri NhsSearchBaseUrl { get; }
         public string GpLookupApiKey { get; }
         public string PostcodeLookupSearchRadiusKm { get; }
+        public string GpPraticeOdsCodeForEpsEnabledCheckOverride { get; }
 
         public GpLookupConfig(IConfiguration configuration, ILogger<GpLookupConfig> logger)
         {
@@ -31,6 +32,8 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             GpLookupApiKey = configuration.GetOrWarn("GP_LOOKUP_API_KEY", logger);
             
             PostcodeLookupSearchRadiusKm = configuration.GetOrWarn("POSTCODE_LOOKUP_SEARCH_RADIUS_KM", logger);
+
+            GpPraticeOdsCodeForEpsEnabledCheckOverride = configuration.GetOrWarn("GP_PRACTICE_ODS_CODE_FOR_EPS_ENABLED_CHECK_OVERRIDE", logger);
         }
     }
 }

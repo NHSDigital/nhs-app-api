@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NHSOnline.Backend.PfsApi.GpSearch
 {
@@ -13,5 +13,10 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
         string GpLookupApiKey { get; }
 
         string PostcodeLookupSearchRadiusKm { get; }
+
+        /// <summary>
+        /// Required for testing as our test ODS codes do not exist in NHS search results.
+        /// </summary>
+        string GpPraticeOdsCodeForEpsEnabledCheckOverride { get; }
     }
 }

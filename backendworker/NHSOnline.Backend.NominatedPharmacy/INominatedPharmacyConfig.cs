@@ -4,6 +4,8 @@ namespace NHSOnline.Backend.NominatedPharmacy
 {
     public interface INominatedPharmacyConfig
     {
+        bool IsNominatedPharmacyEnabled { get; }
+
         Uri BaseUrl { get; }
 
         string SpineAccreditedSystemIdFrom { get; }
