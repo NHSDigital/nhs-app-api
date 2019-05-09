@@ -16,6 +16,7 @@ import {
   DATA_SHARING_PREFERENCES,
   INDEX,
   LOGIN,
+  LOGOUT,
   BEGINLOGIN,
   MORE,
   MYRECORD,
@@ -69,6 +70,10 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaders.login';
       route.meta.pageTitleKey = 'pageTitles.login';
+      break;
+    case LOGOUT.name:
+      route.meta.headerKey = '';
+      route.meta.pageTitleKey = '';
       break;
     case BEGINLOGIN.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
