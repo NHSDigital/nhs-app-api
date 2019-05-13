@@ -8,14 +8,15 @@
     <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink"
                            id="link-to-change-pharmacy"
                            :click-func="goToChangeNominatedPharmacySearch"
-                           :class="[$style.checkFeaturesLink, $style['link']]"
+                           :class="[$style['spacing-top']]"
                            :text="$t('nominatedPharmacy.changePharmacyLink')"
                            tag="a"
                            tabindex="0">
       {{ $t('nominatedPharmacy.changePharmacyLink') }}
     </analytics-tracked-tag>
     <pharmacy-opening-times id="pharmacy-opening-times"
-                            :pharmacy-opening-time="pharmacy.openingTimesFormatted" />
+                            :pharmacy-opening-time="pharmacy.openingTimesFormatted"
+                            :class="[$style['spacing-top']]" />
   </div>
 </template>
 
@@ -97,4 +98,9 @@ export default {
 .additional-padding {
   margin-top: 1em;
 }
+
+.spacing-top {
+  margin: 1.5em 0;
+}
+
 </style>

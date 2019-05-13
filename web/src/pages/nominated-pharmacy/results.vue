@@ -1,6 +1,6 @@
 <template>
   <div :class="[$style.content, 'pull-content']">
-    <div v-if="noResultsFound">
+    <div v-if="noResultsFound" :class="$style.resultPanel">
       <h2>
         {{ $t('nominatedPharmacySearchResults.errors.noResultsFound.header') }}
       </h2>
@@ -11,7 +11,7 @@
         <li>{{ $t('nominatedPharmacySearchResults.errors.noResultsFound.message2') }}</li>
       </ul>
     </div>
-    <div v-if="!noResultsFound">
+    <div v-if="!noResultsFound" :class="$style.resultPanel">
       <p>{{ foundResults }}</p>
       <ul id="searchResults"
           :class="[$style['list-menu-white'], $style.resultList]">
@@ -137,9 +137,12 @@ export default {
 @import '../../style/listmenu';
 @import "../../style/colours";
 
-.resultList {
+.resultPanel {
   margin-top: 1em;
   margin-bottom: 1em;
+}
+.resultList {
+  margin-top: 1em;
 }
 
 .fieldName {

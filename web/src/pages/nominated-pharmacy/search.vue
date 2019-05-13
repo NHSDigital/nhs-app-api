@@ -3,19 +3,24 @@
     <div :class="$style.info">
       <p> {{ $t('searchNominatedPharmacy.line1') }} </p>
       <h3> {{ $t('searchNominatedPharmacy.subHeader') }} </h3>
-      <p> {{ $t('searchNominatedPharmacy.line2') }} </p>
+      <p id="pharmacy-search-label"
+         :class="[$style['search-label-spacing'], $style['search-label']]">
+        {{ $t('searchNominatedPharmacy.line2') }}
+      </p>
       <error-message v-if="showError"
                      :id="$style['error-label']"
+                     :class="$style['search-label-spacing']"
                      role="alert">
         {{ $t('searchNominatedPharmacy.emptySearchError') }}
       </error-message>
       <form @submit.prevent="searchFormSubmitted">
         <generic-text-input id="searchTextInput"
                             v-model="searchQuery"
-                            :class="$style.inputSpacing"
+                            :class="$style['input-spacing']"
                             type="text"
+                            a-labelled-by="pharmacy-search-label"
                             name="searchQuery"
-                            maxlength="10"/>
+                            :maxlength="searchQueryMaxLengthAsString"/>
         <generic-button :button-classes="['green', 'button']">
           {{ $t('searchNominatedPharmacy.searchButton') }}
         </generic-button>
@@ -52,6 +57,7 @@ export default {
   },
   data() {
     return {
+      searchQueryMaxLength: 150,
       isButtonDisabled: false,
       searchQuery: '',
       allPharmaciesURL: NOMINATED_PHARMACY_SEARCH.path,
@@ -66,6 +72,9 @@ export default {
     },
     showError() {
       return this.submissionError;
+    },
+    searchQueryMaxLengthAsString() {
+      return this.searchQueryMaxLength.toString();
     },
   },
   created() {
@@ -115,7 +124,9 @@ export default {
       return processedQuery;
     },
     validateSearchQuery(searchQuery) {
-      return searchQuery && searchQuery.length >= 1 && searchQuery.length <= 10;
+      return searchQuery &&
+             searchQuery.length >= 1 &&
+             searchQuery.length <= this.searchQueryMaxLength;
     },
     async searchForPharmacies(searchQuery) {
       const pharmacySearchResult = {
@@ -150,11 +161,22 @@ export default {
 @import "../../style/buttons";
 @import "../../style/spacings";
 @import '../../style/colours';
+@import '../../style/textstyles';
 
 .above-float-button {
   margin-bottom: $marginBottomFullScreen;
 }
-.inputSpacing{
- margin-bottom: 1em;
+
+.input-spacing {
+  margin-bottom: 1em;
+}
+
+.search-label-spacing {
+  margin-bottom: 1em;
+}
+
+.search-label {
+  @include small_text;
+  color: $light_grey;
 }
 </style>

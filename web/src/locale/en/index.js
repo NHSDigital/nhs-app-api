@@ -1280,7 +1280,7 @@ export default {
     searchButton: 'Search',
     link1: 'See all internet pharmacies',
     link2: 'See all dispensing appliance contractors',
-    emptySearchError: 'Enter a postcode',
+    emptySearchError: 'Enter postcode, town or pharmacy name',
   },
   confirmNominatedPharmacy: {
     confirmButton: 'Confirm',
