@@ -2,7 +2,7 @@
   <div>
     <collapsible-dialog :class="$style['opening-times']">
       <template slot="header">
-        {{ $t('nominatedPharmacy.openingTimes') }}
+        {{ $t('nominated_pharmacy.openingTimes') }}
       </template>
       <div>
         <div v-for="(openingTimeDetail, i)
@@ -12,7 +12,7 @@
             <div :class="$style['column']">{{ openingTimeDetail.day }}</div>
             <div :class="$style['column']">
               <div
-                v-if="openingTimeDetail.times.length === 0">{{ $t('nominatedPharmacy.closed') }}
+                v-if="openingTimeDetail.times.length === 0">{{ $t('nominated_pharmacy.closed') }}
               </div>
               <div v-else>
                 <div v-for="(openingTime, j) in openingTimeDetail.times"

@@ -40,8 +40,8 @@ describe('confirm nominated pharmacy', () => {
     });
 
     it('will translate the line 1 text', () => {
-      expect($t).toHaveBeenCalledWith('confirmNominatedPharmacy.line1');
-      expect($t).toHaveBeenCalledWith('nominatedPharmacy.line1');
+      expect($t).toHaveBeenCalledWith('nominated_pharmacy.confirm.line1');
+      expect($t).toHaveBeenCalledWith('nominated_pharmacy.line1');
     });
   });
 
@@ -67,16 +67,16 @@ describe('confirm nominated pharmacy', () => {
       expect(confirmButton.classes()).toContain($style.button);
     });
 
-    it('will use "confirmNominatedPharmacy.confirmButton" for text', () => {
+    it('will use "nominated_pharmacy.confirm.confirmButton" for text', () => {
       expect(confirmButton.text())
-        .toEqual('translate_confirmNominatedPharmacy.confirmButton');
+        .toEqual('translate_nominated_pharmacy.confirm.confirmButton');
     });
 
     it('will submit nominated pharmacy on click and call to redirect', async () => {
       dependency.redirectTo = jest.fn();
       await confirmButton.trigger('click');
       expect($store.dispatch).toHaveBeenNthCalledWith(1, 'nominatedPharmacy/update', 'RR123');
-      expect($store.dispatch).toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_confirmNominatedPharmacy.pharmacyChanged');
+      expect($store.dispatch).toHaveBeenNthCalledWith(2, 'flashMessage/addSuccess', 'translate_nominated_pharmacy.confirm.pharmacyChanged');
       expect(dependency.redirectTo)
         .toHaveBeenCalledWith(wrapper.vm, NOMINATED_PHARMACY.path, null);
     });

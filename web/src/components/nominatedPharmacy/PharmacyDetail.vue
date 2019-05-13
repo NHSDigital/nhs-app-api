@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>{{ $t('nominatedPharmacy.line1') }}</p>
-    <p v-if="!isMyNominatedPharmacy">{{ $t('confirmNominatedPharmacy.line1') }}</p>
+    <p>{{ $t('nominated_pharmacy.line1') }}</p>
+    <p v-if="!isMyNominatedPharmacy">{{ $t('nominated_pharmacy.confirm.line1') }}</p>
     <pharmacy-summary id="pharmacy-summary"
                       :pharmacy="pharmacy" />
     <hr>
@@ -9,10 +9,10 @@
                            id="link-to-change-pharmacy"
                            :click-func="goToChangeNominatedPharmacySearch"
                            :class="[$style['spacing-top']]"
-                           :text="$t('nominatedPharmacy.changePharmacyLink')"
+                           :text="$t('nominated_pharmacy.changePharmacyLink')"
                            tag="a"
                            tabindex="0">
-      {{ $t('nominatedPharmacy.changePharmacyLink') }}
+      {{ $t('nominated_pharmacy.changePharmacyLink') }}
     </analytics-tracked-tag>
     <pharmacy-opening-times id="pharmacy-opening-times"
                             :pharmacy-opening-time="pharmacy.openingTimesFormatted"

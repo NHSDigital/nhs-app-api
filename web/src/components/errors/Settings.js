@@ -16,6 +16,7 @@ import {
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
+  NOMINATED_PHARMACY_CONFIRM,
 } from '@/lib/routes';
 
 export default {
@@ -60,6 +61,12 @@ export default {
     {
       route: PRESCRIPTION_CONFIRM_COURSES.path,
       errorOverrideStyles: { 466: 'plain' },
+      redirectUrl: {
+        default: PRESCRIPTIONS.path,
+      },
+    },
+    {
+      route: NOMINATED_PHARMACY_CONFIRM.path,
       redirectUrl: {
         default: PRESCRIPTIONS.path,
       },

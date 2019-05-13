@@ -53,7 +53,7 @@ export default {
     getContinueButtonText() {
       return this.hasNoNominatedPharmacy ?
         this.$t('nominatedPharmacyNotFound.continueButton') :
-        this.$t('nominatedPharmacy.continueButton');
+        this.$t('nominated_pharmacy.continueButton');
     },
     showChangePharmacyLink() {
       if (this.pharmacy.pharmacyType !== PharmacyType.P3) {

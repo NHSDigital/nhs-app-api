@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h2 :class="$style['pharmacy-name']"> {{ pharmacy.pharmacyName }} </h2>
+    <div id="pharmacyName" :class="$style['pharmacy-name']">
+      <h2 v-if="pharmacyNameAsHeader"> {{ pharmacy.pharmacyName }} </h2>
+      <p v-else> {{ pharmacy.pharmacyName }} </p>
+    </div>
     <p id="address"> {{ formatAddress(pharmacy) }} </p>
     <p id="phoneNumber"> {{ pharmacy.telephoneNumber }} </p>
   </div>
@@ -12,6 +15,10 @@ export default {
     pharmacy: {
       type: Object,
       required: true,
+    },
+    pharmacyNameAsHeader: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {

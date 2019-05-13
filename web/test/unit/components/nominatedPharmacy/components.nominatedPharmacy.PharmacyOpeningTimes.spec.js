@@ -51,7 +51,7 @@ describe('pharmacy summary', () => {
       expect(openingTimeRows.length).toBe(3);
 
       const sunday = openingTimeRows.at(0);
-      expect(sunday.text()).toContain('Sunday translate_nominatedPharmacy.closed');
+      expect(sunday.text()).toContain('Sunday translate_nominated_pharmacy.closed');
 
       const monday = openingTimeRows.at(1);
       expect(monday.text()).toContain('Monday');

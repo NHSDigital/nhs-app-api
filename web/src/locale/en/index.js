@@ -147,14 +147,6 @@ export default {
       inline: 'Select a medication',
     },
   },
-  nominatedPharmacy: {
-    pageTitle: 'TBC',
-    line1: 'If you order repeat medication using the NHS App, this pharmacy is where it will be sent.',
-    changePharmacyLink: 'Change my nominated pharmacy',
-    openingTimes: 'Opening times',
-    continueButton: 'Continue',
-    closed: 'Closed',
-  },
   nominatedPharmacySearchResults: {
     header: 'Change my nominated pharmacy',
     title: 'Change my nominated pharmacy',
@@ -602,6 +594,25 @@ export default {
           subheader: 'You previously ordered at least one of these medications in the last 30 days.',
           message: 'If you need more medication sooner, contact your GP.',
         },
+      },
+    },
+  },
+  nominated_pharmacy: {
+    line1: 'If you order repeat medication using the NHS App, this pharmacy is where it will be sent.',
+    changePharmacyLink: 'Change my nominated pharmacy',
+    openingTimes: 'Opening times',
+    continueButton: 'Continue',
+    closed: 'Closed',
+    confirm: {
+      confirmButton: 'Confirm',
+      line1: 'This is the pharmacy your next repeat prescription will be sent to.',
+      pharmacyChanged: 'You changed your nominated pharmacy.',
+      errors: {
+        pageHeader: 'Error updating nomination',
+        pageTitle: 'Error updating nomination',
+        header: 'There\'s been a problem updating your pharmacy nomination',
+        message: 'Go back and try again. If the problem continues and you need to nominate a pharmacy now, contact your GP surgery directly.',
+        retryButtonText: 'Back to prescriptions',
       },
     },
   },
@@ -1281,12 +1292,6 @@ export default {
     link1: 'See all internet pharmacies',
     link2: 'See all dispensing appliance contractors',
     emptySearchError: 'Enter postcode, town or pharmacy name',
-  },
-  confirmNominatedPharmacy: {
-    confirmButton: 'Confirm',
-    cancelButton: 'Cancel',
-    line1: 'This is the pharmacy your next repeat prescription will be sent to.',
-    pharmacyChanged: 'You changed your nominated pharmacy.',
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling today?',

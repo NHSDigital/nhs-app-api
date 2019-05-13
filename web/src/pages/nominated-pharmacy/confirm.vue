@@ -6,7 +6,7 @@
     <generic-button id="confirm-button"
                     :class="[$style.button, $style.green]"
                     @click.stop.prevent="submitNominatedPharmacy">
-      {{ $t('confirmNominatedPharmacy.confirmButton') }}
+      {{ $t('nominated_pharmacy.confirm.confirmButton') }}
     </generic-button>
     <analytics-tracked-tag :text="$t('th03.errors.backButton')">
       <generic-button
@@ -45,7 +45,7 @@ export default {
   methods: {
     async submitNominatedPharmacy() {
       await this.$store.dispatch('nominatedPharmacy/update', this.nominatedPharmacy.odsCode);
-      this.$store.dispatch('flashMessage/addSuccess', this.$t('confirmNominatedPharmacy.pharmacyChanged'));
+      this.$store.dispatch('flashMessage/addSuccess', this.$t('nominated_pharmacy.confirm.pharmacyChanged'));
       this.$store.dispatch('nominatedPharmacy/clearSelectedNominatedPharmacy');
       redirectTo(this, NOMINATED_PHARMACY.path, null);
     },

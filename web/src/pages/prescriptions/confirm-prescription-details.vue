@@ -28,9 +28,10 @@
       </div>
       <div v-if="!hasNoNominatedPharmacy" id="my-nominated-pharmacy">
         <hr>
-        <h2 :class="$style.pharmacyHeader">{{ $t('rp04.nominatedPharmacyHeader') }}</h2>
+        <b :class="$style.pharmacyHeader">{{ $t('rp04.nominatedPharmacyHeader') }}</b>
         <pharmacy-summary id="pharmacy-summary"
-                          :pharmacy="nominatedPharmacy" />
+                          :pharmacy="nominatedPharmacy"
+                          :pharmacy-name-as-header="false" />
       </div>
     </div>
 
@@ -126,7 +127,7 @@ export default {
       margin-bottom: 1em;
     }
     .pharmacyHeader {
-      font-size: 1.5em;
+      font-size: 1.2em;
     }
     hr {
       opacity: unset;

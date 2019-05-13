@@ -147,9 +147,9 @@ describe('nominated pharmacy found', () => {
       expect(continueButton.exists()).toBe(true);
     });
 
-    it('will use "nominatedPharmacy.continueButton" for text', () => {
+    it('will use "nominated_pharmacy.continueButton" for text', () => {
       expect(continueButton.text())
-        .toEqual('translate_nominatedPharmacy.continueButton');
+        .toEqual('translate_nominated_pharmacy.continueButton');
     });
 
     it('will navigate to the repeat prescriptions page on click', async () => {
