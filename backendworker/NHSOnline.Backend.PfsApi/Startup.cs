@@ -1,3 +1,4 @@
+using CorrelationId;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -83,6 +84,8 @@ namespace NHSOnline.Backend.PfsApi
                 .AddCookie(ConfigureServiceCookies);
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
+            
+            services.AddCorrelationId();
         
             services.AddCors();
 
@@ -196,6 +199,8 @@ namespace NHSOnline.Backend.PfsApi
                 );
             }
 
+            app.UseCorrelationId();
+            
             app.UseMvc();
 
             _modularStartup.Configure(app, env);

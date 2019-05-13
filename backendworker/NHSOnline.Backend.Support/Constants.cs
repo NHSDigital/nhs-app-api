@@ -45,6 +45,7 @@ namespace NHSOnline.Backend.Support
             public const string IdentityToken = NhsoPrefix + "Identity-Token";
             public const string WebAppVersion = NhsoPrefix + "Web-Version-Tag";
             public const string NativeAppVersion = NhsoPrefix + "Native-Version-Tag";
+            public const string CorrelationIdentifier = NhsoPrefix + "Request-ID";
         }
 
         public static class AuditingTitles

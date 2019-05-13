@@ -11,6 +11,7 @@ using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Middleware;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi
@@ -54,7 +55,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
             services.AddSingleton(typeof(HttpRequestIdentificationHandler<>));
-            
+
             services.AddOptions();
             
             _modularStartup.ConfigureServices(services);
@@ -95,6 +96,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                     .AllowCredentials()
                 );
             }
+
+            app.UseLogRequestHeader(new LogRequestHeaderOptions
+            {
+               HeaderName = Support.Constants.HttpHeaders.CorrelationIdentifier,
+               LogTemplate = "CorrelationId={value}",
+            });
             
             app.UseMvc();
         }
