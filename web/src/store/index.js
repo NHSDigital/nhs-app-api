@@ -1,3 +1,4 @@
+import biometricBanner from './modules/biometricBanner';
 import cookieBanner from './modules/cookieBanner';
 import header from './modules/header';
 import pageTitle from './modules/pageTitle';
@@ -24,6 +25,7 @@ export const modules = {
   appVersion,
   auth,
   availableAppointments,
+  biometricBanner,
   cookieBanner,
   device,
   errors,

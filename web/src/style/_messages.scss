@@ -49,4 +49,12 @@
 			color: $white;
 		}
 	}
+  &.message {
+    border-top-color: $purple;
+    border-top: none;
+    .icon {
+      background-color: $purple;
+      color: $white;
+    }
+  }
 }

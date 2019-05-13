@@ -11,6 +11,7 @@
       <h2 :class="$style.header" data-purpose="greeting" data-hj-suppress>{{ greetingMessage }}</h2>
       <welcome-section :date-of-birth="$store.state.session.dateOfBirth"
                        :nhs-number="$store.state.session.nhsNumber" />
+      <biometric-banner />
       <div :class="$style.navigationList">
         <navigation-list-menu
           nhs-number="nhsNumber"
@@ -27,12 +28,22 @@
 import BetaBanner from '../components/BetaBanner';
 import WelcomeSection from '../components/WelcomeSection';
 import NavigationListMenu from '../components/NavigationListMenu';
+import BiometricBanner from '../components/widgets/BiometricBanner';
+import NativeCallbacks from '@/services/native-app';
+import { accountLinks } from '@/lib/common-links';
 
 export default {
   components: {
     BetaBanner,
+    BiometricBanner,
     WelcomeSection,
     NavigationListMenu,
+  },
+  data() {
+    return {
+      links: accountLinks(this.$env),
+      nativeLoginOptionsMethodExists: true,
+    };
   },
   computed: {
     greetingMessage() {
@@ -43,9 +54,14 @@ export default {
     shouldShowDesktopVersion() {
       return (this.$store.state.device.source !== 'android' && this.$store.state.device.source !== 'ios');
     },
+    shouldShowBiometrics() {
+      return this.$env.BIOMETRICS_ENABLED && this.nativeLoginOptionsMethodExists &&
+        (this.$store.state.device.source === 'android' || this.$store.state.device.source === 'ios');
+    },
   },
   mounted() {
     window.scrollTo(0, 0);
+    this.nativeLoginOptionsMethodExists = NativeCallbacks.goToLoginOptionsExists();
   },
 };
 </script>

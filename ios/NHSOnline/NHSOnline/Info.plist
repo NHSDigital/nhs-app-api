@@ -113,6 +113,8 @@
 	<string>$(HAVE_SHOWN_THROTTLING_CAROUSEL_BEFORE)</string>
 	<key>HomeUrl</key>
 	<string>$(BASE_SCHEME)://$(HOME_URL)</string>
+	<key>HomeHost</key>
+	<string>$(HOME_URL)</string>
 	<key>HotJarLinkUrl</key>
 	<string>https://$(HOT_JAR_LINK_URL)</string>
 	<key>Nhs111Url</key>

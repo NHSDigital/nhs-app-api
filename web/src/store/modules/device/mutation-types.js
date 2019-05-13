@@ -9,3 +9,4 @@ export const SET_SOURCE_DEVICE = 'SET_SOURCE_DEVICE';
 export const INIT_DEVICE = 'INIT_DEVICE';
 export const GO_TO_CHECK_SYMPTOMS = 'GO_TO_CHECK_SYMPTOMS';
 export const GO_TO_GP_FINDER = 'GO_TO_GP_FINDER';
+

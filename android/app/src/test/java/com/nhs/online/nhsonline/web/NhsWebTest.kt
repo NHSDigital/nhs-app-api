@@ -2,6 +2,7 @@ package com.nhs.online.nhsonline.web
 
 import android.app.Activity
 import android.content.res.Resources
+import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
 import com.nhaarman.mockito_kotlin.*
@@ -197,6 +198,16 @@ class NhsWebTest {
         verify(webviewSettings).textZoom = originalTextSize
         verify(appPersistData).storeBoolean(hasThrottlingShown, true)
         verify(spyNhsWeb).loadWelcomePage()
+    }
+
+    @Test
+    fun onBiometricOptionChanged() {
+        nhsWeb.onWebLoggedIn()
+        nhsWeb.onBiometricOptionChanged()
+        val cookies: String? = CookieManager.getInstance()
+                .getCookie(activity.resources.getString(R.string.cookieDomain))
+                ?.takeIf { it.contains("HideBiometricBanner=") }
+        assert(!cookies.isNullOrBlank())
     }
 
     @Test

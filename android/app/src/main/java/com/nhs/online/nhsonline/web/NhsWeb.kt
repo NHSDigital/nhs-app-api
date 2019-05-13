@@ -61,7 +61,7 @@ class NhsWeb(
         webView.addJavascriptInterface(webInterface, NATIVE_APP)
 
         webView.webChromeClient = chromeClient
-        setupBetaCookie()
+        clearSessionCookies()
     }
 
     fun loadWelcomePage() = loadUrl(readResourceString(R.string.baseURL))
@@ -181,6 +181,16 @@ class NhsWeb(
         }
     }
 
+    fun onBiometricOptionChanged() {
+        val cookies: String? = CookieManager.getInstance()
+                .getCookie(activity.resources.getString(R.string.cookieDomain))
+                ?.takeIf { it.contains("HideBiometricBanner=") }
+        if (cookies.isNullOrBlank()) {
+            CookieManager.getInstance().setCookie(readResourceString(R.string.cookieDomain),
+                    "HideBiometricBanner=true; max-age=${60 * 60 * 24 * 365 * 5}")
+        }
+    }
+
     fun handleWebClientLocationResult(grantResults: IntArray) {
         chromeClient.handleLocationPermissionResult(grantResults)
     }
@@ -217,17 +227,23 @@ class NhsWeb(
         return
     }
 
-    private fun setupBetaCookie() {
-        CookieManager.getInstance().removeAllCookies(null)
-
-        val persistedBetaCookie = appPersistData.getBetaCookie()
-        if (!persistedBetaCookie.isNullOrBlank()) {
-            CookieManager.getInstance().setCookie(readResourceString(R.string.cookieDomain),
-                "$persistedBetaCookie; max-age=${60 * 60 * 24 * 365}")
+    fun clearSessionCookies() {
+        val host = readResourceString(R.string.baseHost)
+        val allHosts = host.split('.').foldRight(listOf<String>()) { e, accumulator -> accumulator + if (accumulator.any()) "$e.${accumulator.last()}" else e }
+        for (String in allHosts) {
+            clearCookie("nhso.session", "https://$String")
+            clearCookie("NHSO-Session-Id", "https://.$String")
+            clearCookie("nhso.terms", "https://$String")
+            clearCookie("nhso.auth", "https://$String")
         }
+        CookieManager.getInstance().flush()
     }
 
-    private fun readResourceString(resourceId: Int): String {
+    fun readResourceString(resourceId: Int): String {
         return activity.getString(resourceId)
+    }
+
+    private fun clearCookie(cookieName: String, domain: String) {
+        CookieManager.getInstance().setCookie(domain, "$cookieName=; Expires=Sat, 1 Jan 2000 00:00:01 UTC;")
     }
 }

@@ -26,7 +26,7 @@ export default {
     messageType: {
       type: String,
       default: 'error',
-      validator: value => ['success', 'warning', 'error'].indexOf(value) !== -1,
+      validator: value => ['success', 'warning', 'error', 'message'].indexOf(value) !== -1,
     },
     messageId: {
       type: String,
@@ -48,6 +48,7 @@ export default {
         success: 'Success',
         warning: 'Warning',
         error: 'Error',
+        message: 'Message',
       },
     };
   },

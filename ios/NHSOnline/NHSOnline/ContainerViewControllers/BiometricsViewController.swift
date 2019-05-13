@@ -1,4 +1,5 @@
 import UIKit
+import WebKit
 import LocalAuthentication
 import os.log
 
@@ -11,11 +12,15 @@ class BiometricsViewController: UIViewController {
     @IBOutlet weak var biometricToggle: UISwitch!
     @IBOutlet weak var BiometricLabel: UILabel!
     
+    var webViewController: WebViewController?
     var homeViewController: HomeViewController?
     let laContext: LAContext = LAContext()
     var biometricService: BiometricService?
+    let ExpTime = TimeInterval(60 * 60 * 24 * 365 * 5)
     
     @IBAction func biometricToggleChanged(_ sender: UISwitch) {
+        setCookie(key: "HideBiometricBanner", value: "true" as AnyObject)
+
         if(sender.isOn) {
             DispatchQueue.main.async {
                 sender.setOn(false, animated: false)
@@ -111,5 +116,35 @@ class BiometricsViewController: UIViewController {
         biometricToggle.setOn(true, animated: true)
         storeBiometricState()
         homeViewController?.showBiometricResultsContainer(registration: true)
+    }
+    
+    func setCookie(key: String, value: AnyObject) {
+        let domain = config().HomeHost.dropLast()
+        
+        let cookie = HTTPCookie(properties: [
+            .domain: String(domain),
+            .path: "/",
+            .name: key,
+            .value: value,
+            .secure: "TRUE",
+            .expires: NSDate(timeIntervalSinceNow: 31556926)
+            ])!
+
+        if #available(iOS 11.0, *) {
+            setWKCookie(cookie)
+        }
+        else {
+            setHTTPCookie(cookie)
+        }
+    }
+    @available(iOS 11.0, *)
+    func setWKCookie(_ cookie: HTTPCookie) {
+        let cookieStore = WKWebsiteDataStore.default().httpCookieStore
+        cookieStore.setCookie(cookie) { }
+    }
+    
+    func setHTTPCookie(_ cookie: HTTPCookie) {
+        HTTPCookieStorage.shared.cookieAcceptPolicy = HTTPCookie.AcceptPolicy.always
+        HTTPCookieStorage.shared.setCookie(cookie)
     }
 }

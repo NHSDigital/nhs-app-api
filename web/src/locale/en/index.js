@@ -161,6 +161,15 @@ export default {
       linkText: 'Find out more about cookies',
     },
   },
+  biometricBanner: {
+    header: 'Login options',
+    message: {
+      text: 'If your mobile device supports fingerprint or face recognition, you can use it to log in to the NHS App instead of a password and security code.',
+      settingsButton: 'Open settings',
+      dismissLink: 'Dismiss',
+    },
+
+  },
   termsAndConditions: {
     title: 'Accept conditions of use',
     errorMsgHeader: 'There\'s a problem',
@@ -806,7 +815,7 @@ export default {
     cookiesPolicy: 'Cookies policy',
     openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
-    passwordOptions: 'Login & password options',
+    passwordOptions: 'Login and password options',
     accessibilityStatement: 'Accessibility statement',
   },
   sc04: {

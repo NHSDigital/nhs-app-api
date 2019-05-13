@@ -220,6 +220,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
 
         biometricToggleSwitch.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
+
                 return@setOnTouchListener biometricsInterface
                     .requestBiometricsRegistrationStateChange()
             }
@@ -359,6 +360,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     override fun getActivity(): FragmentActivity = this
 
     override fun toggleBiometricSwitch(isChecked: Boolean) {
+        nhsWeb.onBiometricOptionChanged()
         biometricToggleSwitch.isChecked = isChecked
     }
 
