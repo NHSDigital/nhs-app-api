@@ -1,6 +1,15 @@
 <template>
   <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
     <div :class="$style.info">
+      <message-dialog v-if="isInternetPharmacy"
+                      id="warning-dialog"
+                      message-type="warning"
+                      icon-text="Important">
+        <message-text id="warning-text"
+                      :class="$style.warningText">
+          {{ warningText }}
+        </message-text>
+      </message-dialog>
       <p> {{ $t('nominated_pharmacy.search.line1') }} </p>
       <h3> {{ $t('nominated_pharmacy.search.subHeader') }} </h3>
       <p id="pharmacy-search-label"
@@ -45,6 +54,9 @@ import { getDynamicStyle } from '@/lib/desktop-experience';
 import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
 import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_SEARCH_RESULTS, PRESCRIPTIONS } from '@/lib/routes';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 import { redirectTo } from '@/lib/utils';
 
 export default {
@@ -54,6 +66,8 @@ export default {
     AbbreviationsArrowRightIcon,
     AnalyticsTrackedTag,
     ErrorMessage,
+    MessageDialog,
+    MessageText,
   },
   data() {
     return {
@@ -75,6 +89,16 @@ export default {
     },
     searchQueryMaxLengthAsString() {
       return this.searchQueryMaxLength.toString();
+    },
+    isInternetPharmacy() {
+      return (
+        this.$store.state.nominatedPharmacy.pharmacy.pharmacySubType ===
+          PharmacySubType.InternetPharmacy
+      );
+    },
+    warningText() {
+      return this.$t('nominated_pharmacy.warning.changeInternetPharmacy')
+        .replace(/{pharmacyName}/g, this.$store.state.nominatedPharmacy.pharmacy.pharmacyName);
     },
   },
   created() {

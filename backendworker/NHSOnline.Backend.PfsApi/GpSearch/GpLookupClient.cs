@@ -115,7 +115,6 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 ILogger logger)
             {
                 var stringResponse = await GetStringResponse(responseMessage, logger);
-                                
                 return string.IsNullOrEmpty(stringResponse)
                     ? this : ParseResponse(responseParser, stringResponse, responseMessage);
             }

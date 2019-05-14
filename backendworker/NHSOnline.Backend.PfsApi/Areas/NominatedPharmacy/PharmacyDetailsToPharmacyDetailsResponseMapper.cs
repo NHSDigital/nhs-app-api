@@ -30,6 +30,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.NominatedPharmacy
             var pharmacyDetails = new PharmacyDetails
             {
                 PharmacyName = pharmacy.OrganisationName,
+                PharmacySubType = pharmacy.OrganisationSubType,
+                URL = pharmacy.URL,
                 AddressLine1 = pharmacy.Address1,
                 AddressLine2 = pharmacy.Address2,
                 AddressLine3 = pharmacy.Address3,

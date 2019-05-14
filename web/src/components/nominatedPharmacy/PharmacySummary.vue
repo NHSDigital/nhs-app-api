@@ -4,13 +4,26 @@
       <h2 v-if="pharmacyNameAsHeader"> {{ pharmacy.pharmacyName }} </h2>
       <p v-else> {{ pharmacy.pharmacyName }} </p>
     </div>
-    <p id="address"> {{ formatAddress(pharmacy) }} </p>
+    <p v-if="!isInternetPharmacy" id="pharmacyAddress"> {{ formatAddress(pharmacy) }} </p>
+    <analytics-tracked-tag v-if="isInternetPharmacy"
+                           id="url"
+                           :href="pharmacy.url"
+                           :text="$t(pharmacy.url)"
+                           tag="a" target="_blank">
+      {{ pharmacy.url }}
+    </analytics-tracked-tag>
     <p id="phoneNumber"> {{ pharmacy.telephoneNumber }} </p>
   </div>
 </template>
 
 <script>
+import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+
 export default {
+  components: {
+    AnalyticsTrackedTag,
+  },
   props: {
     pharmacy: {
       type: Object,
@@ -19,6 +32,11 @@ export default {
     pharmacyNameAsHeader: {
       type: Boolean,
       default: true,
+    },
+  },
+  computed: {
+    isInternetPharmacy() {
+      return (this.pharmacy.pharmacySubType === PharmacySubType.InternetPharmacy);
     },
   },
   methods: {

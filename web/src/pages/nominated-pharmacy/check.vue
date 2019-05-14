@@ -11,7 +11,8 @@
                        :pharmacy="pharmacy"
                        :is-my-nominated-pharmacy="true"
                        :previous-path="currentPage"
-                       :can-change-pharmacy="showChangePharmacyLink" />
+                       :can-change-pharmacy="showChangePharmacyLink"
+                       :show-instruction="!isInternetPharmacy" />
     </div>
 
     <generic-button id="continue-button-found"
@@ -33,6 +34,7 @@ import GenericButton from '@/components/widgets/GenericButton';
 import PharmacyDetail from '@/components/nominatedPharmacy/PharmacyDetail';
 import NoNominatedPharmacyWarning from '@/components/nominatedPharmacy/NoNominatedPharmacyWarning';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES, NOMINATED_PHARMACY_CHECK } from '@/lib/routes';
 import { redirectTo } from '@/lib/utils';
 
@@ -56,10 +58,10 @@ export default {
         this.$t('nominated_pharmacy.continueButton');
     },
     showChangePharmacyLink() {
-      if (this.pharmacy.pharmacyType !== PharmacyType.P3) {
-        return true;
-      }
-      return false;
+      return (this.pharmacy.pharmacyType !== PharmacyType.P3);
+    },
+    isInternetPharmacy() {
+      return (this.pharmacy.pharmacySubType === PharmacySubType.InternetPharmacy);
     },
   },
   created() {

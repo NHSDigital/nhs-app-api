@@ -9,7 +9,8 @@
         :pharmacy="nominatedPharmacy"
         :is-my-nominated-pharmacy="true"
         :previous-path="currentPage"
-        :can-change-pharmacy="true"/>
+        :can-change-pharmacy="true"
+        :show-instruction="true"/>
     </div>
     <analytics-tracked-tag :text="$t('generic.backButton.text')">
       <generic-button

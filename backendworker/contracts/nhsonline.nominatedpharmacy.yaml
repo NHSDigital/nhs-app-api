@@ -87,6 +87,12 @@ definitions:
       pharmacyType:
         type: string
         description: Type of the nominated pharmacy.
+      pharmacySubType:
+        type: string
+        description: Subtype of the nominated pharmacy.
+      url:
+        type: string
+        description: The main organisation's website URL.
       addressLine1:
         type: string
         description: First line of address.

@@ -954,11 +954,11 @@
             schema: 
               type: "object"
               description: "error response from backend api."
-              properties: 
-                errorCode: 
+              properties:
+                errorCode:
                   type: "integer"
                   description: "error code."
-                errorMessage: 
+                errorMessage:
                   type: "string"
                   description: "error message."
           504: 
@@ -1675,7 +1675,10 @@
                       odsCode: 
                         type: "string"
                         description: "Code to identify the pharmacy"
-                      openingTimes: 
+                      pharmacyType:
+                        type: "string"
+                        description: "Type of the nominated pharmacy."
+                      openingTimes:
                         type: "array"
                         description: "An array of opening times."
                         items: 
@@ -1716,7 +1719,10 @@
                     pharmacyName: 
                       type: "string"
                       description: "Name of the nominated pharmacy."
-                    pharmacyType: 
+                    pharmacySubType:
+                      type: "string"
+                      description: "Subtype of the nominated pharmacy."
+                    pharmacyType:
                       type: "string"
                       description: "Type of the nominated pharmacy."
                     addressLine1: 

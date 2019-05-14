@@ -106,8 +106,7 @@ describe('nominated pharmacy not found', () => {
   });
 });
 
-
-describe('nominated pharmacy found', () => {
+describe('community pharmacy is nominated', () => {
   let $store;
   let $style;
   let wrapper;
@@ -119,6 +118,7 @@ describe('nominated pharmacy found', () => {
     nominatedPharmacy: {
       pharmacy: {
         pharmacyName: 'Boots',
+        pharmacyType: 'P1',
         openingTimesFormatted: [{
           day: 'Sunday',
           times: [],

@@ -1,10 +1,11 @@
 <template>
   <div>
-    <p>{{ $t('nominated_pharmacy.line1') }}</p>
+    <p v-if="showInstruction" id="instruction">{{ $t('nominated_pharmacy.line1') }}</p>
     <p v-if="!isMyNominatedPharmacy">{{ $t('nominated_pharmacy.confirm.line1') }}</p>
     <pharmacy-summary id="pharmacy-summary"
                       :pharmacy="pharmacy" />
-    <hr>
+    <p v-if="isInternetPharmacy" id="statement"
+       :class="[$style['spacing-top']]">{{ $t('nominated_pharmacy.internetPharmacy') }}</p>
     <analytics-tracked-tag v-if="showChangeNominatedPharmacyLink"
                            id="link-to-change-pharmacy"
                            :click-func="goToChangeNominatedPharmacySearch"
@@ -14,7 +15,7 @@
                            tabindex="0">
       {{ $t('nominated_pharmacy.changePharmacyLink') }}
     </analytics-tracked-tag>
-    <pharmacy-opening-times id="pharmacy-opening-times"
+    <pharmacy-opening-times v-if="!isInternetPharmacy" id="pharmacy-opening-times"
                             :pharmacy-opening-time="pharmacy.openingTimesFormatted"
                             :class="[$style['spacing-top']]" />
   </div>
@@ -25,6 +26,7 @@
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import { NOMINATED_PHARMACY_SEARCH, NOMINATED_PHARMACY_CANNOT_CHANGE, PRESCRIPTIONS } from '@/lib/routes';
 import PharmacyType from '@/lib/pharmacy-detail/pharmacy-types';
+import PharmacySubType from '@/lib/pharmacy-detail/pharmacy-sub-types';
 import PharmacySummary from '@/components/nominatedPharmacy/PharmacySummary';
 import PharmacyOpeningTimes from '@/components/nominatedPharmacy/PharmacyOpeningTimes';
 import { redirectTo } from '@/lib/utils';
@@ -53,10 +55,21 @@ export default {
       type: Boolean,
       required: false,
     },
+    showInstruction: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   computed: {
     showChangeNominatedPharmacyLink() {
       return (this.isMyNominatedPharmacy && this.canChangePharmacy);
+    },
+    isInternetPharmacy() {
+      if (this.pharmacy.pharmacySubType === PharmacySubType.InternetPharmacy) {
+        return true;
+      }
+      return false;
     },
   },
   methods: {
@@ -78,11 +91,6 @@ export default {
 @import "../../style/textstyles";
 @import "../../style/home";
 
-.pharmacy-name {
-  margin-top: 0.5em;
-  margin-bottom: 0.2em;
-}
-
 .column {
   float: left;
   width: 50%;
@@ -93,10 +101,6 @@ export default {
   display: table;
   clear: both;
   padding-bottom: 0.5em;
-}
-
-.additional-padding {
-  margin-top: 1em;
 }
 
 .spacing-top {

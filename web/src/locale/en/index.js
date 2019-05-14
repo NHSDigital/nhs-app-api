@@ -615,6 +615,10 @@ export default {
         retryButtonText: 'Back to prescriptions',
       },
     },
+    internetPharmacy: 'This is an internet pharmacy.',
+    warning: {
+      changeInternetPharmacy: 'If you change your pharmacy from {pharmacyName}, you cannot change it back to {pharmacyName} using the NHS App.',
+    },
     search: {
       pageTitle: 'Change my nominated pharmacy',
       line1: 'The pharmacy you choose is where your repeat prescription will be sent.',

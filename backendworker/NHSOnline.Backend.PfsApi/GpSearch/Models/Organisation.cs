@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSearch.Models;
@@ -28,6 +29,12 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Models
         public string OpeningTimes { get; set; }
 
         public string Contacts { get; set; }
+
+        public string OrganisationSubType { get; set; }
+
+        [SuppressMessage("Microsoft.Naming", "CA1056",
+            Justification = "We want to display the exact URL/string returned from NHSSearch to avoid any parsing error.")]
+        public string URL { get; set; }
 
         public string Metrics { get; set; }
 

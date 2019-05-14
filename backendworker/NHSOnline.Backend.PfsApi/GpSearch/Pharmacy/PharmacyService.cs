@@ -53,13 +53,12 @@ namespace NHSOnline.Backend.PfsApi.GpSearch.Pharmacy
                     }
 
                     var pharmacy = pharmacyGetResult?.Body?.Organisations?.FirstOrDefault();
-
+                    
                     if (pharmacy == null)
                     {
                         _logger.LogInformation($"NHS Search service returned no pharmacy detail for: {odsCode}");
                         return new PharmacyDetailResponse(HttpStatusCode.NotFound);
                     }
-
                     return new PharmacyDetailResponse(pharmacyGetResult.StatusCode, pharmacy);
                 }
                 catch (HttpRequestException ex)
