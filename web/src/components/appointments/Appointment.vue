@@ -37,7 +37,7 @@
       <hr :class="$style.cancel"
           aria-hidden="true">
       <p>
-        <a :class="$style['cancel-link']"
+        <a :class="[$style['nhsuk-action-link__link'], $style['cancel-link']]"
            :href="appointmentCancellingPath"
            @click.stop.prevent="onCancel">
           {{ this.$t('appointments.index.cancelButtonText') }}
@@ -114,6 +114,10 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/panels";
 
+@import '~nhsuk-frontend/packages/core/settings/_all.scss';
+@import '~nhsuk-frontend/packages/core/tools/_all.scss';
+@import '~nhsuk-frontend/packages/core/elements/_links.scss';
+
 .panel {
   &.desktopWeb {
     hr {
@@ -148,11 +152,6 @@ export default {
     a.cancel-link {
       font-family: $default-web;
       font-weight: normal;
-    }
-
-    :visited {
-      color: #D40003;
-      outline-color: $focus_highlight;
     }
   }
 

@@ -91,35 +91,37 @@ export default {
 </script>
 
 <style module lang="scss">
-@import "../style/accessibility";
-@import "../style/colours";
-@import "../style/fonts";
+  @import "../style/accessibility";
+  @import "../style/colours";
+  @import "../style/fonts";
+
   .listMenu {
-   border-top: 1px #D8DDE0 solid;
-   list-style: none;
-   font-size: 1em;
-   margin-bottom: 1em;
+    border-top: 1px #D8DDE0 solid;
+    list-style: none;
+    font-size: 1em;
+    margin-bottom: 1em;
 
-   &.desktopWeb {
-    .listMenuItem {
-      font-family: $default-web;
-      font-weight: lighter;
-      margin: 0;
-      padding: 0.25em 0 0.25em 0;
-      @extend .focusBorder;
-    }
+    &.desktopWeb {
+      .listMenuItem {
+        font-family: $default-web;
+        font-weight: lighter;
+        margin: 0;
+        padding: 0.25em 0 0.25em 0;
+        @extend .focusBorder;
+      }
 
-    .listMenuAnchor {
-      font-family: $default-web;
-      font-weight: normal;
-      line-height: 1.5em;
+      .listMenuAnchor {
+        font-family: $default-web;
+        font-weight: normal;
+        line-height: 1.5em;
 
-      &:hover {
-       color: $black;
+        &:hover {
+          color: $black;
+        }
       }
     }
-   }
   }
+
   .listMenuItem {
     font-weight: normal;
     padding: 0.5em 0;
@@ -135,10 +137,8 @@ export default {
     font-size: 1em;
     line-height: 1.5em;
     color: #212B32;
-    :focus {
-      outline-color: $focus_highlight;
-    }
   }
+
   .listMenuAnchor {
     &.web {
       font-weight: bold;

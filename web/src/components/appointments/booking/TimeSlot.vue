@@ -72,7 +72,7 @@ export default {
     },
     onKeyDown(e) {
       if (e.keyCode === 13) {
-        this.$emit('select', this.timeSlot.ref);
+        this.select();
       }
     },
   },
@@ -96,12 +96,14 @@ export default {
      font-family: $default-web;
      font-weight: lighter;
     }
+    &:focus {
+      border-radius: 0.313em;
+    }
+
+    &:hover {
+      border-radius: 0.313em;
+    }
   }
-
- a:focus {
-  outline-color: $focus_highlight;
- }
-
  .strong {
    font-weight: 700;
  }

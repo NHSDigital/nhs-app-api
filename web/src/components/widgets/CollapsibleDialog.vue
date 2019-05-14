@@ -6,7 +6,7 @@
          role="button"
          tabindex="0"
          @click="toggle"
-         @keypress="keyPress($event)">
+         @keypress.13="toggle">
       <plus-minus-icon :icon-plus="!showContent" />
       <h2 :class="$style['info-message-title']">
         <slot name="header" />
@@ -55,11 +55,18 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/collapsibledialog";
+@import '../../style/collapsibledialog';
+@import '../../style/desktopWeb/accessibility';
 
 div.info-message {
  &.desktopWeb {
   .info-header {
+    &:focus{
+      @include outlineStyle;
+    }
+    &:hover{
+      @include outlineStyleLight;
+    }
    h2 {
     font-family: $default-web;
     font-weight: normal;

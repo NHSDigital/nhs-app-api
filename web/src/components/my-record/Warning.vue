@@ -63,6 +63,12 @@ export default {
     MessageText,
     DesktopGenericBackLink,
   },
+  props: {
+    id: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       indexPath: INDEX.path,
@@ -103,65 +109,73 @@ export default {
   }
 
   div {
-   &.desktopWeb {
-    max-width: 540px;
+    &.desktopWeb {
+      max-width: 540px;
 
-    h2 {
-     font-family: $default_web;
-     font-weight: bold;
-     font-size: 1.375em;
-     line-height: 1.375em;
-     letter-spacing: 0.5px;
+      h2 {
+        font-family: $default_web;
+        font-weight: bold;
+        font-size: 1.375em;
+        line-height: 1.375em;
+        letter-spacing: 0.5px;
+      }
+
+      .warningText {
+        font-family: $default_web;
+        font-weight: normal;
+      }
+
+      li {
+        font-family: $default_web;
+        font-weight: normal;
+      }
+
+      p {
+        font-family: $default_web;
+        font-weight: normal;
+      }
+
+      .button {
+        @include webButton;
+        box-sizing: border-box;
+        padding: 0.625em;
+        background-color: $nhs_blue;
+        border: none;
+        border-radius: 0.125em;
+        outline: none;
+        transition: all ease 0.5s;
+        cursor: pointer;
+        width: auto;
+        min-width: 16.875em;
+        padding-left: 2em;
+        padding-right: 2em;
+        max-width: 960px;
+        display: block;
+        width: auto;
+
+        :focus {
+          outline-color: $focus_highlight;
+          box-shadow: inset 0 0 0 4px $focus_highlight;
+          outline-offset: -5px;
+        }
+
+        &.green {
+          background-color: $light_green;
+          box-shadow: 0 0.125em 0 0 $dark_green;
+        }
+
+        &.green:focus {
+          outline-color: $focus_highlight;
+          box-shadow: inset 0 0 0 4px $focus_highlight;
+          outline-offset: -5px;
+        }
+
+        &.green:hover {
+          outline-color: $focus_highlight;
+          box-shadow: inset 0 0 0 4px $focus_highlight;
+          outline-offset: -5px;
+        }
+      }
     }
-    .warningText {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-
-    li {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-
-    p {
-     font-family: $default_web;
-     font-weight: normal;
-    }
-
-    .button {
-     @include webButton;
-     box-sizing: border-box;
-     padding: 0.625em;
-     background-color: $nhs_blue;
-     border: none;
-     border-radius: 0.125em;
-     outline: none;
-     transition: all ease 0.5s;
-     cursor: pointer;
-     width: auto;
-     min-width: 16.875em;
-     padding-left: 2em;
-     padding-right: 2em;
-     max-width: 960px;
-     display: block;
-     width: auto;
-
-     :focus {
-      outline-color: $focus_highlight;
-      box-shadow: inset 0 0 0 4px $focus_highlight;
-      outline-offset: -5px;
-     }
-
-     &.green {
-      background-color: $light_green;
-      box-shadow: 0 0.125em 0 0 $dark_green;
-     }
-     &.green:focus {
-      outline-color: $focus_highlight;
-      box-shadow: inset 0 0 0 4px $focus_highlight;
-      outline-offset: -5px;
-     }
-    }
-   }
   }
 </style>

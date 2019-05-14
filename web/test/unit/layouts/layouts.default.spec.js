@@ -51,6 +51,7 @@ const createStore = isNativeApp => ({
     },
   },
   dispatch: jest.fn(),
+  subscribe: jest.fn(),
   state: {
     header: {
       headerText: 'someheader',

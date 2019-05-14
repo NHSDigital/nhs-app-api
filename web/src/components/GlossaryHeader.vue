@@ -6,7 +6,7 @@
                            :text="$t('rp01.glossary.linkText')"
                            tag="a"
                            target="_blank">
-      <abbreviations-arrow-right-icon />
+      <abbreviations-arrow-right-icon/>
       {{ $t('rp01.glossary.linkText') }}
     </analytics-tracked-tag>
     <hr aria-hidden="true">
@@ -39,38 +39,38 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-@import '../style/colours';
-@import '../style/textstyles';
-@import '../style/fonts';
-@import '../style/desktopWeb/accessibility';
+  @import '../style/colours';
+  @import '../style/textstyles';
+  @import '../style/fonts';
+  @import '../style/desktopWeb/accessibility';
 
-.info {
-  margin-bottom: 0.5em;
-  &.desktopWeb {
-  a {
-   margin-bottom: 1em;
-   &:focus {
-    @include outlineStyle
-   }
-   &:hover{
-    background: #ffcd60;
-    outline: none;
-    box-sizing: border-box;
-    background-clip: content-box;
-   }
+  .info {
+    margin-bottom: 0.5em;
+    &.desktopWeb {
+      a {
+        display: inline-block;
+        margin-bottom: 1em;
+        width: 13em;
+        &:focus {
+          @include outlineStyle;
+          background-color: $focus_highlight;
+        }
+        &:hover {
+          @include linkHoverStyle;
+        }
+      }
+      p {
+        font-family: $default_web;
+        font-weight: normal;
+        cursor: default;
+      }
+    }
+    hr {
+      opacity: unset;
+    }
+    p, a, analytics-tracked-tag {
+      padding-bottom: 0.5em;
+      padding-top: 0.5em;
+    }
   }
-  p {
-   font-family: $default_web;
-   font-weight: normal;
-   cursor: default;
-  }
- }
- hr {
-   opacity: unset;
-  }
-  p, a, analytics-tracked-tag {
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-  }
-}
 </style>

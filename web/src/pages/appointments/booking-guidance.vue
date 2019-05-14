@@ -164,4 +164,9 @@ div {
  outline-color: $focus_highlight;
  box-shadow: inset 0 0 0 4px $focus_highlight;
 }
+
+.button.green:hover{
+ outline-color: $focus_highlight;
+ box-shadow: inset 0 0 0 4px $focus_highlight;
+}
 </style>

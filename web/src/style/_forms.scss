@@ -37,13 +37,16 @@
 			border: 0.063em $error solid;
 		}
 
-		&.tabFocus {
+    &.tabFocus {
 			border: 0.063em $focus_highlight solid;
 			outline-color: $focus_highlight !important;
-			outline-width: 2px !important;
+			outline-width: 6px !important;
 			outline-style: solid !important;
 			-webkit-filter: brightness(120%);
 			filter: brightness(120%);
+      .timeSlot{
+        outline-width: 6px;
+      }
 		}
 	}
 	input[type=text], input[type=number], input[type=tel] {
@@ -112,8 +115,24 @@
 			border-radius: 0.313em;
 			left: 0px;
 			top: 0px;
-		}
 
+		}
+    &:focus {
+      outline: none;
+      &::before {
+        outline-color: $focus_highlight;
+        box-shadow: 0 0 0 4px $focus_highlight;
+        outline-offset: -5px;
+      }
+    }
+    &:hover {
+      outline: none;
+      &::before {
+        outline-color: $focus_highlight;
+        box-shadow: 0 0 0 4px $focus_highlight;
+        outline-offset: -5px;
+      }
+    }
 		&::after {
 			height: 0.375em;
 			width: 0.813em;

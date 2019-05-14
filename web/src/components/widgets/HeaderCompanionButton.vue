@@ -63,37 +63,42 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
- @import '../../style/colours';
- @import '../../style/screensizes';
- @import '../../style/textstyles';
- @import "../../style/fonts";
- @import '../../style/desktopcomponentsizes';
+  @import '../../style/colours';
+  @import '../../style/screensizes';
+  @import '../../style/textstyles';
+  @import "../../style/fonts";
+  @import '../../style/desktopcomponentsizes';
 
- .headerCompanion {
-  @include main-container-width;
-  display: block;
-  margin: 0 auto;
-  padding: 1em 16px 16px;
+  .headerCompanion {
+    @include main-container-width;
+    display: block;
+    margin: 0 auto;
+    padding: 1em 16px 16px;
 
-  .companionButton {
-   @include button;
-   box-sizing: border-box;
-   background-color: $nhs_blue;
-   border: none;
-   border-radius: 0.125em;
-   outline: none;
-   transition: all ease 0.5s;
-   cursor: pointer;
-   width: auto;
-   min-width: 16.875em;
-   padding: 0.625em 2em;
-   max-width: 960px;
-   display: block;
+    .companionButton {
+      @include button;
+      box-sizing: border-box;
+      background-color: $nhs_blue;
+      border: none;
+      border-radius: 0.125em;
+      outline: none;
+      transition: all ease 0.5s;
+      cursor: pointer;
+      width: auto;
+      min-width: 16.875em;
+      padding: 0.625em 2em;
+      max-width: 960px;
+      display: block;
+    }
+
+    .companionButton:focus {
+      outline-color: $focus_highlight;
+      box-shadow: 0 0 0 4px $focus_highlight;
+    }
+
+    .companionButton:hover {
+      outline-color: $focus_highlight;
+      box-shadow: 0 0 0 4px $focus_highlight;
+    }
   }
-
-  .companionButton:focus {
-    outline-color: $focus_highlight;
-    box-shadow: 0 0 0 4px $focus_highlight;
-  }
- }
 </style>

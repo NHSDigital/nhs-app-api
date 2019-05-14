@@ -8,6 +8,7 @@
               ref="textArea"
               v-model="textValue"
               v-tabbing="textAreaClasses"
+              tabindex="0"
               :class="inputClasses"
               :required="required"
               :aria-labelledby="aLabelledBy"
@@ -45,7 +46,9 @@ export default {
     },
     textAreaClasses: {
       type: Array,
-      default() { return []; },
+      default() {
+        return [];
+      },
     },
     initialContents: {
       type: String,
@@ -83,8 +86,8 @@ export default {
     },
     inputClasses() {
       return [
-        'nhsuk-textarea',
-        this.error ? 'nhsuk-textarea--error' : undefined,
+        this.$style['nhsuk-textarea'],
+        this.error && this.$style['nhsuk-textarea--error'],
       ];
     },
     errorId() {
@@ -100,9 +103,24 @@ export default {
 
 </script>
 <style module lang="scss" scoped>
-div {
-  &.desktopWeb {
-    max-width: 540px;
+  @import "../../style/colours";
+  @import '~nhsuk-frontend/packages/core/settings/all';
+  @import '~nhsuk-frontend/packages/core/tools/all';
+  @import '~nhsuk-frontend/packages/components/textarea/textarea';
+
+  div {
+    &.desktopWeb {
+      max-width: 540px;
+    }
+
+    .nhsuk-textarea {
+      width: 100%;
+    }
+
+    .nhsuk-textarea:hover {
+      box-shadow: 0 0 0 4px $hover_highlight;
+      outline: 4px solid transparent;
+      outline-offset: 4px;
+    }
   }
-}
 </style>

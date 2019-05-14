@@ -5,7 +5,7 @@
     <a v-if="miniMenuExpanded" :class="$style['mini-menu-close-button']"
        role="button" tabindex="0"
        @click.prevent="closeMiniMenu"
-       @keyup.enter="closeMiniMenu">Menu</a>
+       @keyup.13="closeMiniMenu">Menu</a>
 
     <noscript inline-template>
       <div :class="$style['menu-nojs-caption']">Menu</div>

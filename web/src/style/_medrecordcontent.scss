@@ -5,6 +5,8 @@ div.record-content {
   box-sizing: border-box;
   height: auto;
   overflow: auto;
+  margin-top: 0.5em;
+
   p,
   li {
     @include small_text;
@@ -108,7 +110,7 @@ div.record-content {
     }
   }
   .consultationHeader {
-    margin-left:-0.75em; 
+    margin-left:-0.75em;
     .consultationTerm {
       li {
         display: list-item;
@@ -119,7 +121,7 @@ div.record-content {
             height:1px;
         }
         .observationText {
-         margin-left:2em; 
+         margin-left:2em;
           li {
             list-style-type: none;
           }
@@ -133,7 +135,7 @@ div.record-content {
   .testResultLine {
     li {
       display: list-item;
-      list-style-type: disc;      
+      list-style-type: disc;
       ul li
       {
         margin-left: -2em;

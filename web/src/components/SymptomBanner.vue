@@ -59,7 +59,6 @@ export default {
     cursor: pointer;
     display: inline-block;
     border: none;
-    /*padding: 1rem 2rem;*/
     background: none;
     margin: 0;
     outline: none;
@@ -67,18 +66,13 @@ export default {
     h2 {
       color: $nhs_blue;
     }
-
-    &:hover {
-      background: #ffcd60;
-      box-shadow: 0 0 0 4px #ffcd60;
-      color: #212B32;
-      text-decoration: none;
-    }
-
     &:focus {
-      box-shadow: 0 0 0 4px $focus_highlight;
+      @include actionLinkHighlightStyle;
+      background-color: $focus_highlight;
     }
-
+    &:hover {
+      @include linkHoverStyle;
+    }
     &:visited {
       color: #330072;
     }

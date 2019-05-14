@@ -1,5 +1,9 @@
 <template>
-  <div id="app" :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+  <div id="app" ref="nhsAppRoot" tabindex="-1"
+       :class="{
+         [$style.desktopWeb]: !$store.state.device.isNativeApp,
+         [$style['nhs-app']]: true
+       }">
     <div v-if="shouldShowFullDesktopHeader" :class="$style['header-container-desktop']">
       <web-header ref="headerMenu"/>
     </div>
@@ -184,6 +188,12 @@ export default {
   },
   mounted() {
     if (process.client) {
+      this.$store.subscribe((mutation) => {
+        if (mutation.type === 'myRecord/ACCEPT_TERMS') {
+          this.$refs.nhsAppRoot.focus();
+        }
+      });
+
       NativeVersionSetup(this.$store, this.$route);
       if (this.loggedIn) {
         this.$store.dispatch('session/startValidationChecking');
@@ -195,13 +205,15 @@ export default {
         if (this.$store.state.device.isNativeApp) {
           this.$store.dispatch('auth/nativeLogin');
         }
-        this.resetFocus();
+        if (this.$store.state.device.isNativeApp) {
+          NativeCallbacks.resetPageFocus();
+        }
       }
     }
   },
   updated() {
     if (this.pathChanged) {
-      this.resetFocus();
+      this.$refs.nhsAppRoot.focus();
       this.pathChanged = false;
     }
   },
@@ -213,25 +225,7 @@ export default {
       this.surveyBarOpen = isBarOpen;
     },
     isHotJarSurveyVisible() {
-      return this.isAnalyticsCookieAccepted() && (this.$env.HOTJAR_SURVEY_VISIBLE === 'true' || this.$env.HOTJAR_SURVEY_VISIBLE === true);
-    },
-    resetFocus() {
-      if (!this.loggedIn) {
-        return;
-      }
-      if (this.resetTimeoutId) {
-        clearTimeout(this.resetTimeoutId);
-      }
-      this.resetTimeoutId = setTimeout(() => {
-        if (this.$store.state.device.isNativeApp) {
-          NativeCallbacks.resetPageFocus();
-        } else {
-          const headerMenuCompt = this.$refs.headerMenu;
-          if (headerMenuCompt) {
-            headerMenuCompt.resetFocusToNhsLogo();
-          }
-        }
-      }, 500);
+      return this.isAnalyticsCookieAccepted() && `${this.$env.HOTJAR_SURVEY_VISIBLE}` === 'true';
     },
     isAnalyticsCookieAccepted() {
       return this.$store.state.termsAndConditions.analyticsCookieAccepted;
@@ -249,6 +243,11 @@ export default {
 <style module lang="scss" scoped>
 @import "../style/home";
 @import "../style/webshared";
+
+/* Addressing webkit chrome yellow border around app */
+.nhs-app:focus {
+  outline: none;
+}
 
 div {
  &.desktopWeb {

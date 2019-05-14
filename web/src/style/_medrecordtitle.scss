@@ -12,15 +12,19 @@ a.record-title {
 	background: transparent url('~assets/icon_arrow_left.svg') no-repeat center right;
 	background-position: right 1em center;
 	transition: background ease 0.5s;
-	border-bottom: 0.125em solid $white;
-	margin: 0em;
+	margin: 0.5em 0 0 0;
 
 	&.opened {
 		background: transparent url('~assets/icon_arrow_down.svg') no-repeat center right;
 		background-position: right 1em center;
+
+		border-bottom: none;
+
 	}
 	&.closed {
 		background: transparent url('~assets/icon_arrow_left.svg') no-repeat center right;
 		background-position: right 1em center;
+
+		border-bottom: 0.125em solid $white;
 	}
 }

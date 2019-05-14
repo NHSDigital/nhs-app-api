@@ -6,7 +6,7 @@
     <a v-if="showMenuButton"
        :class="$style['mini-menu-toggler']"
        @click.prevent="toggleMiniMenu"
-       @keyup.enter="toggleMiniMenu">
+       @keyup.13="toggleMiniMenu">
       Menu
     </a>
     <header-links :anchor-links="links"/>

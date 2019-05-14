@@ -52,17 +52,30 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/buttons';
-@import '../../style/listmenu';
+  @import '../../style/buttons';
+  @import '../../style/listmenu';
+  @import "../../style/desktopWeb/accessibility";
 
-.no-decoration {
-  text-decoration: none;
-}
+  .list-menu a {
+    outline: 0;
 
-.no-padding {
-  margin-top: -0.5em;
-  margin-left: -1em;
-  margin-right: -1em;
-}
+    &:focus {
+      @include outlineStyle;
+    }
+
+    &:hover {
+      @include outlineStyleLight;
+    }
+  }
+
+  .no-decoration {
+    text-decoration: none;
+  }
+
+  .no-padding {
+    margin-top: -0.5em;
+    margin-left: -1em;
+    margin-right: -1em;
+  }
 
 </style>

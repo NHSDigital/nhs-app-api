@@ -1,51 +1,83 @@
+@import './desktopWeb/accessibility';
 @import './colours';
 @import './textstyles';
 
 /** COMMON ELEMENTS */
 h2 {
-	@include h2;
-	padding-bottom: 0.5em;
-	padding-top: 0.5em;
+  @include h2;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
 }
+
 h3 {
-	@include h3;
-	padding-bottom: 0.5em;
-	padding-top: 0.5em;
+  @include h3;
+  padding-bottom: 0.5em;
+  padding-top: 0.5em;
 }
 
 h4 {
-	@include h4;
-	padding-bottom:0.25em;
-	padding-top:0.25em;
+  @include h4;
+  padding-bottom: 0.25em;
+  padding-top: 0.25em;
 }
 
 a {
-	@include default_text;
-	color: $nhs_blue;
-	font-size: 1em;
-	line-height: 1em;
-	font-weight: bold;
-	text-decoration: none;
-	vertical-align: middle;
+  @include default_text;
+  color: $nhs_blue;
+  font-size: 1em;
+  line-height: 1em;
+  font-weight: bold;
+  text-decoration: none;
+  vertical-align: middle;
 
-	h2 {
-		color: $nhs_blue;
-	}
+  h2 {
+    color: $nhs_blue;
+  }
 }
+
 p {
-	@include default_text;
+  @include default_text;
 }
+
+input[type='checkbox']:focus + label::before {
+  box-shadow: 0 0 0 4px #ffb81B;
+}
+
+a, button {
+  input[type='checkbox']:focus + label::before {
+    box-shadow: 0 0 0 4px #ffb81B;
+  }
+
+  &:focus {
+    @include outlineStyle
+  }
+
+  &:hover {
+    @include outlineStyleLight;
+  }
+}
+
 b,
 strong,
-label{
-	@include default_label;
+label {
+  @include default_label;
 }
+
 strong {
-	display: inline-block;
+  display: inline-block;
 }
+
 hr {
-	height: 1px;
-	border: none;
-	background-color: $border_grey;
-	opacity: 0.25;
+  height: 1px;
+  border: none;
+  background-color: $border_grey;
+  opacity: 0.25;
+}
+
+::-moz-focus-inner {
+  border: none;
+}
+
+::-moz-focus-inner {
+  border: none;
 }

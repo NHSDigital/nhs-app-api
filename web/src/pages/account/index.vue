@@ -128,6 +128,9 @@ export default {
 
     a {
       @extend .focusBorder;
+      &:hover {
+        color: #000;
+      }
     }
   }
 }

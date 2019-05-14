@@ -18,23 +18,38 @@ private const val SIGN_OUT_WAIT_TIME = 1000L
 private const val LOAD_URL_WAIT_TIME = 30L
 private const val POLLING_DURATION = 100L
 private const val TAB_COUNT_VARIABLE = "TabCount"
-
+private const val MAX_RETRY_COUNT = 3
+private const val CHROME_RECOVERY_TIME = 5000L
 open class BrowserSteps {
 
     lateinit var loginPage: LoginPage
 
     @Step
     open fun goToApp() {
+        var tryCount = 0
+        while(tryCount< MAX_RETRY_COUNT) {
+            try {
+               openLoginPage()
+                break
+            }
+            catch(e: org.openqa.selenium.WebDriverException) {
+                println("Error opening Chrome on attempt ${++tryCount} - Error was $e")
+                Thread.sleep(CHROME_RECOVERY_TIME)
+            }
+        }
+    }
+
+
+    fun openLoginPage() {
         if (!loginPage.onMobile() && OptionManager.instance().isEnabled(NoJsOption::class)) {
             loginPage.open()
             val optionManager = OptionManager.instance()
             optionManager.getOptions().forEach {
                 ChromeOptionManager.instance.configureOption(it)
             }
+        } else {
+            loginPage.open()
         }
-        else {
-                loginPage.open()
-            }
     }
 
     @Step

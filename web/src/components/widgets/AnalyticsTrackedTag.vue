@@ -2,6 +2,7 @@
   <!-- JAWS screen reader (on IE11) doesn't recognise tag <a> with undefined href attribute value
     as a link. So role='link' is required to tell it is a link  -->
   <component :is="tag" :id="id" :href="href" :role="tag==='a' && !href ? 'link': undefined"
+             tabindex="0"
              @click="trackClick($event);"
              @keypress="onKeyDown($event)">
     <slot/>
@@ -92,6 +93,5 @@ export default {
 };
 </script>
 
-<style>
-
+<style module lang="scss" scoped>
 </style>

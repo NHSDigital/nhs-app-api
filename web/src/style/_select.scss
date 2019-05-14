@@ -6,6 +6,7 @@
   vertical-align: middle;
   width: 100%;
   margin-bottom: 0.5em;
+  outline-width: 6px;
   &::before,
   &::after {
     content: "";
@@ -31,12 +32,25 @@
     bottom: 0;
     border-radius: 0 3px 3px 0;
   }
+  &.tabFocus {
+    outline-color: $focus_highlight !important;
+    outline-width: 4px !important;
+    outline-style: solid !important;
+  }
   .custom-dropdown__select {
     padding-right: 2.5em;
     border: 1px #979797 solid;
     border-radius: 4px;
     appearance: none;
     &:focus {
+      box-shadow: 0 0 0 4px $focus_highlight;
+      outline-color: transparent !important;
+      outline-width: 4px !important;
+      outline-style: solid !important;
+      -webkit-filter: brightness(120%);
+      filter: brightness(120%);
+    }
+    &:hover {
       box-shadow: 0 0 0 2px $focus_highlight;
       outline-color: transparent !important;
       outline-width: 2px !important;
@@ -44,11 +58,11 @@
       -webkit-filter: brightness(120%);
       filter: brightness(120%);
     }
+
   }
   .custom-dropdown__select_element {
     font-size: inherit;
     /* inherit size from .custom-dropdown */
-    padding: .5em;
     /* add some space*/
     padding: 16px;
     width: 100%;

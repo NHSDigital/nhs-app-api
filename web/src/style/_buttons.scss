@@ -1,9 +1,11 @@
 /** BUTTONS */
 @import './colours';
 @import './textstyles';
+
 a.button {
   text-decoration: none;
   text-align: center;
+
   :focus {
     outline-color: $focus_highlight;
     box-shadow: inset 0 0 0 4px $focus_highlight;
@@ -12,74 +14,79 @@ a.button {
 }
 
 a.button:focus {
-    outline-color: $focus_highlight;
-    box-shadow: 0 0 0 4px $focus_highlight;
+  outline-color: $focus_highlight;
+  box-shadow: 0 0 0 4px $focus_highlight;
 }
 
 @mixin button-core {
-	@include button;
-	box-sizing: border-box;
-	padding: 0.625em;
-	background-color: $nhs_blue;
-	border: none;
-	border-radius: 0.125em;
-	margin-bottom: 1.250em;
-	transition: all ease 0.5s;
-	white-space: normal;
-	cursor: pointer;
+  @include button;
+  box-sizing: border-box;
+  padding: 0.625em;
+  background-color: $nhs_blue;
+  border: none;
+  border-radius: 0.125em;
+  margin-bottom: 1.250em;
+  transition: all ease 0.5s;
+  white-space: normal;
+  cursor: pointer;
   width: 100%;
-    &:focus {
-      outline-color: $focus_highlight;
-      box-shadow: inset 0 0 0 4px $focus_highlight;
-      outline-offset: -5px;
-    }
-    &.web {
-      margin-top: 1em;
-    }
+  &:focus {
+    outline-color: $focus_highlight;
+    box-shadow: inset 0 0 0 4px $focus_highlight;
+    outline-offset: -5px;
+  }
+  &:hover {
+    outline-color: $focus_highlight;
+    box-shadow: inset 0 0 0 4px $focus_highlight;
+    outline-offset: -5px;
+  }
+  &.web {
+    margin-top: 1em;
+  }
 
-	&.tabFocus {
-		outline-color: $focus_highlight !important;
-		outline-width: 2px !important;
-		outline-style: solid !important;
-		-webkit-filter: brightness(120%);
-		filter: brightness(120%);
-	}
+  &.tabFocus {
+    outline-color: $focus_highlight !important;
+    outline-width: 2px !important;
+    outline-style: solid !important;
+    -webkit-filter: brightness(120%);
+    filter: brightness(120%);
+  }
 
-	&.green {
-		background-color: $light_green;
-	}
-	&.grey {
-		background-color: $light_grey;
-	}
-	&.white {
-		background-color: $white;
-		color: $dark_grey;
-	}
+  &.green {
+    background-color: $light_green;
+  }
+  &.grey {
+    background-color: $light_grey;
+  }
+  &.white {
+    background-color: $white;
+    color: $dark_grey;
+  }
 
-	&:active {
-		-webkit-filter: brightness(120%);
-		filter: brightness(120%);
-	}
-	&.disabled {
-		opacity: 0.5;
-	}
-	&.medium{
-		width: inherit;
-		min-width: 16.875em;
-	}
+  &:active {
+    -webkit-filter: brightness(120%);
+    filter: brightness(120%);
+  }
+  &.disabled {
+    opacity: 0.5;
+  }
+  &.medium {
+    width: inherit;
+    min-width: 16.875em;
+  }
 }
 
 
 /** BUTTONS */
 button.button,
 a.button {
-	@include button-core;
+  @include button-core;
 }
 
 button.button-desktop,
 a.button-desktop {
-	@include button-core;
-	width: auto;
+  @include button-core;
+  width: auto;
   padding-left: 2em!important;
   padding-right: 2em!important;
 }

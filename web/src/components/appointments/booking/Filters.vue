@@ -149,6 +149,9 @@ export default {
   :focus {
     outline-color: $focus_highlight;
   }
+  :hover{
+    outline-color: $focus_highlight;
+  }
 }
 div {
  &.desktopWeb {

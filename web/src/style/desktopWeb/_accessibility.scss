@@ -2,6 +2,37 @@
 
 @mixin outlineStyle {
   outline: 4px solid transparent;
-  box-shadow: inset 0 0 0 4px $focus_highlight;
+  box-shadow: 0 0 0 4px $focus_highlight;
   outline-offset: -6px;
+}
+
+@mixin outlineStyleLight {
+  outline: 4px solid transparent;
+  box-shadow: 0 0 0 4px $hover_highlight;
+  outline-offset: -6px;
+}
+
+@mixin actionLinkHighlightStyle {
+  outline: 4px solid transparent;
+  box-shadow: 0 0 0 4px $focus_highlight;
+  outline-offset: -6px;
+  color: $black;
+}
+
+@mixin actionLinkHighlightStyle {
+  outline: 4px solid transparent;
+  box-shadow: 0 0 0 4px $focus_highlight;
+  outline-offset: -6px;
+  color: $black;
+}
+
+@mixin checkboxOutlineStyle {
+  outline: 4px solid transparent;
+  box-shadow: 0 0 0 4px $focus_highlight;
+}
+
+@mixin linkHoverStyle {
+  background-color: $hover_highlight;
+  box-shadow: 0 0 0 4px $hover_highlight;
+  color: $black;
 }

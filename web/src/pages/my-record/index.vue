@@ -161,6 +161,7 @@ export default {
     padding: 0.5em 1em 0em 1em;
     margin-bottom: 0.5em;
     font-size: 1em;
+
     p {
       padding-bottom: 0.5em;
       padding-top: 0.5em;
@@ -176,50 +177,51 @@ export default {
   }
 
   .summaryRecordWarning {
-    padding-left:1em;
-    padding-right:1em;
-    padding-top:0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0.5em;
   }
+
   .glossary {
     padding: 0.5em 1em 0em 1em;
   }
+
   div {
-   &.desktopWeb {
-    &>* {
+    &.desktopWeb {
+      & > * {
         max-width: 540px;
       }
 
-    p {
-     font-family: $default_web;
-     font-weight: lighter;
-    }
+      p {
+        font-family: $default_web;
+        font-weight: lighter;
+      }
 
-    .record-content {
-     margin-left: 1em;
-    }
+      .record-content {
+        margin-left: 1em;
+      }
 
-    .summaryRecordContainer {
-     padding-left: 1em;
-     padding-bottom: 2em;
-     margin-right: 1em;
-    }
+      .summaryRecordContainer {
+        padding-left: 1em;
+        padding-bottom: 2em;
+        margin-right: 1em;
+      }
 
-    .record-title {
-     padding-left: 1em;
-     margin-left: 1em;
-     margin-right: 1em;
-     cursor: pointer;
-    }
+      .record-title {
+        padding-left: 1em;
+        margin-left: 1em;
+        margin-right: 1em;
+        cursor: pointer;
+      }
 
-    .record-title:focus {
-     @include outlineStyle
-    }
+      .record-title:focus {
+        @include outlineStyle
+      }
 
-
-    .patientDetailsContainer {
-     margin-left: 1em;
-     margin-right: 1em;
+      .patientDetailsContainer {
+        margin-left: 1em;
+        margin-right: 1em;
+      }
     }
-   }
   }
 </style>

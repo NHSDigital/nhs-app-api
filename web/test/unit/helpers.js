@@ -82,7 +82,7 @@ export const mount = (component, {
   $t = create$T(),
   $tc = create$T(),
   $te = create$Te(),
-  data = undefined,
+  data = () => ({}),
   propsData = {},
   shallow = false,
   state = {},

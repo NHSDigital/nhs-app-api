@@ -60,7 +60,11 @@
       }
 
       &:focus {
-        @include outlineStyle;
+        @include actionLinkHighlightStyle;
+        background-color: $focus_highlight;
+      }
+      &:hover {
+        @include linkHoverStyle;
       }
     }
 

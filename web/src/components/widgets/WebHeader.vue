@@ -4,14 +4,14 @@
     <header>
       <span :class="$style['header-content']">
         <div :class="$style.nhsLogo">
-          <HomeLink ref="headerHomeLink" :index-path="indexPath"/>
+          <NhsHeaderLogo :index-path="indexPath"/>
         </div>
         <a v-if="showMenuButton"
            :class="$style['mini-menu-toggler']"
            tabindex="0"
            data-sid="mini-menu"
            @click.prevent="toggleMiniMenu()"
-           @keyup.enter="toggleMiniMenu()">
+           @keyup.13="toggleMiniMenu()">
           Menu
         </a>
         <header-links v-if="showLinks" :anchor-links="links"/>
@@ -40,18 +40,20 @@ import {
   LOGIN,
   LOGOUT,
 } from '@/lib/routes';
+import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
 import HeaderLinks from '@/components/widgets/HeaderLinks';
 import HeaderMenu from '@/components/widgets/HeaderMenu';
 import HeaderCompanionButton from '@/components/widgets/HeaderCompanionButton';
 import HomeLink from './HomeLink';
 import PageTitle from './PageTitle';
 import CookieBanner from '../CookieBanner';
-import BreadCrumbTrail from '@/components/widgets/BreadCrumbTrail';
+import NhsHeaderLogo from './NhsHeaderLogo';
 
 export default {
   name: 'WebHeader',
   components: {
     BreadCrumbTrail,
+    NhsHeaderLogo,
     HomeLink,
     HeaderLinks,
     HeaderMenu,
@@ -87,6 +89,7 @@ export default {
   },
   data() {
     return {
+      pathChanged: false,
       helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
       links: [
         { name: this.$t('webHeader.links.account'), value: ACCOUNT.path, id: 'account-link' },
@@ -123,12 +126,6 @@ export default {
   methods: {
     toggleMiniMenu() {
       this.$store.dispatch('header/toggleMiniMenu');
-    },
-    resetFocusToNhsLogo() {
-      const headerHomeLinkCompt = this.$refs.headerHomeLink;
-      if (headerHomeLinkCompt) {
-        headerHomeLinkCompt.resetFocusToNhsLogo();
-      }
     },
   },
 };
@@ -175,7 +172,6 @@ div {
     display: none;
 
     :focus {
-     outline-color: $focus_highlight;
      background-color: transparent;
      border-color: $focus_highlight;
      box-shadow: 0 0 0 3px $focus_highlight;
@@ -216,8 +212,6 @@ div {
 
      &:focus {
       box-shadow: 0 0 0 4px $focus_highlight;
-      outline-color: $focus_highlight;
-      outline-width: thick;
      }
 
      &:hover {
