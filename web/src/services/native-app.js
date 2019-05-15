@@ -187,4 +187,13 @@ export default {
     }
     return '';
   },
+
+  pageLoadComplete() {
+    const app = window.nativeApp;
+    if (app && app.pageLoadComplete) {
+      app.pageLoadComplete();
+      return true;
+    }
+    return false;
+  },
 };

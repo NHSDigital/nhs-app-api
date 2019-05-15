@@ -270,6 +270,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case "fetchNativeAppVersion":
                 self.viewController.setupAppVersion()
                 break
+            case "pageLoadComplete":
+                viewController.applicationState.unBlock()
+                break
             default:
                 break
             }

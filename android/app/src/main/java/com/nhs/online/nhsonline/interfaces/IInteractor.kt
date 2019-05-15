@@ -52,4 +52,6 @@ interface IInteractor {
     fun showNativeBiometricOptions()
 
     fun resetFocusToNhsLogoForAccessibility()
+
+    fun pageLoadComplete()
 }

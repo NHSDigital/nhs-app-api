@@ -75,3 +75,7 @@ window.nativeApp.fetchNativeAppVersion = function() {
 window.nativeApp.attemptBiometricLogin = function() {
     window.webkit.messageHandlers.attemptBiometricLogin.postMessage(null);
 };
+
+window.nativeApp.pageLoadComplete = function () {
+    window.webkit.messageHandlers.pageLoadComplete.postMessage(null);
+};

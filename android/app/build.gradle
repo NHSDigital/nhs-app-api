@@ -182,6 +182,7 @@ dependencies {
     implementation 'com.scottyab:rootbeer-lib:0.0.7'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.mindrot:jbcrypt:0.4'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
 
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
 

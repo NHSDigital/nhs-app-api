@@ -52,7 +52,7 @@
     <string name="isThrottlingEnabled">isThrottlingEnabled</string>
     <string name="fidoServerUrlConfigurationKey">fidoServerUrl</string>
     <string name="isRootCheckEnabled">false</string>
-
+    <string name="menuTimeoutSeconds">10</string>
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 

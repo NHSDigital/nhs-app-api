@@ -210,6 +210,7 @@ export default {
       this.$refs.nhsAppRoot.focus();
       this.pathChanged = false;
     }
+    NativeCallbacks.pageLoadComplete();
   },
   methods: {
     isLoginPage() {

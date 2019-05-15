@@ -7,6 +7,7 @@ import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.BuildConfig
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
+import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.web.NhsWeb
 
 class WebAppInterface(
@@ -122,5 +123,11 @@ class WebAppInterface(
     fun fetchNativeAppVersion(): String {
         Log.d(Application.TAG, "${this::class.java.simpleName}: Entering fetchNativeAppVersion")
         return BuildConfig.VERSION_NAME
+    }
+
+    @JavascriptInterface
+    fun pageLoadComplete() {
+        Log.d(Application.TAG, "${this::class.java.simpleName}: Entering pageLoadComplete")
+        nhsWeb.applicationState.unBlock()
     }
 }

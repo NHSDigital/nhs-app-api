@@ -10,6 +10,7 @@ struct Config: Decodable {
         case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL, AccessibilityStatementURL
         case BaseApiUrl, ConfigurationApiPath, AppStoreUrl, SessionCookieName, AAID, PrivateKeyLabel
         case BiometricHelpURL, FidoLoginErrorPath, BiometricRedirectURL, BiometricsRegistrationResponseEndpoint, BiometricsAuthenticationRequestEndpoint, BiometricsRegistrationRequestEndpoint, BiometricsDeregistrationRequestEndpoint, BiometricsAssertionScheme, CidUrlSuffix
+        case MenuTimeoutSeconds
     }
     
     let HomeUrl: String
@@ -64,6 +65,7 @@ struct Config: Decodable {
     let BiometricsDeregistrationRequestEndpoint: String
     let BiometricsAssertionScheme: String
     let CidUrlSuffix: String
+    let MenuTimeoutSeconds: Double
 }
 
 func config() -> Config {

@@ -59,7 +59,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "focusElement")
         webView.configuration.userContentController.add(delegate, name: "fetchNativeAppVersion")
         webView.configuration.userContentController.add(delegate, name: "attemptBiometricLogin")
-
+        webView.configuration.userContentController.add(delegate, name: "pageLoadComplete")
     }
     
     private func loadSpaPage(path: String)  {
@@ -120,6 +120,10 @@ class WebViewController: UIViewController, WKUIDelegate {
         }
         else if(shouldLoadUrlAsSpaPage(urlToNavigateTo: urlToNavigateTo)) {
             self.loadSpaPage(path: urlToNavigateTo)
+            if(webView.url!.absoluteString == urlToNavigateTo) {
+                webViewDelegate?.viewController.applicationState.unBlock()
+            }
+            
         }
         else {
             webView.loadPage(url: urlToNavigateTo)

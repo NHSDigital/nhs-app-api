@@ -83,6 +83,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         appWebInterface = AppWebInterface(webview)
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
+        menuBar.nhsWeb = nhsWeb
         backToAccountButton.setOnClickListener { onSuccessButton() }
         retryButton.setOnClickListener { onErrorRetryButton() }
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
@@ -442,6 +443,10 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         menuBar.deselectActiveItem()
     }
 
+    fun enableMenuBar() {
+        nhsWeb.applicationState.unBlock()
+    }
+
     override fun showNativeBiometricOptions() {
         nhsWeb.requiresFullPageLoad = true
         activityViewSwitcher.switchTo(ActivityView.FINGERPRINT)
@@ -505,6 +510,11 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         dismissProgressDialog()
         viewSwitcher.visibility = View.VISIBLE
         blankScreen.visibility = View.GONE
+    }
+
+    override fun pageLoadComplete() {
+        logger.info("Entering pageLoadComplete")
+        nhsWeb.applicationState.unBlock()
     }
 
     override fun dismissSessionExtensionDialog() {

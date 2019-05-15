@@ -15,6 +15,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.support.ApplicationState
+import com.nhs.online.nhsonline.web.NhsWeb
 
 
 class MenuBarItem @JvmOverloads constructor(

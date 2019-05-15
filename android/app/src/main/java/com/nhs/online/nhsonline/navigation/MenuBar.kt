@@ -8,7 +8,9 @@ import android.view.Gravity
 import android.view.View
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.LinearLayout
+import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.support.Optional
+import com.nhs.online.nhsonline.web.NhsWeb
 
 class MenuBar @JvmOverloads constructor(
     context: Context,
@@ -16,6 +18,7 @@ class MenuBar @JvmOverloads constructor(
     defaultStyleResourceId: Int = 0
 ) : LinearLayout(context, attributes, defaultStyleResourceId) {
     private var selectedPosition = Optional.empty<Int>()
+    var nhsWeb: NhsWeb? = null
 
     var menuItemSelectedListener: ((menuBarItem: MenuBarItem) -> Unit)? = null
 
@@ -64,15 +67,18 @@ class MenuBar @JvmOverloads constructor(
     }
 
     private fun onMenuItemClicked(position: Int, shouldInvokeListener: Boolean = true) {
-        selectedPosition.ifPresent { selectedPosition ->
+        if(nhsWeb?.applicationState?.isReady() !=  false) {
+            nhsWeb?.applicationState?.block()
+            selectedPosition.ifPresent { selectedPosition ->
 
-            getMenuBarItemAt(selectedPosition).deselectItem()
-            selectMenuItem(position, shouldInvokeListener)
+                getMenuBarItemAt(selectedPosition).deselectItem()
+                selectMenuItem(position, shouldInvokeListener)
 
-        }
+            }
 
-        selectedPosition.ifEmpty {
-            selectMenuItem(position, shouldInvokeListener)
+            selectedPosition.ifEmpty {
+                selectMenuItem(position, shouldInvokeListener)
+            }
         }
     }
 

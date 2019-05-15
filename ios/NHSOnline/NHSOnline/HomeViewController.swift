@@ -7,6 +7,8 @@ class HomeViewController : UIViewController {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
     private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
     
+    let applicationState = ApplicationState()
+    
     @IBOutlet weak var headerBar: HeaderBar!
     @IBOutlet weak var headerBarSlim: HeaderBarSlim!
     
@@ -315,6 +317,7 @@ class HomeViewController : UIViewController {
         }
        
         showErrorViewContainer()
+        applicationState.unBlock()
     }
     
     func showBiometricSessionError () {

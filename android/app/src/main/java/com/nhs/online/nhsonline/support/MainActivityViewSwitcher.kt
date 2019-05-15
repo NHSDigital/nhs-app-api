@@ -23,8 +23,10 @@ class MainActivityViewSwitcher(
             ActivityView.WEBVIEW ->
                 activity.webview.visibility = visibility
 
-            ActivityView.ERROR ->
+            ActivityView.ERROR -> {
                 activity.errorViewLayout.visibility = visibility
+                activity.enableMenuBar()
+            }
 
             ActivityView.FINGERPRINT ->
                 activity.biometricContent.visibility = visibility

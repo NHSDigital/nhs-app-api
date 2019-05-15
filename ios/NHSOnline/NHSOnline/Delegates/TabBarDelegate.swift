@@ -22,26 +22,29 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     }
     
     func tabBar(_ tabBar: UITabBar, didSelect: UITabBarItem) {
-        let selectedItem = Menu(rawValue: didSelect.tag)!
-        var selectedURL: String
-        switch selectedItem {
-        case .Symptoms:
-            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
-            break
-        case .Appointments:
-            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)
-            break
-        case .Prescriptions:
-            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
-            break
-        case .MyRecord:
-            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
-            break
-        case .More:
-            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
-            break
+        if(viewController.applicationState.isReady()) {
+            viewController.applicationState.block()
+            let selectedItem = Menu(rawValue: didSelect.tag)!
+            var selectedURL: String
+            switch selectedItem {
+            case .Symptoms:
+                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
+                break
+            case .Appointments:
+                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)
+                break
+            case .Prescriptions:
+                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
+                break
+            case .MyRecord:
+                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
+                break
+            case .More:
+                selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
+                break
+            }
+            selectPage(pageUrl: selectedURL)
         }
-        selectPage(pageUrl: selectedURL)
     }
     
     private func selectPage(pageUrl: String) {

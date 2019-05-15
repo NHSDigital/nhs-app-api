@@ -12,6 +12,7 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
+import com.nhs.online.nhsonline.support.ApplicationState
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
@@ -38,6 +39,7 @@ class NhsWeb(
     private val errorMessageHandler = ErrorMessageHandler(activity)
     private var originalWebViewZoom = 0
 
+    var applicationState = ApplicationState(readResourceString(R.string.menuTimeoutSeconds).toLong())
     var isUserLoggedIn = false
     var requiresFullPageLoad = true
     var reloadUrl: String? = null
