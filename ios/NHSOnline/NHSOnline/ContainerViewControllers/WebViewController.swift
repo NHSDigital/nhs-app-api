@@ -141,7 +141,8 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     func reloadWebView() {
         if let failedUrl = webViewDelegate!.failedUrl {
-            webView.load(URLRequest(url: failedUrl))
+            let urlToReload = knownServices.getPostRequestReloadUrl(url:failedUrl) ?? failedUrl
+            webView.load(URLRequest(url: urlToReload))
         } else {
             webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
             let viewController = webViewDelegate?.viewController

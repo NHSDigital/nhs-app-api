@@ -3,7 +3,7 @@ import Foundation
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
         case HomeUrl, Nhs111Url, Nhs111LocationUrl, ConditionsUrlPath, CheckSymptomsUrlPath, AppScheme, BaseScheme, HotJarLinkUrl, DataPreferencesURL, HomeHost
-        case AppointmentsUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath
+        case AppointmentsUrlPath, SymptomsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath, MyRecordUrlPath, AuthRedirectPath, OrganDonationUrlPath, DataSharingUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
         case IsFirstTimeOpened, HaveShownThrottlingCarouselBefore, CarouselDirectory, CarouselContentType, IntroCarouselFileName, ThrottlingCarouselFileName
@@ -30,6 +30,7 @@ struct Config: Decodable {
     let OrganDonationUrlPath: String
     let PrescriptionsUrlPath: String
     let MyAccountUrlPath: String
+    let DataSharingUrlPath: String
     let SessionUrlPath: String
     let AuthRedirectPath: String
     let NhsOnlineRequiredQueryString:String

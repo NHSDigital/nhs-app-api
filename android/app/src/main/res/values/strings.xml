@@ -5,9 +5,9 @@
     <string name="prescription">Prescriptions</string>
     <string name="my_record">My record</string>
     <string name="more">More</string>
-
     <string name="my_account_header">My account</string>
     <string name="organ_donation_header">My organ donation decision</string>
+    <!--Data sharing header should be updated in Android, iOS, and Web if changed-->
     <string name="data_sharing_header">Find out why your data matters</string>
     <string name="data_preferences_header">Sharing health data preferences</string>
     <string name="nhs_111_header">111 Online</string>
@@ -21,7 +21,6 @@
     <string name="prescriptions_header">My repeat prescriptions</string>
     <string name="more_header">More</string>
     <string name="home_header">Home</string>
-
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
     <string name="data_sharing_connection_error">Sharing health data unavailable</string>
     <string name="connection_error_header">Connection error</string>

@@ -21,6 +21,7 @@ AUTH_REDIRECT_PATH = /auth-return
 BASE_SCHEME = https
 NHS_ONLINE_REQUIRED_QUERY_STRING = ?source=ios
 CHECK_SYMPTOMS_URL_PATH = /check-your-symptoms
+DATA_SHARING_URL = /data-sharing
 APP_SCHEME = nhsapp
 MEDICAL_RECORD_ABBREVIATIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/
 HELP_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/

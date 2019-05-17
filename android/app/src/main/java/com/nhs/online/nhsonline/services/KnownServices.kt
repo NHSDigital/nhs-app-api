@@ -3,6 +3,7 @@ package com.nhs.online.nhsonline.services
 import android.content.Context
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.support.Optional
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -148,6 +149,13 @@ class KnownServices(private val context: Context) {
 
     private fun fetchStringResource(resourceId: Int): String {
         return context.resources.getString(resourceId)
+    }
+
+    fun getPostRequestReloadUrl(url: String): String? {
+        return when {
+            url.startsWith((fetchStringResource(R.string.dataPreferencesBaseUrl))) -> fetchStringResource(R.string.dataSharingPath)
+            else -> null
+        }
     }
 
     private fun buildExternalSites(): List<URL> {

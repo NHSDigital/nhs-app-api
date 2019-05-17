@@ -762,6 +762,7 @@ export default {
     myRecord: 'My medical record',
     organDonation: 'My organ donation decision',
     symptoms: 'Check my symptoms',
+    /* Data sharing header should be updated in Android, iOS, and Web if changed */
     dataSharing: 'Find out why your data matters',
     more: 'More',
     login: 'Login',

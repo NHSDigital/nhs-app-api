@@ -20,6 +20,7 @@ class KnownServices {
     private let dataPreferencesTitle = NSLocalizedString("DataPreferencesTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
     private let hotJarTitle = NSLocalizedString("HotJarTitle", comment: "")
+    private let dataSharingTitle = NSLocalizedString("DataSharingTitle", comment: "")
     private var serviceList = Array<KnownService>()
     private var externalSites = Array<URL>()
     
@@ -82,6 +83,15 @@ class KnownServices {
         return false
     }
     
+    func getPostRequestReloadUrl(url:URL) -> URL? {
+        switch url {
+        case  _ where url.absoluteString.starts(with: config.DataPreferencesURL):
+            return URL(string: config.DataSharingUrlPath, relativeTo: URL(string: config.HomeUrl))
+        default:
+            return nil
+        }
+    }
+    
     private func buildExternalSites() {
         let helpURL: URL = URL(string: config.HelpURL)!
         let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
@@ -118,11 +128,12 @@ class KnownServices {
         nhsoService.addPathInfo(path: config.MoreUrlPath, service: .MORE, validateSession: true, allowNativeInteraction: true, title: moreTitle)
         nhsoService.addPathInfo(path: config.MyAccountUrlPath, service: .ACCOUNT, validateSession: true, allowNativeInteraction: true, title: myAccountTitle)
         nhsoService.addPathInfo(path: config.OrganDonationUrlPath, service: .ORGAN_DONATION, validateSession: true, allowNativeInteraction: true, title: organDonationTitle)
+        nhsoService.addPathInfo(path: config.DataSharingUrlPath, service: .DATA_SHARING, validateSession: true, allowNativeInteraction: true, title: dataSharingTitle)
         return nhsoService
     }
     
     enum Service {
-        case NHS_111, CONDITIONS, NHS_ONLINE, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT, ORGAN_DONATION;
+        case NHS_111, CONDITIONS, NHS_ONLINE, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT, ORGAN_DONATION, DATA_SHARING;
     }
 }
 

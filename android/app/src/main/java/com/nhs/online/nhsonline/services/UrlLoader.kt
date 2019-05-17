@@ -23,7 +23,7 @@ class UrlLoader(
 
     fun reloadRequest(reloadUrl: String?) {
         if (reloadUrl != null) {
-            webView.loadUrl(reloadUrl)
+            webView.loadUrl(produceValidUrl(reloadUrl))
         } else {
             webView.reload()
         }

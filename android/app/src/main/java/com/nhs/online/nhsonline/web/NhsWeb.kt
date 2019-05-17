@@ -13,6 +13,7 @@ import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConne
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.ApplicationState
+import com.nhs.online.nhsonline.support.Optional
 import com.nhs.online.nhsonline.support.schemehandlers.SchemeHandlers
 import com.nhs.online.nhsonline.support.PersistData
 import com.nhs.online.nhsonline.support.schemehandlers.MailToSchemeHandler
@@ -211,7 +212,8 @@ class NhsWeb(
         return false
     }
 
-    fun reloadCurrentUrl() = urlLoader.reloadRequest(reloadUrl)
+    fun reloadCurrentUrl() = urlLoader.reloadRequest(Optional.of(knownServices.getPostRequestReloadUrl(reloadUrl.orEmpty())).orElse(reloadUrl))
+
 
     fun getFileUploadCallback() = chromeClient.getFileUploadCallback()
 
