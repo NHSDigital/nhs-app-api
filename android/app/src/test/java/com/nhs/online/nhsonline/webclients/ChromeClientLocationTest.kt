@@ -2,16 +2,14 @@ package com.nhs.online.nhsonline.webclients
 
 import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.webkit.GeolocationPermissions
 import android.webkit.WebView
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhs.online.nhsonline.activities.MainActivity
+import com.nhaarman.mockito_kotlin.*
 import com.nhs.online.nhsonline.resources.ResourceMockingClass
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 
@@ -19,16 +17,16 @@ import org.robolectric.RobolectricTestRunner
 class ChromeClientLocationTest {
 
     private lateinit var webviewMock: WebView
-    private lateinit var callBack : GeolocationPermissions.Callback
-    
+    private lateinit var callBack: GeolocationPermissions.Callback
+
     @Before
     fun setUp() {
-        webviewMock =  mock()
+        webviewMock = mock()
         callBack = mock()
     }
 
     @Test
-    fun locationPermissionRespondedNullCallBack(){
+    fun locationPermissionRespondedNullCallBack() {
         // Callback function is null at this point, handler should handle null callback
         val activity: Activity = mock()
         val chromeClient = ChromeClientLocationHandler(activity)
@@ -37,7 +35,7 @@ class ChromeClientLocationTest {
     }
 
     @Test
-    fun showPromptPermissionGranted(){
+    fun showPromptPermissionGranted() {
         // Use context that allows use of geolocation, should just invoke the callback to store
         // the settings
         val activity = ResourceMockingClass().mockGeolocationPermissionsAllow()
@@ -68,7 +66,44 @@ class ChromeClientLocationTest {
 
         chromeClient.onGeolocationPermissionsShowPrompt("https://www.nhs.uk", callBack)
         // This checks that permission is requested on this activity
-        verify(activity).requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),101)
+        verify(activity).requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101)
+    }
+
+    @Test
+    fun handleCameraFilePermissionResultStartsActivityIfGranted() {
+        val activity = ResourceMockingClass().mockFileUpload()
+        val chromeClient = ChromeClientLocationHandler(activity)
+
+        val grantResults: IntArray = intArrayOf(PackageManager.PERMISSION_GRANTED)
+
+        chromeClient.handleCameraFilePermissionResult(grantResults)
+
+        verify(activity, times(1)).startActivityForResult(any(), eq(UPLOAD_FILE_REQUEST_CODE))
+    }
+
+    @Test
+    fun handleCameraFilePermissionResultsNotGranted() {
+        val activity = ResourceMockingClass().mockFileUpload()
+        val chromeClient = ChromeClientLocationHandler(activity)
+
+        val grantResults: IntArray = intArrayOf(PackageManager.PERMISSION_DENIED)
+
+        chromeClient.handleCameraFilePermissionResult(grantResults)
+
+        verify(activity, never()).startActivityForResult(any(), eq(UPLOAD_FILE_REQUEST_CODE))
+    }
+
+    @Test
+    fun handleCameraFilePermissionResultsNotAllGranted() {
+        val activity = ResourceMockingClass().mockFileUpload()
+        val chromeClient = ChromeClientLocationHandler(activity)
+
+        val grantResults: IntArray =
+            intArrayOf(PackageManager.PERMISSION_DENIED, PackageManager.PERMISSION_GRANTED)
+
+        chromeClient.handleCameraFilePermissionResult(grantResults)
+
+        verify(activity, never()).startActivityForResult(any(), eq(UPLOAD_FILE_REQUEST_CODE))
     }
 
 }

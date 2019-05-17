@@ -1,8 +1,10 @@
 package com.nhs.online.nhsonline.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
@@ -27,7 +29,9 @@ import com.nhs.online.nhsonline.network.ConnectionStateMonitor
 import com.nhs.online.nhsonline.network.ConnectionStateMonitor.Companion.isConnectedToNetwork
 import com.nhs.online.nhsonline.support.*
 import com.nhs.online.nhsonline.web.NhsWeb
+import com.nhs.online.nhsonline.webclients.CAMERA_STORAGE_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
+import com.nhs.online.nhsonline.webclients.UPLOAD_FILE_REQUEST_CODE
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.scottyab.rootbeer.RootBeer
 import kotlinx.android.synthetic.main.activity_main.*
@@ -94,6 +98,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true
         webview.settings.javaScriptCanOpenWindowsAutomatically = true
+        webview.settings.allowUniversalAccessFromFileURLs = true
 
         webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
     }
@@ -138,6 +143,45 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         super.onDestroy()
         biometricsInterface.cancelAllProgressingTasks()
         connectionStateMonitor.deregisterNetworkCallback()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+
+        var results: Array<Uri>? = null
+        var fileUploadCallback = nhsWeb.getFileUploadCallback()
+
+        logger.log(Level.WARNING, "${this::class.java.simpleName}: Entering onActivityResult with request code: $requestCode")
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
+
+                var uploadedFileLocation = nhsWeb.getUploadedFileLocation()
+
+                if (fileUploadCallback == null) {
+                    return
+                }
+
+                if (intent?.data == null) {
+                    if (uploadedFileLocation != null) {
+                        results = arrayOf(Uri.parse(uploadedFileLocation))
+                    }
+                } else {
+                    val dataString = intent.dataString
+                    if (dataString != null) {
+                        results = arrayOf(Uri.parse(dataString))
+                    }
+                }
+
+                fileUploadCallback?.onReceiveValue(results)
+            }
+        } else {
+            if (requestCode == UPLOAD_FILE_REQUEST_CODE) {
+                if (fileUploadCallback == null) return
+
+                fileUploadCallback?.onReceiveValue(null)
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -291,8 +335,7 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     }
 
     override fun showProgressDialog() {
-        if (progressBarLayout.visibility == View.GONE)
-        {
+        if (progressBarLayout.visibility == View.GONE) {
             progressBarLayout.visibility = View.VISIBLE
             window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -378,6 +421,10 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
     ) {
         if (requestCode == LOCATION_REQUEST_CODE) {
             nhsWeb.handleWebClientLocationResult(grantResults)
+        } else if (requestCode == CAMERA_STORAGE_REQUEST_CODE) {
+            logger.info("Checking Camera Storage Request Code: $CAMERA_STORAGE_REQUEST_CODE")
+
+            nhsWeb.handleCameraFilePermissionResult(grantResults)
         }
     }
 
@@ -482,13 +529,14 @@ class MainActivity : IInteractor, AppCompatActivity(), IBiometricsInteractor {
         try {
             path = URL(currentUrl).path
         } catch (e: MalformedURLException) {
-            logger.log(Level.WARNING, "${this::class.java.simpleName}: MalformedUrlException: ${webview.url} $e")
+            logger.log(Level.WARNING,
+                "${this::class.java.simpleName}: MalformedUrlException: ${webview.url} $e")
         }
 
         return path
     }
 
-    private fun setupToolbar(id: Int, isHomeEnabled: Boolean){
+    private fun setupToolbar(id: Int, isHomeEnabled: Boolean) {
         setSupportActionBar(findViewById(id))
         supportActionBar?.apply {
             title = null

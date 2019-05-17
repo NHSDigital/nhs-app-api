@@ -1,17 +1,36 @@
 package com.nhs.online.nhsonline.webclients
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.provider.Settings
 import android.support.v4.app.ActivityCompat
-import android.webkit.GeolocationPermissions
-import android.webkit.WebChromeClient
+import android.support.v4.content.ContextCompat
+import android.util.Log
+import android.webkit.*
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 internal const val LOCATION_REQUEST_CODE = 101
+internal const val CAMERA_STORAGE_REQUEST_CODE = 102
+internal const val UPLOAD_FILE_REQUEST_CODE = 103
+
+private val TAG = ChromeClientLocationHandler::class.java.simpleName
+
+var fileUploadCallback: ValueCallback<Array<Uri>>? = null
+var uploadedFileLocation: String? = null
+
 
 class ChromeClientLocationHandler(private val activity: Activity) : WebChromeClient() {
     private var mCallback: GeolocationPermissions.Callback? = null
@@ -49,7 +68,12 @@ class ChromeClientLocationHandler(private val activity: Activity) : WebChromeCli
         }
     }
 
-    fun handleLocationPersionResult(grantResults: IntArray) {
+    override fun onPermissionRequest(request: PermissionRequest) {
+        Log.d(TAG, "Permission Request: ${request.resources}")
+        request.grant(request.resources)
+    }
+
+    fun handleLocationPermissionResult(grantResults: IntArray) {
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             val lm = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             val gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -66,7 +90,112 @@ class ChromeClientLocationHandler(private val activity: Activity) : WebChromeCli
         }
     }
 
+    fun handleCameraFilePermissionResult(grantResults: IntArray) {
+        if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+            Log.d(TAG, "Permissions granted for camera and file")
+
+            uploadFileToWebView()
+        } else {
+            Log.d(TAG, "Permission not granted")
+        }
+    }
+
+    override fun onShowFileChooser(
+        webView: WebView,
+        filePathCallback: ValueCallback<Array<Uri>>,
+        fileChooserParams: WebChromeClient.FileChooserParams
+    ): Boolean {
+        val requiredPermissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA)
+
+        Log.d(TAG, "Showing File Chooser")
+
+        if (!checkMissingPermissions(requiredPermissions)) {
+            fileUploadCallback = filePathCallback
+
+            uploadFileToWebView()
+
+            return true
+        } else {
+            Log.d(TAG, "Permissions not set")
+
+            askForPermissions(requiredPermissions, CAMERA_STORAGE_REQUEST_CODE)
+
+            return false
+        }
+    }
+
+    private fun uploadFileToWebView() {
+        val intentArray: Array<Intent?>
+
+        var takePictureIntent: Intent? = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent?.resolveActivity(activity.packageManager) != null) {
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile()
+                takePictureIntent.putExtra("PhotoPath", uploadedFileLocation)
+            } catch (ex: IOException) {
+                Log.e(TAG, "Image file creation failed", ex)
+            }
+
+            if (photoFile != null) {
+                uploadedFileLocation = "file:" + photoFile.absolutePath
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile))
+            } else {
+                takePictureIntent = null
+            }
+
+            intentArray = if (takePictureIntent != null) {
+                arrayOf(takePictureIntent)
+            } else {
+                arrayOfNulls(0)
+            }
+        } else
+            intentArray = arrayOfNulls(0)
+
+
+        val contentSelectionIntent = Intent(Intent.ACTION_GET_CONTENT)
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE)
+        contentSelectionIntent.type = "*/*"
+
+        val chooserIntent = Intent(Intent.ACTION_CHOOSER)
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent)
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, "File Chooser")
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray)
+        activity.startActivityForResult(chooserIntent, UPLOAD_FILE_REQUEST_CODE)
+    }
+
+
     fun onLocationPermissionResponded(permissionGranted: Boolean) {
         mCallback?.invoke(mOrigin, permissionGranted, false)
+    }
+
+    fun getFileUploadCallback(): ValueCallback<Array<Uri>>? = fileUploadCallback
+
+    fun getUploadedFileLocation(): String? = uploadedFileLocation
+
+    private fun checkMissingPermissions(requiredPermissions: Array<String>): Boolean {
+        return requiredPermissions.any {
+            ContextCompat.checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun askForPermissions(requiredPermissions: Array<String>, permissionRequestCode: Int) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            ActivityCompat.requestPermissions(activity,
+                requiredPermissions,
+                permissionRequestCode)
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        @SuppressLint("SimpleDateFormat") val timeStamp =
+            SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = """img_${timeStamp}_"""
+        val storageDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(imageFileName, ".jpg", storageDir)
     }
 }

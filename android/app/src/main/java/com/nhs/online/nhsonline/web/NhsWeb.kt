@@ -180,7 +180,11 @@ class NhsWeb(
     }
 
     fun handleWebClientLocationResult(grantResults: IntArray) {
-        chromeClient.handleLocationPersionResult(grantResults)
+        chromeClient.handleLocationPermissionResult(grantResults)
+    }
+
+    fun handleCameraFilePermissionResult(grantResults: IntArray) {
+        chromeClient.handleCameraFilePermissionResult(grantResults)
     }
 
     fun loadUrlInChromeTab(urlString: String) {
@@ -196,6 +200,10 @@ class NhsWeb(
     }
 
     fun reloadCurrentUrl() = urlLoader.reloadRequest(reloadUrl)
+
+    fun getFileUploadCallback() = chromeClient.getFileUploadCallback()
+
+    fun getUploadedFileLocation() = chromeClient.getUploadedFileLocation()
 
     fun announceForAccessibility(text: String) = webView.announceForAccessibility(text)
 

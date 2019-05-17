@@ -11,6 +11,8 @@ import com.nhs.online.nhsonline.R
 import org.mockito.Mockito
 
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.eq
 import org.mockito.ArgumentMatchers.anyInt
 
@@ -165,5 +167,12 @@ open class ResourceMockingClass {
                 shouldShowRequestPermissionRationale("android.permission.ACCESS_FINE_LOCATION")
             } doReturn false
         }
+    }
+
+    fun mockFileUpload() : Activity {
+        val resolveInfo: ResolveInfo? = null
+        val mockPackageManger: PackageManager = mock { on { resolveActivity(any(), any()) } doReturn resolveInfo }
+
+        return mock { on { packageManager } doReturn mockPackageManger }
     }
 }
