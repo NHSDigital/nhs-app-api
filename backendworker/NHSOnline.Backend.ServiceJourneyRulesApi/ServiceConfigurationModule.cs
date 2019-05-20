@@ -22,8 +22,9 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
                 .WithNamingConvention(new CamelCaseNamingConvention()).Build());
             services.AddSingleton(new SerializerBuilder().JsonCompatible().Build());
             services.AddSingleton(Assembly.GetExecutingAssembly());
-            
+
             services.AddSingleton<IYamlReaderFactory, YamlReaderFactory>();
+            services.AddSingleton<IYamlWriter, YamlWriter>();
             services.AddSingleton<IYamlToJsonConverter, YamlToJsonConverter>();
             services.AddSingleton<IConfigurationRuleFileValidator, ConfigurationRuleFileValidator>();
             services.AddSingleton<ISchemaValidator, SchemaValidator>();
@@ -32,8 +33,13 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi
             services.AddSingleton<IValidatorStep, LoadRequiredFiles>();
             services.AddSingleton<IValidatorStep, LoadConfigurationFiles>();
             services.AddSingleton<IValidatorStep, ValidateUniqueOdsConfiguration>();
+            services.AddSingleton<IValidatorStep, MergeOdsJourneys>();
+            services.AddSingleton<IValidatorStep, ValidateOdsJourneys>();
+            services.AddSingleton<IValidatorStep, OutputOdsJourneys>();
             services.AddSingleton(typeof(EnumDescriptionConverter<>));
             services.AddSingleton<IServiceJourneyRulesConfiguration, ServiceJourneyRulesConfiguration>();
+            services.AddSingleton<IYamlSerializer, YamlSerializer>();
+            services.AddSingleton<IDirectory, DirectoryWrapper>();
             
             base.ConfigureServices(services, configuration);
         }

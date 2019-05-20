@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public void GetData_WhenTheFileDoesNotExist_ShouldThrowAnException()
         {
             // Arrange
-            _mockFileHandler.Setup(f => f.GetTextReaderToReadFileContent(FilePath)).Throws<FileNotFoundException>();
+            _mockFileHandler.Setup(f => f.GetTextReader(FilePath)).Throws<FileNotFoundException>();
             var yamlReader = SetupYamlReader<TargetConfiguration>(new FileData(FilePath, string.Empty));
             
             // Act and Assert
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             
             // Arrange
             var yamlReader = SetupYamlReader<TargetConfiguration>();
-            _mockFileHandler.Setup(f => f.GetTextReaderToReadFileContent(FilePath))
+            _mockFileHandler.Setup(f => f.GetTextReader(FilePath))
                 .Returns(new StringReader(FileContent));
             
             // Act
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var yamlReader = SetupYamlReader<TargetConfiguration>(schemaData);
             FileData convertedJson = null;
             
-            _mockFileHandler.Setup(f => f.GetTextReaderToReadFileContent(FilePath))
+            _mockFileHandler.Setup(f => f.GetTextReader(FilePath))
                 .Returns(new StringReader("invalid yaml file"));
             _mockYamlToJsonConverter.Setup(c => c.Convert(It.IsAny<FileData>(), out convertedJson))
                 .Returns(false);
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await yamlReader.GetData();
             
             // Assert
-            _mockFileHandler.Verify(f => f.GetTextReaderToReadFileContent(FilePath));
+            _mockFileHandler.Verify(f => f.GetTextReader(FilePath));
             _mockYamlToJsonConverter.Verify(c => c.Convert(It.IsAny<FileData>(), out convertedJson));
             _mockSchemaValidator.VerifyNoOtherCalls();
             _mockLogger.VerifyNoOtherCalls();
@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var yamlReader = SetupYamlReader<TargetConfiguration>(schemaData);
             var convertedJson = new FileData(null, null);
             
-            _mockFileHandler.Setup(f => f.GetTextReaderToReadFileContent(FilePath))
+            _mockFileHandler.Setup(f => f.GetTextReader(FilePath))
                 .Returns(new StringReader(FileContent));
             _mockYamlToJsonConverter.Setup(c => c.Convert(It.IsAny<FileData>(), out convertedJson))
                 .Returns(true);
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await yamlReader.GetData();
             
             // Assert
-            _mockFileHandler.Verify(f => f.GetTextReaderToReadFileContent(FilePath));
+            _mockFileHandler.Verify(f => f.GetTextReader(FilePath));
             _mockYamlToJsonConverter.Verify(c => c.Convert(It.IsAny<FileData>(), out convertedJson));
             _mockSchemaValidator.Verify(s => s.ValidateJsonAgainstSchema(It.IsAny<FileData>(), It.IsAny<FileData>()));
             _mockLogger.VerifyNoOtherCalls();
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var yamlReader = SetupYamlReader<TargetConfiguration>(schemaData);
             var convertedJson = new FileData(null, null);
             
-            _mockFileHandler.Setup(f => f.GetTextReaderToReadFileContent(FilePath))
+            _mockFileHandler.Setup(f => f.GetTextReader(FilePath))
                 .Returns(new StringReader("invalid file content"));
             _mockYamlToJsonConverter.Setup(c => c.Convert(It.IsAny<FileData>(), out convertedJson))
                 .Returns(true);
@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await yamlReader.GetData();
             
             // Assert
-            _mockFileHandler.Verify(f => f.GetTextReaderToReadFileContent(FilePath));
+            _mockFileHandler.Verify(f => f.GetTextReader(FilePath));
             _mockYamlToJsonConverter.Verify(c => c.Convert(It.IsAny<FileData>(), out convertedJson));
             _mockSchemaValidator.Verify(s => s.ValidateJsonAgainstSchema(It.IsAny<FileData>(), It.IsAny<FileData>()));
             _mockLogger.VerifyLogger(LogLevel.Error,typeof(YamlException), Times.Once());
@@ -179,7 +179,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var yamlReader = SetupYamlReader<TargetConfiguration>(schemaData);
             var convertedJson = new FileData(null, null);
             
-            _mockFileHandler.Setup(f => f.GetTextReaderToReadFileContent(FilePath))
+            _mockFileHandler.Setup(f => f.GetTextReader(FilePath))
                 .Returns(new StringReader(FileContent));
             _mockYamlToJsonConverter.Setup(c => c.Convert(It.IsAny<FileData>(), out convertedJson))
                 .Returns(true);
@@ -190,7 +190,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var result = await yamlReader.GetData();
             
             // Assert
-            _mockFileHandler.Verify(f => f.GetTextReaderToReadFileContent(FilePath));
+            _mockFileHandler.Verify(f => f.GetTextReader(FilePath));
             _mockYamlToJsonConverter.Verify(c => c.Convert(It.IsAny<FileData>(), out convertedJson));
             _mockSchemaValidator.Verify(s => s.ValidateJsonAgainstSchema(It.IsAny<FileData>(), It.IsAny<FileData>()));
             _mockLogger.VerifyNoOtherCalls();
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var yamlReader = SetupYamlReader<TargetConfiguration>(schemaData);
             var convertedJson = new FileData(null, null);
             
-            _mockFileHandler.Setup(f => f.GetTextReaderToReadFileContent(FilePath))
+            _mockFileHandler.Setup(f => f.GetTextReader(FilePath))
                 .Returns(new StringReader(FileContent));
             _mockYamlToJsonConverter.Setup(c => c.Convert(It.IsAny<FileData>(), out convertedJson))
                 .Returns(true);

@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         public void GetGpInfo_WhenCalledWithUnkownFile_LogsErrorAndReturnNull()
         {   
             // arrange
-            _mockFileHandler.Setup(f => f.GetTextReaderToReadFileContent(It.IsAny<string>()))
+            _mockFileHandler.Setup(f => f.GetTextReader(It.IsAny<string>()))
                 .Throws<FileNotFoundException>();
             
             // act
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 "ODS,Organisation,ClosedDate,PartyKey,ASID,Supplier,Product,Version,EndpointCreated,CCGCode,CCG\n" +
                 "X1001,XYZ SURGERY,2018-06-21,YGA-0021074");
 
-            _mockFileHandler.Setup(erh => erh.GetTextReaderToReadFileContent(filePath))
+            _mockFileHandler.Setup(erh => erh.GetTextReader(filePath))
                 .Returns(fileDataStream);
             
             // act
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
             var fileDataStream = new StringReader("ODS,Organisation,ClosedDate,PartyKey,ASID,Supplier,Product,Version,EndpointCreated,CCGCode,CCG\n" +
                                                   "A81001,THE DENSHAM SURGERY,,YGA-0021074,2.86E+11,"+ gpSupplier +",SystmOne,601 Core GP2GPLM EPS2(AS),20140121,00K,NHS HARTLEPOOL AND STOCKTON-ON-TEES CCG");
 
-            _mockFileHandler.Setup(erh => erh.GetTextReaderToReadFileContent(GpInfoFilePath))
+            _mockFileHandler.Setup(erh => erh.GetTextReader(GpInfoFilePath))
                 .Returns(fileDataStream);
         }
         
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 "A81001,THE DENSHAM SURGERY,,YGA-0021074,2.86E+11,THE PHOENIX PARTNERSHIP,SystmOne,601 Core GP2GPLM EPS2(AS),20150121,00K,NHS HARTLEPOOL AND STOCKTON-ON-TEES CCG\n" +
                 "A81001,THE DENSHAM SURGERY,2016-01-25,YGA-0021075,2.86E+11,THE PHOENIX PARTNERSHIP,SystmOne,601 Core GP2GPLM EPS2(AS),20160125,00K,NHS HARTLEPOOL AND STOCKTON-ON-TEES CCG");
 
-            _mockFileHandler.Setup(erh => erh.GetTextReaderToReadFileContent(GpInfoFilePath))
+            _mockFileHandler.Setup(erh => erh.GetTextReader(GpInfoFilePath))
                 .Returns(fileDataStream);
         }
     }

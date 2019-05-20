@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -23,7 +22,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         private readonly string _rulesConfigurationFolder = "c:/folder/rules";
         private readonly string _journeysConfigurationFolder = "c:/folder/journeys";
 
-        private LoadConfigurationFiles _step;
+        private IValidatorStep _step;
         private IFixture _fixture;
         private Mock<ILogger<LoadConfigurationFiles>> _mockLogger;
         private Mock<IFileHandler> _mockFileHandler;

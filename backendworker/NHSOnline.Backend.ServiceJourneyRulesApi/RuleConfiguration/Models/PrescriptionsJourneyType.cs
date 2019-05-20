@@ -4,6 +4,6 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
     {
         None = 0,
         Disabled,
-        im1Prescriptions
+        Im1Prescriptions
     }
 }

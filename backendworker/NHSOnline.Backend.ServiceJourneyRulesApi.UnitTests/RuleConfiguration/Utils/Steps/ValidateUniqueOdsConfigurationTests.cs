@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
     [TestClass]
     public class ValidateUniqueOdsConfigurationTests
     {
-        private ValidateUniqueOdsConfiguration _step;
+        private IValidatorStep _step;
         private IFixture _fixture;
         private Mock<ILogger<ValidateUniqueOdsConfiguration>> _mockLogger;
 

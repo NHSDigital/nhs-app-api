@@ -15,5 +15,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
         
         public IDictionary<string, IDictionary<string, Journeys>> FolderOdsJourneys { get; set; }
         
+        public IDictionary<string, Journeys> MergedOdsJourneys { get; set; }
+        
     }
 }

@@ -3,6 +3,9 @@ SwaggerGenerated
 # NDepend Outputs
 NDependOut/
 
+# exclude everything in output
+configurations/output/*
+
 # exclude everything in certs
 certs/*
 

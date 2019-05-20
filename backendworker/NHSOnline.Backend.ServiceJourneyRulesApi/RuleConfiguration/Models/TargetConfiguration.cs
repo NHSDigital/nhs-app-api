@@ -1,11 +1,12 @@
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models
 {
     internal class TargetConfiguration
     {
-        [YamlMember(Alias = "$schema")]
-        public string Schema { get; set; }
+        [YamlMember(Alias = "$schema", ScalarStyle = ScalarStyle.DoubleQuoted)]
+        public string Schema { get; set; } = "Schemas/Journeys/configuration_schema.json";
         
         public Target Target { get; set; }
         

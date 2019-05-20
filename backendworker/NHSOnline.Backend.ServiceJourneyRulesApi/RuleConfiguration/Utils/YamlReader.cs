@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         private readonly ISchemaValidator _schemaValidator;
         private readonly IFileHandler _fileHandler;
 
-        private bool _isInitiliased;
+        private bool _isInitialised;
         private TModel _model;
         
         public YamlReader(
@@ -43,12 +43,12 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 
         public async Task<TModel> GetData()
         {
-            if (_isInitiliased || _schemaData == null)
+            if (_isInitialised || _schemaData == null)
             {
                 return _model;
             }
 
-            _isInitiliased = true;
+            _isInitialised = true;
             var rawData = ReadToEnd();
 
             if (!await ValidateSchema(rawData))
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         
         private string ReadToEnd()
         {
-            using (var stream = _fileHandler.GetTextReaderToReadFileContent(_filePath))
+            using (var stream = _fileHandler.GetTextReader(_filePath))
             {
                 return stream.ReadToEnd();
             }

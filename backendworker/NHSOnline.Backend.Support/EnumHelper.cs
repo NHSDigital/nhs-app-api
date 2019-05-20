@@ -50,6 +50,10 @@ namespace NHSOnline.Backend.Support
             return type;
         }
 
+        public static bool HasValue<TEnum>(TEnum? value)
+            where TEnum : struct, IConvertible
+            => value.HasValue && !value.Equals(default(TEnum));
+
         private static object ParseFromDescriptionInternal(Type type, string description)
         {
             if (description == null)

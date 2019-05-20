@@ -4,6 +4,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils;
 
 namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.Utils
@@ -14,6 +15,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         private const string DuplicateFileName = "duplicate_file.json";
         private const string UniqueFileName = "invalid_schema.json";
         private IFileHandler _fileHandler;
+        private Mock<IDirectory> _directory;
 
         [TestInitialize]
         public void TestInitialize()
@@ -22,7 +24,8 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
                 .Customize(new AutoMoqCustomization());
 
             fixture.Inject(Assembly.GetExecutingAssembly());
-            
+
+            _directory = fixture.Freeze<Mock<IDirectory>>();
             _fileHandler = fixture.Create<FileHandler>();
         }
 
@@ -31,7 +34,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         {
             // act
             var result = _fileHandler.ReadEmbeddedResourceFromFileName(UniqueFileName, out var fileData);
-            
+
             // assert
             result.Should().BeTrue();
             fileData.Should().NotBeNull();
@@ -54,15 +57,27 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.UnitTests.RuleConfiguration.U
         }
 
         [TestMethod]
-        public void
-            GetTextReaderToReadFileContent_WhenCalledWithAValidFilenameAndDirectory_ReturnsTextReaderWithNoError()
+        public void GetTextReader_WhenCalledWithAValidFilePath_ReturnsTextReader()
         {
             // act
-            var result = _fileHandler.GetTextReaderToReadFileContent("TestData/GpInfo/gpinfo.csv");
+            var result = _fileHandler.GetTextReader("TestData/GpInfo/gpinfo.csv");
 
             //assert
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<TextReader>();
+        }
+
+        [TestMethod]
+        public void GetTextWriter_WhenCalledWithAValidFilePath_ReturnsTextWriter()
+        {
+            // act
+            var result = _fileHandler.GetTextWriter("TestData/GpInfo/text.csv");
+
+            //assert
+            _directory.Verify(s => s.CreateDirectory("TestData/GpInfo"));
+
+            result.Should().NotBeNull();
+            result.Should().BeAssignableTo<TextWriter>();
         }
     }
 }

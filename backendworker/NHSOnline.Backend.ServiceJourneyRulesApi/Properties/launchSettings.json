@@ -45,7 +45,8 @@
         "GP_INFO_FILE_PATH": "../configurations/gpinfo.csv",
         "CONFIGURATION_FOLDER_PATH": "../configurations",
         "RULES_FOLDER_NAME": "Rules",
-        "JOURNEYS_FOLDER_NAME": "Journeys"
+        "JOURNEYS_FOLDER_NAME": "Journeys",
+        "OUTPUT_FOLDER_PATH": "../configurations/output"
       }
     },
     "Validate": {
@@ -55,7 +56,8 @@
         "GP_INFO_FILE_PATH": "../configurations/gpinfo.csv",
         "CONFIGURATION_FOLDER_PATH": "../configurations",
         "RULES_FOLDER_NAME": "Rules",
-        "JOURNEYS_FOLDER_NAME": "Journeys"
+        "JOURNEYS_FOLDER_NAME": "Journeys",
+        "OUTPUT_FOLDER_PATH": "../configurations/output"
       }
     }
   }

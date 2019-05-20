@@ -6,30 +6,33 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Models;
 
-namespace  NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
+namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
 {
     internal class FileHandler : IFileHandler
     {
         private readonly ILogger _logger;
+        private readonly IDirectory _directory;
         private readonly Assembly _assembly;
 
-        public FileHandler(ILogger<FileHandler> logger, Assembly assembly)
+        public FileHandler(ILogger<FileHandler> logger, IDirectory directory, Assembly assembly)
         {
             _logger = logger;
+            _directory = directory;
             _assembly = assembly;
         }
 
         public string[] GetFiles(string directoryPath)
             // ignore hidden and system files
-            => Directory.GetFiles(directoryPath, Constants.Target.All, new EnumerationOptions());
-        
+            => _directory.GetFiles(directoryPath, Constants.Target.All, new EnumerationOptions());
+
         public bool ReadEmbeddedResourceFromFileName(string filePath, out FileData fileData)
         {
             try
             {
-                var resourceName = _assembly.GetManifestResourceNames().Single(str => str.EndsWith(filePath, StringComparison.Ordinal));
+                var resourceName = _assembly.GetManifestResourceNames()
+                    .Single(str => str.EndsWith(filePath, StringComparison.Ordinal));
                 fileData = new FileData(filePath, GetEmbeddedText(resourceName));
-                
+
                 return true;
             }
             catch (Exception e)
@@ -40,9 +43,16 @@ namespace  NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
                 return false;
             }
         }
-        
-        public TextReader GetTextReaderToReadFileContent(string filePath) => new StreamReader(filePath);
-        
+
+        public TextReader GetTextReader(string filePath) => new StreamReader(filePath);
+
+        public TextWriter GetTextWriter(string filePath)
+        {
+            CreateDirectory(filePath);
+
+            return new StreamWriter(filePath);
+        }
+
         private string GetEmbeddedText(string resourceName)
         {
             _logger.LogInformation($"Reading resource: {resourceName}");
@@ -51,6 +61,13 @@ namespace  NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
             {
                 return stream.ReadToEnd();
             }
+        }
+
+        private void CreateDirectory(string filePath)
+        {
+            var directory = Path.GetDirectoryName(filePath);
+
+            _directory.CreateDirectory(directory);
         }
     }
 }

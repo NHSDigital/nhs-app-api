@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
         
         private IEnumerable<GpInfo> ReadGpInfoFromCsv(string filePath)
         {
-            var reader = _fileHandler.GetTextReaderToReadFileContent(filePath);
+            var reader = _fileHandler.GetTextReader(filePath);
             
             var csvReader = new CsvReader(reader);
             

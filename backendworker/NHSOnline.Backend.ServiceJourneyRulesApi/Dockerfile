@@ -39,6 +39,7 @@ ENV GP_INFO_FILE_PATH ./configurations/gpinfo.csv
 ENV CONFIGURATION_FOLDER_PATH ./configurations
 ENV RULES_FOLDER_NAME Rules
 ENV JOURNEYS_FOLDER_NAME Journeys
+ENV OUTPUT_FOLDER_PATH ./configurations/output
 
 WORKDIR /app
 EXPOSE $PORT

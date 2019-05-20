@@ -6,9 +6,11 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils
     internal interface IFileHandler
     {
         string[] GetFiles(string directoryPath);
-        
+
         bool ReadEmbeddedResourceFromFileName(string filePath, out FileData fileData);
-        
-        TextReader GetTextReaderToReadFileContent(string filePath);
+
+        TextReader GetTextReader(string filePath);
+
+        TextWriter GetTextWriter(string filePath);
     }
 }
