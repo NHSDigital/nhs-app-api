@@ -1,0 +1,66 @@
+<template>
+  <div :class="!$store.state.device.isNativeApp && $style.desktopWeb">
+    <span v-if="error && errorText" :id="errorId" class="nhsuk-error-message">
+      <span class="nhsuk-u-visually-hidden">{{ $t('generic.input.errors.messagePrefix') }}</span>
+      {{ errorText }}
+    </span>
+    <div class="nhsuk-date-input__item">
+      <div class="nhsuk-form-group">
+        <label class="nhsuk-label" :for="id">
+          File
+        </label>
+        <input :id="id"
+               type="file"
+               :name="name"
+               @change="onSelectedFileChange($event)">
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: 'GenericAttachment',
+  props: {
+    name: {
+      type: String,
+      default: undefined,
+    },
+    required: {
+      type: Boolean,
+      default: true,
+    },
+    error: {
+      type: Boolean,
+      default: false,
+    },
+    errorText: {
+      type: String,
+      default: '',
+    },
+    id: {
+      type: String,
+      default: undefined,
+    },
+  },
+  computed: {
+    errorId() {
+      return this.id ? `${this.id}-error-message` : 'error-message';
+    },
+  },
+  methods: {
+    onSelectedFileChange(event) {
+      this.$emit('input', event);
+    },
+  },
+};
+</script>
+
+<style module lang="scss" scoped>
+  div {
+    display: inline-block;
+  }
+</style>
+
+
