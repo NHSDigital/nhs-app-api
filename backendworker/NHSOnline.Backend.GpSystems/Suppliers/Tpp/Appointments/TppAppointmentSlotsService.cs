@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Support.Logging;
 using NHSOnline.Backend.GpSystems.Appointments;
 using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
@@ -12,15 +14,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
     {
         private readonly ITppClient _tppClient;
         private readonly ILogger<TppAppointmentSlotsService> _logger;
-        private readonly IAppointmentSlotResultBuilder _slotResultBuilder;
+        private readonly IAppointmentSlotsMapper _appointmentSlotsMapper;
         public TppAppointmentSlotsService(
             ITppClient tppClient, 
             ILogger<TppAppointmentSlotsService> logger,
-            IAppointmentSlotResultBuilder appointmentSlotResultBuilder)
+            IAppointmentSlotsMapper appointmentSlotsMapper)
         {
             _tppClient = tppClient;
             _logger = logger;
-            _slotResultBuilder = appointmentSlotResultBuilder;
+            _appointmentSlotsMapper = appointmentSlotsMapper;
         }
         public async Task<AppointmentSlotsResult> GetSlots(GpUserSession gpUserSession, AppointmentSlotsDateRange dateRange)
         {
@@ -29,19 +31,31 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 _logger.LogEnter();
             
                 var tppUserSession = (TppUserSession) gpUserSession;
-                var request = new ListSlots(tppUserSession, dateRange);
-                var listSlotsTask = _tppClient.ListSlotsPost(request, tppUserSession.Suid);
-                await Task.WhenAll(listSlotsTask);
+                var listSlotsRequest = new ListSlots(tppUserSession, dateRange);
+                var listSlotsTask = _tppClient.ListSlotsPost(listSlotsRequest, tppUserSession.Suid);
+                await listSlotsTask;
 
-                var result = _slotResultBuilder.Build(listSlotsTask);
+                var messagesRequest = new RequestSystmOnlineMessages(tppUserSession);
+                var messagesTask = _tppClient.RequestSystmOnlineMessages(messagesRequest, tppUserSession.Suid);
+                
+                try
+                {
+                    await messagesTask;
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Exception has been thrown calling TPP.");
+                }
+
+                var result = new TppAppointmentSlotsResultBuilder(_logger, _appointmentSlotsMapper)
+                    .Build(listSlotsTask, messagesTask);
 
                 return result.ValueOrFailure();
-
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "HttpRequestException has been thrown.");
-                return new AppointmentSlotsResult.InternalServerError();
+                return new AppointmentSlotsResult.SupplierSystemUnavailable();
             }
             finally
             {

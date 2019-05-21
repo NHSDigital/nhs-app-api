@@ -562,6 +562,106 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp
             Assert.IsNotNull(caughtException);
         }
 
+        [TestMethod]
+        public async Task RequestSystmOnlineMessagesPost_ReturnsRequestSystmOnlineMessagesReply_WhenValidlyRequested()
+        {
+            // Arrange
+            var requestModel = _fixture.Create<RequestSystmOnlineMessages>();
+            requestModel.UnitId = UnitId;
+            requestModel.Uuid = Uuid;
+            requestModel.ApiVersion = ApiVersion;
+
+            var requestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, requestModel.RequestType),
+                new KeyValuePair<string, string>(TppClient.RequestSuidHeader, Suid)
+            };
+
+            var responseHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.ResponseSuidHeader, Suid)
+            };
+            
+            var expectedResponse = _fixture.Create<RequestSystmOnlineMessagesReply>();
+            var responseContent = new StringContent(expectedResponse.SerializeXml());
+            
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(requestHeaders)
+                .WithContent(requestModel.SerializeXml())
+                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);    
+
+            // Act
+            var response = await _systemUnderTest.RequestSystmOnlineMessages(requestModel, Suid);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.Headers.Should().BeEquivalentTo(responseHeaders);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task RequestSystmOnlineMessagesPost_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
+        {
+            // Arrange
+            var requestModel = _fixture.Create<RequestSystmOnlineMessages>();
+            requestModel.UnitId = UnitId;
+            requestModel.Uuid = Uuid;
+            requestModel.ApiVersion = ApiVersion;
+            
+            var requestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, requestModel.RequestType),
+                new KeyValuePair<string, string>(TppClient.RequestSuidHeader, Suid)
+            };
+
+            var expectedErrorResponse = _fixture.Create<Error>();
+            
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(requestHeaders)
+                .WithContent(requestModel.SerializeXml())
+                .Respond(MediaType, expectedErrorResponse.SerializeXml());
+            
+            // Act
+            var response = await _systemUnderTest.RequestSystmOnlineMessages(requestModel, Suid);
+            response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.Body.Should().BeNull();
+            response.Headers.Should().BeNull();
+        }
+        
+        [TestMethod]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.Unauthorized)]
+        [DataRow(HttpStatusCode.NotFound)]
+        public async Task RequestSystmOnlineMessagesPost_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
+            HttpStatusCode value)
+        {
+            var requestModel = _fixture.Create<RequestSystmOnlineMessages>();
+            requestModel.UnitId = UnitId;
+            requestModel.Uuid = Uuid;
+            requestModel.ApiVersion = ApiVersion;
+
+            var tppRequestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, requestModel.RequestType),
+                new KeyValuePair<string, string>(TppClient.RequestSuidHeader, Suid)
+            };
+
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(tppRequestHeaders)
+                .Respond(value);
+
+            var response = await _systemUnderTest.RequestSystmOnlineMessages(requestModel, Suid);
+
+            response.StatusCode.Should().Be(value);
+            response.HasSuccessResponse.Should().BeFalse();
+        }
+        
         [TestCleanup]
         public void Dispose()
         {

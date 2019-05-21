@@ -10,17 +10,19 @@ using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Moq;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Support.Temporal;
 using UnitTestHelper;
 
 namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 {
     [TestClass]
-    public class ListSlotsReplyMapperTests
+    public class AppointmentSlotsMapperTests
     {
-        private ListSlotsReplyMapper _systemUnderTest;
+        private AppointmentSlotsMapper _systemUnderTest;
         private IFixture _fixture;
         private Mock<IDateTimeOffsetProvider> _dateTimeOffsetProviderMock;
+        private RequestSystmOnlineMessagesReply _messagesReply;
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,22 +36,25 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             _fixture.Inject(_dateTimeOffsetProviderMock);
             
-            _systemUnderTest = new ListSlotsReplyMapper(_fixture.Create<SessionMapper>());
+            _messagesReply = _fixture.Create<RequestSystmOnlineMessagesReply>();
+            
+            _systemUnderTest = new AppointmentSlotsMapper(_fixture.Create<SessionMapper>());
         }
         
         [TestMethod]
         public void Map_WhenSessionSlotsIsEmpty_ReturnsEmptySetOfSlots()
         {
+            // Arrange
             var session = CreateSession("Leeds", "101", "Dr House", "Emergency");
             session.Slots = new List<Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Slot>();
-
             var listSlotsReply = new ListSlotsReply { Sessions = new [] { session }.ToList() };
-
             var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Backend.GpSystems.Appointments.Models.Slot>() };
 
-            var actualResponse = _systemUnderTest.Map(listSlotsReply);
+            // Act
+            var actualResponse = _systemUnderTest.Map(listSlotsReply, _messagesReply);
 
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            // Assert
+            actualResponse.Slots.Should().BeEquivalentTo(expectedResponse.Slots);
         }
 
         [TestMethod]
@@ -61,9 +66,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Backend.GpSystems.Appointments.Models.Slot>() };
 
-            var actualResponse = _systemUnderTest.Map(listSlotsReply);
+            var actualResponse = _systemUnderTest.Map(listSlotsReply, _messagesReply);
 
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            actualResponse.Slots.Should().BeEquivalentTo(expectedResponse.Slots);
         }
 
         [TestMethod]
@@ -99,10 +104,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(listSlotsReply);
+            var actualResponse = _systemUnderTest.Map(listSlotsReply, _messagesReply);
 
             // Assert
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            actualResponse.Slots.Should().BeEquivalentTo(expectedResponse.Slots);
         }
 
         [TestMethod]
@@ -137,10 +142,58 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(listSlotsReply);
+            var actualResponse = _systemUnderTest.Map(listSlotsReply, _messagesReply);
 
             // Assert
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
+            actualResponse.Slots.Should().BeEquivalentTo(expectedResponse.Slots);
+        }
+
+        [TestMethod]
+        public void Map_WhenSystemMessagesNull_ReturnsEmptyBookingGuidance()
+        {
+            // Arrange
+            var listSlotsReply = new ListSlotsReply();
+            
+            // Act
+            var actualResponse = _systemUnderTest.Map(listSlotsReply, null);
+
+            // Assert
+            actualResponse.BookingGuidance.Should().Be("");
+        }
+
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        [DataRow("  ")]
+        [DataTestMethod]
+        public void Map_WhenSystemMessagesBookAppointmentsNullOrWhitespace_ReturnsEmptyBookingGuidance(string bookAppointments)
+        {
+            // Arrange
+            var listSlotsReply = new ListSlotsReply();
+            _messagesReply.BookAppointments = bookAppointments;
+            
+            // Act
+            var actualResponse = _systemUnderTest.Map(listSlotsReply, _messagesReply);
+
+            // Assert
+            actualResponse.BookingGuidance.Should().Be("");   
+        }
+        
+        [DataRow("test", "test")]
+        [DataRow(" abc ", "abc")]
+        [DataRow(" appointment booking guidance  ", "appointment booking guidance")]
+        [DataTestMethod]
+        public void Map_WhenSystemMessagesBookAppointmentsPopulated_ReturnsTrimmedBookingGuidance(string bookAppointments, string expectedGuidance)
+        {
+            // Arrange
+            var listSlotsReply = new ListSlotsReply();
+            _messagesReply.BookAppointments = bookAppointments;
+            
+            // Act
+            var actualResponse = _systemUnderTest.Map(listSlotsReply, _messagesReply);
+
+            // Assert
+            actualResponse.BookingGuidance.Should().Be(expectedGuidance);   
         }
 
         private static Backend.GpSystems.Suppliers.Tpp.Models.Appointments.Session CreateSession(

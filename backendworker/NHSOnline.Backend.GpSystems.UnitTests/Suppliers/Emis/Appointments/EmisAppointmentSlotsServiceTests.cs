@@ -356,7 +356,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
         
         [TestMethod]
-        public async Task GetSlots_SomethingGoesWrongDuringMappingResponse_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_SomethingGoesWrongDuringMappingResponse_ReturnsInternalServerError()
         {
             // Arrange
             var metadataResponse =

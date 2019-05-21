@@ -23,24 +23,22 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             serviceCollection.Should().NotBeNull();
 
             var registeredService = serviceCollection.ToList();
-            var tppAppointmemntService = new ServiceDescriptor(typeof(TppAppointmentsService),
+            var tppAppointmentService = new ServiceDescriptor(typeof(TppAppointmentsService),
                 typeof(TppAppointmentsService), ServiceLifetime.Transient);
-            var tppAppointmemntSlotService = new ServiceDescriptor(typeof(TppAppointmentSlotsService),
+            var tppAppointmentSlotService = new ServiceDescriptor(typeof(TppAppointmentSlotsService),
                 typeof(TppAppointmentSlotsService), ServiceLifetime.Transient);
 
-            var tppAppointmemntRetrievalService = new ServiceDescriptor(typeof(TppAppointmentsRetrievalService),
+            var tppAppointmentRetrievalService = new ServiceDescriptor(typeof(TppAppointmentsRetrievalService),
                 typeof(TppAppointmentsRetrievalService), ServiceLifetime.Transient);
-            var tppAppointmemntBookingService = new ServiceDescriptor(typeof(TppAppointmentsBookingService),
+            var tppAppointmentBookingService = new ServiceDescriptor(typeof(TppAppointmentsBookingService),
                 typeof(TppAppointmentsBookingService), ServiceLifetime.Transient);
-            var tppAppointmemntCancellationService = new ServiceDescriptor(typeof(TppAppointmentsCancellationService),
+            var tppAppointmentCancellationService = new ServiceDescriptor(typeof(TppAppointmentsCancellationService),
                 typeof(TppAppointmentsCancellationService), ServiceLifetime.Transient);
 
-            var tppListSlotReplyMapper = new ServiceDescriptor(typeof(IListSlotsReplyMapper),
-                typeof(ListSlotsReplyMapper), ServiceLifetime.Transient);
+            var tppListSlotReplyMapper = new ServiceDescriptor(typeof(IAppointmentSlotsMapper),
+                typeof(AppointmentSlotsMapper), ServiceLifetime.Transient);
             var tppSessionMapper = new ServiceDescriptor(typeof(ISessionMapper),
                 typeof(SessionMapper), ServiceLifetime.Transient);
-            var tppAppointmentSlotResultBuilderMapper = new ServiceDescriptor(typeof(IAppointmentSlotResultBuilder),
-                typeof(TppAppointmentSlotsResultBuilder), ServiceLifetime.Singleton);
             var tppAppointmentsReplyMapper = new ServiceDescriptor(typeof(IAppointmentsReplyMapper),
                 typeof(AppointmentsReplyMapper), ServiceLifetime.Transient);
             var tppAppointmentMapper = new ServiceDescriptor(typeof(IAppointmentMapper),
@@ -48,17 +46,15 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var tppAppointmentsResultBuilder = new ServiceDescriptor(typeof(IAppointmentsResultBuilder),
                 typeof(TppAppointmentsResultBuilder), ServiceLifetime.Singleton);
 
+            registeredService.Should().ContainEquivalentOf(tppAppointmentService);
+            registeredService.Should().ContainEquivalentOf(tppAppointmentSlotService);
 
-            registeredService.Should().ContainEquivalentOf(tppAppointmemntService);
-            registeredService.Should().ContainEquivalentOf(tppAppointmemntSlotService);
-
-            registeredService.Should().ContainEquivalentOf(tppAppointmemntRetrievalService);
-            registeredService.Should().ContainEquivalentOf(tppAppointmemntBookingService);
-            registeredService.Should().ContainEquivalentOf(tppAppointmemntCancellationService);
+            registeredService.Should().ContainEquivalentOf(tppAppointmentRetrievalService);
+            registeredService.Should().ContainEquivalentOf(tppAppointmentBookingService);
+            registeredService.Should().ContainEquivalentOf(tppAppointmentCancellationService);
 
             registeredService.Should().ContainEquivalentOf(tppListSlotReplyMapper);
             registeredService.Should().ContainEquivalentOf(tppSessionMapper);
-            registeredService.Should().ContainEquivalentOf(tppAppointmentSlotResultBuilderMapper);
             registeredService.Should().ContainEquivalentOf(tppAppointmentsReplyMapper);
             registeredService.Should().ContainEquivalentOf(tppAppointmentMapper);
             registeredService.Should().ContainEquivalentOf(tppAppointmentsResultBuilder);

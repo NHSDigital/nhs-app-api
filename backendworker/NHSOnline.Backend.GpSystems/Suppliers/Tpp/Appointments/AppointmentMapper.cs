@@ -5,10 +5,6 @@ using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public interface IAppointmentMapper
-    {
-        IEnumerable<Appointment> Map(List<Models.Appointments.Appointment> sourceAppointments);
-    }
     public class AppointmentMapper : IAppointmentMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;

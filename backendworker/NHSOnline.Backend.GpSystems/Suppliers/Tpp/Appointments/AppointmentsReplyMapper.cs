@@ -4,10 +4,6 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public interface IAppointmentsReplyMapper
-    {
-        AppointmentsResponse Map(ViewAppointmentsReply viewPastAppointmentsReply, ViewAppointmentsReply viewUpcomingAppointmentsReply);
-    }
     public class AppointmentsReplyMapper : IAppointmentsReplyMapper
     {
         private readonly IAppointmentMapper _mapper;

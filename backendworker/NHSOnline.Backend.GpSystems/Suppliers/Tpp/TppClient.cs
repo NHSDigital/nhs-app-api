@@ -126,7 +126,6 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             _logger.LogDebug($"Entered: {nameof(TestResultsView)} with { nameof(startDate)}:{startDate} and {nameof(endDate)}:{endDate}");
 
-
             var request = new TestResultsView
             {
                 PatientId = tppUserSession.PatientId,
@@ -229,6 +228,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
         {
             return await Post<CancelAppointment, CancelAppointmentReply>(cancelAppointment, suid);
         }
+        
+        public async Task<TppApiObjectResponse<RequestSystmOnlineMessagesReply>> RequestSystmOnlineMessages(RequestSystmOnlineMessages requestModel, string suid)
+        {
+            return await Post<RequestSystmOnlineMessages, RequestSystmOnlineMessagesReply>(requestModel, suid);
+        }
 
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model,
             string suid = null) where TRequest : ITppRequest
@@ -241,9 +245,9 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp
             model.ApiVersion = _tppConfig.ApiVersion;
             model.Uuid = _tppConfig.CreateGuid();
 
-            var authenticateXml = model.SerializeXml();
-            var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, TppHttpClient.MediaType);
-            var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
+            var xml = model.SerializeXml();
+            var content = new StringContent(xml, Encoding.UTF8, TppHttpClient.MediaType);
+            var request = BuildTppRequest(HttpMethod.Post, model.RequestType, content, suid);
 
             var response = await SendRequestAndParseResponse<TResponse>(request);
 

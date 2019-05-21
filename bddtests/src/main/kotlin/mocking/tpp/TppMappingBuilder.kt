@@ -32,6 +32,8 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
 
     var authentication = TppMappingBuilderAuthentication()
 
+    var requestMessages = TppMappingBuilderMessages()
+
     fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
         val errorMsg = "You don't have access to this online service"
         val disabledTppError = Error(errorCode = ErrorResponseCodeTpp.NO_ACCESS,

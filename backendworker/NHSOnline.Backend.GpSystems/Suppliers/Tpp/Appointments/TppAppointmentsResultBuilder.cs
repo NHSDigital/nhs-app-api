@@ -7,12 +7,6 @@ using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public interface IAppointmentsResultBuilder
-    {
-        Option<AppointmentsResult> Build(
-            Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewPastAppointmentsTask,
-            Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> viewUpcomingAppointmentsTask);
-    }
     public class TppAppointmentsResultBuilder : IAppointmentsResultBuilder
     {
         private readonly IAppointmentsReplyMapper _appointmentsReplyMapper;

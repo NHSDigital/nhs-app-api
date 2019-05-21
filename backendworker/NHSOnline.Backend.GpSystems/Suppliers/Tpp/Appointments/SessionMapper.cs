@@ -6,11 +6,6 @@ using NHSOnline.Backend.Support.Temporal;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public interface ISessionMapper
-    {
-        IEnumerable<GpSystems.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions);
-    }
-    
     public class SessionMapper : ISessionMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;

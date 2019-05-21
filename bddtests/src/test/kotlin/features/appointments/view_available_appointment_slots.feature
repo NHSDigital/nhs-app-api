@@ -42,7 +42,6 @@ Feature: View available appointment slots
     Then I cannot see any appointment slot guidance
     Examples:
       | GP System |
-      | TPP       |
       | MICROTEST |
 
   Scenario Outline: A user can expand, view and collapse guidance provided by <GP System>
@@ -55,6 +54,7 @@ Feature: View available appointment slots
     Examples:
       | Content             | GP System |
       | test Emis Message   | EMIS      |
+      | test TPP Message    | TPP       |
       | yet another Message | VISION    |
 
   Scenario Outline: A user does not see guidance if none is provided by <GP System>
@@ -65,6 +65,7 @@ Feature: View available appointment slots
     Examples:
       | Content           | GP System |
       | whitespace string | EMIS      |
+      | empty             | TPP       |
       | empty             | VISION    |
 
   Scenario Outline: A user does not see any guidance when it cannot be retrieved from <GP System>, but can still progress
@@ -76,6 +77,7 @@ Feature: View available appointment slots
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
       | VISION    |
 
   Scenario Outline: A <GP System> user can filter on slot type and location and only the appropriate slots will be displayed
@@ -105,7 +107,6 @@ Feature: View available appointment slots
       | TPP       |
       | VISION    |
       | MICROTEST |
-
 
   Scenario Outline: A <GP System> user enters the available appointments page, but only 1 appointment is available
     Given there is 1 available appointment slot for <GP System>

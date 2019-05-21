@@ -5,26 +5,26 @@ using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Support;
 using System;
 using System.Threading.Tasks;
+using NHSOnline.Backend.GpSystems.Suppliers.Tpp.Models;
 
 namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 {
-    public interface IAppointmentSlotResultBuilder
-    {
-        Option<AppointmentSlotsResult> Build(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask);
-    }
-    public class TppAppointmentSlotsResultBuilder : IAppointmentSlotResultBuilder
+    public class TppAppointmentSlotsResultBuilder
     {
         private readonly ILogger<TppAppointmentSlotsService> _logger;
-        private readonly IListSlotsReplyMapper _listSlotsReplyMapper;
+        private readonly IAppointmentSlotsMapper _appointmentSlotsMapper;
 
-        public TppAppointmentSlotsResultBuilder(ILogger<TppAppointmentSlotsService> logger, 
-            IListSlotsReplyMapper listSlotsReplyMapper)
+        public TppAppointmentSlotsResultBuilder(
+            ILogger<TppAppointmentSlotsService> logger, 
+            IAppointmentSlotsMapper appointmentSlotsMapper)
         {
-            _listSlotsReplyMapper = listSlotsReplyMapper;
+            _appointmentSlotsMapper = appointmentSlotsMapper;
             _logger = logger;
         }
 
-        public Option<AppointmentSlotsResult> Build(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask)
+        public Option<AppointmentSlotsResult> Build(
+            Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask,
+            Task<TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>> messagesTask)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 
                 return GetSlotsTaskCompletedUnsuccessfullyCase(slotTask)
                     .IfNone(() => GetSlotsResponseHasNoSuccessStatusCodeCase(slotTask))
-                    .IfNone(() => BuildSuccessfulAppointmentSlotsResult(slotTask));
+                    .IfNone(() => BuildSuccessfulAppointmentSlotsResult(slotTask, messagesTask));
             }
             finally
             {
@@ -40,13 +40,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             }
         }
         
-        private Option<AppointmentSlotsResult> BuildSuccessfulAppointmentSlotsResult(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask)
+        private Option<AppointmentSlotsResult> BuildSuccessfulAppointmentSlotsResult(
+            Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask,
+            Task<TppClient.TppApiObjectResponse<RequestSystmOnlineMessagesReply>> messagesTask)
         {
             try
             {
+                var messages = messagesTask.Status == TaskStatus.RanToCompletion
+                    ? messagesTask.Result?.Body
+                    : null;
+
+                var response = _appointmentSlotsMapper.Map(slotTask.Result.Body, messages);
+                
                 var result =
-                    new AppointmentSlotsResult.SuccessfullyRetrieved(
-                        _listSlotsReplyMapper.Map(slotTask.Result.Body));
+                    new AppointmentSlotsResult.SuccessfullyRetrieved(response);
+                
                 return Option.Some<AppointmentSlotsResult>(result);
             }
             catch (Exception e)
