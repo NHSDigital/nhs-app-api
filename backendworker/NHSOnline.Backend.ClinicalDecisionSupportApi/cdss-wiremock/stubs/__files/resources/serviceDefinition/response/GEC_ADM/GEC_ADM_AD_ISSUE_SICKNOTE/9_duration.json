@@ -1,0 +1,109 @@
+{
+  "resourceType": "GuidanceResponse",
+  "contained": [
+    {
+      "resourceType": "Parameters",
+      "id": "outputParams",
+      "parameter": [
+        {
+          "name": "sessionId",
+          "valueString": "1"
+        }
+      ]
+    },
+    {
+      "resourceType": "Questionnaire",
+      "id": "GEC_ADM_AD_ALCOHOL",
+      "status": "active",
+      "item": [
+        {
+          "linkId": "GEC_ADM_AD_ALCOHOL",
+          "text": "Do you know how many units of alcohol you drink each week? (1 pint of beer is approximately two units and one small glass of wine is 1 unit)?",
+          "type": "choice",
+          "required": true,
+          "repeats": false,
+          "option": [
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_DK",
+                "display": "Don't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_0",
+                "display": "Zero"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_1-7",
+                "display": "1-7 units per week"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_8-14",
+                "display": "8-14 units per week"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_15-21",
+                "display": "15-21 units per week"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_22-28",
+                "display": "22-28 units per week"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_29-35",
+                "display": "29-35 units per week"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_36-69",
+                "display": "36-69 units per week"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "GEC_ADM_AD_ALCOHOL_GT70",
+                "display": "More than 70 units per week"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requestId": "1",
+  "module": {
+    "reference": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM"
+  },
+  "status": "data-required",
+  "occurrenceDateTime": "2019-05-23T11:17:51.247",
+  "outputParameters": {
+    "reference": "#outputParams"
+  },
+  "dataRequirement": [
+    {
+      "id": "GEC_ADM_AD_ALCOHOL",
+      "extension": [
+        {
+          "url": "https://www.hl7.org/fhir/questionnaire.html",
+          "valueReference": {
+            "reference": "#GEC_ADM_AD_ALCOHOL"
+          }
+        }
+      ],
+      "type": "QuestionnaireResponse",
+      "profile": ["https://www.hl7.org/fhir/questionnaireresponse.html"]
+    }
+  ]
+}

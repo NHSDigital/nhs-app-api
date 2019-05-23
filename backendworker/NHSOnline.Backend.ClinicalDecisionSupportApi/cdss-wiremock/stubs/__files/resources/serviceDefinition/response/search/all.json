@@ -1,0 +1,191 @@
+{
+  "resourceType": "Bundle",
+  "id": "searchresults",
+  "type": "searchset",
+  "total": 3,
+  "entry": [
+      {
+          "fullUrl": "https://apitest.webgp.com/fhir/ServiceDefinition/ALG_HFV",
+          "resource": {
+              "resourceType": "ServiceDefinition",
+              "id": "ALG_HFV",
+              "contained": [
+                  {
+                      "resourceType": "Questionnaire",
+                      "id": "PRE_STD_AD_DISCLAIMERS",
+                      "status": "active",
+                      "item": [
+                          {
+                              "linkId": "PRE_STD_AD_DISCLAIMERS",
+                              "text": "You can use this form to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice.",
+                              "type": "choice",
+                              "required": true,
+                              "repeats": true,
+                              "option": [
+                                  {
+                                      "valueCoding": {
+                                          "code": "PRE_STD_AD_DISCLAIMERS_1",
+                                          "display": "I have read the privacy notice, and I consent to you using the personal and health data I give you to provide an online consultation. I can withdraw my consent at any time by abandoning the form."
+                                      }
+                                  },
+                                  {
+                                      "valueCoding": {
+                                          "code": "PRE_STD_AD_DISCLAIMERS_2",
+                                          "display": "I consent to you sharing my personal and health data with {0}."
+                                      }
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ],
+              "url": "https://apitest.webgp.com/fhir/ServiceDefinition/ALG_HFV",
+              "version": "0.1.0",
+              "title": "Hay Fever",
+              "status": "draft",
+              "experimental": true,
+              "date": "2019-04-15",
+              "publisher": "eConsultHealthLtd",
+              "dataRequirement": [
+                  {
+                      "id": "1",
+                      "extension": [
+                          {
+                              "url": "https://www.hl7.org/fhir/questionnaire.html",
+                              "valueReference": {
+                                  "reference": "#PRE_STD_AD_DISCLAIMERS"
+                              }
+                          }
+                      ],
+                      "type": "QuestionnaireResponse",
+                      "profile": [
+                          "https://www.hl7.org/fhir/questionnaireresponse.html"
+                      ]
+                  }
+              ]
+          }
+      },
+      {
+          "fullUrl": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM",
+          "resource": {
+              "resourceType": "ServiceDefinition",
+              "id": "GEC_ADM",
+              "contained": [
+                  {
+                      "resourceType": "Questionnaire",
+                      "id": "PRE_STD_AD_DISCLAIMERS",
+                      "status": "active",
+                      "item": [
+                          {
+                              "linkId": "PRE_STD_AD_DISCLAIMERS",
+                              "text": "You can use this form to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice.",
+                              "type": "choice",
+                              "required": true,
+                              "repeats": true,
+                              "option": [
+                                  {
+                                      "valueCoding": {
+                                          "code": "PRE_STD_AD_DISCLAIMERS_1",
+                                          "display": "I have read the privacy notice, and I consent to you using the personal and health data I give you to provide an online consultation. I can withdraw my consent at any time by abandoning the form."
+                                      }
+                                  },
+                                  {
+                                      "valueCoding": {
+                                          "code": "PRE_STD_AD_DISCLAIMERS_2",
+                                          "display": "I consent to you sharing my personal and health data with {0}."
+                                      }
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ],
+              "url": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM",
+              "version": "0.1.0",
+              "title": "Administrative Help",
+              "status": "draft",
+              "experimental": true,
+              "date": "2019-05-07",
+              "publisher": "eConsultHealthLtd",
+              "dataRequirement": [
+                  {
+                      "id": "1",
+                      "extension": [
+                          {
+                              "url": "https://www.hl7.org/fhir/questionnaire.html",
+                              "valueReference": {
+                                  "reference": "#PRE_STD_AD_DISCLAIMERS"
+                              }
+                          }
+                      ],
+                      "type": "QuestionnaireResponse",
+                      "profile": [
+                          "https://www.hl7.org/fhir/questionnaireresponse.html"
+                      ]
+                  }
+              ]
+          }
+      },
+      {
+          "fullUrl": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM",
+          "resource": {
+              "resourceType": "ServiceDefinition",
+              "id": "GEC_ADM",
+              "contained": [
+                  {
+                      "resourceType": "Questionnaire",
+                      "id": "PRE_STD_AD_DISCLAIMERS",
+                      "status": "active",
+                      "item": [
+                          {
+                              "linkId": "PRE_STD_AD_DISCLAIMERS",
+                              "text": "You can use this form to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice.",
+                              "type": "choice",
+                              "required": true,
+                              "repeats": true,
+                              "option": [
+                                  {
+                                      "valueCoding": {
+                                          "code": "PRE_STD_AD_DISCLAIMERS_1",
+                                          "display": "I have read the privacy notice, and I consent to you using the personal and health data I give you to provide an online consultation. I can withdraw my consent at any time by abandoning the form."
+                                      }
+                                  },
+                                  {
+                                      "valueCoding": {
+                                          "code": "PRE_STD_AD_DISCLAIMERS_2",
+                                          "display": "I consent to you sharing my personal and health data with {0}."
+                                      }
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ],
+              "url": "https://apitest.webgp.com/fhir/ServiceDefinition/GEC_ADM",
+              "version": "0.1.1",
+              "title": "Administrative Help",
+              "status": "draft",
+              "experimental": true,
+              "date": "2019-05-16",
+              "publisher": "eConsultHealthLtd",
+              "dataRequirement": [
+                  {
+                      "id": "1",
+                      "extension": [
+                          {
+                              "url": "https://www.hl7.org/fhir/questionnaire.html",
+                              "valueReference": {
+                                  "reference": "#PRE_STD_AD_DISCLAIMERS"
+                              }
+                          }
+                      ],
+                      "type": "QuestionnaireResponse",
+                      "profile": [
+                          "https://www.hl7.org/fhir/questionnaireresponse.html"
+                      ]
+                  }
+              ]
+          }
+      }
+  ]
+}

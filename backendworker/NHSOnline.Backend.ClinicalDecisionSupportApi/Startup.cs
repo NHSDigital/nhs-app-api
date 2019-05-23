@@ -6,11 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.ApiSupport;
 using NHSOnline.Backend.ApiSupport.Filters;
+using NHSOnline.Backend.ClinicalDecisionSupportApi.HttpClients;
+using NHSOnline.Backend.ClinicalDecisionSupportApi.RequestFormatters;
+using NHSOnline.Backend.ClinicalDecisionSupportApi.Settings;
+using NHSOnline.Backend.ClinicalDecisionSupportApi.Utils;
 using NHSOnline.Backend.Support.Http;
 using NHSOnline.Backend.Support.Logging;
+using NHSOnline.Backend.Support.Sanitization;
 using NHSOnline.Backend.Support.Settings;
 
 namespace NHSOnline.Backend.ClinicalDecisionSupportApi
@@ -46,7 +52,18 @@ namespace NHSOnline.Backend.ClinicalDecisionSupportApi
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             });
+
+            services.Configure<OnlineConsultationsProvidersSettings>(Configuration.GetSection("OnlineConsultationsProvidersSettings"));
+            services.AddTransient<IStartupFilter, SettingValidationStartupFilter>();
+            services.AddSingleton(resolver =>
+                resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);
+            services.AddSingleton<IValidatable>(resolver => 
+                resolver.GetRequiredService<IOptions<OnlineConsultationsProvidersSettings>>().Value);
             
+            services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
+            services.AddSingleton<IFhirSanitizationHelper, FhirSanitizationHelper>();
+            services.AddSingleton<IOnlineConsultationsProviderHttpClientPool, OnlineConsultationsProviderHttpClientPool>();
+
             services.AddSingleton(Configuration);
             
             services.AddSingleton(typeof(HttpTimeoutHandler<>));
@@ -62,6 +79,7 @@ namespace NHSOnline.Backend.ClinicalDecisionSupportApi
             options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
             options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
             options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
+            options.InputFormatters.Insert(0, new FhirParametersInputFormatter());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

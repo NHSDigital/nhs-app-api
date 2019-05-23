@@ -32,7 +32,9 @@ ENV PORT=8087
 ENV ASPNETCORE_URLS=
 ENV AUDIT_SINK_TYPE FILE
 ENV SESSION_MONGO_DATABASE_NAME development
-ENV EMS_CDSS_STUB_URL http://ems.cdss.stubs.local.bitraft.io:8088
+ENV OnlineConsultationsProvidersSettings__Providers__0__Provider=eConsult
+ENV OnlineConsultationsProvidersSettings__Providers__0__BaseAddress=http://ems.cdss.stubs.local.bitraft.io:8088/
+ENV OnlineConsultationsProvidersSettings__Providers__0__BearerToken=shfjlkasdhflashfl
 
 WORKDIR /app
 EXPOSE $PORT

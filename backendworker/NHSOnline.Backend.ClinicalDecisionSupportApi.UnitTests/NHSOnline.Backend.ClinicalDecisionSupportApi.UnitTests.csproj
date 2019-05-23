@@ -24,6 +24,7 @@
         </PackageReference>
         <PackageReference Include="ReportGenerator" Version="4.0.2" />
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
+        <PackageReference Include="RichardSzalay.MockHttp" Version="3.3.0" />
     </ItemGroup>
 
     <ItemGroup>

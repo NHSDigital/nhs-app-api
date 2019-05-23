@@ -5,7 +5,7 @@ echo "Commit hash: $(git rev-parse HEAD)"
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 CURRENT_TAG=$(git name-rev --tags --name-only $CURRENT_BRANCH | sed 's/\^.*//g')
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-nhsapp.azurecr.io}
-APIS=(pfsapi cidapi servicejourneyrulesapi clinicaldecisionsupportapi)
+APIS=(pfsapi cidapi servicejourneyrulesapi clinicaldecisionsupportapi cdsswiremock)
 
 echo "Current tag: $CURRENT_TAG"
 

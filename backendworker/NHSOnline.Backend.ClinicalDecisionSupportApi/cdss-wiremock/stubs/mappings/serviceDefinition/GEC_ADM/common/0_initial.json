@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "resourceType": "Parameters",
+          "meta": {
+            "profile": [
+              "http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate"
+            ]
+          },
+          "parameter": [
+            {
+              "name": "requestId"
+            },
+            {
+              "name": "patient",
+              "resource": {
+                "resourceType": "Patient",
+                "name": [
+                  {
+                    "family": "Bloggs",
+                    "given": ["Jenny"]
+                  }
+                ],
+                "gender": "female",
+                "birthDate": "1942-09-07"
+              }
+            }
+          ]
+        },
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/GEC_ADM/common/0_initial.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}

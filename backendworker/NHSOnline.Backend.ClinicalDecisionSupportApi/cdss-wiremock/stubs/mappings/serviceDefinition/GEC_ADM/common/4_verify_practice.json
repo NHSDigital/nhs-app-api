@@ -1,0 +1,72 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/fhir/ServiceDefinition/GEC_ADM/$evaluate",
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "resourceType": "Parameters",
+          "meta": {
+            "profile": [
+              "http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate"
+            ]
+          },
+          "parameter": [
+            {
+              "name": "requestId"
+            },
+            {
+              "name": "sessionId"
+            },
+            {
+              "name": "patient",
+              "resource": {
+                "resourceType": "Patient",
+                "name": [
+                  {
+                    "family": "Bloggs",
+                    "given": ["Jenny"]
+                  }
+                ],
+                "gender": "female",
+                "birthDate": "1942-09-07"
+              }
+            },
+            {
+              "name": "inputData",
+              "resource": {
+                "item": [
+                  {
+                    "answer": [
+                      {
+                        "valueCoding": {
+                          "code": "PRE_STD_AD_PRACTICE_Y"
+                        }
+                      }
+                    ],
+                    "linkId": "PRE_STD_AD_PRACTICE",
+                    "text": "Just to check: are you registered as a patient at {practice.name}? The practice address is {practice.address}."
+                  }
+                ],
+                "questionnaire": {
+                  "reference": "Questionnaire/PRE_STD_AD_PRACTICE"
+                },
+                "resourceType": "QuestionnaireResponse",
+                "status": "completed"
+              }
+            }
+          ]
+        },
+        "ignoreArrayOrder": true,
+        "ignoreExtraElements": true
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/GEC_ADM/common/4_verify_practice.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}

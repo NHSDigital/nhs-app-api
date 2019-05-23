@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             return hasError;
         }
 
-        private IDictionary<string, Journeys> GetTargetJourneys(
+        private static IDictionary<string, Journeys> GetTargetJourneys(
             IDictionary<string, GpInfo> gpInfos,
             TargetConfiguration configuration)
         {
@@ -110,7 +110,7 @@ namespace NHSOnline.Backend.ServiceJourneyRulesApi.RuleConfiguration.Utils.Steps
             return targets.ToDictionary(t => t, t => configuration.Journeys);
         }
 
-        private IEnumerable<string> GetTargets(IDictionary<string, GpInfo> gpInfos, Target target)
+        private static IEnumerable<string> GetTargets(IDictionary<string, GpInfo> gpInfos, Target target)
         {
             if (!string.IsNullOrWhiteSpace(target.OdsCode))
             {

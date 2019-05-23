@@ -19,9 +19,10 @@ Add the following to `/etc/hosts`
 
 Create a run configuration to target the `NHSOnline.Backend.ClinicalDecisionSupportApi` project.
 
-### EMS CDSS Supplier Stub
+### CDSS Supplier Stub
 
-Currently the CDS Api depends on the [EMS CDSS Supplier Stub Api](https://gitlab.com/ems-test-harness/ems-poc-public/cdss-supplier-stub). This is being used as a temporary CDSS supplier. Follow the instructions in the README.
+Currently the CDS Api depends on the CDSS Wiremock Stubs under `nhsonline-app/backendworker/NHSOnline.Backend.ClinicalDecisionSupportApi/cdss-wiremock`.
+This is being used as a temporary CDSS supplier. Follow the instructions in the README within that project to get it running.
 
 <br>
 <br>

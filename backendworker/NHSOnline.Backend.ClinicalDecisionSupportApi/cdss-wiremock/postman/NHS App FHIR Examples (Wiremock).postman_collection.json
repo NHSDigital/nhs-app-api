@@ -1,0 +1,454 @@
+{
+	"info": {
+		"_postman_id": "53adad4c-9206-4e70-8109-f6fa56c5f55e",
+		"name": "NHS App FHIR Examples (Wiremock)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ServiceDefinition",
+			"item": [
+				{
+					"name": "Evaluate",
+					"item": [
+						{
+							"name": "GEC_ADM",
+							"item": [
+								{
+									"name": "0 (initial)",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "2e1d43f2-9c76-4006-9a63-bea90c5d5c87",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "2bb9586d-ce01-4f22-99e0-7102d649a583",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer shfjlkasdhflashfl",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "1 (disclaimers)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer shfjlkasdhflashfl",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"PRE_STD_AD_DISCLAIMERS_1\"\n                                }\n                            },\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"PRE_STD_AD_DISCLAIMERS_2\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"PRE_STD_AD_DISCLAIMERS\",\n                        \"text\": \"You can use this form to contact your practice about administrative requests such as test results, sick notes, GP letters and medical reports. Your answers will be sent securely to your practice.\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/PRE_STD_AD_DISCLAIMERS\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "2 (for self or child)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"PRE_STD_AD_SELFORCHILD_SELF\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"PRE_STD_AD_SELFORCHILD\",\n                        \"text\": \"Are you asking for help for yourself or for your child?\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/PRE_STD_AD_SELFORCHILD\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "3 (is emergency)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"PRE_STD_EMERGENCY_YES\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"PRE_STD_AD_EMERGENCY\",\n                        \"text\": \"Next, let's make sure this isn't an emergency. Are you currently experiencing any of the following? <ul><li><em>Signs of a heart attack</em> - pain like a very tight band, heavy weight or squeezing in the centre of your chest</li><li><em>Signs of a stroke</em> - face drooping on one side, can't hold both arms up, difficulty speaking</li><li><em>Severe difficulty breathing</em> - gasping, not being able to get words out, choking or lips turning blue</li><li><em>Severe injuries</em> - heavy bleeding that won't stop or deep cuts after a serious accident</li></ul>\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/PRE_STD_AD_SELFORCHILD\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "4 (verify practice registration)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"PRE_STD_AD_PRACTICE_Y\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"PRE_STD_AD_PRACTICE\",\n                        \"text\": \"Just to check: are you registered as a patient at {practice.name}? The practice address is {practice.address}.\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/PRE_STD_AD_PRACTICE\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "5 (sex choice)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"PRE_STD_AD_SEX_F\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"PRE_STD_AD_SEX\",\n                        \"text\": \"Tell us your sex\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/PRE_STD_AD_SEX\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "6 (dob)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueDate\": \"1942-01-09\"\n                            }\n                        ],\n                        \"linkId\": \"PRE_STD_AD_DOB\",\n                        \"text\": \"Tell us your date of birth\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/PRE_STD_AD_DOB\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "GEC_ADM_AD_ISSUE_SICKNOTE",
+							"item": [
+								{
+									"name": "7 (administrative issue choice)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"GEC_ADM_AD_ISSUE_SICKNOTE\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"GEC_ADM_AD_ISSUE\",\n                        \"text\": \"What administrative issue can we help you with?\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/GEC_ADM_AD_ISSUE\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "8 (new or extend sick note)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"GEC_ADM_AD_SICKNOTEDETAIL_NEW\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"GEC_ADM_AD_SICKNOTEDETAIL\",\n                        \"text\": \"Is this a new request or extension of an existing sick note?\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/GEC_ADM_AD_SICKNOTEDETAIL\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "9 (sick note duration)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"GEC_ADM_AD_SICKNOTEDURATION_GT7\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"GEC_ADM_AD_SICKNOTEDURATION\",\n                        \"text\": \"How long do you expect you'll be ill for?\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/GEC_ADM_AD_SICKNOTEDURATION\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "10 (alcohol consumption)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"GEC_ADM_AD_ALCOHOL_0\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"GEC_ADM_AD_ALCOHOL\",\n                        \"text\": \"Do you know how many units of alcohol you drink each week? (1 pint of beer is approximately two units and one small glass of wine is 1 unit)?\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/GEC_ADM_AD_ALCOHOL\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "11 (smoking habits) (final)",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer shfjlkasdhflashfl"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"meta\": {\n        \"profile\": [\n            \"http://hl7.org/fhir/OperationDefinition/ServiceDefinition-evaluate\"\n        ]\n    },\n    \"parameter\": [\n        {\n            \"name\": \"requestId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"sessionId\",\n            \"valueString\": \"1\"\n        },\n        {\n            \"name\": \"patient\",\n            \"resource\": {\n                \"resourceType\": \"Patient\",\n                \"name\": [\n                    {\n                        \"family\": \"Bloggs\",\n                        \"given\": [\n                            \"Jenny\"\n                        ]\n                    }\n                ],\n                \"gender\": \"female\",\n                \"birthDate\": \"1942-09-07\"\n            }\n        },\n        {\n            \"name\": \"inputData\",\n            \"resource\": {\n                \"item\": [\n                    {\n                        \"answer\": [\n                            {\n                                \"valueCoding\": {\n                                    \"code\": \"GEC_ADM_AD_SMOKE_NEVER\"\n                                }\n                            }\n                        ],\n                        \"linkId\": \"GEC_ADM_AD_SMOKE\",\n                        \"text\": \"Do you smoke?\"\n                    }\n                ],\n                \"questionnaire\": {\n                    \"reference\": \"Questionnaire/GEC_ADM_AD_SMOKE\"\n                },\n                \"resourceType\": \"QuestionnaireResponse\",\n                \"status\": \"completed\"\n            }\n        }\n    ]\n}"
+										},
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_eval}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_eval}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Search",
+					"item": [
+						{
+							"name": "ById",
+							"item": [
+								{
+									"name": "GEC_ADM",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{host}}{{port}}{{gec_adm_id}}",
+											"host": [
+												"{{host}}{{port}}{{gec_adm_id}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{port}}{{base_sd_path}}",
+									"host": [
+										"{{host}}{{port}}{{base_sd_path}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}

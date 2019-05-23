@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/fhir/ServiceDefinition"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "resources/serviceDefinition/response/search/all.json",
+    "headers": {
+      "Content-Type": "application/json+fhir"
+    }
+  }
+}
