@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
         [TestMethod]
-        public async Task Book_HappyPath_ReturnsSuccessfullyBookedResponse()
+        public async Task Book_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
@@ -68,11 +68,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SuccessfullyBooked>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Success>();
         }
 
         [TestMethod]
-        public async Task Book_TppClientThrowsHttpRequestExceptionFromAppointments_ReturnsSupplierSystemUnavailable()
+        public async Task Book_TppClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
             _mockTppClient.Setup(x => x.BookAppointmentSlotPost(It.IsAny<BookAppointment>(),
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
 
         [TestMethod]
@@ -185,11 +185,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task Book_TppReturnsUnknownError_ReturnsSupplierSystemUnavailable()
+        public async Task Book_TppReturnsUnknownError_ReturnsBadGateway()
         {
             //Arrange
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode
@@ -202,7 +202,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
         [TestMethod]
         public async Task Booking_StartDateIsNull_ReturnsBadRequest()

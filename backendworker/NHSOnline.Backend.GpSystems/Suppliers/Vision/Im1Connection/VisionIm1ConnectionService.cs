@@ -54,13 +54,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                     NhsNumbers = formattedNhsNumbers
                 };
 
-                return new Im1ConnectionVerifyResult.SuccessfullyVerified(response);
+                return new Im1ConnectionVerifyResult.Success(response);
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogCritical("Critical Error sending configuration request to vision");
                 _logger.LogCritical(ex.ToString());
-                return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
+                return new Im1ConnectionVerifyResult.BadGateway();
             }
             finally
             {
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                              $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " +
                              $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
                     _logger.LogVisionErrorResponse(configResponse);
-                    return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    return new Im1ConnectionRegisterResult.BadGateway();
                 }
 
                 var nhsNumbers = configResponse.Body.Configuration.ExtractNhsNumbers();
@@ -136,13 +136,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
                 };
                 _logger.LogDebug($"{nameof(VisionIm1ConnectionService)} Register successfully completed");
 
-                return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
+                return new Im1ConnectionRegisterResult.Success(response);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogCritical("Critical Error sending register request to vision");
                 _logger.LogCritical(e.ToString());
-                return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                return new Im1ConnectionRegisterResult.BadGateway();
             }
             finally
             {
@@ -156,32 +156,32 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 LogError<T>("Invalid Request");
                 _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionVerifyResult.InvalidRequest();
+                return new Im1ConnectionVerifyResult.BadRequest();
             }
 
             if (response.IsInvalidUserCredentialsError)
             {
                 LogError<T>("Invalid User Credentials");
                 _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionVerifyResult.InvalidUserCredentials();
+                return new Im1ConnectionVerifyResult.BadGateway();
             }
 
             if (response.IsInvalidSecurityHeaderError)
             {
                 LogError<T>("Invalid Security Error");
                 _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader();
+                return new Im1ConnectionVerifyResult.InternalServerError();
             }
 
             if (response.IsUnknownError)
             {
                 LogError<T>("Unknown Error");
                 _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionVerifyResult.UnknownError();
+                return new Im1ConnectionVerifyResult.BadGateway();
             }
             LogError<T>("Other Error");
             _logger.LogVisionErrorResponse(response);
-            return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
+            return new Im1ConnectionVerifyResult.BadGateway();
         }
         
         private Im1ConnectionRegisterResult GetCorrectRegisterErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
@@ -190,7 +190,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 LogError<T>("User account locked");
                 _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                return new Im1ConnectionRegisterResult.BadGateway();
             }
             
             if (response.IsAlreadyRegisteredError)
@@ -218,12 +218,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Im1Connection
             {
                 LogError<T>("Unknown error");
                 _logger.LogVisionErrorResponse(response);
-                return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                return new Im1ConnectionRegisterResult.BadGateway();
             }
 
             LogError<T>("Other Error");
             _logger.LogVisionErrorResponse(response);
-            return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+            return new Im1ConnectionRegisterResult.BadGateway();
        }
         
         private void LogError<T>(string errorType)

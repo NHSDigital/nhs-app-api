@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SuccessfullyBooked()));
+                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.Success()));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             _mockGpSystem
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         {
             // Arrange
             _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.InsufficientPermissions()));
+                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.Forbidden()));
 
             // Act
             var result = await _systemUnderTest.Post(_appointmentBookRequest);
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to book appointment due to insufficent permissions for appointment with id: {0} and startDateTime: {1:O}",
+                "Unable to book appointment due to insufficient permissions for appointment with id: {0} and startDateTime: {1:O}",
                 _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
 
@@ -161,11 +161,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public async Task Post_AppointmentsServiceBookReturnsSupplierSystemUnavailable_ReturnsBadGateway()
+        public async Task Post_AppointmentsServiceBookReturnsBadGateway_ReturnsBadGateway()
         {
             // Arrange
             _mockAppointmentsService.Setup(x => x.Book(_userSession.GpUserSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SupplierSystemUnavailable()));
+                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.BadGateway()));
 
             // Act
             var result = await _systemUnderTest.Post(_appointmentBookRequest);

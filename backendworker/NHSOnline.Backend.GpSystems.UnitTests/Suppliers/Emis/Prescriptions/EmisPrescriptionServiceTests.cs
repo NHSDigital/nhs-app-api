@@ -84,8 +84,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -170,10 +170,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
+            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(1);
@@ -275,10 +275,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
+            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(3);
@@ -360,10 +360,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
+            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(expectedNumberOfPrescriptions);
@@ -390,11 +390,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_emisUserSession, date, toDate);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
+        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingEmis()
         {
             // Arrange
             var date = DateTimeOffset.Now;
@@ -412,7 +412,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_emisUserSession, date, toDate);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
             _emisClient.Verify();
         }
 
@@ -437,7 +437,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_emisUserSession, date, toDate);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.InternalServerError>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.InternalServerError>();
             _emisClient.Verify();
         }
 
@@ -462,7 +462,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_emisUserSession, date, toDate);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
         }
 
         #endregion
@@ -484,8 +484,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.PrescriptionsPost(_emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
-            ((PrescriptionResult.SuccessfulPost) result).Should().NotBeNull();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Success>();
+            ((OrderPrescriptionResult.Success) result).Should().NotBeNull();
         }
 
         [TestMethod]
@@ -506,7 +506,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.OrderPrescription(_emisUserSession, _repeatPrescriptionRequest);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.MedicationAlreadyOrderedWithinLast30Days>();
         }
 
         [TestMethod]
@@ -527,7 +527,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.OrderPrescription(_emisUserSession, _repeatPrescriptionRequest);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Forbidden>();
         }
 
         [TestMethod]
@@ -551,7 +551,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.OrderPrescription(_emisUserSession, _repeatPrescriptionRequest);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.BadRequest>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.BadRequest>();
         }
 
         [TestMethod]
@@ -573,7 +573,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.OrderPrescription(_emisUserSession, _repeatPrescriptionRequest);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
         }
 
         #endregion

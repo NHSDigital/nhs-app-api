@@ -6,17 +6,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
 {
     public class TermsAndConditionsFetchConsentResultVisitor : ITermsAndConditionsFetchConsentResultVisitor<IActionResult>
     {
-        public IActionResult Visit(TermsAndConditionsFetchConsentResult.Success success)
+        public IActionResult Visit(TermsAndConditionsFetchConsentResult.Success result)
         {
-            return new OkObjectResult(success);
+            return new OkObjectResult(result);
         }
         
-        public IActionResult Visit(TermsAndConditionsFetchConsentResult.NoConsentFound noConsentFound)
+        public IActionResult Visit(TermsAndConditionsFetchConsentResult.NoConsentFound result)
         {
-            return new OkObjectResult(noConsentFound);
+            return new OkObjectResult(result);
         }
 
-        public IActionResult Visit(TermsAndConditionsFetchConsentResult.FailureToFetchConsent failureToFetchConsent)
+        public IActionResult Visit(TermsAndConditionsFetchConsentResult.FailureToFetchConsent result)
         {
             return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status463FailedToFetchConsent);
         }      

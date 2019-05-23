@@ -2,8 +2,8 @@
 {
     public interface ITermsAndConditionsRecordConsentResultVisitor<out T>
     {
-        T Visit(TermsAndConditionsRecordConsentResult.InitialConsentRecorded consentRecorded);
-        T Visit(TermsAndConditionsRecordConsentResult.UpdateConsentRecorded consentRecorded);
-        T Visit(TermsAndConditionsRecordConsentResult.FailureToRecordConsent failureToRecordConsent);       
+        T Visit(TermsAndConditionsRecordConsentResult.InitialConsentRecorded result);
+        T Visit(TermsAndConditionsRecordConsentResult.UpdateConsentRecorded result);
+        T Visit(TermsAndConditionsRecordConsentResult.FailureToRecordConsent result);       
     }
 }

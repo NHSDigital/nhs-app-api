@@ -2,14 +2,10 @@
 {
     public interface IGetConfigurationResultVisitor<out T>
     {
-        T Visit(GetConfigurationResult.SuccessfullyRetrieved result);
+        T Visit(GetConfigurationResult.Success result);
 
-        T Visit(GetConfigurationResult.MissingDetailsResult result);
+        T Visit(GetConfigurationResult.BadRequest result);
 
-        T Visit(GetConfigurationResult.InvalidNativeAppVersionResult result);
-
-        T Visit(GetConfigurationResult.InvalidDeviceNameResult result);
-
-        T Visit(GetConfigurationResult.ErrorRetrievingConfigResult result);       
+        T Visit(GetConfigurationResult.InternalServerError result);       
     }
 }

@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             _emisPrescriptionMapper = emisPrescriptionMapper;
         }
 
-        public async Task<PrescriptionResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate,
+        public async Task<GetPrescriptionsResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
             var emisUserSession = (EmisUserSession) gpUserSession;
@@ -69,21 +69,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
 
-                        return new PrescriptionResult.SuccessfulGet(mappedPrescriptionList);
+                        return new GetPrescriptionsResult.Success(mappedPrescriptionList);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Something went wrong building the Prescription History response");
-                        return new PrescriptionResult.InternalServerError();
+                        return new GetPrescriptionsResult.InternalServerError();
                     }
                 }
 
-                return GetCorrectErrorResult(prescriptionsResponse);
+                return InterpretGetPrescriptionsError(prescriptionsResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, $"Unsuccessful request retrieving prescriptions");
-                return new PrescriptionResult.SupplierSystemUnavailable();
+                return new GetPrescriptionsResult.BadGateway();
             }
             finally
             {
@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             return prescriptionListResponseFiltered;
         }
 
-        public async Task<PrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<OrderPrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             const string auditType = Constants.AuditingTitles.RepeatPrescriptionsOrderRepeatMedicationsResponse;
 
@@ -203,15 +203,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                 if (response.HasSuccessResponse)
                 {
                     _logger.LogDebug($"Prescription order placed successfully. {repeatPrescriptionRequest.CourseIds.Count()} ordered.");
-                    return new PrescriptionResult.SuccessfulPost();
+                    return new OrderPrescriptionResult.Success();
                 }
 
-                return GetCorrectErrorResult(response);
+                return InterpretOrderPrescriptionError(response);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError($"Repeat prescription order failed with message {e.Message}");
-                return new PrescriptionResult.SupplierSystemUnavailable();
+                return new OrderPrescriptionResult.BadGateway();
             }
             finally
             {
@@ -219,33 +219,62 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             }
         }
 
-        private PrescriptionResult GetCorrectErrorResult(
+        private GetPrescriptionsResult InterpretGetPrescriptionsError(
             EmisClient.EmisApiResponse response)
         {
             if (HasAlreadyBeenOrderedLast30Days(response))
             {
                 _logger.LogWarning("The prescription request is invalid as the prescription has already been ordered in the last 30 days");
                 _logger.LogEmisWarningResponse(response);
-                return new PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days();
+                return new GetPrescriptionsResult.MedicationAlreadyOrderedWithinLast30Days();
             }
 
             if (response.HasForbiddenResponse())
             {
                 _logger.LogError("The emis prescriptions service is not enabled");
                 _logger.LogEmisErrorResponse(response);
-                return new PrescriptionResult.SupplierNotEnabled();
+                return new GetPrescriptionsResult.Forbidden();
             }
 
             if (IsBadRequest(response))
             {
                 _logger.LogError($"The prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponseBadRequest)}");
                 _logger.LogEmisErrorResponse(response);
-                return new PrescriptionResult.BadRequest();
+                return new GetPrescriptionsResult.BadRequest();
             }
 
             _logger.LogError("Emis system is currently unavailable");
             _logger.LogEmisErrorResponse(response);
-            return new PrescriptionResult.SupplierSystemUnavailable();
+            return new GetPrescriptionsResult.BadGateway();
+        }
+        
+        private OrderPrescriptionResult InterpretOrderPrescriptionError(
+            EmisClient.EmisApiResponse response)
+        {
+            if (HasAlreadyBeenOrderedLast30Days(response))
+            {
+                _logger.LogWarning("The prescription request is invalid as the prescription has already been ordered in the last 30 days");
+                _logger.LogEmisWarningResponse(response);
+                return new OrderPrescriptionResult.MedicationAlreadyOrderedWithinLast30Days();
+            }
+
+            if (response.HasForbiddenResponse())
+            {
+                _logger.LogError("The emis prescriptions service is not enabled");
+                _logger.LogEmisErrorResponse(response);
+                return new OrderPrescriptionResult.Forbidden();
+            }
+
+            if (IsBadRequest(response))
+            {
+                _logger.LogError($"The prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponseBadRequest)}");
+                _logger.LogEmisErrorResponse(response);
+                return new OrderPrescriptionResult.BadRequest();
+            }
+
+            _logger.LogError("Emis system is currently unavailable");
+            _logger.LogEmisErrorResponse(response);
+            return new OrderPrescriptionResult.BadGateway();
         }
 
         private static bool IsBadRequest(EmisClient.EmisApiResponse response)

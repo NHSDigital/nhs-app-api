@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public async Task GetAppointments_HappyPath_ReturnsSuccessfullyRetrievedResponse()
+        public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
 
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await _systemUnderTest.GetAppointments(_visionUserSession);
 
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<AppointmentsResult.Success>().Subject.Response;
 
             response.UpcomingAppointments.Should().BeEmpty();
             response.CancellationReasons.Should().BeEmpty();
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsCannotBookAppointments()
+        public async Task GetAppointments_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsForbidden()
         {
             // Arrange
             _visionUserSession.IsAppointmentsEnabled = false;
@@ -78,11 +78,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await _systemUnderTest.GetAppointments(_visionUserSession);
             
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task GetAppointments_VisionClientReturnsAccessDenied_ReturnsCannotBookAppointments()
+        public async Task GetAppointments_VisionClientReturnsAccessDenied_ReturnsForbidden()
         {
             // Arrange
             var response = VisionApiObjectResponseBuilder
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public async Task GetAppointments_VisionClientThrows_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_VisionClientThrows_ReturnsBadGateway()
         {
             // Arrange
             _mockVisionClient.Setup(x => x.GetExistingAppointments(
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await _systemUnderTest.GetAppointments(_visionUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
  
         [TestMethod]
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await _systemUnderTest.GetAppointments(_visionUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentsResult.Success>();
 
             _visionUserSession.AppointmentBookingReasonNecessity.Should().Be(expectedNecessity);
         }

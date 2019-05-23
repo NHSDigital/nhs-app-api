@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             _userSession = userSession;
         }
 
-        public async Task<IActionResult> Visit(GetCoursesResult.SuccessfullyRetrieved result)
+        public async Task<IActionResult> Visit(GetCoursesResult.Success result)
         {
             if (result.AllowFreeTextPrescriptions != null)
             {
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             return new OkObjectResult(result.Response);
         }
 
-        public async Task<IActionResult> Visit(GetCoursesResult.SupplierSystemUnavailable result)
+        public async Task<IActionResult> Visit(GetCoursesResult.BadGateway result)
         {
             return await Task.FromResult(new StatusCodeResult(StatusCodes.Status502BadGateway));
         }
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             return await Task.FromResult(new StatusCodeResult(StatusCodes.Status500InternalServerError));
         }
         
-        public async Task<IActionResult> Visit(GetCoursesResult.SupplierNotEnabled result)
+        public async Task<IActionResult> Visit(GetCoursesResult.Forbidden result)
         {
             return await Task.FromResult(new StatusCodeResult(StatusCodes.Status403Forbidden));
         }

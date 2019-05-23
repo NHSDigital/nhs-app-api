@@ -2,20 +2,14 @@
 {
     public interface IIm1ConnectionVerifyResultVisitor<out T>
     {
-        T Visit(Im1ConnectionVerifyResult.SuccessfullyVerified result);
-
-        T Visit(Im1ConnectionVerifyResult.InsufficientPermissions result);
+        T Visit(Im1ConnectionVerifyResult.Success result);
 
         T Visit(Im1ConnectionVerifyResult.NotFound result);
 
-        T Visit(Im1ConnectionVerifyResult.SupplierSystemUnavailable result);
+        T Visit(Im1ConnectionVerifyResult.BadGateway result);
 
-        T Visit(Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader);
+        T Visit(Im1ConnectionVerifyResult.InternalServerError result);
 
-        T Visit(Im1ConnectionVerifyResult.InvalidUserCredentials invalidUserCredentials);
-
-        T Visit(Im1ConnectionVerifyResult.InvalidRequest invalidRequest);
-
-        T Visit(Im1ConnectionVerifyResult.UnknownError unknownError);
+        T Visit(Im1ConnectionVerifyResult.BadRequest result);
     }
 }

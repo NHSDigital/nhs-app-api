@@ -6,12 +6,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 {
     public class AppointmentSlotsResultVisitor : IAppointmentSlotsResultVisitor<IActionResult>
     {
-        public IActionResult Visit(AppointmentSlotsResult.SuccessfullyRetrieved result)
+        public IActionResult Visit(AppointmentSlotsResult.Success result)
         {
             return new OkObjectResult(result.Response);
         }
 
-        public IActionResult Visit(AppointmentSlotsResult.SupplierSystemUnavailable result)
+        public IActionResult Visit(AppointmentSlotsResult.BadGateway result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
 
-        public IActionResult Visit(AppointmentSlotsResult.CannotBookAppointments result)
+        public IActionResult Visit(AppointmentSlotsResult.Forbidden result)
         {
             return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }

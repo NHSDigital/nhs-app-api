@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromVision()
+        public async Task Get_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromVision()
         {
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
                 .Returns(Task.FromResult(
@@ -102,8 +102,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -131,13 +131,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
             Assert.IsTrue(_visionUserSession.AllowFreeTextPrescriptions); // should be updated
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
 
-            ((GetCoursesResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            ((GetCoursesResult.Success)result).Response.Should().NotBeNull();
         }
 
         [TestMethod]
-        public async Task GetCourses_ReturnsSupplierNotEnabled_WhenRepeatPrescriptionsIsDisabledInUserSession()
+        public async Task GetCourses_ReturnsForbidden_WhenRepeatPrescriptionsIsDisabledInUserSession()
         {
             // Arrange
             _visionUserSession.IsRepeatPrescriptionsEnabled = false;
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
-            result.Should().BeOfType<GetCoursesResult.SupplierNotEnabled>();
+            result.Should().BeOfType<GetCoursesResult.Forbidden>();
         }
 
         [DataTestMethod]
@@ -190,9 +190,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetEligibleRepeats(_visionUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
-            var getCourseResult = (GetCoursesResult.SuccessfullyRetrieved) result;
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
+            var getCourseResult = (GetCoursesResult.Success) result;
             getCourseResult.Response.Should().Be(response);
             capturedItemToMap.Repeats.Should().HaveCount(expectedNumberOfPrescriptions);
         }
@@ -214,11 +214,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
+        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingEmis()
         {
             // Arrange
             _visionClient.Setup(x => x.GetEligibleRepeats(_visionUserSession))
@@ -229,7 +229,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.GetCourses(_visionUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
             _visionClient.Verify();
         }
 

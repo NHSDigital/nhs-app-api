@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.OrganDonation
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
 
-            var demographicsResult = new DemographicsResult.SuccessfullyRetrieved(new DemographicsResponse());
+            var demographicsResult = new DemographicsResult.Success(new DemographicsResponse());
 
             _mockDemographicsService = _fixture.Freeze<Mock<IDemographicsService>>();
             _mockDemographicsService

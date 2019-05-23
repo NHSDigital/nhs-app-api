@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public async Task Cancel_HappyPath_ReturnsSuccessfullyCancelledResponse()
+        public async Task Cancel_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange         
             var response = new VisionPFSClient.VisionApiObjectResponse<CancelledAppointmentResponse>(HttpStatusCode.OK)
@@ -61,11 +61,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SuccessfullyCancelled>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.Success>();
         }
         
         [TestMethod]
-        public async Task Cancel_VisionClientThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
+        public async Task Cancel_VisionClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
             _mockVisionClient.Setup(x => x.CancelAppointment(
@@ -86,11 +86,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task Cancel_AppointmentsDisabled_ReturnsInsufficientPermissions()
+        public async Task Cancel_AppointmentsDisabled_ReturnsForbidden()
         {
             // Arrange
             _userSession.IsAppointmentsEnabled = false;
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await _systemUnderTest.Cancel(_userSession, _request);
             
             // Assert
-            result.Should().BeAssignableTo<AppointmentCancelResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.Forbidden>();
         }
 
         [TestMethod]
@@ -135,7 +135,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public async Task Cancel_VisionClientReturnsAccessDenied_ReturnsInsufficientPermissions()
+        public async Task Cancel_VisionClientReturnsAccessDenied_ReturnsForbidden()
         {
             // Arrange
             var response = VisionApiObjectResponseBuilder
@@ -147,11 +147,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.Forbidden>();
         }
         
         [TestMethod]
-        public async Task Cancel_VisionClientReturnsUnexpectedErrorCode_ReturnsSupplierSystemUnavailable()
+        public async Task Cancel_VisionClientReturnsUnexpectedErrorCode_ReturnsBadGateway()
         {
             // Arrange
             var unexpectedErrorCode = _fixture.Create<string>();
@@ -164,7 +164,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.BadGateway>();
         }
 
         [TestMethod]

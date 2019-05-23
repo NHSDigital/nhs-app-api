@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.PfsApi.Ndop
                 if (!isValid)
                 {
                     _logger.LogError("Could not get Ndop claim audience/issuer.");
-                    return new GetNdopResult.Unsuccessful();
+                    return new GetNdopResult.InternalServerError();
                 }
                 
                 var claims = new[]
@@ -62,12 +62,12 @@ namespace NHSOnline.Backend.PfsApi.Ndop
 
                 var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
-                return new GetNdopResult.SuccessfullyRetrieved(new NdopResponse { Token = token });
+                return new GetNdopResult.Success(new NdopResponse { Token = token });
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
-                return new GetNdopResult.Unsuccessful();
+                return new GetNdopResult.InternalServerError();
             }
         }
     }

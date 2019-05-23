@@ -40,23 +40,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Demographics
                     {
                         _logger.LogWarning("User does not have access to their patient record");
                         _logger.LogEmisErrorResponse(demographicsResponse);
-                        return new DemographicsResult.UserHasNoAccess();
+                        return new DemographicsResult.Forbidden();
                     }
 
                     _logger.LogError($"Unsuccessful request retrieving demographics. Status code: {(int)demographicsResponse.StatusCode}");
                     _logger.LogEmisErrorResponse(demographicsResponse);
-                    return new DemographicsResult.Unsuccessful();
+                    return new DemographicsResult.BadGateway();
                 }
 
                 _logger.LogInformation("Mapping EMIS responses to universal DemographicsResponse class instance");
                 var result = _emisDemographicsMapper.Map(demographicsResponse.Body);
 
-                return new DemographicsResult.SuccessfullyRetrieved(result);
+                return new DemographicsResult.Success(result);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving demographics");
-                return new DemographicsResult.Unsuccessful();
+                return new DemographicsResult.BadGateway();
             }
             finally
             {

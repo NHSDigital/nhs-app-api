@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             _supplier = supplier;
         }
 
-        public async Task Visit(Im1ConnectionVerifyResult.SuccessfullyVerified result)
+        public async Task Visit(Im1ConnectionVerifyResult.Success result)
         {
             try
             {
@@ -42,13 +42,8 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             catch (Exception e)
             {
                 _logger.LogError(e,
-                    $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionVerifyResult.SuccessfullyVerified)}");
+                    $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionVerifyResult.Success)}");
             }
-        }
-
-        public Task Visit(Im1ConnectionVerifyResult.InsufficientPermissions result)
-        {
-            return Task.FromResult<object>(null);
         }
 
         public Task Visit(Im1ConnectionVerifyResult.NotFound result)
@@ -56,27 +51,17 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return Task.FromResult<object>(null);
         }
 
-        public Task Visit(Im1ConnectionVerifyResult.SupplierSystemUnavailable result)
+        public Task Visit(Im1ConnectionVerifyResult.BadGateway result)
         {
             return Task.FromResult<object>(null);
         }
 
-        public Task Visit(Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
+        public Task Visit(Im1ConnectionVerifyResult.InternalServerError result)
         {
             return Task.FromResult<object>(null);
         }
 
-        public Task Visit(Im1ConnectionVerifyResult.InvalidUserCredentials invalidUserCredentials)
-        {
-            return Task.FromResult<object>(null);
-        }
-
-        public Task Visit(Im1ConnectionVerifyResult.InvalidRequest invalidRequest)
-        {
-            return Task.FromResult<object>(null);
-        }
-
-        public Task Visit(Im1ConnectionVerifyResult.UnknownError unknownError)
+        public Task Visit(Im1ConnectionVerifyResult.BadRequest result)
         {
             return Task.FromResult<object>(null);
         }

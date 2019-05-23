@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
     {
         public Task<SessionExtendResult> Extend(GpUserSession gpUserSession)
         {
-            return Task.FromResult((SessionExtendResult)new SessionExtendResult.SuccessfullyExtended());
+            return Task.FromResult((SessionExtendResult)new SessionExtendResult.Success());
         }
     }
 }

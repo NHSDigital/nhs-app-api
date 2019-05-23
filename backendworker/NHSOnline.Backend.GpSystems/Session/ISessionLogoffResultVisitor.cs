@@ -2,10 +2,10 @@ namespace NHSOnline.Backend.GpSystems.Session
 {
     public interface ISessionLogoffResultVisitor<out T>
     {
-        T Visit(SessionLogoffResult.SuccessfullyDeleted successfullyDeleted);
+        T Visit(SessionLogoffResult.Success result);
 
-        T Visit(SessionLogoffResult.NotAuthenticated notAuthenticated);
+        T Visit(SessionLogoffResult.Forbidden result);
 
-        T Visit(SessionLogoffResult.SupplierSystemUnavailable supplierSystemUnavailable);
+        T Visit(SessionLogoffResult.BadGateway result);
     }
 }

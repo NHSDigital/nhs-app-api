@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public async Task Book_HappyPath_ReturnsSuccessfullyBookedResponse()
+        public async Task Book_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
             var response = new VisionPFSClient.VisionApiObjectResponse<BookAppointmentResponse>(HttpStatusCode.OK)
@@ -66,11 +66,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SuccessfullyBooked>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Success>();
         }
         
         [TestMethod]
-        public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsInsufficientPermissions()
+        public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsForbidden()
         {
             // Arrange
             _visionUserSession.IsAppointmentsEnabled = false;
@@ -79,11 +79,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await _systemUnderTest.Book(_visionUserSession, _request);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task Book_VisionClientThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
+        public async Task Book_VisionClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
             _mockVisionClient
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
 
         [TestMethod]
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public async Task Book_VisionClientReturnsAccessDenied_ReturnsInsufficientPermissions()
+        public async Task Book_VisionClientReturnsAccessDenied_ReturnsForbidden()
         {
             // Arrange
             var response = VisionApiObjectResponseBuilder
@@ -163,11 +163,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
         
         [TestMethod]
-        public async Task Book_VisionClientReturnsUnexpectedErrorCode_ReturnsSupplierSystemUnavailable()
+        public async Task Book_VisionClientReturnsUnexpectedErrorCode_ReturnsBadGateway()
         {
             // Arrange
             var unexpectedErrorCode = _fixture.Create<string>();
@@ -180,7 +180,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
 
         [TestMethod]

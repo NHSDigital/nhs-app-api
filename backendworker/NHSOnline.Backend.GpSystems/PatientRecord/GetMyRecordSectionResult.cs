@@ -6,11 +6,11 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
     {
         public abstract T Accept<T>(IMyRecordSectionResultVisitor<T> visitor);
 
-        public class SuccessfullyRetrieved : GetMyRecordSectionResult
+        public class Success : GetMyRecordSectionResult
         {
             public MyRecordSectionResponse Response { get; }
 
-            public SuccessfullyRetrieved(MyRecordSectionResponse response)
+            public Success(MyRecordSectionResponse response)
             {
                 Response = response;
             }
@@ -21,15 +21,7 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
             }
         }
 
-        public class Unsuccessful : GetMyRecordSectionResult
-        {
-            public override T Accept<T>(IMyRecordSectionResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-        
-        public class SupplierBadData : GetMyRecordSectionResult
+        public class BadGateway : GetMyRecordSectionResult
         {
             public override T Accept<T>(IMyRecordSectionResultVisitor<T> visitor)
             {
@@ -37,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
             }
         }
 
-        public class InvalidRequest : GetMyRecordSectionResult
+        public class BadRequest : GetMyRecordSectionResult
         {
             public override T Accept<T>(IMyRecordSectionResultVisitor<T> visitor)
             {
@@ -45,30 +37,6 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
             }
         }
 
-        public class ErrorProcessingSecurityHeader : GetMyRecordSectionResult
-        {
-            public override T Accept<T>(IMyRecordSectionResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InvalidUserCredentials : GetMyRecordSectionResult
-        {
-            public override T Accept<T>(IMyRecordSectionResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class UnknownError : GetMyRecordSectionResult
-        {
-            public override T Accept<T>(IMyRecordSectionResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-        
         public class InternalServerError : GetMyRecordSectionResult
         {
             public override T Accept<T>(IMyRecordSectionResultVisitor<T> visitor)

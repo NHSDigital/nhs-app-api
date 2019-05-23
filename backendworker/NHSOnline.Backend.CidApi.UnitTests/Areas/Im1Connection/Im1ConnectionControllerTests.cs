@@ -127,11 +127,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             };
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
+                new Im1ConnectionVerifyResult.Success(expectedResponse));
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             var gpSystemFactoryMock = MockGpSystemFactory(supplier, gpSystemMock);
             im1ConnectionService.Setup(x => x.Verify(DefaultConnectionToken, odsCode))
-                .ReturnsAsync(new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
+                .ReturnsAsync(new Im1ConnectionVerifyResult.Success(expectedResponse));
             _im1ConnectionController =
                 CreateIm1ConnectionController(gpSystemFactoryMock: gpSystemFactoryMock);
 
@@ -215,11 +215,11 @@ namespace NHSOnline.Backend.CidApi.UnitTests.Areas.Im1Connection
             _odsCodeMassager.Setup(x => x.CheckOdsCode(odsCode)).Returns(odsCode);
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
-                new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
+                new Im1ConnectionVerifyResult.Success(expectedResponse));
             var gpSystemMock = MockGpSystem(im1ConnectionService);
             var gpSystemFactoryMock = MockGpSystemFactory(supplier, gpSystemMock);
             im1ConnectionService.Setup(x => x.Register(model))
-                .ReturnsAsync(new Im1ConnectionRegisterResult.SuccessfullyRegistered(expectedResponse));
+                .ReturnsAsync(new Im1ConnectionRegisterResult.Success(expectedResponse));
             _im1ConnectionController = CreateIm1ConnectionController(gpSystemFactoryMock: gpSystemFactoryMock);
 
             // Act

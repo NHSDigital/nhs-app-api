@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
-        public async Task Cancel_HappyPath_ReturnsSuccessfullyCancelledResponse()
+        public async Task Cancel_HappyPath_ReturnsSuccessResponse()
         {
             var cancellationReason = new CancellationReason
             {
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             //Assert
             _cancellationReasonService.VerifyAll();
             _mockMicrotestClient.Verify();
-            cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.SuccessfullyCancelled>();
+            cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.Success>();
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             //Assert
             _cancellationReasonService.VerifyAll();
             _mockMicrotestClient.Verify();
-            cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.InsufficientPermissions>();
+            cancelRequest.Should().BeAssignableTo<AppointmentCancelResult.Forbidden>();
         }
 
         private void MockMicrotestClientAppointmentDeleteMethod(

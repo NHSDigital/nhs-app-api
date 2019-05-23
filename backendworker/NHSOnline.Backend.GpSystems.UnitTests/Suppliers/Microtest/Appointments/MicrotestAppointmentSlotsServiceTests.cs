@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
-        public async Task GetSlots_MicrotestClientThrowsHttpRequestExceptionFromAppointmentSlots_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_MicrotestClientThrowsHttpRequestExceptionFromAppointmentSlots_ReturnsBadGateway()
         {
             // Arrange
             _mockMicrotestClient
@@ -82,11 +82,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task GetSlots_MicrotestClientGetAppointmentSlotsUnsuccessful_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_MicrotestClientGetAppointmentSlotsUnsuccessful_ReturnsBadGateway()
         {
             // Arrange
             var unsuccessfulSlotResponse = _fixture
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
         
         [TestMethod]
@@ -122,11 +122,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
         
         [TestMethod]
-        public async Task GetSlots_ReturnsSupplierSystemUnavailable_WhenSomethingGoesWrongDuringMappingResponse()
+        public async Task GetSlots_ReturnsInternalServerError_WhenSomethingGoesWrongDuringMappingResponse()
         {
             // Arrange
             var slotResponse = new MicrotestClient.MicrotestApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK)
@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
         private void MockMicrotestClientAppointmentSlotGetMethod(

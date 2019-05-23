@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             _logger = logger;
         }
 
-        public async Task Visit(GetMyRecordSectionResult.SuccessfullyRetrieved result)
+        public async Task Visit(GetMyRecordSectionResult.Success result)
         {
             try
             {
@@ -31,23 +31,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.SuccessfullyRetrieved)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.Success)}");
             }
         }
 
-        public async Task Visit(GetMyRecordSectionResult.SupplierBadData result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Supplier - bad data");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.SupplierBadData)}");
-            }
-        }
-
-        public async Task Visit(GetMyRecordSectionResult.Unsuccessful result)
+        public async Task Visit(GetMyRecordSectionResult.BadGateway result)
         {
             try
             {
@@ -55,35 +43,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.Unsuccessful)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.BadGateway)}");
             }
         }
 
-        public async Task Visit(GetMyRecordSectionResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Error processing security header");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.ErrorProcessingSecurityHeader)}");
-            }
-        }
-
-        public async Task Visit(GetMyRecordSectionResult.InvalidUserCredentials invalidUserCredentials)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Invalid user credentials");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.InvalidUserCredentials)}");
-            }
-        }
-
-        public async Task Visit(GetMyRecordSectionResult.InvalidRequest invalidRequest)
+        public async Task Visit(GetMyRecordSectionResult.BadRequest result)
         {
             try
             {
@@ -91,23 +55,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.InvalidRequest)}");
+                _logger.LogError(e,
+                    $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.BadRequest)}");
             }
         }
 
-        public async Task Visit(GetMyRecordSectionResult.UnknownError unknownError)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error: Unknown error");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetMyRecordSectionResult.UnknownError)}");
-            }
-        }
-
-        public async Task Visit(GetMyRecordSectionResult.InternalServerError internalServerError)
+        public async Task Visit(GetMyRecordSectionResult.InternalServerError result)
         {
             try
             {

@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
                 return Option.None<AppointmentSlotsResult>();
             }
             _logger.LogError(message);
-            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.SupplierSystemUnavailable());
+            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.BadGateway());
         }
 
         private Option<AppointmentSlotsResult> GetResponseHasNoSuccessStatusCodeCase<T>(T response)
@@ -107,11 +107,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogEmisResponseIsForbidden();
                 _logger.LogEmisErrorResponse(response);
-                return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.CannotBookAppointments());
+                return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.Forbidden());
             }
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
-            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.SupplierSystemUnavailable());
+            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.BadGateway());
         }
 
         private Option<AppointmentSlotsResult> BuildSuccessfulAppointmentSlotsResult()
@@ -119,7 +119,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             try
             {
                 var result =
-                    new AppointmentSlotsResult.SuccessfullyRetrieved(
+                    new AppointmentSlotsResult.Success(
                         _appointmentSlotsResponseMapper.Map(
                             SlotResponse.Body,
                             MetaResponse.Body,

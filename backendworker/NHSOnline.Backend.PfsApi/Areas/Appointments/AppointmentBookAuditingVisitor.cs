@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _slotStartTime = slotStartTime;
         }
 
-        public async Task Visit(AppointmentBookResult.SuccessfullyBooked successfullyBooked)
+        public async Task Visit(AppointmentBookResult.Success result)
         {
             try
             {
@@ -32,24 +32,24 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.SuccessfullyBooked)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.Success)}");
             }
         }
 
-        public async Task Visit(AppointmentBookResult.InsufficientPermissions insufficientPermissions)
+        public async Task Visit(AppointmentBookResult.Forbidden result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to book appointment due to insufficent permissions for appointment " +
+                await _auditor.Audit(AuditType, "Unable to book appointment due to insufficient permissions for appointment " +
                                           "with id: {0} and startDateTime: {1:O}", _slotId, _slotStartTime);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.InsufficientPermissions)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.Forbidden)}");
             }
         }
 
-        public async Task Visit(AppointmentBookResult.SlotNotAvailable slotNotAvailable)
+        public async Task Visit(AppointmentBookResult.SlotNotAvailable result)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentBookResult.SupplierSystemUnavailable supplierSystemUnavailable)
+        public async Task Visit(AppointmentBookResult.BadGateway result)
         {
             try
             {
@@ -71,11 +71,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.SupplierSystemUnavailable)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentBookResult.BadGateway)}");
             }
         }
 
-        public async Task Visit(AppointmentBookResult.BadRequest badRequest)
+        public async Task Visit(AppointmentBookResult.BadRequest result)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentBookResult.AppointmentLimitReached appointmentLimitReached)
+        public async Task Visit(AppointmentBookResult.AppointmentLimitReached result)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentBookResult.InternalServerError internalServerError)
+        public async Task Visit(AppointmentBookResult.InternalServerError result)
         {
             try
             {

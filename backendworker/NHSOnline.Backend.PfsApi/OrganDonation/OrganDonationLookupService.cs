@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         public async Task<OrganDonationResult> GetOrganDonation(DemographicsResult myRecord, UserSession userSession)
         {
-            if (!(myRecord is DemographicsResult.SuccessfullyRetrieved demographicsResult))
+            if (!(myRecord is DemographicsResult.Success demographicsResult))
             {
                 return GetDemographicsErrorResult(myRecord);
             }
@@ -82,14 +82,13 @@ namespace NHSOnline.Backend.PfsApi.OrganDonation
 
         private OrganDonationResult GetDemographicsErrorResult(DemographicsResult myRecord)
         {
-
             switch (myRecord)
             {
-                case DemographicsResult.Unsuccessful _:
+                case DemographicsResult.BadGateway _:
                     _logger.LogDebug("GP systems demographics call was unsuccessful");
                     return new OrganDonationResult.DemographicsBadGateway();
-                case DemographicsResult.UserHasNoAccess _:
-                    _logger.LogDebug("GP systems demographics user has no access");
+                case DemographicsResult.Forbidden _:
+                    _logger.LogDebug("GP systems demographics forbidden");
                     return new OrganDonationResult.DemographicsForbidden();
                 case DemographicsResult.InternalServerError _:
                     _logger.LogDebug("GP systems demographics threw an internal server error");

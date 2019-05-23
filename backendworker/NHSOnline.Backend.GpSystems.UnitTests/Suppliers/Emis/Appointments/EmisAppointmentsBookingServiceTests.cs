@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task Book_HappyPath_ReturnsSuccessfullyBookedResponse()
+        public async Task Book_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode.OK)
@@ -69,11 +69,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SuccessfullyBooked>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Success>();
         }
 
         [TestMethod]
-        public async Task Book_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsSupplierSystemUnavailable()
+        public async Task Book_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGatewaye()
         {
             // Arrange
             _mockEmisClient.Setup(x => x.AppointmentsPost(It.IsAny<EmisHeaderParameters>(),
@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
 
         [TestMethod]
@@ -188,7 +188,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
         
         [TestMethod]
-        public async Task Book_WhenEmisReturnsForbidden_ReturnsInsufficientPermissions()
+        public async Task Book_WhenEmisReturnsForbidden_ReturnsForbidden()
         {
             //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
@@ -201,7 +201,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
 
         [TestMethod]
@@ -222,7 +222,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
 
         [TestMethod]
@@ -244,7 +244,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
 
         [TestMethod]
@@ -290,7 +290,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task Book_EmisReturnsUnknownError_ReturnsSupplierSystemUnavailable()
+        public async Task Book_EmisReturnsUnknownError_ReturnsBadGateway()
         {
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: Unhandled Error";
@@ -307,7 +307,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadGateway>();
         }
 
         [DataTestMethod]

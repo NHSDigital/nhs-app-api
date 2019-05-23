@@ -65,17 +65,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 
                 _logger.LogInformation($"{nameof(MyRecordResponse)}: {myRecordResponse}");
                 
-                return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);
+                return new GetMyRecordResult.Success(myRecordResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving my record");
-                return new GetMyRecordResult.Unsuccessful();
+                return new GetMyRecordResult.BadGateway();
             }
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "My record retrieval return null body");
-                return new GetMyRecordResult.SupplierBadData();
+                return new GetMyRecordResult.BadGateway();
             }
             finally
             {
@@ -100,20 +100,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.PatientRecord
                 if (tppTestResultResponse.HasErrored)
                 {
                     _logger.LogExitWith($"{nameof(tppTestResultResponse.HasErrored)}=true");
-                    return new GetDetailedTestResult.Unsuccessful();
+                    return new GetDetailedTestResult.BadGateway();
                 }
                 
-                return new GetDetailedTestResult.SuccessfullyRetrieved(tppTestResultResponse);
+                return new GetDetailedTestResult.Success(tppTestResultResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving test result");
-                return new GetDetailedTestResult.Unsuccessful();
+                return new GetDetailedTestResult.BadGateway();
             }
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "Test Result retrieval return null body");
-                return new GetDetailedTestResult.SupplierBadData();
+                return new GetDetailedTestResult.BadGateway();
             }
             finally
             {

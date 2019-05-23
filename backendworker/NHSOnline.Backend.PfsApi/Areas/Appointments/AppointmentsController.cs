@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
                 if (!isActive)
                 {
-                    result = new AppointmentsResult.CannotViewAppointments();
+                    result = new AppointmentsResult.Forbidden();
                 }
                 else
                 {

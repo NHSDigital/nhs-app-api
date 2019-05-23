@@ -71,8 +71,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
         }
 
         [DataTestMethod]
@@ -119,10 +119,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
+            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.Should().HaveCount(expectedNumberOfPrescriptions);
@@ -144,11 +144,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
+        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingEmis()
         {
             // Arrange
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
@@ -159,7 +159,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
             _tppClient.Verify();
         }
         
@@ -184,7 +184,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Forbidden>();
         }
 
         #endregion
@@ -212,7 +212,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
-            result.Should().BeAssignableTo<PrescriptionResult.CannotReorderPrescription>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.CannotReorderPrescription>();
         }
 
         [TestMethod]
@@ -236,7 +236,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Forbidden>();
         }
 
         [DataTestMethod]
@@ -264,7 +264,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
-            result.Should().BeAssignableTo<PrescriptionResult.BadRequest>(scenario);
+            result.Should().BeAssignableTo<OrderPrescriptionResult.BadRequest>(scenario);
         }
 
         [TestMethod]
@@ -288,7 +288,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
         }
         #endregion
 
@@ -327,7 +327,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             capturedRequestMedication.Medications.ElementAt(0).DrugId.Should().Be(request.CourseIds.ElementAt(0));
             capturedRequestMedication.Medications.ElementAt(1).DrugId.Should().Be(request.CourseIds.ElementAt(1));
             capturedRequestMedication.Medications.ForEach(x => x.Type.Should().Be("Repeat"));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Success>();
         }
 
         [TestMethod]
@@ -350,7 +350,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_tppUserSession, It.IsAny<RequestMedication>()));
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
         }
 
     }

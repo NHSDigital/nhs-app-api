@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
             _logger = logger;
         }
         
-        public async Task Visit(DemographicsResult.UserHasNoAccess result)
+        public async Task Visit(DemographicsResult.Forbidden result)
         {
             try
             {
@@ -27,11 +27,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.UserHasNoAccess)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.Forbidden)}");
             }
         }
 
-        public async Task Visit(DemographicsResult.SuccessfullyRetrieved result)
+        public async Task Visit(DemographicsResult.Success result)
         {
             try
             {
@@ -39,33 +39,21 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.SuccessfullyRetrieved)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.Success)}");
             }
         }
 
-        public async Task Visit(DemographicsResult.SupplierSystemUnavailable supplierSystemUnavailable)
+        public async Task Visit(DemographicsResult.BadGateway result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: supplier system unavailable");
+                await _auditor.Audit(AuditType, "Error viewing Demographics: bad gateway");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.SupplierSystemUnavailable)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.BadGateway)}");
             }
 
-        }
-
-        public async Task Visit(DemographicsResult.Unsuccessful result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error viewing Demographics: unsuccessful");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(DemographicsResult.Unsuccessful)}");
-            }
         }
 
         public async Task Visit(DemographicsResult.InternalServerError result)

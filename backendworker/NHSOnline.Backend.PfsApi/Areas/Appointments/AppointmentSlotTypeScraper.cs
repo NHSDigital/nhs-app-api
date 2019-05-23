@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
 
         public void CaptureAppointmentSlotTypes(UserSession userSession, AppointmentSlotsResult result)
         {
-            if (!(result is AppointmentSlotsResult.SuccessfullyRetrieved successfulResult) 
+            if (!(result is AppointmentSlotsResult.Success successfulResult) 
                 || successfulResult.Response.Slots?.Any() == false)
             {
                 return;
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
         }
 
         internal virtual AppointmentSlotsInformation BuildSlotsInformation(UserSession userSession, 
-            AppointmentSlotsResult.SuccessfullyRetrieved successfulResult)
+            AppointmentSlotsResult.Success successfulResult)
         {
             Debug.Assert(userSession != null);
             Debug.Assert(successfulResult != null);

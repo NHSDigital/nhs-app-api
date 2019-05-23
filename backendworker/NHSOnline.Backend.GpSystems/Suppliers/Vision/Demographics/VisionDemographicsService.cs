@@ -45,18 +45,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
                         if (demographicsResponse.IsAccessDeniedError)
                         {
                             _logger.LogWarning("User does not have access to their patient record");
-                            return new DemographicsResult.UserHasNoAccess();
+                            return new DemographicsResult.Forbidden();
                         }
 
                         _logger.LogError(
                             $"Unsuccessful request retrieving demographics information for Vision. Status code: {(int) demographicsResponse.StatusCode}");
                         _logger.LogVisionErrorResponse(demographicsResponse);
-                        return new DemographicsResult.Unsuccessful();  
+                        return new DemographicsResult.BadGateway();  
                     }
 
                     var result = _visionDemographicsMapper.Map(demographicsResponse.Body.Demographics, visionUserSession.NhsNumber);
                     
-                    return new DemographicsResult.SuccessfullyRetrieved(result);
+                    return new DemographicsResult.Success(result);
                 }
                 catch (Exception e)
                 {
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Demographics
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving patient selected information for Vision");
-                return new DemographicsResult.Unsuccessful();
+                return new DemographicsResult.BadGateway();
             }
             finally
             {

@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             catch (HttpRequestException exception)
             {
                 _logger.LogError(exception, "Booking appointment slots failed.");
-                return new AppointmentBookResult.SupplierSystemUnavailable();
+                return new AppointmentBookResult.BadGateway();
             }
             finally
             {
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         {   
             if (response.HasSuccessResponse)
             {
-                return new AppointmentBookResult.SuccessfullyBooked();
+                return new AppointmentBookResult.Success();
             }
 
             if (SlotIsNotAvailableForBooking(response) || 
@@ -78,12 +78,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogEmisResponseIsForbidden();
                 _logger.LogEmisErrorResponse(response);
-                return new AppointmentBookResult.InsufficientPermissions();
+                return new AppointmentBookResult.Forbidden();
             }
             
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
-            return new AppointmentBookResult.SupplierSystemUnavailable();
+            return new AppointmentBookResult.BadGateway();
         }
 
         private bool TelephoneNumberIsBlank(EmisClient.EmisApiResponse response)

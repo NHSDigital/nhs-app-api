@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Appointments retrieval failed.");
-                return new AppointmentsResult.SupplierSystemUnavailable();
+                return new AppointmentsResult.BadGateway();
             }
             finally
             {
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             {
                 try
                 {
-                    return new AppointmentsResult.SuccessfullyRetrieved(_responseMapper.Map(response.Body));
+                    return new AppointmentsResult.Success(_responseMapper.Map(response.Body));
                 }
                 catch (Exception e)
                 {
@@ -70,12 +70,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             if (response.HasForbiddenResponse)
             {
                 _logger.LogError("Call to Microtest returned a forbidden response");
-                return new AppointmentsResult.CannotViewAppointments();
+                return new AppointmentsResult.Forbidden();
             }
 
             _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentsRetrievalService)}) return an unanticipated " +
                              $"error with status code: '{response.StatusCode}'.");
-            return new AppointmentsResult.SupplierSystemUnavailable();
+            return new AppointmentsResult.BadGateway();
         } 
     }
 }

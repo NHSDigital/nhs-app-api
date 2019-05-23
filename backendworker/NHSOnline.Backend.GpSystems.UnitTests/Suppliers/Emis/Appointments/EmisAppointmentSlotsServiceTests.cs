@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task GetSlots_EmisClientAppointmentSlotsGetThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_EmisClientAppointmentSlotsGetThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
             MockEmisClientAppointmentSlotsMetadataGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK));
@@ -88,11 +88,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task GetSlots_EmisClientAppointmentSlotsGetUnsuccessful_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_EmisClientAppointmentSlotsGetUnsuccessful_ReturnsBadGateway()
         {
             // Arrange
             var metadataResponse =
@@ -117,11 +117,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
             MockEmisClientAppointmentSlotGetMethod(new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK));
@@ -136,11 +136,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetUnsuccessful_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetUnsuccessful_ReturnsBadGateway()
         {
             // Arrange
             var unsuccessfulMetadataResponse = _fixture
@@ -164,7 +164,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
     
         [TestMethod]
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
         
         [TestMethod]
@@ -210,7 +210,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
         [TestMethod]
@@ -236,11 +236,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
         
         [TestMethod]
-        public async Task GetSlots_EmisClientAppointmentSlotsGetNotAvailable_ReturnsCannotBookAppointments()
+        public async Task GetSlots_EmisClientAppointmentSlotsGetNotAvailable_ReturnsForbidden()
         {
             // Arrange
             var metadataResponse =
@@ -265,11 +265,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
         
         [TestMethod]
-        public async Task GetSlots_EmisClientAppointmentSlotsGetNotAvailableException_ReturnsCannotBookAppointments()
+        public async Task GetSlots_EmisClientAppointmentSlotsGetNotAvailableException_ReturnsForbidden()
         {
             // Arrange
             var metadataResponse =
@@ -294,11 +294,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetNotAvailable_ReturnsCannotBookAppointment()
+        public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetNotAvailable_ReturnsForbidden()
         {
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
@@ -323,11 +323,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetNotAvailableException_ReturnsCannotBookAppointment()
+        public async Task GetSlots_EmisClientAppointmentSlotsMetadataGetNotAvailableException_ReturnsForbidden()
         {
             // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
@@ -352,7 +352,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
         
         [TestMethod]
@@ -431,7 +431,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
         private void MockEmisClientPracticeSettingsGetMethod(

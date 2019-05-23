@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
                 .Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
                 .Subject;
 
             successResult.Response.NhsNumbers.Single().NhsNumber.Should().Be(expectedNhsNumber);
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
                 .Subject;
 
             successResult.Response.NhsNumbers.Select(x => x.NhsNumber).Should().BeEquivalentTo(expectedNhsNumbers);
@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 patientIdentifiers: patientIdentifiers);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
                 .Subject;
 
             successResult.Response.NhsNumbers.Should().BeEmpty();
@@ -175,7 +175,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
                 patientIdentifiers: patientIdentifiers);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
                 .Subject;
 
             successResult.Response.NhsNumbers.Should().BeEmpty();
@@ -212,7 +212,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
         }
 
         [TestMethod]
-        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenEmisClientThrowsHttpRequestException()
+        public async Task Verify_ReturnsBadGateway_WhenEmisClientThrowsHttpRequestException()
         {
             var emisClientMock = new Mock<IEmisClient>();
             emisClientMock
@@ -224,7 +224,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
         }
 
         [TestMethod]
@@ -271,7 +271,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
             
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
                        
             _mockEmisClient.Verify(
                 x => x.MeApplicationsPost(
@@ -333,12 +333,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
             _mockIm1CacheService.Verify();
         }
         
         [TestMethod]
-        public async Task Register_ReturnsSupplierSystemUnavailable_WhenEmisClientThrowsHttpRequestException()
+        public async Task Register_ReturnsBadGateway_WhenEmisClientThrowsHttpRequestException()
         {
             // Arrange
             // emis client throws HttpRequestException
@@ -351,7 +351,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
 
         [TestMethod]

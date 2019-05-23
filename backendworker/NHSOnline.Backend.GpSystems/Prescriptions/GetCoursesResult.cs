@@ -6,12 +6,12 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
     {
         public abstract T Accept<T>(ICourseResultVisitor<T> visitor);
 
-        public class SuccessfullyRetrieved : GetCoursesResult
+        public class Success : GetCoursesResult
         {
             public CourseListResponse Response { get; }
             public bool? AllowFreeTextPrescriptions { get; }
 
-            public SuccessfullyRetrieved(CourseListResponse response, bool? allowFreeTextPrescriptions = null)
+            public Success(CourseListResponse response, bool? allowFreeTextPrescriptions = null)
             {
                 Response = response;
                 AllowFreeTextPrescriptions = allowFreeTextPrescriptions;
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
             }
         }
 
-        public class SupplierNotEnabled : GetCoursesResult
+        public class Forbidden : GetCoursesResult
         {
             public override T Accept<T>(ICourseResultVisitor<T> visitor)
             {
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Prescriptions
             }
         }
         
-        public class SupplierSystemUnavailable : GetCoursesResult
+        public class BadGateway : GetCoursesResult
         {
             public override T Accept<T>(ICourseResultVisitor<T> visitor)
             {

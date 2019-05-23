@@ -4,11 +4,11 @@
     {
         public abstract T Accept<T>(IGpSearchResultVisitor<T> visitor);
 
-        public class SuccessfullyRetrieved : GpSearchResult
+        public class Success : GpSearchResult
         {
             public GpSearchResponse Response { get; }
 
-            public SuccessfullyRetrieved(GpSearchResponse response)
+            public Success(GpSearchResponse response)
             {
                 Response = response;
             }
@@ -19,7 +19,7 @@
             }
         }
 
-        public class Unsuccessful : GpSearchResult
+        public class InternalServerError : GpSearchResult
         {
             public override T Accept<T>(IGpSearchResultVisitor<T> visitor)
             {
@@ -27,7 +27,7 @@
             }
         }
 
-        public class NhsSearchServiceUnavailable : GpSearchResult
+        public class BadGateway : GpSearchResult
         {
             public override T Accept<T>(IGpSearchResultVisitor<T> visitor)
             {

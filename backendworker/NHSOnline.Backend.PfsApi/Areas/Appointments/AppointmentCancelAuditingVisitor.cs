@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _appointmentId = appointmentId;
         }
 
-        public async Task Visit(AppointmentCancelResult.SuccessfullyCancelled successfullyCancelled)
+        public async Task Visit(AppointmentCancelResult.Success result)
         {
             try
             {
@@ -30,11 +30,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.SuccessfullyCancelled)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.Success)}");
             }
         }
 
-        public async Task Visit(AppointmentCancelResult.BadRequest badRequest)
+        public async Task Visit(AppointmentCancelResult.BadRequest result)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentCancelResult.AppointmentNotCancellable appointmentNotCancellable)
+        public async Task Visit(AppointmentCancelResult.AppointmentNotCancellable result)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentCancelResult.TooLateToCancel tooLateToCancel)
+        public async Task Visit(AppointmentCancelResult.TooLateToCancel result)
         {
             try
             {
@@ -73,20 +73,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentCancelResult.InsufficientPermissions insufficientPermissions)
+        public async Task Visit(AppointmentCancelResult.Forbidden result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to insufficent permissions for appointment " +
+                await _auditor.Audit(AuditType, "Unable to cancel appointment due to insufficient permissions for appointment " +
                                           "with id: {0}", _appointmentId);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.InsufficientPermissions)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.Forbidden)}");
             }
         }
 
-        public async Task Visit(AppointmentCancelResult.SupplierSystemUnavailable supplierSystemUnavailable)
+        public async Task Visit(AppointmentCancelResult.BadGateway result)
         {
             try
             {
@@ -95,15 +95,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.SupplierSystemUnavailable)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentCancelResult.BadGateway)}");
             }
         }
 
-        public async Task Visit(AppointmentCancelResult.InternalServerError internalServerError)
+        public async Task Visit(AppointmentCancelResult.InternalServerError result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Unable to cancel appointment due to unavailable supplier for appointment " +
+                await _auditor.Audit(AuditType, "Unable to cancel appointment due to internal server error for appointment " +
                                                 "with id: {0}", _appointmentId);
             }
             catch (Exception e)

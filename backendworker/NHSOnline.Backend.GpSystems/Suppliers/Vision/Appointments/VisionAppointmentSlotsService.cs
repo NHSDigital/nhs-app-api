@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {
                     _logger.LogError("Appointments not enabled");
-                    return new AppointmentSlotsResult.CannotBookAppointments();
+                    return new AppointmentSlotsResult.Forbidden();
                 }
 
                 var slotsTask = _visionClient.GetAvailableAppointments(
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, $"Calling {nameof(_visionClient.GetAvailableAppointments)} threw HttpRequestException.");
-                return new AppointmentSlotsResult.SupplierSystemUnavailable();
+                return new AppointmentSlotsResult.BadGateway();
             }
             finally
             {
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             {
                 _logger.LogError("Vision appointments disabled");
                 _logger.LogVisionErrorResponse(slotsResponse);
-                return new AppointmentSlotsResult.CannotBookAppointments();
+                return new AppointmentSlotsResult.Forbidden();
             }
             
             if (slotsResponse.HasErrorResponse)
@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogError($"Call to VISION ({nameof(VisionAppointmentSlotsService)}) returned an unanticipated " +
                                  $"error with status code: '{slotsResponse.StatusCode}'. \n{slotsResponse.ErrorForLogging}");
                 _logger.LogVisionErrorResponse(slotsResponse);
-                return new AppointmentSlotsResult.SupplierSystemUnavailable();
+                return new AppointmentSlotsResult.BadGateway();
             }
             
             try
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                     _logger.LogWarning($"Appointment slots retrieved for Vision patient is equal to the maximum requested ({_settings.VisionAppointmentSlotsRequestCount}).");
                 }
                 
-                return new AppointmentSlotsResult.SuccessfullyRetrieved(response);
+                return new AppointmentSlotsResult.Success(response);
             }
             catch (Exception e)
             {

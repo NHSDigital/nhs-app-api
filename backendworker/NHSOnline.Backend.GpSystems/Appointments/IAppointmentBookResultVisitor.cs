@@ -2,12 +2,12 @@
 {
     public interface IAppointmentBookResultVisitor<out T>
     {
-        T Visit(AppointmentBookResult.SuccessfullyBooked successfullyBooked);
-        T Visit(AppointmentBookResult.InsufficientPermissions insufficientPermissions);
-        T Visit(AppointmentBookResult.SlotNotAvailable slotNotAvailable);
-        T Visit(AppointmentBookResult.SupplierSystemUnavailable supplierSystemUnavailable);
-        T Visit(AppointmentBookResult.BadRequest badRequest);
-        T Visit(AppointmentBookResult.AppointmentLimitReached appointmentLimitReached);
-        T Visit(AppointmentBookResult.InternalServerError internalServerError);
+        T Visit(AppointmentBookResult.Success result);
+        T Visit(AppointmentBookResult.Forbidden result);
+        T Visit(AppointmentBookResult.SlotNotAvailable result);
+        T Visit(AppointmentBookResult.BadGateway result);
+        T Visit(AppointmentBookResult.BadRequest result);
+        T Visit(AppointmentBookResult.AppointmentLimitReached result);
+        T Visit(AppointmentBookResult.InternalServerError result);
     }
 }

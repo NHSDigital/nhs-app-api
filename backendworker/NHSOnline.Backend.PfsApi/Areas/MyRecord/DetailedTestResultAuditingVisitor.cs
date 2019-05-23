@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             _logger = logger;
         }
 
-        public async Task Visit(GetDetailedTestResult.SuccessfullyRetrieved result)
+        public async Task Visit(GetDetailedTestResult.Success result)
         {
             try
             {
@@ -28,33 +28,20 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetDetailedTestResult.SuccessfullyRetrieved)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetDetailedTestResult.Success)}");
             }
         }
 
-        public async Task Visit(GetDetailedTestResult.SupplierBadData result)
+        public async Task Visit(GetDetailedTestResult.BadGateway result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error viewing test result: supplier bad data");
+                await _auditor.Audit(AuditType, "Error viewing test result: bad gateway");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetDetailedTestResult.SupplierBadData)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetDetailedTestResult.BadGateway)}");
             }
         }
-
-        public async Task Visit(GetDetailedTestResult.Unsuccessful result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Error viewing test result: unsuccessful");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetDetailedTestResult.Unsuccessful)}");
-            }
-        }
-
     }
 }

@@ -2,8 +2,8 @@
 {
     public interface INdopResultVisitor<out T>
     {
-        T Visit(GetNdopResult.SuccessfullyRetrieved result);
+        T Visit(GetNdopResult.Success result);
 
-        T Visit(GetNdopResult.Unsuccessful result);
+        T Visit(GetNdopResult.InternalServerError result);
     }
 }

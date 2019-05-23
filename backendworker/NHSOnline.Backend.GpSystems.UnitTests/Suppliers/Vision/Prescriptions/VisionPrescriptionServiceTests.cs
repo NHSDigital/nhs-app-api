@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierNotEnabled_WhenRepeatPrescriptionsIsDisabledInUserSession()
+        public async Task Get_ReturnsForbidden_WhenRepeatPrescriptionsIsDisabledInUserSession()
         {
             // Arrange
             _visionUserSession.IsRepeatPrescriptionsEnabled = false;
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
-            result.Should().BeOfType<PrescriptionResult.SupplierNotEnabled>();
+            result.Should().BeOfType<GetPrescriptionsResult.Forbidden>();
         }
 
         [TestMethod]
@@ -107,8 +107,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -158,13 +158,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            var successfulGet = (PrescriptionResult.SuccessfulGet)result;
-            successfulGet.Response.Should().NotBeNull();
-            successfulGet.Response.Prescriptions.Count().Should().Be(3);
-            successfulGet.Response.Prescriptions.ElementAt(0).Status.Should().Be(Backend.GpSystems.Prescriptions.Models.Status.Approved);
-            successfulGet.Response.Prescriptions.ElementAt(1).Status.Should().Be(Backend.GpSystems.Prescriptions.Models.Status.Rejected);
-            successfulGet.Response.Prescriptions.ElementAt(2).Status.Should().Be(Backend.GpSystems.Prescriptions.Models.Status.Requested);
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            var successResult = (GetPrescriptionsResult.Success)result;
+            successResult.Response.Should().NotBeNull();
+            successResult.Response.Prescriptions.Count().Should().Be(3);
+            successResult.Response.Prescriptions.ElementAt(0).Status.Should().Be(Backend.GpSystems.Prescriptions.Models.Status.Approved);
+            successResult.Response.Prescriptions.ElementAt(1).Status.Should().Be(Backend.GpSystems.Prescriptions.Models.Status.Rejected);
+            successResult.Response.Prescriptions.ElementAt(2).Status.Should().Be(Backend.GpSystems.Prescriptions.Models.Status.Requested);
         }
 
         [TestMethod]
@@ -230,10 +230,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
+            var getPrescriptionsResult = (GetPrescriptionsResult.Success) result;
             getPrescriptionsResult.Response.Should().Be(mappingResult);
 
             capturedItemToMap.Requests.Should().HaveCount(3);
@@ -322,10 +322,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success)result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet)result;
+            var getPrescriptionsResult = (GetPrescriptionsResult.Success)result;
             getPrescriptionsResult.Response.Should().Be(mappingResult);
 
             capturedItemToMap.Requests.Should().HaveCount(3);
@@ -392,10 +392,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.Verify(x => x.GetHistoricPrescriptions(_visionUserSession, It.Is<PrescriptionRequest>(pr => string.Equals(pr.PatientId, _visionUserSession.PatientId, StringComparison.Ordinal))));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
-            ((PrescriptionResult.SuccessfulGet)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.Success>();
+            ((GetPrescriptionsResult.Success)result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet)result;
+            var getPrescriptionsResult = (GetPrescriptionsResult.Success)result;
             getPrescriptionsResult.Response.Should().Be(mappingResult);
 
             capturedItemToMap.Requests.Should().HaveCount(expectedNumberOfPrescriptions);
@@ -414,11 +414,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingVision()
+        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingVision()
         {
             // Arrange
             _visionClient.Setup(x => x.GetHistoricPrescriptions(_visionUserSession, 
@@ -430,7 +430,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.GetPrescriptions(_visionUserSession, null, null);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetPrescriptionsResult.BadGateway>();
             _visionClient.Verify();
         }
 
@@ -483,12 +483,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             capturedRequest.Should().BeEquivalentTo(expectedRequest);
             _visionClient.Verify(x => x.OrderNewPrescription(_visionUserSession, capturedRequest));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
-            ((PrescriptionResult.SuccessfulPost)result).Should().NotBeNull();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Success>();
+            ((OrderPrescriptionResult.Success)result).Should().NotBeNull();
         }
 
         [TestMethod]
-        public async Task OrderPrescription_ReturnsSupplierNotEnabled_WhenRepeatPrescriptionsIsDisabledInUserSession()
+        public async Task OrderPrescription_ReturnsForbidden_WhenRepeatPrescriptionsIsDisabledInUserSession()
         {
             // Arrange
             _visionUserSession.IsRepeatPrescriptionsEnabled = false;
@@ -504,7 +504,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
-            result.Should().BeOfType<PrescriptionResult.SupplierNotEnabled>();
+            result.Should().BeOfType<OrderPrescriptionResult.Forbidden>();
         }
 
         [TestMethod]
@@ -524,7 +524,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             // Assert
             _visionClient.VerifyNoOtherCalls();
-            result.Should().BeOfType<PrescriptionResult.BadRequest>();
+            result.Should().BeOfType<OrderPrescriptionResult.BadRequest>();
         }
 
         [TestMethod]
@@ -579,8 +579,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
 
             capturedRequest.Should().BeEquivalentTo(expectedRequest);
             _visionClient.Verify(x => x.OrderNewPrescription(_visionUserSession, capturedRequest));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
-            ((PrescriptionResult.SuccessfulPost)result).Should().NotBeNull();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.Success>();
+            ((OrderPrescriptionResult.Success)result).Should().NotBeNull();
         }
 
         [TestMethod]
@@ -597,7 +597,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
         }
 
         [TestMethod]
@@ -631,11 +631,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task OrderPrescription_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingVision()
+        public async Task OrderPrescription_ReturnsBadGateway_WhenHttpExceptionOccursCallingVision()
         {
             // Arrange
             _visionClient.Setup(x => x.OrderNewPrescription(_visionUserSession, It.IsAny<OrderNewPrescriptionRequest>())).Throws<HttpRequestException>()
@@ -647,7 +647,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Prescriptions
             var result = await _systemUnderTest.OrderPrescription(_visionUserSession, request);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<OrderPrescriptionResult.BadGateway>();
             _visionClient.Verify();
         }
     }

@@ -2,9 +2,9 @@
 {
     public interface IAppointmentSlotsResultVisitor<out T>
     {
-        T Visit(AppointmentSlotsResult.SuccessfullyRetrieved result);
-        T Visit(AppointmentSlotsResult.SupplierSystemUnavailable result);
+        T Visit(AppointmentSlotsResult.Success result);
+        T Visit(AppointmentSlotsResult.BadGateway result);
         T Visit(AppointmentSlotsResult.InternalServerError result);
-        T Visit(AppointmentSlotsResult.CannotBookAppointments result);
+        T Visit(AppointmentSlotsResult.Forbidden result);
     }
 }

@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.GpSystems
 
         public void CaptureCancellationReasons(GpUserSession gpUserSession, AppointmentsResult result)
         {
-            if (!(result is AppointmentsResult.SuccessfullyRetrieved successfulResult)
+            if (!(result is AppointmentsResult.Success successfulResult)
                 || successfulResult.Response.CancellationReasons?.Any() != true)
             {
                 return;

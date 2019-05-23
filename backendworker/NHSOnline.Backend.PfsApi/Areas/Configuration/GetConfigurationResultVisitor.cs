@@ -5,27 +5,17 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
 {
     public class GetConfigurationResultVisitor : IGetConfigurationResultVisitor<IActionResult>
     {
-        public IActionResult Visit(GetConfigurationResult.SuccessfullyRetrieved result)
+        public IActionResult Visit(GetConfigurationResult.Success result)
         {
             return new OkObjectResult(result.Response);
         }
 
-        public IActionResult Visit(GetConfigurationResult.MissingDetailsResult result)
-        {
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
-        }
-
-        public IActionResult Visit(GetConfigurationResult.InvalidNativeAppVersionResult result)
-        {
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
-        }
-
-        public IActionResult Visit(GetConfigurationResult.InvalidDeviceNameResult result)
+        public IActionResult Visit(GetConfigurationResult.BadRequest result)
         {
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
         
-        public IActionResult Visit(GetConfigurationResult.ErrorRetrievingConfigResult result)
+        public IActionResult Visit(GetConfigurationResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }

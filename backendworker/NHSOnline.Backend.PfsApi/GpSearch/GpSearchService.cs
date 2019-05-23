@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                     {
                         _logger.LogError($"Unsuccessful request searching for Postcode Latitude and Longitude on Nhs Search Service, Status code: " +
                                          $"{(int)postcodeSearchResult.StatusCode}");
-                        return new GpSearchResult.Unsuccessful();
+                        return new GpSearchResult.InternalServerError();
                     }
 
                     var postcodeData = postcodeSearchResult?.Body?.PostcodeDatas?.FirstOrDefault();
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                     if (postcodeData == null)
                     {
                         _logger.LogInformation($"NHS Search service returned no postcode data for: {searchTerm} ");
-                        return new GpSearchResult.SuccessfullyRetrieved(new GpSearchResponse());
+                        return new GpSearchResult.Success(new GpSearchResponse());
                     }
 
                     var organisationSearchData = GetOrganisationPostcodeSearchData(postcodeData);
@@ -91,13 +91,13 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
                 catch (HttpRequestException ex)
                 {
                     _logger.LogError(ex, $"Search for Nhs GP Practice Failed for: {searchTerm} ");
-                    return new GpSearchResult.NhsSearchServiceUnavailable();
+                    return new GpSearchResult.BadGateway();
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error processing Postcode search input: {searchTerm} ");
-                return new GpSearchResult.Unsuccessful();
+                return new GpSearchResult.InternalServerError();
             }
             finally
             {
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, $"Search for Nhs GP Practice Failed: {organisationSearchData.Search} ");
-                return new GpSearchResult.NhsSearchServiceUnavailable();
+                return new GpSearchResult.BadGateway();
             }
             finally
             {
@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.PfsApi.GpSearch
             {
                 _logger.LogError(ex,
                     $"Search for Nhs GP Practice by Latitude and Longitude Failed for postcode: {postcode}");
-                return new GpSearchResult.NhsSearchServiceUnavailable();
+                return new GpSearchResult.BadGateway();
             }
             finally
             {

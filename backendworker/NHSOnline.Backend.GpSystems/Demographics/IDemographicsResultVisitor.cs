@@ -2,10 +2,9 @@
 {
     public interface IDemographicsResultVisitor<out T>
     {
-        T Visit(DemographicsResult.UserHasNoAccess result);
-        T Visit(DemographicsResult.SuccessfullyRetrieved result);
-        T Visit(DemographicsResult.SupplierSystemUnavailable supplierSystemUnavailable);
-        T Visit(DemographicsResult.Unsuccessful result);
+        T Visit(DemographicsResult.Forbidden result);
+        T Visit(DemographicsResult.Success result);
+        T Visit(DemographicsResult.BadGateway result);
         T Visit(DemographicsResult.InternalServerError result);
     }
 }

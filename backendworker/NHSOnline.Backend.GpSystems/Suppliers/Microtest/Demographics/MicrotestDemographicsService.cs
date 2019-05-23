@@ -40,22 +40,22 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Demographics
                     if (demographicsResponse.StatusCode == HttpStatusCode.Forbidden)
                     {
                         _logger.LogWarning("User does not have the necessary permissions within the GP system.");
-                        return new DemographicsResult.UserHasNoAccess();
+                        return new DemographicsResult.Forbidden();
                     }
 
                     _logger.LogError($"Unsuccessful request retrieving demographics. Status code: {(int)demographicsResponse.StatusCode}");
-                    return new DemographicsResult.Unsuccessful();
+                    return new DemographicsResult.BadGateway();
                 }
 
                 _logger.LogInformation("Mapping Microtest responses to universal DemographicsResponse class instance");
                 var result = _microtestDemographicsMapper.Map(demographicsResponse.Body);
 
-                return new DemographicsResult.SuccessfullyRetrieved(result);
+                return new DemographicsResult.Success(result);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving demographics");
-                return new DemographicsResult.Unsuccessful();
+                return new DemographicsResult.BadGateway();
             }
             finally
             {

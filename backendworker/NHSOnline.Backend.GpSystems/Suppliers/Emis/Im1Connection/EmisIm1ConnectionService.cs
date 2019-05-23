@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
                     _logger.LogEmisErrorResponse(endUserSessionResponse);
-                    return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
+                    return new Im1ConnectionVerifyResult.BadGateway();
                 }
 
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
+                    return new Im1ConnectionVerifyResult.BadGateway();
                 }
 
                 var userPatientLinkToken = sessionsResponse.Body?.ExtractUserPatientLinkToken();
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
                     _logger.LogEmisErrorResponse(demographicsResponse);
-                    return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
+                    return new Im1ConnectionVerifyResult.BadGateway();
                 }
 
                 var nhsNumbers = demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
@@ -89,13 +89,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 };
 
                 _logger.LogDebug("Verify successfully completed");
-                return new Im1ConnectionVerifyResult.SuccessfullyVerified(response);
+                return new Im1ConnectionVerifyResult.Success(response);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e,
                     "Failed request to verify Emis Im1ConnectionToken, HttpRequestException has been thrown.");
-                return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
+                return new Im1ConnectionVerifyResult.BadGateway();
             }
             finally
             {
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
                     _logger.LogEmisErrorResponse(endUserSessionResponse);
-                    return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    return new Im1ConnectionRegisterResult.BadGateway();
                 }
 
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
@@ -185,7 +185,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                         _logger.LogError(
                             $"Emis {nameof(_emisClient.MeApplicationsPost)} returned with statuscode {meApplicationsResponse.StatusCode}, success");
                         _logger.LogEmisErrorResponse(meApplicationsResponse);
-                        return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                        return new Im1ConnectionRegisterResult.BadGateway();
                     }
 
                     connectionToken = new EmisConnectionToken
@@ -209,7 +209,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.SessionsPost), sessionsResponse);
                     _logger.LogEmisErrorResponse(sessionsResponse);
-                    return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    return new Im1ConnectionRegisterResult.BadGateway();
                 }
 
                 var userPatientLinkToken = sessionsResponse.Body?.ExtractUserPatientLinkToken();
@@ -228,7 +228,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                 {
                     LogExceptionError(nameof(_emisClient.DemographicsGet), demographicsResponse);
                     _logger.LogEmisErrorResponse(demographicsResponse);
-                    return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    return new Im1ConnectionRegisterResult.BadGateway();
                 }
 
                 var nhsNumbers = demographicsResponse.Body?.ExtractNhsNumbers() ?? Enumerable.Empty<PatientNhsNumber>();
@@ -239,13 +239,13 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Im1Connection
                     NhsNumbers = nhsNumbers
                 };
 
-                return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
+                return new Im1ConnectionRegisterResult.Success(response);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e,
                     "Failed request to register Emis Im1ConnectionToken, HttpRequestException has been thrown.");
-                return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                return new Im1ConnectionRegisterResult.BadGateway();
             }
             finally
             {

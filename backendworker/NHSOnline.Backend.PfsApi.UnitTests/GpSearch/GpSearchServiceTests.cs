@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             // Assert
             _gpLookupClient.Verify(x=>x.PostcodeSearch(It.IsAny<PostcodeSearchData>()));
             _gpLookupClient.Verify(x=>x.GpPostcodeSearch(It.IsAny<OrganisationPostcodeSearchData>()));
-            var response = result.Should().BeAssignableTo<GpSearchResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<GpSearchResult.Success>().Subject.Response;
             response.OrganisationQueryCount.Should().Be(2);
             response.Organisations.Should().BeEquivalentTo(organisationReturnResults);
         }
@@ -125,13 +125,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             
             // Assert
             _gpLookupClient.Verify(x=>x.GpSearch(It.IsAny<OrganisationSearchData>()));
-            var response = result.Should().BeAssignableTo<GpSearchResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<GpSearchResult.Success>().Subject.Response;
             response.OrganisationQueryCount.Should().Be(2);
             response.Organisations.Should().BeEquivalentTo(organisationReturnResults);
         }
         
         [TestMethod]
-        public async Task Search_WhenCalledWithACityAndResponseBodyIsNull_CallsOrganisationSearchAndReturnsUnSuccessfulResponse()
+        public async Task Search_WhenCalledWithACityAndResponseBodyIsNull_CallsOrganisationSearchAndReturnsInternalServerErrorResponse()
         {
             // Arrange
             const string validPostcodeSearchTerm = "Manchester";
@@ -150,7 +150,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
 
             //Assert
             _gpLookupClient.Verify(x=>x.GpSearch(It.IsAny<OrganisationSearchData>()));
-            result.Should().BeAssignableTo<GpSearchResult.Unsuccessful>();
+            result.Should().BeAssignableTo<GpSearchResult.InternalServerError>();
         }
         
         [TestMethod]
@@ -166,7 +166,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
         }
         
         [TestMethod]
-        public async Task Search_WhenCalledAndNhsPostcodeSearchReturnsUnsuccessfulStatusCode_ReturnsUnsuccessful()
+        public async Task Search_WhenCalledAndNhsPostcodeSearchReturnsUnsuccessfulStatusCode_ReturnsInternalServerError()
         {
             
             // Arrange
@@ -182,7 +182,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             var result = await _gpSearchService.Search(searchTerm);
 
             // Assert
-            result.Should().BeAssignableTo<GpSearchResult.Unsuccessful>();
+            result.Should().BeAssignableTo<GpSearchResult.InternalServerError>();
         }
         
         [TestMethod]
@@ -208,7 +208,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.GpSearch
             var result = await _gpSearchService.Search(searchTerm);
 
             // Assert
-            var response = result.Should().BeAssignableTo<GpSearchResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<GpSearchResult.Success>().Subject.Response;
             response.OrganisationQueryCount.Should().Be(0);
         }
     }

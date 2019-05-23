@@ -39,11 +39,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
                 if(!IsResponseBodyValid(responseBody))
                 {
                     _logger.LogError("Vision HttpRequestException has been thrown.");
-                    return new GpSessionCreateResult.SupplierSystemBadResponse();
+                    return new GpSessionCreateResult.BadGateway();
                 }
 
-
-                return new GpSessionCreateResult.SuccessfullyCreated(
+                return new GpSessionCreateResult.Success(
                     response.Body.Configuration.Account.Name,
                     new VisionUserSession
                     {
@@ -61,7 +60,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, "Vision HttpRequestException has been thrown.");
-                return new GpSessionCreateResult.SupplierSystemUnavailable();
+                return new GpSessionCreateResult.BadGateway();
             }
             finally
             {
@@ -79,7 +78,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
         {
             _logger.LogEnter();
             _logger.LogDebug("Vision user successfully deleted");
-            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(gpUserSession));
+            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.Success(gpUserSession));
         }
 
         private GpSessionCreateResult GetCorrectErrorResult<T>(VisionPFSClient.VisionApiObjectResponse<T> response)
@@ -88,34 +87,34 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Session
             {
                 _logger.LogError($"Vision invalid request error {response.StatusCode}");
                 _logger.LogVisionErrorResponse(response);
-                return new GpSessionCreateResult.InvalidRequest();
+                return new GpSessionCreateResult.BadRequest();
             }
 
             if (response.IsInvalidUserCredentialsError)
             {
                 _logger.LogError($"Vision invalid user credentials {response.StatusCode}");
                 _logger.LogVisionErrorResponse(response);
-                return new GpSessionCreateResult.InvalidUserCredentials();
+                return new GpSessionCreateResult.Forbidden();
             }
 
             if (response.IsInvalidSecurityHeaderError)
             {
                 _logger.LogError($"Vision invalid security header {response.StatusCode}");
                 _logger.LogVisionErrorResponse(response);
-                return new GpSessionCreateResult.ErrorProcessingSecurityHeader();
+                return new GpSessionCreateResult.InternalServerError();
             }
 
             if (response.IsUnknownError)
             {
                 _logger.LogError($"Vision unknown error {response.StatusCode}");
                 _logger.LogVisionErrorResponse(response);
-                return new GpSessionCreateResult.UnknownError();
+                return new GpSessionCreateResult.BadGateway();
             }
 
             _logger.LogError($"Vision system is currently unavailable {response.StatusCode}");
             _logger.LogVisionErrorResponse(response);
             
-            return new GpSessionCreateResult.SupplierSystemUnavailable();
+            return new GpSessionCreateResult.BadGateway();
         }
 
         private bool IsResponseBodyValid(PatientConfigurationResponse responseBody)

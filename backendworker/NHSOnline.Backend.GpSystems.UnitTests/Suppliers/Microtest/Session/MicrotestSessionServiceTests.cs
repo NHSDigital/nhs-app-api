@@ -34,32 +34,31 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Session
         }
 
         [TestMethod]
-        public async Task Create_ValidRequest_ReturnsSuccessfullyCreatedResult()
+        public async Task Create_ValidRequest_ReturnsSuccessResult()
         {
             _microtestDemographicsService.Setup(x => x.GetDemographics(It.IsAny<GpUserSession>()))
-                .ReturnsAsync(new DemographicsResult.SuccessfullyRetrieved(new DemographicsResponse()));
+                .ReturnsAsync(new DemographicsResult.Success(new DemographicsResponse()));
 
             var result = await _systemUnderTest.Create("connectionToken", "odsCode", "nhsNumber");
 
             result
                 .Should()
-                .BeAssignableTo<GpSessionCreateResult.SuccessfullyCreated>()
+                .BeAssignableTo<GpSessionCreateResult.Success>()
                 .Subject
                 .UserSession
                 .Should()
                 .NotBeNull();
-
         }
 
         [TestMethod]
-        public async Task Create_InvalidDemographicsResult_ReturnsSupplierSystemUnavailable()
+        public async Task Create_InvalidDemographicsResult_ReturnsBadGateway()
         {
             _microtestDemographicsService.Setup(x => x.GetDemographics(It.IsAny<GpUserSession>()))
-                .ReturnsAsync(new DemographicsResult.SupplierSystemUnavailable());
+                .ReturnsAsync(new DemographicsResult.BadGateway());
 
             var result = await _systemUnderTest.Create("connectionToken", "odsCode", "nhsNumber");
 
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
     }
 }

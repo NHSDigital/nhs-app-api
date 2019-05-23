@@ -9,8 +9,8 @@ namespace NHSOnline.Backend.PfsApi.Brothermailer
 {
     public class BrothermailerService: IBrothermailerService
     {
-        private ILogger<BrothermailerService> _logger;
-        private IBrothermailerClient _brothermailerClient;
+        private readonly ILogger<BrothermailerService> _logger;
+        private readonly IBrothermailerClient _brothermailerClient;
         
         public BrothermailerService(ILogger<BrothermailerService> logger, IBrothermailerClient brothermailerClient)
         {
@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.PfsApi.Brothermailer
                 {
                     _logger.LogError($"Brothermailer service returned unsuccessful status code " +
                                      $"{response.StatusCode}");
-                    return new BrothermailerResult.Unsuccessful();
+                    return new BrothermailerResult.InternalServerError();
                 }
                 
                 if (!response.IsSuccess)
@@ -52,15 +52,15 @@ namespace NHSOnline.Backend.PfsApi.Brothermailer
                     }
 
                     _logger.LogError("Brothermailer service returned unsuccessful signup");
-                    return new BrothermailerResult.Unsuccessful();
+                    return new BrothermailerResult.InternalServerError();
                 }
 
-                return new BrothermailerResult.SuccessfullyRetrieved();
+                return new BrothermailerResult.Success();
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, "Brothermailer service is unavailable, error signing up");
-                return new BrothermailerResult.BrothermailerServiceUnavailable();
+                return new BrothermailerResult.BadGateway();
             }
             finally
             {

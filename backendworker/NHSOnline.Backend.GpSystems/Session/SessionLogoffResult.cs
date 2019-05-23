@@ -10,11 +10,11 @@ namespace NHSOnline.Backend.GpSystems.Session
 
         public abstract T Accept<T>(ISessionLogoffResultVisitor<T> visitor);
 
-        public class SuccessfullyDeleted : SessionLogoffResult
+        public class Success : SessionLogoffResult
         {
             public GpUserSession GpUserSession { get; }
 
-            public SuccessfullyDeleted(
+            public Success(
                 GpUserSession gpUserSession)
             {
                 GpUserSession = gpUserSession;
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.GpSystems.Session
             }
         }
 
-        public class NotAuthenticated : SessionLogoffResult
+        public class Forbidden : SessionLogoffResult
         {
             public override T Accept<T>(ISessionLogoffResultVisitor<T> visitor)
             {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.GpSystems.Session
             }
         }
 
-        public class SupplierSystemUnavailable : SessionLogoffResult
+        public class BadGateway : SessionLogoffResult
         {
             public override T Accept<T>(ISessionLogoffResultVisitor<T> visitor)
             {

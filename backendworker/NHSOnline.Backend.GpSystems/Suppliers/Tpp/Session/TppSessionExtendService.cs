@@ -33,16 +33,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Session
 
                 if (patientSelectedResponse.HasSuccessResponse)
                 {
-                    return new SessionExtendResult.SuccessfullyExtended();
+                    return new SessionExtendResult.Success();
                 }
 
                 _logger.LogError($"{StandardErrorMessage} {patientSelectedResponse.ErrorForLogging}");
-                return new SessionExtendResult.SupplierSystemUnavailable();
+                return new SessionExtendResult.BadGateway();
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, $"{StandardErrorMessage} HttpRequestException has been thrown.");
-                return new SessionExtendResult.SupplierSystemUnavailable();
+                return new SessionExtendResult.BadGateway();
             }
             finally
             {

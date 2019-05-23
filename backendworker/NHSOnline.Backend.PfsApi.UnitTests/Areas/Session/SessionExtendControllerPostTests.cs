@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Post_WhenServiceReturnsSuccessfully_ReturnsSuccessResponse()
         {
             // Arrange
-            var extendedResult = (SessionExtendResult)new SessionExtendResult.SuccessfullyExtended();
+            var extendedResult = (SessionExtendResult)new SessionExtendResult.Success();
 
             _mockSessionExtendService
                 .Setup(x => x.Extend(_userSession.GpUserSession))
@@ -80,10 +80,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_WhenServiceReturnsSupplierSystemUnavailable_ReturnsSupplierSystemUnavailable()
+        public async Task Post_WhenServiceReturnsBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            var extendedResult = (SessionExtendResult)new SessionExtendResult.SupplierSystemUnavailable();
+            var extendedResult = (SessionExtendResult)new SessionExtendResult.BadGateway();
 
             _mockSessionExtendService
                 .Setup(x => x.Extend(_userSession.GpUserSession))

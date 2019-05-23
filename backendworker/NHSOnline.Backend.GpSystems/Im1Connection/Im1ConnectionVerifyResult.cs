@@ -10,23 +10,15 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
 
         public abstract T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor);
 
-        public class SuccessfullyVerified : Im1ConnectionVerifyResult
+        public class Success : Im1ConnectionVerifyResult
         {
             public PatientIm1ConnectionResponse Response { get; }
 
-            public SuccessfullyVerified(PatientIm1ConnectionResponse response)
+            public Success(PatientIm1ConnectionResponse response)
             {
                 Response = response;
             }
 
-            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InsufficientPermissions : Im1ConnectionVerifyResult
-        {
             public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -41,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             }
         }
 
-        public class SupplierSystemUnavailable : Im1ConnectionVerifyResult
+        public class BadGateway : Im1ConnectionVerifyResult
         {
             public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
             {
@@ -49,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             }
         }
 
-        public class InvalidRequest : Im1ConnectionVerifyResult
+        public class BadRequest : Im1ConnectionVerifyResult
         {
             public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
             {
@@ -57,23 +49,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             }
         }
 
-        public class ErrorProcessingSecurityHeader : Im1ConnectionVerifyResult
-        {
-            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InvalidUserCredentials : Im1ConnectionVerifyResult
-        {
-            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class UnknownError : Im1ConnectionVerifyResult
+        public class InternalServerError : Im1ConnectionVerifyResult
         {
             public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
             {

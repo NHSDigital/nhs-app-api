@@ -2,12 +2,12 @@
 {
     public interface IAppointmentCancelResultVisitor<out T>
     {
-        T Visit(AppointmentCancelResult.SuccessfullyCancelled successfullyCancelled);
-        T Visit(AppointmentCancelResult.BadRequest badRequest);
-        T Visit(AppointmentCancelResult.AppointmentNotCancellable appointmentNotCancellable);
-        T Visit(AppointmentCancelResult.TooLateToCancel tooLateToCancel);
-        T Visit(AppointmentCancelResult.InsufficientPermissions insufficientPermissions);
-        T Visit(AppointmentCancelResult.SupplierSystemUnavailable supplierSystemUnavailable);
-        T Visit(AppointmentCancelResult.InternalServerError internalServerError);
+        T Visit(AppointmentCancelResult.Success result);
+        T Visit(AppointmentCancelResult.BadRequest result);
+        T Visit(AppointmentCancelResult.AppointmentNotCancellable result);
+        T Visit(AppointmentCancelResult.TooLateToCancel result);
+        T Visit(AppointmentCancelResult.Forbidden result);
+        T Visit(AppointmentCancelResult.BadGateway result);
+        T Visit(AppointmentCancelResult.InternalServerError result);
     }
 }

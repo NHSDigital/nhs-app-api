@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
         }
 
         [TestMethod]
-        public async Task Create_ValidRequest_ReturnsSuccessfullyCreatedResult()
+        public async Task Create_ValidRequest_ReturnsSuccessResult()
         {
             // Arrange
             var accountName = _fixture.Create<string>();
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
                         }
                     }));
             
-            var expectedResult = new GpSessionCreateResult.SuccessfullyCreated(accountName, 
+            var expectedResult = new GpSessionCreateResult.Success(accountName, 
                 new VisionUserSession
                 {
                     NhsNumber = _nhsNumber, 
@@ -113,14 +113,14 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             // Assert
             _mockVisionClient.VerifyAll();
             
-            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.SuccessfullyCreated>().Subject;
+            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
             
             createdResult.Should().BeEquivalentTo(expectedResult);
 
         }
 
         [TestMethod]
-        public async Task Create_InvalidRequest_ReturnsInvalidRequestResult()
+        public async Task Create_InvalidRequest_ReturnsBadRequestResult()
         {
             // Arrange            
             _mockVisionClient.Setup(x =>
@@ -155,11 +155,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
 
             // Assert
-            result.Should().BeAssignableTo<GpSessionCreateResult.InvalidRequest>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadRequest>();
         }
         
         [TestMethod]
-        public async Task Create_InvalidUserCredentials_ReturnsInvalidUserCredentialsResult()
+        public async Task Create_InvalidUserCredentials_ReturnsForbiddenResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -195,11 +195,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
 
             // Assert
-            result.Should().BeAssignableTo<GpSessionCreateResult.InvalidUserCredentials>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task Create_InvalidSecurityHeader_ReturnsErrorProcessingSecurityHeaderResult()
+        public async Task Create_InvalidSecurityHeader_ReturnsInternalServerErrorResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -225,11 +225,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
 
             // Assert
-            result.Should().BeAssignableTo<GpSessionCreateResult.ErrorProcessingSecurityHeader>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.InternalServerError>();
         }
 
         [TestMethod]
-        public async Task Create_UnknownError_ReturnsUnknownErrorResult()
+        public async Task Create_UnknownError_ReturnsBadGatewayResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -265,11 +265,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
 
             // Assert
-            result.Should().BeAssignableTo<GpSessionCreateResult.UnknownError>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Create_WhenNoMatchedError_ReturnsSupplierSystemUnavailableResult()
+        public async Task Create_WhenNoMatchedError_ReturnsBadGateway()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -292,7 +292,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
 
             // Assert
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
     }
 }

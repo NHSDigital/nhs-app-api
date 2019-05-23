@@ -4,9 +4,9 @@ using NHSOnline.Backend.Support;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Demographics
 {
-    public class SuccessfulDemographicsResultMapper : IMapper<DemographicsResult.SuccessfullyRetrieved, SuccessfulDemographicsResult>
+    public class SuccessfulDemographicsResultMapper : IMapper<DemographicsResult.Success, SuccessfulDemographicsResult>
     {
-        public SuccessfulDemographicsResult Map(DemographicsResult.SuccessfullyRetrieved source)
+        public SuccessfulDemographicsResult Map(DemographicsResult.Success source)
         {
             return new SuccessfulDemographicsResult(new SuccessfulDemographicsResponse
             {

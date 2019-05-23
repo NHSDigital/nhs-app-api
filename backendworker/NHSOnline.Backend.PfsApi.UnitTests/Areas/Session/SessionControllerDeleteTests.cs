@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Delete_DeletingSessionSucceeds_Returns204NoContent()
         {
             // Arrange            
-            var sessionLogoffResult = new SessionLogoffResult.SuccessfullyDeleted(_userSession.GpUserSession);
+            var sessionLogoffResult = new SessionLogoffResult.Success(_userSession.GpUserSession);
 
             _mockSessionService
                 .Setup(x => x.Logoff(_userSession.GpUserSession))
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
         public async Task Delete_GpSupplierSessionLogoffFails_SessionDeletionContinuesAndReturns204NoContent()
         {
             // Arrange            
-            var sessionLogoffResult = new SessionLogoffResult.SupplierSystemUnavailable();
+            var sessionLogoffResult = new SessionLogoffResult.BadGateway();
 
             _mockSessionService
                 .Setup(x => x.Logoff(_userSession.GpUserSession))

@@ -11,9 +11,9 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
 
         public abstract T Accept<T>(IGetConfigurationResultVisitor<T> visitor);
 
-        public class SuccessfullyRetrieved : GetConfigurationResult
+        public class Success : GetConfigurationResult
         {
-            public SuccessfullyRetrieved(bool isDeviceSupported, bool isThrottlingEnabled, Uri fidoServerUrl)
+            public Success(bool isDeviceSupported, bool isThrottlingEnabled, Uri fidoServerUrl)
             {
                 Response = new GetConfigurationResponse
                 {
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
             }
         }
 
-        public class MissingDetailsResult : GetConfigurationResult
+        public class BadRequest : GetConfigurationResult
         {
             public override T Accept<T>(IGetConfigurationResultVisitor<T> visitor)
             {
@@ -39,23 +39,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Configuration
             }
         }
 
-        public class InvalidNativeAppVersionResult : GetConfigurationResult
-        {
-            public override T Accept<T>(IGetConfigurationResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InvalidDeviceNameResult : GetConfigurationResult
-        {
-            public override T Accept<T>(IGetConfigurationResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class ErrorRetrievingConfigResult : GetConfigurationResult
+        public class InternalServerError : GetConfigurationResult
         {
             public override T Accept<T>(IGetConfigurationResultVisitor<T> visitor)
             {

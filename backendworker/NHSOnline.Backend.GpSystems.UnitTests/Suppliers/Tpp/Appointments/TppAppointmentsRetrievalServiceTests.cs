@@ -153,7 +153,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_HappyPath_ReturnsSuccessfullyRetrievedResponse()
+        public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
 
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<AppointmentsResult.Success>().Subject.Response;
             response.Should().BeEquivalentTo(_mappedResponse);
             response.PastAppointmentsEnabled.Should().BeTrue();
             _mockTppClient.VerifyAll();
@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_TppClientThrows_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_TppClientThrows_ReturnsBadGateway()
         {
             // Arrange
             _mockTppClient.Setup(x => x.ViewAppointmentsPost(
@@ -184,7 +184,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
 
         [TestMethod]
@@ -202,7 +202,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_TppClientReturnsForbiddenCode_ReturnsCannotViewAppointments()
+        public async Task GetAppointments_TppClientReturnsForbiddenCode_ReturnsForbidden()
         {
             // Arrange
             var tppResponse = new TppClient.TppApiObjectResponse<ViewAppointmentsReply>(HttpStatusCode.OK) { ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.NoAccess } };
@@ -213,11 +213,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task GetAppointments_TppClientReturnsInternalServerErrorWithForbiddenMessage_ReturnsCannotViewAppointments()
+        public async Task GetAppointments_TppClientReturnsInternalServerErrorWithForbiddenMessage_ReturnsForbidden()
         {
             // Arrange
             var errorResponse = _fixture.Create<Error>();
@@ -235,12 +235,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
 
         }
 
         [TestMethod]
-        public async Task GetAppointments_TppClientReturnsUnknownError_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_TppClientReturnsUnknownError_ReturnsBadGateway()
         {
             // Arrange
             MockTppClientAppointmentsGetMethod(_tppErrorResponse, false);
@@ -250,11 +250,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task GetAppointments_TppClientReturnsUnknownErrorOnPastAppointmentsRequest_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_TppClientReturnsUnknownErrorOnPastAppointmentsRequest_ReturnsBadGateway()
         {
             // Arrange
             MockTppClientAppointmentsGetMethod(_tppErrorResponse, true);
@@ -263,11 +263,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task GetAppointments_TppClientReturnsUnknownErrorOnUpcomingAppointmentsRequest_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_TppClientReturnsUnknownErrorOnUpcomingAppointmentsRequest_ReturnsBadGateway()
         {
             // Arrange
             MockTppClientAppointmentsGetMethod(_tppErrorResponse, true);
@@ -276,7 +276,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             var result = await _systemUnderTest.GetAppointments(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
 
         private void MockTppClientAppointmentsGetMethod(

@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
         {
             // Arrange
             var demographicsResponse = _fixture.Create<DemographicsResponse>();
-            var demographicsResult = new DemographicsResult.SuccessfullyRetrieved(demographicsResponse);
+            var demographicsResult = new DemographicsResult.Success(demographicsResponse);
 
             _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession))
                 .Returns(Task.FromResult((DemographicsResult) demographicsResult));
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
         public async Task Get_ReturnsStatus403Forbidden_WhenPatientDoesNotHaveAccessToData()
         {
             // Arrange
-            var demographicsResult = new DemographicsResult.UserHasNoAccess();
+            var demographicsResult = new DemographicsResult.Forbidden();
 
             _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
@@ -117,10 +117,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
         }
         
         [TestMethod]
-        public async Task Get_ReturnsStatus502BadGateway_WhenServiceReturnsSupplierSystemUnavailable()
+        public async Task Get_ReturnsStatus502BadGateway_WhenServiceReturnsBadGateway()
         {
             // Arrange
-            var demographicsResult = new DemographicsResult.SupplierSystemUnavailable();
+            var demographicsResult = new DemographicsResult.BadGateway();
             _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
 
             // Act
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             _mockDemographicsService.Verify();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: supplier system unavailable" ));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: bad gateway" ));
         }
         
         [TestMethod]
@@ -153,26 +153,6 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Demographics
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: internal server error" ));
-        }
-        
-        [TestMethod]
-        public async Task Get_ReturnsStatus502BadGateway_WhenServiceReturnsUnsuccessful()
-        {
-            // Arrange
-            var demographicsResult = new DemographicsResult.Unsuccessful();
-
-            _mockDemographicsService.Setup(x => x.GetDemographics(_userSession.GpUserSession)).Returns(Task.FromResult((DemographicsResult) demographicsResult));
-
-            // Act
-            var result = await _systemUnderTest.Get();
-
-            // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-            _mockDemographicsService.Verify();
-            
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing Demographics: unsuccessful" ));
         }
     }
 }

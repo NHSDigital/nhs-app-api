@@ -10,11 +10,11 @@ namespace NHSOnline.Backend.GpSystems.Appointments
 
         public abstract T Accept<T>(IAppointmentSlotsResultVisitor<T> visitor);
         
-        public class SuccessfullyRetrieved : AppointmentSlotsResult
+        public class Success : AppointmentSlotsResult
         {
             public AppointmentSlotsResponse Response { get; }
 
-            public SuccessfullyRetrieved(AppointmentSlotsResponse response)
+            public Success(AppointmentSlotsResponse response)
             {
                 Response = response;
             }
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.GpSystems.Appointments
             }
         }
         
-        public class SupplierSystemUnavailable : AppointmentSlotsResult
+        public class BadGateway : AppointmentSlotsResult
         {
             public override T Accept<T>(IAppointmentSlotsResultVisitor<T> visitor)
             {
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Appointments
             }
         }
 
-        public class CannotBookAppointments : AppointmentSlotsResult
+        public class Forbidden : AppointmentSlotsResult
         {
             public override T Accept<T>(IAppointmentSlotsResultVisitor<T> visitor)
             {

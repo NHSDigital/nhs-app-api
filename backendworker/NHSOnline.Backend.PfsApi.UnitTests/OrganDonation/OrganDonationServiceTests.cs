@@ -170,10 +170,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
         [TestMethod]
         public void
-            GetOrganDonation_WhenCalledAndDemographicstRetrievedUnsuccessfully_ReturnsDemographicsBadGateway()
+            GetOrganDonation_WhenCalledAndDemographicsRetrievedUnsuccessfully_ReturnsDemographicsBadGateway()
         {
             // Arrange 
-            var demographicsResult = new DemographicsResult.Unsuccessful();
+            var demographicsResult = new DemographicsResult.BadGateway();
 
             // Act
             var result = _organDonationService.GetOrganDonation(demographicsResult, _userSession);
@@ -185,10 +185,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
         [TestMethod]
         public void
-            GetOrganDonation_WhenCalledAndDemographicsUserHasNoAccess_ReturnsDemographicsForbidden()
+            GetOrganDonation_WhenCalledAndDemographicsForbidden_ReturnsDemographicsForbidden()
         {
             // Arrange 
-            var demographicsResult = new DemographicsResult.UserHasNoAccess();
+            var demographicsResult = new DemographicsResult.Forbidden();
 
             // Act
             var result = _organDonationService.GetOrganDonation(demographicsResult, _userSession);
@@ -215,17 +215,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
 
         [TestMethod]
         public void
-            GetOrganDonation_WhenCalledAndDemographicsSupplierSystemUnavailable_ReturnsDemographicsRetrievalFailed()
+            GetOrganDonation_WhenCalledAndDemographicsBadGateway_ReturnsDemographicsBadGateway()
         {
             // Arrange 
-            var demographicsResult = new DemographicsResult.SupplierSystemUnavailable();
+            var demographicsResult = new DemographicsResult.BadGateway();
 
             // Act
             var result = _organDonationService.GetOrganDonation(demographicsResult, _userSession);
 
             // Assert
             _mockOrganDonationClient.VerifyNoOtherCalls();
-            result.Result.Should().BeOfType<OrganDonationResult.DemographicsRetrievalFailed>();
+            result.Result.Should().BeOfType<OrganDonationResult.DemographicsBadGateway>();
         }
 
         [TestMethod]
@@ -538,7 +538,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.OrganDonation
                 var demographicsResponse = new DemographicsResponse();
                 var organDonationResponse = new OrganDonationResponse<RegistrationLookupResponse>(httpStatus);
                 
-                DemographicsResult = new DemographicsResult.SuccessfullyRetrieved(demographicsResponse);
+                DemographicsResult = new DemographicsResult.Success(demographicsResponse);
 
                 SetupMockClient(x => x.PostLookup(It.IsAny<RegistrationLookupRequest>(), userSession),
                     mockClient,

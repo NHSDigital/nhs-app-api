@@ -8,7 +8,7 @@
 
         public abstract T Accept<T>(IAppointmentBookResultVisitor<T> visitor);
 
-        public class SuccessfullyBooked : AppointmentBookResult
+        public class Success : AppointmentBookResult
         {
             public override T Accept<T>(IAppointmentBookResultVisitor<T> visitor)
             {
@@ -16,7 +16,7 @@
             }
         }
 
-        public class InsufficientPermissions : AppointmentBookResult
+        public class Forbidden : AppointmentBookResult
         {
             public override T Accept<T>(IAppointmentBookResultVisitor<T> visitor)
             {
@@ -32,7 +32,7 @@
             }
         }
 
-        public class SupplierSystemUnavailable : AppointmentBookResult
+        public class BadGateway : AppointmentBookResult
         {
             public override T Accept<T>(IAppointmentBookResultVisitor<T> visitor)
             {

@@ -1,12 +1,13 @@
 ﻿using System;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NHSOnline.Backend.PfsApi.Areas.Configuration;
 using NHSOnline.Backend.Support.Settings;
-using static NHSOnline.Backend.PfsApi.Areas.Configuration.GetConfigurationResult;
 using static NHSOnline.Backend.Support.Constants;
 using NHSOnline.Backend.PfsApi.Devices;
 
@@ -73,8 +74,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(SuccessfullyRetrieved));
-            var actualResult = (SuccessfullyRetrieved)result;
+            var actualResult = result.Should().BeOfType<GetConfigurationResult.Success>().Subject;
             Assert.AreEqual(expectedToBeValid, actualResult.Response.IsDeviceSupported);
         }
 
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(InvalidDeviceNameResult));
+            Assert.IsInstanceOfType(result, typeof(GetConfigurationResult.BadRequest));
         }
 
         [DataTestMethod]
@@ -115,8 +115,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(SuccessfullyRetrieved));
-            var actualResult = (SuccessfullyRetrieved)result;
+            var actualResult = result.Should().BeOfType<GetConfigurationResult.Success>().Subject;
             Assert.AreEqual(true, actualResult.Response.IsDeviceSupported);
         }
 
@@ -134,11 +133,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(InvalidNativeAppVersionResult));
+            result.Should().BeOfType<GetConfigurationResult.BadRequest>();
         }
 
         [TestMethod]
-        public void IsDeviceSupported_ReturnsFalse_IfMinumumSupportedVersionFromConfigCantBeParsed()
+        public void IsDeviceSupported_ReturnsFalse_IfMinimumSupportedVersionFromConfigCantBeParsed()
         {
             // Arrange
             var deviceDetails = new DeviceDetails
@@ -161,7 +160,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Devices
             var result = _systemUnderTest.IsDeviceSupported(deviceDetails);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(ErrorRetrievingConfigResult));
+            result.Should().BeOfType<GetConfigurationResult.InternalServerError>();
         }
     }
 }

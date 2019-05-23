@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.GpSystems.Session
 
         public abstract T Accept<T>(ISessionExtendResultVisitor<T> visitor);
 
-        public class SuccessfullyExtended : SessionExtendResult
+        public class Success : SessionExtendResult
         {
             public override T Accept<T>(ISessionExtendResultVisitor<T> visitor)
             {
@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.GpSystems.Session
             }
         }
 
-        public class SupplierSystemUnavailable : SessionExtendResult
+        public class BadGateway : SessionExtendResult
         {
             public override T Accept<T>(ISessionExtendResultVisitor<T> visitor)
             {

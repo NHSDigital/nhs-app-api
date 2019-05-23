@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _userSession = userSession;
         }
 
-        public async Task Visit(AppointmentSlotsResult.SuccessfullyRetrieved result)
+        public async Task Visit(AppointmentSlotsResult.Success result)
         {
             var slotCount = result.Response?.Slots?.Count() ?? 0;
 
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.SuccessfullyRetrieved)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.Success)}");
             }
             
             var kvp = new Dictionary<string, string>
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _logger.LogInformationKeyValuePairs("Appointment Slot Count", kvp);   
         }
 
-        public async Task Visit(AppointmentSlotsResult.SupplierSystemUnavailable result)
+        public async Task Visit(AppointmentSlotsResult.BadGateway result)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.SupplierSystemUnavailable)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.BadGateway)}");
             }
         }
 
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentSlotsResult.CannotBookAppointments result)
+        public async Task Visit(AppointmentSlotsResult.Forbidden result)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.CannotBookAppointments)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentSlotsResult.Forbidden)}");
             }
         }
     }

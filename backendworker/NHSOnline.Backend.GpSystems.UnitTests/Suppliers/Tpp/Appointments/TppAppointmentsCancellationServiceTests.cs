@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
         [TestMethod]
-        public async Task Cancel_HappyPath_ReturnsSuccessfullyCancelledResponse()
+        public async Task Cancel_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
             var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
@@ -59,11 +59,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SuccessfullyCancelled>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.Success>();
         }
         
         [TestMethod]
-        public async Task Cancel_TppClientThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
+        public async Task Cancel_TppClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
             _mockTppClient.Setup(x => x.CancelAppointmentPost(It.IsAny<CancelAppointment>(),
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.BadGateway>();
         }
         
         [DataTestMethod]
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         
         [DataTestMethod]
         [DataRow(TppApiErrorCodes.NoAccess)]
-        public async Task Cancel_TppClientReturnsInsuffientPermissionsErrorCode_ReturnsInsufficientPermissions(string tppErrorCode)
+        public async Task Cancel_TppClientReturnsInsuffientPermissionsErrorCode_ReturnsForbidden(string tppErrorCode)
         {
             // Arrange
             var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
@@ -139,13 +139,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.Forbidden>();
         }
         
         [DataTestMethod]
         [DataRow("40376")]
         [DataRow("230405")]
-        public async Task Cancel_TppClientReturnsUnanticipatedErrorCode_ReturnsSupplierSystemUnavailable(string tppErrorCode)
+        public async Task Cancel_TppClientReturnsUnanticipatedErrorCode_ReturnsBadGateway(string tppErrorCode)
         {
             // Arrange
             var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.BadGateway>();
         }
 
         private void MockTppClientAppointmentCancelMethod(

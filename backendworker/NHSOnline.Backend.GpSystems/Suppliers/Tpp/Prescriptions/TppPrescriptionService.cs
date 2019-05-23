@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             _tppPrescriptionMapper = tppPrescriptionMapper;
         }
 
-        public async Task<PrescriptionResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate = null,
+        public async Task<GetPrescriptionsResult> GetPrescriptions(GpUserSession gpUserSession, DateTimeOffset? fromDate = null,
             DateTimeOffset? toDate = null)
         {
             var tppUserSession = (TppUserSession) gpUserSession;
@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 
                 if (!response.HasSuccessResponse)
                 {
-                    return GetCorrectErrorResult(response);
+                    return InterpretGetPrescriptionsError(response);
                 }
                 try
                 {
@@ -57,19 +57,19 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                         $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
                     var mapppedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
                     
-                    return new PrescriptionResult.SuccessfulGet(mapppedPrescriptionList);
+                    return new GetPrescriptionsResult.Success(mapppedPrescriptionList);
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(
                         $"Something went wrong during building the response. Exception message: {e.Message}");
-                    return new PrescriptionResult.InternalServerError();
+                    return new GetPrescriptionsResult.InternalServerError();
                 }
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving prescriptions");
-                return new PrescriptionResult.SupplierSystemUnavailable();
+                return new GetPrescriptionsResult.BadGateway();
             }
             finally
             {
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
 
         }
 
-        public async Task<PrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<OrderPrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             _logger.LogEnter();
 
@@ -102,16 +102,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                 _logger.LogInformation("Beginning Place Prescription Request");
                 var response = await _tppClient.OrderPrescriptionsPost(tppUserSession, postRequest);
 
-                if (!response.HasSuccessResponse) return GetCorrectErrorResult(response);
+                if (!response.HasSuccessResponse) return InterpretOrderPrescriptionError(response);
                 
                 _logger.LogDebug($"Prescription order placed successfully");
-                return new PrescriptionResult.SuccessfulPost();
+                return new OrderPrescriptionResult.Success();
 
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError($"Repeat prescription order failed with message {e.Message}");
-                return new PrescriptionResult.SupplierSystemUnavailable();
+                return new OrderPrescriptionResult.BadGateway();
             }
             finally
             {
@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             return medications;
         }
         
-        private PrescriptionResult GetCorrectErrorResult(
+        private GetPrescriptionsResult InterpretGetPrescriptionsError(
             TppClient.TppApiResponse response)
         {
 
@@ -137,26 +137,56 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 _logger.LogError("The tpp prescriptions service is not enabled");
                 
-                return new PrescriptionResult.SupplierNotEnabled();
+                return new GetPrescriptionsResult.Forbidden();
             }
 
             if (PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(response))
             {
                 _logger.LogError("The tpp prescription has already been ordered or is not available");
                 
-                return new PrescriptionResult.CannotReorderPrescription();
+                return new GetPrescriptionsResult.CannotReorderPrescription();
             }
             
             if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response) )
             {
                 _logger.LogError($"The tpp prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponse.TechnicalMessage)}");
 
-                return new PrescriptionResult.BadRequest();
+                return new GetPrescriptionsResult.BadRequest();
             }     
             
             _logger.LogError("Tpp system is currently unavailable");
 
-            return new PrescriptionResult.SupplierSystemUnavailable();
+            return new GetPrescriptionsResult.BadGateway();
+        }
+        
+        private OrderPrescriptionResult InterpretOrderPrescriptionError(
+            TppClient.TppApiResponse response)
+        {
+
+            if (response.HasForbiddenResponse)
+            {
+                _logger.LogError("The tpp prescriptions service is not enabled");
+                
+                return new OrderPrescriptionResult.Forbidden();
+            }
+
+            if (PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(response))
+            {
+                _logger.LogError("The tpp prescription has already been ordered or is not available");
+                
+                return new OrderPrescriptionResult.CannotReorderPrescription();
+            }
+            
+            if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response) )
+            {
+                _logger.LogError($"The tpp prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponse.TechnicalMessage)}");
+
+                return new OrderPrescriptionResult.BadRequest();
+            }     
+            
+            _logger.LogError("Tpp system is currently unavailable");
+
+            return new OrderPrescriptionResult.BadGateway();
         }
         
         private static bool PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(TppClient.TppApiResponse response)

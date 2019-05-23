@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {
                     _logger.LogError("Appointments not enabled");
-                    return new AppointmentsResult.CannotViewAppointments();
+                    return new AppointmentsResult.Forbidden();
                 }
                 
                 var response = await _visionClient.GetExistingAppointments(
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             catch (HttpRequestException exception)
             {
                 _logger.LogError(exception, $"Calling {nameof(_visionClient.GetExistingAppointments)} threw HttpRequestException.");
-                return new AppointmentsResult.SupplierSystemUnavailable();
+                return new AppointmentsResult.BadGateway();
             }
             finally
             {
@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             {
                 _logger.LogError("Vision appointments not enabled");
                 _logger.LogVisionErrorResponse(response);
-                return new AppointmentsResult.CannotViewAppointments();
+                return new AppointmentsResult.Forbidden();
             }
 
             if (response.UnparsableResultMessage != null)
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogError($"Call to VISION ({nameof(VisionAppointmentsRetrievalService)}) returned an unanticipated error " +
                                  $"with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
                 _logger.LogVisionErrorResponse(response);
-                return new AppointmentsResult.SupplierSystemUnavailable();
+                return new AppointmentsResult.BadGateway();
             }
             
             try
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 var visionUserSession = (VisionUserSession)gpUserSession;
                 UpdateUserSessionBookingReasonNecessity(visionUserSession, response);
 
-                var result = new AppointmentsResult.SuccessfullyRetrieved(_responseMapper.Map(response.Body), visionUserSession.AppointmentBookingReasonNecessity);
+                var result = new AppointmentsResult.Success(_responseMapper.Map(response.Body), visionUserSession.AppointmentBookingReasonNecessity);
 
                 return result;
             }

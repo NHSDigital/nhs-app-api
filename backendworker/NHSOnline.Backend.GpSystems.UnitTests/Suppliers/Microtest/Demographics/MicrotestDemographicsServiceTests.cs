@@ -54,12 +54,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
             _mockMicrotestClient.Verify();
             _mockMicrotestDemographicsMapper.Verify();
 
-            var demographicsResult = result.Should().BeAssignableTo<DemographicsResult.SuccessfullyRetrieved>().Subject;
+            var demographicsResult = result.Should().BeAssignableTo<DemographicsResult.Success>().Subject;
             demographicsResult.Response.Should().Be(mappedResponse);
         }
 
         [TestMethod]
-        public async Task GetDemographics_UnsuccessfulResponse_ReturnsUnsuccessful()
+        public async Task GetDemographics_UnsuccessfulResponse_ReturnsBadGateway()
         {
             // Arrange
             var response = CreateResponse(HttpStatusCode.BadGateway);
@@ -75,11 +75,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<DemographicsResult.Unsuccessful>();
+            result.Should().BeAssignableTo<DemographicsResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task GetDemographics_ForbiddenResponse_ReturnsUserHasNoAccess()
+        public async Task GetDemographics_ForbiddenResponse_ReturnsForbidden()
         {
             // Arrange
             var response = CreateResponse(HttpStatusCode.Forbidden);
@@ -95,12 +95,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<DemographicsResult.UserHasNoAccess>();
+            result.Should().BeAssignableTo<DemographicsResult.Forbidden>();
         }
 
 
         [TestMethod]
-        public async Task GetDemographics_Exception_ReturnsUnsuccessful()
+        public async Task GetDemographics_Exception_ReturnsBadGateway()
         {
             // Arrange
             SetupDemographicsGet()
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Demographics
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<DemographicsResult.Unsuccessful>();
+            result.Should().BeAssignableTo<DemographicsResult.BadGateway>();
         }
 
         private Task<DemographicsResult> GetDemographics()

@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
                         var courseListResponse = _emisPrescriptionMapper.Map(coursesResponse.Body);
                         courseListResponse.SpecialRequestNecessity = emisUserSession.PrescriptionSpecialRequestNecessity;
 
-                        return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse);
+                        return new GetCoursesResult.Success(courseListResponse);
                     }
                     catch (Exception e)
                     {
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving courses");
-                return new GetCoursesResult.SupplierSystemUnavailable();
+                return new GetCoursesResult.BadGateway();
             }
             finally
             {
@@ -120,12 +120,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Prescriptions
             {
                 _logger.LogWarning("The emis prescriptions service is not enabled");
                 _logger.LogEmisWarningResponse(response);
-                return new GetCoursesResult.SupplierNotEnabled();
+                return new GetCoursesResult.Forbidden();
             }
             
             _logger.LogError("Emis system is currently unavailable");
             _logger.LogEmisErrorResponse(response);
-            return new GetCoursesResult.SupplierSystemUnavailable();       
+            return new GetCoursesResult.BadGateway();       
         }
     }
 }

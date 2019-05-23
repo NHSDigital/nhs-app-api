@@ -99,11 +99,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Create_EmisClientThrowsHttpRequestExceptionFromSession_ReturnsSupplierSystemUnavailable()
+        public async Task Create_EmisClientThrowsHttpRequestExceptionFromSession_ReturnsBadGateway()
         {
             // Arrange
             // emis client throws HttpRequestException
@@ -117,11 +117,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Create_EmisClientEndUserSessionPostUnsuccessful_ReturnsSupplierSystemUnavailable()
+        public async Task Create_EmisClientEndUserSessionPostUnsuccessful_ReturnsBadGateway()
         {
             // Arrange
             var unsuccessfulEndUserSession = _fixture
@@ -140,11 +140,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Create_EmisClientSessionsPostReturnsForbidden_ReturnsInvalidIm1ConnectionToken()
+        public async Task Create_EmisClientSessionsPostReturnsForbidden_ReturnsForbidden()
         {
             // Arrange
             var forbiddenSession = _fixture
@@ -167,11 +167,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<GpSessionCreateResult.InvalidIm1ConnectionToken>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task Create_EmisClientSessionsPostReturnsBadRequest_ReturnsInvalidIm1ConnectionToken()
+        public async Task Create_EmisClientSessionsPostReturnsBadRequest_ReturnsForbidden()
         {
             // Arrange
             var badRequestSession = _fixture
@@ -194,11 +194,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<GpSessionCreateResult.InvalidIm1ConnectionToken>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task Create_EmisClientSessionsPostReturnsInternalServerError_ReturnsSupplierSystemUnavailable()
+        public async Task Create_EmisClientSessionsPostReturnsInternalServerError_ReturnsBadGateway()
         {
             // Arrange
             var forbiddenSession = _fixture
@@ -220,7 +220,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [DataTestMethod]
@@ -247,9 +247,9 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
 
             // Assert
             _mockEmisClient.VerifyAll();
-            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.SuccessfullyCreated>().Subject;
+            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
 
-            var expectedResult = new GpSessionCreateResult.SuccessfullyCreated(expected, new EmisUserSession { NhsNumber = _nhsNumber, OdsCode = _odsCode});
+            var expectedResult = new GpSessionCreateResult.Success(expected, new EmisUserSession { NhsNumber = _nhsNumber, OdsCode = _odsCode});
 
             createdResult.Should().BeEquivalentTo(expectedResult);
         }
@@ -263,7 +263,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Assert
             result
                 .Should()
-                .BeAssignableTo<GpSessionCreateResult.SuccessfullyCreated>()
+                .BeAssignableTo<GpSessionCreateResult.Success>()
                 .Subject
                 .UserSession
                 .Should()
@@ -279,7 +279,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Assert
             result
                 .Should()
-                .BeAssignableTo<GpSessionCreateResult.SuccessfullyCreated>()
+                .BeAssignableTo<GpSessionCreateResult.Success>()
                 .Subject
                 .UserSession
                 .Supplier
@@ -296,7 +296,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             // Assert
             result
                 .Should()
-                .BeAssignableTo<GpSessionCreateResult.SuccessfullyCreated>()
+                .BeAssignableTo<GpSessionCreateResult.Success>()
                 .Subject
                 .UserSession
                 .Should()

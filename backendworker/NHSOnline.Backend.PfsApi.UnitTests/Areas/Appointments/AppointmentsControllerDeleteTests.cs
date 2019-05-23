@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult) new AppointmentCancelResult.SuccessfullyCancelled()));
+                .Returns(Task.FromResult((AppointmentCancelResult) new AppointmentCancelResult.Success()));
 
             _mockAppointmentsValidationService.Setup(x => x.IsDeleteValid(_appointmentCancelRequest))
                 .Returns(true);
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public async Task Delete_AppointmentsServiceCancelReturnsInsufficientPermissions_ReturnsForbidden()
         {
             // Arrange
-            var serviceResult = new AppointmentCancelResult.InsufficientPermissions();
+            var serviceResult = new AppointmentCancelResult.Forbidden();
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult)serviceResult));
 
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
-                "Unable to cancel appointment due to insufficent permissions for appointment with id: {0}",
+                "Unable to cancel appointment due to insufficient permissions for appointment with id: {0}",
                 _appointmentCancelRequest.AppointmentId));
         }
 
@@ -185,10 +185,10 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public async Task Delete_AppointmentsServiceCancelReturnsSupplierSystemUnavailable_ReturnsBadGateway()
+        public async Task Delete_AppointmentsServiceCancelReturnsBadGateway_ReturnsBadGateway()
         {
             // Arrange
-            var badResult = new AppointmentCancelResult.SupplierSystemUnavailable();
+            var badResult = new AppointmentCancelResult.BadGateway();
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession.GpUserSession, _appointmentCancelRequest))
                 .Returns(Task.FromResult((AppointmentCancelResult)badResult));
 

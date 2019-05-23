@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "HttpRequestException has been thrown.");
-                return new AppointmentsResult.SupplierSystemUnavailable();
+                return new AppointmentsResult.BadGateway();
             }
             finally
             {

@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
                 .Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
         }
 
         [TestMethod]
-        public async Task Verify_InvalidRequest_ReturnsInvalidRequestResult()
+        public async Task Verify_InvalidRequest_ReturnsBadRequestResult()
         {
             // Arrange            
             _mockVisionClient.Setup(x =>
@@ -116,11 +116,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.InvalidRequest>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadRequest>();
         }
 
         [TestMethod]
-        public async Task Verify_InvalidUserCredentials_ReturnsInvalidUserCredentialsResult()
+        public async Task Verify_InvalidUserCredentials_ReturnsBadGatewayResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -154,11 +154,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.InvalidUserCredentials>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Verify_InvalidSecurityHeader_ReturnsErrorProcessingSecurityHeaderResult()
+        public async Task Verify_InvalidSecurityHeader_ReturnsInternalServerErrorResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -182,11 +182,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.InternalServerError>();
         }
 
         [TestMethod]
-        public async Task Verify_UnknownError_ReturnsUnknownErrorResult()
+        public async Task Verify_UnknownError_ReturnsBadGatewayResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -220,11 +220,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.UnknownError>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Verify_WhenNoMatchedError_ReturnsSupplierSystemUnavailableResult()
+        public async Task Verify_WhenNoMatchedError_ReturnsBadGateway()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -245,7 +245,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
         }
         
         [TestMethod]
@@ -303,7 +303,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
 
             _mockVisionClient.Verify(x =>
                     x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()),
@@ -386,7 +386,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
 
             _im1CacheKeyGenerator.VerifyAll();
             _im1CacheService.Verify(x => x.SaveIm1ConnectionToken(
@@ -418,7 +418,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Im1Connection
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
 
         [TestMethod]

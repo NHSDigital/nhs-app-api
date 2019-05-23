@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 }
             };
 
-            var getCoursesResult = new GetCoursesResult.SuccessfullyRetrieved(coursesGetResponse);
+            var getCoursesResult = new GetCoursesResult.Success(coursesGetResponse);
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))

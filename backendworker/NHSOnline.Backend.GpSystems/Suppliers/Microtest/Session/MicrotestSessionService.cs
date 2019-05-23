@@ -30,18 +30,18 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Session
             
             var demographicsResult = await _demographicsService.GetDemographics(session);
             
-            if (!(demographicsResult is DemographicsResult.SuccessfullyRetrieved successfulDemographicsResult))
+            if (!(demographicsResult is DemographicsResult.Success successfulDemographicsResult))
             {
                 _logger.LogError("Error retrieving demographics when creating session");
-                return new GpSessionCreateResult.SupplierSystemUnavailable();
+                return new GpSessionCreateResult.BadGateway();
             }
 
-            return new GpSessionCreateResult.SuccessfullyCreated(successfulDemographicsResult.Response.PatientName, session);
+            return new GpSessionCreateResult.Success(successfulDemographicsResult.Response.PatientName, session);
         }
 
         public Task<SessionLogoffResult> Logoff(GpUserSession gpUserSession)
         {
-            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(gpUserSession));
+            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.Success(gpUserSession));
         }
     }
 }

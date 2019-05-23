@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "HttpRequestException has been thrown.");
-                return new AppointmentSlotsResult.SupplierSystemUnavailable();
+                return new AppointmentSlotsResult.BadGateway();
             }
             finally
             {
@@ -62,20 +62,20 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             if (appointmentSlotsResponse.HasForbiddenResponse)
             {
                 _logger.LogError("Call to Microtest returned a forbidden response");
-                return new AppointmentSlotsResult.CannotBookAppointments();
+                return new AppointmentSlotsResult.Forbidden();
             }
 
             if (!appointmentSlotsResponse.HasSuccessResponse)
             {
                 _logger.LogError($"Call to Microtest ({nameof(MicrotestAppointmentSlotsService)}) returned an unanticipated " +
                                  $"error with status code: '{appointmentSlotsResponse.StatusCode}'.");
-                return new AppointmentSlotsResult.SupplierSystemUnavailable();
+                return new AppointmentSlotsResult.BadGateway();
             }
 
             try
             {
                 var result = _appointmentSlotsResponseMapper.Map(appointmentSlotsResponse.Body);
-                return new AppointmentSlotsResult.SuccessfullyRetrieved(result);
+                return new AppointmentSlotsResult.Success(result);
             }
             catch (Exception e)
             {

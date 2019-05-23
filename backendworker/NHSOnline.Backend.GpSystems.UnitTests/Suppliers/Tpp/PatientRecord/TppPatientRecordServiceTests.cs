@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
         }
         
         [TestMethod]
-        public async Task GetMyRecord_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromTpp()
+        public async Task GetMyRecord_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromTpp()
         {
             // Arrange
             var tppAllergies = CreateListPatientOverviewItem(1);
@@ -125,8 +125,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.PatientRecord
             _patientDcrEventsChecker.Verify();
             _patientOverviewTaskChecker.Verify();
             _patientTestResultsChecker.Verify();
-            result.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
-            ((GetMyRecordResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetMyRecordResult.Success>();
+            ((GetMyRecordResult.Success)result).Response.Should().NotBeNull();
         }
         
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)

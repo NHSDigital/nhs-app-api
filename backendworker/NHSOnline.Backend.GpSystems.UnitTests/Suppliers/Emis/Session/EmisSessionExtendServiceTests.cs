@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
         }
 
         [TestMethod]
-        public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccessfullyExtended()
+        public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccess()
         {    
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK);
@@ -46,12 +46,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var result = await _systemUnderTest.Extend(_gpUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<SessionExtendResult.SuccessfullyExtended>();
+            result.Should().BeAssignableTo<SessionExtendResult.Success>();
             _mockEmisClient.Verify();
         }
 
         [TestMethod]
-        public async Task Extend_WhenClientReturnsError_ReturnsSupplierSystemUnavailable()
+        public async Task Extend_WhenClientReturnsError_ReturnsBadGateway()
         {
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.BadRequest);
@@ -64,12 +64,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var result = await _systemUnderTest.Extend(_gpUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<SessionExtendResult.BadGateway>();
             _mockEmisClient.Verify();
         }
 
         [TestMethod]
-        public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
+        public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
             _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Session
             var result = await _systemUnderTest.Extend(_gpUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<SessionExtendResult.BadGateway>();
             _mockEmisClient.Verify();
         }
     }

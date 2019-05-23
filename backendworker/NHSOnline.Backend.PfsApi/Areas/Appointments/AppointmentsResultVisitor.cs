@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _userSession = userSession;
         }
 
-        public async Task<IActionResult> Visit(AppointmentsResult.SuccessfullyRetrieved result)
+        public async Task<IActionResult> Visit(AppointmentsResult.Success result)
         {
             if (result.BookingReasonNecessity != null)
             {
@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             return await Task.FromResult(new BadRequestResult());
         }
 
-        public async Task<IActionResult> Visit(AppointmentsResult.SupplierSystemUnavailable result)
+        public async Task<IActionResult> Visit(AppointmentsResult.BadGateway result)
         {
             return await Task.FromResult(new StatusCodeResult(StatusCodes.Status502BadGateway));
         }
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             return await Task.FromResult(new StatusCodeResult(StatusCodes.Status500InternalServerError));
         }
 
-        public async Task<IActionResult> Visit(AppointmentsResult.CannotViewAppointments result)
+        public async Task<IActionResult> Visit(AppointmentsResult.Forbidden result)
         {
             return await Task.FromResult(new StatusCodeResult(StatusCodes.Status403Forbidden));
         }

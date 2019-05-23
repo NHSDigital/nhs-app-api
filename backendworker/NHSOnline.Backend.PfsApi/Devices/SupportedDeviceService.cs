@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Support.Settings;
 using NHSOnline.Backend.PfsApi.Areas.Configuration;
 using static NHSOnline.Backend.Support.Constants;
-using static NHSOnline.Backend.PfsApi.Areas.Configuration.GetConfigurationResult;
 
 namespace NHSOnline.Backend.PfsApi.Devices
 {
@@ -51,36 +50,34 @@ namespace NHSOnline.Backend.PfsApi.Devices
             if (string.IsNullOrEmpty(device.Name) || string.IsNullOrEmpty(device.NativeAppVersion))
             {
                 _logger.LogError($"{nameof(device.Name)} or {nameof(device.NativeAppVersion)} is null or empty");
-                return new MissingDetailsResult();
+                return new GetConfigurationResult.BadRequest();
             }
-
-            string minimumSupportedVersionForDevice = null;
 
             _logger.LogDebug($"Checking if device name {device.Name} is valid");
 
             if (!SupportedAppVersions.ContainsKey(device.Name))
             {
                 _logger.LogError($"Device name {device.Name} not recognised:");
-                return new InvalidDeviceNameResult();
+                return new GetConfigurationResult.BadRequest();
             }
 
-            minimumSupportedVersionForDevice = SupportedAppVersions[device.Name];
+            var minimumSupportedVersionForDevice = SupportedAppVersions[device.Name];
 
             if (string.IsNullOrEmpty(minimumSupportedVersionForDevice))
             {
-                return new ErrorRetrievingConfigResult();
+                return new GetConfigurationResult.InternalServerError();
             }
 
             if (!Version.TryParse(device.NativeAppVersion, out Version actualNativeAppVersion))
             {
                 _logger.LogError($"Couldn't parse native app version: {device.NativeAppVersion}");
-                return new InvalidNativeAppVersionResult();
+                return new GetConfigurationResult.BadRequest();
             }
 
             if (!Version.TryParse(minimumSupportedVersionForDevice, out Version actualMinimumVersion))
             {
                 _logger.LogError($"Couldn't parse minimum supported version: {minimumSupportedVersionForDevice}");
-                return new ErrorRetrievingConfigResult();
+                return new GetConfigurationResult.InternalServerError();
             }
 
             _logger.LogInformation(
@@ -91,12 +88,12 @@ namespace NHSOnline.Backend.PfsApi.Devices
             {
                 _logger.LogInformation(
                     $"App version {device.NativeAppVersion} is less than minimum supported version {minimumSupportedVersionForDevice}");
-                return new SuccessfullyRetrieved(isDeviceSupported: false,
+                return new GetConfigurationResult.Success(isDeviceSupported: false,
                     isThrottlingEnabled: _throttlingEnabled,
                     fidoServerUrl: _fidoServerUrl);
             }
 
-            return new SuccessfullyRetrieved(isDeviceSupported: true,
+            return new GetConfigurationResult.Success(isDeviceSupported: true,
                 isThrottlingEnabled: _throttlingEnabled,
                 fidoServerUrl: _fidoServerUrl);
         }

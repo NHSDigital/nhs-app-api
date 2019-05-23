@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                 NhsNumbers = new List<PatientNhsNumber>(),
             });
 
-            return new Im1ConnectionVerifyResult.SuccessfullyVerified(response);
+            return new Im1ConnectionVerifyResult.Success(response);
         }
 
         public async Task<Im1ConnectionRegisterResult> Register(PatientIm1ConnectionRequest request)
@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Im1Connection
                 NhsNumbers = new List<PatientNhsNumber>(),
             });
 
-            return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
+            return new Im1ConnectionRegisterResult.Success(response);
         }
     }
 }

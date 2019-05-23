@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
                 .Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>()
                 .Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         }
 
         [TestMethod]
-        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenTppClientReturnsErrorResponse()
+        public async Task Verify_ReturnsBadGateway_WhenTppClientReturnsErrorResponse()
         {
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
@@ -109,11 +109,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenTppClientReturnsBadGateway()
+        public async Task Verify_ReturnsBadGatewaye_WhenTppClientReturnsBadGateway()
         {
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
@@ -127,11 +127,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task Register_SuccessfullyRegistered_WhenIm1TokenIsCached()
+        public async Task Register_Success_WhenIm1TokenIsCached()
         {
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
@@ -167,13 +167,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Register(request);
 
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
             _mockIm1CacheService.Verify(x => x.GetIm1ConnectionToken<TppConnectionToken>(key), Times.Once);
             _mockTppClient.Verify(x => x.LinkAccountPost(It.IsAny<LinkAccount>()), Times.Never);
         }
         
         [TestMethod]
-        public async Task Register_SuccessfullyRegistered_WhenDataAreCorrect()
+        public async Task Register_Success_WhenDataAreCorrect()
         {
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
@@ -212,13 +212,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Register(request);
 
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>();
 
             _mockIm1CacheService.Verify();
         }
         
         [TestMethod]
-        public async Task Register_ReturnsSupplierSystemUnavailable_WhenTppClientLinkAccountReturnsInvalidProviderId()
+        public async Task Register_ReturnsBadGateway_WhenTppClientLinkAccountReturnsInvalidProviderId()
         {
             var invalidProviderErrorResponse = _fixture.Build<Error>()
                 .With(x => x.ErrorCode, TppApiErrorCodes.LinkAccount.InvalidProviderId)
@@ -236,7 +236,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Register(request);
 
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
         
         [TestMethod]
@@ -262,7 +262,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
         }
         
         [TestMethod]
-        public async Task Register_ReturnsSupplierSystemUnavailable_WhenTppClientLinkAccountReturnsErrorResponse()
+        public async Task Register_ReturnsBadGateway_WhenTppClientLinkAccountReturnsErrorResponse()
         {
             var errorResponse = _fixture.Create<Error>();                
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
@@ -277,11 +277,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Register(request);
 
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task Register_ReturnsSupplierSystemUnavailable_WhenTppClientAuthenticateReturnsErrorResponse()
+        public async Task Register_ReturnsBadGateway_WhenTppClientAuthenticateReturnsErrorResponse()
         {
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
@@ -304,11 +304,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Register(request);
 
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenTppClientLinkAccountThrowsHttpRequestException()
+        public async Task Verify_ReturnsBadGateway_WhenTppClientLinkAccountThrowsHttpRequestException()
         {
             _mockTppClient
                 .Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>()))
@@ -319,11 +319,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Register(request);
 
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
         
         [TestMethod]
-        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenTppClientAuthenticateThrowsHttpRequestException()
+        public async Task Verify_ReturnsBadGateway_WhenTppClientAuthenticateThrowsHttpRequestException()
         {
             var linkAccountReply = _fixture.Create<LinkAccountReply>();
             _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
@@ -342,7 +342,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Im1Connection
 
             var result = await systemUnderTest.Register(request);
 
-            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadGateway>();
         }
     }
 }

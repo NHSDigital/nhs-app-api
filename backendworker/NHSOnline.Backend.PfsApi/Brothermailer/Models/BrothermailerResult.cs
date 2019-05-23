@@ -4,7 +4,7 @@
     {
         public abstract T Accept<T>(IBrothermailerResultVisitor<T> visitor);
 
-        public class SuccessfullyRetrieved : BrothermailerResult
+        public class Success : BrothermailerResult
         {
             public override T Accept<T>(IBrothermailerResultVisitor<T> visitor)
             {
@@ -12,7 +12,7 @@
             }
         }
 
-        public class Unsuccessful : BrothermailerResult
+        public class InternalServerError : BrothermailerResult
         {
             public override T Accept<T>(IBrothermailerResultVisitor<T> visitor)
             {
@@ -20,7 +20,7 @@
             }
         }
 
-        public class BrothermailerServiceUnavailable : BrothermailerResult
+        public class BadGateway : BrothermailerResult
         {
             public override T Accept<T>(IBrothermailerResultVisitor<T> visitor)
             {

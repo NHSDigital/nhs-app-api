@@ -2,9 +2,9 @@
 {
     public interface ICourseResultVisitor<out T>
     {
-        T Visit(GetCoursesResult.SuccessfullyRetrieved result);
-        T Visit(GetCoursesResult.SupplierSystemUnavailable result);
+        T Visit(GetCoursesResult.Success result);
+        T Visit(GetCoursesResult.BadGateway result);
         T Visit(GetCoursesResult.InternalServerError result);
-        T Visit(GetCoursesResult.SupplierNotEnabled result);
+        T Visit(GetCoursesResult.Forbidden result);
     }
 }

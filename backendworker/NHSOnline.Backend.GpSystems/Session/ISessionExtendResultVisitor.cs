@@ -2,8 +2,8 @@ namespace NHSOnline.Backend.GpSystems.Session
 {
     public interface ISessionExtendResultVisitor<out T>
     {
-        T Visit(SessionExtendResult.SuccessfullyExtended successfullyExtended);
+        T Visit(SessionExtendResult.Success result);
 
-        T Visit(SessionExtendResult.SupplierSystemUnavailable supplierSystemUnavailable);
+        T Visit(SessionExtendResult.BadGateway result);
     }
 }

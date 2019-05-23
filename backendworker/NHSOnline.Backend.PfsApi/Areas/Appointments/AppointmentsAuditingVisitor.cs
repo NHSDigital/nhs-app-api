@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             _userSession = userSession;
         }
 
-        public async Task Visit(AppointmentsResult.SuccessfullyRetrieved result)
+        public async Task Visit(AppointmentsResult.Success result)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.SuccessfullyRetrieved)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.Success)}");
             }
         }
 
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentsResult.SupplierSystemUnavailable result)
+        public async Task Visit(AppointmentsResult.BadGateway result)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.SupplierSystemUnavailable)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.BadGateway)}");
             }
         }
 
@@ -95,15 +95,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Appointments
             }
         }
 
-        public async Task Visit(AppointmentsResult.CannotViewAppointments result)
+        public async Task Visit(AppointmentsResult.Forbidden result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful");
+                await _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to insufficient permissions");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.CannotViewAppointments)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(AppointmentsResult.Forbidden)}");
             }
         }
     }

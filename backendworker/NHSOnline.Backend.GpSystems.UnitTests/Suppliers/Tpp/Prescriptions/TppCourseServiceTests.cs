@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromTpp()
+        public async Task Get_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromTpp()
         {
             // Arrange
             _fixture.Customize<Medication>(c => c.With(s => s.Requestable, "y"));
@@ -71,12 +71,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
         }
         
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponseForHappyPath_CanBeRequested_Captial_Y()
+        public async Task Get_ReturnsSuccessResponseForHappyPath_CanBeRequested_Captial_Y()
         {
             // Arrange
             _fixture.Customize<Medication>(c => c.With(s => s.Requestable, "Y"));
@@ -95,12 +95,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
         }
         
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromTpp_NullRequestable()
+        public async Task Get_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromTpp_NullRequestable()
         {
             // Arrange
             _fixture.Customize<Medication>(c => c.With(s => s.Requestable, null));
@@ -119,8 +119,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
         }
 
         [DataTestMethod]
@@ -167,10 +167,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
 
-            var getCourseResult = (GetCoursesResult.SuccessfullyRetrieved) result;
+            var getCourseResult = (GetCoursesResult.Success) result;
             getCourseResult.Response.Should().Be(response);
 
             capturedItemToMap.Should().HaveCount(expectedNumberOfPrescriptions);
@@ -192,11 +192,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
+        public async Task Get_ReturnsBadGateway_WhenHttpExceptionOccursCallingEmis()
         {
             // Arrange
             _tppClient.Setup(x => x.ListRepeatMedicationPost(_tppUserSession))
@@ -207,12 +207,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
             _tppClient.Verify();
         }
         
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponse_TppResponseContainsNullableRequestableProperty()
+        public async Task Get_ReturnsSuccessResponse_TppResponseContainsNullableRequestableProperty()
         {
             // Arrange
             const int expectedNumberOfPrescriptions = 1;
@@ -261,8 +261,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_tppUserSession));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
             Assert.AreEqual(expectedNumberOfPrescriptions, capturedItemToMap.Count);
         }
         
@@ -287,7 +287,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Prescriptions
             var result = await _systemUnderTest.GetCourses(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();
+            result.Should().BeAssignableTo<GetCoursesResult.Forbidden>();
         }
     }
 }

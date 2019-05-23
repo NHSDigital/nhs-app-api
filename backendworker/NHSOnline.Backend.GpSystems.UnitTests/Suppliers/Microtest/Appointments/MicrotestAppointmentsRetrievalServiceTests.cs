@@ -58,13 +58,13 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_HappyPath_ReturnsSuccessfullyRetrievedResponse()
+        public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
             // Act
             var result = await _systemUnderTest.GetAppointments(_microtestUserSession);
 
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<AppointmentsResult.Success>().Subject.Response;
             response.Should().BeEquivalentTo(_mappedResponse);
 
             _mockMicrotestClient.VerifyAll();
@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             var result = await _systemUnderTest.GetAppointments(_microtestUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
         }
         
         [TestMethod]
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_MicrotestClientThrows_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_MicrotestClientThrows_ReturnsBadGateway()
         {
             // Arrange
             _mockMicrotestClient
@@ -123,11 +123,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             var result = await _systemUnderTest.GetAppointments(_microtestUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task GetAppointments_MicrotestClientReturnsUnsuccessfulStatusCode_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_MicrotestClientReturnsUnsuccessfulStatusCode_ReturnsBadGateway()
         {
             // Arrange
 
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
             var result = await _systemUnderTest.GetAppointments(_microtestUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
     }
 }

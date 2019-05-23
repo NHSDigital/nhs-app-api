@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
         {
             // Arrange
             var testResultResponse = _fixture.Create<TestResultResponse>();
-            var testResult = new GetDetailedTestResult.SuccessfullyRetrieved(testResultResponse);
+            var testResult = new GetDetailedTestResult.Success(testResultResponse);
             
             _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession.GpUserSession, TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
@@ -88,17 +88,17 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             // Assert
             _mockPatientRecordService.Verify();
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<GetDetailedTestResult.SuccessfullyRetrieved>();
+            okObjectResult.Value.Should().BeAssignableTo<GetDetailedTestResult.Success>();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Test result successfully viewed" ));
         }
         
         [TestMethod]
-        public async Task GetTestResult_ReturnsStatus502BadGateway_WhenServiceReturnsSupplierBadData()
+        public async Task GetTestResult_ReturnsStatus502BadGateway_WhenServiceReturnsBadGateway()
         {
             // Arrange
-            var testResult = new GetDetailedTestResult.SupplierBadData();
+            var testResult = new GetDetailedTestResult.BadGateway();
 
             _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession.GpUserSession, TestResultId))
                 .Returns(Task.FromResult((GetDetailedTestResult) testResult));
@@ -112,29 +112,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             _mockPatientRecordService.Verify();
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing test result: supplier bad data" ));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing test result: bad gateway" ));
         }
-        
-        [TestMethod]
-        public async Task GetTestResult_ReturnsStatus502BadGateway_WhenServiceReturnsUnsuccessful()
-        {
-            // Arrange
-            var testResult = new GetDetailedTestResult.Unsuccessful();
-
-            _mockPatientRecordService.Setup(x => x.GetDetailedTestResult(_userSession.GpUserSession, TestResultId))
-                .Returns(Task.FromResult((GetDetailedTestResult) testResult));
-
-            // Act
-            var result = await _systemUnderTest.GetTestResult(TestResultId);
-
-            // Assert
-            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
-            _mockPatientRecordService.Verify();
-            
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Error viewing test result: unsuccessful" ));
-        }
-        
     }
 }

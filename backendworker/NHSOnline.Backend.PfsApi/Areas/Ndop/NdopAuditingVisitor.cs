@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
             _logger = logger;
         }
         
-        public async Task Visit(GetNdopResult.SuccessfullyRetrieved result)
+        public async Task Visit(GetNdopResult.Success result)
         {
             try
             {
@@ -28,11 +28,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNdopResult.SuccessfullyRetrieved)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNdopResult.Success)}");
             }
         }
 
-        public async Task Visit(GetNdopResult.Unsuccessful result)
+        public async Task Visit(GetNdopResult.InternalServerError result)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Ndop
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNdopResult.Unsuccessful)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetNdopResult.InternalServerError)}");
             }
         }
     }

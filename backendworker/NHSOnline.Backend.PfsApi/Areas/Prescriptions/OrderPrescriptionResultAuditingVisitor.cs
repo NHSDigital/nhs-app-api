@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 {
-    public class CreatePrescriptionResultAuditingVisitor :  IPrescriptionResultVisitor<Task>
+    public class OrderPrescriptionResultAuditingVisitor :  IOrderPrescriptionResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
         private readonly ILogger<PrescriptionsController> _logger;
@@ -15,27 +15,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
         
         private const string AuditType = Constants.AuditingTitles.RepeatPrescriptionsOrderRepeatMedicationsResponse;
 
-        public CreatePrescriptionResultAuditingVisitor(IAuditor auditor, ILogger<PrescriptionsController> logger, string courseIds)
+        public OrderPrescriptionResultAuditingVisitor(IAuditor auditor, ILogger<PrescriptionsController> logger, string courseIds)
         {
             _auditor = auditor;
             _logger = logger;
             _courseIds = courseIds;
         }
 
-        public async Task Visit(PrescriptionResult.SuccessfulGet result)
-        {
-            try
-            {
-                await _auditor.Audit(AuditType, "Prescriptions successfully retrieved with course ids: {0}", _courseIds);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PrescriptionResult.SuccessfulGet)}");
-            }
-
-        }
-
-        public async Task Visit(PrescriptionResult.SuccessfulPost result)
+        public async Task Visit(OrderPrescriptionResult.Success result)
         {
             try
             {
@@ -43,11 +30,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PrescriptionResult.SuccessfulPost)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.Success)}");
             }
         }
 
-        public async Task Visit(PrescriptionResult.SupplierSystemUnavailable result)
+        public async Task Visit(OrderPrescriptionResult.BadGateway result)
         {
             try
             {
@@ -55,23 +42,23 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PrescriptionResult.SupplierSystemUnavailable)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.BadGateway)}");
             }
         }
 
-        public async Task Visit(PrescriptionResult.SupplierNotEnabled result)
+        public async Task Visit(OrderPrescriptionResult.Forbidden result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error creating prescription request: Supplier Not Enabled with course ids: {0}", _courseIds);
+                await _auditor.Audit(AuditType, "Error creating prescription request: Insufficient permissions with course ids: {0}", _courseIds);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PrescriptionResult.SupplierNotEnabled)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.Forbidden)}");
             }
         }
 
-        public async Task Visit(PrescriptionResult.InternalServerError result)
+        public async Task Visit(OrderPrescriptionResult.InternalServerError result)
         {
             try
             {
@@ -79,12 +66,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PrescriptionResult.InternalServerError)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.InternalServerError)}");
             }
 
         }
 
-        public async Task Visit(PrescriptionResult.BadRequest result)
+        public async Task Visit(OrderPrescriptionResult.BadRequest result)
         {
             try
             {
@@ -92,11 +79,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PrescriptionResult.BadRequest)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.BadRequest)}");
             }
         }
 
-        public async Task Visit(PrescriptionResult.CannotReorderPrescription result)
+        public async Task Visit(OrderPrescriptionResult.CannotReorderPrescription result)
         {
             try
             {
@@ -104,11 +91,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PrescriptionResult.CannotReorderPrescription)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.CannotReorderPrescription)}");
             }
         }
 
-        public async Task Visit(PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days result)
+        public async Task Visit(OrderPrescriptionResult.MedicationAlreadyOrderedWithinLast30Days result)
         {
             try
             {
@@ -116,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(PrescriptionResult.MedicationAlreadyOrderedWithinLast30Days)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(OrderPrescriptionResult.MedicationAlreadyOrderedWithinLast30Days)}");
             }
         }
     }

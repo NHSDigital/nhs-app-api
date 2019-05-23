@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {
                     _logger.LogError("Appointment Cancellation not enabled");
-                    return new AppointmentCancelResult.InsufficientPermissions();
+                    return new AppointmentCancelResult.Forbidden();
                 }
             
                 var cancelAppointmentRequest = new CancelAppointmentRequest
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             catch (HttpRequestException exception)
             {
                 _logger.LogError(exception, "Cancelling appointment failed.");
-                return new AppointmentCancelResult.SupplierSystemUnavailable();
+                return new AppointmentCancelResult.BadGateway();
             }
             finally
             {
@@ -59,11 +59,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
 
         private AppointmentCancelResult InterpretCancelAppointmentResponse(VisionPFSClient.VisionApiObjectResponse<CancelledAppointmentResponse> response)
         {
-            if (response.HasSuccessResponse) return new AppointmentCancelResult.SuccessfullyCancelled();
+            if (response.HasSuccessResponse) return new AppointmentCancelResult.Success();
 
             if (response.IsAccessDeniedError)
             {
-                return new AppointmentCancelResult.InsufficientPermissions();
+                return new AppointmentCancelResult.Forbidden();
             }
 
             if (response.IsAppointmentSlotNotBookedToCurrentUserError || response.IsAppointmentSlotNotFoundError)
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             _logger.LogError($"Call to VISION cancel appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
             _logger.LogVisionErrorResponse(response);
 
-            return new AppointmentCancelResult.SupplierSystemUnavailable();
+            return new AppointmentCancelResult.BadGateway();
         }
     }
 }

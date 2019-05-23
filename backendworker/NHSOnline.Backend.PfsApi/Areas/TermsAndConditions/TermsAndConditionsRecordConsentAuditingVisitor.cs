@@ -25,19 +25,19 @@ namespace NHSOnline.Backend.PfsApi.Areas.TermsAndConditions
             _isUpdatingConsent = isUpdatingConsent;
         }
         
-        public IActionResult Visit(TermsAndConditionsRecordConsentResult.InitialConsentRecorded consentRecorded)
+        public IActionResult Visit(TermsAndConditionsRecordConsentResult.InitialConsentRecorded result)
         {
             AuditConsent("Initial Consent Successfully recorded" );
             return null;
         }
         
-        public IActionResult Visit(TermsAndConditionsRecordConsentResult.UpdateConsentRecorded consentRecorded)
+        public IActionResult Visit(TermsAndConditionsRecordConsentResult.UpdateConsentRecorded result)
         {
             AuditConsent("Updated Consent Successfully recorded" );
             return null;
         }
         
-        public IActionResult Visit(TermsAndConditionsRecordConsentResult.FailureToRecordConsent failureToRecordConsent)
+        public IActionResult Visit(TermsAndConditionsRecordConsentResult.FailureToRecordConsent result)
         { 
             AuditConsent("Failed to record" );          
             return null;

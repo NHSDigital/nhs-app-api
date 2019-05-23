@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             try
             {
                 var appointmentsResponse = _appointmentsReplyMapper.Map(viewPastAppointmentsTask.Result.Body, viewUpcomingAppointmentsTask.Result.Body);
-                var result = new AppointmentsResult.SuccessfullyRetrieved(appointmentsResponse);
+                var result = new AppointmentsResult.Success(appointmentsResponse);
                 return Option.Some<AppointmentsResult>(result);
             }
             catch (Exception e)
@@ -53,10 +53,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             if (response.HasForbiddenResponse)
             {
                 _logger.LogTppResponseAccessIsForbidden();
-                return Option.Some<AppointmentsResult>(new AppointmentsResult.CannotViewAppointments());
+                return Option.Some<AppointmentsResult>(new AppointmentsResult.Forbidden());
             }
             _logger.LogTppUnknownError(response);
-            return Option.Some<AppointmentsResult>(new AppointmentsResult.SupplierSystemUnavailable());
+            return Option.Some<AppointmentsResult>(new AppointmentsResult.BadGateway());
         }
 
         private Option<AppointmentsResult> GetTaskCompletedUnsuccessfullyCase(Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> appointmentTask)
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 return Option.None<AppointmentsResult>();
             }
             _logger.LogError(message);
-            return Option.Some<AppointmentsResult>(new AppointmentsResult.SupplierSystemUnavailable());
+            return Option.Some<AppointmentsResult>(new AppointmentsResult.BadGateway());
         }
     }
 }

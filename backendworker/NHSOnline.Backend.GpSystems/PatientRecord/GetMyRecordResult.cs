@@ -6,11 +6,11 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
     {
         public abstract T Accept<T>(IMyRecordResultVisitor<T> visitor);
 
-        public class SuccessfullyRetrieved : GetMyRecordResult
+        public class Success : GetMyRecordResult
         {
             public MyRecordResponse Response { get; }
 
-            public SuccessfullyRetrieved(MyRecordResponse response)
+            public Success(MyRecordResponse response)
             {
                 Response = response;
             }
@@ -21,47 +21,7 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
             }
         }
 
-        public class Unsuccessful : GetMyRecordResult
-        {
-            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-        
-        public class SupplierBadData : GetMyRecordResult
-        {
-            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InvalidRequest : GetMyRecordResult
-        {
-            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class ErrorProcessingSecurityHeader : GetMyRecordResult
-        {
-            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InvalidUserCredentials : GetMyRecordResult
-        {
-            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class UnknownError : GetMyRecordResult
+        public class BadGateway : GetMyRecordResult
         {
             public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
             {

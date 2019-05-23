@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             _supplier = supplier;
         }
 
-        public async Task Visit(Im1ConnectionRegisterResult.SuccessfullyRegistered result)
+        public async Task Visit(Im1ConnectionRegisterResult.Success result)
         {
             try
             {
@@ -39,16 +39,11 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionRegisterResult.SuccessfullyRegistered)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(Im1ConnectionRegisterResult.Success)}");
             }
         }
 
         public Task Visit(Im1ConnectionRegisterResult.BadRequest result)
-        {
-            return Task.FromResult<object>(null);
-        }
-
-        public Task Visit(Im1ConnectionRegisterResult.InsufficientPermissions result)
         {
             return Task.FromResult<object>(null);
         }
@@ -63,7 +58,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return Task.FromResult<object>(null);
         }
 
-        public Task Visit(Im1ConnectionRegisterResult.SupplierSystemUnavailable result)
+        public Task Visit(Im1ConnectionRegisterResult.BadGateway result)
         {
             return Task.FromResult<object>(null);
         }

@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             catch (HttpRequestException exception)
             {
                 _logger.LogError(exception, "Cancelling appointment failed");
-                return new AppointmentCancelResult.SupplierSystemUnavailable();
+                return new AppointmentCancelResult.BadGateway();
             }
             finally
             {
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
         {
             if (response.HasSuccessResponse)
             {
-                return new AppointmentCancelResult.SuccessfullyCancelled();
+                return new AppointmentCancelResult.Success();
             }
 
             if (AppointmentIsNotAvailableForCancelling(response) ||
@@ -104,12 +104,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogEmisResponseIsForbidden();
                 _logger.LogEmisErrorResponse(response);
-                return new AppointmentCancelResult.InsufficientPermissions();
+                return new AppointmentCancelResult.Forbidden();
             }
 
             _logger.LogEmisUnknownError(response);
             _logger.LogEmisErrorResponse(response);
-            return new AppointmentCancelResult.SupplierSystemUnavailable();
+            return new AppointmentCancelResult.BadGateway();
         }
 
 

@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _appointmentsResponse = _fixture.Create<AppointmentsResponse>();
-            var result = new AppointmentsResult.SuccessfullyRetrieved(_appointmentsResponse);
+            var result = new AppointmentsResult.Success(_appointmentsResponse);
 
             _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
                 .Returns(Task.FromResult((AppointmentsResult)result));
@@ -90,7 +90,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         {
             // Arrange
             var appointmentsResponse = _fixture.Create<AppointmentsResponse>();
-            var successResponse = new AppointmentsResult.SuccessfullyRetrieved(appointmentsResponse);
+            var successResponse = new AppointmentsResult.Success(appointmentsResponse);
 
             _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
                 .Returns(Task.FromResult((AppointmentsResult) successResponse));
@@ -110,11 +110,11 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadGateway_WhenServiceReturnsSupplierSystemUnavailable()
+        public async Task Get_ReturnsBadGateway_WhenServiceReturnsBadGateway()
         {
             // Arrange
             _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession.GpUserSession))
-                .Returns(Task.FromResult((AppointmentsResult) new AppointmentsResult.SupplierSystemUnavailable()));
+                .Returns(Task.FromResult((AppointmentsResult) new AppointmentsResult.BadGateway()));
 
             // Act
             var result = await _systemUnderTest.Get();

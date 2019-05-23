@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             catch (HttpRequestException exception)
             {
                 _logger.LogError(exception, "Cancelling appointment failed.");
-                return new AppointmentCancelResult.SupplierSystemUnavailable();
+                return new AppointmentCancelResult.BadGateway();
             }
             finally
             {
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
         {
             if (response.HasSuccessResponse)
             {
-                return new AppointmentCancelResult.SuccessfullyCancelled();
+                return new AppointmentCancelResult.Success();
             }
 
             if (response.ErrorResponse != null)
@@ -60,12 +60,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                         return new AppointmentCancelResult.TooLateToCancel();
                     case TppApiErrorCodes.NoAccess:
                         _logger.LogTppResponseAccessIsForbidden();
-                        return new AppointmentCancelResult.InsufficientPermissions();
+                        return new AppointmentCancelResult.Forbidden();
                 }
             }
             
             _logger.LogTppUnknownError(response);
-            return new AppointmentCancelResult.SupplierSystemUnavailable();
+            return new AppointmentCancelResult.BadGateway();
         }
     }
 }

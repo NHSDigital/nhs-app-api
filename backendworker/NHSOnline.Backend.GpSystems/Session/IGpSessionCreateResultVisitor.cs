@@ -2,20 +2,14 @@
 {
     public interface IGpSessionCreateResultVisitor<out T>
     {
-        T Visit(GpSessionCreateResult.SuccessfullyCreated successfullyCreated);
+        T Visit(GpSessionCreateResult.Success result);
 
-        T Visit(GpSessionCreateResult.InvalidIm1ConnectionToken invalidIm1ConnectionToken);
+        T Visit(GpSessionCreateResult.Forbidden result);
 
-        T Visit(GpSessionCreateResult.SupplierSystemUnavailable supplierSystemUnavailable);
+        T Visit(GpSessionCreateResult.BadGateway result);
 
-        T Visit(GpSessionCreateResult.SupplierSystemBadResponse supplierSystemBadResponse);
+        T Visit(GpSessionCreateResult.InternalServerError result);
 
-        T Visit(GpSessionCreateResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader);
-
-        T Visit(GpSessionCreateResult.InvalidUserCredentials invalidUserCredentials);
-        
-        T Visit(GpSessionCreateResult.InvalidRequest invalidRequest);
-
-        T Visit(GpSessionCreateResult.UnknownError unknownError);
+        T Visit(GpSessionCreateResult.BadRequest result);
     }
 }

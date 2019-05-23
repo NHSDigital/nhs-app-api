@@ -5,16 +5,16 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 {
     public class SessionLogoffResultVisitor : ISessionLogoffResultVisitor<SessionLogoffResultVisitorOutput>
     {
-        public SessionLogoffResultVisitorOutput Visit(SessionLogoffResult.SuccessfullyDeleted successfullyDeleted)
+        public SessionLogoffResultVisitorOutput Visit(SessionLogoffResult.Success result)
         {
             return new SessionLogoffResultVisitorOutput
             {
                 SessionWasDeleted = true,
-                GpUserSession = successfullyDeleted.GpUserSession,
+                GpUserSession = result.GpUserSession,
             };
         } 
 
-        public SessionLogoffResultVisitorOutput Visit(SessionLogoffResult.NotAuthenticated notAuthenticated)
+        public SessionLogoffResultVisitorOutput Visit(SessionLogoffResult.Forbidden result)
         {
             return new SessionLogoffResultVisitorOutput
             {
@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             };
         }
 
-        public SessionLogoffResultVisitorOutput Visit(SessionLogoffResult.SupplierSystemUnavailable supplierSystemUnavailable)
+        public SessionLogoffResultVisitorOutput Visit(SessionLogoffResult.BadGateway result)
         {
             return new SessionLogoffResultVisitorOutput
             {

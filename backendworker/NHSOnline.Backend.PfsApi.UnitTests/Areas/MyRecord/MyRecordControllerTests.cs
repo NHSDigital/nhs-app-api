@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var mockGpSystem = new Mock<IGpSystem>();
             var patientRecordService = new Mock<IPatientRecordService>();
             var allergyRequestResponse = new MyRecordResponse();
-            var getAllergiesResponse = new GetMyRecordResult.SuccessfullyRetrieved(allergyRequestResponse);
+            var getAllergiesResponse = new GetMyRecordResult.Success(allergyRequestResponse);
             
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
@@ -75,7 +75,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession.GpUserSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
+            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
         
         [TestMethod]
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var mockGpSystem = new Mock<IGpSystem>();
             var patientRecordService = new Mock<IPatientRecordService>();
             var medicationRequestResponse = new MyRecordResponse();
-            var getMedicationsResponse = new GetMyRecordResult.SuccessfullyRetrieved(medicationRequestResponse);
+            var getMedicationsResponse = new GetMyRecordResult.Success(medicationRequestResponse);
             
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession.GpUserSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
+            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
         
         [TestMethod]
@@ -112,7 +112,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             var mockGpSystem = new Mock<IGpSystem>();
             var patientRecordService = new Mock<IPatientRecordService>();
             var problemRequestResponse = new MyRecordResponse();
-            var getProblemsRequestResponse = new GetMyRecordResult.SuccessfullyRetrieved(problemRequestResponse);
+            var getProblemsRequestResponse = new GetMyRecordResult.Success(problemRequestResponse);
             
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
@@ -131,7 +131,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.MyRecord
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession.GpUserSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
+            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.Success>();
         }
     }
 }

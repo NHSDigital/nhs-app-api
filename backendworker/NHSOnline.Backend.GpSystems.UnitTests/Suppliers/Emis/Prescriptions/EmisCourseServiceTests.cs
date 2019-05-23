@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
+        public async Task Get_ReturnsSuccessResponseForHappyPath_WhenSuccessfulResponseFromEmis()
         {
             // Arrange
             var coursesResponse = _fixture.Create<CoursesGetResponse>();
@@ -76,8 +76,8 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -138,10 +138,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
 
-            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved) result;
+            var getCoursesResult = (GetCoursesResult.Success) result;
             getCoursesResult.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(1);
@@ -196,10 +196,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
 
-            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved) result;
+            var getCoursesResult = (GetCoursesResult.Success) result;
             getCoursesResult.Response.Should().Be(response);
             capturedItemToMap.Courses.Should().HaveCount(expectedNumberOfCourses);
         }
@@ -264,10 +264,10 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_emisUserSession.UserPatientLinkToken, _emisUserSession.SessionId,
                 _emisUserSession.EndUserSessionId));
-            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetCoursesResult.Success>();
+            ((GetCoursesResult.Success) result).Response.Should().NotBeNull();
 
-            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved) result;
+            var getCoursesResult = (GetCoursesResult.Success) result;
             getCoursesResult.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(4);
@@ -295,7 +295,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
         }
 
         [TestMethod]
@@ -315,7 +315,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GetCoursesResult.BadGateway>();
             _emisClient.Verify();
         }
 
@@ -358,7 +358,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Prescriptions
             var result = await _systemUnderTest.GetCourses(_emisUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();
+            result.Should().BeAssignableTo<GetCoursesResult.Forbidden>();
         }
     }
 }

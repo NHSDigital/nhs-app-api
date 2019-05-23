@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
                             $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(CourseListResponse)}");
                         
                         var mapppedPrescriptionList = _tppCourseMapper.Map(medicationListFiltered);
-                        return new GetCoursesResult.SuccessfullyRetrieved(mapppedPrescriptionList);
+                        return new GetCoursesResult.Success(mapppedPrescriptionList);
                     }
                     catch (Exception e)
                     {
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving repeat prescriptions");
-                return new GetCoursesResult.SupplierSystemUnavailable();
+                return new GetCoursesResult.BadGateway();
             }
             finally
             {
@@ -103,12 +103,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Prescriptions
             {
                 _logger.LogError("The tpp prescriptions service is not enabled");
 
-                return new GetCoursesResult.SupplierNotEnabled();
+                return new GetCoursesResult.Forbidden();
     }
 
             _logger.LogError("Tpp system is currently unavailable");
 
-            return new GetCoursesResult.SupplierSystemUnavailable();
+            return new GetCoursesResult.BadGateway();
         }
     }
 }

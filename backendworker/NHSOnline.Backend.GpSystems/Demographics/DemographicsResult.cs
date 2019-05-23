@@ -8,11 +8,11 @@
         
         public abstract T Accept<T>(IDemographicsResultVisitor<T> visitor);
         
-        public class SuccessfullyRetrieved : DemographicsResult
+        public class Success : DemographicsResult
         {
             public DemographicsResponse Response { get; }
 
-            public SuccessfullyRetrieved(DemographicsResponse response)
+            public Success(DemographicsResponse response)
             {
                 Response = response;
             }
@@ -23,7 +23,7 @@
             }
         }
         
-        public class SupplierSystemUnavailable : DemographicsResult
+        public class BadGateway : DemographicsResult
         {
             public override T Accept<T>(IDemographicsResultVisitor<T> visitor)
             {
@@ -31,15 +31,7 @@
             }
         }
         
-        public class UserHasNoAccess : DemographicsResult
-        {
-            public override T Accept<T>(IDemographicsResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-        
-        public class Unsuccessful : DemographicsResult
+        public class Forbidden : DemographicsResult
         {
             public override T Accept<T>(IDemographicsResultVisitor<T> visitor)
             {

@@ -6,42 +6,22 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
     public class MyRecordSectionResultVisitor : IMyRecordSectionResultVisitor<IActionResult>
     {
-        public IActionResult Visit(GetMyRecordSectionResult.SuccessfullyRetrieved result)
+        public IActionResult Visit(GetMyRecordSectionResult.Success result)
         {
             return new OkObjectResult(result);
         }
 
-        public IActionResult Visit(GetMyRecordSectionResult.SupplierBadData result)
+        public IActionResult Visit(GetMyRecordSectionResult.BadGateway result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
 
-        public IActionResult Visit(GetMyRecordSectionResult.Unsuccessful result)
-        {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
-        }
-
-        public IActionResult Visit(GetMyRecordSectionResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
-        {
-            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-        }
-
-        public IActionResult Visit(GetMyRecordSectionResult.InvalidUserCredentials invalidUserCredentials)
-        {
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
-        }
-
-        public IActionResult Visit(GetMyRecordSectionResult.InvalidRequest invalidRequest)
+        public IActionResult Visit(GetMyRecordSectionResult.BadRequest result)
         {
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
 
-        public IActionResult Visit(GetMyRecordSectionResult.UnknownError unknownError)
-        {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
-        }
-
-        public IActionResult Visit(GetMyRecordSectionResult.InternalServerError internalServerError)
+        public IActionResult Visit(GetMyRecordSectionResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }

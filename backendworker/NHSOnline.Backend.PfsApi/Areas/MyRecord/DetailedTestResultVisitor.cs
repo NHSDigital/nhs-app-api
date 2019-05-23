@@ -6,17 +6,12 @@ namespace NHSOnline.Backend.PfsApi.Areas.MyRecord
 {
     internal class DetailedTestResultVisitor : IDetailedTestResultVisitor<IActionResult>
     {
-        public IActionResult Visit(GetDetailedTestResult.SuccessfullyRetrieved result)
+        public IActionResult Visit(GetDetailedTestResult.Success result)
         {
             return new OkObjectResult(result);
         }
 
-        public IActionResult Visit(GetDetailedTestResult.SupplierBadData result)
-        {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
-        }
-
-        public IActionResult Visit(GetDetailedTestResult.Unsuccessful result)
+        public IActionResult Visit(GetDetailedTestResult.BadGateway result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }

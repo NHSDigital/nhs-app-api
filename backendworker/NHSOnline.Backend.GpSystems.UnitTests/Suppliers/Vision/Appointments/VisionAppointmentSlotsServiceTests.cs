@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
         
         [TestMethod]
-        public async Task GetSlots_HappyPath_ReturnsSuccessfullyRetrievedResponse()
+        public async Task GetSlots_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
             var systemUnderTest = BuildSystemUnderTest();
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
 
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<AppointmentSlotsResult.Success>().Subject.Response;
 
             response.Slots.Count().Should().Be(_visionClientSlotsResponse.ServiceContent.Appointments.Slots.Count);
             _mockVisionClient.VerifyAll();
@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
             
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<AppointmentSlotsResult.Success>().Subject.Response;
 
             response.Slots.Count().Should().Be(3);
             _mockVisionClient.VerifyAll();
@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
             
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<AppointmentSlotsResult.Success>().Subject.Response;
 
             response.Slots.Count().Should().Be(3);
             _mockVisionClient.VerifyAll();
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
         }
 
         [TestMethod]
-        public async Task GetSlots_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsCannotBookAppointments()
+        public async Task GetSlots_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsForbidden()
         {
             // Arrange
             _visionUserSession.IsAppointmentsEnabled = false;
@@ -157,11 +157,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
             
             // Assert
-            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
         
         [TestMethod]
-        public async Task GetSlots_VisionClientReturnsAccessDenied_ReturnsCannotBookAppointments()
+        public async Task GetSlots_VisionClientReturnsAccessDenied_ReturnsForbidden()
         {
             // Arrange
             var response = VisionApiObjectResponseBuilder
@@ -174,11 +174,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
 
             // Assert
             _mockVisionClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
         
         [TestMethod]
-        public async Task GetSlots_VisionClientThrows_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_VisionClientThrows_ReturnsBadGateway()
         {
             // Arrange
             _mockVisionClient.Setup(x => x.GetAvailableAppointments(
@@ -193,7 +193,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Appointments
             var result = await systemUnderTest.GetSlots(_visionUserSession, _dateRange);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
         
         [TestMethod]

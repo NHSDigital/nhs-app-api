@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
                 if (!visionUserSession.IsAppointmentsEnabled)
                 {
                     _logger.LogError("Appointments not enabled");
-                    return new AppointmentBookResult.InsufficientPermissions();
+                    return new AppointmentBookResult.Forbidden();
                 }
 
                 if (ReasonWillNotBeAccepted(visionUserSession, request))
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             catch (HttpRequestException exception)
             {
                 _logger.LogError(exception, "Booking appointment slots failed.");
-                return new AppointmentBookResult.SupplierSystemUnavailable();
+                return new AppointmentBookResult.BadGateway();
             }
             finally
             {
@@ -59,11 +59,11 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
         
         private AppointmentBookResult InterpretAppointmentsPostResponse(VisionPFSClient.VisionApiObjectResponse<BookAppointmentResponse> response)
         {
-            if (response.HasSuccessResponse) return new AppointmentBookResult.SuccessfullyBooked();
+            if (response.HasSuccessResponse) return new AppointmentBookResult.Success();
 
             if (response.IsAccessDeniedError)
             {
-                return new AppointmentBookResult.InsufficientPermissions();
+                return new AppointmentBookResult.Forbidden();
             }
             
             if (response.IsAppointmentSlotAlreadyBookedError || response.IsAppointmentSlotNotFoundError)
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Appointments
             _logger.LogError($"Call to VISION book appointment endpoint returned an unanticipated error with status code: '{response.StatusCode}'. \n{response.ErrorForLogging}");
             _logger.LogVisionErrorResponse(response);
 
-            return new AppointmentBookResult.SupplierSystemUnavailable();
+            return new AppointmentBookResult.BadGateway();
         }
 
         private bool ReasonWillNotBeAccepted(VisionUserSession visionUserSession, AppointmentBookRequest request)

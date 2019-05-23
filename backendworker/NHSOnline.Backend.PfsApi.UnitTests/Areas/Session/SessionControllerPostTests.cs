@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
             _emisUserSession.NhsNumber = _userProfile.NhsNumber;
 
             _sessionCreateResult =
-                new GpSessionCreateResult.SuccessfullyCreated(_name, _emisUserSession);
+                new GpSessionCreateResult.Success(_name, _emisUserSession);
 
             _citizenIdUserSession = new CitizenIdUserSession { AccessToken = _userProfile.AccessToken };
 
@@ -307,7 +307,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                     Constants.AuditingTitles.SessionCreateResponse, "Creating the session failed with status code: '403'", It.IsAny<object[]>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
-            var sessionCreateResult = new GpSessionCreateResult.InvalidIm1ConnectionToken();
+            var sessionCreateResult = new GpSessionCreateResult.Forbidden();
             _mockSessionService
                 .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
                 .ReturnsAsync(sessionCreateResult)
@@ -339,7 +339,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Session
                 .Returns(Task.CompletedTask)
                 .Verifiable();
             
-            var sessionCreateResult = new GpSessionCreateResult.SupplierSystemUnavailable();
+            var sessionCreateResult = new GpSessionCreateResult.BadGateway();
             _mockSessionService
                 .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
                 .ReturnsAsync(sessionCreateResult)

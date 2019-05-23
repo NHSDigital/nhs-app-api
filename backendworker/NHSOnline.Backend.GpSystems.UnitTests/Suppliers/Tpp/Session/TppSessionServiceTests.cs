@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
         
             // Assert
-            var created = (GpSessionCreateResult.SuccessfullyCreated) result;
+            var created = (GpSessionCreateResult.Success) result;
             created.Name.Should().Be(expectedName);
         }
     
@@ -188,7 +188,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
         
             // Assert
-            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.SuccessfullyCreated>().Subject;
+            var createdResult = result.Should().BeAssignableTo<GpSessionCreateResult.Success>().Subject;
             var tppUserSession = createdResult.UserSession.Should().BeAssignableTo<TppUserSession>().Subject;
             
             tppUserSession.Suid.Should().Be(expectedSessionId);
@@ -199,7 +199,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async Task Create_WhenCalledWithErrorResponse_ReturnsSupplierSystemUnavailable()
+        public async Task Create_WhenCalledWithErrorResponse_ReturnsBadGateway()
         {
             // Arrange 
             var reply = CreateReply();
@@ -215,11 +215,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
             
             // Assert 
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Create_WhenCalledWithHttpError_ReturnsSupplierSystemUnavailable()
+        public async Task Create_WhenCalledWithHttpError_ReturnsBadGateway()
         {
             // Arrange 
             var reply = CreateReply();
@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234", _nhsNumber);
 
             // Assert 
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]
@@ -260,7 +260,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode, _nhsNumber);
 
             // Assert 
-            result.Should().BeAssignableTo<GpSessionCreateResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<GpSessionCreateResult.BadGateway>();
         }
 
         [TestMethod]
@@ -279,11 +279,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Logoff(_tppUserSession);
         
             // Assert
-            result.Should().BeOfType<SessionLogoffResult.SuccessfullyDeleted>();
+            result.Should().BeOfType<SessionLogoffResult.Success>();
         }
 
         [TestMethod]
-        public async Task Logoff_WhenCalledWithErrorResponse_ReturnsSupplierSystemUnavailable()
+        public async Task Logoff_WhenCalledWithErrorResponse_ReturnsBadGateway()
         {
             // Arrange 
             var reply = LogoffReply();
@@ -299,11 +299,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Logoff(_tppUserSession);
             
             // Assert 
-            result.Should().BeAssignableTo<SessionLogoffResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<SessionLogoffResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Logoff_WhenCalledWithHttpError_ReturnsSupplierSystemUnavailable()
+        public async Task Logoff_WhenCalledWithHttpError_ReturnsBadGateway()
         {
             // Arrange
             var reply = LogoffReply();
@@ -320,7 +320,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Logoff(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<SessionLogoffResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<SessionLogoffResult.BadGateway>();
         }
 
         [TestMethod]
@@ -337,7 +337,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Logoff(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<SessionLogoffResult.NotAuthenticated>();
+            result.Should().BeAssignableTo<SessionLogoffResult.Forbidden>();
         }
         
         private static string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>

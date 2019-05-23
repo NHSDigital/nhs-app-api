@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
         }
 
         [TestMethod]
-        public async Task GetSlots_TppListSlotsPostThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_TppListSlotsPostThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
             _mockTppClient
@@ -75,11 +75,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
             
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task GetSlots_TppListSlotsPostUnsuccessful_ReturnsSupplierSystemUnavailable()
+        public async Task GetSlots_TppListSlotsPostUnsuccessful_ReturnsBadGateway()
         {
             // Arrange
             var unsuccessfulResponse = _fixture
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.BadGateway>();
         }
 
         [TestMethod]
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
         [TestMethod]
@@ -138,11 +138,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
         [TestMethod]
-        public async Task GetSlots_TppListSlotsPostForbidden_ReturnsCannotBookAppointments()
+        public async Task GetSlots_TppListSlotsPostForbidden_ReturnsForbidden()
         {
             // Arrange
             var forbiddenResponse = _fixture
@@ -161,7 +161,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Forbidden>();
         }
 
         [TestMethod]
@@ -205,7 +205,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Appointments
 
             // Assert
             _mockTppClient.Verify();
-            result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.Success>();
         }
 
         private void MockTppClientListSlotsPost(TppClient.TppApiObjectResponse<ListSlotsReply> response)

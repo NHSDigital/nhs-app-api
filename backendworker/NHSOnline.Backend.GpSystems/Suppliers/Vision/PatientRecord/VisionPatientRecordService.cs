@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                     var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations, checkedProblems, checkedTestResults, checkedDiagnosis, checkedExaminations, checkedProcedures);
                     response.Supplier = visionUserSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     
-                    return new GetMyRecordResult.SuccessfullyRetrieved(response);
+                    return new GetMyRecordResult.Success(response);
                 }
                 catch (Exception e)
                 {
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving patient selected information for Vision");
-                return new GetMyRecordResult.Unsuccessful();
+                return new GetMyRecordResult.BadGateway();
             }
             finally
             {
@@ -129,7 +129,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                 return await GetProcedureResults(visionUserSession);
             }
             
-            return new GetMyRecordSectionResult.InvalidRequest();
+            return new GetMyRecordSectionResult.BadRequest();
         }
 
         private async Task<GetMyRecordSectionResult> GetTestResults(VisionUserSession visionUserSession)
@@ -190,7 +190,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
                         new VisionTaskChecker<T>(_logger, mapper, visionMapperType).Check(sectionTask);
                     var response = _visionMyRecordMapper.MapSection(checkedSection, viewName);
 
-                    return new GetMyRecordSectionResult.SuccessfullyRetrieved(response);
+                    return new GetMyRecordSectionResult.Success(response);
                 }
                 catch (Exception e)
                 {
@@ -201,7 +201,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.PatientRecord
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, $"Unsuccessful request retrieving {viewName} for Vision");
-                return new GetMyRecordSectionResult.Unsuccessful();
+                return new GetMyRecordSectionResult.BadGateway();
             }
             finally
             {

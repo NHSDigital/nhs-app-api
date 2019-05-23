@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
             var result = await _systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             // Assert
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>().Subject;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.Success>().Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
             successResult.Response.NhsNumbers.Should().BeEmpty();
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Im1Connectio
             var result = await _systemUnderTest.Register(request);
 
             // Assert
-            var successResult = result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>().Subject;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionRegisterResult.Success>().Subject;
             successResult.Response.NhsNumbers.Should().BeEmpty();
             successResult.Response.ConnectionToken.Should().Be("{}");
         }

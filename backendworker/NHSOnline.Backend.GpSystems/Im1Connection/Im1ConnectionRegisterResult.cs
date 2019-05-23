@@ -10,23 +10,15 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
 
         public abstract T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor);
 
-        public class SuccessfullyRegistered : Im1ConnectionRegisterResult
+        public class Success : Im1ConnectionRegisterResult
         {
             public PatientIm1ConnectionResponse Response { get; }
 
-            public SuccessfullyRegistered(PatientIm1ConnectionResponse response)
+            public Success(PatientIm1ConnectionResponse response)
             {
                 Response = response;
             }
 
-            public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
-
-        public class InsufficientPermissions : Im1ConnectionRegisterResult
-        {
             public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
@@ -49,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Im1Connection
             }
         }
 
-        public class SupplierSystemUnavailable : Im1ConnectionRegisterResult
+        public class BadGateway : Im1ConnectionRegisterResult
         {
             public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
             {

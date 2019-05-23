@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_HappyPath_ReturnsSuccessfullyRetrievedResponse()
+        public async Task GetAppointments_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
 
@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
-            var response = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
+            var response = result.Should().BeAssignableTo<AppointmentsResult.Success>().Subject.Response;
             response.Should().BeEquivalentTo(_mappedResponse);
 
             _mockEmisClient.VerifyAll();
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_EmisClientThrows_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_EmisClientThrows_ReturnsBadGateway()
         {
             // Arrange
             _mockEmisClient.Setup(x => x.AppointmentsGet(
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
 
         [TestMethod]
@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task GetAppointments_EmisClientReturnsForbiddenCode_ReturnsCannotViewAppointments()
+        public async Task GetAppointments_EmisClientReturnsForbiddenCode_ReturnsForbidden()
         {
             // Arrange
             var emisResponse = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden);
@@ -111,11 +111,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
         }
 
         [TestMethod]
-        public async Task GetAppointments_EmisClientReturnsForbidden_ReturnsCannotViewAppointments()
+        public async Task GetAppointments_EmisClientReturnsForbidden_ReturnsForbidden()
         {
             // Arrange
             var errorResponse = _fixture.Create<StandardErrorResponse>();
@@ -130,12 +130,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
 
         }
 
         [TestMethod]
-        public async Task GetAppointments_EmisClientReturnsInternalServerErrorWithForbiddenMessage_ReturnsCannotViewAppointments()
+        public async Task GetAppointments_EmisClientReturnsInternalServerErrorWithForbiddenMessage_ReturnsForbidden()
         {
             // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
@@ -152,12 +152,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+            result.Should().BeAssignableTo<AppointmentsResult.Forbidden>();
 
         }
 
         [TestMethod]
-        public async Task GetAppointments_EmisClientReturnsUnknownError_ReturnsSupplierSystemUnavailable()
+        public async Task GetAppointments_EmisClientReturnsUnknownError_ReturnsBadGateway()
         {
             // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
             var result = await _systemUnderTest.GetAppointments(_emisUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentsResult.BadGateway>();
         }
 
         private void MockEmisClientAppointmentsGetMethod(

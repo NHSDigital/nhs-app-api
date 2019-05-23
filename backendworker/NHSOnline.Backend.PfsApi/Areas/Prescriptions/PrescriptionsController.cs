@@ -62,14 +62,14 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             _logger.LogInformation($"Calling prescription service to get prescriptions");
             var result = await prescriptionService.GetPrescriptions(userSession.GpUserSession, fromDate, DateTimeOffset.Now);
             
-            await result.Accept(new GetPrescriptionResultAuditingVisitor(_auditor, _logger));
-            return result.Accept(new PrescriptionResultVisitor());
+            await result.Accept(new GetPrescriptionsResultAuditingVisitor(_auditor, _logger));
+            return result.Accept(new GetPrescriptionsResultVisitor());
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            PrescriptionResult result;
+            OrderPrescriptionResult result;
             UserSession userSession = HttpContext.GetUserSession();
 
             var gpSystem = _gpSystemFactory
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             if (!prescriptionRequestValidationService.IsPostValid(repeatPrescriptionRequest))
             {
                 _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");
-                result = new PrescriptionResult.BadRequest();
+                result = new OrderPrescriptionResult.BadRequest();
             }
             else
             {
@@ -96,8 +96,8 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
                 result = await prescriptionService.OrderPrescription(userSession.GpUserSession, repeatPrescriptionRequest);      
             }
 
-            await result.Accept(new CreatePrescriptionResultAuditingVisitor(_auditor, _logger, courseIds));
-            return result.Accept(new PrescriptionResultVisitor());
+            await result.Accept(new OrderPrescriptionResultAuditingVisitor(_auditor, _logger, courseIds));
+            return result.Accept(new OrderPrescriptionResultVisitor());
         }
 
         private DateTimeOffset GetDefaultFromDate()

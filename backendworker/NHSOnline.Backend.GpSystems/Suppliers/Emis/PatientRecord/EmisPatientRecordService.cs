@@ -90,17 +90,17 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Emis.PatientRecord
 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 
-                return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);
+                return new GetMyRecordResult.Success(myRecordResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving my record");
-                return new GetMyRecordResult.Unsuccessful();
+                return new GetMyRecordResult.BadGateway();
             }
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "My record retrieval return null body");
-                return new GetMyRecordResult.SupplierBadData();
+                return new GetMyRecordResult.BadGateway();
             }
             finally
             {

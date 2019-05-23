@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             _visionPrescriptionMapper = visionPrescriptionMapper;
         }
 
-        public async Task<PrescriptionResult> GetPrescriptions(
+        public async Task<GetPrescriptionsResult> GetPrescriptions(
             GpUserSession gpUserSession,
             DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {
                 _logger.LogError("The Vision repeat prescriptions service is not enabled");
-                return new PrescriptionResult.SupplierNotEnabled();
+                return new GetPrescriptionsResult.Forbidden();
             }
 
             try
@@ -84,23 +84,23 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
 
-                        return new PrescriptionResult.SuccessfulGet(mappedPrescriptionList);
+                        return new GetPrescriptionsResult.Success(mappedPrescriptionList);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Something went wrong building the Prescription History response");
-                        return new PrescriptionResult.InternalServerError();
+                        return new GetPrescriptionsResult.InternalServerError();
                     }
                 }
                 
                 _logger.LogError($"Vision system encountered an error: { prescriptionsResponse.ErrorForLogging }");
                 _logger.LogVisionErrorResponse(prescriptionsResponse);
-                return new PrescriptionResult.SupplierSystemUnavailable();
+                return new GetPrescriptionsResult.BadGateway();
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, $"Unsuccessful request retrieving prescriptions");
-                return new PrescriptionResult.SupplierSystemUnavailable();
+                return new GetPrescriptionsResult.BadGateway();
             }
             finally
             {
@@ -108,21 +108,21 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             }
         }
 
-        public async Task<PrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<OrderPrescriptionResult> OrderPrescription(GpUserSession gpUserSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             var visionUserSession = (VisionUserSession) gpUserSession;
 
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {
                 _logger.LogError("The Vision repeat prescriptions service is not enabled");
-                return new PrescriptionResult.SupplierNotEnabled();
+                return new OrderPrescriptionResult.Forbidden();
             }
 
             if (!visionUserSession.AllowFreeTextPrescriptions && repeatPrescriptionRequest.SpecialRequest != null)
             {
                 _logger.LogError($"User tried to submit prescription with { nameof(repeatPrescriptionRequest.SpecialRequest) } not null. " +
                     $"Stopped because Vision configuration for { nameof(visionUserSession.AllowFreeTextPrescriptions) } currently set to { visionUserSession.AllowFreeTextPrescriptions }");
-                return new PrescriptionResult.BadRequest();
+                return new OrderPrescriptionResult.BadRequest();
             }
 
             var postRequest = new OrderNewPrescriptionRequest
@@ -141,7 +141,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 if (response.HasErrorResponse)
                 {
                     _logger.LogError($"Vision response does not indicate a successful order: { response.ErrorForLogging }");
-                    return new PrescriptionResult.SupplierSystemUnavailable();
+                    return new OrderPrescriptionResult.BadGateway();
                 }
 
                 if (!string.Equals(
@@ -154,16 +154,16 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                         $"expected: { OrderNewPrescriptionResponse.OkResponseText }, " +
                         $"actual: { response.RawResponse.Body.VisionResponse.ServiceContent.Result }");
                     _logger.LogVisionErrorResponse(response);
-                    return new PrescriptionResult.SupplierSystemUnavailable();
+                    return new OrderPrescriptionResult.BadGateway();
                 }
                 
                 _logger.LogDebug("Vision prescription order placed successfully");
-                return new PrescriptionResult.SuccessfulPost();
+                return new OrderPrescriptionResult.Success();
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError($"Repeat prescription order failed with message { e.Message }");
-                return new PrescriptionResult.SupplierSystemUnavailable();
+                return new OrderPrescriptionResult.BadGateway();
             }
         }
 

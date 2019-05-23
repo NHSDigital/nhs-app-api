@@ -52,8 +52,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
 
                 var response = _appointmentSlotsMapper.Map(slotTask.Result.Body, messages);
                 
-                var result =
-                    new AppointmentSlotsResult.SuccessfullyRetrieved(response);
+                var result = new AppointmentSlotsResult.Success(response);
                 
                 return Option.Some<AppointmentSlotsResult>(result);
             }
@@ -78,10 +77,10 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             if (response.HasForbiddenResponse)
             {
                 _logger.LogTppResponseAccessIsForbidden();
-                return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.CannotBookAppointments());
+                return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.Forbidden());
             }
             _logger.LogTppUnknownError(response);
-            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.SupplierSystemUnavailable());
+            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.BadGateway());
         }
 
         private Option<AppointmentSlotsResult> GetSlotsTaskCompletedUnsuccessfullyCase(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask)
@@ -99,7 +98,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                 return Option.None<AppointmentSlotsResult>();
             }
             _logger.LogError(message);
-            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.SupplierSystemUnavailable());
+            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.BadGateway());
         }
     }
 }

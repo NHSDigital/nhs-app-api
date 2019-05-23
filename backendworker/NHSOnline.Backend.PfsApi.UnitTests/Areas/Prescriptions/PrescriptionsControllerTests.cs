@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 },
             };
 
-            var getPrescriptionsResult = new PrescriptionResult.SuccessfulGet(prescriptionRequestsGetResponse);
+            var getPrescriptionsResult = new GetPrescriptionsResult.Success(prescriptionRequestsGetResponse);
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
-            prescriptionService.Setup(x => x.GetPrescriptions(_userSession.GpUserSession, date, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((PrescriptionResult)getPrescriptionsResult));
+            prescriptionService.Setup(x => x.GetPrescriptions(_userSession.GpUserSession, date, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((GetPrescriptionsResult)getPrescriptionsResult));
 
             _prescriptionRequestValidationService
                 .Setup(x => x.IsGetValid(date, It.IsAny<DateTimeOffset>()))
@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 },
             };
 
-            var getPrescriptionsResult = new PrescriptionResult.SuccessfulGet(prescriptionRequestsGetResponse);
+            var getPrescriptionsResult = new GetPrescriptionsResult.Success(prescriptionRequestsGetResponse);
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
@@ -185,7 +185,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
 
             DateTimeOffset? fromDateGenerated = null;
             prescriptionService.Setup(x => x.GetPrescriptions(_userSession.GpUserSession, It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
-                .Returns(Task.FromResult((PrescriptionResult)getPrescriptionsResult))
+                .Returns(Task.FromResult((GetPrescriptionsResult)getPrescriptionsResult))
                 .Callback((GpUserSession s, DateTimeOffset? fd, DateTimeOffset? td) => fromDateGenerated = fd);
 
             _prescriptionRequestValidationService
@@ -227,7 +227,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var mockGpSystem = new Mock<IGpSystem>();
             var prescriptionService = new Mock<IPrescriptionService>();
 
-            var postPrescriptionResult = new PrescriptionResult.SuccessfulPost();
+            var postPrescriptionResult = new OrderPrescriptionResult.Success();
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
@@ -240,7 +240,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
                 .Returns(prescriptionService.Object);
 
             prescriptionService.Setup(x => x.OrderPrescription(_userSession.GpUserSession, It.IsAny<RepeatPrescriptionRequest>()))
-                .Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
+                .Returns(Task.FromResult((OrderPrescriptionResult)postPrescriptionResult));
             
             _prescriptionRequestValidationService
                 .Setup(x => x.IsPostValid(It.IsAny<RepeatPrescriptionRequest>()))
@@ -277,7 +277,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             var mockGpSystem = new Mock<IGpSystem>();
             var prescriptionService = new Mock<IPrescriptionService>();
 
-            var postPrescriptionResult = new PrescriptionResult.SuccessfulPost();
+            var postPrescriptionResult = new OrderPrescriptionResult.Success();
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
@@ -289,7 +289,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Prescriptions
             mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
-            prescriptionService.Setup(x => x.OrderPrescription(_userSession.GpUserSession, It.IsAny<RepeatPrescriptionRequest>())).Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
+            prescriptionService.Setup(x => x.OrderPrescription(_userSession.GpUserSession, It.IsAny<RepeatPrescriptionRequest>())).Returns(Task.FromResult((OrderPrescriptionResult)postPrescriptionResult));
             
             _prescriptionRequestValidationService
                 .Setup(x => x.IsPostValid(It.IsAny<RepeatPrescriptionRequest>()))

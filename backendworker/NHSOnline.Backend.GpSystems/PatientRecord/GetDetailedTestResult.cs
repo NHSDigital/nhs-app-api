@@ -6,11 +6,11 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
     {
         public abstract T Accept<T>(IDetailedTestResultVisitor<T> visitor);
 
-        public class SuccessfullyRetrieved : GetDetailedTestResult
+        public class Success : GetDetailedTestResult
         {
             public TestResultResponse Response { get; }
 
-            public SuccessfullyRetrieved(TestResultResponse response)
+            public Success(TestResultResponse response)
             {
                 Response = response;
             }
@@ -20,16 +20,8 @@ namespace NHSOnline.Backend.GpSystems.PatientRecord
                 return visitor.Visit(this);
             }
         }
-
-        public class Unsuccessful : GetDetailedTestResult
-        {
-            public override T Accept<T>(IDetailedTestResultVisitor<T> visitor)
-            {
-                return visitor.Visit(this);
-            }
-        }
         
-        public class SupplierBadData : GetDetailedTestResult
+        public class BadGateway : GetDetailedTestResult
         {
             public override T Accept<T>(IDetailedTestResultVisitor<T> visitor)
             {

@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccessfullyExtended()
+        public async Task Extend_WhenClientReturnsSuccess_ReturnsSuccess()
         {    
             // Arrange
             var response = new TppClient.TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.OK);
@@ -46,12 +46,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Extend(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<SessionExtendResult.SuccessfullyExtended>();
+            result.Should().BeAssignableTo<SessionExtendResult.Success>();
             _mockTppClient.Verify();
         }
 
         [TestMethod]
-        public async Task Extend_WhenClientReturnsError_ReturnsSupplierSystemUnavailable()
+        public async Task Extend_WhenClientReturnsError_ReturnsBadGateway()
         {
             // Arrange
             var response = new TppClient.TppApiObjectResponse<PatientSelectedReply>(HttpStatusCode.BadRequest);
@@ -64,12 +64,12 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Extend(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<SessionExtendResult.BadGateway>();
             _mockTppClient.Verify();
         }
 
         [TestMethod]
-        public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsSupplierSystemUnavailable()
+        public async Task Extend_WhenClientThrowsHttpRequestException_ReturnsBadGateway()
         {
             // Arrange
             _mockTppClient.Setup(x => x.PatientSelectedPost(_tppUserSession))
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Tpp.Session
             var result = await _systemUnderTest.Extend(_tppUserSession);
 
             // Assert
-            result.Should().BeAssignableTo<SessionExtendResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<SessionExtendResult.BadGateway>();
             _mockTppClient.Verify();
         }
     }

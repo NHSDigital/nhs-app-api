@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
             catch (HttpRequestException exception)
             {
                 _logger.LogError(exception, "Booking appointment slots failed.");
-                return new AppointmentBookResult.SupplierSystemUnavailable();
+                return new AppointmentBookResult.BadGateway();
             }
             finally
             {
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
         {
             if (response.HasSuccessResponse)
             {
-                return new AppointmentBookResult.SuccessfullyBooked();
+                return new AppointmentBookResult.Success();
             }
 
             if (response.ErrorResponse != null)
@@ -71,12 +71,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Tpp.Appointments
                         return new AppointmentBookResult.SlotNotAvailable();
                     case TppApiErrorCodes.NoAccess:
                         _logger.LogTppResponseAccessIsForbidden();
-                        return new AppointmentBookResult.InsufficientPermissions();
+                        return new AppointmentBookResult.Forbidden();
                 }
             }
 
             _logger.LogTppUnknownError(response);
-            return new AppointmentBookResult.SupplierSystemUnavailable();
+            return new AppointmentBookResult.BadGateway();
         }
     }
 }

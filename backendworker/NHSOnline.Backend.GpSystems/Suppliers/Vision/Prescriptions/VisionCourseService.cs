@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
             if (!visionUserSession.IsRepeatPrescriptionsEnabled)
             {
                 _logger.LogError("The Vision repeat prescriptions service is not enabled");
-                return new GetCoursesResult.SupplierNotEnabled();
+                return new GetCoursesResult.Forbidden();
             }
 
             try
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
 
                         visionUserSession.AllowFreeTextPrescriptions = coursesResponse.Body.EligibleRepeats.Settings.AllowFreeText;
 
-                        return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse, visionUserSession.AllowFreeTextPrescriptions);
+                        return new GetCoursesResult.Success(courseListResponse, visionUserSession.AllowFreeTextPrescriptions);
                     }
                     catch (Exception e)
                     {
@@ -89,12 +89,12 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Vision.Prescriptions
                 _logger.LogError($"Vision system encountered an error: { coursesResponse.ErrorForLogging }");
                 _logger.LogVisionErrorResponse(coursesResponse);
 
-                return new GetCoursesResult.SupplierSystemUnavailable();
+                return new GetCoursesResult.BadGateway();
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving courses");
-                return new GetCoursesResult.SupplierSystemUnavailable();
+                return new GetCoursesResult.BadGateway();
             }
             finally
             {

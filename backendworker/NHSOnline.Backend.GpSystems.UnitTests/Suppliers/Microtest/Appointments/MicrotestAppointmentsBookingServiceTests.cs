@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
         }
 
         [TestMethod]
-        public async Task Book_HappyPath_ReturnsSuccessfullyBookedResponse()
+        public async Task Book_HappyPath_ReturnsSuccessResponse()
         {
             // Arrange
             var response = new MicrotestClient.MicrotestApiObjectResponse<string>(HttpStatusCode.OK)
@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.SuccessfullyBooked>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Success>();
         }
 
         [TestMethod]
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Microtest.Appointments
 
             // Assert
             _mockMicrotestClient.Verify();
-            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentBookResult.Forbidden>();
         }
 
         [DataTestMethod]

@@ -42,12 +42,12 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public void CaptureAppointmentSlotTypes_AppointmentSlotsResultUnsuccessful_NoInformationBuiltNorLogged()
+        public void CaptureAppointmentSlotTypes_AppointmentSlotsResultBadGateway_NoInformationBuiltNorLogged()
         {
             // Arrange
             var systemUnderTest = _fixture.Create<Mock<AppointmentSlotTypeScraper>>();
             systemUnderTest.CallBase = true;
-            var badResult = new AppointmentSlotsResult.SupplierSystemUnavailable();
+            var badResult = new AppointmentSlotsResult.BadGateway();
 
             // Act
             systemUnderTest.Object.CaptureAppointmentSlotTypes(_userSession, badResult);
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             systemUnderTest.VerifyAll();
             systemUnderTest.Verify(x => 
                     x.BuildSlotsInformation(
-                        It.IsAny<UserSession>(), It.IsAny<AppointmentSlotsResult.SuccessfullyRetrieved>()), 
+                        It.IsAny<UserSession>(), It.IsAny<AppointmentSlotsResult.Success>()), 
                 Times.Never());
             systemUnderTest.Verify(x => 
                     x.LogInformation(
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             systemUnderTest.VerifyAll();
             systemUnderTest.Verify(x => 
                     x.BuildSlotsInformation(
-                        It.IsAny<UserSession>(), It.IsAny<AppointmentSlotsResult.SuccessfullyRetrieved>()), 
+                        It.IsAny<UserSession>(), It.IsAny<AppointmentSlotsResult.Success>()), 
                 Times.Never());
             systemUnderTest.Verify(x => 
                     x.LogInformation(
@@ -291,7 +291,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public void BuildSlotsInformation_OdsCodeDerivedFromUserSession()
         {
             // Arrange
-            var result = _fixture.Create<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            var result = _fixture.Create<AppointmentSlotsResult.Success>();
 
             // Act
             var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
@@ -304,7 +304,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         public void BuildSlotsInformation_SupplierDerivedFromUserSession()
         {
             // Arrange
-            var result = _fixture.Create<AppointmentSlotsResult.SuccessfullyRetrieved>();
+            var result = _fixture.Create<AppointmentSlotsResult.Success>();
 
             // Act
             var information = _systemUnderTest.BuildSlotsInformation(_userSession, result);
@@ -478,9 +478,9 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
            
         }
         
-        private static AppointmentSlotsResult.SuccessfullyRetrieved BuildSuccessfulResult(params Slot[] slots)
+        private static AppointmentSlotsResult.Success BuildSuccessfulResult(params Slot[] slots)
         {
-            return new AppointmentSlotsResult.SuccessfullyRetrieved(
+            return new AppointmentSlotsResult.Success(
                 new AppointmentSlotsResponse
                 {
                     Slots = slots

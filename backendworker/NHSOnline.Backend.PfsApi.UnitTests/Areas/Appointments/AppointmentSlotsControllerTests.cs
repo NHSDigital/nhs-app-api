@@ -89,7 +89,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
             gpSystem.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
-            var successResponse = new AppointmentSlotsResult.SuccessfullyRetrieved(appointmentSlotsServicesGetResponse);
+            var successResponse = new AppointmentSlotsResult.Success(appointmentSlotsServicesGetResponse);
 
             appointmentSlotsService
                 .Setup(x => x.GetSlots(_userSession.GpUserSession, It.IsAny<AppointmentSlotsDateRange>()))
@@ -110,13 +110,13 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Areas.Appointments
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenServiceReturnsSupplierSystemUnavailable()
+        public async Task Get_ReturnsBadGateway_WhenServiceReturnsBadGateway()
         {
             // Arrange
             var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
 
-            var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.SupplierSystemUnavailable();
+            var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.BadGateway();
  
             _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.GpUserSession.Supplier))
                 .Returns(gpSystem.Object);

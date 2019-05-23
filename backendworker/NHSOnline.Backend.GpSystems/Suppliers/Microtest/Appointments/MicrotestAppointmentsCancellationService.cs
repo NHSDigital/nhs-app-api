@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
             catch (HttpRequestException exception)
             {
                 _logger.LogError(exception, "Cancelling an appointment failed.");
-                return new AppointmentCancelResult.SupplierSystemUnavailable();
+                return new AppointmentCancelResult.BadGateway();
             }
             finally
             {
@@ -57,15 +57,15 @@ namespace NHSOnline.Backend.GpSystems.Suppliers.Microtest.Appointments
         {
             if (response.HasSuccessResponse)
             {
-                return new AppointmentCancelResult.SuccessfullyCancelled();
+                return new AppointmentCancelResult.Success();
             } 
             if (response.HasForbiddenResponse)
             {
-                return new AppointmentCancelResult.InsufficientPermissions();
+                return new AppointmentCancelResult.Forbidden();
             }
 
             _logger.LogError(response.ErrorForLogging);
-            return new AppointmentCancelResult.SupplierSystemUnavailable();
+            return new AppointmentCancelResult.BadGateway();
         }
 
         private Option<CancelAppointmentDeleteRequest> GetCancelAppointmentDeleteRequest(

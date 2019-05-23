@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
 
         private const string AuditType = Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsResponse;
         
-        public async Task Visit(GetCoursesResult.SuccessfullyRetrieved result)
+        public async Task Visit(GetCoursesResult.Success result)
         {
             try
             {
@@ -29,11 +29,11 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.SuccessfullyRetrieved)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.Success)}");
             }
         }
 
-        public async Task Visit(GetCoursesResult.SupplierSystemUnavailable result)
+        public async Task Visit(GetCoursesResult.BadGateway result)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.SupplierSystemUnavailable)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.BadGateway)}");
             }
         }
 
@@ -57,15 +57,15 @@ namespace NHSOnline.Backend.PfsApi.Areas.Prescriptions
             }
         }
 
-        public async Task Visit(GetCoursesResult.SupplierNotEnabled result)
+        public async Task Visit(GetCoursesResult.Forbidden result)
         {
             try
             {
-                await _auditor.Audit(AuditType, "Error retrieving courses: Supplier Not Enabled");
+                await _auditor.Audit(AuditType, "Error retrieving courses: Insufficient permissions");
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.SupplierNotEnabled)}");
+                _logger.LogError(e, $"Exception thrown auditing {AuditType} {nameof(GetCoursesResult.Forbidden)}");
             }
         }
     }

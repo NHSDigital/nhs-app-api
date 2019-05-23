@@ -2,8 +2,7 @@
 {
     public interface IDetailedTestResultVisitor<out T>
     {
-        T Visit(GetDetailedTestResult.SuccessfullyRetrieved result);
-        T Visit(GetDetailedTestResult.Unsuccessful result);
-        T Visit(GetDetailedTestResult.SupplierBadData result);
+        T Visit(GetDetailedTestResult.Success result);
+        T Visit(GetDetailedTestResult.BadGateway result);
     }
 }

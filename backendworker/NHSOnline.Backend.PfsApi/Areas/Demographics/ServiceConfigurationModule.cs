@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Demographics
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IDemographicsResultVisitor<IActionResult>, DemographicsResultVisitor>();
-            services.AddSingleton<IMapper<DemographicsResult.SuccessfullyRetrieved, SuccessfulDemographicsResult>,
+            services.AddSingleton<IMapper<DemographicsResult.Success, SuccessfulDemographicsResult>,
                 SuccessfulDemographicsResultMapper>();
             
             base.ConfigureServices(services, configuration);

@@ -26,11 +26,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Vision.Session
         }
 
         [TestMethod]
-        public async Task Extend_ReturnsSuccessfullyExtended()
+        public async Task Extend_ReturnsSuccess()
         {
             var result = await _systemUnderTest.Extend(_visionUserSession);
 
-            result.Should().BeAssignableTo<SessionExtendResult.SuccessfullyExtended>();
+            result.Should().BeAssignableTo<SessionExtendResult.Success>();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             Request = request;
         }
 
-        public IActionResult Visit(Im1ConnectionRegisterResult.SuccessfullyRegistered result)
+        public IActionResult Visit(Im1ConnectionRegisterResult.Success result)
         {
             return new CreatedResult(Request.GetDisplayUrl(), result.Response);
         }
@@ -22,11 +22,6 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
         public IActionResult Visit(Im1ConnectionRegisterResult.BadRequest result)
         {
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
-        }
-
-        public IActionResult Visit(Im1ConnectionRegisterResult.InsufficientPermissions result)
-        {
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
 
         public IActionResult Visit(Im1ConnectionRegisterResult.NotFound result)
@@ -39,7 +34,7 @@ namespace NHSOnline.Backend.CidApi.Areas.Im1Connection
             return new StatusCodeResult(StatusCodes.Status409Conflict);
         }
 
-        public IActionResult Visit(Im1ConnectionRegisterResult.SupplierSystemUnavailable result)
+        public IActionResult Visit(Im1ConnectionRegisterResult.BadGateway result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }

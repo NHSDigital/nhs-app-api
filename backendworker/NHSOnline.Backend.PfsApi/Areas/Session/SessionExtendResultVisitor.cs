@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
 {
     public class SessionExtendResultVisitor : ISessionExtendResultVisitor<SessionExtendResultVisitorOutput>
     {
-        public SessionExtendResultVisitorOutput Visit(SessionExtendResult.SuccessfullyExtended successfullyExtended)
+        public SessionExtendResultVisitorOutput Visit(SessionExtendResult.Success result)
         {
             return new SessionExtendResultVisitorOutput
             {
@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.PfsApi.Areas.Session
             };
         }
 
-        public SessionExtendResultVisitorOutput Visit(SessionExtendResult.SupplierSystemUnavailable supplierSystemUnavailable)
+        public SessionExtendResultVisitorOutput Visit(SessionExtendResult.BadGateway result)
         {
             return new SessionExtendResultVisitorOutput
             {

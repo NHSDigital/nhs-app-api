@@ -96,7 +96,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
             var result = await _brothermailerService.SendEmailAddress(validBrothermailerRequest);
             
             // Assert
-            result.Should().BeAssignableTo<BrothermailerResult.SuccessfullyRetrieved>();
+            result.Should().BeAssignableTo<BrothermailerResult.Success>();
         }
         
         [TestMethod]
@@ -134,7 +134,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
         }
 
         [TestMethod] public async Task
-            SendEmailAddress_WhenCalledWithValidEmailButBrothermailerRespondsWithUnsuccessfulStatus_ReturnsUnSuccessful()
+            SendEmailAddress_WhenCalledWithValidEmailButBrothermailerRespondsWithUnsuccessfulStatus_ReturnsInternalServerError()
         {
 
             // Arrange
@@ -158,7 +158,7 @@ namespace NHSOnline.Backend.PfsApi.UnitTests.Brothermailer
             var result = await _brothermailerService.SendEmailAddress(validEmailRequest);
             
             // Assert
-            result.Should().BeAssignableTo<BrothermailerResult.Unsuccessful>();
+            result.Should().BeAssignableTo<BrothermailerResult.InternalServerError>();
         }
     }
 }

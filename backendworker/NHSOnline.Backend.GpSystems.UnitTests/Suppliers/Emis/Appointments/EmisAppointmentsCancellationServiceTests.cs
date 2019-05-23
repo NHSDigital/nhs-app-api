@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task Cancel_HappyPath_ReturnsSuccessfullyCancelledResponse()
+        public async Task Cancel_HappyPath_ReturnsSuccessResponse()
         {
            //Arrange
             var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode.Created)
@@ -76,11 +76,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SuccessfullyCancelled>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.Success>();
         }
 
         [TestMethod]
-        public async Task Cancel_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsSupplierSystemUnavailable()
+        public async Task Cancel_EmisClientThrowsHttpRequestExceptionFromAppointments_ReturnsBadGateway()
         {
             // Arrange
             _mockEmisClient.Setup(x => x.AppointmentsDelete(It.IsAny<EmisHeaderParameters>(),
@@ -93,11 +93,11 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.BadGateway>();
         }
 
         [TestMethod]
-        public async Task Cancel_EmisReturnsForbidden_ReturnsInsufficientPermissions()
+        public async Task Cancel_EmisReturnsForbidden_ReturnsForbidden()
         {
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
@@ -110,7 +110,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.Forbidden>();
         }
 
         [TestMethod]
@@ -157,7 +157,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
         }
 
         [TestMethod]
-        public async Task Cancel_EmisReturnsUnknownError_ReturnsSupplierSystemUnavailable()
+        public async Task Cancel_EmisReturnsUnknownError_ReturnsBadGateway()
         {
             // Arrange
             var errorResponse = _fixture.Create<ExceptionErrorResponse>();
@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.GpSystems.UnitTests.Suppliers.Emis.Appointments
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.BadGateway>();
         }
 
         [TestMethod]
