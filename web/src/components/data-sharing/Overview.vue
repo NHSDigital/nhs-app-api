@@ -3,6 +3,8 @@
 
     <p>{{ $t('ds01.pages.p1.intro.paragraph') }}</p>
 
+    <inset-content :paragraphs="$t('ds01.pages.ndop.paragraphs')"/>
+
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.confidential.title') }}</h2>
     <p>{{ $t('ds01.pages.p1.confidential.paragraph1') }}</p>
     <ul>
@@ -54,11 +56,14 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import InsetContent from '@/components/data-sharing/InsetContent';
+
 
 export default {
   name: 'Overview',
   components: {
     AnalyticsTrackedTag,
+    InsetContent,
   },
   data() {
     return {

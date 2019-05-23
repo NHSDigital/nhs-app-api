@@ -16,6 +16,9 @@ describe('data sharing index', () => {
   let button;
   let getNdopToken;
   let wrapper;
+  let insetText;
+
+  const findInsetText = () => wrapper.find('.nhsuk-inset-text');
 
   beforeEach(() => {
     const $store = createStore({ state: createState() });
@@ -39,6 +42,7 @@ describe('data sharing index', () => {
           case 'ds01.pages.p3.listItems':
           case 'ds01.pages.p1.confidential.listItems':
           case 'ds01.pages.p1.patientInformation.researchAndPlanningListItems':
+          case 'ds01.pages.ndop.paragraphs':
             return ['paragraph 1', 'paragraph 2'];
           default:
             return $t(key);
@@ -59,6 +63,28 @@ describe('data sharing index', () => {
         expect(getNdopToken).toHaveBeenCalled();
       } else {
         expect(getNdopToken).not.toHaveBeenCalled();
+      }
+    }
+  });
+
+  it('will contain inset text', () => {
+    for (let i = 0; i <= 3; i += 1) {
+      wrapper.setData({ pageIndex: i });
+      insetText = findInsetText();
+
+      if (i === 0 || i === 3) {
+        expect(insetText.exists()).toBe(true);
+      }
+    }
+  });
+
+  it('will not contain inset text', () => {
+    for (let i = 0; i <= 3; i += 1) {
+      wrapper.setData({ pageIndex: i });
+      insetText = findInsetText();
+
+      if (i === 1 || i === 2) {
+        expect(insetText.exists()).toBe(false);
       }
     }
   });
